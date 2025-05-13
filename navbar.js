@@ -34,10 +34,14 @@ module.exports = {
 
     {
       type: 'dropdown',
-      to: 'v3/guidelines/get-started-with-ton',
+      to: 'v3/guidelines/quick-start/getting-started',
       label: 'Guidelines',
       position: 'left',
       items: [
+        {
+          to: '/v3/guidelines/quick-start/getting-started',
+          label: 'Quick Start',
+        },
         {
           to: '/v3/guidelines/smart-contracts/guidelines',
           label: 'Smart Contracts',
@@ -80,7 +84,7 @@ module.exports = {
           label: 'Nodes'
         },
         {
-          to: 'v3/documentation/dapps/defi/coins', // TODO: add page
+          to: 'v3/documentation/dapps/dapps-overview',
           label: 'DApps',
         },
         {

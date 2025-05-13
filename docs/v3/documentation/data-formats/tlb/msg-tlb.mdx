@@ -1,13 +1,13 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
 # Messages TL-B schemes
-
-In this section detailed explanation of TL-B schemes for messages.
-
+This section provides a detailed explanation of the TL-B schemes used for messages.
 
 ## Message TL-B
 ### TL-B
-Main message TL-B scheme declared as a combination of several nested structures
+The main TL-B scheme for messages is defined as a combination of several nested structures.
 
 ```tlb
 message$_ {X:Type} info:CommonMsgInfo
@@ -21,25 +21,28 @@ body:(Either X ^X) = MessageRelaxed X;
 _ (Message Any) = MessageAny;
 ```
 
-Here `Message X` - is common message structure, `MessageRelaxed X` additional type with CommonMsgInfoRelaxed body and `Message Any` is a union of both.
-Message structure unified with X:Type, that in other words is a Cell.
-According to TL-B we can combine all data in one cell(if it will be fit to 1023 bits) or use references declared with caret `^`.
+* `Message X` refers to the standard message structure.
+* `MessageRelaxed X` is a variant that uses a `CommonMsgInfoRelaxed` body.
+* `Message Any` is a union of both structures.
 
-Serialized `Message X` placed to action list with FunC method send_raw_message(), than smart contract execute this action and message send.
+The message structure is unified using X:Type, which in this context represents a cell.
+According to TL-B rules, all data can be stored within a single cell—if it fits within 1023 bits—or distributed across references using the caret symbol `^`.
+
+A serialized `Message X` is placed into the action list using the FunC method `send_raw_message()`. The smart contract then executes this action, and the message is sent.
 
 
 ### Definition of explicit serialization
-For building valid binary data according TL-B structure we should do serialization, which defined for each type recurrently. It means, that for serialization of Message X we need to know how to serialize
-`StateInit`, `CommonMsgInfo` and so on.
 
-Every nested structure we should get from another TL-B scheme according to link recurrently, until serialization for top structure will be explicit - every bit defined by Boolean or bit-like type(bits, uint, varuint).
+To construct valid binary data according to a TL-B structure, serialization must be performed as defined recursively for each type. To serialize a `Message X`, you must also know how to serialize nested structures like `StateInit`, `CommonMsgInfo`, etc.
 
-Structures that currently does not use in regular development will mark with `*` in Type column, for example *Anycast usually skipped in serialization.
+Each nested structure is defined in a separate TL-B scheme, which must be referenced and resolved recursively. This continues until the serialization of the top-level structure becomes explicit—that is, every bit is defined by a boolean or a bit-representable type, e.g., `bits`, `uint`, `varuint`.
+
+Structures not commonly used in regular development are marked with an asterisk `*` in the Type column. For example, `*Anycast` is typically omitted during serialization.
 
 
 ### message$_
 
-There is the top TL-B scheme whole messages `Message X`:
+This is the top-level TL-B scheme for messages, referred to as `Message X`:
 
 ```tlb
 message$_ {X:Type} info:CommonMsgInfo
@@ -48,12 +51,12 @@ body:(Either X ^X) = Message X;
 ```
 
 
-| Structure | Type                              | Required | Description                                                                                                    |
-|-----------|-----------------------------------|----------|----------------------------------------------------------------------------------------------------------------|
-| message$_ | Constructor                       |          | It defined according the constructor ruler. Empty tag `$_` means we will not add any bits in the beginning     |
-| info      | [CommonMsgInfo](#commonmsginfo)   | Required | Detailed Message properties define destination and its value. Always placed in message root cell.              |
-| init      | [StateInit](#stateinit-tl-b)      | Optional | General structure using in TON for initilizing new contracts. Could be write in cell reference or root cell.   |
-| body      | X                                 | Required | Message Payload. Could be write in cell reference or root cell.                                                |                                                                                            |
+| Structure | Type                            | Required | Description                                                                                                                     |
+|-----------|---------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------|
+| message$_ | Constructor                     |          | Defined according to the constructor rule. The empty tag `$_` indicates that no bits are added initially.                       |
+| info      | [CommonMsgInfo](#commonmsginfo) | Required | Contains detailed message properties such as destination and value. It is always stored in the message's root cell.             |
+| init      | [StateInit](#stateinit-tl-b)    | Optional | The general structure is used in TON to initialize new contracts. It can be placed in either a cell reference or the root cell. |
+| body      | X                               | Required | Message payload. It can be placed in either a cell reference or the root cell.                                                  |                                                                                            |
 
 
 ```tlb
@@ -63,9 +66,9 @@ left$0 {X:Type} {Y:Type} value:X = Either X Y;
 right$1 {X:Type} {Y:Type} value:Y = Either X Y;
 ```
 
-Recall how `Maybe` and `Either` works, we can serialize different cases:
+Recall how `Maybe` and `Either` work—we can serialize different cases:
 
-* `[CommonMsgInfo][10][StateInit][0][X]` - `Message X` in the one cell
+* `[CommonMsgInfo][10][StateInit][0][X]` - a `Message X` fully serialized into a single cell.
 
 
 <br></br>
@@ -78,7 +81,7 @@ dark: '/img/docs/data-formats/tl-b-docs-9-dark.png?raw=true',
 />
 <br></br>
 
-* `[CommonMsgInfo][11][^StateInit][1][^X]` - `Message X` with references
+* `[CommonMsgInfo][11][^StateInit][1][^X]` - a `Message X` with references.
 
 
 <br></br>
@@ -93,13 +96,11 @@ dark: '/img/docs/data-formats/tl-b-docs-8-dark.png?raw=true',
 
 
 
-
 ## CommonMsgInfo TL-B
 
 ### CommonMsgInfo
 
-`CommonMsgInfo` is a list of parameters, that defines how message will be delivered in TON blockchain.
-
+`CommonMsgInfo` is a set of parameters that define how the message will be delivered on the TON blockchain.
 
 ```tlb
 //internal message
@@ -119,8 +120,8 @@ ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
 
 ### int_msg_info$0
 
-`int_msg_info` is a case of internal message. This means they could be sent between contracts, and only between contracts.
-Use case - ordinary cross contract messages.
+`int_msg_info` represents an internal message, meaning it can only be sent between smart contracts.
+Use case: regular cross-contract communication within the TON blockchain.
 
 
 ```tlb
@@ -132,26 +133,26 @@ int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
   created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ```
 
-| Structure      | Type                                       | Required | Description                                                                                                         |
-|----------------|--------------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------|
-| int_msg_info$0 | Constructor                                | Required | $0 tag means, that in serialization CommonMsgInfo started with 0 bit describes a internal message.                  |
-| ihr_disabled   | Bool                                       | Required | Hyper cube routing flag.                                                                                            |
-| bounce         | Bool                                       | Required | Message should be bounced if there are errors during processing. If message's flat bounce = 1, it calls bounceable. |
-| bounced        | Bool                                       | Required | Flag that describes, that message itself is a result of bounce.                                                     |
-| src            | [MsgAddressInt](#msgaddressint-tl-b)       | Required | Address of smart contract sender of message.                                                                        |
-| dest           | [MsgAddressInt](#msgaddressint-tl-b)       | Required | Address of smart contract destination of message.                                                                   |
-| value          | [CurrencyCollection](#currencycollection)  | Required | Structure which describes currency information including total funds transferred in message.                        |
-| ihr_fee        | [VarUInteger 16](#varuinteger-n)           | Required | Fees for hyper routing delivery                                                                                     |
-| fwd_fee        | [VarUInteger 16](#varuinteger-n)           | Required | Fees for forwarding messages assigned by validators                                                                 |
-| created_lt     | uint64                                     | Required | Logic time of sending message assigned by validator. Using for odering actions in smart contract.                   |
-| created_at     | uint32                                     | Required | Unix time                                                                                                           |
+| Structure      | Type                                      | Required | Description                                                                                                                     |
+|----------------|-------------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------|
+| int_msg_info$0 | Constructor                               | Required | The `$0` tag indicates that the `CommonMsgInfo` begins with a `0` bit in serialization, denoting an internal message.           |
+| ihr_disabled   | Bool                                      | Required | Flag indicating whether hypercube routing (IHR) is disabled.                                                                    |
+| bounce         | Bool                                      | Required | Specifies whether the message should be bounced if an error occurs during processing. If set to `1`, the message is bounceable. |
+| bounced        | Bool                                      | Required | Indicates that the message is a result of a bounce.                                                                             |
+| src            | [MsgAddressInt](#msgaddressint-tl-b)      | Required | The sender's smart contract address.                                                                                            |
+| dest           | [MsgAddressInt](#msgaddressint-tl-b)      | Required | The recipient's smart contract address.                                                                                         |
+| value          | [CurrencyCollection](#currencycollection) | Required | Describes the currency details, including the total funds transferred with the message.                                         |
+| ihr_fee        | [VarUInteger 16](#varuinteger-n)          | Required | Fee for delivering the message using hypercube routing.                                                                         |
+| fwd_fee        | [VarUInteger 16](#varuinteger-n)          | Required | Validators set the fee for forwarding the message.                                                                              |
+| created_lt     | uint64                                    | Required | Logic time of the message, used by validators to order actions in smart contracts.                                              |
+| created_at     | uint32                                    | Required | UNIX timestamp indicating when the message was created.                                                                         |
 
 
 
 ### ext_in_msg_info$10
+`ext_in_msg_info$10` – represents an external incoming message. This message is sent from the off-chain world to a smart contract.
+Use case: a wallet application sending a request to a wallet contract.
 
-`ext_in_msg_info$10` is a case of external incoming message. This means this type of messages sent from off-chain space to contracts.
-Use case - wallet application request to wallet contract.
 
 
 ```tlb
@@ -161,19 +162,20 @@ ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
   import_fee:Grams = CommonMsgInfo;
 ```
 
-| Structure          | Type                                 | Required | Description                                                                                                        |
-|--------------------|--------------------------------------|----------|--------------------------------------------------------------------------------------------------------------------|
-| ext_in_msg_info$10 | Constructor                          | Required | `$10` tag means, that in serialization CommonMsgInfo started with `10` bits describes a external incoming message. |
-| ihr_disabled       | Bool                                 | Required | Hyper routing flag. (currently always true)                                                                        |
-| src                | [MsgAddressExt](#msgaddressext-tl-b) | Required | Address of a external sender of the message.                                                                       |
-| dest               | [MsgAddressInt](#msgaddressint-tl-b) | Required | Address of smart contract destination of message.                                                                  |
-| import_fee         | [VarUInteger 16](#varuinteger-n)     | Required | Fee for executing and delivering of message.                                                                       |
+| Structure          | Type                                 | Required | Description                                                                                                                     |
+|--------------------|--------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------|
+| ext_in_msg_info$10 | Constructor                          | Required | The `$10` tag indicates that the `CommonMsgInfo` begins with `10` bits in serialization, denoting an external incoming message. |
+| ihr_disabled       | Bool                                 | Required | Flag indicating whether hyper routing is disabled. Currently, it is always set to `true`.                                       |
+| src                | [MsgAddressExt](#msgaddressext-tl-b) | Required | The external sender’s address.                                                                                                  |
+| dest               | [MsgAddressInt](#msgaddressint-tl-b) | Required | The destination smart contract address.                                                                                         |
+| import_fee         | [VarUInteger 16](#varuinteger-n)     | Required | The fee for executing and delivering the message.                                                                               |
+
 
 
 ### ext_out_msg_info$11
 
-`ext_out_msg_info$11` is a case of external outgoing message. This means they could be sent from contracts to off-chain space.
-Use case - logs.
+`ext_out_msg_info$11` – represents an external outgoing message. This message is sent from a smart contract to the off-chain world.
+Use case: logs.
 
 ```tlb
 //external outgoing message
@@ -181,18 +183,18 @@ ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
   created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ```
 
-| Structure           | Type                                  | Required | Description                                                                                                       |
-|---------------------|---------------------------------------|----------|-------------------------------------------------------------------------------------------------------------------|
-| ext_out_msg_info$11 | Constructor                           | Required | `$11` tag means, that in serialization CommonMsgInfo started with `11` bit describes a external outgoing message. |
-| src                 | [MsgAddressInt](#msgaddressint-tl-b)  | Required | Address of smart contract sender of message.                                                                      |
-| dest                | [MsgAddressExt](#msgaddressext-tl-b)  | Required | Address of a external destination of the message.                                                                 |
-| created_lt          | uint64                                | Required | Logic time of sending message assigned by validator. Using for odering actions in smart contract.                 |
-| created_at          | uint32                                | Required | Unix time                                                                                                         |
+| Structure           | Type                                 | Required | Description                                                                                                                     |
+|---------------------|--------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------|
+| ext_out_msg_info$11 | Constructor                          | Required | The `$11` tag indicates that the `CommonMsgInfo` begins with `11` bits in serialization, denoting an external outgoing message. |
+| src                 | [MsgAddressInt](#msgaddressint-tl-b) | Required | The sender’s smart contract address.                                                                                            |
+| dest                | [MsgAddressExt](#msgaddressext-tl-b) | Required | The external destination address for the message.                                                                               |
+| created_lt          | uint64                               | Required | Logic times of the message, assigned by the validator. Used for ordering actions in the smart contract.                         |
+| created_at          | uint32                               | Required | UNIX timestamp representing when the message was created.                                                                       |
 
 
 ## StateInit TL-B
 
-StateInit serves to delivery inital data to contract and used in contract deployment.
+`StateInit` – delivers initial data to a contract during its deployment.
 
 ```tlb
 _ split_depth:(Maybe (## 5)) special:(Maybe TickTock)
@@ -201,17 +203,16 @@ _ split_depth:(Maybe (## 5)) special:(Maybe TickTock)
 ```
 
 
+| Structure   | Type                    | Required | Description                                                                                                                                                                                                                                                                                                                                                            |
+|-------------|-------------------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| split_depth | (## 5)                  | Optional | A parameter for high-load contracts that defines the behavior of splitting into multiple instances across different shards. Currently, `StateInit` is used without it.                                                                                                                                                                                                 |
+| special     | TickTock*               | Optional | A structure used for invoking smart contracts in every new blockchain block. Available only in the MasterChain and not typically used in regular user contracts.                                                                                                                                                                                                       |
+| code        | Cell                    | Optional | The contract's serialized code.                                                                                                                                                                                                                                                                                                                                        |
+| data        | Cell                    | Optional | The initial data for the contract.                                                                                                                                                                                                                                                                                                                                     |
+| library     | HashmapE 256 SimpleLib* | Optional | Currently, `StateInit` is used without libraries.                                                                                                                                                                                                                                                                                                                        |
 
-| Structure   | Type                    | Required | Description                                                                                                                                            |
-|-------------|-------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| split_depth | (## 5)                  | Optional | Parameter for the highload contracts, defines behaviour of splitting into multiple instances in different shards. Currently StateInit used without it. |
-| special     | TickTock*               | Optional | Used for invoking smart contracts in every new block of the blockchain. Available only in the masterchain. Regular user's contracts used without it.   |
-| code        | Cell                    | Optional | Contract's serialized code.                                                                                                                            |
-| data        | Cell                    | Optional | Contract initial data.                                                                                                                                 |
-| library     | HashmapE 256 SimpleLib* | Optional | Currently used StateInit without libs                                                                                                                  |
 
-
-[General detailed explanations for Hashmaps](/v3/documentation/data-formats/tlb/tl-b-types#hashmap)
+[General detailed explanations for Hashmaps](/v3/documentation/data-formats/tlb/tl-b-types#hashmap).
 
 ## MsgAddressExt TL-B
 
@@ -222,19 +223,19 @@ addr_extern$01 len:(## 9) external_address:(bits len)
 = MsgAddressExt;
 ```
 
-`MsgAddress` is a scheme of various serialization for addresses. Depends on which participant(off-chain or smartcontract) messages sent, different structures using.
+`MsgAddress` is a scheme for various serializations of addresses. The structure depends on the participant, either off-chain or a smart contract, sending the message. Different structures are employed based on whether the message comes from an off-chain participant or a smart contract.
 
 ### addr_none$00
 
-`addr_none$00` - using for defining null address of off-chain participant. It means, that we can send external message to contract without unique sender's address.
+`addr_none$00` defines a null address for an off-chain participant. This indicates that an external message can be sent to a contract without specifying a unique sender's address.
 
 ```tlb
 addr_none$00 = MsgAddressExt;
 ```
 
-| Structure           | Type               | Required | Description                                                                                                             |
-|---------------------|--------------------|----------|-------------------------------------------------------------------------------------------------------------------------|
-| addr_none$00 | Constructor        | Required | `$00` tag means, that in serialization MsgAddressExt started with `00` bits. This means whole external address is `00`. |
+| Structure    | Type        | Required | Description                                                                                                                                   |
+|--------------|-------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| addr_none$00 | Constructor | Required | The `$00` tag in serialization indicates that `MsgAddressExt` starts with `00` bits. This signifies that the entire external address is `00`. |
 
 
 ### addr_extern$01
@@ -245,11 +246,11 @@ addr_extern$01 len:(## 9) external_address:(bits len)
 ```
 
 
-| Structure        | Type        | Required | Description                                                                                                      |
-|------------------|-------------|----------|------------------------------------------------------------------------------------------------------------------|
-| addr_extern$01   | Constructor | Required | `$01` tag means, that in the serialization MsgAddressExt started with a `01` bits describes an external address. |
-| len              | ## 9        | Required | Same as uintN - means an unsigned N-bit number                                                                   |
-| external_address | (bits len)  | Required | Address is a bitstring of the len equal to previous `len`                                                        |
+| Structure        | Type        | Required | Description                                                                                                            |
+|------------------|-------------|----------|------------------------------------------------------------------------------------------------------------------------|
+| addr_extern$01   | Constructor | Required | The `$01` tag in serialization indicates that `MsgAddressExt` starts with `01` bits and describes an external address. |
+| len              | ## 9        | Required | Represents an unsigned N-bit number, similar to `uintN`.                                                               |
+| external_address | (bits len)  | Required | A bitstring address, where the length of the address equals the previously defined `len`.                              |
 
 
 ## MsgAddressInt TL-B
@@ -270,12 +271,12 @@ workchain_id:int8 address:bits256  = MsgAddressInt;
 ```
 
 
-| Structure    | Type        | Required | Description                                                                                                      |
-|--------------|-------------|----------|------------------------------------------------------------------------------------------------------------------|
-| addr_std$10  | Constructor | Required | `$10` tag means, that in the serialization MsgAddressInt started with a `10` bits describes an internal address. |
-| anycast      | Anycast*    | Optional | Additional address data, currently do not used in ordinary internal messages                                     |
-| workchain_id | int8        | Required | Workchain where smart contract of destination address placed. At moment always equals zero.                      |
-| address      | (bits256)   | Required | Smart contract account ID number                                                                                 |
+| Structure    | Type        | Required | Description                                                                                                                                                                                                                                                |
+|--------------|-------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| addr_std$10  | Constructor | Required | The `$10` tag in serialization indicates that `MsgAddressInt` starts with `10` bits and describes an internal address.                                                                                                                                     |
+| anycast      | Anycast*    | Optional | Represents additional address data. Currently not used in ordinary internal messages.                                                                                                                                                                      |
+| workchain_id | int8        | Required | The WorkChain where the smart contract of the destination address is located. Currently, this value always equals zero.                                                                                                                                    |
+| address      | (bits256)   | Required | The smart contract account ID number.                                                                                                                                                                                                                      |
 
 
 
@@ -291,11 +292,11 @@ workchain_id:int32 address:(bits addr_len) = MsgAddressInt;
 
 | Structure    | Type        | Required  | Description                                                                                                               |
 |--------------|-------------|-----------|---------------------------------------------------------------------------------------------------------------------------|
-| addr_var$11  | Constructor | Required  | `$11` tag means, that in the serialization MsgAddressInt started with a `11` bits describes an internal contract address. |
-| anycast      | Anycast*    | Optional  | Additional address data, currently do not used in ordinary internal messages                                              |
-| addr_len     | ## 9        | Required  | Same as uintN - means an unsigned N-bit number                                                                            |
-| workchain_id | int32       | Required  | Workchain where smart contract of destination address placed. At moment always equals zero.                               |
-| address      | (bits256)   | Required  | Payload address(could be account ID)                                                                                      |
+| addr_var$11  | Constructor | Required  | The `$11` tag indicates that in the serialization of `MsgAddressInt`, the address starts with `11` bits, representing an internal contract address. |
+| anycast      | Anycast*    | Optional  | Additional address data is not currently used in regular internal messages.               |
+| addr_len     | ## 9        | Required  | Same as `uintN` – represents an unsigned N-bit number.                                                                       |
+| workchain_id | int32       | Required  | The WorkChain is where the smart contract for the destination address is located. Currently, this is always set to zero.                           |
+| address      | (bits256)   | Required  | The payload address (this could be the account ID).                                                                                   |
 
 
 ## Basic used types
@@ -313,12 +314,11 @@ currencies$_ grams:Grams other:ExtraCurrencyCollection
 
 | Structure    | Type                    | Required | Description                                                                                                  |
 |--------------|-------------------------|----------|--------------------------------------------------------------------------------------------------------------|
-| currencies$_ | Constructor             | Required | `$_` empty tag means, that in the serialization CurrencyCollection we will not add any bits in the beginning |
-| grams        | (VarUInteger 16)        | Required | Message value in nanoTons                                                                                    |
-| other        | ExtraCurrencyCollection | Optional | ExtraCurrencyCollection is a dict designed for additional currencies, that usually empty                     |
+| currencies$_ | Constructor             | Required | The `$_` empty tag indicates that no bits are added at the beginning during the serialization of `CurrencyCollection`.|
+| grams        | (VarUInteger 16)        | Required | Represents the message value, expressed in nanoTons.                                                                                |
+| other        | ExtraCurrencyCollection | Optional | ExtraCurrencyCollection is a dictionary intended for additional, typically empty currencies.         |
 
-* ExtraCurrencyCollection complex type, that usually wrote as empty dict in messages
-
+* ExtraCurrencyCollection is a complex type usually written as an empty dictionary in messages.
 
 ### VarUInteger n
 
@@ -331,11 +331,11 @@ var_int$_ {n:#} len:(#< n) value:(int (len * 8))
 
 
 
-| Structure  | Type             | Required | Description                                                                                                          |
-|------------|------------------|----------|----------------------------------------------------------------------------------------------------------------------|
-| var_uint$_ | Constructor      | Required | `var_uint$_` empty tag means, that in the serialization CurrencyCollection we will not add any bits in the beginning |
-| len        | uintN            | Required | bits len parameter for next value                                                                                    |
-| value      | (uint (len * 8)) | Optional | uint value for integer number wrote in (len * 8) bits                                                                |
+| Structure  | Type             | Required | Description                                                                                                                 |
+|------------|------------------|----------|-----------------------------------------------------------------------------------------------------------------------------|
+| var_uint$_ | Constructor      | Required | The `var_uint$_` is an empty tag, indicating that no bits are added at the beginning of `CurrencyCollection` serialization. |
+| len        | uintN            | Required | Specifies the bit-length used to encode the next value.                                                                     |
+| value      | (uint (len * 8)) | Optional | An optional unsigned integer encoded in `(len * 8)` bits.                                                                   |
 
 
 ## Message example
@@ -364,7 +364,7 @@ var_int$_ {n:#} len:(#< n) value:(int (len * 8))
 ```
 ### Regular func message in short form
 
-Message parts that are always overwritten by validators could be skipped(fill with zero bits). Message's sender here skipped too, serialized as `addr_none$00`.
+Validators always overwrite message parts, which can be skipped and filled with zero bits. The message's sender is also skipped and serialized as `addr_none$00`.
 
 ```func
   cell msg = begin_cell()
@@ -375,3 +375,6 @@ Message parts that are always overwritten by validators could be skipped(fill wi
         .store_slice(message_body)
 .end_cell();
 ```
+
+<Feedback />
+

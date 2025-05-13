@@ -8,7 +8,7 @@ const getEnvLangConfig = () => {
 
   const langArray = process.env.TARGET_LANGS
     ? process.env.TARGET_LANGS.split(",")
-   : ["mandarin"];
+    : ["mandarin", "ru"];
   // : ["mandarin", "ru", "ko", "pl", "uk", "ja"];
 
   const locales = Array.from(new Set([defaultLocale, ...langArray]));
@@ -46,7 +46,7 @@ const config = {
   baseUrl: '/',
   themes: [
     '@docusaurus/theme-live-codeblock',
-    ],
+  ],
   plugins: [
     ['docusaurus-plugin-sass', {}],
     [
@@ -169,6 +169,7 @@ const config = {
           'typescript',
           'cpp',
           'c',
+          'bash', // bash, sh, and shell code blocks
         ],
       },
       docs: {

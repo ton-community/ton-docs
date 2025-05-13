@@ -2,21 +2,23 @@
 title: "Tolk vs FunC: mutability"
 ---
 
+import Feedback from '@site/src/components/Feedback';
+
 # Mutability in Tolk vs tilda functions in FunC
 
 :::tip TLDR
 - no `~` tilda methods
 - `cs.loadInt(32)` modifies a slice and returns an integer
 - `b.storeInt(x, 32)` modifies a builder
-- `b = b.storeInt()` also works, since it not only modifies, but returns
-- chained methods work identically to JS, they return `self`
+- `b = b.storeInt()` also works since it not only modifies but returns
+- chained methods work identically to JS; they return `self`
 - everything works exactly as expected, similar to JS
-- no runtime overhead, exactly same Fift instructions
+- no runtime overhead, the same Fift instructions
 - custom methods are created with ease
 - tilda `~` does not exist in Tolk at all
 :::
 
-This is a drastic change. If FunC has `.methods()` and `~methods()`, Tolk has only dot, one and only way to call a `.method()`. A method may *mutate* an object, or may not. Unlike the list "in short", it's a behavioral and semantic difference from FunC.
+This is a drastic change. If FunC has `.methods()` and `~methods()`, Tolk has only a dot, and the only way to call a method is `.method()`. The method may or may not *mutate* an object. Also, there is a behavioral and semantic difference between FunC and the list.
 
 The goal is to have calls identical to JS and other languages:
 
@@ -42,7 +44,7 @@ The goal is to have calls identical to JS and other languages:
   </tr>
   <tr>
     <td><code dangerouslySetInnerHTML={{__html: 'slice data = get_data()<br>             .begin_parse();<br>int flag = data~load_uint(32);'}}></code></td>
-    <td><code dangerouslySetInnerHTML={{__html: 'val flag = getContractData()<br>           .beginParse()<br>           .loadUint(32);'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'val flag = contract.getData()<br>           .beginParse()<br>           .loadUint(32);'}}></code></td>
   </tr>
   <tr>
     <td><code>{'dict~udict_set(...);'}</code></td>
@@ -63,7 +65,7 @@ The goal is to have calls identical to JS and other languages:
   </tbody>
 </table>
 
-In order to make this available, Tolk offers a mutability conception, which is a generalization of what a tilda means in FunC.
+Tolk offers a mutability conception to make this available, a generalization of what a `~` tilda means in FunC.
 
 <h3 className="cmp-func-tolk-header">
   By default, all arguments are copied by value (identical to FunC)
@@ -80,7 +82,7 @@ someFn(10);     // ok, just int
 origX.someFn(); // still allowed (but not recommended), origX remains 0
 ```
 
-Same goes for cells, slices, whatever:
+The same goes for cells, slices, whatever:
 ```tolk
 fun readFlags(cs: slice) {
     return cs.loadInt(32);
@@ -90,13 +92,13 @@ var flags = readFlags(msgBody);  // msgBody is not modified
 // msgBody.loadInt(32) will read the same flags
 ```
 
-It means, that when you call a function, you are sure that original data is not modified.
+This means that when you call a function, you are sure that the original data has not been modified.
 
 <h3 className="cmp-func-tolk-header">
   `mutate` keyword and mutating functions
 </h3>
 
-But if you add `mutate` keyword to a parameter, a passed argument will be mutated. To avoid unexpected mutations, you must specify `mutate` when calling it, also:
+But if you add the `mutate` keyword to a parameter, it will make a passed argument mutable. To avoid unexpected mutations, you must specify `mutate` when calling it, also:
 ```tolk
 fun increment(mutate x: int) {
     x += 1;
@@ -111,7 +113,7 @@ increment(origX);         // error, unexpected mutation
 increment(10);            // error, not lvalue
 origX.increment();        // error, not a method, unexpected mutation
 val constX = getSome();
-increment(mutate constX); // error, it's immutable, since `val`
+increment(mutate constX); // error, it's immutable since `val`
 ```
 
 Same for slices and any other types:
@@ -134,15 +136,16 @@ fun incrementXY(mutate x: int, mutate y: int, byValue: int) {
 incrementXY(mutate origX, mutate origY, 10);   // both += 10
 ```
 
-*You may ask — is it just passing by reference? It effectively is, but since "ref" is an overloaded term in TON (cells and slices have refs), a keyword `mutate` was chosen.*
+*You may ask — is it just passing by reference? It effectively is, but since "ref" is an overloaded term in TON (cells and slices have refs), the keyword `mutate` was chosen.*
 
 <h3 className="cmp-func-tolk-header">
-  `self` parameter turning a function into a method
+  By default, `self` in methods is immutable
 </h3>
 
-When a first parameter is named `self`, it emphasizes that a function (still a global one) is a method and should be called via dot.
+Methods — unlike global functions `fun f()` — are declared as `fun receiver_type.f()`.
+If a method accepts `self`, it's an instance method (if not, it's a static one).
 ```tolk
-fun assertNotEq(self: int, throwIfEq: int) {
+fun int.assertNotEq(self, throwIfEq: int) {
     if (self == throwIfEq) {
         throw 100;
     }
@@ -150,16 +153,15 @@ fun assertNotEq(self: int, throwIfEq: int) {
 
 someN.assertNotEq(10);
 10.assertNotEq(10);      // also ok, since self is not mutating
-assertNotEq(someN, 10);  // still allowed (but not recommended)
 ```
 
-`self`, without `mutate`, is **immutable** (unlike all other parameters). Think of it like "read-only method".
+`self` by default is immutable. Think of it like a **read-only method**.
 ```tolk
-fun readFlags(self: slice) {
+fun slice.readFlags(self) {
     return self.loadInt(32);  // error, modifying immutable variable
 }
 
-fun preloadInt32(self: slice) {
+fun slice.preloadInt32(self) {
     return self.preloadInt(32);  // ok, it's a read-only method
 }
 ```
@@ -172,13 +174,13 @@ Combining `mutate` and `self`, we get mutating methods.
 
 As follows:
 ```tolk
-fun readFlags(mutate self: slice) {
+fun slice.readFlags(mutate self) {
     return self.loadInt(32);
 }
 
 val flags = msgBody.readFlags(); // pretty obvious
 
-fun increment(mutate self: int) {
+fun int.increment(mutate self) {
     self += 1;
 }
 
@@ -187,7 +189,7 @@ origX.increment();    // 11
 10.increment();       // error, not lvalue
 
 // even this is possible
-fun incrementWithY(mutate self: int, mutate y: int, byValue: int) {
+fun int.incrementWithY(mutate self, mutate y: int, byValue: int) {
     self += byValue;
     y += byValue;
 }
@@ -195,22 +197,22 @@ fun incrementWithY(mutate self: int, mutate y: int, byValue: int) {
 origX.incrementWithY(mutate origY, 10);   // both += 10
 ```
 
-If you take a look into stdlib, you'll notice, that lots of functions are actually `mutate self`, meaning they are methods, modifying an object. Tuples, dictionaries, and so on. In FunC, they were usually called via tilda.
+If you look into stdlib, you'll notice that many functions actually **mutate self**, meaning they are methods of modifying an object. Tuples, dictionaries, and so on. In FunC, they were usually called via tilda.
 ```tolk
 @pure
-fun tuplePush<X>(mutate self: tuple, value: X): void
+fun tuple.push<X>(mutate self, value: X): void
     asm "TPUSH";
 
-t.tuplePush(1);
+t.push(1);
 ```
 
 <h3 className="cmp-func-tolk-header">
   `return self` makes a method chainable
 </h3>
 
-Exactly like `return self` in Python or `return this` in JavaScript. That's what makes methods like `storeInt()` and others chainable.
+It is precisely like `return self` in Python or `return this` in JavaScript. That makes methods like `storeInt()` and others chainable.
 ```tolk
-fun storeInt32(mutate self: builder, x: int): self {
+fun builder.storeInt32(mutate self, x: int): self {
     self.storeInt(x, 32);
     return self;
 
@@ -223,13 +225,13 @@ b.storeInt32(4);     // works without assignment, since mutates b
 b = b.storeInt32(5); // and works with assignment, since also returns
 ```
 
-Pay attention to the return type, it's `self`. Currently, you should specify it. Being left empty, compilation will fail. Probably, in the future it would be correct.
+Pay attention to the return type, it's `self`. You should specify it; otherwise, the compilation will fail if left empty. Probably, in the future, it will be correct.
 
 <h3 className="cmp-func-tolk-header">
   `mutate self` and asm functions
 </h3>
 
-While it's obvious for user-defined functions, one could be interested, how to make an `asm` function with such behavior? To answer this question, we should look under the hood, how mutation works inside the compiler.
+While it's evident for user-defined functions, one could be interested in how to make an `asm` function with such behavior. To answer this question, we should look under the hood at how mutation works inside the compiler.
 
 When a function has `mutate` parameters, it actually implicitly returns them, and they are implicitly assigned to arguments. It's better by example:
 ```tolk
@@ -245,7 +247,7 @@ fun f2(mutate x: int, mutate y: int): (slice, cell) { ... }
 // actually does: (x', y', r) = f2(x, y); x = x'; y = y'; someF(r)
 someF(f2(mutate x, mutate y));
 
-// when `self`, it's exactly the same
+// when `self`, it's the same
 // actually does: (cs', r) = loadInt(cs, 32); cs = cs'; flags = r
 flags = cs.loadInt(32);
 ```
@@ -255,37 +257,37 @@ So, an `asm` function should place `self'` onto a stack before its return value:
 // "TPUSH" pops (tuple) and pushes (tuple')
 // so, self' = tuple', and return an empty tensor
 // `void` is a synonym for an empty tensor
-fun tuplePush<X>(mutate self: tuple, value: X): void
+fun tuple.push<X>(mutate self, value: X): void
     asm "TPUSH";
 
 // "LDU" pops (slice) and pushes (int, slice')
 // with asm(-> 1 0), we make it (slice', int)
 // so, self' = slice', and return int
-fun loadMessageFlags(mutate self: slice): int
+fun slice.loadMessageFlags(mutate self): int
     asm(-> 1 0) "4 LDU";
 ```
 
-Note, that to return self, you don't have to do anything special, just specify a return type. Compiler will do the rest.
+Note, that to return self, you don't have to do anything special, just specify a return type. The compiler will do the rest.
 ```tolk
 // "STU" pops (int, builder) and pushes (builder')
 // with asm(op self), we put arguments to correct order
 // so, self' = builder', and return an empty tensor
 // but to make it chainable, `self` instead of `void`
-fun storeMessageOp(mutate self: builder, op: int): self
+fun builder.storeMessageOp(mutate self, op: int): self
     asm(op self) "32 STU";
 ```
 
-It's very unlikely you'll have to do such tricks. Most likely, you'll just write wrappers around existing functions:
+It's doubtful you'll have to do such tricks. Most likely, you'll write wrappers around existing functions:
 ```tolk
-// just do like this, without asm, it's the same effective
+// just do it like this, without asm; it's the same effective
 
 @inline
-fun myLoadMessageFlags(mutate self: slice): int {
+fun slice.myLoadMessageFlags(mutate self): int {
     return self.loadUint(4);
 }
 
 @inline
-fun myStoreMessageOp(mutate self: builder, flags: int): self {
+fun builder.myStoreMessageOp(mutate self, flags: int): self {
     return self.storeUint(32, flags);
 }
 ```
@@ -294,28 +296,10 @@ fun myStoreMessageOp(mutate self: builder, flags: int): self {
   Do I need `@inline` for simple functions/methods?
 </h3>
 
-For now, better do it, yes. In most examples above, `@inline` was omitted for clarity. Currently, without `@inline`, it will be a separate TVM continuation with jumps in/out. With `@inline`, a function will be generated, but inlined by Fift (like `inline` specifer in FunC).
+For now, better do it, yes. In most examples above, `@inline` was omitted for clarity. Without `@inline`, it will be a separate TVM continuation with jumps in/out. With `@inline`, a function will be generated, but inlined by Fift, like the `inline` specifier in FunC.
 
-In the future, Tolk will automatically detect simple functions and perform a true inlining by itself, on AST level. Such functions won't be even codegenerated to Fift. The compiler would decide, better than a human, whether to inline, to make a ref, etc. But it will take some time for Tolk to become so smart :) For now, please specify the `@inline` attribute.
+In the future, Tolk will automatically detect simple functions and perform true inlining on the AST level. Such functions won't be even generated to Fift. The compiler would decide, better than a human, whether to inline, to make a ref, etc. But it will take some time for Tolk to become so smart :)
 
-<h3 className="cmp-func-tolk-header">
-  But `self` is not a method, it's still a function! I feel like I've been cheated
-</h3>
+For now, please specify the `@inline` attribute.
 
-Absolutely. Like FunC, Tolk has only global functions (as of v0.6). There are no classes / structures with methods. There are no methods `hash()` for `slice` and `hash()` for `cell`. Instead, there are functions `sliceHash()` and `cellHash()`, which can be called either like functions or by dot (preferred):
-```tolk
-fun f(s: slice, c: cell) {
-    // not like this
-    s.hash();
-    c.hash();
-    // but like this
-    s.sliceHash();
-    c.cellHash();
-    // since it's the same as
-    sliceHash(s);
-    cellHash(s);
-}
-```
-
-In the future, after a giant work on the type system, having fully refactored FunC kernel inside, Tolk might have an ability of declaring structures with real methods, generalized enough for covering built-in types. But it will take a long journey to follow.
-
+<Feedback />

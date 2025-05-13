@@ -1,21 +1,25 @@
-# Writing Tests with Blueprint
+import Feedback from '@site/src/components/Feedback';
+
+# Writing tests with Blueprint
 
 ## Overview
 
-Test toolkit (usually sandbox) is already included in the TypeScript SDK named [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript). You can create a demo project and launch the default test with two steps:
+The TypeScript SDK, named [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript), already includes the test toolkit (usually Sandbox). You can create a demo project and run the default test in two steps:
 
 1. Create a new Blueprint project:
+
 ```bash
 npm create ton@latest MyProject
 ```
 
 2. Run a test:
+
 ```bash
 cd MyProject
 npx blueprint test
 ```
 
-As a result you'll see the corresponding output in the terminal window:
+As a result, you’ll see the corresponding output in the terminal window:
 
 ```bash
 % npx blueprint test
@@ -34,102 +38,111 @@ Time:        1.224 s, estimated 2 s
 Ran all test suites.
 ```
 
-## Basic Usage
-Testing of smart contracts allows for the coverage of security, optimization of gas spending, and examination of edge cases.
-Writing tests in Blueprint (based on [Sandbox](https://github.com/ton-org/sandbox)) works through defining arbitrary actions with the contract and comparing test results with the expected result, for example:
+## Basic usage
+
+Testing smart contracts allows you to cover security, optimize gas spending, and examine edge cases.  
+Writing tests in Blueprint (based on [Sandbox](https://github.com/ton-org/sandbox)) involves defining arbitrary actions with the contract and comparing the test results with the expected outcome. For example:
 
 ```typescript
-it('should execute with success', async () => {                              // description of the test case
-    const res = await main.sendMessage(sender.getSender(), toNano('0.05'));  // performing an action with contract main and saving result in res
+it("should execute with success", async () => {
+  // Description of the test case
+  const res = await main.sendMessage(sender.getSender(), toNano("0.05")); // Perform an action with the contract and save the result in res
 
-    expect(res.transactions).toHaveTransaction({                             // configure the expected result with expect() function
-        from: main.address,                                                  // set expected sender for transaction we want to test matcher properties from
-        success: true                                                        // set the desirable result using matcher property success
-    });
+  expect(res.transactions).toHaveTransaction({
+    // Configure the expected result with the expect() function
+    from: main.address, // Set the expected sender for the transaction
+    success: true, // Set the desirable result using the matcher property success
+ });
 
-    printTransactionFees(res.transactions);                                  // print table with details on spent fees
+  printTransactionFees(res.transactions); // Print a table with details on spent fees
 });
 ```
 
+### Writing tests for complex assertions
 
-### Writing Tests for Complex Assertion
+The basic workflow for creating a test is as follows:
 
-The basic workflow of creating a test is:
 1. Create a specific wrapped `Contract` entity using `blockchain.openContract()`.
-2. Describe the actions your `Contract` should perform and save the execution result in `res` variable.
+2. Describe the actions your `Contract` should perform and save the execution result in the `res` variable.
 3. Verify the properties using the `expect()` function and the matcher `toHaveTransaction()`.
 
-The `toHaveTransaction` matcher expects an object with any combination of fields from the `FlatTransaction` type defined with the following properties
+The `toHaveTransaction` matcher expects an object with any combination of fields from the `FlatTransaction` type, defined with the following properties:
 
-| Name                 | Type          | Description                                                                                                                                                         |
-|----------------------|---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| from                 | Address?      | Contract address of the message sender                                                                                                                              |
-| on                   | Address       | Contract address of the message destination  (Alternative name of the property `to`).                                                                               |
-| value                | bigint?       | Amount of Toncoins in the message in nanotons                                                                                                                       |
-| body                 | Cell          | Message body defined as a Cell                                                                                                                                              |
-| op                   | number?       | Op code is the operation identifier number (crc32 from TL-B usually). Expected in the first 32 bits of a message body.                                              |
-|success| boolean?       | Custom Sandbox flag that defines the resulting status of a certain transaction. True - if both the compute and the action phase succeeded. Otherwise - False.       |
+| Name    | Type     | Description                                                                                                                                                |
+| ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| from    | Address? | Contract address of the message sender                                                                                                                     |
+| on      | Address  | Contract address of the message destination (alternative name for the property `to`).                                                                      |
+| value   | bigint?  | Amount of TON coins in the message, in nanotons                                                                                                            |
+| body    | Cell     | Message body defined as a Cell                                                                                                                             |
+| op      | number?  | Op code is usually the operation identifier number (crc32 from TL-B). Expected in the first 32 bits of a message body.                                     |
+| success | boolean? | Custom Sandbox flag that defines the resulting status of a certain transaction. True if both the compute and the action phases succeeded. Otherwise, False. |
 
-You can omit the fields that you're not interested in and pass functions accepting the types returning booleans (`true` meaning good) to check for example number ranges, message opcodes, etc. Please note that if a field is optional (like `from?: Address`), then the function needs to accept the optional type, too.
+You can omit fields you’re not interested in and pass functions that accept the types and return booleans (`true` meaning good) to check, for example, number ranges, message opcodes, etc. Note that if a field is optional (like `from?: Address`), the function must also accept the optional type.
 
-
-:::tip
-You can learn the whole list of matcher fields from the [Sandbox documentation](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).
+:::tip  
+The complete list of matcher fields is in the [Sandbox documentation](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).  
 :::
 
-### Specific Test Suite
+### Specific test suite
 
-#### Extract SendMode
+#### Extract send mode
 
-To extract the send mode of a sent message you can use the following code:
+To extract the send mode of a sent message, use the following code:
 
 ```ts
 const re = await blockchain.executor.runTransaction({
-    message: beginCell().endCell(),
-    config: blockchain.configBase64,
-    libs: null,
-    verbosity: 'short',
-    shardAccount: beginCell().storeAddress(address).endCell().toBoc().toString('base64'),
-    now: Math. floor (Date.now()) / 1000,
-    lt: BigInt(Date.now()),
-    randomSeed: null,
-    ignoreChksig: false,
-    debugEnabled: true
+  message: beginCell().endCell(),
+  config: blockchain.configBase64,
+  libs: null,
+  verbosity: "short",
+  shardAccount: beginCell()
+ .storeAddress(address)
+ .endCell()
+ .toBoc()
+ .toString("base64"),
+  now: Math.floor(Date.now()) / 1000,
+  lt: BigInt(Date.now()),
+  randomSeed: null,
+  ignoreChksig: false,
+  debugEnabled: true,
 });
 
 if (!re.result.success || !re.result.actions) {
-    throw new Error('fail');
+  throw new Error("fail");
 }
 
 const actions = loadOutList(Cell.fromBase64(re.result.actions).beginParse());
 for (const act of actions) {
-    if (act.type === "sendMsg") {
-        // process action
-        console.log(act.mode)
-    }
+  if (act.type === "sendMsg") {
+    // process action
+    console.log(act.mode);
+ }
 }
 ```
-
 
 ## Tutorials
 
 Learn more about testing from the most valuable community tutorials on TON:
 
-* [Lesson 2: Testing FunC for a Smart Contract](https://github.com/romanovichim/TonFunClessons_Eng/blob/main/lessons/smartcontract/2lesson/secondlesson.md)
-* [TON Hello World part 4: Step by step guide for testing your first smart contract](https://ton-community.github.io/tutorials/04-testing/)
-* [TON Smart Contract Pipeline](https://dev.to/roma_i_m/ton-smart-contract-pipeline-write-simple-contract-and-compile-it-4pnh)
-* [[YouTube]Sixth lesson FunC & Blueprint. Gas, fees, tests.](https://youtu.be/3XIpKZ6wNcg)
+- [Lesson 2: Testing FunC for a Smart Contract](https://github.com/romanovichim/TonFunClessons_Eng/blob/main/lessons/smartcontract/2lesson/secondlesson.md)
+- [TON Hello World part 4: Step-by-step guide for testing your first smart contract](https://helloworld.tonstudio.io/04-testing/)
+- [TON Smart Contract Pipeline](https://dev.to/roma_i_m/ton-smart-contract-pipeline-write-simple-contract-and-compile-it-4pnh)
+- [[YouTube] Sixth lesson FunC & Blueprint: Gas, fees, tests](https://youtu.be/3XIpKZ6wNcg)
 
 ## Examples
 
-Check test suites used for TON Ecosystem contracts and learn by examples.
+Check test suites used for TON Ecosystem contracts and learn by examples:
 
-* [liquid-staking-contract sandbox tests](https://github.com/ton-blockchain/liquid-staking-contract/tree/main/tests)
-* [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/config_tests/tests/)
-* [JettonWallet.spec.ts](https://github.com/EmelyanenkoK/modern_jetton/blob/master/tests/JettonWallet.spec.ts)
-* [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/elector_tests/tests/complaint-test.fc)
-* [MassSender.spec.ts](https://github.com/Gusarich/ton-mass-sender/blob/main/tests/MassSender.spec.ts)
-* [Assurer.spec.ts](https://github.com/aSpite/dominant-assurance-contract/blob/main/tests/Assurer.spec.ts)
+- [Liquid-staking-contract sandbox tests](https://github.com/ton-blockchain/liquid-staking-contract/tree/main/tests)
+- [Governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/config_tests/tests/)
+- [JettonWallet.spec.ts](https://github.com/EmelyanenkoK/modern_jetton/blob/master/tests/JettonWallet.spec.ts)
+- [Governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/elector_tests/tests/complaint-test.fc)
+- [MassSender.spec.ts](https://github.com/Gusarich/ton-mass-sender/blob/main/tests/MassSender.spec.ts)
+- [Assurer.spec.ts](https://github.com/aSpite/dominant-assurance-contract/blob/main/tests/Assurer.spec.ts)
 
-## See Also
-* [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript)
+## See also
+
+- [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript)
+
+<Feedback />
+

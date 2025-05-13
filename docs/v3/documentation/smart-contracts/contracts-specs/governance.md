@@ -1,74 +1,137 @@
-# Governance Contracts
+import Feedback from '@site/src/components/Feedback';
 
-In TON, consensus parameters of node operation related to TVM, catchain, fees, and chain topology (as well as how those parameters are stored and updated) are controlled by a set of special smart contracts (in contrast to the old-fashioned and inflexible ways of hardcoding those parameters adopted by blockchains of previous generations). That way, TON implements comprehensive and transparent on-chain governance. The set of special contracts itself is governed by parameters and currently includes the Elector, Config, and DNS contracts and in future will be extended by extra-currency Minter and others.
+# Governance contracts
+
+In TON, a set of special smart contracts controls consensus parameters for node operation - including TVM, catchain, fees, and chain topology - and how these parameters are stored and updated. Unlike older blockchains that hardcode these parameters, TON enables transparent on-chain governance. The current governance contracts include the **Elector**, **Config**, and **DNS** contracts, with expansion plans (e.g., extra-currency **Minter**).
 
 ## Elector
 
-The Elector smart contract controls the way how rounds of validation change each other, who gets the duty to validate the blockchain, and how rewards for validation would be distributed. If you want to become a validator and interact with Elector, check [validator instructions](https://ton.org/validator).
+The **Elector** smart contract manages validator elections, validation rounds, and reward distribution. To become a validator and interact with the Elector, follow the [validator instructions](https://ton.org/validator).
 
-Elector stores data of Toncoin that is not withdrawn in `credits` hashmap, new applications in `elect` hashmap, and information about previous elections in _past\_elections_ hashmap (the latter is stored inside _complaints_ about validator misbehavior and _frozen_-stakes of validator for already finished rounds, which are withheld for `stake_held_for`(ConfigParam 15)). The Elector contract has three purposes:
- - Process applications for the election of validators
- - Hold elections
- - Process validator misbehaving reports
- - Distribute validation rewards
+### Data storage
 
-### Processing applications
-To create an application, a future validator needs to form a special message that contains the corresponding parameters (ADNL address, public key, `max_factor`, etc.), attach it to some sum of TON (called a stake), and send it to the Elector. In turn, the Elector checks those parameters and either registers an application or immediately returns the stake back to the sender. Note that applications are only accepted from addresses on the masterchain.
+The Elector stores:
+
+- Non-withdrawn Toncoin in the `credits` hashmap.
+- New validator applications in the `elect` hashmap.
+- Past election data in the `past_elections` hashmap (including complaints and `frozen` stakes held for `stake_held_for` periods, defined in **ConfigParam 15**).
+
+### Key functions
+
+1. **Process validator applications**
+2. **Conduct elections**
+3. **Handle validator misbehavior reports**
+4. **Distribute validation rewards**
+
+#### Processing applications
+
+To apply, a validator must:
+
+1. Send a message to the Elector with their ADNL address, public key, `max_factor`, and stake (TON amount).
+2. The Elector validates the parameters and either registers the application or refunds the stake.  
+   _Note:_ Only masterchain addresses can apply.
 
 ### Conducting elections
-The Elector is a special smart contract that has the option to be forcedly invoked at the beginning and end of each block (so-called Tick and Tock transactions). The Elector, indeed, is invoked on each block and checks whether it is time to conduct a new election.
 
-The general concept of the election process is to consider all applications, in particular their TON amount and `max_factor` (the maximal ratio of validation work this applicant is agreed to do in comparison to the weakest validator), and set weights to each validator proportional to the TON amount but in such a way that all `max_factor` conditions are met.
+The Elector is a special smart contract that triggers **Tick and Tock transactions** (forced executions at the start and end of each block). It checks whether it’s time to conduct a new election during each block.
 
-It is technically implemented as follows:
+**Process details:**
 
-1. Elector takes all applications with a stake amount above the current network minimum `min_stake` (ConfigParam 17).
-2. It sorts them by stake in descending order.
-3. If there are more participants than the maximum number of validators (`max_validators` ConfigParam 16), discard the tail of the list.
-4. Cycle `i` from `1` to `N` (remaining number of participants).
-  - Take the first `i` element from the list (sorted in descending order)
-  - Assume that _i_-th candidate will be the last accepted (and thus has the lowest weight) and calculate an effective stake (`true_stake` in code) with respect to `max_factor`. In other words, the effective stake of a _j_-th (`j<i`) applicant is calculated as `min(stake[i]*max_factor[j], stake[j])`.
-  - Calculate the total effective stake (TES) of participants from 1 to _i_-th. If this TES is higher than the previous known maximal TES, consider it the current best weight configuration.
-5. Get the current best configuration, i.e., the weight configuration that utilizes the maximal stake, and send it to the configuration contract (Config contract, see below) to be a new validator set.
-6. Put all unused stakes, such as those from applicants that do not become validators and excesses (if any) `stake[j]-min(stake[i]*max_factor[j], stake[j])` to the `credits` table from where they can be requested by applicants.
+- Take applications with stake ≥ `min_stake` (**ConfigParam 17**).
+- Arrange candidates by stake in descending order.
+- If applicants exceed `max_validators` (**ConfigParam 16**), discard the lowest-staked candidates.
+- For each subset size `i` (from 1 to remaining candidates):
+  - Assume the `i`-th candidate (lowest in the subset) defines the baseline.
+  - Calculate effective stake (`true_stake`) for each `j`-th candidate (`j < i`) as:
 
-That way, if we have nine candidates with 100,000 and a factor of 2.7 and one participant with 10,000. The last participant will not be elected: Without him, an effective stake would be 900,000, and with him, only 9 * 27,000 + 10,000 = 253,000. In contrast, if we have one candidate with 100,000 and a factor of 2.7 and nine participants with 10,000, they all become validators. However, the first candidate will only stake 10*2.7 = 27,000 TON with the excess of 73,000 TON going into `credits`.
+```
+min(stake[i] * max_factor[j], stake[j])
+```
 
-Note that there are some limitations (obviously controlled by TON configuration parameters) on the resulting validation set, in particular `min_validators`, `max_validators` (ConfigParam 16), `min_stake`, `max_stake`, `min_total_stake`, `max_stake_factor` (ConfigParam 17). If there is no way to meet those conditions with the current applications, elections will be postponed.
+- Track the subset with the highest **total effective stake (TES)**.
+- Submit the winning validator set to the **Config** contract.
+- Return unused stakes and excess amounts (e.g., `stake[j] - min(stake[i] * max_factor[j], stake[j])`) to `credits`.
+
+**Example breakdown**:
+
+- **Case 1**: 9 candidates stake 100,000 TON (`max_factor=2.7`), 1 candidate stakes 10,000.
+
+  - _Without the 10k candidate_: TES = 900,000.
+  - _With the 10k candidate_: TES = 9 \* 27,000 + 10,000 = 253,000.
+  - **Result**: 10k candidate is excluded.
+
+- **Case 2**: 1 candidate stakes 100,000 (`max_factor=2.7`), 9 stake 10,000.
+  - Effective stake for the 100k candidate: `10,000 * 2.7 = 27,000`.
+  - Excess: `100,000 - 27,000 = 73,000` → sent to `credits`.
+  - **Result**: All 10 participate.
+
+**Election constraints**:
+
+- `min_validators` ≤ participants ≤ `max_validators` (**ConfigParam 16**).
+- Stakes must satisfy:
+  - `min_stake` ≤ stake ≤ `max_stake`
+  - `min_total_stake` ≤ total stake ≤ `max_total_stake`
+  - Stake ratios ≤ `max_stake_factor` (**ConfigParam 17**).
+- If conditions aren’t met, elections **postponed**.
 
 ### Process of reporting validator misbehavior
 
-Each validator, from time to time, is randomly assigned to create a new block (if the validator fails after a few seconds, this duty is passed to the next validator). The frequency of such assignments is determined by the validator's weight. So, anyone can get the blocks from the previous validation round and check whether the expected number of generated blocks is close to the real number of blocks. A statistically significant deviation (when the number of generated blocks is less than expected) means that a validator is misbehaving. On TON, it is relatively easy to prove misbehavior using Merkle proofs. The Elector contract accepts such proof with a suggested fine from anyone who is ready to pay for its storage and registers the complaint. Then, every validator of the current round checks the complaint, and if it is correct and the suggested fine corresponds to the severity of the misbehavior, they vote for it. Upon getting more than 2/3 of the votes with respect to the weight, the complaint gets accepted, and the fine is withheld from the `frozen` hashmap of the corresponding element of `past_elections`.
+Each validator is periodically assigned the duty to create new blocks, with the frequency of assignments determined by their weight. After a validation round, anyone can audit the blocks to check whether the actual number of blocks produced by a validator significantly deviates from the expected number (based on their weight). A statistically significant underperformance (e.g., fewer blocks created than expected) constitutes misbehavior.
 
-### Distribution of validation rewards
-The same way as with checking whether it is time to conduct new elections, the Elector in each block checks whether it is time to release funds from `frozen` for stored `past_elections`. At the corresponding block, the Elector distributes accumulated earnings from corresponding validation rounds (gas fees and block creation rewards) to validators of that round proportional to validator weights. After that, stakes with rewards are added to the `credits` table, and the election gets removed from `past_elections` table.
+To report misbehavior, a user must:
 
-### Current state of Elector
-You can check current state in the [dapp](https://1ixi1.github.io/elector/), which allows to see elections participants, locked stakes, ready to withdraw funds, complaints and so on.
+1. Generate a **Merkle proof** demonstrating the validator's failure to produce the expected blocks.
+2. Propose a fine proportional to the severity of the offense.
+3. Submit the proof and fine proposal to the Elector contract, covering the associated storage costs.
+
+The Elector registers the complaint in the `past_elections` hashmap. Current round validators then verify the complaint. If the proof is valid and the proposed fine aligns with the severity of the misbehavior, validators vote on the complaint. Approval requires agreement from over **two-thirds of the total validator weight** (not just a majority of participants).
+
+The fine is deducted from the validator's `frozen` stake in the relevant `past_elections` record if approved. These funds stay locked for the period defined by **ConfigParam 15** (`stake_held_for`).
+
+#### Distributing rewards
+
+The Elector releases `frozen` stakes and rewards (gas fees + block rewards) proportionally to past validators. Funds move to `credits`, and the election record clears from `past_elections`.
+
+### Current Elector state
+
+Track live data (elections, stakes, complaints) via this [dapp](https://1ixi1.github.io/elector/).
+
 ## Config
-Config smart contract controls TON configuration parameters. Its logic determines who and under what conditions has permission to change some of those parameters. It also implements a proposal/voting mechanism and validator set rolling updates.
 
-### Validator set rolling updates
-Once the Config contract gets a special message from the Elector contract that notifies it of a new validator set being elected, Config puts a new validator set to ConfigParam 36 (next validators). Then, in each block during TickTock transactions, Config checks whether it is time to apply a new validator set (the time `utime_since` is embedded in the validator set itself) and moves the previous set from ConfigParam 34 (current validators) to ConfigParam32 (previous validators) and sets from ConfigParam 36 to ConfigParam 34.
+The **Config** contract manages TON’s configuration parameters, validator set updates, and proposal voting.
+
+### Validator set updates
+
+1. The **Elector** notifies **Config** of a new validator set.
+2. **Config** stores it in **ConfigParam 36** (_next validators_).
+3. At the scheduled time (`utime_since`), **Config**:
+   - Moves the old set to **ConfigParam 32** (_previous validators_).
+   - Promotes **ConfigParam 36** to **ConfigParam 34** (_current validators_).
 
 ### Proposal/voting mechanism
-Anyone who is ready to pay the storage fee for storing the proposal may propose a change of one or more configuration parameters by sending corresponding messages to the Config contract. In turn, any validator in the current set may vote for this proposal by signing an approval message with their private key (note that the corresponding public key is stored in ConfigParam 34). On gaining or not gaining 3/4 of the votes (with respect to validators' weight), the proposal wins or loses the round. Upon winning a critical number of rounds (`min_wins` ConfigParam 11), the proposal is accepted; upon losing a critical number of rounds (`max_losses` ConfigParam 11), it gets discarded.
-Note that some of the parameters are considered critical (the set of critical parameters is itself a configuration parameter ConfigParam 10) and, thus require more rounds to be accepted.
 
-Configuration parameter indexes `-999`, `-1000`, `-1001` are reserved for voting for an emergency update mechanism and updating the code of Config and the Elector. When the proposal with the corresponding indexes gains enough votes in enough rounds corresponding to the emergency key, the code of the Config contract or the code of the Elector contract gets updated.
+1. **Submit a proposal**: Pay storage fees to propose parameter changes.
+2. **Vote**: Validators (from **ConfigParam 34**) sign approval messages.
+3. **Outcome**:
+   - **Approved**: After `min_wins` rounds (**ConfigParam 11**) with ≥3/4 weighted votes.
+   - **Rejected**: After `max_losses` rounds.
+   - _Critical parameters_ (**ConfigParam 10**) require more rounds.
 
+#### Emergency updates
 
-#### Emergency update
-Validators may vote to assign a special public key to be able to update configuration parameters when it cannot be done via the voting mechanism. This is a temporary measure that is necessary during the active development of the network. It is expected that as the network matures, this measure will be phased out. As soon as it’s developed and tested, the key will be transferred to a multisignature solution. And once the network has proven its stability, the emergency mechanism will be completely discarded.
+- Reserved indexes (`-999`, `-1000`, `-1001`) allow urgent updates to **Config**/**Elector** code.
+- A temporary emergency key (assigned to the TON Foundation in 2021) accelerated fixes but couldn't alter contracts.
+- **Key retired** on Nov 22, 2023 (**block 34312810**), replaced with zeros.
+- Later patched to a fixed byte sequence (`sha256("Not a valid curve point")`) to prevent exploits.
 
-Validators indeed voted to assign that key to TON Foundation in July 2021 (masterchain block `12958364`). Note that such a key can only be used to speed up configuration updates. It has no ability to interfere with the code, storage, and balances of any contract on any chain.
+**Historical uses**:
 
-History of emergency updates:
- - On April 17, 2022, the number of applications for the election grew big enough that the election could not be conducted under gas limits at that moment. In particular, elections required more than 10 million of gas, while the block `soft_limit` and `hard_limit` were set to `10m` and `20m`  (ConfigParam 22), `special_gas_limit` and `block_gas_limit` were set to `10m` and `10m`, respectively (ConfigParam 20). That way, new validators cannot be set, and due to reaching the block gas limit, transactions that process internal messages on the masterchain could not be included in the block. In turn, that leads to the inability to vote for configuration updates (it was impossible to win the required number of rounds since the current round was unable to finish). An emergency key was used to update ConfigParam 22 `soft_limit` to 22m and `hard_limit` to 25m (in block `19880281`) and ConfigParam 20 `special_gas_limit` to 20m and `block_gas_limit` to 22m (in block `19880300`). As a result, the election was successfully conducted, the next block consumed `10 001 444` gas. The total postponement of elections was about 6 hours, and the functionality of the base chain was unaffected.
- - On March 2, 2023, the number of applications for the election grew big enough that even `20m` were not enough to conduct election. However, this time masterchain continue to process external messages due to higher `hard_limit`. An emergency key was used to update ConfigParam 20 `special_gas_limit` to 25m and `block_gas_limit` to 27m (in block `27747086`). As a result, the election was successfully conducted in next block. The total postponement of elections was about 6 hours, besides elections, functionality of the both master chain and base chain was unaffected.
- - On November 22, 2023, key was used to [renounce itself](https://t.me/tonblockchain/221) (in block `34312810`). As a result, public key was replaced with 32 zero bytes.
- - Due to switch to OpenSSL implementation of Ed25519 signature verification, check for special case [all bytes of public key are the same](https://github.com/ton-blockchain/ton/blob/7fcf26771748338038aec4e9ec543dc69afeb1fa/crypto/ellcurve/Ed25519.cpp#L57C1-L57C1) was disabled. As a result, check against zero public key stopped work as intended. Using this issue, emergency key was [updated on December 9](https://t.me/tonstatus/80) yet another time (in block `34665437`, [tx](https://tonscan.org/tx/MU%2FNmSFkC0pJiCi730Fmt6PszBooRZkzgiQMv0sExfY=)) to nothing-in-my-sleeve byte-sequence `82b17caadb303d53c3286c06a6e1affc517d1bc1d3ef2e4489d18b873f5d7cd1` that is `sha256("Not a valid curve point")`. Now, the only way to update network configuration parameters is through validator consensus.
+- **Apr 2022**: Increased gas limits (**blocks 19880281/19880300**) to unblock elections.
+- **Mar 2023**: Raised `special_gas_limit` to 25M (**block 27747086**) for election throughput.
 
+## See also
 
-## See Also
-- [Precompiled Contracts](/v3/documentation/smart-contracts/contracts-specs/precompiled-contracts)
+- [Precompiled contracts](/v3/documentation/smart-contracts/contracts-specs/precompiled-contracts)
+
+<Feedback />
+

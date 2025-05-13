@@ -1,0 +1,2065 @@
+import Button from '@site/src/components/button'
+
+# TON Connect для Telegram ботов
+
+:::warning
+Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::
+
+:::warning устаревшее
+В этом руководстве описан устаревший метод интеграции TON Connect с ботами Telegram. Для более безопасного и актуального способа рекомендуется использовать [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview для более современной и безопасной интеграции.
+:::
+
+В этом руководстве мы создадим пример Telegram-бота с использованием JavaScript TON Connect SDK, поддерживающего аутентификацию TON Connect 2.0. Мы рассмотрим подключение кошельков, отправку транзакций, получение информации о кошельках и отключение кошельков.
+
+<Button href="https://t.me/ton_connect_example_bot" colorType={'primary'} sizeType={'sm'}>
+
+Открыть демо-бот
+
+</Button>
+
+<Button href="https://github.com/ton-connect/demo-telegram-bot" colorType={'secondary'} sizeType={'sm'}>
+
+Ознакомиться с GitHub
+
+</Button>
+
+## Ссылки на документацию
+
+- [Документация TON Connect SDK] (https://www.npmjs.com/package/@tonconnect/sdk)
+
+## Необходимые компоненты
+
+- Вам нужно создать Telegram-бота с помощью [@BotFather](https://t.me/BotFather) и сохранить его токен.
+- Необходимо установить Node JS (в этом руководстве используется версия 18.1.0).
+- Необходимо установить Docker.
+
+## Создание проекта
+
+### Настройка зависимостей
+
+Начнем с создания проекта Node.js. Мы будем использовать TypeScript и библиотеку [node-telegram-bot-api](https://www.npmjs.com/package/node-telegram-bot-api), хотя вы можете выбрать другую библиотеку по своему усмотрению. Также мы будем использовать библиотеку [qrcode](https://www.npmjs.com/package/qrcode) для генерации QR-кодов,  но вы можете заменить её любой другой аналогичной библиотекой.
+
+Давайте создадим директорию `ton-connect-bot`. Добавьте в нее следующий файл package.json:
+
+```json
+{
+  "name": "ton-connect-bot",
+  "version": "1.0.0",
+  "scripts": {
+    "compile": "npx rimraf dist && tsc",
+    "run": "node ./dist/main.js"
+  },
+  "dependencies": {
+    "@tonconnect/sdk": "^3.0.0-beta.1",
+    "dotenv": "^16.0.3",
+    "node-telegram-bot-api": "^0.61.0",
+    "qrcode": "^1.5.1"
+  },
+  "devDependencies": {
+    "@types/node-telegram-bot-api": "^0.61.4",
+    "@types/qrcode": "^1.5.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.9.5"
+  }
+}
+```
+
+Запустите `npm i`, чтобы установить зависимости.
+
+### Добавление файла tsconfig.json
+
+Создайте файл `tsconfig.json`:
+
+<details>
+<summary>Код tsconfig.json</summary>
+
+```json
+{
+  "compilerOptions": {
+    "declaration": true,
+    "lib": ["ESNext", "dom"],
+    "resolveJsonModule": true,
+    "experimentalDecorators": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es6",
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "useUnknownInCatchVariables": false,
+    "noUncheckedIndexedAccess": true,
+    "emitDecoratorMetadata": false,
+    "importHelpers": false,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "allowJs": true,
+    "outDir": "./dist"
+  },
+  "include": ["src"],
+  "exclude": [
+    "./tests","node_modules", "lib", "types"]
+}
+```
+
+</details>
+
+[Подробнее о tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
+
+### Добавление простого кода бота
+
+Создайте файл `.env` и добавьте туда токен вашего бота, манифест DApp и список кошельков, которые будут кэшироваться в это время:
+
+[Подробнее о tonconnect-manifes.json] (https://github.com/ton-connect/sdk/tree/main/packages/sdk#add-the-tonconnect-manifest)
+
+```dotenv
+# .env
+TELEGRAM_BOT_TOKEN=<YOUR BOT TOKEN, E.G 1234567890:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA>
+TELEGRAM_BOT_LINK=<YOUR TG BOT LINK HERE, E.G. https://t.me/ton_connect_example_bot>
+MANIFEST_URL=https://raw.githubusercontent.com/ton-connect/demo-telegram-bot/master/tonconnect-manifest.json
+WALLETS_LIST_CACHE_TTL_MS=86400000
+```
+
+Создайте директорию `src` и файл `bot.ts` внутри. Давайте создадим там экземпляр TelegramBot:
+
+```ts
+// src/bot.ts
+
+import TelegramBot from 'node-telegram-bot-api';
+import * as process from 'process';
+
+const token = process.env.TELEGRAM_BOT_TOKEN!;
+
+export const bot = new TelegramBot(token, { polling: true });
+```
+
+Теперь мы можем создать входной файл `main.ts` в директории `src`:
+
+```ts
+// src/main.ts
+import dotenv from 'dotenv';
+dotenv.config();
+
+import { bot } from './bot';
+
+bot.on('message', msg => {
+  const chatId = msg.chat.id;
+
+  bot.sendMessage(chatId, 'Received your message');
+});
+```
+
+Все готово. Вы можете запустить `npm run compile` и `npm run start`, и отправить любое сообщение вашему боту. Бот ответит: "Received your message". Мы готовы к интеграции с TonConnect.
+
+На данный момент у нас следующая структура файлов:
+
+```text
+ton-connect-bot
+├── src
+│   ├── bot.ts
+│   └── main.ts
+├── package.json
+├── package-lock.json
+├── .env
+└── tsconfig.json
+```
+
+## Подключение кошелька
+
+После установки `@tonconnect/sdk` мы можем начать с его импорта для инициализации подключений кошелька.
+
+Мы начнем с получения списка кошельков. Нам нужны только кошельки, совместимые с http-bridge. Создайте папку `ton-connect` в `src` и добавьте туда файл `wallets.ts`:
+Мы также определим функцию `getWalletInfo`, которая запрашивает подробную информацию о кошельке по его `appName`.
+Разница между `name` и `appName` заключается в том, что `name` - это читаемое название кошелька, а `appName` - это уникальный идентификатор кошелька.
+
+```ts
+// src/ton-connect/wallets.ts
+
+import { isWalletInfoRemote, WalletInfoRemote, WalletsListManager } from '@tonconnect/sdk';
+
+const walletsListManager = new WalletsListManager({
+    cacheTTLMs: Number(process.env.WALLETS_LIST_CACHE_TTL_MS)
+});
+
+export async function getWallets(): Promise<WalletInfoRemote[]> {
+    const wallets = await walletsListManager.getWallets();
+    return wallets.filter(isWalletInfoRemote);
+}
+
+export async function getWalletInfo(walletAppName: string): Promise<WalletInfo | undefined> {
+    const wallets = await getWallets();
+    return wallets.find(wallet => wallet.appName.toLowerCase() === walletAppName.toLowerCase());
+}
+```
+
+Теперь нам нужно определить хранилище TonConnect. TonConnect использует `localStorage` для сохранения данных о подключении при работе в браузере, однако в среде NodeJS `localStorage` отсутствует. Поэтому нам нужно добавить собственную простую реализацию хранилища.
+
+[Подробнее о хранилище TonConnect](https://github.com/ton-connect/sdk/tree/main/packages/sdk#init-connector)
+
+Создайте файл `storage.ts` в директории `ton-connect`:
+
+```ts
+// src/ton-connect/storage.ts
+
+import { IStorage } from '@tonconnect/sdk';
+
+const storage = new Map<string, string>(); // temporary storage implementation. We will replace it with the redis later
+
+export class TonConnectStorage implements IStorage {
+  constructor(private readonly chatId: number) {} // we need to have different stores for different users
+
+  private getKey(key: string): string {
+    return this.chatId.toString() + key; // we will simply have different keys prefixes for different users
+  }
+
+  async removeItem(key: string): Promise<void> {
+    storage.delete(this.getKey(key));
+  }
+
+  async setItem(key: string, value: string): Promise<void> {
+    storage.set(this.getKey(key), value);
+  }
+
+  async getItem(key: string): Promise<string | null> {
+    return storage.get(this.getKey(key)) || null;
+  }
+}
+```
+
+Мы переходим к реализации подключения кошелька.
+Измените `src/main.ts` и добавьте команду `connect`. Подключение кошелька будет реализовано в обработчике этой команды.
+
+```ts
+import dotenv from 'dotenv';
+dotenv.config();
+
+import { bot } from './bot';
+import { getWallets } from './ton-connect/wallets';
+import TonConnect from '@tonconnect/sdk';
+import { TonConnectStorage } from './ton-connect/storage';
+import QRCode from 'qrcode';
+
+bot.onText(/\/connect/, async msg => {
+  const chatId = msg.chat.id;
+  const wallets = await getWallets();
+
+  const connector = new TonConnect({
+    storage: new TonConnectStorage(chatId),
+    manifestUrl: process.env.MANIFEST_URL
+  });
+
+  connector.onStatusChange(wallet => {
+    if (wallet) {
+      bot.sendMessage(chatId, `${wallet.device.appName} wallet connected!`);
+    }
+  });
+
+  const tonkeeper = wallets.find(wallet => wallet.appName === 'tonkeeper')!;
+
+  const link = connector.connect({
+    bridgeUrl: tonkeeper.bridgeUrl,
+    universalLink: tonkeeper.universalLink
+  });
+  const image = await QRCode.toBuffer(link);
+
+  await bot.sendPhoto(chatId, image);
+});
+```
+
+Давайте разберемся, что мы делаем. Сначала мы получаем список кошельков и создаем экземпляр TonConnect.
+Затем подписываемся на изменение кошелька. Когда пользователь подключит кошелек, бот отправит сообщение `${wallet.device.appName} wallet connected!`.
+Далее мы находим кошелек Tonkeeper и создаем ссылку для подключения. В завершение мы генерируем QR-код со ссылкой и отправляем его пользователю в виде фотографии.
+
+Теперь вы можете запустить бота (`npm run compile` и `npm run start`), а затем отправить боту сообщение `/connect`. Бот должен ответить QR-кодом. Отсканируйте его кошельком Tonkeeper. В чате появится сообщение `Tonkeeper wallet connected!`.
+
+Мы будем использовать коннектор во многих местах, поэтому давайте перенесем код его создания в отдельный файл:
+
+```ts
+// src/ton-connect/connector.ts
+
+import TonConnect from '@tonconnect/sdk';
+import { TonConnectStorage } from './storage';
+import * as process from 'process';
+
+export function getConnector(chatId: number): TonConnect {
+    return new TonConnect({
+        manifestUrl: process.env.MANIFEST_URL,
+        storage: new TonConnectStorage(chatId)
+    });
+}
+```
+
+И импортируем его в `src/main.ts`
+
+```ts
+// src/main.ts
+
+import dotenv from 'dotenv';
+dotenv.config();
+
+import { bot } from './bot';
+import { getWallets } from './ton-connect/wallets';
+import QRCode from 'qrcode';
+import { getConnector } from './ton-connect/connector';
+
+bot.onText(/\/connect/, async msg => {
+    const chatId = msg.chat.id;
+    const wallets = await getWallets();
+
+    const connector = getConnector(chatId);
+
+    connector.onStatusChange(wallet => {
+        if (wallet) {
+            bot.sendMessage(chatId, `${wallet.device.appName} wallet connected!`);
+        }
+    });
+
+    const tonkeeper = wallets.find(wallet => wallet.appName === 'tonkeeper')!;
+
+    const link = connector.connect({
+        bridgeUrl: tonkeeper.bridgeUrl,
+        universalLink: tonkeeper.universalLink
+    });
+    const image = await QRCode.toBuffer(link);
+
+    await bot.sendPhoto(chatId, image);
+});
+```
+
+На данный момент у нас следующая структура файлов:
+
+```text
+bot-demo
+├── src
+│   ├── ton-connect
+│   │   ├── connector.ts
+│   │   ├── wallets.ts
+│   │   └── storage.ts
+│   ├── bot.ts
+│   └── main.ts
+├── package.json
+├── package-lock.json
+├── .env
+└── tsconfig.json
+```
+
+## Создание меню подключения кошелька
+
+### Добавление инлайн-клавиатуры
+
+Мы реализовали подключение кошелька Tonkeeper. Однако мы не добавили возможность подключения через универсальный QR-код для всех кошельков и не дали пользователю выбрать подходящий кошелёк. Давайте исправим это сейчас.
+
+Для улучшения UX мы будем использовать функции Telegram `callback_query` и `inline_keyboard`. Если вы не знакомы с ними, вы можете прочитать об этом подробнее [здесь](https://core.telegram.org/bots/api#callbackquery).
+
+Мы реализуем следующий UX для подключения кошелька:
+
+```text
+First screen:
+<Unified QR>
+<Open @wallet>, <Choose a wallet button (opens second screen)>, <Open wallet unified link>
+
+Second screen:
+<Unified QR>
+<Back (opens first screen)>
+<@wallet button (opens third screen)>, <Tonkeeper button (opens third screen)>, <Tonhub button (opens third screen)>, <...>
+
+Third screen:
+<Selected wallet QR>
+<Back (opens second screen)>
+<Open selected wallet link>
+```
+
+Давайте начнем с добавления инлайн-клавиатуры в обработчик команды `/connect` в файле `main.ts`
+
+```ts
+// src/main.ts
+bot.onText(/\/connect/, async msg => {
+    const chatId = msg.chat.id;
+    const wallets = await getWallets();
+
+    const connector = getConnector(chatId);
+
+    connector.onStatusChange(async wallet => {
+        if (wallet) {
+            const walletName =
+                (await getWalletInfo(wallet.device.appName))?.name || wallet.device.appName;
+            bot.sendMessage(chatId, `${walletName} wallet connected!`);
+        }
+    });
+
+    const link = connector.connect(wallets);
+    const image = await QRCode.toBuffer(link);
+
+    await bot.sendPhoto(chatId, image, {
+        reply_markup: {
+            inline_keyboard: [
+                [
+                    {
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: 'Open Link',
+                        url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
+                            link
+                        )}`
+                    }
+                ]
+            ]
+        }
+    });
+});
+```
+
+Нам нужно обернуть диплинк TonConnect как https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(link)}, так как Telegram позволяет использовать в инлайн-клавиатуре только ссылки формата `http`.
+Сайт https://ton-connect.github.io/open-tc просто перенаправляет пользователя на ссылку, переданную в параметре `connect` запроса, что является временным решением для открытия ссылок `tc://` в Telegram.
+
+Обратите внимание, что мы изменили аргументы вызова `connector.connect`. Теперь мы генерируем универсальную ссылку для всех кошельков.
+
+Далее мы указываем Telegram вызвать обработчик `callback_query` со значением `{"method": "chose_wallet" }`, когда пользователь нажимает кнопку `Choose a Wallet`.
+
+### Добавление обработчика кнопки "Choose a Wallet"
+
+Создайте файл `src/connect-wallet-menu.ts`.
+
+Давайте добавим туда обработчик нажатия кнопки 'Choose a Wallet':
+
+```ts
+// src/connect-wallet-menu.ts
+
+async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<void> {
+    const wallets = await getWallets();
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                wallets.map(wallet => ({
+                    text: wallet.name,
+                    callback_data: JSON.stringify({ method: 'select_wallet', data: wallet.appName })
+                })),
+                [
+                    {
+                        text: '« Back',
+                        callback_data: JSON.stringify({
+                            method: 'universal_qr'
+                        })
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message!.message_id,
+            chat_id: query.message!.chat.id
+        }
+    );
+}
+```
+
+Здесь мы заменяем инлайн-клавиатуру сообщения на новую, которая содержит кликабельный список кошельков и кнопку `Back`.
+
+Теперь мы добавим глобальный обработчик `callback_query` и зарегистрируем `onChooseWalletClick`:
+
+```ts
+// src/connect-wallet-menu.ts
+import { CallbackQuery } from 'node-telegram-bot-api';
+import { getWallets } from './ton-connect/wallets';
+import { bot } from './bot';
+
+export const walletMenuCallbacks = { // Define buttons callbacks
+    chose_wallet: onChooseWalletClick
+};
+
+bot.on('callback_query', query => { // Parse callback data and execute corresponing function
+    if (!query.data) {
+        return;
+    }
+
+    let request: { method: string; data: string };
+
+    try {
+        request = JSON.parse(query.data);
+    } catch {
+        return;
+    }
+
+    if (!walletMenuCallbacks[request.method as keyof typeof walletMenuCallbacks]) {
+        return;
+    }
+
+    walletMenuCallbacks[request.method as keyof typeof walletMenuCallbacks](query, request.data);
+});
+
+// ... other code from the previous ster
+async function onChooseWalletClick ...
+```
+
+Здесь мы определяем список обработчиков кнопок и парсер `callback_query`. К сожалению, колбек-данные всегда строковые, поэтому мы передаем JSON в `callback_data` и парсим его позже в обработчике `callback_query`.
+Затем мы ищем запрашиваемый метод и вызываем его с переданными параметрами.
+
+Теперь мы должны добавить импорт `connect-wallet-menu.ts` в `main.ts`.
+
+```ts
+// src/main.ts
+
+// ... other imports
+
+import './connect-wallet-menu';
+
+// ... other code
+```
+
+Скомпилируйте и запустите бота. Вы можете нажать на кнопку "Choose a wallet ", и бот заменит кнопки инлайн-клавиатуры!
+
+### Добавление обработчиков других кнопок
+
+Давайте завершим создание меню и добавим обработчики оставшихся команд.
+
+Для начала мы создадим служебную функцию `editQR`. Редактирование медиафайлов сообщения (QR-изображения) - задача непростая. Нам нужно сохранить изображение в файл и отправить его на сервер Telegram. Затем мы можем удалить этот файл.
+
+```ts
+// src/connect-wallet-menu.ts
+
+// ... other code
+
+
+async function editQR(message: TelegramBot.Message, link: string): Promise<void> {
+    const fileName = 'QR-code-' + Math.round(Math.random() * 10000000000);
+
+    await QRCode.toFile(`./${fileName}`, link);
+
+    await bot.editMessageMedia(
+        {
+            type: 'photo',
+            media: `attach://${fileName}`
+        },
+        {
+            message_id: message?.message_id,
+            chat_id: message?.chat.id
+        }
+    );
+
+    await new Promise(r => fs.rm(`./${fileName}`, r));
+}
+```
+
+В обработчике `onOpenUniversalQRClick` мы просто регенерируем QR-код и диплинк и изменяем сообщение:
+
+```ts
+// src/connect-wallet-menu.ts
+
+// ... other code
+
+async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<void> {
+    const chatId = query.message!.chat.id;
+    const wallets = await getWallets();
+
+    const connector = getConnector(chatId);
+
+    connector.onStatusChange(wallet => {
+        if (wallet) {
+            bot.sendMessage(chatId, `${wallet.device.appName} wallet connected!`);
+        }
+    });
+
+    const link = connector.connect(wallets);
+
+    await editQR(query.message!, link);
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                [
+                    {
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: 'Open Link',
+                        url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
+                            link
+                        )}`
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message?.message_id,
+            chat_id: query.message?.chat.id
+        }
+    );
+}
+
+// ... other code
+```
+
+В обработчике `onWalletClick` мы создаем специальный QR-код и универсальную ссылку только для выбранного кошелька и изменяем сообщение.
+
+```ts
+// src/connect-wallet-menu.ts
+
+// ... other code
+
+async function onWalletClick(query: CallbackQuery, data: string): Promise<void> {
+    const chatId = query.message!.chat.id;
+    const connector = getConnector(chatId);
+
+    connector.onStatusChange(wallet => {
+        if (wallet) {
+            bot.sendMessage(chatId, `${wallet.device.appName} wallet connected!`);
+        }
+    });
+
+    const selectedWallet = await getWalletInfo(data);
+    if (!selectedWallet) {
+        return;
+    }
+
+    const link = connector.connect({
+        bridgeUrl: selectedWallet.bridgeUrl,
+        universalLink: selectedWallet.universalLink
+    });
+
+    await editQR(query.message!, link);
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                [
+                    {
+                        text: '« Back',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: `Open ${selectedWallet.name}`,
+                        url: link
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message?.message_id,
+            chat_id: chatId
+        }
+    );
+}
+
+// ... other code
+```
+
+Теперь нам нужно зарегистрировать эти функции как колбек (`walletMenuCallbacks`):
+
+```ts
+// src/connect-wallet-menu.ts
+import TelegramBot, { CallbackQuery } from 'node-telegram-bot-api';
+import { getWallets } from './ton-connect/wallets';
+import { bot } from './bot';
+import * as fs from 'fs';
+import { getConnector } from './ton-connect/connector';
+import QRCode from 'qrcode';
+
+export const walletMenuCallbacks = {
+    chose_wallet: onChooseWalletClick,
+    select_wallet: onWalletClick,
+    universal_qr: onOpenUniversalQRClick
+};
+
+// ... other code
+```
+
+<details>
+<summary>На данный момент src/connect-wallet-menu.ts выглядит следующим образом</summary>
+
+```ts
+// src/connect-wallet-menu.ts
+
+import TelegramBot, { CallbackQuery } from 'node-telegram-bot-api';
+import { getWallets, getWalletInfo } from './ton-connect/wallets';
+import { bot } from './bot';
+import { getConnector } from './ton-connect/connector';
+import QRCode from 'qrcode';
+import * as fs from 'fs';
+
+export const walletMenuCallbacks = {
+    chose_wallet: onChooseWalletClick,
+    select_wallet: onWalletClick,
+    universal_qr: onOpenUniversalQRClick
+};
+
+bot.on('callback_query', query => { // Parse callback data and execute corresponing function
+    if (!query.data) {
+        return;
+    }
+
+    let request: { method: string; data: string };
+
+    try {
+        request = JSON.parse(query.data);
+    } catch {
+        return;
+    }
+
+    if (!callbacks[request.method as keyof typeof callbacks]) {
+        return;
+    }
+
+    callbacks[request.method as keyof typeof callbacks](query, request.data);
+});
+
+
+async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<void> {
+    const wallets = await getWallets();
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                wallets.map(wallet => ({
+                    text: wallet.name,
+                    callback_data: JSON.stringify({ method: 'select_wallet', data: wallet.appName })
+                })),
+                [
+                    {
+                        text: '« Back',
+                        callback_data: JSON.stringify({
+                            method: 'universal_qr'
+                        })
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message!.message_id,
+            chat_id: query.message!.chat.id
+        }
+    );
+}
+
+async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<void> {
+    const chatId = query.message!.chat.id;
+    const wallets = await getWallets();
+
+    const connector = getConnector(chatId);
+
+    connector.onStatusChange(wallet => {
+        if (wallet) {
+            bot.sendMessage(chatId, `${wallet.device.appName} wallet connected!`);
+        }
+    });
+
+    const link = connector.connect(wallets);
+
+    await editQR(query.message!, link);
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                [
+                    {
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: 'Open Link',
+                        url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
+                            link
+                        )}`
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message?.message_id,
+            chat_id: query.message?.chat.id
+        }
+    );
+}
+
+async function onWalletClick(query: CallbackQuery, data: string): Promise<void> {
+    const chatId = query.message!.chat.id;
+    const connector = getConnector(chatId);
+
+    connector.onStatusChange(wallet => {
+        if (wallet) {
+            bot.sendMessage(chatId, `${wallet.device.appName} wallet connected!`);
+        }
+    });
+
+    const selectedWallet = await getWalletInfo(data);
+    if (!selectedWallet) {
+        return;
+    }
+
+    const link = connector.connect({
+        bridgeUrl: selectedWallet.bridgeUrl,
+        universalLink: selectedWallet.universalLink
+    });
+
+    await editQR(query.message!, link);
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                [
+                    {
+                        text: '« Back',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: `Open ${selectedWallet.name}`,
+                        url: link
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message?.message_id,
+            chat_id: chatId
+        }
+    );
+}
+
+async function editQR(message: TelegramBot.Message, link: string): Promise<void> {
+    const fileName = 'QR-code-' + Math.round(Math.random() * 10000000000);
+
+    await QRCode.toFile(`./${fileName}`, link);
+
+    await bot.editMessageMedia(
+        {
+            type: 'photo',
+            media: `attach://${fileName}`
+        },
+        {
+            message_id: message?.message_id,
+            chat_id: message?.chat.id
+        }
+    );
+
+    await new Promise(r => fs.rm(`./${fileName}`, r));
+}
+```
+
+</details>
+
+Скомпилируйте и запустите бота, чтобы проверить, как теперь работает подключение к кошельку.
+
+Вы могли заметить, что мы пока не рассматривали истечение срока действия QR-кода и остановку работы коннекторов. Мы займёмся этим позже.
+
+На данный момент у нас есть следующая структура файлов:
+
+```text
+bot-demo
+├── src
+│   ├── ton-connect
+│   │   ├── connector.ts
+│   │   ├── wallets.ts
+│   │   └── storage.ts
+│   ├── bot.ts
+│   ├── connect-wallet-menu.ts
+│   └── main.ts
+├── package.json
+├── package-lock.json
+├── .env
+└── tsconfig.json
+```
+
+## Реализация отправки транзакций
+
+Прежде чем писать новый код для отправки транзакций, давайте оптимизируем существующий. Мы создадим новый файл для обработчиков команд бота ('/connect', '/send_tx', ...)
+
+```ts
+// src/commands-handlers.ts
+
+import { bot } from './bot';
+import { getWallets } from './ton-connect/wallets';
+import QRCode from 'qrcode';
+import TelegramBot from 'node-telegram-bot-api';
+import { getConnector } from './ton-connect/connector';
+
+export async function handleConnectCommand(msg: TelegramBot.Message): Promise<void> {
+    const chatId = msg.chat.id;
+    const wallets = await getWallets();
+
+    const connector = getConnector(chatId);
+
+    connector.onStatusChange(wallet => {
+        if (wallet) {
+            bot.sendMessage(chatId, `${wallet.device.appName} wallet connected!`);
+        }
+    });
+
+    const link = connector.connect(wallets);
+    const image = await QRCode.toBuffer(link);
+
+    await bot.sendPhoto(chatId, image, {
+        reply_markup: {
+            inline_keyboard: [
+                [
+                    {
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: 'Open Link',
+                        url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
+                            link
+                        )}`
+                    }
+                ]
+            ]
+        }
+    });
+}
+```
+
+Давайте импортируем его в `main.ts`, а также переместим точку входа для `callback_query` из `connect-wallet-menu.ts` в `main.ts`:
+
+```ts
+// src/main.ts
+
+import dotenv from 'dotenv';
+dotenv.config();
+
+import { bot } from './bot';
+import './connect-wallet-menu';
+import { handleConnectCommand } from './commands-handlers';
+import { walletMenuCallbacks } from './connect-wallet-menu';
+
+const callbacks = {
+    ...walletMenuCallbacks
+};
+
+bot.on('callback_query', query => {
+    if (!query.data) {
+        return;
+    }
+
+    let request: { method: string; data: string };
+
+    try {
+        request = JSON.parse(query.data);
+    } catch {
+        return;
+    }
+
+    if (!callbacks[request.method as keyof typeof callbacks]) {
+        return;
+    }
+
+    callbacks[request.method as keyof typeof callbacks](query, request.data);
+});
+
+bot.onText(/\/connect/, handleConnectCommand);
+```
+
+```ts
+// src/connect-wallet-menu.ts
+
+// ... imports
+
+
+export const walletMenuCallbacks = {
+    chose_wallet: onChooseWalletClick,
+    select_wallet: onWalletClick,
+    universal_qr: onOpenUniversalQRClick
+};
+
+async function onChooseWalletClick(query: CallbackQuery, _: string): Promise<void> {
+
+// ... other code
+```
+
+Теперь мы можем добавить обработчик команды `send_tx`:
+
+```ts
+// src/commands-handlers.ts
+
+// ... other code
+
+export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<void> {
+    const chatId = msg.chat.id;
+
+    const connector = getConnector(chatId);
+
+    await connector.restoreConnection();
+    if (!connector.connected) {
+        await bot.sendMessage(chatId, 'Connect wallet to send transaction');
+        return;
+    }
+
+    connector
+        .sendTransaction({
+            validUntil: Math.round(Date.now() / 1000) + 600, // timeout is SECONDS
+            messages: [
+                {
+                    amount: '1000000',
+                    address: '0:0000000000000000000000000000000000000000000000000000000000000000'
+                }
+            ]
+        })
+        .then(() => {
+            bot.sendMessage(chatId, `Transaction sent successfully`);
+        })
+        .catch(e => {
+            if (e instanceof UserRejectsError) {
+                bot.sendMessage(chatId, `You rejected the transaction`);
+                return;
+            }
+
+            bot.sendMessage(chatId, `Unknown error happened`);
+        })
+        .finally(() => connector.pauseConnection());
+
+    let deeplink = '';
+    const walletInfo = await getWalletInfo(connector.wallet!.device.appName);
+    if (walletInfo) {
+        deeplink = walletInfo.universalLink;
+    }
+
+    await bot.sendMessage(
+        chatId,
+        `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`,
+        {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: 'Open Wallet',
+                            url: deeplink
+                        }
+                    ]
+                ]
+            }
+        }
+    );
+}
+```
+
+Здесь мы проверяем, подключен ли кошелек пользователя, и обрабатываем отправку транзакции.
+Затем мы отправляем пользователю сообщение с кнопкой, которая открывает его кошелек (универсальная ссылка на кошелек без дополнительных параметров).
+Обратите внимание, что эта кнопка содержит пустой диплинк. Это означает, что данные запроса на отправку транзакции проходят через http-мост, и транзакция появится в кошельке пользователя, даже если он просто откроет приложение кошелька, не нажимая кнопку.
+
+Давайте зарегистрируем этот обработчик:
+
+```ts
+// src/main.ts
+
+// ... other code
+
+bot.onText(/\/connect/, handleConnectCommand);
+
+bot.onText(/\/send_tx/, handleSendTXCommand);
+```
+
+Скомпилируйте и запустите бота, чтобы проверить, правильно ли работает отправка транзакций.
+
+На данный момент у нас следующая структура файлов:
+
+```text
+bot-demo
+├── src
+│   ├── ton-connect
+│   │   ├── connector.ts
+│   │   ├── wallets.ts
+│   │   └── storage.ts
+│   ├── bot.ts
+│   ├── connect-wallet-menu.ts
+│   ├── commands-handlers.ts
+│   └── main.ts
+├── package.json
+├── package-lock.json
+├── .env
+└── tsconfig.json
+```
+
+## Добавление отключения и отображение команд подключенного кошелька
+
+Реализация этих команд достаточно проста:
+
+```ts
+// src/commands-handlers.ts
+
+// ... other code
+
+export async function handleDisconnectCommand(msg: TelegramBot.Message): Promise<void> {
+    const chatId = msg.chat.id;
+
+    const connector = getConnector(chatId);
+
+    await connector.restoreConnection();
+    if (!connector.connected) {
+        await bot.sendMessage(chatId, "You didn't connect a wallet");
+        return;
+    }
+
+    await connector.disconnect();
+
+    await bot.sendMessage(chatId, 'Wallet has been disconnected');
+}
+
+export async function handleShowMyWalletCommand(msg: TelegramBot.Message): Promise<void> {
+    const chatId = msg.chat.id;
+
+    const connector = getConnector(chatId);
+
+    await connector.restoreConnection();
+    if (!connector.connected) {
+        await bot.sendMessage(chatId, "You didn't connect a wallet");
+        return;
+    }
+
+    const walletName =
+        (await getWalletInfo(connector.wallet!.device.appName))?.name ||
+        connector.wallet!.device.appName;
+
+
+    await bot.sendMessage(
+        chatId,
+        `Connected wallet: ${walletName}\nYour address: ${toUserFriendlyAddress(
+            connector.wallet!.account.address,
+            connector.wallet!.account.chain === CHAIN.TESTNET
+        )}`
+    );
+}
+```
+
+И зарегистрируем эти команды:
+
+```ts
+// src/main.ts
+
+// ... other code
+
+bot.onText(/\/connect/, handleConnectCommand);
+bot.onText(/\/send_tx/, handleSendTXCommand);
+bot.onText(/\/disconnect/, handleDisconnectCommand);
+bot.onText(/\/my_wallet/, handleShowMyWalletCommand);
+```
+
+Скомпилируйте и запустите бота, чтобы проверить, правильно ли работают эти команды.
+
+## Оптимизация
+
+Мы реализовали все базовые команды. Но важно помнить, что каждый коннектор поддерживает открытое соединение SSE до тех пор, пока оно не будет приостановлено.
+Кроме того, мы не рассмотрели случай, когда пользователь вызывает `/connect` несколько раз, или вызывает `/connect` или `/send_tx` и не сканирует QR-код. Нам необходимо установить таймаут и закрывать соединение, чтобы экономить серверные ресурсы.
+Также нужно уведомлять пользователя, что срок действия QR-кода или запроса транзакции истек.
+
+### Оптимизация отправки транзакций
+
+Давайте создадим служебную функцию, которая оборачивает промис и отклоняет его после заданного таймаута:
+
+```ts
+// src/utils.ts
+
+export const pTimeoutException = Symbol();
+
+export function pTimeout<T>(
+    promise: Promise<T>,
+    time: number,
+    exception: unknown = pTimeoutException
+): Promise<T> {
+    let timer: ReturnType<typeof setTimeout>;
+    return Promise.race([
+        promise,
+        new Promise((_r, rej) => (timer = setTimeout(rej, time, exception)))
+    ]).finally(() => clearTimeout(timer)) as Promise<T>;
+}
+```
+
+Вы можете использовать этот код или выбрать библиотеку, которая вам больше нравится.
+
+Давайте добавим значение параметра таймаута в `.env`
+
+```dotenv
+# .env
+TELEGRAM_BOT_TOKEN=<YOUR BOT TOKEN, LIKE 1234567890:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA>
+MANIFEST_URL=https://raw.githubusercontent.com/ton-connect/demo-telegram-bot/master/tonconnect-manifest.json
+WALLETS_LIST_CACHE_TTL_MS=86400000
+DELETE_SEND_TX_MESSAGE_TIMEOUT_MS=600000
+```
+
+Теперь улучшим функцию `handleSendTXCommand` и перенести отправку tx в `pTimeout`
+
+```ts
+// src/commands-handlers.ts
+
+// export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<void> { ...
+
+pTimeout(
+    connector.sendTransaction({
+        validUntil: Math.round(
+            (Date.now() + Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)) / 1000
+        ),
+        messages: [
+            {
+                amount: '1000000',
+                address: '0:0000000000000000000000000000000000000000000000000000000000000000'
+            }
+        ]
+    }),
+    Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)
+)
+    .then(() => {
+        bot.sendMessage(chatId, `Transaction sent successfully`);
+    })
+    .catch(e => {
+        if (e === pTimeoutException) {
+            bot.sendMessage(chatId, `Transaction was not confirmed`);
+            return;
+        }
+
+        if (e instanceof UserRejectsError) {
+            bot.sendMessage(chatId, `You rejected the transaction`);
+            return;
+        }
+
+        bot.sendMessage(chatId, `Unknown error happened`);
+    })
+    .finally(() => connector.pauseConnection());
+
+// ... other code
+```
+
+<details>
+<summary>Полный код handleSendTXCommand</summary>
+
+```ts
+export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<void> {
+    const chatId = msg.chat.id;
+
+    const connector = getConnector(chatId);
+
+    await connector.restoreConnection();
+    if (!connector.connected) {
+        await bot.sendMessage(chatId, 'Connect wallet to send transaction');
+        return;
+    }
+
+    pTimeout(
+        connector.sendTransaction({
+            validUntil: Math.round(
+                (Date.now() + Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)) / 1000
+            ),
+            messages: [
+                {
+                    amount: '1000000',
+                    address: '0:0000000000000000000000000000000000000000000000000000000000000000'
+                }
+            ]
+        }),
+        Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)
+    )
+        .then(() => {
+            bot.sendMessage(chatId, `Transaction sent successfully`);
+        })
+        .catch(e => {
+            if (e === pTimeoutException) {
+                bot.sendMessage(chatId, `Transaction was not confirmed`);
+                return;
+            }
+
+            if (e instanceof UserRejectsError) {
+                bot.sendMessage(chatId, `You rejected the transaction`);
+                return;
+            }
+
+            bot.sendMessage(chatId, `Unknown error happened`);
+        })
+        .finally(() => connector.pauseConnection());
+
+    let deeplink = '';
+    const walletInfo = await getWalletInfo(connector.wallet!.device.appName);
+    if (walletInfo) {
+        deeplink = walletInfo.universalLink;
+    }
+
+    await bot.sendMessage(
+        chatId,
+        `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`,
+        {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: 'Open Wallet',
+                            url: deeplink
+                        }
+                    ]
+                ]
+            }
+        }
+    );
+}
+```
+
+</details>
+
+Если пользователь не подтвердит транзакцию в течение `DELETE_SEND_TX_MESSAGE_TIMEOUT_MS` (10 минут), транзакция будет отменена, а бот отправит сообщение `Transaction was not confirmed`.
+
+Вы можете установить этот параметр на `5000`, скомпилировать и перезапустить бота, чтобы протестировать его поведение.
+
+### Оптимизация процесса подключения кошелька
+
+В данный момент мы создаем новый коннектор на каждом шаге навигации через меню подключения кошелька.
+Это неэффективно, так как мы не закрываем соединение предыдущих коннекторов при создании новых. Давайте улучшим это поведение и создадим кэш-карту для коннекторов пользователей.
+
+<details>
+<summary>Код src/ton-connect/connector.ts</summary>
+
+```ts
+// src/ton-connect/connector.ts
+
+import TonConnect from '@tonconnect/sdk';
+import { TonConnectStorage } from './storage';
+import * as process from 'process';
+
+type StoredConnectorData = {
+    connector: TonConnect;
+    timeout: ReturnType<typeof setTimeout>;
+    onConnectorExpired: ((connector: TonConnect) => void)[];
+};
+
+const connectors = new Map<number, StoredConnectorData>();
+
+export function getConnector(
+    chatId: number,
+    onConnectorExpired?: (connector: TonConnect) => void
+): TonConnect {
+    let storedItem: StoredConnectorData;
+    if (connectors.has(chatId)) {
+        storedItem = connectors.get(chatId)!;
+        clearTimeout(storedItem.timeout);
+    } else {
+        storedItem = {
+            connector: new TonConnect({
+                manifestUrl: process.env.MANIFEST_URL,
+                storage: new TonConnectStorage(chatId)
+            }),
+            onConnectorExpired: []
+        } as unknown as StoredConnectorData;
+    }
+
+    if (onConnectorExpired) {
+        storedItem.onConnectorExpired.push(onConnectorExpired);
+    }
+
+    storedItem.timeout = setTimeout(() => {
+        if (connectors.has(chatId)) {
+            const storedItem = connectors.get(chatId)!;
+            storedItem.connector.pauseConnection();
+            storedItem.onConnectorExpired.forEach(callback => callback(storedItem.connector));
+            connectors.delete(chatId);
+        }
+    }, Number(process.env.CONNECTOR_TTL_MS));
+
+    connectors.set(chatId, storedItem);
+    return storedItem.connector;
+}
+```
+
+</details>
+
+Этот код может показаться немного запутанным, но давайте разберемся.
+Здесь мы сохраняем коннектор, тайм-аут для его очистки и список колбеков, которые должны быть выполнены после истечения тайм-аута для каждого пользователя.
+
+При вызове `getConnector` мы проверяем, есть ли в кэше существующий коннектор для данного `chatId` (пользователя). Если он существует, мы сбрасываем таймаут очистки и возвращаем коннектор.
+Это позволяет сохранять активные коннекторы пользователей в кэше. Если в кэше нет коннектора, мы создаем новый, регистрируем функцию очистки по таймауту и возвращаем этот коннектор.
+
+Чтобы это работало, необходимо добавить новый параметр в `.env`
+
+```dotenv
+# .env
+TELEGRAM_BOT_TOKEN=<YOUR BOT TOKEN, LIKE 1234567890:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA>
+MANIFEST_URL=https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json
+WALLETS_LIST_CACHE_TTL_MS=86400000
+DELETE_SEND_TX_MESSAGE_TIMEOUT_MS=600000
+CONNECTOR_TTL_MS=600000
+```
+
+Теперь давайте используем его в handelConnectCommand
+
+<details>
+<summary>Код src/commands-handlers.ts</summary>
+
+```ts
+// src/commands-handlers.ts
+
+import {
+    CHAIN,
+    isWalletInfoRemote,
+    toUserFriendlyAddress,
+    UserRejectsError
+} from '@tonconnect/sdk';
+import { bot } from './bot';
+import { getWallets, getWalletInfo } from './ton-connect/wallets';
+import QRCode from 'qrcode';
+import TelegramBot from 'node-telegram-bot-api';
+import { getConnector } from './ton-connect/connector';
+import { pTimeout, pTimeoutException } from './utils';
+
+let newConnectRequestListenersMap = new Map<number, () => void>();
+
+export async function handleConnectCommand(msg: TelegramBot.Message): Promise<void> {
+    const chatId = msg.chat.id;
+    let messageWasDeleted = false;
+
+    newConnectRequestListenersMap.get(chatId)?.();
+
+    const connector = getConnector(chatId, () => {
+        unsubscribe();
+        newConnectRequestListenersMap.delete(chatId);
+        deleteMessage();
+    });
+
+    await connector.restoreConnection();
+    if (connector.connected) {
+        const connectedName =
+            (await getWalletInfo(connector.wallet!.device.appName))?.name ||
+            connector.wallet!.device.appName;
+
+        await bot.sendMessage(
+            chatId,
+            `You have already connect ${connectedName} wallet\nYour address: ${toUserFriendlyAddress(
+                connector.wallet!.account.address,
+                connector.wallet!.account.chain === CHAIN.TESTNET
+            )}\n\n Disconnect wallet firstly to connect a new one`
+        );
+
+        return;
+    }
+
+    const unsubscribe = connector.onStatusChange(async wallet => {
+        if (wallet) {
+            await deleteMessage();
+
+            const walletName =
+                (await getWalletInfo(wallet.device.appName))?.name || wallet.device.appName;
+            await bot.sendMessage(chatId, `${walletName} wallet connected successfully`);
+            unsubscribe();
+            newConnectRequestListenersMap.delete(chatId);
+        }
+    });
+
+    const wallets = await getWallets();
+
+    const link = connector.connect(wallets);
+    const image = await QRCode.toBuffer(link);
+
+    const botMessage = await bot.sendPhoto(chatId, image, {
+        reply_markup: {
+            inline_keyboard: [
+                [
+                    {
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: 'Open Link',
+                        url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
+                            link
+                        )}`
+                    }
+                ]
+            ]
+        }
+    });
+
+    const deleteMessage = async (): Promise<void> => {
+        if (!messageWasDeleted) {
+            messageWasDeleted = true;
+            await bot.deleteMessage(chatId, botMessage.message_id);
+        }
+    };
+
+    newConnectRequestListenersMap.set(chatId, async () => {
+        unsubscribe();
+
+        await deleteMessage();
+
+        newConnectRequestListenersMap.delete(chatId);
+    });
+}
+
+// ... other code
+```
+
+</details>
+
+Мы определили `newConnectRequestListenersMap` для хранения колбека очистки последнего запроса подключения для каждого пользователя.
+Если пользователь вызывает `/connect` несколько раз, бот удалит предыдущее сообщение с QR-кодом.
+Кроме того, мы настроили время ожидания подключения, чтобы удалять сообщение с QR-кодом по истечении срока его действия.
+
+Теперь мы должны удалить подписку `connector.onStatusChange` из функций `connect-wallet-menu.ts`, так как они используют один и тот же экземпляр коннектора, а одной подписки в `handleConnectCommand` достаточно.
+
+<details>
+<summary>Код src/connect-wallet-menu.ts</summary>
+
+```ts
+// src/connect-wallet-menu.ts
+
+// ... other code
+
+async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<void> {
+    const chatId = query.message!.chat.id;
+    const wallets = await getWallets();
+
+    const connector = getConnector(chatId);
+
+    const link = connector.connect(wallets);
+
+    await editQR(query.message!, link);
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                [
+                    {
+                        text: 'Choose a Wallet',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: 'Open Link',
+                        url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(
+                            link
+                        )}`
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message?.message_id,
+            chat_id: query.message?.chat.id
+        }
+    );
+}
+
+async function onWalletClick(query: CallbackQuery, data: string): Promise<void> {
+    const chatId = query.message!.chat.id;
+    const connector = getConnector(chatId);
+
+    const wallets = await getWallets();
+
+    const selectedWallet = wallets.find(wallet => wallet.name === data);
+    if (!selectedWallet) {
+        return;
+    }
+
+    const link = connector.connect({
+        bridgeUrl: selectedWallet.bridgeUrl,
+        universalLink: selectedWallet.universalLink
+    });
+
+    await editQR(query.message!, link);
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                [
+                    {
+                        text: '« Back',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: `Open ${data}`,
+                        url: link
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message?.message_id,
+            chat_id: chatId
+        }
+    );
+}
+
+// ... other code
+```
+
+</details>
+
+Вот и все! Скомпилируйте и запустите бота и попробуйте вызвать `/connect` дважды.
+
+### Улучшение взаимодействия с @wallet
+
+Начиная с версии 3 TonConnect поддерживает подключение к кошелькам TWA, таким как @wallet. На данный момент в руководстве бот может быть подключен к @wallet.
+Однако следует улучшить стратегию перенаправления для повышения удобства UX. Кроме того, давайте добавим кнопку `Connect @wallet` на первый экран ("Универсальный QR").
+
+Для начала давайте создадим несколько служебных функций:
+
+```ts
+// src/utils.ts
+import { encodeTelegramUrlParameters, isTelegramUrl } from '@tonconnect/sdk';
+
+export const AT_WALLET_APP_NAME = 'telegram-wallet';
+
+// ... other code
+export function addTGReturnStrategy(link: string, strategy: string): string {
+    const parsed = new URL(link);
+    parsed.searchParams.append('ret', strategy);
+    link = parsed.toString();
+
+    const lastParam = link.slice(link.lastIndexOf('&') + 1);
+    return link.slice(0, link.lastIndexOf('&')) + '-' + encodeTelegramUrlParameters(lastParam);
+}
+
+export function convertDeeplinkToUniversalLink(link: string, walletUniversalLink: string): string {
+    const search = new URL(link).search;
+    const url = new URL(walletUniversalLink);
+
+    if (isTelegramUrl(walletUniversalLink)) {
+        const startattach = 'tonconnect-' + encodeTelegramUrlParameters(search.slice(1));
+        url.searchParams.append('startattach', startattach);
+    } else {
+        url.search = search;
+    }
+
+    return url.toString();
+}
+```
+
+Параметры TonConnect в ссылках Telegram должны быть закодированы особым образом, поэтому мы используем `encodeTelegramUrlParameters` для кодирования параметра стратегии возврата.
+Мы будем использовать `addTGReturnStrategy`, для предоставления правильного URL-адреса возврата демо-боту для @wallet.
+
+Поскольку мы используем универсальный код создания QR-страниц в двух местах, мы выносим его в отдельную функцию:
+
+```ts
+// src/utils.ts
+
+// ... other code
+
+export async function buildUniversalKeyboard(
+    link: string,
+    wallets: WalletInfoRemote[]
+): Promise<InlineKeyboardButton[]> {
+    const atWallet = wallets.find(wallet => wallet.appName.toLowerCase() === AT_WALLET_APP_NAME);
+    const atWalletLink = atWallet
+        ? addTGReturnStrategy(
+            convertDeeplinkToUniversalLink(link, atWallet?.universalLink),
+            process.env.TELEGRAM_BOT_LINK!
+        )
+        : undefined;
+
+    const keyboard = [
+        {
+            text: 'Choose a Wallet',
+            callback_data: JSON.stringify({ method: 'chose_wallet' })
+        },
+        {
+            text: 'Open Link',
+            url: `https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(link)}`
+        }
+    ];
+
+    if (atWalletLink) {
+        keyboard.unshift({
+            text: '@wallet',
+            url: atWalletLink
+        });
+    }
+
+    return keyboard;
+}
+```
+
+Здесь мы добавляем отдельную кнопку для @wallet на первый экран (Универсальный QR-экран). Осталось только использовать эту функцию в
+connect-wallet-menu и command-handlers:
+
+<details>
+<summary>Код src/connect-wallet-menu.ts</summary>
+
+```ts
+// src/connect-wallet-menu.ts
+
+// ... other code
+
+async function onOpenUniversalQRClick(query: CallbackQuery, _: string): Promise<void> {
+    const chatId = query.message!.chat.id;
+    const wallets = await getWallets();
+
+    const connector = getConnector(chatId);
+
+    const link = connector.connect(wallets);
+
+    await editQR(query.message!, link);
+
+    const keyboard = await buildUniversalKeyboard(link, wallets);
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [keyboard]
+        },
+        {
+            message_id: query.message?.message_id,
+            chat_id: query.message?.chat.id
+        }
+    );
+}
+
+// ... other code
+```
+
+</details>
+
+<details>
+<summary>Код src/commands-handlers.ts</summary>
+
+```ts
+// src/commands-handlers.ts
+
+// ... other code
+
+export async function handleConnectCommand(msg: TelegramBot.Message): Promise<void> {
+    const chatId = msg.chat.id;
+    let messageWasDeleted = false;
+
+    newConnectRequestListenersMap.get(chatId)?.();
+
+    const connector = getConnector(chatId, () => {
+        unsubscribe();
+        newConnectRequestListenersMap.delete(chatId);
+        deleteMessage();
+    });
+
+    await connector.restoreConnection();
+    if (connector.connected) {
+        const connectedName =
+            (await getWalletInfo(connector.wallet!.device.appName))?.name ||
+            connector.wallet!.device.appName;
+        await bot.sendMessage(
+            chatId,
+            `You have already connect ${connectedName} wallet\nYour address: ${toUserFriendlyAddress(
+                connector.wallet!.account.address,
+                connector.wallet!.account.chain === CHAIN.TESTNET
+            )}\n\n Disconnect wallet firstly to connect a new one`
+        );
+
+        return;
+    }
+
+    const unsubscribe = connector.onStatusChange(async wallet => {
+        if (wallet) {
+            await deleteMessage();
+
+            const walletName =
+                (await getWalletInfo(wallet.device.appName))?.name || wallet.device.appName;
+            await bot.sendMessage(chatId, `${walletName} wallet connected successfully`);
+            unsubscribe();
+            newConnectRequestListenersMap.delete(chatId);
+        }
+    });
+
+    const wallets = await getWallets();
+
+    const link = connector.connect(wallets);
+    const image = await QRCode.toBuffer(link);
+
+    const keyboard = await buildUniversalKeyboard(link, wallets);
+
+    const botMessage = await bot.sendPhoto(chatId, image, {
+        reply_markup: {
+            inline_keyboard: [keyboard]
+        }
+    });
+
+    const deleteMessage = async (): Promise<void> => {
+        if (!messageWasDeleted) {
+            messageWasDeleted = true;
+            await bot.deleteMessage(chatId, botMessage.message_id);
+        }
+    };
+
+    newConnectRequestListenersMap.set(chatId, async () => {
+        unsubscribe();
+
+        await deleteMessage();
+
+        newConnectRequestListenersMap.delete(chatId);
+    });
+}
+
+// ... other code
+```
+
+</details>
+
+Теперь мы будем корректно обрабатывать TG-ссылки, когда пользователь нажимает на кнопку кошелька на втором экране (Выбор кошелька):
+
+<details>
+<summary>Код src/connect-wallet-menu.ts</summary>
+
+```ts
+// src/connect-wallet-menu.ts
+
+// ... other code
+
+
+async function onWalletClick(query: CallbackQuery, data: string): Promise<void> {
+    const chatId = query.message!.chat.id;
+    const connector = getConnector(chatId);
+
+    const selectedWallet = await getWalletInfo(data);
+    if (!selectedWallet) {
+        return;
+    }
+
+    let buttonLink = connector.connect({
+        bridgeUrl: selectedWallet.bridgeUrl,
+        universalLink: selectedWallet.universalLink
+    });
+
+    let qrLink = buttonLink;
+
+    if (isTelegramUrl(selectedWallet.universalLink)) {
+        buttonLink = addTGReturnStrategy(buttonLink, process.env.TELEGRAM_BOT_LINK!);
+        qrLink = addTGReturnStrategy(qrLink, 'none');
+    }
+
+    await editQR(query.message!, qrLink);
+
+    await bot.editMessageReplyMarkup(
+        {
+            inline_keyboard: [
+                [
+                    {
+                        text: '« Back',
+                        callback_data: JSON.stringify({ method: 'chose_wallet' })
+                    },
+                    {
+                        text: `Open ${selectedWallet.name}`,
+                        url: buttonLink
+                    }
+                ]
+            ]
+        },
+        {
+            message_id: query.message?.message_id,
+            chat_id: chatId
+        }
+    );
+}
+
+// ... other code
+```
+
+</details>
+
+Обратите внимание, что для QR-кода и кнопки-ссылки (`qrLink` и `buttonLink`) используются разные ссылки, так как перенаправление не требуется, если пользователь сканирует QR-код через @wallet. Однако оно необходимо, если пользователь подключается к @wallet через кнопку-ссылку.
+
+Теперь давайте добавим стратегию возврата для TG-ссылок в обработчик `send transaction`:
+
+<details>
+<summary>Код src/commands-handlers.ts</summary>
+
+```ts
+// src/commands-handlers.ts
+
+// ... other code
+
+export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<void> {
+    const chatId = msg.chat.id;
+
+    const connector = getConnector(chatId);
+
+    await connector.restoreConnection();
+    if (!connector.connected) {
+        await bot.sendMessage(chatId, 'Connect wallet to send transaction');
+        return;
+    }
+
+    pTimeout(
+        connector.sendTransaction({
+            validUntil: Math.round(
+                (Date.now() + Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)) / 1000
+            ),
+            messages: [
+                {
+                    amount: '1000000',
+                    address: '0:0000000000000000000000000000000000000000000000000000000000000000'
+                }
+            ]
+        }),
+        Number(process.env.DELETE_SEND_TX_MESSAGE_TIMEOUT_MS)
+    )
+        .then(() => {
+            bot.sendMessage(chatId, `Transaction sent successfully`);
+        })
+        .catch(e => {
+            if (e === pTimeoutException) {
+                bot.sendMessage(chatId, `Transaction was not confirmed`);
+                return;
+            }
+
+            if (e instanceof UserRejectsError) {
+                bot.sendMessage(chatId, `You rejected the transaction`);
+                return;
+            }
+
+            bot.sendMessage(chatId, `Unknown error happened`);
+        })
+        .finally(() => connector.pauseConnection());
+
+    let deeplink = '';
+    const walletInfo = await getWalletInfo(connector.wallet!.device.appName);
+    if (walletInfo) {
+        deeplink = walletInfo.universalLink;
+    }
+
+    if (isTelegramUrl(deeplink)) {
+        const url = new URL(deeplink);
+        url.searchParams.append('startattach', 'tonconnect');
+        deeplink = addTGReturnStrategy(url.toString(), process.env.TELEGRAM_BOT_LINK!);
+    }
+
+    await bot.sendMessage(
+        chatId,
+        `Open ${walletInfo?.name || connector.wallet!.device.appName} and confirm transaction`,
+        {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: `Open ${walletInfo?.name || connector.wallet!.device.appName}`,
+                            url: deeplink
+                        }
+                    ]
+                ]
+            }
+        }
+    );
+}
+
+// ... other code
+```
+
+</details>
+
+Вот и все. Теперь пользователь может подключить @wallet с помощью специальной кнопки на главном экране, а также мы обеспечили корректную стратегию возврата для TG-ссылок.
+
+## Добавление постоянного хранилища
+
+В данный момент мы сохраняем сессии TonConnect в объекте Map. Однако вы можете сохранить их в базе данных или другом постоянном хранилище, чтобы не терять их при перезапуске сервера.
+Мы будем использовать для этого Redis, но вы можете выбрать любое постоянное хранилище.
+
+### Настройка redis
+
+Для начала запустите `npm i redis`.
+
+[Смотрите подробности о пакете](https://www.npmjs.com/package/redis)
+
+Для работы с redis необходимо запустить сервер redis. Мы будем использовать образ Docker:
+`docker run -p 6379:6379 -it redis/redis-stack-server:latest`
+
+Теперь добавьте параметр подключения redis в `.env`. Url-адрес redis по умолчанию - `redis://127.0.0.1:6379`.
+
+```dotenv
+# .env
+TELEGRAM_BOT_TOKEN=<YOUR BOT TOKEN, LIKE 1234567890:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA>
+MANIFEST_URL=https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json
+WALLETS_LIST_CACHE_TTL_MS=86400000
+DELETE_SEND_TX_MESSAGE_TIMEOUT_MS=600000
+CONNECTOR_TTL_MS=600000
+REDIS_URL=redis://127.0.0.1:6379
+```
+
+Давайте интегрируем redis в `TonConnectStorage`:
+
+```ts
+// src/ton-connect/storage.ts
+
+import { IStorage } from '@tonconnect/sdk';
+import { createClient } from 'redis';
+
+const client = createClient({ url: process.env.REDIS_URL });
+
+client.on('error', err => console.log('Redis Client Error', err));
+
+export async function initRedisClient(): Promise<void> {
+    await client.connect();
+}
+export class TonConnectStorage implements IStorage {
+    constructor(private readonly chatId: number) {}
+
+    private getKey(key: string): string {
+        return this.chatId.toString() + key;
+    }
+
+    async removeItem(key: string): Promise<void> {
+        await client.del(this.getKey(key));
+    }
+
+    async setItem(key: string, value: string): Promise<void> {
+        await client.set(this.getKey(key), value);
+    }
+
+    async getItem(key: string): Promise<string | null> {
+        return (await client.get(this.getKey(key))) || null;
+    }
+}
+```
+
+Чтобы это работало, необходимо дождаться инициализации Redis в `main.ts`. Давайте обернем код в этом файле в асинхронную функцию:
+
+```ts
+// src/main.ts
+// ... imports
+
+async function main(): Promise<void> {
+    await initRedisClient();
+
+    const callbacks = {
+        ...walletMenuCallbacks
+    };
+
+    bot.on('callback_query', query => {
+        if (!query.data) {
+            return;
+        }
+
+        let request: { method: string; data: string };
+
+        try {
+            request = JSON.parse(query.data);
+        } catch {
+            return;
+        }
+
+        if (!callbacks[request.method as keyof typeof callbacks]) {
+            return;
+        }
+
+        callbacks[request.method as keyof typeof callbacks](query, request.data);
+    });
+
+    bot.onText(/\/connect/, handleConnectCommand);
+
+    bot.onText(/\/send_tx/, handleSendTXCommand);
+
+    bot.onText(/\/disconnect/, handleDisconnectCommand);
+
+    bot.onText(/\/my_wallet/, handleShowMyWalletCommand);
+}
+
+main();
+```
+
+## Заключение
+
+Что дальше?
+
+- Если вы хотите запустить бота в продакшене, вам стоит установить и использовать менеджер процессов, такой как [pm2](https://pm2.keymetrics.io/).
+- Вы можете улучшить обработку ошибок в боте.
+
+## См. также
+
+- [Отправка сообщений](/v3/guidelines/ton-connect/guidelines/sending-messages)
+- [Руководство по интеграции](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)

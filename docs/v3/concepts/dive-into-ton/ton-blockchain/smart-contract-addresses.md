@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Smart contract addresses
 
 On the TON Blockchain, every actor, including wallets and smart contracts, is represented by an address. These addresses are critical for receiving and sending messages and transactions. There are two main formats for smart contract addresses: **raw addresses** and **user-friendly addresses**.
@@ -38,7 +40,7 @@ User-friendly addresses make transactions safer by preventing errors and allowin
 
 ### User-friendly address flags
 
-Two flags are defined: **bounceable**/**non-bounceable** and **testnet**/**any-net**. They can be easily detected by looking at the first letter of the address because it stands for the first 6 bits in address encoding, and flags are located there according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
+Two flags are defined: **bounceable**/**non-bounceable** and **testnet**/**any-net**. The first letter of the address reflects address type because it stands for the first 6 bits in address encoding, and flags are located in these 6 bits according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
 
 | Address beginning | Binary form | Bounceable | Testnet-only |
 |:-----------------:|:-----------:|:----------:|:------------:|
@@ -48,7 +50,7 @@ Two flags are defined: **bounceable**/**non-bounceable** and **testnet**/**any-n
 |        0...       |  110100.01  |     no     |   yes        |
 
 :::tip
-The Testnet-only flag doesn't have representation in blockchain at all. The non-bounceable flag makes a difference only when used as the destination address for a transfer: in this case, it [disallows bounce](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) for a message sent; the address in blockchain, again, does not contain this flag.
+The Testnet-only flag doesn't have representation in the blockchain at all. The non-bounceable flag makes a difference only when used as the destination address for a transfer: in this case, it [disallows bounce](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) for a message sent; the address in blockchain, again, does not contain this flag.
 :::
 
 ```
@@ -73,11 +75,14 @@ However, raw addresses have two main issues:
 
 ## Converting between address formats
 
-Convert between raw and user-friendly addresses use [ton.org/address](https://ton.org/address/).
+Convert raw, user-friendly addresses using [ton.org/address](https://ton.org/address/).
 
-For more details refhandlingl guide in [Addresses Documentation](/v3/documentation/smart-contracts/a/).
+For more details, refer to the refhandling guide in [Addresses Documentation](/v3/documentation/smart-contracts/addresses/).
 
 ## See also
 
 - [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton/)
 - [Smart contracts addresses documentation](/v3/documentation/smart-contracts/addresses/)
+
+<Feedback />
+

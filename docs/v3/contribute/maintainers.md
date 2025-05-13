@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Maintainers
 
 ## Active team
@@ -44,3 +46,6 @@ We sincerely appreciate each contributor who has helped make TON documentation a
 - [Content standardization](/v3/contribute/content-standardization/)
 - [Typography](/v3/contribute/typography/)
 - [Localization program](/v3/contribute/localization-program/overview/)
+
+<Feedback />
+

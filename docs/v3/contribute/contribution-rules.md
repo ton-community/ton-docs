@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Contribution Guidelines
 
 :::danger
@@ -47,3 +49,6 @@ The TON Ecosystem is being built for the entire world, so it's crucial that it's
 
 * [TON Contribution Guidelines](/v3/contribute/contribution-rules/)
 * [Tutorial Styling Guidelines](/v3/contribute/tutorials/guidelines/)
+
+<Feedback />
+

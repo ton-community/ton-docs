@@ -1,18 +1,20 @@
+import Feedback from '@site/src/components/Feedback';
+
 # FAQ
 
-## MyTonCtrl Directory Usage
+## MyTonCtrl directory usage
 
-MyTonCtrl is a wrapper that stores its files in two places:
+MyTonCtrl is a wrapper that stores its files in two locations:
 
-1. `~/.local/share/mytonctrl/` - Long-term files such as logs are stored here.
-2. `/tmp/mytonctrl/` - Temporary files are stored here.
+1. `~/.local/share/mytonctrl/`: Long-term files such as logs are stored here.
+2. `/tmp/mytonctrl/`: Temporary files are stored here.
 
-MyTonCtrl also includes another script, mytoncore, which in turn stores files in the following locations:
+MyTonCtrl includes another script called `mytoncore`, which stores files in the following locations:
 
-1. `~/.local/share/mytoncore/` - Permanent files, the main configuration will be stored here.
-2. `/tmp/mytoncore/` - Temporary files, parameters used for elections will be saved here.
+1. `~/.local/share/mytoncore/`: Permanent files, the main configuration will be stored here.
+2. `/tmp/mytoncore/`: Temporary files and parameters used for elections will be saved here.
 
-MyTonCtrl downloads the source code for itself and the validator into the following directories:
+MyTonCtrl downloads its source code, along with the validator, into the following directories:
 
 1. `/usr/src/mytonctrl/`
 2. `/usr/src/ton/`
@@ -45,60 +47,64 @@ sudo bash /usr/src/mytonctrl/scripts/uninstall.sh
 sudo rm -rf /usr/bin/ton
 ```
 
-During this process, ensure you have sufficient permissions to delete or modify these files or directories.
+Ensure you have the necessary permissions to delete or modify files and directories.
 
+## Directory changes with MyTonCtrl
 
-## Directory Changes with MyTonCtrl
+### Changing validator working directory pre-installation
 
-### Changing Validator Working Directory Pre-installation
+If you want to change the working directory of the validator before installation, you have two options:
 
-If you wish to change the working directory of the validator prior to installation, there are two ways to do so:
+1. **Fork the project**: You can fork the project and make your modifications there. To learn how to fork a project, use the command `man git-fork`.
 
-1. **Fork the project** - You can fork the project and make your changes there. Learn how to fork a project with `man git-fork`.
-2. **Create a symbolic link** - You can also create a symbolic link with the following command:
+2. **Create a symbolic link**: Alternatively, you can create a symbolic link with the following command:
 
-    ```bash
-    ln -s /opt/ton/var/ton
-    ```
-This command will create a link `/var/ton` that points to `/opt/ton`.
+   ```bash
+   ln -s /opt/ton/var/ton /var/ton
+   ```
 
-### Changing Validator Working Directory Post-installation
+This command will create a link at `/var/ton` that points to `/opt/ton`.
 
-If you want to change the working directory of the validator from `/var/ton/` after installation, perform the following steps:
+### Changing validator working directory post-installation
 
-1. **Stop services** - You will need to stop the services with these commands:
+To change the working directory of the validator from `/var/ton/` after installation, follow these steps:
 
-    ```bash
-    systemctl stop validator.service
-    systemctl stop mytoncore.service
-    ```
+1. **Stop services**: First, stop the services using the following commands:
 
-2. **Move validator files** - You then need to move the validator files with this command:
+   ```bash
+   systemctl stop validator.service
+   systemctl stop mytoncore.service
+   ```
 
-    ```bash
-    mv /var/ton/* /opt/ton/
-    ```
+2. **Move validator files**: Next, move the validator files with this command:
 
-3. **Update configuration paths** - Replace the paths in the configuration located at `~/.local/share/mytoncore/mytoncore.db`.
+   ```bash
+   mv /var/ton/* /opt/ton/
+   ```
 
-4. **Note on experience** - There is no prior experience with such a transfer, so consider this when moving forward.
+3. **Update configuration paths**: Ensure you update the paths in the configuration file located at `~/.local/share/mytoncore/mytoncore.db`.
 
-Remember to make sure you have sufficient permissions to make these changes or run these commands.
+4. **Consider experience**: Note that there might be limited experience with this type of transfer, so take this into account as you proceed.
 
-## Understanding Validator Status and Restarting Validator in MyTonCtrl
+Make sure you have sufficient permissions to execute these commands and make these changes.
 
-This document will help you understand how to confirm if MyTonCtrl has become a full validator and how to restart your validator.
+## Understanding validator status and restarting validator in MyTonCtrl
 
-## Restarting Your Validator
+This [document](/v3/guidelines/nodes/running-nodes/validator-node) will help you confirm if MyTonCtrl has become a full validator.
 
-If you need to restart your validator, you can do so by running the following command:
+## Restarting your validator
+
+If you need to restart your validator, run this command:
 
 ```bash
 systemctl restart validator.service
 ```
 
-Ensure you have sufficient permissions to execute these commands and make necessary adjustments. Always remember to back up important data before performing operations that could potentially affect your validator.
+Please ensure you have the necessary permissions to execute these commands and make any needed adjustments. <u>**Remember to back up important data before performing operations that may affect your validator.**</u>
 
-## See Also
+## See also
 
-* [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
+- [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
+
+<Feedback />
+

@@ -1,36 +1,40 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
 # Proofs verifying (low-level)
 
 ## Overview
 :::caution
-This section describes instructions and manuals for interacting with TON at a low level.
-it is assumed that you have already become familiar with [exotic cells](/v3/documentation/data-formats/tlb/exotic-cells), [TL-B language](/v3/documentation/data-formats/tlb/tl-b-language) and
-understand the [simple proof verifying](/v3/documentation/data-formats/tlb/exotic-cells#simple-proof-verifying-example) example.
+This section provides instructions and guidance for interacting with TON at a low level.
+It assumes you are familiar with [exotic cells](/v3/documentation/data-formats/tlb/exotic-cells) and the [TL-B language](/v3/documentation/data-formats/tlb/tl-b-language)
+and understand the [simple proof verifying](/v3/documentation/data-formats/tlb/exotic-cells#simple-proof-verifying-example) example.
 :::
 
-This article describes advanced examples of verifying proofs from Liteservers.
 
-It's important to check any data you receive from a node for trustless interaction with the blockchain.
-However, the article covers only part of trustless communication with Liteserver,
-because its assumed that you verified the Block hash you received from a Liteserver (or from anyone else).
-Block hash verifying is more advanced, because you need to sync key blocks and (or) check block signatures,
-and will be described in the other article in the future. But anyway even using only these examples
-you're decreasing probability that Liteserver will send you the wrong data that you will believe.
+This article presents advanced examples of proof verification using liteservers.
+
+Verifying any data received from a node is essential for trustless interaction with the blockchain.
+However, this article covers only a portion of the trustless communication process with a liteserver.
+It assumes you have verified the block hash received from a liteserver or any other source.
+Block hash verification is a more advanced topic.
+It requires syncing key blocks and/or validating block signatures. This topic will be covered in a future article.
+Nonetheless, even using only the examples provided here can significantly reduce the probability of accepting incorrect data from a liteserver.
 
 
-## Block Header
+## Block header
 
-Let's say we know a Block ID:
+Suppose we have a known block ID:
 ```json
 <TL BlockIdExt [wc=-1, shard=-9223372036854775808, seqno=31220993, root_hash=51ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a52c7b1f46c26406, file_hash=d4fcdc692de1a252deb379cd25774842b733e6a96525adf82b8ffc41da667bf5] >
 ```
-And we ask a Liteserver for a Header for this block. Liteserver [response](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L35)
-contains a `header_proof` boc.
+We then request the corresponding block header from a liteserver.
+The liteserver’s [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L36) includes a `header_proof` BoC.
+
 
 <details>
 
-  <summary><b>Show boc</b></summary>
+  <summary><b>Show BoC</b></summary>
 
 ```boc
 
@@ -39,7 +43,7 @@ b5ee9c72010207010001470009460351ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a5
 ```
 </details>
 
-After boc deserialization, we got Cell:
+After deserializing the BoC, we obtain the following cell:
 
 ```json
 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
@@ -53,7 +57,7 @@ After boc deserialization, we got Cell:
 	}
 }
 ```
-that we should deserialize according to the Block [Tlb scheme](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L442):
+We should deserialize the cell according to the block [TLB scheme](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L442):
 
 ```python
 {
@@ -91,37 +95,42 @@ that we should deserialize according to the Block [Tlb scheme](https://github.co
 }
 ```
 
-Now, we should check that `seqno` in deserialized block matches to block `seqno` we know, and then compute hash_1 of the only
-Merkle Proof reference and compare it to block hash we know:
+
+Next, we need to verify that the `seqno` in the deserialized block matches the `seqno` of the block we know. After that, we compute `hash_1` for the single Merkle proof reference and compare it to our block hash.
+
 ```python
 assert h_proof.refs[0].get_hash(0) == block_id.root_hash
 ```
-Now, we can trust all other data, this Cell contains
+Now, we can trust all other data in the cell.
 
-_Checking Proof Examples:_ [Python](https://github.com/yungwine/pytoniq-core/blob/873a96aa2256db33b8f35fbe2ab8fe8cf8ae49c7/pytoniq_core/proof/check_proof.py#L19), [Kotlin](https://github.com/andreypfau/ton-kotlin/blob/b1edc4b134e89ccf252149f27c85fd530377cebe/ton-kotlin-liteclient/src/commonMain/kotlin/CheckProofUtils.kt#L15), [C++](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/check-proof.cpp#L34)
+_Checking proof examples:_ [Python](https://github.com/yungwine/pytoniq-core/blob/873a96aa2256db33b8f35fbe2ab8fe8cf8ae49c7/pytoniq_core/proof/check_proof.py#L19), [Kotlin](https://github.com/andreypfau/ton-kotlin/blob/b1edc4b134e89ccf252149f27c85fd530377cebe/ton-kotlin-liteclient/src/commonMain/kotlin/CheckProofUtils.kt#L15), [C++](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/check-proof.cpp#L34)
 
-## Full Block
+## Full block
 
-For `liteserver.getBlock` method the proof verifying is the same as described above, however it contains full Cells instead of Pruned Branches for [Value Flow](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L464), [State Update](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413) and [Block Extra](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L452) schemas.
+In the `liteserver.getBlock` method, proof verification is performed in the same manner as described above. However, it includes full cells instead of pruned branches for the [value flow](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L464), [state update](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413), and [block extra](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L452) schemas.
 
-## Shard Block
 
-Shard proofs are proofs that shard reference is actually stored in the masterchain block we provided to Liteserver. We need to check such proofs when we call `liteServer.getShardInfo`, `liteServer.getAccountState` and `liteServer.runSmcMethod` methods.
+## Shard block
 
-Let's ask a Liteserver for a Shard info for masterchain block we mentioned in above:
+Shard proofs verify that a shard reference is stored in the MasterChain block provided to the liteserver. These proofs are necessary when calling the following methods:
+- `liteServer.getShardInfo`
+- `liteServer.getAccountState`
+- `liteServer.runSmcMethod`
+
+To request shard info from the liteserver for the MasterChain block mentioned above, we can execute the following code:
+
 ```python
 await client.raw_get_shard_info(master, wc=0)
 ```
-
-Liteserver response contains BlockIdExt of the shard block:
+The liteserver response contains the `BlockIdExt` of the shard block:
 ```json
 <TL BlockIdExt [wc=0, shard=-9223372036854775808, seqno=36908135, root_hash=39e5cbca5bf69750b5d9897872c3a0d7a3e614e521c53e4de728fafed38dce27, file_hash=f1f0e5cdc4b8a12cf2438dcab60f4712d1dc04f3792b1d72f2500cbf640948b7] >
 ```
-Shard Proof boc:
+Shard proof BoC:
 
 <details>
 
-  <summary><b>Show boc</b></summary>
+  <summary><b>Show BoC</b></summary>
 
 ```boc
 
@@ -130,11 +139,11 @@ b5ee9c72010219020004b9010009460332bf3592969931ca4fbc7715494b50597f1884c0d8474560
 ```
 </details>
 
-And `shard_descr` boc which we can use as a result if we trust Liteserver.
+The `shard_descr` BoC can be used if the liteserver is trusted.
 
 <details>
 
-  <summary><b>Show boc</b></summary>
+  <summary><b>Show BoC</b></summary>
 
 ```boc
 
@@ -143,12 +152,14 @@ b5ee9c7201010201007d0001db50119963380ee3280800011e9c5cb7ee0000011e9c5cb7ee29cf2e
 ```
 </details>
 
-After the shard proof boc deserialization we got 2 roots:
+After deserializing the shard proof BoC, 2 root cells are obtained:
+
 ```json
 [<Cell 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> 1 refs>, <Cell 280[0332BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F] -> 1 refs>]
 ```
 
-The first one is a Masterchain block Merkle Proof which we should check (using `check_block_header` function):
+The first root is a MasterChain block Merkle proof, which must be verified using the `check_block_header` function:
+
 ```json
 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
 	64[11EF55AAFFFFFF11] -> {
@@ -165,7 +176,7 @@ The first one is a Masterchain block Merkle Proof which we should check (using `
 }
 ```
 
-The Cell
+The cell
 ```json
 552[0478E0F0E601BA1161ECC1395E9A0475C4F80AADBD6C483F210E96E29CF36789E432BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F016F] -> {
     560[010378E0F0E601BA1161ECC1395E9A0475C4F80AADBD6C483F210E96E29CF36789E46492304DFB6EF9149781871464AF686056A9627F882F60E3B24F8C944A75EBAF016F0014],
@@ -173,9 +184,10 @@ The Cell
 }
 ```
 
-Is a Merkle Update of [ShardState](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413) TLB scheme, so we need to remember the new hash.
+Is a Merkle update of the [ShardState](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413) TLB schema. The resulting new hash should be stored.
 
-After we've made sure that the only Merkle Proof Cell reference Hash_1 is matching with the block hash we know, and remembered the new ShardState hash, we check the second `shard proof` Cell:
+After verifying that the only Merkle proof cell reference `Hash_1` matches the known block hash and storing the new ShardState hash, proceed to validate the second `shard proof` cell:
+
 
 ```json
 280[0332BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F] -> {
@@ -203,12 +215,11 @@ After we've made sure that the only Merkle Proof Cell reference Hash_1 is matchi
 }
 ```
 
-As we can see the only Merkle Proof reference has prefix `9023AFE2` which is [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410)
-TLB Scheme prefix, so we need to compare this reference Hash_1 with the one we remembered in the previous step:
+The Merkle proof reference in this cell has the prefix `9023AFE2`, corresponding to the [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410) TLB schema. This reference's `Hash_1` must match the hash stored in the previous step:
 
 ```python
 """
-Here mc_block_cell is a first shard proof root and mc_state_root is the second one.
+Here mc_block_cell is the first shard proof root and mc_state_root is the second one.
 The check_block_header_proof function returns new hash of the ShardState Merkle Update.
 """
 
@@ -219,9 +230,9 @@ if mc_state_hash != state_hash:
     raise ProofError('mc state hashes mismatch')
 ```
 
-* _Why?_ - because we've checked the block header proof and that means, that we can trust other Cell data. So now we trust the new hash of ShardState Merkle Update, and to trust the second Cell data we need to check if hashes are match.
+* _Why?_ — We can trust the associated cell data because the block header proof is verified. Therefore, the new hash from the ShardState Merkle update is considered trusted. We must confirm the hashes match to validate the second cell’s data.
 
-Now, let's deserialize the second Cell:
+Now, proceed to deserialize the second cell:
 
 ```python
 {
@@ -277,29 +288,29 @@ Now, let's deserialize the second Cell:
 }
 ```
 
-Since we trust this Cell we can trust the Shard Block data (`ShardStateUnsplit` -> `custom` -> `shard_hashes` -> `0 (shrdblk wc)` -> `leaf`).
+Since this cell is trusted, we can also trust the shard block data  (`ShardStateUnsplit` -> `custom` -> `shard_hashes` -> `0 (shrdblk wc)` -> `leaf`).
 
-## Account State
+## Account state
 
-Let's prove state of account `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG` for the same Masterchain block we started with in the article beginning.
+Next, let's prove the state of account `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG` for the same MasterChain block referenced at the beginning of this article.
 
-Liteserver [response](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L37) contains masterchain block id _(must be the same we sent to ls)_, shard block id and `shard_proof` boc which we should check as described above,
-`proof` boc, and `state` boc.
+The liteserver [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L38) includes the MasterChain block ID, which must match the one sent to the liteserver, the shard block ID, and a `shard_proof` BoC, which must be verified as described above, along with a `proof` BoC and a `state` BoC.
 
 
 <details>
 
-  <summary><b>Show bocs</b></summary>
+  <summary><b>Show BoCs</b></summary>
 
 ```boc
-Proof boc:
+Proof BoC:
     b5ee9c7201023d020008480100094603f93fe5eda41a6ce9ecb353fd589842bd3f5d5e73b846cb898525293fc742fd6902190209460339e5cbca5bf69750b5d9897872c3a0d7a3e614e521c53e4de728fafed38dce27001d34235b9023afe2ffffff110000000000000000000000000002332c670000000164b6c351000023d38b96fdc501dc64fd200304052848010138f8d1c6e9f798a477d13aa26cb4d6cfe1a17949ac276b2f1e0ce037a521b9bc0001221382097522af06ffaff1f0063321d90000000000000000ffffffffffffffff825d48abc1bfebfc7bc2df8993c189361000023d38b69370401dc64fd2fa78ec529bcf9931e14f9d8b27ec1469290c0baef8256d657ce573b9679c5997431fcda6bf2d0be39344a9336cfe0ae9c844a88d2bd8022102e4012a760d4db83323130104ba9157837fd7f8f8070833231301032030fdc45f2d3838090a0b284801013e38e2548c5236a9652c45e553ced677f76550097b94138a4576f122443944d400692848010159e1a18ee4e5670306b5203912c87dffc17898f0999bd128a6965027d53b6fa40215231301013fa38088aaea2b780c0d10284801016f315f25b4a39ac12c85fea4ecfe7a83e5e59d1f059783fa0c3ef2797308806100002848010188d5f8a73382aea73dede03fc3bcda2634a717ef50e7428d5a4a44c771b014b90066231301005ecd9e51e5d22a380e0f1023130100303b3b607d7ffc781112132848010182eb0e24c842092ec2705486cbbe98de8016d55f5cff4ea910471a4c3a7a1cf1003b28480101ed7e26bd36efa6d5d9b4f6aaab9813af0742a84244977f74fd4074c9c98908be000028480101ca85960e3fc3dfb6d26e83ae87a837ae5c2faf7c8d43ea177393c602fadaa0300039221100e0f41ada252e2f08141528480101d7acbb602338c86d610f35cfb362fd76fc18b1812476b6fca99a0678e665fcf50000284801014fae109c41f3d5e2be0a3ff00a007f2e50a796797700d18a7aa663e531c37180002d221100e05c33225b78bce8161728480101545b5925b3ab2a8df2470fe22a5a3c9cc64e3cb24407c26167e0fbb476e05309002c221100e03480847f372168181928480101844a14c99695506e920635d18e76d9e685adee74e5fba6f6d3b371ca77e348130029220f00d0b1cce62aecc81a1b220f00c625c7e90dfc681c1d284801019ca2157c92d49b9d051388de45d07072c78a3aa65a5b05547d94e0369aa6bdee002a284801010326812b62712345473070d679bc38cdbbce58b7a2bf6c5c6f091fc8d36e81cd001f220f00c279d628dbf2081e1f220f00c0b8f29f9d04e82021284801019143abf2a72662054eda4f4949d010c897aff4383b514b387cff790408231c6c001a28480101de5072f46a0e0ecab2bbfc2cfc62a3fe200f12d5d457df833a46eb747fa004e30059220f00c03fa2ec9ad848222328480101baee90fd11a130d6d2e2ded21ae4a7b86553116015b7e7ebfc52369534d298b20017220f00c02e722bded7282425220d00ab138e7f18482627284801017f1df311101e472b1d443334d2426fd339539f558694c60e3428221dcb1a5478001628480101e1fc242c29e519f9740ca2570d85779aed0c593cc36b59119852945988e186960015220d00a21324d3ff2828292848010199fe288fdce2606d39f9b6af72f9c2643ef06e6bacc15dd72cfa84d63c9e44a40013220d00a1e877ec8ba82a2b284801019e019e92be76a5ae7aee239299f561682afbe445dc42ee57ccc31ecb427fdf42000e220d00a1db848431a82c2d284801012345b80e66c025fb62c41261b5d230616303ec47f3bb7a255872fada62a1e8bf0010220d00a1d633bc10682e2f220d00a02ca3ddc468303128480101654781e5d466ec4ca50cb2983b20170bb5d90e2e6ab83ed7d42a829651a5eec1000a219abb19e61b8190c2587677c010ce49a93364b965f7762a9810d916b082f45e080a02bc35ebaa649b46ac72e6e4d4c1293b66d58d9ed7a54902beefd97f5bff7977dd85998b3d000023c5643934413228480101edced2278013ea497dd2e286f495b4f7f8df6ea73e08e85414fc43a611c17797000b284801018282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488000828480101b3e9649d10ccb379368e81a3a7e8e49c8eb53f6acc69b0ba2ffa80082f70ee390001241011ef55aaffffff113536373802a09bc7a98700000000840102332c67000000010000000000000000000000000064b6c351000023d38b96fdc0000023d38b96fdc5d41c6e3c0007035701dc64fd01dc42bec400000003000000000000002e393a28480101cb54530ac857df730e82ee239b2150528c6e5f6ed3678eab6e1e789f0e3c7a5300032a8a04f2ad1ede336a68623ddabf36cb8fa405dbe70a38c453f711000f9a9f92592db0f93fe5eda41a6ce9ecb353fd589842bd3f5d5e73b846cb898525293fc742fd69021902193b3c28480101d0cf03a1058c2fd6029288951051a0d82733953c1e9181a67c502ce59b180200000b0098000023d38b69370401dc64fd2fa78ec529bcf9931e14f9d8b27ec1469290c0baef8256d657ce573b9679c5997431fcda6bf2d0be39344a9336cfe0ae9c844a88d2bd8022102e4012a760d4db0098000023d38b87bb8402332c662b4e96320f9d0afb02e5d55b6b42c3349e33540620ecc07b399211fd56e4de3e2555617cdde457cd65a0ad033aafc0c6c25df716b04e455f49179668a46300db688c0103f2ad1ede336a68623ddabf36cb8fa405dbe70a38c453f711000f9a9f92592db04a4ff9713b206e420baaee4dd21febbeb426fcd9ce158db2a56dce9188fc313e0219001b688c0103f93fe5eda41a6ce9ecb353fd589842bd3f5d5e73b846cb898525293fc742fd6987d796744ca386906016c56921370d01f72cb004a1d7c294752afe4446da07bb0219001b
-State boc:
+State BoC:
     b5ee9c720102160100033c000271c006f5bc67986e06430961d9df00433926a4cd92e597ddd8aa6043645ac20bd178222c859043259e0d9000008f1590e4d10d405786bd75534001020114ff00f4a413f4bcf2c80b030051000000e929a9a317c1b3226ce226d6d818bafe82d3633aa0f06a6c677272d1f9b760ff0d0dcf56d8400201200405020148060704f8f28308d71820d31fd31fd31f02f823bbf264ed44d0d31fd31fd3fff404d15143baf2a15151baf2a205f901541064f910f2a3f80024a4c8cb1f5240cb1f5230cbff5210f400c9ed54f80f01d30721c0009f6c519320d74a96d307d402fb00e830e021c001e30021c002e30001c0039130e30d03a4c8cb1f12cb1fcbff1213141502e6d001d0d3032171b0925f04e022d749c120925f04e002d31f218210706c7567bd22821064737472bdb0925f05e003fa403020fa4401c8ca07cbffc9d0ed44d0810140d721f404305c810108f40a6fa131b3925f07e005d33fc8258210706c7567ba923830e30d03821064737472ba925f06e30d08090201200a0b007801fa00f40430f8276f2230500aa121bef2e0508210706c7567831eb17080185004cb0526cf1658fa0219f400cb6917cb1f5260cb3f20c98040fb0006008a5004810108f45930ed44d0810140d720c801cf16f400c9ed540172b08e23821064737472831eb17080185005cb055003cf1623fa0213cb6acb1fcb3fc98040fb00925f03e20201200c0d0059bd242b6f6a2684080a06b90fa0218470d4080847a4937d29910ce6903e9ff9837812801b7810148987159f31840201580e0f0011b8c97ed44d0d70b1f8003db29dfb513420405035c87d010c00b23281f2fff274006040423d029be84c6002012010110019adce76a26840206b90eb85ffc00019af1df6a26840106b90eb858fc0006ed207fa00d4d422f90005c8ca0715cbffc9d077748018c8cb05cb0222cf165005fa0214cb6b12ccccc973fb00c84014810108f451f2a7020070810108d718fa00d33fc8542047810108f451f2a782106e6f746570748018c8cb05cb025006cf165004fa0214cb6a12cb1fcb3fc973fb0002006c810108d718fa00d33f305224810108f459f2a782106473747270748018c8cb05cb025005cf165003fa0213cb6acb1f12cb3fc973fb00000af400c9ed54
 ```
 </details>
 
-When we've checked the `Shard Proof`, we need to deserialize both `proof` and `state` cells. First, `proof` proof cell must have exactly 2 roots:
+After verifying the `shard_proof`, the `proof` and `state` cells must be deserialized. The `proof` cell must contain exactly 2 root cells:
+
 
 ```json
 
@@ -307,7 +318,7 @@ When we've checked the `Shard Proof`, we need to deserialize both `proof` and `s
 
 ```
 
-The first root is a Merkle Proof for shard block (we already proved and trust it hash):
+The first `root` is a Merkle proof for the shard block, whose hash we have already verified and trusted.
 
 ```json
 280[0339E5CBCA5BF69750B5D9897872C3A0D7A3E614E521C53E4DE728FAFED38DCE27001D] -> {
@@ -326,9 +337,10 @@ The first root is a Merkle Proof for shard block (we already proved and trust it
 }
 ```
 
-As we did in the `Shard Proof` verifying we need to use function `check_block_header`: check if Block Cell is valid and remember the new `StateUpdate` hash.
+As in the `shard_proof` verification, the `check_block_header` function must validate the block cell and record the new `StateUpdate` hash.
 
-Then we deserialize the second root (let's call it `state_cell`) and check if its Hash_1 matches the hash we remembered:
+Next, deserialize the second root (`state_cell`) and verify that its `Hash_1` matches the previously recorded hash:
+
 ```python
 proof_cells = Cell.from_boc(proof)
 if len(proof_cells) != 2:
@@ -342,11 +354,11 @@ if state_cell[0].get_hash(0) != state_hash:
     raise ProofError('state hashes mismatch')
 ```
 
-Now we can trust the `state_cell` which looks like this:
+Once the hash matches, the `state_cell` can be trusted. Its structure is as follows:
 
 <details>
 
-  <summary><b>Show Cell</b></summary>
+  <summary><b>Show cell</b></summary>
 
 ```json
 280[03F93FE5EDA41A6CE9ECB353FD589842BD3F5D5E73B846CB898525293FC742FD690219] -> {
@@ -432,8 +444,8 @@ Now we can trust the `state_cell` which looks like this:
 
 </details>
 
-Again, the only Merkle Proof reference has prefix `9023AFE2` which is [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410)
-TLB Scheme prefix, so we're gonna deserialize it according to the TLB Scheme:
+The only Merkle proof reference has the prefix `9023AFE2`, which corresponds to the [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410) TLB schema.
+Therefore, it must be deserialized accordingly.
 
 ```python
 {
@@ -476,11 +488,14 @@ TLB Scheme prefix, so we're gonna deserialize it according to the TLB Scheme:
 }
 ```
 
-Here we need the `account` field which has [ShardAccounts](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L261) type.
-`ShardAccounts` is a HashmapAugE where key is an address hash_part, value has `ShardAccount` type and extra has `DeepBalanceInfo` type.
+We now need the `account` field, which is of type [ShardAccounts](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L261).
+`ShardAccounts` is a HashmapAugE, where the key is the address `hash_part`, the value is type `ShardAccount`, and the extra field is type `DeepBalanceInfo`.
 
-Parsing the address `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG` we get the hash_part is equals to `50368879097771769677871174881221998657607998794347754829932074327482686052226`, so we need to
-get from Hashmap value of this key:
+Parsing the address `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG`, we obtain the `hash_part` equal to:
+
+`50368879097771769677871174881221998657607998794347754829932074327482686052226`
+
+We then use this key to retrieve the corresponding value from the Hashmap.
 
 ```python
 {
@@ -493,7 +508,7 @@ get from Hashmap value of this key:
 }
 ```
 
-We need to remember `last_trans_hash` and `last_trans_lt`, because we can use them to get account transactions and let's check the whole Cell of this data:
+We need to store the values of `last_trans_hash` and `last_trans_lt`, as they can be used later to retrieve the account's transactions. Let's examine the entire cell containing this data.
 
 ```json
 320[649B46AC72E6E4D4C1293B66D58D9ED7A54902BEEFD97F5BFF7977DD85998B3D000023C564393441] -> {
@@ -501,10 +516,11 @@ We need to remember `last_trans_hash` and `last_trans_lt`, because we can use th
 }
 ```
 
-As we can see the Cell is an ordinary Cell with level 1, which has only one reference - the pruned account data, so let's compute the Hash_1 of this pruned branch -
-this is the account state hash we can trust: `8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`.
+This is a regular cell with level 1, containing a single reference — the pruned account data. We compute the `Hash_1` of this pruned branch, which serves as the trusted account state hash:
 
-Now the last step is to deserialize the `state` boc:
+`8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`.
+
+The next step is to deserialize the `state` BoC:
 
 ```json
 449[C006F5BC67986E06430961D9DF00433926A4CD92E597DDD8AA6043645AC20BD178222C859043259E0D9000008F1590E4D10D405786BD755300] -> {
@@ -541,9 +557,11 @@ Now the last step is to deserialize the `state` boc:
 }
 ```
 
-Compute its representation hash and make sure that it matches to the one we got from the Pruned: `8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`.
+Compute its representation hash, and verify that it matches the trusted hash obtained from the pruned data:
 
-And deserialize it according to the [Account](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L231-L233) TLB Scheme:
+`8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`.
+
+Finally, the BoC is deserialized using the [account](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L231-L233) TLB Scheme.
 
 ```python
 {
@@ -560,20 +578,23 @@ And deserialize it according to the [Account](https://github.com/ton-blockchain/
 }
 ```
 
-Now we can trust this account state data.
+At this point, the account state data is verified and trusted.
 
 ## Account transactions
 
-For [liteServer.getTransactions](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L71) request we must provide `lt` and `hash` of the transaction to start from.
-If we want to get last account transactions we can get them from `ShardAccount` (described above) and trust these `lt` and `hash`.
+For the [liteServer.getTransactions](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L94) request, we must provide the `lt` and `hash` of the transaction to start from.
+If we want to retrieve an account's latest transactions, we can extract the `lt` and `hash` from the trusted `ShardAccount`, as described above.
 
-When we receive transactions from the Liteserver we get boc with amount of transactions we asked roots. Each root is a Cell, which we should deserialize according to the [Transaction](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L263-L269) TLB Scheme.
-For the first transaction cell we should check that its hash matches with `last_trans_hash` we got from account state. Then we remember value of `prev_trans_hash` field and compare it to the hash of the second root and so on.
+When the liteserver returns the transactions, it provides a BoC containing the requested number of transaction roots. Each root is a cell that should be deserialized using the [transaction](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L263-L269) TLB scheme.
+For the first transaction cell, verify that its hash matches the `last_trans_hash` from the account state. Then, store the `prev_trans_hash` field, compare it to the hash of the second transaction root, and continue the verification process in this manner.
+
+
 
 ## Block transactions
 
-Let's ask a Liteserver for transactions belong to the block we started with in the article beginning.
-LiteServer [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L46) contains `ids` field with transactions and `proof` boc. First, let's deserialize the `proof`:
+Next, we query the liteserver for the list of transactions belonging to the block we started with at the beginning of this article.
+The liteserver [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L47) includes `ids` field with the transaction list and a `proof` BoC.
+The first step is to deserialize the `proof`:
 
 ```json
 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
@@ -607,7 +628,7 @@ LiteServer [response](https://github.com/ton-blockchain/ton/blob/master/tl/gener
 }
 ```
 
-Now we should check the Block Header Proof (to trust this Cell data) and deserialize it according to the Block TLB Scheme:
+We must verify the **block header proof** to trust the cell's contents. Once verified, we can deserialize it using the block TLB Scheme.
 
 ```python
 {
@@ -651,8 +672,11 @@ Now we should check the Block Header Proof (to trust this Cell data) and deseria
 }
 ```
 
-In this case we should remember field `block` -> `extra` -> `account_blocks`, which has type of [ShardAccountBlocks](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L282),
-which is HashmapAugE where key is an address hash_part, value has [AccountBlock](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L277-L280) type and extra has `CurrencyCollection` type:
+After successful deserialization, we should extract and remember the following field: `block` -> `extra` -> `account_blocks`.
+This field has the type [ShardAccountBlocks](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L282), which is a `HashmapAugE`, where:
+- The key is the address `hash_part`.
+- The value is of type [AccountBlock](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L277-L280).
+- The extra data is a `CurrencyCollection`.
 
 ```python
 {
@@ -680,7 +704,7 @@ which is HashmapAugE where key is an address hash_part, value has [AccountBlock]
 }
 ```
 
-Now lets check the `ids`:
+Now, let's check the `ids` field:
 
 ```python
 [
@@ -690,7 +714,7 @@ Now lets check the `ids`:
 ]
 ```
 
-For every transaction here we need to find it in the `account_block` we remembered and compare hashes:
+For each transaction, we should find its corresponding entry in the `account_blocks` we remembered and verify that their hashes match:
 
 ```python
 block_trs: dict = acc_block.get(int(tr['account'], 16)).transactions[0]
@@ -699,19 +723,17 @@ assert block_tr.get_hash(0) == tr['hash']
 ```
 
 :::note
-
-In this example it was unnecessary to check `ids` field, we could just take transactions from the account block.
-But when you request the [liteServer.listBlockTransactionsExt](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L80) method
-you check proofs similar but in that case you really need to compare hashes.
-
+In this example, checking the `ids` field was optional — we could have retrieved all transactions directly from the account blocks.
+However, verifying the transaction proofs becomes essential when using the [liteServer.listBlockTransactionsExt](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L48) method, and you must compare transaction hashes.
 :::
 
 ## Config
 
-Let's ask a Liteserver for 1, 4, 5, 7, 8 and 15 [Config params](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L83) (for [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L82) where you get all params, the proof verifying is the same).
-The [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L53) contains `state_proof` and `config_proof`.
+Request the following [config params](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L101) from the liteserver: 1, 4, 5, 7, 8, and 15 for [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L100), where all parameters are returned, and the proof verification remains the same.
+The [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L54) includes `state_proof` and `config_proof`.
 
-First, let's deserialize the `state_proof` Cell:
+
+First, deserialize the `state_proof` cell:
 
 ```json
 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
@@ -729,13 +751,14 @@ First, let's deserialize the `state_proof` Cell:
 }
 ```
 
-For it, we should check Block Header proof and remember the `StateUpdate` new hash.
 
-Now, let's deserialize the `config_proof` Cell:
+To do this, verify the block header proof and store the new hash from the `StateUpdate`.
+
+Next, deserialize the `config_proof` cell:
 
 <details>
 
-  <summary><b>Show Cell</b></summary>
+  <summary><b>Show cell</b></summary>
 
 ```json
 280[0332BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F] -> {
@@ -827,16 +850,15 @@ Now, let's deserialize the `config_proof` Cell:
 ```
 
 </details>
-
-We need to compare Hash_1 of this Merkle Proof only reference with the hash we got from `check_block_header` function above, so we can trust this Cell:
+Compare the `Hash_1` from the Merkle proof (reference only) with the hash obtained from the `check_block_header` function above. If they match, the cell can be trusted:
 
 ```python
 state_hash = check_block_header_proof(state_proof[0], block.root_hash, True)
 if config_proof[0].get_hash(0) != state_hash:
-    raise LiteClientError('hashes mismach')
+    raise LiteClientError('hashes mismatch')
 ```
 
-Now, let's deserialize the Cell according to the `ShardStateUnsplit` scheme:
+Next, deserialize the cell using the `ShardStateUnsplit` scheme:
 
 ```python
 {
@@ -878,10 +900,9 @@ Now, let's deserialize the Cell according to the `ShardStateUnsplit` scheme:
     }
 }
 ```
+Then, access the `ShardStateUnsplit` -> `custom` -> `config` -> `config` field, a Hashmap where the key is a `ConfigParam` number and the value is a cell containing the parameter value.
 
-And take the `ShardStateUnsplit` -> `custom` -> `config` -> `config` field, which is a Hashmap where key is a ConfigParam number and value is a Cell with parameter value.
-
-After deserialization of all params we got:
+After deserializing all parameters, we obtain:
 
 ```python
 {
@@ -912,6 +933,9 @@ After deserialization of all params we got:
 }
 ```
 
-## See Also
+## See also
 
-* [Exotic Cells](/v3/documentation/data-formats/tlb/exotic-cells)
+* [Exotic cells](/v3/documentation/data-formats/tlb/exotic-cells)
+
+<Feedback />
+

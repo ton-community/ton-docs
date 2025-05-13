@@ -1,84 +1,106 @@
-# Changing the Parameters
+import Feedback from '@site/src/components/Feedback';
 
-The aim of this document is to provide a basic explanation of configuration parameters of TON Blockchain, and to give step-by-step instructions for changing these parameters by a consensus of a majority of validators.
+# Changing the parameters
 
-We assume that the reader is already familiar with [Fift](/v3/documentation/smart-contracts/fift/overview) and the [Lite Client](/v3/guidelines/nodes/running-nodes/liteserver-node), as explained in [FullNode-HOWTO (low-level)](/v3/guidelines/nodes/running-nodes/full-node), and [Validator-HOWTO (low-level)](/v3/guidelines/nodes/running-nodes/validator-node) in the sections where validators' voting for the configuration proposals is described.
+This document aims to provide a basic explanation of TON Blockchain's configuration parameters and give step-by-step instructions for changing these parameters based on a consensus of a majority of validators.
 
-## 1. Configuration parameters
-The **configuration parameters** are certain values that affect the behavior of validators and/or fundamental smart contracts of TON Blockchain. The current values of all configuration parameters are stored as a special part of the masterchain state and are extracted from the current masterchain state when needed. Therefore, it makes sense to speak of the values of the configuration parameters with respect to a certain masterchain block. Each shardchain block contains a reference to the latest known masterchain block; the values from the corresponding masterchain state are assumed to be active for this shardchain block and are used during its generation and validation. For masterchain blocks, the state of the previous masterchain block is used to extract the active configuration parameters. Therefore, even if one tries to change some configuration parameters inside a masterchain block, the changes will become active only for the next masterchain block.
+We assume that the reader is already familiar with [Fift](/v3/documentation/smart-contracts/fift/overview) and the [Lite Client](/v3/guidelines/nodes/running-nodes/liteserver-node), as explained in [FullNode-HOWTO (low-level)](/v3/guidelines/nodes/running-nodes/full-node), and [Validator-HOWTO (low-level)](/v3/guidelines/nodes/running-nodes/validator-node) particularly in the sections discussing how validators vote on configuration proposals.
 
-Each configuration parameter is identified by a signed 32-bit integer index, called **configuration parameter index** or simply **index**. The value of a configuration parameter is always a Cell. Some configuration parameters may be missing; then it is sometimes assumed that the value of this parameter is `Null`. There also is a list of **mandatory** configuration parameters that must be always present; this list is stored in configuration parameter `#10`.
+## Configuration parameters
 
-All configuration parameters are combined into a **configuration dictionary** - a Hashmap with signed 32-bit keys (configuration parameter indices) and values consisting of exactly one cell reference. In other words, a configuration dictionary is a value of TL-B type (`HashmapE 32 ^Cell`). In fact, the collection of all configuration parameters is stored in the masterchain state as a value of TL-B type `ConfigParams`:
+The **configuration parameters** are specific values that influence the behavior of validators and fundamental smart contracts on the TON Blockchain. The current values of all configuration parameters are stored as a distinct part of the MasterChain state and are retrieved whenever necessary. Consequently, we can refer to the values of the configuration parameters concerning a particular MasterChain block. Each ShardChain block includes a reference to the most recently known MasterChain block; the values from the corresponding MasterChain state are considered active for this ShardChain block and are used during its generation and validation.
 
-    _ config_addr:bits256 config:^(Hashmap 32 ^Cell) = ConfigParams;
+For MasterChain blocks, the state of the previous MasterChain block is used to extract the active configuration parameters. Therefore, even if certain configuration parameters are attempted to be modified within a MasterChain block, any changes will only take effect in the subsequent MasterChain block.
 
-We see that, apart from the configuration dictionary, `ConfigParams` contains `config_addr`—256-bit address of the configuration smart contract in the masterchain. More details on the configuration smart contract will be provided later.
 
-The configuration dictionary containing the active values of all configuration parameters is available via special TVM register `c7` to all smart contracts when their code is executed in a transaction. More precisely, when a smart contract is executed, `c7` is initialized by a Tuple, the only element of which is a Tuple with several "context" values useful for the execution of the smart contract, such as the current Unix time (as registered in the block header). The tenth entry of this Tuple (i.e., the one with zero-based index 9) contains a Cell representing the configuration dictionary. Therefore, it can be accessed by means of TVM instructions `PUSH c7; FIRST; INDEX 9` or by the equivalent instruction `CONFIGROOT`. In fact, special TVM instructions `CONFIGPARAM` and `CONFIGOPTPARAM` combine the previous actions with a dictionary lookup, returning any configuration parameter by its index. We refer to the TVM documentation for more details on these instructions. What is relevant here is that all configuration parameters are easily accessible from all smart contracts (masterchain or shardchain), and smart contracts may inspect them and use them to perform specific checks. For instance, a smart contract might extract workchain data storage prices from a configuration parameter to compute the price for storing a chunk of user-provided data.
+Each configuration parameter is identified by a signed 32-bit integer known as the **configuration parameter index**, or simply the **index**. The value of a configuration parameter is always a `Cell`. In some cases, certain configuration parameters may be absent, and it is generally assumed that the value of these missing parameters is `Null`. Additionally, there is a list of **mandatory** configuration parameters that must always be present. This list is stored in the configuration parameter `#10`.
 
-The values of configuration parameters are not arbitrary. In fact, if the configuration parameter index `i` is non-negative, then the value of this parameter must be a valid value of TL-B type (`ConfigParam i`). This restriction is enforced by the validators, which will not accept changes to configuration parameters with non-negative indices unless they are valid values of the corresponding TL-B type.
+All configuration parameters are combined into a **configuration dictionary**, which is a `Hashmap` with signed 32-bit keys (the configuration parameter indices) and values that consist of exactly one cell reference. In other words, a configuration dictionary is a value of the TL-B type `HashmapE 32 ^Cell`. The collection of all configuration parameters is retained in the MasterChain state as a value of the TL-B type `ConfigParams`:
 
-Therefore, the structure of such parameters is determined in source file `crypto/block/block.tlb`, where (`ConfigParam i`) is defined for different values of `i`. For instance,
+`_ config_addr:bits256 config:^(Hashmap 32 ^Cell) = ConfigParams;`
 
-    _ config_addr:bits256 = ConfigParam 0;
-    _ elector_addr:bits256 = ConfigParam 1;
-    _ dns_root_addr:bits256 = ConfigParam 4;  // root TON DNS resolver
+In addition to the configuration dictionary, `ConfigParams` contains `config_addr`—the 256-bit address of the configuration smart contract within the MasterChain. Further details on the configuration smart contract will be provided later.
 
-    capabilities#c4 version:uint32 capabilities:uint64 = GlobalVersion;
-    _ GlobalVersion = ConfigParam 8;  // all zero if absent
+The configuration dictionary, which contains the active values of all configuration parameters, is accessible to all smart contracts through a special TVM register called `c7` during the execution of a transaction. Specifically, when a smart contract is executed, `c7` is initialized as a tuple. This tuple consists of a single element, which is another tuple containing several "context" values that are useful for executing the smart contract, such as the current Unix time (as recorded in the block header). 
 
-We see that the configuration parameter `#8` contains a Cell with no references and exactly 104 data bits. The first four bits must be `11000100`, then 32 bits with the currently enabled "global version" are stored, and a 64-bit integer with flags corresponding to currently enabled capabilities follows. A more detailed description of all configuration parameters will be provided in an appendix to the TON Blockchain documentation; for now, one can inspect the TL-B scheme in `crypto/block/block.tlb` and check how different parameters are used in the validator sources.
+The tenth entry of this inner tuple (i.e., the one indexed with zero-based index 9) contains a `Cell` representing the configuration dictionary. This configuration dictionary can be accessed by using the TVM instructions `PUSH c7; FIRST; INDEX 9` or the equivalent instruction `CONFIGROOT`. Furthermore, special TVM instructions like `CONFIGPARAM` and `CONFIGOPTPARAM` streamline this process by combining the previous actions with a dictionary lookup, allowing smart contracts to retrieve any configuration parameter by its index.
 
-In contrast with configuration parameters with non-negative indices, configuration parameters with negative indices can contain arbitrary values. At least, no restrictions on their values are enforced by the validators. Therefore, they can be used to store important information (such as the Unix time when certain smart contracts must start operating) that is not crucial for the block generation but is used by some of the fundamental smart contracts.
+It is important to note that all configuration parameters are readily accessible to all smart contracts, whether they operate on the MasterChain or ShardChain. As a result, smart contracts can inspect these parameters and utilize them for specific checks. For instance, a smart contract might extract data storage prices for different WorkChains from a configuration parameter in order to calculate the cost of storing a piece of user-provided data.
 
-## 2. Changing configuration parameters
 
-We have already explained that the current values of configuration parameters are stored in a special portion of the masterchain state. How do they ever get changed?
+The values of configuration parameters are not arbitrary. Specifically, if the configuration parameter index `i` is non-negative, then its value must correspond to a valid value of the TL-B type `ConfigParam i`. Validators enforce this restriction and do not accept changes to configuration parameters with non-negative indices unless the values are valid for the corresponding TL-B type.
 
-In fact, there is a special smart contract residing in the masterchain called the **configuration smart contract**. Its address is determined by the `config_addr` field in `ConfigParams`, which we have described before. The first cell reference in its data must contain an up-to-date copy of all configuration parameters. When a new masterchain block is generated, the configuration smart contract is looked up by its address, `config_addr`, and the new configuration dictionary is extracted from the first cell reference of its data. After some validity checks (such as verifying that any value with a non-negative 32-bit index `i` is indeed a valid value of TL-B type (`ConfigParam i`)) the validator copies this new configuration dictionary into the portion of the masterchain containing ConfigParams. This is performed after all transactions have been created, so only the final version of the new configuration dictionary stored in the configuration smart contract is inspected. If the validity checks fail, then the "true" configuration dictionary is left unchanged. In this way, the configuration smart contract cannot install invalid values of configuration parameters. If the new configuration dictionary coincides with the current configuration dictionary, then no checks are performed and no changes are made.
+The structure of these parameters is defined in the source file `crypto/block/block.tlb`, where `ConfigParam i` is specified for different values of `i`. For example:
 
-In this way, all changes to configuration parameters are performed by the configuration smart contract, and it is its code that determines the rules for changing configuration parameters. Currently, the configuration smart contract supports two modes for changing configuration parameters:
+- `_config_addr: bits256 = ConfigParam 0;`
+- `_elector_addr: bits256 = ConfigParam 1;`
+- `_dns_root_addr: bits256 = ConfigParam 4; // root TON DNS resolver`
+- `capabilities#c4 version:uint32 capabilities:uint64 = GlobalVersion;`
+- `_GlobalVersion = ConfigParam 8; // all zero if absent`
 
-1) By means of an external message signed by a specific private key, which corresponds to a public key stored in the data of the configuration smart contract. This is the method employed in the public testnet and probably in the smaller private test networks controlled by one entity, because it enables the operator to easily change the values of any configuration parameters. Note that this public key may be changed by a special external message signed by an old key, and that if it is changed to zero, then this mechanism is disabled. Therefore, one might use it for fine-tuning immediately after the launch and then disable it for good.
-2) By means of creating "configuration proposals" that are subsequently voted for or against by validators. Typically, a configuration proposal has to collect votes from more than 3/4 of all validators (by weight), and not only in one round but in several rounds (i.e., several consecutive sets of validators have to confirm the proposed parameter change). This is the distributed governance mechanism to be used by the TON Blockchain Mainnet.
+These entries illustrate how configuration parameters are structured and defined within the specified file.
 
-We would like to describe the second way of changing configuration parameters in more detail.
+The configuration parameter `#8` includes a `Cell` that has no references and contains exactly 104 data bits. The first four bits are allocated for `11000100`, followed by 32 bits that represent the currently enabled "global version." This is followed by a 64-bit integer with flags that correspond to the currently enabled capabilities. A more detailed description of all configuration parameters will be provided in an appendix to the TON Blockchain documentation. In the meantime, you can review the TL-B scheme in `crypto/block/block.tlb` to see how different parameters are utilized in the validator sources.
 
-## 3. Creating configuration proposals
+Unlike configuration parameters with non-negative indices, those with negative indices can hold arbitrary values. Validators do not enforce any restrictions on these values. As a result, they can be used to store essential information, such as the Unix time when specific smart contracts are set to begin operating. This information is not critical for block generation but is necessary for some fundamental smart contracts.
 
-A new **configuration proposal** contains the following data:
-- index of the configuration parameter to be changed
-- new value of the configuration parameter (or Null, if it is to be deleted)
-- expiration Unix time of the proposal
-- flag indicating whether the proposal is **critical** or not
-- optional **old value hash** with the cell hash of the current value (the proposal can be activated only if the current value has the indicated hash)
+## Changing configuration parameters
 
-Anybody with a wallet in the masterchain can create a new configuration proposal, provided he pays an adequate fee. However, only validators can vote for or against existing configuration proposals.
+The current values of configuration parameters are stored in a special section of the MasterChain state. But how are they changed?
 
-Note that there are **critical** and **ordinary** configuration proposals. A critical configuration proposal can change any configuration parameter, including one of the so-called critical ones (the list of critical configuration parameters is stored in configuration parameter `#10`, which is itself critical). However, creating critical configuration proposals is more expensive, and they usually need to collect more validator votes in more rounds (the precise voting requirements for ordinary and critical configuration proposals are stored in critical configuration parameter `#11`). On the other hand, ordinary configuration proposals are cheaper, but they cannot change the critical configuration parameters.
+There is a special smart contract known as the **configuration smart contract** that resides in the MasterChain. Its address is specified by the `config_addr` field in `ConfigParams`. The first cell reference in its data must contain an up-to-date copy of all configuration parameters. When a new MasterChain block is generated, the configuration smart contract is accessed using its address (`config_addr`), and the new configuration dictionary is extracted from the first cell reference of its data. 
 
-In order to create a new configuration proposal, one first has to generate a BoC (bag-of-cells) file containing the proposed new value. The exact way of doing this depends on the configuration parameter being changed. For instance, if we want to create a parameter `-239` containing UTF-8 string "TEST" (i.e., `0x54455354`), we could create `config-param-239.boc` as follows: invoke Fift and then type
+Following some validity checks—like ensuring that any value with a non-negative 32-bit index `i` is indeed a valid TL-B type (`ConfigParam i`)—the validator copies this new configuration dictionary into the portion of the MasterChain that contains `ConfigParams`. This operation occurs after all transactions have been created, meaning only the final version of the new configuration dictionary stored in the smart contract is evaluated. 
+
+If the validity checks fail, the existing configuration dictionary remains unchanged, ensuring that the configuration smart contract cannot install invalid parameter values. If the new configuration dictionary is identical to the current one, no checks are performed, and no changes are made.
+
+All changes to configuration parameters are executed by the configuration smart contract, which defines the rules for modifying these parameters. Currently, the configuration smart contract supports two methods for changing configuration parameters:
+
+- **External message**: This method involves an external message signed by a specific private key, which corresponds to a public key stored in the configuration smart contract's data. This approach is typically used in public testnets and possibly in smaller private test networks controlled by a single entity, as it allows the operator to easily modify any configuration parameter values. 
+
+  It is important to note that this public key can be changed through a special external message signed by the previous key, and if changed to zero, this mechanism becomes disabled. This means the method can be used for fine-tuning right after launch and then permanently disabled.
+
+- **Configuration proposals**: This method involves creating "configuration proposals" that validators vote on. Generally, a configuration proposal must gather votes from more than 3/4 (75%) of all validators by weight, and this requires approval in multiple rounds (i.e., several consecutive sets of validators must confirm the proposed parameter change). This serves as the distributed governance mechanism for the TON Blockchain Mainnet.
+
+We will provide a more detailed explanation of the second method for changing configuration parameters.
+
+## Creating configuration proposals
+
+A new **configuration proposal** includes the following information:
+
+- The index of the configuration parameter to be changed.
+  
+- The new value of the configuration parameter (or `Null`, if it is to be deleted).
+  
+- The expiration Unix time of the proposal.
+  
+- A flag indicating whether the proposal is **critical**.
+  
+- An optional **old value hash** that contains the cell hash of the current value (the proposal can only be activated if the current value matches the specified hash).
+
+Anyone with a wallet in the MasterChain can create a new configuration proposal, provided they pay the required fee. However, only validators have the authority to vote for or against existing configuration proposals.
+
+It is important to note that there are **critical** and **ordinary** configuration proposals. A critical configuration proposal can modify any configuration parameter, including those classified as critical. The list of critical configuration parameters is stored in configuration parameter `#10`, which is itself considered critical. Creating critical configuration proposals is more costly, and they typically require gathering more validator votes across multiple rounds. The specific voting requirements for both ordinary and critical configuration proposals are detailed in the critical configuration parameter `#11`. Conversely, ordinary configuration proposals are less expensive to create but cannot alter critical configuration parameters.
+
+To create a new configuration proposal, one must first generate a BoC (bag-of-cells) file that contains the proposed new value. The method for doing this varies depending on the configuration parameter being modified. For example, if we want to create a parameter `-239` containing the UTF-8 string "TEST" (i.e., `0x54455354`), we would generate `config-param-239.boc` by invoking Fift and then typing:
 
 ```
 <b "TEST" $, b> 2 boc+>B "config-param-239.boc" B>file
 bye
 ```
-    
 
-As a result, a 21-byte file `config-param-239.boc` will be created, containing the serialization of the required value.
+As a result, a 21-byte file named `config-param-239.boc` will be created, which contains the serialization of the required value.
 
-For more sophisticated cases, and especially for configuration parameters with non-negative indices this straightforward approach is not easily applicable. We recommend using `create-state` (available as `crypto/create-state` in the build directory) instead of `fift` and copying and editing suitable portions of the source files `crypto/smartcont/gen-zerostate.fif` and `crypto/smartcont/CreateState.fif`, which are usually employed to create the zero state (corresponding to the "genesis block" of other blockchain architectures) of TON Blockchain.
+For more complex cases, especially for configuration parameters with non-negative indices, this straightforward approach may not be easily applicable. We recommend using `create-state`, which is available as `crypto/create-state` in the build directory, instead of using `fift`. You should also consider copying and modifying relevant portions of the source files `crypto/smartcont/gen-zerostate.fif` and `crypto/smartcont/CreateState.fif`. These files are typically used to create the zero state, corresponding to the "genesis block" found in other blockchain architectures, for the TON Blockchain.
 
-Consider, for instance, configuration parameter `#8`, which contains the currently-enabled global blockchain version and capabilities:
+For example, consider configuration parameter `#8`, which contains the currently enabled global blockchain version and its capabilities:
 
 ```
 capabilities#c4 version:uint32 capabilities:uint64 = GlobalVersion;
 _ GlobalVersion = ConfigParam 8;
 ```
 
-
-We can inspect its current value by running the lite client and typing `getconfig 8`:
+We can check its current value by running the lite client and typing `getconfig 8`:
 
 ```
 > getconfig 8
@@ -89,14 +111,15 @@ ConfigParam(8) = (
 x{C4000000010000000000000006}
 ```
 
-Now suppose that we want to enable the capability represented by bit `#3` (`+8`), which is `capReportVersion` (when enabled, this capability forces all collators to report their supported versions and capabilities in the block headers of the blocks they generate). Therefore, we want to have `version=1` and `capabilities=14`. In this example, we can still guess the correct serialization and create the BoC file directly by typing in Fift.
+Let’s consider enabling the capability represented by bit `#3` (which corresponds to `+8`), specifically the `capReportVersion` capability. When this capability is enabled, it requires all collators to include their supported versions and capabilities in the block headers of the blocks they generate. Therefore, we need to set `version=1` and `capabilities=14`. In this case, we can accurately guess the correct serialization and create the BoC file directly by entering commands in Fift.
+
 ```
 x{C400000001000000000000000E} s>c 2 boc+>B "config-param8.boc" B>file
 ```
 
-(A 30-byte file `config-param8.boc` containing the desired value is created as a result.)
+A 30-byte file named `config-param8.boc` is created, containing the desired value.
 
-However, in more complicated cases this might not be an option, so let's do this example differently. Namely, we can inspect the source files `crypto/smartcont/gen-zerostate.fif` and `crypto/smartcont/CreateState.fif` for relevant portions.
+In more complicated cases, this may not be an option. Therefore, let's approach this example differently. We can inspect the source files `crypto/smartcont/gen-zerostate.fif` and `crypto/smartcont/CreateState.fif` for relevant portions.
 
 ```
 // version capabilities --
@@ -115,8 +138,8 @@ and
 1 capCreateStats capBounceMsgBody or capReportVersion or config.version!
 ```
 
+We observe that `config.version!`, excluding the last `8 config!`, effectively accomplishes our goal. Therefore, we can create a temporary Fift script named `create-param8.fif`:
 
-We see that `config.version!` without the last `8 config!` essentially does what we need, so we can create a temporary Fift script, for example, `create-param8.fif`:
 ```
 #!/usr/bin/fift -s
 "TonUtil.fif" include
@@ -139,16 +162,16 @@ dup ."Serialized value = " <s csr.
 ."(Saved into file " type .")" cr
 ```
 
-Now if we run `fift -s create-param8.fif config-param8.boc` or, even better, `crypto/create-state -s create-param8.fif config-param8.boc` (from the build directory) we see the following output:
+To execute the command `fift -s create-param8.fif config-param8.boc` or, even better, use `crypto/create-state -s create-param8.fif config-param8.boc` from the build directory, we will see the following output:
 
 ```
 Serialized value = x{C400000001000000000000000E}
 (Saved into file config-param8.boc)
 ```
 
-and we obtain a 30-byte file `config-param8.boc` with the same content as before.
+We have obtained a 30-byte file named `config-param8.boc`, which contains the same content as before.
 
-Once we have a file with the desired value of the configuration parameter, we invoke the script `create-config-proposal.fif` that can be found in the directory `crypto/smartcont` of the source tree with suitable arguments. Again, we recommend using `create-state` (available as `crypto/create-state` from the build directory) instead of `fift`, because it is a special extended version of Fift that is able to do more blockchain-related validity checks:
+To create a configuration proposal, we first need a file containing the desired value for the configuration parameter. Next, we execute the script `create-config-proposal.fif`, which is located in the `crypto/smartcont` directory of the source tree, using appropriate arguments. We recommend using `create-state` (found as `crypto/create-state` in the build directory) instead of `fift`. This is because `create-state` is a specialized version of Fift that performs additional blockchain related validity checks:
 
 ```
 $ crypto/create-state -s create-config-proposal.fif 8 config-param8.boc -x 1100000
@@ -168,13 +191,15 @@ B5EE9C7241010301002C0001216E5650525E838CB0000000085E9455904001010BF300000008A002
 (Saved to file config-msg-body.boc)
 ```
 
-We have obtained the body of an internal message to be sent to the configuration smart contract with a suitable amount of Toncoin from any (wallet) smart contract residing in the masterchain. The address of the configuration smart contract may be obtained by typing `getconfig 0` in the lite client:
+We have acquired the content of an internal message intended for the configuration smart contract, along with an appropriate amount of Toncoin from any wallet smart contract located in the MasterChain. To find the address of the configuration smart contract, you can enter the `get config 0' command in the lite client:
+
 ```
 > getconfig 0
 ConfigParam(0) = ( config_addr:x5555555555555555555555555555555555555555555555555555555555555555)
 x{5555555555555555555555555555555555555555555555555555555555555555}
 ```
-We see that the address of the configuration smart contract is `-1:5555...5555`. By running suitable get-methods of this smart contract, we can find out the required payment for creating this configuration proposal:
+
+We have the address of the configuration smart contract as `-1:5555...5555`. By using appropriate getter methods of this smart contract, we can determine the required payment for creating this configuration proposal:
 
 ```
 > runmethod -1:5555555555555555555555555555555555555555555555555555555555555555 proposal_storage_price 0 1100000 104 0
@@ -184,9 +209,9 @@ result:  [ 2340800000 ]
 remote result (not to be trusted):  [ 2340800000 ] 
 ```
 
-The parameters to get-method `proposal_storage_price` are the critical flag (0 in this case), the time interval during which this proposal will be active (1.1 Megaseconds), the total amount of bits (104) and cell references (0) in the data. The latter two quantities can be seen in the output of `create-config-proposal.fif`.
-
-We see that one has to pay 2.3408 Toncoin to create this proposal. It is better to add at least 1.5 Tonoin to the message to pay for the processing fees, so we are going to send 4 Toncoin along with the request (all excess Toncoin will be returned back). Now we use `wallet.fif` (or the corresponding Fift script for the wallet we are using) to create a transfer from our wallet to the configuration smart contract carrying 4 Toncoin and the body from `config-msg-body.boc`. This usually looks like:
+The parameters for the `proposal_storage_price` get-method include the following: a critical flag set to 0, a time interval of 1.1 megaseconds during which the proposal will remain active, a total of 104 bits, and 0 cell references in the data. The latter two quantities can be found in the output of `create-config-proposal.fif`.
+  
+To create this proposal, we need to pay 2.3408 Toncoins. It's advisable to add at least 1.5 Toncoins to cover the processing fees. Therefore, we will send a total of 4 Toncoins with the request (any excess Toncoins will be returned). We will then use `wallet.fif` (or the appropriate Fift script for our wallet) to execute a transfer from our wallet to the configuration smart contract, including the 4 Toncoins and the body from `config-msg-body.boc`. This process typically looks like:
 
 ```
 $ fift -s wallet.fif my-wallet -1:5555555555555555555555555555555555555555555555555555555555555555 31 4. -B config-msg-body.boc
@@ -210,13 +235,13 @@ B5EE9C724101040100CB0001CF89FE00000000000000000000000000000000000000000000000000
 (Saved to file wallet-query.boc)
 ```
 
-Now we send the external message `wallet-query.boc` to the blockchain with the aid of the lite client.
+We will now send the external message `wallet-query.boc` to the blockchain using the lite client.
 
     > sendfile wallet-query.boc
     ....
     external message status is 1
 
-After waiting for some time, we can inspect the incoming messages of our wallet to check for response messages from the configuration smart contract, or, if we feel lucky, simply inspect the list of all active configuration proposals by means of method `list_proposals` of the configuration smart contract.
+After waiting for a brief period, we can check the incoming messages in our wallet to look for response messages from the configuration smart contract. Alternatively, if we are feeling lucky, we can directly inspect the list of all active configuration proposals by using the `list_proposals` method of the configuration smart contract.
 
 ```
 > runmethod -1:5555555555555555555555555555555555555555555555555555555555555555 list_proposals
@@ -227,19 +252,30 @@ remote result (not to be trusted):  [ ([6465489854369209310663026020982025659862
 ... caching cell FDCD887EAF7ACB51DA592348E322BBC0BD3F40F9A801CB6792EFF655A7F43BBC
 ```
 
-We see that the list of all active configuration proposals consists of exactly one entry represented by a pair.
+The list of all active configuration proposals contains exactly one entry represented by a pair.
+
 ```
 [6465...6321 [1586779536 0 [8 C{FDCD...} -1] 1124...2998 () 8646...209 3 0 0]]
 ```
-The first number `6465..6321` is the unique identifier of the configuration proposal, equal to its 256-bit hash. The second component of this pair is a Tuple describing the status of this configuration proposal. The first component of this Tuple is the expiration Unix time of the configuration proposal (`1586779546`). The second component (`0`) is the criticality flag. Next comes the configuration proposal proper, described by the triple `[8 C{FDCD...} -1]`, where `8` is the index of the configuration parameter to be modified, `C{FDCD...}` is the cell with the new value (represented by the hash of this cell), and `-1` is the optional hash of the old value of this parameter (`-1` means that this hash has not been specified). Next we see a large number `1124...2998` representing the identifier of the current validator set, then an empty list `()` representing the set of all currently active validators that have voted for this proposal so far, then `weight_remaining` equal to `8646...209` - a number that is positive if the proposal has not yet collected enough validator votes in this round, and negative otherwise. Then we see three numbers: `3 0 0`. These numbers are `rounds_remaining` (this proposal will survive at most three rounds, i.e., changes of the current validator set), `wins` (the count of rounds where the proposal collected votes of more than 3/4 of all validators by weight), and `losses` (the count of rounds where the proposal failed to collect 3/4 of all validator votes).
 
-We can inspect the proposed value for configuration parameter `#8` by asking the lite-client to expand cell `C{FDCD...}` using its hash `FDCD...` or a sufficiently long prefix of this hash to uniquely identify the cell in question:
+The first number, `6465..6321`, serves as the unique identifier for the configuration proposal and represents its 256-bit hash. The second component of this pair is a tuple that describes the status of the configuration proposal. The first part of this tuple indicates the expiration Unix time of the proposal (`1586779546`), while the second part (`0`) acts as a criticality flag.
+
+Next, we find the configuration proposal itself, which is expressed by the triple `[8 C{FDCD...} -1]`. In this notation, `8` represents the index of the configuration parameter to be modified, `C{FDCD...}` denotes the cell containing the new value (its hash is represented by the value that follows), and `-1` indicates the optional hash of the old value for this parameter (where `-1` means the old hash is not specified).
+
+Following that, we encounter a large number, `1124...2998`, which identifies the current validator set. An empty list `()` is included to signify the set of all currently active validators who have voted for this proposal so far. Next is `weight_remaining`, equal to `8646...209`. This value is positive if the proposal has not yet garnered enough validator votes in this round, and negative otherwise.
+
+Lastly, we see three numbers: `3 0 0`. These represent `rounds_remaining` (the proposal can survive at most three rounds, meaning changes to the current validator set), `wins` (the count of rounds in which the proposal received votes exceeding 3/4 of all validators by weight), and `losses` (the count of rounds where the proposal failed to secure 3/4 of all validator votes).
+
+To inspect the proposed value for configuration parameter `#8`, you can ask the lite client to expand cell `C{FDCD...}` using its hash `FDCD...` or a sufficiently long prefix of this hash to uniquely identify the specific cell in question:
+
 ```
 > dumpcell FDC
 C{FDCD887EAF7ACB51DA592348E322BBC0BD3F40F9A801CB6792EFF655A7F43BBC} =
   x{C400000001000000000000000E}
 ```
-We see that the value is `x{C400000001000000000000000E}`, which is indeed the value we have embedded into our configuration proposal. We can even ask the lite client to display this Cell as a value of TL-B type (`ConfigParam 8`).
+
+We observe that the value is `x{C400000001000000000000000E}`, which is the value we have incorporated into our configuration proposal. Additionally, we can ask the lite client to present this Cell as a TL-B type value (`ConfigParam 8`).
+
 ```
 > dumpcellas ConfigParam8 FDC
 dumping cells as values of TLB type (ConfigParam 8)
@@ -248,66 +284,88 @@ C{FDCD887EAF7ACB51DA592348E322BBC0BD3F40F9A801CB6792EFF655A7F43BBC} =
 (
     (capabilities version:1 capabilities:14))
 ```
-This is especially useful when we consider configuration proposals created by other people.
 
-Note that the configuration proposal is henceforth identified by its 256-bit hash -- the huge decimal number `6465...6321`. We can inspect the current status of a specific configuration proposal by running the get-method `get_proposal` with the only argument equal to the identifier of the configuration proposal:
+This is particularly useful when we evaluate configuration proposals created by others.
+
+Each configuration proposal is identified by its unique 256-bit hash, represented by the large decimal number `6465...6321`. To check the current status of a specific configuration proposal, you can use the `get_proposal` method, providing the identifier of the configuration proposal as the only argument:
+
 ```
 > runmethod -1:5555555555555555555555555555555555555555555555555555555555555555 get_proposal 64654898543692093106630260209820256598623953458404398631153796624848083036321
 ...
 arguments:  [ 64654898543692093106630260209820256598623953458404398631153796624848083036321 94347 ] 
 result:  [ [1586779536 0 [8 C{FDCD887EAF7ACB51DA592348E322BBC0BD3F40F9A801CB6792EFF655A7F43BBC} -1] 112474791597373109254579258586921297140142226044620228506108869216416853782998 () 864691128455135209 3 0 0] ] 
 ```
-We obtain essentially the same result as before, but for only one configuration proposal and without the identifier of the configuration proposal at the beginning.
 
-## 4. Voting for configuration proposals
+We achieve essentially the same outcome as before, but for only one configuration proposal and without the identifier at the beginning.
 
-Once a configuration proposal is created, it is supposed to collect votes from more than 3/4 of all current validators (by weight, i.e., by stake) in the current round and maybe in several subsequent rounds (elected validator sets). In this way, the decision to change a configuration parameter must be approved by a significant majority not only of the current set of validators but also of several subsequent sets of validators.
+## Voting for configuration proposals
 
-Voting for a configuration proposal is possible only for current validators, listed (with their permanent public keys) in configuration parameter `#34`. The process is approximately as follows:
+Once a configuration proposal is created, it must collect votes from more than 75% of all current validators (based on their stake) during the current round and possibly in several subsequent rounds (with elected validator sets). This ensures that the decision to change a configuration parameter is approved by a significant majority, not only of the current set of validators but also of several future sets.
 
-- The operator of a validator looks up `val-idx`, the (0-based) index of his validator in the current set of validators as stored in configuration parameter `#34`.
-- The operator invokes a special Fift script `config-proposal-vote-req.fif` found in directory `crypto/smartcont` of the source tree, indicating `val-idx` and `config-proposal-id` as its arguments:
-```
+Voting for a configuration proposal is limited to the current validators listed (with their permanent public keys) in configuration parameter `#34`. The process is outlined below:
+
+- The operator of a validator first looks up `val-idx`, the zero-based index of their validator in the current set of validators stored in configuration parameter `#34`.
+
+- The operator then invokes a special Fift script, `config-proposal-vote-req.fif`, found in the `crypto/smartcont` directory of the source tree. They must indicate both `val-idx` and `config-proposal-id` as arguments:
+
+  ```
     $ fift -s config-proposal-vote-req.fif -i 0 64654898543692093106630260209820256598623953458404398631153796624848083036321
     Creating a request to vote for configuration proposal 0x8ef1603180dad5b599fa854806991a7aa9f280dbdb81d67ce1bedff9d66128a1 on behalf of validator with index 0 
     566F744500008EF1603180DAD5B599FA854806991A7AA9F280DBDB81D67CE1BEDFF9D66128A1
     Vm90RQAAjvFgMYDa1bWZ-oVIBpkaeqnygNvbgdZ84b7f-dZhKKE=
     Saved to file validator-to-sign.req
-```
-- After that, the vote request has to be signed by the current validator's private key, using `sign <validator-key-id> 566F744...28A1` in `validator-engine-console` connected to the validator. This process is similar to that described in [Validator-HOWTO](/v3/guidelines/nodes/running-nodes/validator-node) for participating in validator elections, but this time the currently active key has to be used.
-- Next, another script `config-proposal-signed.fif` has to be invoked. It has similar arguments to `config-proposal-req.fif`, but it expects two extra arguments: the base64 representation of the public key used to sign the vote request, and the base64 representation of the signature itself. Again, this is quite similar to the process described in [Validator-HOWTO](/v3/guidelines/nodes/running-nodes/validator-node).
-- In this way, the file `vote-msg-body.boc` containing the body of an internal message carrying a signed vote for this configuration proposal is created.
-- After that, `vote-msg-body.boc` has to be carried in an internal message from any smart contract residing in the masterchain (typically, the controlling smart contract of the validator will be used) along with a small amount of Toncoin for processing (typically, 1.5 Toncoin should suffice). This is again completely similar to the procedure employed during validator elections. This is typically achieved by means of running:
-```
-$ fift -s wallet.fif my_wallet_id -1:5555555555555555555555555555555555555555555555555555555555555555 1 1.5 -B vote-msg-body.boc
-```
-(if a simple wallet is used to control the validator) and then sending the resulting file `wallet-query.boc` from the lite client:
+  ```
 
-```
-> sendfile wallet-query.boc
-```
+- The vote request must then be signed using the current validator’s private key, with the command `sign <validator-key-id> 566F744...28A1` in the `validator-engine-console` connected to the validator. This process is similar to the steps described in the [Validator-HOWTO](/v3/guidelines/nodes/running-nodes/validator-node) for participating in validator elections; however, the currently active key must be used.
 
-You can monitor answer messages from the configuration smart contract to the controlling smart contract to learn the status of your voting queries. Alternatively, you can inspect the status of the configuration proposal by means of get-method `show_proposal` of the configuration smart contract:
-```
-> runmethod -1:5555555555555555555555555555555555555555555555555555555555555555 get_proposal 64654898543692093106630260209820256598623953458404398631153796624848083036321
-...
-arguments:  [ 64654898543692093106630260209820256598623953458404398631153796624848083036321 94347 ] 
-result:  [ [1586779536 0 [8 C{FDCD887EAF7ACB51DA592348E322BBC0BD3F40F9A801CB6792EFF655A7F43BBC} -1] 112474791597373109254579258586921297140142226044620228506108869216416853782998 (0) 864691128455135209 3 0 0] ]
-```
-This time, the list of indices of validators that voted for this configuration proposal should be non-empty, and it should contain the index of your validator. In this example, this list is (`0`), meaning that only the validator with index `0` in configuration parameter `#34` has voted. If the list becomes large enough, the last-but-one integer (the first zero in `3 0 0`) in the proposal status will increase by one, indicating a new win by this proposal. If the number of wins becomes greater than or equal to the value indicated in configuration parameter `#11`, then the configuration proposal is automatically accepted and the proposed changes become effective immediately. On the other hand, when the validator set changes, then the list of validators that have already voted becomes empty, the value of `rounds_remaining` (three in `3 0 0`) is decreased by one, and if it becomes negative, the configuration proposal is destroyed. If it is not destroyed, and if it did not win in this round, then the number of losses (the second zero in `3 0 0`) is increased. If it becomes larger than a value specified in configuration parameter `#11`, then the configuration proposal is discarded.  As a result, all validators who did not vote in a round implicitly voted against.
+- Next, the `config-proposal-signed.fif` script is invoked. This script has similar arguments to `config-proposal-req.fif`, but it also requires two additional arguments: the base64 representation of the public key used to sign the vote request and the base64 representation of the signature. The process is again akin to what is described in the [Validator-HOWTO](/v3/guidelines/nodes/running-nodes/validator-node).
 
-## 5. An automated way for voting on configuration proposals
+- This process generates a file named `vote-msg-body.boc`, which contains the body of an internal message carrying a signed vote for this configuration proposal.
 
-Similarly to the automation provided by command `createelectionbid` of `validator-engine-console` for participating in validator elections, `validator-engine` and `validator-engine-console` offer an automated way of performing most of the steps explained in the previous section, producing a `vote-msg-body.boc` ready to be used with the controlling wallet. In order to use this method, you must install the Fift scripts `config-proposal-vote-req.fif` and `config-proposal-vote-signed.fif` into the same directory that the validator-engine uses to look up `validator-elect-req.fif` and `validator-elect-signed.fif` as explained in Section 5 of [Validator-HOWTO](/v3/guidelines/nodes/running-nodes/validator-node). After that, you simply run
+- After that, `vote-msg-body.boc` must be sent in an internal message from any smart contract residing in the masterchain (typically from the controlling smart contract of the validator) along with a small amount of Toncoin for processing (usually, 1.5 Toncoin is sufficient). This step follows the same procedure used during validator elections. The command is typically structured as follows:
+
+  ```
+  $ fift -s wallet.fif my_wallet_id -1:5555555555555555555555555555555555555555555555555555555555555555 1 1.5 -B vote-msg-body.boc
+  ```
+
+  (if a simple wallet controls the validator), followed by sending the resulting file `wallet-query.boc` from the lite client:
+
+    ```
+    > sendfile wallet-query.boc
+    ```
+
+- You can monitor the response messages from the configuration smart contract to the controlling smart contract to check the status of your voting queries. Alternatively, you can inspect the status of the configuration proposal by using the `get-method` `show_proposal` of the configuration smart contract:
+
+  ```
+  > runmethod -1:5555555555555555555555555555555555555555555555555555555555555555 get_proposal 64654898543692093106630260209820256598623953458404398631153796624848083036321
+  ...
+  arguments:  [ 64654898543692093106630260209820256598623953458404398631153796624848083036321 94347 ] 
+  result:  [ [1586779536 0 [8 C{FDCD887EAF7ACB51DA592348E322BBC0BD3F40F9A801CB6792EFF655A7F43BBC} -1] 112474791597373109254579258586921297140142226044620228506108869216416853782998 (0) 864691128455135209 3 0 0] ]
+  ```
+  In this output, the list of indices for validators that voted for this configuration proposal should not be empty and must include the index of your validator. For example, if the list contains (`0`), it indicates that only the validator with index `0` in configuration parameter `#34` has voted. If this list grows, the second-to-last integer (the first zero in `3 0 0`) in the proposal status will increase, reflecting another win for this proposal. If the number of wins reaches or exceeds the value indicated in configuration parameter `#11`, the configuration proposal is automatically accepted, and the proposed changes take effect immediately.
+
+  Conversely, when the validator set changes, the list of validators that have already voted will become empty, the `rounds_remaining` value (currently three in `3 0 0`) will decrease by one, and if it becomes negative, the configuration proposal will be destroyed. If the proposal is not destroyed and has not won in the current round, the number of losses (the second zero in `3 0 0`) will increase. If this number exceeds the value specified in configuration parameter `#11`, the configuration proposal will be rejected.
+
+## An automated way of voting on configuration proposals
+
+The automation provided by the command `createelectionbid` in `validator-engine-console` facilitates participation in validator elections. Similarly, both `validator-engine` and `validator-engine-console` automate most of the steps mentioned in the previous section, allowing you to generate a `vote-msg-body.boc` that can be used with the controlling wallet.
+
+To use this method, you need to install the Fift scripts `config-proposal-vote-req.fif` and `config-proposal-vote-signed.fif` in the same directory that the validator-engine uses to locate `validator-elect-req.fif` and `validator-elect-signed.fif`, as described in Section 5 of the [Validator-HOWTO](/v3/guidelines/nodes/running-nodes/validator-node). Once you have those files set up, you can create the `vote-msg-body.boc` by executing the following command in the validator-engine-console:
+
 ```
     createproposalvote 64654898543692093106630260209820256598623953458404398631153796624848083036321 vote-msg-body.boc
 ```
-in validator-engine-console to create `vote-msg-body.boc` with the body of the internal message to be sent to the configuration smart contract.
 
-## 6. Upgrading the code of configuration smart contract and the elector smart contract
+This command will generate the `vote-msg-body.boc`, which contains the body of the internal message to be sent to the configuration smart contract.
 
-It may happen that the code of the configuration smart contract itself or the code of the elector smart contract has to be upgraded. To this end, the same mechanism as described above is used. The new code is to be stored in the only reference of a value cell, and this value cell has to be proposed as the new value of configuration parameter `-1000` (for upgrading the configuration smart contract) or `-1001` (for upgrading the elector smart contract). These parameters pretend to be critical, so a lot of validator votes are needed to change the configuration smart contract (this is akin to adopting a new constitution). We expect that such changes will involve first testing them in a test network, and discussing the proposed changes in public forums before each validator operator decides to vote for or against the proposed changes.
+## Upgrading the code of the configuration smart contract and the elector smart contract
 
-Alternatively, critical configuration parameters `0` (the address of the configuration smart contract) or `1` (the address of the elector smart contract) can be changed to other values, that must correspond to already existing and correctly initialized smart contracts. In particular, the new configuration smart contract must contain a valid configuration dictionary in the first reference of its persistent data. Since it is not so easy to correctly transfer changing data (such as the list of active configuration proposals, or the previous and current participant lists of validator elections) between different smart contracts, in most cases it is better to upgrade the code of an existing smart contract rather than to change the configuration smart contract address.
+It may be necessary to upgrade the code of either the configuration smart contract or the elector smart contract. To do this, we will use the same mechanism described previously. The new code must be stored in a reference of a value cell, and this value cell should be proposed as the new value for the configuration parameter `-1000` (for upgrading the configuration smart contract) or `-1001` (for upgrading the elector smart contract). These parameters are considered critical, so a significant number of validator votes will be required to make changes to the configuration smart contract, similar to adopting a new constitution. We anticipate that such changes will first be tested in a test network and discussed in public forums before each validator operator makes their decision to vote for or against the proposed changes.
 
-There are two auxiliary scripts used to create such configuration proposals to upgrade the code of the configuration or elector smart contract. Namely, `create-config-upgrade-proposal.fif` loads a Fift assembler source file (`auto/config-code.fif` by default, corresponding to the code automatically generated by FunC compiler from `crypto/smartcont/config-code.fc`) and creates the corresponding configuration proposal (for configuration parameter `-1000`). Similarly, `create-elector-upgrade-proposal.fif` loads a Fift assembler source file (`auto/elector-code.fif` by default) and uses it to create a configuration proposal for configuration parameter `-1001`. In this way, creating configuration proposals to upgrade one of these two smart contracts should be very simple. However, one should also publish the modified FunC source of the smart contract, the exact version of the FunC compiler used to compile it, so that all validators (or rather their operators) would be able to reproduce the code in the configuration proposal (and compare the hashes) and study and discuss the source code and the changes in this code before deciding to vote for or against the proposed changes.
+Alternatively, critical configuration parameters `0` (which indicates the address of the configuration smart contract) or `1` (which indicates the address of the elector smart contract) can be changed to other values, provided that these values match existing and correctly initialized smart contracts. Specifically, the new configuration smart contract must contain a valid configuration dictionary in the first reference of its persistent data. Since transferring changing data—such as the list of active configuration proposals or the previous and current participant lists of validator elections—between different smart contracts can be complicated, it is generally more beneficial to upgrade the code of an existing smart contract rather than change the address of the configuration smart contract.
+
+There are two auxiliary scripts designed to create configuration proposals for upgrading the code of the configuration or elector smart contract. The script `create-config-upgrade-proposal.fif` loads a Fift assembler source file (`auto/config-code.fif` by default), which corresponds to the code automatically generated by the FunC compiler from `crypto/smartcont/config-code.fc`, and creates the corresponding configuration proposal for the configuration parameter `-1000`. Similarly, the script `create-elector-upgrade-proposal.fif` loads a Fift assembler source file (`auto/elector-code.fif` by default) and uses it to create a configuration proposal for configuration parameter `-1001`. This makes it simple to create configuration proposals to upgrade either of these two smart contracts. 
+
+However, it is also essential to publish the modified FunC source code of the smart contract and specify the exact version of the FunC compiler used for compilation. This way, all validators (or their operators) will be able to reproduce the code in the configuration proposal, compare the hashes, and examine the source code and changes before deciding how to vote on the proposed changes.
+<Feedback />
+
