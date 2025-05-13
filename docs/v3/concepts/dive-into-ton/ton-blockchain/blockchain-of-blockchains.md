@@ -25,13 +25,18 @@ This behavior pattern is well known and called **actor**.
 
 ### The lowest level: AccountChain
 
-A sequence of transactions `Tx1 -> Tx2 -> Tx3 -> ....` may be called a **chain**. When considering a single account, we call the chain of transactions an **AccountChain**.
+A **chain** can be viewed as a sequence of transactions, such as `Tx1 → Tx2 → Tx3 → …`. When this transaction sequence pertains to a single account, it is specifically termed an **AccountChain**.
 
-Now, since nodes that process transactions need from time to time to coordinate the state of the smart contract to reach a consensus about the state, those transactions are batched:
-`[Tx1 -> Tx2] -> [Tx3 -> Tx4 -> Tx5] -> [] -> [Tx6]`.
-Batching does not intervene in sequencing; each transaction still has only one 'prev tx' and at most one 'next tx', but now this sequence is cut into the blocks. 
+Since nodes processing these transactions periodically need to synchronize the smart contract state to achieve consensus, transactions are grouped into batches called **blocks**. For instance:
 
-It is also expedient to include queues of incoming and outgoing messages in blocks. In that case, the block will contain a full set of information that determines and describes what happened to the smart contract during that block.
+```
+[Tx1 → Tx2] → [Tx3 → Tx4 → Tx5] → [] → [Tx6]
+```
+
+Batching does not alter the underlying sequence. Each transaction still references exactly one preceding transaction (`prev tx`) and at most one succeeding transaction (`next tx`). Batching simply organizes this sequence into manageable blocks for consensus purposes.
+
+Additionally, each block can contain queues of incoming and outgoing messages. Incorporating these queues ensures that a block fully encapsulates all events and state changes relevant to the smart contract within the block period.
+
 
 ## Many AccountChains: Shards
 
@@ -79,5 +84,7 @@ There is a necessity for the synchronization of message routing and transaction 
 
 ## See also
 - [Smart contract addresses](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses/)
+
+
 <Feedback />
 
