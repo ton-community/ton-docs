@@ -1,9 +1,9 @@
-# TON BlockChain limits
+# TON blockchain limits
 
-This document contains the current limits and metrics used in the TON BlockChain.
+This document contains the current limits and metrics used in the TON blockchain.
 
 :::info
-You can check all the BlockChain parameters [live in the explorer](https://tonviewer.com/config).
+You can check all the blockchain parameters live in the explorer:[Tonviewer](https://tonviewer.com/config) or [Tonscan](https://tonscan.org/config).
 
 Parameters defined in the code can be found in the [source code repository](https://github.com/ton-blockchain/ton).
 :::

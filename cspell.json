@@ -23,7 +23,7 @@
     {
       "name":"examples",
       "path":"./src/grammar/examples-dictionary.txt"
-    },
+    }
   ],
   "words": [
     "ADNL",
@@ -119,6 +119,8 @@
     "Tonhub",
     "Tonkeeper",
     "Tonkey",
+    "Tonviewer",
+    "Tonscan",
     "Underload",
     "Uninit",
     "WAGMI",
@@ -258,6 +260,7 @@
     "randomizer",
     "reindex",
     "respecifying",
+    "runvm",
     "runvmcode",
     "seamus",
     "seck256r1",
@@ -299,6 +302,7 @@
     "underload",
     "underloaded",
     "unixtime",
+    "utime",
     "visio",
     "Visio",
     "votings",
@@ -314,7 +318,7 @@
     "zerostate",
     "decentralised",
     "colour",
-    "analyse"
+    "analyse",
     "ensurepip",
     "Buildx",
     "underperforming",
@@ -356,6 +360,6 @@
     "i18n",
     ".husky",
     "3rd/*",
-    ".github/*",
+    ".github/*"
   ]
 }
