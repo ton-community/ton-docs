@@ -620,6 +620,10 @@ asyncio.run(main())
 Although it is a common approach, [calling the GET method](/v3/guidelines/smart-contracts/get-methods#calling-get-methods-from-code) every time to retrieve the wallet address can be slow and resource-intensive. 
 However, if you know the jetton wallet code and storage structure, you can calculate the wallet address without making network requests.
 
+
+<Tabs groupId="code-examples">
+<TabItem value="example" label="Example">
+
 For example, using Tonviewer, you can get the jetton master contract address (e.g., `EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo`). 
 If we [go to this address](https://tonviewer.com/EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo?section=method) and open the Methods tab, we can see that there is already a `get_jetton_data` method there. 
 By calling it, we can get the hex form of the cell with the jetton wallet code:
@@ -632,65 +636,84 @@ Knowing the jetton wallet code and its storage structure, you can manually compu
 For some tokens, you'll need to find additional parameters. 
 For example, for Hamster Kombat, you need to know the merkle root used by mintless wallets and the salt used for [predictable sharding](https://docs.ton.org/v3/guidelines/smart-contracts/howto/shard-optimization/#how-to-deploy-a-contract-to-a-specific-shard). 
 You can obtain the salt for an existing address using the jetton master's `get_wallet_state_init_and_salt` get-method and the merkle hash using `get_mintless_airdrop_hashmap_root`.
+</TabItem>
 
-<Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton/ton)">
 
 ```js
-import { Address, Cell, beginCell } from '@ton/core';
+import { Cell, contractAddress, toNano, TupleBuilder } from "@ton/core";
+import { ContractProvider, Address, Contract, Sender, StateInit } from "@ton/core";
+import { Blockchain, createShardAccount } from "@ton/sandbox";
 
-const JETTON_WALLET_CODE = Cell.fromBoc(Buffer.from('b5ee9c72010101010023000842020f1ad3d8a46bd283321dde639195fb72602e9b31b1727fecc25e2edc10966df4', 'hex'))[0];
-const JETTON_MASTER_ADDRESS = Address.parse('EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo');
-const USER_ADDRESS = Address.parse('UQDKHZ7e70CzqdvZCC83Z4WVR8POC_ZB0J1Y4zo88G-zCSRH'); // Binance hot wallet
-const hamster_merkle = 29945721131613672054990630604903528297803118035866103598622265652475246912273n;
-const hamster_salt = 14n;
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+//const USDTMasterAddress = Address.parse('EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs')  // EQC7aZ-_G_tWeSn0GZ0HclwZvGIBp-CRrSsbMibTHN6l4kr7
+//const NOTMasterAddress = Address.parse('EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT')   // EQA9idRBK7TY1AF0L2CpuxrwdjPr7qzKSQjbgakURWGQRdOW
+//const HMSTRMasterAddress = Address.parse('EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo') // EQDXT5HaCnuwzBff8tjwAmGvs9N9MEbqOXDIY_KepS9yYyMo
+//const DOGSMasterAddress = Address.parse('EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS')  // EQCRgs1d1M91dm2hHeF8luXBH-aIF9PT-T2jlocQXiYBvAGY
+//const STONMasterAddress = Address.parse('EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO')  // EQCx5ruSqFmw5LYxJ6iksuCuRLsNpgTjWcCuW6jm8BhaLOTK
+// ------------------------------------------------------------------------------------------------------------------------------------------------
 
-async function calcStateInit(
-  owner: Address,
-  master: Address,
-  code: Cell,
-  status?: number,
-  root?: bigint,
-  salt?: bigint
-): Promise<Cell> {
-  const dataCell = beginCell();
 
-  // Add status first if it exists
-  if (status !== undefined) {
-    dataCell.storeUint(status, 4);
-  }
+export class MyContract implements Contract {
+    readonly address: Address
+    readonly init?: StateInit
 
-  // Then balance
-  dataCell.storeCoins(0);
+    static fromInit(code: Cell, data: Cell) {
+        return new MyContract(contractAddress(0, {code: code, data: data}), {code: code, data: data})
+    }
 
-  // Then addresses
-  dataCell.storeAddress(owner).storeAddress(master);
+    constructor(address: Address, init?: StateInit) {
+        this.address = address
+        this.init = init
+    }
 
-  // Then root if it exists
-  if (root !== undefined) {
-    dataCell.storeUint(root, 256);
-  }
+    async send(
+        provider: ContractProvider,
+        via: Sender,
+        args: {value: bigint; bounce?: boolean | null | undefined},
+        body: Cell,
+    ) {
+        await provider.internal(via, {...args, body: body})
+    }
 
-  // Then salt if it exists
-  if (salt !== undefined) {
-    dataCell.storeUint(salt, 10);
-  }
-
-  return beginCell()
-    .storeUint(0, 2) // 0b00 - No split_depth; No special
-    .storeMaybeRef(code) // code
-    .storeMaybeRef(dataCell.endCell()) // data
-    .storeUint(0, 1) // empty libs
-    .endCell();
+    async getRunMethod(provider: ContractProvider, id: number | string, stack: TupleBuilder = new TupleBuilder()) {
+        return (await provider.get(id, stack.build())).stack
+    }
 }
 
 async function main() {
-  const jettonWalletStateInit = await calcStateInit(USER_ADDRESS, JETTON_MASTER_ADDRESS, JETTON_WALLET_CODE, 0, hamster_merkle, hamster_salt);
-  const userJettonWalletAddress = new Address(0, jettonWalletStateInit.hash());
-  console.log('User Jetton Wallet address:', userJettonWalletAddress.toString());
+    const blockchain = await Blockchain.create();
+    // blockchain.verbosity.vmLogs = "vm_logs_verbose"
+
+    // First we need to gather state of the contract from the blockchain:
+    const contractCode = Cell.fromHex("b5ee9c7201021a0100050e000114ff00f4a413f4bcf2c80b0102016202030202cb0405020120101101d7d0cb434c0c05c6c23910c200835c874c7c0608405e351466ea44c38601035c87e800c3b51343e803e903e90353534ffc07e1874541168504d3e10721401be80940133c59633c5b33332fff27b55383e903e900c7e800c7d007e800c7e80004c5c3e0e80b4c7c04074cfc044a06001da23864658380e78b64814183fa0bc004fced44d0fa00fa40fa40d4d4d3ff01f861d1268210642b7d07ba8ecb35355161c705f2e04904fa4021fa4430c000f2e14dfa00d4d120d0d31f018210178d4519baf2e0488040d721fa00fa4031fa4031fa0020d70b009ad74bc00101c001b0f2b19130e254431be0392582107bdd97debae3022582102c76b973bae30234240708090a018e2191729171e2f839206e9381782e9120e2216e9431817ee09101e25023a813a0738104ad70f83ca00270f83612a00170f836a07381051382100966018070f837a0bcf2b025597f0b01e63505fa00fa40f828f84128103401db3c6f2230f9007074c8cb02ca07cbffc9d05008c705f2e04a12a144145036f841c85006fa025004cf1658cf16cccccbffc9ed54fa40d120d70b01c000b38e22c8801001cb0501cf1670fa027001cb6a8210d53276db01cb1f0101cb3fc98042fb00915be21801d2355f033401fa40d2000101d195c821cf16c9916de2c8801001cb055004cf1670fa027001cb6a8210d173540001cb1f500401cb3f23fa4430c0008e9df828f84110354150db3c6f2230f9007074c8cb02ca07cbffc9d012cf1697316c127001cb01e2f400c98050fb001804fe82106501f354ba8e2530335142c705f2e04902fa40d1400304f841c85006fa025004cf1658cf16cccccbffc9ed54e0248210fb88e119ba8e24313303d15131c705f2e0498b024034f841c85006fa025004cf1658cf16cccccbffc9ed54e0248210cb862902bae302302382102508d66abae3022382107431f221bae30210360c0d0e0f01c082103b9aca0070fb02f828f84110364150db3c6f223020f9007074c8cb02ca07cbffc8801801cb0501cf1758fa02029858775003cb6bcccc9730017158cb6acce2c98011fb005005a04314f841c85006fa025004cf1658cf16cccccbffc9ed5418004e34365145c705f2e049c85003cf16c9103412f841c85006fa025004cf1658cf16cccccbffc9ed540022365f0302c705f2e049d4d4d101ed54fb04004a335042c705f2e04901d18b028b024034f841c85006fa025004cf1658cf16cccccbffc9ed54001c5f068210d372158cbadc840ff2f002014812130202711617013fb5d15da89a1f401f481f481a9a9a7fe03f0c3a228be09f051f08225b678de4501802016a1415002eab5bed44d0fa00fa40fa40d4d4d3ff01f861d110245f04002eaa67ed44d0fa00fa40fa40d4d4d3ff01f861d15f05f841015badbcf6a2687d007d207d206a6a69ff80fc30e88a2f827c147c20896d9e3791187c80383a6465816503e5ffe4e84018008baf16f6a2687d007d207d206a6a69ff80fc30e8bf99e836c1783872ebdb514d9c97c283b7f0ae5179029e2b6119c39462719e4f46ed8f7413e62c780a38646583fa0064a1804001f6840f7f7026fa4431abfb531149461804c8cb035003fa0201cf1601cf16cbff208100cac8cb0f01cf1724f90025d7652582020134c8cb1712cb0fcb0fcbff8e2906a45c01cb0971f90400527001cbff71f90400abfb28b25304b9933434239130e220c02024c000b117e610235f033333227003cb09c922c8cb0112190014f400f400cb00c9016f02");
+    const contractData = Cell.fromHex("b5ee9c720101040100af0002979056bc75ddfc673410080177e274e049215c770a7fbc709371cfb836bea9100f522b0ea608c92d495da648211a56b90a6f27e9f2c5241dd6b2c716d530d50027787d2a0e4223997141d188c001020842020f1ad3d8a46bd283321dde639195fb72602e9b31b1727fecc25e2edc10966df4010003006e68747470733a2f2f6170692e68616d737465726b6f6d6261742e696f2f7075626c69632f746f6b656e2f6d657461646174612e6a736f6e");
+    // Use mainnet address of the Jetton Master contract
+    const JettonMasterAddress = Address.parse("EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo");
+    // Open the contract, so sandbox can send messages to it
+    const openedContract = blockchain.openContract(
+        new MyContract(JettonMasterAddress)
+            // {code: contractCode, data: contractData})
+    );
+
+    // Instead of deploying the contract, we can set shard account directly
+    await blockchain.setShardAccount(JettonMasterAddress, createShardAccount({
+        address: JettonMasterAddress,
+        code: contractCode,
+        data: contractData,
+        balance: toNano("0.05"),
+        workchain: 0
+    }));
+
+    // If some arguments are needed, we can pass them as second argument like this:
+    const stack = new TupleBuilder();
+    stack.writeAddress(Address.parse("UQDKHZ7e70CzqdvZCC83Z4WVR8POC_ZB0J1Y4zo88G-zCSRH"));
+
+    const result = await openedContract.getRunMethod('get_wallet_address', stack);
+    console.log("Jetton Wallet Address: ", result.readAddress());
 }
 
-main();
+void main();
 ```
 
 </TabItem>
@@ -924,7 +947,7 @@ Explorers support comments in Jetton notifications, similar to regular TON trans
 Be careful when calculating fees and amounts for jetton transfer messages. For instance, transferring 0.2 TON with no excess may prevent you from receiving 0.1 TON in a response.
 :::
 
-## TEP-62 (NFT Standard)
+## TEP-62 (NFT standard)
 
 NFT collections on TON are highly customizable. The NFT contract can be defined as any contract that provides a valid get-method to return metadata. The transfer operation is standardized similarly to [Jettons](/v3/guidelines/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment).
 :::warning
