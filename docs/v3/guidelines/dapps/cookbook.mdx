@@ -620,10 +620,9 @@ asyncio.run(main())
 Although it is a common approach, [calling the GET method](/v3/guidelines/smart-contracts/get-methods#calling-get-methods-from-code) every time to retrieve the wallet address can be slow and resource-intensive. 
 However, if you know the jetton wallet code and storage structure, you can calculate the wallet address without making network requests.
 
-
-<Tabs groupId="code-examples">
-<TabItem value="example" label="Example">
-
+<details>
+  <summary>Conceptual example</summary>
+  
 Using Tonviewer, you can get the jetton master contract address, for example `EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo`. 
 If we [go to this address](https://tonviewer.com/EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo?section=method) and open the Methods tab, we can see that there is already a `get_jetton_data` method there. 
 By calling it, we can get the hex form of the cell with the jetton wallet code:
@@ -693,12 +692,12 @@ async function main() {
 
 main();
 ```
+</details>
 
-</TabItem>
+<Tabs groupId="code-examples">
+<TabItem value="ts-ton" label="TS (@ton/ton)">
 
-<TabItem value="js-ton" label="JS (@ton/ton)">
-
-```js
+```ts
 import { Cell, contractAddress, toNano, TupleBuilder } from "@ton/core";
 import { ContractProvider, Address, Contract, Sender, StateInit } from "@ton/core";
 import { Blockchain, createShardAccount } from "@ton/sandbox";
@@ -779,7 +778,7 @@ void main();
 <TabItem value="Python" label="Python">
 
 Unfortunately, there is currently no tool like Sandbox for Python to emulate the blockchain. 
-However, you can still refer to this example and the `Example` tab to understand how to correctly construct the data needed to obtain the address.
+However, you can still refer to this example and the `Conceptual example` spoiler to understand how to correctly construct the data needed to obtain the address.
 
 ```python
 
