@@ -414,18 +414,37 @@ module.exports = [
     ]
   },
   {
+    label: 'Integrate with TON',
+    type: 'category',
+    link: {
+      type: 'generated-index',
+      title: 'Integrate with TON',
+      slug: '/guidelines/integrate-with-ton',
+    },
+
     items: [
       'v3/guidelines/ton-connect/overview',
       {
         type: 'category',
         label: 'Integrate a DApp',
-
+        link: {
+          type: 'generated-index',
+          title: 'Integrate a DApp',
+          slug: '/guidelines/integrate-dapp',
+          keywords: ['dapp'],
+        },
         items: [
           'v3/guidelines/ton-connect/guidelines/how-ton-connect-works',
           'v3/guidelines/ton-connect/guidelines/creating-manifest',
           {
             type: 'category',
             label: 'Install TON Connect',
+            link: {
+              type: 'generated-index',
+              title: 'Install TON Connect',
+              slug: '/guidelines/install-ton-connect',
+              keywords: ['TON Connect'],
+            },
             items: [
               {
                 type: 'doc',
@@ -458,6 +477,11 @@ module.exports = [
       {
         type: 'category',
         label: 'Advanced',
+        link: {
+          type: 'generated-index',
+          title: 'Advanced',
+          slug: '/guidelines/advanced',
+        },
         items: [
           {
             type: 'link',
@@ -474,14 +498,19 @@ module.exports = [
       {
         type: 'category',
         label: 'Business',
+        link: {
+          type: 'generated-index',
+          title: 'Business',
+          slug: '/guidelines/business',
+          keywords: ['business'],
+        },
         items: [
           'v3/guidelines/ton-connect/business/ton-connect-for-business',
           'v3/guidelines/ton-connect/business/ton-connect-for-security'
         ],
       }
     ],
-    label: 'Integrate with TON',
-    type: 'category'
+
   },
   {
     type: 'category',
