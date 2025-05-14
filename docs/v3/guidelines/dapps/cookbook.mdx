@@ -624,7 +624,7 @@ However, if you know the jetton wallet code and storage structure, you can calcu
 <Tabs groupId="code-examples">
 <TabItem value="example" label="Example">
 
-For example, using Tonviewer, you can get the jetton master contract address (e.g., `EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo`). 
+Using Tonviewer, you can get the jetton master contract address, for example `EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo`. 
 If we [go to this address](https://tonviewer.com/EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo?section=method) and open the Methods tab, we can see that there is already a `get_jetton_data` method there. 
 By calling it, we can get the hex form of the cell with the jetton wallet code:
 
@@ -636,6 +636,64 @@ Knowing the jetton wallet code and its storage structure, you can manually compu
 For some tokens, you'll need to find additional parameters. 
 For example, for Hamster Kombat, you need to know the merkle root used by mintless wallets and the salt used for [predictable sharding](https://docs.ton.org/v3/guidelines/smart-contracts/howto/shard-optimization/#how-to-deploy-a-contract-to-a-specific-shard). 
 You can obtain the salt for an existing address using the jetton master's `get_wallet_state_init_and_salt` get-method and the merkle hash using `get_mintless_airdrop_hashmap_root`.
+
+```js
+import { Address, Cell, beginCell } from '@ton/core';
+
+const JETTON_WALLET_CODE = Cell.fromBoc(Buffer.from('b5ee9c72010101010023000842020f1ad3d8a46bd283321dde639195fb72602e9b31b1727fecc25e2edc10966df4', 'hex'))[0];
+const JETTON_MASTER_ADDRESS = Address.parse('EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo');
+const USER_ADDRESS = Address.parse('UQDKHZ7e70CzqdvZCC83Z4WVR8POC_ZB0J1Y4zo88G-zCSRH'); // Binance hot wallet
+const hamster_merkle = 29945721131613672054990630604903528297803118035866103598622265652475246912273n;
+const hamster_salt = 14n;
+
+async function calcStateInit(
+  owner: Address,
+  master: Address,
+  code: Cell,
+  status?: number,
+  root?: bigint,
+  salt?: bigint
+): Promise<Cell> {
+  const dataCell = beginCell();
+
+  // Add status first if it exists
+  if (status !== undefined) {
+    dataCell.storeUint(status, 4);
+  }
+
+  // Then balance
+  dataCell.storeCoins(0);
+
+  // Then addresses
+  dataCell.storeAddress(owner).storeAddress(master);
+
+  // Then root if it exists
+  if (root !== undefined) {
+    dataCell.storeUint(root, 256);
+  }
+
+  // Then salt if it exists
+  if (salt !== undefined) {
+    dataCell.storeUint(salt, 10);
+  }
+
+  return beginCell()
+    .storeUint(0, 2) // 0b00 - No split_depth; No special
+    .storeMaybeRef(code) // code
+    .storeMaybeRef(dataCell.endCell()) // data
+    .storeUint(0, 1) // empty libs
+    .endCell();
+}
+
+async function main() {
+  const jettonWalletStateInit = await calcStateInit(USER_ADDRESS, JETTON_MASTER_ADDRESS, JETTON_WALLET_CODE, 0, hamster_merkle, hamster_salt);
+  const userJettonWalletAddress = new Address(0, jettonWalletStateInit.hash());
+  console.log('User Jetton Wallet address:', userJettonWalletAddress.toString());
+}
+
+main();
+```
+
 </TabItem>
 
 <TabItem value="js-ton" label="JS (@ton/ton)">
@@ -719,6 +777,9 @@ void main();
 </TabItem>
 
 <TabItem value="Python" label="Python">
+
+Unfortunately, there is currently no tool like Sandbox for Python to emulate the blockchain. 
+However, you can still refer to this example and the `Example` tab to understand how to correctly construct the data needed to obtain the address.
 
 ```python
 
