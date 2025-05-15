@@ -36,7 +36,7 @@ Below we outline three fundamental approaches:
 
 ---
 
-## Approach 2: Block skipping {#block-skip}
+## Approach 2: block skipping {#block-skip}
 
 **Mechanism**: Uses [entropy from skipped blocks](https://github.com/puppycats/ton-random?tab=readme-ov-file#ton-random) in blockchain history.  
 **Security model**:
@@ -52,7 +52,7 @@ Below we outline three fundamental approaches:
 
 ---
 
-## Approach 3: Commit-reveal scheme {#commit-reveal}
+## Approach 3: commit-reveal scheme {#commit-reveal}
 
 **Mechanism**:
 

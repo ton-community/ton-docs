@@ -110,7 +110,7 @@ cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. \
 -DLZ4_INCLUDE_DIRS=$lz4Path/lib
 ```
 
-:::
+
 
 :::tip
 If you are compiling on a computer with low memory (e.g., 1 Gb), don't forget to [create a swap partitions](/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory).

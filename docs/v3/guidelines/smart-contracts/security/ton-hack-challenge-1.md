@@ -157,7 +157,7 @@ Hope this article has shed some light on the non-obvious rules for FunC develope
 
 ## References
 
-Originally written by Dan Volkov
+Originally written by *Dan Volkov*.
 
 - [dvlkv on GitHub](https://github.com/dvlkv)
 - [Original article](https://dev.to/dvlkv/drawing-conclusions-from-ton-hack-challenge-1aep)

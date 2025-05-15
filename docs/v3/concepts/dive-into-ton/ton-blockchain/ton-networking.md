@@ -4,7 +4,7 @@ import Feedback from '@site/src/components/Feedback';
 
 The TON Ecosystem uses its peer-to-peer network protocols.
 
-- **TON blockchain** uses these protocols to propagate new blocks, send and collect transaction candidates, etc.
+- **TON Blockchain** uses these protocols to propagate new blocks, send and collect transaction candidates, etc.
 
   While the networking demands of single-blockchain projects, such as Bitcoin or Ethereum, can be met quite easily: one essentially needs to construct a peer-to-peer overlay network and then propagate all new blocks and transaction candidates via a [gossip](https://en.wikipedia.org/wiki/Gossip_protocol) protocol.
 

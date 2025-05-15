@@ -13,7 +13,7 @@ import TabItem from '@theme/TabItem';
 Learning how wallets and transactions work on TON before beginning smart contracts development is essential. This knowledge will help developers understand the interaction between wallets, messages, and smart contracts to implement specific development tasks.
 
 :::tip
-Before starting this tutorial, we recommend reviewing the [Types of Wallet Contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) article.
+Before starting this tutorial, we recommend reviewing the [Wallet contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) article.
 :::
 
 This section will teach us to create operations without using pre-configured functions to understand development workflows. The references chapter contains all the necessary references for analyzing this tutorial.
@@ -72,7 +72,9 @@ npx tsc --init --rootDir src --outDir build \ --esModuleInterop --target es2020 
 
 :::info
 To help us carry out the following process, a `ts-node` executes TypeScript code directly without precompiling. `nodemon` restarts the node application automatically when file changes in the directory are detected.
-::: 4. Next, remove these lines from `tsconfig.json`:
+::: 
+
+4. Next, remove these lines from `tsconfig.json`:
 
 ```json
   "files": [
@@ -123,10 +125,10 @@ npm run start:dev
 The TON Community created an excellent tool for automating all development processes (deployment, contract writing, testing) called [Blueprint](https://github.com/ton-org/blueprint). However, we will not need such a powerful tool, so the instructions above should be followed.
 :::
 
-**OPTIONAL: ** When using Golang, follow these instructions:
+**OPTIONAL:** When using Golang, follow these instructions:
 
 1. Install the GoLand IDE.
-2. Create a project folder and a `go.mod` file with the following content. If the current version of Go is outdated, update it to the required version to proceed with this process:
+2. Create a project folder and a `go.mod` file with the following content. If the current version of Go is outdated, update it to the required version to proceed with this process:
 
 ```
 module main
@@ -162,7 +164,7 @@ It is also possible to use another IDE since GoLand isn’t free, but it is pref
 :::
 
 :::warning IMPORTANT
-Add all coding components to the `main` function created in the [⚙ Set Your Environment](/v3/guidelines/smart-contracts/howto/wallet#-set-your-environment) section.
+Add all coding components to the `main` function created in the [⚙ Set your environment](/v3/guidelines/smart-contracts/howto/wallet#-set-your-environment) section.
 
 Only the imports required for that specific code section are specified in each new section. Combine new imports with the existing ones as needed.
 :::
@@ -176,7 +178,7 @@ Our main task is to build messages using various objects and functions for @ton/
 :::note
 This tutorial may not explain particular details on occasion. In these cases, more details will be provided later.
 
-** IMPORTANT: ** Throughout this tutorial, the [wallet v3 code] (https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) is used to understand the wallet development process better. Version v3 has two sub-versions: r1 and r2. Currently, only the second version is being used, which means that when we refer to v3 in this document, it implies v3r2.
+**IMPORTANT:** Throughout this tutorial, the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) is used to understand the wallet development process better. Version v3 has two sub-versions: r1 and r2. Currently, only the second version is being used, which means that when we refer to v3 in this document, it implies v3r2.
 :::
 
 ## 💎 TON blockchain wallets
@@ -432,7 +434,7 @@ Validators rewrite the above values (including src), excluding the State Init an
 If the number value fits within fewer bits than is specified, then the missing zeros are added to the left side of the value. For example, 0x18 fits within 5 bits -> `11000`. However, since 6 bits were specified, the result becomes `011000`.
 :::
 
-Next, we’ll prepare a message to send Toncoins to another wallet v3. For example, let’s say a user wants to send 0.5 TON to themselves with the comment "**Hello, TON!**". To learn how to send a message with a comment, refer to this documentation section: [How to Send a Simple Message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-simple-message).
+Next, we’ll prepare a message to send Toncoins to another wallet v3. For example, let’s say a user wants to send 0.5 TON to themselves with the comment "**Hello, TON!**". To learn how to send a message with a comment, refer to this documentation section: [How to send a simple message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-simple-message).
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -2183,7 +2185,7 @@ In the contract storage, we can find the following fields:
 | last_clean_time | The time of the last cleanup. If `last_clean_time < (now() - timeout)`, old queries are moved to `old_queries`. If `last_clean_time < (now() - 2 * timeout)`, both `old_queries` and `queries` are cleared. |
 |     timeout     |                                                                          The time after which queries are moved to `old_queries`.                                                                           |
 
-We’ll explore how to work with processed queries in more detail in the [Replay Protection](#replay-protection) section.
+We’ll explore how to work with processed queries in more detail in the [Replay protection](#replay-protection) section.
 
 ### Shifts and bits numbers as query id
 
@@ -2591,7 +2593,7 @@ queryHandler.getNext();
 
 ## 🔥 High-load wallet v2 
 
-::: warning
+:::warning
 High-load wallet v2 is outdated. Do not use this for new projects.
 :::
 
