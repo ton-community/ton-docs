@@ -883,7 +883,7 @@ Explorers support comments in Jetton notifications, similar to regular TON trans
 Be careful when calculating fees and amounts for jetton transfer messages. For instance, transferring 0.2 TON with no excess may prevent you from receiving 0.1 TON in a response.
 :::
 
-## TEP-62 (NFT Standard)
+## TEP-62 (NFT standard)
 
 NFT collections on TON are highly customizable. The NFT contract can be defined as any contract that provides a valid get-method to return metadata. The transfer operation is standardized similarly to [Jettons](/v3/guidelines/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment).
 :::warning
@@ -1006,7 +1006,7 @@ Next, we need to correctly calculate the total transaction cost. The value of `0
 
 ### How to change the owner of a collection's smart contract?
 
-Changing the owner of a collection is simple. Specify the opcode = 3, any query_id, and the new owner’s address.
+Changing the owner of a collection is simple. Specify the `opcode = 3`, any `query_id`, and the new owner’s address.
 
 
 <Tabs groupId="code-examples">
@@ -1278,7 +1278,7 @@ DeDust utilizes three key components for asset swaps:
 - Pool: The pool calculates the swap amount based on predefined formulas and informs the vault, which in turn releases the swapped asset to the user.
 
 
-Calculations of swap amount are based on a mathematical formula, which means so far we have two different pools, one known as Volatile, that operates based on the commonly used "Constant Product" formula: x * y = k, And the other known as Stable-Swap - Optimized for assets of near-equal value (e.g. USDT / USDC, TON / stTON). It uses the formula: x3 * y + y3 * x = k.
+Calculations of swap amount are based on a mathematical formula, which means so far we have two different pools, one known as Volatile, that operates based on the commonly used "Constant Product" formula: `x * y = k`, And the other known as Stable-Swap - Optimized for assets of near-equal value (e.g. USDT / USDC, TON / stTON). It uses the formula: `x3 * y + y3 * x = k`.
 So for every swap we need the corresponding Vault and it needs just implement a specific API tailored for interacting with a distinct asset type. DeDust has three implementations of Vault, Native Vault - Handles the native coin (Toncoin). Jetton Vault - Manages jettons and Extra-Currency Vault (upcoming) - Designed for TON extra-currencies.
 
 

@@ -159,7 +159,7 @@ If you run a regular node, then contact the group: [@mytonctrl_help](https://t.m
 
 ## See also
 
-* [Run a full Node](/v3/guidelines/nodes/running-nodes/full-node)
+* [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
 * [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
 * [Staking incentives](/v3/documentation/infra/nodes/validation/staking-incentives)
 <Feedback />

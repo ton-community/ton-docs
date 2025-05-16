@@ -209,7 +209,7 @@ On-chain NFT parser: [stackblitz/ton-onchain-nft-parser](https://stackblitz.com/
 ## References
 * [TON Enhancement Proposal 64 (TEP-64)](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md)
 
-## See Also
+## See also
 * [TON NFT processing](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
 * [TON jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
 * [Mint your first jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token)

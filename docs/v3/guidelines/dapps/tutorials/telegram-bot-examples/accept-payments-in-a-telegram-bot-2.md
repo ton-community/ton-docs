@@ -213,7 +213,7 @@ Now, we're ready to create a payment handler.
 
 ### Sending API requests from code
 
-Let's start by importing the required libraries along with the`config.py` and `db.py` files.
+Let's start by importing the required libraries along with the `config.py` and `db.py` files.
 ```python
 import requests
 import asyncio

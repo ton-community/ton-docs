@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Transaction Fees
+# Transaction fees
 
 Every TON user should keep in mind that _commission depends on many factors_.
 

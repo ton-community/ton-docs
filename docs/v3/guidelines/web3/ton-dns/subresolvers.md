@@ -275,7 +275,7 @@ If a non-empty subdomain suffix remains, the function returns the number of byte
 
 While this function could be improved to handle errors more gracefully, such enhancements are not strictly required.
 
-## Appendix 1. Code of resolve-contract.ton
+## Appendix 1: code of resolve-contract.ton
 
 <details>
 <summary>subresolver.fc</summary>

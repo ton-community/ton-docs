@@ -92,11 +92,11 @@ TON blockchain is asynchronous. That means the messages do not have to arrive su
 
 You may receive bounced messages (error notifications), which should be handled.
 
-- [Handling of Standard Response Messages](/v3/documentation/smart-contracts/message-management/internal-messages#handling-of-standard-response-messages)
+- [Handling of standard response messages](/v3/documentation/smart-contracts/message-management/internal-messages#handling-of-standard-response-messages)
 
 ## References
 
-Originally written by 0xguard
+Originally written by *0xguard*.
 
 - [Original article](https://0xguard.com/things_to_focus_on_while_working_with_ton_blockchain)
 

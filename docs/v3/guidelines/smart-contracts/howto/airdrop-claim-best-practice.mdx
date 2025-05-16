@@ -57,7 +57,7 @@ A linear design is more effective:
 3. The distributor checks the proof (with the user index included as part of the proof) and releases the jettons.
 4. The distributor sends the fee to the fee wallet.
 
-**MORE NAIVE ART**
+**More naive art**
 
 ## Shard optimizations
 
@@ -134,7 +134,7 @@ Now, everything should be ready to go!
 3. The distributor sends the fee to the fee wallet.
 4. The distributor checks the proof (with the user index included) and releases jettons via the jetton wallet in the same shard.
 
-**MORE NAIVE ART**
+**More naive art**
 
 Is there anything wrong with this approach? Let's take a closer look.  
 ...  
@@ -145,7 +145,7 @@ Yes, there is! There's only one fee wallet, and fees queue up to a single shard.
 1. It's the same as V3, but now there are 16 fee wallets, each in the same shard as its _distributor_.
 2. Make the _fee wallet_ address updatable.
 
-**A Bit More Art**
+**A bit more art**
 
 How about now? LGTM.
 
