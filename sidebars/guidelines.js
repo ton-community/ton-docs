@@ -426,10 +426,10 @@ module.exports = [
       'v3/guidelines/ton-connect/overview',
       {
         type: 'category',
-        label: 'Integrate a DApp',
+        label: 'Integrate a dApp',
         link: {
           type: 'generated-index',
-          title: 'Integrate a DApp',
+          title: 'Integrate a dApp',
           slug: '/guidelines/integrate-dapp',
           keywords: ['dapp'],
         },
@@ -449,17 +449,17 @@ module.exports = [
               {
                 type: 'doc',
                 id: 'v3/guidelines/ton-connect/frameworks/react',
-                label: 'React Apps',
+                label: 'React apps',
               },
               {
                 type: 'doc',
                 id: 'v3/guidelines/ton-connect/frameworks/vue',
-                label: 'Vue Apps',
+                label: 'Vue apps',
               },
               {
                 type: 'doc',
                 id: 'v3/guidelines/ton-connect/frameworks/web',
-                label: 'HTML/JS Apps',
+                label: 'HTML/JS apps',
               },
             ],
           },

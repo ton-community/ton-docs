@@ -554,10 +554,10 @@ const NftItemCodeCell = Cell.fromBase64(
 dataCell.storeRef(NftItemCodeCell);
 ```
 
-The smart contract stores royalty parameters using royaltyFactor, royaltyBase, and royaltyAddress. The royalty percentage is calculated using the formula: royaltyFactor / royaltyBase) * 100%. If we know royaltyPercent, calculating royaltyFactor is straightforward.
+The smart contract stores royalty parameters using royaltyFactor, royaltyBase, and royaltyAddress. The royalty percentage is calculated using the formula: `(royaltyFactor / royaltyBase) * 100%`. If we know royaltyPercent, calculating royaltyFactor is straightforward.
 
-​
- )×100%
+
+
 
 ```ts
 const royaltyBase = 1000;
@@ -578,7 +578,7 @@ return dataCell.endCell();
 ```
 
 
-Now, let's write a getter that returns the StateInit of our collection.
+Now, let's write a getter that returns the `StateInit` of our collection.
 ```ts
 public get stateInit(): StateInit {
   const code = this.createCodeCell();
@@ -588,7 +588,7 @@ public get stateInit(): StateInit {
 }
 ```
 
-We also need a getter that calculates the collection’s address. (In TON, a smart contract’s address is simply the hash of its StateInit.)
+We also need a getter that calculates the collection’s address. In TON, a smart contract’s address is simply the hash of its `StateInit`.
 ```ts
 public get address(): Address {
     return contractAddress(0, this.stateInit);
@@ -615,8 +615,8 @@ public async deploy(wallet: OpenedWallet) {
     return seqno;
   }
 ```
-Deploying a new smart contract in our case means sending a message from our wallet to the collection address (which we can calculate if we have StateInit) along with its StateInit.
-When the owner mints a new NFT, the collection accepts the owner's message and sends a new message to the created NFT smart contract (which requires a fee). Let’s write a method to replenish the collection’s balance based on the number of NFTs to be minted:
+Deploying a new smart contract in our case means sending a message from our wallet to the collection address, which we can calculate if we have `StateInit`, along with its `StateInit`.
+When the owner mints a new NFT, the collection accepts the owner's message and sends a new message to the created NFT smart contract, which requires a fee. Let’s write a method to replenish the collection’s balance based on the number of NFTs to be minted:
 ```ts
 public async topUpBalance(
     wallet: OpenedWallet,
@@ -882,7 +882,7 @@ export class NftMarketplace {
 }
 ```
 
-Implement a method to calculate the smart contract address based on StateInit.
+Implement a method to calculate the smart contract address based on `StateInit`.
 ```ts
 public get address(): Address {
     return contractAddress(0, this.stateInit);
@@ -918,7 +918,7 @@ Finally, add a few lines of code to `app.ts` to deploy the marketplace.
 import { NftMarketplace } from "./contracts/NftMarketplace";
 ```
 
-And then
+Then:
 
 ```ts
 console.log("Start deploy of new marketplace  ");
@@ -1031,7 +1031,7 @@ private createCodeCell(): Cell {
 
 To deploy the sale contract, we must form a message and send it to the marketplace:
 
-First, Create a cell storing the StateInit of the new sale contract
+First, create a cell storing the StateInit of the new sale contract
 
 ```ts
 public async deploy(wallet: OpenedWallet): Promise<number> {
@@ -1097,7 +1097,7 @@ static createTransferBody(params: {
 ```
 
 Include the following details:
-- op-code, query-id, and the new owner's address.
+- Op-code, query-id, and the new owner's address.
 - The address where a confirmation response will be sent.
 - The remaining incoming message coins.
 - The amount of TON sent to the new owner.

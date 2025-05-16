@@ -706,7 +706,7 @@ externalMessage := cell.BeginCell().
 0b10 (b - binary) denotes a binary record. Two bits are stored in this process: `1` and `0`. Thus, we specify that it's `ext_in_msg_info$10`.
 :::
 
-Now that we have a completed message ready to send to our contract, the next step is to serialize it into a `BOC` ([Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells)). Once serialized, we can send it using the following code:
+Now that we have a completed message ready to send to our contract, the next step is to serialize it into a `BoC` ([bag of cells](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells)). Once serialized, we can send it using the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">

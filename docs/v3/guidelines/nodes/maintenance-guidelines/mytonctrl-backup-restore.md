@@ -36,7 +36,7 @@ By default, automated backups are saved in the directory `/tmp/mytoncore/auto_ba
 
 ### Restore backup package
 
-**Important Notes**:
+**Important notes**:
 
 * Make sure to stop or disable the TON node on the donor machine. Failing to do so can lead to connectivity and synchronization issues on both machines. It is recommended to stop the donor node for at least 20 minutes before applying the backup data to the new machine.
 

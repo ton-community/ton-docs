@@ -33,10 +33,10 @@ It is recommended to set up multiple MEMO deposit wallets for better performance
 ### Additional info
 
 :::caution Transaction notification
-Each service in the Ecosystem is expected to set `forward_ton_amount` to 0.000000001 TON (1 nanoton) when withdrawing a token to send a jetton Notify on [successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be compliant. It will not be able to be processed by other CEXs and services.
+Each service in the ecosystem is expected to set `forward_ton_amount` to 0.000000001 TON (1 nanoton) when withdrawing a token to send a jetton Notify on [successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be compliant. It will not be able to be processed by other CEXs and services.
 :::
 
-- PRefer to the official JS library from the TON Foundation, [tonweb](https://github.com/toncenter/tonweb), for a JS lib example.
+- Prefer to the official JS library from TON Foundation, [tonweb](https://github.com/toncenter/tonweb), for a JS lib example.
 
 - For Java, consider [ton4j](https://github.com/neodix42/ton4j/tree/main). 
 
@@ -369,7 +369,7 @@ This should not be confused with the `sender` field in the [body](/v3/guidelines
 To prevent transaction bottlenecks in a single wallet, distribute deposits across multiple wallets and expand as needed.
 :::
 
-:::Transaction notification warning:
+:::warning Transaction notification:
 Each service in the ecosystem is expected to set `forward_ton_amount` to 0.000000001 TON (1 nanoton) when withdrawing a token, in order to send a token notification upon [a successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be compliant and will not be processed by other CEXs and services.
 :::
 
@@ -496,7 +496,7 @@ taking into account [processing incoming jettons information found here](#proces
 :::info Important
 **It is recommended that you** read and **understand** the [how jetton transfer works](/v3/guidelines/dapps/asset-processing/jettons#overview) and [how to send jettons with a comment](/v3/guidelines/dapps/asset-processing/jettons#jetton-off-chain-processing) articles before reading this section.
 
-Below you will find a step-by-step guide on how to process jetton withdrawals.
+Below, you will find a step-by-step guide on how to process jetton withdrawals.
 :::
 
 To withdraw jettons, the wallet sends messages with a `transfer` body to the corresponding jetton wallet.
@@ -516,9 +516,12 @@ See: [Jetton Contract Message Layouts](/v3/guidelines/dapps/asset-processing/jet
 2. Get the jetton wallet addresses for the deployed hot wallet: [How to get jetton wallet addresses for a given user](#retrieving-jetton-wallet-addresses-for-a-given-user)
 3. Get the primary jetton addresses for each jetton wallet: [How to get data for jetton wallets](#retrieving-data-for-a-specific-jetton-wallet).
 
-The `jetton` parameter is required (which is actually the address of the primary jetton contract).
+  The `jetton` parameter is required (which is actually the address of the primary jetton contract).
+
 4. Compare the addresses from the primary jetton contracts from step 1 and step 3. If the addresses do not match, then a jetton address validation error should be reported.
+
 5. Receive withdrawal requests that actually specify the jetton type, amount to be transferred, and the recipient wallet address.
+
 6. Check the jetton wallet balance to ensure there are enough funds for the withdrawal.
 7. Create a [message](/v3/guidelines/dapps/asset-processing/jettons#message-0).
 8. When using a wallet with high load, it is recommended to collect a batch of messages and send one batch at a time to optimize fees.
@@ -553,7 +556,8 @@ Below is a `list of best practices` to keep in mind when **doing on-chain jetton
 
 2. When linking a jetton wallet and a master jetton, **check** that the **connection is bidirectional**, with the wallet recognizing the master contract and vice versa. For example, if your contract system receives a notification from a jetton wallet (which considers its MySuperJetton to be its master contract), its transfer information should be displayed to the user before showing the `symbol`, `name`, and `image` of the MySuperJetton contract, check that the MySuperJetton wallet is using the correct contract system. In turn, if your contract system for some reason needs to send tokens using the MySuperJetton or MySuperJetton master contracts, check that the X wallet, like the wallet, uses the same contract parameters.
 Also, before sending a `transfer` request to X, make sure it recognizes MySuperJetton as its master.
-3. The **true power** of decentralized finance (DeFi) comes from the ability to stack protocols on top of each other like Lego blocks. For example, say Token A is swapped for Token B, which in turn is then used as leverage in a lending protocol (where the user provides liquidity), which is then used to buy an NFT ... and so on. So think about how a contract can serve not only off-chain users, but also on-chain entities by attaching a tokenized value to a transfer notification, adding a custom payload that can be sent with the transfer notification. 4. **Remember** that not all contracts follow the same standards. Unfortunately, some tokens can be hostile (using attack vectors) and are designed solely to attack unsuspecting users. For security purposes, if the protocol in question is composed of many contracts, do not create a large number of token wallets of the same type. In particular, do not send tokens within the protocol between a deposit contract, a storage contract, or a user account contract, etc. Attackers can intentionally interfere with contract logic by spoofing transfer notifications, token amounts, or payload parameters. Reduce the potential attack surface by using only one wallet in the system per token (for all deposits and withdrawals).
+3. The **true power** of decentralized finance (DeFi) comes from the ability to stack protocols on top of each other like Lego blocks. For example, say Token A is swapped for Token B, which in turn is then used as leverage in a lending protocol (where the user provides liquidity), which is then used to buy an NFT and so on. So think about how a contract can serve not only off-chain users, but also on-chain entities by attaching a tokenized value to a transfer notification, adding a custom payload that can be sent with the transfer notification. 
+4. **Remember** that not all contracts follow the same standards. Unfortunately, some tokens can be hostile (using attack vectors) and are designed solely to attack unsuspecting users. For security purposes, if the protocol in question is composed of many contracts, do not create a large number of token wallets of the same type. In particular, do not send tokens within the protocol between a deposit contract, a storage contract, or a user account contract, etc. Attackers can intentionally interfere with contract logic by spoofing transfer notifications, token amounts, or payload parameters. Reduce the potential attack surface by using only one wallet in the system per token (for all deposits and withdrawals).
 5. It is also **often a good idea** to create subcontracts for each individual token to reduce the likelihood of address spoofing (e.g. where a transfer message is sent to token B using a contract intended for token A).
 6. **It is strongly recommended** to work with indivisible units of tokens at the contract level. Logic related to decimal numbers is usually used to improve the display user interface and is not related to the numerical record keeping on the chain.
 

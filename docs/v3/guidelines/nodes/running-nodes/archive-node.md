@@ -262,8 +262,8 @@ Contact technical support at [@ton_node_help](https://t.me/ton_node_help).
 
 ## See also
 
-- [TON Node Types](/v3/documentation/infra/nodes/node-types)
-- [Run a Full Node](/v3/guidelines/nodes/running-nodes/full-node)
+- [TON node types](/v3/documentation/infra/nodes/node-types)
+- [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
 
 <Feedback />
 

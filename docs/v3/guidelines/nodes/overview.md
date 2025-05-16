@@ -4,7 +4,7 @@ import Feedback from '@site/src/components/Feedback';
 
 This page collects some recommendations that could be followed to manage Nodes on TON Blockchain.
 
-* [TON Node Types](/v3/documentation/infra/nodes/node-types)
+* [TON node types](/v3/documentation/infra/nodes/node-types)
 
 ## Running TON node
 

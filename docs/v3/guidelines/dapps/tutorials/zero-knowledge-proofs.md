@@ -137,7 +137,6 @@ You can remove the unnecessary files:
 ```bash
 rm pot14_0000.ptau pot14_0001.ptau pot14_0002.ptau pot14_beacon.ptau
 ```
-
 ### 📜 Circuit compilation
 
 To compile the circuit, run the following command from the `build/circuits` folder:
@@ -588,7 +587,7 @@ If you have any questions or run into any errors, feel free to reach out to the 
 - [Blueprint](https://github.com/ton-org/blueprint)
 
 
-## 📖 See Also
+## 📖 See also
 
 - [TON trustless bridge EVM contracts](https://github.com/ton-blockchain/ton-trustless-bridge-evm-contracts)
 - [Tonnel network: privacy protocol on TON](http://github.com/saberdotcoder/tonnel-network)
@@ -596,7 +595,7 @@ If you have any questions or run into any errors, feel free to reach out to the 
 
 
 ## 📬 About the author 
-- Saber on [Telegram](https://t.me/saber_coder), [GitHub](https://github.com/saberdotcoder), and [LinkedIn](https://www.linkedin.com/in/szafarpoor).
+- *Saber* on [Telegram](https://t.me/saber_coder), [GitHub](https://github.com/saberdotcoder), and [LinkedIn](https://www.linkedin.com/in/szafarpoor).
 
 <Feedback />
 
