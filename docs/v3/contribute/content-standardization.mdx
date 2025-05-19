@@ -1,6 +1,8 @@
 import Feedback from '@site/src/components/Feedback';
-
 import ThemedImage from "@theme/ThemedImage";
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
+
 
 # Content standardization
 
@@ -271,6 +273,83 @@ Use a sequence diagram for complex and repetitive communication schemes between 
 
 - Store the original files in the project's Git repository under the `/static/visio` directory to facilitate future modifications.
 - Learn [Visio](https://www.microsoft.com/en-us/microsoft-365/visio/flowchart-software) references directly from [Visio sources](https://github.com/ton-community/ton-docs/tree/main/static/schemes-visio/).
+
+
+## Math equations
+
+To include mathematical expressions in documentation, use the [react-katex](https://katex.org/docs/supported) library. It supports both inline and block-level math using `LaTeX` syntax.
+
+Import the required components at the top of your `.mdx` file:
+
+```
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
+```
+These imports allow you to render `LaTeX` math expressions:
+- `BlockMath` is used for centered, standalone formulas.
+- `InlineMath` is used for short expressions inside the regular text.
+- The `css` import applies the necessary styling for proper rendering.
+
+Contributors can use the following examples to format various types of math expressions in the documentation:
+
+### Systems of equations
+
+For systems of equations, use `LaTeX` formatting for clarity:
+
+```
+<BlockMath math={`\\begin{cases}
+x + y = 10 \\\\
+2x - y = 4
+\\end{cases}`} />
+```
+
+This renders the system of equations as:
+
+<BlockMath math={`\\begin{cases}
+x + y = 10 \\\\
+2x - y = 4
+\\end{cases}`} />
+
+
+### Exponential functions
+
+For exponential functions, you can use the following format:
+
+```
+<InlineMath math="e^{x} = \lim\limits_{n\to \infty} \left( 1 + \frac{x}{n} \right)^n" />
+```
+
+This renders the equation: <InlineMath math="e^{x} = \lim\limits_{n\to \infty} \left( 1 + \frac{x}{n} \right)^n" />
+
+
+### Fractions
+
+To represent fractions, use `\frac{numerator}{denominator}:`
+
+```
+<InlineMath math="\frac{a}{b}"/>
+```
+
+This renders the fraction: <InlineMath math="\frac{a}{b}"/>
+
+### Summation
+
+For summation notation, use the following `LaTeX` formatting:
+```
+<BlockMath math="\sum_{i=1}^{n} i^2" />
+```
+This renders the summation: <BlockMath math="\sum_{i=1}^{n} i^2" />
+
+### Logarithmic expressions
+
+For logarithmic equations, use the following `LaTeX` syntax:
+
+```
+<InlineMath math="\log_{b}(x)" />
+```
+
+This renders the logarithmic expression: <InlineMath math="\log_{b}(x)" />
+
 
 ## Terminology
 
