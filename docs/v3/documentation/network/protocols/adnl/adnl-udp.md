@@ -377,6 +377,6 @@ Further communication occurs based on the logic outlined in this article, though
 
 ## References
 
-_Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-UDP-Internal.md) by [Oleg Baranov](https://github.com/xssnick)._
+Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-UDP-Internal.md) - _[Oleg Baranov](https://github.com/xssnick)._
 <Feedback />
 

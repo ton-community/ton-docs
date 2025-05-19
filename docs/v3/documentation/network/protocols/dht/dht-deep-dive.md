@@ -204,6 +204,6 @@ These nodes will also provide us with all the information regarding the blocks.
 
 ## References
 
-_Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/DHT.md) by [Oleg Baranov](https://github.com/xssnick)._
+Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/DHT.md) - _[Oleg Baranov](https://github.com/xssnick)._
 <Feedback />
 
