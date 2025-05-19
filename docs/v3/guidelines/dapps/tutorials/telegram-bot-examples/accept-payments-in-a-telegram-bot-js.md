@@ -440,9 +440,9 @@ If your bot isn't working correctly, compare your code with the code [from this 
 
 ## References
 
- - Made for TON as a part of [ton-footsteps/58](https://github.com/ton-society/ton-footsteps/issues/58).
- - By Coalus ([Telegram @coalus](https://t.me/coalus), [Coalus on GitHub](https://github.com/coalus)).
- - [Bot sources](https://github.com/coalus/DumplingShopBot).
+ - Made for TON as a part of [ton-footsteps/58](https://github.com/ton-society/ton-footsteps/issues/58)
+ - [Telegram @coalus](https://t.me/coalus), [Coalus on GitHub](https://github.com/coalus) - _Coalus_
+ - [Bot sources](https://github.com/coalus/DumplingShopBot)
 
 <Feedback />
 

@@ -576,7 +576,7 @@ can be crafted to mislead users, making victims potential victims of fraud. Ther
 5. **Always be on guard against potential attackers** creating fake tokens, it is always a good idea to provide users with the functionality needed to eliminate unwanted tokens from their main user interface.
 
 
-Authored by [kosrk](https://github.com/kosrk), [krigga](https://github.com/krigga), [EmelyanenkoK](https://github.com/EmelyanenkoK/) and [tolya-yanot](https://github.com/tolya-yanot/).
+Authors are _[kosrk](https://github.com/kosrk)_, _[krigga](https://github.com/krigga)_, _[EmelyanenkoK](https://github.com/EmelyanenkoK/)_ and _[tolya-yanot](https://github.com/tolya-yanot/)_.
 
 
 ## Best practices

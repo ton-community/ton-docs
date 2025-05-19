@@ -3,7 +3,7 @@ import Feedback from '@site/src/components/Feedback';
 # Archive node
 
 :::info
-Before this article, read about [Full Node](/v3/guidelines/nodes/running-nodes/full-node).
+Before this article, read about [Full node](/v3/guidelines/nodes/running-nodes/full-node).
 :::
 
 ## Overview

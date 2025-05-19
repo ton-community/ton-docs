@@ -1,4 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
 
 # Step by step NFT collection minting 
 
@@ -554,7 +556,8 @@ const NftItemCodeCell = Cell.fromBase64(
 dataCell.storeRef(NftItemCodeCell);
 ```
 
-The smart contract stores royalty parameters using royaltyFactor, royaltyBase, and royaltyAddress. The royalty percentage is calculated using the formula: `(royaltyFactor / royaltyBase) * 100%`. If we know royaltyPercent, calculating royaltyFactor is straightforward.
+The smart contract stores royalty parameters using royaltyFactor, royaltyBase, and royaltyAddress. The royalty percentage is calculated using the formula: <InlineMath math="\left( \frac{\text{royaltyFactor}}{\text{royaltyBase}} \right) \times 100\%" />
+. If we know royaltyPercent, calculating royaltyFactor is straightforward.
 
 
 
@@ -1207,7 +1210,7 @@ Today, you learned a lot about TON and successfully created your own NFT collect
 - [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
 
 ## About the author 
-- Coalus on [Telegram](https://t.me/coalus) or [GitHub](https://github.com/coalus)
+- _Coalus_ on [Telegram](https://t.me/coalus) or [GitHub](https://github.com/coalus)
 
 ## See also
  - [NFT use cases](/v3/documentation/dapps/defi/nft)
