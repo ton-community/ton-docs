@@ -64,7 +64,7 @@ Storage → Credit → Compute → Action → Bounce
 
 #### Example of calculation
 
-| Fee in Explorer                                                                                       | Value       | How it's obtained               |
+| Fee in explorer                                                                                       | Value       | How it's obtained               |
 | :---------------------------------------------------------------------------------------------------- | :---------- | :------------------------------ |
 | Total fee                                                                                             | 0.001982134 | gas + storage + action + import |
 | Fwd. fee                                                                                              | 0.001       | fwd_fee + action_fee + ihr_fee  |
@@ -84,7 +84,7 @@ For live calculations, refer to the [**fee calculator**](/v3/documentation/smart
 The transaction fees used in these examples are hypothetical and for illustrative purposes only. Any fees other than message forwarding are outside the scope of this article.
 Funds included with an ignored message will still be [credited to the receiving address](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557).
 
-## 1. (Mode 0, Flag 0) Basic message {#mode0}
+## 1. (Mode 0, flag 0) basic message {#mode0}
 
 State before transaction: Account A has 1 TON, Account B has 1 TON
 
@@ -105,7 +105,7 @@ State after the transaction: Account A has 0.9 TON, Account B has 1.096 TON
 </div>
 <br></br>
 
-## 2. (Mode 0, Flag 2) Error‐silent message {#mode2}
+## 2. (Mode 0, flag 2) error‐silent message {#mode2}
 
 :::info
 Please note that omitting the `+2` flag may be unsafe. For more information, refer to [this section](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
@@ -135,7 +135,7 @@ If no errors occur, the result is the same as [mode = 0](#mode0).
 </div>
 <br></br>
 
-## 3. (Mode 0, Flag 16) Bounce on action error {#mode16}
+## 3. (Mode 0, flag 16) bounce on action error {#mode16}
 
 State before transaction: Account A has 1 TON, Account B has 1 TON
 
@@ -179,7 +179,7 @@ The key difference is that `flag 16` creates bounces for [action phase errors](/
 </div>
 <br></br>
 
-## 4. (Mode 0, Flag 1) Separate fees {#mode1}
+## 4. (Mode 0, flag 1) separate fees {#mode1}
 
 :::info
 Please note that using only this flag is unsafe, for more information refer to [this section](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
@@ -204,7 +204,7 @@ State after the transaction: Account A has 0.896 TON, Account B has 1.1 TON
 </div>
 <br></br>
 
-## 5. (Mode 0, Flag 17) Separate fees and bounce on action error {#mode17}
+## 5. (Mode 0, flag 17) separate fees and bounce on action error {#mode17}
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON
 
@@ -243,7 +243,7 @@ If no errors occur, the result is the same as [mode = 1](#mode1).
 </div>
 <br></br>
 
-## 6. (Mode 64, Flag 0) Carry forward the remaining value {#mode64}
+## 6. (Mode 64, flag 0) carry forward the remaining value {#mode64}
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -275,7 +275,7 @@ If you try to send multiple messages (e.g., mode 0 **and** mode 64), you'll get 
 </div>
 <br></br>
 
-## 7. (Mode 64, Flag 1) Carry forward with separate fees {#mode65}
+## 7. (Mode 64, flag 1) carry forward with separate fees {#mode65}
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -301,7 +301,7 @@ Please note that `storage_fee` is included in `total_fee` but is always paid fro
 </div>
 <br></br>
 
-## 8. (Mode 64, Flag 16) Bounce‐protected carry forward {#mode80}
+## 8. (Mode 64, flag 16) bounce‐protected carry forward {#mode80}
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -340,7 +340,7 @@ If no errors occur, the result is the same as [mode = 64, flag 0](#mode64). This
 </div>
 <br></br>
 
-## 9. (Mode 64, Flag 17) Bounce‐protected carry forward with separate fees {#mode81}
+## 9. (Mode 64, flag 17) bounce‐protected carry forward with separate fees {#mode81}
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -379,7 +379,7 @@ If no errors occur, the result is the same as [mode = 65](#mode65).
 </div>
 <br></br>
 
-## 10. (Mode 128, Flag 0) Send whole balance {#mode128}
+## 10. (Mode 128, flag 0) send whole balance {#mode128}
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -400,7 +400,7 @@ State after the transaction: Account A has 0.896 TON, Account B has 0 TON, Accou
 </div>
 <br></br>
 
-## 11. (Mode 128, Flag 16) Send the whole balance bounce‐protected {#mode144}
+## 11. (Mode 128, flag 16) send the whole balance bounce‐protected {#mode144}
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -438,7 +438,7 @@ If no errors occur, the result is the same as [mode = 128](#mode128). This mode 
 </div>
 <br></br>
 
-## 12. (Mode 128, Flag 32) Send the whole balance and destroy the contract {#mode160}
+## 12. (Mode 128, flag 32) send the whole balance and destroy the contract {#mode160}
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
