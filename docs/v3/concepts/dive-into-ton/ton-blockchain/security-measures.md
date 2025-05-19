@@ -31,7 +31,7 @@ Audit for TON Virtual Machine and the Fift programming language.
 **Audit report**:
 - [Trail of Bits Audit Report - TVM & Fift](https://docs.ton.org/audits/TVM_and_Fift_ToB.pdf)
 
-## TVM Upgrade 2023.07
+## TVM Upgrade Jul 2023
 
 Audit for security and potential vulnerabilities in TVM Upgrade 2023.07.
 

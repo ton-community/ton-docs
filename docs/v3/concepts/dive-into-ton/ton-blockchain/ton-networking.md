@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # TON networking
 
-The TON Ecosystem uses its peer-to-peer network protocols.
+TON Ecosystem uses its peer-to-peer network protocols.
 
 - **TON Blockchain** uses these protocols to propagate new blocks, send and collect transaction candidates, etc.
 
@@ -11,10 +11,10 @@ The TON Ecosystem uses its peer-to-peer network protocols.
 Multi-blockchain projects, such as TON, are much more demanding. For example, one must be able to subscribe to updates for only some shardchains, not necessarily all of them.
 
 
-- **TON Ecosystem services** like TON Proxy, TON Sites, TON Storage, and DApps run on these protocols.
+- **TON Ecosystem services** like TON Proxy, TON Sites, TON Storage, and dApps run on these protocols.
 
   Once the more sophisticated network protocols are in place to support the TON blockchain. 
-  They can easily be used for purposes not necessarily related to the immediate demands of the blockchain itself, thus providing more possibilities and flexibility for creating new services in the TON Ecosystem.
+  They can easily be used for purposes not necessarily related to the immediate demands of the blockchain itself, thus providing more possibilities and flexibility for creating new services in TON Ecosystem.
 
 ## TON network protocols
 
