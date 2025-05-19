@@ -12,8 +12,9 @@ This article describes ready-to-use methods for mass token distribution on the T
 
 <Player url="https://www.youtube.com/watch?v=8HHXykOyNys" />
 
-Tool – [link](https://tonapi.io/airdrop?utm_source=web&utm_medium=tondocs&utm_campaign=tondocs_1).
-Documentation – [link](https://docs.tonconsole.com/tonconsole/jettons/airdrop).
+- [Tool](https://tonapi.io/airdrop?utm_source=web&utm_medium=tondocs&utm_campaign=tondocs_1)
+
+- [Documentation](https://docs.tonconsole.com/tonconsole/jettons/airdrop)
 
 ### About the instrument
 

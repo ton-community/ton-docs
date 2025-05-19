@@ -306,7 +306,7 @@ try {
 <br></br>
 
 Most SDKs follow a similar process for sending messages from your wallet:
-- Create a wallet wrapper (object) of the correct version, typically v3r2 ( see also [wallet versions](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)), your secret key and workchain (usually 0 for the [basechain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules)).
+- Create a wallet wrapper (object) of the correct version, typically v3r2 (see also [wallet versions](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)), your secret key and workchain (usually 0 for the [BaseChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules)).
 - Create a blockchain wrapper (or "client")—an object that routes requests to the API or lite servers, depending on your setup.
 - **Open** the contract in the blockchain wrapper. This ensures that the contract object is linked to an actual account on either the TON Mainnet or Testnet.
 - Form messages you want to send and initiate the transaction. You can send up to 4 messages per request, as detailed in the [advanced manual](/v3/guidelines/smart-contracts/howto/wallet#sending-multiple-messages-simultaneously).
@@ -1265,7 +1265,8 @@ Following is the TL-B schema that DeDust introduced for the Asset concept.
 ```tlb
 native$0000 = Asset; // for ton
 
-jetton$0001 workchain_id:int8 address:uint256 = Asset; // for any jetton,address refer to jetton master address
+// for any jetton,address refer to jetton master address
+jetton$0001 workchain_id:int8 address:uint256 = Asset;
 
 // Upcoming, not implemented yet.
 extra_currency$0010 currency_id:int32 = Asset;
