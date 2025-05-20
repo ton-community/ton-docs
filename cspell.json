@@ -23,7 +23,7 @@
     {
       "name":"examples",
       "path":"./src/grammar/examples-dictionary.txt"
-    },
+    }
   ],
   "words": [
     "ADNL",
@@ -119,6 +119,8 @@
     "Tonhub",
     "Tonkeeper",
     "Tonkey",
+    "Tonviewer",
+    "Tonscan",
     "Underload",
     "Uninit",
     "WAGMI",
@@ -258,6 +260,7 @@
     "randomizer",
     "reindex",
     "respecifying",
+    "runvm",
     "runvmcode",
     "seamus",
     "seck256r1",
@@ -299,6 +302,7 @@
     "underload",
     "underloaded",
     "unixtime",
+    "utime",
     "visio",
     "Visio",
     "votings",
@@ -364,11 +368,12 @@
     "deployment",
     "docs/learn/tvm-instructions/instructions.csv",
     "docs/learn/tvm-instructions/generate_md.py",
+    "docs/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib.md",
     "sidebars.js",
     "sidebars",
     "i18n",
     ".husky",
     "3rd/*",
-    ".github/*",
+    ".github/*"
   ]
 }

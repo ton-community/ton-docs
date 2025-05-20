@@ -274,6 +274,13 @@ module.exports = [
               'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot',
               'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-2',
               'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-js',
+
+              {
+                type: 'link',
+                label: 'TMA USD₮ payments demo',
+                href: 'https://github.com/ton-community/tma-usdt-payments-demo',
+              },
+
             ],
           },
         ],

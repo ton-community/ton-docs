@@ -349,9 +349,9 @@ Note that the `0x8E`, `0x90`, and `0x92` wallet exit codes are designed to preve
 4. int get_public_key() returns current stored public key.
 5. cell get_extensions() returns extensions dictionary.
 
-#### Preparing for Gasless Transactions
+#### Preparing for gasless transactions
 
-As was sad before v5 wallet smart contract allows the processing of internal messages signed by the owner. This also allows you to make gasless transactions, e.g., payment of network fees when transferring USDt in USDt itself. Common scheme looks like that:
+As was said, before v5, the wallet smart contract allowed the processing of internal messages signed by the owner. This also allows you to make gasless transactions, e.g., payment of network fees when transferring USDt in USDt itself. The common scheme looks like this:
 
 ![image](/img/gasless.jpg)
 

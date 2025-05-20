@@ -31,8 +31,16 @@ module.exports = [
           'v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
           'v3/documentation/smart-contracts/contracts-specs/precompiled-contracts',
           'v3/documentation/smart-contracts/contracts-specs/examples',
+
+          {
+            type: 'link',
+            label: 'TON enhancement proposals (TEPs)',
+            href: 'https://github.com/ton-blockchain/TEPs/tree/master',
+          },
+
         ],
       },
+      'v3/documentation/smart-contracts/limits',
       {
         type: 'category',
         label: 'Message management',
