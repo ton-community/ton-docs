@@ -10,8 +10,8 @@ Examples of valid literals: `0`, `123`, `-17`, `00987`, `0xef`, `0xEF`, `0x0`, `
 ## String literals
 
 In FunC, strings are enclosed in double quotes `"`, like `"this is a string"`.<br />
-Optionally, a type can be specified after a string literal, such as `"string"u`.<br />
-Special characters like `\n` are not supported, but you can create multi-line <br /> strings by simply writing the text across multiple lines, like this:
+You can optionally specify a type after the string literal, such as `"string"u`.<br />
+Special characters like `\n` are not supported, but you can create multi-line <br />  strings simply by writing the text across multiple lines, like this:
 ```
 ;; somewhere inside of a function body
 
