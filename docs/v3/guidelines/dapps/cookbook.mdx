@@ -704,46 +704,218 @@ void main();
 <TabItem value="Python" label="Python">
 
 Unfortunately, there is currently no tool like Sandbox for Python to emulate the blockchain. 
-However, you can still refer to this example and [jetton code](https://tonviewer.com/EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo?section=code) to understand how to correctly construct the data needed to obtain the address.
+However, you can still implement something similar with [pytvm](https://github.com/yungwine/pytvm).
+This example helps to understand how to correctly construct the data needed to obtain the address.
 Essentially you need to build the same thing as `get_wallet_address(slice owner_address) method_id` in the master contract:
 
 ```python
 
-from pytoniq_core import Address, Cell, begin_cell
+# Recreate from jetton-utils.fc calculate_jetton_wallet_address()
+# https://tonscan.org/jetton/EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo#source
 
-def calculate_jetton_address(
-    owner_address: Address, jetton_master_address: Address, jetton_wallet_code: str
-):
-    # Recreate from jetton-utils.fc calculate_jetton_wallet_address()
-    # https://tonscan.org/jetton/EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs#source
-    # https://tonscan.org/jetton/EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo#source
+from pytoniq_core import Address, Cell, Builder, Slice
 
-    data_cell = (
-        begin_cell()
-        .store_uint(0, 4)
-        .store_coins(0)
-        .store_address(owner_address)
-        .store_address(jetton_master_address)
-        .end_cell()
+# Constants from the HMSTR FunC code
+STATUS_SIZE = 4
+MERKLE_ROOT_SIZE = 256
+SALT_SIZE = 10  # Bits for salt
+ITERATION_NUM = 32  # Number of salt iterations
+MY_WORKCHAIN = 0  # Assuming Basechain (0)
+
+# --- Configuration Variables ---
+# Replace these values with your actual data before running the script
+OWNER_ADDRESS_EXAMPLE = "UQDKHZ7e70CzqdvZCC83Z4WVR8POC_ZB0J1Y4zo88G-zCSRH" # Binance Hot Wallet
+JETTON_MASTER_ADDRESS_EXAMPLE = "EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo" # HMSTR Jetton Master
+# Gather from the blockchain using master's get_jetton_data method or compile from source.
+JETTON_WALLET_CODE_HEX_EXAMPLE = "b5ee9c72010101010023000842020f1ad3d8a46bd283321dde639195fb72602e9b31b1727fecc25e2edc10966df4"
+# The merkle_root from the master contract using get_mintless_airdrop_hashmap_root method.
+MERKLE_ROOT_EXAMPLE = 29945721131613672054990630604903528297803118035866103598622265652475246912273
+# --- End Configuration Variables ---
+
+def pack_jetton_wallet_data(
+    status: int,
+    balance: int,
+    owner_address_slice: Slice,
+    jetton_master_address_slice: Slice,
+    merkle_root: int,
+    salt: int,
+) -> Cell:
+    """
+    Packs the jetton wallet data into a cell, similar to FunC's pack_jetton_wallet_data.
+    Note: owner_address_slice and jetton_master_address_slice should be slices
+    representing the full MsgAddressInt structure (e.g., from builder.store_address().end_cell().begin_parse()).
+    """
+    builder = Builder()
+    builder.store_uint(status, STATUS_SIZE)
+    builder.store_coins(balance)
+    builder.store_slice(owner_address_slice)
+    builder.store_slice(jetton_master_address_slice)
+    builder.store_uint(merkle_root, MERKLE_ROOT_SIZE)
+    builder.store_uint(salt, SALT_SIZE)
+    return builder.end_cell()
+
+def calculate_jetton_wallet_state_init_and_salt(
+    owner_address: Address,
+    jetton_master_address: Address,
+    jetton_wallet_code: Cell,
+    merkle_root: int,
+) -> tuple[Cell, int]:
+    """
+    Calculates the optimal StateInit for a jetton wallet and the salt used.
+    This function mirrors the logic of `calculate_jetton_wallet_properties_cheap`
+    and subsequent StateInit construction in FunC.
+    """
+    owner_hash_part_int = int.from_bytes(owner_address.hash_part, "big")
+    owner_prefix = owner_hash_part_int >> (256 - 4)  # First 4 bits of owner's address hash
+
+    # Create full slice representations of addresses for storing in the data cell
+    owner_addr_builder = Builder()
+    owner_addr_builder.store_address(owner_address)
+    owner_addr_data_slice = owner_addr_builder.end_cell().begin_parse()
+
+    jetton_master_addr_builder = Builder()
+    jetton_master_addr_builder.store_address(jetton_master_address)
+    jetton_master_addr_data_slice = jetton_master_addr_builder.end_cell().begin_parse()
+
+    min_distance = 0xFFFF
+    best_salt = 0 # FunC starts salt at -1 and increments, so first real salt is 0
+    
+    best_state_init_cell = None
+
+    # Loop for salt values from 0 to ITERATION_NUM (inclusive)
+    for current_salt in range(ITERATION_NUM + 1):
+        # 1. Create the jetton wallet data cell
+        # Status and balance are 0 for this calculation, as in FunC's _cheap version
+        data_cell = pack_jetton_wallet_data(
+            status=0,
+            balance=0,
+            owner_address_slice=owner_addr_data_slice,
+            jetton_master_address_slice=jetton_master_addr_data_slice,
+            merkle_root=merkle_root,
+            salt=current_salt,
+        )
+
+        # 2. Create the StateInit cell
+        state_init_builder = Builder()
+        state_init_builder.store_uint(0, 2)  # No split_depth, No special
+        state_init_builder.store_maybe_ref(jetton_wallet_code)
+        state_init_builder.store_maybe_ref(data_cell)
+        state_init_builder.store_uint(0, 1)  # Empty libraries
+        current_state_init_cell = state_init_builder.end_cell()
+
+        # 3. Calculate account_hash (hash of state_init)
+        account_hash_bytes = current_state_init_cell.hash
+        account_hash_int = int.from_bytes(account_hash_bytes, "big")
+
+        # 4. Calculate wallet_prefix (first 4 bits of StateInit hash)
+        wallet_prefix = account_hash_int >> (256 - 4)
+
+        # 5. Calculate XOR distance
+        distance = wallet_prefix ^ owner_prefix
+
+        if distance < min_distance:
+            min_distance = distance
+            best_salt = current_salt
+            best_state_init_cell = current_state_init_cell
+        
+        if min_distance == 0: # Found a perfect match
+            break
+            
+    if best_state_init_cell is None:
+        # This should not happen if ITERATION_NUM >= 0, as at least one iteration will run.
+        # For safety, if it were to occur, recompute with the initial salt (0 or best_salt if it was updated).
+        # However, the logic ensures best_state_init_cell is set on the first iteration.
+        # Re-create the data cell and state_init with the best_salt found (or default 0)
+        final_data_cell = pack_jetton_wallet_data(
+            status=0, balance=0,
+            owner_address_slice=owner_addr_data_slice,
+            jetton_master_address_slice=jetton_master_addr_data_slice,
+            merkle_root=merkle_root, salt=best_salt
+        )
+        final_state_init_builder = Builder()
+        final_state_init_builder.store_uint(0, 2)
+        final_state_init_builder.store_maybe_ref(jetton_wallet_code)
+        final_state_init_builder.store_maybe_ref(final_data_cell)
+        final_state_init_builder.store_uint(0, 1)
+        best_state_init_cell = final_state_init_builder.end_cell()
+
+
+    return best_state_init_cell, best_salt
+
+def calculate_jetton_wallet_address_from_state_init(
+    state_init: Cell, workchain: int = MY_WORKCHAIN
+) -> Address:
+    """
+    Calculates the jetton wallet address from its StateInit cell.
+    """
+    state_init_hash = state_init.hash  # This is the 256-bit hash part of the address
+    return Address(f"{workchain}:{state_init_hash.hex()}")
+
+def calculate_user_jetton_wallet_address_py(
+    owner_address_str: str,  # User-friendly address string, e.g., "EQ..."
+    jetton_master_address_str: str,  # User-friendly address string, e.g., "EQ..."
+    jetton_wallet_code_boc_hex: str,  # BOC HEX string for the jetton wallet code cell
+    merkle_root: int = 0,
+) -> tuple[str, int]:
+    """
+    Calculates the user's jetton wallet address and the salt used.
+    This is the Python equivalent of FunC's `calculate_user_jetton_wallet_address`.
+    Returns the address as a user-friendly string and the salt.
+    """
+    owner_address = Address(owner_address_str)
+    jetton_master_address = Address(jetton_master_address_str)
+    
+    # Ensure jetton_wallet_code_boc_hex is bytes if it's hex string
+    if isinstance(jetton_wallet_code_boc_hex, str):
+        jetton_wallet_code_boc_bytes = bytes.fromhex(jetton_wallet_code_boc_hex)
+    else:
+        jetton_wallet_code_boc_bytes = jetton_wallet_code_boc_hex
+
+    jetton_wallet_code = Cell.one_from_boc(jetton_wallet_code_boc_bytes)
+
+    state_init_cell, salt_used = calculate_jetton_wallet_state_init_and_salt(
+        owner_address, jetton_master_address, jetton_wallet_code, merkle_root
     )
 
-    code_cell = Cell.one_from_boc(jetton_wallet_code)
-
-    state_init = (
-        begin_cell()
-        .store_uint(0, 2)
-        .store_maybe_ref(code_cell)
-        .store_maybe_ref(data_cell)
-        .store_uint(0, 1)
-        .end_cell()
+    wallet_address = calculate_jetton_wallet_address_from_state_init(
+        state_init_cell, MY_WORKCHAIN
     )
-    state_init_hex = state_init.hash.hex()
-    jetton_address = Address(f'0:{state_init_hex}')
+    
+    # Return user-friendly, bounceable address string and the salt
+    return wallet_address.to_str(is_user_friendly=True, is_bounceable=True, is_test_only=False), salt_used
 
-    return jetton_address
+if __name__ == "__main__":
+    # Example Usage:
+    # Ensure the CONFIGURATION VARIABLES at the top of the script are set correctly.
+
+    # You can get this by compiling your jetton wallet FunC code to a .cell file, 
+    # then converting that .cell file (which is BOC) to a hex string.
+    # Or if you have the .fif file for the code: fift -s build/jetton-wallet-code.fif -o jetton-wallet-code.cell
+    # Then convert jetton-wallet-code.cell (binary file) to hex.
+
+    print(f"Note: Using HMSTR jetton wallet code from the top of the script if not changed.\n"
+          f"Ensure 'JETTON_WALLET_CODE_HEX_EXAMPLE' is the actual BOC hex of your jetton wallet code.\n")
+
+    try:
+
+        calculated_address, salt = calculate_user_jetton_wallet_address_py(
+            owner_address_str=OWNER_ADDRESS_EXAMPLE,
+            jetton_master_address_str=JETTON_MASTER_ADDRESS_EXAMPLE,
+            jetton_wallet_code_boc_hex=JETTON_WALLET_CODE_HEX_EXAMPLE,
+            merkle_root=MERKLE_ROOT_EXAMPLE # Pass the actual merkle_root here
+        )
+        print(f"Calculated Jetton Wallet Address: {calculated_address}")
+        print(f"Salt used: {salt}")
+
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        print("Please ensure you have 'pytoniq-core' installed (pip install pytoniq-core).")
+        print("And provide valid address strings and a valid BOC hex for the jetton wallet code.") 
+
 
 ```
-Read the entire example [here](/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py).
+Read the simple example [here](/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py).
 
 </TabItem>
 </Tabs>
