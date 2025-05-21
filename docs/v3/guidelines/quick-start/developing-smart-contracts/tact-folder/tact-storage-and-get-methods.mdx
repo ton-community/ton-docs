@@ -107,7 +107,7 @@ receive(msg: Add) {
 }
 ```
 
-For accepting messages with empty body you can add `recieve` function with no arguments:
+For accepting messages with empty body you can add `receive` function with no arguments:
 
 ```tact title="/contracts/hello_world.tact"
 receive() {
@@ -151,12 +151,12 @@ contract HelloWorld {
         self.counter = 0;
     }
 
-    // default(null) recieve for deploy
+    // default(null) receive for deploy
     receive() {
         cashback(sender())
     }
 
-    // function to recive messages from other contracts
+    // function to receive messages from other contracts
     receive(msg: Add) {
         self.counter += msg.amount;
 
