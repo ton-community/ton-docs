@@ -69,18 +69,26 @@ As new parameter constructors are introduced, these opcodes are updated accordin
 
 Each opcode consumes 26 gas.
 
-
 | Fift syntax           | Stack                                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 |:----------------------|:-------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `GETGASFEE`           | _`gas_used is_mc - price`_           | Calculates the computation cost in nanotons for a transaction that consumes `gas_used` gas.                                                                                                                                                                                                                                                                                                                                                                |
-| `GETSTORAGEFEE`       | _`cells bits seconds is_mc - price`_ | Calculates the storage fees in nanotons for the contract based on current storage prices.`cells` and `bits` represent the size of the [`AccountState`](https://github.com/ton-blockchain/ton/blob/8a9ff339927b22b72819c5125428b70c406da631/crypto/block/block.tlb#L247) with deduplication, including the root cell.                                                                                                                                       |
-| `GETFORWARDFEE`       | _`cells bits is_mc - price`_         | Calculates forward fees in nanotons for an outgoing message. `is_mc` is true if the source or the destination is in the MasterChain and false if both are in the basechain. **Note:** `cells` and `bits` in the message should be counted with deduplication and the _root-not-counted_ rules.                                                                                                                                                             |
+| `GETSTORAGEFEE`       | _`cells bits seconds is_mc - price`_ | Calculates the storage fees in nanotons for the contract based on current storage prices. `cells` and `bits` represent the size of the [`AccountState`](https://github.com/ton-blockchain/ton/blob/8a9ff339927b22b72819c5125428b70c406da631/crypto/block/block.tlb#L247) with deduplication, including the root cell.                                                                                                                                            |
+| `GETFORWARDFEE`       | _`cells bits is_mc - price`_         | Calculates forward fees in nanotons for an outgoing message. `is_mc` is true if the source or the destination is in the MasterChain and false if both are in the basechain. **Note:** `cells` and `bits` in the message should be counted with deduplication and the _root-not-counted_ rules.                                                                                                                        |
 | `GETPRECOMPILEDGAS`   | _`- null`_                           | Reserved; currently returns null. It returns the cost of contract execution in gas units if the contract is _precompiled_.                                                                                                                                                                                                                                                                                                                                 |
 | `GETORIGINALFWDFEE`   | _`fwd_fee is_mc - orig_fwd_fee`_     | Calculates `fwd_fee * 2^16 / first_frac`. It can be used to get the original `fwd_fee` of the message as a replacement for hardcoded values like [this](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L224C17-L224C46) from the `fwd_fee` parsed from an incoming message. `is_mc` is true if the source or destination is in the MasterChain and false if both are in the basechain. |
 | `GETGASFEESIMPLE`     | _`gas_used is_mc - price`_           | Calculates the additional computation cost in nanotons for a transaction that consumes additional `gas_used` gas. This is the same as `GETGASFEE`, but without the flat price calculated as `(gas_used * price) / 2^16.`                                                                                                                                                                                                                                   |
-| `GETFORWARDFEESIMPLE` | _`cells bits is_mc - price`_         | Calculates the additional forward cost in nanotons for a message containing additional `cells` and `bits`. This is the same as `GETFORWARDFEE`, but without the lump price calculated as `(bits * bit_price + cells * cell_price) / 2^16)`.                                                                                                                                                                                                                |
+| `GETFORWARDFEESIMPLE` | _`cells bits is_mc - price`_         | Calculates the additional forward cost in nanotons for a message containing additional `cells` and `bits`. This is the same as `GETFORWARDFEE`, but without the lump price calculated as `(bits * bit_price + cells * cell_price) / 2^16)`.                                                                                                                                                                        |
+| `PFXDICTSET`          | _`x k D n – D0 −1 or D 0`_           | Sets a value in a prefix code dictionary. Similar to `DICTSET` but enforces prefix code rules. Fails if prefix constraints are violated.                                                                                                               |
+| `PFXDICTREPLACE`      | _`x k D n – D0 −1 or D 0`_           | Replaces a value in a prefix code dictionary if the entry exists and prefix constraints are met.                                                                                                                |
+| `PFXDICTADD`          | _`x k D n – D0 −1 or D 0`_           | Adds a new entry to a prefix code dictionary. Fails if an entry with the same prefix already exists.                                                                                                           |
+| `PFXDICTDEL`          | _`k D n – D0 −1 or D 0`_             | Deletes an entry from a prefix code dictionary by key.                                                                                                                  |
+| `HASHEXT`             | _`cell i - hash`_                    | Returns the extended hash of a cell at the specified index. Useful for advanced cell structure analysis.                                                               |
 
-**Note:** `gas_used`, `cells`, `bits`, and `time_delta` are integers in the range `0..2^63-1`.
+:::note
+`gas_used`, `cells`, `bits`, and `time_delta` are integers in the range `0..2^63-1`.
+
+If a stack underflow occurs at the same time as another error for any instruction above, the VM will always return a stack underflow (`stk_und`) error. This makes error handling more consistent and predictable for developers.
+:::
 
 ### Cell-level operations
 These operations work with Merkle proofs, where cells can have a non-zero level and multiple hashes. Each operation consumes 26 gas.
@@ -100,39 +108,21 @@ The value of `i` is in the range `0..3`.
 
 These instructions improve cryptographic flexibility (e.g., supporting x-only pubkeys) and allow contracts to batch-modify continuations or access recent validator snapshots.
 
+### Cryptographic and continuation operations
 
 | Fift syntax                         | Stack                              | Description |
-|------------------------------------|-------------------------------------|-------------|
-| SECP256K1_XONLY_PUBKEY_TWEAK_ADD | key tweak - 0 or f x y -1         | Performs secp256k1_xonly_pubkey_tweak_add, returning a 65-byte public key in the format used by ECRECOVER. Gas cost: 1276. |
-| mask SETCONTCTRMANY              | cont - cont'                      | Performs c[i] PUSHCTR SWAP c[i] SETCONTCNR for each i set in the mask. Efficiently updates many continuations. |
-| SETCONTCTRMANYX                  | cont mask - cont'                 | Same as SETCONTCTRMANY, but reads mask from the stack. |
-| PREVMCBLOCKS_100                 | - list                            | Returns the new third item in c7[13] — list of 16 recent masterchain block IDs (every 100th). |
-
-### Error handling improvements
-If any of these instructions encounter multiple error conditions (such as a stack underflow **and** an argument/type error), the VM will always report stk_und (stack underflow) as the primary error.
-This prioritization makes error handling and debugging more predictable for smart contract developers.
-
-| Opcode                | Error context / what it does                                           |
-| --------------------- | ---------------------------------------------------------------------- |
-| PFXDICTADD          | Add a new entry to a prefix dictionary; errors if stack or dict is bad |
-| PFXDICTSET          | Set a value in a prefix dictionary; may error on stack/dict issues     |
-| PFXDICTREPLACE      | Replace a value in a prefix dictionary                                 |
-| PFXDICTDEL          | Delete an entry from a prefix dictionary                               |
-| GETGASFEE           | Calculate gas fees; requires correct stack arguments                   |
-| GETSTORAGEFEE       | Calculate storage fees; errors if arguments are missing/invalid        |
-| GETFORWARDFEE       | Calculate forwarding fees; stack underflow if not enough inputs        |
-| GETORIGINALFWDFEE   | Re-compute original forwarding fee                                     |
-| GETGASFEESIMPLE     | Simpler gas fee calculation                                            |
-| GETFORWARDFEESIMPLE | Simpler forwarding fee calculation                                     |
-| HASHEXT             | Extended hash operation; stack underflow or input errors possible      |
+|:------------------------------------|:-----------------------------------|:------------|
+| `SECP256K1_XONLY_PUBKEY_TWEAK_ADD`  | _`key tweak - 0 or f x y -1`_      | Performs `secp256k1_xonly_pubkey_tweak_add`. Takes two 256-bit unsigned integers (key and tweak). Returns a 65-byte public key as `uint8 f`, `uint256 x`, `uint256 y` (same as `ECRECOVER`). Gas cost: 1276. |
+| `mask SETCONTCTRMANY`               | _`cont - cont'`_                   | For each bit set in `mask` (range 0..255), applies `c[i] PUSHCTR SWAP c[i] SETCONTCNR` to the continuation. Efficiently updates multiple continuations at once. |
+| `SETCONTCTRMANYX`                   | _`cont mask - cont'`_              | Same as `SETCONTCTRMANY`, but reads `mask` from the stack. |
+| `PREVMCBLOCKS_100`                  | _`- list`_                         | Returns the third element in `c7[13]`: a list of 16 recent masterchain block IDs (where seqno is divisible by 100). |
 
 
 ### Execution and gas logic improvements
-
-* When the `RAWRESERVE` action uses flag 4, the original balance is calculated as balance - msg_balance_remaining. 
-* The gas cost for deep continuation jumps with depth greater than 8 is increased by one additional gas unit per extra level. Jumps to continuations with non-null control data execute without error.
+* When the `RAWRESERVE` action uses flag 4, the original balance is calculated as `balance - msg_balance_remaining`.
+* The gas cost for continuation jumps deeper than 8 levels is increased by one additional gas unit per extra level. Jumps to continuations with non-null control data now execute without error.
 * The `RESERVE` action in mode +2 supports reserving extra currencies in addition to TON. Executing contract code from a library cell does not consume additional gas.
-* Accounts with previously locked highload-v2 wallets gets higher gas limits to enable unlocking and improved operation.
+* Accounts with previously locked highload-v2 wallets are assigned higher gas limits to enable unlocking and improved operation.
 
 <Feedback />
 
