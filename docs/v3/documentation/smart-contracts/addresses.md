@@ -11,7 +11,7 @@ On TON, smart contracts are built using the [Actor model](/v3/concepts/dive-into
 Typically, actors process incoming messages, change their internal states, and generate outbound messages as a result. That's why every actor (i.e., smart contract) on TON Blockchain must have an address, so it can receive messages from other actors.
 
 :::info EVM EXPERIENCE
-On the Ethereum Virtual Machine (EVM), addresses are completely separate from smart contracts. Feel free to learn more about the differences by reading our article ["Six unique aspects of TON Blockchain that will surprise Solidity developers"](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers) by Tal Kol.
+On the Ethereum Virtual Machine (EVM), addresses are completely separate from smart contracts. Feel free to learn more about the differences by reading our article ["Six unique aspects of TON Blockchain that will surprise Solidity developers"](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers) - _Tal Kol_.
 :::
 
 ## Address of smart contract
@@ -62,7 +62,7 @@ Each address can be in one of possible states:
 - `active` - address has smart contract code, persistent data and balance. At this state it can perform some logic during the transaction and change its persistent data. An address enters this state when it was `uninit` and there was an incoming message with state_init param (note, that to be able to deploy this address, hash of `state_init` and `code` must be equal to address).
 - `frozen` - address cannot perform any operations, this state contains only two hashes of the previous state (code and state cells respectively). When an address's storage charge exceeds its balance, it goes into this state. To unfreeze it, you can send an internal message with `state_init` and `code` which store the hashes described earlier and some Toncoin. It can be difficult to recover it, so you should not allow this situation. There is a project to unfreeze the address, which you can find [here](https://unfreezer.ton.org/).
 
-## Raw and User-Friendly addresses
+## Raw and user-friendly addresses
 
 After providing a brief overview of how smart contract addresses on TON leverage workchains and account IDs (for the Masterchain and Basechain specifically), it is important to understand that these addresses are expressed in two main formats:
 

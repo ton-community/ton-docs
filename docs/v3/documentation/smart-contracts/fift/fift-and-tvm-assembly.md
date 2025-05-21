@@ -55,9 +55,9 @@ TVM assembly, in contrast, is like the trainee's final working program. While it
 
 ## Smart contract usage
 
-### [Fift] Including large BOCs in contracts
+### [Fift] including large BoCs in contracts
 
-When using `toncli`, you can include large BOCs by:
+When using `toncli`, you can include large BoCs by:
 
 1. Editing `project.yaml` to include `fift/blob.fif`:
 ```yaml
@@ -68,7 +68,7 @@ contract:
     - func/code.fc
 ```
 
-2. Adding the BOC to `fift/blob.boc`
+2. Adding the BoC to `fift/blob.boc`
 
 3. Including this code in `fift/blob.fif`:
 ```
@@ -84,7 +84,7 @@ cell load_blob() asm "LDBLOB";
 }
 ```
 
-### [TVM assembly] Converting integers to strings
+### [TVM assembly] converting integers to strings
 
 Fift primitives can't convert integers to strings at runtime because Fift operates at compile-time. For runtime conversion, use TVM assembly like this solution from TON Smart Challenge 3:
 
@@ -106,7 +106,7 @@ builder store_signed(builder msg, int v) inline_ref {
 }
 ```
 
-### [TVM assembly] Efficient modulo multiplication
+### [TVM assembly] efficient modulo multiplication
 
 Compare these implementations:
 

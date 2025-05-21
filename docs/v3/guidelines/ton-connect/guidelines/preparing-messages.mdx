@@ -439,7 +439,6 @@ await connector.sendTransaction({
 
 The `body` for jetton transfers is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while typically jettons and Toncoin uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
-
 :::info
 You can use `assets-sdk` library with the methods out of the box (even with `ton-connect`)
 :::
@@ -1222,7 +1221,7 @@ const royaltyPercent =
 
 Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
 
-To place NFT on the GetGems Sale Contract, we should prepare a special message body, `transferNftBody`, to transfer NFT to the special NFT Sale Contract.
+To place NFT on the GetGems Sale Contract, we should prepare a special message body, `transferNftBody`, to transfer NFT to the special NFT Sale contract.
 ```js
     const transferNftBody = beginCell()
         .storeUint(0x5fcc3d14, 32) // Opcode for NFT transfer
@@ -1315,7 +1314,7 @@ async function main() {
 
 </details>
 
-The prepared `transferNftBody` should be sent to the NFT Item Contract with at least `1.08` TON, which is expected for successful processing. Excess will be returned to a sender's wallet.
+The prepared `transferNftBody` should be sent to the NFT Item contract with at least `1.08` TON, which is expected for successful processing. Excess will be returned to a sender's wallet.
 
 <Tabs groupId="NFT Sale Fix Price">
 <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
@@ -1705,7 +1704,7 @@ transaction = {
 
 Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
 
-To place NFT on GetGems Sale Contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale Contract.
+To place NFT on GetGems Sale contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale contract.
 
 
 <details>
@@ -1928,7 +1927,7 @@ if err != nil {
 
 ### Jetton transfer
 
-Example of function for jetton transfer message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals(1 TON = 1 × 10<sup>9</sup>).
+Example of function for jetton transfer message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 ```go
 import (
@@ -1990,7 +1989,8 @@ if err != nil {
 
 ### Jetton burn
 
-Example of function for jetton burn message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals(1 TON = 1 × 10<sup>9</sup>).
+Example of function for jetton burn message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
+
 
 ```go
 import (
@@ -2108,7 +2108,7 @@ if err != nil {
 
 Here is an example of preparing a message and transaction for sale on the GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
 
-To place NFT on the GetGems Sale Contract, we should prepare a special message body, `transferNftBody` that will transfer NFT to the special NFT Sale Contract.
+To place NFT on the GetGems Sale contract, we should prepare a special message body, `transferNftBody` that will transfer NFT to the special NFT Sale contract.
 ```go
 transferNftBody := cell.BeginCell().
     MustStoreUInt(0x5fcc3d14, 32).        // opcode for NFT transfer

@@ -862,7 +862,7 @@ Example of a working bot [@AirDealerBot](https://t.me/AirDealerBot)
 ## References
 
 - Made for TON as part of [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)
-- By Lev ([Telegram @Revuza](https://t.me/revuza), [LevZed on GitHub](https://github.com/LevZed))
+- [Telegram @Revuza](https://t.me/revuza), [LevZed on GitHub](https://github.com/LevZed) - _Lev_
 
 <Feedback />
 

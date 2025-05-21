@@ -70,7 +70,7 @@ There is a [TVM exit code](/v3/documentation/tvm/tvm-exit-codes) for a transacti
 Also, TVM [compute phase may be skipped](/v3/documentation/tvm/tvm-overview#compute-phase-skipped) for reasons like lack of funds or state.
 
 :::info for toncenter api v3
-One should use tx.description.action to determine a successful transaction.success && tx.description.compute_ph.success:
+One should use `tx.description.action` to determine a successful `transaction.success  && tx.description.compute_ph.success`:
 :::
 
 ```json
@@ -98,7 +98,7 @@ The transaction may have one of three results:
 - Fail, [exit code](/v3/documentation/tvm/tvm-exit-codes), `aborted: true`
 
 :::info for toncenter api v3
-`aborted: true` is a toncenter field. Transaction has no such field.
+`aborted: true` is a TON Center field. Transaction has no such field.
 :::
 
 ## What is a logical time?

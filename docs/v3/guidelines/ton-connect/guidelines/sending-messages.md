@@ -81,9 +81,9 @@ The function will exit, and the output from the blockchain will be printed:
 }
 ```
 
-BOC is [Bag of Cells](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), the way data is stored in TON. Now, we can decode it.
+BoC is [bag of cells](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), the way data is stored in TON. Now, we can decode it.
 
-Decode this BOC in the tool of your choice, and you'll get the following tree of cells:
+Decode this BoC in the tool of your choice, and you'll get the following tree of cells:
 
 ```bash
 x{88016543D9EAA8BC0ED9A6D5CA2DD4FD7BE655D401195457095F30CD7D9641112B5A02501DD1A83C401673E97A8D7DD57FE38A29A7F41C27AB7CF0714FCC3231D134DE6C0B9B72CA6055DD2275AE3CB2B1C023AC30C500857F884F960724843CFF70094D4D18BB1F72F5600000024800181C_}
@@ -104,7 +104,7 @@ x{88016543D9EAA8BC0ED9A6D5CA2DD4FD7BE655D401195457095F30CD7D964111...
   ...
 ```
 
-Returning the BOC of the sent transaction is to track it.
+Returning the BoC of the sent transaction is to track it.
 
 ### Processing transactions initiated with TON Connect
 
@@ -139,7 +139,7 @@ Before we proceed, let's talk about the format of the messages we will send.
 * **stateInit** (string base64, optional): raw one-cell BoC encoded in Base64.
   * We will use it to deploy a smart contract
 
-After building a message, you can serialize it into BOC. 
+After building a message, you can serialize it into BoC. 
 
 ```js
 TonWeb.utils.bytesToBase64(await payloadCell.toBoc())
@@ -147,7 +147,7 @@ TonWeb.utils.bytesToBase64(await payloadCell.toBoc())
 
 ### Transfer with comment
 
-You can use [toncenter/tonweb](https://github.com/toncenter/tonweb) JS SDK or your favourite tool to serialize cells to BOC.
+You can use [toncenter/tonweb](https://github.com/toncenter/tonweb) JS SDK or your favourite tool to serialize cells to BoC.
 
 Text comments on transfer are encoded as opcode 0 (32 zero bits) + UTF-8 bytes of comment. Here's an example of how to convert it into a bag of cells.
 
@@ -218,9 +218,9 @@ Error: [TON_CONNECT_SDK_ERROR] The Wallet declined the request
 
 This error can be considered final (unlike connection cancellation) - if it has been raised, then the requested transaction will definitely not happen until the next request is sent.
 
-## See Also
+## See also
 
-* [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+* [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
 
 <Feedback />
 

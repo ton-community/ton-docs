@@ -55,12 +55,13 @@ Any object in TON, like the message, block, or whole blockchain state, serialize
 A TL-B scheme describes the serialization process: a formal description of how this object can be serialized into _builder_ or how to parse an object of a given type from the _Slice_.
 TL-B for cells is the same as TL or ProtoBuf for byte-streams.
 
-If you want more details about cell serialization and deserialization, read the [Cell & Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc) article.
+If you want more details about cell serialization and deserialization, read [Cell & bag of cells](/v3/documentation/data-formats/tlb/cell-boc) article.
+
 
 ## See also
 
 - [Blockchain of blockchains](docs/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/)
-- [TL-B Language](/v3/documentation/data-formats/tlb/tl-b-language)
+- [TL-B language](/v3/documentation/data-formats/tlb/tl-b-language)
 
 <Feedback />
 

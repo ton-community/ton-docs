@@ -163,7 +163,7 @@ export function ParseChunkDict(cell: Slice): Buffer {
 * _game_ - display used for games that appears as an NFT but also displays the number of tokens and takes into account the `amount_style` value.
 
 ## Parsing metadata
-To parse metadata, NFT data must first be obtained from the blockchain. To better understand this process, consider reading the [Retrieving NFT Data](/v3/guidelines/dapps/asset-processing/nft-processing/nfts#retrieving-nft-data) section of our TON asset processing documentation section.
+To parse metadata, NFT data must first be obtained from the blockchain. To better understand this process, consider reading the [retrieving NFT data](/v3/guidelines/dapps/asset-processing/nft-processing/nfts#retrieving-nft-data) section of our TON asset processing documentation section.
 
 After on-chain NFT data is retrieved, it must be parsed. To carry out this process, the NFT content type must be determined by reading the first byte that makes up the inner workings of the NFT.
 
@@ -209,7 +209,7 @@ On-chain NFT parser: [stackblitz/ton-onchain-nft-parser](https://stackblitz.com/
 ## References
 * [TON Enhancement Proposal 64 (TEP-64)](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md)
 
-## See Also
+## See also
 * [TON NFT processing](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
 * [TON jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
 * [Mint your first jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token)

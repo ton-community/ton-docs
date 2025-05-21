@@ -4,7 +4,7 @@ import Feedback from '@site/src/components/Feedback';
 
 ## Election and staking
 
-TON Blockchain uses the **Proof of stake (PoS)** consensus algorithm, meaning that, like all PoS networks, a set of network validators maintains the network's security and stability. In particular, validators propose candidates for new blocks (made up of transaction batches), while other validators _validate_ and approve them via digital signatures.
+TON Blockchain uses the **Proof-of-stake (PoS)** consensus algorithm, meaning that, like all PoS networks, a set of network validators maintains the network's security and stability. In particular, validators propose candidates for new blocks (made up of transaction batches), while other validators _validate_ and approve them via digital signatures.
 
 Validators are chosen using a special [Elector governance contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector). During each consensus round, validator candidates send an application for election along with their stake and desired _max_factor_ (a parameter that regulates the amount of maintenance the validator performs per consensus round).
 
@@ -162,10 +162,8 @@ If you don't want to do this please consider [using staking services](https://to
 
 ## See also
 
-* [Running a Validator](/v3/guidelines/nodes/running-nodes/validator-node)
-
-* [Transaction Fees](/v3/documentation/smart-contracts/transaction-fees/fees)
-
+* [Running a validator](/v3/guidelines/nodes/running-nodes/validator-node)
+* [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
 * [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
 
 <Feedback />

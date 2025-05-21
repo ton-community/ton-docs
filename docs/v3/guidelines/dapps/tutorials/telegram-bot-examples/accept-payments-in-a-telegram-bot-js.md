@@ -279,7 +279,7 @@ We have initialized the bot, but it is still empty. We need to add some features
   });
   bot.callbackQuery("check_transaction", checkTransaction);
 ```
-Reacting to the command/start, the handleStart function will be executed. If the user clicks on the button with callback_data equal to "buy", we will start our "conversation", which we registered just above. And when we click on the button with callback_data equal to "check_transaction", we will execute the checkTransaction function.
+Reacting to the command/start, the handleStart function will be executed. If the user clicks on the button with callback_data equal to "buy", we will start our "conversation", which we registered just above. And when we click on the button with callback_data equal to `"check_transaction"`, we will execute the `checkTransaction` function.
 
 Finally, launch the bot and output a log a success message.
 ```js
@@ -312,12 +312,12 @@ Welcome to the best Dumplings Shop in the world <tg-spoiler>and concurrently an 
 }
 ```
 First, import the InlineKeyboard from the grammy module. Then, create an inline keyboard offering to buy dumplings and linking to this tutorial. 
-The .row() method places the next button on a new line.
+The `.row()` method places the next button on a new line.
 We send a welcome message (formatted with HTML) along with the keyboard. You can customize this message as needed.
 
 #### Payment process
 
-We begin by importing necessary modules:
+We begin by importing the necessary modules:
 
 ```js
 import { InlineKeyboard } from "grammy";
@@ -327,7 +327,7 @@ import {
   verifyTransactionExistance,
 } from "../../services/ton.js";
 ```
-After that, we will create a startPaymentProcess handler, which we have already registered in the app.js. This function is executed when a specific button is pressed.
+After that, we will create a startPaymentProcess handler, which we have already registered in the `app.js`. This function is executed when a specific button is pressed.
 
 To remove the spinning watch icon in Telegram, we acknowledge the callback before proceeding.
 
@@ -440,9 +440,9 @@ If your bot isn't working correctly, compare your code with the code [from this 
 
 ## References
 
- - Made for TON as a part of [ton-footsteps/58](https://github.com/ton-society/ton-footsteps/issues/58).
- - By Coalus ([Telegram @coalus](https://t.me/coalus), [Coalus on GitHub](https://github.com/coalus)).
- - [Bot sources](https://github.com/coalus/DumplingShopBot).
+ - Made for TON as a part of [ton-footsteps/58](https://github.com/ton-society/ton-footsteps/issues/58)
+ - [Telegram @coalus](https://t.me/coalus), [Coalus on GitHub](https://github.com/coalus) - _Coalus_
+ - [Bot sources](https://github.com/coalus/DumplingShopBot)
 
 <Feedback />
 

@@ -5,7 +5,7 @@ import TabItem from '@theme/TabItem';
 
 # Single nominator pool
 
-The [single nominator](https://github.com/ton-blockchain/single-nominator) contract is a security-focused smart contract that lets validators securely stake Toncoins without needing other participants. Designed for validators with sufficient self-stake, it keeps signing keys separate from staked funds using a cold wallet for maximum security. The contract provides an alternative simplified implementation for the [nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) smart contract that supports a single nominator only. The benefit of this implementation is that it's more secure since the attack surface is considerably smaller. This is due to a massive reduction in the complexity of the nominator pool that has to support multiple third-party nominators.
+The [single nominator](https://github.com/ton-blockchain/single-nominator) contract is a security-focused smart contract that lets validators securely stake Toncoins without needing other participants. Designed for validators with sufficient self-stake, it keeps signing keys separate from staked funds using a cold wallet for maximum security. The contract provides an alternative simplified implementation for the [nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) smart contract that supports a single nominator only. The benefit of this implementation is that it's more secure since the attack surface is considerably smaller. This is due to a massive reduction in the complexity of the nominator pool that has to support multiple third-party nominators.
 
 ## The go-to solution for validators
 
@@ -71,7 +71,7 @@ The architecture is nearly identical to the [nominator pool](https://github.com/
 
 - The validator node requires a hot wallet to sign new blocks. This wallet is inherently insecure because its private key is connected to the Internet. Even if this key is compromised, the _Validator_ cannot extract the funds used for validation. Only _Owner_ can withdraw these funds.
 
-- Even if the _ Validator _ wallet is compromised, _ Owner _ can tell _ SingleNominator _ to change the validator address. This will prevent the attacker from interacting with _SingleNominator_ further. There is no race condition here; _Owner_ will always take precedence.
+- Even if the _Validator_ wallet is compromised, _Owner_ can tell _SingleNominator_ to change the validator address. This will prevent the attacker from interacting with _SingleNominator_ further. There is no race condition here; _Owner_ will always take precedence.
 
 - The _SingleNominator_ balance holds the principal staking funds only—its balance is not used for gas fees. Gas money for entering election cycles is held in the _Validator_ wallet. This prevents an attacker who compromised the validator from draining the principal via a gas spending attack.
 

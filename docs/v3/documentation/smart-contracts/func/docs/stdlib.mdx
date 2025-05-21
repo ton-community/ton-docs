@@ -309,6 +309,19 @@ cell config_param(int x) asm "CONFIGOPTPARAM";
 
 Returns the value of the global configuration parameter with integer index `i` as `cell` or `null` value.
 
+#### my_code
+
+```func
+cell my_code() asm "MYCODE";
+```
+
+Retrieves the smart contract's code from `c7`.
+
+:::warning
+This function is not included in the standard library, but is often sought by developers.
+You need to manually add initialization it to your contract system, with the `asm` word specified as shown in the snippet above.
+:::
+
 ### Hashes
 
 #### cell_hash

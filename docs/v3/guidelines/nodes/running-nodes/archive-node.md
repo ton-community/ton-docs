@@ -3,7 +3,7 @@ import Feedback from '@site/src/components/Feedback';
 # Archive node
 
 :::info
-Before this article, read about [Full Node](/v3/guidelines/nodes/running-nodes/full-node).
+Before this article, read about [Full node](/v3/guidelines/nodes/running-nodes/full-node).
 :::
 
 ## Overview
@@ -262,8 +262,8 @@ Contact technical support at [@ton_node_help](https://t.me/ton_node_help).
 
 ## See also
 
-- [TON Node Types](/v3/documentation/infra/nodes/node-types)
-- [Run a Full Node](/v3/guidelines/nodes/running-nodes/full-node)
+- [TON node types](/v3/documentation/infra/nodes/node-types)
+- [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
 
 <Feedback />
 

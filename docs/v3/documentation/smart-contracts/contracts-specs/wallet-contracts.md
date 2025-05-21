@@ -5,7 +5,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 # Wallet contracts
 
-You may have heard about different versions of wallets on the TON Blockchain. But what do these versions actually mean, and how do they differ?
+You may have heard about different versions of wallets on TON Blockchain. But what do these versions actually mean, and how do they differ?
 
 In this article, we’ll explore the various versions and modifications of TON wallets.
 
@@ -20,7 +20,7 @@ Before we start, there are some terms and concepts that you should be familiar w
 
 To break the tension, we should first understand that wallets are not a specific entity in the TON ecosystem. They are still just smart contracts consisting of code and data, and, in that sense, are equal to any other actor (i.e., smart contract) in TON.
 
-Like your own custom smart contract, or any other one, wallets can receive external and internal messages, send internal messages and logs, and provide "get" methods.
+Like your own custom smart contract, or any other one, wallets can receive external and internal messages, send internal messages and logs, and provide `get methods`.
 So the question is: what functionality do they provide and how it differs between versions?
 
 You can consider each wallet version as a smart-contract implementation providing a standard external interface, allowing different external clients to interact with the wallets in the same way. You can find these implementations in FunC and Fift languages in the main TON monorepo:
@@ -42,7 +42,7 @@ This version isn’t even used in regular apps because it has some major issues:
 - No easy way to retrieve the seqno and public key from the contract.
 - No `valid_until` check, so you can't be sure that the transaction won't be confirmed too late.
 
-The first issue was fixed in `V1R2` and `V1R3`. The `R` stands for "revision". Usually, revisions are just small updates that only add get methods; you can find all of those in the changes history of `new-wallet.fif`. Hereinafter, we will consider only the latest revisions.
+The first issue was fixed in `V1R2` and `V1R3`. The `R` stands for **revision**. Usually, revisions are just small updates that only add get methods; you can find all of those in the changes history of `new-wallet.fif`. Hereinafter, we will consider only the latest revisions.
 
 Nevertheless, because each subsequent version inherits the functionality of the previous one, we should still stick to it, as this will help us with later versions.
 
@@ -406,7 +406,7 @@ Wallet source code:
 
 As you see, there are many different versions of wallets in TON. But in most cases, you only need `V3R2` or `V4R2`. You can also use one of the special wallets if you want to have some additional functionality like a periodic unlocking of funds.
 
-## See Also
+## See also
 
 - [Working With Wallet Smart Contracts](/v3/guidelines/smart-contracts/howto/wallet)
 - [Sources of basic wallets](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
