@@ -16,7 +16,7 @@ The `RUNVM` instruction creates an isolated VM instance, allowing code execution
 Flags operate similarly to `RUNVMX` in Fift:
 
 - `+1`: sets `c3` to code.
-- `+2`: pushes an implicit `0` before executing the code.
+- `+2`: pushes an implicit `0` before executing the code. Note, it only works with +1 flag set
 - `+4`: takes persistent data `c4` from the stack and returns its final value.
 - `+8`: takes the gas limit `g_l` from the stack and returns the consumed gas `g_c`.
 - `+16`: takes `c7` (smart contract context) from the stack.
