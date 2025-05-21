@@ -1,0 +1,346 @@
+import Feedback from "@site/src/components/Feedback";
+import ThemedImage from "@theme/ThemedImage";
+import Button from '@site/src/components/button'
+
+# Чтение из сети
+
+## Введение
+
+Это руководство демонстрирует, как читать данные из блокчейна TON. Вы узнаете, как:
+
+- Получать информацию об аккаунте
+- Вызывать `get-методы`
+- Получать данные о транзакциях аккаунта
+
+В итоге вы поймёте, как взаимодействовать с [TON  API на основе HTTP](/ru/v3/guidelines/dapps/apis-sdks/ton-http-apis/). В этом руководстве используется [TON Center](https://toncenter.com/) — быстрый и надежный HTTP API для TON.
+
+## Настройка окружения
+
+Сначала посетите страницы установки и установите [Node.js и npm](https://nodejs.org/en/download/) для вашей ОС. Проверьте, что установка корректна, выполнив следующие команды:
+
+```bash
+node -v
+npm -v
+```
+
+Версии `node` и `npm` должны быть по меньшей мере `v20` и `v10` соответственно.
+
+## Настройка проекта
+
+Давайте настроим структуру вашего проекта:
+
+1. Создайте новый каталог для вашего проекта и перейдите в него.
+2. Инициализируйте проект Node.js.
+3. Установите необходимые зависимости.
+4. Инициализируйте конфигурацию TypeScript.
+
+Выполните эти команды в терминале:
+
+```bash
+mkdir reading-from-ton && cd reading-from-ton
+npm init -y
+npm install typescript ts-node @ton/ton @ton/core @ton/crypto
+npx tsc --init
+```
+
+Для запуска скрипта на TypeScript, сохранённого как `script.ts` в вашей текущей директории, можно выполнить такую команду:
+
+```bash
+npx ts-node script.ts
+```
+
+## Чтение информации об аккаунте
+
+Информация об аккаунте включает составляющие `balance`, `state`, `code` и `data`.
+
+- `balance`: Сумма TON на счету.
+- `state`: Состояние может быть одним из следующих:
+  - **Nonexist**: По адресу ещё нет никаких данных.
+  - **Uninit**: У адреса есть баланс, но нет кода смарт-контракта.
+  - **Active**: Адрес уже активен, у него есть и код, и баланс.
+  - **Frozen**: Адрес заблокирован, поскольку баланс оказался недостаточным для расходов на хранение данных.
+- `code`: Код контракта в «сыром формате».
+- `data`: Сериализованные данные контракта, хранящиеся в [_ячейке_](/ru/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage/).
+
+Состояние аккаунта может быть получено с помощью метода [`getContractState`](https://testnet.toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get/).
+
+#### Реализация
+
+Создайте новый файл `1-get-account-state.ts`:
+
+```typescript title="1-get-account-state.ts"
+import { Address, TonClient } from "@ton/ton";
+
+async function main() {
+  // Initializaing TON HTTP API Client
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  });
+
+  const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'); // Replace with any address
+
+  // Calling method on http api
+  const state = await tonClient.getContractState(accountAddress);
+
+
+  console.log('State: ', state.state);
+  console.log('Balance: ', state.balance);
+  console.log('Data: ', state.data?.toString('hex'));
+  console.log('Code: ', state.code?.toString('hex'));
+}
+
+main();
+```
+
+Запустите этот пример, используя следующую команду:
+
+```bash
+npx ts-node 1-get-account-state.ts
+```
+
+#### Ожидаемый результат
+
+```bash
+State:  active
+Balance:  3722511000883n
+Data:  b5ee9c7241010101002...fd1e976824402aa67b98
+Code:  b5ee9c7241021401000...c9ed54696225e5
+```
+
+## Вызов get-методов
+
+Get-методы — это специальные функции в смарт-контрактах, позволяющие наблюдать текущее состояние смарт-контракта. Их выполнение не требует оплаты комиссий и не может изменить данные смарт-контракта.
+
+Результат вызова get-метода через TON HTTP API приходит в _стековом_ формате, и его можно десериализировать один элемент за другим с помощью `readNumber()` или схожей функции.
+
+#### Реализация
+
+Создайте новый файл `2-call-get-method.ts`:
+
+```typescript title="2-call-get-method.ts"
+import { Address, TonClient, TupleBuilder } from "@ton/ton";
+
+async function main() {
+  // Initializaing TON HTTP API Client
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  });
+
+  // Building optional get method parameters list
+  const builder = new TupleBuilder();
+  builder.writeAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
+
+  const accountAddress = Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy')
+
+  // Calling http api to run get method on specific contract
+  const result = await tonClient.runMethod(
+    accountAddress, // address to call get method on
+    'get_wallet_address', // method name
+    builder.build(), // optional params list
+  );
+
+  // Deserializing get method result
+  const address = result.stack.readAddress();
+  console.log(address.toRawString());
+}
+
+main();
+```
+
+Запустите этот пример с помощью следующей команды:
+
+```bash
+npx ts-node 2-call-get-method.ts
+```
+
+#### Ожидаемый результат
+
+```bash
+0:25f2bf1ce8f83ed0c0fd73ea27aac77093cdcf900c750b071df7fb0288e019b2
+```
+
+Get-методы можно также вызвать с помощью Tonviewer:
+
+1. Перейдите в раздел [get-методов](https://testnet.tonviewer.com/kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy?section=method).
+2. Выберите `get_wallet_address`.
+3. Вставьте адрес из примера _0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-_ в поле Slice.
+4. Нажмите **Выполнить**.
+
+Вы получите тот же адрес, который вы получили из консоли.
+
+### Использование обёрток для простоты
+
+Обёртки — это классы, которые упрощают взаимодействие со смарт-контрактами, превращая сложные операции с блокчейном в простые вызовы функций. Вместо того, чтобы вручную сериализировать ячейки и транзакции, вы можете просто вызвать методы вроде `jettonMaster.getWalletAddress()`, который уже выполнил эти задачи для вас. Вот пример использования оболочки, функционально эквивалентной предыдущему фрагменту кода:
+
+```typescript
+import { Address, JettonMaster, TonClient } from "@ton/ton";
+
+async function main() {
+  // Initializaing TON HTTP API Client
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  });
+
+  // Initializing wrappers
+  const jettonMaster = tonClient.open(
+    JettonMaster.create(Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy')),
+  );
+
+  // Calling get method through wrapper
+  const address = jettonMaster.getWalletAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
+  console.log(address);
+}
+
+main();
+```
+
+## Получение транзакций аккаунта
+
+Взаимодействие с аккаунтом в блокчейне происходит с помощью [сообщений и транзакций](/v3/documentation/smart-contracts/message-management/messages-and-transactions/).
+
+### Что такое транзакция?
+
+Транзакция в TON состоит из следующего:
+
+- Входящее сообщение, которое изначально обращается к контракту (существуют специальные способы обратиться)
+- Действия контракта, вызванные входящим сообщением, такие как обновление хранимых  контрактом данных (опционально)
+- Исходящие сообщения, которые генерируются и отправляются другим акторам (опционально)
+
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
+  }}
+/>
+
+### Ключевые поля транзакций
+
+Транзакция, полученная из API, имеет следующую структуру:
+
+```json5
+{
+  "@type": "raw.transaction",
+  "address": {
+    "@type": "accountAddress",
+    "account_address": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx"
+  },
+  "utime": 1738588970,
+  ...
+  "in_msg": {
+    ...
+  },
+  "out_msgs": [...]
+}
+```
+
+- `address`: Адрес аккаунта, где осуществлялась транзакция.
+- `utime`: [UNIX-время](https://www.unixtimestamp.com/) транзакции.
+- `in_msg`: входящее [сообщение](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/), которое инициировало транзакцию.
+- `out_msgs`: исходящие сообщения, отправленные в ходе транзакции.
+
+### Что такое сообщение?
+
+Сообщение представляет собой пакет данных, отправляемых между акторами (пользователями, приложениями или смарт-контрактами). Обычно оно содержит информацию, указывающую получателю на то, какие действия выполнять: например, обновление сохранённых данных или отправка нового сообщения.
+
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/message-delivery/message_delivery_1.png?raw=true',
+      dark: '/img/docs/message-delivery/message_delivery_1_dark.png?raw=true',
+    }}
+  />
+</div>
+
+### Ключевые поля сообщений
+
+```json5
+{
+  "@type": "raw.message",
+  "hash": "mcHdqltDAB8ODQHqtedtYQIS6MQL7x4ut+nf9tXWGqg=",
+  "source": "EQAJTegD8OO-HksHfI4KVDqb7vW9Dlqi5C1FTcL1dECeosTf",
+  "destination": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx",
+  "value": "20000000",
+  ...
+  "msg_data": {
+    "@type": "msg.dataRaw",
+    "body": "te6cckEBAQEAAgAAAEysuc0=",
+    ...
+  },
+  ...
+}
+```
+
+- `source`: Адрес отправителя (аккаунт, который инициировал сообщение).
+- `destination`: Адрес получателя (аккаунт, который будет обрабатывать сообщение).
+- `value`: Количество TON (указывается в nanoTON), прикреплённое к сообщению.
+- `msg_data`: Содержит тело сообщения и состояние инициализации.
+
+#### Реализация
+
+Создайте новый файл `3-fetch-account-transaction.ts`:
+
+```typescript title="3-fetch-account-transaction.ts"
+import { Address, TonClient } from "@ton/ton";
+
+async function main() {
+  // Initializaing TON HTTP API Client
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  });
+
+  // Calling method on http api
+  // full api: https://testnet.toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get
+  const transactions = await tonClient.getTransactions(
+    Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'), // Address to fetch transactions
+    {
+      limit: 10,      //maximum ammount of recieved transactions
+      archival: true, //search in all history
+    },
+  );
+
+  const firstTx = transactions[0];
+  const { inMessage } = firstTx;
+
+  console.log('Timestamp:', firstTx.now);
+  if (inMessage?.info?.type === 'internal') {
+    console.log('Value:', inMessage.info.value.coins);
+    console.log('Sender:', inMessage.info.src);
+  }
+}
+
+main();
+```
+
+Выполните этот пример, используя следующую команду:
+
+```bash
+npx ts-node 3-fetch-account-transaction.ts
+```
+
+#### Ожидаемый результат
+
+```bash
+Timestamp: 1743516631
+Value: 100000000n
+Sender: EQBui16XCF61MSWauIDpVFbKAOJmjLHRxXvXeqiN9dYaIgjq
+```
+
+:::info
+Более сложный пример обхождения графа транзакций можно найти [здесь](https://docs.ton.org/ru/v3/guidelines/dapps/asset-processing/payments-processing/#retrieve-incomingoutgoing-transactions).
+:::
+
+## Следующий шаг
+
+Теперь, когда вы научились читать данные из блокчейна TON, пришло время изучить **писать данные в сеть**.
+
+Нажмите кнопку ниже, чтобы продолжить:
+
+<Button href="/v3/guidelines/quick-start/blockchain-interaction/writing-to-network" colorType={'primary'} sizeType={'sm'}>
+
+  Запись в сеть
+
+</Button>
+
+<Feedback />

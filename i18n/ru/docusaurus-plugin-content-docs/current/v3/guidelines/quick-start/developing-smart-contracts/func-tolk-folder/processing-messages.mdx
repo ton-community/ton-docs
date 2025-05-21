@@ -1,0 +1,434 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Feedback from "@site/src/components/Feedback";
+import Button from '@site/src/components/button'
+
+# Обработка сообщений
+
+> **Резюме:** В предыдущих шагах мы изменили взаимодействие нашего смарт-контракт с `хранилищем`, `get-методы`, и изучили базовый поток разработки смарт-контрактов.
+
+Теперь мы готовы перейти к основным функциям смарт-контрактов — **отправке и получению сообщений**. В TON сообщения используются не только для отправки валюты, но и в качестве механизма обмена данными между смарт-контрактами, что делает их ключевыми в разработке смарт-контрактов.
+
+:::tip
+Если вы застряли на некоторых примерах, вы можете найти исходный шаблон проекта со всеми изменениями, внесёнными в этом руководстве, [здесь](https://github.com/ton-community/onboarding-sandbox/tree/main/quick-start/smart-contracts/Example/contracts).
+:::
+
+---
+
+## Внутренние сообщения
+
+Прежде чем приступить к реализации, давайте кратко опишем основные пути и шаблоны, которые мы можем использовать для обработки внутренних сообщений.
+
+### Акторы и роли
+
+Поскольку TON реализует [модель акторов](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor/), довольно естественно думать об отношениях смарт-контрактов в контексте ролей, определяющих, кому можно обращаться к определённой функциональности смарт-контракта. Самые распространённые примеры ролей:
+
+- `кто угодно`: любой контракт без специально выделенной роли.
+- `владелец`: контракт, который обладает исключительным доступом к некоторым ключевым частям функциональности.
+
+Давайте рассмотрим сигнатуру функции `recv_internal` для понимания того, как мы можем использовать это:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```func
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, ломтик in_msg_body) нарушает
+```
+ - `my_balance` - смарт-контрактный баланс при начале транзакции.
+ - `msg_value` - средства, полученные с сообщением.
+ - `in_msg_full` - `ячейка`, включающая "заголовочные" поля сообщения.
+ - `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) содержит тело сообщения.
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice)
+```
+ - `myBalance` - баланс смарт-контракта при попрошайничестве транзакции.
+ - `msgValue` - средства, полученные с сообщением.
+ - `msgFull` - `cell` с полями "header" сообщения.
+ - `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) захват сообщения payload pf.
+</TabItem>
+</Tabs>
+
+:::info\
+Вы можете найти полное описание отправки сообщений в этом [разделе](/ru/v3/documentation/smart-contracts/message-management/sending-messages#%D0%BC%D0%B0%D0%BA%D0%B5%D1%82-%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D1%8F).\
+:::
+
+Из всего этого нам сейчас интересен исходный адрес сообщения, который мы можем извлечь из ячейки `msg_full`. Получив этот адрес и сравнив его с хранимым, мы при выполнении требуемого условия можем разрешить доступ к важнейшим частям функциональности нашего смарт-контракта. Обычный подход выглядит следующим образом:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```func
+;; Это не часть проекта, просто пример.
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    ; Разобрать адрес отправителя из in_msg_full
+    см = in_msg_full. egin_parse();
+    int flags = cs~load_uint(4);
+    slice sender_address = cs~load_msg_addr();
+
+    ;; check if message was send by owner
+    if (equal_slices_bits(sender_address, owner_address)) {
+      ;;owner operations
+      return
+    } else if (equal_slices_bits(sender_address, other_role_address)){
+      ;;other role operations
+      return
+    } else {
+      ;;anyone else operations
+      return
+    }
+
+;;no known operation were obtained for presented role
+;;0xffff is not standard exit code, but is standard practice among TON developers
+throw(0xffff);
+```
+
+}
+
+````
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+// This is NOT a part of the project, just an example.
+fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
+    // Parse the sender address from in_msg_full
+    var cs: slice = msgFull.beginParse();
+    val flags = cs.loadMessageFlags();
+    var sender_address = cs~load_msg_address();
+
+    if (isSliceBitsEqual(sender_address, owner_address)) {
+      // owner operations
+      return
+    } else if (isSliceBitsEqual(sender_address, other_role_address)){
+      // other role operations
+      return
+    } else {
+      // anyone else operations
+      return
+    }
+
+    throw 0xffff; // if the message contains an op that is not known to this contract, we throw
+}
+````
+
+</TabItem></Tabs>
+
+### Операции
+
+Обычный шаблон контрактов в TON — включать **32-битный код операции** в тела сообщений, который сообщает вашему контракту, какие действия необходимо выполнить:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```func
+;; Это не часть проекта, просто пример!
+const int op::increment = 1;
+const int op::decrement = 2;
+
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    ; Шаг 1: Проверим, является ли сообщение пустым
+    if (in_msg_body. lice_empty?()) {
+        return; ;; Ничего не делаем с пустыми сообщениями
+}
+
+;; Step 2: Extract the operation code
+int op = in_msg_body~load_uint(32);
+
+;; Step 3-7: Handle the requested operation
+if (op == op::increment) {
+    increment();   ;;call to specific operation handler
+    return;
+} else if (op == op::decrement) {
+    decrement();
+    ;; Just accept the money
+    return;
+}
+
+;; Unknown operation
+throw(0xffff);
+```
+
+}
+
+````
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk
+//This is NOT a part of the project, just an example!
+const op::increment : int = 1;
+const op::decrement : int = 2;
+
+fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
+    // Step 1: Check if the message is empty
+    if (slice.isEndOfSlice()) {
+        return; // Nothing to do with empty messages
+    }
+
+    // Step 2: Extract the operation code
+    var op = in_msg_body~load_uint(32);
+
+    // Step 3-7: Handle the requested operation
+    if (op == op::increment) {
+        increment();   //call to specific operation handler
+        return;
+    } else if (op == op::decrement) {
+        decrement();
+        // Just accept the money
+        return;
+    }
+
+    // Unknown operation
+    throw(0xffff);
+}
+````
+
+</TabItem></Tabs>
+
+Объединяя оба этих шаблона, вы можете добиться полного описания систем ваших смарт-контрактов, обеспечив безопасное взаимодействие между ними и раскрыв полностью потенциал модели акторов в TON.
+
+## Внешние сообщения
+
+`Внешние сообщения` — это единственный способ обращения к логике смарт-контракта извне блокчейна. Обычно нет необходимости реализовывать его в смарт-контрактах, потому что в большинстве случаев вы не хотите, чтобы внешние точки входа были доступны кому-либо, кроме вас. Если от внешних обращений вам требуется только это, то стандартным способом будет делегировать эту ответственность отдельному актору — [кошельку](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets/), для которого они в основном и были спроектированы.
+
+В разработке внешних endpoints есть несколько стандартных [подходов](/v3/documentation/smart-contracts/message-management/external-messages/) и [мер безопасности] (/v3/guidelines/smart-contracts/security/overview/), которые сейчас для вас могут быть излишне сложными. Поэтому в этом руководстве мы реализуем увеличение раннее добавленного числа `ctx_counter_ext`.
+
+:::danger
+Эта реализация **небезопасна** и может привести к потере средств на вашем контракте. Не разворачивайте такой контракт в `мейннете`, особенно с крупной суммой средств на балансе.
+:::
+
+## Реализация
+
+Давайте изменим наш смарт-контракт, чтобы он мог получать внешние сообщения, в соответствии со стандартными шагами, описанными в разделе [Обзор Blueprint SDK](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview/).
+
+### Шаг 1: редактирование кода смарт-контракта
+
+Добавьте функцию `recv_external` в смарт-контракт `HelloWorld`:
+
+<Tabs groupId="language">
+<TabItem value="FunC" label="FunC">
+```func title="/contracts/hello_world.fc"
+() recv_external(slice in_msg) impure {
+    accept_message();
+
+```
+var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
+
+var query_id = in_msg~load_uint(64);
+var addr = in_msg~load_msg_addr();
+var coins = in_msg~load_coins();
+var increase_by = in_msg~load_uint(32);
+
+var msg = begin_cell()
+    .store_uint(0x18, 6)
+    .store_slice(addr)
+    .store_coins(coins)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+    .store_uint(op::increase, 32)
+    .store_uint(query_id, 64)
+    .store_uint(increase_by, 32);
+send_raw_message(msg.end_cell(), 0);
+
+ctx_counter_ext += increase_by;
+save_data(ctx_id, ctx_counter, ctx_counter_ext);
+
+return ();
+```
+
+}
+
+````
+</TabItem>
+<TabItem value="Tolk" label="Tolk">
+```tolk title="/contracts/HelloWorld.tolk"
+fun acceptExternalMessage(): void
+    asm "ACCEPT";
+
+fun onExternalMessage(inMsg: slice) {
+    acceptExternalMessage();
+    var (ctxId, ctxCounter, ctxCounterExt) = loadData();
+
+    var queryId = inMsg.loadUint(64);
+    var addr = inMsg.loadAddress();
+    var coins = inMsg.loadCoins();
+    var increaseBy = inMsg.loadUint(32);
+
+    var msg = beginCell()
+        .storeUint(0x18, 6)
+        .storeSlice(addr)
+        .storeCoins(coins)
+        .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .storeUint(OP_INCREASE, 32)
+        .storeUint(queryId, 64)
+        .storeUint(increaseBy, 32);
+    sendRawMessage(msg.endCell(), 0);
+
+    ctxCounterExt += increaseBy;
+    saveData(ctxId, ctxCounter, ctxCounterExt);
+
+    return ();
+}
+````
+
+</TabItem></Tabs>
+
+Эта функция при получении внешнего сообщения увеличит нашу переменную `ctx_counter_ext` и отправит внутреннее сообщение на указанный адрес с операцией `increase`.
+
+Проверьте, что код смарт-контракта верен, запустив:
+
+```bash
+npx blueprint build
+```
+
+Ожидаемый вывод должен выглядеть следующим образом:
+
+```bash
+✅ Compiled successfully! Cell BOC result:
+
+{
+  "hash": "310e49288a12dbc3c0ff56113a3535184f76c9e931662ded159e4a25be1fa28b",
+  "hashBase64": "MQ5JKIoS28PA/1YROjU1GE92yekxZi3tFZ5KJb4foos=",
+  "hex": "b5ee9c7241010e0100d0000114ff00f4a413f4bcf2c80b01020120020d02014803080202ce0407020120050600651b088831c02456f8007434c0cc1caa42644c383c0040f4c7f4cfcc4060841fa1d93beea5f4c7cc28163c00b817c12103fcbc2000153b513434c7f4c7f4fff4600017402c8cb1fcb1fcbffc9ed548020120090a000dbe7657800b60940201580b0c000bb5473e002b70000db63ffe002606300072f2f800f00103d33ffa40fa00d31f30c8801801cb055003cf1601fa027001cb6a82107e8764ef01cb1f12cb3f5210cb1fc970fb0013a012f0020844ca0a"
+}
+
+✅ Wrote compilation artifact to build/HelloWorld.compiled.json
+```
+
+### Шаг 2: обновить обёртку
+
+Добавьте метод обёртки, который можно будет вызывать через наш класс обёртки для отправки внешних сообщений:
+
+```typescript title="/wrappers/HelloWorld.ts"
+async sendExternalIncrease(
+    provider: ContractProvider,
+    opts: {
+        increaseBy: number;
+        value: bigint;
+        addr: Address;
+        queryID?: number;
+    }
+) {
+    const message = beginCell()
+        .storeUint(opts.queryID ?? 0, 64)
+        .storeAddress(opts.addr)
+        .storeCoins(opts.value)
+        .storeUint(opts.increaseBy, 32)
+    .endCell()
+
+    return await provider.external(message);
+}
+```
+
+### Шаг 3: обновить тест
+
+Обновите тест, чтобы убедиться, что контракт `HelloWorld` получил внешнее сообщение и обновил свои счётчики:
+
+```typescript title="/tests/HelloWorld.spec.ts"
+//@version TypeScript 5.8.3
+import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
+import { Cell, toNano} from '@ton/core';
+import { HelloWorld } from '../wrappers/HelloWorld';
+import '@ton/test-utils';
+import { compile } from '@ton/blueprint';
+
+describe('HelloWorld', () => {
+    let code: Cell;
+
+    beforeAll(async () => {
+        code = await compile('HelloWorld');
+    });
+
+    let blockchain: Blockchain;
+    let deployer: SandboxContract<TreasuryContract>;
+    let helloWorld: SandboxContract<HelloWorld>;
+
+    beforeEach(async () => {
+        blockchain = await Blockchain.create();
+
+        helloWorld = blockchain.openContract(
+            HelloWorld.createFromConfig(
+                {
+                    id: 0,
+                    ctxCounter: 0,
+                    ctxCounterExt: 0n,
+                },
+                code
+            )
+        );
+
+        deployer = await blockchain.treasury('deployer');
+
+        const deployResult = await helloWorld.sendDeploy(deployer.getSender(), toNano('1.00'));
+
+        expect(deployResult.transactions).toHaveTransaction({
+            from: deployer.address,
+            to: helloWorld.address,
+            deploy: true,
+            success: true,
+        });
+    });
+
+    it('should receive external message and update counter', async () => {
+        const [__, counterExtBefore] = await helloWorld.getCounters()
+        const increase = 5;
+
+        const result = await helloWorld.sendExternalIncrease({
+            increaseBy: increase,
+            value: toNano(0.05),
+            addr: deployer.address, // Using deployer address
+            queryID: 0
+        });
+
+        expect(result.transactions).toHaveTransaction({
+            from: undefined, // External messages have no 'from' address
+            to: helloWorld.address,
+            success: true,
+        });
+
+        const [_, counterExt] = await helloWorld.getCounters()
+        expect(counterExtBefore + BigInt(increase)).toBe(counterExt);
+    });
+});
+```
+
+{/*Этот тест описывает стандартный поток транзакций любой `многоконтрактной` системы:
+
+1. Отправьте внешнее сообщение для обращения к логике смарт-контракта извне блокчейна.
+2. Инициируйте отправку одного или нескольких внутренних сообщений другим контрактам.  
+3. После получения внутреннего сообщения измените состояние контракта и повторите **шаг 2**, если требуется.
+
+Поскольку результирующая последовательность транзакций может быть сложной для понимания, полезной практикой будет создать `диаграмму последовательности`, описывающую вашу систему. Вот пример нашего случая:
+
+<div style={{marginBottom: '30px'}} align="center">
+  <img src="/img/tutorials/quick-start/multi-contract.png" alt="Multi-contract scheme"/>
+</div> */}
+
+Проверьте, что все примеры верны, запустив тестовый скрипт:
+
+```bash
+npx blueprint test
+```
+
+Ожидаемый вывод должен выглядеть примерно так:
+
+```bash
+ PASS  tests/HelloWorld.spec.ts
+  HelloWorld
+    ✓ should receive external message and update counter (251 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        1.841 s, estimated 2 s
+Ran all test suites.
+
+```
+
+## Следующий шаг
+
+Теперь, когда вы понимаете, как смарт-контракты отправляют и получают сообщения, вы можете **развернуть свой контракт** в блокчейне TON.
+
+<Button href="/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/deploying-to-network" colorType={'primary'} sizeType={'sm'}>
+
+  Развёртывание в сети
+
+</Button>
+
+<Feedback />
