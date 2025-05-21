@@ -13,6 +13,7 @@ This update is enabled with Config8 `version >= 6`.
 ## `c7`
 
 The `c7` tuple has been extended from 14 to 16 elements as follows:
+* **13**: Information about previous blocks. It includes a list of the 16 most recent masterchain block IDs whose seqno is divisible by 100 (e.g. 19000, 18900, ..., 17500).
 * **14**: a tuple containing various config parameters as cell slices. If a parameter is absent from the config, its value is null.
   * **0**: `StoragePrices` from `ConfigParam 18`. Not the entire dictionary but the specific `StoragePrices` entry corresponding to the current time.
   * **1**: `ConfigParam 19` - global ID.
@@ -94,6 +95,44 @@ These operations work with Merkle proofs, where cells can have a non-zero level 
 | `CDEPTHIX` | _`cell i - depth`_ | Returns the `i`-th depth of the cell.    |
 
 The value of `i` is in the range `0..3`.
+
+### Cryptography and continuation operations
+
+These instructions improve cryptographic flexibility (e.g., supporting x-only pubkeys) and allow contracts to batch-modify continuations or access recent validator snapshots.
+
+
+| Fift syntax                         | Stack                              | Description |
+|------------------------------------|-------------------------------------|-------------|
+| SECP256K1_XONLY_PUBKEY_TWEAK_ADD | key tweak - 0 or f x y -1         | Performs secp256k1_xonly_pubkey_tweak_add, returning a 65-byte public key in the format used by ECRECOVER. Gas cost: 1276. |
+| mask SETCONTCTRMANY              | cont - cont'                      | Performs c[i] PUSHCTR SWAP c[i] SETCONTCNR for each i set in the mask. Efficiently updates many continuations. |
+| SETCONTCTRMANYX                  | cont mask - cont'                 | Same as SETCONTCTRMANY, but reads mask from the stack. |
+| PREVMCBLOCKS_100                 | - list                            | Returns the new third item in c7[13] — list of 16 recent masterchain block IDs (every 100th). |
+
+### Error handling improvements
+If any of these instructions encounter multiple error conditions (such as a stack underflow **and** an argument/type error), the VM will always report stk_und (stack underflow) as the primary error.
+This prioritization makes error handling and debugging more predictable for smart contract developers.
+
+| Opcode                | Error context / what it does                                           |
+| --------------------- | ---------------------------------------------------------------------- |
+| PFXDICTADD          | Add a new entry to a prefix dictionary; errors if stack or dict is bad |
+| PFXDICTSET          | Set a value in a prefix dictionary; may error on stack/dict issues     |
+| PFXDICTREPLACE      | Replace a value in a prefix dictionary                                 |
+| PFXDICTDEL          | Delete an entry from a prefix dictionary                               |
+| GETGASFEE           | Calculate gas fees; requires correct stack arguments                   |
+| GETSTORAGEFEE       | Calculate storage fees; errors if arguments are missing/invalid        |
+| GETFORWARDFEE       | Calculate forwarding fees; stack underflow if not enough inputs        |
+| GETORIGINALFWDFEE   | Re-compute original forwarding fee                                     |
+| GETGASFEESIMPLE     | Simpler gas fee calculation                                            |
+| GETFORWARDFEESIMPLE | Simpler forwarding fee calculation                                     |
+| HASHEXT             | Extended hash operation; stack underflow or input errors possible      |
+
+
+### Execution and gas logic improvements
+
+* When the `RAWRESERVE` action uses flag 4, the original balance is calculated as balance - msg_balance_remaining. 
+* The gas cost for deep continuation jumps with depth greater than 8 is increased by one additional gas unit per extra level. Jumps to continuations with non-null control data execute without error.
+* The `RESERVE` action in mode +2 supports reserving extra currencies in addition to TON. Executing contract code from a library cell does not consume additional gas.
+* Accounts with previously locked highload-v2 wallets gets higher gas limits to enable unlocking and improved operation.
 
 <Feedback />
 
