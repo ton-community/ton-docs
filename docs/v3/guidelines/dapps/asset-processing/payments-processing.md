@@ -108,7 +108,7 @@ Full Address description on the [Smart contract addresses](/v3/documentation/sma
 
 ### Check contract's transactions
 To retrieve a smart contract's transactions, use the [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get). method. This method fetches up to 10 transactions starting from a specified `last_transaction_id` and earlier. To process all incoming transactions, follow these steps:
-1. Obtain the latest `last_transaction_id` using [getAddressInformation](https://toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get)
+1. Obtain the latest `last_transaction_id` using [getAddressInformation](https://toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get).
 2. Load 10 transactions using the `getTransactions` method.
 3. Process transactions where the source field in the incoming message is not empty and the destination field matches the account address.
 4. Retrieve the next 10 transactions and repeat steps 2 and 3 until all incoming transactions are processed.
@@ -179,7 +179,7 @@ main();
 ### Send payments
 
 :::tip
-Learn the basics of payment processing from the [TMA USDT Payments demo](https://github.com/ton-community/tma-usdt-payments-demo)
+Learn the basics of payment processing from the [TMA USDT Payments demo](https://github.com/ton-community/tma-usdt-payments-demo).
 :::
 
 1. The service must deploy a `wallet` and keep it funded to prevent contract destruction due to storage fees. Storage fees are typically less than 1 Toncoin per year.
@@ -211,7 +211,7 @@ To accept payments based on attached comments, the service should:
 
 To calculate the **incoming message value** that a message brings to a contract, we need to analyze the transaction. This happens when a message enters the contract. The transaction can be retrieved using [getTransactions](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L268). For an incoming wallet transaction, the correct data consists of one incoming message and zero outgoing messages. Otherwise, either an outgoing message is sent to the wallet, in which case the owner spends the Toncoin, or the wallet is not deployed and the incoming transaction is returned.
 
-In any case, in general, the amount a message brings to a contract can be calculated as the incoming message value minus the sum of the outgoing message values ​​minus the fee: `value_{in_msg} - SUM(value_{out_msg}) - fee`. Technically, the transaction view contains three different fields with `fee` in the name: `fee`, `storage_fee` and `other_fee`, i.e. the total fee, the portion of the fee related to storage costs, and the portion of the fee related to processing the transaction. Only the first one should be used.
+In any case, in general, the amount a message brings to a contract can be calculated as the incoming message value minus the sum of the outgoing message values minus the fee: `value_{in_msg} - SUM(value_{out_msg}) - fee`. Technically, the transaction view contains three different fields with `fee` in the name: `fee`, `storage_fee` and `other_fee`, i.e. the total fee, the portion of the fee related to storage costs, and the portion of the fee related to processing the transaction. Only the first one should be used.
 
 
 

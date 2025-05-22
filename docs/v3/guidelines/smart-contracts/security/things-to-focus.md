@@ -12,7 +12,7 @@ Func variables and functions may contain almost any legit character. I.e. `var++
 
 When writing and inspecting a Func code, Linter should be used.
 
-- [IDE plugins](/v3/documentation/smart-contracts/getting-started/ide-plugins/)
+- [IDE plugins](/v3/documentation/smart-contracts/getting-started/ide-plugins)
 
 ### 2. Check the throw values
 

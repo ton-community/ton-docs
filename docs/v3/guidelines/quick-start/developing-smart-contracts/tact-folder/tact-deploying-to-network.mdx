@@ -45,7 +45,7 @@ init(id: Int, owner: Address) {
 If we remove the `id` field from its initial storage, we can ensure that **only one** `HelloWorld` smart contract can exist for a particular owner.
 
 :::info Tokens
-This mechanism plays a crucial role in [Jetton Processing](/v3/guidelines/dapps/asset-processing/jettons/). Each non-native (jetton) token requires its own `Jetton Wallet` for a particular owner and, therefore, provides a calculable address for it, creating a **star scheme** with the basic wallet in the center.
+This mechanism plays a crucial role in [Jetton processing](/v3/guidelines/dapps/asset-processing/jettons). Each non-native (jetton) token requires its own `Jetton Wallet` for a particular owner and, therefore, provides a calculable address for it, creating a **star scheme** with the basic wallet in the center.
 :::
 
 ## Implementation
@@ -104,7 +104,7 @@ After that, you will see an interactive menu allowing you to choose a network:
 ```
 
 :::danger
-Before deployment to the `Mainnet`, ensure that your smart contracts correspond to [Security Measures](/v3/guidelines/smart-contracts/security/overview/). As we said before, the `HelloWorld` smart contract **doesn't**.
+Before deployment to the `Mainnet`, ensure that your smart contracts correspond to [Security measures](/v3/guidelines/smart-contracts/security/overview). As we said before, the `HelloWorld` smart contract **doesn't**.
 :::
 
 ### Step 4: choose wallet app
@@ -136,10 +136,10 @@ Contract deployed at address EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 You can view it at https://testnet.tonscan.org/address/EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 ```
 
-**Congratulations!** Your custom `smart contract` is ready to execute `get methods` the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs/) section and execute `transactions` the same as in the [Blockchain interaction](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network) section — consider reading it to understand how to interact with `smart contracts` off-chain if you haven't already.
+**Congratulations!** Your custom `smart contract` is ready to execute `get methods` the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs) section and execute `transactions` the same as in the [Blockchain interaction](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network) section — consider reading it to understand how to interact with `smart contracts` off-chain if you haven't already.
 
 :::tip
-Using `Blueprint` and wallet apps is not the only option. You can create a message with [state_init](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout/) by yourself. Moreover, you can do it even through a smart contract's [internal message](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout/).
+Using `Blueprint` and wallet apps is not the only option. You can create a message with [state_init](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) by yourself. Moreover, you can do it even through a smart contract's [internal message](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
 :::
 
 <Feedback />

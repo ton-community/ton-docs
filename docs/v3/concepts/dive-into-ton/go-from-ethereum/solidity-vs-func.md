@@ -30,7 +30,7 @@ Solidity includes the following basic data types:
 - **Byte arrays** — declared with the keyword **bytes**, is a fixed-size array used to store a predefined number of bytes up to 32, usually declared along with the keyword.
 - **Literals** — Immutable values such as addresses, rationals and integers, strings, Unicode, and hexadecimal can be stored in a variable.
 - **Enums**
-- **Arrays** fixed or dynamic)
+- **Arrays** fixed or dynamic
 - **Structs**
 - **Mappings**
 

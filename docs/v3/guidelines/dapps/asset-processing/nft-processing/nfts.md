@@ -186,7 +186,7 @@ Now that we’ve covered the basics of sending and receiving NFTs, let’s explo
 
 ### Sending NFTs
 
-In this example, the NFT transfer message is found on [line 67](https://www.google.com/url?q=https://github.com/ton-blockchain/token-contract/blob/1ad314a98d20b41241d5329e1786fc894ad811de/nft/nft-sale.fc%23L67&sa=D&source=docs&ust=1685436161341866&usg=AOvVaw1yuoIzcbEuvqMS4xQMqfXE):
+In this example, the NFT transfer message is found on [line 67](https://github.com/ton-blockchain/token-contract/blob/1ad314a98d20b41241d5329e1786fc894ad811de/nft/nft-sale.fc#L67):
 
 ```
 var nft_msg = begin_cell()

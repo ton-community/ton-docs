@@ -21,7 +21,7 @@ Before we proceed to implementation, let's briefly describe the main ways and pa
 
 ### Actors and roles
 
-Since TON implements the [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor/) model, it's natural to think about smart contract relations in terms of `roles`, determining who can access smart contract functionality or not. The most common examples of roles are:
+Since TON implements the [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor) model, it's natural to think about smart contract relations in terms of `roles`, determining who can access smart contract functionality or not. The most common examples of roles are:
 
 - `anyone`: any contract that doesn't have a distinct role.
 - `owner`: a contract that has exclusive access to some crucial parts of the functionality.
@@ -50,7 +50,7 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 </Tabs>
 
 :::info  
-You can find a comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout/).  
+You can find a comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
 :::
 
 What we are specifically interested in is the source address of the message, which we can extract from the `msg_full` cell. By obtaining that address and comparing it to a stored one — we can conditionally allow access to crucial parts of our smart contract functionality. A common approach looks like this:
@@ -181,9 +181,9 @@ By combining both of these patterns, you can achieve a comprehensive description
 
 ## External messages
 
-`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because, in most cases, you don't want external entry points to be accessible to anyone except you. If this is all the functionality that you want from the external section, the standard way is to delegate this responsibility to a separate actor - [wallet](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets/), which is practically the main reason they were designed for.
+`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because, in most cases, you don't want external entry points to be accessible to anyone except you. If this is all the functionality that you want from the external section, the standard way is to delegate this responsibility to a separate actor - [wallet](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets), which is practically the main reason they were designed for.
 
-Developing external endpoints includes several standard [approaches](/v3/documentation/smart-contracts/message-management/external-messages/) and [security measures](/v3/guidelines/smart-contracts/security/overview/) that might be overwhelming at this point. Therefore, in this guide, we will implement incrementing the previously added `ctx_counter_ext` number.
+Developing external endpoints includes several standard [approaches](/v3/documentation/smart-contracts/message-management/external-messages) and [security measures](/v3/guidelines/smart-contracts/security/overview) that might be overwhelming at this point. Therefore, in this guide, we will implement incrementing the previously added `ctx_counter_ext` number.
 
 :::danger
 This implementation is **unsafe** and may lead to losing your contract funds. Don't deploy it to `Mainnet`, especially with a high smart contract balance.
@@ -191,7 +191,7 @@ This implementation is **unsafe** and may lead to losing your contract funds. Do
 
 ## Implementation
 
-Let's modify our smart contract to receive external messages following the standard steps described in the previous [Blueprint overview](/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/blueprint-sdk-overview/) section.
+Let's modify our smart contract to receive external messages following the standard steps described in the previous [Blueprint overview](/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/blueprint-sdk-overview) section.
 
 ### Step 1: edit smart contract code
 

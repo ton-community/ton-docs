@@ -19,10 +19,10 @@ Multi-blockchain projects, such as TON, are much more demanding. For example, on
 ## TON network protocols
 
 * [TON Connect](/v3/guidelines/ton-connect/overview/)
-* [ADNL Protocol](/v3/documentation/network/protocols/adnl/overview/)
-* [Overlay Subnetworks](/v3/documentation/network/protocols/overlay/)
-* [RLDP Protocol](/v3/documentation/network/protocols/rldp/)
-* [TON DHT Service](/v3/documentation/network/protocols/dht/ton-dht/)
+* [ADNL protocol](/v3/documentation/network/protocols/adnl/overview/)
+* [Overlay subnetworks](/v3/documentation/network/protocols/overlay/)
+* [RLDP protocol](/v3/documentation/network/protocols/rldp/)
+* [TON DHT service](/v3/documentation/network/protocols/dht/ton-dht/)
 
 ## See also
 - [TON security audits](/v3/concepts/dive-into-ton/ton-blockchain/security-measures/)
