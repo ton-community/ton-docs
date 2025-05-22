@@ -325,6 +325,8 @@ module.exports = [
         items: [
           'v3/documentation/tvm/changelog/tvm-upgrade-2024-04',
           'v3/documentation/tvm/changelog/tvm-upgrade-2023-07',
+          'v3/documentation/tvm/changelog/tvm-upgrade-2025-02',
+
         ],
       },
     ]

@@ -7,14 +7,14 @@ import Feedback from '@site/src/components/Feedback';
 This upgrade is available on the Mainnet.
 :::
 
-## c7 Tuple Extension
+## c7 tuple extension
 
 The `c7` tuple parameter number **13** (previous blocks info tuple) now has a third element, containing IDs of the last 16 masterchain blocks with seqno divisible by 100.
 
 Example: if the last masterchain block seqno is `19071`, the list contains block IDs with seqnos `19000, 18900, ..., 17500`.
 
 
-## New TVM Instructions - Cryptographic and Continuation Operations
+## New TVM instructions - cryptographic and continuation operations
 
 | Fift syntax                        | Stack                         | Description                                                                                                                                                                                                           |
 | :--------------------------------- | :---------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -23,7 +23,7 @@ Example: if the last masterchain block seqno is `19071`, the list contains block
 | `SETCONTCTRMANYX`                  | *`cont mask - cont'`*         | Same as `SETCONTCTRMANY`, but reads `mask` from the stack.                                                                                                                                                            |
 | `PREVMCBLOCKS_100`                 | *`- list`*                    | Returns the new third element in `c7[13]`: a list of 16 recent masterchain block IDs (where seqno is divisible by 100).                                                                                               |
 
-## Execution and Gas Logic Improvements
+## Execution and gas logic improvements
 
 * When the `RAWRESERVE` action uses flag 4, the original balance is calculated as `balance - msg_balance_remaining`.
 * The gas cost for continuation jumps deeper than 8 levels is increased by one additional gas unit per extra level.
@@ -32,7 +32,7 @@ Example: if the last masterchain block seqno is `19071`, the list contains block
 * Executing contract code from a library cell does not consume additional gas.
 * Accounts with previously locked highload-v2 wallets are assigned higher gas limits to enable unlocking and improved operation.
 
-## Error Handling Improvements
+## Error handling improvements
 
 If these instructions encounter multiple error conditions, the TVM prioritizes `stk_und` (stack underflow) over other errors.
 
@@ -49,13 +49,13 @@ If these instructions encounter multiple error conditions, the TVM prioritizes `
 | `PFXDICTREPLACE`      | *`x k D n – D0 −1 or D 0`*           | Replaces a value in a prefix code dictionary if constraints are satisfied.                                                                                                                                                                                                                                            |
 | `PFXDICTADD`          | *`x k D n – D0 −1 or D 0`*           | Adds an entry to a prefix code dictionary. Fails if entry already exists.                                                                                                                                                                                                                                             |
 | `PFXDICTDEL`          | *`k D n – D0 −1 or D 0`*             | Deletes an entry from a prefix code dictionary.                                                                                                                                                                                                                                                                     
-## Emulator and Validator Improvements
+## Emulator and validator improvements
 
 Validator nodes now perform more reliable IP discovery by retrying DHT queries, making it easier to locate updated peers during upgrades or restarts. The validator console also displays dashed names and shard formats in a more readable format, helping operators better monitor network activity.
 
 In the emulator, handling of library cells and extra currency operations has been improved to provide more accurate behavior during local testing. Support for extra currencies has been refined across both `rungetmethod` and reserve modes, ensuring compatibility for contracts that rely on multi-currency interactions.
 
-## TL-B Schema Fixes
+## TL-B schema fixes
 
 * Corrected CRC computations ensuring accurate validation of TL-B schema data.
 * Fixed incorrect tags in Merkle proofs, improving proof reliability.
