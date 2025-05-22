@@ -4,7 +4,7 @@ import Feedback from '@site/src/components/Feedback';
 
 ## How to assign a TON domain to a TON Storage bag 
 
-1. [Upload your bag of files]((/v3/guidelines/web3/ton-storage/storage-daemon#creating-a-bag-of-files))to the network and copy the bag ID. 
+1. [Upload your bag of files](/v3/guidelines/web3/ton-storage/storage-daemon#creating-a-bag-of-files) to the network and copy the bag ID. 
 2. Open Google Chrome on your computer. 
 3. Install a TON extension:
    - [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd)

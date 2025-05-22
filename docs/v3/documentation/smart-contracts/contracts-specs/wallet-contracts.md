@@ -62,7 +62,7 @@ Nevertheless, because each subsequent version inherits the functionality of the 
 As you can see, the main functionality of the wallet is to provide a safe way to communicate with the TON blockchain from the outside world. The `seqno` mechanism protects against replay attacks, and the `Ed25519 signature` provides authorized access to wallet functionality. We will not dwell in detail on each of these mechanisms, as they are described in detail in the [external message](/v3/documentation/smart-contracts/message-management/external-messages) documentation page and are quite common among smart contracts receiving external messages. The payload data consists of up to 4 references to cells and the corresponding number of modes, which will be directly transferred to the [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
 
 :::caution
-Note that the wallet doesn't provide any validation for internal messages you send through it. It is the programmer's (i.e., the external client’s) responsibility to serialize the data according to the [internal message layout](http://localhost:3000/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
+Note that the wallet doesn't provide any validation for internal messages you send through it. It is the programmer's (i.e., the external client’s) responsibility to serialize the data according to the [internal message layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
 :::
 
 #### Exit codes
@@ -74,7 +74,7 @@ Note that the wallet doesn't provide any validation for internal messages you se
 | 0x0       | Standard successful execution exit code.       |
 
 :::info
-Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standart exit codes](/v3/documentation/tvm/tvm-exit-codes) (`0x0` - is one of them), so you can get one of them too, if you run out of [gas](https://docs.ton.org/develop/smart-contracts/fees), for example, you will get `0xD` code.
+Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standart exit codes](/v3/documentation/tvm/tvm-exit-codes) (`0x0` - is one of them), so you can get one of them too, if you run out of [gas](/v3/documentation/smart-contracts/transaction-fees/fees), for example, you will get `0xD` code.
 :::
 
 #### Get methods
@@ -111,13 +111,13 @@ Wallet source code:
 
 Essentially, `subwallet_id` is just a number added to the contract state when it’s deployed. Since the contract address in TON is a hash of its state and code, the wallet address will change with a different `subwallet_id`. This version is the most widely used right now. It covers most use cases and remains clean, simple, and mostly the same as previous versions. All get methods remain the same.
 
-#### Persistent Memory Layout
+#### Persistent memory layout
 
 - <b>seqno</b>: 32-bit sequence number.
 - <b>subwallet</b>: 32-bit subwallet ID.
 - <b>public-key</b>: 256-bit public key.
 
-#### External Message Layout
+#### External message layout
 
 1. Data:
    - <b>signature</b>: 512-bit ed25519 signature.
@@ -127,7 +127,7 @@ Essentially, `subwallet_id` is just a number added to the contract state when it
    - <b>(0-4)mode</b>: Up to four 8-bit integers defining the sending mode for each message.
 2. Up to 4 references to cells containing messages.
 
-#### Exit Codes
+#### Exit codes
 
 | Exit Code | Description                                                             |
 | --------- | ----------------------------------------------------------------------- |
@@ -312,7 +312,7 @@ actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other
 We can consider `InnerRequest` as two lists of actions: the first, `OutList`, is an optional chain of cell references, each containing a send message request led by the message mode. The second, `ActionList,` is led by a one-bit flag, `has_other_actions`, which marks the presence of extended actions, starting from the first cell and continuing as a chain of cell references. We are already familiar with the first two extended actions, `action_add_ext` and `action_delete_ext`, followed by the internal address that we want to add or delete from the extensions dictionary. The third, `action_set_signature_auth_allowed`, restricts or allows authentication through the public key, leaving the only way to interact with the wallet through extensions. This functionality might be extremely important in the case of a lost or compromised private key.
 
 :::info
-Note that the maximum number of actions is 255; this is a consequence of the realization through the [c5](/v3/documentation/tvm/tvm-overview#result-of-tvm-execution) TVM register. Technically, you can make a request with empty `OutAction` and `ExtendedAction`, but in that case, it will be similar to just receiving funds.
+Note that the maximum number of actions is 255; this is a consequence of the realization through the [c5](/v3/documentation/tvm/tvm-overview#results-of-tvm-execution) TVM register. Technically, you can make a request with empty `OutAction` and `ExtendedAction`, but in that case, it will be similar to just receiving funds.
 :::
 
 #### Exit Codes
@@ -408,7 +408,7 @@ As you see, there are many different versions of wallets in TON. But in most cas
 
 ## See also
 
-- [Working With Wallet Smart Contracts](/v3/guidelines/smart-contracts/howto/wallet)
+- [Working with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet)
 - [Sources of basic wallets](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
 - [More technical description of versions](https://github.com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources.md)
 - [Wallet V4 sources and detailed description](https://github.com/ton-blockchain/wallet-contract)

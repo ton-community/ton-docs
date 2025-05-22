@@ -201,7 +201,7 @@ console.log(await connector.sendTransaction({
 ```
 
 :::info
-Get more examples on the [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages) page for Transfer NFT and Jettons.
+Get more examples on the [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages) page for Transfer NFT and Jettons.
 :::
 
 After confirmation, we may see our transaction complete at [tonscan.org](https://tonscan.org/tx/pCA8LzWlCRTBc33E2y-MYC7rhUiXkhODIobrZVVGORg=).

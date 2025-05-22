@@ -26,7 +26,7 @@ Therefore, any blockchain payment may come either:
 
 #### Fees
 
-Actual transaction fees will vary depending on the blockchain configuration, the smart contract code, and other factors. When a message is received, storage and gas fees will consume part of the contract `balance` if the message `value` [is above a certain amount](/v3/documentation/tvm/tvm-overview#compute-phase-skipped).
+Actual transaction fees will vary depending on the blockchain configuration, the smart contract code, and other factors. When a message is received, storage and gas fees will consume part of the contract `balance` if the message `value` [is above a certain amount](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped).
 
 According to the [transaction flow](/v3/documentation/tvm/tvm-overview#transactions-and-phases), each transaction consists of five distinct phases:
 
@@ -160,7 +160,7 @@ State after the transaction with error: Account A has 1 - ([total_fee](/v3/docum
 :::info tip
 If no errors occur, the result is the same as [mode = 0](#mode0).
 
-The key difference is that `flag 16` creates bounces for [action phase errors](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes). In contrast, the message's [built‐in bounce flag](https://docs.ton.org/v3/guidelines/smart-contracts/howto/wallet#internal-message-creation) handles protocol‐level failures like:
+The key difference is that `flag 16` creates bounces for [action phase errors](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes). In contrast, the message's [built‐in bounce flag](/v3/guidelines/smart-contracts/howto/wallet#internal-message-creation) handles protocol‐level failures like:
 
 - The destination contract does not exist.
 - The destination contract throws an unhandled exception.

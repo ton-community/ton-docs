@@ -290,9 +290,9 @@ All fees are nominated in nanotons or nanotons multiplied by 2^16 to [maintain a
 - out_fwd_fees = [p24](https://tonviewer.com/config#24), [p25](https://tonviewer.com/config#25)
 
 :::info
-[A direct link to the mainnet live config file](https://tonviewer.com/config)
+[A direct link to the mainnet live config file](https://tonviewer.com/config).
 
-For educational purposes [example of the old one](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05)
+For educational purposes [example of the old one](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05).
 :::
 
 ## References

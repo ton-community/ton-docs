@@ -505,7 +505,7 @@ Let's analyze our remaining bits according to our data:
 
 Read first 4 bits - `1000`, this is 8. 8*8=64, read next 64 bits = `0000011101011111010010001110011101101110100111110110000001100000`, removing extra zero bits, we get `11101011111010010001110011101101110100111110110000001100000`, that is equal to `531223439883591776`, and, translating from nano to TON, we get `531223439.883591776`.
 
-We will stop here, since we have already analyzed all the main cases, the rest can be obtained in a similar way with what we have analyzed. Also, additional information on parsing TL-B can be found in [official documentation](/v3/documentation/data-formats/tlb/tl-b-language)
+We will stop here, since we have already analyzed all the main cases, the rest can be obtained in a similar way with what we have analyzed. Also, additional information on parsing TL-B can be found in [official documentation](/v3/documentation/data-formats/tlb/tl-b-language).
 
 ### Other methods
 
@@ -534,7 +534,7 @@ As an example, for keys of type ed25519 that are used for handshake, the key ID 
 
 The handshake packet is sent in a semi-open form, only 160 bytes are encrypted, containing information about permanent ciphers.
 
-To encrypt them, we need an AES-CTR cipher, to get it we need a SHA256 hash of 160 bytes and [ECDH shared key](#getting-a-shared-key-using-ecdh)
+To encrypt them, we need an AES-CTR cipher, to get it we need a SHA256 hash of 160 bytes and [ECDH shared key](#getting-a-shared-key-using-ecdh).
 
 The cipher is built like this:
 * key = (0 - 15 bytes of public key) + (16 - 31 bytes of hash)

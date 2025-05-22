@@ -33,7 +33,7 @@ A transaction in TON consists of the following:
 - Contract actions caused by the incoming message, such as an update to the contract's storage (optional)
 - Outgoing messages generated and sent to other actors (optional)
 
-> Technically, a contract can be triggered through special functions such as [Tick-Tock](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock). Still, this function is more used for internal TON Blockchain core contracts.
+> Technically, a contract can be triggered through special functions such as [Tick-tock](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock). Still, this function is more used for internal TON Blockchain core contracts.
 
 > Not every transaction results in outgoing messages or updates to the contract's storage - this depends on the actions defined by the contract's code.# Messages and transactions
 
@@ -67,7 +67,7 @@ See [transaction layout](/v3/documentation/data-formats/tlb/transaction-layout) 
 ### Transaction outcome
 
 There is a [TVM exit code](/v3/documentation/tvm/tvm-exit-codes) for a transaction that had a compute phase. If it is not 0 or 1, then there was an error.
-Also, TVM [compute phase may be skipped](/v3/documentation/tvm/tvm-overview#compute-phase-skipped) for reasons like lack of funds or state.
+Also, TVM [compute phase may be skipped](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped) for reasons like lack of funds or state.
 
 :::info for toncenter api v3
 One should use `tx.description.action` to determine a successful `transaction.success  && tx.description.compute_ph.success`:
