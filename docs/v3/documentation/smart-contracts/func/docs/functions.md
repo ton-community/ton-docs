@@ -301,8 +301,45 @@ When a function is marked with the `inline_ref` specifier, its code is stored in
 
 #### method_id
 
-In a TVM program, every function has an internal integer ID that determines how it can be called. By default, ordinary functions are assigned sequential numbers starting from `1`, while contract get-methods use `crc16` hashes of their names.
-The `method_id(<some_number>)` specifier allows you to set a function’s ID to a specific value manually. If no ID is specified, the default is calculated as `(crc16(<function_name>) & 0xffff) | 0x10000`. If a function has the `method_id` specifier, it can be invoked by its name as a get-method in lite client or TON explorer.
+In a TVM program, every function has an internal integer ID that determines how it can be called. 
+By default, ordinary functions are assigned sequential numbers starting from `1`, while contract get-methods use `crc16` hashes of their names.
+The `method_id(<some_number>)` specifier allows you to set a function's ID to a specific value manually. 
+If no ID is specified, the default is calculated as `(crc16(<function_name>) & 0xffff) | 0x10000`. 
+If a function has the `method_id` specifier, it can be invoked by its name as a get-method in lite client or TON explorer.
+
+:::info
+There is a catch if you try to define specific ID manually:
+- It should not exceed `0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff`
+- Due to a lazy check in types it can accept up to `0x6ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff` and succesfully compile
+- In TVM it is still a 257-bit unsigned variable, so it should be defined in range
+:::
+
+<details>
+<summary><b>AnyIntView&lt;Tr&gt;::parse_hex_any</b></summary>
+
+This function (`crypto/common/bigint.hpp`) is responsible for parsing the hexadecimal string.
+
+It first performs a basic check on the length of the hex string:
+```cpp
+if ((j - i - (p > 0)) * 4 > (max_size() - 1) * word_shift + word_bits - 2) {
+  return 0; // Invalid if too long
+}
+```
+
+For `BigInt<257>`, `Tr` is `BigIntInfo`, `word_bits` is 64, `word_shift` is 62. 
+
+The `max_size()` for `BigInt<257>` is `257 / 62 + 1 = 4 + 1 = 5` "words".
+
+Let's plug in the values:
+`(5 - 1) * 62 + 64 - 2 = 4 * 62 + 62 = 248 + 62 = 310` bits.
+
+A 65-character hex string represents \( 65 times 4 = 260 \) bits.
+So, `260 < 310 - 2`. Such a number (65 hex digits) can *pass* this initial length check. This check is designed to quickly reject inputs that are grossly too large. The `-2` is a slight margin.
+
+After basic parsing into internal `digits_`, it calls `normalize_bool_any()`.
+
+If `normalize_bool_any()` returns `false`, `parse_hex_any` will invalidate the `BigInt` and return `0`, indicating a parsing failure. This leads to `td::string_to_int256` returning a `null` `RefInt256`.
+</details>
 
 **Example**
 ```func
