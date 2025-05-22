@@ -16,12 +16,6 @@ module.exports = [
       {
         type: 'category',
         label: 'Blockchain interaction',
-        link: {
-          type: 'generated-index',
-          title: 'Blockchain interaction',
-          slug: '/guidelines/blockchain-interaction',
-          keywords: ['blockchain interaction'],
-        },
         items: [
           'v3/guidelines/quick-start/blockchain-interaction/reading-from-network',
           'v3/guidelines/quick-start/blockchain-interaction/writing-to-network',
