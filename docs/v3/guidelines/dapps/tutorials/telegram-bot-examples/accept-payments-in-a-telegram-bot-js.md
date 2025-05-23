@@ -5,6 +5,10 @@ import Feedback from '@site/src/components/Feedback';
 
 # Bot for selling dumplings
 
+:::warning
+The integration method described in this guide is one of the available approaches. With ongoing developments, Telegram Mini Apps provide additional capabilities that better suit modern security and functionality requirements.
+:::
+
 In this article, we'll create a simple Telegram bot for accepting payments in TON.
 
 ## 🦄 What it looks like
