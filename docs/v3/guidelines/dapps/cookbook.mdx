@@ -12,7 +12,7 @@ During product development, various questions often arise regarding interactions
 
 ## Working with contracts' addresses
 
-### How to convert (user friendly \<-\> raw), assemble, and extract addresses from strings?
+### How to convert (user-friendly \<-\> raw), assemble, and extract addresses from strings?
 
 TON addresses uniquely identify contracts on the blockchain, indicating their workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses) are: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
 
@@ -502,7 +502,7 @@ Don't forget that the comment message in a snake cell has 32 zero bits (i.e., it
 
 ### How to calculate the user's jetton wallet address (offchain)?
 
-To calculate a user's jetton wallet address, use the `get_wallet_address` method from the jetton master contract with the user's address. You can also call the master contract directly, or use the getWalletAddress method provided in the JettonMaster SDK.
+To calculate a user's jetton wallet address, use the `get_wallet_address` method from the jetton master contract with the user's address. You can also call the master contract directly or use the `getWalletAddress` method provided in the JettonMaster SDK.
 
 :::info
 The `JettonMaster` in `@ton/ton` provides this functionality, although it lacks other features.
