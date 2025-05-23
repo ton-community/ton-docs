@@ -4,7 +4,7 @@ import Feedback from '@site/src/components/Feedback';
 
 
 :::tip
-This upgrade is available on the Mainnet.
+This upgrade is active on the Mainnet since **March 11, 2025**. See details in the [here](https://t.me/tonstatus/155).
 :::
 
 ## c7 tuple extension
