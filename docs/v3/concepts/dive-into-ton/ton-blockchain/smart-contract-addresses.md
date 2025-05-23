@@ -77,12 +77,12 @@ However, raw addresses have two main issues:
 
 Convert raw, user-friendly addresses using [ton.org/address](https://ton.org/address/).
 
-For more details, refer to the refhandling guide in the [Smart contracts addresses documentation](/v3/documentation/smart-contracts/addresses/) section.
+For more details, refer to the refhandling guide in the [Smart contracts addresses documentation](/v3/documentation/smart-contracts/addresses) section.
 
 ## See also
 
-- [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton/)
-- [Smart contracts addresses documentation](/v3/documentation/smart-contracts/addresses/)
+- [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton)
+- [Smart contracts addresses documentation](/v3/documentation/smart-contracts/addresses)
 
 <Feedback />
 

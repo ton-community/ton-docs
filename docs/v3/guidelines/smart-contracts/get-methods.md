@@ -72,7 +72,7 @@ int seqno() method_id {
 }
 ```
 
-Returns the transaction's sequence number within a specific wallet. This method is primarily used for [replay protection](/v3/guidelines/smart-contracts/howto/wallet#replay-protection---seqno/).
+Returns the transaction's sequence number within a specific wallet. This method is primarily used for [replay protection](/v3/guidelines/smart-contracts/howto/wallet#replay-protection---seqno).
 
 #### get_subwallet_id()
 
@@ -82,7 +82,7 @@ int get_subwallet_id() method_id {
 }
 ```
 
-- [What is subwallet ID?](/v3/guidelines/smart-contracts/howto/wallet#subwallet-ids/)
+- [What is subwallet ID?](/v3/guidelines/smart-contracts/howto/wallet#subwallet-ids)
 
 #### get_public_key()
 
@@ -222,7 +222,7 @@ You can call get methods on the "Get methods" tab.
 We will use Javascript libraries and tools for the examples below:
 
 - [ton](https://github.com/ton-org/ton/) library
-- [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript/) 
+- [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript) 
 
 Let's say there is some contract with the following get method:
 
@@ -273,7 +273,7 @@ async getTotal(provider: ContractProvider) {
 }
 ```
 
-It executes the get method and retrieves the resulting stack. In this snippet, we read a single number from the stack. In more complex cases where multiple values are returned at once, you can simply call the `readSomething` type of method multiple times to parse the entire execution result from the stack.
+It executes the get method and retrieves the resulting stack. In this snippet, we read a single number from the stack. In more complex cases where multiple values are returned at once, you can simply call the `readSomething` type of method multiple times to parse the entire execution result from the stack.
 
 Finally, we can use this method in our tests. Navigate to the `tests/Counter.spec.ts` and add a new test:
 
@@ -303,7 +303,7 @@ These limitations mean that one contract cannot directly access the state of ano
 
 ### Solutions and workarounds
 
-In the TON Blockchain, smart contracts communicate through messages rather than directly invoking methods from one another. One can send a message to another contract requesting the execution of a specific method. These requests usually begin with special [operation codes](/v3/documentation/smart-contracts/message-management/internal-messages/).
+In the TON Blockchain, smart contracts communicate through messages rather than directly invoking methods from one another. One can send a message to another contract requesting the execution of a specific method. These requests usually begin with special [operation codes](/v3/documentation/smart-contracts/message-management/internal-messages).
 
 A contract designed to handle such requests will execute the specified method and return the results in a separate message. While this approach may seem complex, it effectively streamlines communication between contracts, enhancing the scalability and performance of the blockchain network.
 
@@ -359,7 +359,7 @@ In this example, the contract receives and processes internal messages by interp
 
 For simplicity, we used just simple little numbers 1, 2, and 3 for the operation codes. But for real projects, consider setting them according to the standard:
 
-- [CRC32 Hashes for op-codes](/v3/documentation/data-formats/tlb/crc32/)
+- [CRC32 hashes for op-codes](/v3/documentation/data-formats/tlb/crc32)
 
 ## Common pitfalls and how to avoid them
 
@@ -374,7 +374,7 @@ For simplicity, we used just simple little numbers 1, 2, and 3 for the operation
 Get methods are vital for querying data from smart contracts on the TON Blockchain. While they have certain limitations, understanding these constraints and learning how to work around them is crucial for effectively utilizing get methods in your smart contracts.
 
 ## See also
-- [Writing tests examples](/v3/guidelines/smart-contracts/testing/writing-test-examples/)
+- [Writing tests examples](/v3/guidelines/smart-contracts/testing/writing-test-examples)
 
 <Feedback />
 

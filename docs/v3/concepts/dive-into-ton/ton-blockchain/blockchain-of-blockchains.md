@@ -83,7 +83,7 @@ BaseChain is used for everyday transactions between actors because it's cheap, w
 There is a necessity for the synchronization of message routing and transaction execution. In other words, nodes in the network need a way to fix some 'point' in a multichain state and reach a consensus about that state. In TON, a special chain called **MasterChain** is used for that purpose. Blocks of MasterChain contain additional information, like the latest block hashes, about all other chains in the system, thus any observer unambiguously determines the state of all multichain systems at a single MasterChain block.
 
 ## See also
-- [Smart contract addresses](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses/)
+- [Smart contract addresses](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses)
 
 
 <Feedback />

@@ -41,7 +41,7 @@ Library reference cells are used to incorporate libraries in smart contracts.
 They always have a level of 0 and contain precisely `8 + 256` bits.
 
 The first byte is always `02`, indicating the cell type.
-The following 32 bytes represent the referenced library cell's [Representation hash](/v3/documentation/data-formats/tlb/cell-boc#standard-cell-representation-hash-calculation).
+The following 32 bytes represent the referenced library cell's [Representation hash](/v3/documentation/data-formats/tlb/cell-boc#standard-representation-hash-calculation).
 
 ### Merkle proof
 

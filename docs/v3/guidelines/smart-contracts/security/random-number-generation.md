@@ -22,7 +22,7 @@ Below we outline three fundamental approaches:
 
 ## Approach 1: randomize_lt {#randomize_lt}
 
-**Mechanism**: Generates [randomness using block logical time](https://docs.ton.org/v3/guidelines/smart-contracts/security/ton-hack-challenge-1/#4-lottery) (`lt`) and blockchain entropy.  
+**Mechanism**: Generates [randomness using block logical time](/v3/guidelines/smart-contracts/security/ton-hack-challenge-1/#4-lottery) (`lt`) and blockchain entropy.  
 **Security model**:
 
 - ✅ Safe against user manipulation

@@ -1,4 +1,4 @@
-# TON blockchain limits
+# TON Blockchain limits
 
 This document contains the current limits and metrics used in the TON blockchain.
 

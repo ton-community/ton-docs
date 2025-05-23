@@ -57,7 +57,7 @@ Account information includes the `balance`, `state`, `code`, and `data`.
   - **Active**: The address is live with code and balance.
   - **Frozen**: The address is locked due to insufficient balance for storage costs.
 - `code`: The contract's code in raw format.
-- `data`: Serialized contract data stored in a [*Cell*](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage/).
+- `data`: Serialized contract data stored in a [*Cell*](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage).
 
 Account state may be obtained using the [`getContractState`](https://testnet.toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get/) method.
 
@@ -232,7 +232,7 @@ A transaction obtained from the API has the following structure:
 ```
 - `address`: The account address where the transaction occurred.
 - `utime`: The [unix timestamp](https://www.unixtimestamp.com/) of the transaction.
-- `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/) that triggered the transaction.
+- `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message) that triggered the transaction.
 - `out_msgs`: Outgoing messages sent during the transaction.
 
 ### What is a message?

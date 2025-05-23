@@ -24,7 +24,7 @@ Welcome to the TON Quick start guide! This guide will give you a starting point 
 
 ## Concept of smart contract
 
-You can think of smart contracts in TON as programs running on the blockchain, following the well-known behavioral concept of the [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor/) model.
+You can think of smart contracts in TON as programs running on the blockchain, following the well-known behavioral concept of the [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor) model.
 
 :::info
 In contrast to some other blockchains, where you can call other contract codes synchronously, a smart contract in TON is a standalone entity that communicates with other smart contracts on an equal basis by sending asynchronous messages between them.
@@ -118,7 +118,7 @@ Let's take a look at our newly created wallet using the `explorer`: copy your wa
 
 #### Address state
 
-First, let's examine the common [address state](/v3/documentation/smart-contracts/addresses/#addresses-state/) of our smart contract:
+First, let's examine the common [address state](/v3/documentation/smart-contracts/addresses/#addresses-state) of our smart contract:
 
 - `Nonexisting`: If you haven't received funds to your `address` yet, you will see the default state for any address that has not been used before and, therefore, has no data.
 
@@ -146,7 +146,7 @@ This might seem unintuitive: why is your wallet in the `uninit` state when youâ€
 </div>
 
 :::info
-There is also a fourth state called [frozen](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee/), which stands for a smart contract with a [storage charge](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee/) that exceeds its balance. In this state, the smart contract cannot perform any operations.
+There is also a fourth state called [frozen](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee), which stands for a smart contract with a [storage charge](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee) that exceeds its balance. In this state, the smart contract cannot perform any operations.
 :::
 
 And here we are â€” our wallet contract is deployed and ready to use. Let's examine the provided user interface:

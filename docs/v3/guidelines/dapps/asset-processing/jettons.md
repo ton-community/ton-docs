@@ -64,7 +64,7 @@ This document covers the following topics in order:
 ## Overview
 
 :::info
-TON transactions are irreversible after just one confirmation. To clearly understand this process, readers should be familiar with the basic principles of asset processing described in [this section of our documentation](/v3/documentation/dapps/assets/overview). It is particularly important to understand [contracts](/v3/documentation/smart-contracts/addresses#everything-is-a-smart-contract), wallets](/v3/guidelines/smart-contracts/howto/wallet), [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions), and the deployment process.
+TON transactions are irreversible after just one confirmation. To clearly understand this process, readers should be familiar with the basic principles of asset processing described in [this section of our documentation](/v3/documentation/dapps/assets/overview). It is particularly important to understand [contracts](/v3/documentation/smart-contracts/addresses#everything-is-a-smart-contract), [wallets](/v3/guidelines/smart-contracts/howto/wallet), [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions), and the deployment process.
 :::
 
 :::info
@@ -137,7 +137,7 @@ This method returns the following data:
 | `jetton_wallet_code` | `cell`  |                      |
 
 
-You can also use the [TON Center API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get) `/jetton/masters` method to retrieve already decoded jetton data and metadata. We have also developed methods for (js) [tonweb](https://github.com/toncenter/tonweb/blob/master/src/contract/token/ft/JettonMinter.js#L85) and (js) [ton-core/ton](https://github.com/ton-core/ton/blob/master/src/jetton/jettonMaster.ts#L28), (go) [tongo](https://github.com/tonkeeper/tongo/blob/master/liteapi/jetton.go#L48) and (go) [tonutils-go](https://github.com/xssnick/tonutils-go/blob/33fd62d754d3a01329ed5c904db542ab4a11017b/ton/jetton/jetton.go#L79), (python) [pytonlib](https://github.com/toncenter/pytonlib/blob/d96276ec8a46546638cb939dea23612876a62881/pytonlib/client.py#L742), and many other [SDK](/v3/guidelines/dapps/apis-sdks/sdk).
+You can also use the [TON Center API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get) `/jetton/masters` method to retrieve already decoded jetton data and metadata. We have also developed methods for (js) [tonweb](https://github.com/toncenter/tonweb/blob/master/src/contract/token/ft/JettonMinter.js#L85) and (js) [ton-core/ton](https://github.com/ton-core/ton/blob/master/src/jetton/jettonMaster.ts#L28), (go) [tongo](https://github.com/tonkeeper/tongo/blob/master/liteapi/jetton.go#L48) and (go) [tonutils-go](https://github.com/xssnick/tonutils-go/blob/33fd62d754d3a01329ed5c904db542ab4a11017b/ton/jetton/jetton.go#L79), (python) [pytonlib](https://github.com/toncenter/pytonlib/blob/d96276ec8a46546638cb939dea23612876a62881/pytonlib/client.py#L742), and many other [SDKs](/v3/guidelines/dapps/apis-sdks/sdk).
 
 The example of using [Tonweb](https://github.com/toncenter/tonweb) to run a get method and get url for off-chain metadata:
 
@@ -323,7 +323,7 @@ Finally, to retrieve `Excess 0xd53276db` message you must set up `response desti
 Sometimes you may get a `709` error when sending a jetton. This error indicates that the amount of Toncoin attached to the message is not enough to send it. Make sure `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`, which is usually >0.04 unless the payload being forwarded is very large. The fee depends on various factors, including the jetton code data and whether the recipient needs to deploy a new jetton wallet.
 It is recommended to add a supply of Toncoin to the message and set your address as the `response_destination` to receive `Excess 0xd53276db` messages. For example, you can add 0.05 TON to the message by setting `forward_ton_amount` to 1 nanoton (this amount of TON will be attached to the `jetton notify 0x7362d09c` message).
 
-You may also encounter the error [`cskip_no_gas`](/v3/documentation/tvm/tvm-overview#compute-phase-skipped), which indicates that the tokens were successfully transferred, but no other computations were performed. This is a common situation when the `forward_ton_amount` value is 1 nanoton.
+You may also encounter the error [`cskip_no_gas`](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped), which indicates that the tokens were successfully transferred, but no other computations were performed. This is a common situation when the `forward_ton_amount` value is 1 nanoton.
 
 :::tip
 Check [best practices](/v3/guidelines/dapps/asset-processing/jettons#best-practices) for the _"send jettons with comments"_ example.
@@ -357,7 +357,7 @@ The sender address of the internal message containing the body of the `Transfer 
 This should not be confused with the `sender` field in the [body](/v3/guidelines/dapps/asset-processing/jettons#message-2) of the `Transfer Notification`.
 
 1. Get the jetton master address for the new jetton wallet by [retrieving the wallet data] (/v3/guidelines/dapps/asset-processing/jettons#retrieving-data-for-a-specific-jetton-wallet).
-2. Get the jetton wallet address for your wallet address (as the owner) using the jetton master contract: [How to get the jetton wallet address for a given user](#retrieving-jetton-wallet-addresses-for-a-given-user)
+2. Get the jetton wallet address for your wallet address (as the owner) using the jetton master contract: [How to get the jetton wallet address for a given user](#retrieving-jetton-wallet-addresses-for-a-given-user).
 3. Compare the address returned by the master contract and the actual wallet token address. If they match, that's perfect. If not, you've probably received a scam token that's counterfeit.
 4. Retrieve jetton metadata: [How to retrieve jetton metadata](#retrieving-jetton-data).
 5. Check the `symbol` and `name` fields for signs of fraud. Warn the user if necessary. [Adding new jettons for asset processing and initial verification](#adding-new-jettons-for-asset-processing-and-initial-verification).
@@ -398,11 +398,11 @@ Tonweb examples:
 3. Retrieve the jetton master address for each jetton wallet using [retrieving wallet data](/v3/guidelines/dapps/asset-processing/jettons#retrieving-data-for-a-specific-jetton-wallet).
 4. Compare the jetton master contract addresses from step 1. and step 3 (immediately above). If the addresses do not match, you should report an address validation error to jetton.
 5. Retrieve the list of recent unprocessed transactions using the hot wallet account and repeat (sorting each transaction one at a time). See: [Check contract transactions](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions).
-6. Check the input message (in_msg) for transactions and extract the source address from the input message. [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L84)
+6. Check the input message (in_msg) for transactions and extract the source address from the input message. [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L84).
 7. If the source address matches the address in the jetton wallet, then the transaction should be processed further. If not, then skip the transaction processing and check the next transaction.
 8. Make sure the message body is not empty and that the first 32 bits of the message match the `transfer notification` opcode `0x7362d09c`. [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L91) If the message body is empty or the opcode is invalid, skip the transaction.
-9. Read other message body data, including `query_id`, `amount`, `sender`, `forward_payload`. [jetton contract message layouts](/v3/guidelines/dapps/asset-processing/jettons#message-layouts), [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L105)
-10. Try extracting text comments from the `forward_payload` data. The first 32 bits should correspond to the text comment opcode `0x00000000`, and the rest to the UTF-8 encoded text. [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L110)
+9. Read other message body data, including `query_id`, `amount`, `sender`, `forward_payload`. [jetton contract message layouts](/v3/guidelines/dapps/asset-processing/jettons#message-layouts), [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L105).
+10. Try extracting text comments from the `forward_payload` data. The first 32 bits should correspond to the text comment opcode `0x00000000`, and the rest to the UTF-8 encoded text. [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L110).
 11. If the `forward_payload` data is empty or the operation code is invalid - skip the transaction.
 12. Compare the received comment with the saved notes. If there is a match (user identification is always possible) - make the transfer.
 13. Restart from step 5 and repeat the process until you have gone through the entire list of transactions.
@@ -460,7 +460,7 @@ The process is:
 3. Get transactions from blocks.
 4. Filter transactions to only use addresses from the jetton wallet pool for deposit.
 5. Decode messages using the `transfer notification` body to get more details, including the
-`sender` address, jetton `amount`, and comment. (See: [Processing incoming jettons](#processing-incoming-jettons))
+`sender` address, jetton `amount`, and comment. (See: [Processing incoming jettons](#processing-incoming-jettons)).
 6. If there is at least one transaction with undecodeable output messages (the message body does not contain opcodes for
 `transfer notification` and opcodes for `excesses`) or no output messages in
 an account, the jetton balance must be queried using the get method for the current block, while the previous
@@ -502,7 +502,7 @@ Below, you will find a step-by-step guide on how to process jetton withdrawals.
 To withdraw jettons, the wallet sends messages with a `transfer` body to the corresponding jetton wallet.
 The jetton wallet then sends the jettons to the recipient. It is important to attach some TON (at least 1 nanoTON)
 as the `forward_ton_amount` (and an optional comment to the `forward_payload`) to trigger a `transfer notification`.
-See: [Jetton Contract Message Layouts](/v3/guidelines/dapps/asset-processing/jettons#message-layouts)
+See: [Jetton contract message layouts](/v3/guidelines/dapps/asset-processing/jettons#message-layouts).
 
 #### Preparation
 

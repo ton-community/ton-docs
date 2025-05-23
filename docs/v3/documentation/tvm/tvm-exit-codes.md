@@ -128,7 +128,7 @@ contract Loot {
 
 ### 3: Stack overflow {#3}
 
-When you copy too many elements into a closure continuation, the system throws an error with exit code 3: `Stack overflow`. This error rarely occurs unless you work deep in [Fift and TVM assembly][fift] trenches.
+When you copy too many elements into a closure continuation, the system throws an error with exit code 3: `Stack overflow`. This error rarely occurs unless you work deep in Fift and TVM assembly trenches.
 
 ```tact
 // Remember, kids, don't try to overflow the stack at home!
@@ -252,7 +252,7 @@ contract VibeCheck {
 
 > `Cell` is a [primitive][p] and a data structure, which ordinarly consists of up to 1023 continuously laid out bits and up to 4 references (refs) to other cells.
 
-A 'Builder' is utilized to create a 'Cell'. If you attempt to store more than 1023 bits of data or exceed 4 references to other cells, an error with exit code 8 is thrown: 'Cell overflow'.
+A 'Builder' is utilized to create a 'Cell'. If you attempt to store more than 1023 bits of data or exceed 4 references to other cells, an error with exit code 8 is thrown: `Cell overflow`.
 
 ```tact
 // Too much bits
@@ -306,9 +306,9 @@ try {
 
 ### 10: Dictionary error {#10}
 
-In Tact, the `map<K, V>` type is an abstraction over the ["hash" map dictionaries of FunC](/v3/documentation/smart-contracts/func/docs/dictionaries#hashmap) and underlying [`HashmapE` type](/v3/documentation/data-formats/tlb/tl-b-types#hashmap) of [TL-B][tlb] and [TVM][tvm].
+In Tact, the `map<K, V>` type is an abstraction over the ["hash" map dictionaries of FunC](/v3/documentation/smart-contracts/func/docs/dictionaries#hash-map) and underlying [`HashmapE` type](/v3/documentation/data-formats/tlb/tl-b-types#hashmap) of [TL-B][tlb] and [TVM][tvm].
 
-If there is an incorrect manipulation of dictionaries, such as improper assumptions about their memory layout, an error with exit code 10 is thrown: `Dictionary error`. Note that Tact prevents you from getting this error unless you do [Fift and TVM assembly][fift] work yourself:
+If there is an incorrect manipulation of dictionaries, such as improper assumptions about their memory layout, an error with exit code 10 is thrown: `Dictionary error`. Note that Tact prevents you from getting this error unless you do Fift and TVM assembly work yourself:
 
 ```tact
 /// Pre-computed Int to Int dictionary with two entries — 0: 0 and 1: 1

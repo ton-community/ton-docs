@@ -29,7 +29,7 @@ If this process is repeated 10 times, and you answer correctly each time, the ve
 
 However, this method is interactive, meaning it requires multiple steps between the prover and verifier. In a decentralized application (DApp), having users send 30 transactions to prove a fact would be inefficient. This is why a non-interactive solution is needed—enter zk-SNARKs and zk-STARKs.
 
-For this tutorial, we’ll focus on zk-SNARKs. However, you can learn more about zk-STARKs on the [StarkWare website](https://starkware.co/stark/), and find a comparison of zk-SNARKs vs. zk-STARKs in this [Panther Protocol blog post](https://blog.pantherprotocol.io/zk-snarks-vs-zk-starks-differences-in-zero-knowledge-technologies/).**
+For this tutorial, we’ll focus on zk-SNARKs. However, you can learn more about zk-STARKs on the [StarkWare website](https://starkware.co/stark/), and find a comparison of zk-SNARKs vs. zk-STARKs in this [Panther Protocol blog post](https://blog.pantherprotocol.io/zk-snarks-vs-zk-starks-differences-in-zero-knowledge-technologies/).
 
 ### 🎯 Zk-SNARK: zero-knowledge succinct non-interactive argument of knowledge
 

@@ -299,11 +299,11 @@ func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, a
 
 ### Set up a single nominator pool
 
-Configure the single nominator pool contract using the [following instructions](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator).
+Configure the single nominator pool contract using the [following instructions](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-a-single-nominator-pool).
 
 ### Join the elections
 
-[Deposit](/v3/guidelines/smart-contracts/howto/single-nominator-pool#deposit-pool) the minimum stake amount into the single nominator pool.
+[Deposit](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-a-single-nominator-pool) the minimum stake amount into the single nominator pool.
 
 **MyTonCtrl** will automatically join the elections. You can set the stake amount that MyTonCtrl sends to the [elector contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector) approximately every 18 hours on Mainnet and 2 hours on Testnet.
 
@@ -400,7 +400,7 @@ MyTonCtrl> disable_mode validator
 
 1. Disable the `validator` mode to stop participating in elections.
 2. Wait for both stakes to return from the elector.
-3. Follow the [steps](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator) to set up a single nominator pool.
+3. Follow the [steps](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-a-single-nominator-pool) to set up a single nominator pool.
 
 ## Single nominator pool client
 

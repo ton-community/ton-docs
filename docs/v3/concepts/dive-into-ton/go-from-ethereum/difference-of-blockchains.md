@@ -90,7 +90,7 @@ When the wallet smart contract receives the message, it processes it and deliver
 We can represent the sequence of transactions as a chain. In this representation, each smart contract has its transactions, which means that each contract has its blockchain, so the network can process the transactions independently.
 
 :::info
-Read more in [Blockchain of blockchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
+Read more in [Blockchain of blockchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains).
 :::
 
 ### Gas
@@ -126,7 +126,7 @@ In TON, the calculation of transaction fees is complex. It includes several type
 The price of gas and some other parameters can be changed by voting on the main network. Unlike Ethereum, TON users cannot set the gas price themselves. Also, the developer needs to return the remaining gas funds to the owner manually, otherwise they will remain locked. Smart contract storage also affects the price: if a wallet's smart contract remains unused for a long time, the next transaction will incur higher costs.
 
 :::info
-Read more about [gas](/v3/documentation/smart-contracts/transaction-fees/fees/)
+Read more about [gas](/v3/documentation/smart-contracts/transaction-fees/fees/).
 :::
 
 ### Architecture

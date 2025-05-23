@@ -60,7 +60,7 @@ If you want more details about cell serialization and deserialization, read [Cel
 
 ## See also
 
-- [Blockchain of blockchains](docs/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/)
+- [Blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
 - [TL-B language](/v3/documentation/data-formats/tlb/tl-b-language)
 
 <Feedback />
