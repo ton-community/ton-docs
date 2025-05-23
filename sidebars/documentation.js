@@ -323,9 +323,9 @@ module.exports = [
         type: 'category',
         label: 'TVM changelog',
         items: [
+          'v3/documentation/tvm/changelog/tvm-upgrade-2025-02',
           'v3/documentation/tvm/changelog/tvm-upgrade-2024-04',
           'v3/documentation/tvm/changelog/tvm-upgrade-2023-07',
-          'v3/documentation/tvm/changelog/tvm-upgrade-2025-02',
 
         ],
       },
