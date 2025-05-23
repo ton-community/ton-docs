@@ -4,8 +4,10 @@ import Feedback from '@site/src/components/Feedback';
 
 
 :::tip
-This upgrade is active on the Mainnet since **March 11, 2025**. See details in the [here](https://t.me/tonstatus/155).
+This upgrade is active on the Mainnet since **February 13, 2025**. See details in the [here](https://t.me/tonstatus/153).
 :::
+
+This update is enabled with Config8 `version >= 9`.
 
 ## c7 tuple extension
 
@@ -25,7 +27,7 @@ Example: if the last masterchain block seqno is `19071`, the list contains block
 
 ## Execution and gas logic improvements
 
-* When the `RAWRESERVE` action uses flag 4, the original balance is calculated as `balance - msg_balance_remaining`.
+* When the `RAWRESERVE` action uses flag 4, the original balance is calculated as `balance - msg_balance_remaining`. Previously, this calculation did not work correctly if the storage fee exceeded the original balance.
 * The gas cost for continuation jumps deeper than 8 levels is increased by one additional gas unit per extra level.
 * Jumps to continuations with non-null control data now execute without error.
 * The `RESERVE` action in mode +2 supports reserving extra currencies in addition to TON.
