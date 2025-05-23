@@ -6,7 +6,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Bot with own balance
 
-:::warning
+:::caution
 The integration method described in this guide is one of the available approaches. With ongoing developments, Telegram Mini Apps provide additional capabilities that better suit modern security and functionality requirements.
 :::
 
