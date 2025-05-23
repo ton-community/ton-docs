@@ -1,0 +1,416 @@
+import Feedback from "@site/src/components/Feedback";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Button from '@site/src/components/button'
+
+# Хранение данных и get-методы
+
+> **Резюме:** На предыдущих этапах мы узнали, как использовать `Blueprint SDK` и его структуру проекта.
+
+Tact — это высокоуровневый язык программирования для блокчейна TON, ориентированный на эффективность и простоту. Он спроектирован так, чтобы быть простым в изучении и использовании, и в то же время хорошо подходить разработке смарт-контрактов. Tact — это статически типизированный язык с простым синтаксисом и мощной системой типов.
+
+:::info
+Подробнее с ним можно ознакомиться в [документации Tact](https://docs.tact-lang.org/#start/) и на сайте [Tact By Example](https://tact-by-example.org/00-hello-world/).
+:::
+
+Давайте создадим и модифицируем наш смарт-контракт по стандартным шагам, описанным в предыдущем разделе [обзор Blueprint SDK](/ru/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview/) .
+
+## Шаг 1: редактирование кода смарт-контракта
+
+В верхней части сгенерированного файла контракта `hello_world.tact` вы можете увидеть определение сообщения:
+
+```tact title="/contracts/hello_world.tact"
+message Add {
+    queryId: Int as uint64;
+    amount: Int as uint32;
+}
+```
+
+Сообщение — это базовая структура для коммуникации между контрактами. Tact автоматически сериализирует и десериализирует сообщения в ячейки. Чтобы быть уверенными, что при изменении структуры сообщений опкоды сохранятся теми же, их можно добавлять так, как показано ниже:
+
+```tact title="/contracts/hello_world.tact"
+message(0x7e8764ef) Add {
+    queryId: Int as uint64;
+    amount: Int as uint32;
+}
+```
+
+Tact сериализует это следующим образом:
+
+```func
+begin_cell()
+    .store_uint(0x7e8764ef, 32) ;; message opcode
+    .store_uint(query_id, 64)
+    .store_uint(amount, 32)
+    .end_cell()
+```
+
+Используя эту структуру, можно отправить контракту сообщение из FunC.
+
+#### Определение контракта
+
+В Tact [контракт](https://docs.tact-lang.org/book/contracts/) определяют в объектно-ориентированном стиле программирования:
+
+```tact
+contract HelloWorld {
+    ...
+}
+```
+
+#### Хранилище контракта
+
+Контракт может хранить переменные состояния, как показано ниже. К ним можно получить доступ с помощью [`self-ссылки`](https://docs.tact-lang.org/book/contracts/#self)
+
+```tact
+id: Int as uint32;
+counter: Int as uint32;
+```
+
+Чтобы удостовериться, что только владелец контракта может взаимодействовать с конкретными функциями, добавьте поле `владелец`:
+
+```tact title="/contracts/hello_world.tact"
+id: Int as uint32;
+counter: Int as uint32;
+owner: Address;
+```
+
+Эти поля сериализуются аналогично структурам и хранятся в регистре данных контракта.
+
+#### Инициализация контракта
+
+Если вы попробуете скомпилировать контракт на данном этапе, вы столкнётесь с ошибкой: `Field "owner" is not set` («поле "владелец" не установлено»). Дело в том, что контракт должен инициализировать свои поля при развёртывании. Определите функцию [`init()`](https://docs.tact-lang.org/book/contracts/#init-function/), чтобы делать это:
+
+```tact title="/contracts/hello_world.tact"
+init(id: Int, owner: Address) {
+    self.id = id;
+    self.counter = 0;
+    self.owner = owner;
+}
+```
+
+#### Обработка сообщений
+
+Чтобы принять сообщения от других контрактов, используйте [receiver-функцию](https://docs.tact-lang.org/book/functions/#receiver-functions). Такие функции автоматически вызывают функцию, соответствующую опкоду сообщения:
+
+```tact title="/contracts/hello_world.tact"
+receive(msg: Add) {
+    self.counter += msg.amount;
+    self.notify("Cashback".asComment());
+}
+```
+
+Чтобы принимать сообщения с пустым телом, можно добавить receive-функцию без аргументов:
+
+```tact title="/contracts/hello_world.tact"
+receive() {
+    cashback(sender())
+}
+```
+
+#### Ограничение доступа
+
+Tact также предоставляет удобные способы поделиться логикой с помощью так называемых [«черт»](https://docs.tact-lang.org/book/types/#traits)  («traits») — повторно используемых блоков кода, похожих на абстрактные классы в других языках программирования. Tact не использует классическое наследование, но черты позволяют определить общую логику без дублирования кода. Они выглядят как контракты, но не могут хранить постоянное состояние.
+Например, вы можете использовать черту `Ownable`, которая предоставляет встроенные проверки собственности, чтобы убедиться, что только владелец контракта может отправлять сообщения.
+
+```tact title="/contracts/hello_world.tact"
+// Import library to use trait
+import "@stdlib/ownable";
+
+// Ownable trait introduced here
+contract HelloWorld with Ownable {
+
+    ...
+
+    receive(msg: Add) {
+        self.requireOwner();
+        self.counter += msg.amount;
+        self.notify("Cashback".asComment());
+    }
+}
+```
+
+:::info
+[Проверка идентичности](https://docs.tact-lang.org/book/security-best-practices/#identity-validation) играет ключевую роль в безопасных взаимодействиях контрактов. Вы можете прочитать больше о такой проверке и её важности в документации по ссылке.
+:::
+
+#### Getter-функции
+
+Tact поддерживает [getter functions](https://docs.tact-lang.org/book/functions/#getter-functions) для извлечения состояния контракта извне блокчейна:
+
+:::note
+Get-функцию нельзя вызвать из другого контракта.
+:::
+
+```tact title="/contracts/hello_world.tact"
+get fun counter(): Int {
+    return self.counter;
+}
+```
+
+Обратите внимание, что геттер `owner` автоматически определяется при использовании черты `Ownable`.
+
+#### Полный контракт
+
+```tact title="/contracts/hello_world.tact"
+import "@stdlib/ownable";
+
+// message with opcode
+message(0x7e8764ef) Add {
+    queryId: Int as uint64;
+    amount: Int as uint32;
+}
+
+// Contract defenition. `Ownable` is a trait to share functionality.
+contract HelloWorld with Ownable {
+
+    // storage variables
+    id: Int as uint32;
+    counter: Int as uint32;
+    owner: Address;
+
+    // init function.
+    init(id: Int, owner: Address) {
+        self.id = id;
+        self.counter = 0;
+        self.owner = owner;
+    }
+
+    // default(null) recieve for deploy
+    receive() {
+        cashback(sender())
+    }
+
+    // function to recive messages from other contracts
+    receive(msg: Add) {
+        // function from `Ownable` trait to assert, that only owner may call this
+        self.requireOwner();
+        self.counter += msg.amount;
+
+        // Notify the caller that the receiver was executed and forward remaining value back
+        self.notify("Cashback".asComment());
+    }
+
+    // getter function to be called offchain
+    get fun counter(): Int {
+        return self.counter;
+    }
+
+    get fun id(): Int {
+        return self.id;
+    }
+}
+```
+
+Проверьте правильность кода смарт-контракта, запустив скрипт сборки:
+
+```bash
+npx blueprint build
+```
+
+Ожидаемый вывод должен выглядеть примерно так:
+
+```bash
+✅ Compiled successfully! Cell BOC result:
+
+{
+  "hash": "cdd26fef4db3a94d735a0431be2f93050c181e6b497346ededea38d8a4a21080",
+  "hashBase64": "zdJv702zqU1zWgQxvi+TBQwYHmtJc0bt7eo42KSiEIA=",
+  "hex": "b5ee9c7241020e010001cd00021eff00208e8130e1f4a413f4bcf2c80b010604f401d072d721d200d200fa4021103450666f04f86102f862ed44d0d200019ad31fd31ffa4055206c139d810101d700fa405902d1017001e204925f04e002d70d1ff2e0822182107e8764efba8fab31d33fd31f596c215023db3c03a0884130f84201706ddb3cc87f01ca0055205023cb1fcb1f01cf16c9ed54e001020305040012f8425210c705f2e084001800000000436173686261636b01788210946a98b6ba8eadd33f0131c8018210aff90f5758cb1fcb3fc913f84201706ddb3cc87f01ca0055205023cb1fcb1f01cf16c9ed54e05f04f2c0820500a06d6d226eb3995b206ef2d0806f22019132e21024700304804250231036552212c8cf8580ca00cf8440ce01fa028069cf40025c6e016eb0935bcf819d58cf8680cf8480f400f400cf81e2f400c901fb000202710709014dbe28ef6a268690000cd698fe98ffd202a903609cec08080eb807d202c816880b800f16d9e3618c08000220020378e00a0c014caa18ed44d0d200019ad31fd31ffa4055206c139d810101d700fa405902d1017001e2db3c6c310b000221014ca990ed44d0d200019ad31fd31ffa4055206c139d810101d700fa405902d1017001e2db3c6c310d000222bbeaff01"
+}
+
+✅ Wrote compilation artifact to build/HelloWorld.compiled.json
+```
+
+## Шаг 2: обновить обёртку
+
+[Обёртки](https://docs.tact-lang.org/book/compile/#wrap-ts) облегчают взаимодействие с контрактом из TypeScript. В отличие от FunC или Tolk, они генерируются автоматически во время процесса сборки:
+
+```typescript title="/wrappers/HelloWorld.ts"
+export * from '../build/HelloWorld/tact_HelloWorld';
+```
+
+## Шаг 3: обновление тестов
+
+Теперь давайте убедимся, что наш код смарт-контракта не выполнит задание, если мы попытаемся отправить сообщение `add` от адреса не-владельца:
+
+- Создайте `HelloWorld`, указав владельца.
+- Создайте другой смарт-контракт, который будет иметь другой адрес — "nonOwner".
+- Попробуйте отправить внутреннее сообщение в `HelloWorld` и убедиться, что он выдаст ошибку с ожидаемым значением `exitCode`, а поле счетчика остаётся прежним.
+
+Реализиация теста должна выглядеть следующим образом:
+
+```typescript title="/tests/HelloWorld.spec.ts"
+// @version TypeScript 5.8.3
+import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
+import { toNano } from '@ton/core';
+import { HelloWorld } from '../wrappers/HelloWorld';
+import '@ton/test-utils';
+
+describe('HelloWorld Basic Tests', () => {
+    let blockchain: Blockchain;
+    let helloWorld: SandboxContract<HelloWorld >;
+    let owner: SandboxContract<TreasuryContract>;
+
+    beforeEach(async () => {
+        // Create a new blockchain instance
+        blockchain = await Blockchain.create();
+
+        // Create an owner wallet
+        owner = await blockchain.treasury('owner');
+
+        // Deploy the contract
+        helloWorld = blockchain.openContract(
+            await HelloWorld .fromInit(0n, owner.address)
+        );
+
+        // Send deploy transaction
+        const deployResult = await helloWorld.send(
+            owner.getSender(),
+            { value: toNano('1.00') },
+            null
+        );
+
+        // Verify deployment was successful
+        expect(deployResult.transactions).toHaveTransaction({
+            from: owner.address,
+            to: helloWorld.address,
+            deploy: true,
+            success: true
+        });
+    });
+
+    it('should initialize with correct values', async () => {
+        // Check initial counter value
+        const initialCounter = await helloWorld.getCounter();
+        expect(initialCounter).toBe(0n);
+
+        // Check initial ID
+        const id = await helloWorld.getId();
+        expect(id).toBe(0n);
+    });
+
+    it('should allow owner to increment counter', async () => {
+        // Get initial counter value
+        const initialCounter = await helloWorld.getCounter();
+
+        // Increment counter by 5
+        const incrementAmount = 5n;
+        const result = await helloWorld.send(
+            owner.getSender(),
+            { value: toNano('0.05') },
+            {
+                $$type: 'Add',
+                amount: incrementAmount,
+                queryId: 0n
+            }
+        );
+
+        // Verify transaction was successful
+        expect(result.transactions).toHaveTransaction({
+            from: owner.address,
+            to: helloWorld.address,
+            success: true
+        });
+
+        // Check counter was incremented correctly
+        const newCounter = await helloWorld.getCounter();
+        expect(newCounter).toBe(initialCounter + incrementAmount);
+    });
+
+    it('should prevent non-owner from incrementing counter', async () => {
+        // Create a non-owner wallet
+        const nonOwner = await blockchain.treasury('nonOwner');
+
+        // Get initial counter value
+        const initialCounter = await helloWorld.getCounter();
+
+        // Try to increment counter as non-owner
+        const result = await helloWorld.send(
+            nonOwner.getSender(),
+            { value: toNano('0.05') },
+            {
+                $$type: 'Add',
+                amount: 5n,
+                queryId: 0n
+            }
+        );
+
+        // Verify transaction failed
+        expect(result.transactions).toHaveTransaction({
+            from: nonOwner.address,
+            to: helloWorld.address,
+            success: false
+        });
+
+        // Verify counter was not changed
+        const newCounter = await helloWorld.getCounter();
+        expect(newCounter).toBe(initialCounter);
+    });
+
+    it('should handle multiple increments correctly', async () => {
+        // Perform multiple increments
+        const increments = [3n, 7n, 2n];
+        let expectedCounter = 0n;
+
+        for (const amount of increments) {
+            await helloWorld.send(
+                owner.getSender(),
+                { value: toNano('0.05') },
+                {
+                    $$type: 'Add',
+                    amount: amount,
+                    queryId: 0n
+                }
+            );
+            expectedCounter += amount;
+        }
+
+        // Verify final counter value
+        const finalCounter = await helloWorld.getCounter();
+        expect(finalCounter).toBe(expectedCounter);
+    });
+});
+
+
+```
+
+Не забудьте проверить правильность этого примера, запустив тестовый скрипт:
+
+```bash
+npx blueprint test
+```
+
+Ожидаемый вывод должен выглядеть примерно так:
+
+```bash
+
+ PASS  tests/HelloWorld.spec.ts
+  HelloWorld Basic Tests
+    ✓ should initialize with correct values (211 ms)
+    ✓ should allow owner to increment counter (100 ms)
+    ✓ should prevent non-owner from incrementing counter (152 ms)
+    ✓ should handle multiple increments correctly (112 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       4 passed, 4 total
+Snapshots:   0 total
+Time:        1.193 s, estimated 2 s
+Ran all test suites.
+
+```
+
+---
+
+## Следующий шаг
+
+Вы написали свой первый смарт-контракт на языке Tact, протестировали его и изучили, как работают хранилище и get-методы.
+
+Теперь пришло время **развёртывания контракта** в блокчейне TON.
+
+<Button href="/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-deploying-to-network" colorType={'primary'} sizeType={'sm'}>
+
+  Развёртывание в сети
+
+</Button>
+
+<Feedback />
