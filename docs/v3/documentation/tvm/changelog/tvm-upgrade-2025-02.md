@@ -4,7 +4,7 @@ import Feedback from '@site/src/components/Feedback';
 
 
 :::tip
-This upgrade is active on the Mainnet since **February 13, 2025**. See details in the [here](https://t.me/tonstatus/153).
+This upgrade is active on the Mainnet since February 13, 2025. See details [here](https://t.me/tonstatus/153).
 :::
 
 This update is enabled with Config8 `version >= 9`.
