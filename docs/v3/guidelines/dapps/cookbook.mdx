@@ -1482,9 +1482,9 @@ This information is sufficient to construct the swap message.
 
  <TabItem value="js-ton" label="JS (@ton)">
 DEXs use different protocols for their work, we need to familiarize ourselves with key concepts and some vital components and also know the TL-B schema involved in doing our swap process correctly. In this tutorial, we deal with DeDust, one of the famous DEX implemented entirely in TON.
-DeDust introduced an abstract Asset concept, which includes any swappable asset type, simplifying the process because the type of asset doesn't matter in the swap. This abstraction allows the exchange of extra currency or even assets from other chains in a straightforward manner.
+ DeDust introduced an abstract Asset concept that includes any swappable asset type. This simplifies the process because the type of asset doesn't matter in the swap. This abstraction allows the straightforward exchange of extra currency or even assets from other chains.
 
-Following is the TL-B schema that DeDust introduced for the Asset concept.
+   Following is the TL-B schema that DeDust introduced for the Asset concept.
 
 ```tlb
 native$0000 = Asset; // for ton
