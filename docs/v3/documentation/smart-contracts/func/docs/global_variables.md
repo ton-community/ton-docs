@@ -25,11 +25,8 @@ int main() {
 
 In this example, the global variable `op` is assigned the addition operator `_+_`. The program then verifies the associativity of addition using three sample integers: 2, 3, and 9.
 
-Under the hood, global variables in FunC are stored in the `c7` control register of the TVM.
+Under the hood, global variables in FunC are stored in the `c7` control register of the TVM, with a maximum limit of 31 variables.
 
-:::info
-Please note that FunC uses `SETGLOB` and `GETGLOB` instructions which are limited to 31 global variables
-:::
 
 In FunC, you can _omit the type_ of global variable. 
 In this case, the compiler determines the type based on how the variable is used. 
