@@ -29,7 +29,32 @@ You can consider each wallet version as a smart-contract implementation providin
 
 ## Basic wallets
 
-### Wallet V1
+### Wallet contracts hashes
+
+Here, you can find the current hashes of the wallet contract code versions.  
+For detailed specifications of each wallet contract, please refer to the page.
+
+<details>
+  <summary> Show wallet contracts hashes table </summary>
+
+| Contract version         | Hash                                     |
+|--------------------------|------------------------------------------|
+| [walletv1r1](#wallet-v1) | `oM/CxIruFqJx8s/AtzgtgXVs7LEBfQd/qqs7tgL2how=` |
+| [walletv1r2](#wallet-v1) | `1JAvzJ+tdGmPqONTIgpo2g3PcuMryy657gQhfBfTBiw=` |
+| [walletv1r3](#wallet-v1) | `WHzHie/xyE9G7DeX5F/ICaFP9a4k8eDHpqmcydyQYf8=` |
+| [walletv2r1](#wallet-v2) | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
+| [walletv2r2](#wallet-v2) | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
+| [walletv3r1](#wallet-v3) | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
+| [walletv3r2](#wallet-v3) | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
+| [walletv4r1](#wallet-v4) | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
+| [walletv4r2](#wallet-v4) | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
+| [walletv5r1](#wallet-v5) | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
+
+</details>
+
+**Note:** These hashes can also be found in the explorers.
+
+### Wallet V1 {#wallet-v1}
 
 This is the simplest one. It only allows you to send four transactions at a time and doesn't check anything besides your signature and seqno.
 
@@ -45,6 +70,15 @@ This version isn’t even used in regular apps because it has some major issues:
 The first issue was fixed in `V1R2` and `V1R3`. The `R` stands for **revision**. Usually, revisions are just small updates that only add get methods; you can find all of those in the changes history of `new-wallet.fif`. Hereinafter, we will consider only the latest revisions.
 
 Nevertheless, because each subsequent version inherits the functionality of the previous one, we should still stick to it, as this will help us with later versions.
+
+#### Official code hashes
+
+| Contract version | Hash                                     |
+|------------------|------------------------------------------|
+| walletv1r1       | `oM/CxIruFqJx8s/AtzgtgXVs7LEBfQd/qqs7tgL2how=` |
+| walletv1r2       | `1JAvzJ+tdGmPqONTIgpo2g3PcuMryy657gQhfBfTBiw=` |
+| walletv1r3       | `WHzHie/xyE9G7DeX5F/ICaFP9a4k8eDHpqmcydyQYf8=` |
+
 
 #### Persistent memory layout
 
@@ -82,7 +116,8 @@ Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standart exit codes](/v
 1. int seqno() returns current stored seqno.
 2. int get_public_key returns current stored public key.
 
-### Wallet V2
+
+### Wallet V2 {#wallet-v2}
 
 Wallet source code:
 
@@ -91,6 +126,13 @@ Wallet source code:
 This version introduces the `valid_until` parameter, which is used to set a time limit for a transaction in case you don't want it to be confirmed too late. This version also does not have the get-method for the public key, which was added in `V2R2`.
 
 All differences compared to the previous version are a consequence of adding the `valid_until` functionality. A new exit code was added: `0x23`, marking the failure of the valid_until check. Additionally, a new UNIX-time field has been added to the external message body layout, setting the time limit for the transaction. All get methods remain the same.
+
+#### Official code hashes
+
+| Contract version         | Hash                                     |
+|--------------------------|------------------------------------------|
+| [walletv2r1](#wallet-v2) | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
+| [walletv2r2](#wallet-v2) | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
 
 #### External message body layout
 
@@ -101,7 +143,8 @@ All differences compared to the previous version are a consequence of adding the
    - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
 2. Up to 4 references to cells containing messages.
 
-### Wallet V3
+
+### Wallet V3 {#wallet-v3}
 
 This version introduces the `subwallet_id` parameter, which allows you to create multiple wallets using the same public key (so you can have only one seed phrase and multiple wallets). As before, `V3R2` only adds the get-method for the public key.
 
@@ -110,6 +153,14 @@ Wallet source code:
 - [ton/crypto/smartcont/wallet3-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)
 
 Essentially, `subwallet_id` is just a number added to the contract state when it’s deployed. Since the contract address in TON is a hash of its state and code, the wallet address will change with a different `subwallet_id`. This version is the most widely used right now. It covers most use cases and remains clean, simple, and mostly the same as previous versions. All get methods remain the same.
+
+#### Official code hashes
+
+| Contract version         | Hash                                     |
+|--------------------------|------------------------------------------|
+| [walletv3r1](#wallet-v3) | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
+| [walletv3r2](#wallet-v3) | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
+
 
 #### Persistent Memory Layout
 
@@ -127,17 +178,18 @@ Essentially, `subwallet_id` is just a number added to the contract state when it
    - <b>(0-4)mode</b>: Up to four 8-bit integers defining the sending mode for each message.
 2. Up to 4 references to cells containing messages.
 
-#### Exit Codes
+#### Exit codes
 
-| Exit Code | Description                                                             |
-| --------- | ----------------------------------------------------------------------- |
+| Exit code | Description                                                             |
+|-----------| ----------------------------------------------------------------------- |
 | 0x23      | `valid_until` check failed; transaction confirmation attempted too late |
 | 0x23      | `Ed25519 signature` check failed                                        |
 | 0x21      | `seqno` check failed; reply protection triggered                        |
 | 0x22      | `subwallet-id` does not match the stored one                            |
 | 0x0       | Standard successful execution exit code.                                |
 
-### Wallet V4
+
+### Wallet V4 {#wallet-v4}
 
 This version retains all the functionality of the previous versions but also introduces something very powerful: `plugins`.
 
@@ -146,6 +198,15 @@ Wallet source code:
 - [ton-blockchain/wallet-contract](https://github.com/ton-blockchain/wallet-contract)
 
 This feature allows developers to implement complex logic that works in tandem with a user's wallet. For example, a DApp may require a user to pay a small amount of coins every day to use certain features. In this case, the user would need to install the plugin on their wallet by signing a transaction. The plugin would then send coins to the destination address daily when requested by an external message.
+
+#### Official code hashes
+
+| Contract version         | Hash                                     |
+|--------------------------|------------------------------------------|
+| [walletv4r1](#wallet-v4) | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
+| [walletv4r2](#wallet-v4) | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
+| [walletv5r1](#wallet-v5) | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
+
 
 #### Plugins
 
@@ -201,10 +262,10 @@ If `state_init` doesn't make much sense from its name, take a look at the follow
 - [internal-message-layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout)
   :::
 
-#### Exit Codes
+#### Exit codes
 
-| Exit Code | Description                                                             |
-| --------- | ----------------------------------------------------------------------- |
+| Exit code | Description                                                             |
+|-----------| ----------------------------------------------------------------------- |
 | 0x24      | `valid_until` check failed, transaction confirmation attempted too late |
 | 0x23      | `Ed25519 signature` check failed                                        |
 | 0x21      | `seqno` check failed, reply protection triggered                        |
@@ -221,7 +282,8 @@ If `state_init` doesn't make much sense from its name, take a look at the follow
 4. int is_plugin_installed(int wc, int addr_hash) checks if plugin with defined workchain ID and address hash is installed.
 5. tuple get_plugin_list() returns list of plugins.
 
-### Wallet V5
+
+### Wallet V5 {#wallet-v5}
 
 It is the most modern wallet version at the moment, developed by the Tonkeeper team, aimed at replacing V4 and allowing arbitrary extensions.
 <br></br>
@@ -246,6 +308,13 @@ TL-B scheme:
 :::caution
 In contrast to previous wallet version specifications, we will rely on [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) scheme, due to the relative complexity of this wallet version's interface implementation. We will provide some description for each of those. Nevertheless, a basic understanding is still required, in combination with the wallet source code, it should be enough.
 :::
+
+#### Official code hash
+
+| Contract version         | Hash                                     |
+|--------------------------|------------------------------------------|
+| [walletv5r1](#wallet-v5) | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
+
 
 #### Persistent memory layout
 
@@ -315,10 +384,10 @@ We can consider `InnerRequest` as two lists of actions: the first, `OutList`, is
 Note that the maximum number of actions is 255; this is a consequence of the realization through the [c5](/v3/documentation/tvm/tvm-overview#result-of-tvm-execution) TVM register. Technically, you can make a request with empty `OutAction` and `ExtendedAction`, but in that case, it will be similar to just receiving funds.
 :::
 
-#### Exit Codes
+#### Exit codes
 
-| Exit Code | Description                                                                       |
-| --------- | --------------------------------------------------------------------------------- |
+| Exit code | Description                                                                       |
+|-----------| --------------------------------------------------------------------------------- |
 | 0x84      | Authentication attempt through signature while it's disabled                      |
 | 0x85      | `seqno` check failed, reply protection occurred                                   |
 | 0x86      | `wallet-id` does not correspond to the stored one                                 |
@@ -371,6 +440,7 @@ Beta version of the gasless backend API is available on [tonapi.io/api-v2](https
 Wallet source code:
 
 - [ton-blockchain/wallet-contract-v5](https://github.com/ton-blockchain/wallet-contract-v5)
+
 
 ## Special wallets
 
