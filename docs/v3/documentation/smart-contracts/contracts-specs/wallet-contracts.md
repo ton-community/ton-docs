@@ -127,7 +127,7 @@ Essentially, `subwallet_id` is just a number added to the contract state when it
    - <b>(0-4)mode</b>: Up to four 8-bit integers defining the sending mode for each message.
 2. Up to 4 references to cells containing messages.
 
-#### Exit Codes
+#### Exit codes
 
 | Exit Code | Description                                                             |
 | --------- | ----------------------------------------------------------------------- |

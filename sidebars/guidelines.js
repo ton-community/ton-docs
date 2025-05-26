@@ -66,6 +66,7 @@ module.exports = [
     ]
   },
   'v3/guidelines/get-started-with-ton',
+  'v3/guidelines/transaction-guide',
   {
     type: 'category',
     label: 'TON Hello World series',
