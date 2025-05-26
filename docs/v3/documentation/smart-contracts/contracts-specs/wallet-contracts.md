@@ -129,10 +129,10 @@ All differences compared to the previous version are a consequence of adding the
 
 #### Official code hashes
 
-| Contract version         | Hash                                     |
-|--------------------------|------------------------------------------|
-| [walletv2r1](#wallet-v2) | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
-| [walletv2r2](#wallet-v2) | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
+| Contract version      | Hash                                     |
+|-----------------------|------------------------------------------|
+| walletv2r1 | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
+| walletv2r2 | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
 
 #### External message body layout
 
@@ -156,10 +156,10 @@ Essentially, `subwallet_id` is just a number added to the contract state when it
 
 #### Official code hashes
 
-| Contract version         | Hash                                     |
-|--------------------------|------------------------------------------|
-| [walletv3r1](#wallet-v3) | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
-| [walletv3r2](#wallet-v3) | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
+| Contract version       | Hash                                     |
+|------------------------|------------------------------------------|
+| walletv3r1 | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
+| walletv3r2 | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
 
 
 #### Persistent Memory Layout
@@ -201,11 +201,11 @@ This feature allows developers to implement complex logic that works in tandem w
 
 #### Official code hashes
 
-| Contract version         | Hash                                     |
-|--------------------------|------------------------------------------|
-| [walletv4r1](#wallet-v4) | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
-| [walletv4r2](#wallet-v4) | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
-| [walletv5r1](#wallet-v5) | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
+| Contract version       | Hash                                     |
+|------------------------|------------------------------------------|
+| walletv4r1 | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
+| walletv4r2 | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
+| walletv5r1 | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
 
 
 #### Plugins
@@ -311,9 +311,9 @@ In contrast to previous wallet version specifications, we will rely on [TL-B](/v
 
 #### Official code hash
 
-| Contract version         | Hash                                     |
-|--------------------------|------------------------------------------|
-| [walletv5r1](#wallet-v5) | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
+| Contract version       | Hash                                     |
+|------------------------|------------------------------------------|
+| walletv5r1 | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
 
 
 #### Persistent memory layout
