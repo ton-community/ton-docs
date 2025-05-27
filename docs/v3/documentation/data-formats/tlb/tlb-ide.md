@@ -1,7 +1,9 @@
-# IDE Support
+import Feedback from '@site/src/components/Feedback';
 
-The [intellij-ton](https://github.com/andreypfau/intellij-ton) plugin supports the Fift and FunC programming languages
-as well as the typed language binary (TL-B) format.
+# IDE support
 
-Additionally, the correct TL-B syntax specifications are described in
-the [TlbParser.bnf](https://github.com/ton-blockchain/intellij-ton/blob/main/src/main/grammar/TlbParser.bnf) file.
+The [intellij-ton](https://github.com/andreypfau/intellij-ton) plugin supports the Fift and FunC programming languages and the Typed Language Binary (TL-B) format.
+
+The TL-B syntax specification is defined in the [TlbParser.bnf](https://github.com/ton-blockchain/intellij-ton/blob/main/src/main/grammar/TlbParser.bnf) file.
+<Feedback />
+

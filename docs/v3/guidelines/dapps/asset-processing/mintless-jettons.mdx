@@ -1,103 +1,106 @@
-# Mintless Jettons Processing
+import Feedback from '@site/src/components/Feedback';
+
+# Mintless jettons processing
 
 ## Introduction
 
 :::info
-For a clear understanding, the reader should be familiar with the basic principles of asset processing described in [payments processing section](/v3/guidelines/dapps/asset-processing/payments-processing) and [jetton processing](/v3/guidelines/dapps/asset-processing/jettons).
+To understand this document, you should be familiar with the basic principles of asset processing outlined in [payments processing section](/v3/guidelines/dapps/asset-processing/payments-processing) and [jetton processing](/v3/guidelines/dapps/asset-processing/jettons).
 :::
 
-The TON blockchain ecosystem has introduced an innovative extension to the Jetton standard called [Mintless Jettons](https://github.com/ton-community/mintless-jetton?tab=readme-ov-file).
+TON has introduced [mintless jettons](https://github.com/ton-community/mintless-jetton?tab=readme-ov-file), an innovative extension of the Jetton standard.
 
-This extension enables decentralized, [Merkle-proof](/v3/documentation/data-formats/tlb/exotic-cells#merkle-proof) airdrops without the need for traditional minting processes.
+This extension enables decentralized, [merkle-proof](/v3/documentation/data-formats/tlb/exotic-cells#merkle-proof) airdrops without requiring traditional minting processes.
 
 ## Overview
 
-Mintless Jettons - are an extension ([TEP-177](https://github.com/ton-blockchain/TEPs/pull/177) and [TEP-176](https://github.com/ton-blockchain/TEPs/pull/176)) of the standard Jetton implementation ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)) on the TON blockchain.
+Mintless jettons are an extension ([TEP-177](https://github.com/ton-blockchain/TEPs/pull/177) and [TEP-176](https://github.com/ton-blockchain/TEPs/pull/176)) of the standard jetton implementation ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)) on TON Blockchain.
 
-This implementation enables large-scale, decentralized airdrops to millions of users without incurring significant costs or adding excessive load to the blockchain.
+This implementation enables large-scale, decentralized airdrops to millions of users while minimizing costs and blockchain load.
 
-### Basic Features
+### Basic features
 
 - **Scalability**: Traditional minting processes can be resource-intensive and costly when distributing tokens to a vast number of users.
-- **Efficiency**: By utilizing Merkle trees, Mintless Jettons store a single hash representing all airdropped amounts, reducing storage requirements.
-- **User-Friendly Airdrops**: Users have their jettons ready to use immediately—send, swap, and more—without any preparatory steps like withdrawal or claim!
+- **Efficiency**: By utilizing merkle trees, mintless jettons store a single hash representing all airdropped amounts, reducing storage requirements.
+- **User-friendly airdrops**: Users receive jettons immediately, ready for transactions like sending and swapping—without needing to withdraw or claim them first.
 
-## Supporting Mintless Jettons in On-Chain Protocols
+## Supporting mintless jettons in on-chain protocols
 
-Since Mintless Jettons are an extension of Standard Jettons, no additional steps are needed. Just interact with them as you would with USDT, NOT, Scale, or STON.
+Because mintless jettons extend the standard jettons, you can interact with them the same way you would with USDT, NOT, Scale, or STON—no additional steps required.
 
-## Supporting Mintless Jettons in Wallet Applications
+## Supporting mintless jettons in wallet applications
 
-Wallet applications play a crucial role in enhancing user experience with Mintless Jettons:
+Wallet applications play a key role in improving the user experience with mintless jettons:
 
-- **Display Unclaimed Jettons**: Wallets should show users the jettons they are eligible to claim based on the Merkle tree data.
-- **Automated Claim Process**: On initiating an outgoing transfer, the wallet should automatically include the necessary Merkle proof in the `transfer` message's custom payload.
+- **Display unclaimed jettons**: Wallets should show users the jettons they are eligible to claim based on the merkle tree data.
+- **Automated claim process**: When users initiate an outgoing transfer, wallets should automatically include the necessary merkle proof in the transfer message's custom payload.
 
-This can be done by either:
+Wallets can achieve this by:
 
-- Integration with the Off-Chain API Specified in the [Custom Payload API](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain)**:
-  - For each jetton, check whether it is mintless.
-  - If it is mintless, check whether the owner of the wallet has claimed it.
-  - If not claimed, retrieve data from the Custom Payload API and add the off-chain balance to the on-chain one.
-  - On outgoing transfers, if the user has not yet claimed the airdrop, retrieve the custom payload and init state from the Custom Payload API and include it in the `transfer` message to the jetton wallet.
+Integrating with the off-chain API specified in the [custom payload API](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain):
+  - Check if the jetton is mintless.
+  - Verify whether the wallet owner has claimed it.
+  - If unclaimed, retrieve data from the custom payload API and add the off-chain balance to the on-chain one.
+  - If the user hasn’t claimed the airdrop, retrieve the custom payload and initialization data from the Custom Payload API and include it in the `transfer` message to the jetton wallet.
 
-- Custom API:
-  - Download the tree of airdrops from `mintless_merkle_dump_uri` in the jetton metadata.
-  - Parse it (see section 6 below) and make the parsed result available via API.
+Using a custom API:
+  - Download the airdrop tree from `mintless_merkle_dump_uri` in the jetton metadata.
+  - Parse the data as explained in section 6 below.
+  - Make the parsed result available via API.
 
 :::info
-Supporting Mintless claims (in particular, indexing of airdrop trees) is not mandatory for wallets. It is expected that wallet applications may charge the jetton issuer for this service.
+Wallets are not required to support mintless claims, including indexing airdrop trees. Wallet applications may charge the jetton issuer for this service.
 :::
-## Supporting Mintless Jettons in dApps (DEX/Lending Platforms)
+## Supporting mintless jettons in dApps (DEX/Lending platforms)
 
-Since the claim happens automatically in wallet applications, dApps don't need any specific logic. They may use APIs (like Tonapi or Toncenter) that show unclaimed balances.
+Because wallet applications handle claims automatically, dApps don’t need special logic for mintless jettons. dApps can use APIs (such as TonAPI or Ton Center API) to display unclaimed balances.
 
-To enhance the user experience, dApps can check whether the wallet application that the user used to connect to the dApp supports the specific mintless jetton. If it is not supported, the dApp can retrieve the airdrop proof and initialization data from the jetton API and add it to the `transfer` message on the dApp side.
+To improve the user experience, dApps can check if the user's wallet application supports a specific mintless jetton. If unsupported, retrieve the airdrop proof and initialization data from the jetton API and include it in the transfer message.
 
-## Deploy a Mintless Jetton
+## Deploy a mintless jetton
 
-Deploying a Mintless Jetton involves several steps:
+Deploying a mintless jetton involves several steps:
 
-1. Prepare the Merkle Tree:
-  - Generate a Merkle tree containing all the airdrop recipients and their respective amounts.
+1. Prepare a merkle tree:
+  - Generate a merkle tree with all airdrop recipients and their respective amounts.
   - Compute the root `merkle_hash`.
 
-2. Deploy the Jetton Master Contract:
+2. Deploy a jetton master contract:
   - Include the `merkle_hash` in the contract's storage.
-  - Ensure the contract complies with the extended Jetton standard; you may use the [Mintless Jetton Standard Implementation](https://github.com/ton-community/mintless-jetton) as an example.
+  - Ensure the contract complies with the extended jetton standard; you may use the [mintless jetton standard implementation](https://github.com/ton-community/mintless-jetton) as an example.
 
-3. Provide the Merkle Proofs:
-  - Host the Merkle tree data off-chain.
-  - Implement the Custom Payload API to allow wallets to fetch the necessary proofs.
+3. Provide merkle proofs:
+  - Host the merkle tree data off-chain.
+  - Implement the custom payload API to allow wallets to fetch the necessary proofs.
 
-4. Update Metadata:
-  - Add the `mintless_merkle_dump_uri` and `custom_payload_api_uri` to the token's metadata as per the [Metadata Standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
+4. Update metadata:
+  - Add `mintless_merkle_dump_uri` and `custom_payload_api_uri` to the token's metadata as per the [metadata standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 
-5. Request Support from Wallets:
-  - Ask desired wallet applications to support (index) your Mintless Jetton.
+5. Request support from wallets:
+  - Ask wallet applications to index your mintless jetton.
 
-By following these steps, you can deploy a Mintless Jetton that users can seamlessly claim during usual operations.
+By following these steps, you can deploy a mintless jetton that users can seamlessly claim during regular transactions.
 
-## Retrieving Airdrop Information
+## Retrieving airdrop information
 
-Auditing the airdrop and verifying the total supply consists of a few steps.
+Auditing the airdrop and verifying the total supply involves a few steps.
 
-### Accessing the Merkle Dump
-- Start by downloading the Merkle tree data from the `mintless_merkle_dump_uri` provided in the metadata. It can be stored in TON Storage, IPFS, a web 2.0 resource, or other ways. This file contains `HashMap{address -> airdrop_data}` as a BoC file. The `airdrop_data` includes the amount, Unix timestamp from which the claim is available (`start_from`), and Unix timestamp when the claim is closed (`expired_at`).
+### Accessing the merkle dump
+- Download the merkle tree data from the `mintless_merkle_dump_uri` in the metadata. It can be stored in TON Storage, IPFS, a web 2.0 resource, or other formats. This file contains `HashMap{address -> airdrop_data}` as a BoC file. The `airdrop_data` includes the amount, Unix timestamp from which the claim is available (`start_from`), and Unix timestamp when the claim expires (`expired_at`).
 
-### Checking Integrity
-- This can be done by comparing the mintless Merkle dump cell hash with the hash stored in the jetton minter (the latter can be retrieved on-chain via the `get_mintless_airdrop_hashmap_root` get-method of the minter contract).
+### Checking integrity
+- Compare the mintless merkle dump cell hash with the hash stored in the jetton minter. You can retrieve the latter on-chain using the `get_mintless_airdrop_hashmap_root` get-method of the minter contract.
 
-### Verifying Balances
-- Use the Merkle tree to verify individual balances and ensure they sum up to the expected total supply.
+### Verifying balances
+- Use the merkle tree to confirm individual balances and ensure they add up to the expected total supply.
 
 ## Tooling
 
-There are a few utilities that can be used for the steps described above.
+Several utilities can help with these processes.
 
 ### mintless-proof-generator (from Core)
 
-1. **Compile the Utility**:
+1. **Compile the utility**:
 
 ```bash
 git clone https://github.com/ton-blockchain/ton
@@ -125,18 +128,18 @@ make mintless-proof-generator
 
 - The compiled file is stored as `build/crypto/mintless-proof-generator`.
 
-2. **Run a Check**:
+2. **Run a check**:
 
 ```bash
 build/crypto/mintless-proof-generator parse <input-boc> <output-file>
 ```
-This utility will print the mintless Merkle dump cell hash and store to `<output-file>` the list of all airdrops in `<address> <amount> <start_from> <expired_at>` format (one airdrop per line).
+This utility will print the mintless merkle dump cell hash and store to `<output-file>` the list of all airdrops in `<address> <amount> <start_from> <expired_at>` format (one airdrop per line).
 
-You can additionally generate all Merkle proofs (needed for `custom_payload_api_uri`) via the `mintless-proof-generator make_all_proofs <input-boc> <output-file>` command.
+You can additionally generate all merkle proofs (needed for `custom_payload_api_uri`) via the `mintless-proof-generator make_all_proofs <input-boc> <output-file>` command.
 
 ### mintless-toolbox (from Tonkeeper)
 
-1. **Compile the Utility**:
+1. **Compile the utility**:
 ```bash
 git clone https://github.com/tonkeeper/mintless-toolbox.git
 ```
@@ -149,23 +152,28 @@ cd mintless-toolbox
 make
 ```
 
-2. **Run a Check**:
+2. **Run a check**:
 
 ```bash
 ./bin/mintless-cli dump <airdrop-filename>
 ```
-- This utility reads an airdrop file and dumps it to the console in the format `address,amount,start_from,expire_at`.
+- This utility reads an airdrop file and prints it to the console in the format: `address,amount,start_from,expire_at`.
 
-By auditing the Merkle tree and contract data, stakeholders can verify the integrity of the airdrop and token supply.
+By auditing the merkle tree and contract data, stakeholders can verify the integrity of the airdrop and token supply.
 
 ## Conclusion
 
-Mintless Jettons offer an efficient and scalable solution for large-scale token airdrops on the TON blockchain. By extending the standard Jetton implementation, they reduce costs and blockchain load while maintaining security and decentralization. Supporting Mintless Jettons across smart contracts, wallet applications, and dApps ensures a seamless experience for users and fosters wider adoption. Deploying and auditing Mintless Jettons involves careful implementation of Merkle trees and adherence to the extended standards, contributing to a robust and transparent token ecosystem.
+Mintless jettons provide an efficient and scalable solution for large-scale token airdrops on TON Blockchain. By extending the standard jetton implementation, they reduce costs and blockchain load while maintaining security and decentralization.
+
+Supporting mintless jettons across smart contracts, wallet applications, and dApps ensures a seamless user experience and drives adoption. Deploying and auditing mintless jettons requires careful implementation of merkle trees and compliance with extended standards, contributing to a transparent and robust token ecosystem.
 
 
-## See Also
+## See also
 
-- [Understanding Mintless Jettons: A Comprehensive Guide](https://gist.github.com/EmelyanenkoK/bfe633bdf8e22ca92a5138e59134988f) - original post.
-- [Mintless Jetton Standard Implementation](https://github.com/ton-community/mintless-jetton)
-- [Jetton Offchain Payloads TEP](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain)
-- [Jetton Metadata Standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md)
+- [Understanding mintless jettons: a comprehensive guide](https://gist.github.com/EmelyanenkoK/bfe633bdf8e22ca92a5138e59134988f) - the original post.
+- [Mintless jetton standard implementation](https://github.com/ton-community/mintless-jetton)
+- [Jetton offchain payloads TEP](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain)
+- [Jetton metadata standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md)
+
+<Feedback />
+

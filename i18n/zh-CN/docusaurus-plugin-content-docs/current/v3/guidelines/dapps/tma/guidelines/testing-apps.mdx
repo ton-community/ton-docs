@@ -31,9 +31,38 @@ import ConceptImage from '@site/src/components/conceptImage'
 
 ### Telegram 桌面版（Windows 和 Linux）
 
-- 在**Windows**或**Linux**上下载并启动 Telegram 桌面版的[测试版](https://desktop.telegram.org/changelog#beta-version)（尚不支持 macOS 上的 Telegram 桌面版）。
+iOS 网络视图调试需要 Safari 桌面浏览器，因此需要 macOS。
+
+**在 iOS 设备上：**
+
+- 下载并启动 Telegram macOS 的[测试版](https://telegram.org/dl/macos/beta)。
+- 快速点击设置图标 5 次以打开调试菜单并启用“调试小程序”。
+- 向下滚动并按下 _Advanced_。
+- 启用 _Web Inspector_ 选项。
+
+在小程序中点击右键并选择 _检查元素_。
+
+- 打开 Safari 浏览器。
+- 打开 _Settings_ （⌘ + ，）。
+- 选择 _Advanced_ 选项卡。
+- 选中底部的 _Show features for web developers_ 选项。
+
+[Eruda](https://github.com/liriliri/eruda) 是一个提供基于 Web 的控制台的工具，用于在移动设备和桌面浏览器上调试和检查网页。以下是在 Telegram 小程序项目中使用 Eruda 的逐步指南。
+
+- 通过数据线将 iOS 设备连接到 Mac。
+- 在 iOS Telegram 客户端中打开 Mini App。
+- 在 macOS 的 Safari 菜单栏中打开 _Develop_ 标签。
+- 选择已连接的 iPhone。
+- 可选项：选择 _Connect via network_ 并拔掉电缆。
+- 在 _Telegram_ 块下选择已打开的网络视图 URL。
+
+### 步骤 1：包含 Eruda 库
+
+- 在 **Windows**、**Linux** 或 **macOS** 上下载并启动最新版本的 Telegram Desktop（目前版本为 5.0.1）。
 - 转到 _设置 > 高级 > 实验性设置 > 启用 webview 检查_。
-- 在 WebView 中点击右键并选择 _审查_。
+- 在 Windows 和 Linux 上，右键单击 WebView 并选择 _Inspect_。
+- 在 macOS 上，您需要通过 [Safari 开发者菜单](https://support.apple.com/en-gb/guide/safari/sfri20948/mac)
+  访问 Inspect，右键单击上下文菜单中无法使用 Inspect。
 
 ### Telegram macOS
 
@@ -42,22 +71,22 @@ import ConceptImage from '@site/src/components/conceptImage'
 
 在小程序中点击右键并选择 _检查元素_。
 
-## 使用 Eruda 测试
+## 步骤 2：初始化 Eruda
 
-[Eruda](https://github.com/liriliri/eruda) 是一个提供基于 Web 的控制台的工具，用于在移动设备和桌面浏览器上调试和检查网页。以下是在 Telegram 小程序项目中使用 Eruda 的逐步指南。
+接下来，你需要初始化 Eruda。你通常在网页加载时执行此操作。如果你通过 CDN 运行 Eruda。
 
 ![1](/img/docs/telegram-apps/eruda-1.png)
 
 ### 步骤 1：包含 Eruda 库
 
-首先，你需要在你的 HTML 文件中包含 Eruda 库。你可以通过 CDN 包含它：
+首先，在 HTML 文件中包含 Eruda 库。您可以从 CDN 加载它：
 
 ```html
 <!-- Include Eruda from CDN (Recommended) -->
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 ```
 
-或者你可以在 npm 上获取它。
+部署你的小程序，启动它，然后只需按 Eruda 图标即可开始调试！
 
 ```bash npm2yarn
 npm install eruda --save
@@ -65,7 +94,7 @@ npm install eruda --save
 
 ### 步骤 2：初始化 Eruda
 
-接下来，你需要初始化 Eruda。你通常在网页加载时执行此操作。如果你通过 CDN 运行 Eruda。
+接下来，在网页加载时初始化 Eruda。如果您从 CDN 使用 Eruda，请执行此操作：
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
@@ -86,7 +115,7 @@ eruda.init()
 
 ### 步骤 3：启动 Eruda
 
-部署你的小程序，启动它，然后只需按 Eruda 图标即可开始调试！
+部署好 Mini App 后，启动它，只需按下 Eruda 图标即可开始调试！
 
 <ConceptImage style={{maxWidth:'200pt', margin: '10pt 20pt 0 0', display: 'flex-box'}} src="/img/docs/telegram-apps/eruda-2.png" />
 <ConceptImage style={{maxWidth:'200pt', margin: '10pt 20pt', display: 'flex-box'}}  src="/img/docs/telegram-apps/eruda-3.png" />

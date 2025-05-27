@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Compile and Build smart contracts on TON
 
 Here is a list of libraries and repos to build your smart contract.
@@ -200,3 +202,6 @@ Note that all FunC source file contents used in your project should be passed to
 * [disintar/toncli](https://github.com/disintar/toncli) — one of the most popular approaches. You even can use it with Docker.
 * [tonthemoon/ton](https://github.com/tonthemoon/ton) — _(closed beta)_ one-line TON binaries installer.
 * [delab-team/tlbcrc](https://github.com/delab-team/tlbcrc) — Package & CLI to generate opcodes by TL-B scheme
+
+<Feedback />
+

@@ -1,56 +1,59 @@
-# How to Contribute
+import Feedback from '@site/src/components/Feedback';
 
-In our quest to make **TON the most successful blockchain**, ensuring that TON documentation is comprehensible to people worldwide is crucial. Localization is key, and we're **excited** to have you join us in this effort.
+# How to contribute
+
+This page explains how to participate in the localization program for TON documentation.
 
 ## Prerequisites
 
-The **TownSquare Labs Localization Program** is open to everyone! Here are a few steps you need to take before you start contributing:
+Localization contribution is open to everyone. Here are a few steps you need to take before you start contributing:
 
-1. Log in to your [**Crowdin**](https://crowdin.com) account or sign up.
+1. Log in to your [Crowdin](https://crowdin.com) account or sign up.
 2. Select the language you want to contribute to.
-3. Familiarize yourself with the [**How to Use Crowdin**](/v3/contribute/localization-program/how-to-contribute) guide and the [**Translation Style Guide**](/v3/contribute/localization-program/translation-style-guide) for tips and best practices.
-4. Use machine translations to aid your work but do not rely solely on them.
-5. All translation results can be previewed on the website one hour after they have been proofread.
+3. Familiarize yourself with the [How to use crowdin](/v3/contribute/localization-program/how-to-contribute/) guide and the [Translation style guide](/v3/contribute/localization-program/translation-style-guide/) for tips and best practices.
+4. Use machine translations to aid your work, but do not rely solely on them.
+5. Preview all translation results on the website after proofreading.
+
+:::info
+Before contributing, read the guidelines below to ensure standardization and quality, speeding up the review process.
+:::
+
+## Side-by-side mode
+
+All tasks are performed in **side-by-side** mode in the Crowdin Editor. To enable this, click a file you want to work on. At the top right of the page, click the **Editor view** button and select **side-by-side** mode for a clearer editor view.  
+![side-by-side mode](/img/localizationProgramGuideline/side-by-side.png)
 
 ## Roles
 
 Here are the **roles** you can assume in the system:
 
 - **Language Coordinator** – Manages project features within assigned languages.
-- **Developer** – Uploads files, edits translatable text, connects integrations, and uses the API.
+- **Developer** – Uploads files, edits translatable text, connects integrations and uses the API.
 - **Proofreader** – Translates and approves strings.
 - **Translator** (in-house or community) – Translates strings and votes on translations added by others.
 
-Our localization project is hosted on [Crowdin](https://crowdin.com/project/ton-docs).
+The localization project is hosted on [Crowdin](https://crowdin.com/project/ton-docs).
 
-:::info
-Before you start contributing, **read the guidelines below** to ensure standardization and quality, making the review process much faster.
 
-## Side-by-Side Mode
-
-All tasks are performed in **side-by-side** mode in the Crowdin Editor. To enable this, click a file you want to work on. At the top right of the page, click the **Editor view** button and select **side-by-side** mode for a clearer editor view.  
-![side-by-side mode](/img/localizationProgramGuideline/side-by-side.png)
-:::
-
-### Language Coordinator
-- **Translate and approve strings**
-- **Pre-translate project content**
-- **Manage project members and join requests**
+### Language coordinator guidelines
+- Translate and approve strings
+- Pre-translate project content
+- Manage project members and join requests
   ![manage-members](/img/localizationProgramGuideline/manage-members.png)
-- **Generate project reports**
+- Generate project reports
   ![generate-reports](/img/localizationProgramGuideline/generate-reports.png)
-- **Create tasks**
+- Create tasks
   ![create-tasks](/img/localizationProgramGuideline/create-tasks.png)
 
-### Developer
-- **Update Footer Configuration for Your Language :**
-  1. Fork our [**repository**](https://github.com/TownSquareXYZ/ton-docs/tree/i18n_feat).
+### Developer guidelines
+- **Update footer configuration for your language:**
+  1. Fork our [repository](https://github.com/TownSquareXYZ/ton-docs/tree/i18n_feat).
   2. Locate the file [**`src/theme/Footer/config.ts`**](https://github.com/TownSquareXYZ/ton-docs/blob/main/src/theme/Footer/config.ts).
   3. Copy the value of the variable **`FOOTER_COLUMN_LINKS_EN`** to **`FOOTER_COLUMN_LINKS_[YOUR_LANG]`**.
   4. Translate the values of the keys **`headerLangKey`** and **`langKey`** to your language, as we did for Mandarin in **`FOOTER_COLUMN_LINKS_CN`**.
   5. Add a new property to **`FOOTER_LINKS_TRANSLATIONS`**:
       - Set **the key** as your [**ISO language code**](https://www.andiamo.co.uk/resources/iso-language-codes/) (**two letters**, **lowercase**).
-      - **The value** should be the new variable you just created for your language.
+      - **The value** should be the new variable you created for your language.
   6. Run the command **`yarn start:local [YOUR_IOS_LANG_CODE]`** to preview the new footer in your language.   
         (e.g., **`yarn start:local ru`** for a preview of the **Russian** footer)
   7. If everything looks good, create a pull request to the **`i18n_feat`** branch.
@@ -60,13 +63,13 @@ All tasks are performed in **side-by-side** mode in the Crowdin Editor. To enabl
   ![install-github-integration](/img/localizationProgramGuideline/howItWorked/install-github-integration.png)
 - **Use the [Crowdin API](https://developer.crowdin.com/api/v2/)**
 
-### Proofreader
+### Proofreader guidelines
 
 As a **Proofreader**, you'll work on files with a **blue progress bar**.
 ![proofread step1](/img/localizationProgramGuideline/proofread-step1.png)
 Click on a file to enter the editing interface.
 
-#### Let's Start Contributing
+#### Contribution flow
 
 1. Make sure you're in [**side-by-side mode**](#side-by-side-mode). Filter by **Not Approved** translations to see strings needing proofreading.
 ![proofread filter](/img/localizationProgramGuideline/proofread-filter.png)
@@ -79,23 +82,23 @@ Click on a file to enter the editing interface.
 ![proofread approved](/img/localizationProgramGuideline/proofread-approved.png)
 
 :::info
-You can also review approved lines:
+You can also review the approved lines:
   1. Filter by **Approved**.
   2. If an approved line has issues, click the ☑️ button to revert it to needing proofreading.
 :::
 
-3. To move to the next file, click the file name at the top, select the new file from the pop-up window, and continue proofreading.
+3. To move to the following file, click the file name at the top, select the new file from the pop-up window, and continue proofreading.
 ![to next](/img/localizationProgramGuideline/redirect-to-next.png)
 
-#### Previewing Your Work
-Every approved content will be deployed to a preview website within one hour. Check [**our repo**](https://github.com/TownSquareXYZ/ton-docs/pulls) for the **preview** link in the newest PR.
+#### Previewing your work
+The preview website displays all approved content within one hour. Check [**our repo**](https://github.com/TownSquareXYZ/ton-docs/pulls) for the **preview** link in the newest PR.
 ![preview link](/img/localizationProgramGuideline/preview-link.png)
 
-### Translator
+### Translator guidelines
 
-As a **Translator**, your goal is to ensure translations are faithful and expressive, making them as close to the original meaning and as understandable as possible. Your mission is to make the **blue progress bar** reach 100%.
+As a translator, you aim to ensure that translations are faithful and expressive, keeping them as close to the original meaning and as understandable as possible. Your mission is to make the blue progress bar reach 100%.
 
-#### Let's Start Translating
+#### Translation flow
 
 Follow these steps for a successful translation process:
 
@@ -116,15 +119,18 @@ Follow these steps for a successful translation process:
 5. To move to the next file, click the file name at the top and select the new file from the pop-up window.
 ![to next](/img/localizationProgramGuideline/redirect-to-next.png)
 
-## How to Add Support for a New Language
+## How to add support for a new language
 
-Currently, we have all desired languages in Crowdin. If you are a community manager, follow these steps:
+If you are a community manager, follow these steps:
 
 1. Add a new branch named `[lang]_localization` (e.g., `ko_localization` for Korean) on [TownSquareXYZ/ton-docs](https://github.com/TownSquareXYZ/ton-docs).
 2. **Contact the Vercel owner of this repo** to add the new language to the menu.
 3. Create a PR request to the dev branch. **Do not merge to dev**; this is for preview purposes only.
 
-Once these steps are completed, you can see the preview of your language in the PR request.
+Once you complete these steps, you can see the preview of your language in the PR request.
 ![ko preview](/img/localizationProgramGuideline/ko_preview.png)
 
 When your language is ready for the TON docs, create an issue, and we'll set your language into the production environment.
+
+<Feedback />
+

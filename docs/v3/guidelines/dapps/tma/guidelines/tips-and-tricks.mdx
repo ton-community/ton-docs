@@ -1,20 +1,22 @@
+import Feedback from '@site/src/components/Feedback';
 
-# Tips and Tricks
+
+# Tips and tricks
 
 
-On this page, you'll find a list of frequently asked questions related to issues in TMA.
+On this page, you'll find a list of frequently asked questions about issues in TMA.
 
 ### How to solve the cache overflow issue in TMA?
 
 :::tip
-Only reinstalling the Telegram application could be helpful.
+Reinstalling the Telegram application is the only effective solution.
 :::
 
 
 ### Are there any recommendations on caching headers for HTML files?
 
 :::tip
-It's preferable to switch off cache in the HTML. To ensure your cache switched off, specify headers in your request according the following:
+It’s best to disable caching in HTML files. To ensure caching is turned off, specify the following headers in your request:
 
 ```curl
 Cache-Control: no-store, must-revalidate
@@ -26,16 +28,16 @@ Expires: 0
 
 ### What is suggested IDE for development TMA?
 
-The process of development in Google Chrome more convenient because of the familiar dev tools.
+Developing in Google Chrome is more convenient due to its familiar developer tools.
 
-You can retrieve the launch parameters of the mini-app and open this link in Chrome. For our case, the easiest way is to retrieve the launch parameters from the web version of Telegram: [https://web.telegram.org/](https://web.telegram.org/)
-
-
-
-### Closing Behaviour
+To retrieve the mini-app's launch parameters and open this link in Chrome, use the web version of Telegram: [https://web.telegram.org/](https://web.telegram.org/)
 
 
-In many web applications, users might accidentally close the app while scrolling to the top. This can happen if they drag a section of the application too far, inadvertently triggering the app to close.
+
+### Closing behavior
+
+
+In many web applications, users may accidentally close the app while scrolling to the top. This can happen if they drag a section of the app too far, inadvertently triggering its closure.
 
 
 <p align="center">
@@ -45,7 +47,7 @@ In many web applications, users might accidentally close the app while scrolling
 </p>
 
 
-To prevent such accidental closures, enable `closing_behavior` in the TMA. This method will add a dialog where the user can either approve or decline the closing of the Web App.
+To prevent accidental closures, enable `closing_behavior` in TMA. This method adds a confirmation dialog, where the user can either approve or decline closing of the Web App.
 
 
 
@@ -57,9 +59,12 @@ window.Telegram.WebApp.enableClosingConfirmation()
 ## How to specify a description for a certain language in the TMA?
 
 :::tip
-You can configure your description with following methods:
+Use the following methods to configure descriptions in different languages:
 
 * https://core.telegram.org/bots/api#setmydescription
 * https://core.telegram.org/bots/api#setmyshortdescription
 
 :::
+
+<Feedback />
+

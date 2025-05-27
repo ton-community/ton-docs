@@ -1,13 +1,15 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 
-# Blueprint SDK
+# Blueprint
 
 ![Blueprint](/img/blueprint/logo.svg)
 
 A development environment for TON for writing, testing, and deploying smart contracts.
 
-## Quick start 🚀
+## Quick start
 
 Run the following in terminal to create a new project and follow the on-screen instructions:
 
@@ -18,7 +20,7 @@ npm create ton@latest
 
 <Button href="https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa" colorType={'secondary'} sizeType={'sm'}>
 
-Watch Video Tutorials
+Watch video tutorials
 
 </Button>
 
@@ -31,13 +33,16 @@ Watch Video Tutorials
 
 ### Tech stack
 - Compiling FunC with https://github.com/ton-community/func-js (no cli)
+- Compiling Tact with https://github.com/tact-lang/tact
 - Testing smart contracts with https://github.com/ton-org/sandbox
 - Deploying smart contracts with TON Connect 2.0 compatible wallets or a `ton://` deeplink
 
 ### Requirements
 
 - [Node.js](https://nodejs.org/) with a recent version like v18, verify version with `node -v`
-- IDE with TypeScript and FunC support like [Visual Studio Code](https://code.visualstudio.com/) with the [FunC plugin](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
+- IDE with TypeScript and TON support:
+  - [Visual Studio Code](https://code.visualstudio.com/) with the [FunC plugin](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode) or [Tact plugin](https://marketplace.visualstudio.com/items?itemName=tonstudio.vscode-tact)
+  - [IntelliJ IDEA](https://www.jetbrains.com/idea/) with the [TON Development plugin](https://plugins.jetbrains.com/plugin/23382-ton)
 
 ## References
 
@@ -53,9 +58,12 @@ Watch Video Tutorials
 - [[YouTube] Func with Blueprint EN](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa) ([RU version](https://youtube.com/playlist?list=PLyDBPwv9EPsA5vcUM2vzjQOomf264IdUZ))
 
 
-## See Also
+## See also
 
 * [Develop Smart Contract Introduction](/v3/documentation/smart-contracts/overview)
 * [How to work with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet)
 * [SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
+
+
+<Feedback />
 

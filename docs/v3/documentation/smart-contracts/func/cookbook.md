@@ -1,14 +1,17 @@
-# FunC Cookbook
+import Feedback from '@site/src/components/Feedback';
 
-The core reason for creating the FunC Cookbook is to collect all the experience from FunC developers in one place so that future developers will use it!
+# FunC cookbook
+The FunC cookbook was created to consolidate all the knowledge and best practices from experienced FunC developers in one place. The goal is to make it easier for future developers to build smart contracts efficiently.
 
-Compared to the [FunC Documentation](/v3/documentation/smart-contracts/func/docs/types), this article is more focused on the everyday tasks of every FunC developer to resolve during the development of smart contracts.
+Unlike the official [FunC documentation](/v3/documentation/smart-contracts/func/docs/types), this guide focuses on solving everyday challenges that FunC developers encounter during smart contract development.
 
 ## Basics
 
 ### How to write an if statement
 
 Let's say we want to check if any event is relevant. To do this, we use the flag variable. Remember that in FunC `true` is `-1` and `false` is `0`.
+
+To check whether an event is relevant, use a flag variable. In FunC, `true` is represented by `-1`, and `false` is `0`.
 
 ```func
 int flag = 0; ;; false
@@ -20,18 +23,12 @@ else {
     ;; reject the transaction
 }
 ```
+**Note:** The `==` operator is unnecessary, as `0` already evaluates to `false`, and any nonzero value is considered `true`.
 
-> 💡 Noted
-> 
-> We do not need the operator `==`, because the value `0` is `false`, so any other value will be `true`.
-
-> 💡 Useful links
->  
-> ["If statement" in docs](/v3/documentation/smart-contracts/func/docs/statements#if-statements)
+**Reference:** [`If statement` in docs](/v3/documentation/smart-contracts/func/docs/statements#if-statements)
 
 ### How to write a repeat loop
-
-As an example, we can take exponentiation
+A repeat loop helps execute an action a fixed number of times. The example below demonstrates exponentiation:
 
 ```func
 int number = 2;
@@ -44,50 +41,40 @@ repeat(degree - 1) {
 }
 ```
 
-> 💡 Useful links
-> 
-> ["Repeat loop" in docs](/v3/documentation/smart-contracts/func/docs/statements#repeat-loop)
+**Reference:** [`Repeat loop` in docs](/v3/documentation/smart-contracts/func/docs/statements#repeat-loop)
 
 ### How to write a while loop
 
-While is useful when we do not know how often to perform a particular action. For example, take a `cell`, which is known to store up to four references to other cells. 
+A while loop is useful when the number of iterations is unknown. The following example processes a `cell` which can store up to four references to other cells:
 
 ```func
-cell inner_cell = begin_cell() ;; create a new empty builder
-        .store_uint(123, 16) ;; store uint with value 123 and length 16 bits
-        .end_cell(); ;; convert builder to a cell
+cell inner_cell = begin_cell() ;; Create a new empty builder
+        .store_uint(123, 16) ;; Store uint with value 123 and length 16 bits
+        .end_cell(); ;; Convert builder to a cell
 
 cell message = begin_cell()
-        .store_ref(inner_cell) ;; store cell as reference
+        .store_ref(inner_cell) ;; Store cell as reference
         .store_ref(inner_cell)
         .end_cell();
 
-slice msg = message.begin_parse(); ;; convert cell to slice
-while (msg.slice_refs_empty?() != -1) { ;; we should remind that -1 is true
-    cell inner_cell = msg~load_ref(); ;; load cell from slice msg
+slice msg = message.begin_parse(); ;; Convert cell to slice
+while (msg.slice_refs_empty?() != -1) { ;; We should remind that -1 is true
+    cell inner_cell = msg~load_ref(); ;; Load cell from slice msg
     ;; do something
 }
 ```
 
-> 💡 Useful links
-> 
-> ["While loop" in docs](/v3/documentation/smart-contracts/func/docs/statements#while-loop)
->
-> ["Cell" in docs](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage)
->
-> ["slice_refs_empty?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_refs_empty)
->
-> ["store_ref()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
-> 
-> ["begin_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
-> 
-> ["end_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
-> 
-> ["begin_parse()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
+**References:**
+- [`While loop` in docs](/v3/documentation/smart-contracts/func/docs/statements#while-loop)
+- [`Cell` in docs](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage)
+- [`slice_refs_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_refs_empty)
+- [`store_ref()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
 ### How to write a do until loop
-
-When we need the cycle to run at least once, we use `do until`.
+Use a `do-until` loop when the loop must execute at least once.
 
 ```func 
 int flag = 0;
@@ -97,155 +84,140 @@ do {
 } until (flag == -1); ;; -1 is true
 ```
 
-> 💡 Useful links
-> 
-> ["Until loop" in docs](/v3/documentation/smart-contracts/func/docs/statements#until-loop)
+**Reference:** [`Until loop` in docs](/v3/documentation/smart-contracts/func/docs/statements#until-loop)
 
 ### How to determine if slice is empty
 
-Before working with `slice`, it is necessary to check whether it has any data to process it correctly. We can use `slice_empty?()` to do this, but we have to consider that it will return `0` (`false`) if there is at least one `bit` of data or one `ref`.
+Before working with a `slice`, checking whether it contains any data is essential to ensure proper processing. The `slice_empty?()` method can be used for this purpose. However, it returns `0` (`false`) if the slice contains at least one `bit` of data or one `ref`.
 
 ```func
-;; creating empty slice
+;; Creating empty slice
 slice empty_slice = "";
-;; `slice_empty?()` returns `true`, because slice doesn't have any `bits` and `refs`
+;; `slice_empty?()` returns `true` because the slice doesn't have any `bits` and `refs`.
 empty_slice.slice_empty?();
 
-;; creating slice which contains bits only
+;; Creating slice which contains bits only
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_empty?()` returns `false`, because slice have any `bits`
+;; `slice_empty?()` returns `false` because the slice has `bits`.
 slice_with_bits_only.slice_empty?();
 
-;; creating slice which contains refs only
+;; Creating slice which contains refs only
 slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_empty?()` returns `false`, because slice have any `refs`
+;; `slice_empty?()` returns `false` because the slice has `refs`.
 slice_with_refs_only.slice_empty?();
 
-;; creating slice which contains bits and refs
+;; Creating slice which contains bits and refs
 slice slice_with_bits_and_refs = begin_cell()
     .store_slice("Hello, world!")
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_empty?()` returns `false`, because slice have any `bits` and `refs`
+;; `slice_empty?()` returns `false` because the slice has `bits` and `refs`.
 slice_with_bits_and_refs.slice_empty?();
 ```
-> 💡 Useful links
->
-> ["slice_empty?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_empty)
-> 
-> ["store_slice()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
-> 
-> ["store_ref()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
-> 
-> ["begin_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
-> 
-> ["end_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
-> 
-> ["begin_parse()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
+**References:**
+- [`slice_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_empty)
+- [`store_slice()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- [`store_ref()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
 
-### How to determine if slice is empty (doesn't have any bits, but may have refs)
+### How to determine if slice is empty (no bits, but may have refs)
 
-If we need to check only the `bits` and it does not matter if there are any `refs` in `slice`, then we should use `slice_data_empty?()`.
+If only the presence of `bits` matters and `refs` in `slice` can be ignored, use the `slice_data_empty?()`.
 
 ```func 
-;; creating empty slice
+;; Creating empty slice
 slice empty_slice = "";
-;; `slice_data_empty?()` returns `true`, because slice doesn't have any `bits`
+;; `slice_data_empty?()` returns `true` because the slice doesn't have any `bits`.
 empty_slice.slice_data_empty?();
 
-;; creating slice which contains bits only
+;; Creating slice which contains bits only
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_data_empty?()` returns `false`, because slice have any `bits`
+;; `slice_data_empty?()` returns `false` because the slice has  `bits`.
 slice_with_bits_only.slice_data_empty?();
 
-;; creating slice which contains refs only
+;; Creating slice which contains refs only
 slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_data_empty?()` returns `true`, because slice doesn't have any `bits`
+;; `slice_data_empty?()` returns `true` because the slice doesn't have any `bits`
 slice_with_refs_only.slice_data_empty?();
 
-;; creating slice which contains bits and refs
+;; Creating slice which contains bits and refs
 slice slice_with_bits_and_refs = begin_cell()
     .store_slice("Hello, world!")
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_data_empty?()` returns `false`, because slice have any `bits`
+;; `slice_data_empty?()` returns `false` because the slice has `bits`.
 slice_with_bits_and_refs.slice_data_empty?();
 ```
 
-> 💡 Useful links
->
-> ["slice_data_empty?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_data_empty)
-> 
-> ["store_slice()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
-> 
-> ["store_ref()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
-> 
-> ["begin_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
-> 
-> ["end_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
-> 
-> ["begin_parse()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
+**References:**
+- [`slice_data_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_data_empty)
+- [`store_slice()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- [`store_ref()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
 
-### How to determine if slice is empty (doesn't have any refs, but may have bits)
+### How to determine if slice is empty (no refs, but may have bits)
 
 In case we are only interested in `refs`, we should check their presence using `slice_refs_empty?()`.
 
+If only `refs` are of interest, their presence can be checked using the `slice_refs_empty?()`.
+
 ```func 
-;; creating empty slice
+;; Creating empty slice
 slice empty_slice = "";
-;; `slice_refs_empty?()` returns `true`, because slice doesn't have any `refs`
+;; `slice_refs_empty?()` returns `true` because the slice doesn't have any `refs`.
 empty_slice.slice_refs_empty?();
 
-;; creating slice which contains bits only
+;; Creating slice which contains bits only
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_refs_empty?()` returns `true`, because slice doesn't have any `refs`
+;; `slice_refs_empty?()` returns `true` because the slice doesn't have any `refs`.
 slice_with_bits_only.slice_refs_empty?();
 
-;; creating slice which contains refs only
+;; Creating slice which contains refs only
 slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_refs_empty?()` returns `false`, because slice have any `refs`
+;; `slice_refs_empty?()` returns `false` because the slice has `refs`.
 slice_with_refs_only.slice_refs_empty?();
 
-;; creating slice which contains bits and refs
+;; Creating slice which contains bits and refs
 slice slice_with_bits_and_refs = begin_cell()
     .store_slice("Hello, world!")
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_refs_empty?()` returns `false`, because slice have any `refs`
+;; `slice_refs_empty?()` returns `false` because the slice has `refs`.
 slice_with_bits_and_refs.slice_refs_empty?();
 ```
 
-> 💡 Useful links
-> 
-> ["slice_refs_empty?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_refs_empty)
-> 
-> ["store_slice()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
-> 
-> ["store_ref()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
-> 
-> ["begin_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
-> 
-> ["end_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
-> 
-> ["begin_parse()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
+**References:**
+- [`slice_refs_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_refs_empty)
+- [`store_slice()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- [`store_ref()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
-### How to determine if cell is empty
+### How to determine if a cell is empty
 
-To check if there is any data in a `cell`, we should first convert it to `slice`. If we are only interested in having `bits`, we should use `slice_data_empty?()`, if only `refs` - `slice_refs_empty?()`. In case we want to check the presence of any data regardless of whether it is a `bit` or `ref`, we need to use `slice_empty?()`.
+To check whether a `cell` contains any data, it must first be converted into a `slice`.
+- If only `bits` matter, use `slice_data_empty?()`.
+- If only `refs` matter, use `slice_refs_empty?()`.
+- If the presence of any data (`bits` or `refs`) needs to be checked, use `slice_empty?()`.
 
 ```func
 cell cell_with_bits_and_refs = begin_cell()
@@ -253,40 +225,34 @@ cell cell_with_bits_and_refs = begin_cell()
     .store_ref(null())
     .end_cell();
 
-;; Change `cell` type to slice with `begin_parse()`
+;; Change the `cell` type to slice with `begin_parse()`.
 slice cs = cell_with_bits_and_refs.begin_parse();
 
-;; determine if slice is empty
+;; Determine if the slice is empty.
 if (cs.slice_empty?()) {
-    ;; cell is empty
+    ;; Cell is empty
 }
 else {
-    ;; cell is not empty
+    ;; Cell is not empty
 }
 ```
 
-> 💡 Useful links
->
-> ["slice_empty?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_empty)
->
-> ["begin_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
->
-> ["store_uint()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
->
-> ["end_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
->
-> ["begin_parse()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
+**References:**
+- [`slice_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_empty)
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`store_uint()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
-### How to determine if dict is empty
-
-There is a method of `dict_empty?()` to check the data presence in dict. This method is the equivalent of `cell_null?()` because usually a `null`-cell is an empty dictionary.
+### How to determine if a dict is empty
+The `dict_empty?()` checks whether a dictionary contains any data. This method is functionally equivalent to `cell_null?()`, as a `null` cell typically represents an empty dictionary.
 
 ```func
 cell d = new_dict();
 d~udict_set(256, 0, "hello");
 d~udict_set(256, 1, "world");
 
-if (d.dict_empty?()) { ;; Determine if dict is empty
+if (d.dict_empty?()) { ;; Determine if the dict is empty
     ;; dict is empty
 }
 else {
@@ -294,17 +260,15 @@ else {
 }
 ```
 
-> 💡 Useful links
->
-> ["dict_empty?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#dict_empty)
->
-> ["new_dict()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#new_dict) creating an empty dict
->
-> ["dict_set()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_set) adding some elements in dict d with function, so it is not empty
+**References:**
+- [`dict_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#dict_empty)
+- [`new_dict()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#new_dict), creating an empty dict
+- [`dict_set()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_set), adding some elements in dict `d` with function, so it is not empty
 
-### How to determine if tuple is empty
+### How to determine if a tuple is empty
 
-When working with `tuples`, it is important always to know if any values are inside for extraction. If we try to extract value from an empty `tuple`, we get an error: "not a tuple of valid size" with `exit code 7`.
+When working with `tuples`, checking for existing values before extracting them is crucial. Extracting a value from an empty tuple will result in an error:
+["not a tuple of valid size" - `exit code 7`](/v3/documentation/tvm/tvm-exit-codes#7)
 
 ```func
 ;; Declare tlen function because it's not presented in stdlib
@@ -323,20 +287,18 @@ When working with `tuples`, it is important always to know if any values are ins
     }
 }
 ```
+**Note:** 
+We are defining the `tlen` assembly function. You can find more details [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) and a see a [list of assembler commands](/v3/documentation/tvm/instructions).
 
-> 💡 Noted
-> 
-> We are declaring tlen assembly function. You can read more [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) and see [list of all assembler commands](/v3/documentation/tvm/instructions).
+**References:**
+- [`empty_tuple?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#empty_tuple)
+- [`tpush()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
+- [`Exit codes` in docs](/v3/documentation/tvm/tvm-exit-codes)
 
-> 💡 Useful links
->
-> ["empty_tuple?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#empty_tuple)
->
-> ["tpush()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
->
-> ["Exit codes" in docs](/v3/documentation/tvm/tvm-exit-codes)
+### How to determine if a lisp-style list is empty
 
-### How to determine if lisp-style list is empty
+We can use the [cons](/v3/documentation/smart-contracts/func/docs/stdlib/#cons) function to add an element to determine if a lisp-style list is empty. For example, adding 100 to the list ensures it is not empty.
+
 
 ```func
 tuple numbers = null();
@@ -349,11 +311,9 @@ if (numbers.null?()) {
 }
 ```
 
-We are adding number 100 to our list-style list with [cons](/v3/documentation/smart-contracts/func/docs/stdlib/#cons) function, so it's not empty.
-
 ### How to determine a state of the contract is empty
-
-Let’s say we have a `counter` that stores the number of transactions. This variable is not available during the first transaction in the smart contract state, because the state is empty, so it is necessary to process such a case. If the state is empty, we create a variable `counter` and save it.
+Consider a smart contract with a `counter` that tracks the number of transactions. This variable does not exist in the contract state during the first transaction because it is empty. 
+It is important to handle this scenario by checking if the state is empty and initializing the `counter` accordingly.
 
 ```func
 ;; `get_data()` will return the data cell from contract state
@@ -361,36 +321,32 @@ cell contract_data = get_data();
 slice cs = contract_data.begin_parse();
 
 if (cs.slice_empty?()) {
-    ;; contract data is empty, so we create counter and save it
+    ;; Contract data is empty, so we create counter and save it
     int counter = 1;
-    ;; create cell, add counter and save in contract state
+    ;; Create cell, add counter and save in contract state
     set_data(begin_cell().store_uint(counter, 32).end_cell());
 }
 else {
-    ;; contract data is not empty, so we get our counter, increase it and save
+    ;; Contract data is not empty, so we get our counter, increase it and save
     ;; we should specify correct length of our counter in bits
     int counter = cs~load_uint(32) + 1;
     set_data(begin_cell().store_uint(counter, 32).end_cell());
 }
 ```
 
-> 💡 Noted
-> 
-> We can determine that state of contract is empty by determining that [cell is empty](/v3/documentation/smart-contracts/func/cookbook#how-to-determine-if-cell-is-empty).
+**Note:**
+The contract state can be determined as empty by verifying whether the [cell is empty](/v3/documentation/smart-contracts/func/cookbook#how-to-determine-if-cell-is-empty).
 
-> 💡 Useful links
->
-> ["get_data()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#get_data)
->
-> ["begin_parse()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#begin_parse)
->
-> ["slice_empty?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
->
-> ["set_data?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#set_data)
+
+**References:**
+- [`get_data()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#get_data)
+- [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#begin_parse)
+- [`slice_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
+- [`set_data?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#set_data)
 
 ### How to build an internal message cell
 
-If we want the contract to send an internal message, we should first properly create it as a cell, specifying the technical flags, the recipient address, and the rest data.
+When a smart contract needs to send an internal message, it must first construct the message as a `cell`. This includes specifying technical flags, the recipient's address, and additional data.
 
 ```func
 ;; We use literal `a` to get valid address inside slice from string containing address 
@@ -409,34 +365,23 @@ cell msg = begin_cell()
 
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
+**Note:**
+- In this example, we use the literal `a` to obtain an address. More details on string literals can be found in the [documentation](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals). 
+- You can find more details in the [documentation](/v3/documentation/smart-contracts/message-management/sending-messages). A direct link to the [layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) is also available.
 
-> 💡 Noted
->
-> In this example, we use literal `a` to get address. You can find more about string literals in [docs](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals)
+**References:**
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`store_uint()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
+- [`store_slice()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- [`store_coins()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_coins)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#end_cell)
+- [`send_raw_message()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
 
-> 💡 Noted
->
-> You can find more in [docs](/v3/documentation/smart-contracts/message-management/sending-messages). Also, you can jump in [layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) with this link.
+### How to contain a body as a ref in an internal message cell
 
-> 💡 Useful links
->
-> ["begin_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
-> 
-> ["store_uint()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
->
-> ["store_slice()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
->
-> ["store_coins()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_coins)
->
-> ["end_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#end_cell)
->
-> ["send_raw_message()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
+The message body can contain `int`, `slices`, or `cells` following flags and other technical data. If a `cell` is used, a bit must be set to `1` before calling `store_ref()`, indicating that the `cell` will be included.
 
-### How to contain a body as ref to an internal message cell
-
-In the body of a message that follows flags and other technical data, we can send `int`, `slice`, and `cell`. In the case of the latter, it is necessary to set the bit to `1` before `store_ref()` to indicate that the `cell` will go on. 
-
-We can also send the body of the message inside the same `cell` as header, if we are sure that we have enough space. In this case, we need to set the bit to `0`.
+Alternatively, if there is sufficient space, the message body can be stored in the same `cell` as the header. In this case, the bit should be set to `0`.
 
 ```func
 ;; We use literal `a` to get valid address inside slice from string containing address 
@@ -460,35 +405,25 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
 
-> 💡 Noted
->
-> In this example, we use literal `a` to get address. You can find more about string literals in [docs](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals)
+**Note:**
+- In this example, we use the literal `a` to obtain an address. More details on string literals can be found in the [documentation](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals).
+- The example uses [`mode 3`](/v3/documentation/smart-contracts/message-management/sending-messages#mode3), which ensures the contract deducts the specified amount while covering the transaction fee from the contract balance and ignoring errors.
+  - `mode 64` returns all received tokens, subtracting the commission.
+  - `mode 128` transfers the entire balance.
+- The [message](/v3/documentation/smart-contracts/func/cookbook#how-to-build-an-internal-message-cell) is constructed with the body added separately.
+  
 
-> 💡 Noted
->
-> In this example, we used mode 3 to take the incoming tons and send exactly as much as specified (amount) while paying commission from the contract balance and ignoring the errors. Mode 64 is needed to return all the tons received, subtracting the commission, and mode 128 will send the entire balance.
+**References:**
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`store_uint()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
+- [`store_slice()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- [`store_coins()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_coins)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#end_cell)
+- [`send_raw_message()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
 
-> 💡 Noted
->
-> We are [building a message](/v3/documentation/smart-contracts/func/cookbook#how-to-build-an-internal-message-cell) but adding message body separetly.
+### How to contain a body as a slice in an internal message cell
 
-> 💡 Useful links
->
-> ["begin_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
-> 
-> ["store_uint()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
->
-> ["store_slice()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
->
-> ["store_coins()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_coins)
->
-> ["end_cell()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#end_cell)
->
-> ["send_raw_message()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
-
-### How to contain a body as slice to an internal message cell
-
-When sending messages, the body message can be sent either as `cell` or as `slice`. In this example, we send the body of the message inside the `slice`.
+A message body can be sent as either a `cell` or a `slice`. In this example, the body is sent inside a `slice`.
 
 ```func 
 ;; We use literal `a` to get valid address inside slice from string containing address 
@@ -508,22 +443,14 @@ cell msg = begin_cell()
 
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
+**Note:**
+- The literal `a` is used to obtain an address. See the [documentation](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals) for details on string literals.
+- The example uses `mode 3`, `mode 64`, and `mode 128`, as described above.
+- The [message](/v3/documentation/smart-contracts/func/cookbook#how-to-build-an-internal-message-cell) is constructed with the body included as a slice.
 
-> 💡 Noted
->
-> In this example, we use literal `a` to get address. You can find more about string literals in [docs](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals)
+### How to iterate tuples (both directions)
 
-> 💡 Noted
->
-> In this example, we used mode 3 to take the incoming tons and send exactly as much as specified (amount) while paying commission from the contract balance and ignoring the errors. Mode 64 is needed to return all the tons received, subtracting the commission, and mode 128 will send the entire balance.
-
-> 💡 Noted
->
-> We are [building a message](/v3/documentation/smart-contracts/func/cookbook#how-to-build-an-internal-message-cell) but adding message as a slice.
-
-### How to iterate tuples (in both directions)
-
-If we want to work with an array or stack in FunC, then tuple will be necessary there. And first of all we need to be able to iterate values to work with them.
+When working with arrays or stacks in FunC, tuples are essential. The first step is learning how to iterate through tuple values for processing.
 
 ```func
 (int) tlen (tuple t) asm "TLEN";
@@ -549,45 +476,47 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 }
 ```
 
-> 💡 Noted
->
-> We are declaring `tlen` assembly function. You can read more [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) and see [list of all assembler commands](/v3/documentation/tvm/instructions).
->
-> Also we declaring `to_tuple` function. It just changes data type of any input to tuple, so be careful while using it.
+**Note:**
+- The `tlen` assembly function is declared [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition). You can read more about it and explore a [list of all assembler commands](/v3/documentation/tvm/instructions).
+- The `to_tuple` function is also declared. This function converts any input into a tuple, so use it carefully.
 
-### How to write own functions using `asm` keyword
 
-When using any features we actually use pre-prepared for us methods inside `stdlib.fc`. But in fact, we have many more opportunities available to us, and we need to learn to write them ourselves.
 
-For example, we have the method of `tpush`, which adds an element to `tuple`, but without `tpop`. In this case, we should do this:
+### How to write own functions using asm keyword
+
+
+Many features we use in FunC come from pre-prepared methods inside `stdlib.fc`. However, we have many more capabilities, and learning to write custom functions unlocks new possibilities.
+
+For example, while `tpush`, which adds an element to a `tuple`, exists, there is no built-in `tpop` function. In such cases, we must implement it ourselves.
+
 ```func
 ;; ~ means it is modifying method
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP"; 
 ```
+We must determine its length if we want to iterate over a `tuple`. We can achieve this by writing a new function using the `TLEN` asm instruction.
 
-If we want to know the length of `tuple` for iteration, we should write a new function with the `TLEN` asm instruction:
 ```func
 int tuple_length (tuple t) asm "TLEN";
 ```
 
-Some examples of functions already known to us from stdlib.fc:
+Examples of functions from `stdlib.fc`:
+
 ```func
 slice begin_parse(cell c) asm "CTOS";
 builder begin_cell() asm "NEWC";
 cell end_cell(builder b) asm "ENDC";
 ```
 
-> 💡 Useful links:
->
-> ["modifying method" in docs](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)
->
-> ["stdlib" in docs](/v3/documentation/smart-contracts/func/docs/stdlib)
->
-> ["TVM instructions" in docs](/v3/documentation/tvm/instructions)
+**References:**
+- [`modifying method` in docs](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)
+- [`stdlib` in docs](/v3/documentation/smart-contracts/func/docs/stdlib)
+- [`TVM instructions` in docs](/v3/documentation/tvm/instructions)
 
 ### Iterating n-nested tuples
 
-Sometimes we want to iterate nested tuples. The following example will iterate and print all of the items in a tuple of format `[[2,6],[1,[3,[3,5]]], 3]` starting from the head
+
+Sometimes, we need to iterate through nested tuples. The following example iterates through a tuple formatted as: `[[2,6],[1,[3,[3,5]]], 3]` starting from the head.
+
 
 ```func
 int tuple_length (tuple t) asm "TLEN";
@@ -597,7 +526,7 @@ forall X -> tuple cast_to_tuple (X x) asm "NOP";
 forall X -> int cast_to_int (X x) asm "NOP";
 forall X -> (tuple) to_tuple (X x) asm "NOP";
 
-;; define global variable
+;; Define a global variable
 global int max_value;
 
 () iterate_tuple (tuple t) impure {
@@ -618,19 +547,16 @@ global int max_value;
 () main () {
     tuple t = to_tuple([[2,6], [1, [3, [3, 5]]], 3]);
     int len = t.tuple_length();
-    max_value = 0; ;; reset max_value;
-    iterate_tuple(t); ;; iterate tuple and find max value
+    max_value = 0; ;; Reset max_value;
+    iterate_tuple(t); ;; Iterate tuple and find max value
     ~dump(max_value); ;; 6
 }
 ```
 
-> 💡 Useful links
->
-> ["Global variables" in docs](/v3/documentation/smart-contracts/func/docs/global_variables)
->
-> ["~dump" in docs](/v3/documentation/smart-contracts/func/docs/builtins#dump-variable)
->
-> ["TVM instructions" in docs](/v3/documentation/tvm/instructions) 
+**References:**
+- [`global variables` in docs](/v3/documentation/smart-contracts/func/docs/global_variables)
+- [`~dump` in docs](/v3/documentation/smart-contracts/func/docs/builtins#dump-variable)
+- [`TVM instructions` in docs](/v3/documentation/tvm/instructions) 
 
 
 ### Basic operations with tuples
@@ -665,7 +591,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
 ### Resolving type X
 
-The following example checks if some value is contained in a tuple, but tuple contains values X (cell, slice, int, tuple, int). We need to check the value and cast accordingly.
+If a tuple contains various data types X (cell, slice, int, tuple, etc.), we may need to check the value and cast it accordingly before processing.
 
 ```func
 forall X -> int is_null (X x) asm "ISNULL";
@@ -680,7 +606,7 @@ forall X -> tuple cast_to_tuple (X x) asm "NOP";
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
 forall X -> () resolve_type (X value) impure {
-    ;; value here is of type X, since we dont know what is the exact value - we would need to check what is the value and then cast it
+    ;; Value here is of type X, since we dont know what is the exact value - we would need to check what is the value and then cast it
     
     if (is_null(value)) {
         ;; do something with the null
@@ -715,9 +641,7 @@ forall X -> () resolve_type (X value) impure {
 }
 ```
 
-> 💡 Useful links
->
-> ["TVM instructions" in docs](/v3/documentation/tvm/instructions) 
+**Reference:** [`TVM instructions` in docs](/v3/documentation/tvm/instructions) 
 
 
 ### How to get current time
@@ -730,12 +654,12 @@ if (current_time > 1672080143) {
 }
 ```
 
-### How to generate random number
+### How to generate a random number
 
 :::caution draft
-Please note that this method of generating random numbers isn't safe.
 
-Checkout [Random Number Generation](/v3/guidelines/smart-contracts/security/random-number-generation) for more information.
+This method is not cryptographically secure.
+For more details, see [Random number generation](/v3/guidelines/smart-contracts/security/random-number-generation) section.
 :::
 
 ```func
@@ -748,8 +672,14 @@ int c = random();
 
 ### Modulo operations
 
-As an example, lets say that we want to run the following calculation of all 256 numbers : `(xp + zp)*(xp-zp)`. Since most of those operations are used for cryptography, in the following example we are using the modulo operator for montogomery curves.
-Note that xp+zp is a valid variable name ( without spaces between ).
+As an example, let’s say we need to perform the following calculation for all 256 numbers: 
+
+`(xp + zp) * (xp - zp)`.
+
+Since these operations are commonly used in cryptography, we utilize the modulo operator for montgomery curves.
+
+**Note:**
+Variable names like `xp+zp` are valid as long as there are no spaces between the operators.
 
 ```func
 (int) modulo_operations (int xp, int zp) {  
@@ -764,9 +694,7 @@ Note that xp+zp is a valid variable name ( without spaces between ).
 }
 ```
 
-> 💡 Useful links
->
-> ["muldivmod" in docs](/v3/documentation/tvm/instructions#A98C)
+**Reference:** [`muldivmod` in docs](/v3/documentation/tvm/instructions#A98C)
 
 
 ### How to throw errors
@@ -781,11 +709,10 @@ throw_unless(39, number == 198); ;; the error will be triggered only if the numb
 throw(36); ;; the error will be triggered anyway
 ```
 
-[Standard tvm exception codes](/v3/documentation/tvm/tvm-exit-codes)
+[Standard TVM exception codes](/v3/documentation/tvm/tvm-exit-codes)
 
 ### Reversing tuples
-
-Because tuple stores data as a stack, sometimes we have to reverse tuple to read data from the other end.
+Since tuples behave as stacks in FunC, sometimes we need to **reverse** them to access data from the opposite end.
 
 ```func
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
@@ -808,9 +735,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 }
 ```
 
-> 💡 Useful links
->
-> ["tpush()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
+**Reference:** [`tpush()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
 
 
 ### How to remove an item with a certain index from the list
@@ -847,9 +772,11 @@ int tlen (tuple t) asm "TLEN";
 }
 ```
 
-### Determine if slices are equal
+### Determine if the slices are equal
 
-There are two different ways we can determine the equality. One is based on the slice hash, while the other one by using the SDEQ asm instruction.
+There are two main ways to check if two slices are equal:
+- Comparing their hashes.
+- Using the SDEQ asm instruction.
 
 ```func
 int are_slices_equal_1? (slice a, slice b) {
@@ -870,14 +797,12 @@ int are_slices_equal_2? (slice a, slice b) asm "SDEQ";
 }
 ```
 
-#### 💡 Useful links
+**References:**
+- [`slice_hash()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_hash)
+- [`SDEQ` in docs](/v3/documentation/tvm/instructions#C705)
 
- * ["slice_hash()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_hash)
- * ["SDEQ" in docs](/v3/documentation/tvm/instructions#C705)
-
-### Determine if cells are equal 
-
-We can easily determine cell equality based on their hash.
+### Determine if the cells are equal
+We can determine if two cells are equal by comparing their hashes.
 
 ```func
 int are_cells_equal? (cell a, cell b) {
@@ -897,13 +822,10 @@ int are_cells_equal? (cell a, cell b) {
 }
 ```
 
-> 💡 Useful links
->
-> ["cell_hash()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
+**Reference:** [`cell_hash()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
 
-### Determine if tuples are equal
-
-A more advanced example would be to iterate and compare each of the tuple values. Since they are X we need to check and cast to the corresponding type and if it is tuple to iterate it recursively.
+### Determine if the tuples are equal
+A more advanced approach involves iterating through tuples and comparing each value recursively. Since tuples can contain different data types, we must check and cast values dynamically.
 
 ```func
 int tuple_length (tuple t) asm "TLEN";
@@ -979,17 +901,15 @@ int are_cells_equal? (cell a, cell b) {
 }
 ```
 
-> 💡 Useful links
->
-> ["cell_hash()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
->
-> ["TVM instructions" in docs](/v3/documentation/tvm/instructions)
+**References:**
+- [`cell_hash()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
+- [`TVM instructions` in docs](/v3/documentation/tvm/instructions)
 
-### Generate internal address
+### Generate an internal address
 
-We need to generate an internal address when our contract should deploy a new contract, but do not know his address. Suppose we already have `state_init` - the code and data of the new contract. 
+When deploying a new contract, we need to generate its internal address because it is initially unknown. Suppose we already have `state_init`, which contains the code and data of the new contract.
 
-Creates an internal address for the corresponding MsgAddressInt TLB.
+This function creates an internal address corresponding to the `MsgAddressInt` TLB.
 
 ```func
 (slice) generate_internal_address (int workchain_id, cell state_init) {
@@ -1008,18 +928,13 @@ Creates an internal address for the corresponding MsgAddressInt TLB.
     ;; then we can deploy new contract
 }
 ```
+**Note:** In this example, we use `workchain()` to retrieve the WorkChain ID. You can learn more about the WorkChain ID in [docs](/v3/documentation/smart-contracts/addresses#workchain-id).
 
-> 💡 Noted
-> 
-> In this example, we use `workchain()` to get id of workchain. You can find more about Workchain ID in [docs](/v3/documentation/smart-contracts/addresses#workchain-id).
+**Reference:** [`cell_hash()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
 
-> 💡 Useful links
->
-> ["cell_hash()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
+### Generate an external address
 
-### Generate external address
-
-We use the TL-B scheme from [block.tlb](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L101C1-L101C12) to understand how we need to create an address in this format. 
+We use the TL-B scheme from [block.tlb](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L101C1-L101C12) to determine the address format to generate an external address.
 
 ```func
 (int) ubitsize (int a) asm "UBITSIZE";
@@ -1036,16 +951,13 @@ slice generate_external_address (int address) {
     .end_cell().begin_parse();
 }
 ```
+Since we need to find the exact number of bits occupied by the address, we must [declare an asm function](#how-to-write-custom-functions-using-the-asm-keyword) with the `UBITSIZE` opcode. This function will return the minimum number of bits required to store a given number.
 
-Since we need to determine the number of bits occupied by the address, it is also necessary to [declare an asm function](#how-to-write-own-functions-using-asm-keyword) with the opcode `UBITSIZE`, which will return the minimum number of bits required to store the number.
+**Reference:** ["TVM instructions" in docs](/v3/documentation/tvm/instructions#B603)
 
-> 💡 Useful links
->
-> ["TVM Instructions" in docs](/v3/documentation/tvm/instructions#B603)
+### How to store and load dictionary in a local storage
 
-### How to store and load dictionary in local storage
-
-The logic for loading the dictionary
+The logic for loading a dictionary from local storage is as follows:
 
 ```func
 slice local_storage = get_data().begin_parse();
@@ -1055,27 +967,22 @@ if (~ slice_empty?(local_storage)) {
 }
 ```
 
-While the logic for storing the dictionary is like the following example:
+Storing the dictionary follows a similar approach, ensuring data persistence.
+
 
 ```func
 set_data(begin_cell().store_dict(dictionary_cell).end_cell());
 ```
 
-> 💡 Useful links
->
-> ["get_data()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#get_data)
->
-> ["new_dict()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#new_dict)
->
-> ["slice_empty?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
->
-> ["load_dict()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_dict)
->
-> ["~" in docs](/v3/documentation/smart-contracts/func/docs/statements#unary-operators)
+**References:**
+- [`get_data()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#get_data)
+- [`new_dict()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#new_dict)
+- [`slice_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
+- [`load_dict()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_dict)
+- [`~` in docs](/v3/documentation/smart-contracts/func/docs/statements#unary-operators)
 
 ### How to send a simple message
-
-The usual way for us to send tons with a comment is actually a simple message. To specify that the body of the message is a `comment`, we should set `32 bits` before the message text to 0.
+To send a simple message with a comment, prepend the message body with `32 bits` set to `0`, indicating that it is a `comment`.
 
 ```func
 cell msg = begin_cell()
@@ -1089,13 +996,11 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 ```
 
-> 💡 Useful links
->
-> ["Message layout" in docs](/v3/documentation/smart-contracts/message-management/sending-messages)
+**Reference:** [`Message layout` in docs](/v3/documentation/smart-contracts/message-management/sending-messages)
 
 ### How to send a message with an incoming account
 
-The contract example below is useful to us if we need to perform any actions between the user and the main contract, that is, we need a proxy contract.
+A proxy contract can facilitate secure message exchange if interaction between a user and the main contract is needed.
 
 ```func
 () recv_internal (slice in_msg_body) {
@@ -1119,15 +1024,13 @@ The contract example below is useful to us if we need to perform any actions bet
 }
 ```
 
-> 💡 Useful links
-> 
-> ["Message layout" in docs](/v3/documentation/smart-contracts/message-management/sending-messages)
->
-> ["load_msg_addr()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_msg_addr)
+**References:**
+- [`Message layout` in docs](/v3/documentation/smart-contracts/message-management/sending-messages)
+- [`load_msg_addr()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_msg_addr)
 
 ### How to send a message with the entire balance
 
-If we need to send the entire balance of the smart contract, then, in this case, we need to use send `mode 128`. An example of such a case would be a proxy contract that accepts payments and forwards to the main contract.
+To transfer the entire balance of a smart contract, use send `mode 128`. This is particularly useful for proxy contracts that receive payments and forward them to the main contract.
 
 ```func
 cell msg = begin_cell()
@@ -1141,15 +1044,14 @@ cell msg = begin_cell()
 send_raw_message(msg, 128); ;; mode = 128 is used for messages that are to carry all the remaining balance of the current smart contract
 ```
 
-> 💡 Useful links
->
-> ["Message layout" in docs](/v3/documentation/smart-contracts/message-management/sending-messages)
-> 
-> ["Message modes" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
+**References:**
+- [`Message layout` in docs](/v3/documentation/smart-contracts/message-management/sending-messages)
+- [`Message modes` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
 
 ### How to send a message with a long text comment
 
-As we know, only 127 characters can fit into a single `cell` (< 1023 bits). In case we need more - we need to organize a snake cells.
+A `cell` can store up to 127 characters (`<1023 bits`). 
+A sequence of linked cells ("snake cells") must be used if more space is required.
 
 ```func
 {-
@@ -1181,13 +1083,11 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 ```
 
-> 💡 Useful links
->
-> ["Internal messages" in docs](/v3/documentation/smart-contracts/message-management/internal-messages)
+**Reference:** [`Internal messages` in docs](/v3/documentation/smart-contracts/message-management/internal-messages)
 
 ### How to get only data bits from a slice (without refs)
 
-If we are not interested in `refs` inside the `slice`, then we can get a separate date and work with it.
+If `refs` within a `slice` are unnecessary, only the raw data bits can be extracted for further processing.
 
 ```func
 slice s = begin_cell()
@@ -1199,17 +1099,13 @@ slice s = begin_cell()
 slice s_only_data = s.preload_bits(s.slice_bits());
 ```
 
-> 💡 Useful links
-> 
-> ["Slice primitives" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice-primitives)
->
-> ["preload_bits()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#preload_bits)
->
-> ["slice_bits()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_bits)
+**References:**
+- [`Slice primitives` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice-primitives)
+- [`preload_bits()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#preload_bits)
+- [`slice_bits()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_bits)
 
-### How to define your own modifying method
-
-Modifying methods allow data to be modified within the same variable. This can be compared to referencing in other programming languages.
+### How to define a custom modifying method
+Modifying methods allow data to be updated within the same variable, similar to references in other programming languages.
 
 ```func
 (slice, (int)) load_digit (slice s) {
@@ -1227,9 +1123,7 @@ Modifying methods allow data to be modified within the same variable. This can b
 }
 ```
 
-> 💡 Useful links
-> 
-> ["Modifying methods" in docs](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)
+**Reference:** [`Modifying methods` in docs](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)
 
 ### How to raise number to the power of n
 
@@ -1301,8 +1195,7 @@ slice result = string.end_cell().begin_parse();
 ```
 
 ### How to iterate dictionaries
-
-Dictionaries are very useful when working with a lot of data. We can get minimum and maximum key values using the built-in methods `dict_get_min?` and `dict_get_max?` respectively. Additionally, we can use `dict_get_next?` to iterate the dictionary.
+Dictionaries are useful for managing large datasets. The built-in methods `dict_get_min?` and `dict_get_max` retrieve the minimum and maximum key values, while `dict_get_next?` allows dictionary iteration.
 
 ```func
 cell d = new_dict();
@@ -1319,17 +1212,12 @@ while (flag) {
 }
 ```
 
-> 💡 Useful links
->
-> ["Dictonaries primitives" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dictionaries-primitives)
->
-> ["dict_get_max?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_max)
->
-> ["dict_get_min?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_min)
->
-> ["dict_get_next?()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_next)
->
-> ["dict_set()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_set)
+**References:**
+- [`Dictonaries primitives` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dictionaries-primitives)
+- [`dict_get_max?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_max)
+- [`dict_get_min?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_min)
+- [`dict_get_next?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_next)
+- [`dict_set()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_set)
 
 ### How to delete value from dictionaries
 
@@ -1344,9 +1232,9 @@ names~udict_delete?(256, 27);
 ~dump(val); ;; null() -> means that key was not found in a dictionary
 ```
 
-### How to iterate cell tree recursively
+### How to iterate a cell tree recursively
 
-As we know, one `cell` can store up to `1023 bits` of data and up to `4 refs`. To get around this limit, we can use a tree of cells, but to do this we need to be able to iterate it for proper data processing.
+Each `cell` can store up to `1023 bits` of data and `4 refs`. A tree of cells can be used to handle more complex data structures, requiring recursive iteration.
 
 ```func
 forall X -> int is_null (X x) asm "ISNULL";
@@ -1390,17 +1278,13 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 }
 ```
 
-> 💡 Useful links
-> 
-> ["Lisp-style lists" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#lisp-style-lists)
->
-> ["null()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#null)
->
-> ["slice_refs()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_refs)
+**References:**
+- [`Lisp-style lists` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#lisp-style-lists)
+- [`null()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#null)
+- [`slice_refs()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_refs)
 
 ### How to iterate through lisp-style list
-
-The data type tuple can hold up to 255 values. If this is not enough, then we should use a lisp-style list. We can put a tuple inside a tuple, thus bypassing the limit.
+A tuple can hold up to 255 values. If more space is needed, a lisp-style list can be used by nesting tuples within tuples, effectively bypassing the limit.
 
 ```func
 forall X -> int is_null (X x) asm "ISNULL";
@@ -1424,11 +1308,9 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 }
 ```
 
-> 💡 Useful links
-> 
-> ["Lisp-style lists" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#lisp-style-lists)
->
-> ["null()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#null)
+**References:**
+- [`Lisp-style lists` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#lisp-style-lists)
+- [`null()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#null)
 
 ### How to send a deploy message (with stateInit only, with stateInit and body)
 
@@ -1490,8 +1372,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
 ### How to update the smart contract logic
 
-Below is a simple `СounterV1` smart-contract that has the functionality to increment the counter and update the smart-contract logic. 
-
+Below is an example of a simple `CounterV1` smart contract that allows the counter to be incremented and includes logic for updating the contract.
 ```func
 () recv_internal (slice in_msg_body) {
     int op = in_msg_body~load_uint(32);
@@ -1510,8 +1391,8 @@ Below is a simple `СounterV1` smart-contract that has the functionality to incr
     }
 }
 ```
+After interacting with the contract, you may realize that the functionality for decrementing the counter is missing. To fix this, copy the code from `CounterV1` and add a new `decrease` function next to the existing `increase` function. Your updated code will look like this:
 
-After operating the smart-contract, you realize that you are missing the meter reduction feature. You must copy the code of the smart-contract `CounterV1` and next to the `increase` function, add a new `decrease` function. Now your code looks like this:
 
 ```func
 () recv_internal (slice in_msg_body) {
@@ -1539,7 +1420,8 @@ After operating the smart-contract, you realize that you are missing the meter r
 }
 ```
 
-Once the smart-contract `CounterV2` is ready, you must compile it off-chain into a `cell` and send an upgrade message to the `CounterV1` smart-contract.
+Once the `CounterV2` smart contract is ready, you need to compile it off-chain into a `cell` and send an upgrade message to the `CounterV1` contract:
+
 
 ```javascript
 await contractV1.sendUpgrade(provider.sender(), {
@@ -1548,13 +1430,14 @@ await contractV1.sendUpgrade(provider.sender(), {
 });
 ```
 
-> 💡 Useful links
-> 
-> [Is it possible to re-deploy code to an existing address or does it have to be deployed as a new contract?](/v3/documentation/faq#is-it-possible-to-re-deploy-code-to-an-existing-address-or-does-it-have-to-be-deployed-as-a-new-contract)
->
-> ["set_code()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib#set_code)
+**References:**
+- [Is it possible to redeploy code to an existing address or does it have to be deployed as a new contract?](/v3/documentation/faq#is-it-possible-to-re-deploy-code-to-an-existing-address-or-does-it-have-to-be-deployed-as-a-new-contract)
+- [`set_code()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#set_code)
 
 
 
 
+
+
+<Feedback />
 

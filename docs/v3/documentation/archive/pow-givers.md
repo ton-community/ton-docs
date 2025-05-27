@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # POW Givers
 
 :::warning deprecated
@@ -195,3 +197,6 @@ Now you are a happy owner of 100 Toncoin. Congratulations!
 ## 3. Automating the mining process in the case of failure
 
 If you fail to obtain your Toncoin for a long time, this may happen because too many other users are simultaneously mining from the same proof-of-work giver smart contract. Maybe you should choose another proof-of-work giver smart contract from one of the lists given above. Alternatively, you can write a simple script to automatically run `pow-miner` with the correct parameters again and again until success (detected by checking the exit code of `pow-miner`) and invoke the Lite Client with the parameter `-c 'sendfile mined.boc'` to send the external message immediately after it is found.
+
+<Feedback />
+

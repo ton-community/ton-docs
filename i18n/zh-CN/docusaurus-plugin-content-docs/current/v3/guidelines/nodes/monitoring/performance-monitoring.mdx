@@ -1,0 +1,158 @@
+# 性能监测
+
+## 监控 TON 服务器性能
+
+`htop`, `iotop`, `iftop`, `dstat`, `nmon` 等工具是测量实时性能的好帮手，但它们缺乏对过去性能进行故障排除的功能。
+
+本指南推荐并解释如何使用 Linux sar（系统活动报告）实用程序进行 TON 服务器性能监控。
+
+:::tip
+该指南有助于确定服务器是否出现资源短缺，而不是验证引擎是否表现不佳。
+:::
+
+### 安装
+
+#### SAR 安装
+
+```bash
+sudo apt-get install sysstat
+```
+
+#### 启用自动收集统计数据功能
+
+```bash
+sudo sed -i 's/false/true/g' /etc/default/sysstat
+```
+
+#### 启用服务
+
+```bash
+sudo systemctl enable sysstat sysstat-collect.timer sysstat-summary.timer
+```
+
+#### 启动服务
+
+```bash
+sudo systemctl start sysstat sysstat-collect.timer sysstat-summary.timer
+```
+
+### 使用方法
+
+默认情况下，sar 每 10 分钟收集一次统计数据，并从午夜开始显示当天的统计数据。您可以不带参数运行 sar 来查看：
+
+```bash
+sar
+```
+
+如果您想查看前一天或前两天的统计数据，请将数字作为选项：
+
+```bash
+sar -1   # previous day
+sar -2   # two days ago
+```
+
+如需精确日期，应使用 f 选项指向一个月内某一天的 sa 文件。因此，9 月 23 日应该是
+
+```bash
+sar -f /var/log/sysstat/sa23
+```
+
+要运行哪些 sar 报告，如何读取这些报告以识别性能问题？
+
+以下是可用于收集不同系统统计信息的 sar 命令列表。您可以使用上述选项对其进行补充，以快速获取所需日期的报告。
+
+### 内存报告
+
+```bash
+sar -rh
+```
+
+由于 TON 验证器引擎使用了 jemalloc 功能，它缓存了大量数据，这就是 sar -rh 命令大多数时候在 `%memused` 列中返回较低数字的原因。
+
+同时，`kbcached` 列中的数字总是很高。出于同样的原因，你也不必担心 `kbmemfree` 列中显示的可用内存数量过低。重要的指标是来自 `%memused`列的数字。
+
+如果超过 90%，则应考虑增加内存，并注意验证引擎是否因 OOM（内存不足）原因而异常停止--检查的最佳方法是 grep `/var/ton-work/log` 文件中的信号信息。
+
+SWAP使用情况
+
+```bash
+sar -Sh
+```
+
+如果你发现swap被使用，就应该考虑增加内存。TON Core 团队的一般建议是禁用swap。
+
+### CPU 报告
+
+```bash
+sar -u
+```
+
+如果服务器的 CPU 平均使用率不超过 70%（请参阅 "%user" 一栏），则应视为良好。
+
+### 磁盘使用报告
+
+```bash
+sar -dh
+```
+
+注意 "%util" 一栏，如果某个磁盘的这一比例超过 90%，就做出相应的反应。
+
+### 网络报告
+
+```bash
+sar -n DEV -h
+```
+
+或
+
+```bash
+sar -n DEV -h --iface=<interface name>
+```
+
+如果要按网络接口名称过滤结果。
+
+查看 `%ifutil` 列的结果--它显示了接口在最大链路速度下的使用情况。
+
+执行以下命令可以检查网卡支持的速度：
+
+```bash
+cat /sys/class/net/<interface>/speed
+```
+
+:::info
+这不是提供商为您提供的链接速度。
+:::
+
+如果 `%ifutil` 显示使用率超过 70%，或 rxkB/s 和 txkB/s 列报告值接近提供商提供的带宽，请考虑升级链接速度。
+
+### 报告性能问题
+
+在报告任何性能问题之前，请确保满足节点的最低要求。然后执行以下命令：
+
+```bash
+sar -rudh | cat && sar -n DEV -h --iface=eno1 | cat > report_today.txt
+```
+
+昨天的报告请执行：
+
+```bash
+sar -rudh -1 | cat && sar -n DEV -h --iface=eno1 -1 | cat > report_yesterday.txt
+```
+
+另外，停止 TON 节点，测量磁盘 IO 和网络速度。
+
+```bash
+sudo fio --randrepeat=1 --ioengine=io_uring --direct=1 --gtod_reduce=1 --name=test --filename=/var/ton-work/testfile --bs=4096 --iodepth=1 --size=40G --readwrite=randread --numjobs=1 --group_reporting
+```
+
+查找 `read：IOPS=` 并将其与报告一起发送。超过 10k IOPS 的值应视为良好值。
+
+```bash
+curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -
+```
+
+下载和上传速度超过 700 Mbit/s 即为良好。
+
+报告时，请将 SAR 报告以及 IOPS 和网络速度结果发送至 [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot) 。
+
+初始版本由 [@neodix](https://t.me/neodix) - Ton 核心团队提供，2024 年 9 月 23 日

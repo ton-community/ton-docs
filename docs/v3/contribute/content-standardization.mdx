@@ -1,0 +1,652 @@
+import Feedback from '@site/src/components/Feedback';
+import ThemedImage from "@theme/ThemedImage";
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
+
+
+# Content standardization
+
+## Introduction
+
+This guideline aims to maintain a consistent documentation style and help contributors standardize their content so that it seamlessly integrates into the documentation.
+
+## Text preferences
+
+### Use American English
+
+For words that have multiple spellings, use American English over British English.
+
+Examples:
+
+- "decentralized" over "decentralised"
+- "color" over "colour"
+- "analyze" over "analyse"
+
+### Use present tense
+
+Use present tense to describe general behavior, current functionality, and step-by-step instructions.
+This makes documentation clear and easy to follow.
+
+**Examples:**
+- This guideline provides an overview of the contribution process.
+- The system checks the file format and shows an error if it is invalid.
+
+*Avoid future or past tense for immediate or typical actions.*
+
+**Avoid:**
+- The system will check the file format.
+- The user clicked the button.
+
+### When to use the future or past tenses
+
+Present tense is standard, but future and past tenses are allowed in specific cases.
+
+**Future tense:** for actions that happen later, after a condition or delay.
+
+**Examples:**
+- After setup, the system will send a confirmation email.
+- If payment fails, the user will get a notification.
+
+*Avoid the future tense for immediate behavior or unreleased features. Also, avoid *would*.*
+
+**Avoid:**
+
+- The system will check the file format.
+- The API would return an error.
+
+
+**Past tense:** for describing past events like changelogs or logs.
+
+**Examples:**
+- Version 2.1 fixed a validation issue.
+- The user submitted the form at 2 pm and got a 500 error.
+
+*Avoid past tense in general documentation — it can imply outdated info.*
+
+**Avoid:**
+
+- The system checked the user’s location.
+- The user clicked the button.
+
+
+
+### Use active voice
+
+Sentences using active voice are more concise and efficient, making your writing more engaging and easier to comprehend.
+
+**Active voice sentence:** An actor acts on a target
+
+> _"The smart contract processed a message."_
+
+**Passive voice sentence:** A target acts on an actor
+
+> _"The message was processed by the smart contract."_
+
+[Read more on active voice](https://www.grammarly.com/blog/active-vs-passive-voice/)
+
+_This isn't an easy one, especially for non-native English speakers. If you aren't sure, don't worry. We'll help with any of these._
+
+### Grammar
+
+This documentation uses [cspell](https://cspell.org/) to correct grammar during development.
+
+The `cspell` will check the spelling and automatically suggest corrections in case of mistakes before creating a new commit. Feel free to add specific words to the [cspell.json](https://github.com/ton-community/ton-docs/blob/doc_editor_guidelines/cspell.json) config and include them in the verification dictionary.
+
+### Date format
+
+Use the **"Mon D, YYYY"** format. This approach is standard for American readers, spells out the month (or uses a three-letter abbreviation), and minimizes confusion with day–month ordering.
+
+#### Preferred format:
+
+- Nov 2, 2023
+- Feb 11, 2023
+
+#### Incorrect format:
+
+- 2-Nov-2023
+- 11/2/2023
+- 2/11/2023
+
+Adhering to these guidelines creates a unified approach to presenting dates, fostering clarity and comprehension throughout the TON documentation.
+
+### Use of emojis and icons
+
+#### In the Documentation section:
+- Avoid using emojis and decorative icons.
+- Technical documentation should be clear, professional, and distraction-free.
+- Use only standard formatting elements like headings, lists, and code blocks.
+
+#### In the Guidelines section:
+- Emojis and icons are allowed to make content more engaging and friendly.
+- Use them purposefully and consistently, preferring functional icons such as:
+
+✅ Success, ⚠️ Warning, ❌ Error.
+- Always use icons with supporting text — don’t rely on icons alone to convey meaning.
+- Avoid overly decorative or emotional emojis that don’t add meaning.
+- When in doubt, skip the icon. Clarity, consistency, and neutrality come first.
+
+
+## Link preferences
+
+### Linking to internal pages
+
+When linking to another page on TON documentation, use the relative path over the absolute path.
+
+#### Correct link:
+
+```md
+Read more about [smart contracts](/v3/documentation/smart-contracts/overview/)
+```
+
+#### Incorrect link:
+
+```md
+Read more about [smart contracts](https://docs.ton.org/v3/documentation/smart-contracts/overview)
+```
+
+Don't hard-code the language path (for example, `/mandarin/`) in any links. This maintains consistent capability across different language versions of the site.
+
+#### Correct link:
+
+```md
+Read more about [smart contracts](/v3/documentation/smart-contracts/overview/)
+```
+
+#### Incorrect link:
+
+```md
+Read more about [smart contracts](/mandarin/v3/documentation/smart-contracts/overview)
+```
+
+Set a trailing slash to all links. This approach keeps links consistent and avoids redirects, which hurts site performance.
+
+#### Correct link:
+
+```md
+Read more about [smart contracts](/v3/documentation/smart-contracts/overview/)
+```
+
+#### Incorrect link:
+
+```md
+Read more about [smart contracts](/v3/documentation/smart-contracts/overview)
+```
+
+### Article authors
+
+When citing articles by a specific author or organization, use the article's name as a link, followed by a dash and the author's name italicized.
+
+#### Correct description:
+
+```md
+- [How to shard your TON smart contract and why](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons) — _Tal Kol_
+- [TON Teleport BTC Whitepaper](https://tgbtc.gitbook.io/docs/whitepaper/abstract) – _RSquad Blockchain Lab_
+```
+
+#### Incorrect description:
+
+```md
+- [How to shard your TON smart contract and why](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
+- [TON Teleport BTC Whitepaper](https://tgbtc.gitbook.io/docs/whitepaper/abstract) by RSquad Blockchain Lab
+```
+
+### See also links section
+
+Include related resources on your page in an H2 section titled `## See also`.
+
+This section guides readers to additional materials and supports a cohesive developer journey.
+
+#### Example:
+
+```md
+## See also
+
+- [Style guide](/v3/contribute/style-guide/)
+- [Typography](/v3/contribute/typography/)
+- [Localization program](/v3/contribute/localization-program/overview/)
+```
+
+## Image preferences
+
+### Linking to images
+
+When adding an image to a page, download and set an image in the TON documentation `static/img` folder.
+
+#### Correct linking:
+
+```md
+![jetton_transfer](/img/docs/asset-processing/jetton_transfer.png)
+```
+
+#### Incorrect linking:
+
+```md
+![tact_logo](https://docs.tact-lang.org/_astro/logomark-dark.BSmgZYWc_ZKRrUl.svg)
+```
+
+This is helpful to ensure the image will be available.
+
+### Light and dark theme modes
+
+TON documentation supports theme-specific images. Follow these steps to add themed pictures to the page.
+
+1. Themed mode is available only for `.mdx` files.
+
+2. Import the `ThemedImage` module in the header.
+
+```js
+import ThemedImage from "@theme/ThemedImage";
+```
+
+3. Set the links for both images according to the example:
+
+```js
+<br></br>
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_2.svg?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_2_dark.svg?raw=true',
+  }}
+/>
+<br></br>
+```
+
+### Annotation specification
+
+To depict message processing, use a graphical representation that resembles a smart contract graph, including labels for transactions and messages.
+
+If the transaction order isn't essential, omit their labels. This approach simplifies the diagram, making it easier to read and understand the message and contract details.
+
+### Annotation primitives
+
+<ThemedImage
+  alt=""
+  sources={{
+    light:
+      "/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1.png?raw=true",
+    dark: "/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1_dark.png?raw=true",
+  }}
+/>
+<br></br>
+
+- Avoid using a large variety of bright colors.
+- Modify figures by applying techniques such as a dashed border.
+- To emphasize specific details, display transactions using distinct line styles (e.g., solid and dashed).
+
+### Message processing schemes
+
+On the TON blockchain, providing clear explanations of actor behavior and message processing for various smart contracts and fundamental scenarios is essential.
+
+The message processing schemes offer additional context for readers seeking a clear understanding of actor behavior. These schemes should be unified throughout the TON documentation to ensure maximum clarity.
+
+#### Example
+
+<br></br>
+<ThemedImage
+  alt=""
+  sources={{
+    light: "/img/docs/message-delivery/message_delivery_2.png?raw=true",
+    dark: "/img/docs/message-delivery/message_delivery_2_dark.png?raw=true",
+  }}
+/>
+<br></br>
+
+### Sequence diagram
+
+Use a sequence diagram for complex and repetitive communication schemes between 2-3 actors. For messages, use the notation of a typical synchronous message arrow.
+
+#### Example
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: "/img/docs/message-delivery/message_delivery_7.png?raw=true",
+      dark: "/img/docs/message-delivery/message_delivery_7_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+### Scheme formats and colors
+
+#### Format:
+
+- Use a PNG format for the diagrams in the documentation to ensure readability on various devices.
+
+#### Fonts:
+
+- Use the [Inter](https://rsms.me/inter/) font family for all text within diagrams.
+- Maintain a consistent text size.
+- Avoid overusing **bold** and _italic_ formatting for optimal readability.
+
+#### Themed colors for light mode:
+
+- Pencil Hand Drawn, default Visio theme.
+
+#### Themed colors for dark mode:
+
+- Font `#e3e3e3`.
+- Background `#232328`.
+- Light Highlight, arrows and scheme borders `#058dd2`.
+- Dark Highlight, arrows and scheme borders `#0088cc`.
+- InnerBackGround, for nested blocks `#333337`.
+
+#### Version control policy:
+
+- Store the original files in the project's Git repository under the `/static/visio` directory to facilitate future modifications.
+- Learn [Visio](https://www.microsoft.com/en-us/microsoft-365/visio/flowchart-software) references directly from [Visio sources](https://github.com/ton-community/ton-docs/tree/main/static/schemes-visio/).
+
+
+## Math equations
+
+To include mathematical expressions in documentation, use the [react-katex](https://katex.org/docs/supported) library. It supports both inline and block-level math using `LaTeX` syntax.
+
+Import the required components at the top of your `.mdx` file:
+
+```
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
+```
+These imports allow you to render `LaTeX` math expressions:
+- `BlockMath` is used for centered, standalone formulas.
+- `InlineMath` is used for short expressions inside the regular text.
+- The `css` import applies the necessary styling for proper rendering.
+
+Contributors can use the following examples to format various types of math expressions in the documentation:
+
+### Systems of equations
+
+For systems of equations, use `LaTeX` formatting for clarity:
+
+```
+<BlockMath math={`\\begin{cases}
+x + y = 10 \\\\
+2x - y = 4
+\\end{cases}`} />
+```
+
+This renders the system of equations as:
+
+<BlockMath math={`\\begin{cases}
+x + y = 10 \\\\
+2x - y = 4
+\\end{cases}`} />
+
+
+### Exponential functions
+
+For exponential functions, you can use the following format:
+
+```
+<InlineMath math="e^{x} = \lim\limits_{n\to \infty} \left( 1 + \frac{x}{n} \right)^n" />
+```
+
+This renders the equation: <InlineMath math="e^{x} = \lim\limits_{n\to \infty} \left( 1 + \frac{x}{n} \right)^n" />
+
+
+### Fractions
+
+To represent fractions, use `\frac{numerator}{denominator}:`
+
+```
+<InlineMath math="\frac{a}{b}"/>
+```
+
+This renders the fraction: <InlineMath math="\frac{a}{b}"/>
+
+### Summation
+
+For summation notation, use the following `LaTeX` formatting:
+```
+<BlockMath math="\sum_{i=1}^{n} i^2" />
+```
+This renders the summation: <BlockMath math="\sum_{i=1}^{n} i^2" />
+
+### Logarithmic expressions
+
+For logarithmic equations, use the following `LaTeX` syntax:
+
+```
+<InlineMath math="\log_{b}(x)" />
+```
+
+This renders the logarithmic expression: <InlineMath math="\log_{b}(x)" />
+
+
+## Terminology
+
+### TON
+
+TON should always be capitalized.
+
+**Correct usage:**
+
+- TON
+
+### TON with a word
+
+- It is essential to ensure the correct use of _THE_ in the TON documentation. _TON Blockchain_ and _TON Ecosystem_ are capitalized terms, and therefore, do not require _THE_ in their usage.
+- We write _TON_ with regular nouns, and if it requires _THE_ according to English grammar, we use it. For instance: "_The_ TON Connect _protocol_ is a..."
+
+**Correct usage:**
+
+- TON Blockchain
+- TON Ecosystem
+- The TON Connect protocol
+
+### TON Center
+
+**Correct usage:**
+
+- TON Center
+
+**Incorrect usage:**
+
+- Toncenter
+- TonCenter
+- TONcenter
+
+### Mainnet
+
+When referring to the TON Mainnet (i.e. not referring to a Testnet) use the proper noun. Proper nouns help avoid confusion and build greater understanding.
+
+**Correct usage:**
+
+- Mainnet
+- TON Mainnet
+
+**Incorrect usage:**
+
+- main net
+- mainnet
+- Main net
+- TON mainnet
+
+### AccountChain
+
+**Correct usage:**
+
+- AccountChain
+
+**Incorrect usage:**
+
+- Account Chain
+- Accountchain
+
+### ShardChain
+
+**Correct usage:**
+
+- ShardChain
+
+**Incorrect usage:**
+
+- Shardchain
+- Shard Chain
+
+### WorkChain
+
+**Correct usage:**
+
+- WorkChain
+
+**Incorrect usage:**
+
+- Workchain
+- Work Chain
+
+### MasterChain
+
+**Correct usage:**
+
+- MasterChain
+
+**Incorrect usage:**
+
+- Masterchain
+- Work Chain
+
+### BaseChain
+
+**Correct usage:**
+
+- BaseChain
+
+**Incorrect usage:**
+
+- Basechain
+- Base Chain
+
+### Proof-of-work / Proof-of-stake
+
+Proof-of-work should be capitalized only when at the beginning of a sentence. In any other instance, all letters should be lowercase. In either case, proof-of-work should be hyphenated between each word.
+
+**Correct usage:**
+
+- Proof-of-work
+- proof-of-work
+- Proof-of-stake
+- proof-of-stake
+
+**Incorrect usage:**
+
+- Proof-of-Stake
+- Proof of stake
+- proof of stake
+
+The same rules we apply to proof-of-work apply to proof-of-stake, proof-of-authority, proof-of-humanity, proof-of-individuality, etc.
+
+### Smart contract
+
+The smart contract is a common noun and should only be capitalized at the beginning of a sentence. In any other instance, all letters should be lowercase.
+
+**Correct usage:**
+
+- Smart contract
+- smart contract
+
+** Incorrect usage:**
+
+- Smart Contract
+
+### Zero-knowledge
+
+Zero-knowledge is a common noun and should only be capitalized at the beginning of a sentence. In any other instance, all letters should be lowercase. In either case, zero-knowledge should be hyphenated between each word.
+
+**Correct usage:**
+
+- Zero-knowledge
+- zero-knowledge
+
+**Incorrect usage:**
+
+- Zero-Knowledge
+- Zero knowledge
+- zero knowledge
+
+### ZK-proof
+
+When using the abbreviated form of zero-knowledge proof you should shorten zero-knowledge to ZK, and hyphenate the abbreviation.
+
+**Correct usage:**
+
+- ZK-proof
+
+**Incorrect usage:**
+
+- Zk-proof
+- zK-proof
+- zk-proof
+- Zk proof
+- zK proof
+- zk proof
+
+### ZK-rollup
+
+When using the abbreviated form of zero-knowledge rollup you should shorten zero-knowledge to ZK, and hyphenate the abbreviation.
+
+**Correct usage:**
+
+- ZK-rollup
+
+**Incorrect usage:**
+
+- Zk-rollup
+- zK-rollup
+- zk-rollup
+- Zk rollup
+- zK rollup
+- zk rollup
+
+### Nominator, validator, collator, node, liteserver
+
+When using these words, refer to them in lowercase unless they are the first word of a heading.
+
+**Correct usage:**
+
+- nominator
+- validator
+- collator
+- node
+- liteserver
+
+**Incorrect usage:**
+
+- Nominator
+- Validator
+- Collator
+- Node
+- Liteserver
+
+### BoC, bag of cells
+
+- Use either the abbreviation **BoC** or the full term **bag of cells**.
+- **Bag of cells** is capitalized only when it starts a sentence or heading. In all other cases, write **bag of cells** in lowercase.
+- Always abbreviate **BoC**. Do not use **BOC** or **boc**.
+
+**Correct usage:**
+
+- BoC
+- Bag of cells
+- bag of cells
+
+
+**Incorrect usage:**
+
+- BOC
+- boc
+- Bag Of Cells
+- Bag of Cells
+
+## See also
+
+- [How to contribute](/v3/contribute/)
+- [Content standardization](/v3/contribute/content-standardization/)
+- [Typography](/v3/contribute/typography/)
+- [Localization program](/v3/contribute/localization-program/overview/)
+
+<Feedback />
+

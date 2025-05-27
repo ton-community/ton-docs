@@ -64,7 +64,7 @@ storage-daemon-cli -I 127.0.0.1:5555 -k storage-db/cli-keys/client -p storage-db
 命令有位置参数和标志。带空格的参数应用引号（`'`或`"`）括起来，也可以转义空格。还可以使用其他转义，例如：
 
 ```
-create filename\ with\ spaces.txt -d "Description\nSecond line of \"description\"\nBackslash: \"
+create filename\ with\ spaces.txt -d "Description\nSecond line of \"description\"\nBackslash: \\"
 ```
 
 `--`后的所有参数都是位置参数。可以用它来指定以破折号开头的文件名：

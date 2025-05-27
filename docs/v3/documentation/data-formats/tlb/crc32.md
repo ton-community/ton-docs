@@ -1,18 +1,19 @@
+import Feedback from '@site/src/components/Feedback';
 
 # CRC32 
 
 ## Overview
 
-CRC stands for Cyclic Redundancy Check, a commonly used method for verifying the integrity of digital data. It is an error-detecting algorithm used to check if errors have occurred in digital data during transmission or storage. A CRC generates a short checksum or hash of the data being transmitted or stored, which is appended to the data. When the data is received or retrieved, the CRC is recalculated and compared to the original checksum. If the two checksums match, it is assumed that the data has not been corrupted. If they do not match, it indicates that an error has occurred and the data needs to be resent or retrieved again
+CRC stands for **Cyclic Redundancy Check**, a widely used method for verifying the integrity of digital data. An error-detecting algorithm checks whether data has been altered during transmission or storage. CRC generates a short checksum or hash from the original data, which is appended to it. The checksum is recalculated and compared with the original upon retrieval or receipt. If the values match, the data is considered intact; if not, it indicates corruption and the data must be resent or recovered.
 
-The CRC32 IEEE version used for TL-B schemes. By viewing this [NFT op code](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema) example a clearer understanding of calculation TL-B for various messages is achieved.
+The CRC32 IEEE variant is used in TL-B schemes. You can refer to this [NFT op code](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema)example to better understand how CRC32 values are calculated for various TL-B messages.
 
 ## Tools
 
 ### Online calculator
 
 * [Online calculator example](https://emn178.github.io/online-tools/crc32.html)
-* [Tonwhales Introspection ID Generator](https://tonwhales.com/tools/introspection-id)
+* [Tonwhales introspection ID generator](https://tonwhales.com/tools/introspection-id)
 
 ### VS Code extension
 
@@ -58,4 +59,7 @@ function calculateResponseOpcode_2(str: string): string {
     return ((a | b) < 0 ? (a | b) + BigInt('4294967296') : a | b).toString(16);
 }
 ```
+
+
+<Feedback />
 

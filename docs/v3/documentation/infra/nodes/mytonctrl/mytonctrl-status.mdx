@@ -1,6 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 # MyTonCtrl status
 
-Here is an explanation of `status` command output.
+This document serves as a comprehensive guide to help you understand the output of **MyTonCtrl**'s `status` command.
 
 ![status](/img/docs/mytonctrl/status.png)
 
@@ -8,146 +10,151 @@ Here is an explanation of `status` command output.
 
 ### Network name
 
-Possible values: `mainnet`, `testnet`, `unknown`. `unknown` mustn't be printed ever.
+Possible values are: `mainnet`, `testnet`, and `unknown`. However, the value `unknown` should never be displayed.
 
 ### Number of validators
 
-There are two values: one green and one yellow. Green is the number of online validators, yellow is a number of all
-validators.
-Must be an integer greater than 0, MyTonCtrl get it with command `getconfig 34`,
-check [this (param 32-34-and-36) section](/v3/documentation/network/configs/blockchain-configs#param-32-34-and-36) for more.
+There are two key values: one represented in green and the other in yellow. The green value indicates the number of online validators, while the yellow value represents the total number of validators.
+
+Both values must be integers greater than 0. You can obtain the green value using the command `getconfig 34` with MyTonCtrl. For more information, please check the [relevant section here](/v3/documentation/network/configs/blockchain-configs#param-32-34-and-36) regarding parameters 32, 34, and 36.
 
 ### Number of shardchains
 
-Must be an integer greater than 0, has green color.
+This value must be an integer greater than 0 and is displayed in green.
 
 ### Number of offers
 
-There are two values: one green and one yellow. Green is a number of `new offers`, yellow is a number of `all offers`.
+- There are two values to note:
+  - **Green**: Represents the number of `new offers`.
+  - **Yellow**: Represents the total number of `all offers`.
 
 ### Number of complaints
 
-There are two values: one green and one yellow. Green is a number of `new complaints`, yellow is a number
-of `all complaints`.
+- Similarly, there are two values to consider:
+  - **Green**: Indicates the number of `new complaints`.
+  - **Yellow**: Indicates the total number of `all complaints`.
 
 ### Election status
 
-Can be green text `open` or yellow `closed`.
+The election status can be indicated with green text for `open` or yellow text for `closed`.
 
 ## Local validator status
 
-### Validator Index
+### Validator index
 
-If the validator index is higher or equal to 0 (and it should be so if validator mode is active), it must be green, else - red.
+The validator index should be greater than or equal to 0 (which is the case if the validator mode is active). If it meets this requirement, it should be displayed in green; otherwise, it should be red.
 
 ### ADNL address of local validator
 
-Just ADNL address.
+This section contains only the ADNL address.
 
 ### Local validator wallet address
 
-The address used for staking must be a valid TON address. 
+The wallet address used for staking must be a valid TON address.
 
 ### Local validator wallet balance
 
-The balance of the wallet.
+This section shows the current balance of the wallet.
 
 ### Load average
 
-Has format `[int]: int, int, int`. First one is a number of cpus, others represent the system load average for the last 1, 5 and 15 minutes.
+The `load average` format is `[int]: int, int, int`. The first integer represents the number of CPUs, while the subsequent integers indicate the system load average for the last 1, 5, and 15 minutes.
 
 ### Network load average
 
-Three integers, same logic as for `load average`: system load average for the last 1, 5 and 15 minutes.
+This section also displays three integers, following the same logic as the `load average`: it presents the system load average for the last 1, 5, and 15 minutes.
 
 ### Memory load
 
-Two pairs of integers, absolute and relative memory usage of ram and swap.
+**Absolute and Relative Memory Usage:** This refers to the usage of RAM and swap memory in two pairs of integers.
 
-### Disks load average
+### Disk load average
 
-Same as for `memory load`, but for all disks.
+This is similar to the `memory load`. However, it relates to the usage of all disk space instead.
 
 ### Mytoncore status
 
-Should be green, tells how much time Mytoncore is up.
+The status indicator should be green, showing how long Mytoncore has been operational.
 
 ### Local validator status
 
-Should be green, tells how much time the local validator is up.
+This indicator should also be green, displaying the uptime of the local validator.
 
 ### Local validator out of sync
 
-Integer should be less than 20 (it will be green so).
+This integer value should be less than 20, indicating that it is functioning properly (it will appear green).
 
 ### Local validator last state serialization
 
-Shows the number of out-of-service masterchain blocks
+This entry displays the number of MasterChain blocks that are currently out of service.
 
-### Local validator database size
+### Local Validator database size
 
-The absolute load should be less than 1000 GB, a relative load should be less than 80%.
+The absolute load size should be less than 1000 GB, and the relative load should be under 80%.
 
-### Version mytonctrl
+### Version of MyTonCtrl
 
-Hash of commit and name of branch.
+This indicates the hash of the commit and the name of the branch.
 
-### Version validator
+### Version of validator
 
-Hash of commit and name of branch.
+This shows the hash of the commit and the name of the branch.
 
 ## TON network configuration
 
 ### Configurator address
 
-Configurator address, check [this param 0](/v3/documentation/network/configs/blockchain-configs#param-0) for more.
+The address of the configurator. Refer to [this parameter-0](/v3/documentation/network/configs/blockchain-configs#param-0) for more information.
 
 ### Elector address
 
-Elector address, check [this param 1](/v3/documentation/network/configs/blockchain-configs#param-1) for more.
+The address of the elector. Refer to [this parameter-1](/v3/documentation/network/configs/blockchain-configs#param-1) for additional details.
 
 ### Validation period
 
-Validation period in seconds, check [this param 15](/v3/documentation/network/configs/blockchain-configs#param-15) for more.
+The duration of the validation period in seconds. Check [this parameter-15](/v3/documentation/network/configs/blockchain-configs#param-15).
 
 ### Duration of elections
 
-Duration of elections in seconds, check [this param 15](/v3/documentation/network/configs/blockchain-configs#param-15) for more.
+This refers to the duration of elections in seconds. To know more, refer to [this parameter-15](/v3/documentation/network/configs/blockchain-configs#param-15).
 
 ### Hold period
 
-Hold period in seconds, check [this param 15](/v3/documentation/network/configs/blockchain-configs#param-15) for more.
+The hold period in seconds, with details available at [this parameter-15](/v3/documentation/network/configs/blockchain-configs#param-15).
 
 ### Minimum stake
 
-Minimum stake in TONs, check [this param 17](/v3/documentation/network/configs/blockchain-configs#param-17) for more.
+The minimum stake required in TONs. Check [this parameter-17](/v3/documentation/network/configs/blockchain-configs#param-17).
 
 ### Maximum stake
 
-Maximum stake in TONs, check [this param 17](/v3/documentation/network/configs/blockchain-configs#param-17) for more.
+The maximum stake allowed in TONs. Check [this parameter-17](/v3/documentation/network/configs/blockchain-configs#param-17).
 
 ## TON timestamps
 
-### TON Network Launch
+### TON network launch
 
-The time when the current network (mainnet or testnet) was launched.
+This indicates the launch time of the current network, whether it is the Mainnet or Testnet.
 
-### Start of the Validation Cycle
+### Start of the validation cycle
 
-The timestamp for the start of the validation cycle; it will be green if it represents a future moment.
+The timestamp indicates the beginning of the validation cycle. If it represents a future event, it will be displayed in green.
 
-### End of the Validation Cycle
+### End of the validation cycle
 
-The timestamp for the end of the validation cycle; it will be green if it represents a future moment.
+This is the timestamp for the end of the validation cycle; it will also appear green if it indicates a future date.
 
-### Start of Elections
+### Start of elections
 
-The timestamp for the start of the elections; it will be green if it represents a future moment.
+The timestamp for when elections begin. This will be green if it represents a future date.
 
-### End of Elections
+### End of elections
 
-The timestamp for the end of the elections; it will be green if it represents a future moment.
+The timestamp indicating the end of elections is displayed in green if it predicts a future date.
 
-### Beginning of the Next Elections
+### Beginning of the next elections
 
-The timestamp for the start of the next elections; it will be green if it represents a future moment.
+The timestamp for the start of the next elections will appear green if it signifies a future event.
+
+<Feedback />
+

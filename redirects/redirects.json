@@ -128,10 +128,6 @@
         "to": "/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk"
     },
     {
-        "from": "/develop/dapps/ton-connect/comparison",
-        "to": "/v3/guidelines/ton-connect/business/ton-connect-comparison"
-    },
-    {
         "from": "/develop/dapps/ton-connect/business",
         "to": "/v3/guidelines/ton-connect/business/ton-connect-for-business"
     },
@@ -549,7 +545,7 @@
     },
     {
         "from": "/participate/run-nodes/alerting",
-        "to": "/v3/documentation/infra/nodes/mytonctrl/mytonctrl-alerting"
+        "to": "/v3/guidelines/nodes/maintenance-guidelines/mytonctrl-private-alerting"
     },
     {
         "from": "/participate/run-nodes/node-commands",
@@ -818,5 +814,97 @@
     {
         "from": "/develop/dapps/README",
         "to": "/v3/guidelines/dapps/overview"
+    },
+    {
+      "from": "/v3/concepts/qa-outsource/outsource",
+      "to": "https://ton.org/en/talents"
+    },
+    {
+      "from": "/v3/documentation/infra/nodes/mytonctrl/mytonctrl-alerting",
+      "to": "/v3/guidelines/nodes/maintenance-guidelines/mytonctrl-private-alerting"
+    },
+    {
+      "from": "/v3/concepts/qa-outsource/auditors",
+      "to": "https://ton.org/talents?filterBy=Auditors"
+    },
+    {
+      "from": "/develop/dapps/asset-processing/jettons",
+      "to": "/v3/guidelines/dapps/asset-processing/jettons"
+    },
+    {
+      "from": "/develop/dapps/apis/sdk",
+      "to": "/v3/guidelines/dapps/apis-sdks/sdk"
+    },
+    {
+      "from": "/develop/dapps/cookbook",
+      "to": "/v3/guidelines/dapps/cookbook"
+    },
+    {
+      "from": "/develop/dapps/telegram-apps/README",
+      "to": "/v3/guidelines/dapps/tma/overview"
+    },
+    {
+      "from": "/develop/dapps/telegram-apps/app-examples",
+      "to": "/v3/guidelines/dapps/tma/tutorials/app-examples"
+    },
+    {
+      "from": "/develop/dapps/telegram-apps/step-by-step-guide",
+      "to": "/v3/guidelines/dapps/tma/tutorials/step-by-step-guide"
+    },
+    {
+      "from": "/develop/dapps/ton-connect/developers",
+      "to": "/v3/guidelines/ton-connect/guidelines/developers"
+    },
+    {
+      "from": "/develop/dapps/ton-connect/overview",
+      "to": "/v3/guidelines/ton-connect/guidelines/how-ton-connect-works"
+    },
+    {
+      "from": "/develop/dapps/ton-connect/react",
+      "to": "/v3/guidelines/ton-connect/frameworks/react"
+    },
+    {
+      "from": "/develop/dapps/ton-connect/wallet",
+      "to": "/v3/guidelines/ton-connect/wallet"
+    },
+    {
+      "from": "/develop/dapps/ton-connect/web",
+      "to": "/v3/guidelines/ton-connect/frameworks/web"
+    },
+    {
+      "from": "/develop/dapps/tutorials/how-to-run-ton-site",
+      "to": "/v3/guidelines/web3/ton-proxy-sites/how-to-run-ton-site"
+    },
+    {
+      "from": "/develop/get-started-with-ton",
+      "to": "/v3/guidelines/get-started-with-ton"
+    },
+    {
+      "from": "/develop/overview",
+      "to": "/v3/documentation/ton-documentation"
+    },
+    {
+      "from": "/develop/smart-contracts/fees",
+      "to": "/v3/documentation/smart-contracts/transaction-fees/fees"
+    },
+    {
+      "from": "/learn/introduction",
+      "to": "v3/concepts/dive-into-ton/introduction"
+    },
+    {
+      "from": "/learn/overviews/addresses",
+      "to": "/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses"
+    },
+    {
+      "from": "/participate/run-nodes/full-node",
+      "to": "/v3/guidelines/nodes/running-nodes/full-node"
+    },
+    {
+      "from": "/participate/wallets/contracts",
+      "to": "/v3/documentation/smart-contracts/contracts-specs/wallet-contracts"
+    },
+    {
+      "from":"/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk",
+      "to":"/v3/guidelines/ton-connect/frameworks/web"
     }
 ]

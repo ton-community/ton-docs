@@ -1,0 +1,39 @@
+.container {
+  position: relative;
+  display: inline-block;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 16px;
+  border-radius: 40px;
+  border: 0px;
+  gap: 6px;
+  background: rgba(118, 152, 187, 0.09);
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+[data-theme=dark] .button {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.button:hover:not(:disabled) {
+  background: rgba(118, 152, 187, 0.16);
+  cursor: pointer;
+}
+
+[data-theme=dark] .button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+  cursor: pointer;
+}

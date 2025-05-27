@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 
 # TON Connect for React
 
@@ -7,16 +9,16 @@ The recommended SDK for React Apps is a [UI React SDK](/v3/guidelines/ton-connec
 
 ### Installation
 
-To start integrating TON Connect into your DApp, you need to install the `@tonconnect/ui-react` package. You can use npm or yarn for this purpose:
+To start integrating TON Connect into your dApp, you need to install the `@tonconnect/ui-react` package:
 
 ```bash npm2yarn
 npm i @tonconnect/ui-react
 ```
 
-### TON Connect Initiation
+### TON Connect initiation
 
 
-After installing the package, you should create a `manifest.json` file for your application. More information on how to create a manifest.json file can be found [here](/v3/guidelines/ton-connect/guidelines/creating-manifest).
+After installing the package, you should create a `manifest.json` file for your application. More information on creating a manifest.json file can be found [here](/v3/guidelines/ton-connect/guidelines/creating-manifest).
 
 After creating the manifest file, import TonConnectUIProvider to the root of your Mini App and pass the manifest URL:
 
@@ -33,10 +35,9 @@ export function App() {
 
 ```
 
-### Connect to the Wallet
+### Connect to the wallet
 
-Add the `TonConnectButton`. The TonConnect Button is a universal UI component for initializing a connection. After the wallet is connected, it transforms into a wallet menu. It is recommended to place it in the top right corner of your app.
-
+Add the `TonConnectButton`. 
 ```tsx
 export const Header = () => {
   return (
@@ -47,13 +48,16 @@ export const Header = () => {
   );
 };
 ```
+The `TonConnectButton` is a universal UI component for initializing a connection. After the wallet is connected, it transforms into a wallet menu. Prefer to place the **Connect** button in the top right corner of your app.
 
-You can add className and style props to the button as well. Note that you cannot pass child to the TonConnectButton:
+You can add the `className` and style props to the button:
+
 ```js
 <TonConnectButton className="my-button-class" style={{ float: "right" }}/>
 ```
+Note that you cannot pass a child to the `TonConnectButton`.
 
-Moreover, you can always initiate the connection manually using the  `useTonConnectUI` hook and [openModal](https://github.com/ton-connect/sdk/tree/main/packages/ui#open-connect-modal) method.
+You can always initiate the connection manually using the  `useTonConnectUI` hook and [openModal](https://github.com/ton-connect/sdk/tree/main/packages/ui#open-connect-modal) method.
 
 ```tsx
 export const Header = () => {
@@ -70,7 +74,7 @@ export const Header = () => {
 ```
 
 #### Connect with a specific wallet
-To open a modal window for a specific wallet, use the `openSingleWalletModal()` method. This method takes the wallet's `app_name` as a parameter (refer to the [wallets-list.json](https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json) file) and opens the corresponding wallet modal. It returns a promise that resolves once the modal window has successfully opened.
+To open a modal window for a specific wallet, use the `openSingleWalletModal()` method. This method takes the wallet's `app_name` as a parameter (refer to the [wallets-list.json](https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json) file) and opens the corresponding wallet modal. It returns a promise that resolves once the modal window opens successfully.
 
 ```tsx
 <button onClick={() => tonConnectUI.openSingleWalletModal('tonwallet')}>
@@ -80,7 +84,7 @@ To open a modal window for a specific wallet, use the `openSingleWalletModal()` 
 
 ### Redirects
 
-If you want to redirect the user to a specific page after wallet connection, you can use `useTonConnectUI` hook and [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
+If you want to redirect the user to a specific page after wallet connection, you can use the `useTonConnectUI` hook and [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
 
 #### Telegram Mini Apps
 
@@ -100,7 +104,7 @@ If you want to redirect the user to a [Telegram Mini App](/v3/guidelines/dapps/t
 
 ### UI customization
 
-To [customize UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) of the modal you can use the `useTonConnectUI` hook and the `setOptions` function. See more about useTonConnectUI hook in [Hooks](#hooks) section.
+To [customize UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) of the modal, you can use the `useTonConnectUI` hook and the `setOptions` function. See more about the `useTonConnectUI` hook in the [Hooks](#hooks) section.
 
 ## Hooks
 
@@ -108,7 +112,8 @@ If you want to use some low-level TON Connect UI SDK features in your React app,
 
 ### useTonAddress
 
-Use it to get user's current ton wallet address. Pass the boolean parameter `isUserFriendly` (default is `true`) to choose the format of the address. If the wallet is not connected, the hook will return an empty string.
+Use it to get the user's current TON wallet address. Pass the boolean parameter `isUserFriendly` to choose the address format, where the `isUserFriendly` is `true` by default. The hook will return an empty string if the wallet is not connected.
+
 
 ```tsx
 import { useTonAddress } from '@tonconnect/ui-react';
@@ -150,7 +155,7 @@ export const ModalControl = () => {
 ### useTonWallet
 
 Use this hook to retrieve the user's current TON wallet.
-If the wallet is not connected, the hook will return `null`. The `wallet` object provides common data such as the user's address, provider, [TON proof](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users), and other attributes (see the [Wallet interface](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)).
+The hook will return `null` if the wallet is not connected. The `wallet` object provides common data such as the user's address, provider, [TON proof](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users), and other attributes (see the [Wallet interface](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)).
 
 Additionally, you can access more specific details about the connected wallet, such as its name, image, and other attributes (refer to the [WalletInfo interface](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html)).
 
@@ -182,11 +187,11 @@ export const Wallet = () => {
 
 ### useTonConnectUI
 
-Use it to get access to the `TonConnectUI` instance and UI options updating function.
+Access the `TonConnectUI` instance and update the UI options function.
 
 [See more about TonConnectUI instance methods](https://github.com/ton-connect/sdk/tree/main/packages/ui#send-transaction)
 
-[See more about setOptions function](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
+[See more about the `setOptions` function](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
 
 
 ```tsx
@@ -212,8 +217,8 @@ export const Settings = () => {
 ```
 
 ### useIsConnectionRestored
-Indicates current status of the connection restoring process.
-You can use it to detect when connection restoring process if finished.
+`useIsConnectionRestored` indicates the current status of the connection restoring process.
+You can use it to detect when the connection restoring process is finished.
 
 ```tsx
 import { useIsConnectionRestored } from '@tonconnect/ui-react';
@@ -231,11 +236,11 @@ export const EntrypointPage = () => {
 
 ## Usage
 
-Let's take a look at how to use the React UI SDK on practice.
+Let's look at how to use the React UI SDK in practice.
 
 ### Sending transactions
 
-Send TON coins (in nanotons) to a specific address:
+Send Toncoins to a specific address:
 
 ```js
 import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -264,17 +269,18 @@ export const Settings = () => {
 };
 
 ```
+:::tip
+Get more examples on the [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages) page.
+:::
 
-- Get more examples here: [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+### Understanding transaction status by hash
 
-### Understanding Transaction Status by Hash
+Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions) using the tonweb library.
 
-The principle is located in Payment Processing (using tonweb). [See more](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions)
-
-### Optional Check (ton_proof) on the Backend
+### Optional check on the backend: ton_proof
 
 :::tip
-Understand how to sign and verify messages: [Signing and Verification](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
+Understand how to sign and verify messages: [Signing and verification](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
 :::
 
 To ensure that the user truly owns the declared address, you can use `ton_proof`.
@@ -290,7 +296,7 @@ const [tonConnectUI] = useTonConnectUI();
 // Set loading state
 tonConnectUI.setConnectRequestParameters({ state: "loading" });
 
-// Fetch tonProofPayload from backend
+// Fetch tonProofPayload from the backend
 const tonProofPayload: string | null =
   await fetchTonProofPayloadFromBackend();
 
@@ -306,7 +312,7 @@ if (tonProofPayload) {
 }
 ```
 
-#### Handling ton_proof Result
+#### Handling ton_proof result
 
 You can find the `ton_proof` result in the `wallet` object when the wallet is connected:
 
@@ -343,9 +349,9 @@ type TonProofItemReplySuccess = {
 }
 ```
 
-You can find an example of authentication on this [page](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#react-example)
+You can find an example of authentication on this [page](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#react-example).
 
-### Wallet Disconnection
+### Wallet disconnection
 
 Call to disconnect the wallet:
 ```js
@@ -356,9 +362,13 @@ await tonConnectUI.disconnect();
 
 #### Deploying contract
 
-Deploying contract using TonConnect is pretty straightforward. You just need to obtain contract code and state init, store it as a cell and send transaction with `stateInit` field provided.
+Deploying a contract using TON Connect is pretty straightforward. You must:
 
-Note, that `CONTRACT_CODE` and `CONTRACT_INIT_DATA` may be found in wrappers.
+- Obtain the contract `code` and `data`
+- Store them as a `stateInit` cell
+- Send a transaction using the `statement` field provided
+
+Note that `CONTRACT_CODE` and `CONTRACT_INIT_DATA` may be found in wrappers.
 
 ```typescript
 import { beginCell, Cell, contractAddress, StateInit, storeStateInit } from '@ton/core';
@@ -393,14 +403,14 @@ await tonConnectUI.sendTransaction({
 
 Wrappers are classes that simplify interaction with the contract, allowing you to work without concerning yourself with the underlying details.
 
-- When developing a contract in FunC, you need to write the wrapper yourself.
+- When developing a contract in FunC, write the wrapper yourself.
 - When using the [Tact language](https://docs.tact-lang.org), wrappers are automatically generated for you.
 
 :::tip
-Check out the [blueprint](https://github.com/ton-org/blueprint) documentation how to develop and deploy contracts
+Check out the [Blueprint](https://github.com/ton-org/blueprint) documentation how to develop and deploy contracts
 :::
 
-Let's take a look at the default `Blueprint` Counter wrapper example and how we can use it:
+Let's take a look at the default `Blueprint` counter wrapper example and how we can use it:
 
 <details>
 <summary>Wrapper usage</summary>
@@ -422,7 +432,7 @@ export const Opcodes = {
     increase: 0x7e8764ef,
 };
 
-export class Counter implements Contract {
+export class Counter implements contract {
     constructor(
         readonly address: Address,
         readonly init?: { code: Cell; data: Cell },
@@ -530,7 +540,7 @@ class TonConnectProvider implements Sender {
     // The transaction is valid for 10 minutes.
     const validUntil = Math.floor(Date.now() / 1000) + 600;
 
-    // The address of the recipient, should be in bounceable format for all smart contracts.
+    // The recipient's address should be in bounceable format for all smart contracts.
     const address = args.to.toString({ urlSafe: true, bounceable: true });
 
     // The address of the sender, if available.
@@ -557,7 +567,7 @@ class TonConnectProvider implements Sender {
       payload = args.body.toBoc().toString("base64");
     }
 
-    // Send the message using the TonConnect UI and wait for the message to be sent.
+    // Use the TonConnect UI to send the message and wait for the sending
     await this.provider.sendTransaction({
       validUntil: validUntil,
       from: from,
@@ -635,20 +645,27 @@ export const Header = () => {
 </details>
 
 
-### Wrappers for Jettons and NFTs
+### Wrappers for jettons and NFTs
 
-To interact with jettons or NFTs you can use [assets-sdk](https://github.com/ton-community/assets-sdk).
-This SDK provides wrappers that simplify interaction with these assets. For practical examples, please check our [examples](https://github.com/ton-community/assets-sdk/tree/main/examples) section.
+To interact with jettons or NFTs, you can use [assets-sdk](https://github.com/ton-community/assets-sdk).
+This SDK provides wrappers that simplify interaction with these assets. Please check our [examples](https://github.com/ton-community/assets-sdk/tree/main/examples) section for practical examples.
 
-## API Documentation
+## API documentation
 
 [Latest API documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui_react.html)
 
 
 ## Examples
 
-* Step-by-step [TON Hello World guide](https://ton-community.github.io/tutorials/03-client/) to create a simple DApp with React UI.
-* [Demo dApp](https://github.com/ton-connect/demo-dapp-with-react-ui) - Example of a DApp with `@tonconnect/ui-react`.
+* Step-by-step [TON Hello World guide](https://helloworld.tonstudio.io/03-client/) to create a simple dApp with React UI.
+* [Demo dApp](https://github.com/ton-connect/demo-dapp-with-react-ui) - Example of a dApp with `@tonconnect/ui-react`.
 * [ton.vote](https://github.com/orbs-network/ton-vote) - Example of React website with TON Connect implementation.
 
+
+## See also
+
+- [TON Connect for Vue apps](/v3/guidelines/ton-connect/frameworks/vue)
+- [TON Connect for HTML/JS apps](/v3/guidelines/ton-connect/frameworks/web)
+
+<Feedback />
 

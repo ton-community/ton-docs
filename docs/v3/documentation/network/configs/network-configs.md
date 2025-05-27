@@ -1,11 +1,17 @@
-# Network Configs
+import Feedback from '@site/src/components/Feedback';
 
-On this page you can find active network configs of TON Blockchain:
+# Network configs
 
--   Mainnet: https://ton.org/global-config.json
--   Testnet: https://ton.org/testnet-global.config.json
+On this page, you can find the active network configurations for TON Blockchain:
 
-## See Also
+- Mainnet: https://ton.org/global-config.json
 
-- [Node Types](/v3/documentation/infra/nodes/node-types)
-- [Blockchain Params Config](/v3/documentation/network/configs/blockchain-configs)
+- Testnet: https://ton.org/testnet-global.config.json
+
+## See also
+
+- [Node types](/v3/documentation/infra/nodes/node-types)
+
+- [Blockchain parameters configurations](/v3/documentation/network/configs/blockchain-configs)
+<Feedback />
+

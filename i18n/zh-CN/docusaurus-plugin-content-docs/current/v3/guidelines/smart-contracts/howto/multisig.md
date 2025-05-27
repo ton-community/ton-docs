@@ -4,9 +4,13 @@ description: 本教程结束时，您将在TON区块链上部署了多签合约�
 
 # 如何制作一个简单的多签合约
 
+:::caution 高级模式
+这些信息是**非常低级的**。新手可能难以理解，专为希望了解 [fift](/v3/documentation/smart-contracts/fift/overview) 的高级人员设计。日常工作中不需要使用 fift。
+:::
+
 ## 💡 概览
 
-本教程将帮助您学习如何部署您的多签合约。回想一下，(n, k)多签合约是一个有n个私钥持有者的多签钱包，如果请求（又称订单、查询）至少收集到持有者的k个签名，则接受发送消息的请求。
+基于akifoq对原始多签合约代码的更新：
 
 基于akifoq对原始多签合约代码的更新：
 
@@ -21,17 +25,17 @@ description: 本教程结束时，您将在TON区块链上部署了多签合约�
 
 - 如何创建和定制一个简单的多签钱包。
 - 如何使用轻客户端部署多签钱包。
-- 如何签署请求并将其作为消息发送到区块链。
+- 如何签署请求并以信息形式发送到区块链。
 
 ## ⚙ 设置您的环境
 
 在我们开始之前，检查并准备您的环境。
 
-- 从[安装](/develop/smart-contracts/environment/installation)部分中安装`func`、`fift`、`lite-client`二进制文件和`fiftlib`。
+- 从 [Installation](/v3/documentation/archive/precompiled-binaries) 部分安装 `func`、`fift`、`lite-client` 二进制文件和 `fiftlib`。
 - 克隆[库](https://github.com/akifoq/multisig)并在CLI中打开其目录。
 
-```cpp
-https://github.com/akifoq/multisig.git
+```bash
+git clone https://github.com/akifoq/multisig.git
 cd ~/multisig
 ```
 
@@ -50,7 +54,7 @@ cd ~/multisig
 func -o multisig-code.fif -SPA stdlib.fc multisig-code.fc
 ```
 
-### 准备多签所有者密钥
+### 创建参与者密钥
 
 #### 创建参与者密钥
 
@@ -78,15 +82,15 @@ fift -s new-key.fif multisig_key
 Public key = Pub5XqPLwPgP8rtryoUDg2sadfuGjkT4DLRaVeIr08lb8CB5HW
 ```
 
-在`"Public key = "`之后的任何内容都需要保存在某个地方！
+让我们将其存储在`keys.txt`文件中。每行一个公钥，这很重要。
 
 让我们将其存储在`keys.txt`文件中。每行一个公钥，这很重要。
 
-### 部署您的合约
+### 通过轻客户端部署
 
 #### 通过轻客户端部署
 
-创建所有密钥后，您需要将公钥收集到文本文件`keys.txt`中。
+例如：
 
 例如：
 
@@ -123,7 +127,7 @@ Bounceable address (for later access): kQBLuyZgCX21xy3V6QhhFQEPD4yFAeC4_vH-MY2d5
 ```
 
 :::info
-如果您遇到“公钥必须为48个字符长”的错误，请确保您的`keys.txt`具有unix类型的换行符 - LF。例如，可以通过Sublime文本编辑器更改换行符。
+最好保留可弹回地址 - 这是钱包的地址。
 :::
 
 :::tip
@@ -132,7 +136,7 @@ Bounceable address (for later access): kQBLuyZgCX21xy3V6QhhFQEPD4yFAeC4_vH-MY2d5
 
 #### 激活您的合约
 
-您需要向我们新生成的_treasure_发送一些TON，例如0.5 TON。
+之后，您需要运行轻客户端：
 
 之后，您需要运行轻客户端：
 
@@ -150,7 +154,7 @@ lite-client -C global.config.json
 time
 ```
 
-好的，轻客户端工作正常！
+之后，您需要部署钱包。运行命令：
 
 之后，您需要部署钱包。运行命令：
 
@@ -160,7 +164,7 @@ sendfile ./wallet-create.boc
 
 之后，钱包将在一分钟内准备好可供使用。
 
-### 与多签钱包进行交互
+### 创建请求
 
 #### 创建请求
 
@@ -239,7 +243,7 @@ fift -s add-signature.fif multisig_key 0
 fift -s create-external-message.fif wallet $KEY$ $KEY_INDEX$
 ```
 
-在这种情况下，只需要钱包所有者的一个签名即可。这样做的想法是，您无法使用无效签名攻击合约。
+例如：
 
 例如：
 
@@ -261,7 +265,7 @@ lite-client -C global.config.json
 sendfile wallet-query.boc
 ```
 
-如果其他人都签署了请求，它将被完成！
+您做到了，哈哈！🚀🚀🚀
 
 您做到了，哈哈！🚀🚀🚀
 

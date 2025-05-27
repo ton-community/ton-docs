@@ -18,7 +18,7 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "spell": "cspell --show-suggestions",
+    "spell": "cspell '**/*.md' '**/.mdx' --show-suggestions --exclude build",
     "postinstall": "husky"
   },
   "dependencies": {
@@ -35,13 +35,17 @@
     "clsx": "^2.1.1",
     "docusaurus-plugin-sass": "^0.2.5",
     "dotenv": "^16.4.5",
+    "katex": "^0.16.22",
     "markdown-link-extractor": "^4.0.2",
     "markdown-to-jsx": "^7.5.0",
     "prism-react-renderer": "^2.4.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-katex": "^3.1.0",
     "react-player": "^2.16.0",
+    "react-tooltip": "^5.28.0",
     "sass": "^1.79.4",
+    "tonweb-mnemonic": "^1.0.1",
     "url": "^0.11.4"
   },
   "devDependencies": {
@@ -52,7 +56,7 @@
     "cspell": "^8.14.2",
     "eslint": "^8.56.0",
     "husky": "^9.1.6",
-    "typescript": "^5.6.2"
+    "typescript": "^5.8.3"
   },
   "browserslist": {
     "production": [

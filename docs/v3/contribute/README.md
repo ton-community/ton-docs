@@ -1,51 +1,76 @@
-# How to Contribute
+# How to contribute
 
-## Identify area for contribution
+:::info
+Learn how to submit content to TON documentation here.
+:::
 
-There are several ways to identify the area where you can contribute to TON Docs:
+## Contribute rules
 
-- Join [TON Docs Club chat](https://t.me/+c-0fVO4XHQsyOWM8) in Telegram and get the latest tasks from maintainers.
-- If you have a specific contribution in mind but are unsure about it, confirm whether
-  the contribution is appropriate by contacting one of the [Docs maintainers](/v3/contribute/maintainers) directly.
-- Get familiar with the most frequently asked questions in the [TON Developers](https://t.me/tondev_eng) chats.
-- Please read over the [issues](https://github.com/ton-community/ton-docs/issues) in the GitHub repository.
-- Learn available [footsteps](https://github.com/ton-society/ton-footsteps/issues?q=documentation) for the documentation.
+### Documentation maintain community
 
-## TL;DR
+TON Documentation is entirely open source. Community enthusiasts and early TON contributors have played a key role in creating this open-source TON documentation by turning their notes into detailed pages.
 
-- If you need to add or edit something in TON Docs, create a pull request 
-  against the `main` branch.
-- The documentation team will review the pull request or reach out as needed.
-- Repository: https://github.com/ton-community/ton-docs
+It was initially written by TON [contributors](/v3/contribute/maintainers/) and supported by [TON Studio](https://tonstudio.io/).
+We aim to educate users about TON through explicit, easily searchable content that appeals to technical experts and casual readers.
 
-## Development
 
-### Online one-click contribution setup
+### How to contribute
 
-You can use Gitpod (a free, online, VS code-like IDE) for contributing. It will launch a workspace with a single click and will automatically:
+:::info
+This documentation is written in English. Please refer to [localization program](/v3/contribute/localization-program/how-to-contribute/) for other languages.
+:::
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ton-community/ton-docs)
+1. Clone a current version from the [ton-docs](https://github.com/ton-community/ton-docs) GitHub repository.
+1. Determine an area for contribution according to [Style guide](/v3/contribute/style-guide/) and open a related [issue](https://github.com/ton-community/ton-docs/issues).
+2. Familiarize yourself with [Content standardization](/v3/contribute/content-standardization/) and [Typography](/v3/contribute/typography/).
+3. Open a pull request against the `main` branch with a clear description and concise updates according to the template.
 
-### Code Conventions
+#### Pull request template
 
-- **Most important**: look around. Match the overall style of the project. This includes formatting, naming files, naming objects in code, naming things in documentation, and so on.
-- **For documentation**: When editing documentation, do not wrap lines at 80 characters; instead, configure your editor to soft-wrap.
-- **Grammar**: `cpell` will check the spelling and suggest corrections in case of mistakes automatically before creating new commit. Feel free to add specific `words` to `cspell.json` config to include them in the verification dictionary.
+```md
 
-Don't worry too much about styles in general; the maintainers will help you fix them as they review your code.
+## Description
 
-### Pull Requests
+Brief description of the changes introduced in this pull request. Include any relevant issue numbers or links.
 
-So you have decided to contribute code back to upstream by opening a pull request. You've put in a lot of effort, and we appreciate it. We will do our best to work with you and get the pull request reviewed. 
+Closes [link to issue].
 
-When submitting a pull request, please ensure the following:
+## Checklist
 
-1. **Keep your pull request small**. Smaller pull requests (~300 lines of diff) are easier to review and more likely to get merged. Make sure the pull request does only one thing, otherwise please split it.
-2. **Use descriptive titles**. It is recommended to follow the commit message style.
-3. **Test your changes**. Describe your test plan in your pull request description.
+- [ ] I have created an issue.
+- [ ] I am working on content that aligns with the [Style guide](https://docs.ton.org/v3/contribute/style-guide/).
+- [ ] I have reviewed and formatted the content according to [Content standardization](https://docs.ton.org/v3/contribute/content-standardization/).
+- [ ] I have reviewed and formatted the text in the article according to [Typography](https://docs.ton.org/v3/contribute/typography/).
 
-All pull requests should be opened against the `main` branch.
+```
+4. Before submitting your pull request, complete and verify each milestone in the description checklist.
 
-## What Happens Next?
+:::info
+To avoid excessive rework, read the contribution guidelines in the [Style guide](/v3/contribute/style-guide/), [Content standardization](/v3/contribute/content-standardization/), and [Typography](/v3/contribute/typography/) before contributing. Don't worry about minor issues; maintainers will help you fix them during the review process.
+:::
 
-The TON Docs team will be monitoring pull requests. Please help us by following the guidelines above to keep the pull requests consistent.
+### Development
+
+- Learn the documentation development flow from a [ton-docs/README.md](https://github.com/ton-community/ton-docs?tab=readme-ov-file#set-up-your-environment-%EF%B8%8F) document.
+
+#### Best practices for pull requests
+
+1. **Keep your pull request small**. Minor pull requests (~300 lines of diff) are easier to review and more likely to get merged. Make sure the pull request does only one thing; otherwise, please split it.
+2. **Use descriptive titles**. It would be best to follow the commit message style.
+3. **Test your changes**. Run build locally, and make sure you have no crashes.
+4. **Use soft wrap**: Don't wrap lines at 80 characters; configure your editor to soft-wrap.
+
+
+## Communicate to other developers
+
+- [Ask questions related to TON documentation in the TON Docs Club chat in Telegram.](https://t.me/+c-0fVO4XHQsyOWM8)
+- [Get familiar with the most frequently asked questions in the TON Developers.](https://t.me/tondev_eng)
+- [Create an issue with your ideas on improvement.](https://github.com/ton-community/ton-docs/issues)
+- [Find and take available bounties for the documentation.](https://github.com/ton-society/ton-footsteps/issues?q=documentation) 
+- [See docs-ton on GitHub.](https://github.com/ton-community/ton-docs)
+
+## See also
+
+- [Style guide](/v3/contribute/style-guide/)
+- [Typography](/v3/contribute/typography/)
+- [Localization program](/v3/contribute/localization-program/overview/)

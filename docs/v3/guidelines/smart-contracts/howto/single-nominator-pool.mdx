@@ -1,45 +1,47 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# How to use Single Nominator Pool
+# How to use a single nominator pool
 
 :::tip
-It's recommended to get acquainted with [Single Nominator Pool Specification](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool) before reading this tutorial.
+Before proceeding with this tutorial, we recommend familiarizing yourself with the [single nominator pool specification](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool).
 :::
 
-### Set up single-nominator
+### Set up single nominator mode
 
 :::caution
-Before start make sure you have topped up and [activated](/v3/guidelines/nodes/running-nodes/validator-node#activate-the-wallets) validator's wallet.
+Before starting, ensure you have topped up and [activated](/v3/guidelines/nodes/running-nodes/validator-node#activate-the-wallets) the validator's wallet.
 :::
 
-1. Enable single nominator mode
+1. Enable single nominator mode:
 
 ```bash
 MyTonCtrl> enable_mode single-nominator
 ```
 
-2. Check if single-nominator mode is enabled.
+2. Verify if single nominator mode is enabled:
 
 ```bash
 MyTonCtrl> status_modes
-Name              Status             Description
-single-nominator  enabled   Orbs's single nominator pools.
+Name              Status   Description
+single-nominator  enabled  Orbs's single nominator pools.
 ```
 
-3. Create pool
+3. Create a pool:
 
 ```bash
 MyTonCtrl> new_single_pool <pool-name> <owner_address>
 ```
 
-If you have already created pool it's possible to import it:
+If you have already created a pool, you can import it:
 
 ```bash
 MyTonCtrl> import_pool <pool-name> <pool-addr>
 ```
 
-4. Type `pools_list` to display pool addresses
+4. Display pool addresses using `pools_list`:
 
 ```bash
 MyTonCtrl> pools_list
@@ -47,13 +49,13 @@ Name       Status  Balance  Version   Address
 test-pool  empty   0.0      spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
 ```
 
-5. Activate the pool
+5. Activate the pool:
 
 ```bash
 MyTonCtrl> activate_single_pool <pool-name>
 ```
 
-After successfully activated pool:
+After successfully activating the pool:
 
 ```bash
 MyTonCtrl> pools_list
@@ -61,147 +63,145 @@ Name       Status  Balance  Version   Address
 test-pool  active  0.99389  spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
 ```
 
-Now you can work with this pool via mytonctrl like with a standard nominator pool.
+You can manage this pool via MyTonCtrl like a standard nominator pool.
 
 :::info
-If the pool's balance is enough to participate in both rounds (`balance > min_stake_amount * 2`) then MyTonCtrl will automatically participate in both rounds using `stake = balance / 2`, unless user sets stake manually using command `set stake`. This behaviour is different from using a nominator pool but similar to staking using validator wallet.
+If the pool's balance is sufficient to participate in both rounds (`balance > min_stake_amount * 2`), MyTonCtrl will automatically participate in both rounds using `stake = balance / 2`, unless you manually set the stake using the `set stake` command. This behavior differs from using a nominator pool but resembles staking with a validator wallet.
 :::
 
-## Start without mytonctrl
+## Start without MyTonCtrl
 
-#### Prepare launched Validator
+#### Prepare a launched validator
 
-  If you have mytonctrl installed and validator running:
+If you have MyTonCtrl installed and a validator running:
 
-  1. Stop validation and withdraw all funds.
+1. Stop validation and withdraw all funds.
 
-#### Prepare from the beginning
-  If you had no Validator before, do the following:
-   1. [Run a Validator](/v3/guidelines/nodes/running-nodes/full-node) and make sure it's synced.
-   2. Stop validation and withdraw all funds.
+#### Prepare from scratch
 
+If you have no prior validator setup, follow these steps:
 
-### Prepare Single Nominator
+1. [Run a validator](/v3/guidelines/nodes/running-nodes/full-node) and ensure it is synced.
+2. Stop validation and withdraw all funds.
 
+### Prepare single nominator
 
-1. Install [nodejs](https://nodejs.org/en) v.16 and later and npm  ([detailed instructions](https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions))
-
-2. Install `ts-node` and `arg` module
+1. Install [Node.js](https://nodejs.org/en) v.16 or later and npm ([detailed instructions](https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions)).
+2. Install `ts-node` and the `arg` module:
 
 ```bash
 $ sudo apt install ts-node
 $ sudo npm i arg -g
 ```
 
-4. Create symlinks for compilers:
+3. Create symlinks for compilers:
 
 ```bash
 $ sudo ln -s /usr/bin/ton/crypto/fift /usr/local/bin/fift
 $ sudo ln -s /usr/bin/ton/crypto/func /usr/local/bin/func
 ```
 
-5. Run test to make sure everything is set up properly:
+4. Run a test to verify the setup:
 
 ```bash
 $ npm run test
 ```
 
-6. Replace mytonctrl nominator-pool scripts: https://raw.githubusercontent.com/orbs-network/single-nominator/main/mytonctrl-scripts/install-pool-scripts.sh
+5. Replace MyTonCtrl nominator-pool scripts: [Install pool scripts](https://raw.githubusercontent.com/orbs-network/single-nominator/main/mytonctrl-scripts/install-pool-scripts.sh).
 
-### Create Single Nominator Pool
+### Create a single nominator pool
 
-1. Get Toncenter API key from a Telegram [@tonapibot](https://t.me/tonapibot)
-2. Set env variables:
+1. Obtain a TON Center API key from [@tonapibot](https://t.me/tonapibot) on Telegram.
+2. Set environment variables:
 
 ```bash
 export OWNER_ADDRESS=<owner_address>
 export VALIDATOR_ADDRESS=<validator_wallet_address>
 export TON_ENDPOINT=https://toncenter.com/api/v2/jsonRPC
-export TON_API_KEY=<toncenter api key>
+export TON_API_KEY=<toncenter_api_key>
 ```
 
-2. Create deployer address:
+3. Create a deployer address:
 
 ```bash
 $ npm run init-deploy-wallet
 Insufficient Deployer [EQAo5U...yGgbvR] funds 0
 ```
 
-3. Topup deployer address with 2.1 TON
-4. Deploy pool contract, you will get pool address: `Ef-kC0..._WLqgs`:
+4. Top up the deployer address with 2.1 TON.
+5. Deploy the pool contract to get the pool address (`Ef-kC0..._WLqgs`):
 
-```
+```bash
 $ npm run deploy
 ```
 
-5. Convert address to .addr:
+6. Convert the address to `.addr`:
 
-```
+```bash
 $ fift -s ./scripts/fift/str-to-addr.fif Ef-kC0..._WLqgs
 ```
 
 (Saving address to file single-nominator.addr)
 
-6. Backup deployer private key "./build/deploy.config.json" and "single-nominator.addr" files
-7. Copy "single-nominator.addr" to "mytoncore/pools/single-nominator-1.addr"
-8. Send stake from owner address to single nominator address
+7. Back up the deployer private key (`./build/deploy.config.json`) and `single-nominator.addr` files.
+8. Copy `single-nominator.addr` to `mytoncore/pools/single-nominator-1.addr`.
+9. Send a stake from the owner's address to the single nominator's address.
 
-### Withdrawals from Single Nominator
+### Withdrawals from the single nominator
 
-Using wallets to withdraw from Single Nominator
-Fift:
+#### Using wallets to withdraw
 
-1. Create "withdraw.boc" request with amount:
+**Fift:**
+
+1. Create a `withdraw.boc` request with the desired amount:
 
 ```bash
 $ fift -s ./scripts/fift/withdraw.fif <withdraw_amount>
 ```
 
-2. Create and sign request from owner's wallet:
+2. Create and sign the request from the owner's wallet:
 
 ```bash
 $ fift -s wallet-v3.fif <my-wallet> <single_nominator_address> <sub_wallet_id> <seqno> <amount=1> -B withdraw.boc
 ```
 
-3. Broadcast query:
+3. Broadcast the query:
 
 ```bash
 $ lite-client -C global.config.json -c 'sendfile wallet-query.boc'
-tons
 ```
 
-1. Create "withdraw.boc" request with amount:
+**Tonkeeper:**
+
+1. Create a `withdraw.boc` request with the desired amount:
 
 ```bash
 $ fift -s ./scripts/fift/withdraw.fif <withdraw_amount>
 ```
 
-2. Send request to single nominator address:
-
-a.
+2. Send the request to the single nominator address:
 
 ```bash
 $ tons wallet transfer <my-wallet> <single_nominator_address> <amount=1> --body withdraw.boc
-tonkeeper
 ```
 
-b.
+3. Link TypeScript:
 
-```
+```bash
 npm link typescript
 ```
 
-c.
+4. Generate a deeplink:
 
-```
+```bash
 npx ts-node scripts/ts/withdraw-deeplink.ts <single-nominator-addr> <withdraw-amount>
 ```
 
-d. Open deeplink on the owner's phone
+5. Open the deeplink on the owner's phone.
 
-## Deposit pool
+## Deposit to pool
 
-You can make a deposit using **MyTonCtrl**, using the following commands:
+You can deposit using **MyTonCtrl** with the following commands:
 
 ```sh
 MyTonCtrl> mg <from-wallet-name> <pool-account-addr> <amount>
@@ -213,54 +213,54 @@ or
 MyTonCtrl> deposit_to_pool <pool-addr> <amount>
 ```
 
-which deposits pool from validator wallet.
+Alternatively, follow these steps:
 
-Or use the following steps:
+1. Navigate to the pool’s page: `https://tonscan.org/nominator/{pool_address}`.
+2. Ensure the pool information is displayed correctly. If the pool has an incorrect smart contract, no information will appear.
+3. Click the `ADD STAKE` button or scan the QR code using Tonkeeper or another TON wallet.
+4. Enter the TON amount and send the transaction. The TON coins will then be added to staking.
 
-1. Go to the pool’s page https://tonscan.org/nominator/{pool_address}.
-
-2. Make sure that the information about the pool is fully displayed, if the pool has the wrong smart contract, there will be no information.
-
-3. Press the `ADD STAKE` button or scan the QR-code using Tonkeeper or any other TON Wallet.
-
-4. After you are transferred to the wallet, please, enter the amount of TON and then send the transaction. After that TON coins will be added to staking.
-
-If the wallet does not open automatically, you can send the transaction manually by copying the pool address. Send it through any TON wallet. From the sent transaction, 1 TON will be debited as a commission for processing the deposit.
-
+If the wallet does not open automatically, manually send the transaction by copying the pool address and using any TON wallet. Note that 1 TON will be deducted as a commission for processing the deposit.
 
 ## Withdraw funds
 
-You can also withdraw funds using the following command:
+You can withdraw funds using the following command:
 
 ```sh
 MyTonCtrl> withdraw_from_pool <pool-addr> <amount>
 ```
 
-Or you can create and send transaction manually:
+Alternatively, create and send the transaction manually:
 
 <Tabs groupId="code-examples">
 <TabItem value="toncore" label="JS (@ton)">
 
 ```js
-import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
+import {
+  Address,
+  beginCell,
+  internal,
+  storeMessageRelaxed,
+  toNano,
+} from "@ton/core";
 
 async function main() {
-    const single_nominator_address = Address.parse('single nominator address');
-    const WITHDRAW_OP = 0x1000
-    const amount = 50000
+  const single_nominator_address = Address.parse("single nominator address");
+  const WITHDRAW_OP = 0x1000;
+  const amount = 50000;
 
-    const messageBody = beginCell()
-        .storeUint(WITHDRAW_OP, 32) // op code for withdrawal
-        .storeUint(0, 64)           // query_id
-        .storeCoins(amount)         // amount to withdraw
-        .endCell();
+  const messageBody = beginCell()
+    .storeUint(WITHDRAW_OP, 32) // op code for withdrawal
+    .storeUint(0, 64) // query_id
+    .storeCoins(amount) // amount to withdraw
+    .endCell();
 
-    const internalMessage = internal({
-        to: single_nominator_address,
-        value: toNano('1'),
-        bounce: true,
-        body: messageBody
-    });
+  const internalMessage = internal({
+    to: single_nominator_address,
+    value: toNano("1"),
+    bounce: true,
+    body: messageBody,
+  });
 }
 ```
 
@@ -271,74 +271,71 @@ async function main() {
 ```go
 func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, amount uint64) (*tonconnect.Message, error) {
 
-	const WITHDRAW_OP = 0x1000
+    const WITHDRAW_OP = 0x1000;
 
-	payload, _ := cell.BeginCell().
-		MustStoreUInt(WITHDRAW_OP, 32). // op code for withdrawal
-		MustStoreUInt(query_id, 64).    // query_id
-		MustStoreCoins(amount).         // amount to withdraw
-		EndCell().MarshalJSON()
+    payload, _ := cell.BeginCell().
+        MustStoreUInt(WITHDRAW_OP, 32). // op code for withdrawal
+        MustStoreUInt(query_id, 64).    // query_id
+        MustStoreCoins(amount).        // amount to withdraw
+        EndCell().MarshalJSON();
 
-	msg, err := tonconnect.NewMessage(
-		single_nominator_address,
-		tlb.MustFromTON("1").Nano().String(), // nanocoins to transfer/compute message
-		tonconnect.WithPayload(payload))
+    msg, err := tonconnect.NewMessage(
+        single_nominator_address,
+        tlb.MustFromTON("1").Nano().String(), // nanocoins to transfer/compute message
+        tonconnect.WithPayload(payload));
 
-	if err != nil {
-		return nil, err
-	}
+    if err != nil {
+        return nil, err;
+ }
 
-	return msg, nil
+    return msg, nil;
 }
 ```
 
 </TabItem>
-
 </Tabs>
-
 
 ## Election process
 
-### Set up a Single Nominator Pool
+### Set up a single nominator pool
 
-Configure the Single Nominator Pool contract using the [following](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator) instructions.
+Configure the single nominator pool contract using the [following instructions](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator).
 
 ### Join the elections
 
-[Deposit](/v3/guidelines/smart-contracts/howto/single-nominator-pool#deposit-pool) minimum stake amount to the Single Nominator Pool.
+[Deposit](/v3/guidelines/smart-contracts/howto/single-nominator-pool#deposit-pool) the minimum stake amount into the single nominator pool.
 
-**MyTonCtrl** will automatically join the elections. You can set the stake amount that mytonctrl sends to the [Elector contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector) ~ every 18 hours on Mainnet and 2 hours on Testnet.
+**MyTonCtrl** will automatically join the elections. You can set the stake amount that MyTonCtrl sends to the [elector contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector) approximately every 18 hours on Mainnet and 2 hours on Testnet.
 
 ```sh
 MyTonCtrl> set stake 90000
 ```
 
-**Minimum stake** amount could be found using `status` command.
+Find the **minimum stake** amount using the `status` command.
 
 ![](/img/docs/single-nominator/tetsnet-conf.png)
 
-You can set `stake` as `null` and it will be calculated according to the `stakePercent` value (could be checked with `status_settings` command).
+You can set `stake` to `null`, which will calculate based on the `stakePercent` value (check with `status_settings`).
 
-It's possible to check is election has already been started:
+Verify if the election has started:
 
 ```bash
 MyTonCtrl> status
 ```
 
-and for Testnet:
+For Testnet:
 
 ```bash
 MyTonCtrl> status fast
 ```
 
-As example:
+Example:
 
 ![](/img/docs/single-nominator/election-status.png)
 
+If the election has started and the single nominator pool is activated, the validator will **automatically** send an **ElectorNewStake** message to the elector contract at the beginning of the next round.
 
-If the election has been started and Single Nominator Pool is activated, validator should **automatically** send **ElectorNewStake** message to the Elector contract at the beginning of the next round.
-
-Check validator wallet:
+Check the validator wallet:
 
 ```sh
 MyTonCtrl> wl
@@ -346,7 +343,7 @@ Name                  Status  Balance           Ver  Wch  Address
 validator_wallet_001  active  995.828585374     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
 ```
 
-Then check it transaction history:
+Check the transaction history:
 
 ```sh
 MyTonCtrl> vas kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
@@ -357,40 +354,39 @@ Code hash
 c3b9bb03936742cfbb9dcdd3a5e1f3204837f613ef141f273952aa41235d289e
 
 Time                 Coins   From/To
-39 minutes ago  >>>  1.3     kf_hz3BIXrn5npis1cPX5gE9msp1nMTYKZ3l4obzc8phrBfF
+39 minutes ago >>>  1.3     kf_hz3BIXrn5npis1cPX5gE9msp1nMTYKZ3l4obzc8phrBfF
 ```
 
-This **ElectorNewStake** transaction in Single Nominator contract history in Tonviewer:
+This **ElectorNewStake** transaction appears in the single nominator contract history on Tonviewer:
 
 ![](/img/docs/single-nominator/new-stake.png)
 
-On the above example **MyTonCtrl** automatically stake `90000` Toncoins on the Elector contract.
+In this example, **MyTonCtrl** automatically staked `90000` Toncoins on the elector contract.
 
-### Checking Validator Status
+### Check validator status
 
-At the beginning of the next round check **MyTonCtrl** validator status with `status` command (`status fast` on Testnet).
+At the beginning of the next round, check the validator status with the `status` command (`status fast` on Testnet).
 
 ![](/img/docs/single-nominator/status-validator.png)
 
-You can confirm if your node has become a full validator by checking the following conditions:
+Confirm if your node has become a full validator by checking:
 
-1. **Validator Efficiency** - An efficiency of the local validator should be green and not `n/a`.
-2. **Validator Index** - The validator index should be greater than -1.
+1. **Validator efficiency** – The local validator's efficiency should be green and not `n/a`.
+2. **Validator index** – The validator index should be greater than -1.
 
+### Check profit
 
-### Checking profit
-
-At the end of the round **MyTonCtrl** sends **ElectorRecoverStakeRequest** message to the Elector contract. It responses with `stake + profit` amount of Toncoins to your Single Nominator Pool.
+At the end of the round, **MyTonCtrl** sends an **ElectorRecoverStakeRequest** message to the elector contract. It returns `stake + profit` to your single nominator pool.
 
 ![](/img/docs/single-nominator/validator-profit.png)
 
-You can also check transactions history of your pool with `vas` command:
+You can also check the pool's transaction history with the `vas` command:
 
 ![](/img/docs/single-nominator/validator-profit-vas.png)
 
 ### Stop participating
 
-If user doesn't want to take part in validating anymore:
+If you no longer wish to participate in validation:
 
 1. Disable validator mode:
 
@@ -398,41 +394,40 @@ If user doesn't want to take part in validating anymore:
 MyTonCtrl> disable_mode validator
 ```
 
-2. [Withdraw](/v3/guidelines/smart-contracts/howto/single-nominator-pool#withdraw-funds) all funds from the Single Nominator contract to the owner wallet.
+2. [Withdraw](/v3/guidelines/smart-contracts/howto/single-nominator-pool#withdraw-funds) all funds from the single nominator contract to the owner wallet.
 
-## Transitioning a Regular Validator to Nominator Pool Mode
+## Transitioning a regular validator to nominator pool mode
 
-1. Disable `validator` mode to discontinue election participation.
-2. Await the return of both your stakes from the elector.
-3. Proceed with the following [steps](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator).
+1. Disable the `validator` mode to stop participating in elections.
+2. Wait for both stakes to return from the elector.
+3. Follow the [steps](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator) to set up a single nominator pool.
 
-## Single Nominator Pool client
+## Single nominator pool client
 
-* There is a simple open-source client to deploy and interact with the contract - https://github.com/orbs-network/single-nominator-client
-* If you run into trouble, you can ask the team for support on [Telegram](https://t.me/single_nominator)
+- Use the open-source client [Single nominator client](https://github.com/orbs-network/single-nominator-client) to deploy and interact with the contract.
+- For support, contact the team on [Telegram](https://t.me/single_nominator).
 
-## Run Single Nominator Pool with Vesting Contract
+## Run a single nominator pool with a vesting contract
 
-From the beginning, owner of Vesting Contract can manage it with his Wallet Contract.
-In this scheme we will manage interaction of several contracts.
+Initially, the owner of the vesting contract manages it with their wallet contract. This scheme involves managing interactions between multiple contracts.
 
-|Contracts|Interface for Managing|
-|---|---|
-|`validator_wallet` |Mytonctrl|
-|`vesting` | [vesting.ton.org](https://vesting.ton.org/) |
-|`owner_wallet`| app e.g.:Tonkeeper, MyTonWallet |
-|`single_nominator_pool` |MyTonctrl|
+| Contracts               | Interface for managing                      |
+| ----------------------- | ------------------------------------------- |
+| `validator_wallet`      | MyTonCtrl                                   |
+| `vesting`               | [vesting.ton.org](https://vesting.ton.org/) |
+| `owner_wallet`          | Apps like Tonkeeper or MyTonWallet          |
+| `single_nominator_pool` | MyTonCtrl                                   |
 
-*  `owner_wallet` - TON Wallet who own the `vesting`.
+- `owner_wallet` – The TON wallet that owns the `vesting`.
 
 :::caution
-Make Sure you have completely done back up for Vesting  `owner_wallet`'s recovery parse. Once  `owner_wallet` access lost, the access to managing `vesting` funds also lost and can't be recovered.
+Ensure you have backed up the vesting `owner_wallet` recovery phrase. If you lose access to the `owner_wallet`, you will also lose access to managing the `vesting` funds, and recovery will be impossible.
 :::
 
-1. Run a Full Node, wait sync node.
-2. Enable Validator mode, get the wallet_v1 address was created due installation - retrieve this via `Mytonctrl wl`.
-3. Send 200 TON(monthly expenses) to the `validator_wallet`.
-4. Create `single_nominator_pool`:
+1. Run a full node and wait for it to sync.
+2. Enable validator mode and retrieve the `wallet_v1` address created during installation using `MyTonCtrl wl`.
+3. Send 200 TON (for monthly expenses) to the `validator_wallet`.
+4. Create a `single_nominator_pool`:
 
 ```bash
 MyTonCtrl> new_single_pool <pool-name> <vesting>
@@ -440,11 +435,11 @@ MyTonCtrl> new_single_pool <pool-name> <vesting>
 
 Example:
 
-```
+```bash
 MyTonCtrl> new_single_pool my_s_pool EQD...lme-D
 ```
 
-5. Activate `single_nominator_pool`:
+5. Activate the `single_nominator_pool`:
 
 ```bash
 MyTonCtrl> activate_single_pool <pool-name>
@@ -452,15 +447,16 @@ MyTonCtrl> activate_single_pool <pool-name>
 
 Example:
 
-```
+```bash
 MyTonCtrl> activate_single_pool my_s_pool
 ```
 
-6. After receiving the `single_nominator_pool` address on-chain, request to whitelist your `single_nominator_pool` person who send you Vesting contract.
-7. Once your `single_nominator_pool` whitelisted, you will be able to send locked tokens from `vesting` contract to `single_nominator_pool` with [vesting.ton.org](https://vesting.ton.org/).
-    - a.Connect with `owner_wallet` on [vesting.ton.org](https://vesting.ton.org/).
-    - b.Make test deposit from `vesting` Send 10 TON to the `single_nominator_pool`.
-    - c. Return remains(~8 TON) funds  back to `vesting` with message [amount 0, comment `w`] from [vesting.ton.org](https://vesting.ton.org/) interface.
-    - d. Make sure you received remains on `vesting`.
-8. Transfer the required amount of TON from the `vesting` contract to the `single_nominator_pool` for both cycles.
+6. After the `single_nominator_pool` address appears on-chain, request whitelisting from the person who provided the vesting contract.
+7. Once whitelisted, you can send locked tokens from the `vesting` contract to the `single_nominator_pool` using [vesting.ton.org](https://vesting.ton.org/):
+   - a. Connect the `owner_wallet` on [vesting.ton.org](https://vesting.ton.org/).
+   - b. Test by sending 10 TON from `vesting` to the `single_nominator_pool`.
+   - c. Return the remaining funds (~8 TON) to `vesting` with a message [amount 0, comment `w`] via the [vesting.ton.org](https://vesting.ton.org/) interface.
+   - d. Confirm the remaining funds are received in `vesting`.
+8. Transfer the required TON amount from `vesting` to `single_nominator_pool` for both cycles.
 9. Wait for the validators’ voting.
+   <Feedback />

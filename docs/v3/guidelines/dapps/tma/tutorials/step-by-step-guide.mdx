@@ -1,16 +1,18 @@
-# TMA Launch Tutorial
+import Feedback from '@site/src/components/Feedback';
 
-Telegram Mini Apps (TMA) are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript. Telegram Mini Apps can be used to create DApps, games, and other types of apps that can be run inside Telegram.
+# TMA launch tutorial
 
-## Create your App
+Telegram Mini Apps (TMA) are web applications that run inside the Telegram messenger. They are built using web technologies—HTML, CSS, and JavaScript. Telegram Mini Apps can be used to create dApps, games, and other types of apps that can be run inside Telegram.
 
-1. To connect your Mini App to Telegram, place the SDK script `telegram-web-app.js` using this code:
+## Create your Mini App
+
+1. To connect your Mini App to Telegram, add the SDK script `telegram-web-app.js` using this code:
 
 ```html
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 ```
 :::tip
-It's preferable to switch off cache in the HTML. To ensure your cache is switched off, specify headers in your request according to the following:
+It's best to disable caching in the HTML. To ensure your caching is turned off, specify these headers in your request:
 
 ```curl
 Cache-Control: no-store, must-revalidate
@@ -19,43 +21,46 @@ Expires: 0
 ```
 :::
 
-2. Once the script is connected, a **[window.Telegram.WebApp](https://core.telegram.org/bots/webapps#initializing-web-apps)** object becomes available. You can read more about creating Mini App utilizing [`telegram-web-app.js`](/v3/guidelines/dapps/tma/tutorials/app-examples#basic-tma-example) here.
+2. Once the script is connected, the **[window.Telegram.WebApp](https://core.telegram.org/bots/webapps#initializing-web-apps)** object becomes available. Learn more about creating Mini App using [`telegram-web-app.js`](/v3/guidelines/dapps/tma/tutorials/app-examples#basic-tma-example) here.
 
-3. The modern way to connect SDK is an NPM package for Telegram Mini Apps SDK:
+3. You can also connect the SDK using the NPM package for Telegram Mini Apps SDK:
 
 ```bash npm2yarn
 npm i @twa-dev/sdk
 ```
 
-You can find a guide for [`@twa-dev/sdk`](/v3/guidelines/dapps/tma/tutorials/app-examples#modern-tma-example ) here.
+Find a guide for `@twa-dev/sdk` [here](/v3/guidelines/dapps/tma/tutorials/app-examples#modern-tma-example).
 
-5. When your Mini App is ready and deployed to the web server, follow to the next step.
+4. Once your Mini App is ready and deployed to a web server, move on to the next step.
 
-## Setting Up a Bot for the App
+## Setting up a bot for the Mini App
 
-To connect your Mini App to Telegram, you need to create a bot and set up a Mini App for it. Follow these steps to set up a new Telegram bot:
+To connect your Mini App to Telegram, you need to create a bot and set up a Mini App for it. Follow these steps:
 
-### 1. Start a Chat with BotFather
+### 1. Start a chat with BotFather
 
 - Open the Telegram app or web version.
-- Search for `@BotFather` in the search bar or follow the link [https://t.me/BotFather](https://t.me/BotFather).
-- Start a chat with BotFather by clicking on the `START` button.
+- Search for `@BotFather` in the search bar or click this link [https://t.me/BotFather](https://t.me/BotFather).
+- Start a chat with BotFather by clicking `START`.
 
-### 2. Create a New Bot
+### 2. Create a new bot
 
-- Send `/newbot` command to BotFather.
-- BotFather will ask you to choose a name for your bot. This is a display name and can contain spaces.
-- Next, you'll be asked to choose a username for your bot. This must end in `bot` (e.g., `sample_bot`) and be unique.
+- Send the `/newbot` command to BotFather.
+- Choose a display name for your bot. It can include spaces.
+- Choose a unique username for your bot that ends with `bot`, such as `sample_bot`.
 
-### 3. Set Up Bot Mini App
+### 3. Set up the bot Mini App
 
-- Send `/mybots` command to BotFather.
-- Choose your bot from the list and the **Bot settings** option
-- Choose **Menu button** option
-- Choose **Edit menu button URL** option and send URL to your Telegram Mini App, for example link from GitHub Pages deploy.
+- Send the `/mybots` command to [@BotFather](https://t.me/BotFather).
+- Select your bot from the list and choose **Bot settings**.
+- Select **Menu button**.
+- Choose **Edit menu button URL** and send URL to your Telegram Mini App (e.g., a link from GitHub Pages deployment).
 
-### 4. Accessing the Bot
+### 4. Access the bot
 
-- You can now search for your bot using its username in Telegram's search bar.
-- Press the button next to attach picker to launch your Telegram Mini App in messenger
+- Search for your bot using its username in Telegram's search bar.
+- Click the button next to attach picker to launch your Telegram Mini App in messenger.
 - You’re awesome!
+
+<Feedback />
+

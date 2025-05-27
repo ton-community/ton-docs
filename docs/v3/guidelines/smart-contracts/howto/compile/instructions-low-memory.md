@@ -1,50 +1,61 @@
-# Compile TON on a low-memory machines
+import Feedback from '@site/src/components/Feedback';
+
+# Compile TON on low-memory machines
 
 :::caution
-This section describes instructions and manuals for interacting with TON at a low level.
+This section provides low-level instructions for working with TON.
 :::
 
-Creating a swap partitions to compile TON on a computer with low memory (less than 1GB).
+To compile TON on systems with limited memory (< 1 GB), you need to create swap partitions.
 
 ## Prerequisites
 
-During C++ compilation in the Linux system the following errors occur, resulting in a compilation abort:
+When compiling C++ components on Linux, you may encounter memory-related failures:
 
 ```
-C++: fatal error: Killed signal terminated program cc1plus compilation terminated.
+C++: fatal error: Killed signal terminated program cc1plus
+compilation terminated.
 ```
 
 ## Solution
 
-This occurs due to a lack of memory and is solved by creating a swap partitions.
+Follow these steps to create a 4GB swap partition:
 
 ```bash
-# Create the partition path
+# Create swap partition
 sudo mkdir -p /var/cache/swap/
-# Set the size of the partition
-# bs=64M is the block size, count=64 is the number of blocks, so the swap space size is bs*count=4096MB=4GB
+
+# Allocate 4GB swap space (64MB blocks × 64)
 sudo dd if=/dev/zero of=/var/cache/swap/swap0 bs=64M count=64
-# Set permissions for this directory
+
+# Set secure permissions
 sudo chmod 0600 /var/cache/swap/swap0
-# Create the SWAP file
+
+# Initialize swap
 sudo mkswap /var/cache/swap/swap0
-# Activate the SWAP file
+
+# Activate swap
 sudo swapon /var/cache/swap/swap0
-# Check if SWAP information is correct
+
+# Verify activation
 sudo swapon -s
 ```
 
-Command to delete swap partition:
+### Swap management commands
+
+**Remove swap partition:**
 
 ```bash
 sudo swapoff /var/cache/swap/swap0
 sudo rm /var/cache/swap/swap0
 ```
 
-Free space command:
+**Free all swap space:**
 
 ```bash
 sudo swapoff -a
-#Detailed usage: swapoff --help
-#View current memory usage: --swapoff: free -m
+# Check memory: free -m
 ```
+
+<Feedback />
+

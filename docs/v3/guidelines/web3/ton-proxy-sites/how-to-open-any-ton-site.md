@@ -1,32 +1,35 @@
+import Feedback from '@site/src/components/Feedback';
+
 # How to open any TON Site?
 
-In this article we'll have a look at most common ways to visit TON Sites from different devices.
+This article explains the most common ways to access TON Sites from different devices.
 
-Each method have it's own pros and cons which we will analyze here.
+Each method has its advantages and limitations. The list begins with the most straightforward options and progresses to more advanced configurations.
 
-we will start with the simplest methods and finish with the most advanced ones.
-
-## 😄 Easy methods
+## Easy methods
 
 ### Browse through the ton.run or tonp.io
 
-The simplest way to open a TON Site is through sites like [ton.run](https://ton.run). You don't need to install or set up anything on your device - just open the **ton.run** or **tonp.io** and you're ready to explore TON Sites.
+The simplest way to access a TON Site is through services like [ton.run](https://ton.run). No installation or setup is required — just open the **ton.run** or **tonp.io** and browse TON Sites.
 
-This method may be suitable for casual browsing of TON Sites or for some checks, but not for regular use, because it also has its drawbacks:
+This method is helpful for casual browsing or quick checks. However, it is not recommended for regular use due to several drawbacks:
 
--   You trust your internet traffic to the **ton.run**
--   It can go offline or break at any moment
--   It can be blocked by your internet provider
+- Your internet traffic is routed through a third-party service, e.g., ton.run. 
+- The service may go offline or stop functioning at any time.
+- Your internet service provider may block it.
+
 
 ### TON Wallet and MyTonWallet extensions
 
-A bit harder but better method is to use some browser extension which will connect you to the TON Proxy and allow to browse TON Sites without any intermediate services such as ton.run.
 
-Currently, TON Proxy is already available in [MyTonWallet](https://mytonwallet.io/) extension and also will be available in [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) extension soon.
+A more reliable and private method is to use a browser extension that connects directly to the TON Proxy without relying on third-party services.
+Currently:
+- [MyTonWallet](https://mytonwallet.io/) supports TON Proxy in its browser extension. 
+- [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) will support it soon.
 
-This method is also pretty easy, but you need to install an extension in your browser to make it work. It will be suitable for most users.
+This method requires installing a browser extension and is suitable for regular use by most users.
 
-## 🤓 Advanced methods
+## Advanced methods
 
 ### Using Tonutils-Proxy
 
@@ -38,5 +41,15 @@ This is the most secure way of accessing TON Sites.
 3. Done!
 
 
-## See Also
-* [Run C++ Implementation](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)
+For the most secure and independent access to TON Sites, use Tonutils-Proxy.
+
+**To get started:**
+1. Download the latest release from [GitHub](https://github.com/xssnick/Tonutils-Proxy#download-precompiled-version). 
+2. Launch the application and click “Start Gateway”.
+
+
+## See also
+* [Run C++ implementation](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)
+
+<Feedback />
+

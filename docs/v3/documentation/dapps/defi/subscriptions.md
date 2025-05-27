@@ -1,4 +1,6 @@
-# Content Subscriptions
+import Feedback from '@site/src/components/Feedback';
+
+# Content subscriptions
 
 Due to the fact that transactions in TON Blockchain are fast and the network fees are low, you can process recurring payments on-chain via smart contracts.
 
@@ -36,3 +38,5 @@ On the other hand, user can't get subscription installed without their knowledge
 ## Implementation
 
 A good example of implementation is decentralized subscriptions for Toncoin to private channels in Telegram by the [@donate](https://t.me/donate) bot and the [Tonkeeper wallet](https://tonkeeper.com).
+<Feedback />
+

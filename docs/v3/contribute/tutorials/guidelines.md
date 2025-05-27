@@ -1,4 +1,11 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Tutorial Styling Guidelines
+
+:::danger
+This page is outdated and will be updated soon.
+See the [How to contribute](/v3/contribute/).
+:::
 
 So you've decided to write a tutorial for TON Documentation?
 
@@ -128,3 +135,6 @@ import { useEffect, useState } from 'react';
 *For example*: `mkdir example && cd example`
 - If you use `npm init` to initialize a project directory, explain the prompts or use the `-y` flag.
 - If you use `npm install` use the `-save` flag.
+
+<Feedback />
+

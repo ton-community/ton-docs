@@ -1,98 +1,102 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ConceptImage from '@site/src/components/conceptImage'
 
 # Testing Mini Apps
 
 ## Using bots in the test environment
 
-To log in to the test environment, use either of the following:
+To log in to the test environment, use one of the following methods:
 
-- **iOS:** tap 10 times on the Settings icon > Accounts > Login to another account > Test.
-- **Telegram Desktop:** open ☰ Settings > Shift + Alt + Right click ‘Add Account’ and select ‘Test Server’.
-- **macOS:** click the Settings icon 10 times to open the Debug Menu, ⌘ + click ‘Add Account’ and log in via phone number.
+- **iOS:** Tap 10 times on the Settings icon. Navigate to > Accounts > Login to another account > Test.
+- **Telegram Desktop:** Open ☰ Settings > Shift + Alt + Right click **Add Account** and select **Test Server**.
+- **macOS:** Click the Settings icon 10 times to open the Debug Menu. `⌘` + Click **Add Account** and log in using your phone number.
 
-The test environment is entirely separate from the main environment. You will need to create a **new user account** and a **new bot** using `@BotFather`.
+The test environment is completely separate from the main environment. You must create a **new user account** and a **new bot** using [@BotFather](https://t.me/BotFather).
 
 
-Once you have received your bot token, send requests to the Bot API using the following format:
+Once you have received your bot token, send requests to the Bot API using this format:
 
 `https://api.telegram.org/bot<token>/test/METHOD_NAME`
 
-**Note:** When working with the test environment, you may use HTTP links without TLS to test your Mini App.
+**Note:** When using the test environment, you may use HTTP links without TLS to test your Mini App.
 
-## Debug Mode for Mini Apps
+## Debug mode for Mini Apps
 
-Use the following tools to identify app-specific issues in your Mini App:
+Use the following tools to identify app-specific issues in your Mini App.
 
 ### Android
 
 - [Enable USB-Debugging](https://developer.chrome.com/docs/devtools/remote-debugging/) on your device.
-- In Telegram Settings, scroll all the way down, press and hold on the **version number** two times.
-- Choose *Enable WebView Debug* in the Debug Settings.
-- Connect your phone to your computer and open chrome://inspect/#devices in Chrome – you will see your Mini App there when you launch it on your phone.
+- In Telegram Settings, scroll to the bottom, press and hold the **version number** two times.
+- Choose *Enable WebView Debug* in Debug Settings.
+- Connect your phone to your computer and open chrome://inspect/#devices in Chrome.
+- Launch your Mini App on your phone, and it will appear in Chrome’s Inspect Devices tab.
 
 ### iOS
 
-iOS webview debugging requires Safari desktop browser and therefore macOS.
+iOS WebView debugging requires the Safari desktop browser on macOS.
 
 **On iOS device:**
 - Go to *Settings*.
-- Find Safari icon and press on it.
-- Scroll down and press *Advanced*.
-- Enable *Web Inspector* option.
+- Scroll down and tap Safari.
+- Scroll to the bottom and press *Advanced*.
+- Enable *Web Inspector*.
 
 **On macOS:**
-- Open Safari browser.
-- Open *Settings* (⌘ + ,).
-- Select *Advanced* tab.
-- Check *Show features for web developers* option at the bottom.
+- Open Safari.
+- Open *Settings* (`⌘` + `,`).
+- Select the *Advanced* tab.
+- Check *Show features for web developers*.
 
 **Next steps:**
-- Connect iOS device to Mac via cable.
+- Connect your iOS device to the Mac via USB cable.
 - Open Mini App inside iOS Telegram client.
-- Open *Develop* tab in the menu bar in Safari on macOS.
-- Select connected iPhone.
-- Optional: select *Connect via network* and disconnect the cable.
-- Select opened webview URL under *Telegram* block.
+- In Safari on macOS, go to *Develop* in the menu bar.
+- Select the connected iPhone.
+- (Optional) select *Connect via network* and disconnect the cable.
+- Under the *Telegram* block, select the opened WebView URL.
 
-### Telegram Desktop on Windows, Linux and macOS
+### Telegram Desktop on Windows, Linux, and macOS
 
-- Download and launch the latest version of Telegram Desktop on **Windows**, **Linux** or **macOS** (as the writing of this version 5.0.1 is available)
+- Download and launch the latest version of Telegram Desktop on **Windows**, **Linux** or **macOS** (5.0.1 at the time of writing)
 - Go to *Settings > Advanced > Experimental settings > Enable webview inspection*.
 - on Windows and Linux, right-click in the WebView and choose *Inspect*.
-- On macOS, you need to access the Inspect through [Safari Developer menu](https://support.apple.com/en-gb/guide/safari/sfri20948/mac)
-  and Inspect is not available through the right-click context menu
+- On macOS, you need to access the Inspect through [Safari Developer menu](https://support.apple.com/en-gb/guide/safari/sfri20948/mac) as Inspect is not available via right-click.
 
 ### Telegram macOS
 
-- Download and launch the [Beta Version](https://telegram.org/dl/macos/beta) of Telegram macOS.
-- Quickly click 5 times on the Settings icon to open the debug menu and enable “Debug Mini Apps”.
+- Download and launch the [beta version](https://telegram.org/dl/macos/beta) of Telegram macOS.
+- Quickly click the Settings icon five times to open the debug menu and enable **Debug Mini Apps**.
 
-Right click in the mini app and choose *Inspect Element*.
+Right-click inside the Mini App and choose *Inspect Element*.
 
 ## Testing with Eruda
 
-[Eruda](https://github.com/liriliri/eruda) is a tool that provides a web-based console for debugging and inspecting web pages on mobile devices and desktop browsers. Here's a step-by-step guide on how to use Eruda in a Telegram Mini Apps project.
+[Eruda](https://github.com/liriliri/eruda) is a tool that provides a web-based console for debugging and inspecting web pages on mobile devices and desktop browsers.
 
 ![1](/img/docs/telegram-apps/eruda-1.png)
 
-### Step 1: Include Eruda Library
+### Step 1: include Eruda library
 
-To begin, include the Eruda library in your HTML file. You can load it from a CDN:
+To begin, add the Eruda library to your HTML file:
+
+**Option 1:** use a CDN (recommended).
 
 ```html
 <!-- Include Eruda from CDN (Recommended) -->
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 ```
 
-Or you can get it on npm.
+**Option 2:** install via npm.
 
 ```bash npm2yarn
 npm install eruda --save
 ```
 
-### Step 2: Initialise Eruda
+### Step 2: initialise Eruda
 
-Next, initialize Eruda when the web page loads. If you're using Eruda from a CDN, do this:
+If using the CDN, initialize Eruda when the page loads:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
@@ -103,7 +107,7 @@ Next, initialize Eruda when the web page loads. If you're using Eruda from a CDN
 
 ```
 
-If you prefer modern tooling and packages add this script to your project:
+If you prefer modern tooling and packages, add this script to your project:
 
 ```jsx
 import eruda from 'eruda'
@@ -111,10 +115,16 @@ import eruda from 'eruda'
 eruda.init()
 ```
 
-### Step 3: Launch Eruda
+### Step 3: launch Eruda
 
-After deploying your Mini App, launch it, and simply press the Eruda icon to start debugging!
+After deploying your Mini App:
+
+- Open it in Telegram.
+- Press the Eruda icon to start debugging.
 
 <ConceptImage style={{maxWidth:'200pt', margin: '10pt 20pt 0 0', display: 'flex-box'}} src="/img/docs/telegram-apps/eruda-2.png" />
 <ConceptImage style={{maxWidth:'200pt', margin: '10pt 20pt', display: 'flex-box'}}  src="/img/docs/telegram-apps/eruda-3.png" />
+
+
+<Feedback />
 

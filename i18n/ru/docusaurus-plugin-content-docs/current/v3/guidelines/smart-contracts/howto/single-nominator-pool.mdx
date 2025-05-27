@@ -1,0 +1,462 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Как использовать Single Nominator Pool
+
+:::tip
+Перед чтением этого руководства рекомендуется ознакомиться со [спецификацией Single Nominator Pool](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool).
+:::
+
+### Установка single nominator
+
+:::caution
+Перед началом работы убедитесь, что вы пополнили и [активировали](/v3/guidelines/nodes/running-nodes/validator-node#активация-кошельков) кошелек валидатора.
+:::
+
+1. Включите режим _single-nominator_:
+
+```bash
+MyTonCtrl> enable_mode single-nominator
+```
+
+2. Проверьте статус режима _single-nominator_:
+
+```bash
+MyTonCtrl> status_modes
+Name              Status             Description
+single-nominator  enabled   Orbs's single nominator pools.
+```
+
+3. Создайте пул:
+
+```bash
+MyTonCtrl> new_single_pool <pool-name> <owner_address>
+```
+
+Если вы уже создавали пул, то его можно импортировать:
+
+```bash
+MyTonCtrl> import_pool <pool-name> <pool-addr>
+```
+
+4. Введите `pools_list`, чтобы отобразить адреса пулов:
+
+```bash
+MyTonCtrl> pools_list
+Name       Status  Balance  Version   Address
+test-pool  empty   0.0      spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
+```
+
+5. Активируйте пул:
+
+```bash
+MyTonCtrl> activate_single_pool <pool-name>
+```
+
+После успешной активации пула проверьте статус:
+
+```bash
+MyTonCtrl> pools_list
+Name       Status  Balance  Version   Address
+test-pool  active  0.99389  spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
+```
+
+Теперь можно работать с этим пулом через MyTonCtrl как с обычным пулом номинаторов.
+
+:::info
+Если средств на балансе пула достаточно для участия в обоих раундах (`balance > min_stake_amount * 2`), то MyTonCtrl автоматически примет в них участие, используя `stake = balance / 2`, если только пользователь не сделает ставку вручную, используя команду `set stake`. Такое поведение отличается от работы пула номинаторов, но похоже на ставку с помощью кошелька валидатора.
+:::
+
+## Запуск без MyTonCtrl
+
+#### Остановка уже запущенного валидатора
+
+Если у вас установлен MyTonCtrl и запущен валидатор:
+
+1. Остановите валидацию и выведите все средства.
+
+#### Подготовка
+
+Если у вас ранее не было валидатора, выполните следующее:
+
+1. Запустите узел в [режиме валидатора](/v3/guidelines/nodes/running-nodes/full-node) и убедитесь, что он синхронизировался.
+2. Остановите валидацию и выведите все средства.
+
+### Подготовка Single Nominator
+
+1. Установите [Node.js](https://nodejs.org/en) 16 или более поздней версии и npm ([подробные инструкции](https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions)).
+
+2. Установите модули `ts-node` и `arg`:
+
+```bash
+$ sudo apt install ts-node
+$ sudo npm i arg -g
+```
+
+4. Создайте симлинки для компиляторов:
+
+```bash
+$ sudo ln -s /usr/bin/ton/crypto/fift /usr/local/bin/fift
+$ sudo ln -s /usr/bin/ton/crypto/func /usr/local/bin/func
+```
+
+5. Запустите тест, чтобы убедиться, что все настроено правильно:
+
+```bash
+$ npm run test
+```
+
+6. Замените скрипты MyTonCtrl `nominator-pool`: https://raw.githubusercontent.com/orbs-network/single-nominator/main/mytonctrl-scripts/install-pool-scripts.sh.
+
+### Создание Single Nominator Pool
+
+1. Получите API-ключ Toncenter у [@tonapibot](https://t.me/tonapibot) в Telegram.
+2. Установите переменные окружения:
+
+```bash
+export OWNER_ADDRESS=<owner_address>
+export VALIDATOR_ADDRESS=<validator_wallet_address>
+export TON_ENDPOINT=https://toncenter.com/api/v2/jsonRPC
+export TON_API_KEY=<toncenter api key>
+```
+
+2. Создайте адрес с которого будет происходить развертывание:
+
+```bash
+$ npm run init-deploy-wallet
+Insufficient Deployer [EQAo5U...yGgbvR] funds 0
+```
+
+3. Пополните этот адрес на 2.1 TON.
+4. Разверните смарт-контракт пула, после чего вы получите адрес пула: `Ef-kC0..._WLqgs`:
+
+```
+$ npm run deploy
+```
+
+5. Преобразуйте адрес в .addr:
+
+```
+$ fift -s ./scripts/fift/str-to-addr.fif Ef-kC0..._WLqgs
+```
+
+(сохранение адреса в файл single-nominator.addr).
+
+6. Выполните бэкап приватного ключа диплоера `./build/deploy.config.json` и `single-nominator.addr` файлов.
+7. Скопируйте `single-nominator.addr` в `mytoncore/pools/single-nominator-1.addr`.
+8. Отправьте ставку с адреса владельца на адрес single nominator.
+
+### Вывод средств с Single Nominator
+
+Использование кошельков для вывода средств с Single Nominator.
+Fift:
+
+1. Создайте запрос "withdraw.boc" с суммой:
+
+```bash
+$ fift -s ./scripts/fift/withdraw.fif <withdraw_amount>
+```
+
+2. Создайте и подпишите запрос из кошелька владельца:
+
+```bash
+$ fift -s wallet-v3.fif <my-wallet> <single_nominator_address> <sub_wallet_id> <seqno> <amount=1> -B withdraw.boc
+```
+
+3. Широковещательный запрос:
+
+```bash
+$ lite-client -C global.config.json -c 'sendfile wallet-query.boc'
+tons
+```
+
+1. Создайте запрос "withdraw.boc" с суммой:
+
+```bash
+$ fift -s ./scripts/fift/withdraw.fif <withdraw_amount>
+```
+
+2. Отправьте запрос на адрес single nominator:
+
+a.
+
+```bash
+$ tons wallet transfer <my-wallet> <single_nominator_address> <amount=1> --body withdraw.boc
+tonkeeper
+```
+
+b.
+
+```
+npm link typescript
+```
+
+c.
+
+```
+npx ts-node scripts/ts/withdraw-deeplink.ts <single-nominator-addr> <withdraw-amount>
+```
+
+d. Откройте deeplink на телефоне владельца.
+
+## Депозитный пул
+
+Вы можете сделать депозит с помощью **MyTonCtrl**, используя следующую команду:
+
+```sh
+MyTonCtrl> mg <from-wallet-name> <pool-account-addr> <amount>
+```
+
+или
+
+```sh
+MyTonCtrl> deposit_to_pool <pool-addr> <amount>
+```
+
+которая пополняет пул из кошелька валидатора.
+
+Или выполните следующие действия:
+
+1. Перейдите на страницу пула https://tonscan.org/nominator/{pool_address}.
+
+2. Убедитесь, что информация о пуле отображается полностью. Если у пула некорректный смарт-контракт – информации не будет.
+
+3. Нажмите кнопку `ADD STAKE` или отсканируйте QR-код с помощью Tonkeeper или любого другого TON-кошелька.
+
+4. После перехода в кошелек введите сумму TON и отправьте транзакцию, таким образом средства будут добавлены в стейкинг.
+
+Если кошелек не открывается автоматически, можно отправить транзакцию вручную, скопировав адрес пула. Отправьте транзакцию через любой кошелек TON. С отправленной транзакции будет списан 1 TON в качестве комиссии за обработку депозита.
+
+## Вывод средств
+
+Вы можете вывести средства, используя следующую команду:
+
+```sh
+MyTonCtrl> withdraw_from_pool <pool-addr> <amount>
+```
+
+Или же создать и отправить транзакцию вручную:
+
+<Tabs groupId="Покупка NFT">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+```js
+import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
+
+async function main() {
+    const single_nominator_address = Address.parse('single nominator address');
+    const WITHDRAW_OP = 0x1000
+    const amount = 50000
+
+    const messageBody = beginCell()
+        .storeUint(WITHDRAW_OP, 32) // op code for withdrawal
+        .storeUint(0, 64)           // query_id
+        .storeCoins(amount)         // amount to withdraw
+        .endCell();
+
+    const internalMessage = internal({
+        to: single_nominator_address,
+        value: toNano('1'),
+        bounce: true,
+        body: messageBody
+    });
+}
+```
+
+</TabItem>
+
+<TabItem value="tonconnect" label="Golang">
+
+```go
+func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, amount uint64) (*tonconnect.Message, error) {
+
+	const WITHDRAW_OP = 0x1000
+
+	payload, _ := cell.BeginCell().
+		MustStoreUInt(WITHDRAW_OP, 32). // op code for withdrawal
+		MustStoreUInt(query_id, 64).    // query_id
+		MustStoreCoins(amount).         // amount to withdraw
+		EndCell().MarshalJSON()
+
+	msg, err := tonconnect.NewMessage(
+		single_nominator_address,
+		tlb.MustFromTON("1").Nano().String(), // nanocoins to transfer/compute message
+		tonconnect.WithPayload(payload))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return msg, nil
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+## Процесс выборов
+
+### Настройка Single Nominator Pool
+
+Настройте смарт-контракт Single Nominator Pool, используя [следующие](/v3/guidelines/smart-contracts/howto/single-nominator-pool#установка-single-nominator) инструкции.
+
+### Присоединяйтесь к выборам
+
+[Внесите](/v3/guidelines/smart-contracts/howto/single-nominator-pool#депозитный-пул) минимальную ставку в Single Nominator Pool.
+
+**MyTonCtrl** автоматически присоединится к выборам. Вы можете установить сумму ставки, которую MyTonCtrl отправляет в [контракт Избирателя](/v3/documentation/smart-contracts/contracts-specs/governance#избиратель) ~ каждые 18 часов в Mainnet и каждые 2 часа в Testnet.
+
+```sh
+MyTonCtrl> set stake 90000
+```
+
+**Минимальную сумму ставки** можно узнать с помощью команды `status`.
+
+![](/img/docs/single-nominator/tetsnet-conf.png)
+
+Вы можете задать `stake` как `null`, и тогда ставка будет рассчитываться в соответствии со значением `stakePercent` (можно проверить с помощью команды `status_settings`).
+
+Для проверки состояния выборов:
+
+```bash
+MyTonCtrl> status
+```
+
+и для Testnet:
+
+```bash
+MyTonCtrl> status fast
+```
+
+Пример вывода:
+
+![](/img/docs/single-nominator/election-status.png)
+
+Если выборы начались и активирован Single Nominator Pool, валидатор должен **автоматически** отправить сообщение **ElectorNewStake** контракту избирателя в начале следующего раунда.
+
+Проверьте кошелек валидатора:
+
+```sh
+MyTonCtrl> wl
+Name                  Status  Balance           Ver  Wch  Address
+validator_wallet_001  active  995.828585374     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
+```
+
+Затем проверьте историю транзакций:
+
+```sh
+MyTonCtrl> vas kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
+Address                                           Status  Balance        Version
+kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct  active  995.828585374  v1r3
+
+Code hash
+c3b9bb03936742cfbb9dcdd3a5e1f3204837f613ef141f273952aa41235d289e
+
+Time                 Coins   From/To
+39 minutes ago  >>>  1.3     kf_hz3BIXrn5npis1cPX5gE9msp1nMTYKZ3l4obzc8phrBfF
+```
+
+Транзакция **ElectorNewStake** в контракте Single Nominator в истории Tonviewer:
+
+![](/img/docs/single-nominator/new-stake.png)
+
+В приведенном выше примере **MyTonCtrl** автоматически делает ставку в `90000` Toncoins на контракт избирателя.
+
+### Проверка состояния валидатора
+
+В начале следующего раунда проверьте состояние валидатора **MyTonCtrl** командой `status` (для Testnet – `status fast`).
+
+![](/img/docs/single-nominator/status-validator.png)
+
+Чтобы удостовериться в том, что ваш узел стал полноценным валидатором, проверьте следующие условия:
+
+1. **Validator Efficiency** (эффективность валидатора) – эффективность локального валидатора должна быть зеленой, а не `n/a`.
+2. **Validator Index** (индекс валидатора) – индекс валидатора должен быть выше, чем -1.
+
+### Проверка прибыли
+
+В конце раунда **MyTonCtrl** отправляет сообщение **ElectorRecoverStakeRequest** смарт-контракту избирателя. В ответ избиратель отправляет сумму TON в размере `ставка + доход` на адрес Single Nominator Pool.
+
+![!](/img/docs/single-nominator/validator-profit.png)
+
+Историю транзакций вашего пула можно проверить с помощью команды `vas`:
+
+![](/img/docs/single-nominator/validator-profit-vas.png)
+
+### Прекращение участия
+
+Если пользователь не хочет больше принимать участие в валидации:
+
+1. Отключите режим валидатора:
+
+```bash
+MyTonCtrl> disable_mode validator
+```
+
+2. [Выведите](/v3/guidelines/smart-contracts/howto/single-nominator-pool#вывод-средств) все средства из контракта Single Nominator Pool в кошелек владельца.
+
+## Переход обычного валидатора в режим пула номинаторов
+
+1. Отключите режим `validator`, чтобы прекратить участие в выборах.
+2. Ожидайте возврата двух ваших ставок от избирателя.
+3. Выполните следующие [шаги](/v3/guidelines/smart-contracts/howto/single-nominator-pool#установка-single-nominator).
+
+## Клиент Single Nominator Pool
+
+- Существует простой клиент с открытым исходным кодом для развертывания и взаимодействия с контрактом – https://github.com/orbs-network/single-nominator-client.
+- Если возникнут проблемы, то вы всегда можете обратиться за поддержкой в [Telegram](https://t.me/single_nominator).
+
+## Запуск Single Nominator Pool с Vesting-контрактом
+
+С самого начала владелец Vesting-контракта может управлять им с помощью своего контракта кошелька.
+В этой схеме мы будем управлять взаимодействием нескольких контрактов.
+
+| Смарт-контракты               | Интерфейс для управления                              |
+| ----------------------------- | ----------------------------------------------------- |
+| `validator_wallet`            | MyTonCtrl                                             |
+| `vesting`                     | [vesting.ton.org](https://vesting.ton.org/)           |
+| `owner_wallet`                | Приложение кошелька, например: Tonkeeper, MyTonWallet |
+| `single_nominator_pool`       | MyTonCtrl                                             |
+
+- `owner_wallet` – кошелек TON, которому принадлежит `vesting`.
+
+:::caution
+Убедитесь, что вы сохранили фразу для восстановления `owner_wallet` в Vesting. Если доступ к `owner_wallet` будет утерян, то доступ к управлению средствами `vesting` будет невозможен и не сможет быть восстановлен.
+:::
+
+1. Запустите [полный узел](/v3/guidelines/nodes/running-nodes/full-node) и дождитесь синхронизации.
+2. Включите режим валидатора, получите адрес wallet_v1, который был создан в результате установки – извлеките его с помощью `wl` в MyTonCtrl.
+3. Отправьте 200 TON (ежемесячные расходы) на `validator_wallet`.
+4. Создайте `single_nominator_pool`:
+
+```bash
+MyTonCtrl> new_single_pool <pool-name> <vesting>
+```
+
+Пример:
+
+```
+MyTonCtrl> new_single_pool my_s_pool EQD...lme-D
+```
+
+5. Активируйте `single_nominator_pool`:
+
+```bash
+MyTonCtrl> activate_single_pool <pool-name>
+```
+
+Пример:
+
+```
+MyTonCtrl> activate_single_pool my_s_pool
+```
+
+6. После получения адреса `single_nominator_pool` on-chain, попросите того, кто отправил вам Vesting-контракт внести адрес в whitelist.
+7. После того, как `single_nominator_pool` будет внесен в whitelist, вы сможете отправлять заблокированные токены из `vesting`-контракта в `single_nominator_pool` с помощью [vesting.ton.org](https://vesting.ton.org/):
+   - подключитесь к `owner_wallet` на [vesting.ton.org](https://vesting.ton.org/).
+   - создайте тестовый депозит из `vesting`. Отправьте 10 TON в `single_nominator_pool`.
+   - с помощью интерфейса [vesting.ton.org](https://vesting.ton.org/) верните остаток средств (~ 8 TON) обратно в `vesting` с сообщением `amount 0, comment w`.
+   - убедитесь, что вы получили остаток на `vesting`.
+8. Переведите необходимое количество TON из `vesting`-контракта в `single_nominator_pool` для обоих циклов.
+9. Дождитесь голосования валидаторов.

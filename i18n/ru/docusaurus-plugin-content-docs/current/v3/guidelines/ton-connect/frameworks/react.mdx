@@ -1,0 +1,655 @@
+# TON Connect для React
+
+:::warning
+Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::
+
+Рекомендуемый SDK для приложений на React — это [UI React SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-react). Это компонент React, который обеспечивает высокоуровневый способ взаимодействия с TON Connect.
+
+## Реализация
+
+### Установка
+
+Чтобы начать интеграцию TON Connect в ваш DApp, вам необходимо установить пакет `@tonconnect/ui-react`. Вы можете использовать npm или yarn для этого:
+
+```bash npm2yarn
+npm i @tonconnect/ui-react
+```
+
+### Инициализация TON Connect
+
+После установки пакета вам следует создать файл `manifest.json` для вашего приложения. Более подробную информацию о том, как создать файл manifest.json, можно найти [здесь](/v3/guidelines/ton-connect/guidelines/creating-manifest).
+
+После создания файла манифеста, импортируйте TonConnectUIProvider в корень вашего мини-приложения и передайте URL файла manifest:
+
+```tsx
+import { TonConnectUIProvider } from '@tonconnect/ui-react';
+
+export function App() {
+    return (
+        <TonConnectUIProvider manifestUrl="https://<YOUR_APP_URL>/tonconnect-manifest.json">
+            { /* Your app */ }
+        </TonConnectUIProvider>
+    );
+}
+
+```
+
+### Подключение кошелька
+
+Добавьте `TonConnectButton`. Кнопка TonConnect — это универсальный компонент пользовательского интерфейса для инициализации соединения. После подключения кошелька она преобразуется в меню кошелька. Рекомендуется разместить ее в правом верхнем углу вашего приложения.
+
+```tsx
+export const Header = () => {
+  return (
+    <header>
+      <span>My App with React UI</span>
+      <TonConnectButton />
+    </header>
+  );
+};
+```
+
+Вы также можете добавить className и style props к кнопке. Обратите внимание, что вы не можете передать child в TonConnectButton:
+
+```js
+<TonConnectButton className="my-button-class" style={{ float: "right" }}/>
+```
+
+Более того, вы всегда можете инициировать соединение вручную с помощью хука `useTonConnectUI` и метода [openModal](https://github.com/ton-connect/sdk/tree/main/packages/ui#open-connect-modal).
+
+```tsx
+export const Header = () => {
+  const [tonConnectUI, setOptions] = useTonConnectUI();
+  return (
+    <header>
+      <span>My App with React UI</span>
+      <button onClick={() => tonConnectUI.openModal()}>
+        Connect Wallet
+      </button>
+    </header>
+  );
+};
+```
+
+#### Подключение к определенному кошельку
+
+Чтобы открыть модальное окно для определенного кошелька, используйте метод `openSingleWalletModal()`. Этот метод принимает `app_name` кошелька в качестве параметра (см. файл [wallets-list.json](https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json)) и открывает соответствующее модальное окно кошелька. Он возвращает промис, который разрешается, когда модальное окно успешно откроется.
+
+```tsx
+<button onClick={() => tonConnectUI.openSingleWalletModal('tonwallet')}>
+  Connect Wallet
+</button>
+```
+
+### Перенаправления
+
+Если вы хотите перенаправить пользователя на определенную страницу после подключения кошелька, вы можете использовать хук `useTonConnectUI` и [настроить стратегию возврата](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
+
+#### Мини-приложения Telegram
+
+Если вы хотите перенаправить пользователя на [Мини-приложение Telegram](/v3/guidelines/dapps/tma/overview) после подключения кошелька, вы можете настроить элемент `TonConnectUIProvider`:
+
+```tsx
+      <TonConnectUIProvider
+            // ... other parameters
+          actionsConfiguration={{
+              twaReturnUrl: 'https://t.me/<YOUR_APP_NAME>'
+          }}
+      >
+      </TonConnectUIProvider>
+```
+
+[Открыть пример на GitHub](https://github.com/ton-connect/demo-dapp-with-wallet/blob/master/src/App.tsx)
+
+### Настройка интерфейса пользователя
+
+Чтобы настроить [интерфейс](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) модального окна, вы можете использовать хук `useTonConnectUI` и функцию `setOptions`. Подробнее о хуке useTonConnectUI можно почитать в разделе [Хуки](#hooks).
+
+## Хуки
+
+Если вы хотите использовать некоторые низкоуровневые функции TON Connect UI SDK в своем приложении React, вы можете использовать хуки из пакета `@tonconnect/ui-react`.
+
+### useTonAddress
+
+Используйте его для получения текущего адреса кошелька пользователя Ton. Передайте логический параметр `isUserFriendly` (по умолчанию `true`), чтобы выбрать формат адреса. Если кошелек не подключен, хук вернет пустую строку.
+
+```tsx
+import { useTonAddress } from '@tonconnect/ui-react';
+
+export const Address = () => {
+  const userFriendlyAddress = useTonAddress();
+  const rawAddress = useTonAddress(false);
+
+  return (
+    userFriendlyAddress && (
+      <div>
+        <span>User-friendly address: {userFriendlyAddress}</span>
+        <span>Raw address: {rawAddress}</span>
+      </div>
+    )
+  );
+};
+```
+
+### useTonConnectModal
+
+Используйте этот хук для доступа к функциям открытия и закрытия модального окна. Хук возвращает объект с текущим состоянием модального окна и методами для его открытия и закрытия.
+
+```tsx
+import { useTonConnectModal } from '@tonconnect/ui-react';
+
+export const ModalControl = () => {
+    const { state, open, close } = useTonConnectModal();
+
+    return (
+      <div>
+          <div>Modal state: {state?.status}</div>
+          <button onClick={open}>Open modal</button>
+          <button onClick={close}>Close modal</button>
+      </div>
+    );
+};
+```
+
+### useTonWallet
+
+Используйте этот хук для извлечения текущего кошелька TON пользователя. Если кошелек не подключен, хук вернет `null`. Объект `wallet` предоставляет общие данные, такие как адрес пользователя, провайдер, [TON proof](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users) и другие атрибуты (см. интерфейс [Wallet](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)).
+
+Кроме того, вы можете получить более конкретную информацию о подключенном кошельке, такую как его имя, изображение и другие атрибуты (см. интерфейс [WalletInfo](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html)).
+
+```tsx
+import { useTonWallet } from '@tonconnect/ui-react';
+
+export const Wallet = () => {
+  const wallet = useTonWallet();
+
+  return (
+    wallet && (
+      <div>
+        <span>Connected wallet address: {wallet.account.address}</span>
+        <span>Device: {wallet.device.appName}</span>
+        <span>Connected via: {wallet.provider}</span>
+        {wallet.connectItems?.tonProof?.proof && <span>Ton proof: {wallet.connectItems.tonProof.proof}</span>}
+
+        <div>Connected wallet info:</div>
+        <div>
+          {wallet.name} <img src={wallet.imageUrl} />
+        </div>
+      </div>
+    )
+  );
+};
+
+```
+
+### useTonConnectUI
+
+Используйте его для получения доступа к экземпляру `TonConnectUI` и функции обновления параметров пользовательского интерфейса.
+
+[Подробнее о методах экземпляра TonConnectUI](https://github.com/ton-connect/sdk/tree/main/packages/ui#send-transaction)
+
+[Подробнее о функции setOptions](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
+
+```tsx
+import { Locales, useTonConnectUI } from '@tonconnect/ui-react';
+
+export const Settings = () => {
+  const [tonConnectUI, setOptions] = useTonConnectUI();
+
+  const onLanguageChange = (language: Locales) => {
+    setOptions({ language });
+  };
+
+  return (
+    <div>
+      <label>language</label>
+      <select onChange={(e) => onLanguageChange(e.target.value as Locales)}>
+        <option value="en">en</option>
+        <option value="ru">ru</option>
+      </select>
+    </div>
+  );
+};
+```
+
+### useIsConnectionRestored
+
+Показывает текущий статус процесса восстановления подключения. Вы можете использовать его для обнаружения завершения процесса восстановления подключения.
+
+```tsx
+import { useIsConnectionRestored } from '@tonconnect/ui-react';
+
+export const EntrypointPage = () => {
+  const connectionRestored = useIsConnectionRestored();
+
+  if (!connectionRestored) {
+    return <Loader>Please wait...</Loader>;
+  }
+
+  return <MainPage />;
+};
+```
+
+## Использование
+
+Давайте рассмотрим, как использовать React UI SDK на практике.
+
+### Отправка транзакций
+
+Отправьте монеты TON (в nanotons) на конкретный адрес:
+
+```js
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
+const transaction: SendTransactionRequest = {
+  validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes
+  messages: [
+    {
+      address:
+        "0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-", // message destination in user-friendly format
+      amount: "20000000", // Toncoin in nanotons
+    },
+  ],
+};
+
+export const Settings = () => {
+  const [tonConnectUI, setOptions] = useTonConnectUI();
+
+  return (
+    <div>
+      <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+        Send transaction
+      </button>
+    </div>
+  );
+};
+
+```
+
+- Больше примеров здесь: [Подготовка сообщений](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+
+### Понимание статуса транзакции по хэшу
+
+Основная идея находится в обработке платежей (используя tonweb). [См. подробнее](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions)
+
+### Дополнительная проверка (ton_proof) на Backend
+
+:::tip
+Узнайте, как подписывать и проверять сообщения: [Подпись и проверка](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
+:::
+
+Чтобы убедиться, что пользователь действительно владеет заявленным адресом, вы можете использовать `ton_proof`.
+
+Используйте функцию `tonConnectUI.setConnectRequestParameters` для настройки параметров вашего запроса на подключение. Вы можете использовать его для:
+
+- Состояние загрузки: Показывайте состояние загрузки, ожидая ответа от вашей серверной части.
+- Состояние готовности с tonProof: Установите состояние в 'ready' и включите значение tonProof.
+- Если возникла ошибка, удалите загрузчик и создайте запрос на подключение без дополнительных параметров.
+
+```ts
+const [tonConnectUI] = useTonConnectUI();
+
+// Set loading state
+tonConnectUI.setConnectRequestParameters({ state: "loading" });
+
+// Fetch tonProofPayload from backend
+const tonProofPayload: string | null =
+  await fetchTonProofPayloadFromBackend();
+
+if (tonProofPayload) {
+  // Set ready state with tonProof
+  tonConnectUI.setConnectRequestParameters({
+    state: "ready",
+    value: { tonProof: tonProofPayload },
+  });
+} else {
+  // Remove loader
+  tonConnectUI.setConnectRequestParameters(null);
+}
+```
+
+#### Обработка результата ton_proof
+
+Результат `ton_proof` можно найти в объекте `wallet`, когда кошелек подключен:
+
+```ts
+useEffect(() => {
+    tonConnectUI.onStatusChange((wallet) => {
+      if (
+        wallet.connectItems?.tonProof &&
+        "proof" in wallet.connectItems.tonProof
+      ) {
+        checkProofInYourBackend(
+          wallet.connectItems.tonProof.proof,
+          wallet.account.address
+        );
+      }
+    });
+  }, [tonConnectUI]);
+```
+
+#### Структура ton_proof
+
+```ts
+type TonProofItemReplySuccess = {
+  name: "ton_proof";
+  proof: {
+    timestamp: string; // Unix epoch time (seconds)
+    domain: {
+      lengthBytes: number; // Domain length
+      value: string;  // Domain name
+    };
+    signature: string; // Base64-encoded signature
+    payload: string; // Payload from the request
+  }
+}
+```
+
+Пример аутентификации можно найти на этой [странице](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#react-example)
+
+### Отключение кошелька
+
+Вызов для отключения кошелька:
+
+```js
+const [tonConnectUI] = useTonConnectUI();
+
+await tonConnectUI.disconnect();
+```
+
+#### Развертывание контракта
+
+Развернуть контракт с использованием TonConnect довольно просто. Вам просто нужно получить код контракта и состояние init, сохранить его как ячейку и отправить транзакцию с предоставленным полем `stateInit`.
+
+Обратите внимание, что `CONTRACT_CODE` и `CONTRACT_INIT_DATA` могут быть найдены в обертках.
+
+```typescript
+import { beginCell, Cell, contractAddress, StateInit, storeStateInit } from '@ton/core';
+
+const [tonConnectUI] = useTonConnectUI();
+
+const init = {
+    code: Cell.fromBase64('<CONTRACT_CODE>'),
+    data: Cell.fromBase64('<CONTRACT_INIT_DATA>')
+} satisfies StateInit;
+
+const stateInit = beginCell()
+    .store(storeStateInit(init))
+    .endCell();
+
+const address = contractAddress(0, init);
+
+await tonConnectUI.sendTransaction({
+    validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes
+    messages: [
+        {
+            address: address.toRawString(),
+            amount: '5000000',
+            stateInit: stateInit.toBoc().toString('base64')
+        }
+    ]
+});
+
+```
+
+## Обертки
+
+Обертки - это классы, которые упрощают взаимодействие с контрактом, позволяя вам работать без необходимости беспокоиться о деталях реализации.
+
+- При разработке контракта на FunC вам необходимо написать обертку самостоятельно.
+- При использовании [языка Tact](https://docs.tact-lang.org) обертки автоматически генерируются для вас.
+
+:::tip
+Ознакомьтесь с документацией [blueprint](https://github.com/ton-org/blueprint) о том, как разрабатывать и развертывать контракты
+:::
+
+Давайте рассмотрим пример стандартной обертки `Blueprint` Counter и как мы можем ее использовать:
+
+<details>
+<summary>Использование обертки</summary>
+Класс обертки счетчика:
+
+```ts
+import { Address, beginCell, Cell, Contract, contractAddress, ContractProvider, Sender, SendMode } from '@ton/core';
+
+export type CounterConfig = {
+    id: number;
+    counter: number;
+};
+
+export function counterConfigToCell(config: CounterConfig): Cell {
+    return beginCell().storeUint(config.id, 32).storeUint(config.counter, 32).endCell();
+}
+
+export const Opcodes = {
+    increase: 0x7e8764ef,
+};
+
+export class Counter implements Contract {
+    constructor(
+        readonly address: Address,
+        readonly init?: { code: Cell; data: Cell },
+    ) {}
+
+    static createFromAddress(address: Address) {
+        return new Counter(address);
+    }
+
+    static createFromConfig(config: CounterConfig, code: Cell, workchain = 0) {
+        const data = counterConfigToCell(config);
+        const init = { code, data };
+        return new Counter(contractAddress(workchain, init), init);
+    }
+
+    async sendDeploy(provider: ContractProvider, via: Sender, value: bigint) {
+        await provider.internal(via, {
+            value,
+            sendMode: SendMode.PAY_GAS_SEPARATELY,
+            body: beginCell().endCell(),
+        });
+    }
+
+    async sendIncrease(
+        provider: ContractProvider,
+        via: Sender,
+        opts: {
+            increaseBy: number;
+            value: bigint;
+            queryID?: number;
+        },
+    ) {
+        await provider.internal(via, {
+            value: opts.value,
+            sendMode: SendMode.PAY_GAS_SEPARATELY,
+            body: beginCell()
+                .storeUint(Opcodes.increase, 32)
+                .storeUint(opts.queryID ?? 0, 64)
+                .storeUint(opts.increaseBy, 32)
+                .endCell(),
+        });
+    }
+
+    async getCounter(provider: ContractProvider) {
+        const result = await provider.get('get_counter', []);
+        return result.stack.readNumber();
+    }
+
+    async getID(provider: ContractProvider) {
+        const result = await provider.get('get_id', []);
+        return result.stack.readNumber();
+    }
+}
+
+```
+
+Теперь вы можете использовать этот класс в своем компоненте React:
+
+```ts
+
+import "buffer";
+import {
+  TonConnectUI,
+  useTonConnectUI,
+  useTonWallet,
+} from "@tonconnect/ui-react";
+import {
+  Address,
+  beginCell,
+  Sender,
+  SenderArguments,
+  storeStateInit,
+  toNano,
+  TonClient,
+} from "@ton/ton";
+
+class TonConnectProvider implements Sender {
+  /**
+   * The TonConnect UI instance.
+   * @private
+   */
+  private readonly provider: TonConnectUI;
+
+  /**
+   * The address of the current account.
+   */
+  public get address(): Address | undefined {
+    const address = this.provider.account?.address;
+    return address ? Address.parse(address) : undefined;
+  }
+
+  /**
+   * Creates a new TonConnectProvider.
+   * @param provider
+   */
+  public constructor(provider: TonConnectUI) {
+    this.provider = provider;
+  }
+
+  /**
+   * Sends a message using the TonConnect UI.
+   * @param args
+   */
+  public async send(args: SenderArguments): Promise<void> {
+    // The transaction is valid for 10 minutes.
+    const validUntil = Math.floor(Date.now() / 1000) + 600;
+
+    // The address of the recipient, should be in bounceable format for all smart contracts.
+    const address = args.to.toString({ urlSafe: true, bounceable: true });
+
+    // The address of the sender, if available.
+    const from = this.address?.toRawString();
+
+    // The amount to send in nano tokens.
+    const amount = args.value.toString();
+
+    // The state init cell for the contract.
+    let stateInit: string | undefined;
+    if (args.init) {
+      // State init cell for the contract.
+      const stateInitCell = beginCell()
+        .store(storeStateInit(args.init))
+        .endCell();
+      // Convert the state init cell to boc base64.
+      stateInit = stateInitCell.toBoc().toString("base64");
+    }
+
+    // The payload for the message.
+    let payload: string | undefined;
+    if (args.body) {
+      // Convert the message body to boc base64.
+      payload = args.body.toBoc().toString("base64");
+    }
+
+    // Send the message using the TonConnect UI and wait for the message to be sent.
+    await this.provider.sendTransaction({
+      validUntil: validUntil,
+      from: from,
+      messages: [
+        {
+          address: address,
+          amount: amount,
+          stateInit: stateInit,
+          payload: payload,
+        },
+      ],
+    });
+  }
+}
+
+const CONTRACT_ADDRESS = "EQAYLhGmznkBlPxpnOaGXda41eEkliJCTPF6BHtz8KXieLSc";
+
+const getCounterInstance = async () => {
+  const client = new TonClient({
+    endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+  });
+
+  // OR you can use createApi from @ton-community/assets-sdk
+  // import {
+  //   createApi,
+  // } from "@ton-community/assets-sdk";
+
+  // const NETWORK = "testnet";
+  // const client = await createApi(NETWORK);
+
+
+  const address = Address.parse(CONTRACT_ADDRESS);
+  const counterInstance = client.open(Counter.createFromAddress(address));
+
+  return counterInstance;
+};
+
+export const Header = () => {
+  const [tonConnectUI, setOptions] = useTonConnectUI();
+  const wallet = useTonWallet();
+
+  const increaseCount = async () => {
+    const counterInstance = await getCounterInstance();
+    const sender = new TonConnectProvider(tonConnectUI);
+
+    await counterInstance.sendIncrease(sender, {
+      increaseBy: 1,
+      value: toNano("0.05"),
+    });
+  };
+
+  const getCount = async () => {
+    const counterInstance = await getCounterInstance();
+
+    const count = await counterInstance.getCounter();
+    console.log("count", count);
+  };
+
+  return (
+    <main>
+      {!wallet && (
+        <button onClick={() => tonConnectUI.openModal()}>Connect Wallet</button>
+      )}
+      {wallet && (
+        <>
+          <button onClick={increaseCount}>Increase count</button>
+          <button onClick={getCount}>Get count</button>
+        </>
+      )}
+    </main>
+  );
+};
+
+```
+
+</details>
+
+### Обертки для жетонов и NFT
+
+Для взаимодействия с жетонами или NFT вы можете использовать [assets-sdk](https://github.com/ton-community/assets-sdk).
+Этот SDK предоставляет обертки, которые упрощают взаимодействие с этими ассетами. Для практических примеров, пожалуйста, проверьте наш раздел [примеров](https://github.com/ton-community/assets-sdk/tree/main/examples).
+
+## Документация API
+
+[Последняя документация по API](https://ton-connect.github.io/sdk/modules/_tonconnect_ui_react.html)
+
+## Примеры
+
+- Пошаговое руководство [TON Hello World](https://helloworld.tonstudio.io/03-client/) для создания простого DApp с использованием React UI.
+- [Demo dApp](https://github.com/ton-connect/demo-dapp-with-react-ui) - Пример DApp с `@tonconnect/ui-react`.
+- [ton.vote](https://github.com/orbs-network/ton-vote) - Пример веб-сайта React с реализацией TON Connect.

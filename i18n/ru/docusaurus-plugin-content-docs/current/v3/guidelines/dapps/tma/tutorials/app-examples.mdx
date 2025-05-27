@@ -1,0 +1,314 @@
+import Button from '@site/src/components/button'
+
+# Примеры мини-приложений (TMA)
+
+:::warning
+Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::
+
+Ознакомьтесь с примерами ниже, чтобы узнать, как создать свое собственное мини-приложение Telegram.
+
+## Пример базового TMA
+
+<p align="center">
+  <br />
+    <img width="240" src="/img/docs/telegram-apps/tapps.png" alt="logo of telegram mini apps" />
+      <br />
+</p>
+
+Это базовое и простое мини-приложение Telegram (TMA), реализованное с использованием простых JavaScript, HTML и CSS. Цель этого проекта - показать простой пример того, как создать простое TMA и запустить его в Telegram, не прибегая к сложным инструментам сборки или передовым библиотекам.
+
+- Приложение доступно по прямой ссылке: [t.me/simple_telegram_mini_app_bot/app](https://t.me/simple_telegram_mini_app_bot/app)
+- Или вы можете запустить приложение с помощью кнопки меню бота: [t.me/simple_telegram_mini_app_bot](https://t.me/simple_telegram_mini_app_bot)
+- URL-адрес развертывания: [https://telegram-mini-apps-dev.github.io/vanilla-js-boilerplate/](https://telegram-mini-apps-dev.github.io/vanilla-js-boilerplate/)
+
+<Button href="https://t.me/simple_telegram_mini_app_bot/app" colorType={'primary'} sizeType={'sm'}>
+
+Открыть демо
+
+</Button>
+
+<Button href="https://github.com/Telegram-Mini-Apps-Dev/vanilla-js-boilerplate.git" colorType={'secondary'} sizeType={'sm'}>
+
+GitHub
+
+</Button>
+
+### Особенности
+
+- Минималистичный пользовательский интерфейс.
+- Никакие внешние библиотеки или фреймворки не используется.
+- Легко понять и модифицировать.
+
+### Начало работы
+
+#### Необходимые компоненты
+
+Чтобы запустить этот пример, Вам понадобится обновленный веб-браузер с включенным JavaScript.
+
+#### Установка
+
+1. Скопируйте этот репозиторий на свой локальный компьютер:
+
+```bash
+git clone https://github.com/Telegram-Mini-Apps-Dev/vanilla-js-boilerplate.git
+```
+
+2. Перейдите в каталог проекта:
+
+```bash
+cd vanilla-js-boilerplate
+```
+
+Откройте index.html в выбранном вами редакторе кода или IDE.
+
+### Использование
+
+1. Откройте index.html в выбранном вами редакторе кода или IDE.
+2. Внесите свои изменения.
+3. Создайте свой собственный репозиторий GitHub, фиксируйте и выкладывайте свои обновления.
+4. Перейдите на страницу вашего репозитория GitHub и откройте Settings. Проверьте вкладку Pages и раздел Build and deployment. Если была выбрана опция GitHub Actions, активы должны быть развернуты на Pages, и там будет URL, похожий на `https://<username>.github.io/vanilla-js-boilerplate/`. Вы можете скопировать этот URL и использовать его с ботом [BotFather](https://tg.me/BotFather), чтобы создать свой собственный TWA.
+
+## Актуальный пример TMA
+
+### Введение
+
+Vite (что в переводе с французского означает "быстрый") - это инструмент для фронтенд сборки и сервер разработки, цель которого - обеспечить более быструю и компактную разработку новых веб-проектов. Мы будем использовать Vite для создания этого примера мини-приложения Telegram.
+
+Вы можете ознакомиться с примерами проекта здесь [https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate](https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate) или воспользоваться следующими инструкциями.
+
+### Необходимые компоненты
+
+Мы начнем со скаффолдинга (шаблона) для Вашего проекта Vite.
+
+С NPM:
+
+```bash
+$ npm create vite@latest
+```
+
+С Yarn:
+
+```bash
+$ yarn create vite
+```
+
+Затем следуйте подсказкам!
+
+Или вы можете просто запустить эту команду, чтобы создать проект React с поддержкой TypeScript:
+
+```bash
+# npm 7+, extra double-dash is needed:
+npm create vite my-react-telegram-web-app -- --template react-ts
+
+# or yarn
+yarn create vite my-react-telegram-web-app --template react-ts
+
+# this will change the directory to recently created project
+cd my-react-telegram-web-app
+```
+
+### Разработка мини-приложения
+
+Теперь нам нужно запустить режим разработки проекта, выполнив следующие команды в терминале:
+
+```bash
+# npm
+npm install
+npm run dev --host
+
+# or yarn
+yarn
+yarn dev --host
+```
+
+Параметр `--host` позволяет получить URL с IP-адресом, который вы можете использовать для тестирования в процессе разработки. Важное примечание - в режиме разработки мы будем использовать самозаверенный SSL-сертификат, что даст нам возможность протестировать наше приложение с горячей перезагрузкой только в веб-версии Telegram [https://web.telegram.org](https://web.telegram.org/a/#6549734463)/ из-за политики других платформ (iOS, Android, MacOS).
+
+Нам нужно добавить плагин `@vitejs/plugin-basic-ssl`:
+
+```bash npm2yarn
+npm install @vitejs/plugin-basic-ssl
+```
+
+Теперь нам нужно изменить `vite.config.ts`. Добавьте импорт:
+
+```jsx
+import basicSsl from '@vitejs/plugin-basic-ssl';
+```
+
+И добавьте плагин
+
+```jsx
+export default defineConfig({
+   plugins: [react(), basicSsl()]
+});
+```
+
+Вы можете использовать `ngrok`, для подключения вашего локального сервера к Интернету с помощью SSL-сертификата. Вы сможете выполнять разработку с заменой горячего модуля на всех платформах Telegram. Откройте новое окно терминала и запустите:
+
+```bash
+# where 5173 is the port number from npm/yarn dev --host
+ngrok http 5173
+```
+
+Также мы должны подготовить наш проект к размещению на GitHub Pages:
+
+```jsx
+export default defineConfig({
+   plugins: [react(), basicSsl()],
+	 build: {
+	   outDir: './docs'
+	 },
+   base: './'
+});
+```
+
+Мы будем использовать сценарий развертывания для GitHub Actions, который будет запускаться при нажатии на главную ветку. Из корня Вашего проекта:
+
+```bash
+# we are going to create GitHub Actions config for deployment
+mkdir .github
+cd .github
+mkdir workflows
+cd workflows
+touch static.yml
+```
+
+Теперь добавьте эту конфигурацию в `static.yml`:
+
+```yaml
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ['master']
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: './'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload dist repository
+          path: './docs'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+```
+
+Не забудьте выбрать параметр GitHub Actions для Build and Deployment в Settings→Pages вашего репозитория GitHub. Теперь после каждого обновления ваш код будет разворачиваться на Pages.
+
+![Скриншот 2023-09-11 в 22.07.44.png](/img/docs/telegram-apps/modern-1.png)
+
+Теперь нужно добавить `@twa-dev/sdk`. Telegram распределяет SDK по [ссылке](https://core.telegram.org/bots/webapps#initializing-web-apps). Это своего рода устаревший способ работы с библиотекой. Пакет `@twa-dev/sdk` позволяет работать с SDK как с пакетом npm, так и с поддержкой TypeScript.
+
+```bash npm2yarn
+npm install @twa-dev/sdk
+```
+
+Откройте файл `/src/main.tsx` и добавьте следующее:
+
+```tsx
+import WebApp from '@twa-dev/sdk'
+
+WebApp.ready();
+
+ReactDOM.createRoot...
+```
+
+`WebApp.ready()` - это метод, который информирует приложение Telegram о том, что мини-приложение готово к отображению. Рекомендуется вызывать этот метод как можно раньше, как только все основные элементы интерфейса будут загружены. После вызова этого метода загрузочный плагин скрывается и мини-приложение отображается.
+
+Затем можно добавить некоторое взаимодействие с пользователем. Перейдите в `src/App.tsx` и добавьте кнопку с предупреждением.
+
+```tsx
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+
+import WebApp from '@twa-dev/sdk'
+
+function App() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <>
+      <div>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+      </div>
+		{/* Here we add our button with alert callback */}
+      <div className="card">
+        <button onClick={() => WebApp.showAlert(`Hello World! Current count is ${count}`)}>
+            Show Alert
+        </button>
+      </div>
+    </>
+  )
+}
+
+export default App
+```
+
+И теперь нам нужно создать Telegram бота, чтобы можно было запускать мини-приложение (TMA) в приложении мессенджера.
+
+### Настройка бота для приложения
+
+Чтобы подключить ваше мини-приложение к Telegram, вам нужно создать бота и настроить для него мини-приложение. Выполните следующие шаги, чтобы создать нового бота Telegram:
+
+<Button href="/v3/guidelines/dapps/tma/tutorials/step-by-step-guide#setting-up-a-bot-for-the-app" colorType={'primary'} sizeType={'sm'}>
+
+Настройка бота
+
+</Button>
+
+### Подсказки
+
+С самозаверенным SSL-сертификатом у вас могут возникнуть проблемы с подобными предупреждениями. Нажмите кнопку "Дополнительно (Advanced)", а затем нажмите `Proceed <local dev server address here>`. Без этих шагов вы не сможете выполнять отладку в веб-версии Telegram.
+
+![Скриншот 2023-09-11 в 18.58.24.png](/img/docs/telegram-apps/modern-2.png)

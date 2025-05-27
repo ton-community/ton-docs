@@ -12,10 +12,6 @@ module.exports = [
     from: '/learn/tvm-instructions/tvm_exit_codes',
   },
   {
-    to: '/develop/dapps/telegram-apps',
-    from: '/develop/dapps/twa',
-  },
-  {
     to: '/v3/documentation/tvm/tvm-overview',
     from: '/learn/tvm-instructions/tvm_overview',
   },

@@ -1,13 +1,15 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Fift and TVM assembly
 
-Fift is stack-based programming language that has TON-specific features and therefore can work with cells. TVM assembly is also a stack-based programming language, also specific to TON, and it also can work with cells. So what's the difference between them?
+Fift is a stack-based programming language with TON-specific features that can work with cells. TVM assembly is another stack-based language designed for TON that also handles cells. What's the difference between them?
 
-## The difference
+## Key differences
 
-Fift is executed **at compile-time** - when your compiler builds smart-contract code BOC, after FunC code is processed. Fift can look differently:
+Fift executes at **compile-time** - when your compiler builds the smart contract code BOC after processing FunC code. Fift can appear in different forms:
 
 ```
-// tuple primitives
+// Tuple primitives
 x{6F0} @Defop(4u) TUPLE
 x{6F00} @Defop NIL
 x{6F01} @Defop SINGLE
@@ -17,47 +19,48 @@ x{6F02} dup @Defop PAIR @Defop CONS
 
 ```
 "Asm.fif" include
-<{ SETCP0 DUP IFNOTRET // return if recv_internal
+<{ SETCP0 DUP IFNOTRET // Return if recv_internal
    DUP 85143 INT EQUAL OVER 78748 INT EQUAL OR IFJMP:<{ // "seqno" and "get_public_key" get-methods
      1 INT AND c4 PUSHCTR CTOS 32 LDU 32 LDU NIP 256 PLDU CONDSEL  // cnt or pubk
    }>
-   INC 32 THROWIF	// fail unless recv_external
-   9 PUSHPOW2 LDSLICEX DUP 32 LDU 32 LDU 32 LDU 	//  signature in_msg subwallet_id valid_until msg_seqno cs
-   NOW s1 s3 XCHG LEQ 35 THROWIF	//  signature in_msg subwallet_id cs msg_seqno
-   c4 PUSH CTOS 32 LDU 32 LDU 256 LDU ENDS	//  signature in_msg subwallet_id cs msg_seqno stored_seqno stored_subwallet public_key
-   s3 s2 XCPU EQUAL 33 THROWIFNOT	//  signature in_msg subwallet_id cs public_key stored_seqno stored_subwallet
-   s4 s4 XCPU EQUAL 34 THROWIFNOT	//  signature in_msg stored_subwallet cs public_key stored_seqno
-   s0 s4 XCHG HASHSU	//  signature stored_seqno stored_subwallet cs public_key msg_hash
-   s0 s5 s5 XC2PU	//  public_key stored_seqno stored_subwallet cs msg_hash signature public_key
-   CHKSIGNU 35 THROWIFNOT	//  public_key stored_seqno stored_subwallet cs
+   INC 32 THROWIF    // Fail unless recv_external
+   9 PUSHPOW2 LDSLICEX DUP 32 LDU 32 LDU 32 LDU     // signature in_msg subwallet_id valid_until msg_seqno cs
+   NOW s1 s3 XCHG LEQ 35 THROWIF    // signature in_msg subwallet_id cs msg_seqno
+   c4 PUSH CTOS 32 LDU 32 LDU 256 LDU ENDS    // signature in_msg subwallet_id cs msg_seqno stored_seqno stored_subwallet public_key
+   s3 s2 XCPU EQUAL 33 THROWIFNOT    // signature in_msg subwallet_id cs public_key stored_seqno stored_subwallet
+   s4 s4 XCPU EQUAL 34 THROWIFNOT    // signature in_msg stored_subwallet cs public_key stored_seqno
+   s0 s4 XCHG HASHSU    // signature stored_seqno stored_subwallet cs public_key msg_hash
+   s0 s5 s5 XC2PU    // public_key stored_seqno stored_subwallet cs msg_hash signature public_key
+   CHKSIGNU 35 THROWIFNOT    // public_key stored_seqno stored_subwallet cs
    ACCEPT
    WHILE:<{
-     DUP SREFS	//  public_key stored_seqno stored_subwallet cs _51
-   }>DO<{	//  public_key stored_seqno stored_subwallet cs
-     8 LDU LDREF s0 s2 XCHG	//  public_key stored_seqno stored_subwallet cs _56 mode
+     DUP SREFS    // public_key stored_seqno stored_subwallet cs _51
+   }>DO<{    // public_key stored_seqno stored_subwallet cs
+     8 LDU LDREF s0 s2 XCHG    // public_key stored_seqno stored_subwallet cs _56 mode
      SENDRAWMSG
-   }>	//  public_key stored_seqno stored_subwallet cs
-   ENDS SWAP INC	//  public_key stored_subwallet seqno'
+   }>    // public_key stored_seqno stored_subwallet cs
+   ENDS SWAP INC    // public_key stored_subwallet seqno'
    NEWC 32 STU 32 STU 256 STU ENDC c4 POP
 }>c
 ```
 > wallet_v3_r2.fif
 
-Last fragment of code looks like TVM assembly, and most of it really is! How can this happen?
+The last code fragment resembles TVM assembly because most of it actually is TVM assembly. Here's why:
 
-Imagine you're talking to a trainee programmer, saying him "and now add commands doing this, this and that to the end of function". Your commands end up being in trainee's program. They're processed twice - just like here, opcodes in capital letters (SETCP0, DUP, etc) are processed both by Fift and by TVM.
+Imagine explaining programming concepts to a trainee. Your instructions become part of their program, processed twice - similar to how opcodes in capital letters (SETCP0, DUP, etc.) are processed by both Fift and TVM.
 
-You can explain high-level abstractions to your trainee, eventually he will understand and be able to use them. Fift is also extensible - you're able to define your own commands. In fact, Asm[Tests].fif is all about defining TVM opcodes.
+Think of Fift as a teaching language where you can introduce high-level concepts to a learner. Just as a trainee programmer gradually absorbs and applies new concepts, Fift allows you to define custom commands and abstractions. The Asm[Tests].fif file demonstrates this perfectly - it's essentially a collection of TVM opcode definitions.
 
-TVM opcodes, on the other hand, are executed **at run-time** - they're code of smart contracts. They can be thought of as program of your trainee - TVM assembly can do less things (e.g. it doesn't have builtin primitives for signing data - because everything that TVM does in blockchain is public), but it can really interact with its environment.
+TVM assembly, in contrast, is like the trainee's final working program. While it operates with fewer built-in features (it can't perform cryptographic signing, for instance), it has direct access to the blockchain environment during contract execution. Where Fift works at compile-time to shape the contract's code, TVM assembly runs that code on the actual blockchain.
 
-## Usage in smart-contracts
+## Smart contract usage
 
-### [Fift] - Putting big BOC into contract
+### [Fift] including large BoCs in contracts
 
-This is possible if you are using `toncli`. If you use other compilers to build contract, possibly there are other ways to include big BOC.
-Edit `project.yaml` so that `fift/blob.fif` is included when building smart-contract code:
-```
+When using `toncli`, you can include large BoCs by:
+
+1. Editing `project.yaml` to include `fift/blob.fif`:
+```yaml
 contract:
   fift:
     - fift/blob.fif
@@ -65,12 +68,14 @@ contract:
     - func/code.fc
 ```
 
-Put the BOC in `fift/blob.boc`, then add the following code to `fift/blob.fif`:
+2. Adding the BoC to `fift/blob.boc`
+
+3. Including this code in `fift/blob.fif`:
 ```
 <b 8 4 u, 8 4 u, "fift/blob.boc" file>B B>boc ref, b> <s @Defop LDBLOB
 ```
 
-Now, you're able to extract this blob from smart contract:
+Now you can access the blob in your contract:
 ```
 cell load_blob() asm "LDBLOB";
 
@@ -79,13 +84,10 @@ cell load_blob() asm "LDBLOB";
 }
 ```
 
-### [TVM assembly] - Converting integer to string
+### [TVM assembly] converting integers to strings
 
-"Sadly", int-to-string conversion attempt using Fift primitives fails.
-```
-slice int_to_string(int x) asm "(.) $>s PUSHSLICE";
-```
-The reason is obvious: Fift is doing calculations in compile-time, where no `x` is yet available for conversion. To convert non-constant integer to string slice, you need TVM assembly. For example, this is code by one of TON Smart Challenge 3 participants':
+Fift primitives can't convert integers to strings at runtime because Fift operates at compile-time. For runtime conversion, use TVM assembly like this solution from TON Smart Challenge 3:
+
 ```
 tuple digitize_number(int value)
   asm "NIL WHILE:<{ OVER }>DO<{ SWAP TEN DIVMOD s1 s2 XCHG TPUSH }> NIP";
@@ -95,7 +97,7 @@ builder store_number(builder msg, tuple t)
 
 builder store_signed(builder msg, int v) inline_ref {
   if (v < 0) {
-    return msg.store_uint(45, 8).store_number(digitize_number(- v));
+    return msg.store_uint(45, 8).store_number(digitize_number(-v));
   } elseif (v == 0) {
     return msg.store_uint(48, 8);
   } else {
@@ -104,7 +106,9 @@ builder store_signed(builder msg, int v) inline_ref {
 }
 ```
 
-### [TVM assembly] - Cheap modulo multiplication
+### [TVM assembly] efficient modulo multiplication
+
+Compare these implementations:
 
 ```
 int mul_mod(int a, int b, int m) inline_ref {               ;; 1232 gas units
@@ -118,4 +122,6 @@ int mul_mod_better(int a, int b, int m) inline_ref {        ;; 1110 gas units
 int mul_mod_best(int a, int b, int m) asm "x{A988} s,";     ;; 65 gas units
 ```
 
-`x{A988}` is opcode formatted according to [5.2 Division](/v3/documentation/tvm/instructions#A988): division with pre-multiplication, where the only returned result is remainder modulo third argument. But opcode needs to get into smart-contract code - that's what `s,` does: it stores slice on top of stack into builder slightly below.
+The `x{A988}` opcode implements an optimized division operation with built-in multiplication (as specified in [section 5.2 Division](/v3/documentation/tvm/instructions#A988)). This specialized instruction directly computes just the modulo remainder of the operation, skipping unnecessary computation steps. The `s,` suffix then handles the result storage - it takes the resulting slice from the stack's top and efficiently writes it into the target builder. Together, this combination delivers substantial gas savings compared to conventional approaches.
+<Feedback />
+

@@ -1,4 +1,11 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Sample tutorial structure 
+
+:::danger
+This page is outdated and will be updated soon.
+See the [How to contribute](/v3/contribute/).
+:::
 
 ## Introduction
 
@@ -118,3 +125,5 @@ This section ***must*** be present if you have taken any help in writing this tu
 Credit sources by adding their name and a link to the document when possible.
 
 If it is not a digital document, include an ISBN or other form of reference.
+<Feedback />
+

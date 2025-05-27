@@ -1,0 +1,90 @@
+import Feedback from '@site/src/components/Feedback';
+
+# MyTonCtrl prometheus metrics
+
+MyTonCtrl can be configured to expose Prometheus metrics for monitoring and alerting purposes. 
+This guide will walk you through the process of enabling Prometheus metrics in MyTonCtrl.
+
+### Metrics delivery method
+
+Currently, MyTonCtrl can only push metrics to Prometheus because of security reasons. 
+So it should be used with the [Prometheus Pushgateway](https://github.com/prometheus/pushgateway) service.
+
+## Setup
+
+:::caution
+For validators it's highly recommended to run Prometheus and Pushgateway on a separate server.
+:::
+
+1. Install Pushgateway
+
+    You can install the Pushgateway service by following the instructions in the [official documentation](https://github.com/prometheus/pushgateway?tab=readme-ov-file#run-it).
+    The easiest way to do that is via docker:
+  
+      ```bash
+      docker pull prom/pushgateway
+      docker run -d -p 9091:9091 prom/pushgateway
+      ```
+
+2. Configure Prometheus
+
+    Create `prometheus.yml` file adding the Pushgateway job to the scrape_configs section. Example of the configuration file:
+
+    ```yaml
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+   
+    scrape_configs:
+      - job_name: "prometheus"
+        static_configs:
+          - targets: ["localhost:9090"]
+    
+      - job_name: "pushgateway"
+        honor_labels: true
+        static_configs:
+          - targets: ["localhost:9091"]  # or "host.docker.internal:9091" if you are using Docker
+     ```
+
+3. Install Prometheus
+
+    You can install Prometheus by following the instructions in the [official documentation](https://prometheus.io/docs/prometheus/latest/installation/).
+    The easiest way to do that is via docker:
+  
+      ```bash
+    docker volume create prometheus-data
+    docker run -d \
+        --add-host host.docker.internal:host-gateway \
+        -p 9090:9090 \
+        -v ./prometheus.yml:/etc/prometheus/prometheus.yml \
+        -v prometheus-data:/prometheus \
+        prom/prometheus
+      ```
+
+4. Configure MyTonCtrl
+
+    Enable mode `prometheus` in MyTonCtrl:
+
+    ```bash
+    MyTonCtrl> enable_mode prometheus
+    ```
+
+    Set the Pushgateway url:
+
+    ```bash
+    MyTonCtrl> set prometheus_url http://<host>:9091/metrics/job/<jobname>
+    ```
+    :::warning
+    Note that it is very important to use different job names for different nodes in case you want to monitor multiple nodes with the same Prometheus instance.
+    :::
+
+5. Check the metrics
+
+    You can check that Prometheus scrapes the metrics by opening the Prometheus web interface:
+
+    ```bash
+    http://<host>:9090/targets
+    ```
+
+<Feedback />
+

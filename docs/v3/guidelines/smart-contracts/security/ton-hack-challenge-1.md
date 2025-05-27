@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Drawing conclusions from TON Hack Challenge
 
 The TON Hack Challenge was held on October 23.
@@ -155,7 +157,8 @@ Hope this article has shed some light on the non-obvious rules for FunC develope
 
 ## References
 
-Originally written by Dan Volkov
+- [dvlkv on GitHub](https://github.com/dvlkv) - _Dan Volkov_
+- [Original article](https://dev.to/dvlkv/drawing-conclusions-from-ton-hack-challenge-1aep) - _Dan Volkov_
 
-- [dvlkv on GitHub](https://github.com/dvlkv)
-- [Original article](https://dev.to/dvlkv/drawing-conclusions-from-ton-hack-challenge-1aep)
+<Feedback />
+

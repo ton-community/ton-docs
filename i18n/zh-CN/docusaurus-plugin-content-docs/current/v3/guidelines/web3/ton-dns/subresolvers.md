@@ -41,14 +41,14 @@ This contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH\_Zp]
   }
   
   ;; we are loading some subdomain
-  ;; supported subdomains are "ton\0", "me\0t\0" and "address\0"
+  ;; supported subdomains are "ton\\0", "me\\0t\\0" and "address\\0"
   
   slice subdomain_sfx = null();
   builder domain_nft_address = null();
   
   if (subdomain.starts_with("746F6E00"s)) {
     ;; we're resolving
-    ;; "ton" \0 <subdomain> \0 [subdomain_sfx]
+    ;; "ton" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(32);
     
     ;; reading domain name
@@ -73,8 +73,8 @@ This contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH\_Zp]
   
   if (slice_empty?(subdomain_sfx)) {
     ;; example of domain being resolved:
-    ;; [initial, not accessible in this contract] "ton\0resolve-contract\0ton\0ratelance\0"
-    ;; [what is accessible by this contract]      "ton\0ratelance\0"
+    ;; [initial, not accessible in this contract] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    ;; [what is accessible by this contract]      "ton\\0ratelance\\0"
     ;; subdomain          "ratelance"
     ;; subdomain_sfx      ""
     
@@ -97,8 +97,8 @@ This contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH\_Zp]
     }
   } else {
     ;; subdomain          "resolve-contract"
-    ;; subdomain_sfx      "ton\0ratelance\0"
-    ;; we want to pass \0 further, so that next resolver has opportunity to process only one byte
+    ;; subdomain_sfx      "ton\\0ratelance\\0"
+    ;; we want to pass \\0 further, so that next resolver has opportunity to process only one byte
     
     ;; next resolver is contract of 'resolve-contract<.ton>'
     ;; dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;
@@ -124,7 +124,7 @@ This contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH\_Zp]
    1. 跳过前32位（子域名 = `"resolve-contract\0"`）
    2. 设置 `subdomain_sfx` 的值为 `subdomain`，并读取直到零字节的字节
    3. （子域名 = `"resolve-contract\0"`，subdomain_sfx = `""`）
-   4. 从子域名切片的末尾裁剪零字节和 subdomain_sfx（子域名 = `"resolve-contract"`）
+   4. 从子域名 slice 的末尾裁剪零字节和 subdomain_sfx（子域名 = `"resolve-contract"`）
    5. 使用 slice_hash 和 get_ton_dns_nft_address_by_index 函数将域名转换为合约地址。您可以在 [[Subresolvers#Appendix 1. resolve-contract.ton 的代码|附录 1]] 中看到它们。
 4. 否则，dnsresolve() 检查子域名是否以 `"address\0"` 开头。如果是，它跳过该前缀并读取 base64 地址。
 5. 如果提供的用于解析的子域名与这些前缀都不匹配，函数通过返回 `(0, null())`（零字节前缀解析无 DNS 条目）表示失败。
@@ -256,9 +256,9 @@ const int op::update_record = 0x537a3491;
 }
 ```
 
-`dnsresolve` 函数检查请求的子域名是否包含整数个八位字节，跳过子域名切片开头的可选零字节，然后将其分割为最高级别的域和其他部分（`test\0qwerty\0` 被分割为 `test` 和 `qwerty\0`）。加载与请求的域名对应的记录字典。
+`dnsresolve` 函数检查请求的子域名是否包含整数个八位字节，跳过子域名 slice 开头的可选零字节，然后将其分割为最高级别的域和其他部分（`test\0qwerty\0` 被分割为 `test` 和 `qwerty\0`）。加载与请求的域名对应的记录字典。
 
-如果存在非空子域名后缀，函数返回已解析的字节数和在 `"dns_next_resolver"H` 键下找到的下一个解析器记录。否则，函数返回已解析的字节数（即整个切片长度）和请求的记录。
+如果存在非空子域名后缀，函数返回已解析的字节数和在 `"dns_next_resolver"H` 键下找到的下一个解析器记录。否则，函数返回已解析的字节数（即整个 slice 长度）和请求的记录。
 
 可以通过更优雅地处理错误来改进此函数，但这不是绝对必需的。
 
@@ -357,14 +357,14 @@ slice decode_base64_address(slice readable) method_id {
   }
   
   ;; we are loading some subdomain
-  ;; supported subdomains are "ton\0", "me\0t\0" and "address\0"
+  ;; supported subdomains are "ton\\0", "me\\0t\\0" and "address\\0"
   
   slice subdomain_sfx = null();
   builder domain_nft_address = null();
   
   if (subdomain.starts_with("746F6E00"s)) {
     ;; we're resolving
-    ;; "ton" \0 <subdomain> \0 [subdomain_sfx]
+    ;; "ton" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(32);
     
     ;; reading domain name
@@ -375,7 +375,7 @@ slice decode_base64_address(slice readable) method_id {
     
     domain_nft_address = get_ton_dns_nft_address_by_index(slice_hash(subdomain));
   } elseif (subdomain.starts_with("6D65007400"s)) {
-    ;; "t" \0 "me" \0 <subdomain> \0 [subdomain_sfx]
+    ;; "t" \\0 "me" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(40);
     
     ;; reading domain name
@@ -400,8 +400,8 @@ slice decode_base64_address(slice readable) method_id {
   
   if (slice_empty?(subdomain_sfx)) {
     ;; example of domain being resolved:
-    ;; [initial, not accessible in this contract] "ton\0resolve-contract\0ton\0ratelance\0"
-    ;; [what is accessible by this contract]      "ton\0ratelance\0"
+    ;; [initial, not accessible in this contract] "ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    ;; [what is accessible by this contract]      "ton\\0ratelance\\0"
     ;; subdomain          "ratelance"
     ;; subdomain_sfx      ""
     
@@ -424,11 +424,11 @@ slice decode_base64_address(slice readable) method_id {
     }
   } else {
     ;; example of domain being resolved:
-    ;; [initial, not accessible in this contract] "ton\0resolve-contract\0ton\0resolve-contract\0ton\0ratelance\0"
-    ;; [what is accessible by this contract]      "ton\0resolve-contract\0ton\0ratelance\0"
+    ;; [initial, not accessible in this contract] "ton\\0resolve-contract\\0ton\\0resolve-contract\\0ton\\0ratelance\\0"
+    ;; [what is accessible by this contract]      "ton\\0resolve-contract\\0ton\\0ratelance\\0"
     ;; subdomain          "resolve-contract"
-    ;; subdomain_sfx      "ton\0ratelance\0"
-    ;; and we want to pass \0 further, so that next resolver has opportunity to process only one byte
+    ;; subdomain_sfx      "ton\\0ratelance\\0"
+    ;; and we want to pass \\0 further, so that next resolver has opportunity to process only one byte
     
     ;; next resolver is contract of 'resolve-contract<.ton>'
     ;; dns_next_resolver#ba93 resolver:MsgAddressInt = DNSRecord;

@@ -172,9 +172,15 @@ tonNode.shardPublicOverlayId workchain:int shard:long zero_state_file_hash:int25
 
 生成的 id 将是 `dht.findValue` 的密钥，而 `name` 字段的值将是 `nodes` 字样。我们重复上一节的过程，一切与上次相同，但 `updateRule` 将是 [dht.updateRule.overlayNodes](#dhtupdateruleoverlaynodes)。
 
-经过验证 - 我们将获得公钥（`id`）的节点，这些节点拥有我们工作链和分片的信息。为了获取节点的ADNL地址，我们需要对每个密钥（使用哈希方法）制作ID并重复上述过程，就像`foundation.ton`域的ADNL地址一样。
+```bash
+dht.findValue
+```
 
 结果是，我们将得到节点的地址，如果需要，我们可以使用[overlay.getRandomPeers](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L237)方法找到此链的其他节点的地址。我们还可以从这些节点接收有关区块的所有信息。
+
+经过验证 - 我们将获得公钥（`id`）的节点，这些节点拥有我们工作链和分片的信息。为了获取节点的ADNL地址，我们需要对每个密钥（使用哈希方法）制作ID并重复上述过程，就像`foundation.ton`域的ADNL地址一样。
+
+*这里是[原文链接](https://github.com/xssnick/ton-deep-doc/blob/master/DHT.md)，作者是[Oleg Baranov](https://github.com/xssnick)。*
 
 ## 参考资料
 

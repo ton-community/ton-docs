@@ -1,19 +1,22 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Full Node
+# Full node
 
 ## OS requirements
 
 We highly recommend installing MyTonCtrl using the supported operating systems:
-* Ubuntu 20.04
-* Ubuntu 22.04
-* Debian 11
+
+- Ubuntu 20.04
+- Ubuntu 22.04
+- Debian 11
 
 ## Hardware requirements
 
 :::caution Node usage on personal local machine
-You shouldn't run any type of node on your personal local machine for long, even if it satisfies the requirements. Nodes actively use disks and can damage them quickly.
+You shouldn't run any type of node on your personal local machine for extended periods, even if it meets the requirements. Nodes actively use disks, which can lead to rapid wear and potential damage.
 :::
 
 ### With validator
@@ -26,57 +29,64 @@ You shouldn't run any type of node on your personal local machine for long, even
 - 64 TB/month traffic (100 TB/month on peak load)
 
 :::info Be ready for peak loads
-Typically you'll need at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
+To reliably handle peak loads, a connection of at least 1 Gbit/s is typically required, while the average load is expected to be around 100 Mbit/s.
 :::
 
-### Port Forwarding
+### Port forwarding
 
-All types of nodes require a static external IP address, one UDP port to be forwarded for incoming connections and all outgoing connections to be open - the node uses random ports for new outgoing connections. It is necessarily for the node to be visible to the outside world over the NAT.
+All types of nodes require a static external IP address, one UDP port forwarded for incoming connections, and all outgoing connections to be open—the node uses random ports for new outgoing connections. The node must also be visible to the outside world over the NAT.
 
-This can be done with your network provider or by [renting a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
+You can accomplish this by contacting your network provider or [renting a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
 
 :::info
 You can find out which UDP port is open using the `netstat -tulpn` command.
 :::
 
-### Recommended Providers
+### Recommended providers
 
 The TON Foundation recommends the following providers for running a Validator:
 
-| Cloud Provider   | Instance Type         | CPU            | RAM    | Storage           | Network      | Public IP                         | Traffic       |
-|------------------|-----------------------|----------------|--------|-------------------|--------------|-----------------------------------|---------------|
-| GCP              | `n2-standard-16`      | `32 vCPUs`     | `128GB`| `1TB NVMe SSD`    | `16 Gbps`    | Reserve a static external IP      | `64 TB/month`|
-| Alibaba Cloud    | `ecs.g6.4xlarge`      | `32 vCPUs`     | `128GB`| `1TB NVMe SSD`    | `Up to 10 Gbps` | Bind an Elastic IP           | `64 TB/month`|
-| Tencent Cloud    | `M5.4XLARGE`          | `32 vCPUs`     | `128GB`| `1TB NVMe SSD`    | `Up to 10 Gbps` | Associate an Elastic IP       | `64 TB/month`|
-| Vultr            | `bare metal Intel E-2388G` | `16 Cores / 32 Threads` | `128GB` | `1.92TB NVMe SSD` | `10 Gbps` | Fixed IP address included with instance | `64 TB/month`|
-| DigitalOcean     | `general purpose premium Intel` | `32 vCPUs` | `128GB` | `1TB NVMe SSD` | `10 Gbps` | Fixed IP address included with instance | `64 TB/month`|
-| Latitude         | `c3.medium.x86`       | `16 Cores / 32 Threads` | `128GB` | `1.9TB NVMe SSD` | `10 Gbps` | Fixed IP address included with instance | `64 TB/month`|
-| AWS              | `i4i.8xlarge`         | `32 vCPUs`     | `256GB`| `2 x 3,750 AWS Nitro SSD (fixed)` | `Up to 25 Gbps` | Bind an Elastic IP | `64 TB/month`|
+| Cloud Provider | Instance Type                   | CPU                     | RAM     | Storage                           | Network         | Public IP                               | Traffic       |
+| -------------- | ------------------------------- | ----------------------- | ------- | --------------------------------- | --------------- | --------------------------------------- | ------------- |
+| GCP            | `n2-standard-16`                | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `16 Gbps`       | Reserve a static external IP            | `64 TB/month` |
+| Alibaba Cloud  | `ecs.g6.4xlarge`                | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `Up to 10 Gbps` | Bind an Elastic IP                      | `64 TB/month` |
+| Tencent Cloud  | `M5.4XLARGE`                    | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `Up to 10 Gbps` | Associate an Elastic IP                 | `64 TB/month` |
+| Vultr          | `bare metal Intel E-2388G`      | `16 Cores / 32 Threads` | `128GB` | `1.92TB NVMe SSD`                 | `10 Gbps`       | Fixed IP address included with instance | `64 TB/month` |
+| DigitalOcean   | `general purpose premium Intel` | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `10 Gbps`       | Fixed IP address included with instance | `64 TB/month` |
+| Latitude       | `c3.medium.x86`                 | `16 Cores / 32 Threads` | `128GB` | `1.9TB NVMe SSD`                  | `10 Gbps`       | Fixed IP address included with instance | `64 TB/month` |
+| AWS            | `i4i.8xlarge`                   | `32 vCPUs`              | `256GB` | `2 x 3,750 AWS Nitro SSD (fixed)` | `Up to 25 Gbps` | Bind an Elastic IP                      | `64 TB/month` |
 
 :::info
-**Note:** Prices, configurations, and availability may vary. It is advisable to always check the official documentation and pricing pages of the respective cloud provider before making any decisions.
+**Note:** Prices, configurations, and availability can change. It is recommended to always refer to the official documentation and pricing pages of the respective cloud provider before making any decisions.
 :::
 
 ## Run a Node (video)
 
-[//]: # (<ReactPlayer controls={true} style={{borderRadius:'10pt', margin:'15pt auto', maxWidth: '100%'}} url='/docs/files/TON_nodes.mp4' />)
+[//]: # "<ReactPlayer controls={true} style={{borderRadius:'10pt', margin:'15pt auto', maxWidth: '100%'}} url='/docs/files/TON_nodes.mp4' />"
 
 Please, check this video step-by-step tutorial to start promptly:
 
-<video style={{borderRadius:'10pt', margin:'auto', width: '100%', maxWidth: '100%'}} controls={true}>
-    <source src="/files/TON_nodes.mp4" type="video/mp4" />
+<video
+  style={{
+    borderRadius: "10pt",
+    margin: "auto",
+    width: "100%",
+    maxWidth: "100%",
+  }}
+  controls={true}
+>
+  <source src="/files/TON_nodes.mp4" type="video/mp4" />
 </video>
 
-
-## Run a Node (text)
+## Run a node (text)
 
 ### Switch to non-root user
 
 :::warning
-This step is **required** to successfully install and use mytonctrl — don't ignore **non-root user creation**. Without this step, there will be no errors during installation, but mytonctrl will not work properly.
+This step is required to successfully install and use MyTonCtrl—don't ignore non-root user creation. Without this step, there will be no errors during installation, but MyTonCtrl will not work properly.
 :::
 
-If you don't have **non-root** user, you can create one with the following steps (otherwise skip first two steps and go to the third).
+If you don't have a non-root user, you can create one with the following steps (otherwise, skip the first two steps and go to the third).
 
 1. Login as root and create new user:
 
@@ -103,56 +113,54 @@ Download and run the installation script from the **non-root** user account with
 <Tabs groupId="operating-systems">
   <TabItem value="ubuntu" label="Ubuntu">
 
-  ```bash
-  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  sudo bash install.sh
-  ```
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+sudo bash install.sh
+```
 
   </TabItem>
   <TabItem value={'debian'} label={'Debian'}>
 
-  ```bash
-  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-  su root -c 'bash install.sh'
-  ```
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+su root -c 'bash install.sh'
+```
 
   </TabItem>
 </Tabs>
 
-* `-d` - **mytonctrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state.
-This will reduce synchronization time by several times.
-* `-c <path>` - If you want to use not public liteservers for synchronization. _(not required)_
-* `-i` - Ignore minimum requirements, use it only if you want to check compilation process without real node usage.
-* `-m` - Mode, can be `validator` or `liteserver`.
-* `-t` - Disable telemetry.
+- `-d` - **mytonctrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state.
+  This will reduce synchronization time by several times.
+- `-c <path>` - If you want to use not public liteservers for synchronization. _(not required)_
+- `-i` - Ignore minimum requirements, use it only if you want to check compilation process without real node usage.
+- `-m` - Mode, can be `validator` or `liteserver`.
+- `-t` - Disable telemetry.
 
 **To use testnet**, `-c` flag should be provided with `https://ton.org/testnet-global.config.json` value.
 
 Default `-c` flag value is `https://ton-blockchain.github.io/global.config.json`, which is default mainnet config.
 
-### Run the mytonctrl
+### Running the MyTonCtrl
 
 1. Run `MyTonCtrl` console **from the local user account used for installation**:
 
-  ```sh
-  mytonctrl
-  ```
+```sh
+mytonctrl
+```
 
 2. Check the `MyTonCtrl` status using the `status` command:
 
-  ```sh
-  status
-  ```
-
+```sh
+status
+```
 
 **In testnet** `status fast` command must be used instead of `status`.
 
-
 The following statuses should be displayed:
 
-* **mytoncore status**: Should be in green.
-* **local validator status**: Should also be in green.
-* **local validator out of sync**: Initially, a `n/a` string is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20, the validator is synchronized.
+- **mytoncore status**: should display in green.
+- **local validator status**: should also display in green.
+- **local validator out of sync**: initially, a `n/a` string is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20, the validator is synchronized.
 
 Example of the **status** command output:
 
@@ -163,16 +171,16 @@ For all nodes type **Local Validator status** section should appear.
 Otherwise, [check troubleshooting section](/v3/guidelines/nodes/nodes-troubleshooting#status-command-displays-without-local-node-section) and [check node logs](/v3/guidelines/nodes/running-nodes/full-node#check-the-node-logs).
 :::
 
-Wait until `Local validator out of sync` becomes less than 20 seconds.
+Please wait until the `Local validator out of sync` status is less than 20 seconds.
 
-When a new node have been started, even from dump, **it's needed to wait up to 3 hours before out of sync number starts to decrease**. This is because the node still needs to establish its place in the network, propagate its addresses via DHT tables, etc.
+When a new node is started, even from a dump, it is important to wait up to 3 hours before the _out of sync_ number begins to decrease. This delay occurs because the node must establish its place in the network and propagate its addresses through the DHT tables, among other processes.
 
 ### Uninstall mytonctrl
 
 Download script and run it:
 
 ```bash
-sudo bash /usr/src/mytonctrl/uninstall.sh
+sudo bash /usr/src/mytonctrl/scripts/uninstall.sh
 ```
 
 ### Check mytonctrl owner
@@ -183,7 +191,7 @@ Run:
 ls -lh /var/ton-work/keys/
 ```
 
-## Tips & Tricks
+## Tips & tricks
 
 ### List of available commands
 
@@ -191,9 +199,9 @@ ls -lh /var/ton-work/keys/
 
 ![Help command](/img/docs/full-node/help.jpg)
 
-### Check the mytonctrl logs
+### Check the MyTonCtrl logs
 
-- To check **mytonctrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for Root.
+- To check **MyTonCtrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for root.
 
 ![logs](/img/docs/nodes-validator/manual-ubuntu_mytoncore-log.png)
 
@@ -207,4 +215,6 @@ tail -f /var/ton-work/log.thread*
 
 ## Support
 
-Contact technical support with [@mytonctrl_help](https://t.me/mytonctrl_help).
+Contact technical support with [@ton_node_help](https://t.me/ton_node_help).
+
+<Feedback />

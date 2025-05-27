@@ -1,0 +1,115 @@
+import ThemedImage from '@theme/ThemedImage';
+
+# Pyth Oracles
+
+## 如何在 TON 合约中使用实时数据
+
+TON 上的 Pyth 价格反馈通过主 TON Pyth 智能
+合约进行管理，实现与链上数据的无缝交互。在 TON，
+Pyth 接收器合约中的特定功能促进了这些交互。该合约充当 Pyth
+价格源的接口，处理价格数据的检索和更新。
+
+## 安装 Pyth SDK
+
+使用 npm 或 yarn 安装 Pyth TON SDK 和其他必要的依赖项：
+
+```ts
+   npm install @pythnetwork/pyth-ton-js @pythnetwork/hermes-client
+   @ton/core @ton/ton @ton/crypto
+```
+
+   或
+
+```ts
+   yarn add @pythnetwork/pyth-ton-js @pythnetwork/hermes-client
+   @ton/core @ton/ton @ton/crypto
+```
+
+## 编写客户端代码
+
+下面的代码片段演示了如何获取价格更新、与 TON 上的 Pyth 合约交互以及更新价格馈送：
+
+- TON Mainnet: [EQBU6k8HH6yX4Jf3d18swWbnYr31D3PJI7PgjXT-flsKHqql](https://docs.pyth.network/price-feeds/contract-addresses/ton)
+- TON 测试网：[EQB4ZnrI5qsP_IUJgVJNwEGKLzZWsQOFhiaqDbD7pTt_f9oU](https://docs.pyth.network/price-feeds/contract-addresses/ton)
+
+以下示例使用的是 testnet 合约。要使用主网，请将 `PYTH_CONTRACT_ADDRESS_TESTNET` 相应改为 `PYTH_CONTRACT_ADDRESS_MAINNET` 。 
+
+```ts
+import { TonClient, Address, WalletContractV4 } from "@ton/ton";
+import { toNano } from "@ton/core";
+import { mnemonicToPrivateKey } from "@ton/crypto";
+import { HermesClient } from "@pythnetwork/hermes-client";
+import {
+  PythContract,
+  PYTH_CONTRACT_ADDRESS_TESTNET,
+  calculateUpdatePriceFeedsFee,
+} from "@pythnetwork/pyth-ton-js";
+const BTC_PRICE_FEED_ID =
+  "0xe62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43";
+async function main() {
+  // Initialize TonClient
+  const client = new TonClient({
+    endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+    apiKey: "your-api-key-here", // Optional
+  });
+  // Create PythContract instance
+  const contractAddress = Address.parse(PYTH_CONTRACT_ADDRESS_TESTNET);
+  const contract = client.open(PythContract.createFromAddress(contractAddress));
+  // Get current guardian set index
+  const guardianSetIndex = await contract.getCurrentGuardianSetIndex();
+  console.log("Guardian Set Index:", guardianSetIndex);
+  // Get BTC price from TON contract
+  const price = await contract.getPriceUnsafe(BTC_PRICE_FEED_ID);
+  console.log("BTC Price from TON contract:", price);
+  // Fetch latest price updates from Hermes
+  const hermesEndpoint = "https://hermes.pyth.network";
+  const hermesClient = new HermesClient(hermesEndpoint);
+  const priceIds = [BTC_PRICE_FEED_ID];
+  const latestPriceUpdates = await hermesClient.getLatestPriceUpdates(
+    priceIds,
+    { encoding: "hex" }
+  );
+  console.log("Hermes BTC price:", latestPriceUpdates.parsed?.[0].price);
+  // Prepare update data
+  const updateData = Buffer.from(latestPriceUpdates.binary.data[0], "hex");
+  console.log("Update data:", updateData);
+  // Get update fee
+  const updateFee = await contract.getUpdateFee(updateData);
+  console.log("Update fee:", updateFee);
+  const totalFee =
+    calculateUpdatePriceFeedsFee(BigInt(updateFee)) + BigInt(updateFee);
+  // Update price feeds
+  const mnemonic = "your mnemonic here";
+  const key = await mnemonicToPrivateKey(mnemonic.split(" "));
+  const wallet = WalletContractV4.create({
+    publicKey: key.publicKey,
+    workchain: 0,
+  });
+  const provider = client.open(wallet);
+  await contract.sendUpdatePriceFeeds(
+    provider.sender(key.secretKey),
+    updateData,
+    totalFee
+  );
+  console.log("Price feeds updated successfully.");
+}
+main().catch(console.error);
+```
+
+该代码段的功能如下：
+
+1. 初始化一个 `TonClient` 并创建一个 `PythContract` 实例。
+2. 从 TON 合约中读取当前的守护套利指数和 BTC 价格。
+3. 从Hermes获取最新价格更新。
+4. 准备更新数据并计算更新费。
+5. 更新 TON 合约的价格信息。
+
+## 其他资源
+
+您可能会发现这些额外的资源对开发您的 TON 申请很有帮助：
+
+- [TON文档](https://ton.org/docs/)
+- [Pyth Price Feed IDs](https://pyth.network/developers/price-feed-ids)
+- [Pyth TON Contract](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/contracts)
+- [Pyth TON SDK](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/sdk)
+- [Pyth TON 示例](https://github.com/pyth-network/pyth-examples/tree/main/price_feeds/ton/sdk_js_usage)

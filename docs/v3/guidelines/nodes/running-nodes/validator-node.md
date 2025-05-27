@@ -1,179 +1,166 @@
-# Validator Node
+import Feedback from '@site/src/components/Feedback';
 
+# Validator node
 
-## Minimal Hardware Requirements
+Network validators confirm all user transactions. If all validators agree that a transaction is valid, it gets added to the blockchain. Invalid transactions are rejected. See more information [here](https://ton.org/validators).
 
-- 16 cores CPU
-- 128 GB RAM
-- 1TB NVME SSD _OR_ Provisioned 64+k IOPS storage
-- 1 Gbit/s network connectivity
-- public IP address (_fixed IP address_)
-- 100 TB/month traffic on peak load
+## Minimal hardware requirements
+
+- 16-core CPU  
+- 128 GB RAM  
+- 1TB NVMe SSD or provisioned 64+k IOPS storage  
+- 1 Gbit/s network connectivity  
+- Public IP address (fixed IP address)  
+- 100 TB/month traffic at peak load
 
 > Typically you'll need at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
 
 > We draw special attention of validators to IOPS disk requirements, it is crucially important for smooth network operation.
 
-## Port Forwarding
+## Port forwarding
 
-All types of nodes require a static external IP address, one UDP port to be forwarded for incoming connections and all outgoing connections to be open - the node uses random ports for new outgoing connections. It's necessarily for the node to be visible to the outside world over the NAT.
+All types of nodes require a static external IP address, one UDP port forwarded for incoming connections, and all outgoing connections to be open—the node uses random ports for new outgoing connections. The node must also be visible to the outside world over the NAT.
 
-It can be done with your network provider or [rent a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
+You can work with your network provider or [rent a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
 
 :::info
-It's possible to find out which UDP port is opened from the `netstat -tulpn` command.
+To determine which UDP ports are open, use the `netstat -tulpn` command.
 :::
 
+## Prerequisites
 
-## Prerequisite
+### Learn slashing policy
 
-### Learn Slashing Policy
+If a validator processes less than 90% of the expected blocks during a validation round, they will be fined by 101 TON.
 
-If the validator processed less than 90% of the expected number of blocks during a validation round, this Validator will be fined by 101 TON.
-Read more about [slashing policy](/v3/documentation/infra/nodes/validation/staking-incentives#decentralized-system-of-penalties).
+Learn more about the [slashing policy](/v3/documentation/infra/nodes/validation/staking-incentives#decentralized-system-of-penalties).
+  
+### Running a fullnode
 
+Launch the [Full Node](/v3/guidelines/nodes/running-nodes/full-node) before follow this article.
 
-### Run a Fullnode
-Launch [Full Node](/v3/guidelines/nodes/running-nodes/full-node) before follow this article.
-
-
-
-Check that validator mode is enabled using `status_modes` command. If it's not, refer [mytonctrl enable_mode command](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#enable_mode).
+Ensure that validator mode is enabled by using the `status_modes` command. If it is not enabled, refer to the [MyTonCtrl enable_mode command](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#enable_mode).
 
 ## Architecture
 
 ![image](/img/nominator-pool/hot-wallet.png)
 
-## View the List of Wallets
+## View the list of wallets
 
-Check out the list of available wallets in the **MyTonCtrl** console using the `wl` command:
+Check out the list of available wallets in the `MyTonCtrl` console using the `wl` command:
 
 ```sh
 wl
 ```
 
-During the installation of **mytonctrl**, the **validator_wallet_001** wallet is created:
+During the installation of `MyTonCtrl`, the installer creates a wallet named `validator_wallet_001`.
 
 ![wallet list](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-wl_ru.png)
 
+## Activate the wallets
 
-## Activate the Wallets
+1. Send the necessary number of coins to the wallet and activate it. The minimum stake is approximately __300K TON__, and the maximum is about __1M__ TON. To understand the required amount of coins, please check the current stakes at [tonscan.com](https://tonscan.com/validation). For  more information, see [how maximum and minimum stakes calculated](/v3/documentation/infra/nodes/validation/staking-incentives#values-of-stakes-max-effective-stake).
 
-1. Send the necessary number of coins to the wallet and activate it.
+2. Use the `vas` command to view the history of transfers:
 
-   Recently (_at the end of 2023_), the approximate figures have been a minimum stake of around __340K TON__ and a maximum of about __1M TON__.
+```sh
+vas [wallet name]
+```
 
-   Check current stakes with [tonscan.com](https://tonscan.com/validation) to understand necessary amount of coins.
+3. Use the `aw` command to activate the wallet. The `wallet name` parameter is optional; if no arguments are provided, all available wallets will be activated.
 
-   Read more [how maximum and minimum stakes calculated](/v3/documentation/infra/nodes/validation/staking-incentives#values-of-stakes-max-effective-stake).
-
-2. Use the `vas` command to display the history of transfers:
-
-    ```sh
-    vas [wallet name]
-    ```
-
-3. Activate the wallet using the `aw` command (`wallet name` is optional, if no arguments provided it will activate all available)
-
-    ```sh
-    aw [wallet name]
-    ```
+```sh
+aw [wallet name]
+```
 
 ![account history](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-vas-aw_ru.png)
 
-## Your Validator is Now Ready
+## Your validator is ready to use
 
-**mytoncore** will automatically join the elections. It divides the wallet balance into two parts and uses them as a stake to participate in the elections. You can also manually set the stake size:
+**mytoncore** automatically participates in elections by dividing the wallet balance into two parts. These parts are then used as a stake for participation. Additionally, you can manually adjust the stake size:
 
 ```sh
-set stake 50000
+set  stake  50000
 ```
 
-`set stake 50000` — this sets the stake size to 50k coins. If the bet is accepted and our node becomes a validator, the bet can only be withdrawn in the second election (according to the rules of the electorate).
+The command above sets the stake size to 50k Toncoins. If the bet is accepted and your node becomes a validator, the stake can only be withdrawn in the second election as per the electorate's rules.
 
 ![setting stake](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-set_ru.png)
 
-## Maintain Guidelines
+## Adhere to rules  
 
-:::caution Slashing of Poor Validators
-If the validator processed less than 90% of the expected number of blocks during a validation round, this Validator will be fined by 101 TON.
-
-Read more about [slashing policy](/v3/documentation/infra/nodes/validation/staking-incentives#decentralized-system-of-penalties).
+:::caution Slashing policy for underperforming validators
+If a validator processes less than 90% of the expected number of blocks during a validation round, that validator will incur a fine of 101 TON. For more information, read about the [slashing policy](/v3/documentation/infra/nodes/validation/staking-incentives#decentralized-system-of-penalties).
 :::
 
+As a TON validator, make sure you follow these crucial steps to ensure network stability and avoid slashing penalties in the future.
 
-As a TON Validators, make sure you are follow these crucial steps to ensure network stability and to avoid slashing penalties in the future.
+### Important measures:
 
-Essential Actions:
+1. Follow [@tonstatus](https://t.me/tonstatus), turn on notifications, and be prepared for urgent updates if needed.
 
-1. Follow the [@tonstatus](https://t.me/tonstatus) turn on notifications and be ready to apply urgent updates if necessary.
-2. Ensure your hardware meets or exceeds [minimal system requirements](/v3/guidelines/nodes/running-nodes/validator-node#minimal-hardware-requirements).
-3. We imperatively request you to use [mytonctrl](https://github.com/ton-blockchain/mytonctrl).
-   - In `mytonctrl` keep update due the notification and enable telemetry: `set sendTelemetry true`
-4. Set up monitoring dashboards for RAM, Disk, Network, and CPU usage. For technical assistance, contact @mytonctrl_help_bot.
-5. Monitor the efficiency of your validator with dashboards. 
-   - Check with `mytonctrl` via `check_ef`.
-   - [Build dashboard with APIs](/v3/guidelines/nodes/running-nodes/validator-node#validation-and-effectiveness-apis).
+2. Make sure that your hardware meets or exceeds the [minimum system requirements](/v3/guidelines/nodes/running-nodes/validator-node#minimal-hardware-requirements).
+
+3. We strongly urge you to utilize [MyTonCtrl](https://github.com/ton-blockchain/mytonctrl).
+
+	- In `MyTonCtrl`, ensure that updates are synchronized with notifications and enable telemetry by setting the option: `set sendTelemetry true`.
+
+4. Set up monitoring dashboards for RAM, disk, network, and CPU usage. For technical assistance, please contact [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot).
+
+5. Monitor the efficiency of your validator with dashboards.
+
+	- Please verify with `MyTonCtrl` using the `check_ef` command.
+
+	- Check [Build dashboard with APIs](/v3/guidelines/nodes/running-nodes/validator-node#validation-and-effectiveness-apis).
 
 :::info
-`mytonctrl` allows to check effectiveness of validators via command `check_ef` which outputs your validator efficiency data for the last round and for current round.
-This command retrieves data by calling `checkloadall` utility.
-Ensure, that your efficiency is greater than 90% (for the full round period).
+`MyTonCtrl` enables you to evaluate the performance of validators using the command `check_ef`. This command provides efficiency data for both the last round and the current round. The data is retrieved by calling the `checkloadall` utility. Make sure that your efficiency is above 90% for the entire round period.
 :::
 
 :::info
-In case of low efficiency - take action to fix the problem. Contact technical support [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot) if necessary.
+If you encounter low efficiency, take action to resolve the issue. If necessary, contact technical support at [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot).
 :::
 
-
-## Validation and Effectiveness APIs
+## Validation effectiveness APIs
 
 :::info
-Please set up dashboards to monitor your validators using these APIs.
+Please set up dashboards to monitor your validators using the APIs provided below.
 :::
 
-#### Penalized Validators Tracker
+### Penalized validators tracker
 
 You can track penalized validators on each round with [@tonstatus_notifications](https://t.me/tonstatus_notifications).
 
 #### Validation API
-https://elections.toncenter.com/docs - use this API to get information about current and past validation rounds (cycles) - time of rounds, which validators participated in them, their stakes, etc.
 
-Information on current and past elections (for the validation round) is also available.
+You can use this [API](https://elections.toncenter.com/docs) to obtain information about current and past validation rounds (cycles) - including the timing of rounds, which validators participated, their stakes, and more. Information regarding current and past elections for each validation round is also available.
 
 #### Efficiency API
 
-https://toncenter.com/api/qos/index.html#/ - use this API to get information on the efficiency of validators over time.
+You can use this [API](https://toncenter.com/api/qos/index.html#/) to obtain information about the efficiency of validators over time.
 
-This API analyses the information from the catchain and builds an estimate of the validator's efficiency. This API does not use the checkloadall utility, but is its alternative.
-Unlike `checkloadall` which works only on validation rounds, in this API you can set any time interval to analyze the validator's efficiency.
+This API analyzes data from the catchain to provide an estimate of a validator's efficiency. It serves as an alternative to the `checkloadall` utility.
 
-Workflow:
+Unlike `checkloadall`, which only works on validation rounds, this API allows you to set any time interval to analyze a validator's efficiency.
 
-1. Pass ADNL address of your validator and time interval (`from_ts`, `to_ts`) to API. For accurate result it makes sense to take a sufficient interval, for example from  18 hours ago the current moment.
+##### Workflow:
 
-2. Retrieve the result. If your efficiency percentage field is less than 80%, your validator is not working properly.
+1. To the API, provide the ADNL address of your validator along with a time interval (`from_ts`, `to_ts`). For accurate results, choose a sufficient interval, such as 18 hours ago to the present moment.
 
-3. It is important that your validator participates in validation and has the same ADNL address throughout the specified time period.
+2. Retrieve the result. If your efficiency percentage is below 80%, your validator is malfunctioning.
 
-For example, if a validator participates in validation every second round - then you need to specify only those intervals when he participated in validation. Otherwise, you will get an incorrect underestimate.
+3. Your validator must actively participate in validation and use the same ADNL address throughout the specified time period. For example, if a validator contributes to validation every second round, you should only indicate the intervals during which they participated. Failing to do so may result in an inaccurate underestimate. This requirement applies not only to MasterChain validators (with an index < 100) but also to other validators (with an index > 100).
 
-It works not only for Masterchain validators (with index < 100) but also for other validators (with index > 100).
+## Support
 
+Contact technical support [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot). This bot is for validators only and will not assist with questions for regular nodes.
 
+If you run a regular node, then contact the group: [@mytonctrl_help](https://t.me/mytonctrl_help).
 
+## See also
 
-
-## Support 
-
-Contact technical support [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot). This bot for validators only and will not assist on questions for regular nodes. 
-
-If you have a regular node, then contact the group: [@mytonctrl_help](https://t.me/mytonctrl_help).
-
-
-## See Also
-
-* [Run a Full Node](/v3/guidelines/nodes/running-nodes/full-node)
+* [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
 * [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
-* [Staking Incentives](/v3/documentation/infra/nodes/validation/staking-incentives)
+* [Staking incentives](/v3/documentation/infra/nodes/validation/staking-incentives)
+<Feedback />
 

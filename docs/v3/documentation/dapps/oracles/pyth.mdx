@@ -1,8 +1,10 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
-# Pyth Oracles
+# Pyth oracles
 
-## How to Use Real-Time Data in TON Contracts
+## How to use real-time data in TON contracts
 
 Pyth price feeds on TON are managed through the main TON Pyth smart
 contract, enabling seamless interaction with on-chain data. In TON,
@@ -25,7 +27,7 @@ Install the Pyth TON SDK and other necessary dependencies using npm or yarn:
    ```
     
 
-## Write Client Code
+## Write client code
 
 The following code snippet demonstrates how to fetch price updates, interact with the Pyth contract on TON, and update price feeds:
 
@@ -34,6 +36,7 @@ The following code snippet demonstrates how to fetch price updates, interact wit
 
 The following example uses testnet contract. For mainnet usage, change the `PYTH_CONTRACT_ADDRESS_TESTNET` to `PYTH_CONTRACT_ADDRESS_MAINNET` accordingly. 
 
+<details>
 ```ts
 import { TonClient, Address, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core";
@@ -95,6 +98,7 @@ async function main() {
 }
 main().catch(console.error);
 ```
+</details>
 
 This code snippet does the following:
 
@@ -104,12 +108,15 @@ This code snippet does the following:
 4. Prepares the update data and calculates the update fee.
 5. Updates the price feeds on the TON contract.
 
-## Additional Resources
+## Additional resources
 
 You may find these additional resources helpful for developing your TON application:
 
-- [TON Documentation](https://ton.org/docs/)
-- [Pyth Price Feed IDs](https://pyth.network/developers/price-feed-ids)
-- [Pyth TON Contract](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/contracts)
+- [TON documentation](https://ton.org/docs/)
+- [Pyth price feed IDs](https://pyth.network/developers/price-feed-ids)
+- [Pyth TON contract](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/contracts)
 - [Pyth TON SDK](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/sdk)
-- [Pyth TON Example](https://github.com/pyth-network/pyth-examples/tree/main/price_feeds/ton/sdk_js_usage)
+- [Pyth TON example](https://github.com/pyth-network/pyth-examples/tree/main/price_feeds/ton/sdk_js_usage)
+
+<Feedback />
+

@@ -1,0 +1,226 @@
+import Feedback from "@site/src/components/Feedback";
+import ThemedImage from "@theme/ThemedImage";
+import Button from '@site/src/components/button'
+
+# Writing to the network
+
+In the previous section, you learned how to **read data** from the TON Blockchain. Now, let's explore how to **write data** to it.
+
+## Introduction
+
+This guide will walk you through writing data to TON Blockchain. You'll learn how to:
+- Make transactions
+- Transfer TON/NFTs
+
+## Set up environment
+
+First, visit the installation pages and install [Node.js and npm](https://nodejs.org/en/download/) for your OS. Check that the installation is correct by running the following commands:
+
+```bash
+node -v
+npm -v
+```
+
+Versions of `node` and `npm` should be at least `v20` and `v10` correspondingly.
+
+## Project setup
+
+Let's set up our project structure:
+
+1. Create a new directory for your project
+2. Initialize a Node.js project
+3. Install the required dependencies
+4. Initialize TypeScript configuration.
+
+Run these commands in your terminal:
+
+```bash
+mkdir writing-to-ton && cd writing-to-ton
+npm init -y
+npm install typescript ts-node @ton/ton @ton/core @ton/crypto
+npx tsc --init
+```
+
+To run scripts, use the following command:
+
+```bash
+npx ts-node script.ts
+```
+
+## Sending TON
+
+The simplest interaction between two accounts in TON Blockchain is a TON transfer. The process involves preparing and signing a transaction and then sending it to the blockchain.
+
+A common transfer would look like this:
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1.svg?raw=true',
+      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1_dark.svg?raw=true',
+    }}
+  />
+</div>
+<br></br>
+
+:::caution
+Unlike in the [Reading from network](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/) section, a Toncenter API key is mandatory in the following examples. It may be retrieved using [the following guide](/v3/guidelines/dapps/apis-sdks/api-keys/).
+:::
+
+#### Implementation
+
+Create a new file `1-send-ton.ts`:
+
+```typescript title="1-send-ton.ts"
+import { mnemonicToWalletKey } from "@ton/crypto";
+import { comment, internal, toNano, TonClient, WalletContractV3R2, WalletContractV4, WalletContractV5R1 } from "@ton/ton";
+import { SendMode } from "@ton/core";
+
+async function main() {
+  // Initializing tonClient for sending messages to blockchain
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+    apiKey: 'YOUR_API_KEY',  //acquire it from: https://t.me/toncenter
+  });
+
+  // Using mnemonic to derive public and private keys
+  // ATTENTION! Replace on your own mnemonic 24-word phrase that you get from wallet app!
+  const mnemonic = "swarm trumpet innocent empty faculty banner picnic unique major taste cigar slogan health neither diary monster jar scale multiply result biology champion genuine outside".split(' ');
+  const { publicKey, secretKey } = await mnemonicToWalletKey(mnemonic);
+
+  // Creating wallet depending on version (v5r1 or v4 or V3R2), uncomment which version do you have
+  const walletContract = WalletContractV5R1.create({ walletId: { networkGlobalId: -3 }, publicKey }); // networkGlobalId: -3 for Testnet, -239 for Mainnet
+  //const walletContract = WalletContractV4.create({ workchain: 0, publicKey });
+  //const walletContract = WalletContractV3R2.create({ workchain: 0, publicKey });
+
+  // Opening wallet with tonClient, which allows to send messages to blockchain
+  const wallet = tonClient.open(walletContract);
+
+  // Retrieving seqno used for replay protection
+  const seqno = await wallet.getSeqno();
+
+  // Sending transfer
+  await wallet.sendTransfer({
+    seqno,
+    secretKey,
+    messages: [internal({
+      to: wallet.address, // Transfer will be made to the same wallet address
+      body: comment('Hello from wallet!'), // Transfer will contain comment
+      value: toNano(0.05), // Amount of TON, attached to transfer
+    })],
+    sendMode: SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS,
+  });
+}
+
+main();
+```
+
+Using `API_KEY` in this case, allows you to access TON functionality through the `endpoint`. By running this script, we authenticate to our wallet through a `public/private key` pair generated from the `mnemonic phrase`. After preparing a transaction, we send it to TON, resulting in a message that the wallet sends to itself with the *'Hello from wallet!'* message.
+
+:::caution Advanced Level
+In most scenarios, `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS` will work, but if you want a deeper understanding, continue reading in the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
+:::
+
+
+Run this example using the following command:
+
+```bash
+npx ts-node 1-send-ton.ts
+```
+
+#### Expected result
+
+Navigate to [Tonviewer](https://testnet.tonviewer.com/) and paste your address into the search bar. You should see a TON transfer with the *'Hello from wallet!'* comment.
+
+## Sending NFTs
+
+[Non-fungible tokens](/v3/guidelines/dapps/asset-processing/nft-processing/nfts/) (NFTs) are assets like a piece of art, digital content, or video that have been tokenized via a blockchain. In TON, NFTs are represented via a collection of smart contracts:
+- **NFT Collection**: Stores information about the NFT collection.
+- **NFT Item**: Stores information about the NFT item that the user owns.
+
+To send an NFT, we should first acquire one. The easiest way to do that is to create and deploy your own NFT through [TON Tools](https://ton-collection-edit.vercel.app/deploy-nft-single). Note that the `owner` addresses of your NFT must be your wallet address to be able to perform operations on it.
+
+The basic operation of the [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) in TON is `transfer`. What is actually performed is changing the address of the `owner` in NFT storage to the `new owner`, which is the address of another contract that is now able to perform operations with the `NFT Item`.
+
+:::tip
+See [Actors and Roles](/v3/guidelines/quick-start/developing-smart-contracts/processing-messages#actors-and-roles/) for a more conceptual description.
+:::
+
+#### Implementation
+
+Create a new file `2-send-nft.ts`:
+
+```typescript title="2-send-nft.ts"
+import { mnemonicToWalletKey } from "@ton/crypto";
+import { Address, beginCell, comment, internal, toNano, TonClient, WalletContractV5R1 } from "@ton/ton";
+import { SendMode } from "@ton/core";
+
+
+async function main() {
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+    apiKey: 'YOUR_API_KEY',  //acquire it from: https://t.me/toncenter
+  });
+
+  // Using mnemonic to derive public and private keys
+  // ATTENTION! Replace on your own mnemonic 24-word phrase that you get from wallet app!
+  const mnemonic = "swarm trumpet innocent empty faculty banner picnic unique major taste cigar slogan health neither diary monster jar scale multiply result biology champion genuine outside".split(' ');
+  // Remember that it should be mnemonic of the wallet that you have made an owner of NFT
+
+  const { publicKey, secretKey } = await mnemonicToWalletKey(mnemonic);
+  const walletContract = WalletContractV5R1.create({ walletId: { networkGlobalId: -3 }, publicKey });
+  const wallet = tonClient.open(walletContract);
+  const seqno = await wallet.getSeqno();
+
+  const nftTransferBody = beginCell()
+    .storeUint(0x5fcc3d14, 32) // opcode for nft transfer
+    .storeUint(0, 64) // query id
+    .storeAddress(wallet.address) // address to transfer ownership to
+    .storeAddress(wallet.address) // response destination
+    .storeBit(0) // no custom payload
+    .storeCoins(1) // forward amount - if >0, will send notification message
+    .storeMaybeRef(comment('Hello from NFT!'))
+    .endCell();
+
+  //The one that you have acquired from https://ton-collection-edit.vercel.app/deploy-nft-single
+  const nftAddress = Address.parse('YOUR_NFT_ADDRESS'); 
+  // Sending NFT transfer
+  await wallet.sendTransfer({
+    seqno,
+    secretKey,
+    messages: [internal({
+      to: nftAddress,
+      body: nftTransferBody,
+      value: toNano(0.05),
+    })],
+    sendMode: SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS,
+  });
+}
+main();
+```
+
+Run this example using the following command:
+
+```bash
+npx ts-node 2-send-nft.ts
+```
+
+#### Expected result
+
+Navigate to [Tonviewer](https://testnet.tonviewer.com/) and paste your address into the search bar. You should see an NFT transfer with the *'Hello from NFT!'* comment.
+
+## Next step
+
+Now that you’ve learned how to write data to TON Blockchain, it’s time to move on to the next stage—**developing your smart contracts**. You’ll first need to **set up your development environment** with the necessary tools and libraries to do that.
+
+Click the button below to get started:
+
+<Button href="/v3/guidelines/quick-start/developing-smart-contracts/setup-environment" colorType={'primary'} sizeType={'sm'}>
+
+  Setup development environment
+
+</Button>
+
+<Feedback />

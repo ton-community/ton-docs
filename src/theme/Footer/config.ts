@@ -48,7 +48,7 @@ const PAGE_LIQUIDITY_PROGRAM = "https://ton.org/defi-liquidity-program";
 const TON_DEV_COMMUNITY_TELEGRAM_URL = "https://t.me/tondev_eng";
 const WHITEPAPER_URL = "https://ton.org/whitepaper.pdf";
 const TON_DOCUMENTATION_URL = "https://docs.ton.org/";
-const APP_AND_DAPPS_URL = "https://ton.app/";
+const APP_AND_DAPPS_URL = "https://t.me/tapps_bot/center?startApp=section_web3-tonorgtma";
 const BRIDGE_URL = "https://bridge.ton.org";
 const DNS_URL = "https://dns.ton.org/";
 const CAREERS_URL = "https://jobs.ton.org/jobs";
@@ -86,7 +86,7 @@ export const FOOTER_COLUMN_LINKS_EN = [
       { langKey: "Get or sell Toncoin", url: PAGE_BUY_TONCOIN },
       { langKey: "Stake", url: PAGE_STAKE },
       { langKey: "Accept Payments", url: TON_ACCEPT_PAYMENT },
-      { langKey: "Apps & Servies", url: FOOTER_APP_AND_DAPPS_URL },
+      { langKey: "Apps & Services", url: FOOTER_APP_AND_DAPPS_URL },
       { langKey: "Bridge", url: FOOTER_BRIDGE_URL },
       { langKey: "Domains", url: FOOTER_DNS_URL },
       { langKey: "The Open League", url: TON_THE_OPEN_LEAGUE },

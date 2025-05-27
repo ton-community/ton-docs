@@ -92,7 +92,7 @@ cell load_blob() asm "LDBLOB";
 slice int_to_string(int x) asm "(.) $>s PUSHSLICE";
 ```
 
-原因很明显：Fift 在编译时进行计算，那时还没有 `x` 可供转换。要将非常量整数转换为字符串切片，你需要 TVM 汇编。例如，这是 TON 智能挑战 3位 参赛者之一的代码：
+原因很明显：Fift 在编译时进行计算，那时还没有 `x` 可供转换。要将非常量整数转换为字符串 slice ，你需要 TVM 汇编。例如，这是 TON 智能挑战 3位 参赛者之一的代码：
 
 ```
 tuple digitize_number(int value)
@@ -126,4 +126,4 @@ int mul_mod_better(int a, int b, int m) inline_ref {        ;; 1110 gas units
 int mul_mod_best(int a, int b, int m) asm "x{A988} s,";     ;; 65 gas units
 ```
 
-`x{A988}` 是根据 [5.2 Division](/learn/tvm-instructions/instructions#52-division) 格式化的操作码：带有预乘法的除法，唯一返回的结果是第三个参数的余数。但操作码需要进入智能合约代码 - 这就是 `s,` 的作用：它将栈顶的切片存储到稍低的构建器中。
+`x{A988}` 是根据 [5.2 Division](/learn/tvm-instructions/instructions#52-division) 格式化的操作码：带有预乘法的除法，唯一返回的结果是第三个参数的余数。但操作码需要进入智能合约代码 - 这就是 `s,` 的作用：它将栈顶的 slice 存储到稍低的构建器中。

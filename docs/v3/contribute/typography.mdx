@@ -1,0 +1,186 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Typography
+
+## Introduction
+This standard ensures a consistent and professional style across TON documentation. 
+
+Following these guidelines, you help maintain clarity, enhance readability, and support easy navigation in the documentation site and any associated menus.
+
+---
+
+## File names
+- **Naming convention:** Use **kebab-case** - all lowercase, words separated by hyphens.
+- **Example:** `kebab-case-file-name.md`
+- **Purpose:** Kebab-case is SEO-friendly, easy to read, and helps avoid naming conflicts or issues in case-sensitive file systems.
+
+---
+
+## Documents typography
+
+### General text style
+- Write concise, clear sentences.
+- Use simple, direct language suitable for both new and experienced users.
+- Avoid overly complex structures; aim for clarity and brevity.
+- Avoid excessive use of bold or italic styles.
+- All graphic elements containing text should use the [Inter](https://rsms.me/inter/) or a similarly compatible font.
+
+
+### Acronyms
+
+When introducing an unfamiliar acronym, spell the entire term and put the abbreviation in parentheses. Put both the full term and acronym in bold.
+
+**Example:**
+
+**The Open Network (TON)** is a decentralized and open internet platform...
+
+### Headers
+
+#### Header hierarchy:
+1. **H1 (`#`)** – Document title
+2. **H2 (`##`)** – Major sections
+3. **H3 (`###`)** – Subsections under H2
+4. **H4 (`####`)** and below – Use sparingly for finer detail
+
+#### Header capitalization style:
+- **H1, H2, H3 and H4:** **Sentence case**
+  - Example: `# This sentence is in sentence case`
+  - Example: `## This sentence is in sentence case`
+  - Example: `### This sentence is in sentence case`
+  - Example: `### This sentence is in sentence case`
+
+
+- **Exception**: **Special terms**.
+Despite the overall _sentence case_ rule,
+  certain words or phrases—key concepts or defined terms within the documentation—must always be formatted
+  using the title case.
+  - Example: `## Use American English`
+  - Example: `# Run the TON Center service`
+
+#### Header consistency:
+- Avoid repeating the exact words in consecutive headers.
+
+#### Header formatting:
+
+Use plain text for all headers.
+Avoid using any formatting styles in headings:
+
+- No code formatting `backticks` (``)
+- No bold **text**
+- No italics *text*
+- No quotation marks (“ ” or " ")
+- No ALL CAPS (unless it's an acronym)
+
+Keep headers clean and consistent. Use formatting only in body text.
+
+**Correct:**
+
+- Run the TON Center service
+- How the smart contract works
+
+**Incorrect:**
+
+- *Run the TON Center service*
+- How the `smart contract` works
+- “Run the TON Center service”
+- HOW THE SMART CONTRACT WORKS
+
+
+#### Capitalized terms in headers
+
+Sometimes, you can face specific capitalization defined as capitalized according to American English rules.
+
+- Capitalization standard for specific terms:
+- Example: `## Use American English`
+- Example: `### Date Format`
+  
+Date and Format are special terms and should be capitalized, regardless of the overall Sentence Case rule.
+
+### Avoid "quotation marks"
+Do not use "quotation marks" to highlight terms, variables, or functions. Instead, apply **bold** for terms and `code formatting` for code references.
+
+**Correct usage:**
+- Use **get_wallet_address** when introducing a term.
+- Use `get_wallet_address` when referencing a code variable or function.
+
+**Incorrect usage:**
+- Do not use "get_wallet_address" for a term, code variable, or function.
+
+
+### Navigation menu headings
+The navigation menus should remain minimalistic in both the left sidebar and the top menu. For consistency and clarity, all menu headings must use Sentence case.
+
+#### Left sidebar menu:
+- Avoid lengthy descriptions.
+- Use short, clear labels of two or three words.
+
+:::info
+Specify the left side menu with [sidebars](https://github.com/ton-community/ton-docs/tree/main/sidebars) configuration files.
+:::
+
+#### Navigation bar menu:
+- Set only high-level hierarchy pages in this menu.
+- Use broad, descriptive terms to categorize content, ensuring users can quickly identify the main section they need.
+
+:::info
+Specify the navigation bar menu with the [navbar.js](https://github.com/ton-community/ton-docs/blob/main/navbar.js) configuration file.
+:::
+
+#### Consistency between menu and in-page headers
+- Match the header text used in the table of contents or side menu with the header text in the article, ensuring readers know they're on the correct page or section.
+
+
+---
+
+## Putting it all together
+1. **Create your new documentation file** using the kebab-case naming convention
+   * Example:`getting-started-guide.md`.
+2. **Open the file** and set an H1 heading in sentence case
+   * Example: `# Getting started guide`.
+3. **Organize content** with H2 headings for main topics 
+   * Example:`## Installation steps`, also in sentence case.
+4. **Use H3 headings** for more detailed subtopics in sentence case 
+   * Example: `### Installing on Linux`).
+5. **Maintain consistency** in any side menus or tables of contents by matching the header text from within the document.
+
+---
+
+## Example structure
+
+```md title="getting-started-with-ton.md"
+# Getting started with TON
+
+## Prerequisites
+
+### What is TON
+**The Open Network (TON)** is a decentralized and open internet platform...
+The content goes here.
+
+### Checking your environment
+The content goes here.
+
+## Installation steps
+
+### Installing on Linux
+The content goes here.
+
+### Installing on macOS
+The content goes here.
+
+## Basic usage
+
+### Running your first command
+The content goes here.
+
+## See also
+- [How to contribute](/v3/contribute/)
+```
+
+## See also
+- [How to contribute](/v3/contribute/)
+- [Content standardization](/v3/contribute/content-standardization/)
+- [Typography](/v3/contribute/typography/)
+- [Localization program](/v3/contribute/localization-program/overview/)
+
+<Feedback />
+

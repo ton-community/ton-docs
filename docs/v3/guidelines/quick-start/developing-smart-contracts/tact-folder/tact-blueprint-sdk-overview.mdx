@@ -1,0 +1,104 @@
+import Feedback from "@site/src/components/Feedback";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Button from '@site/src/components/button'
+
+# Blueprint overview
+
+> **Summary:** In the previous steps, we installed and configured all the tools required for TON smart contract development and created our first project template.
+
+:::info
+We recommend installing the [Tact extension for VS Code](https://marketplace.visualstudio.com/items?itemName=tonstudio.vscode-tact). It offers syntax highlighting, error hints, and a smoother development experience.
+:::
+
+Before we proceed to actual smart contract development, let's briefly describe the project structure and explain how to use the **`Blueprint`**.
+
+## Project structure
+
+:::warning
+If you didn't choose the proposed names in the previous steps, source code file names and some of the in-code entities may differ.
+:::
+
+<Tabs groupId="language">
+  <TabItem value="Tact" label="Tact">
+    ```ls title="Project structure"
+    Example/
+    ├── contracts/           # Folder containing smart contracts code
+    │   ├── hello_world.tact   # Main contract file
+    ├── scripts/             # Deployment and on-chain interaction scripts
+    │   ├── deployHelloWorld.ts     # Script to deploy the contract
+    │   └── incrementHelloWorld.ts  # Script to interact with the contract
+    ├── tests/               # Test folder for local contract testing
+    │   └── HelloWorld.spec.ts      # Test specifications for the contract
+    └── wrappers/            # TypeScript wrappers for contract interaction
+    ├── HelloWorld.ts           # Wrapper class for smart contract
+    └── HelloWorld.compile.ts   # Script for contract compilation
+    ```
+  </TabItem>
+
+</Tabs>
+
+### `/contracts`
+
+This folder contains your smart contract source code written in one of the available programming languages used for TON Blockchain smart contract development.
+
+### `/scripts`
+
+The `scripts` directory contains `TypeScript` files that help you deploy and interact with your smart contracts on-chain using previously implemented wrappers.
+
+### `/tests`
+
+This directory contains test files for your smart contracts. Testing contracts directly on the TON network is not the best option because deployment requires some amount of time and may lead to losing funds. This testing playground allows you to execute multiple smart contracts and even send messages between them in your **"local network"**. Tests are crucial for ensuring your smart contracts behave as expected before deployment to the network.
+
+### `/wrappers`
+
+To interact with your smart contract off-chain, you need to serialize and deserialize messages sent to it. `Wrapper` classes are developed to mirror your smart contract implementation, making its functionality simple to use.
+
+
+## Development flow
+
+Almost any smart contract project development consists of five simple steps:
+
+1. Edit the smart contract code in the `/contracts` folder and build it by running the build script:
+
+```bash
+npx blueprint build
+```
+
+2. Update the smart contract wrapper in the `/wrappers` folder to correspond to changes in the contract.
+
+3. Update tests in the `/tests` folder to ensure the correctness of the new functionality and run the test script:
+
+```bash
+npx blueprint test
+```
+
+4. Repeat steps 1-3 until you achieve the desired result.
+
+5. Update the deployment script in the `/scripts` folder and run it using this command:
+
+```bash
+npx blueprint run
+```
+
+:::tip
+All examples in this guide follow the sequence of these **1-3 steps** with corresponding code samples. **Step 5**, the deployment process, is covered in the last section of the guide: [Deploying to network](/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-deploying-to-network/).
+:::
+
+Also, you can always generate the same structure for another smart contract if, for example, you want to create multiple contracts interacting with each other by using the following command:
+
+```bash
+npx blueprint create PascalCase # Don't forget to name the contract in PascalCase
+```
+
+## Next step
+
+Now you’re all set — it's time to start writing smart contracts. We’ll begin with the basics: **storage** and **get methods**.
+
+<Button href="/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-storage-and-get-methods" colorType={'primary'} sizeType={'sm'}>
+
+  Storage & get methods
+
+</Button>
+
+<Feedback />

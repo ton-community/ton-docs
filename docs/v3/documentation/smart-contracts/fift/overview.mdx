@@ -1,56 +1,69 @@
-import Button from '@site/src/components/button'
+import Feedback from '@site/src/components/Feedback';
+
+import Button from "@site/src/components/button";
 
 # Overview
 
-Fift is a stack-based general purpose programming language optimized for creating, debugging, and managing TON Blockchain smart contracts.
-Fift has been specifically designed to interact with the TON Virtual Machine (TON VM or TVM) and TON Blockchain.
+Fift is a stack-based programming language specifically designed for developing, debugging, and managing TON Blockchain smart contracts. It provides optimized interaction with:
+
+- TON Virtual Machine (TVM)
+- TON Blockchain infrastructure
 
 ```fift
 { ."hello " } execute ."world"
 hello world ok
 ```
 
-
 :::info
-Usually, using the Fift is not required for programming smart contracts in TON. However, Sometimes, you may need to use the Fift language to solve uncommon technical challenges as part of your task.
-You might be interested in:
-* [TVM Retracer](https://retracer.ton.org/)
+While most smart contract development doesn't require Fift, it becomes essential for:
+
+- Solving unique technical challenges
+- Low-level TVM interactions
+- Advanced contract debugging
+
+**Recommended resources**:
+
+- [TVM Retracer](https://retracer.ton.org/)
 :::
 
-
-<Button href="https://blog.ton.org/introduction-to-fift"
-colorType="primary" sizeType={'sm'}>
-
-Introduction To Fift
-
+<Button
+  href="https://blog.ton.org/introduction-to-fift"
+  colorType="primary"
+  sizeType={"sm"}
+>
+  Introduction To Fift
 </Button>
 
-
-<Button href="https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs"
-          colorType="secondary" sizeType={'sm'}>
-
-His majesty Fift
-
+<Button
+  href="https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs"
+  colorType="secondary"
+  sizeType={"sm"}
+>
+  His majesty Fift
 </Button>
 
-<br></br><br></br>
-
+<br></br>
+<br></br>
 
 ## Documentation
 
-* [Fift: A Brief Introduction](https://ton.org/fiftbase.pdf)
-* [TON Virtual Machine](/v3/documentation/tvm/tvm-overview)
+- [Fift: A Brief Introduction](https://ton.org/fiftbase.pdf)
+- [TON Virtual Machine](/v3/documentation/tvm/tvm-overview)
 
 ## Examples
 
-* [Fift Smart Conctract examples](/v3/documentation/smart-contracts/contracts-specs/examples#fift-smart-contracts)
+- [Fift smart contract examples](/v3/documentation/smart-contracts/contracts-specs/examples#fift-smart-contracts)
 
 ## Tutorials
 
-* [Introduction To Fift](https://blog.ton.org/introduction-to-fift)
-* [[YouTube]His majesty Fift](https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs) [[RU version](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCYG-hR4N5FRTKUkfM8POgh)] by **@MarcoDaTr0p0je** & **@Wikimar**.
+- [Introduction To Fift](https://blog.ton.org/introduction-to-fift)
+- [His majesty Fift](https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs)
+  - [Russian version](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCYG-hR4N5FRTKUkfM8POgh)
+created - _@MarcoDaTr0p0je & @Wikimar_
 
-## Sources
+## Source code
 
-* [Fift scripts for standard smart contracts](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+- [Standard smart contracts in Fift](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+
+<Feedback />
 

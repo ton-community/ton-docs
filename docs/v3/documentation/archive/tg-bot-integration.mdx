@@ -1,9 +1,11 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # TON Connect for Telegram Bots
 
 :::warning deprecated
-This guide explains an outdated method of integrating TON Connect with Telegram bots. For a more secure and modern approach, consider using [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview for a more modern and secure integration.
+This guide explains an outdated method of integrating TON Connect with Telegram bots. For a more secure and modern approach, consider using [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview) for a more modern and secure integration.
 :::
 
 In this tutorial, we will develop a sample Telegram bot using the JavaScript TON Connect SDK, supporting TON Connect 2.0 authentication.
@@ -464,7 +466,7 @@ export const walletMenuCallbacks = { // Define buttons callbacks
     chose_wallet: onChooseWalletClick
 };
 
-bot.on('callback_query', query => { // Parse callback data and execute corresponing function
+bot.on('callback_query', query => { // Parse callback data and execute corresponding function
     if (!query.data) {
         return;
     }
@@ -678,7 +680,7 @@ export const walletMenuCallbacks = {
     universal_qr: onOpenUniversalQRClick
 };
 
-bot.on('callback_query', query => { // Parse callback data and execute corresponing function
+bot.on('callback_query', query => { // Parse callback data and execute corresponding function
     if (!query.data) {
         return;
     }
@@ -2034,3 +2036,6 @@ What is next?
 ## See Also
 - [Sending messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
 - [Integration Manual](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)
+
+<Feedback />
+

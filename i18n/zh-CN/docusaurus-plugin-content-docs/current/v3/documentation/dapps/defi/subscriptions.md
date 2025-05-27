@@ -12,7 +12,7 @@
 Subscription contract requires authorization exactly once, on installation; then it can withdraw TON as it pleases. Do your own research before attaching unknown subscriptions.
 
 另一方面，用户不能在不知情的情况下安装订阅程序。
-::：
+:::
 
 ## 示例流程
 

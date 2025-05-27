@@ -1,68 +1,90 @@
-# Run MyTonCtrl in Docker
+import Feedback from '@site/src/components/Feedback';
 
-## Hardware requirements:
+# Running MyTonCtrl in Docker
 
-* 16 cores CPU
-* 128 GB RAM
-* 1TB NVME SSD OR Provisioned 64+k IOPS storage
-* 1 Gbit/s network connectivity
-* Public IP address (fixed IP address)
-* 16 TB/month traffic on peak load
+This guide provides a step-by-step process for installing MyTonCtrl using Docker.
 
-**_Not recommended!_** **_For testing purposes only!_**
+## Hardware requirements
 
-Variable **IGNORE_MINIMAL_REQS=true** turns off requirements verification of CPU/RAM.
+To ensure an optimal experience while running MyTonCtrl, here are the recommended hardware specifications:
 
-## Software requirements:
+- 16-core CPU
+- 128 GB RAM
+- 1TB NVME SSD or provisioned 64+k IOPS storage
+- 1 Gbit/s network connectivity
+- Public IP address (fixed IP address)
+- 16 TB/month traffic on peak load
 
-* docker-ce
-* docker-ce-cli
-* containerd.io
-* docker-buildx-plugin
-* docker-compose-plugin
+:::warning 
+ This setup is primarily intended for testing purposes, so it may not be suitable for production environments. If you’d like to bypass hardware checks for any reason, you can easily do this by setting the variable ``IGNORE_MINIMAL_REQS=true``.
+:::
+## Software requirements
 
-  _Installation guide in official [Docker](https://docs.docker.com/engine/install/)_
+To get started, please ensure you have the following software installed:
 
-## Tested operational systems:
+- Docker CE  
+- Docker CE CLI  
+- Containerd.io  
+- Docker Buildx Plugin  
+- Docker Compose Plugin  
 
-* Ubuntu 20.04
-* Ubuntu 22.04
-* Ubuntu 24.04
-* Debian 11
-* Debian 12
+For detailed installation instructions, see the official [Docker installation guide](https://docs.docker.com/engine/install/).
 
-## Run MyTonCtrl v2 using official docker image:
-* Pull the image and run the node with MyTonCtrl 
+## Tested operating systems
+
+We’ve successfully tested MyTonCtrl on these operating systems:
+
+- Ubuntu 20.04  
+- Ubuntu 22.04  
+- Ubuntu 24.04  
+- Debian 11  
+- Debian 12  
+
+## Running MyTonCtrl v2 using the official Docker image
+
+Here’s how you can pull the image and set up your MyTonCtrl node:
+
 ```bash
-docker run -d --name ton-node -v <YOUR_LOCAL_FOLDER>:/var/ton-work -it ghcr.io/ton-community/ton-docker-ctrl:latest
-
-
-## Install and start MyTonCtrl from sources:
-
-1. Clone the last version of the repository
-```bash
-git clone https://github.com/ton-community/ton-docker-ctrl.git
+docker run -d --name ton-node -v <YOUR_LOCAL_FOLDER>:/var/ton-work -it ghcr.io/ton-blockchain/ton-docker-ctrl:latest
 ```
-2. Go to directory
+
+## Installing and starting MyTonCtrl from source
+
+If you prefer to install from source, just follow these easy steps:
+
+1. Clone the repository with the latest version:
+
+```bash
+git clone https://github.com/ton-blockchain/ton-docker-ctrl.git
+```
+
+2. Change into the project directory:
+
 ```bash
 cd ./ton-docker-ctrl
 ```
-3. Indicate the necessary values in the .env file
+
+3. Open the `.env` file and make any necessary updates:
+
 ```bash
 vi .env
 ```
-4. Initiate assembling of docker image. This step involves the compilation of the latest versions of fift, validator-engine, lite-client, etc., as well as the installation and initial setup of MyTonCtrl.
+
+4. Next, build the Docker image, which will set up everything you need—compiling the latest versions of fift, validator-engine, lite-client, and more:
+
 ```bash
 docker compose build ton-node
 ```
-5. Start of MyTonCtrl
+
+5. Finally, start MyTonCtrl:
+
 ```bash
 docker compose up -d
 ```
 
-## Migrate non-Docker fullnode or validator to a dockerized MyTonCtrl v2
+## Migrating a non-Docker full node or validator to a Dockerized MyTonCtrl v2
 
-Specify paths to TON binaries and sources, as well as to TON work directory, but most importantly to MyTonCtrl settings and wallets.
+If you want to transition your existing TON setup to a Dockerized version, specify the paths for your TON binaries, source files, work directory, and MyTonCtrl settings:
 
 ```bash
 docker run -d --name ton-node --restart always \
@@ -70,69 +92,93 @@ docker run -d --name ton-node --restart always \
 -v /usr/bin/ton:/usr/bin/ton \
 -v /usr/src/ton:/usr/src/ton \
 -v /home/<USER>/.local/share:/usr/local/bin \
-ghcr.io/ton-community/ton-docker-ctrl:latest
+ghcr.io/ton-blockchain/ton-docker-ctrl:latest
 ```
 
-## Variables setting:
+## Variable settings
 
-Variables indicated in the file .env
-* **GLOBAL_CONFIG_URL** - Network configs of TON Blockchain (default: [Testnet](https://ton.org/testnet-global.config.json))
-* **MYTONCTRL_VERSION** - Git branch  from which MyTonCtrl assembled
-* **TELEMETRY** - Enabling/Disabling telemetry
-* **MODE** - Set MyTonCtrl in the indicated mode (validator or liteserver)
-* **IGNORE_MINIMAL_REQS** - Ignore hardware requirements
+In the `.env` file, you can configure the following variables:
 
-## Stop and delete MyTonCtrl:
+- ``GLOBAL_CONFIG_URL``: Points to the network configurations for the TON Blockchain (default: [Testnet](https://ton.org/testnet-global.config.json))  
+- ``MYTONCTRL_VERSION``: Indicates the Git branch used for assembling MyTonCtrl  
+- ``TELEMETRY``: Turn telemetry on or off  
+- ``MODE``: Define the mode for MyTonCtrl (either validator or liteserver)  
+- ``IGNORE_MINIMAL_REQS``: Option to bypass hardware requirements  
 
-1. Stop container
+## Stopping and deleting MyTonCtrl
+
+When it’s time to stop or remove your MyTonCtrl setup, here’s how you can do it:
+
+1. Stop the container:
+
 ```bash
 docker compose stop
 ```
-2. Delete container
+
+2. Delete the container:
+
 ```bash
 docker compose down
 ```
-3. Delete container with data
+
+3. To completely remove the container along with its data:
+
 ```bash
 docker compose down --volumes
 ```
-## Connection to  MyTonCtrl:
+
+## Connecting to MyTonCtrl
+
+You can easily connect to MyTonCtrl using this command:
+
 ```bash
 docker compose exec -it ton-node bash -c "mytonctrl"
 ```
-As soon as get connected it is possible to check the status by using the command `status`
+
+Once connected, check the status with:
+
 ```bash
 MyTonCtrl> status
 ```
 ![](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
 
-Reflects the list of accessible commands `help`
+And if you would like to see a list of commands you can use, simply enter:
+
 ```bash
 MyTonCtrl> help
 ```
-## Review of MyTonCtrl logs:
+
+## Reviewing MyTonCtrl logs
+
+Monitoring the situation is simple, as you can easily view the logs:
+
 ```bash
 docker compose logs
 ```
-## Updates of MyTonCtrl and TON:
 
-To get the last versions of TON validator and MyTonCtrl, it is necessary to go to catalogue with  docker-compose.yml and make assembling
+## Updating MyTonCtrl and TON
+
+Updating your version of TON and MyTonCtrl is easy: just navigate to the directory containing your `docker-compose.yml` file and rebuild.
+
 ```bash
 cd ./ton-docker-ctrl
 docker compose build ton-node
 ```
-Once finished, start Docker Compose again
+
+After that, restart Docker Compose:
+
 ```bash
 docker compose up -d
 ```
-When connected to MyTonCtrl, an automatic verification for updates is performed. If any updates are detected, a message is displayed"_MyTonCtrl update available. Please update it with `update` command._"
 
-Update is done using the update command by specifying the necessary branch
+When you’re connected to MyTonCtrl, it will automatically check for updates. If any are available, you’ll see a message saying, “``MyTonCtrl update available. Please update it with the `update` command``”.  To do the update, use the command below and specify the branch you want:
+
 ```bash
 MyTonCtrl> update mytonctrl2
 ```
-## Change of data storage path:
 
-By default TON and Mytoncore works are stored in **/var/lib/docker/volumes/**
+## Changing the data storage path
 
-You can change it in the file docker-compose.yml, by indicating the required route in **volumes** section
+TON and MyTonCore data is stored in ``/var/lib/docker/volumes/``by default. If you wish to change this storage path, update the required route in the ``volumes`` section of your `docker-compose.yml` file to fit your needs. 
+<Feedback />
+

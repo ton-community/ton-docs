@@ -207,7 +207,7 @@ cell get_nft_content(int index, cell individual_nft_content) method_id {
 
 您可以在页面底部的"Methods"标签中调用get方法。
 
--
+- https://tonviewer.com/EQAWrNGl875lXA6Fff7nIOwTIYuwiJMq0SmtJ5Txhgnz4tXI?section=method
 
 ####
 
@@ -220,7 +220,7 @@ cell get_nft_content(int index, cell individual_nft_content) method_id {
 我们将使用以下Javascript库和工具来提供以下示例：
 
 - [ton](https://github.com/ton-core/ton)库
--
+- [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript) SDK
 
 假设有一个合约，其中有以下get方法：
 
@@ -235,7 +235,8 @@ cell get_nft_content(int index, cell individual_nft_content) method_id {
 下面的代码片段可以用来在已知地址的某个合约上调用这个get方法：
 
 ```ts
-import { Address, TonClient } from 'ton';
+import { TonClient } from '@ton/ton';
+import { Address } from '@ton/core';
 
 async function main() {
     // Create Client

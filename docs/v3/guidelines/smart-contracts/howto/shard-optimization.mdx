@@ -1,34 +1,39 @@
-# Shard Optimizations on TON
+import Feedback from '@site/src/components/Feedback';
 
-## Architecture Basics
-TON is designed to process myriads of transactions in parallel. This capability is built on the [infinite sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm), which means that once the load on a group of validators approaches their throughput limit, it is split (sharded). Two groups of validators then process this load independently and in parallel. These splits occur deterministically, and whether a transaction is processed by a specific group depends on the contract address associated with the transaction. Addresses that are close to each other (sharing the same prefix) will be processed in the same shard.
+# Shard optimizations on TON
 
-When a message is sent from one contract to another, there are two possibilities: either both contracts reside in the same shard, or they are in different shards. In the former case, the current group already has all necessary data and can process the message immediately. In the latter case, the message must be routed from one group to another. To avoid message loss or double-processing, proper accounting is needed. This is done by registering a queue of outgoing messages from the sender's shard in a masterchain block, and then the receiver's shard must explicitly confirm that it has processed this queue. Such overhead makes cross-shard message delivery slower; there needs to be at least one masterchain block between the block where the message was sent and the block where it was consumed. This delay is usually about 12-13 seconds.
+## Architecture basics
 
-Since transactions on one account are always processed in one shard, the transactions per second (TPS) speed for a single account is limited. This means that when developing an architecture for a new mass-scale protocol, you should try to avoid central points. Additionally, if a chain of transactions follows the same route, it will not be processed faster due to sharding: the TPS limit on each contract in the chain will be the same, but due to delivery latency, the overall chain processing time will be higher.
+TON processes countless transactions in parallel. This capability relies on the infinite sharding paradigm. When the load on a group of validators approaches its throughput limit, the system splits (shards) the group. Two groups of validators then independently and in parallel process this load. The system deterministically performs these splits, and the contract address associated with the transaction determines which group processes it. The system processes addresses close to each other (sharing the same prefix) in the same shard.TON processes countless transactions in parallel. This capability relies on the [infinite sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm). When the load on a group of validators approaches its throughput limit, the system splits (shards) the group. Two groups of validators then independently and in parallel process this load. The system deterministically performs these splits, and the contract address associated with the transaction determines which group processes it. The system processes addresses close to each other (sharing the same prefix) in the same shard.
 
-In a mass-scale system, the trade-off between latency and throughput becomes the point that distinguishes good protocols from great ones.
+When one contract sends a message to another, two scenarios can occur: either both contracts reside in the same shard or in different shards. In the first scenario, the current group already holds all the necessary data and can process the message immediately. In the second scenario, the system must route the message from one group to another. To prevent message loss or double-processing, the system requires proper accounting. It achieves this by registering a queue of outgoing messages from the sender's shard in a MasterChain block. The receiver's shard must explicitly confirm that it has processed this queue. This overhead slows down cross-shard message delivery, as the system requires at least one MasterChain block between the block where the message was sent and the block where it was consumed. Typically, this delay lasts about 12-13 seconds.
 
-## To Shard or Not to Shard
+Since the system processes all transactions for a single account within one shard, the transactions per second (TPS) speed for that account becomes limited. This limitation means that when designing an architecture for a new mass-scale protocol, you should aim to avoid central points. Furthermore, if a chain of transactions follows the same route, sharding will not speed up its processing. Each contract in the chain will face the same TPS limit, and delivery latency will increase the overall chain processing time.
 
-To improve user experience and processing time, protocols need to understand which parts of their system can be processed in parallel and thus should be sharded to improve throughput, and which parts are strictly sequential and thus will experience lower latency if placed in one shard.
+In a mass-scale system, the trade-off between latency and throughput becomes the key factor separating good and great protocols.
 
-A great example of throughput optimization is with Jettons. Since transfers from A to B and C to D do not rely on each other, they can be processed in parallel. By spreading all jetton-wallets randomly and uniformly across the address space, we can achieve perfect distribution of the load across the blockchain and attain throughput of hundreds of transfers per second (thousands in the future) with appropriate latency.
+## To shard or not to shard
 
-Conversely, if another smart contract that deals with jettons, let's say contract A, does something when it receives jetton X (and A's jetton-wallet contract is B), placing contract A and its wallet B in different shards will not increase throughput. Indeed, each incoming transfer will go through the same chain of addresses, and each address will serve as a bottleneck. In this scenario, it is expedient to improve latency by placing A and B in the same shard, thus decreasing the overall chain time.
+To enhance user experience and reduce processing time, protocols must identify which parts of their system can process transactions in parallel and benefit from sharding to improve throughput. They must also determine which parts are strictly sequential and will achieve lower latency if placed in the same shard.
 
-## Practical Conclusion for Smart Contract Developers
-If you have a single smart contract that executes business logic, consider deploying multiple such contracts to enjoy the parallelism of TON. If this cannot be done and your smart contract interacts with a predefined set of other smart contracts (let's say jetton-wallets), consider placing them in the same shard. This often can be done offchain (by brute-forcing a specific contract address so that all desired jetton-wallets have neighboring addresses), and sometimes onchain brute-force is acceptable too.
+A prime example of throughput optimization involves Jettons. Since transfers from A to B and C to D operate independently, the system can process them in parallel. By distributing all jetton wallets randomly and uniformly across the address space, the system achieves a balanced load distribution across the blockchain, enabling throughput of hundreds of transfers per second (and potentially thousands in the future) with acceptable latency.
 
-Upcoming improvements in node and network performance are expected to increase one shard's throughput and reduce delivery latency; however, they will be accompanied by an increase in the number of users. As more users join, shard optimization will become increasingly important. Eventually, it will be a deal-breaker for mass applications: users will choose the most convenient application for them, thus the application with lower latency. So, don't hesitate to shard-optimize your application counting on overall network improvement. Do it now! It might even be more important than gas optimization in many cases.
+On the other hand, consider a smart contract, contract A, that interacts with jettons. Suppose contract A performs an action when it receives jetton X, and its associated jetton wallet is contract B. Placing contract A and contract B in different shards will not increase throughput. Instead, each incoming transfer will follow the same chain of addresses, creating bottlenecks at each step. Placing contracts A and B in the same shard improves latency, reducing the overall chain processing time.
 
-## Practical Conclusion for Services
+## Practical conclusion for smart contract developers
+
+If you rely on a single smart contract to execute business logic, consider deploying multiple instances of that contract to leverage TON’s parallelism. If this approach isn’t feasible and your smart contract interacts with a predefined set of other contracts (such as jetton wallets), aim to place them in the same shard. You can often achieve this off-chain by brute-forcing specific contract addresses to ensure all desired jetton wallets have neighboring addresses. In some cases, onchain brute-forcing is also acceptable.
+
+Upcoming node and network performance improvements will likely boost the throughput of individual shards and reduce delivery latency. However, these advancements will coincide with a growing number of users. As more users join the network, shard optimization will become increasingly critical. Eventually, it will determine the success of mass-scale applications: users will naturally prefer the most convenient option, meaning the application with lower latency. Therefore, don’t delay shard-optimizing your application in anticipation of overall network improvements. Act now! In many cases, shard optimization may even outweigh gas optimization in importance.
+
+## Practical conclusion for services
+
 ### Deposits
-If you expect deposits at a rate higher than, say, 30 transfers per second, it is advisable to have multiple addresses, so you can accept them in parallel and enjoy high throughput. If you know the address from which a user will deposit, for instance, through a transaction initiated via TON Connect, choose the closest deposit address to the user's wallet address. Ready-to-use Typescript code for choosing the closest address could look like this:
 
-``` typescript
+If you expect deposits at a rate exceeding, for example, 30 transfers per second, you should use multiple addresses to accept them in parallel and achieve high throughput. If you know the user’s deposit address — for instance, through a transaction initiated via TON Connect - select the deposit address closest to the user’s wallet address. Below is the ready-to-use TypeScript code for choosing the closest address:
 
-import { Address } from '@ton/ton';
+```typescript
+import { Address } from "@ton/ton";
 
 function findMatchingBits (a: number, b: number, start_from: number) {
     let bitPos    = start_from;
@@ -39,31 +44,31 @@ function findMatchingBits (a: number, b: number, start_from: number) {
         const shift    = 8 - bitCount;
         if(((a >> shift) & mask) == ((b >> shift) & mask)) {
             bitPos++;
-        }
+ }
         else {
             keepGoing = false;
-        }
-    } while(keepGoing && bitPos < 7);
+ }
+ } while(keepGoing && bitPos < 7);
 
     return bitPos;
 }
 
 function chooseAddress(user: Address, contracts: Address[]) {
-    const maxBytes = 32;
-    let byteIdx = 0;
-    let bitIdx  = 0;
-    let bestMatch: Address | undefined;
+  const maxBytes = 32;
+  let byteIdx = 0;
+  let bitIdx = 0;
+  let bestMatch: Address | undefined;
 
     if(user.workChain !== 0) {
         throw new TypeError(`Only basechain user address allowed:${user}`);
-    }
+ }
     for(let testContract of contracts) {
         if(testContract.workChain !== 0) {
             throw new TypeError(`Only basechain deposit address allowed:${testContract}`);
-        }
+ }
         if(byteIdx >= maxBytes) {
             break;
-        }
+ }
         if(byteIdx == 0 || testContract.hash.subarray(0, byteIdx).equals(user.hash.subarray(0, byteIdx))) {
             let keepGoing  = true;
             do {
@@ -73,8 +78,8 @@ function chooseAddress(user: Address, contracts: Address[]) {
                     bitIdx = 0;
                     if(byteIdx == maxBytes) {
                         break;
-                    }
-                }
+ }
+ }
                 else {
                     keepGoing = false;
                     if(bitIdx < 7) {
@@ -82,79 +87,90 @@ function chooseAddress(user: Address, contracts: Address[]) {
                         if(resIdx > bitIdx) {
                             bitIdx = resIdx;
                             bestMatch = testContract;
-                        }
-                    }
-                }
-            } while(keepGoing);
-        }
-    }
+ }
+ }
+ }
+ } while(keepGoing);
+ }
+ }
     return {
         match: bestMatch,
         prefixLength: byteIdx * 8 + bitIdx
-    }
+ }
 }
 ```
 
-If you expect deposits of jettons, in addition to creating multiple deposit addresses, it is advisable to shard-optimize these addresses: choose such addresses that each deposit-address is in the same shard as its jetton-wallet. A generator for such addresses can be found [here](https://github.com/Trinketer22/turbo-wallet). Choosing the closest address to the user will also be expedient.
+If you expect jetton deposits, you should not only create multiple deposit addresses but also shard-optimize them. Ensure each deposit address resides in the same shard as its corresponding jetton wallet. You can use a generator for such addresses, available [here](https://github.com/Trinketer22/turbo-wallet). Additionally, selecting the deposit address closest to the user’s wallet address will further improve efficiency.
 
 ### Withdrawals
-The same applies to withdrawals; if you need to send a high number of transfers per second, it is advisable to have multiple sending addresses and shard-optimize them with jetton-wallets if necessary.
+
+The same applies to withdrawals; if you need to send a large number of transfers per second, it is advisable to have multiple sending addresses and shard-optimize them with jetton wallets if necessary.
 
 ## Shard optimizations 101
 
-### Explain shards like i'm from web 2
-TON blockchain as any other blockchain is a network, so it makes sense to try to explain it in a web2 (ipv4) networking terms.
+### Explain shards like I'm from web 2
+
+Like any other blockchain, the TON blockchain is a network, so it makes sense to try to explain it in web2 (IPv4) networking terms.
 
 #### Endpoints
-In general networking the endpoint is a pysical device, in blockchain endpoint is a smart contract.
+
+In general networking, the endpoint is a physical device; in blockchain, the endpoint is a smart contract.
 
 #### Shards
-In that logic, shard is nothing more than a subnet. Only difference from that perspective is that ipv4 has 32 bit addressing scheme and TON has 256 bit.
-So, contract address shard prefix is a part of a contract address that identifies the group of validators that will compute it's incomming message result.
-From networking perspective, it's clear that request on the same network segment will get to processing faster than the one that is routed elsewhere, right?
-It's kind of like one uses CDN to host content closer to the end users, in TON we deploy contract closer to the end users.
 
-If load on the shard exceeds [certain level](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#algorithm-for-deciding-whether-to-split-or-merge) shard splits. And the goal is to provide dedicated computational resources to the contract under load and isolate it's impact on the whole network.
-Current maximum shard prefix length is just 4 bits, so blockchain can split in 16 shards max from prefix 0 to 15.
+In this analogy, a shard functions like a subnet. The key difference lies in the addressing scheme: IPv4 uses a 32-bit system, while TON employs a 256-bit one.  
+The shard prefix of a contract address identifies the group of validators responsible for computing the results of its incoming messages. From a networking perspective, a request within the same network segment processes faster than one routed elsewhere. This principle resembles using a CDN to host content closer to end users; in TON, we deploy contracts closer to the users.
+
+When the load on a shard surpasses a [certain threshold](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#algorithm-for-deciding-whether-to-split-or-merge), the system splits the shard. This split allocates dedicated computational resources to the overloaded contract and isolates its impact on the broader network. Currently, the maximum shard prefix length is 4 bits, allowing the blockchain to split into a maximum of 16 shards, ranging from prefix 0 to 15.
+
 
 ### Problems during shard optimizations
 
-Let's get more practical
+Let's get more practical.
 
-#### Check if two addresses belong to same shard
-Since we know that shard prefix is max 4 bits, code snippet for it, could look like this:
-``` typescript
+#### Check if two addresses belong to the same shard
+
+Since we know that the shard prefix is a maximum of 4 bits, a code snippet for it could look like this:
+
+```typescript
 import { Address } from '@ton/core';
 const addressA = Address.parse(...);
 const addressB = Address.parse(...);
 
-if((addressA.hash[0] >> 4) == (addressb.hash[0] >> 4)) {
+if((addressA.hash[0] >> 4) == (addressB.hash[0] >> 4)) {
   console.log("Same shard");
 } else {
   console.log("Nope");
 }
 ```
-From the human perspective easiest way to check the address shard is to look at the address [raw form](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses#raw-address).
-One could use [address page](https://ton.org/address/) for it.
-Let's test in on the USDT address for example:`EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs`.
-You will see `0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe` as a raw representation and the first 4 bits is essentially first hexadecimal symbol - `b`.
-Now we know, that USDT minter is located in shard `b`(hex) or `11`(decimal) if you will.
 
-### How to deploy contract to a certain shard
-In order to understand how this works, one should understand how contract address [depends](/v3/documentation/smart-contracts/addresses#account-id) on it's code and data.
-Essentially it's a SHA256 has of code and data at deployment time.
-Knowing that, the only way to deploy contract with the same code in a different shard is to manipulate initial data.
-Data field, that is used to manipulate resulting contract address is called *nonce*.
-Any field, that is either safe to update after deployment, or does not directly impact contract execution can be used for such purposes.
-One of very first know contracts, that used this principle is [vanity contract](https://github.com/ton-community/vanity-contract).
-It has `salt` data field, the only purpose of which is to *brute-force* the value of it, that results in the desired address pattern.
-Putting the contract into specific shard is done in exactly same way, except the prefix one needs to match is way shorter.
-One of the simplest examples to start from would be the wallet contract.
-- [Wallet creation for different shard](/v3/guidelines/dapps/asset-processing/payments-processing/#wallet-creation-for-different-shards) article illustrates case where public key is used as nonce to put wallet in a specific shard.
-- The other examples is [turbo-wallet](https://github.com/Trinketer22/turbo-wallet/blob/d239c1a1ac31c7f5545c2ef3ddc909d6cbdafe24/src/lib/contracts/HighloadWalletV3.ts#L44) using subwalletId for [same](https://github.com/Trinketer22/turbo-wallet/blob/d239c1a1ac31c7f5545c2ef3ddc909d6cbdafe24/src/lib/turboWallet.ts#L80) purposes.
-You can pretty quickly extend [ShardedContract](https://github.com/Trinketer22/turbo-wallet/blob/main/src/lib/ShardedContract.ts) interface using your contract constructor to make it *sharded* too.
-## Mass Jetton Distribution solutions
-If you need to distribute jettons among tens/hundreds of thousands or millions of users, check this [post](/v3/guidelines/dapps/asset-processing/mintless-jettons). We suggest you consider existing battle-tested services. A few are deeply optimized and will not only be shard-optimized but also cheaper than handmade solutions:
-- **Mintless Jettons:** When you need to distribute jettons during a Token Generation Event (TGE), you can allow users to claim a predefined airdrop directly from the jetton-wallets contract. It is cheap, does not require an additional transaction, and is available on demand (only users who need to spend jettons now will claim them). [LINK]
-- **Tonapi Solution for Jetton Mass Sending:** Allows for the distribution of existing jettons via direct sending to user wallets. Battle-tested by Notcoin and DOGS (a few million transfers each), optimized to decrease latency, throughput, and costs. [Mass jetton sending](https://docs.tonconsole.com/tonconsole/jettons/mass-sending)
-- **TokenTable Solution for Decentralized Claim:** Allows users to claim jettons from specific claim transactions (users pay for fees). Battle-tested by Avacoin and DOGS (a few million transfers), optimized to increase throughput and costs. [Introduction](https://docs.tokentable.xyz/for-tvm-developers/introduction)
+From the human perspective, the easiest way to check the address shard is to look at the address [raw form](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses#raw-address).
+One could use the [address page](https://ton.org/address/) for it.
+Let's test it on the USDT address, for example: `EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs`.
+You will see `0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe` as a raw representation, and the first 4 bits are essentially the first hexadecimal symbol - `b`.
+Now we know that the USDT minter is located in shard `b` (hex) or `11` (decimal).
+
+### How to deploy a contract to a specific shard
+
+To understand how this works, you must first grasp how a contract address [depends](/v3/documentation/smart-contracts/addresses#account-id) on its code and data. Essentially, the system generates the address by computing a SHA256 hash of the contract’s code and data at deployment time.  
+
+Given this, the only way to deploy a contract with the same code in a different shard is to manipulate its initial data. The data field influencing the resulting contract address is called a _nonce_. You can use any field that is either safe to update after deployment or does not directly affect contract execution for this purpose.  
+
+One of the earliest examples of this principle in action is the [vanity contract](https://github.com/ton-community/vanity-contract). It includes a `salt` data field specifically designed to _brute-force_ a value that produces the desired address pattern.  
+
+Placing a contract into a specific shard follows the same approach, except the prefix you need to match is much shorter. A simple starting point for this is the wallet contract.  
+
+- The [Wallet creation for different shard](/v3/guidelines/dapps/asset-processing/payments-processing/#wallet-creation-for-different-shards) article illustrates the case where the public key is used as a nonce to put the wallet in a specific shard.
+- The other example is [turbo-wallet](https://github.com/Trinketer22/turbo-wallet/blob/d239c1a1ac31c7f5545c2ef3ddc909d6cbdafe24/src/lib/contracts/HighloadWalletV3.ts#L44) using subwalletId for the [same](https://github.com/Trinketer22/turbo-wallet/blob/d239c1a1ac31c7f5545c2ef3ddc909d6cbdafe24/src/lib/turboWallet.ts#L80) purposes.
+ You can pretty quickly extend the [ShardedContract](https://github.com/Trinketer22/turbo-wallet/blob/main/src/lib/ShardedContract.ts) interface using your contract constructor to make it _sharded_ too.
+
+## Mass jetton distribution solutions
+
+If you need to distribute jettons to tens or hundreds of thousands - or even millions - of users, refer to this [post](/v3/guidelines/dapps/asset-processing/mintless-jettons). We recommend leveraging existing, battle-tested services. Several of these solutions are deeply optimized, offering shard-optimized performance and lower costs compared to custom-built alternatives:
+
+- **Mintless Jettons:** During a Token Generation Event (TGE), you can enable users to claim a predefined airdrop directly from the jetton wallet contract. This approach is cost-effective, eliminates the need for additional transactions, and operates on-demand (only users ready to spend jettons will claim them). [LINK]
+- **Tonapi Solution for Jetton Mass Sending:** This solution distributes existing jettons by sending them directly to user wallets. Proven by Notcoin and DOGS (handling millions of transfers each), it optimizes latency, throughput, and costs. [Mass jetton sending](https://docs.tonconsole.com/tonconsole/jettons/mass-sending)
+- **TokenTable Solution for Decentralized Claim:** This approach lets users claim jettons from specific claim transactions (users cover the fees). Tested by Avacoin and DOGS (millions of transfers), it maximizes throughput while managing costs. [Introduction](https://docs.tokentable.xyz/for-tvm-developers/introduction)
+
+<Feedback />
+

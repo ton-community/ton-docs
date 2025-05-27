@@ -1,0 +1,95 @@
+import Feedback from "@site/src/components/Feedback";
+import Button from '@site/src/components/button'
+
+# Setup development environment
+
+> **Summary:** In the previous steps, we learned the concept of a smart contract and basic ways of interacting with TON Blockchain through **wallet apps** and **explorers**.
+
+This guide covers the basic steps of setting up your smart contract development environment using **`Blueprint`** and creating a basic project template.
+
+## Prerequisites
+
+- Basic programming skills.
+- Familiarity with the command-line interface.
+
+## Setup development environment
+
+For this guide, we will rely on the [Blueprint](https://github.com/ton-org/blueprint/) and [Node.js](https://nodejs.org/en)/TypeScript stack for writing wrappers, tests, and deployment scripts for your smart contract, as it provides the easiest, ready-to-use environment for smart contract development.
+
+:::info
+Using native tools and language-dependent SDKs for smart contract development is covered in more advanced sections here:
+- [Compile and build smart contracts on TON](/v3/documentation/archive/compile#ton-compiler/).
+- [Creating state init for deployment](/v3/guidelines/smart-contracts/howto/wallet#creating-the-state-init-for-deployment/).
+:::
+
+### Step 1: install Node.js
+
+First, visit the [installation page](https://nodejs.org/en/download) and execute the download commands in `PowerShell` or `Bash` corresponding to your operating system (Windows/Linux).
+
+Check that `npm` and `node` are installed by executing the following command:
+
+```bash
+npm -v
+node -v
+```
+
+### Step 2: choose a smart contract development language
+
+During the guide, we provide examples in `FunC`, `Tolk`, and `Tact`. You can choose any of them and even combine smart contracts in different languages. To proceed through the guide, there is no need for a deep understanding of the chosen language—basic programming skills will be enough.
+
+:::info
+You can find a brief overview of the languages here: [Programming languages](/v3/documentation/smart-contracts/overview#programming-languages/)
+:::
+
+### Step 3: set up Blueprint
+
+Change the directory to the parent folder of your future project and run the following command:
+
+```bash
+npm create ton@latest
+```
+
+This will run an interactive script to create the project template. You can enter anything you want, but if you want to follow the same paths as in this guide, choose the following:
+
+1. **Project name**: `Example`  
+2. **First contract name**: `HelloWorld`  
+3. **Project template**: a **simple counter contract** in `FunC`, `Tolk` or `Tact`
+
+Finally, change your current directory to the generated project template folder and install all required dependencies:
+
+```bash
+cd ./Example
+npm install
+```
+
+### Step 4 (optional): IDE and editor support
+
+The TON community has developed plugins that provide syntax support for several IDEs and code editors. You can find them here: [Plugin List](https://docs.ton.org/v3/documentation/smart-contracts/getting-started/ide-plugins/).
+
+Also, consider installing plugins that support **JavaScript/TypeScript** tools for your preferred IDE or code editor, specifically `Jest`, for debugging smart contract tests.
+
+
+
+## Choose the programming language
+
+Now that your environment is set up choose a programming language to get started:
+
+- **FunC or Tolk**: estimated time to learn is 25 min for each.
+- **Tact**: estimated time to learn is 15 min.
+
+
+<Button href="/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/blueprint-sdk-overview" colorType="primary" sizeType={'sm'}>
+  Start with FunC or Tolk
+
+</Button>
+
+
+<Button href="/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-blueprint-sdk-overview" colorType={'secondary'} sizeType={'sm'}>
+
+  Start with Tact
+
+</Button>
+
+
+
+<Feedback />

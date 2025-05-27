@@ -1,25 +1,27 @@
-# Mint your first Jetton
+import Feedback from '@site/src/components/Feedback';
+
+# Mint your first jetton
 
 Welcome, dev! It's great to have you here. 👋
 
-In this article, we'll tell you about creating your first fungible token (Jetton) on TON.
-
-To mint Jettons we will be using the [TON Minter](https://minter.ton.org/) / [TON Minter testnet](https://minter.ton.org/?testnet=true) browser service.
+You'll learn how to create your first token on TON using TON Minter.
+To mint a token, we will use the [TON Minter](https://minter.ton.org/).
 
 ## 📖 What you'll learn
 
-In this article, you'll learn how to:
+By the end of this tutorial, you'll be able to:
 
-- deploy a Jetton using your browser
+- deploy a token using TON Minter
 - customize your token
-- manage and use your token
-- edit the token parameters
+- manage and use the token
+- edit token parameters
 
 
 ## 📌 Prepare before you start
+Before you start, make sure you have the following:
 
-1. First you need to have the [Tonhub](https://ton.app/wallets/tonhub-wallet) / [Tonkeeper](https://ton.app/wallets/tonkeeper) wallet or any other supported on the service.
-2. You must have more than 0.25 Toncoin on your balance plus additional funds to cover the blockchain commission.
+1. A [Tonhub](https://ton.app/wallets/tonhub-wallet) / [Tonkeeper](https://ton.app/wallets/tonkeeper) wallet or any other TON-compatible wallet.
+At least 0.25 Toncoin in your wallet (plus extra for blockchain fees)
 
 :::tip Starter tip
  ~0.5 TON should be enough for this tutorial.
@@ -32,11 +34,11 @@ Use your web browser to open the service [TON Minter](https://minter.ton.org/) /
 
 ![image](/img/tutorials/jetton/jetton-main-page.png)
 
-### Deploy a Jetton using your browser
+### Deploy a jetton using your browser
 
-#### Connect Wallet
+#### Connect wallet
 
-Click the `Connect Wallet` button to connect your [Tonhub](https://ton.app/wallets/tonhub-wallet) wallet or another wallet from the ones below.
+Open [TON Minter](https://minter.ton.org/) or [TON Minter testnet](https://minter.ton.org/?testnet=true) in your web browser. Click "Connect Wallet" and link your Tonhub or another supported wallet.
 
 #### ![image](/img/tutorials/jetton/jetton-connect-wallet.png)
 
@@ -53,12 +55,12 @@ Click the `Connect Wallet` button to connect your [Tonhub](https://ton.app/walle
 
 ![image](/img/tutorials/jetton/jetton-token-logo.png)
 
-If you want to have an attractive Jetton token, you need to host a beautiful logo somewhere. For example:
+If you want your token to stand out, you’ll need to host an attractive logo online.
 
 * https://bitcoincash-example.github.io/website/logo.png
 
 :::info
- You can easily find out  about url placement of the logo in the [repository](https://github.com/ton-blockchain/minter-contract#jetton-metadata-field-best-practices) in paragraph "Where is this metadata stored".
+ You can easily find out about the URL placement of the logo in the [repository](https://github.com/ton-blockchain/minter-contract#jetton-metadata-field-best-practices) in the 'Where is this metadata stored' paragraph.
 
  * On-chain.
  * Off-chain IPFS.
@@ -68,31 +70,32 @@ If you want to have an attractive Jetton token, you need to host a beautiful log
 #### How to create your logo URL?
 
  1. Prepare a **256x256** PNG image of the token logo with a transparent background.
- 2. Get a link to your logo. A good solution is [GitHub Pages](https://pages.github.com/). Let's use them.
+ 2. Host it online using, for example, [GitHub Pages](https://pages.github.com/).
  3. [Create a new public repository](https://docs.github.com/en/get-started/quickstart/create-a-repo) with the name `website`.
  4. Upload your prepared image to git and enable `GitHub Pages`.
     1. [Add GitHub Pages to your repository](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-github-pages-site).
     2. [Upload your image and get a link](https://docs.github.com/en/repositories/working-with-files/managing-files/adding-a-file-to-a-repository).
- 5. If you have your own domain, then it would be good to use `.org` instead of `github.io`.
- 
+ 5. If possible, purchase a custom domain for your project. Use any domain seller like [Google Domains](https://domains.google/) or [GoDaddy](https://www.godaddy.com/). Then, connect your custom domain to the repository in the previous step, you can follow the instructions [here](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site).
+ 6. If you have a custom domain, your image URL should be `https://bitcoincash.org/logo.png` instead of the `github.io` one. This prevents dependency on GitHub and gives you full control over hosting.
 
- ## 💸 Send Jettons
+
+ ## 💸 Send jettons
 On the right side of the screen, you can **send tokens** to multi-currency wallets such as [Tonkeeper](https://tonkeeper.com/) or [Tonhub](https://ton.app/wallets/tonhub-wallet).
 
 ![image](/img/tutorials/jetton/jetton-send-tokens.png)
 
 :::info
- You always also **burn** your Jettons to reduce their amount.
+ You also can **burn** your tokens to reduce their amount.
  
  ![image](/img/tutorials/jetton/jetton-burn-tokens.png)
 :::
 
- ### 📱 Send tokens from phone using Tonkeeper
+ ### 📱 Send tokens from your phone using Tonkeeper
 
 Prerequisites:
 
-1. You must already have tokens on your balance to send them.
-2. There must be at least 0.1 Toncoin to pay transaction fees.
+1. You must have Jettons in your wallet.
+2. You need at least 0.1 Toncoin to cover transaction fees.
 
 #### Step-by-step guide
 
@@ -103,7 +106,7 @@ Then, go to **your token**, set the **amount** to send, and enter the **recipien
 
  ## 📚 Using the token on the site
 
-You can access the **search field** at the top of the site by entering the token's address to manage it as the owner.
+You can manage your token by entering its address in the **search bar** at the top of the TON Minter site.
  
 :::info
  The address can be found on the right side if you are already in the owner panel, or you can find the token address when receiving an airdrop.
@@ -114,45 +117,45 @@ You can access the **search field** at the top of the site by entering the token
 
  ## ✏️ Jetton (token) customization
 
-With the [FunC](/v3/documentation/smart-contracts/func/overview) language you can change the behavior of the token in your favor.
+With the [FunC](/v3/documentation/smart-contracts/func/overview) language, you can change a token's behavior in your favor.
 
-To make any changes, begin here:
+To make any changes, start here:
 
 * https://github.com/ton-blockchain/minter-contract
 
 ### Step-by-step guide for developers
 
- 1. Make sure you have all "Dependencies and Requirements" from the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) repo.
+ 1. Ensure you have all dependencies from the [tonstarter-contracts](https://github.com/ton-defi-org/tonstarter-contracts) repository.
  2. Clone the [minter-contract repository](https://github.com/ton-blockchain/minter-contract) and rename the project. 
- 3. To install you need to open a terminal at the root and run:
+ 3. To install, open a terminal at the root and run:
 
  ```bash npm2yarn
  npm install
  ```
 
- 4. Edit the original smart contract files same way in the root terminal. All contract files are in `contracts/*.fc`
+ 4. Edit the smart contract files. All contract files are in `contracts/*.fc`
 
  5. Build a project by using: 
 
  ```bash npm2yarn
  npm run build
  ```
- The build result will be describes the process of creating the necessary files, as well as the search for smart contracts. 
+ The result will describe the process of creating the necessary files and the search for smart contracts. 
  
  :::info
  Read the console, there are a lot of tips!
  :::
     
- 6. You can test your changes by using:
+ 6. You can test your changes using:
 
  ```bash npm2yarn
  npm run test
  ```
 
- 7. Edit the **name** and other metadata of the token in `build/jetton-minter.deploy.ts` by changing JettonParams object.
+ 7. Edit the **name** and other metadata of the token in `build/jetton-minter.deploy.ts` by changing the JettonParams object.
 
  ```js
-// This is example data - Modify these params for your own jetton!
+// This is example data - Modify these parameters for your jetton!
 // - Data is stored on-chain (except for the image data itself)
 // - Owner should usually be the deploying wallet's address.
    
@@ -160,12 +163,12 @@ To make any changes, begin here:
   owner: Address.parse("EQD4gS-Nj2Gjr2FYtg-s3fXUvjzKbzHGZ5_1Xe_V0-GCp0p2"),
   name: "MyJetton",
   symbol: "JET1",
-  image: "https://www.linkpicture.com/q/download_183.png", // Image url
+  image: "https://www.linkpicture.com/q/download_183.png", // Image URL
   description: "My jetton",
 };
  ```
 
- 8. To deploy a token use the following command:
+ 8. To deploy a token, use the following command:
 
  ```bash npm2yarn
  npm run deploy
@@ -187,10 +190,10 @@ To make any changes, begin here:
 
     * Found root contract 'build/jetton-minter.deploy.ts - let's deploy it':
      - Based on your init code+data, your new contract address is: YOUR-ADDRESS
-     - Let's deploy the contract on-chain..
+     - Let's deploy the contract on-chain.
      - Deploy transaction sent successfully
      - Block explorer link: https://tonwhales.com/explorer/address/YOUR-ADDRESS
-     - Waiting up to 20 seconds to check if the contract was actually deployed..
+     - Waiting up to 20 seconds to check if the contract was actually deployed.
      - SUCCESS! Contract deployed successfully to address: YOUR-ADDRESS
      - New contract balance is now YOUR-BALANCE TON, make sure it has enough to pay rent
      - Running a post deployment test:
@@ -205,12 +208,17 @@ To make any changes, begin here:
 
 ## What's next?
 
-If you want to go deeper, read this article by Tal Kol:  
+If you want to dive deeper, read this article by Tal Kol:  
 * [How and why to shard your smart contract—studying the anatomy of TON Jettons](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
+
+If you want to learn more about other token-minting solutions, read this article:
+* [History of mass minting on TON](https://blog.ton.org/history-of-mass-minting-on-ton)
 
 
 ## References
 
  - Project: https://github.com/ton-blockchain/minter-contract
- - By Slava ([Telegram @delovoyslava](https://t.me/delovoyslava), [delovoyhomie on GitHub](https://github.com/delovoyhomie))
  - [Jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
+
+<Feedback />
+

@@ -2,16 +2,6 @@
  * @type {import('@docusaurus/plugin-content-docs').SidebarConfig}
  */
 module.exports = [
-  'v3/concepts/dive-into-ton/introduction', // TODO: Change
-  'v3/concepts/glossary',
-  {
-    'type': 'html',
-    'value': '<hr/>',
-  },
-  {
-    'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Dive into TON </small></b></span>',
-  },
   'v3/concepts/dive-into-ton/introduction',
   {
     type: 'category',
@@ -39,21 +29,13 @@ module.exports = [
     type: 'category',
     label: 'Newcomers from Ethereum',
     items: [
-      'v3/concepts/dive-into-ton/go-from-ethereum/difference-of-blockchains',
-      'v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm',
-      'v3/concepts/dive-into-ton/go-from-ethereum/solidity-vs-func',
       'v3/concepts/dive-into-ton/go-from-ethereum/blockchain-services',
-    ]
+      'v3/concepts/dive-into-ton/go-from-ethereum/difference-of-blockchains',
+      'v3/concepts/dive-into-ton/go-from-ethereum/solidity-vs-func',
+      'v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm',
+    ],
   },
   'v3/concepts/educational-resources',
-  {
-    'type': 'html',
-    'value': '<hr/>',
-  },
-  {
-    'type': 'html',
-    'value': '<span class=\'menu__link\'><b><small> Quality Assurance & Outsource </small></b></span>',
-  },
-  'v3/concepts/qa-outsource/auditors',
-  'v3/concepts/qa-outsource/outsource',
+  'v3/concepts/glossary',
+  //'v3/concepts/qa-outsource/auditors'
 ];

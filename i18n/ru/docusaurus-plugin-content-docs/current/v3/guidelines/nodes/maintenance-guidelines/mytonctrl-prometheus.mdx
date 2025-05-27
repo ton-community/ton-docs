@@ -1,0 +1,90 @@
+# Метрики MyTonCtrl Prometheus
+
+:::warning
+Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::
+
+MyTonCtrl можно настроить для предоставления метрик Prometheus для мониторинга и оповещений.
+Это руководство проведет вас через процесс включения метрик Prometheus в MyTonCtrl.
+
+### Метод доставки метрик
+
+В настоящее время MyTonCtrl может отправлять метрики только в Prometheus из соображений безопасности.
+Поэтому его следует использовать с сервисом [Prometheus Pushgateway](https://github.com/prometheus/pushgateway).
+
+## Настройка
+
+:::caution
+Для валидаторов настоятельно рекомендуется запускать Prometheus и Pushgateway на отдельном сервере.
+:::
+
+1. Установите Pushgateway
+
+   Вы можете установить службу Pushgateway, следуя инструкциям в [официальной документации](https://github.com/prometheus/pushgateway?tab=readme-ov-file#run-it).
+   Самый простой способ сделать это — через docker:
+
+   ```bash
+   docker pull prom/pushgateway
+   docker run -d -p 9091:9091 prom/pushgateway
+   ```
+
+2. Настройте Prometheus
+
+   Создайте файл `prometheus.yml`, добавив задание Pushgateway в раздел scrape_configs. Пример файла конфигурации:
+
+   ```yaml
+   global:
+     scrape_interval: 15s
+     evaluation_interval: 15s
+
+   scrape_configs:
+     - job_name: "prometheus"
+       static_configs:
+         - targets: ["localhost:9090"]
+
+     - job_name: "pushgateway"
+       honor_labels: true
+       static_configs:
+         - targets: ["localhost:9091"]  # or "host.docker.internal:9091" if you are using Docker
+   ```
+
+3. Установите Prometheus
+
+   Вы можете установить Prometheus, следуя инструкциям в [официальной документации](https://prometheus.io/docs/prometheus/latest/installation/).
+   Самый простой способ сделать это — через docker:
+
+   ```bash
+   docker volume create prometheus-data
+   docker run -d \
+     --add-host host.docker.internal:host-gateway \
+     -p 9090:9090 \
+     -v ./prometheus.yml:/etc/prometheus/prometheus.yml \
+     -v prometheus-data:/prometheus \
+     prom/prometheus
+   ```
+
+4. Настройте MyTonCtrl
+
+   Включите режим `prometheus` в MyTonCtrl:
+
+   ```bash
+   MyTonCtrl> enable_mode prometheus
+   ```
+
+   Установите URL-адрес Pushgateway:
+
+   ```bash
+   MyTonCtrl> set prometheus_url http://<host>:9091/metrics/job/<jobname>
+   ```
+
+   :::предупреждение
+   Обратите внимание, что очень важно использовать разные имена заданий для разных узлов, если вы хотите отслеживать несколько узлов с помощью одного и того же экземпляра Prometheus.
+   :::
+
+5. Проверьте показатели
+
+   Вы можете проверить, собирает ли Prometheus показатели, открыв веб-интерфейс Prometheus:
+
+   ```bash
+   http://<host>:9090/targets
+   ```

@@ -74,15 +74,15 @@ export function flattenSnakeCell(cell: Cell): Buffer {
 
 应该注意，使用 蛇形格式时在根cell中并不总是需要 `0x00` 字节前缀，就像链下 NFT 内容的情况一样。此外，cell中以字节而非位填充，以简化解析。为了避免在其父cell已经写入后再向下一个子cell添加引用的问题，snake cell是以反向顺序构造的。
 
-## 分块编码
+## 分片编码
 
-分块编码格式使用字典数据结构存储数据，从 chunk_index 到 chunk。分块编码必须使用 `0x01` 字节作为前缀。TL-B 方案：
+分片编码格式使用字典数据结构存储数据，从 chunk_index 到 chunk。分片编码必须使用 `0x01` 字节作为前缀。TL-B 方案：
 
 ```
 chunked_data#_ data:(HashMapE 32 ^(SnakeData ~0)) = ChunkedData;
 ```
 
-以下是使用 TypeScript 解码分块数据的示例：
+以下是使用 TypeScript 解码分片数据的示例：
 
 ```typescript
 interface ChunkDictValue {
@@ -190,7 +190,7 @@ URL 内容（从上面直接引用）:
 
 如果元数据字节字符串以 `0x00` 开始，它表示 NFT 使用链上或半链上格式。
 
-我们的 NFT 元数据存储在一个字典中，其中键是属性名称的 SHA256 哈希，值是以Snake或分块格式存储的数据。
+我们的 NFT 元数据存储在一个字典中，其中键是属性名称的 SHA256 哈希，值是以Snake或分片格式存储的数据。
 
 为了确定正在使用哪种类型的 NFT，开发者需要读取已知的 NFT 属性，例如 `uri`、`name`、`image`、`description` 和 `image_data`。如果元数据中存在 `uri` 字段，则表示半链上布局。在这种情况下，应该下载 uri 字段中指定的链外内容，并与字典值合并。
 

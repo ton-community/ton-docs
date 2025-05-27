@@ -2,51 +2,52 @@
 description: At the end of the tutorial, you will have deployed multisig contract in TON Blockchain.
 ---
 
+import Feedback from '@site/src/components/Feedback';
+
 # Make a simple multisig contract with fift
 
 :::caution advanced level
-This information is **very low-level**. Could be hard to understand for newcomers and designed for advanced people who want to understand [fift](/v3/documentation/smart-contracts/fift/overview). The use of fift is not required in everyday tasks.
+This information is **very low-level**. It could be hard for newcomers and designed for advanced people who want to understand [fift](/v3/documentation/smart-contracts/fift/overview). The use of fift is not required in everyday tasks.
 :::
 
 ## 💡 Overview
 
-This tutorial help you learn how to deploy your multisig contract.  
-Recall, that (n, k)-multisig contract is a multisignature wallet with n private keys holders, which accepts requests to send messages if the request (aka order, query) collects at least k signatures of the holders.
+This tutorial helps you learn how to deploy your multisig contract.  
+Recall that an (n, k)-multisig contract is a multisignature wallet with n private key holders, which accepts requests to send messages if the request (aka order, query) collects at least k holders' signatures.
 
-Based on original multisig contract code and updates by akifoq:
-- [original TON Blockchain multisig-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/multisig-code.fc)
+Based on the original multisig contract code and updates by akifoq:
+
+- [Original TON Blockchain multisig-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/multisig-code.fc)
 - [akifoq/multisig](https://github.com/akifoq/multisig) with fift libraries to work with multisig.
 
 :::tip starter tip
-For anyone new with multisig: [What is Multisig Technology? (video)](https://www.youtube.com/watch?v=yeLqe_gg2u0)
+For anyone new to multisig: [What is Multisig Technology? (video)](https://www.youtube.com/watch?v=yeLqe_gg2u0)
 :::
 
 ## 📖 What you'll learn
 
 - How to create and customize a simple multisig wallet.
-- How to deploy multisig wallet using lite-client.
-- How to sign request and send it in message to the blockchain.
+- How to deploy a multisig wallet using lite-client.
+- How to sign a request and send it in a message to the blockchain.
 
 ## ⚙ Set your environment
 
 Before we begin our journey, check and prepare your environment.
 
-- Install `func`, `fift`, `lite-client` binaries and `fiftlib` from the [Installation](/v3/documentation/archive/precompiled-binaries) section.
-- Clone [repository](https://github.com/akifoq/multisig) and open its directory in CLI.
+- Install `func`, `fift`, `lite-client` binaries, and `fiftlib` from the [Installation](/v3/documentation/archive/precompiled-binaries) section.
+- Clone the [repository](https://github.com/akifoq/multisig) and open its directory in CLI.
 
 ```bash
 git clone https://github.com/akifoq/multisig.git
 cd ~/multisig
-``` 
-
+```
 
 ## 🚀 Let's get started!
 
-
 1. Compile the code to fift.
-2. Prepare multisig owners keys.
+2. Prepare multisig owners' keys.
 3. Deploy your contract.
-4. Interact with deployed multisig wallet in blockchain.
+4. Interact with the deployed multisig wallet in the blockchain.
 
 ### Compile the contract
 
@@ -56,17 +57,17 @@ Compile the contract to Fift with:
 func -o multisig-code.fif -SPA stdlib.fc multisig-code.fc
 ```
 
+### Prepare multisig owners' keys
 
-### Prepare multisig owners keys
-#### Create participants keys
+#### Create participants' keys
 
-To create a key you need to run:
+To create a key, you need to run:
 
 ```cpp
 fift -s new-key.fif $KEY_NAME$
 ```
 
-* Where `KEY_NAME` is the name of the file where the private key will be written.
+- Where `KEY_NAME` is the file name where the private key will be written.
 
 For example:
 
@@ -74,7 +75,7 @@ For example:
 fift -s new-key.fif multisig_key
 ```
 
-We'll receive a file `multisig_key.pk` with private key inside.
+We'll receive a `multisig_key.pk` file with the private key inside.
 
 #### Collect public keys
 
@@ -86,13 +87,13 @@ Public key = Pub5XqPLwPgP8rtryoUDg2sadfuGjkT4DLRaVeIr08lb8CB5HW
 
 Anything after `"Public key = "` needs to be saved somewhere!
 
-Let's store in file `keys.txt`. One Public Key per line, it's important.
+Let's store it in a file called `keys.txt`. It's important to have one public key per line.
 
 ### Deploy your contract
 
 #### Deploy via lite-client
 
-After creating all the keys, you need to collect the public keys into a text file `keys.txt`.
+After creating all the keys, you need to collect the public keys into a text file, `keys.txt`.
 
 For example:
 
@@ -107,11 +108,11 @@ After that, you need to run:
 fift -s new-multisig.fif 0 $WALLET_ID$ wallet $KEYS_COUNT$ ./keys.txt
 ```
 
-* `$WALLET_ID$` - the wallet number assigned for current key. It is recommended to use a unique `$WALLET_ID$` for each new wallet with the same key.
-* `$KEYS_COUNT$` - the number of keys needed for confirmation, usually equal to the number of public keys
+- `$WALLET_ID$` - the wallet number assigned for the current key. It is recommended that each new wallet with the same key use a unique `$WALLET_ID$`.
+- `$KEYS_COUNT$` - the number of keys needed for confirmation, usually equal to the number of public keys.
 
 :::info wallet_id explained
-It's possible to create many wallets with the same keys (Alice key, Bob key). What to do if Alice and Bob already have treasure? That's why `$WALLET_ID$` is crucial here.
+It is possible to create many wallets with the same keys (Alice key, Bob key). What should we do if Alice and Bob already have a treasure? That's why `$WALLET_ID$` is crucial here.
 :::
 
 The script will output something like:
@@ -128,17 +129,17 @@ Bounceable address (for later access): kQBLuyZgCX21xy3V6QhhFQEPD4yFAeC4_vH-MY2d5
 (Saved wallet creating query to file wallet-create.boc)
 ```
 
-:::info 
-If you have "public key must be 48 characters long" error, please make sure your `keys.txt` has unix type word wrap - LF. For example, word wrap can be changed via Sublime text editor.
+:::info
+If you have a "public key must be 48 characters long" error, please make sure your `keys.txt` has a Unix-type word wrap - LF. For example, word wrap can be changed via the Sublime text editor.
 :::
 
 :::tip
-Bounceable address is better to keep - this is the address of the wallet.
+A bounceable address is better to keep - this is the wallet's address.
 :::
 
 #### Activate your contract
 
-You need to send some TON to our newly generated _treasure_. For example 0.5 TON. You can send testnet coins via [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
+You need to send some TON to our newly generated _treasure_. For example, 0.5 TON. You can send testnet coins via [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
 
 After that, you need to run lite-client:
 
@@ -146,19 +147,19 @@ After that, you need to run lite-client:
 lite-client -C global.config.json
 ```
 
-:::info Where get `global.config.json`?
-You can get fresh config file `global.config.json` for [mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json).
+:::info Where to get `global.config.json`?
+You can get a fresh config file `global.config.json` for [mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json).
 :::
 
-After starting lite-client, it's best to run the `time` command in lite-client console to make sure the connection was successful:
+After starting lite-client, it's best to run the `time` command in the lite-client console to make sure the connection was successful:
 
 ```bash
 time
 ```
 
-Okay, lite-client is works!
+Okay, lite-client works!
 
-After you need to deploy the wallet. run the command:
+After that, you need to deploy the wallet. Run the command:
 
 ```
 sendfile ./wallet-create.boc
@@ -166,20 +167,19 @@ sendfile ./wallet-create.boc
 
 After that, the wallet will be ready to work within a minute.
 
-
-### Interact with multisig wallet
+### Interact with a multisig wallet
 
 #### Create a request
 
-First you need to create a message request:
+First, you need to create a message request:
 
 ```cpp
 fift -s create-msg.fif $ADDRESS$ $AMOUNT$ $MESSAGE$
 ```
 
-* `$ADDRESS$` - address where to send coins
-* `$AMOUNT$` - number of coins
-* `$MESSAGE$` - name of file for compiled message.
+- `$ADDRESS$` - address where to send coins.
+- `$AMOUNT$` - number of coins.
+- `$MESSAGE$` - the file name for the compiled message.
 
 For example:
 
@@ -188,35 +188,37 @@ fift -s create-msg.fif EQApAj3rEnJJSxEjEHVKrH3QZgto_MQMOmk8l72azaXlY1zB 0.1 mess
 ```
 
 :::tip
-To add comment for your transaction, use `-C comment` attribute. To get more information, run _create-msg.fif_ file without parameters.
+Use the `-C comment` attribute to add a comment for your transaction. To get more information, run the _create-msg.fif_ file without parameters.
 :::
 
 #### Choose a wallet
 
-Next you need to choose a wallet to send a coins from:
+Next, you need to choose a wallet to send coins from:
 
 ```
 fift -s create-order.fif $WALLET_ID$ $MESSAGE$ -t $AWAIT_TIME$
 ```
+
 Where
-* `$WALLET_ID$` — is an ID of wallet backed by this multisig contract.
-* `$AWAIT_TIME$` — Time in seconds that smart contract will await signs from multisig wallet's owners for request.
-* `$MESSAGE$` — here is a name of message boc-file created on the previous step.
+
+- `$WALLET_ID$` — is an ID of the wallet backed by this multisig contract.
+- `$AWAIT_TIME$` — Time in seconds that the smart contract will await signs from multisig wallet's owners for the request.
+- `$MESSAGE$` — here is the name of the message boc-file created in the previous step.
 
 :::info
-If time equals `$AWAIT_TIME$` passed before the request signs, the request becomes expired. As usual, $AWAIT_TIME$ equals a couple of hours (7200 seconds)
+The request expires if the time equals `$AWAIT_TIME$` passed before the request signs. As usual, `$AWAIT_TIME$` equals a couple of hours (7200 seconds).
 :::
 
 For example:
+
 ```
 fift -s create-order.fif 0 message -t 7200
 ```
 
-
-Ready file will be saved in `order.boc`
+The ready file will be saved in `order.boc`.
 
 :::info
-`order.boc` needs to be shared with key holders, they have to sign it.
+`order.boc` must be shared with key holders; they must sign it.
 :::
 
 #### Sign your part
@@ -227,8 +229,8 @@ To sign, you need to do:
 fift -s add-signature.fif $KEY$ $KEY_INDEX$
 ```
 
-* `$KEY$` - name of the file containing the private key to sign, without extension.
-* `$KEY_INDEX$` - index of the given key in `keys.txt` (zero-based)
+- `$KEY$` - file name containing the private key to sign, without extension.
+- `$KEY_INDEX$` - index of the given key in `keys.txt` (zero-based).
 
 For example, for our `multisig_key.pk` file:
 
@@ -239,17 +241,20 @@ fift -s add-signature.fif multisig_key 0
 #### Create a message
 
 After everyone has signed the order, it needs to be turned into a message for the wallet and signed again with the following command:
+
 ```
 fift -s create-external-message.fif wallet $KEY$ $KEY_INDEX$
 ```
-In this case, will be enough only one sign of wallet's owner. The idea is that you can't attack a contract with invalid signatures.
+
+In this case, only one sign of the wallet's owner will be enough. The idea is that you can't attack a contract with invalid signatures.
 
 For example:
+
 ```
 fift -s create-external-message.fif wallet multisig_key 0
 ```
 
-#### Send sign to TON Blockchain
+#### Send sign to TON blockchain
 
 After that, you need to start the light client again:
 
@@ -257,7 +262,7 @@ After that, you need to start the light client again:
 lite-client -C global.config.json
 ```
 
-And after finally, we want to send our sign! Just run:
+And finally, we want to send our sign! Just run:
 
 ```bash
 sendfile wallet-query.boc
@@ -267,6 +272,9 @@ If everyone else signed the request, it will be completed!
 
 You did it, ha-ha! 🚀🚀🚀
 
-## What's next?
+## See also
 
-- [Read more about multisig wallets in TON](https://github.com/akifoq/multisig) from akifoq
+- [Read more about multisig wallets in TON](https://github.com/akifoq/multisig) — _[@akifoq](https://t.me/aqifoq)_
+- [Multisig wallet v2](https://github.com/ton-blockchain/multisig-contract-v2)
+
+<Feedback />

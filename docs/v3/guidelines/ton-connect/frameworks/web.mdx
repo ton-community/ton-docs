@@ -1,13 +1,15 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # TON Connect for JS
 
-This guide will help you integrate TON Connect into your Javascript application for user authentication and transactions.
+This guide will help you integrate TON Connect into your Javascript app for user authentication and transactions.
 
-If you're using React for your DApp, take a look at the [TON Connect UI React SDK](/v3/guidelines/ton-connect/frameworks/react).
+If using React for your DApp, look at the [TON Connect UI React SDK](/v3/guidelines/ton-connect/frameworks/react).
 
-If you're using Vue for your DApp, take a look at the [TON Connect UI Vue SDK](/v3/guidelines/ton-connect/frameworks/vue).
+If you're using Vue for your DApp, look at the [TON Connect UI Vue SDK](/v3/guidelines/ton-connect/frameworks/vue).
 
 
 ## Implementation
@@ -16,7 +18,7 @@ If you're using Vue for your DApp, take a look at the [TON Connect UI Vue SDK](/
 
 <Tabs groupId="Installation">
   <TabItem value="CDN" label="CDN">
-Add the script to the HEAD element of your website:
+Add the script to the `<HEAD>` element of your website:
     <br/>
     <br/>
 
@@ -26,7 +28,7 @@ Add the script to the HEAD element of your website:
 ```
   </TabItem>
   <TabItem value="NPM" label="NPM">
-    To begin the integration of TON Connect into your app, install the @tonconnect/ui package:
+   Install the [@tonconnect/ui](https://www.npmjs.com/package/@tonconnect/ui) package:
 
 ```bash npm2yarn
 npm i @tonconnect/ui
@@ -34,17 +36,18 @@ npm i @tonconnect/ui
   </TabItem>
 </Tabs>
 
-### TON Connect Initiation
+### TON Connect initiation
 
-After installing the package, create a `manifest.json` file for your application. More information on how to create a manifest.json file can be found [here](/v3/guidelines/ton-connect/guidelines/creating-manifest).
+After installing the package, create a `manifest.json` file for your app.
+More information on how to create a `manifest.json` file can be found [here](/v3/guidelines/ton-connect/guidelines/creating-manifest).
 
-Add a button with `ton-connect` id to connect to the wallet:
+Add a button with a `ton-connect` id to connect to the wallet:
 
 ```html
 <div id="ton-connect"></div>
 ```
 
-*After this tag*, add a script for `tonConnectUI` in the `<body>` part of the application page:
+*After this tag*, add a script for `tonConnectUI` in the `<body>` part of the app page:
 
 ```html
 <script>
@@ -55,11 +58,11 @@ Add a button with `ton-connect` id to connect to the wallet:
 </script>
 ```
 
-### Connect to the Wallet
+### Connect to the wallet
 
-The "Connect" button (which is added at `buttonRootId`) automatically handles clicks.
+The `'ton-connect'` button in `buttonRootId` will automatically manage clicks.
 
-But you can open "connect modal" programmatically, e.g. after click on custom button:
+But you can open **connect modal** programmatically, for example, after clicking on the custom button:
 
 ```html
 <script>
@@ -101,18 +104,18 @@ TonConnect UI provides an interface that should be familiar and recognizable to 
 - [TonConnect UI documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
 
 
-## SDK Documentation
+## SDK documentation
 
 - [SDK documentation](https://github.com/ton-connect/sdk/blob/main/packages/ui/README.md)
 - [Latest API documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui.html)
 
 ## Usage
 
-Let's take a look at the example of using the TON Connect UI in the application.
+Let's look at the example of using the TON Connect UI in the app.
 
 ### Sending messages
 
-Here is an example of sending a transaction using the TON Connect UI:
+Here's an example of sending a transaction using the TON Connect UI:
 
 ```js
 import TonConnectUI from '@tonconnect/ui';
@@ -123,7 +126,8 @@ const tonConnectUI = new TonConnectUI({ //connect application
 });
 
 const transaction = {
-    messages: [
+  validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
+  messages: [
         {
             address: "EQABa48hjKzg09hN_HjxOic7r8T1PleIy1dRd8NvZ3922MP0", // destination address
             amount: "20000000" //Toncoin in nanotons
@@ -134,27 +138,32 @@ const transaction = {
 const result = await tonConnectUI.sendTransaction(transaction)
 ```
 
-- Get more examples here: [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages).
+:::tip
+Get more examples on the [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages) page.
+:::
 
-### Understanding Transaction Status by Hash
+### Understanding transaction status by hash
 
-The principle located in Payment Processing (using tonweb). [See more](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions)
+Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions) using the tonweb library.
 
-### Signing and Verification
+### Signing and verification
 
 Understand how to sign and verify messages using the TON Connect:
-- [Signing and Verification](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
+- [Signing and verification](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
 - [TON Connect UI implementation on GitHub](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-connect-request-parameters-ton_proof)
 
-### Wallet Disconnection
+### Wallet disconnection
 
 Call to disconnect the wallet:
 ```js
 await tonConnectUI.disconnect();
 ```
 
-## See Also
+## See also
 
-* [UI Customization](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
+* [UI customization](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
 * [[YouTube] TON Connect UI React [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=1747)
-* [[YouTube] Connect TON Connect UI to Site [RU]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
+* [[YouTube] Connect TON Connect UI to site [RU]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
+
+<Feedback />
+

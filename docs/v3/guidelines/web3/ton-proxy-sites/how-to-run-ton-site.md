@@ -1,46 +1,52 @@
+import Feedback from '@site/src/components/Feedback';
+
 # How to run TON Sites
 
-## 👋 Introduction
+## Introduction
 
-[TON Sites](https://blog.ton.org/ton-sites) work almost like regular sites except for their installation. Several additional actions are required to launch them. In this tutorial, I will show you how to do it.
+[TON Sites](https://blog.ton.org/ton-sites) work similarly to regular websites but require additional steps to start. This guide walks you through the setup process.
 
-## 🖥 Running TON Site
-Install [Tonutils Reverse Proxy](https://github.com/tonutils/reverse-proxy) to use TON Proxy for your website.
-
+## Running TON Site
+Install the [Tonutils reverse proxy](https://github.com/tonutils/reverse-proxy) to use TON Proxy for your website.
 
 ### Installation on any Linux
 
 ##### Download
 ```bash
-wget https://github.com/ton-utils/reverse-proxy/releases/latest/download/tonutils-reverse-proxy-linux-amd64
+wget https://github.com/tonutils/reverse-proxy/releases/latest/download/tonutils-reverse-proxy-linux-amd64
 chmod +x tonutils-reverse-proxy-linux-amd64
 ```
 
 ##### Run
 
-Run with domain configuration and follow the steps:
+Run with domain configuration and follow the following steps:
 ```
 ./tonutils-reverse-proxy-linux-amd64 --domain your-domain.ton 
 ```
-Scan QR code from your terminal using Tonkeeper, Tonhub or any other wallet, execute transaction. Your domain will be linked to your site.
+Scan the QR code shown in your terminal using Tonkeeper, Tonhub, or any other wallet. Confirm the transaction to link your domain to the site.
 
 ###### Run without domain
-Alternatively, you can run in simple mode with an .adnl domain, if you don't have a .ton or .t.me domain:
+Alternatively, you can run the proxy in simple mode with an .adnl domain if you do not have a `.ton` or `.t.me` domain:
+
 ```
 ./tonutils-reverse-proxy-linux-amd64
 ```
 
 ##### Use
-Now anyone can access your TON Site using the ADNL address or domain.
+Your TON Site is now accessible via the ADNL address or the domain.
 
-If you want to change some settings, like the proxy pass URL, open the `config.json` file, edit and restart the proxy. Default proxy pass url is `http://127.0.0.1:80/`
+To change settings such as the proxy pass URL, edit the `config.json` file and restart the proxy. The default proxy pass URL is: `http://127.0.0.1:80/`.
 
-The proxy adds additional headers:
-`X-Adnl-Ip` - ip of the client, and `X-Adnl-Id` - adnl id of the client
+
+The proxy also adds the following headers:
+- `X-Adnl-Ip` – the client's IP address.
+- `X-Adnl-Id` – the client's ADNL ID.
 
 ### Installation on any other OS
 
 Build it from sources, and run it as in step 2 for linux. Go environment is required to build.
+
+To install it on other systems, build the project from the source and run it as in step 2 for Linux. A `Go` environment is required.
 
 ```bash
 git clone https://github.com/tonutils/reverse-proxy.git
@@ -48,22 +54,26 @@ cd reverse-proxy
 make build
 ```
 
-To build for other operating systems, run `make all`
+To build for other operating systems, run `make all`.
 
-## 👀 Further steps
 
-### 🔍 Checking availability of the site
+## Further steps
 
-After completing all the steps of the method you selected, the TON Proxy should have started. If everything was successful, your site will be available at the ADNL address received at the corresponding step. 
+### Checking site availability 
 
-You can check the availability of the site by opening this address with the domain `.adnl`. Also note that in order for the site to open, you must have a TON Proxy running in your browser, for example through an extension [MyTonWallet](https://mytonwallet.io/).
+After completing the setup, the TON Proxy should be running. If the setup is successful, your site will be available at the ADNL address generated during the configuration.
 
-## 📌 References
+You can check availability by opening the address with the `.adnl` suffix. Ensure that a TON Proxy is active in your browser, such as via the [MyTonWallet](https://mytonwallet.io/) browser extension.
+
+## References
 
  * [TON Sites, TON WWW and TON Proxy](https://blog.ton.org/ton-sites)
- * [Tonutils Reverse Proxy](https://github.com/tonutils/reverse-proxy)
- * Authors: [Andrew Burnosov](https://github.com/AndreyBurnosov) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov)), [Daniil Sedov](https://gusarich.com) (TG: [@sedov](https://t.me/sedov)), [George Imedashvili](https://github.com/drforse)
+ * [Tonutils reverse proxy](https://github.com/tonutils/reverse-proxy)
+ * Authors: [_Andrew Burnosov_](https://github.com/AndreyBurnosov) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov)), [_Daniil Sedov_](https://gusarich.com) (TG: [@sedov](https://t.me/sedov)), [_George Imedashvili_](https://github.com/drforse)
 
 
-## See Also
-* [Run C++ Implementation](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)
+## See also
+* [Run C++ implementation](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)
+
+<Feedback />
+

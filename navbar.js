@@ -34,47 +34,14 @@ module.exports = {
 
     {
       type: 'dropdown',
-      to: '/v3/documentation/ton-documentation',
-      label: 'Documentation',
-      position: 'left',
-      items: [
-        {
-          to: 'v3/documentation/smart-contracts/overview',
-          label: 'Smart Contracts',
-        },
-        {
-          to: 'v3/documentation/tvm/tvm-overview',
-          label: 'TON Virtual Machine (TVM)',
-        },
-        {
-          to: 'v3/documentation/infra/nodes/node-types',
-          label: 'Nodes'
-        },
-        {
-          to: 'v3/documentation/dapps/defi/coins', // TODO: add page
-          label: 'DApps',
-        },
-        {
-          to: '/v3/documentation/data-formats/tlb/cell-boc',
-          label: 'Data Formats',
-        },
-        {
-          to: 'v3/documentation/network/protocols/adnl/low-level-adnl',
-          label: 'Networking'
-        },
-        {
-          to: 'v3/documentation/whitepapers/overview',
-          label: 'Whitepapers',
-        },
-      ]
-    },
-
-    {
-      type: 'dropdown',
-      to: 'v3/guidelines/get-started-with-ton',
+      to: 'v3/guidelines/quick-start/getting-started',
       label: 'Guidelines',
       position: 'left',
       items: [
+        {
+          to: '/v3/guidelines/quick-start/getting-started',
+          label: 'Quick Start',
+        },
         {
           to: '/v3/guidelines/smart-contracts/guidelines',
           label: 'Smart Contracts',
@@ -97,7 +64,44 @@ module.exports = {
         },
       ]
     },
-    // TODO: extract tutorials page!!!
+
+    {
+      type: 'dropdown',
+      to: '/v3/documentation/ton-documentation',
+      label: 'Documentation',
+      position: 'left',
+      items: [
+        {
+          to: 'v3/documentation/smart-contracts/overview',
+          label: 'Smart Contracts',
+        },
+        {
+          to: 'v3/documentation/tvm/tvm-overview',
+          label: 'TON Virtual Machine (TVM)',
+        },
+        {
+          to: 'v3/documentation/infra/nodes/node-types',
+          label: 'Nodes'
+        },
+        {
+          to: 'v3/documentation/dapps/dapps-overview',
+          label: 'DApps',
+        },
+        {
+          to: '/v3/documentation/data-formats/tlb/cell-boc',
+          label: 'Data Formats',
+        },
+        {
+          to: 'v3/documentation/network/protocols/adnl/low-level-adnl',
+          label: 'Networking'
+        },
+        {
+          to: 'v3/documentation/whitepapers/overview',
+          label: 'Whitepapers',
+        },
+      ]
+    },
+
     // {
     //   type: 'dropdown',
     //   to: '/v3/documentation/ton-documentation',
@@ -109,164 +113,164 @@ module.exports = {
     //       label: 'Start with Onboarding Tutorials',
     //     },
     //   ],
+    // // },
+    // {
+    //   type: 'dropdown',
+    //   to: '/v3/guidelines/dapps/overview',
+    //   position: 'left',
+    //   label: 'DApps',
+    //   items: [
+    //     {
+    //       to: '/v3/guidelines/dapps/tma/overview',
+    //       label: 'Telegram Mini Apps (TMAs)',
+    //     },
+    //     {
+    //       to: 'v3/guidelines/dapps/apis-sdks/overview',
+    //       label: 'APIs and SDKs',
+    //     },
+    //     {
+    //       to: '/v3/guidelines/dapps/cookbook',
+    //       label: 'Cookbook',
+    //     },
+    //   ],
     // },
-    {
-      type: 'dropdown',
-      to: '/v3/guidelines/dapps/overview',
-      position: 'left',
-      label: 'DApps',
-      items: [
-        {
-          to: '/v3/guidelines/dapps/tma/overview',
-          label: 'Telegram Mini Apps (TMAs)',
-        },
-        {
-          to: 'v3/guidelines/dapps/apis-sdks/overview',
-          label: 'APIs and SDKs',
-        },
-        {
-          to: '/v3/guidelines/dapps/cookbook',
-          label: 'Cookbook',
-        },
-      ],
-    },
-    {
-      type: 'dropdown',
-      to: '/v3/documentation/dapps/assets/overview',
-      position: 'left',
-      label: 'Assets',
-      items: [
-        {
-          to: '/v3/guidelines/dapps/asset-processing/payments-processing',
-          label: 'Payment Processing',
-        },
-        {
-          to: 'v3/guidelines/dapps/asset-processing/jettons',
-          label: 'Jetton Processing',
-        },
-        {
-          to: '/v3/documentation/dapps/assets/usdt',
-          label: 'USDT Processing',
-        },
-        {
-          to: 'v3/guidelines/dapps/asset-processing/mintless-jettons',
-          label: 'Mintless Jetton Processing',
-        },
-        {
-          to: '/v3/guidelines/dapps/tutorials/mint-your-first-token',
-          label: 'Mint your Tokens',
-        },
-        {
-          to: '/v3/guidelines/dapps/tutorials/nft-minting-guide',
-          label: 'Mint your NFTs',
-        },
-      ],
-    },
-    {
-      type: 'dropdown',
-      to: 'v3/documentation/smart-contracts/overview',
-      position: 'left',
-      label: 'Contracts',
-      items: [
-        {
-          to: '/v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
-          label: 'Contracts Specification',
-        },
-        {
-          to: '/v3/documentation/smart-contracts/addresses',
-          label: 'Address Specification',
-        },
-        {
-          to: 'v3/documentation/smart-contracts/message-management/messages-and-transactions',
-          label: 'Messages and Transactions',
-        },
-        {
-          to: 'v3/documentation/smart-contracts/transaction-fees/fees',
-          label: 'Transaction Fees',
-        },
-        {
-          to: '/v3/guidelines/smart-contracts/security/things-to-focus',
-          label: 'Best Practices',
-        },
-        {
-          to: 'v3/documentation/tvm/tvm-overview',
-          label: 'TON Virtual Machine (TVM)',
-        },
-      ],
-    },
-
-    {
-      type: 'dropdown',
-      to: 'v3/documentation/smart-contracts/overview',
-      position: 'left',
-      label: 'Languages',
-      items: [
-        {
-          to: 'https://docs.tact-lang.org/',
-          label: 'Tact',
-        },
-        {
-          to: 'v3/documentation/smart-contracts/tolk/overview',
-          label: 'Tolk',
-        },
-        {
-          to: 'v3/documentation/smart-contracts/func/overview',
-          label: 'FunC',
-        },
-        {
-          to: 'v3/documentation/smart-contracts/func/cookbook',
-          label: 'FunC Cookbook',
-        },
-        {
-          to: '/v3/documentation/tvm/instructions',
-          label: 'TVM Instruction',
-        },
-        {
-          to: '/v3/documentation/smart-contracts/fift/overview',
-          label: 'Fift',
-        },
-        {
-          to: '/v3/documentation/data-formats/tlb/tl-b-language',
-          label: 'TL-B',
-        },
-      ],
-    },
-    {
-      type: 'dropdown',
-      to: 'v3/documentation/infra/nodes/node-types',
-      position: 'left',
-      label: 'Nodes',
-      items: [
-        {
-          to: '/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview',
-          label: 'Software (Mytonctrl)',
-        },
-        {
-          to: '/v3/guidelines/nodes/running-nodes/liteserver-node',
-          label: 'Liteserver',
-        },
-        {
-          to: '/v3/guidelines/nodes/running-nodes/validator-node',
-          label: 'Validator',
-        },
-        {
-          to: '/v3/guidelines/smart-contracts/howto/single-nominator-pool',
-          label: 'Single Nominator Pool',
-        },
-        // {
-        //   to: '/v3/guidelines/nodes/running-nodes/archive-node', // TODO: add article
-        //   label: 'Running Nodes',
-        // },
-        {
-          to: '/v3/guidelines/nodes/nodes-troubleshooting',
-          label: 'Troubleshooting',
-        },
-        {
-          to: '/v3/guidelines/nodes/faq',
-          label: 'FAQ',
-        },
-      ],
-    },
+    // {
+    //   type: 'dropdown',
+    //   to: '/v3/documentation/dapps/assets/overview',
+    //   position: 'left',
+    //   label: 'Assets',
+    //   items: [
+    //     {
+    //       to: '/v3/guidelines/dapps/asset-processing/payments-processing',
+    //       label: 'Payment Processing',
+    //     },
+    //     {
+    //       to: 'v3/guidelines/dapps/asset-processing/jettons',
+    //       label: 'Jetton Processing',
+    //     },
+    //     {
+    //       to: '/v3/documentation/dapps/assets/usdt',
+    //       label: 'USDT Processing',
+    //     },
+    //     {
+    //       to: 'v3/guidelines/dapps/asset-processing/mintless-jettons',
+    //       label: 'Mintless Jetton Processing',
+    //     },
+    //     {
+    //       to: '/v3/guidelines/dapps/tutorials/mint-your-first-token',
+    //       label: 'Mint your Tokens',
+    //     },
+    //     {
+    //       to: '/v3/guidelines/dapps/tutorials/nft-minting-guide',
+    //       label: 'Mint your NFTs',
+    //     },
+    //   ],
+    // // },
+    // {
+    //   type: 'dropdown',
+    //   to: 'v3/documentation/smart-contracts/overview',
+    //   position: 'left',
+    //   label: 'Contracts',
+    //   items: [
+    //     {
+    //       to: '/v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
+    //       label: 'Contracts Specification',
+    //     },
+    //     {
+    //       to: '/v3/documentation/smart-contracts/addresses',
+    //       label: 'Address Specification',
+    //     },
+    //     {
+    //       to: 'v3/documentation/smart-contracts/message-management/messages-and-transactions',
+    //       label: 'Messages and Transactions',
+    //     },
+    //     {
+    //       to: 'v3/documentation/smart-contracts/transaction-fees/fees',
+    //       label: 'Transaction Fees',
+    //     },
+    //     {
+    //       to: '/v3/guidelines/smart-contracts/security/things-to-focus',
+    //       label: 'Best Practices',
+    //     },
+    //     {
+    //       to: 'v3/documentation/tvm/tvm-overview',
+    //       label: 'TON Virtual Machine (TVM)',
+    //     },
+    //   ],
+    // // },
+    //
+    // {
+    //   type: 'dropdown',
+    //   to: 'v3/documentation/smart-contracts/overview',
+    //   position: 'left',
+    //   label: 'Languages',
+    //   items: [
+    //     {
+    //       to: 'https://docs.tact-lang.org/',
+    //       label: 'Tact',
+    //     },
+    //     {
+    //       to: 'v3/documentation/smart-contracts/tolk/overview',
+    //       label: 'Tolk',
+    //     },
+    //     {
+    //       to: 'v3/documentation/smart-contracts/func/overview',
+    //       label: 'FunC',
+    //     },
+    //     {
+    //       to: 'v3/documentation/smart-contracts/func/cookbook',
+    //       label: 'FunC Cookbook',
+    //     },
+    //     {
+    //       to: '/v3/documentation/tvm/instructions',
+    //       label: 'TVM Instruction',
+    //     },
+    //     {
+    //       to: '/v3/documentation/smart-contracts/fift/overview',
+    //       label: 'Fift',
+    //     },
+    //     {
+    //       to: '/v3/documentation/data-formats/tlb/tl-b-language',
+    //       label: 'TL-B',
+    //     },
+    //   ],
+    // },
+    // {
+    //   type: 'dropdown',
+    //   to: 'v3/documentation/infra/nodes/node-types',
+    //   position: 'left',
+    //   label: 'Nodes',
+    //   items: [
+    //     {
+    //       to: '/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview',
+    //       label: 'Software (Mytonctrl)',
+    //     },
+    //     {
+    //       to: '/v3/guidelines/nodes/running-nodes/liteserver-node',
+    //       label: 'Liteserver',
+    //     },
+    //     {
+    //       to: '/v3/guidelines/nodes/running-nodes/validator-node',
+    //       label: 'Validator',
+    //     },
+    //     {
+    //       to: '/v3/guidelines/smart-contracts/howto/single-nominator-pool',
+    //       label: 'Single Nominator Pool',
+    //     },
+    //     // {
+    //     //   to: '/v3/guidelines/nodes/running-nodes/archive-node', // TODO: add article
+    //     //   label: 'Running Nodes',
+    //     // },
+    //     {
+    //       to: '/v3/guidelines/nodes/nodes-troubleshooting',
+    //       label: 'Troubleshooting',
+    //     },
+    //     {
+    //       to: '/v3/guidelines/nodes/faq',
+    //       label: 'FAQ',
+    //     },
+    //   ],
+    // },
 
     // {
     //   type: 'dropdown',

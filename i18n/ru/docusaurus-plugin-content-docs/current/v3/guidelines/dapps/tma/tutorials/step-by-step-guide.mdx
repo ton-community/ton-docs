@@ -1,0 +1,67 @@
+# Инструкция по запуску TMA
+
+:::warning
+Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::
+
+Telegram Mini Apps (TMA) - это веб-приложения, которые запускаются внутри мессенджера Telegram. Они созданы с использованием веб-технологий - HTML, CSS и JavaScript. Telegram Mini Apps можно использовать для создания DApps, игр и других типов приложений, которые можно запускать внутри Telegram.
+
+## Создайте свое приложение
+
+1. Чтобы подключить Ваше мини-приложение к Telegram, разместите SDK-скрипт `telegram-web-app.js`, используя этот код:
+
+```html
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+```
+
+:::tip
+It's preferable to switch off cache in the HTML. To ensure your cache is switched off, specify headers in your request according to the following:
+
+```curl
+Cache-Control: no-store, must-revalidate
+Pragma: no-cache
+Expires: 0
+```
+
+:::
+
+2. После подключения скрипта, станет доступен объект **[window.Telegram.WebApp](https://core.telegram.org/bots/webapps#initializing-web-apps)**. Подробнее о создании Mini App с помощью [`telegram-web-app.js`](/v3/guidelines/dapps/tma/tutorials/app-examples#basic-tma-example) Вы можете прочитать здесь.
+
+3. Современный способ подключения SDK - это NPM пакет для Telegram Mini Apps SDK:
+
+```bash npm2yarn
+npm i @twa-dev/sdk
+```
+
+Вы можете найти руководство для [`@twa-dev/sdk`](/v3/guidelines/dapps/tma/tutorials/app-example#modern-tma-example) здесь.
+
+5. Когда Ваше мини-приложение будет готово и развернуто на веб-сервере, переходите к следующему шагу.
+
+## Настройка бота для приложения
+
+Чтобы подключить Ваше мини-приложение к Telegram, Вам нужно создать бота и настроить для него мини-приложение. Выполните следующие шаги, чтобы создать нового бота Telegram:
+
+### 1. Начните чат с BotFather
+
+- Откройте приложение Telegram или веб-версию.
+- Найдите `@BotFather` через строку поиска или перейдите по ссылке [https://t.me/BotFather](https://t.me/BotFather).
+- Начните чат с BotFather, нажав на кнопку `START`.
+
+### 2. Создайте нового бота
+
+- Отправьте команду `/newbot` в BotFather.
+- BotFather попросит Вас выбрать имя для Вашего бота. Это отображаемое имя, которое может содержать пробелы.
+- Далее Вам будет предложено выбрать имя пользователя для Вашего бота. Оно должно заканчиваться на `bot` (например, `sample_bot`) и быть уникальным.
+
+### 3. Настройка Bot Mini App
+
+- Отправьте команду `/mybots` в BotFather.
+- Выберите своего бота из списка и выберите опцию **Настройки бота**.
+- Выберите опцию **Кнопка меню**.
+- Выберите опцию **Редактировать URL кнопки меню** и отправьте URL Вашего приложения Telegram Mini App, например, ссылку с GitHub Pages deploy.
+
+### 4. Доступ к боту
+
+- Теперь Вы можете искать своего бота, используя его имя пользователя в строке поиска Telegram.
+- Нажмите кнопку рядом с приложением, чтобы запустить Ваше Telegram Mini App в мессенджере.
+- Вы великолепны!

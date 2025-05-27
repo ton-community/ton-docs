@@ -1,0 +1,141 @@
+# Написание тестов с Blueprint
+
+:::warning
+Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::
+
+## Общие сведения
+
+Набор инструментов для тестирования (обычно песочница) уже включен в TypeScript SDK с именем [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript). Вы можете создать демонстрационный проект и запустить тест по умолчанию, выполнив два шага:
+
+1. Создайте новый проект Blueprint:
+
+```bash
+npm create ton@latest MyProject
+```
+
+2. Запустите тест:
+
+```bash
+cd MyProject
+npx blueprint test
+```
+
+В результате вы увидите соответствующий вывод в окне терминала:
+
+```bash
+% npx blueprint test
+
+> MyProject@0.0.1 test
+> jest
+
+ PASS  tests/Main.spec.ts
+  Main
+    ✓ should deploy (127 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       1 passed, 1 total
+Snapshots:   0 total
+Time:        1.224 s, estimated 2 s
+Ran all test suites.
+```
+
+## Основное использование
+
+Тестирование смарт-контрактов позволяет обеспечить безопасность, оптимизировать расход газа и исследовать крайние случаи.
+Написание тестов в Blueprint (на основе [Sandbox](https://github.com/ton-org/sandbox)) выполняется путем определения произвольных действий с контрактом и сравнения результатов тестирования с ожидаемым результатом, например:
+
+```typescript
+it('should execute with success', async () => {                              // description of the test case
+    const res = await main.sendMessage(sender.getSender(), toNano('0.05'));  // performing an action with contract main and saving result in res
+
+    expect(res.transactions).toHaveTransaction({                             // configure the expected result with expect() function
+        from: main.address,                                                  // set expected sender for transaction we want to test matcher properties from
+        success: true                                                        // set the desirable result using matcher property success
+    });
+
+    printTransactionFees(res.transactions);                                  // print table with details on spent fees
+});
+```
+
+### Написание тестов для сложных утверждений
+
+Базовый рабочий процесс создания теста:
+
+1. Создайте определенную обернутую сущность `Contract` с помощью `blockchain.openContract()`.
+2. Опишите действия, которые должен выполнять ваш `Contract`, и сохраните результат выполнения в переменной `res`.
+3. Проверьте свойства с помощью функции `expect()` и средства сопоставления `toHaveTransaction()`.
+
+Средство сопоставления `toHaveTransaction` ожидает объект с любой комбинацией полей из типа `FlatTransaction`, определенного со следующими свойствами
+
+| Имя     | Тип           | Описание                                                                                                                                                                           |
+| ------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| from    | Address?      | Адрес контракта отправителя сообщения                                                                                                                                              |
+| on      | Address       | Адрес контракта получателя сообщения (альтернативное имя свойства `to`).                                                                                                           |
+| value   | bigint?       | Количество Toncoin в сообщении в nanoton                                                                                                                                           |
+| body    | Cell          | Тело сообщения определено как Cell                                                                                                                                                 |
+| op      | number?       | Op code — это номер идентификатора операции (обычно crc32 из TL-B). Ожидается в первых 32 битах тела сообщения.                                                                    |
+| success | boolean?      | Пользовательский флаг Sandbox, определяющий конечный статус определенной транзакции. True — если и фаза вычисления, и фаза действия выполнены успешно. В противном случае — False. |
+
+Вы можете опустить поля, которые вас не интересуют, и передать функции, принимающие типы, возвращающие логические значения (`true` означает хорошо), чтобы проверить, например, диапазоны чисел, коды операций сообщения и т. д. Обратите внимание, что если поле является необязательным (например, `from?: Address`), то функция также должна принимать необязательный тип.
+
+:::tip
+Вы можете узнать весь список полей сопоставления из [документации Sandbox](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).
+:::
+
+### Специальный набор тестов
+
+#### Extract SendMode
+
+Чтобы получить режим отправки отправленного сообщения, вы можете использовать следующий код:
+
+```ts
+const re = await blockchain.executor.runTransaction({
+    message: beginCell().endCell(),
+    config: blockchain.configBase64,
+    libs: null,
+    verbosity: 'short',
+    shardAccount: beginCell().storeAddress(address).endCell().toBoc().toString('base64'),
+    now: Math. floor (Date.now()) / 1000,
+    lt: BigInt(Date.now()),
+    randomSeed: null,
+    ignoreChksig: false,
+    debugEnabled: true
+});
+
+if (!re.result.success || !re.result.actions) {
+    throw new Error('fail');
+}
+
+const actions = loadOutList(Cell.fromBase64(re.result.actions).beginParse());
+for (const act of actions) {
+    if (act.type === "sendMsg") {
+        // process action
+        console.log(act.mode)
+    }
+}
+```
+
+## Руководства
+
+Узнайте больше о тестировании из самых ценных руководств сообщества по TON:
+
+- [Урок 2: Тестирование FunC для смарт-контракта](https://github.com/romanovichim/TonFunClessons_Eng/blob/main/lessons/smartcontract/2lesson/secondlesson.md)
+- [TON Hello World часть 4: Пошаговое руководство по тестированию вашего первого смарт-контракта](https://helloworld.tonstudio.io/04-testing/)
+- [TON Smart Contract Pipeline](https://dev.to/roma_i_m/ton-smart-contract-pipeline-write-simple-contract-and-compile-it-4pnh)
+- [[YouTube]Шестой урок FunC & Blueprint. Gas, комиссии, тесты.](https://youtu.be/3XIpKZ6wNcg)
+
+## Примеры
+
+Ознакомьтесь с наборами тестов, используемыми для экосистемных контрактов TON, и учитесь на примерах.
+
+- [тесты песочницы liquid-staking-contract](https://github.com/ton-blockchain/liquid-staking-contract/tree/main/tests)
+- [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/config_tests/tests/)
+- [JettonWallet.spec.ts](https://github.com/EmelyanenkoK/modern_jetton/blob/master/tests/JettonWallet.spec.ts)
+- [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/elector_tests/tests/complaint-test.fc)
+- [MassSender.spec.ts](https://github.com/Gusarich/ton-mass-sender/blob/main/tests/MassSender.spec.ts)
+- [Assurer.spec.ts](https://github.com/aSpite/dominant-assurance-contract/blob/main/tests/Assurer.spec.ts)
+
+## См. также
+
+- [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript)

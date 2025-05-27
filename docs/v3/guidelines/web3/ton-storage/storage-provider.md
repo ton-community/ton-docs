@@ -1,142 +1,202 @@
+import Feedback from '@site/src/components/Feedback';
+
 
 # Storage provider
-*A storage provider* is a service that stores files for a fee. 
+A **storage provider** is a service that stores files for a fee.
+
 
 ## Binaries
 
-You can download `storage-daemon` and `storage-daemon-cli` for Linux/Windows/MacOS binaries from [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
+Precompiled binaries of `storage-daemon` and `storage-daemon-cli` are available for Linux, Windows, and macOS at [TON auto builds](https://github.com/ton-blockchain/ton/releases/latest).
 
 ## Compile from sources
-
-You can compile `storage-daemon` and `storage-damon-cli` from sources using this [instruction](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#storage-daemon).
+To build `storage-daemon` and `storage-daemon-cli` from the source, follow the [instruction](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#storage-daemon).
 
 ## Key concepts
-It consists of a smart contract that accepts storage requests and manages payment from clients, and an application that uploads and serves the files to clients. Here's how it works:
 
-1. The owner of the provider launches the `storage-daemon`, deploys the main smart contract, and sets up the parameters. The contract's address is shared with potential clients.
-2. Using the `storage-daemon`, the client creates a Bag from their files and sends a special internal message to the provider's smart contract.
-3. The provider's smart contract creates a storage contract to handle this specific Bag.
-4. The provider, upon finding the request in the blockchain, downloads the Bag and activates the storage contract.
-5. The client can then transfer payment for storage to the storage contract. To receive the payment, the provider regularly presents the contract with proof that they are still storing the Bag.
-6. If the funds on the storage contract run out, the contract is considered inactive and the provider is no longer required to store the Bag. The client can either refill the contract or retrieve their files.
+A storage provider consists of:
+- A smart contract that handles storage requests and manages client payments. 
+- A daemon application that uploads and serves files to clients.
+
+The process works as follows:
+
+1. The owner of the provider launches the `storage-daemon`, deploying the main smart contract, and configuring the necessary parameters. The contract address is then shared with potential clients.
+
+2. A client uses the `storage-daemon` to create **a bag** from their files and sends an internal message to the provider's smart contract. 
+3. The smart contract creates a storage contract for **this bag**. 
+4. The provider detects the request on-chain, downloads the bag, and activates the storage contract. 
+5. The client transfers payment to the storage contract. The provider must regularly submit proof that the bag is still being stored to continue receiving payment. 
+6. If the contract's funds are depleted, it becomes inactive, and the provider is no longer obligated to store the bag. The client can either refill the contract or retrieve their files.
+
 
 :::info
-The client can also retrieve their files at any time by providing proof of ownership to the storage contract. The contract will then release the files to the client and deactivate itself.
+Clients can retrieve their files anytime by providing proof of ownership to the storage contract. Once validated, the contract releases the files and deactivates itself.
 :::
 
 ## Smart contract
 
-[Smart Contract Source Code](https://github.com/ton-blockchain/ton/tree/master/storage/storage-daemon/smartcont).
+View the [smart contract source code](https://github.com/ton-blockchain/ton/tree/master/storage/storage-daemon/smartcont).
 
-## Using a Provider by Clients
-In order to use a storage provider, you need to know the address of its smart contract. The client can obtain the provider's parameters with the following command in `storage-daemon-cli`:
+## Using a provider by clients
+To use a storage provider, you need to first know the address of its smart contract. You can retrieve the provider's parameters using the following command in `storage-daemon-cli`:
+
 ```
 get-provider-params <address>
 ```
 
-### The provider's parameters:
+### Provider parameters
 
 * Whether new storage contracts are accepted.
 * Minimum and maximum *Bag* size (in bytes).
 * Rate - the cost of storage. Specified in nanoTON per megabyte per day.
 * Max span - how often the provider should provide proofs of *Bag* storage.
 
-### A request to store
 
-You need to create a *Bag* and generate a message with the following command:
+The output includes the following parameters:
+- Whether new storage contracts are currently accepted. 
+- Minimum and maximum **bag** size (in bytes). 
+- Rate – the cost of storage specified in nanoTON per megabyte per day. 
+- Max span – the interval at which the provider must submit proof of **bag** storage.
+
+### A request to store
+To request storage, you need to create a **bag** and generate a message using the following command:
 
 ```
 new-contract-message <BagID> <file> --query-id 0 --provider <address>
 ```
 
-### Info:
+### Notes
+- This command may take some time to execute for large **bags**. 
+- The generated message body, not the full internal message, is saved to `<file>`.
+- Query ID can be any integer from `0` to `2^64 - 1`. 
+- The generated message includes the provider's current rate and max span parameters. These values are displayed after execution and should be reviewed before sending. 
+- If the provider updates their parameters before the message is submitted, it will be rejected. This ensures that the storage contract is created under the client's agreed-upon conditions.
 
-Executing this command may take some time for large *Bags*. The message body will be saved to `<file>` (not the entire internal message). Query id can be any number from 0 to `2^64-1`. The message contains the provider's parameters (rate and max span). These parameters will be printed out after executing the command, so they should be double checked before sending. If the provider's owner changes the parameters, the message will be rejected, so the conditions of the new storage contract will be exactly what the client expects.
+The client must then send the generated message body to the provider's smart contract address. If an error occurs, the message bounces back to the sender. If successful, a new storage contract is created, and the client receives a message from the contract with [`op=0xbf7bd0c1`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L3) and the same query ID.
 
-The client must then send the message with this body to the provider's address. In case of an error the message will come back to the sender (bounce). Otherwise, a new storage contract will be created and the client will receive a message from it with [`op=0xbf7bd0c1`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L3) and the same query id.
+At this stage, the contract is not yet active. Once the provider downloads the bag, the contract is activated, and the client receives another message from the same contract with  [`op=0xd4caedcd`](https://github.com/SpyCheese/ton/blob/tonstorage/storage/storage-daemon/smartcont/constants.fc#L4).
 
-At this point the contract is not yet active. Once the provider downloads the *Bag*, it will activate the storage contract and the client will receive a message with [`op=0xd4caedcd`](https://github.com/SpyCheese/ton/blob/tonstorage/storage/storage-daemon/smartcont/constants.fc#L4) (also from the storage contract).
 
-The storage contract has a "client balance" - these are the funds that the client transferred to the contract and which have not yet been paid to the provider. Funds are gradually debited from this balance (at a rate equal to the rate per megabyte per day). The initial balance is what the client transferred with the request to create the storage contract. The client can then top up the balance by making simple transfers to the storage contract (this can be done from any address). The remaining client balance is returned by the [`get_storage_contract_data`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/storage-contract.fc#L222) get method as the second value (`balance`).
+#### Client balance
 
-### The contract may be closed for the following cases:
+The storage contract maintains a client balance, which consists of the funds transferred by the client that have not yet been paid to the provider. This balance gradually reduces over time based on the provider's rate (in nanoTON per megabyte per day).
+- The initial balance is the amount sent when creating the storage contract with the request. 
+- The client can top up the contract anytime by making transfers to the storage contract — this can be done from any wallet address. 
+- The current balance can be retrieved using the [`get_storage_contract_data`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/storage-contract.fc#L222) getter method. It is returned as the second value: `balance`.
+
+
+### Contract closure
 
 :::info
-In case of the storage contract being closed, the client receives a message with the remaining balance and [`op=0xb6236d63`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L6). 
+If the storage contract is closed, the client receives a message with the remaining balance and [`op=0xb6236d63`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L6). 
 :::
 
-* Immediately after creation, before activation, if the provider refuses to accept the contract (the provider's limit is exceeded or other errors).
-* The client balance reaches 0.
-* The provider can voluntarily close the contract.
-* The client can voluntarily close the contract by sending a message with [`op=0x79f937ea`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L2) from its own address and any query id.
+A storage contract may be closed under the following conditions:
+
+* Immediately after creation, before activation, if the provider declines the request, e.g., due to capacity limits or configuration issues.
+* When the client balance reaches 0.
+* Voluntarily by the provider.
+* Voluntarily by the client by sending a message with [`op=0x79f937ea`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L2) from the address with any query ID.
 
 
-## Running and Configuring a Provider
-The Storage Provider is part of the `storage-daemon`, and is managed by the `storage-daemon-cli`. `storage-daemon` needs to be started with the `-P` flag.
-
+## Running and configuring a provider
+The storage provider is a component of the `storage-daemon` and is managed using the `storage-daemon-cli`. To run the provider, launch `storage-daemon` with the `-P` flag.
 
 ### Create a main smart contract
 
-You can do this from `storage-daemon-cli`:
+To deploy the provider’s smart contract from `storage-daemon-cli`, run:
 ```
 deploy-provider
 ```
 
 :::info IMPORTANT!
-You will be asked to send a non-bounceable message with 1 TON to the specified address in order to initialize the provider. You can check that the contract has been created using the `get-provider-info` command.
+During deployment, you’ll be prompted to send a non-bounceable message with 1 TON to the specified address to initialize the provider. You can verify successful deployment with the `get-provider-info` command.
 :::
 
-By default, the contract is set to not accept new storage contracts. Before activating it, you need to configure the provider. The provider's settings consist of a configuration (stored in `storage-daemon`) and contract parameters (stored in the blockchain).
+By default, the contract does not accept new storage contracts. Before activating it, you must configure the provider configuration, which is stored in  `storage-daemon`, and contract parameters stored on-chain.
 
-### Configuration:
-* `max contracts` - maximum number of storage contracts that can exist at the same time.
-* `max total size` - maximum total size of *Bags* in storage contracts.
-You can view the configuration values using `get-provider-info`, and change them with:
+### Configuration
+
+The provider configuration includes:
+
+* `max contracts` - maximum number of concurrent storage contracts.
+* `max total size` - maximum total size of *bags* in storage contracts.
+
+To view the current configuration:
+
+```
+get-provider-info
+```
+
+To update the configuration:
 ```
 set-provider-config --max-contracts 100 --max-total-size 100000000000
 ```
 
-### Contract parameters:
+### Contract parameters
 * `accept` - whether to accept new storage contracts.
-* `max file size`, `min file size` - size limits for one *Bag*.
-* `rate` - storage cost (specified in nanoTONs per megabyte per day).
+* `max file size`, `min file size` - size limits for one *bag*.
+* `rate` - cost of storage specified in nanoTON per megabyte per day.
 * `max span` - how often the provider will have to submit storage proofs.
 
-You can view the parameters using `get-provider-info`, and change them with:
+To view the current parameters:
+```
+get-provider-info
+```
+
+To update the parameters:
 ```
 set-provider-params --accept 1 --rate 1000000000 --max-span 86400 --min-file-size 1024 --max-file-size 1000000000
 ```
 
-### It is worth paying attention
+**Note:** in the `set-provider-params` command, you may update only a subset of parameters. Any omitted values will retain their current settings. Since blockchain data is not updated instantly, executing multiple `set-provider-params` commands quickly can lead to inconsistent results.
 
-Note: in the `set-provider-params` command, you can specify only some of the parameters. The others will be taken from the current parameters. Since the data in the blockchain is not updated instantly, several consecutive `set-provider-params` commands can lead to unexpected results.
+It is recommended that the provider’s smart contract be funded with more than 1 TON after deployment to cover future transaction fees. However, avoid transferring large amounts during the initial non-bounceable setup.
 
-It is recommended to initially put more than 1 TON on the provider's balance, so that there are enough funds to cover the commissions for working with storage contracts. However, do not send too many TONs with the first non-bounceable message.
+
 
 After setting the `accept` parameter to `1`, the smart contract will start accepting requests from clients and creating storage contracts, while the storage daemon will automatically process them: downloading and distributing *Bags*, generating storage proofs.
 
 
-## Further Work With the Provider
+- The provider begins accepting client requests once the `accept` parameter is set to `1` and creates storage contracts. The storage daemon will automatically:
+- Download and distribute **bags**. 
+- Generate and submit storage proofs.
+
+
+## Further work with the provider
 
 ### List of existing storage contracts
 
+To list all active storage contracts and their balances:
 ```
 get-provider-info --contracts --balances
 ```
-Each storage contract has a `Client$` and `Contract$` balance listed; the difference between them can be withdrawn to the main provider contract with the command `withdraw <address>`.
+Each contract displays:
+- `Client$`: funds provided by the client.
+- `Contract$`: total funds in the contract.
 
-The command `withdraw-all` will withdraw funds from all contracts that have at least `1 TON` available.
+The difference between these values represents the provider’s earnings, which can be withdrawn using `withdraw <address>`.
 
-Any storage contract can be closed with the command `close-contract <address>`. This will also transfer the funds to the main contract. The same will happen automatically when the client's balance runs out. The *Bag* files will be deleted in this case (unless there are other contracts using the same *Bag*).
+To withdraw from all contracts with at least 1 TON available:
+`withdraw-all`
+
+To close a specific contract: 
+`close-contract <address>`
+
+Closing a contract automatically transfers available funds to the main provider contract. The exact process occurs automatically when the client’s balance is depleted. In both cases, the associated bag files will be deleted—unless other active contracts still use them.
 
 ### Transfer
 
 You can transfer funds from the main smart contract to any address (the amount is specified in nanoTON):
+
 ```
 send-coins <address> <amount>
 send-coins <address> <amount> --message "Some message"
 ```
 
 :::info
-All *Bags* stored by the provider are available with the command `list`, and can be used as usual. To prevent disrupting the provider's operations, do not delete them or use this storage daemon to work with any other *Bags*.
+All *bags* stored by the provider are available with the command `list` and can be used as usual. To prevent disrupting the provider's operations, do not delete them or use this storage daemon to work with any other *bags*.
 :::
+
+<Feedback />
+

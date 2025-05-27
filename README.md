@@ -1,24 +1,29 @@
-<img align="left" width="300px" src="static\img\readme\about.png">
+# TON documentation 📚
 
-## TON Blockchain Documentation 📚
+<img align="left" width="300px" src="static\img\readme\about.png">
 
 This is the official repository for The Open Network documentation.
 
-Latest documentation release: [docs.ton.org](https://docs.ton.org)
- 
-The mission of this documentation is to collect all available information and knowledge that can help TON developers.
+Latest documentation release: [docs.ton.org](https://docs.ton.org).
 
-You can improve the documentation by following steps below.
+Contribution guidelines: [How to contribute](https://docs.ton.org/v3/contribute).
+
+TON Documentation is entirely open source. Community enthusiasts and early TON contributors have played a key role in creating this open-source TON documentation by turning their notes into detailed pages.
+
+It was initially written by TON [contributors](/v3/contribute/maintainers/) and supported by [TON Studio](https://tonstudio.io/).
 
 ---
 
-<img align="right" width="300px" src="static\img\readme\contribute.png">
+
 
 ## Join TON Docs Club 💎
+
+<img align="right" width="300px" src="static\img\readme\contribute.png">
 
 TON is an actively growing ecosystem, and every day many devs contribute to its development. 
 
 You can participate in TON by helping organize knowledge, making Pull Requests and creating tutorials to help other developers. 
+
 Feedback, lectures, technical articles, tutorials, and examples. All this can help the developers community grow even faster!
 
 Join TON Docs Club chat in Telegram to join contributors party:
@@ -28,31 +33,35 @@ Join TON Docs Club chat in Telegram to join contributors party:
 
 <img align="left" width="300px" src="static\img\readme\how.png">
 
-## How to Contribute? 🦄
-
-If you are a developer and faced some difficulties, successfully overcoming them - share this knowledge with future developers!
+## How to contribute? 🦄
 
 — Have an issue? [Prepare a solution with TON Docs Wizard](https://t.me/ton_docs_bot).  
-— Have an idea? [Submit a Feature Request](https://github.com/ton-community/ton-docs/issues/new/choose).  
-— Want to contribute? [Setup your environment](https://github.com/ton-community/ton-docs#set-up-your-environment-%EF%B8%8F).
 
-Contributing best practices:  [docs/contribute](/v3/contribute)
+— Have an idea? [Submit a Feature Request](https://github.com/ton-community/ton-docs/issues/new/choose).  
+
+— Want to contribute? [How to contribute](https://docs.ton.org/v3/contribute).
+
+— Want to translate? [Localization](https://docs.ton.org/v3/contribute/localization-program/how-to-contribute).
+
+— Have a question? [Documentation development chat](https://t.me/+c-0fVO4XHQsyOWM8).
+
+
 
 ---
 
-## Set up your Environment ☁️
+## Set up your environment ☁️
 
-If you are changing the sidebar or adding media-files, please check that your submission will not break production.
+If you're changing the sidebar or adding media-files, links, please make sure that your submission won't break production.
 
 You can do this in two ways:
 
-### Cloud (quick way)
+### Cloud
 
-Use Gitpod (a free, online VS code-like IDE) for contributing. It will launch a workspace with a single click:
+Use Gitpod for contributing. It'll launch a workspace with a single click:
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ton-community/ton-docs)
 
-### Local (default way)
+### Local
 
 1. Download repository from GitHub with its submodules
 
@@ -81,7 +90,14 @@ Use Gitpod (a free, online VS code-like IDE) for contributing. It will launch a 
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
-## Contributors Wall
+## Install recursive module
+
+If you cloned the repository from GitHub without step 1, you'll need to install the submodules to enable local execution.
+  ```
+  git submodule update --init --recursive
+  ```
+
+## Contributors wall
 <a href="https://github.com/ton-community/ton-docs/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ton-community/ton-docs&max=204" />
 </a>

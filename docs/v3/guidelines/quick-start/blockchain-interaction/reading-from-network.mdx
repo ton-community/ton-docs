@@ -1,0 +1,345 @@
+import Feedback from "@site/src/components/Feedback";
+import ThemedImage from "@theme/ThemedImage";
+import Button from '@site/src/components/button'
+
+# Reading from network
+
+## Introduction
+
+This guide will walk you through reading data from TON Blockchain. You'll learn how to:
+- Fetch account information
+- Call `get methods`
+- Retrieve account transactions
+
+By the end, you'll understand how to interact with [TON HTTP-based APIs](/v3/guidelines/dapps/apis-sdks/ton-http-apis/). In this guide, [TON Center](https://toncenter.com/) is used—a fast and reliable HTTP API for TON.
+
+## Set up environment
+
+First, visit the installation pages and install [Node.js and npm](https://nodejs.org/en/download/) for your OS. Check that the installation is correct by running the following commands:
+
+```bash
+node -v
+npm -v
+```
+
+Versions of `node` and `npm` should be at least `v20` and `v10` correspondingly.
+
+## Project setup
+
+Let’s set up your project structure:
+1. Create a new directory for your project and navigate into it.
+2. Initialize a Node.js project.
+3. Install the required dependencies.
+4. Initialize TypeScript configuration.
+
+Run these commands in your terminal:
+
+```bash
+mkdir reading-from-ton && cd reading-from-ton
+npm init -y
+npm install typescript ts-node @ton/ton @ton/core @ton/crypto
+npx tsc --init
+```
+
+To run a TypeScript script saved as `script.ts` in your current directory, run:
+
+```bash
+npx ts-node script.ts
+```
+
+## Reading account information
+
+Account information includes the `balance`, `state`, `code`, and `data`.
+- `balance`: The amount of TON the account holds.
+- `state`: Can be one of:
+  - **Nonexist**: The address has no data.
+  - **Uninit**: The address has a balance but no smart contract code.
+  - **Active**: The address is live with code and balance.
+  - **Frozen**: The address is locked due to insufficient balance for storage costs.
+- `code`: The contract's code in raw format.
+- `data`: Serialized contract data stored in a [*Cell*](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage/).
+
+Account state may be obtained using the [`getContractState`](https://testnet.toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get/) method.
+
+#### Implementation
+
+Create a new file `1-get-account-state.ts`:
+
+```typescript title="1-get-account-state.ts"
+import { Address, TonClient } from "@ton/ton";
+
+async function main() {
+  // Initializaing TON HTTP API Client
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  });
+
+  const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'); // Replace with any address
+
+  // Calling method on http api
+  const state = await tonClient.getContractState(accountAddress);
+
+
+  console.log('State: ', state.state);
+  console.log('Balance: ', state.balance);
+  console.log('Data: ', state.data?.toString('hex'));
+  console.log('Code: ', state.code?.toString('hex'));
+}
+
+main();
+```
+
+Run this example using the following command:
+
+```bash
+npx ts-node 1-get-account-state.ts
+```
+
+#### Expected result
+
+```bash
+State:  active
+Balance:  3722511000883n
+Data:  b5ee9c7241010101002...fd1e976824402aa67b98
+Code:  b5ee9c7241021401000...c9ed54696225e5
+```
+
+## Calling get methods
+
+Get methods are special functions in smart contracts that allow you to observe the current state of a smart contract. Their execution doesn't cost any fees and can't change the smart contract's storage.
+
+The result of calling a get method from the TON HTTP API comes in *stack* format and may be deserialized one by one using `readNumber()` or a similar function.
+
+#### Implementation
+
+Create a new file `2-call-get-method.ts`:
+
+```typescript title="2-call-get-method.ts"
+import { Address, TonClient, TupleBuilder } from "@ton/ton";
+
+async function main() {
+  // Initializaing TON HTTP API Client
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  });
+
+  // Building optional get method parameters list
+  const builder = new TupleBuilder();
+  builder.writeAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
+
+  const accountAddress = Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy')
+
+  // Calling http api to run get method on specific contract
+  const result = await tonClient.runMethod(
+    accountAddress, // address to call get method on
+    'get_wallet_address', // method name
+    builder.build(), // optional params list
+  );
+
+  // Deserializing get method result
+  const address = result.stack.readAddress();
+  console.log(address.toRawString());
+}
+
+main();
+```
+
+Run this example using the following command:
+
+```bash
+npx ts-node 2-call-get-method.ts
+```
+
+#### Expected result
+
+```bash
+0:25f2bf1ce8f83ed0c0fd73ea27aac77093cdcf900c750b071df7fb0288e019b2
+```
+
+Get methods may also be called using Tonviewer:
+
+1. Navigate to the [get methods section](https://testnet.tonviewer.com/kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy?section=method).
+2. Select `get_wallet_address`.
+3. Insert the address from the example *0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-* into the slice section.
+4. Press **Execute**.
+
+You will end up with the same address you got from the console.
+
+### Using wrappers for simplicity
+
+Wrappers are classes that simplify interactions with smart contracts by turning complex blockchain operations into simple function calls. Instead of manually serializing cells and transactions, you can just call methods like `jettonMaster.getWalletAddress()` that already perform these tasks for you. Here's an example of using a wrapper functionally equivalent to the previous code snippet:
+
+```typescript
+import { Address, JettonMaster, TonClient } from "@ton/ton";
+
+async function main() {
+  // Initializaing TON HTTP API Client
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  });
+
+  // Initializing wrappers
+  const jettonMaster = tonClient.open(
+    JettonMaster.create(Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy')),
+  );
+
+  // Calling get method through wrapper
+  const address = jettonMaster.getWalletAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
+  console.log(address);
+}
+
+main();
+```
+
+## Fetching account transactions
+
+Interaction within an account on the blockchain happens due to [messages and transactions](/v3/documentation/smart-contracts/message-management/messages-and-transactions/).
+
+### What is a transaction?
+
+A transaction in TON consists of the following:
+- The incoming message that initially triggers the contract (special ways to trigger exist)
+- Contract actions caused by the incoming message, such as an update to the contract's storage (optional)
+- Outgoing messages generated and sent to other actors (optional)
+
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
+  }}
+/>
+
+
+### Key transaction fields
+
+A transaction obtained from the API has the following structure:
+
+```json5
+{
+  "@type": "raw.transaction",
+  "address": {
+    "@type": "accountAddress",
+    "account_address": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx"
+  },
+  "utime": 1738588970,
+  ...
+  "in_msg": {
+    ...
+  },
+  "out_msgs": [...]
+}
+```
+- `address`: The account address where the transaction occurred.
+- `utime`: The [unix timestamp](https://www.unixtimestamp.com/) of the transaction.
+- `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/) that triggered the transaction.
+- `out_msgs`: Outgoing messages sent during the transaction.
+
+### What is a message?
+
+A message is a packet of data exchanged between actors (users, applications, or smart contracts). It typically contains information instructing the receiver on what action to perform, such as updating storage or sending a new message.
+
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/message-delivery/message_delivery_1.png?raw=true',
+      dark: '/img/docs/message-delivery/message_delivery_1_dark.png?raw=true',
+    }}
+  />
+</div>
+
+### Key message fields
+
+```json5
+{
+  "@type": "raw.message",
+  "hash": "mcHdqltDAB8ODQHqtedtYQIS6MQL7x4ut+nf9tXWGqg=",
+  "source": "EQAJTegD8OO-HksHfI4KVDqb7vW9Dlqi5C1FTcL1dECeosTf",
+  "destination": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx",
+  "value": "20000000",
+  ...
+  "msg_data": {
+    "@type": "msg.dataRaw",
+    "body": "te6cckEBAQEAAgAAAEysuc0=",
+    ...
+  },
+  ...
+}
+```
+
+- `source`: The address of the sender (the account that initiated the message).
+- `destination`: The address of the receiver (the account that will process the message).
+- `value`: The amount of TON (in nanoTON) attached to the message.
+- `msg_data`: Contains the message body and state initialization.
+
+#### Implementation
+
+Create a new file `3-fetch-account-transaction.ts`:
+
+```typescript title="3-fetch-account-transaction.ts"
+import { Address, TonClient } from "@ton/ton";
+
+async function main() {
+  // Initializaing TON HTTP API Client
+  const tonClient = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  });
+
+  // Calling method on http api
+  // full api: https://testnet.toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get
+  const transactions = await tonClient.getTransactions(
+    Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'), // Address to fetch transactions
+    {
+      limit: 10,      //maximum ammount of recieved transactions
+      archival: true, //search in all history
+    },
+  );
+
+  const firstTx = transactions[0];
+  const { inMessage } = firstTx;
+
+  console.log('Timestamp:', firstTx.now);
+  if (inMessage?.info?.type === 'internal') {
+    console.log('Value:', inMessage.info.value.coins);
+    console.log('Sender:', inMessage.info.src);
+  }
+}
+
+main();
+```
+
+Run this example using following command:
+
+```bash
+npx ts-node 3-fetch-account-transaction.ts
+```
+
+#### Expected result
+
+```bash
+Timestamp: 1743516631
+Value: 100000000n
+Sender: EQBui16XCF61MSWauIDpVFbKAOJmjLHRxXvXeqiN9dYaIgjq
+```
+
+:::info
+A more complex example of traversing transactions graph may be found [here](/v3/guidelines/dapps/asset-processing/payments-processing/#retrieve-incomingoutgoing-transactions).
+:::
+
+## Next step
+
+Now that you’ve learned how to read data from TON Blockchain, it’s time to explore how to **write data to the network**.
+
+Click the button below to continue:
+
+<Button href="/v3/guidelines/quick-start/blockchain-interaction/writing-to-network" colorType={'primary'} sizeType={'sm'}>
+
+  Writing to the network
+
+</Button>
+
+
+<Feedback />
+
+

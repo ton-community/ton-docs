@@ -1,26 +1,29 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
 
 
-# TON Cookbook
+# TON cookbook
 
-During product development, various questions often arise regarding interactions with different contracts on TON.
+During product development, various questions often arise regarding interactions with different contracts on TON. This document aims to gather the best practices from developers and share them with the community.
 
-This document was created to gather the best practices from all developers and share them with everyone.
 
 ## Working with contracts' addresses
 
 ### How to convert (user friendly \<-\> raw), assemble, and extract addresses from strings?
 
-A TON address uniquely identifies contract in blockchain, indicating its workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses) are used: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
+TON addresses uniquely identify contracts on the blockchain, indicating their workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses) are: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
 
 ```
 User-friendly: EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
 Raw: 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 ```
 
-To obtain an address object from a string in your SDK, you can use the following code:
+To obtain a TON address object from a string in your SDK, you can use the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -109,9 +112,9 @@ print(address2.to_str(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca2492e
 </TabItem>
 </Tabs>
 
-### What flags are there in user-friendly addresses?
+### Flags in user-friendly addresses
 
-Two flags are defined: **bounceable**/**non-bounceable** and **testnet**/**any-net**. They can be easily detected by looking at the first letter of the address, because it stands for first 6 bits in address encoding, and flags are located there according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
+There are two flags in user-friendly addresses: **bounceable**/**non-bounceable** and **testnet**/**any-net**. These flags are represented in the first character of the address, which corresponds to the first 6 bits of the address encoding. These flags can be detected by looking at the first character, according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
 
 | Address beginning | Binary form | Bounceable | Testnet-only |
 |:-----------------:|:-----------:|:----------:|:------------:|
@@ -121,10 +124,10 @@ Two flags are defined: **bounceable**/**non-bounceable** and **testnet**/**any-n
 |        0...       |  110100.01  |     no     |   yes        |
 
 :::tip
-Testnet-only flag doesn't have representation in blockchain at all. Non-bounceable flag makes difference only when used as destination address for a transfer: in this case, it [disallows bounce](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) for a message sent; address in blockchain, again, does not contain this flag.
+The testnet-only flag does not appear in the blockchain. The non-bounceable flag only affects message transfers: when used as a destination, it prevents the message from being bounced.
 :::
 
-Also, in some libraries, you may notice a serialization parameter called `urlSafe`. he base64 format is not URL safe, which means that some characters (namely,`+` and `/`) can cause issues when transmitting an address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
+Also, in some libraries, you may notice a serialization parameter called `urlSafe`. Тhe base64 format is not URL safe, which means that some characters (namely, `+` and `/`) can cause issues when transmitting an address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -207,7 +210,7 @@ print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=Tru
 </Tabs>
 
 
-### How to Check the Validity of a TON Address?
+### How to check the validity of a TON address?
 
 
 <Tabs groupId="address-examples">
@@ -272,9 +275,9 @@ try {
 </Tabs>
 
 
-## Standard wallets in TON ecosystem
+## Standard wallets in TON Ecosystem
 
-### How to transfer TON? How to send a text message to another wallet?
+### How to transfer TON and send a text message to another wallet
 
 #### Sending messages
 
@@ -304,11 +307,11 @@ try {
 </div>
 <br></br>
 
-Most SDKs provide the following process for sending messages from your wallet:
-- You create wallet wrapper (object in your program) of a correct version (in most cases, v3r2; see also [wallet versions](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)), using secret key and workchain (usually 0, which stands for [basechain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules)).
-- You also create blockchain wrapper, or "client" - object that will route requests to API or liteservers, whichever you choose.
-- Then, you *open* contract in the blockchain wrapper. This means contract object is no longer abstract and represents actual account in either TON mainnet or testnet.
-- After that, you can form messages you want and send them. You can also send up to 4 messages per request, as described in an [advanced manual](/v3/guidelines/smart-contracts/howto/wallet#sending-multiple-messages-simultaneously).
+Most SDKs follow a similar process for sending messages from your wallet:
+- Create a wallet wrapper (object) of the correct version, typically v3r2 (see also [wallet versions](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)), your secret key and workchain (usually 0 for the [BaseChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules)).
+- Create a blockchain wrapper (or "client")—an object that routes requests to the API or lite servers, depending on your setup.
+- **Open** the contract in the blockchain wrapper. This ensures that the contract object is linked to an actual account on either the TON Mainnet or Testnet.
+- Form messages you want to send and initiate the transaction. You can send up to 4 messages per request, as detailed in the [advanced manual](/v3/guidelines/smart-contracts/howto/wallet#sending-multiple-messages-simultaneously).
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton-v4" label="JS (@ton) for Wallet V4">
@@ -453,7 +456,7 @@ asyncio.run(main())
 
 ### Writing comments: long strings in snake format
 
-Sometimes it's necessary to store long strings (or other large information) while cells can hold **maximum 1023 bits**. In this case, we can use snake cells. Snake cells are cells that contain a reference to another cell, which, in turn, contains a reference to another cell, and so on.
+Sometimes, it's necessary to store large strings in cells, but the maximum size for a cell is 1023 bits. In these cases, you can use snake cells, which reference other cells recursively.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-tonweb" label="JS (tonweb)">
@@ -493,18 +496,18 @@ console.log(text);
 </TabItem>
 </Tabs>
 
-Many SDKs already have functions responsible for parsing and storing long strings. In others, you can work with such cells using recursion, or possibly optimize it out (trick known as "tail calls").
+Many SDKs already offer functions to parse and store long strings in this format. Alternatively, you can use recursion to handle these strings or optimize with "tail calls."
 
-Don't forget that comment message has 32 zero bits (one may say, that its opcode is 0)!
+Don't forget that the comment message in a snake cell has 32 zero bits (i.e., its opcode is 0).
 
-## TEP-74 (Jettons Standard)
+## TEP-74 (jettons standard)
 
-### How to calculate user's Jetton wallet address (offchain)?
+### How to calculate the user's jetton wallet address (offchain)?
 
-To calculate the user's jetton wallet address, we need to call the "get_wallet_address" get-method of the jetton master contract with user address actually. For this task we can easily use getWalletAddress method from JettonMaster or call master contract by ourselves.
+To calculate a user’s jetton wallet address, use the `get_wallet_address` method from the jetton master contract with the user's address. You can also call the master contract directly, or use the getWalletAddress method provided in the JettonMaster SDK.
 
 :::info
-`JettonMaster` in `@ton/ton` lacks much functionality but has *this one* present, fortunately.
+The `JettonMaster` in `@ton/ton` provides this functionality, although it lacks other features.
 :::
 
 <Tabs groupId="code-examples">
@@ -614,17 +617,17 @@ asyncio.run(main())
 
 </Tabs>
 
-### How to calculate user's Jetton wallet address (offline)?
+### How to calculate a user's jetton wallet address (offline)?
 
-Calling the GET method every time to get the wallet address can take a lot of time and resources. If we know the Jetton Wallet code and its storage structure in advance, we can get the wallet address without any network requests.
+Calling the GET method every time to retrieve the wallet address can be slow and resource-intensive. If you know the jetton wallet code and storage structure, you can calculate the wallet address without making network requests.
 
-You can get the code using Tonviewer. Let's take `jUSDT` as an example, the Jetton Master address is `EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA`. If we [go to this address](https://tonviewer.com/EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA?section=method) and open the Methods tab, we can see that there is already a `get_jetton_data` method there. By calling it, we can get the hex form of the cell with the Jetton Wallet code:
+For example, using Tonviewer, you can get the jetton master contract address (e.g., `EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA`). If we [go to this address](https://tonviewer.com/EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA?section=method) and open the Methods tab, we can see that there is already a `get_jetton_data` method there. By calling it, we can get the hex form of the cell with the jetton wallet code:
 
 ```
 b5ee9c7201021301000385000114ff00f4a413f4bcf2c80b0102016202030202cb0405001ba0f605da89a1f401f481f481a9a30201ce06070201580a0b02f70831c02497c138007434c0c05c6c2544d7c0fc07783e903e900c7e800c5c75c87e800c7e800c1cea6d0000b4c7c076cf16cc8d0d0d09208403e29fa96ea68c1b088d978c4408fc06b809208405e351466ea6cc1b08978c840910c03c06f80dd6cda0841657c1ef2ea7c09c6c3cb4b01408eebcb8b1807c073817c160080900113e910c30003cb85360005c804ff833206e953080b1f833de206ef2d29ad0d30731d3ffd3fff404d307d430d0fa00fa00fa00fa00fa00fa00300008840ff2f00201580c0d020148111201f70174cfc0407e803e90087c007b51343e803e903e903534544da8548b31c17cb8b04ab0bffcb8b0950d109c150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c032481c007e401d3232c084b281f2fff274013e903d010c7e800835d270803cb8b13220060072c15401f3c59c3e809dc072dae00e02f33b51343e803e903e90353442b4cfc0407e80145468017e903e9014d771c1551cdbdc150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c0325c007e401d3232c084b281f2fff2741403f1c147ac7cb8b0c33e801472a84a6d8206685401e8062849a49b1578c34975c2c070c00870802c200f1000aa13ccc88210178d4519580a02cb1fcb3f5007fa0222cf165006cf1625fa025003cf16c95005cc2391729171e25007a813a008aa005004a017a014bcf2e2c501c98040fb004300c85004fa0258cf1601cf16ccc9ed5400725269a018a1c882107362d09c2902cb1fcb3f5007fa025004cf165007cf16c9c8801001cb0527cf165004fa027101cb6a13ccc971fb0050421300748e23c8801001cb055006cf165005fa027001cb6a8210d53276db580502cb1fcb3fc972fb00925b33e24003c85004fa0258cf1601cf16ccc9ed5400eb3b51343e803e903e9035344174cfc0407e800870803cb8b0be903d01007434e7f440745458a8549631c17cb8b049b0bffcb8b0b220841ef765f7960100b2c7f2cfc07e8088f3c58073c584f2e7f27220060072c148f3c59c3e809c4072dab33260103ec01004f214013e809633c58073c5b3327b55200087200835c87b51343e803e903e9035344134c7c06103c8608405e351466e80a0841ef765f7ae84ac7cbd34cfc04c3e800c04e81408f214013e809633c58073c5b3327b5520
 ```
 
-Now, knowing the Jetton Wallet code, the Jetton Master address and the vault structure, we can manually calculate the wallet address:
+Knowing the jetton wallet code and its storage structure, you can manually compute the wallet address.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton/ton)">
@@ -695,11 +698,11 @@ Read the entire example [here](/example-code-snippets/pythoniq/jetton-offline-ad
 </TabItem>
 </Tabs>
 
-Most major tokens do not have a different storage structure because they use [a standard implementation of the TEP-74 standard](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc). The exception is the new [Jetton-with-governance contracts](https://github.com/ton-blockchain/stablecoin-contract) for centralized stablecoins. In these, the difference is [the presence of a wallet status field and the absence of a code cell in the vault](https://github.com/ton-blockchain/stablecoin-contract/blob/7a22416d4de61336616960473af391713e100d7b/contracts/jetton-utils.fc#L3-L12).
+Major tokens typically use a standard implementation of the [ TEP-74 standard](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc), except the new [Jetton-with-governance contracts](https://github.com/ton-blockchain/stablecoin-contract) for centralized stablecoins. The difference is [the presence of a wallet status field and the absence of a code cell in the vault](https://github.com/ton-blockchain/stablecoin-contract/blob/7a22416d4de61336616960473af391713e100d7b/contracts/jetton-utils.fc#L3-L12).
 
 ### How to construct a message for a jetton transfer with a comment?
 
-To understand how to construct a message for a token transfer, we use  [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which describes the token standard.
+When constructing a message for a jetton transfer, refer to [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which defines the token standard.
 
 #### Transfer jettons
 <br></br>
@@ -715,7 +718,7 @@ To understand how to construct a message for a token transfer, we use  [TEP-74](
 <br></br>
 
 :::warning
-When displayed, token doesn't usually show count of indivisible units user has; rather, amount is divided by `10 ^ decimals`. This value is commonly set to `9`, and this allows us to use `toNano` function. If decimals were different, we would **need to multiply by a different value** (for instance, if decimals are 6, then we would end up transferring thousand times the amount we wanted).
+When displaying token amounts, they are usually divided by `10^decimals` (often `9 decimals`). This allows for the use of the `toNano` function. If the number of decimals is different (e.g., 6), you will need to adjust accordingly.
 
 Of course, one can always do calculation in indivisible units.
 :::
@@ -871,27 +874,27 @@ asyncio.run(main())
 
 </Tabs>
 
-If `forward_amount` is nonzero, a notification regarding jetton reception is sent to destination contract, as can be seen in the scheme in the top of this section. If `response_destination` address is not null, toncoins left (they're called "excesses") are sent to that address.
+If the `forward_amount` is nonzero, a notification about the Jetton reception will be sent to the destination contract. Additionally, if the `response_destination` address is non-null, excess Toncoins (called "excesses") will be sent to that address.
+
 
 :::tip
-Explorers support comments in jetton notifications, as well as in common TON transfers. Their format is 32 zero bits and then text, preferably UTF-8.
+Explorers support comments in Jetton notifications, similar to regular TON transfers. Comments are formatted as 32 zero bits followed by UTF-8 text.
 :::
 
 :::tip
-Jetton transfers need careful consideration for fees and amounts behind outgoing messages. For instance, if you "call" transfer with 0.2 TON, you won't be able to forward 0.1 TON and receive 0.1 TON in excess return message.
+Be careful when calculating fees and amounts for jetton transfer messages. For instance, transferring 0.2 TON with no excess may prevent you from receiving 0.1 TON in a response.
 :::
 
-## TEP-62 (NFT Standard)
+## TEP-62 (NFT standard)
 
-NFT collections are very different. Actually, NFT contract on TON can be defined as "contract that has appropriate get-method and returns valid metadata". Transfer operation is standardized and quite analogous to [jetton's one](/v3/guidelines/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment), so we will not dive into it and rather see additional capabilities provided by most collections you may meet!
-
+NFT collections on TON are highly customizable. The NFT contract can be defined as any contract that provides a valid get-method to return metadata. The transfer operation is standardized similarly to [Jettons](/v3/guidelines/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment).
 :::warning
-Reminder: all methods about NFT below are not bound by TEP-62 to work. Before trying them, please check if your NFT or collection will process those messages in an expected way. Wallet app emulation may prove useful in this case.
+Reminder: all methods about NFT below are not bound by TEP-62 to work. Before trying them, check if your NFT or collection process those messages in an expected way. The wallet app emulation may be useful in this case.
 :::
 
-### How to use NFT batch deploy?
+### How to use NFT batch deployment?
 
-Smart contracts for collections allow deploying up to 250 NFTs in a single transaction. However, it's essential to consider that, in practice, this maximum is around 100-130 NFTs due to the computation fee limit of 1 ton. To achieve this, we need to store information about the new NFTs in a dictionary.
+NFT collection smart contracts allow batch deployment of up to 250 NFTs in a single transaction. However, due to the 1 TON computation fee limit, this number is practically reduced to 100-130 NFTs.
 
 #### Batch mint NFT
 :::info
@@ -940,7 +943,7 @@ async function main() {
 </TabItem>
 </Tabs>
 
-To begin with, let's assume that the minimum amount of TON for the storage fee is `0.05`. This means that after deploying an NFT, the collection's smart contract will send this much TON to its balance. Next, we obtain arrays with the owners of the new NFTs and their content. Afterward, we get the `next_item_index` using the GET method `get_collection_data`.
+To deploy a batch, the contract stores information about new NFTs in a dictionary. The process involves: setting up storage fees (e.g., `0.05`), obtaining arrays with the new NFT owners and content, retrieving the `next_item_index` using the `get_collection_data` method.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -1005,7 +1008,8 @@ Next, we need to correctly calculate the total transaction cost. The value of `0
 
 ### How to change the owner of a collection's smart contract?
 
-Changing the owner of a collection is very simple. To do this, you need to specify **opcode = 3**, any query_id, and the address of the new owner:
+Changing the owner of a collection is simple. Specify the `opcode = 3`, any `query_id`, and the new owner’s address.
+
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -1085,9 +1089,14 @@ main().finally(() => console.log("Exiting..."));
 
 ### How to change the content of a collection's smart contract?
 
-To change the content of a smart contract's collection, we need to understand how it is stored. The collection stores all the content in a single cell, inside of which there are two cells: **collection content** and **NFT common content**. The first cell contains the collection's metadata, while the second one contains the base URL for the NFT metadata.
+The content of an NFT collection contract is stored in a single cell, which includes two parts:
 
-Often, the collection's metadata is stored in a format similar to `0.json` and continues incrementing, while the address before this file remains the same. It is this address that should be stored in the NFT common content.
+- сollection metadata
+- NFT common content (base URL for metadata)
+
+The first cell contains the collection's metadata, while the second one contains the base URL for the NFT metadata.
+
+Often, the collection's metadata is stored in a format similar to `0.json` and continues incrementing, while the address before this file remains the same. This address should be stored in the NFT common content.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -1207,16 +1216,17 @@ main().finally(() => console.log("Exiting..."));
 </TabItem>
 </Tabs>
 
-Additionally, we need to include royalty information in our message, as they also change using this opcode. It's important to note that it's not necessary to specify new values everywhere. If, for example, only the NFT common content needs to be changed, then all other values can be specified as they were before.
+When updating NFT metadata or content, royalty information must also be included, especially when using the appropriate opcode to modify this data. It’s important to remember that you don’t need to update all values if only certain elements are changing. For instance, if the only change is to the NFT common content, the other data remains the same and can be reused without modification.
 
-## Third-party: Decentralized Exchanges (DEX)
+## Third-party: decentralized exchanges (DEX)
 
 ### How to send a swap message to DEX (DeDust)?
 
-DEXs use different protocols for their work. In this example we will interact with **DeDust**.
+DEXs (Decentralized Exchanges) operate using various protocols. In this section, we will focus on **DeDust**, a decentralized exchange built on TON.
+
  * [DeDust documentation](https://docs.dedust.io/).
 
-DeDust has two exchange paths: jetton \<-> jetton or TON \<-> jetton. Each has a different scheme. To swap, you need to send jettons (or toncoin) to a specific **vault** and provide a special payload. Here is the scheme for swapping jetton to jetton or jetton to toncoin:
+DeDust provides two primary paths for exchanging assets: jetton \<-> jetton or TON \<-> jetton. Each has a different scheme. The process involves sending either jettons or Toncoins to specific vaults and including a special payload. Below is the process for both types of swaps:
 
 ```tlb
 swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
@@ -1225,9 +1235,9 @@ swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
               swap_params#_ deadline:Timestamp recipient_addr:MsgAddressInt referral_addr:MsgAddress
                     fulfill_payload:(Maybe ^Cell) reject_payload:(Maybe ^Cell) = SwapParams;
 ```
-This scheme shows what should be in the `forward_payload` of your jettons transfer message (`transfer#0f8a7ea5`).
-
+Similarly, when swapping from TON to jetton, a transfer message to the TON vault must be sent, and the swap information will be contained in the forward_payload.
 And the scheme of toncoin to jetton swap:
+
 ```tlb
 swap#ea06185d query_id:uint64 amount:Coins _:SwapStep swap_params:^SwapParams = InMsgBody;
               step#_ pool_addr:MsgAddressInt params:SwapStepParams = SwapStep;
@@ -1244,39 +1254,38 @@ jetton$0001 workchain_id:int8 address:uint256 = Asset; // for jetton
 ```
 Also for the exchange itself, we need the **pool** address - acquired from get method `get_pool_address`. As arguments - asset slices according to the scheme above. In response, both methods will return a slice of the address of the requested **vault** / **pool**.
 
-This is enough to build the message.
+This information is sufficient to construct the swap message.
 
 <Tabs groupId="code-examples">
 
  <TabItem value="js-ton" label="JS (@ton)">
 DEXs use different protocols for their work, we need to familiarize ourselves with key concepts and some vital components and also know the TL-B schema involved in doing our swap process correctly. In this tutorial, we deal with DeDust, one of the famous DEX implemented entirely in TON.
-In DeDust, we have an abstract Asset concept that includes any swappable asset types. Abstraction over asset types simplifies the swap process because the type of asset does not matter, and extra currency or even assets from other chains in this approach will be covered with ease.
-
-
+DeDust introduced an abstract Asset concept, which includes any swappable asset type, simplifying the process because the type of asset doesn’t matter in the swap. This abstraction allows the exchange of extra currency or even assets from other chains in a straightforward manner.
 
 Following is the TL-B schema that DeDust introduced for the Asset concept.
 
 ```tlb
 native$0000 = Asset; // for ton
 
-jetton$0001 workchain_id:int8 address:uint256 = Asset; // for any jetton,address refer to jetton master address
+// for any jetton,address refer to jetton master address
+jetton$0001 workchain_id:int8 address:uint256 = Asset;
 
 // Upcoming, not implemented yet.
 extra_currency$0010 currency_id:int32 = Asset;
 ```
 
-Next, DeDust introduced three components, Vault, Pool, and Factory. These components are contracts or groups of contracts and are responsible for parts of the swap process. The factory acts as finding other component addresses (like vault, and pool)
-and also building other components.
-Vault is responsible for receiving transfer messages, holding assets, and just informing the corresponding pool that "user A wants to swap 100 X to Y".
+DeDust utilizes three key components for asset swaps:
+
+- Factory: This component locates and constructs the vaults and pools required for the swap.
+- Vault: The vault is responsible for holding assets and receiving transfer messages. When a swap is requested, the vault informs the corresponding pool.
+- Pool: The pool calculates the swap amount based on predefined formulas and informs the vault, which in turn releases the swapped asset to the user.
 
 
-Pool, on the other hand, is responsible for calculating the swap amount based on the predefined formula informing other Vault that are responsible for asset Y, and telling it to pay a calculated amount to the user.
-Calculations of swap amount are based on a mathematical formula, which means so far we have two different pools, one known as Volatile, that operates based on the commonly used "Constant Product" formula: x * y = k, And the other known as Stable-Swap - Optimized for assets of near-equal value (e.g. USDT / USDC, TON / stTON). It uses the formula: x3 * y + y3 * x = k.
+Calculations of swap amount are based on a mathematical formula, which means so far we have two different pools, one known as Volatile, that operates based on the commonly used "Constant Product" formula: <InlineMath math="x \cdot y = k" />, And the other known as Stable-Swap - Optimized for assets of near-equal value (e.g. USDT / USDC, TON / stTON). It uses the formula: <InlineMath math="x^3 \cdot y + y^3 \cdot x = k" />.
 So for every swap we need the corresponding Vault and it needs just implement a specific API tailored for interacting with a distinct asset type. DeDust has three implementations of Vault, Native Vault - Handles the native coin (Toncoin). Jetton Vault - Manages jettons and Extra-Currency Vault (upcoming) - Designed for TON extra-currencies.
 
 
-DeDust provides a special SDk to work with contract, component, and API, it was written in typescript.
-Enough theory, let's set up our environment to swap one jetton with TON.
+DeDust provides an SDK, written in TypeScript, to interact with the contracts, components, and APIs needed for the swap. Before swapping any assets, the environment must be set up and the necessary objects initialized.
 
 ```bash
 npm install --save @ton/core @ton/ton @ton/crypto
@@ -1302,8 +1311,7 @@ const factory = tonClient.open(Factory.createFromAddress(MAINNET_FACTORY_ADDR));
 //The Factory contract  is used to  locate other contracts.
 ```
 
-The process of swapping has some steps, for example, to swap some TON with Jetton we first need to find the corresponding Vault and Pool
-then make sure they are deployed. For our example TON and SCALE, the code is as follows :
+The swap process involves finding the corresponding vault and pool for the assets to be swapped. For instance, swapping TON for SCALE (a jetton token) involves:
 
 ```typescript
 import { Asset, VaultNative } from "@dedust/sdk";
@@ -1313,7 +1321,7 @@ const tonVault = tonClient.open(await factory.getNativeVault());
 //We use the factory to find our native coin (Toncoin) Vault.
 ```
 
-The next step is to find the corresponding Pool, here (TON and SCALE)
+Finding the Vault and Pool for both TON and SCALE.
 
 ```typescript
 import { PoolType } from "@dedust/sdk";
@@ -1330,8 +1338,7 @@ const pool = tonClient.open(
 );
 ```
 
-Now we should ensure that these contracts exist since sending funds to an inactive contract could result in irretrievable loss.
-
+Ensure that the contracts are deployed: Always check that the contracts for the vault and pool are active, as sending funds to inactive contracts may result in permanent loss.
 ```typescript
 import { ReadinessStatus } from "@dedust/sdk";
 
@@ -1346,7 +1353,7 @@ if ((await tonVault.getReadinessStatus()) !== ReadinessStatus.READY) {
 }
 ```
 
-After that, we can send transfer messages with the amount of TON.
+Sending transfer messages: Once the vault and pool are confirmed, send the transfer message with the amount of TON to be swapped for SCALE.
 
 ```typescript
 import { toNano } from "@ton/core";
@@ -1493,7 +1500,7 @@ runBlocking {
 
 <TabItem value="py" label="Python">
 
-This example shows how to swap Toncoins to Jettons.
+This example shows how to swap Toncoins to jettons.
 
 ```py
 from pytoniq import Address, begin_cell, LiteBalancer, WalletV4R2
@@ -1564,7 +1571,7 @@ asyncio.run(main())
 
 ## Basics of message processing
 
-### How to parse transactions of an account (Transfers, Jettons, NFTs)?
+### How to parse transactions of an account (transfers, jettons, NFTs)?
 
 The list of transactions on an account can be fetched through `getTransactions` API method. It returns an array of `Transaction` objects, with each item having lots of attributes. However, the fields that are the most commonly used are:
  - Sender, Body and Value of the message that initiated this transaction
@@ -1832,16 +1839,15 @@ asyncio.run(main())
 
 </Tabs>
 
-Note that this example covers only the simplest case with incoming messages, where it is enough to fetch the transactions on a single account. If you want to go deeper and handle more complex chains of transactions and messages, you should take `tx.outMessages` field into an account. It contains the list of the output messages sent by smart-contract in the result of this transaction. To understand the whole logic better, you can read these articles:
-* [Message Overview](/v3/documentation/smart-contracts/message-management/messages-and-transactions)
+Note that this example covers only the simplest case with incoming messages, where it is enough to fetch the transactions on a single account. If you want to go deeper and handle more complex chains of transactions and messages, you should take `tx.outMessages` field into account. It contains the list of the output messages sent by smart-contract in the result of this transaction. To understand the whole logic better, you can read these articles:
+* [Message overview](/v3/documentation/smart-contracts/message-management/messages-and-transactions)
 * [Internal messages](/v3/documentation/smart-contracts/message-management/internal-messages)
 
-This topic is explored in more depth in [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing) article.
+This topic is explored in depth in the [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing) article.
 
 ### How to find transaction for a certain TON Connect result?
 
-TON Connect 2 returns only cell which was sent to blockchain, not generated transaction hash (since that transaction may not come to pass, if external message gets lost or timeouts). Provided BOC, though, allows us to search for that exact message in our account history.
-
+TON Connect 2 only returns the cell sent to the blockchain, not the transaction hash itself, as the transaction may not be confirmed. To track a transaction from TON Connect, you can search for it in your account history using an indexer.
 :::tip
 You can use an indexer to make the search easier. The provided implementation is for `TonClient` connected to a RPC.
 :::
@@ -1866,7 +1872,7 @@ export async function retry<T>(fn: () => Promise<T>, options: { retries: number,
 
 ```
 
-Create listener function which will assert specific transaction on certain account with specific incoming external message, equal to body message in boc:
+Create a listener function that will assert specific transaction on certain account with specific incoming external message, equal to body message in boc:
 
 <Tabs>
 <TabItem value="ts" label="@ton/ton">
@@ -1933,11 +1939,11 @@ export async function getTxByBOC(exBoc: string): Promise<string> {
 ### How to find transaction or message hash?
 
 :::info
-Be careful with the hash definition. It can be either a transaction hash or a message hash. These are different things.
+Be careful with the hash definition. It can be either a transaction hash or a message hash.
 :::
 
-To get transaction hash you need to use `hash` method of a transaction. To get external message hash you need
-to build message cell using `storeMessage` method and then use `hash` method of this cell.
+To get transaction hash you need to use a `hash` method of a transaction. To get external message hash you need
+to build a message cell using a `storeMessage` method and then use a `hash` method of this cell.
 
 <Tabs>
   <TabItem value="ts" label="@ton/ton">
@@ -1972,8 +1978,7 @@ for (const transaction of transactions) {
 
 </Tabs>
 
-Also you can get hash of message when building it. Note, this is the same hash as the hash of the message sent to initiate transaction
-like in previous example.
+Also you can get a hash of message when building it. Note that this is the same hash as the hash of the message sent to initiate the transaction, as in the previous example.
 
 <Tabs>
   <TabItem value="ts" label="@ton/ton">
@@ -2004,3 +2009,6 @@ const inMessageHash = transfer.hash();
   </TabItem>
 
 </Tabs>
+
+<Feedback />
+

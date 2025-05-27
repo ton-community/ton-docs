@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Participate as a Maintainer
 
 The Hacktoberfest event is the best time of year to receive support from the community!
@@ -37,3 +39,6 @@ To participate in Hack-TON-berfest follow this link:
     Add a repository to the list
   </a>
 </span>
+
+<Feedback />
+

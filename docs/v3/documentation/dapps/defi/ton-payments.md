@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON Payments
 
 TON Payments is the platform for micropayment channels. 
@@ -34,7 +36,10 @@ Find examples of using payment channels in the [Hack-a-TON #1](https://ton.org/h
 * [illright/diamonds](https://github.com/illright/diamonds)—Pay-per-Minute learning platform ([website](https://diamonds-ton.vercel.app/), [video](https://www.youtube.com/watch?v=g9wmdOjAv1s))
 
 
-## See Also
+## See also
 
-* [Payments Processing](/v3/guidelines/dapps/asset-processing/payments-processing)
+* [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing)
 * [TON Connect](/v3/guidelines/ton-connect/overview) 
+
+<Feedback />
+

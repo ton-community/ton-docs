@@ -1,4 +1,10 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Integration manual with the JavaScript SDK
+
+:::danger
+The page is outdated and will be deleted soon. Learn actual JS flow from [the guideline for web](/v3/guidelines/ton-connect/frameworks/web).
+:::
 
 In this tutorial, we’ll create a sample web app that supports TON Connect 2.0 authentication. It will allow for signature verification to eliminate the possibility of fraudulent identity impersonation without the need for agreement establishment between parties.
 
@@ -486,6 +492,10 @@ After implementing the above parameters, if an attacker tries to impersonate a u
 ```bash
 nacl.exceptions.BadSignatureError: Signature was forged or corrupt.
 ```
+## See also
+
+* [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+* [Sending Messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
 
 ## Next steps
 
@@ -498,3 +508,6 @@ When writing a dApp, the following should also be considered:
    - the current user may sign in using another type of contract instead of a wallet. Thankfully, this will contain the public key in the expected location
 
 Good luck and have fun writing dApps!
+
+<Feedback />
+

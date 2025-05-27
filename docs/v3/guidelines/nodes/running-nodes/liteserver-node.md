@@ -1,37 +1,39 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Liteserver Node
+# Liteserver node
 
 :::info
-Read about [Full Node](/v3/guidelines/nodes/running-nodes/full-node) before this article
+Before reading this article, please refer to the section on [Full node](/v3/guidelines/nodes/running-nodes/full-node) for more information.
 :::
 
-When an endpoint is activated in a full node, the node assumes the role of a **Liteserver**. This node type can field and respond to requests from Lite Clients, allowing for seamless interaction with the TON Blockchain.
+When an endpoint is activated in a full node, that node becomes a **liteserver**. This type of node can handle and respond to requests from the lite-client, facilitating smooth interaction with the TON Blockchain.
 
 ## Hardware requirements
 
-Compared to a [validator](/v3/guidelines/nodes/running-nodes/full-node#hardware-requirements), a liteserver mode requires less resources. However, it is still recommended to use a powerful machine to run a liteserver.
+Running a liteserver mode requires fewer resources than a [validator](/v3/guidelines/nodes/running-nodes/full-node#hardware-requirements), but it is still recommended that you use a powerful machine:
 
-- at least 16 cores CPU
-- at least 128 GB RAM
-- at least 1TB GB NVMe SSD _OR_ Provisioned 64+k IOPS storage
-- 1 Gbit/s network connectivity
-- 16 TB/month traffic on peak load
-- public IP address (_fixed IP address_)
+- minimum of 16-core CPU  
+- minimum of 128 GB RAM  
+- at least 1 TB NVMe SSD or provisioned storage with 64,000+ IOPS  
+- 1 Gbps network connectivity  
+- 16 TB of traffic per month during peak load  
+- fixed public IP address  
 
-### Recommended Providers
+### Recommended providers
 
-Feel free to use cloud providers listed in the [Recommended Providers](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) section.
+Feel free to use the cloud providers listed in the [recommended providers](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) section.
 
-Hetzner and OVH are forbidden to run a validator, but you can use them to run a liteserver:
+Hetzner and OVH are not allowed to run a validator, but you can use them to run a liteserver:
 
 - __Hetzner__: EX101, AX102
 - __OVH__: RISE-4
 
 ## Installation of liteserver
 
-If you don't have mytonctrl, install it with `-m liteserver` flag:
+If you don't have `MyTonCtrl`, install it using the `-m liteserver` flag.
 
 <Tabs groupId="operating-systems">
   <TabItem value="ubuntu" label="Ubuntu">
@@ -52,17 +54,14 @@ If you don't have mytonctrl, install it with `-m liteserver` flag:
   </TabItem>
 </Tabs>
 
-* `-d` - **mytonctrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state.
-  This will reduce synchronization time by several times.
-* `-c <path>` - If you want to use not public liteservers for synchronization. _(not required)_
-* `-i` - Ignore minimum requirements, use it only if you want to check compilation process without real node usage.
-* `-m` - Mode, can be `validator` or `liteserver`.
+- `-d`: The `MyTonCtrl` command will download a [dump](https://dump.ton.org/) of the latest blockchain state, significantly reducing synchronization time. 
+- `-c <path>`: This option allows you to use private liteservers for synchronization. _(This option is not required.)_
+- `-i`: Use this flag to ignore minimum requirements. It should only be used if you want to check the compilation process without utilizing a real node.
+- `-m`: This specifies the mode and can be set to either `validator` or `liteserver`.
 
-**To use testnet**, `-c` flag should be provided with `https://ton.org/testnet-global.config.json` value.
+To use the Testnet, you must provide the `-c` flag with the value `https://ton.org/testnet-global.config.json.` The default value for the `-c` flag is `https://ton-blockchain.github.io/global.config.json`, which refers to the mainnet configuration. 
 
-Default `-c` flag value is `https://ton-blockchain.github.io/global.config.json`, which is default mainnet config.
-
-If you already have mytonctrl installed, run:
+If you already have `MyTonCtrl` installed, run:
 
 ```bash
 user@system:~# mytonctrl
@@ -71,7 +70,7 @@ MyTonCtrl> enable_mode liteserver
 
 ## Check the firewall settings
 
-First, verify the Liteserver port specified in your `/var/ton-work/db/config.json` file. This port changes with each new installation of `MyTonCtrl`. It is located in the `port` field:
+Firstly, check the liteserver port specified in your `/var/ton-work/db/config.json` file. This port may vary with each new installation of `MyTonCtrl` and can be found in the `port` field.
 
 ```json
 {
@@ -86,28 +85,28 @@ First, verify the Liteserver port specified in your `/var/ton-work/db/config.jso
 }
 ```
 
-If you are using a cloud provider, you need to open this port in the firewall settings. For example, if you are using AWS, you need to open the port in the [security group](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html).
+If you use a cloud provider, open this port in the firewall settings. For instance, if you are using AWS, you should open the port in the [security group](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html).
 
-Below is an example of opening a port in the bare metal server firewall.
+Here is an example of how to open a port in the firewall of a bare metal server:
 
 ### Opening a port in the firewall
 
-We will use the `ufw` utility ([cheatsheet](https://www.cyberciti.biz/faq/ufw-allow-incoming-ssh-connections-from-a-specific-ip-address-subnet-on-ubuntu-debian/)). You can use the one you prefer.
+We will use the `ufw` utility (see the [cheatsheet](https://www.cyberciti.biz/faq/ufw-allow-incoming-ssh-connections-from-a-specific-ip-address-subnet-on-ubuntu-debian/)). However, feel free to use any alternative that you prefer.
 
-1. Install `ufw` if it is not installed:
+1. If `ufw` is not already installed, install it:
 
 ```bash
 sudo apt update
 sudo apt install ufw
 ```
 
-2. Allow ssh connections:
+2. Enable SSH connections:
 
 ```bash
 sudo ufw allow ssh
 ```
 
-3. Allow the port specified in the `config.json` file:
+3. Ensure that you allow the port indicated in the `config.json` file:
 
 ```bash
 sudo ufw allow <port>
@@ -125,25 +124,25 @@ sudo ufw enable
 sudo ufw status
 ```
 
-This way, you can open the port in the firewall settings of your server.
+To do this, you can open the port in your server's firewall settings.
 
-## Interaction with Liteserver (lite-client)
+## Interaction with liteserver (lite-client)
 
-0. Create an empty project on your machine and paste `config.json` in the project directory. This config can be obtained by following command:
+1. Create a new project directory on your machine and place the `config.json` file in it. You can obtain this configuration by running the following command:
 
 ```bash
 installer clcf # in mytonctrl
 ```
 
-It will create `/usr/bin/ton/local.config.json` on your machine where mytonctrl is installed. Check [mytonctrl documentation for more](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#clcf).
+It will create a file at `/usr/bin/ton/local.config.json` on your machine where `MyTonCtrl` is installed. Check the [MyTonCtrl documentation for more information](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#clcf).
 
-1. Install libraries.
+2. Install libraries.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
 
   ```bash
-  npm i --save ton-core ton-lite-
+  npm i --save ton-core ton-lite-client
   ```
 
   </TabItem>
@@ -164,12 +163,12 @@ It will create `/usr/bin/ton/local.config.json` on your machine where mytonctrl 
   </TabItem>
 </Tabs>
 
-2. Initialize a  and request masterchain info to ensure the liteserver is running.
+3. Initialize and request MasterChain information to confirm that the liteserver is running properly.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
 
-Change project type to `module` in your `package.json` file:
+Update the project type to `module` in your `package.json` file.
 
   ```json
   {
@@ -177,11 +176,11 @@ Change project type to `module` in your `package.json` file:
   }
   ```
 
-Create `index.js` file with the following content:
+Create a file named `index.js` and include the following content:
   ```js
-  import { LiteSingleEngine } from 'ton-lite-/dist/engines/single.js'
-  import { LiteRoundRobinEngine } from 'ton-lite-/dist/engines/roundRobin.js'
-  import { Lite } from 'ton-lite-/dist/.js'
+  import { LiteSingleEngine } from 'ton-lite-client/dist/engines/single.js'
+  import { LiteRoundRobinEngine } from 'ton-lite-client/dist/engines/roundRobin.js'
+  import { Lite } from 'ton-lite-client/dist/.js'
   import config from './config.json' assert {type: 'json'};
 
 
@@ -292,8 +291,10 @@ Create `index.js` file with the following content:
   </TabItem>
 </Tabs>
 
-3. Now you can interact with your own liteserver.
+4. You can now interact with your own liteserver.
 
 ## See also
 
-* [[YouTube]Tutorial how to launch liteserver](https://youtu.be/p5zPMkSZzPc)
+- [YouTube-Tutorial how to launch a liteserver](https://youtu.be/p5zPMkSZzPc)
+<Feedback />
+

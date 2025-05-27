@@ -1,5 +1,12 @@
+import Feedback from '@site/src/components/Feedback';
+
 
 # Contribution Guide
+
+:::danger
+This page is outdated and will be deleted soon.
+See the [How to contribute](/v3/contribute/).
+:::
 
 Here is a step-by-step guide of contributing to TON Documentation with Tutorials.
 
@@ -44,3 +51,6 @@ Write a _ton-footstep_ to receive a funding for your contributing.
 2. Follow a guide [How to complete ton-bounty?](https://github.com/ton-society/grants-and-bounties/blob/main/bounties/BOUNTIES_PROGRAM_GUIDELINES.md#got-assigned-submit-a-questbook-proposal) to complete bounty and get reward.
 3. In your task, you will be asked for a wallet to send a reward.
 4. Get rewarded!
+
+<Feedback />
+

@@ -1,18 +1,20 @@
-# Smart Contract Addresses Documentation
+import Feedback from '@site/src/components/Feedback';
+
+# Smart contract addresses
 
 This section describes the specifics of smart contract addresses on the TON Blockchain. It also explains how actors are synonymous with smart contracts on TON.
 
-## Everything is a Smart Contract
+## Everything is a smart contract
 
 On TON, smart contracts are built using the [Actor model](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor). In fact, actors on TON are technically represented as smart contracts. This means that even your wallet is a simple actor (and a smart contract).
 
 Typically, actors process incoming messages, change their internal states, and generate outbound messages as a result. That's why every actor (i.e., smart contract) on TON Blockchain must have an address, so it can receive messages from other actors.
 
 :::info EVM EXPERIENCE
-On the Ethereum Virtual Machine (EVM), addresses are completely separate from smart contracts. Feel free to learn more about the differences by reading our article ["Six unique aspects of TON Blockchain that will surprise Solidity developers"](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers) by Tal Kol.
+On the Ethereum Virtual Machine (EVM), addresses are completely separate from smart contracts. Feel free to learn more about the differences by reading our article ["Six unique aspects of TON Blockchain that will surprise Solidity developers"](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers) - _Tal Kol_.
 :::
 
-## Address of Smart Contract
+## Address of smart contract
 
 Smart contract addresses on TON typically consist of two main components:
 
@@ -22,7 +24,7 @@ Smart contract addresses on TON typically consist of two main components:
 
 In the raw address overview section of this documentation, we'll discuss how  **(workchain_id, account_id)** pairs are presented.
 
-### Workchain ID and Account ID
+### WorkChain ID and Account ID
 
 #### Workchain ID
 
@@ -32,21 +34,24 @@ Nowadays, only the Masterchain (workchain_id=-1) and occasionally the basic work
 
 Both of them have 256-bit addresses, therefore, we assume that the workchain_id is either 0 or -1, and the address within the workchain is precisely 256 bits.
 
+
 #### Account ID
 
-All account IDs on TON make use of 256-bit addresses on the Masterchain and Basechain (or basic workchain).
+All account IDs on TON use 256-bit addresses on the Masterchain and Basechain (also referred to as the basic workchain).
 
-In fact, Account ID’s **(account_id)** defined as hash functions for smart contract objects (particular, the SHA-256). Every smart contract operating on TON Blockchain stores two main components. These include:
+In fact, an Account ID (**account_id**) is defined as the result of applying a hash function (specifically SHA-256) to a smart contract object. Every smart contract operating on the TON Blockchain stores two main components:
 
-1. _Compiled code_. Logic of the smart contract compiled in the form of bytecode.
-2. _Initial state_. The contract's values at the moment of its deployment on-chain.
+1. _Compiled code_. The logic of the smart contract, compiled into bytecode.
+2. _Initial state_. The contract's values at the moment it is deployed on-chain.
 
+To derive the contract's address, you calculate the hash of the **(Initial code, Initial state)** pair. We won’t explore how the [TVM](/v3/documentation/tvm/tvm-overview) works at this time, but it is important to understand that account IDs on TON follow this formula:
 
-Finally, to derive the contract's address, it is necessary to calculate the hash corresponding to the pair **(Initial code, Initial state)** object. At this time, we won't take a deep dive into how the [TVM](/v3/documentation/tvm/tvm-overview) works, but it's important to understand that account IDs on TON are determined using this formula:
-:
 **account_id = hash(initial code, initial state)**
 
-In time, throughout this documentation, we'll dive deeper into the technical specifications and overview of the TVM and TL-B scheme. Now that we are familiar with the generation of the **account_id** and their interaction with smart contract addresses on TON, let’s explain Raw and User-Friendly addresses.
+Later in this documentation, we will dive deeper into the technical specifications of the TVM and TL-B scheme. Now that we are familiar with how the **account_id** is generated and how it interacts with smart contract addresses on TON, let’s discuss Raw and User-Friendly addresses.
+
+
+
 
 ## Addresses state
 
@@ -57,7 +62,7 @@ Each address can be in one of possible states:
 - `active` - address has smart contract code, persistent data and balance. At this state it can perform some logic during the transaction and change its persistent data. An address enters this state when it was `uninit` and there was an incoming message with state_init param (note, that to be able to deploy this address, hash of `state_init` and `code` must be equal to address).
 - `frozen` - address cannot perform any operations, this state contains only two hashes of the previous state (code and state cells respectively). When an address's storage charge exceeds its balance, it goes into this state. To unfreeze it, you can send an internal message with `state_init` and `code` which store the hashes described earlier and some Toncoin. It can be difficult to recover it, so you should not allow this situation. There is a project to unfreeze the address, which you can find [here](https://unfreezer.ton.org/).
 
-## Raw and User-Friendly Addresses
+## Raw and user-friendly addresses
 
 After providing a brief overview of how smart contract addresses on TON leverage workchains and account IDs (for the Masterchain and Basechain specifically), it is important to understand that these addresses are expressed in two main formats:
 
@@ -83,7 +88,7 @@ Notice the `-1` at the start of the address string, which denotes a _workchain_i
 Uppercase letters (such as 'A', 'B', 'C', 'D' etc.) may be used in address strings instead of their lowercase counterparts (such as 'a', 'b', 'c', 'd' etc.).
 :::
 
-#### Issues With Raw Addresses
+#### Issues with raw addresses
 
 Using the Raw Address form presents two main issues:
 
@@ -92,11 +97,11 @@ Using the Raw Address form presents two main issues:
 2. When using the raw address format, it's impossible to add special flags like those used when sending transactions that employ user-friendly addresses.
    To help you better understand this concept, we’ll explain which flags can be used below.
 
-### User-Friendly Address
+### User-friendly address
 
 User-friendly addresses were developed to secure and simplify the experience for TON users who share addresses on the internet (for example, on public messaging platforms or via their email service providers), as well as in the real world.
 
-#### User-Friendly Address Structure
+#### User-friendly address structure
 
 User-friendly addresses are made up of 36 bytes in total and are obtained by generating the following components in order:
 
@@ -124,7 +129,7 @@ After this process is complete, the generation of a user-friendly address with a
 On TON, DNS addresses such as mywallet.ton are sometimes used instead of raw and user-friendly addresses. DNS addresses are made up of user-friendly addresses and include all the required flags that allow developers to access all the flags from the DNS record within the TON domain.
 :::
 
-#### User-Friendly Address Encoding Examples
+#### User-friendly address encoding examples
 
 For example, the "test giver" smart contract (a special smart contract residing in the testnet masterchain that sends 2 test tokens to anyone who requests them) makes use of the following raw address:
 
@@ -139,7 +144,7 @@ The above "test giver" raw address must be converted into the user-friendly addr
 Notice that both forms (_base64_ and _base64url_) are valid and must be accepted!
 :::
 
-#### Bounceable vs Non-Bounceable Addresses
+#### Bounceable vs non-bounceable addresses
 
 The core idea behind the bounceable address flag is sender's funds security.
 
@@ -151,7 +156,7 @@ In relation to bounceable addresses specifically:
 
 Feel free to read more on this topic in our documentation to gain a better understanding of [non-bounceable messages](/v3/documentation/smart-contracts/message-management/non-bounceable-messages).
 
-#### Armored base64 Representations
+#### Armored base64 representations
 
 Additional binary data related to TON Blockchain employs similar "armored" base64 user-friendly address representations. These differentiate from one another depending on the first 4 characters of their byte tag. For example, 256-bit Ed25519 public keys are represented by first creating a 36-byte sequence using the below process in order:
 
@@ -166,7 +171,7 @@ The resulting 36-byte sequence is converted into a 48-character base64 or base64
 `Pubjns2gp7DGCnEH7EOWeCnb6Lw1akm538YYaz6sdLVHfRB2`
 
 
-### Converting User-Friendly Addresses and Raw Addresses
+### Converting user-friendly addresses and raw addresses
 
 The simplest way to convert user-friendly and raw addresses is to use one of several TON APIs and other tools, including:
 
@@ -182,7 +187,7 @@ Additionally, there are two ways to convert user-friendly and raw addresses for 
 
 It's also possible to make use of similar mechanisms using [SDKs](/v3/guidelines/dapps/apis-sdks/sdk).
 
-### Address Examples
+### Address examples
 
 Learn more examples on TON Addresses in the [TON Cookbook](/v3/guidelines/dapps/cookbook#working-with-contracts-addresses).
 
@@ -220,4 +225,7 @@ If you are developing a custom product on the TON blockchain, it is essential to
 
 Ensure your application verifies whether the recipient address is initialized before sending funds.
 Based on the address state, use bounceable addresses for user smart contracts with custom application logic to ensure funds are returned. Use non-bounceable addresses for wallets.
+
+
+<Feedback />
 

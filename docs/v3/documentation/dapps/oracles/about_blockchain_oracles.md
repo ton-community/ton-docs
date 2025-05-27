@@ -1,4 +1,6 @@
-# About Oracles
+import Feedback from '@site/src/components/Feedback';
+
+# About oracles
 
 Blockchain oracles are entities that connect the blockchain to external systems, allowing smart contracts to be executed based on real-world inputs.
 
@@ -56,6 +58,9 @@ It is difficult to generate random numbers in smart contracts because all operat
 
 ## List of oracles in TON
 
-* [Pyth Oracles](/v3/documentation/dapps/oracles/pyth)
-* [RedStone Oracles](/v3/documentation/dapps/oracles/red_stone)
+* [Pyth oracles](/v3/documentation/dapps/oracles/pyth)
+* [RedStone oracles](/v3/documentation/dapps/oracles/red_stone)
+
+
+<Feedback />
 

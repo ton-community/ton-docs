@@ -1,14 +1,15 @@
 ---
 description: At the end of the tutorial, you will write a beautiful bot that will be able to accept payments for your product directly in TON.
 ---
+import Feedback from '@site/src/components/Feedback';
 
-# Bot for sales of dumplings
+# Bot for selling dumplings
 
 In this article, we'll create a simple Telegram bot for accepting payments in TON.
 
 ## 🦄 What it looks like
 
-At the end of the tutorial, you will write a beautiful bot that will be able to accept payments for your product directly in TON.
+By the end of the tutorial, you will have a fully functional bot that can accept payments for your product directly in TON.
 
 The bot will look like this:
 
@@ -16,22 +17,22 @@ The bot will look like this:
 
 ## 📖 What you'll learn
 You'll learn how to:
- - Create a Telegram bot in NodeJS using grammY
- - Work with public TON Center API
+ - Create a Telegram bot in NodeJS using grammY,
+ - Work with the public TON Center API.
 
-> Why do we use grammY?
-Because grammY is a modern, young, high-level framework for comfortable & fast development of telegram bots on JS/TS/Deno, in addition to this grammY has great [documentation](https://grammy.dev) and an active community that can always help you.
+> Why use grammY?
+grammY is a modern, high-level framework designed for fast and efficient development of Telegram bots using JavaScript, TypeScript, or Deno. It features excellent [documentation](https://grammy.dev) and an active community ready to help.
 
 
 ## ✍️ What you need to get started
 Install [NodeJS](https://nodejs.org/en/download/) if you haven't yet.
 
-Also you need these libraries:
- - grammy
- - ton
- - dotenv
+You will also need the following libraries:
+ - grammy,
+ - ton,
+ - dotenv.
 
-You can install them with one command in the terminal.
+You can install them with a single terminal command.
 ```bash npm2yarn
 npm install ton dotenv grammy @grammyjs/conversations
 ```
@@ -48,15 +49,15 @@ src
     ├── app.js
 .env
 ```
-* `bot/start.js` & `bot/payment.js` - files with handlers for telegram bot
-* `src/ton.js` - file with business logic related to TON
-* `app.js` - file for initializing and launching the bot
+* `bot/start.js` & `bot/payment.js` - Handlers for the Telegram bot,
+* `src/ton.js` - Business logic related to TON,
+* `app.js` - Initializes and launches the bot.
 
 
-Now let's begin writing code!
+Now let's start writing the code!
 
 ## Config
-Let's start with `.env`. We just need to set a few parameters in it.
+Let's begin with `.env`. You need to set the following parameters:
 
 **.env**
 ```
@@ -67,39 +68,37 @@ OWNER_WALLET=
 ```
 
 Here you need to fill in the values in the first four lines:
- - `BOT_TOKEN` is your Telegram Bot token which you can get after [creating a bot](https://t.me/BotFather).
- - `OWNER_WALLET` is your project's wallet address which will accept all payments. You can just create a new TON wallet and copy its address.
- - `API_KEY` is your API key from TON Center which you can get from [@tonapibot](https://t.me/tonapibot)/[@tontestnetapibot](https://t.me/tontestnetapibot) for the mainnet and testnet, respectively.
- - `NETWORK` is about on what network your bot will run - testnet or mainnet
+ - `BOT_TOKEN` - Your Telegram bot token, obtained after [creating a bot](https://t.me/BotFather).
+ - `OWNER_WALLET` - Your project's wallet address for receiving payments. You can create a new TON wallet and copy its address.
+ - `API_KEY` - Your API key from TON Center, available via [@tonapibot](https://t.me/tonapibot)/[@tontestnetapibot](https://t.me/tontestnetapibot) for the Mainnet and Testnet, respectively.
+ - `NETWORK` - The network on which your bot will operate: Testnet or Mainnet.
 
-That's all for the config file, so we can move forward!
+With the config file set up, we can move forward!
 
 ## TON Center API
-In the `src/services/ton.py` file we'll declare a functions to verify the existence of a transaction and generate links for a quick transition to the wallet application for payment
+In `src/services/ton.py`, we will define functions to verify transactions and generate payment links.
 
 ### Getting the latest wallet transactions
 
-Our task is to check the availability of the transaction we need from a certain wallet. 
+Our goal is to check whether a specific transaction exists in a wallet.
 
-We will solve it like this:
-1. We will receive the last transactions that were received to our wallet. Why ours? In this case, we do not have to worry about what the user's wallet address is, we do not have to confirm that it is his wallet, we do not have to store this wallet anywhere.
-2. Sort and leave only incoming transactions 
-3. Let's go through all the transactions, and each time we will check whether the comment and the amount are equal to the data that we have  
-4. celebrating the solution of our problem🎉
+How to solve it:
+1. Retrieve the latest transactions for our wallet. Why our wallet? In this case, we do not have to worry about what the user's wallet address is, we do not have to confirm that it is their wallet, and we do not have to store this wallet.
+2. Filter incoming transactions only.
+3. Iterate through transactions and verify if the comment and amount match our data.
+4. Celebrate the solution to our problem.
 
 #### Getting the latest transactions
 
-If we use the TON Center API, then we can refer to their [documentation](https://toncenter.com/api/v2/) and find a method that ideally solves our problem - [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get)
+Using the TON Center API, we can refer to their [documentation](https://toncenter.com/api/v2/) and call the [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get) method with just the wallet address. We also use the limit parameter to restrict the response to 100 transactions.
 
-One parameter is enough for us to get transactions - the wallet address for accepting payments, but we will also use the limit parameter in order to limit the issuance of transactions to 100 pieces.
-
-Let's try to call a test request for the `EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N` address (by the way, this is the TON Foundation address)
+For example, a test request for `EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N` (this is the TON Foundation address):
 ```bash
 curl -X 'GET' \
   'https://toncenter.com/api/v2/getTransactions?address=EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N&limit=100' \
   -H 'accept: application/json'
 ```
-Great, now we have a list of transactions on hand in ["result"], now let's take a closer look at 1 transaction
+Great, now we have a list of transactions on hand in `["result"]`, now let's take a closer look at 1 transaction.
 
 
 ```json
@@ -134,26 +133,26 @@ Great, now we have a list of transactions on hand in ["result"], now let's take 
     }
 ```
 
-From this json file, we can understand some information that can be usefull for us:
+From this JSON file, we can extract some insights:
 
-- This is an incoming transaction, since the "out_msgs" field is empty
-- We can also get a comment of the transaction, its sender and the transaction amount
+- The transaction is incoming, which is indicated by an empty `out_msgs` field.
+- We can extract the transaction comment, sender, and amount.
 
-Now we're ready to create a transaction checker
+Now, we're ready to create a transaction checker.
 
-### Work with TON
+### Working with TON
 
-Let's start by importing the necessary library TON
+Start with importing the required TON library:
 ```js
 import { HttpApi, fromNano, toNano } from "ton";
 ```
 
-Let's think about how to check if the user has sent the transaction we need.
+Think about how to check if the user has sent the transaction we need.
 
-Everything is elementary simple. We can just sort only incoming transactions to our wallet, and then go through the last 100 transactions, and if a transaction is found that has the same comment and amount, then we have found the transaction we need!
+It's all very simple. We can simply sort only incoming transactions to our wallet, and then go through the last 100 transactions, and if there is a transaction with the same comment and amount, then we have found the transaction we need!
 
 
-Let's start with initializing the http client, for convenient work with TON
+Initialize the http client for convenient work with TON:
 ```js
 export async function verifyTransactionExistance(toWallet, amount, comment) {
   const endpoint =
@@ -166,23 +165,23 @@ export async function verifyTransactionExistance(toWallet, amount, comment) {
     { apiKey: process.env.TONCENTER_TOKEN }
   );
 ```
-Here we simply generate the endpoint url based on which network is selected in the config. And after that we initialize the http client.
+Here we simply generate the endpoint url based on which network is selected in the configuration. And after that we initialize the http client.
 
-So, now we can get the last 100 transactions from the owner's wallet
+So, now we can get the last 100 transactions from the owner's wallet.
 ```js
 const transactions = await httpClient.getTransactions(toWallet, {
     limit: 100,
   });
 ```
 
-and filter, leaving only incoming transactions (if the out_msgs of transaction is empty, we leave it)
+Filter, leaving only incoming transactions (if the out_msgs of the transaction is empty, we leave it).
 ```js
 let incomingTransactions = transactions.filter(
     (tx) => Object.keys(tx.out_msgs).length === 0
   );
 ```
 
-Now we just have to go through all the transactions, and provided that the comment and the transaction value match, we return true
+Now we just have to go through all the transactions. If a matching transaction is found, we return true.
 ```js
   for (let i = 0; i < incomingTransactions.length; i++) {
     let tx = incomingTransactions[i];
@@ -203,10 +202,10 @@ Now we just have to go through all the transactions, and provided that the comme
 
   return false;
 ```
-Note that value is in nanotons by default, so we need to divide it by 1 billion or we can just use `fromNano` method from the TON library.
-And that's all for the `verifyTransactionExistance` function!
+Since values are in nanotons by default, we divide by 1 billion or use the `fromNano` method from the TON library.
+And that's it for the `verifyTransactionExistance` function!
 
-Now we can create function to generate link for a quick transition to the wallet application for payment
+Finally, we create a function to generate a payment link by embedding the transaction parameters in a URL.
 ```js
 export function generatePaymentLink(toWallet, amount, comment, app) {
   if (app === "tonhub") {
@@ -219,7 +218,7 @@ export function generatePaymentLink(toWallet, amount, comment, app) {
   )}&text=${comment}`;
 }
 ```
-All we need is just to substitute the transaction parameters in the URL. Without forgetting to transfer the value of the transaction to nano.
+All we need is just to substitute the transaction parameters in the URL. Make sure to convert the transaction value to nano.
 
 
 ## Telegram bot
@@ -239,12 +238,14 @@ import {
 import handleStart from "./bot/handlers/start.js";
 ```
 
-Let's set up dotenv module to comfy work with environment variables that we set at .env file 
+Set up the dotenv module to work with environment variables:
+
 ```js
 dotenv.config();
 ```
 
-After that we create a function that will run our project. In order for our bot not to stop if any errors appear, we add this code
+Now, define a function to run the bot. To prevent it from stopping due to errors, include:
+
 ```js
 async function runApp() {
   console.log("Starting app...");
@@ -255,7 +256,7 @@ async function runApp() {
   });
 ```
 
-Now initialize the bot and the necessary plugins
+Next, initialize the bot and the necessary plugins.
 ```js
   // Initialize the bot
   const bot = new Bot(process.env.BOT_TOKEN);
@@ -267,9 +268,9 @@ Now initialize the bot and the necessary plugins
 
   bot.use(createConversation(startPaymentProcess));
 ```
-Here we use `BOT_TOKEN` from our config that we made at the beginning of the tutorial.  
+Here we use `BOT_TOKEN` from our configuration we created at the beginning of the tutorial.
 
-We initialized the bot but it's still empty. We must add some functions for interaction with the user.
+We have initialized the bot, but it is still empty. We need to add some features to interact with the user.
 ```js
   // Register all handelrs
   bot.command("start", handleStart);
@@ -278,9 +279,9 @@ We initialized the bot but it's still empty. We must add some functions for inte
   });
   bot.callbackQuery("check_transaction", checkTransaction);
 ```
-Reacting to the command/start, the handleStart function will be executed. If the user clicks on the button with callback_data equal to "buy", we will start our "conversation", which we registered just above. And when we click on the button with callback_data equal to "check_transaction", we will execute the checkTransaction function.
+Reacting to the command/start, the handleStart function will be executed. If the user clicks on the button with callback_data equal to "buy", we will start our "conversation", which we registered just above. And when we click on the button with callback_data equal to `"check_transaction"`, we will execute the `checkTransaction` function.
 
-And all that remains for us is to launch our bot and output a log about a successful launch
+Finally, launch the bot and output a log a success message.
 ```js
   // Start bot
   await bot.init();
@@ -292,7 +293,7 @@ And all that remains for us is to launch our bot and output a log about a succes
 
 #### /start Command
 
-Let's begin with the `/start` command handler. This function will be called when the user launches the bot for the first time, restarts it
+Let's begin with the `/start` command handler. This function is triggered when a user starts or restarts the bot.
 
 ```js
 import { InlineKeyboard } from "grammy";
@@ -310,14 +311,13 @@ Welcome to the best Dumplings Shop in the world <tg-spoiler>and concurrently an 
   );
 }
 ```
-Here we first import the InlineKeyboard from the grammy module. After that, we create an inline keyboard in the handler with an offer to buy dumplings and a link to this article (a bit of recursion here😁).
-.row() stands for the transfer of the next button to a new line.
-After that, we send a welcome message with the text (important, I use html markup in my message to decorate it) along with the created keyboard
-The welcome message can be anything you want.
+First, import the InlineKeyboard from the grammy module. Then, create an inline keyboard offering to buy dumplings and linking to this tutorial. 
+The `.row()` method places the next button on a new line.
+We send a welcome message (formatted with HTML) along with the keyboard. You can customize this message as needed.
 
 #### Payment process
 
-As always, we will start our file with the necessary imports
+We begin by importing the necessary modules:
 
 ```js
 import { InlineKeyboard } from "grammy";
@@ -327,13 +327,14 @@ import {
   verifyTransactionExistance,
 } from "../../services/ton.js";
 ```
-After that, we will create a startPaymentProcess handler, which we have already registered in the app.js for execution when a certain button is pressed
+After that, we will create a startPaymentProcess handler, which we have already registered in the `app.js`. This function is executed when a specific button is pressed.
 
-In the telegram when you click on the inline button a spinning watch appears in order to remove them, we respond to the callback
+To remove the spinning watch icon in Telegram, we acknowledge the callback before proceeding.
+
 ```js
   await ctx.answerCallbackQuery();
 ```
-After that, we need to send the user a picture of dumplings, ask him to send the number of dumplings that he wants to buy. And we are waiting for him to enter this number
+Next, we need to send the user a picture of dumplings, ask them to send the number of dumplings that they want to buy. Wait for the user to enter this number.
 ```js
   await ctx.replyWithPhoto(
     "https://telegra.ph/file/bad2fd69547432e16356f.jpg",
@@ -346,7 +347,7 @@ After that, we need to send the user a picture of dumplings, ask him to send the
   // Wait until the user enters the number
   const count = await conversation.form.number();
 ```
-Now we calculate the total amount of the order and generate a random string, which we will use to comment on the transaction and add the dumplings postfix
+Next, we calculate the total amount of the order and generate a random string that we will use for the transaction comment and add the postfix `"dumplings"`.
 ```js
   // Get the total cost: multiply the number of portions by the price of the 1 portion
   const amount = count * 3;
@@ -354,13 +355,13 @@ Now we calculate the total amount of the order and generate a random string, whi
   const comment = Math.random().toString(36).substring(2, 8) + "dumplings";
 ```
 
-And we save the resulting data to the session so that we can get this data in the next handler.
+Save the resulting data to the session so that we can get this data in the next handler.
 ```js
   conversation.session.amount = amount;
   conversation.session.comment = comment;
 ```
 
-We generate links to go to a quick payment and create an inline keyboard
+We generate links for quick payment and create a built-in keyboard.
 ```js
 const tonhubPaymentLink = generatePaymentLink(
     process.env.OWNER_WALLET,
@@ -382,7 +383,8 @@ const tonhubPaymentLink = generatePaymentLink(
     .row()
     .text(`I sent ${amount} TON`, "check_transaction");
 ```
-And we send our message with the keyboard, where we ask the user to send a transaction to our wallet address with a randomly generated comment
+Send the message using the keyboard, in which ask the user to send a transaction to our wallet address with a randomly generated comment.
+
 ```js
   await ctx.reply(
     `
@@ -390,13 +392,13 @@ Fine, all you have to do is transfer ${amount} TON to the wallet <code>${process
 
 <i>WARNING: I am currently working on ${process.env.NETWORK}</i>
 
-P.S. You can conveniently make a transfer by clicking on the appropriate button below and confirm the transaction in the offer`,
+P.S. You can conveniently make a transfer by clicking on the appropriate button below and confirming the transaction in the offer`,
     { reply_markup: menu, parse_mode: "HTML" }
   );
 }
 ```
 
-Now all we have to do is create a handler to check for the presence of a transaction
+Now all we have to do is create a handler to check for the presence of a transaction.
 ```js
 export async function checkTransaction(ctx) {
   await ctx.answerCallbackQuery({
@@ -424,21 +426,23 @@ export async function checkTransaction(ctx) {
   }
 }
 ```
-All we are doing here is just checking for a transaction, and provided that it exists, we tell the user about it and reset the data in the session
+Next, simply check for a transaction, and if it exists, notify the user and flush the data in the session.
 
+### Start of the bot
 
-### Bot start
-
-To start use this command:
+To start the bot, use this command:
 
 ```bash npm2yarn
 npm run app
 ```
 
-If your bot doesn't work correctly, compare your code with code [from this repository](https://github.com/coalus/DumplingShopBot). If it didn't help, feel free to write me in telegram. You can find my telegram account below
+If your bot isn't working correctly, compare your code with the code [from this repository](https://github.com/coalus/DumplingShopBot). If issues persist, feel free to contact me on Telegram. You can find my Telegram account below.
 
 ## References
 
- - Made for TON as part of [ton-footsteps/58](https://github.com/ton-society/ton-footsteps/issues/58)
- - By Coalus ([Telegram @coalus](https://t.me/coalus), [Coalus on GitHub](https://github.com/coalus))
- - [Bot Sources](https://github.com/coalus/DumplingShopBot)
+ - Made for TON as a part of [ton-footsteps/58](https://github.com/ton-society/ton-footsteps/issues/58)
+ - [Telegram @coalus](https://t.me/coalus), [Coalus on GitHub](https://github.com/coalus) - _Coalus_
+ - [Bot sources](https://github.com/coalus/DumplingShopBot)
+
+<Feedback />
+
