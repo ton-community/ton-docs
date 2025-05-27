@@ -480,7 +480,7 @@ function writeStringTail(str, cell) {
 function readStringTail(slice) {
     const str = new TextDecoder('ascii').decode(slice.array); // decode uint8array to string
     if (cell.refs.length > 0) {
-        return str + readStringTail(cell.refs[0].beginParse()); // read next cell
+        return str + readStringTail(slice.refs[0]); // read next cell
     } else {
         return str;
     }
