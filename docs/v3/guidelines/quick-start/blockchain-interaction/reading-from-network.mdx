@@ -323,9 +323,24 @@ A message is a packet of data exchanged between actors (users, applications, or 
 Some fields like message `hash` or `logical time (lt)` are not part of the message itself. They appear after the message has been included in a transaction and are calculated by the API for your convenience.
 :::
 
+
+
 #### Implementation
 
-Create a new file `3-fetch-account-transaction.ts`:
+Let’s now try to fetch transactions for an account we control.
+
+Before running this code:
+* Go to [Tonviewer](https://testnet.tonviewer.com) and open your Testnet wallet address, which we created earlier in the [Getting Started](/v3/guidelines/quick-start/getting-started#interacting-with-ton-ecosystem) section.
+* Send some test TON to yourself using [Testgiver Ton Bot](https://t.me/testgiver_ton_bot/).
+* Wait a few seconds and make sure the transaction appears in Tonviewer.
+
+:::important
+Make sure you're working in the Testnet, not the Mainnet.
+
+Also, please note that the Testnet API may update data with some delay, so your transaction might not appear immediately when querying through the API.
+:::
+
+* Then, create a new file `3-fetch-account-transaction.ts`:
 
 ```typescript title="3-fetch-account-transaction.ts"
 import { Address, TonClient } from "@ton/ton";
@@ -339,7 +354,8 @@ async function main() {
   // Calling method on http api
   // full api: https://testnet.toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get
   const transactions = await tonClient.getTransactions(
-    Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'), // Address to fetch transactions
+    // Your Testnet address to fetch transactions
+    Address.parse('your Testnet wallet address'),
     {
       limit: 10,      //maximum ammount of recieved transactions
       archival: true, //search in all history
@@ -359,7 +375,9 @@ async function main() {
 main();
 ```
 
-Run this example using following command:
+* Replace `your Testnet wallet address` with your Testnet address from Tonviewer.
+
+Run this example using the following command:
 
 ```bash
 npx ts-node 3-fetch-account-transaction.ts
@@ -368,9 +386,9 @@ npx ts-node 3-fetch-account-transaction.ts
 #### Expected result
 
 ```bash
-Timestamp: 1743516631
-Value: 100000000n
-Sender: EQBui16XCF61MSWauIDpVFbKAOJmjLHRxXvXeqiN9dYaIgjq
+Timestamp: 1748381530
+Value: 2000000000n
+Sender: EQCSES0TZYqcVkgoguhIb8iMEo4cvaEwmIrU5qbQgnN8fmvP
 ```
 
 :::info
