@@ -284,7 +284,7 @@ First key: AABB2233
 Second key: 3322BBAA
 ```
 
-We need to determine which key to use for specific purposes. To do this, we can compare the ID of our public channel key with the ID of the server channel's public key, converting both to a numerical format (uint256). 
+We need to determine which key to use for specific purposes. To do this, we can compare the ID of our public key with the ID of the server's public key, converting both to a numerical format (uint256). 
 
 This method ensures that both the server and the client agree on which key is used for what function. If the server uses the first key for encryption, this approach guarantees that the client will always use it for decryption. 
 
@@ -377,6 +377,6 @@ Further communication occurs based on the logic outlined in this article, though
 
 ## References
 
-_Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-UDP-Internal.md) by [Oleg Baranov](https://github.com/xssnick)._
+Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-UDP-Internal.md) - _[Oleg Baranov](https://github.com/xssnick)._
 <Feedback />
 

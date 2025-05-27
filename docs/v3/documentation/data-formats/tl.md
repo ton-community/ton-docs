@@ -48,6 +48,6 @@ The type is explicitly specified, so the prefix is not needed.
 
 ## Reference
 
-Here is [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/TL.md) by _[Oleg Baranov](https://github.com/xssnick)_.
+[Link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/TL.md) - _[Oleg Baranov](https://github.com/xssnick)_.
 <Feedback />
 

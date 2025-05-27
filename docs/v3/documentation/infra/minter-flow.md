@@ -25,13 +25,13 @@ _ to_mint:ExtraCurrencyCollection = ConfigParam 7;
 _ mint_new_price:Grams mint_add_price:Grams = ConfigParam 6;
 ```
 
-`ConfigParam2` contains the address of  **Minter**.
+`ConfigParam2` contains the address of  **minter**.
 
 ## Low-level minting flow
 
 In each block, the collator compares the old global balance (the global balance of all currencies at the end of the previous block) with `ConfigParam7`. If any amount for any currency in `ConfigParam7` is less than it is in the global balance, the config is invalid. If any amount of any currency in `ConfigParam7` is higher than it is in the global balance, a minting message will be created.
 
-This minting message has source `-1:0000000000000000000000000000000000000000000000000000000000000000` and **Minter** from `ConfigParam2` as destination and contains excesses of extracurrencies in `ConfigParam7` over the old global balance.
+This minting message has source `-1:0000000000000000000000000000000000000000000000000000000000000000` and **minter** from `ConfigParam2` as destination and contains excesses of extracurrencies in `ConfigParam7` over the old global balance.
 
 The problem here is that the minting message includes only additional currencies and no Toncoins.  As a result, even if the **Minter** is designated as a fundamental smart contract (as indicated in `ConfigParam31`), a minting message will lead to an aborted transaction with the error: `compute_ph:(tr_phase_compute_skipped reason:cskip_no_gas)`.
 
@@ -47,7 +47,7 @@ _ (Hashmap 32 std_addr) = ExtraCurrencyAuthorizationConfig;
 
 where key - `currency_id` and `std_addr` is _admin_ of this currency (can be in any WorkChain).
 
-2. Minter accepts mint requests from **admins**, forwards requests for mint to **Config**, **Config** updates `ConfigParam 7`, and responds to **Minter**. Since extracurrencies would be minted to **Minter** only on the next MasterChain block, withdrawing extra currencies to **admin** should be delayed. It is done via **Echo** smart-contract, not in MasterChain. When a response from **Echo** comes to **Minter**, it sends extracurrencies to **admin**. So the scheme is as follows: 
+2. Minter accepts mint requests from **admins**, forwards requests for mint to **config**, **config** updates `ConfigParam 7`, and responds to **minter**. Since extracurrencies would be minted to **minter** only on the next MasterChain block, withdrawing extra currencies to **admin** should be delayed. It is done via **echo** smart-contract, not in MasterChain. When a response from **echo** comes to **minter**, it sends extracurrencies to **admin**. So the scheme is as follows: 
 
 	`Admin -> Minter -> Config -> Minter -> Echo (in other workchain to wait 	until the next masterchain block) -> Minter -> Admin`
 
@@ -58,18 +58,18 @@ Each minting of new extracurrency or an increase in the supply of existing curre
 :::
 
 :::info
-Sending of extracurrency to blackhole has the following effect: extracurrency amount is burnt, but since `ConfigParam7` is not changed, on the next block, **Minter** will receive the burnt amount on its balance.
+Sending of extracurrency to blackhole has the following effect: extracurrency amount is burnt, but since `ConfigParam7` is not changed, on the next block, **minter** will receive the burnt amount on its balance.
 :::
 
 
 ## How to mint your own extracurrency
 
-1. Ensure that your network has the **Minter Contract** and that `ConfigParam2` and `ConfigParam6` are set correctly.
+1. Ensure that your network has the **minter contract** and that `ConfigParam2` and `ConfigParam6` are set correctly.
 
-2. Create a **Currency Admin Contract** that will control how the extra currency is minted.
+2. Create a **currency admin contract** that will control how the extra currency is minted.
 
-3. Submit a proposal to the validators to add your **Currency Admin** contract address to the `ExtraCurrencyAuthorizationConfig` for a specific `currency_id` and obtain their approval.
+3. Submit a proposal to the validators to add your **currency admin** contract address to the `ExtraCurrencyAuthorizationConfig` for a specific `currency_id` and obtain their approval.
 
-4. Send a `mint` request from the **Currency Admin Contract** to the **Minter**. Wait for the **Minter** to return the extra currency.
+4. Send a `mint` request from the **currency admin contract** to the **minter**. Wait for the **minter** to return the extra currency.
 <Feedback />
 

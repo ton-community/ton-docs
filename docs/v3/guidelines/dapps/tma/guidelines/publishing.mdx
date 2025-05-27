@@ -90,7 +90,7 @@ Apart from this, Web Apps opened via the menu button work in the same way as [in
 
 **TL;DR:** Mini Apps launched via **web_app** type [InlineQueryResultsButton](https://core.telegram.org/bots/api#inlinequeryresultsbutton) can be used anywhere in inline mode. Users can create content in a web interface and seamlessly send it to the current chat via inline mode.
 
-**NEW**: The *button* parameter in the [answerInlineQuery](https://core.telegram.org/bots/api#answerinlinequery) method to display a special 'Switch to Mini App' button either above or in place of the inline results. This button will **open a Mini App** from the specified URL. Once done, you can call the [Telegram.WebApp.switchInlineQuery](https://core.telegram.org/bots/webapps#initializing-web-apps) method to send the user back to inline mode.
+**New**: The *button* parameter in the [answerInlineQuery](https://core.telegram.org/bots/api#answerinlinequery) method to display a special 'Switch to Mini App' button either above or in place of the inline results. This button will **open a Mini App** from the specified URL. Once done, you can call the [Telegram.WebApp.switchInlineQuery](https://core.telegram.org/bots/webapps#initializing-web-apps) method to send the user back to inline mode.
 
 Inline Mini Apps have **no access** to the chat – they can't read messages or send new ones on behalf of the user. To send messages, the user must be redirected to **inline mode** and actively pick a result.
 
@@ -102,7 +102,7 @@ Inline Mini Apps have **no access** to the chat – they can't read messages or 
 
 **TL;DR:** Mini App bots can be launched from a direct link in any chat. They support a *startapp* parameter and are aware of the current chat context.
 
-**NEW**: Direct links **open a Mini App** in the current chat. If a non-empty *startapp* parameter is included in the link, it appears in the Mini App's *start_param* field and in the GET parameter *tgWebAppStartParam*.
+**New**: Direct links **open a Mini App** in the current chat. If a non-empty *startapp* parameter is included in the link, it appears in the Mini App's *start_param* field and in the GET parameter *tgWebAppStartParam*.
 
 In this mode, Mini Apps use *chat_type* and *chat_instance* parameters to track the current chat context. This enables **concurrent** and **shared** usage among multiple chat members–ideal for live whiteboards, group orders, multiplayer games, and similar apps.
 

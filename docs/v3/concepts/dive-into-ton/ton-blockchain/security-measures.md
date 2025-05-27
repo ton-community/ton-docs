@@ -4,39 +4,39 @@ import Feedback from '@site/src/components/Feedback';
 
 The security of the TON blockchain ecosystem is of utmost importance. Below is a summary of completed audits conducted by renowned auditing firms for key components of the TON blockchain.
 
-## TON blockchain
+## TON Blockchain
 
 Various security providers audited core blockchain modules to ensure their robustness and security.
 
-**Audit Firms**: Trail of Bits, SlowMist, CertiK  
-**Audit Reports**:
+**Audit firms**: Trail of Bits, SlowMist, CertiK  
+**Audit reports**:
 - [Trail of Bits: TON Blockchain Audit Report](https://docs.ton.org/audits/TON_Blockchain_ToB.pdf)
 - [SlowMist: TON Blockchain Audit Report](https://docs.ton.org/audits/TON_Blockchain_SlowMist.pdf)
 - [CertiK: TON Blockchain Audit Report](https://docs.ton.org/audits/TON_Blockchain_CertiK.pdf)
 - [CertiK: TON Masterchain Contracts Formal Verification](https://docs.ton.org/audits/TON_Blockchain_Formal_Verification_CertiK.pdf)
 
-## TON blockchain library (tonlib)
+## TON Blockchain library (tonlib)
 
 Zellic conducted a security assessment for TON from October 16th to November 17th, 2023. During this engagement, Zellic reviewed Tonlib’s code for security vulnerabilities, design issues, and general weaknesses in security posture.
 
-**Audit Firm**: Zellic  
-**Audit Report**:
+**Audit firm**: Zellic  
+**Audit report**:
 - [Zellic: Audit Report](https://docs.ton.org/audits/TON_Blockchain_tonlib_Zellic.pdf)
 
 ## TVM and Fift
 
 Audit for TON Virtual Machine and the Fift programming language.
 
-**Audit Firm**: Trail of Bits  
-**Audit Report**:
+**Audit firm**: Trail of Bits  
+**Audit report**:
 - [Trail of Bits Audit Report - TVM & Fift](https://docs.ton.org/audits/TVM_and_Fift_ToB.pdf)
 
-## TVM Upgrade 2023.07
+## TVM Upgrade Jul 2023
 
 Audit for security and potential vulnerabilities in TVM Upgrade 2023.07.
 
-**Audit Firm**: Trail of Bits  
-**Audit Report**:
+**Audit firm**: Trail of Bits  
+**Audit report**:
 - [Trail of Bits Audit Report - TVM Upgrade](https://docs.ton.org/audits/TVM_Upgrade_ToB_2023.pdf)
 
 ---

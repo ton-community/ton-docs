@@ -43,7 +43,7 @@ In the case of FunC, the main data types are:
 - **Tuples** — is an ordered collection of up to 255 components, having arbitrary value types, possibly distinct.
 - **Tensors** — is an ordered collection ready for mass assigning like: `(int, int) a = (2, 4)`. A special case of tensor type is the unit type `()`. It represents that a function doesn’t return any value or has no arguments.
 
-Currently, FunC does not support defining custom types. Read more about types in [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
+Currently, FunC does not support defining custom types. Read more about types in the [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
 ### Declaring and using variables
 
@@ -64,7 +64,7 @@ FunC is a more abstract and function-oriented language. It supports dynamic typi
 var z = x + y; // Dynamic variable declaration 
 ```
 
-Read more in [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
+Read more on the [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
 ### Loops
 
@@ -93,7 +93,7 @@ repeat(10) {
 }
 ;; x = 1024
 ```
-Read more on [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
+Read more on the [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
 ### Functions
 
@@ -133,7 +133,7 @@ Most of the control structures known from curly-braces languages are available i
 #### FunC
 FunC supports classic `if-else` statements, `ifnot`, `repeat`, `while`, and `do/until` loops.  Also, since v0.4.0, `try-catch` statements are supported.
 
-Read more in [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
+Read more on the [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
 ### Dictionaries
 
@@ -233,7 +233,7 @@ send_raw_message(msg, mode);
 
 This example presented how smart contracts can communicate with each other. 
 
-Read more in [Internal Messages](/v3/documentation/smart-contracts/overview/) page.
+Read more on the [Internal messages](/v3/documentation/smart-contracts/overview/) page.
 
 ## See also 
 

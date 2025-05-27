@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Accept Message Effects
+# Accept message effects
 
 The `accept_message` and `set_gas_limit` TVM primitives play a crucial role in managing gas limits and transaction processing in TON smart contracts. While their basic functionality is documented in the [stdlib reference](/v3/documentation/smart-contracts/func/docs/stdlib#accept_message), their effects on transaction processing, gas limits, and contract balances can be complex and have important security implications. This page explores these effects in detail, particularly focusing on how they impact external and internal message processing.
 

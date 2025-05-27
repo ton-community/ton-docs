@@ -565,7 +565,7 @@ The details of the ECDH itself will be omitted for the sake of simplicity. It is
 
 ## References
 
-_Here is a [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-TCP-Liteserver.md) by [Oleg Baranov](https://github.com/xssnick)._
+Here is a [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-TCP-Liteserver.md) - _[Oleg Baranov](https://github.com/xssnick)_.
 
 <Feedback />
 

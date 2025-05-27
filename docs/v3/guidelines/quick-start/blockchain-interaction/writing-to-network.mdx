@@ -30,14 +30,15 @@ Let's set up our project structure:
 1. Create a new directory for your project
 2. Initialize a Node.js project
 3. Install the required dependencies
+4. Initialize TypeScript configuration.
 
 Run these commands in your terminal:
 
 ```bash
-mkdir writing-to-ton && cd writing-to-ton # create new directory and cd to it
-npm init -y # initialize Node.js project
-npm install typescript ts-node @ton/ton @ton/core @ton/crypto #install required dependecies
-npx tsc --init # initialize typesctipt
+mkdir writing-to-ton && cd writing-to-ton
+npm init -y
+npm install typescript ts-node @ton/ton @ton/core @ton/crypto
+npx tsc --init
 ```
 
 To run scripts, use the following command:
@@ -65,7 +66,7 @@ A common transfer would look like this:
 <br></br>
 
 :::caution
-Unlike in the [Reading from the Network](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/) section, a Toncenter API key is mandatory in the following examples. It may be retrieved using [the following guide](/v3/guidelines/dapps/apis-sdks/api-keys/).
+Unlike in the [Reading from network](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/) section, a Toncenter API key is mandatory in the following examples. It may be retrieved using [the following guide](/v3/guidelines/dapps/apis-sdks/api-keys/).
 :::
 
 #### Implementation

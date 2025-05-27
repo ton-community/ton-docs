@@ -47,10 +47,10 @@ acc_state_active$10 = AccountStatus;
 acc_state_nonexist$11 = AccountStatus;
 ```
 
--   `[00]`: Account is uninitialized.
--   `[01]`: Account is frozenю
--   `[10]`: Account is activeю
--   `[11]`: Account does not existю
+-   `[00]`: Account is uninitialized
+-   `[01]`: Account is frozen
+-   `[10]`: Account is active
+-   `[11]`: Account does not exist
 
 ## HASH_UPDATE
 

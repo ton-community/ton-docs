@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Things to focus on while working with TON blockchain
+# Things to focus on while working with TON Blockchain
 
 In this article, we will review and discuss the elements to consider for those who want to develop TON applications.
 
@@ -74,7 +74,7 @@ Smart contracts addresses in TON blockchain are deterministic and can be precomp
 TON addresses may have three representations.
 A full representation can either be "raw" (`workchain:address`) or "user-friendly". The last one is the one users encounter most often. It contains a tag byte, indicating whether the address is `bounceable` or `not bounceable`, and a workchain id byte. This information should be noted.
 
-- [Raw and User-Friendly Addresses](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses)
+- [Raw and user-friendly addresses](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses)
 
 ### 13. Keep track of the flaws in code execution
 
@@ -92,13 +92,11 @@ TON blockchain is asynchronous. That means the messages do not have to arrive su
 
 You may receive bounced messages (error notifications), which should be handled.
 
-- [Handling of Standard Response Messages](/v3/documentation/smart-contracts/message-management/internal-messages#handling-of-standard-response-messages)
+- [Handling of standard response messages](/v3/documentation/smart-contracts/message-management/internal-messages#handling-of-standard-response-messages)
 
 ## References
 
-Originally written by 0xguard
-
-- [Original article](https://0xguard.com/things_to_focus_on_while_working_with_ton_blockchain)
+- [Original article](https://0xguard.com/things_to_focus_on_while_working_with_ton_blockchain) - _0xguard_
 
 <Feedback />
 

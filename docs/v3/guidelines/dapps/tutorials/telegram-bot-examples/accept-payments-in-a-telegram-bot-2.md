@@ -213,7 +213,7 @@ Now, we're ready to create a payment handler.
 
 ### Sending API requests from code
 
-Let's start by importing the required libraries along with the`config.py` and `db.py` files.
+Let's start by importing the required libraries along with the `config.py` and `db.py` files.
 ```python
 import requests
 import asyncio
@@ -507,7 +507,7 @@ If the bot does not function as expected, compare your code with the code [from 
 ## References
 
  - Made for TON as part of [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)
- - By Gusarich ([Telegram @Gusarich](https://t.me/Gusarich), [Gusarich on GitHub](https://github.com/Gusarich))
+ - [Telegram @Gusarich](https://t.me/Gusarich), [Gusarich on GitHub](https://github.com/Gusarich) - _Gusarich_
 
 <Feedback />
 

@@ -301,7 +301,7 @@ For educational purposes [example of the old one](https://explorer.toncoin.org/c
 
 ## See also
 
-- [TON Fees overview](/v3/documentation/smart-contracts/transaction-fees/fees)
+- [TON fees overview](/v3/documentation/smart-contracts/transaction-fees/fees)
 - [Transactions and phases](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
 - [Fees calculation](/v3/guidelines/smart-contracts/fee-calculation)
 

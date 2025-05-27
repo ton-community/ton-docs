@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# MyTonCtrl Remote Controller
+# MyTonCtrl remote controller
 
 MyTonCtrl and TON Node can be used on separate machines. There are some advantages of using that:
 

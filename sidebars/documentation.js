@@ -31,6 +31,13 @@ module.exports = [
           'v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
           'v3/documentation/smart-contracts/contracts-specs/precompiled-contracts',
           'v3/documentation/smart-contracts/contracts-specs/examples',
+
+          {
+            type: 'link',
+            label: 'TON enhancement proposals (TEPs)',
+            href: 'https://github.com/ton-blockchain/TEPs/tree/master',
+          },
+
         ],
       },
       'v3/documentation/smart-contracts/limits',
@@ -112,7 +119,7 @@ module.exports = [
       },
       {
         type: 'category',
-        label: 'Fift Language',
+        label: 'Fift language',
         items: [
           'v3/documentation/smart-contracts/fift/overview',
           'v3/documentation/smart-contracts/fift/fift-and-tvm-assembly',
@@ -128,7 +135,7 @@ module.exports = [
       'v3/documentation/dapps/dapps-overview',
       {
         type: 'category',
-        label: 'DeFi Principles',
+        label: 'DeFi principles',
         items: [
           'v3/documentation/dapps/defi/coins',
           'v3/documentation/dapps/defi/tokens',
@@ -191,7 +198,7 @@ module.exports = [
             items: [
               {
                 type: 'doc',
-                label: 'Proof of Stake',
+                label: 'Proof-of-stake',
                 id: 'v3/documentation/infra/nodes/validation/staking-incentives',
               },
               'v3/documentation/infra/nodes/validation/collators',
@@ -202,7 +209,7 @@ module.exports = [
       'v3/documentation/infra/minter-flow',
       {
         type: 'category',
-        label: 'Cross-chain Bridges',
+        label: 'Cross-chain bridges',
         items: [
           {
             type: 'doc',
@@ -211,7 +218,7 @@ module.exports = [
           },
           {
             type: 'doc',
-            label: 'Bridges Addresses',
+            label: 'Bridges addresses',
             id: 'v3/documentation/infra/crosschain/bridge-addresses',
           },
         ],
@@ -302,19 +309,19 @@ module.exports = [
       'v3/documentation/tvm/tvm-exit-codes',
       {
         type: 'link',
-        label: 'TVM Instructions',
+        label: 'TVM instructions',
         href: '/v3/documentation/tvm/instructions',
       },
       {
         type: 'category',
-        label: 'TVM Specification',
+        label: 'TVM specification',
         items: [
           'v3/documentation/tvm/specification/runvm',
         ],
       },
       {
         type: 'category',
-        label: 'TVM Changelog',
+        label: 'TVM changelog',
         items: [
           'v3/documentation/tvm/changelog/tvm-upgrade-2024-04',
           'v3/documentation/tvm/changelog/tvm-upgrade-2023-07',
@@ -348,9 +355,10 @@ module.exports = [
       },
       {
         type: 'link',
-        label: 'Catchain Consensus Protocol',
+        label: 'Catchain consensus protocol',
         href: 'https://docs.ton.org/catchain.pdf',
       },
     ],
   },
+
 ];

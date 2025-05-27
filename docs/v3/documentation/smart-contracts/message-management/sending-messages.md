@@ -198,7 +198,7 @@ e.g., the maximum message size must not exceed `max_msg_bits`, and the number of
 More configuration parameters and their values can be found [here](/v3/documentation/network/configs/blockchain-configs#param-43).
 :::
 
-## Message Modes
+## Message modes
 
 :::info
 For the latest information, refer to the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook).
@@ -275,7 +275,7 @@ As a result, unprocessed external messages can be replayed until they expire or 
 
 ---
 
-### Error handling with +2 Flag
+### Error handling with +2 flag
 
 The `IGNORE ERRORS` flag (`+2`) suppresses these specific errors during the Action Phase:
 
@@ -337,9 +337,9 @@ If a transfer using `mode=3` fails due to a suppressed error:
 
 1. Transfer action is not executed
 2. Contract state updates persist (no rollback)
-3. **Result:** Permanent loss of `jetton_amount` from the balance
+3. **Result:** permanent loss of `jetton_amount` from the balance
 
-**Best Practice**
+**Best practice**
 
 Always pair `IGNORE_ERRORS` with robust client-side validations and real-time balance checks to prevent unintended state changes.
 

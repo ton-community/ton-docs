@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Highload wallet contracts
 
-When working with many messages in a short period, there is a need for special wallet called Highload Wallet. Highload Wallet V2 was the main wallet on TON for a long time, but you had to be very careful with it. Otherwise, you could [lock all funds](https://t.me/tonstatus/88). 
+When working with many messages in a short period, there is a need for special wallet called Highload wallet. Highload wallet v2 was the main wallet on TON for a long time, but you had to be very careful with it. Otherwise, you could [lock all funds](https://t.me/tonstatus/88). 
 
 [With the advent of Highload Wallet V3](https://github.com/ton-blockchain/Highload-wallet-contract-v3), this problem has been solved at the contract architecture level and consumes less gas. This chapter will cover the basics of Highload Wallet V3 and important nuances to remember.
 
@@ -56,11 +56,11 @@ Failed transaction may be replayed.
 old queries may be cleaned in one tx. If number of expired queries will be higher, contract will stuck.
 
 That means that it is not recommended to set too high expiration date:
-number of queries during expiration time span should not exceed 1000.
+the number of queries during expiration time span should not exceed 1000.
 
-Also, number of expired queries cleaned in one transaction should be below 100.
+Also, the number of expired queries cleaned in one transaction should be below 100.
 
-## How To
+## How to
 
 You can also read [Highload Wallet Tutorials](/v3/guidelines/smart-contracts/howto/wallet#-high-load-wallet-v3) article.
 

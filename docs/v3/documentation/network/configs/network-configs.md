@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Network configs
 
-On this page, you can find the active network configurations for the TON Blockchain:
+On this page, you can find the active network configurations for TON Blockchain:
 
 - Mainnet: https://ton.org/global-config.json
 

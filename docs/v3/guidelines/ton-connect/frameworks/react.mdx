@@ -9,7 +9,7 @@ The recommended SDK for React Apps is a [UI React SDK](/v3/guidelines/ton-connec
 
 ### Installation
 
-To start integrating TON Connect into your DApp, you need to install the `@tonconnect/ui-react` package: 
+To start integrating TON Connect into your dApp, you need to install the `@tonconnect/ui-react` package:
 
 ```bash npm2yarn
 npm i @tonconnect/ui-react
@@ -349,7 +349,7 @@ type TonProofItemReplySuccess = {
 }
 ```
 
-You can find an example of authentication on this [page](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#react-example)
+You can find an example of authentication on this [page](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#react-example).
 
 ### Wallet disconnection
 
@@ -362,10 +362,11 @@ await tonConnectUI.disconnect();
 
 #### Deploying contract
 
-Deploying a contract using TonConnect is pretty straightforward. You must:
-Obtain the contract `code` and `data`
-Store them as a `stateInit` cell
-Send a transaction using the `statement` field provided
+Deploying a contract using TON Connect is pretty straightforward. You must:
+
+- Obtain the contract `code` and `data`
+- Store them as a `stateInit` cell
+- Send a transaction using the `statement` field provided
 
 Note that `CONTRACT_CODE` and `CONTRACT_INIT_DATA` may be found in wrappers.
 
@@ -409,7 +410,7 @@ Wrappers are classes that simplify interaction with the contract, allowing you t
 Check out the [Blueprint](https://github.com/ton-org/blueprint) documentation how to develop and deploy contracts
 :::
 
-Let's take a look at the default `Blueprint` Counter wrapper example and how we can use it:
+Let's take a look at the default `Blueprint` counter wrapper example and how we can use it:
 
 <details>
 <summary>Wrapper usage</summary>
@@ -656,8 +657,8 @@ This SDK provides wrappers that simplify interaction with these assets. Please c
 
 ## Examples
 
-* Step-by-step [TON Hello World guide](https://helloworld.tonstudio.io/03-client/) to create a simple DApp with React UI.
-* [Demo dApp](https://github.com/ton-connect/demo-dapp-with-react-ui) - Example of a DApp with `@tonconnect/ui-react`.
+* Step-by-step [TON Hello World guide](https://helloworld.tonstudio.io/03-client/) to create a simple dApp with React UI.
+* [Demo dApp](https://github.com/ton-connect/demo-dapp-with-react-ui) - Example of a dApp with `@tonconnect/ui-react`.
 * [ton.vote](https://github.com/orbs-network/ton-vote) - Example of React website with TON Connect implementation.
 
 

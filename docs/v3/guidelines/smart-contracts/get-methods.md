@@ -222,7 +222,7 @@ You can call get methods on the "Get methods" tab.
 We will use Javascript libraries and tools for the examples below:
 
 - [ton](https://github.com/ton-org/ton/) library
-- [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript/) SDK
+- [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript/) 
 
 Let's say there is some contract with the following get method:
 

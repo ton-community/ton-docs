@@ -399,7 +399,7 @@ A `+16` flag has been added for the following operations:
 **Effect:** if the action fails, a bounce transaction is triggered.  
 **Exception:** the flag has **no effect** if `+2` is used.
 
-## Security Audits
+## Security audits
 
 The upgrade to the TON Virtual Machine (TVM) was analyzed for security risks and potential vulnerabilities.
 

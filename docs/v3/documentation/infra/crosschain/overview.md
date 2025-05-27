@@ -2,11 +2,11 @@ import Feedback from '@site/src/components/Feedback';
 
 # Cross-chain bridges
 
-Decentralized cross-chain bridges function on the TON Blockchain, allowing asset transfers between this blockchain and the others.
+Decentralized cross-chain bridges function on TON Blockchain, allowing asset transfers between this blockchain and the others.
 
 ## Toncoin bridge
 
-The Toncoin bridge enables transfers of Toncoin between the TON and Ethereum Blockchain and between the TON and the BSC (BNB Smart Chain).
+The Toncoin bridge enables transfers of Toncoin between TON and Ethereum Blockchain and between TON and the BSC (BNB Smart Chain).
 
 This bridge is managed by [decentralized oracles](/v3/documentation/infra/crosschain/bridge-addresses).
 
@@ -18,7 +18,7 @@ The bridge frontend is hosted [here](https://ton.org/bridge).
 [Bridge frontend source code](https://github.com/ton-blockchain/bridge)
 :::
 
-### Smart Contract source codes
+### Smart contract source codes
 
 #### TON-Ethereum
 

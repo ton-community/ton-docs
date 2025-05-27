@@ -10,12 +10,12 @@ import TabItem from '@theme/TabItem';
 This page **explains how to process** (send and accept) digital assets on TON Blockchain. While it primarily focuses on handling TON coins, the **theoretical concepts** are also relevant for processing `jettons`.
 
 :::tip
-It's recommended to review the [Asset Processing Overview](/v3/documentation/dapps/assets/overview) before reading this tutorial.
+It's recommended to review the [Asset processing overview](/v3/documentation/dapps/assets/overview) before reading this tutorial.
 :::
 
 ## Wallet smart contract
 
-Wallet smart contracts on the TON Network allow external actors to interact with blockchain entities. They serve the following purposes:* Authenticates the owner: 
+Wallet smart contracts on the TON Network allow external actors to interact with blockchain entities. They serve the following purposes: 
 * Authenticating the owner: Rejects requests that attempt to process transactions or pay fees on behalf of unauthorized users.
 * Providing replay protection: Prevents the repeated execution of the same request, such as sending assets to another smart contract multiple times.
 * Initiating arbitrary interactions with other smart contracts.
@@ -41,7 +41,7 @@ To deploy a wallet via TonLib, follow these steps:
 6. Check the contract’s status after a few seconds using the [getAccountState](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L288) method.
 
 :::tip
-Read more in the [Wallet Tutorial](/v3/guidelines/smart-contracts/howto/wallet#-deploying-a-wallet)
+Read more on the [Wallet tutorial](/v3/guidelines/smart-contracts/howto/wallet#-deploying-a-wallet).
 :::
 
 ### Checking wallet address validity
@@ -266,7 +266,7 @@ ton://transfer/<destination-address>?
 
 
 
-[Learn more about ton links here](https://github.com/tonkeeper/wallet-api#payment-urls)
+[Learn more about TON links here](https://github.com/tonkeeper/wallet-api#payment-urls).
 
 ## Explorers
 
@@ -280,7 +280,7 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 
 `https://explorer.toncoin.org/transaction?account={account address}&lt={lt as int}&hash={txhash as base64url}`
 
-Note: tonviewer and tonscan also support external-in message hashes instead of transaction hashes for explorer links. This is useful when generating an external message and needing an instant transaction link. Learn more about transactions and messages hashes [here](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash)
+Note: tonviewer and tonscan also support external-in message hashes instead of transaction hashes for explorer links. This is useful when generating an external message and needing an instant transaction link. Learn more about transactions and messages hashes [here](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
  
 ## Best practices
 
