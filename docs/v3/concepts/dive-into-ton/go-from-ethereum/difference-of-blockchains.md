@@ -126,7 +126,7 @@ In TON, the calculation of transaction fees is complex. It includes several type
 The price of gas and some other parameters can be changed by voting on the main network. Unlike Ethereum, TON users cannot set the gas price themselves. Also, the developer needs to return the remaining gas funds to the owner manually, otherwise they will remain locked. Smart contract storage also affects the price: if a wallet's smart contract remains unused for a long time, the next transaction will incur higher costs.
 
 :::info
-Read more about [gas](/v3/documentation/smart-contracts/transaction-fees/fees/).
+Read more about [gas](/v3/documentation/smart-contracts/transaction-fees/fees).
 :::
 
 ### Architecture
