@@ -13,6 +13,7 @@ module.exports = [
     },
     items: [
       'v3/guidelines/quick-start/getting-started',
+      'v3/guidelines/quick-start/transactions-guide',
       {
         type: 'category',
         label: 'Blockchain interaction',
