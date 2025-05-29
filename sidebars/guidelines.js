@@ -134,6 +134,7 @@ module.exports = [
         },
         items: [
           'v3/guidelines/smart-contracts/security/overview',
+          'v3/guidelines/smart-contracts/security/common-vulnerabilities',
           'v3/guidelines/smart-contracts/security/secure-programming',
           'v3/guidelines/smart-contracts/security/things-to-focus',
           'v3/guidelines/smart-contracts/security/ton-hack-challenge-1',
