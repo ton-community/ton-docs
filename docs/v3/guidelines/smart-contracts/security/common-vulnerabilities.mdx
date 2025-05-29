@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 import Button from '@site/src/components/button'
 
-# Common Smart Contract Vulnerabilities
+# Common smart contract vulnerabilities
 
 This comprehensive guide covers the most critical security vulnerabilities found in TON smart contracts, based on real-world audits and security research. Understanding these pitfalls is essential for developing secure smart contracts on TON Blockchain.
 
@@ -10,64 +10,69 @@ This comprehensive guide covers the most critical security vulnerabilities found
 Many of these vulnerabilities can lead to complete loss of funds. Always conduct thorough security audits before deploying contracts to mainnet.
 :::
 
-## High-Severity Vulnerabilities
+## High-severity vulnerabilities
 
-### 1. Missing `impure` Modifier
+### Missing impure modifier
 
 **Severity:** 🔴 **Critical**
 
 The absence of the `impure` modifier allows the compiler to skip function calls if the return value is unused, potentially bypassing critical security checks.
 
-#### Vulnerable Code:
+#### Vulnerable code:
 ```func
+// counter.fc
 () authorize(sender) inline {
     throw_unless(187, equal_slice_bits(sender, addr1) | equal_slice_bits(sender, addr2));
 }
 ```
 
-#### Secure Implementation:
+#### Secure implementation:
 ```func
+// counter.fc
 () authorize(sender) impure inline {
     throw_unless(187, equal_slice_bits(sender, addr1) | equal_slice_bits(sender, addr2));
 }
 ```
 
-:::tip Best Practice
+:::tip Best practice
 Always add the `impure` modifier to functions that perform state changes or critical validations.
 :::
 
-### 2. Incorrect Use of Modifying/Non-Modifying Methods
+### Incorrect use of modifying/non-modifying methods
 
 **Severity:** 🔴 **Critical**
 
 Using `.` instead of `~` for modifying methods means the original data structure remains unchanged, leading to logic errors.
 
-#### Vulnerable Code:
+#### Vulnerable code:
 ```func
+// accounts.fc
 (_, slice old_balance_slice, int found?) = accounts.udict_delete_get?(256, sender);
 ```
 
-#### Secure Implementation:
+#### Secure implementation:
 ```func
+// accounts.fc
 (_, int found?) = accounts~udict_delete_get?(256, sender);
 if(found?) {
     ;; accounts dictionary has been modified
 }
 ```
 
-:::info Key Difference
+:::info Key difference
 - **Non-modifying (`.`)**: Returns modified copy, original unchanged
 - **Modifying (`~`)**: Modifies the original variable in place
 :::
 
-### 3. Signed/Unsigned Integer Vulnerabilities
+### Signed/unsigned integer vulnerabilities
 
 **Severity:** 🔴 **Critical**
 
 Improper handling of signed integers can allow attackers to exploit overflow/underflow conditions.
 
-#### Vulnerable Code:
+#### Vulnerable code:
 ```func
+// voting.fc
 (cell,()) transfer_voting_power(cell votes, slice from, slice to, int amount) impure {
     int from_votes = get_voting_power(votes, from);
     int to_votes = get_voting_power(votes, to);
@@ -81,8 +86,9 @@ Improper handling of signed integers can allow attackers to exploit overflow/und
 }
 ```
 
-#### Secure Implementation:
+#### Secure implementation:
 ```func
+// voting.fc
 (cell,()) transfer_voting_power(cell votes, slice from, slice to, int amount) impure {
     int from_votes = get_voting_power(votes, from);
     int to_votes = get_voting_power(votes, to);
@@ -98,14 +104,15 @@ Improper handling of signed integers can allow attackers to exploit overflow/und
 }
 ```
 
-### 4. Insecure Random Number Generation
+### Insecure random number generation
 
 **Severity:** 🔴 **Critical**
 
 Using predictable sources like logical time for randomness allows attackers to predict and exploit outcomes.
 
-#### Vulnerable Code:
+#### Vulnerable code:
 ```func
+// random.fc
 int seed = cur_lt();  // Predictable!
 int seed_size = min(in_msg_body.slice_bits(), 128);
 if(in_msg_body.slice_bits() > 0) {
@@ -118,19 +125,19 @@ if(rand(10000) == 7777) {
 }
 ```
 
-#### Recommendation:
 :::warning
 Never rely on on-chain randomness for critical operations. Validators can influence or predict random values. Consider using commit-reveal schemes or external oracles for true randomness.
 :::
 
-### 5. Missing Bounced Message Handling
+### Missing bounced message handling
 
 **Severity:** 🔴 **Critical**
 
 Failing to handle bounced messages can lead to inconsistent state and fund loss.
 
-#### Secure Implementation:
+#### Secure implementation:
 ```func
+// message_handler.fc
 () recv_internal(int msg_value, cell in_msg_full, slice in_msg_body) impure {
     slice in_msg_full_slice = in_msg_full.begin_parse();
     int msg_flags = in_msg_full_slice~load_msg_flags();
@@ -154,17 +161,17 @@ Failing to handle bounced messages can lead to inconsistent state and fund loss.
 }
 ```
 
-## Medium-Severity Vulnerabilities
+## Medium-severity vulnerabilities
 
-### 6. Race Conditions in Message Flows
+### Race conditions in message flows
 
 **Severity:** 🟡 **Medium**
 
 Message cascades can span multiple blocks, allowing attackers to initiate parallel flows.
 
-#### Best Practice:
+#### Best practice:
 ```func
-;; Always validate state at each step
+// transfer_handler.fc
 () handle_transfer(slice sender, int amount) impure {
     int current_balance = get_balance(sender);
     throw_unless(error::insufficient_funds, current_balance >= amount);
@@ -173,14 +180,15 @@ Message cascades can span multiple blocks, allowing attackers to initiate parall
 }
 ```
 
-### 7. Improper Gas Management
+### Improper gas management
 
 **Severity:** 🟡 **Medium**
 
 Failing to return excess gas or miscalculating gas requirements.
 
-#### Secure Gas Handling:
+#### Secure gas handling:
 ```func
+// gas_handler.fc
 int ton_balance_before_msg = my_ton_balance - msg_value;
 int storage_fee = const::min_tons_for_storage - min(ton_balance_before_msg, const::min_tons_for_storage);
 msg_value -= storage_fee + const::gas_consumption;
@@ -198,14 +206,15 @@ if (msg_value > 0) {
 }
 ```
 
-### 8. Fake Jetton Token Validation
+### Fake jetton token validation
 
 **Severity:** 🟡 **Medium**
 
 Accepting transfers without validating the sender's jetton wallet address.
 
-#### Secure Validation:
+#### Secure validation:
 ```func
+// jetton_handler.fc
 () handle_jetton_transfer(slice sender_address, int jetton_amount, slice from_user) impure {
     ;; Calculate expected jetton wallet address
     slice expected_wallet = calculate_jetton_wallet_address(from_user, jetton_master_address);
@@ -216,7 +225,7 @@ Accepting transfers without validating the sender's jetton wallet address.
 }
 ```
 
-## Security Checklist
+## Security checklist
 
 Before deploying your smart contract, ensure you've addressed:
 
@@ -230,34 +239,26 @@ Before deploying your smart contract, ensure you've addressed:
 - [ ] Jetton wallet address validation (if applicable)
 - [ ] Avoid on-chain randomness for critical operations
 
-## Testing and Auditing
+## Testing and auditing
 
-:::tip Security First
+:::tip Security first
 - Use [Blueprint testing framework](/v3/guidelines/smart-contracts/testing/overview/) for comprehensive testing
 - Conduct formal security audits before mainnet deployment
 - Test edge cases and failure scenarios
 - Verify bounced message handling
 :::
 
-## Additional Resources
+## See also
 
-<Button href="/v3/guidelines/smart-contracts/security/secure-programming" colorType={'primary'} sizeType={'sm'}>
-Secure Programming Guide
-</Button>
-
-<Button href="/v3/guidelines/smart-contracts/security/ton-hack-challenge-1" colorType={'secondary'} sizeType={'sm'}>
-TON Hack Challenge Analysis
-</Button>
-
-<Button href="/v3/guidelines/smart-contracts/testing/overview" colorType={'secondary'} sizeType={'sm'}>
-Testing Guidelines
-</Button>
+- [Secure programming guide](/v3/guidelines/smart-contracts/security/secure-programming/)
+- [TON hack challenge analysis](/v3/guidelines/smart-contracts/security/ton-hack-challenge-1/)
+- [Testing guidelines](/v3/guidelines/smart-contracts/testing/overview/)
 
 ## References
 
 - [SlowMist TON Security Best Practices](https://github.com/slowmist/Toncoin-Smart-Contract-Security-Best-Practices)
 - [TON Hack Challenge #1](https://github.com/ton-blockchain/hack-challenge-1)
-- [TON Smart Contract Guidelines](/v3/guidelines/smart-contracts/guidelines)
-- [TVM Exit Codes](/v3/documentation/tvm/tvm-exit-codes)
+- [TON Smart Contract Guidelines](/v3/guidelines/smart-contracts/guidelines/)
+- [TVM Exit Codes](/v3/documentation/tvm/tvm-exit-codes/)
 
 <Feedback /> 
