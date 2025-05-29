@@ -280,6 +280,13 @@ var b: builder = beginCell();
 var (i: int, b: builder) = (10, beginCell());
 ```
 
+Defaults for parameters are supported:
+```tolk
+fun increment(x: int, by: int = 1) {
+    return x + by
+}
+```
+
 
 <h3 className="cmp-func-tolk-header">
   ✅ Variables are not allowed to be redeclared in the same scope
@@ -346,7 +353,7 @@ Tolk removes the old FunC-style string postfixes (`"..."c`, etc.) in favor of a 
     </tr>
     <tr>
         <td><code>{'"..."a'}</code></td>
-        <td><code>{'stringAddressToSlice("...")'}</code></td>
+        <td><code>{'address("...")'}</code></td>
     </tr>
     <tr>
         <td><code>{'"..."s'}</code></td>
@@ -365,8 +372,8 @@ These functions:
 * can be used in constant initialization
 
 ```tolk
-// type will be `slice`
-const BASIC_ADDR = stringAddressToSlice("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF");
+// type will be `address`
+const BASIC_ADDR = address("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF");
 
 // return type will be `int`
 fun minihashDemo() {
@@ -470,6 +477,7 @@ We have the following types:
 - `coins` and function `ton("0.05")`
 - `int32`, `uint64`, and other fixed-width integers (just int at TVM) [details](https://github.com/ton-blockchain/ton/pull/1559)
 - `bytesN` and `bitsN`, similar to `intN` (backed by slices at TVM)
+- `address` (internal/external/none, still a slice at TVM)
 - `void` (more canonical to be named `unit`, but `void` is more reliable)
 - `self`, to make chainable methods, described below; actually it's not a type, it can only occur instead of return type of a function
 - `never` (an always-throwing function returns `never`, for example; an "impossible type" is also `never`)
@@ -1130,6 +1138,73 @@ globalTuple.1.2 += 10;  // "GETGLOB" + ... + "SETGLOB"
 
 
 <h3 className="cmp-func-tolk-header">
+  ✅ Type `address`
+</h3>
+
+In TVM, all "binary data" is just "a slice." Same goes for addresses: while TL/B describes the entity `MsgAddress` (internal/external/none/var address),
+and TVM assembler has instructions to load/validate addresses, nevertheless: at the low level, it's just a slice.
+That's why in FunC's standard library `loadAddress` returned `slice`, and `storeAddress` accepted `slice`.
+
+Tolk introduces the dedicated `address` type. It's still a TVM slice at runtime (internal/external/none),
+but it differs from an "abstract slice" from the type system point of view:
+
+1) Integrated with auto-serialization: compiler knows how to pack/unpack it (`LDMSGADDR` and `STSLICE`)
+2) Comparable: operators `==` and `!=` work on addresses:
+```tolk
+if (senderAddress == msg.owner)
+```
+3) Introspectable: `address.isNone()`, `address.isInternal()`, `address.isExternal()`, `address.getWorkchain()` and `address.getWorkchainAndHash()` (valid for internal addresses)
+
+Passing a slice instead leads to an error:
+```tolk
+var a: slice = s.loadAddress();  // error, can not assign `address` to `slice`
+```
+
+**Embedding a const address into a contract**
+
+Use the built-in `address()` function, which accepts a standard address. In FunC, there was a postfix `"..."a` that returned a slice.
+```tolk
+address("EQCRDM9h4k3UJdOePPuyX40mCgA4vxge5Dc5vjBR8djbEKC5")
+address("0:527964d55cfa6eb731f4bfc07e9d025098097ef8505519e853986279bd8400d8")
+```
+
+**Casting `slice` to `address` and vice versa**
+
+If you have a raw slice, which is actually an address, you can cast it via `as` operator.
+In practice, this can occur if you've composed an address with a builder, having manually written its binary representation:
+```tolk
+var b = beginCell()
+       .storeUint(0b01)   // addr_extern
+       ...;
+var s = b.endCell().beginParse();
+return s as address;   // `slice` as `address`
+```
+
+A reversed cast also is valid: `someAddr as slice` (why would you need it, is an open question, though).
+
+**Different types of addresses**
+
+According to a standard, there are different types of addresses. The most frequently used is a "standard address" — just and address of a smart contract, like "EQ...". But also, there are "external" and "none" addresses. In a binary TL/B representation,
+* '10' ("internal" prefix) + '0' (anycast, always 0) + workchain (8 bits) + hash (256 bits) — that's "EQ...": it's 267 bits
+* '01' ("external" prefix) + len (9 bits) + len bits — external addresses
+* '00' ("none" prefix) — address "none", 2 bits
+
+The `address` type can hold any of these. Most often, it's an internal address. But the type system does not restrict it exactly: this can't be done without heavy runtime checks.
+
+So, if `address` comes from an untrusted input, you should probably validate it:
+```tolk
+val newOwner = msg.nextOwnerAddress;
+assert(newOwner.isInternal()) throw 403;
+assert(newOwner.getWorkchain() == BASECHAIN) throw 403;
+```
+
+All in all, if you don't trust inputs — you should validate everything: numbers, payload, and addresses particularly.
+But if an input comes from a trusted source (your own contract storage, for example) — of course, you can rely on its contents.
+The compiler does not insert hidden instructions.
+Just remember, that `address` in general can hold all valid types.
+
+
+<h3 className="cmp-func-tolk-header">
   ✅ Type aliases <code>type NewName = &lt;existing type&gt;</code>
 </h3>
 
@@ -1743,6 +1818,28 @@ callable2(someContainer32);   // pass it as self
 </h3>
 
 This change is so huge that it's described on a separate page: [Tolk mutability](/v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability).
+
+
+<h3 className="cmp-func-tolk-header">
+  ✅ Auto-packing to/from cells/builders/slices
+</h3>
+
+Having any struct, you can unpack in from a cell or pack and object to a cell:
+```tolk
+struct Point {
+    x: int8;
+    y: int8;
+}
+
+var value: Point = { x: 10, y: 20 };
+
+// makes a cell containing "0A14"
+var c = value.toCell();
+// back to { x: 10, y: 20 }
+var p = Point.fromCell(c);
+```
+
+Continue reading on a separate page: [Auto-packing to/from cells](/v3/documentation/smart-contracts/tolk/tolk-vs-func/pack-to-from-cells).
 
 
 <hr />
