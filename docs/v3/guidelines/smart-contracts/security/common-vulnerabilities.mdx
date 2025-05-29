@@ -10,7 +10,7 @@ This comprehensive guide covers the most critical security vulnerabilities found
 Many of these vulnerabilities can lead to complete loss of funds. Always conduct thorough security audits before deploying contracts to mainnet.
 :::
 
-## High-severity vulnerabilities
+## Critical
 
 ### Missing impure modifier
 
@@ -20,7 +20,6 @@ The absence of the `impure` modifier allows the compiler to skip function calls 
 
 #### Vulnerable code:
 ```func
-// counter.fc
 () authorize(sender) inline {
     throw_unless(187, equal_slice_bits(sender, addr1) | equal_slice_bits(sender, addr2));
 }
@@ -28,7 +27,6 @@ The absence of the `impure` modifier allows the compiler to skip function calls 
 
 #### Secure implementation:
 ```func
-// counter.fc
 () authorize(sender) impure inline {
     throw_unless(187, equal_slice_bits(sender, addr1) | equal_slice_bits(sender, addr2));
 }
@@ -46,13 +44,11 @@ Using `.` instead of `~` for modifying methods means the original data structure
 
 #### Vulnerable code:
 ```func
-// accounts.fc
 (_, slice old_balance_slice, int found?) = accounts.udict_delete_get?(256, sender);
 ```
 
 #### Secure implementation:
 ```func
-// accounts.fc
 (_, int found?) = accounts~udict_delete_get?(256, sender);
 if(found?) {
     ;; accounts dictionary has been modified
@@ -72,7 +68,6 @@ Improper handling of signed integers can allow attackers to exploit overflow/und
 
 #### Vulnerable code:
 ```func
-// voting.fc
 (cell,()) transfer_voting_power(cell votes, slice from, slice to, int amount) impure {
     int from_votes = get_voting_power(votes, from);
     int to_votes = get_voting_power(votes, to);
@@ -88,7 +83,6 @@ Improper handling of signed integers can allow attackers to exploit overflow/und
 
 #### Secure implementation:
 ```func
-// voting.fc
 (cell,()) transfer_voting_power(cell votes, slice from, slice to, int amount) impure {
     int from_votes = get_voting_power(votes, from);
     int to_votes = get_voting_power(votes, to);
@@ -112,7 +106,6 @@ Using predictable sources like logical time for randomness allows attackers to p
 
 #### Vulnerable code:
 ```func
-// random.fc
 int seed = cur_lt();  // Predictable!
 int seed_size = min(in_msg_body.slice_bits(), 128);
 if(in_msg_body.slice_bits() > 0) {
@@ -137,7 +130,6 @@ Failing to handle bounced messages can lead to inconsistent state and fund loss.
 
 #### Secure implementation:
 ```func
-// message_handler.fc
 () recv_internal(int msg_value, cell in_msg_full, slice in_msg_body) impure {
     slice in_msg_full_slice = in_msg_full.begin_parse();
     int msg_flags = in_msg_full_slice~load_msg_flags();
@@ -161,7 +153,118 @@ Failing to handle bounced messages can lead to inconsistent state and fund loss.
 }
 ```
 
-## Medium-severity vulnerabilities
+### Sending private data on-chain
+
+**Severity:** 🔴 **Critical**
+
+All data stored on blockchain is public and permanent, including transaction history.
+
+#### Vulnerable approach:
+```func
+;; DON'T: Storing password hash or private data
+cell private_data = begin_cell()
+    .store_slice("secret_password_hash")
+    .store_uint(user_private_key, 256)
+    .end_cell();
+```
+
+:::warning
+Everything on blockchain is public. Transaction history, contract storage, and message contents are permanently visible to everyone.
+:::
+
+### Account destruction race conditions
+
+**Severity:** 🔴 **Critical**
+
+Destroying accounts without proper checks can lead to fund loss in race conditions.
+
+#### Vulnerable code:
+```func
+() recv_internal(msg_value, in_msg_full, in_msg_body) {
+    if (in_msg_body.slice_empty?()) {
+        return ();  ;; Dangerous: empty message handling
+    }
+    
+    ;; Process and destroy account
+    send_raw_message(msg, 128 + 32);  ;; Destroys account
+}
+```
+
+#### Secure approach:
+```func
+() recv_internal(msg_value, in_msg_full, in_msg_body) {
+    ;; Proper validation before any destruction
+    throw_unless(error::unauthorized, authorized_sender?(sender));
+    
+    ;; Ensure no pending operations
+    throw_unless(error::pending_operations, safe_to_destroy?());
+    
+    ;; Then proceed with destruction if really needed
+}
+```
+
+### Missing replay protection
+
+**Severity:** 🔴 **Critical**
+
+External messages without replay protection can be re-executed multiple times.
+
+#### Secure implementation:
+```func
+() recv_external(slice in_msg) impure {
+    slice ds = get_data().begin_parse();
+    int stored_seqno = ds~load_uint(32);
+    int msg_seqno = in_msg~load_uint(32);
+    
+    throw_unless(33, msg_seqno == stored_seqno);  ;; Prevent replay
+    
+    accept_message();
+    
+    ;; Update sequence number
+    set_data(begin_cell().store_uint(stored_seqno + 1, 32)...);
+}
+```
+
+### Improper message bounce handling
+
+**Severity:** 🔴 **Critical**
+
+Using non-bounceable messages when bounceable is needed can cause fund loss.
+
+#### Vulnerable code:
+```func
+var msg = begin_cell()
+    .store_uint(0x10, 6)  ;; Non-bounceable
+    .store_slice(to_address)
+    .store_coins(amount)
+    .end_cell();
+```
+
+#### Secure implementation:
+```func
+var msg = begin_cell()
+    .store_uint(0x18, 6)  ;; Bounceable message
+    .store_slice(to_address)
+    .store_coins(amount)
+    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+    .store_uint(op::excesses(), 32)
+    .end_cell();
+```
+
+### Executing third-party code
+
+**Severity:** 🔴 **Critical**
+
+Executing untrusted code can compromise contract security.
+
+#### Prevention:
+```func
+;; Validate all external code before execution
+throw_unless(error::untrusted_code, verify_code_signature(code));
+throw_unless(error::invalid_code, validate_code_safety(code));
+```
+
+## Medium
 
 ### Race conditions in message flows
 
@@ -171,7 +274,6 @@ Message cascades can span multiple blocks, allowing attackers to initiate parall
 
 #### Best practice:
 ```func
-// transfer_handler.fc
 () handle_transfer(slice sender, int amount) impure {
     int current_balance = get_balance(sender);
     throw_unless(error::insufficient_funds, current_balance >= amount);
@@ -188,7 +290,6 @@ Failing to return excess gas or miscalculating gas requirements.
 
 #### Secure gas handling:
 ```func
-// gas_handler.fc
 int ton_balance_before_msg = my_ton_balance - msg_value;
 int storage_fee = const::min_tons_for_storage - min(ton_balance_before_msg, const::min_tons_for_storage);
 msg_value -= storage_fee + const::gas_consumption;
@@ -214,7 +315,6 @@ Accepting transfers without validating the sender's jetton wallet address.
 
 #### Secure validation:
 ```func
-// jetton_handler.fc
 () handle_jetton_transfer(slice sender_address, int jetton_amount, slice from_user) impure {
     ;; Calculate expected jetton wallet address
     slice expected_wallet = calculate_jetton_wallet_address(from_user, jetton_master_address);
@@ -225,19 +325,176 @@ Accepting transfers without validating the sender's jetton wallet address.
 }
 ```
 
+### Missing function return value checks
+
+**Severity:** 🟡 **Medium**
+
+Ignoring function return values can lead to logic errors and unexpected behavior.
+
+#### Vulnerable code:
+```func
+dictinfos~udict_delete?(32, index);  ;; Ignoring success flag
+```
+
+#### Secure implementation:
+```func
+int success = dictinfos~udict_delete?(32, index);
+throw_unless(error::fail_to_delete_dict, success);
+```
+
+### Name collision vulnerabilities
+
+**Severity:** 🟡 **Medium**
+
+Function or variable names can collide with built-in functions or reserved keywords.
+
+#### Best practice:
+```func
+;; Use descriptive, unique names
+int user_balance = 0;  ;; Instead of just 'balance'
+() validate_user_signature()  ;; Instead of just 'validate()'
+```
+
+### Incorrect data type handling
+
+**Severity:** 🟡 **Medium**
+
+Reading or writing incorrect data types can corrupt contract state.
+
+#### Vulnerable code:
+```func
+;; Writing uint but reading int
+storage~store_uint(value, 32);
+int read_value = storage~load_int(32);  ;; Type mismatch
+```
+
+#### Secure implementation:
+```func
+;; Consistent type usage
+storage~store_uint(value, 32);
+int read_value = storage~load_uint(32);
+```
+
+### Contract code updates
+
+**Severity:** 🟡 **Medium**
+
+Contracts can be updated if not properly protected, changing their behavior unexpectedly.
+
+#### Secure implementation:
+```func
+() update_code(cell new_code) impure {
+    throw_unless(error::unauthorized, authorized_admin?(sender()));
+    throw_unless(error::invalid_code, validate_code?(new_code));
+    
+    set_code(new_code);
+}
+```
+
+### TON address representation issues
+
+**Severity:** 🟡 **Medium**
+
+TON addresses have multiple representations that must be handled correctly.
+
+#### Address formats:
+```func
+;; Raw: 0:b4c1b2ede12aa76f4a44353944258bcc8f99e9c7c474711a152c78b43218e296
+;; Bounceable: EQC0wbLt4Sqnb0pENTlEJYvMj5npx8R0cRoVLHi0MhjilkPX
+;; Non-bounceable: UQC0wbLt4Sqnb0pENTlEJYvMj5npx8R0cRoVLHi0Mhjilh4S
+
+;; Always validate workchain
+force_chain(to_address);
+```
+
+### Carry-value pattern violations
+
+**Severity:** 🟡 **Medium**
+
+Not following carry-value pattern can lead to inconsistent state across contracts.
+
+#### Correct pattern:
+```func
+;; Sender contract subtracts and sends
+sender_balance -= amount;
+send_transfer_message(destination, amount);
+
+;; Receiver contract receives and adds
+receiver_balance += received_amount;
+```
+
+### Transaction phases misunderstanding
+
+**Severity:** 🟡 **Medium**
+
+Not understanding TON's 5-phase transaction model can lead to unexpected behavior.
+
+:::info Transaction phases
+1. **Storage phase**: Account state loading
+2. **Credit phase**: Value crediting
+3. **Compute phase**: Contract execution
+4. **Action phase**: Message sending
+5. **Bounce phase**: Error handling
+:::
+
+### Cross-contract data access
+
+**Severity:** 🟡 **Medium**
+
+Attempting to directly access other contract data instead of using message-based communication.
+
+#### Correct approach:
+```func
+;; Don't try to read other contract's data directly
+;; Use message-based communication instead
+send_get_data_request(target_contract, query_id);
+```
+
+### Predefined method IDs
+
+**Severity:** 🟡 **Medium**
+
+Not properly understanding predefined method IDs can cause conflicts.
+
+#### Reserved method IDs:
+```func
+() recv_internal(int msg_value, cell in_msg_cell, slice in_msg) impure {  ;; method_id = 0
+}
+
+() recv_external(slice in_msg) impure {  ;; method_id = -1
+}
+```
+
 ## Security checklist
 
 Before deploying your smart contract, ensure you've addressed:
 
+### Critical security checks
 - [ ] All functions with side effects have `impure` modifier
 - [ ] Correct use of modifying (`~`) vs non-modifying (`.`) methods
 - [ ] Proper validation of integer operations and ranges
 - [ ] Bounced message handling implemented
+- [ ] No private data stored on-chain
+- [ ] Account destruction safety measures
+- [ ] Replay protection for external messages
+- [ ] Bounceable vs non-bounceable message usage
+- [ ] Third-party code execution safety
+- [ ] Avoid on-chain randomness for critical operations
+
+### Important considerations
 - [ ] Gas calculation and excess return logic
 - [ ] Input validation for all external calls
 - [ ] Race condition considerations in message flows
 - [ ] Jetton wallet address validation (if applicable)
-- [ ] Avoid on-chain randomness for critical operations
+- [ ] Function return values checked
+- [ ] Name collision prevention
+- [ ] Correct data type usage
+- [ ] Code update protection mechanisms
+- [ ] Proper address format handling
+- [ ] Carry-value pattern compliance
+- [ ] Understanding of transaction phases
+- [ ] Message-based cross-contract communication
+- [ ] Awareness of predefined method IDs
 
 ## Testing and auditing
 
@@ -250,9 +507,16 @@ Before deploying your smart contract, ensure you've addressed:
 
 ## See also
 
+- [Random number generation](/v3/guidelines/smart-contracts/security/random/)
 - [Secure programming guide](/v3/guidelines/smart-contracts/security/secure-programming/)
 - [TON hack challenge analysis](/v3/guidelines/smart-contracts/security/ton-hack-challenge-1/)
 - [Testing guidelines](/v3/guidelines/smart-contracts/testing/overview/)
+- [Message structure](/v3/documentation/smart-contracts/messages/)
+- [Gas and fees](/v3/documentation/smart-contracts/fees/)
+- [Jetton standard](/v3/documentation/smart-contracts/standards/jettons/)
+- [TVM transaction phases](/v3/documentation/tvm/tvm-overview/#transaction-phases)
+- [TVM instructions](/v3/documentation/tvm/instructions/)
+- [FunC functions and modifiers](/v3/documentation/smart-contracts/func/functions/)
 
 ## References
 
