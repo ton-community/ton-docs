@@ -67,14 +67,12 @@ export const InstructionGroups = React.memo(({ instructions, aliases, search }: 
       item.doc_fift?.toLowerCase()?.includes(searchValue),
   ), [aliasesWithInstructions, searchValue]);
 
-  // --- START OF MODIFIED BLOCK ---
   const activeTab = useMemo(() => {
     if (filteredAliases.length > 0 && filteredInstructions.length === 0) {
       return 'alias';
     }
     return 'all';
   }, [filteredAliases, filteredInstructions]);
-  // --- END OF MODIFIED BLOCK ---
 
   return (
     <Tabs key={activeTab} defaultValue={activeTab}>
