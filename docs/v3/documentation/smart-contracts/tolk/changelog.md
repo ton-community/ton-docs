@@ -5,6 +5,14 @@ import Feedback from '@site/src/components/Feedback';
 When new versions of Tolk are released, they will be mentioned here.
 
 
+## v0.13
+
+1. Auto-packing to/from cells/builders/slices
+2. Type `address`
+3. Lateinit variables
+4. Defaults for parameters
+
+
 ## v0.12
 
 1. Structures `struct A { ... }`
