@@ -13,7 +13,6 @@ module.exports = [
     },
     items: [
       'v3/guidelines/quick-start/getting-started',
-      'v3/guidelines/quick-start/transactions-guide',
       {
         type: 'category',
         label: 'Blockchain interaction',
@@ -61,6 +60,7 @@ module.exports = [
     ]
   },
   'v3/guidelines/get-started-with-ton',
+  'v3/guidelines/transactions-guide',
   {
     type: 'category',
     label: 'TON Hello World series',
