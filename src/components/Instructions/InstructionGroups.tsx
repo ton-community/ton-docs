@@ -49,7 +49,7 @@ export const InstructionGroups = React.memo(({ instructions, aliases, search }: 
       return acc;
     }, {});
     return aliases.map((alias) => ({ ...alias, instruction: instructionsByMnemonic[alias.alias_of] }));
-  }, [instructions]);
+  }, [instructions, aliases]);
 
   const searchValue = search.toLowerCase();
 
@@ -58,62 +58,63 @@ export const InstructionGroups = React.memo(({ instructions, aliases, search }: 
       item.doc?.opcode?.toLowerCase()?.includes(searchValue) ||
       item.doc?.fift?.toLowerCase()?.includes(searchValue) ||
       item?.doc?.description?.toLowerCase()?.includes(searchValue),
-  ), [searchValue]);
+  ), [instructions, searchValue]);
 
   const filteredAliases = useMemo(() => aliasesWithInstructions.filter(
     (item) =>
       item.mnemonic?.toLowerCase()?.includes(searchValue) ||
       item.description?.toLowerCase()?.includes(searchValue) ||
       item.doc_fift?.toLowerCase()?.includes(searchValue),
-  ), [searchValue]);
+  ), [aliasesWithInstructions, searchValue]);
 
-    const activeTab = useMemo(() => {
-      if (filteredAliases.length > 0 && filteredInstructions.length === 0) {
-        return 'alias';
-      }
-      return 'all';
-    }, [filteredAliases, filteredInstructions]);
+  // --- START OF MODIFIED BLOCK ---
+  const activeTab = useMemo(() => {
+    if (filteredAliases.length > 0 && filteredInstructions.length === 0) {
+      return 'alias';
+    }
+    return 'all';
+  }, [filteredAliases, filteredInstructions]);
+  // --- END OF MODIFIED BLOCK ---
 
-    return (
-      <Tabs key={activeTab} defaultValue={activeTab}>
-        {sections.map(({ label, types, value }) => {
-          if (value === 'alias') {
-            if (!filteredAliases.length) return null;
-            return (
-              <TabItem label={label} value={value} key={value}>
-                <InstructionTable
-                  instructions={filteredAliases.map((alias) => ({
-                    opcode: alias.instruction?.doc.opcode,
-                    fift: alias.doc_fift,
-                    gas: alias.instruction?.doc.gas,
-                    description: alias.description,
-                    stack: alias.doc_stack,
-                  }))}
-                />
-              </TabItem>
-            );
-          }
-
-          const tabInstructions = types
-            ? filteredInstructions.filter((inst) => types.includes(inst.doc.category))
-            : filteredInstructions;
-
-          if (!tabInstructions.length) return null;
+  return (
+    <Tabs key={activeTab} defaultValue={activeTab}>
+      {sections.map(({ label, types, value }) => {
+        if (value === 'alias') {
+          if (!filteredAliases.length) return null;
           return (
             <TabItem label={label} value={value} key={value}>
               <InstructionTable
-                instructions={tabInstructions.map((inst) => ({
-                  opcode: inst.doc.opcode,
-                  fift: inst.doc.fift,
-                  gas: inst.doc.gas,
-                  description: inst.doc.description,
-                  stack: inst.doc.stack,
+                instructions={filteredAliases.map((alias) => ({
+                  opcode: alias.instruction?.doc.opcode,
+                  fift: alias.doc_fift,
+                  gas: alias.instruction?.doc.gas,
+                  description: alias.description,
+                  stack: alias.doc_stack,
                 }))}
               />
             </TabItem>
           );
-        })}
-      </Tabs>
-    );
-  },
-);
+        }
+
+        const tabInstructions = types
+          ? filteredInstructions.filter((inst) => types.includes(inst.doc.category))
+          : filteredInstructions;
+
+        if (!tabInstructions.length) return null;
+        return (
+          <TabItem label={label} value={value} key={value}>
+            <InstructionTable
+              instructions={tabInstructions.map((inst) => ({
+                opcode: inst.doc.opcode,
+                fift: inst.doc.fift,
+                gas: inst.doc.gas,
+                description: inst.doc.description,
+                stack: inst.doc.stack,
+              }))}
+            />
+          </TabItem>
+        );
+      })}
+    </Tabs>
+  );
+});
