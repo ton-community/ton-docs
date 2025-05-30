@@ -301,8 +301,53 @@ When a function is marked with the `inline_ref` specifier, its code is stored in
 
 #### method_id
 
-In a TVM program, every function has an internal integer ID that determines how it can be called. By default, ordinary functions are assigned sequential numbers starting from `1`, while contract get-methods use `crc16` hashes of their names.
-The `method_id(<some_number>)` specifier allows you to set a function’s ID to a specific value manually. If no ID is specified, the default is calculated as `(crc16(<function_name>) & 0xffff) | 0x10000`. If a function has the `method_id` specifier, it can be invoked by its name as a get-method in lite client or TON explorer.
+In a TVM program, every function has an internal integer ID that determines how it can be called. 
+By default, ordinary functions are assigned sequential numbers starting from `1`, while contract get-methods use `crc16` hashes of their names.
+The `method_id(<some_number>)` specifier allows you to set a function's ID to a specific value manually. 
+If no ID is specified, the default is calculated as `(crc16(<function_name>) & 0xffff) | 0x10000`. 
+If a function has the `method_id` specifier, it can be invoked by its name as a get-method in lite client or TON explorer.
+
+:::warning Important limitations and recommendations
+**19-bit limitation**: Method IDs are limited to 19 bits by the TVM assembler, meaning the valid range is **0 to 524,287** (2^19 - 1).
+
+**Reserved ranges**:
+- **0-999**: Reserved for system functions (approximate range)
+- **Special functions**: `main`/`recv_internal` (id=0), `recv_external` (id=-1), `run_ticktock` (id=-2)  
+- **65536+**: Default range for user functions when using automatic generation `(crc16() & 0xffff) | 0x10000`
+
+**Best practice**: It's recommended to **avoid setting method IDs manually** and rely on automatic generation instead. Manual assignment can lead to conflicts and unexpected behavior.
+:::
+
+<details>
+<summary><b>Technical details about method_id parsing</b></summary>
+
+While the FunC compiler can initially accept larger hex values during parsing, the actual limitation comes from the TVM assembler which restricts method IDs to 19 bits (`@procdictkeylen = 19` in Asm.fif).
+
+The parsing of the hexadecimal string for `method_id` is handled by functions in `crypto/common/bigint.hpp` (specifically `AnyIntView::parse_hex_any` called via `td::string_to_int256` and `BigInt<257>::parse_hex`).
+
+`AnyIntView::parse_hex_any` first performs a basic check on the length of the hex string:
+```cpp
+if ((j - i - (p > 0)) * 4 > (max_size() - 1) * word_shift + word_bits - 2) {
+  return 0; // Invalid if too long
+}
+```
+
+For `BigInt<257>` (which is `td::BigIntG<257, td::BigIntInfo>`):
+- `Tr` is `BigIntInfo`.
+- `word_bits` (bits in a word) is 64.
+- `word_shift` (effective bits used per word in normalization) is 52. (Source: `crypto/common/bigint.hpp`)
+- `max_size()` (maximum words for `BigInt<257>`) is `(257 + 52 - 1) / 52 + 1 = 6` words.
+
+Let's plug these values into the length check formula:
+`(max_size() - 1) * word_shift + word_bits - 2`
+`(6 - 1) * 52 + 64 - 2 = 5 * 52 + 62 = 260 + 62 = 322` bits.
+
+A 65-character hex string represents \( 65 times 4 = 260 \) bits.
+The calculated bit limit for the quick check is 322 bits. Since `260` is not greater than `322`, such a number (65 hex digits) can *pass* this initial length check. This check is designed to quickly reject inputs that are grossly too large. The `-2` offers a slight margin.
+
+After this initial parsing into internal `digits_`, `parse_hex_any` calls `normalize_bool_any()`. This function converts the internal representation into a canonical signed form.
+If `normalize_bool_any()` returns `false`, it indicates an overflow during this canonicalization. This can happen even if the number passed the initial length check, for example, if a carry propagates such that it requires more than `max_size()` words to represent in the specific signed format, or if the most significant word itself overflows. In such a case, `parse_hex_any` invalidates the `BigInt` and returns `0`, leading to `td::string_to_int256` returning a `null RefInt256` and FunC reporting an "invalid integer constant".
+</details>
 
 **Example**
 ```func
