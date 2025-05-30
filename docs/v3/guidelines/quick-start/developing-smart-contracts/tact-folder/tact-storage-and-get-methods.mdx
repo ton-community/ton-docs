@@ -5,20 +5,22 @@ import Button from '@site/src/components/button'
 
 # Storage and get methods
 
-> **Summary:** In the previous steps, we learned how to use the `Blueprint` and its project structure.
-
-Tact is a high-level programming language for the TON Blockchain, focused on efficiency and simplicity. It is designed to be easy to learn and use while being well-suited for smart contract development. Tact is a statically typed language with a simple syntax and a powerful type system.
+> **Summary:** In the previous steps, we learned how to use the `Blueprint SDK` and its project structure.
 
 :::info
 For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#start/) and [Tact By Example](https://tact-by-example.org/00-hello-world/).
 :::
 
-Let's create and modify our smart contract following standard steps described in the previous [Blueprint overview](/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-blueprint-sdk-overview/) section.
+
+Smart contracts often need to store data, like counters or ownership information, and provide a way to read or update it through messages. In this section, you’ll learn how to define and initialize contract storage, receive and handle incoming messages, and create getter functions to read contract states outside the blockchain.
+
+Let's create and modify our smart contract following the standard steps described in the previous [Blueprint overview](/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-blueprint-sdk-overview/) section.
+
 
 ## Step 1: edit smart contract code
 
 
-At the top of the generated contract file: `hello_world.tact`, you may see a message definition:
+At the top of the generated contract file: `hello_world.tact`, you may see a **message** definition:
 
 ```tact title="/contracts/hello_world.tact"
 message Add {
@@ -27,7 +29,12 @@ message Add {
 }
 ```
 
-A message is a basic structure for communication between contracts. Tact automatically serializes and deserializes messages into cells. To ensure that opcodes will be the same during message structure changes, it may be added like below:
+A **message** is a structure that sends data into a contract from another contract or outside the blockchain.
+Tact simplifies working with messages by automatically serializing and deserializing them into [TVM cells](https://docs.ton.org/v3/documentation/data-formats/tlb/msg-tlb). You don’t need to write low-level serialization code or think about bit layout manually — Tact handles that for you.
+
+Every message is assigned a unique 32-bit identifier called an **opcode** (short for operation code). This identifier is stored at the beginning of the serialized message and helps the contract understand what type of message it is *receiving*.
+
+By default, Tact automatically assigns this identifier. However, you can also define it manually, for example, when evolving the structure of your messages over time:
 
 ```tact title="/contracts/hello_world.tact"
 message(0x7e8764ef) Add {
@@ -36,17 +43,25 @@ message(0x7e8764ef) Add {
 }
 ```
 
-Tact will serialize it as follows:
 
-```func
-begin_cell()
-    .store_uint(0x7e8764ef, 32) ;; message opcode
-    .store_uint(query_id, 64)
-    .store_uint(amount, 32)
-    .end_cell()
-```
+<details>
+  <summary><b>Tact automatically serializes messages into TVM cells.</b></summary>
 
-Using this structure, a message can be sent to the contract from FunC.
+  When compiled, Tact will automatically serialize this message into a TVM cell. Internally, it would be represented something like this:
+
+  ```func
+  begin_cell()
+  .store_uint(0x7e8764ef, 32) ;; message opcode
+  .store_uint(query_id, 64)
+  .store_uint(amount, 32)
+  .end_cell()
+  ```
+
+  Usually, you don’t need to think about this — Tact takes care of it behind the scenes. However, it can be helpful to understand when debugging or interacting with low-level language like FunC.
+
+</details>
+
+
 
 #### Defining the contract
 
@@ -66,26 +81,18 @@ A contract may store its state variables as follows. They may be accessed with [
 id: Int as uint32;
 counter: Int as uint32;
 ```
-
-To ensure that only the contract owner can interact with specific functions, add an `owner` field:
-
-```tact title="/contracts/hello_world.tact"
-id: Int as uint32;
-counter: Int as uint32;
-owner: Address;
-```
-
 These fields are serialized similarly to structures and stored in the contract's data register.
+
+Use `self.id` and `self.counter` to access them within contract functions.
 
 #### Initializing the contract
 
-If you compile the contract at this stage, you will encounter the error: `Field "owner" is not set`. This is because the contract needs to initialize its fields upon deployment. Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function/) function to do this:
+Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function/) function to set initial values:
 
 ```tact title="/contracts/hello_world.tact"
-init(id: Int, owner: Address) {
+init(id: Int) {
     self.id = id;
     self.counter = 0;
-    self.owner = owner;
 }
 ```
 
@@ -100,39 +107,13 @@ receive(msg: Add) {
 }
 ```
 
-For accepting messages with empty body you can add `recieve` function with no arguments:
+For accepting messages with empty body you can add `receive` function with no arguments:
 
 ```tact title="/contracts/hello_world.tact"
 receive() {
     cashback(sender())
 }
 ```
-
-#### Restricting access
-
-Tact also provides handy ways to share the same logic through [traits](https://docs.tact-lang.org/book/types/#traits) reusable code blocks similar to abstract classes in other languages. Tact doesn’t use classical inheritance, but traits let you define shared logic without duplicating code. They look like contracts but can’t store persistent state.
-For example, you can use the `Ownable` trait, which provides built-in ownership checks, to ensure that only the contract owner can send messages.
-
-```tact title="/contracts/hello_world.tact"
-// Import library to use trait
-import "@stdlib/ownable";
-
-// Ownable trait introduced here
-contract HelloWorld with Ownable {
-
-    ...
-
-    receive(msg: Add) {
-        self.requireOwner();
-        self.counter += msg.amount;
-        self.notify("Cashback".asComment());
-    }
-}
-```
-
-:::info
-[Identity validation](https://docs.tact-lang.org/book/security-best-practices/#identity-validation) plays a key role in secure contract interactions. You can read more about identity validation and its importance in the linked documentation.
-:::
 
 #### Getter functions
 
@@ -148,43 +129,35 @@ get fun counter(): Int {
 }
 ```
 
-Note, that the `owner` getter is automatically defined via the `Ownable` trait.
-
 #### Complete contract
 
 ```tact title="/contracts/hello_world.tact"
-import "@stdlib/ownable";
-
 // message with opcode
 message(0x7e8764ef) Add {
     queryId: Int as uint64;
     amount: Int as uint32;
 }
 
-// Contract defenition. `Ownable` is a trait to share functionality.
-contract HelloWorld with Ownable {
+// Contract defenition
+contract HelloWorld {
 
     // storage variables
     id: Int as uint32;
     counter: Int as uint32;
-    owner: Address;
 
     // init function.
-    init(id: Int, owner: Address) {
+    init(id: Int) {
         self.id = id;
         self.counter = 0;
-        self.owner = owner;
     }
 
-    // default(null) recieve for deploy
+    // default(null) receive for deploy
     receive() {
         cashback(sender())
     }
 
-    // function to recive messages from other contracts
+    // function to receive messages from other contracts
     receive(msg: Add) {
-        // function from `Ownable` trait to assert, that only owner may call this
-        self.requireOwner();
         self.counter += msg.amount;
 
         // Notify the caller that the receiver was executed and forward remaining value back
@@ -224,182 +197,122 @@ Expected output should look like this:
 
 ## Step 2: update wrapper
 
-[Wrappers](https://docs.tact-lang.org/book/compile/#wrap-ts) facilitate contract interaction from TypeScript. Unlike in FunC or Tolk, they are generated automatically during the build process:
+After building your contract, Tact automatically generates a special wrapper file. This [wrapper]((https://docs.tact-lang.org/book/compile/#wrap-ts)) simplifies interaction with your contract from TypeScript, such as calling its methods or sending messages.
+
+In the wrapper file, you'll find this line of code:
 
 ```typescript title="/wrappers/HelloWorld.ts"
 export * from '../build/HelloWorld/tact_HelloWorld';
 ```
 
+This code exports everything inside the `tact_HelloWorld.ts` file in the build folder, making it available for use in other files.
+
 ## Step 3: updating tests
 
-Now let's ensure that our smart contract code fails when we try to send `add` message from non-owner:
- - Create `HelloWorld` with some owner.
- - Create another smart contract that will have different address - `nonOwner`.
- - Try to send an internal message to `HelloWorld` and enusre that it fails with expected `exitCode` and counter field remains the same.
 
-Implementation of test should look like this:
+<details>
+  <summary><b>Updating tests</b></summary>
 
-```typescript title="/tests/HelloWorld.spec.ts"
-// @version TypeScript 5.8.3
-import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
-import { toNano } from '@ton/core';
-import { HelloWorld } from '../wrappers/HelloWorld';
-import '@ton/test-utils';
+  Now let's ensure that our smart contract correctly updates the counter:
+  - Deploy the `HelloWorld` contract with an initial ID.
+  - Check that the initial counter value is `0`.
+  - Send an `Add` message to increment the counter.
+  - Verify that the counter value increases by the expected amount.
 
-describe('HelloWorld Basic Tests', () => {
-    let blockchain: Blockchain;
-    let helloWorld: SandboxContract<HelloWorld >;
-    let owner: SandboxContract<TreasuryContract>;
 
-    beforeEach(async () => {
-        // Create a new blockchain instance
-        blockchain = await Blockchain.create();
+  Implementation of test should look like this:
 
-        // Create an owner wallet
-        owner = await blockchain.treasury('owner');
+  ```typescript title="/tests/HelloWorld.spec.ts"
+  // @version TypeScript 5.8.3
+  import { Blockchain, SandboxContract, TreasuryContract } from '@ton/sandbox';
+  import { toNano } from '@ton/core';
+  import { HelloWorld } from '../wrappers/HelloWorld';
+  import '@ton/test-utils';
 
-        // Deploy the contract
-        helloWorld = blockchain.openContract(
-            await HelloWorld .fromInit(0n, owner.address)
-        );
+  describe('HelloWorld Basic Tests', () => {
+  let blockchain: Blockchain;
+  let helloWorld: SandboxContract<HelloWorld>;
+  let sender: SandboxContract<TreasuryContract>;
 
-        // Send deploy transaction
-        const deployResult = await helloWorld.send(
-            owner.getSender(),
-            { value: toNano('1.00') },
-            null
-        );
+  beforeEach(async () => {
+  blockchain = await Blockchain.create();
+  sender = await blockchain.treasury('user');
 
-        // Verify deployment was successful
-        expect(deployResult.transactions).toHaveTransaction({
-            from: owner.address,
-            to: helloWorld.address,
-            deploy: true,
-            success: true
-        });
-    });
+  helloWorld = blockchain.openContract(
+  // init with id = 0
+  await HelloWorld.fromInit(0n)
+  );
 
-    it('should initialize with correct values', async () => {
-        // Check initial counter value
-        const initialCounter = await helloWorld.getCounter();
-        expect(initialCounter).toBe(0n);
+  const deployResult = await helloWorld.send(
+  sender.getSender(),
+{ value: toNano('1') },
+  null
+  );
 
-        // Check initial ID
-        const id = await helloWorld.getId();
-        expect(id).toBe(0n);
-    });
-
-    it('should allow owner to increment counter', async () => {
-        // Get initial counter value
-        const initialCounter = await helloWorld.getCounter();
-
-        // Increment counter by 5
-        const incrementAmount = 5n;
-        const result = await helloWorld.send(
-            owner.getSender(),
-            { value: toNano('0.05') },
-            {
-                $$type: 'Add',
-                amount: incrementAmount,
-                queryId: 0n
-            }
-        );
-
-        // Verify transaction was successful
-        expect(result.transactions).toHaveTransaction({
-            from: owner.address,
-            to: helloWorld.address,
-            success: true
-        });
-
-        // Check counter was incremented correctly
-        const newCounter = await helloWorld.getCounter();
-        expect(newCounter).toBe(initialCounter + incrementAmount);
-    });
-
-    it('should prevent non-owner from incrementing counter', async () => {
-        // Create a non-owner wallet
-        const nonOwner = await blockchain.treasury('nonOwner');
-
-        // Get initial counter value
-        const initialCounter = await helloWorld.getCounter();
-
-        // Try to increment counter as non-owner
-        const result = await helloWorld.send(
-            nonOwner.getSender(),
-            { value: toNano('0.05') },
-            {
-                $$type: 'Add',
-                amount: 5n,
-                queryId: 0n
-            }
-        );
-
-        // Verify transaction failed
-        expect(result.transactions).toHaveTransaction({
-            from: nonOwner.address,
-            to: helloWorld.address,
-            success: false
-        });
-
-        // Verify counter was not changed
-        const newCounter = await helloWorld.getCounter();
-        expect(newCounter).toBe(initialCounter);
-    });
-
-    it('should handle multiple increments correctly', async () => {
-        // Perform multiple increments
-        const increments = [3n, 7n, 2n];
-        let expectedCounter = 0n;
-
-        for (const amount of increments) {
-            await helloWorld.send(
-                owner.getSender(),
-                { value: toNano('0.05') },
-                {
-                    $$type: 'Add',
-                    amount: amount,
-                    queryId: 0n
-                }
-            );
-            expectedCounter += amount;
-        }
-
-        // Verify final counter value
-        const finalCounter = await helloWorld.getCounter();
-        expect(finalCounter).toBe(expectedCounter);
-    });
+  expect(deployResult.transactions).toHaveTransaction({
+  from: sender.address,
+  to: helloWorld.address,
+  deploy: true,
+  success: true
+});
 });
 
+  it('should initialize with id = 0 and counter = 0', async () => {
+  const id = await helloWorld.getId();
+  const counter = await helloWorld.getCounter();
+  expect(id).toBe(0n);
+  expect(counter).toBe(0n);
+});
 
-```
+  it('should increase counter by given amount', async () => {
+  const result = await helloWorld.send(
+  sender.getSender(),
+{ value: toNano('0.1') },
+{
+  $$type: 'Add',
+  queryId: 0n,
+  amount: 10n
+}
+  );
 
-Don't forget to verify the example is correct by running test script:
+  expect(result.transactions).toHaveTransaction({
+  from: sender.address,
+  to: helloWorld.address,
+  success: true
+});
 
-```bash
-npx blueprint test
-```
+  const counter = await helloWorld.getCounter();
+  expect(counter).toBe(10n);
+});
+});
 
-Expected output should look like this:
+  ```
 
-```bash
+  Don't forget to verify the example is correct by running test script:
 
- PASS  tests/HelloWorld.spec.ts
+  ```bash
+  npx blueprint test
+  ```
+
+  Expected output should look like this:
+
+  ```bash
+
+  PASS  tests/HelloWorld.spec.ts
   HelloWorld Basic Tests
-    ✓ should initialize with correct values (211 ms)
-    ✓ should allow owner to increment counter (100 ms)
-    ✓ should prevent non-owner from incrementing counter (152 ms)
-    ✓ should handle multiple increments correctly (112 ms)
+  ✓ should initialize with id = 0 and counter = 0 (305 ms)
+  ✓ should increase counter by given amount (120 ms)
 
-Test Suites: 1 passed, 1 total
-Tests:       4 passed, 4 total
-Snapshots:   0 total
-Time:        1.193 s, estimated 2 s
-Ran all test suites.
+  Test Suites: 1 passed, 1 total
+  Tests:       2 passed, 2 total
+  Snapshots:   0 total
+  Time:        1.399 s
+  Ran all test suites.
 
-```
 
----
+  ```
+</details>
+
 
 ## Next step
 

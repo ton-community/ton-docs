@@ -137,15 +137,15 @@ Navigate to [Tonviewer](https://testnet.tonviewer.com/) and paste your address i
 ## Sending NFTs
 
 [Non-fungible tokens](/v3/guidelines/dapps/asset-processing/nft-processing/nfts/) (NFTs) are assets like a piece of art, digital content, or video that have been tokenized via a blockchain. In TON, NFTs are represented via a collection of smart contracts:
-- **NFT Collection**: Stores information about the NFT collection.
-- **NFT Item**: Stores information about the NFT item that the user owns.
+- **NFT Collection**: stores information about the NFT collection.
+- **NFT Item**: stores information about the NFT item that the user owns.
 
 To send an NFT, we should first acquire one. The easiest way to do that is to create and deploy your own NFT through [TON Tools](https://ton-collection-edit.vercel.app/deploy-nft-single). Note that the `owner` addresses of your NFT must be your wallet address to be able to perform operations on it.
 
 The basic operation of the [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) in TON is `transfer`. What is actually performed is changing the address of the `owner` in NFT storage to the `new owner`, which is the address of another contract that is now able to perform operations with the `NFT Item`.
 
 :::tip
-See [Actors and Roles](/v3/guidelines/quick-start/developing-smart-contracts/processing-messages#actors-and-roles/) for a more conceptual description.
+See [Actors and roles](/v3/guidelines/quick-start/developing-smart-contracts/processing-messages#actors-and-roles) for a more conceptual description.
 :::
 
 #### Implementation
