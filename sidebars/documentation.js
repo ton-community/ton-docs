@@ -81,6 +81,7 @@ module.exports = [
           'v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short',
           'v3/documentation/smart-contracts/tolk/tolk-vs-func/in-detail',
           'v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability',
+          'v3/documentation/smart-contracts/tolk/tolk-vs-func/pack-to-from-cells',
           'v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib',
           'v3/documentation/smart-contracts/tolk/changelog',
         ],
