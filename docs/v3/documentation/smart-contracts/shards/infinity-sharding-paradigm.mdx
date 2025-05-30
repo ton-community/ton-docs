@@ -97,11 +97,32 @@ Validators determine whether to split or merge shards based on the `want_split` 
 Shards perform the split or merge after a delay of `split_merge_delay = 100` seconds from the decision.
 
 
-## Messages and instant hypercube routing (instant hypercube routing)
+## Messages and instant hypercube routing (IHR)
 
 In the infinite sharding paradigm, each account or smart contract is treated as if it were a part of its own ShardChain.
 Interactions between accounts occur exclusively through message passing, following the **actor model**, where accounts act as actors.
 An efficient messaging system between ShardChains is essential for the operation of the TON blockchain. A key feature supporting this is **Instant Hypercube Routing**, which enables near-instantaneous message delivery and processing across ShardChains. Messages created in one ShardChain block are processed in the next block of the target ShardChain — regardless of how many messages are in the system.
+
+### Current Status of IHR
+
+:::info Important Clarification
+**Instant Hypercube Routing (IHR) is an alternative mechanism for message delivery without intermediate hops.** However, it is important to understand that:
+
+- **IHR is not implemented** and is not yet fully specified
+- **IHR is only relevant** when there are more than 16 shards and not all shards are neighbors to each other
+- **Current network settings forbid splitting deeper than 16 shards**, so IHR is not relevant in any practical sense today
+
+Currently, TON uses standard **Hypercube Routing (HR)** for message delivery between shards, which routes messages through intermediate shards when necessary. IHR would provide a more direct routing mechanism, but only becomes necessary in much larger shard configurations than are currently possible.
+:::
+
+### Message Routing Mechanisms
+
+TON blockchain supports two conceptual message routing mechanisms:
+
+1. **Hypercube Routing (HR)** - Currently implemented mechanism that routes messages between shards through intermediate hops when necessary
+2. **Instant Hypercube Routing (IHR)** - Alternative mechanism (not implemented) that would allow direct message delivery without intermediate hops
+
+The choice between these mechanisms would depend on the network topology and shard configuration, but given current limitations on shard depth, only HR is relevant.
 
 ## Sharding example
 
