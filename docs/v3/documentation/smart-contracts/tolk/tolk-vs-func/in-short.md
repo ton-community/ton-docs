@@ -29,7 +29,7 @@ get currentCounter(): int { ... }
 6. Syntax improvements:
     - `;; comment` → `// comment`
     - `{- comment -}` → `/* comment */`
-    - `#include` → `import`, with a strict rule "import what you use"
+    - `#include` → `import`, with a strict rule **import what you use**
     - `~ found` → `!found` (for true/false only, obviously) (true is -1, like in FunC)
     - `v = null()` → `v = null`
     - `null?(v)` → `v == null`, same for `builder_null?` and others
