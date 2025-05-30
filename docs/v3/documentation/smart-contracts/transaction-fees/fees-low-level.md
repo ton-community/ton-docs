@@ -220,8 +220,16 @@ Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the 
 
 ### IHR
 
-:::tip
-At this moment (November 2024), [IHR](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) is not implemented, and if you set the `ihr_fee` to a non-zero value, it will always be added to the message value upon receipt. For now, there are no practical reasons to do this.
+:::info What is IHR?
+[**Instant Hypercube Routing (IHR)**](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) is an alternative mechanism for message delivery without intermediate hops between shards. To understand why IHR is not currently relevant:
+
+- **IHR is not implemented** and is not yet fully specified
+- **IHR would only be relevant** when the network has more than 16 shards and not all shards are neighbors to each other
+- **Current network settings forbid splitting deeper than 16 shards**, which means IHR is not relevant in any practical sense
+
+In the current TON network configuration, all message routing uses standard **Hypercube Routing (HR)**, which can handle message delivery efficiently with the current shard topology. The `ihr_fee` field exists in the message structure for future compatibility, but serves no functional purpose today. 
+
+If you set the `ihr_fee` to a non-zero value, it will always be added to the message value upon receipt. For now, there are no practical reasons to do this.
 :::
 
 ### Formula
