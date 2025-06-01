@@ -21,10 +21,9 @@ Non-fungible tokens (NFTs) have become one of the hottest topics in the world of
 ## 💡 Prerequisites
 You must already have a testnet wallet with at least 2 TON. You can get testnet coins from [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
 
-:::info How to open the testnet version of my Tonkeeper wallet?  
-1. Open settings and click the Tonkeeper logo at the bottom  5 times. 
-2. Activate Dev mode.  
-3. Return to the main menu and create a new Testnet wallet: Add wallet → Add Testnet Account.
+:::info How to use the testnet on my Tonkeeper wallet?  
+1. Open Wallets list.
+2. Create a new Testnet wallet: Add wallet → Add Testnet Account.
 :::
 
 We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key and api_secret. The official Pinata [documentation](https://docs.pinata.cloud/account-management/api-keys) can help with that. Once you have these API tokens, I’ll be waiting for you here!
