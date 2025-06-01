@@ -62,5 +62,7 @@ GraphQL nodes also function as indexers.
 
 * [TonAPI](https://docs.tonconsole.com/tonapi) - A user-friendly API that abstracts low-level smart contract details for a streamlined experience.
 
+*	[DYOR API](https://docs.dyor.io/technical-guides/introduction) – A developer-focused API providing unified access to on-chain token data, trust scores, prices, liquidity, holders, market stats, and historical data.
+
 <Feedback />
 
