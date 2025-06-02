@@ -18,12 +18,6 @@ module.exports = [
       {
         type: 'category',
         label: 'Developing smart contracts',
-        link: {
-          type: 'generated-index',
-          title: 'Developing smart contracts',
-          slug: '/guidelines/developing-smart-contracts',
-          keywords: ['smart contracts developing'],
-        },
         items: [
           'v3/guidelines/quick-start/developing-smart-contracts/setup-environment',
 
