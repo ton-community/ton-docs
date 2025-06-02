@@ -1141,12 +1141,15 @@ globalTuple.1.2 += 10;  // "GETGLOB" + ... + "SETGLOB"
   ✅ Type `address`
 </h3>
 
+
 In TVM, all **binary data** is just **a slice.** Same goes for addresses: while TL-B describes the entity `MsgAddress` (internal/external/none/var address),
+
 and TVM assembler has instructions to load/validate addresses, nevertheless: at the low level, it's just a slice.
 That's why in FunC's standard library `loadAddress` returned `slice`, and `storeAddress` accepted `slice`.
 
 Tolk introduces the dedicated `address` type. It's still a TVM slice at runtime (internal/external/none),
 but it differs from an **abstract slice** from the type system point of view:
+
 
 1) Integrated with auto-serialization: compiler knows how to pack/unpack it (`LDMSGADDR` and `STSLICE`)
 2) Comparable: operators `==` and `!=` work on addresses:
@@ -1188,6 +1191,7 @@ According to a standard, there are different types of addresses. The most freque
 * `10` (**internal** prefix) + `0` (anycast, always 0) + workchain (8 bits) + hash (256 bits) — that's `EQ...`: it's 267 bits
 * `01` (**external** prefix) + len (9 bits) + len bits — external addresses
 * `00` (**none** prefix) — address **none**, 2 bits
+
 
 The `address` type can hold any of these. Most often, it's an internal address. But the type system does not restrict it exactly: this can't be done without heavy runtime checks.
 
