@@ -24,14 +24,16 @@ var p = Point.fromCell(c);
 
 ## Key features of auto-serialization
 
-* supports all types: unions, tensors, nullables, generics, atomics, ...
-* allows you to specify serialization prefixes (particularly, opcodes)
-* allows you to manage cell references and when to load them
-* lets you control error codes and other behavior
-* unpacks data from a cell or a slice, mutate it or not
-* packs data to a cell or a builder
-* warns if data potentially exceeds 1023 bits
-* more efficient than manual serialization
+
+* Supports all types: unions, tensors, nullables, generics, atomics, ...
+* Allows you to specify serialization prefixes (particularly, opcodes)
+* Allows you to manage cell references and when to load them
+* Lets you control error codes and other behavior
+* Unpacks data from a cell or a slice, mutate it or not
+* Packs data to a cell or a builder
+* Warns if data potentially exceeds 1023 bits
+* More efficient than manual serialization
+
 
 
 ## List of supported types and how they are serialized
@@ -40,25 +42,27 @@ A small reminder: Tolk has `intN` types (`int8`, `uint64`, etc.). Of course, the
 They are just integers at the TVM level, they can hold any value at runtime: **overflow only happens at serialization**. 
 For example, if you assign 256 to uint8, asm command "8 STU" will fail with code 5 (integer out of range).
 
-| Type                      | TL/B Equivalent                          | Serialization Notes                      |
-|---------------------------|------------------------------------------|------------------------------------------|
-| `int8`, `uint55`, etc.    | same as TL/B                             | `N STI` / `N STU`                        |
-| `coins`                   | TL/B varint16                            | `STGRAMS`                                |
-| `bytes8`, `bits123`, etc. | just N bits                              | runtime check + `STSLICE` (1)            |
-| `address`                 | MsgAddress (internal/external/none)      | `STSLICE` (2)                            |
-| `bool`                    | one bit                                  | `1 STI`                                  |
-| `cell`                    | untyped reference, TL-B `^Cell`          | `STREF`                                  |
-| `cell?`                   | maybe reference, TL-B `(Maybe ^Cell)`    | `STOPTREF`                               |
-| `Cell<T>`                 | typed reference, TL-B `^T`               | `STREF`                                  |
-| `Cell<T>?`                | maybe typed reference, TL-B `(Maybe ^T)` | `STOPTREF`                               |
-| `RemainingBitsAndRefs`    | rest of slice                            | `STSLICE`                                |
-| `builder`                 | only for writing, not for reading        | `STBR`                                   |
-| `T?`                      | TL/B `(Maybe T)`                         | `1 STI` + IF ...                         |
-| `T1 \| T2`                | TL/B `(Either T1 T2)`                    | `1 STI` + IF ... + ELSE ... (3)          |
-| `T1 \| T2 \| ...`         | TL/B multiple constructors               | IF ... + ELSE IF ... + ELSE ... (4)      |
-| `(T1, T2)`                | TL/B `(Pair T1 T2)` = one by one         | pack T1 + pack T2                        |
-| `(T1, T2, ...)`           | nested pairs = one by one                | pack T1 + pack T2 + ...                  |
-| `SomeStruct`              | fields one by one                        | like a tensor                            |
+
+| Type                      | TL-B equivalent                          | Serialization notes                 |
+|---------------------------|------------------------------------------|-------------------------------------|
+| `int8`, `uint55`, etc.    | same as TL-B                             | `N STI` / `N STU`                   |
+| `coins`                   | TL-B varint16                            | `STGRAMS`                           |
+| `bytes8`, `bits123`, etc. | just N bits                              | runtime check + `STSLICE` (1)       |
+| `address`                 | MsgAddress (internal/external/none)      | `STSLICE` (2)                       |
+| `bool`                    | one bit                                  | `1 STI`                             |
+| `cell`                    | untyped reference, TL-B `^Cell`          | `STREF`                             |
+| `cell?`                   | maybe reference, TL-B `(Maybe ^Cell)`    | `STOPTREF`                          |
+| `Cell<T>`                 | typed reference, TL-B `^T`               | `STREF`                             |
+| `Cell<T>?`                | maybe typed reference, TL-B `(Maybe ^T)` | `STOPTREF`                          |
+| `RemainingBitsAndRefs`    | rest of slice                            | `STSLICE`                           |
+| `builder`                 | only for writing, not for reading        | `STBR`                              |
+| `T?`                      | TL-B `(Maybe T)`                         | `1 STI` + IF ...                    |
+| `T1 \| T2`                | TL-B `(Either T1 T2)`                    | `1 STI` + IF ... + ELSE ... (3)     |
+| `T1 \| T2 \| ...`         | TL-B multiple constructors               | IF ... + ELSE IF ... + ELSE ... (4) |
+| `(T1, T2)`                | TL-B `(Pair T1 T2)` = one by one         | pack T1 + pack T2                   |
+| `(T1, T2, ...)`           | nested pairs = one by one                | pack T1 + pack T2 + ...             |
+| `SomeStruct`              | fields one by one                        | like a tensor                       |
+
 
 * (1) By analogy with `intN`, there is are `bytesN` types. It's just a `slice` under the hood: the type shows how to serialize this slice. 
 By default, before `STSLICE`, the compiler inserts runtime checks (get bits/refs count + compare with N + compare with 0). 
@@ -67,14 +71,17 @@ However, if you guarantee that a slice is valid (for example, it comes from trus
 
 * (2) In TVM, all addresses are also plain slices. Type `address` indicates that it's a slice containing *some* valid address (internal/external/none). 
 It's packed with `STSLICE` (no runtime checks) and loaded with `LDMSGADDR`. 
-Don't confuse "address none" with null! "None" is a valid address (two zero bits), whereas `address?` is "maybe address" (bit '0' OR bit '1' + address).
 
-* (3) TL/B Either is expressed with a union `T1 | T2`. For example, `int32 | int64` is packed as ('0' + 32-bit int OR '1' + 64-bit int). 
+Don't confuse `address none` with null! `None` is a valid address (two zero bits), whereas `address?` is `maybe address` (bit "0" OR bit "1" + address).
+
+* (3) TL-B Either is expressed with a union `T1 | T2`. For example, `int32 | int64` is packed as ("0" + 32-bit int OR "1" + 64-bit int). 
+
 However, if T1 and T2 are both structures with manual serialization prefixes, those prefixes are used instead of a 0/1 bit.
 
 * (4) To (un)pack a union, say, `Msg1 | Msg2 | Msg3`, we need serialization prefixes. For structures, you can specify them manually 
 (or the compiler will generate them right here). For primitives, like `int32 | int64 | int128 | int256`, the compiler generates a prefix tree 
-(00/01/10/11 in this case). Read "auto-generating serialization prefixes" below.
+(00/01/10/11 in this case). Read **auto-generating serialization prefixes** below.
+
 
 
 ## Some examples of valid types
@@ -110,7 +117,9 @@ struct A {
 ## Serialization prefixes and opcodes
 
 Declaring a struct, there is a special syntax to provide pack prefixes. 
-Typically, you'll use 32-bit prefixes for messages opcodes, or arbitrary prefixes is case you'd like to express TL/B multiple constructors.
+
+Typically, you'll use 32-bit prefixes for messages opcodes, or arbitrary prefixes is case you'd like to express TL-B multiple constructors.
+
 
 ```tolk
 struct (0x7362d09c) TransferNotification {
@@ -125,7 +134,10 @@ Prefixes **can be of any width**, they are not restricted to be 32 bit.
 * `0b010` — 3-bit prefix
 * `0b00001111` — 8-bit prefix
 
-Declaring messages with 32-bit opcodes does not differ from declaring any other structs. Say, you the following TL/B scheme:
+
+Declaring messages with 32-bit opcodes does not differ from declaring any other structs. Say, you the following TL-B scheme:
+
+
 ```tl-b
 asset_simple$001 workchain:int8 ptr:bits32 = Asset;
 asset_booking$1000 order_id:uint64 = Asset;
@@ -316,7 +328,9 @@ So, typed cells are a powerful mechanism to express the contents of referenced c
 Note that `Cell<address>` or even `Cell<int32 | int64>` is also okay, you are not restricted to structures.
 
 When it comes to untyped cells — just `cell` — they also denote references, but don't denote their inner contents, don't have the `.load()` method. 
-It's just "some cell," like code/data of a contract or an untyped nft content.
+
+It's just _some cell_, like code/data of a contract or an untyped nft content.
+
 
 
 ## Remaining data after reading
@@ -424,7 +438,10 @@ struct JettonMessage {
      forwardPayload: RemainingBitsAndRefs;
 }
 ```
-When you deserialize JettonMessage, forwardPayload contains "everything left after reading fields above". Essentially, it's an alias to a slice which is handled specially while unpacking:
+
+When you deserialize JettonMessage, forwardPayload contains _everything left after reading fields above_. Essentially, it's an alias to a slice which is handled specially while unpacking:
+
+
 ```
 type RemainingBitsAndRefs = slice;
 ```
@@ -432,7 +449,9 @@ type RemainingBitsAndRefs = slice;
 
 ## Auto-generating prefixes for unions
 
-We've mentioned multiple times, that `T1 | T2` is encoded as TL/B Either: bit '0' + T1 OR bit '1' + T2. But what about wider unions? Say,
+
+We've mentioned multiple times, that `T1 | T2` is encoded as TL-B Either: bit '0' + T1 OR bit '1' + T2. But what about wider unions? Say,
+
 ```tolk
 struct WithUnion {
     f: int8 | int16 | int32;

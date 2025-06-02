@@ -465,7 +465,7 @@ FunC's type system is based on Hindley-Milner. This is a common approach for fun
 
 In Tolk v0.7, the type system is rewritten from scratch.
 In order to add booleans, fixed-width integers, nullability, structures, and generics, we must have a static type system (like TypeScript or Rust).
-Because Hindley-Milner will clash with structure methods, struggle with proper generics, and become entirely impractical for union types (despite claims that it was "designed for union types").
+Because Hindley-Milner will clash with structure methods, struggle with proper generics, and become entirely impractical for union types (despite claims that it was _designed for union types_).
 
 We have the following types:
 - `int`, `bool`, `cell`, `slice`, `builder`, untyped `tuple`
@@ -480,7 +480,7 @@ We have the following types:
 - `address` (internal/external/none, still a slice at TVM)
 - `void` (more canonical to be named `unit`, but `void` is more reliable)
 - `self`, to make chainable methods, described below; actually it's not a type, it can only occur instead of return type of a function
-- `never` (an always-throwing function returns `never`, for example; an "impossible type" is also `never`)
+- `never` (an always-throwing function returns `never`, for example; an _impossible type_ is also `never`)
 - structures and generics
 
 The type system obeys the following rules:
@@ -641,18 +641,18 @@ All parameter types and their order rename the same, only naming is changed. `fu
   </tbody>
 </table>
 
-In Tolk, you can not use a symbol from `a.tolk` without importing this file. In other words, "import what you use".
+In Tolk, you can not use a symbol from `a.tolk` without importing this file. In other words, **import what you use**.
 
-All stdlib functions are available out of the box. Downloading stdlib and `#include "stdlib.fc" is unnecessary. See below about embedded stdlib.
+All stdlib functions are available out of the box. Downloading stdlib and `#include "stdlib.fc"` is unnecessary. See below about embedded stdlib.
 
-There is still a global scope of naming. If `f` is declared in two different files, it's an error. We "import" a whole file with no per-file visibility, and the `export` keyword is now supported but probably will be in the future.
+There is still a global scope of naming. If `f` is declared in two different files, it's an error. We `import` a whole file with no per-file visibility, and the `export` keyword is now supported but probably will be in the future.
 
 
 <h3 className="cmp-func-tolk-header">
   ✅ #pragma → compiler options
 </h3>
 
-In FunC, "experimental" features like `allow-post-modifications` were turned on by a pragma in .fc files (leading to problems when some files contain it, some don't). Indeed, it's not a pragma for a file, it's a compilation option.
+In FunC, **experimental** features like `allow-post-modifications` were turned on by a pragma in `.fc` files (leading to problems when some files contain it, some don't). Indeed, it's not a pragma for a file, it's a compilation option.
 
 In Tolk, all pragmas were removed. `allow-post-modification` and `compute-asm-ltr` were merged into Tolk sources (as if they were always on in FunC). Instead of pragmas, there is now an ability to pass experimental options.
 
@@ -950,7 +950,7 @@ Continue here: [Tolk vs FunC: standard library](/v3/documentation/smart-contract
   </tbody>
 </table>
 
-In Tolk, stdlib a part of distribution. Standard library is inseparable, since keeping a triple "language, compiler, stdlib" together is the only correct way to maintain release cycle.
+In Tolk, stdlib a part of distribution. Standard library is inseparable, since keeping a triple **language, compiler, stdlib** together is the only correct way to maintain release cycle.
 
 It works in such a way. Tolk compiler knows how to locate a standard library. If a user has installed an apt package, stdlib sources were also downloaded and exist on a hard disk, so the compiler locates them by system paths. If a user uses a WASM wrapper, they are provided by tolk-js. And so on.
 
@@ -963,7 +963,7 @@ var dict = createEmptyDict();
 dict.iDictSet(...);
 ```
 
-Mind the rule "import what you use", it's applied to `@stdlib/...` files also (with the only exception of "common.tolk").
+Mind the rule **import what you use**, it's applied to `@stdlib/...` files also (with the only exception of `common.tolk`).
 
 JetBrains IDE plugin automatically discovers stdlib folder and inserts necessary imports as you type.
 
@@ -1141,12 +1141,15 @@ globalTuple.1.2 += 10;  // "GETGLOB" + ... + "SETGLOB"
   ✅ Type `address`
 </h3>
 
-In TVM, all "binary data" is just "a slice." Same goes for addresses: while TL/B describes the entity `MsgAddress` (internal/external/none/var address),
+
+In TVM, all **binary data** is just **a slice.** Same goes for addresses: while TL-B describes the entity `MsgAddress` (internal/external/none/var address),
+
 and TVM assembler has instructions to load/validate addresses, nevertheless: at the low level, it's just a slice.
 That's why in FunC's standard library `loadAddress` returned `slice`, and `storeAddress` accepted `slice`.
 
 Tolk introduces the dedicated `address` type. It's still a TVM slice at runtime (internal/external/none),
-but it differs from an "abstract slice" from the type system point of view:
+but it differs from an **abstract slice** from the type system point of view:
+
 
 1) Integrated with auto-serialization: compiler knows how to pack/unpack it (`LDMSGADDR` and `STSLICE`)
 2) Comparable: operators `==` and `!=` work on addresses:
@@ -1184,10 +1187,11 @@ A reversed cast also is valid: `someAddr as slice` (why would you need it, is an
 
 **Different types of addresses**
 
-According to a standard, there are different types of addresses. The most frequently used is a "standard address" — just and address of a smart contract, like "EQ...". But also, there are "external" and "none" addresses. In a binary TL/B representation,
-* '10' ("internal" prefix) + '0' (anycast, always 0) + workchain (8 bits) + hash (256 bits) — that's "EQ...": it's 267 bits
-* '01' ("external" prefix) + len (9 bits) + len bits — external addresses
-* '00' ("none" prefix) — address "none", 2 bits
+According to a standard, there are different types of addresses. The most frequently used is a **standard address** — just and address of a smart contract, like `EQ...`. But also, there are **external** and **none** addresses. In a binary TL-B representation,
+* `10` (**internal** prefix) + `0` (anycast, always 0) + workchain (8 bits) + hash (256 bits) — that's `EQ...`: it's 267 bits
+* `01` (**external** prefix) + len (9 bits) + len bits — external addresses
+* `00` (**none** prefix) — address **none**, 2 bits
+
 
 The `address` type can hold any of these. Most often, it's an internal address. But the type system does not restrict it exactly: this can't be done without heavy runtime checks.
 
@@ -1335,7 +1339,7 @@ if (exists) {
 }
 ```
 
-You can also declare "always-throwing functions" that return `never`:
+You can also declare **always-throwing functions** that return `never`:
 ```tolk
 fun alwaysThrows(): never {
     throw 123;
