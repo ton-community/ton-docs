@@ -5,12 +5,6 @@ module.exports = [
   {
     type: 'category',
     label: `Quick start`,
-    link: {
-      type: 'generated-index',
-      title: 'Quick start',
-      slug: '/guidelines/quick-start',
-      keywords: ['quick start'],
-    },
     items: [
       'v3/guidelines/quick-start/getting-started',
       {
