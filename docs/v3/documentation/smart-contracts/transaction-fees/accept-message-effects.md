@@ -7,13 +7,13 @@ The `accept_message` and `set_gas_limit` TVM primitives play a crucial role in m
 ## External messages
 
 External messages follow this processing flow:
-- The `gas_limit` is initially set to `gas_credit` ([Param20/Param21](v3/documentation/network/configs/blockchain-configs#param-20-and-21)), which equals 10k gas units
-- During credit spending, a contract must call `accept_message` to `set_gas_limit`, indicating its readiness to pay processing fees
-- If `gas_credit` is depleted or computation completes without `accept_message`, the message is discarded (as if it never existed)
+- The `gas_limit` is initially set to `gas_credit` [Param20/Param21](/v3/documentation/network/configs/blockchain-configs#param-20-and-21), which equals 10k gas units.
+- During credit spending, a contract must call `accept_message` to `set_gas_limit`, indicating its readiness to pay processing fees.
+- If `gas_credit` is depleted or computation completes without `accept_message`, the message is discarded (as if it never existed).
 - Otherwise, a new gas limit is set to either:
   - `contract_balance/gas_price` (with `accept_message`)
-  - A custom value (with `set_gas_limit`)
-- After transaction completion, full computation fees are deducted from the contract balance (making `gas_credit` truly a credit, not free gas)
+  - A custom value (with `set_gas_limit`).
+- After transaction completion, full computation fees are deducted from the contract balance (making `gas_credit` truly a credit, not free gas).
 
 
 If an error occurs after `accept_message` (in either Compute or Action phase):
@@ -22,7 +22,8 @@ If an error occurs after `accept_message` (in either Compute or Action phase):
 - Storage remains unchanged
 - Actions are not applied
 
-**Critical Security Consideration:**
+**Critical security consideration**
+
 If a contract accepts an external message and then throws an exception (due to invalid message data or serialization errors), it:
 - Pays for processing
 - Cannot prevent message replay

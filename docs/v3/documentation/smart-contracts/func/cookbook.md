@@ -335,7 +335,7 @@ else {
 ```
 
 **Note:**
-The contract state can be determined as empty by verifying whether the [cell is empty](/v3/documentation/smart-contracts/func/cookbook#how-to-determine-if-cell-is-empty).
+The contract state can be determined as empty by verifying whether the [cell is empty](/v3/documentation/smart-contracts/func/cookbook#how-to-determine-if-a-cell-is-empty).
 
 
 **References:**
@@ -482,7 +482,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 
 
 
-### How to write own functions using asm keyword
+### How to write custom functions using asm keyword
 
 
 Many features we use in FunC come from pre-prepared methods inside `stdlib.fc`. However, we have many more capabilities, and learning to write custom functions unlocks new possibilities.
@@ -951,9 +951,9 @@ slice generate_external_address (int address) {
     .end_cell().begin_parse();
 }
 ```
-Since we need to find the exact number of bits occupied by the address, we must [declare an asm function](#how-to-write-custom-functions-using-the-asm-keyword) with the `UBITSIZE` opcode. This function will return the minimum number of bits required to store a given number.
+Since we need to find the exact number of bits occupied by the address, we must [declare an asm function](#how-to-write-custom-functions-using-asm-keyword) with the `UBITSIZE` opcode. This function will return the minimum number of bits required to store a given number.
 
-**Reference:** ["TVM instructions" in docs](/v3/documentation/tvm/instructions#B603)
+**Reference:** [TVM instructions in docs](/v3/documentation/tvm/instructions#B603)
 
 ### How to store and load dictionary in a local storage
 
@@ -1431,7 +1431,7 @@ await contractV1.sendUpgrade(provider.sender(), {
 ```
 
 **References:**
-- [Is it possible to redeploy code to an existing address or does it have to be deployed as a new contract?](/v3/documentation/faq#is-it-possible-to-re-deploy-code-to-an-existing-address-or-does-it-have-to-be-deployed-as-a-new-contract)
+- [Is it possible to redeploy code to an existing address, or does it have to be deployed as a new contract?](/v3/documentation/faq#is-it-possible-to-redeploy-code-to-an-existing-address-or-must-it-be-deployed-as-a-new-contract)
 - [`set_code()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#set_code)
 
 

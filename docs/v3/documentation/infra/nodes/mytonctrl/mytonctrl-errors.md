@@ -42,6 +42,6 @@ This document explains the errors that users may encounter with **MyTonCtrl**.
 
 ## See also
 
-* [Nodes Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
+* [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
 <Feedback />
 
