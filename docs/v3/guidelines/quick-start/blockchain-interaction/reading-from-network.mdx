@@ -11,7 +11,7 @@ This guide will walk you through reading data from TON Blockchain. You'll learn 
 - Call `get methods`
 - Retrieve account transactions
 
-By the end, you'll understand how to interact with [TON HTTP-based APIs](/v3/guidelines/dapps/apis-sdks/ton-http-apis/). In this guide, [TON Center](https://toncenter.com/) is used—a fast and reliable HTTP API for TON.
+By the end, you'll understand how to interact with [TON HTTP-based APIs](/v3/guidelines/dapps/apis-sdks/ton-http-apis). In this guide, [TON Center](https://toncenter.com/) is used—a fast and reliable HTTP API for TON.
 
 ## Set up environment
 
@@ -57,9 +57,39 @@ Account information includes the `balance`, `state`, `code`, and `data`.
   - **Active**: The address is live with code and balance.
   - **Frozen**: The address is locked due to insufficient balance for storage costs.
 - `code`: The contract's code in raw format.
-- `data`: Serialized contract data stored in a [*Cell*](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage/).
+- `data`: Serialized contract data stored in a [*Cell*](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage).
 
 Account state may be obtained using the [`getContractState`](https://testnet.toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get/) method.
+
+
+#### Account's address
+
+To get account information, you need the account's address. In TON, we can use a user-friendly address — a base64url-encoded string that represents a blockchain account in a human-readable and error-resistant format.
+
+User-friendly addresses also include special flags that define how the address should be used. For example, some addresses are valid only on Testnet, while others work on any network. These flags are encoded in the first few bits and influence the first letter of the address:
+* Addresses beginning with **E** or **U** are used on **Mainnet**
+* Addresses beginning with **k** or **0** are used for **Testnet**
+
+**Mainnet example:**
+
+* `EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF`
+* `UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA`
+
+**Testnet example:**
+
+* `kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP`
+* `0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK`
+
+
+#### Your address in the following examples
+
+In the given code snippets, feel free to change the example address to your test wallet address in this line.
+
+```typescript
+ // Replace with any address
+const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-');
+```
+
 
 #### Implementation
 
@@ -74,7 +104,8 @@ async function main() {
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
 
-  const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'); // Replace with any address
+  // Replace with any address
+  const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-');
 
   // Calling method on http api
   const state = await tonClient.getContractState(accountAddress);
@@ -104,11 +135,24 @@ Data:  b5ee9c7241010101002...fd1e976824402aa67b98
 Code:  b5ee9c7241021401000...c9ed54696225e5
 ```
 
+**Note:** the balance may differ from the example because anyone can send funds to the wallet, so the amount is dynamic and not fixed.
+
 ## Calling get methods
 
-Get methods are special functions in smart contracts that allow you to observe the current state of a smart contract. Their execution doesn't cost any fees and can't change the smart contract's storage.
+Get methods are special functions in smart contracts that allow you to conveniently observe the current state of a smart contract, returning only the **specific data** you need—without having to read the entire account state, as we did in the first example. While reading the whole account provides you with all the information, including balance, code, data, and more, get methods allow you to query **precise pieces of information**, making the process more efficient and developer-friendly.
 
-The result of calling a get method from the TON HTTP API comes in *stack* format and may be deserialized one by one using `readNumber()` or a similar function.
+Their execution:
+- Do not charge any fees from contracts.
+- Cannot modify the smart contract’s storage or state.
+
+The result of calling a get method via the TON HTTP API is returned in a stack format, which can be deserialised step-by-step using functions like `readNumber()` or others, depending on the expected data type.
+
+#### Why do we need this?
+In TON, tokens or jettons are managed via separate contracts called **Jetton wallets**, which are linked to users' main wallet addresses. To interact with a user's tokens, we first need to know the address of their Jetton wallet contract.
+
+The `get_wallet_address` get method on the Jetton master contract allows us to retrieve the **verified Jetton wallet contract address**  for a given user's main wallet address.
+
+In this example, we demonstrate how to call this method to obtain the user's Jetton wallet address.
 
 #### Implementation
 
@@ -125,6 +169,8 @@ async function main() {
 
   // Building optional get method parameters list
   const builder = new TupleBuilder();
+
+  // Replace with your address
   builder.writeAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
 
   const accountAddress = Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy')
@@ -137,8 +183,11 @@ async function main() {
   );
 
   // Deserializing get method result
-  const address = result.stack.readAddress();
-  console.log(address.toRawString());
+  const rawAddress = result.stack.readAddress();
+
+  console.log("Raw address:", rawAddress.toRawString());
+  console.log("User-friendly address:", rawAddress.toString({ bounceable: true, urlSafe: true, testOnly: true}));
+
 }
 
 main();
@@ -153,8 +202,17 @@ npx ts-node 2-call-get-method.ts
 #### Expected result
 
 ```bash
-0:25f2bf1ce8f83ed0c0fd73ea27aac77093cdcf900c750b071df7fb0288e019b2
+Raw address: 0:25f2bf1ce8f83ed0c0fd73ea27aac77093cdcf900c750b071df7fb0288e019b2
+User-friendly address: kQB11H0oDahylXlASZjiDtINlrS0PevVMsvtsbmKmvN5l9np
 ```
+
+As you can see, the get method returns the contract address in two formats:
+
+* The _raw address_ (hexadecimal format) is how TON represents addresses internally. It’s precise but not very human-friendly.
+* The _user-friendly address_  is a readable, safer format designed for sharing and everyday use. It’s easier to work with in wallets and apps.
+
+Both addresses point to the same contract — in this case, the **Jetton wallet contract** associated with the user’s wallet address.
+
 
 Get methods may also be called using Tonviewer:
 
@@ -184,7 +242,7 @@ async function main() {
   );
 
   // Calling get method through wrapper
-  const address = jettonMaster.getWalletAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
+  const address = await jettonMaster.getWalletAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
   console.log(address);
 }
 
@@ -217,9 +275,7 @@ A transaction obtained from the API has the following structure:
 
 ```json5
 {
-  "@type": "raw.transaction",
   "address": {
-    "@type": "accountAddress",
     "account_address": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx"
   },
   "utime": 1738588970,
@@ -232,7 +288,7 @@ A transaction obtained from the API has the following structure:
 ```
 - `address`: The account address where the transaction occurred.
 - `utime`: The [unix timestamp](https://www.unixtimestamp.com/) of the transaction.
-- `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/) that triggered the transaction.
+- `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message) that triggered the transaction.
 - `out_msgs`: Outgoing messages sent during the transaction.
 
 ### What is a message?
@@ -253,29 +309,41 @@ A message is a packet of data exchanged between actors (users, applications, or 
 
 ```json5
 {
-  "@type": "raw.message",
   "hash": "mcHdqltDAB8ODQHqtedtYQIS6MQL7x4ut+nf9tXWGqg=",
   "source": "EQAJTegD8OO-HksHfI4KVDqb7vW9Dlqi5C1FTcL1dECeosTf",
   "destination": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx",
   "value": "20000000",
   ...
   "msg_data": {
-    "@type": "msg.dataRaw",
     "body": "te6cckEBAQEAAgAAAEysuc0=",
     ...
   },
   ...
 }
 ```
-
+- `hash`: A cryptographic message identifier which is computed after the message is included in a transaction and assigned a [logical time (lt)](/v3/documentation/smart-contracts/message-management/messages-and-transactions/#what-is-a-logical-time), which determines its processing order. The hash is not part of the original message and uniquely identifies the finalized message for integrity verification.
 - `source`: The address of the sender (the account that initiated the message).
 - `destination`: The address of the receiver (the account that will process the message).
 - `value`: The amount of TON (in nanoTON) attached to the message.
 - `msg_data`: Contains the message body and state initialization.
 
+
 #### Implementation
 
-Create a new file `3-fetch-account-transaction.ts`:
+Let’s now try to fetch transactions for an account we control.
+
+Before running this code:
+* Go to [Tonviewer](https://testnet.tonviewer.com) and open your Testnet wallet address, which we created earlier in the [Getting Started](/v3/guidelines/quick-start/getting-started#interacting-with-ton-ecosystem) section.
+* Send some test TON to yourself using [Testgiver Ton Bot](https://t.me/testgiver_ton_bot/).
+* Wait a few seconds and make sure the transaction appears in Tonviewer.
+
+:::important
+Make sure you're working in the Testnet, not the Mainnet.
+
+Also, please note that the Testnet API may update data with some delay, so your transaction might not appear immediately when querying through the API.
+:::
+
+* Then, create a new file `3-fetch-account-transaction.ts`:
 
 ```typescript title="3-fetch-account-transaction.ts"
 import { Address, TonClient } from "@ton/ton";
@@ -289,7 +357,8 @@ async function main() {
   // Calling method on http api
   // full api: https://testnet.toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get
   const transactions = await tonClient.getTransactions(
-    Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'), // Address to fetch transactions
+    // Replace with your Testnet address to fetch transactions
+    Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'),
     {
       limit: 10,      //maximum ammount of recieved transactions
       archival: true, //search in all history
@@ -302,14 +371,16 @@ async function main() {
   console.log('Timestamp:', firstTx.now);
   if (inMessage?.info?.type === 'internal') {
     console.log('Value:', inMessage.info.value.coins);
-    console.log('Sender:', inMessage.info.src);
+    console.log('Sender:', inMessage.info.src.toString({ testOnly: true }));
   }
 }
 
 main();
 ```
 
-Run this example using following command:
+* Replace `Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-')` with your Testnet address.
+
+Run this example using the following command:
 
 ```bash
 npx ts-node 3-fetch-account-transaction.ts
@@ -318,9 +389,9 @@ npx ts-node 3-fetch-account-transaction.ts
 #### Expected result
 
 ```bash
-Timestamp: 1743516631
-Value: 100000000n
-Sender: EQBui16XCF61MSWauIDpVFbKAOJmjLHRxXvXeqiN9dYaIgjq
+Timestamp: 1748338158
+Value: 48526800n
+Sender: kQDhJ2Kx7dD6FLzAXcqiI4Xsu4ioY6JlE24m9Tx86eGkq0OF
 ```
 
 :::info
