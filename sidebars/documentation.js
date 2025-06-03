@@ -81,6 +81,7 @@ module.exports = [
           'v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short',
           'v3/documentation/smart-contracts/tolk/tolk-vs-func/in-detail',
           'v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability',
+          'v3/documentation/smart-contracts/tolk/tolk-vs-func/pack-to-from-cells',
           'v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib',
           'v3/documentation/smart-contracts/tolk/changelog',
         ],
@@ -323,8 +324,10 @@ module.exports = [
         type: 'category',
         label: 'TVM changelog',
         items: [
+          'v3/documentation/tvm/changelog/tvm-upgrade-2025-02',
           'v3/documentation/tvm/changelog/tvm-upgrade-2024-04',
           'v3/documentation/tvm/changelog/tvm-upgrade-2023-07',
+
         ],
       },
     ]

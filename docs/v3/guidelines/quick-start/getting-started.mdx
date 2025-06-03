@@ -12,7 +12,7 @@ Welcome to the TON Quick start guide! This guide will give you a starting point 
 - Basic programming knowledge.
 - Around __30 minutes__ of your time.
 
-> **Note**: We will provide a short explanation of core concepts during the guide, but if you prefer a more theoretical approach, you can check out the core concepts of [TON Blockchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/) first.
+> **Note**: We will provide a short explanation of core concepts during the guide, but if you prefer a more theoretical approach, you can check out the core concepts of [TON Blockchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains) first.
 
 ## What you'll learn
 
@@ -27,7 +27,7 @@ Welcome to the TON Quick start guide! This guide will give you a starting point 
 You can think of smart contracts in TON as programs running on the blockchain, following the well-known behavioral concept of the [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor) model.
 
 :::info
-In contrast to some other blockchains, where you can call other contract codes synchronously, a smart contract in TON is a standalone entity that communicates with other smart contracts on an equal basis by sending asynchronous messages between them.
+In contrast to other blockchains, where you can call other contract codes synchronously, a smart contract in TON is a standalone entity that communicates equally with other smart contracts. Smart contracts interact by sending messages to each other, and the processing of these messages happens asynchronously due to the asynchronous nature of transactions in TON.
 :::
 
 Each processing of a message by the receiving smart contract is considered a transaction, resulting in the following actions:
@@ -62,7 +62,7 @@ In TON, there are two different networks called `Mainnet` and `Testnet`, each wi
 
 #### Getting funds
 
-Transactions in TON always require some amount of funds, as executing a smart contract code requires a [fee](/v3/documentation/smart-contracts/transaction-fees/fees/) payment. TON basic transactions are very cheap—about 1 cent per transaction. Getting the equivalent of $5 worth of [Toncoin](/v3/documentation/dapps/defi/coins/) will be enough for hundreds of them. Here’s how you can get them:
+Transactions in TON always require some amount of funds, as executing a smart contract code requires a [fee](/v3/documentation/smart-contracts/transaction-fees/fees) payment. TON basic transactions are very cheap—about 1 cent per transaction. Getting the equivalent of $5 worth of [Toncoin](/v3/documentation/dapps/defi/coins) will be enough for hundreds of them. Here’s how you can get them:
 
 - For `Mainnet`, you can get `Toncoins` by simply pressing the buy button in the user interface or asking someone to send them to your `address`. You can copy the address from the wallet app, which is usually located near your balance.
 

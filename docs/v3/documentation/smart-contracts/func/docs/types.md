@@ -128,7 +128,7 @@ The type `[]` represents an empty tuple with a unique value—the empty tuple it
 
 ## Polymorphism with type variables
 
-FunC features a  **Miller-Rabin-type system** with support for polymorphic functions.
+FunC features a **custom type system** with support for polymorphic functions.
 For example, consider the following function:
 
 ```func

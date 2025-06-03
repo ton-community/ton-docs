@@ -33,19 +33,19 @@ Let's examine the `recv_internal` function signature to understand how we could 
 ```func
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure
 ```
- - `my_balance` - smart-contract balance at the beggining of the transaction.
+ - `my_balance` - smart-contract balance at the beginning of the transaction.
  - `msg_value` - funds received with message.
  - `in_msg_full` - `cell` containing "header" fields of the message.
- - `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containg payload of the message.
+ - `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containing payload of the message.
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk
 fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice)
 ```
- - `myBalance` - balance of smart contract at the beggining of the transaction.
- - `msgValue` - funds recieved with message.
+ - `myBalance` - balance of smart contract at the beginning of the transaction.
+ - `msgValue` - funds received with message.
  - `msgFull` - `cell` containing "header" fields of message.
- - `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containg payload pf the message.
+ - `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containing payload pf the message.
 </TabItem>
 </Tabs>
 

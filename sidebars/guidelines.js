@@ -5,23 +5,11 @@ module.exports = [
   {
     type: 'category',
     label: `Quick start`,
-    link: {
-      type: 'generated-index',
-      title: 'Quick start',
-      slug: '/guidelines/quick-start',
-      keywords: ['quick start'],
-    },
     items: [
       'v3/guidelines/quick-start/getting-started',
       {
         type: 'category',
         label: 'Blockchain interaction',
-        link: {
-          type: 'generated-index',
-          title: 'Blockchain interaction',
-          slug: '/guidelines/blockchain-interaction',
-          keywords: ['blockchain interaction'],
-        },
         items: [
           'v3/guidelines/quick-start/blockchain-interaction/reading-from-network',
           'v3/guidelines/quick-start/blockchain-interaction/writing-to-network',
@@ -30,12 +18,6 @@ module.exports = [
       {
         type: 'category',
         label: 'Developing smart contracts',
-        link: {
-          type: 'generated-index',
-          title: 'Developing smart contracts',
-          slug: '/guidelines/developing-smart-contracts',
-          keywords: ['smart contracts developing'],
-        },
         items: [
           'v3/guidelines/quick-start/developing-smart-contracts/setup-environment',
 

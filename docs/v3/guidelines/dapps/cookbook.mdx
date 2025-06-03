@@ -14,7 +14,7 @@ During product development, various questions often arise regarding interactions
 
 ## Working with contracts' addresses
 
-### How to convert (user friendly \<-\> raw), assemble, and extract addresses from strings?
+### How to convert (user-friendly \<-\> raw), assemble, and extract addresses from strings?
 
 TON addresses uniquely identify contracts on the blockchain, indicating their workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses) are: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
 
@@ -504,7 +504,7 @@ Don't forget that the comment message in a snake cell has 32 zero bits (i.e., it
 
 ### How to calculate the user's jetton wallet address (offchain)?
 
-To calculate a user’s jetton wallet address, use the `get_wallet_address` method from the jetton master contract with the user's address. You can also call the master contract directly, or use the getWalletAddress method provided in the JettonMaster SDK.
+To calculate a user's jetton wallet address, use the `get_wallet_address` method from the jetton master contract with the user's address. You can also call the master contract directly or use the `getWalletAddress` method provided in the JettonMaster SDK.
 
 :::info
 The `JettonMaster` in `@ton/ton` provides this functionality, although it lacks other features.
@@ -619,86 +619,310 @@ asyncio.run(main())
 
 ### How to calculate a user's jetton wallet address (offline)?
 
-Calling the GET method every time to retrieve the wallet address can be slow and resource-intensive. If you know the jetton wallet code and storage structure, you can calculate the wallet address without making network requests.
-
-For example, using Tonviewer, you can get the jetton master contract address (e.g., `EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA`). If we [go to this address](https://tonviewer.com/EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA?section=method) and open the Methods tab, we can see that there is already a `get_jetton_data` method there. By calling it, we can get the hex form of the cell with the jetton wallet code:
-
-```
-b5ee9c7201021301000385000114ff00f4a413f4bcf2c80b0102016202030202cb0405001ba0f605da89a1f401f481f481a9a30201ce06070201580a0b02f70831c02497c138007434c0c05c6c2544d7c0fc07783e903e900c7e800c5c75c87e800c7e800c1cea6d0000b4c7c076cf16cc8d0d0d09208403e29fa96ea68c1b088d978c4408fc06b809208405e351466ea6cc1b08978c840910c03c06f80dd6cda0841657c1ef2ea7c09c6c3cb4b01408eebcb8b1807c073817c160080900113e910c30003cb85360005c804ff833206e953080b1f833de206ef2d29ad0d30731d3ffd3fff404d307d430d0fa00fa00fa00fa00fa00fa00300008840ff2f00201580c0d020148111201f70174cfc0407e803e90087c007b51343e803e903e903534544da8548b31c17cb8b04ab0bffcb8b0950d109c150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c032481c007e401d3232c084b281f2fff274013e903d010c7e800835d270803cb8b13220060072c15401f3c59c3e809dc072dae00e02f33b51343e803e903e90353442b4cfc0407e80145468017e903e9014d771c1551cdbdc150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c0325c007e401d3232c084b281f2fff2741403f1c147ac7cb8b0c33e801472a84a6d8206685401e8062849a49b1578c34975c2c070c00870802c200f1000aa13ccc88210178d4519580a02cb1fcb3f5007fa0222cf165006cf1625fa025003cf16c95005cc2391729171e25007a813a008aa005004a017a014bcf2e2c501c98040fb004300c85004fa0258cf1601cf16ccc9ed5400725269a018a1c882107362d09c2902cb1fcb3f5007fa025004cf165007cf16c9c8801001cb0527cf165004fa027101cb6a13ccc971fb0050421300748e23c8801001cb055006cf165005fa027001cb6a8210d53276db580502cb1fcb3fc972fb00925b33e24003c85004fa0258cf1601cf16ccc9ed5400eb3b51343e803e903e9035344174cfc0407e800870803cb8b0be903d01007434e7f440745458a8549631c17cb8b049b0bffcb8b0b220841ef765f7960100b2c7f2cfc07e8088f3c58073c584f2e7f27220060072c148f3c59c3e809c4072dab33260103ec01004f214013e809633c58073c5b3327b55200087200835c87b51343e803e903e9035344134c7c06103c8608405e351466e80a0841ef765f7ae84ac7cbd34cfc04c3e800c04e81408f214013e809633c58073c5b3327b5520
-```
-
-Knowing the jetton wallet code and its storage structure, you can manually compute the wallet address.
+Although it is a common approach, [calling the GET method](/v3/guidelines/smart-contracts/get-methods#calling-get-methods-from-code) every time to retrieve the wallet address can be slow and resource-intensive. 
+However, if you know the jetton wallet code and storage structure, you can calculate the wallet address without making network requests.
 
 <Tabs groupId="code-examples">
-<TabItem value="js-ton" label="JS (@ton/ton)">
+<TabItem value="ts-ton" label="TS (@ton/ton)">
 
-```js
-import { Address, Cell, beginCell, storeStateInit } from '@ton/core';
+```ts
+import { Cell, contractAddress, toNano, TupleBuilder } from "@ton/core";
+import { ContractProvider, Address, Contract, Sender, StateInit } from "@ton/core";
+import { Blockchain, createShardAccount } from "@ton/sandbox";
 
-const JETTON_WALLET_CODE = Cell.fromBoc(Buffer.from('b5ee9c7201021301000385000114ff00f4a413f4bcf2c80b0102016202030202cb0405001ba0f605da89a1f401f481f481a9a30201ce06070201580a0b02f70831c02497c138007434c0c05c6c2544d7c0fc07783e903e900c7e800c5c75c87e800c7e800c1cea6d0000b4c7c076cf16cc8d0d0d09208403e29fa96ea68c1b088d978c4408fc06b809208405e351466ea6cc1b08978c840910c03c06f80dd6cda0841657c1ef2ea7c09c6c3cb4b01408eebcb8b1807c073817c160080900113e910c30003cb85360005c804ff833206e953080b1f833de206ef2d29ad0d30731d3ffd3fff404d307d430d0fa00fa00fa00fa00fa00fa00300008840ff2f00201580c0d020148111201f70174cfc0407e803e90087c007b51343e803e903e903534544da8548b31c17cb8b04ab0bffcb8b0950d109c150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c032481c007e401d3232c084b281f2fff274013e903d010c7e800835d270803cb8b13220060072c15401f3c59c3e809dc072dae00e02f33b51343e803e903e90353442b4cfc0407e80145468017e903e9014d771c1551cdbdc150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c0325c007e401d3232c084b281f2fff2741403f1c147ac7cb8b0c33e801472a84a6d8206685401e8062849a49b1578c34975c2c070c00870802c200f1000aa13ccc88210178d4519580a02cb1fcb3f5007fa0222cf165006cf1625fa025003cf16c95005cc2391729171e25007a813a008aa005004a017a014bcf2e2c501c98040fb004300c85004fa0258cf1601cf16ccc9ed5400725269a018a1c882107362d09c2902cb1fcb3f5007fa025004cf165007cf16c9c8801001cb0527cf165004fa027101cb6a13ccc971fb0050421300748e23c8801001cb055006cf165005fa027001cb6a8210d53276db580502cb1fcb3fc972fb00925b33e24003c85004fa0258cf1601cf16ccc9ed5400eb3b51343e803e903e9035344174cfc0407e800870803cb8b0be903d01007434e7f440745458a8549631c17cb8b049b0bffcb8b0b220841ef765f7960100b2c7f2cfc07e8088f3c58073c584f2e7f27220060072c148f3c59c3e809c4072dab33260103ec01004f214013e809633c58073c5b3327b55200087200835c87b51343e803e903e9035344134c7c06103c8608405e351466e80a0841ef765f7ae84ac7cbd34cfc04c3e800c04e81408f214013e809633c58073c5b3327b5520', 'hex'))[0];
-const JETTON_MASTER_ADDRESS = Address.parse('EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA');
-const USER_ADDRESS = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+//const USDTMasterAddress = Address.parse('EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs')  // EQC7aZ-_G_tWeSn0GZ0HclwZvGIBp-CRrSsbMibTHN6l4kr7
+//const NOTMasterAddress = Address.parse('EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT')   // EQA9idRBK7TY1AF0L2CpuxrwdjPr7qzKSQjbgakURWGQRdOW
+//const HMSTRMasterAddress = Address.parse('EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo') // EQDXT5HaCnuwzBff8tjwAmGvs9N9MEbqOXDIY_KepS9yYyMo
+//const DOGSMasterAddress = Address.parse('EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS')  // EQCRgs1d1M91dm2hHeF8luXBH-aIF9PT-T2jlocQXiYBvAGY
+//const STONMasterAddress = Address.parse('EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO')  // EQCx5ruSqFmw5LYxJ6iksuCuRLsNpgTjWcCuW6jm8BhaLOTK
+// ------------------------------------------------------------------------------------------------------------------------------------------------
 
-const jettonWalletStateInit = beginCell().store(storeStateInit({
-    code: JETTON_WALLET_CODE,
-    data: beginCell()
-        .storeCoins(0)
-        .storeAddress(USER_ADDRESS)
-        .storeAddress(JETTON_MASTER_ADDRESS)
-        .storeRef(JETTON_WALLET_CODE)
-        .endCell()
-}))
-.endCell();
-const userJettonWalletAddress = new Address(0, jettonWalletStateInit.hash());
 
-console.log('User Jetton Wallet address:', userJettonWalletAddress.toString());
+export class MyContract implements Contract {
+    readonly address: Address
+    readonly init?: StateInit
+
+    static fromInit(code: Cell, data: Cell) {
+        return new MyContract(contractAddress(0, {code: code, data: data}), {code: code, data: data})
+    }
+
+    constructor(address: Address, init?: StateInit) {
+        this.address = address
+        this.init = init
+    }
+
+    async send(
+        provider: ContractProvider,
+        via: Sender,
+        args: {value: bigint; bounce?: boolean | null | undefined},
+        body: Cell,
+    ) {
+        await provider.internal(via, {...args, body: body})
+    }
+
+    async getRunMethod(provider: ContractProvider, id: number | string, stack: TupleBuilder = new TupleBuilder()) {
+        return (await provider.get(id, stack.build())).stack
+    }
+}
+
+async function main() {
+    const blockchain = await Blockchain.create();
+    // blockchain.verbosity.vmLogs = "vm_logs_verbose"
+
+    // First we need to gather state of the contract from the blockchain:
+    const contractCode = Cell.fromHex("b5ee9c7201021a0100050e000114ff00f4a413f4bcf2c80b0102016202030202cb0405020120101101d7d0cb434c0c05c6c23910c200835c874c7c0608405e351466ea44c38601035c87e800c3b51343e803e903e90353534ffc07e1874541168504d3e10721401be80940133c59633c5b33332fff27b55383e903e900c7e800c7d007e800c7e80004c5c3e0e80b4c7c04074cfc044a06001da23864658380e78b64814183fa0bc004fced44d0fa00fa40fa40d4d4d3ff01f861d1268210642b7d07ba8ecb35355161c705f2e04904fa4021fa4430c000f2e14dfa00d4d120d0d31f018210178d4519baf2e0488040d721fa00fa4031fa4031fa0020d70b009ad74bc00101c001b0f2b19130e254431be0392582107bdd97debae3022582102c76b973bae30234240708090a018e2191729171e2f839206e9381782e9120e2216e9431817ee09101e25023a813a0738104ad70f83ca00270f83612a00170f836a07381051382100966018070f837a0bcf2b025597f0b01e63505fa00fa40f828f84128103401db3c6f2230f9007074c8cb02ca07cbffc9d05008c705f2e04a12a144145036f841c85006fa025004cf1658cf16cccccbffc9ed54fa40d120d70b01c000b38e22c8801001cb0501cf1670fa027001cb6a8210d53276db01cb1f0101cb3fc98042fb00915be21801d2355f033401fa40d2000101d195c821cf16c9916de2c8801001cb055004cf1670fa027001cb6a8210d173540001cb1f500401cb3f23fa4430c0008e9df828f84110354150db3c6f2230f9007074c8cb02ca07cbffc9d012cf1697316c127001cb01e2f400c98050fb001804fe82106501f354ba8e2530335142c705f2e04902fa40d1400304f841c85006fa025004cf1658cf16cccccbffc9ed54e0248210fb88e119ba8e24313303d15131c705f2e0498b024034f841c85006fa025004cf1658cf16cccccbffc9ed54e0248210cb862902bae302302382102508d66abae3022382107431f221bae30210360c0d0e0f01c082103b9aca0070fb02f828f84110364150db3c6f223020f9007074c8cb02ca07cbffc8801801cb0501cf1758fa02029858775003cb6bcccc9730017158cb6acce2c98011fb005005a04314f841c85006fa025004cf1658cf16cccccbffc9ed5418004e34365145c705f2e049c85003cf16c9103412f841c85006fa025004cf1658cf16cccccbffc9ed540022365f0302c705f2e049d4d4d101ed54fb04004a335042c705f2e04901d18b028b024034f841c85006fa025004cf1658cf16cccccbffc9ed54001c5f068210d372158cbadc840ff2f002014812130202711617013fb5d15da89a1f401f481f481a9a9a7fe03f0c3a228be09f051f08225b678de4501802016a1415002eab5bed44d0fa00fa40fa40d4d4d3ff01f861d110245f04002eaa67ed44d0fa00fa40fa40d4d4d3ff01f861d15f05f841015badbcf6a2687d007d207d206a6a69ff80fc30e88a2f827c147c20896d9e3791187c80383a6465816503e5ffe4e84018008baf16f6a2687d007d207d206a6a69ff80fc30e8bf99e836c1783872ebdb514d9c97c283b7f0ae5179029e2b6119c39462719e4f46ed8f7413e62c780a38646583fa0064a1804001f6840f7f7026fa4431abfb531149461804c8cb035003fa0201cf1601cf16cbff208100cac8cb0f01cf1724f90025d7652582020134c8cb1712cb0fcb0fcbff8e2906a45c01cb0971f90400527001cbff71f90400abfb28b25304b9933434239130e220c02024c000b117e610235f033333227003cb09c922c8cb0112190014f400f400cb00c9016f02");
+    const contractData = Cell.fromHex("b5ee9c720101040100af0002979056bc75ddfc673410080177e274e049215c770a7fbc709371cfb836bea9100f522b0ea608c92d495da648211a56b90a6f27e9f2c5241dd6b2c716d530d50027787d2a0e4223997141d188c001020842020f1ad3d8a46bd283321dde639195fb72602e9b31b1727fecc25e2edc10966df4010003006e68747470733a2f2f6170692e68616d737465726b6f6d6261742e696f2f7075626c69632f746f6b656e2f6d657461646174612e6a736f6e");
+    // Use mainnet address of the Jetton Master contract
+    const JettonMasterAddress = Address.parse("EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo");
+    // Open the contract, so sandbox can send messages to it
+    const openedContract = blockchain.openContract(
+        new MyContract(JettonMasterAddress)
+            // {code: contractCode, data: contractData})
+    );
+
+    // Instead of deploying the contract, we can set shard account directly
+    await blockchain.setShardAccount(JettonMasterAddress, createShardAccount({
+        address: JettonMasterAddress,
+        code: contractCode,
+        data: contractData,
+        balance: toNano("0.05"),
+        workchain: 0
+    }));
+
+    // If some arguments are needed, we can pass them as second argument like this:
+    const stack = new TupleBuilder();
+    stack.writeAddress(Address.parse("UQDKHZ7e70CzqdvZCC83Z4WVR8POC_ZB0J1Y4zo88G-zCSRH"));
+
+    const result = await openedContract.getRunMethod('get_wallet_address', stack);
+    console.log("Jetton Wallet Address: ", result.readAddress());
+}
+
+void main();
 ```
 
 </TabItem>
 
 <TabItem value="Python" label="Python">
 
+Unfortunately, there is currently no tool like Sandbox for Python to emulate the blockchain. 
+However, you can still implement something similar with [pytvm](https://github.com/yungwine/pytvm).
+This example helps to understand how to correctly construct the data needed to obtain the address.
+Essentially you need to build the same thing as `get_wallet_address(slice owner_address) method_id` in the master contract:
+
 ```python
 
-from pytoniq_core import Address, Cell, begin_cell
+# Recreate from jetton-utils.fc calculate_jetton_wallet_address()
+# https://tonscan.org/jetton/EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo#source
 
-def calculate_jetton_address(
-    owner_address: Address, jetton_master_address: Address, jetton_wallet_code: str
-):
-    # Recreate from jetton-utils.fc calculate_jetton_wallet_address()
-    # https://tonscan.org/jetton/EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs#source
+from pytoniq_core import Address, Cell, Builder, Slice
 
-    data_cell = (
-        begin_cell()
-        .store_uint(0, 4)
-        .store_coins(0)
-        .store_address(owner_address)
-        .store_address(jetton_master_address)
-        .end_cell()
+# Constants from the HMSTR FunC code
+STATUS_SIZE = 4
+MERKLE_ROOT_SIZE = 256
+SALT_SIZE = 10  # Bits for salt
+ITERATION_NUM = 32  # Number of salt iterations
+MY_WORKCHAIN = 0  # Assuming Basechain (0)
+
+# --- Configuration Variables ---
+# Replace these values with your actual data before running the script
+OWNER_ADDRESS_EXAMPLE = "UQDKHZ7e70CzqdvZCC83Z4WVR8POC_ZB0J1Y4zo88G-zCSRH" # Binance Hot Wallet
+JETTON_MASTER_ADDRESS_EXAMPLE = "EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo" # HMSTR Jetton Master
+# Gather from the blockchain using master's get_jetton_data method or compile from source.
+JETTON_WALLET_CODE_HEX_EXAMPLE = "b5ee9c72010101010023000842020f1ad3d8a46bd283321dde639195fb72602e9b31b1727fecc25e2edc10966df4"
+# The merkle_root from the master contract using get_mintless_airdrop_hashmap_root method.
+MERKLE_ROOT_EXAMPLE = 29945721131613672054990630604903528297803118035866103598622265652475246912273
+# --- End Configuration Variables ---
+
+def pack_jetton_wallet_data(
+    status: int,
+    balance: int,
+    owner_address_slice: Slice,
+    jetton_master_address_slice: Slice,
+    merkle_root: int,
+    salt: int,
+) -> Cell:
+    """
+    Packs the jetton wallet data into a cell, similar to FunC's pack_jetton_wallet_data.
+    Note: owner_address_slice and jetton_master_address_slice should be slices
+    representing the full MsgAddressInt structure (e.g., from builder.store_address().end_cell().begin_parse()).
+    """
+    builder = Builder()
+    builder.store_uint(status, STATUS_SIZE)
+    builder.store_coins(balance)
+    builder.store_slice(owner_address_slice)
+    builder.store_slice(jetton_master_address_slice)
+    builder.store_uint(merkle_root, MERKLE_ROOT_SIZE)
+    builder.store_uint(salt, SALT_SIZE)
+    return builder.end_cell()
+
+def calculate_jetton_wallet_state_init_and_salt(
+    owner_address: Address,
+    jetton_master_address: Address,
+    jetton_wallet_code: Cell,
+    merkle_root: int,
+) -> tuple[Cell, int]:
+    """
+    Calculates the optimal StateInit for a jetton wallet and the salt used.
+    This function mirrors the logic of `calculate_jetton_wallet_properties_cheap`
+    and subsequent StateInit construction in FunC.
+    """
+    owner_hash_part_int = int.from_bytes(owner_address.hash_part, "big")
+    owner_prefix = owner_hash_part_int >> (256 - 4)  # First 4 bits of owner's address hash
+
+    # Create full slice representations of addresses for storing in the data cell
+    owner_addr_builder = Builder()
+    owner_addr_builder.store_address(owner_address)
+    owner_addr_data_slice = owner_addr_builder.end_cell().begin_parse()
+
+    jetton_master_addr_builder = Builder()
+    jetton_master_addr_builder.store_address(jetton_master_address)
+    jetton_master_addr_data_slice = jetton_master_addr_builder.end_cell().begin_parse()
+
+    min_distance = 0xFFFF
+    best_salt = 0 # FunC starts salt at -1 and increments, so first real salt is 0
+    
+    best_state_init_cell = None
+
+    # Loop for salt values from 0 to ITERATION_NUM (inclusive)
+    for current_salt in range(ITERATION_NUM + 1):
+        # 1. Create the jetton wallet data cell
+        # Status and balance are 0 for this calculation, as in FunC's _cheap version
+        data_cell = pack_jetton_wallet_data(
+            status=0,
+            balance=0,
+            owner_address_slice=owner_addr_data_slice,
+            jetton_master_address_slice=jetton_master_addr_data_slice,
+            merkle_root=merkle_root,
+            salt=current_salt,
+        )
+
+        # 2. Create the StateInit cell
+        state_init_builder = Builder()
+        state_init_builder.store_uint(0, 2)  # No split_depth, No special
+        state_init_builder.store_maybe_ref(jetton_wallet_code)
+        state_init_builder.store_maybe_ref(data_cell)
+        state_init_builder.store_uint(0, 1)  # Empty libraries
+        current_state_init_cell = state_init_builder.end_cell()
+
+        # 3. Calculate account_hash (hash of state_init)
+        account_hash_bytes = current_state_init_cell.hash
+        account_hash_int = int.from_bytes(account_hash_bytes, "big")
+
+        # 4. Calculate wallet_prefix (first 4 bits of StateInit hash)
+        wallet_prefix = account_hash_int >> (256 - 4)
+
+        # 5. Calculate XOR distance
+        distance = wallet_prefix ^ owner_prefix
+
+        if distance < min_distance:
+            min_distance = distance
+            best_salt = current_salt
+            best_state_init_cell = current_state_init_cell
+        
+        if min_distance == 0: # Found a perfect match
+            break
+            
+    if best_state_init_cell is None:
+        # This should not happen if ITERATION_NUM >= 0, as at least one iteration will run.
+        # For safety, if it were to occur, recompute with the initial salt (0 or best_salt if it was updated).
+        # However, the logic ensures best_state_init_cell is set on the first iteration.
+        # Re-create the data cell and state_init with the best_salt found (or default 0)
+        final_data_cell = pack_jetton_wallet_data(
+            status=0, balance=0,
+            owner_address_slice=owner_addr_data_slice,
+            jetton_master_address_slice=jetton_master_addr_data_slice,
+            merkle_root=merkle_root, salt=best_salt
+        )
+        final_state_init_builder = Builder()
+        final_state_init_builder.store_uint(0, 2)
+        final_state_init_builder.store_maybe_ref(jetton_wallet_code)
+        final_state_init_builder.store_maybe_ref(final_data_cell)
+        final_state_init_builder.store_uint(0, 1)
+        best_state_init_cell = final_state_init_builder.end_cell()
+
+
+    return best_state_init_cell, best_salt
+
+def calculate_jetton_wallet_address_from_state_init(
+    state_init: Cell, workchain: int = MY_WORKCHAIN
+) -> Address:
+    """
+    Calculates the jetton wallet address from its StateInit cell.
+    """
+    state_init_hash = state_init.hash  # This is the 256-bit hash part of the address
+    return Address(f"{workchain}:{state_init_hash.hex()}")
+
+def calculate_user_jetton_wallet_address_py(
+    owner_address_str: str,  # User-friendly address string, e.g., "EQ..."
+    jetton_master_address_str: str,  # User-friendly address string, e.g., "EQ..."
+    jetton_wallet_code_boc_hex: str,  # BOC HEX string for the jetton wallet code cell
+    merkle_root: int = 0,
+) -> tuple[str, int]:
+    """
+    Calculates the user's jetton wallet address and the salt used.
+    This is the Python equivalent of FunC's `calculate_user_jetton_wallet_address`.
+    Returns the address as a user-friendly string and the salt.
+    """
+    owner_address = Address(owner_address_str)
+    jetton_master_address = Address(jetton_master_address_str)
+    
+    # Ensure jetton_wallet_code_boc_hex is bytes if it's hex string
+    if isinstance(jetton_wallet_code_boc_hex, str):
+        jetton_wallet_code_boc_bytes = bytes.fromhex(jetton_wallet_code_boc_hex)
+    else:
+        jetton_wallet_code_boc_bytes = jetton_wallet_code_boc_hex
+
+    jetton_wallet_code = Cell.one_from_boc(jetton_wallet_code_boc_bytes)
+
+    state_init_cell, salt_used = calculate_jetton_wallet_state_init_and_salt(
+        owner_address, jetton_master_address, jetton_wallet_code, merkle_root
     )
 
-    code_cell = Cell.one_from_boc(jetton_wallet_code)
-
-    state_init = (
-        begin_cell()
-        .store_uint(0, 2)
-        .store_maybe_ref(code_cell)
-        .store_maybe_ref(data_cell)
-        .store_uint(0, 1)
-        .end_cell()
+    wallet_address = calculate_jetton_wallet_address_from_state_init(
+        state_init_cell, MY_WORKCHAIN
     )
-    state_init_hex = state_init.hash.hex()
-    jetton_address = Address(f'0:{state_init_hex}')
+    
+    # Return user-friendly, bounceable address string and the salt
+    return wallet_address.to_str(is_user_friendly=True, is_bounceable=True, is_test_only=False), salt_used
 
-    return jetton_address
+if __name__ == "__main__":
+    # Example Usage:
+    # Ensure the CONFIGURATION VARIABLES at the top of the script are set correctly.
+
+    # You can get this by compiling your jetton wallet FunC code to a .cell file, 
+    # then converting that .cell file (which is BOC) to a hex string.
+    # Or if you have the .fif file for the code: fift -s build/jetton-wallet-code.fif -o jetton-wallet-code.cell
+    # Then convert jetton-wallet-code.cell (binary file) to hex.
+
+    print(f"Note: Using HMSTR jetton wallet code from the top of the script if not changed.\n"
+          f"Ensure 'JETTON_WALLET_CODE_HEX_EXAMPLE' is the actual BOC hex of your jetton wallet code.\n")
+
+    try:
+
+        calculated_address, salt = calculate_user_jetton_wallet_address_py(
+            owner_address_str=OWNER_ADDRESS_EXAMPLE,
+            jetton_master_address_str=JETTON_MASTER_ADDRESS_EXAMPLE,
+            jetton_wallet_code_boc_hex=JETTON_WALLET_CODE_HEX_EXAMPLE,
+            merkle_root=MERKLE_ROOT_EXAMPLE # Pass the actual merkle_root here
+        )
+        print(f"Calculated Jetton Wallet Address: {calculated_address}")
+        print(f"Salt used: {salt}")
+
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        print("Please ensure you have 'pytoniq-core' installed (pip install pytoniq-core).")
+        print("And provide valid address strings and a valid BOC hex for the jetton wallet code.") 
+
 
 ```
-Read the entire example [here](/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py).
+Read the simple example [here](/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py).
 
 </TabItem>
 </Tabs>
 
-Major tokens typically use a standard implementation of the [ TEP-74 standard](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc), except the new [Jetton-with-governance contracts](https://github.com/ton-blockchain/stablecoin-contract) for centralized stablecoins. The difference is [the presence of a wallet status field and the absence of a code cell in the vault](https://github.com/ton-blockchain/stablecoin-contract/blob/7a22416d4de61336616960473af391713e100d7b/contracts/jetton-utils.fc#L3-L12).
+Most tokens implement the [TEP-74 standard](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc), except [Jetton-with-governance contracts](https://github.com/ton-blockchain/stablecoin-contract) which add a wallet `status` field and [mintless jettons](/v3/guidelines/dapps/asset-processing/mintless-jettons) featuring `merkle root` and `salt` fields, with all implementations maintaining core token functionality. 
 
 ### How to construct a message for a jetton transfer with a comment?
 
@@ -1216,7 +1440,7 @@ main().finally(() => console.log("Exiting..."));
 </TabItem>
 </Tabs>
 
-When updating NFT metadata or content, royalty information must also be included, especially when using the appropriate opcode to modify this data. It’s important to remember that you don’t need to update all values if only certain elements are changing. For instance, if the only change is to the NFT common content, the other data remains the same and can be reused without modification.
+When updating NFT metadata or content, royalty information must also be included, especially when using the appropriate opcode to modify this data. It's important to remember that you don't need to update all values if only certain elements are changing. For instance, if the only change is to the NFT common content, the other data remains the same and can be reused without modification.
 
 ## Third-party: decentralized exchanges (DEX)
 
@@ -1260,9 +1484,9 @@ This information is sufficient to construct the swap message.
 
  <TabItem value="js-ton" label="JS (@ton)">
 DEXs use different protocols for their work, we need to familiarize ourselves with key concepts and some vital components and also know the TL-B schema involved in doing our swap process correctly. In this tutorial, we deal with DeDust, one of the famous DEX implemented entirely in TON.
-DeDust introduced an abstract Asset concept, which includes any swappable asset type, simplifying the process because the type of asset doesn’t matter in the swap. This abstraction allows the exchange of extra currency or even assets from other chains in a straightforward manner.
+ DeDust introduced an abstract Asset concept that includes any swappable asset type. This simplifies the process because the type of asset doesn't matter in the swap. This abstraction allows the straightforward exchange of extra currency or even assets from other chains.
 
-Following is the TL-B schema that DeDust introduced for the Asset concept.
+   Following is the TL-B schema that DeDust introduced for the Asset concept.
 
 ```tlb
 native$0000 = Asset; // for ton
