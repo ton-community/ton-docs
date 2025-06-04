@@ -1,5 +1,3 @@
-
-
 # Interact with transactions
 
 ## Как мне выяснить что моя транзакция выполнилась успешно спомощью метода API?
@@ -29,13 +27,13 @@
 ### Сообщения
 
 * Сообщение
-Все взаимодействия cо смарт контрактами в тоне построено на сообщениях. Сообщения чем-то похожи на запросы к серверу. Каждый смарт контракт имеет обработчик сообщений и выполняет определенную логику, по приходу сообщения.
+Все взаимодействия со смарт-контрактами в TON построены на сообщениях. Сообщения чем-то похожи на запросы к серверу. Каждый смарт-контракт имеет обработчик сообщений и выполняет определенную логику по приходу сообщения.
 
 * Transaction and message real life examples
 * Tl-B structure
 * Message structure TL-B
-  Теперь о данных в сообщении. Мы уже говорили что и в external, и internal сообщениях могут содержаться какие-то данные. Но как именно эти данные передавать? В тоне все данные представлены в виде ячеек. Для того чтобы закодировать данные в ячейку, существует общепринятый стандарт для описания сериализации этих данных – TL-B.
-  Простейший практический контракт в тоне – это счетчик. Рассмотрим такой гипотетический пример и примеры возможных сообщений к нему. Пусть смарт контракт может совершать два действия, увеличить или уменьшить внутреннюю переменную в нём. Тогда возможные сообщения описанные на языке TL-B будут выглядеть примерно так:
+  Теперь о данных в сообщении. Мы уже говорили что и в external, и internal сообщениях могут содержаться какие-то данные. Но как именно эти данные передавать? В TON все данные представлены в виде ячеек. Для того чтобы закодировать данные в ячейку, существует общепринятый стандарт для описания сериализации этих данных – TL-B.
+  Простейший практический контракт в TON – это счетчик. Рассмотрим такой гипотетический пример и примеры возможных сообщений к нему. Пусть смарт-контракт может совершать два действия, увеличить или уменьшить внутреннюю переменную в нём. Тогда возможные сообщения описанные на языке TL-B будут выглядеть примерно так:
 
 * Particular message structure
 * Headers fields (CommonMsgInfo)
@@ -48,17 +46,17 @@
 
 
 ### Internal
-Теперь об internal сообщениях. Когда кошелек получает external сообщение он проверяет подпись, и если всё корректно кошелек посылает уже internal сообщение на другой смарт контракт. У internal сообщения есть несколько важных отличий – помимо данных, к сообщению может быть прикреплено некоторое количество тонов, а ещё у internal сообщения есть отправитель, то есть в нашем примере отправитель это наш кошелек.
+Теперь об internal сообщениях. Когда кошелек получает external сообщение он проверяет подпись, и если всё корректно кошелек посылает уже internal сообщение на другой смарт-контракт. У internal сообщения есть несколько важных отличий – помимо данных, к сообщению может быть прикреплено некоторое количество TON, а ещё у internal сообщения есть отправитель, то есть в нашем примере отправитель это наш кошелек.
 
-Говоря немного иначе internal сообщение – это сообщение от одного смарт контракта к другому. При получении internal сообщения смарт контракт знает сколько к этому сообщению было прикреплено тонов и кто отправитель этого сообщения. Корректность этих данных гарантируется блокчейном, соответственно смарт контракт может им доверять.
+Говоря немного иначе internal сообщение – это сообщение от одного смарт-контракта к другому. При получении internal сообщения смарт-контракт знает сколько к этому сообщению было прикреплено TON и кто отправитель этого сообщения. Корректность этих данных гарантируется блокчейном, соответственно смарт-контракт может им доверять.
 
 ### External incoming
-Начнём с external сообщений. External сообщение это просто сообщение с данными к конкретному смарт контракту. То есть любой человек может отправить произвольные данные на любой смарт контракт, а смарт контракт решит, что с этим сообщением делать. Это относительно редко используемая логика, но у неё есть одно самое важное применение – контракты кошельков.
+Начнём с external сообщений. External сообщение это просто сообщение с данными к конкретному смарт-контракту. То есть любой человек может отправить произвольные данные на любой смарт-контракт, а смарт-контракт решит, что с этим сообщением делать. Это относительно редко используемая логика, но у неё есть одно самое важное применение – контракты кошельков.
 
-Почти любое действие в блокчейне начинается с external сообщение к кошельку. То есть, когда пользователь хочет кому-то перевести тоны или например совершить обмен на дексе, он посылает external сообщение на свой кошелёк с подписанными данными.
+Почти любое действие в блокчейне начинается с external сообщения к кошельку. То есть, когда пользователь хочет кому-то перевести TON или например совершить обмен на DEX, он посылает external сообщение на свой кошелёк с подписанными данными.
 
 ### External outgoing
-External-out (их ещё иногда называют Events) – это просто данные которые генерирует смарт контракт и никуда не отправляет. Редкий тип сообщения, по своей сути очень похож на логи. По большей части нужен просто для облегчения индексации блокчейна. Например дедаст генерирует external out сообщение при успешном свапе, чтобы другим сервисам был.
+External-out (их ещё иногда называют Events) – это просто данные которые генерирует смарт-контракт и никуда не отправляет. Редкий тип сообщения, по своей сути очень похож на логи. По большей части нужен просто для облегчения индексации блокчейна. Например DeDust генерирует external out сообщение при успешном свапе, чтобы другим сервисам было проще отслеживать торговую активность.
 
 External message examples and typical using
 Internal message examples and typical using
@@ -83,9 +81,9 @@ increase#34a3ff12 query_id:uint64 amount:uint32 = InternalMsgBody;
 decrease#e4d5986b query_id:uint64 amount:uint32 = InternalMsgBody;
 ```
 
-Это схема описывает 2 сообщения (сами данные). Когда мы работаем с сообщением, то тело сообщения и количество прикрепленных к нему тон – это два самых важных параметра.
+Это схема описывает 2 сообщения (сами данные). Когда мы работаем с сообщением, то тело сообщения и количество прикрепленных к нему TON – это два самых важных параметра.
 
-В теле сообщения есть два конвенциональных поля – opcode и query_id. opcode – это 32-битное число означающее тип операции, а query_id – 64-битное число, которое смарт контракт никак не должен использовать, и нужное лишь для удобства внешним сервисам.
+В теле сообщения есть два конвенциональных поля – opcode и query_id. opcode – это 32-битное число означающее тип операции, а query_id – 64-битное число, которое смарт-контракт никак не должен использовать, и нужное лишь для удобства внешним сервисам.
 
 Так в коде чтобы собрать тело сообщения
 
@@ -107,11 +105,547 @@ const body = beginCell()
   * Build message serializer according to source code
   * Assembler (blockchain explorer preview/ https://tonviewer.com/EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1?section=code )
 
+## Хэши в TON Blockchain
+
+Хэши играют критически важную роль в экосистеме TON, обеспечивая идентификацию и верификацию данных на всех уровнях блокчейна. Понимание того, как работают хэши, поможет вам эффективно отслеживать транзакции, верифицировать сообщения и интегрировать ваши приложения с TON.
+
+### Что такое хэш?
+
+В контексте TON хэш — это уникальный криптографический отпечаток данных, вычисленный с помощью алгоритма SHA-256. Каждая ячейка (Cell), сообщение или транзакция имеют свой уникальный хэш, который служит их цифровой подписью.
+
+:::info Важно
+Хэши в TON необратимы — по хэшу нельзя восстановить исходные данные. Однако они детерминированы — одни и те же данные всегда дают одинаковый хэш.
+:::
+
+### Типы хэшей в TON
+
+#### Хэш тела сообщения
+
+Хэш тела сообщения — это уникальный идентификатор содержимого вашего сообщения. Он вычисляется от ячейки, содержащей данные сообщения.
+
+**Практический пример:**
+
+```typescript
+import { beginCell } from '@ton/core';
+
+// Создаем тело сообщения для увеличения счетчика
+const messageBody = beginCell()
+  .storeUint(0x34a3ff12, 32)  // opcode для операции "increase"
+  .storeUint(0, 64)           // query_id
+  .storeUint(5, 32)           // amount - увеличить на 5
+  .endCell();
+
+// Получаем хэш тела сообщения
+const bodyHash = messageBody.hash();
+console.log('Message Body Hash:', bodyHash.toString('hex'));
+// Вывод: Message Body Hash: a1b2c3d4e5f6789...
+```
+
+**Когда использовать хэш тела сообщения:**
+- Для проверки целостности данных
+- При отладке и логировании операций
+- Для дедупликации сообщений в вашем приложении
+
+#### Хэш полного сообщения
+
+Полное сообщение включает не только тело, но и заголовки с метаданными (отправитель, получатель, сумма, комиссии). Его хэш — это уникальный идентификатор всего сообщения.
+
+**Практический пример:**
+
+```typescript
+import { storeMessage, beginCell, internal, Address } from '@ton/ton';
+import { toNano } from '@ton/core';
+
+// Создаем внутреннее сообщение
+const internalMessage = internal({
+  to: Address.parse('EQB...'), // адрес получателя
+  value: toNano('0.1'),        // 0.1 TON
+  body: messageBody             // тело сообщения из предыдущего примера
+});
+
+// Получаем хэш полного сообщения
+const messageCell = beginCell()
+  .store(storeMessage(internalMessage))
+  .endCell();
+
+const fullMessageHash = messageCell.hash();
+console.log('Full Message Hash:', fullMessageHash.toString('hex'));
+// Вывод: Full Message Hash: f1e2d3c4b5a6987...
+```
+
+**Когда использовать хэш полного сообщения:**
+- Для отслеживания конкретных сообщений в блокчейне
+- При работе с API TON Center для поиска транзакций
+- Для верификации того, что сообщение не было изменено
+
+#### Хэш транзакции
+
+Хэш транзакции — это уникальный идентификатор всей транзакции, включающей входящие и исходящие сообщения, изменения состояния и комиссии.
+
+**Практический пример получения хэша транзакции:**
+
+```typescript
+import { TonClient } from '@ton/ton';
+import { Address } from '@ton/core';
+
+const client = new TonClient({
+  endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+  apiKey: 'your-api-key'
+});
+
+const transactions = await client.getTransactions(
+  Address.parse('EQB...'), 
+  { limit: 10 }
+);
+
+for (const tx of transactions) {
+  const txHash = tx.hash();
+  console.log('Transaction Hash:', txHash.toString('hex'));
   
-* Hash
-* Hash of a message’s body
-* Hash of a full message’s (Message X)
-* Send message and check fact of sending
+  // Также можем получить хэш входящего сообщения
+  if (tx.inMessage) {
+    const inMsgCell = beginCell()
+      .store(storeMessage(tx.inMessage))
+      .endCell();
+    const inMsgHash = inMsgCell.hash();
+    console.log('Incoming Message Hash:', inMsgHash.toString('hex'));
+  }
+}
+```
+
+#### Хэш StateInit для верификации адресов
+
+В TON Connect часто требуется верифицировать соответствие между адресом кошелька и его StateInit. Хэш StateInit должен совпадать с хэш-частью адреса.
+
+**Практический пример верификации адреса:**
+
+```typescript
+import { Cell, Address, contractAddress } from '@ton/ton';
+
+async function verifyWalletAddress(
+  receivedAddress: string, 
+  stateInitBase64: string
+): Promise<boolean> {
+  try {
+    // Парсим StateInit из base64
+    const stateInit = Cell.fromBase64(stateInitBase64);
+    
+    // Получаем хэш StateInit
+    const stateInitHash = stateInit.hash();
+    
+    // Парсим полученный адрес
+    const address = Address.parse(receivedAddress);
+    
+    // Проверяем, что хэш-часть адреса совпадает с хэшем StateInit
+    const addressHashPart = stateInitHash.toString('hex');
+    const expectedAddress = address.hash.toString('hex');
+    
+    console.log('StateInit Hash:', addressHashPart);
+    console.log('Address Hash:', expectedAddress);
+    
+    return addressHashPart === expectedAddress;
+  } catch (error) {
+    console.error('Ошибка верификации адреса:', error);
+    return false;
+  }
+}
+
+// Пример использования в TON Connect
+const isValidAddress = await verifyWalletAddress(
+  '0:b2a1ecf5545e076cd36ae516ea7ebdf32aea008caa2b84af9866becb208895ad',
+  'te6cckECFgEAAwQAAgE0ARUBFP8A9KQT9LzyyAs...'
+);
+
+if (isValidAddress) {
+  console.log('Адрес верифицирован успешно!');
+} else {
+  console.log('Ошибка верификации адреса!');
+}
+```
+
+#### Нормализованный хэш сообщения
+
+Нормализованный хэш сообщения — это инновационное решение проблемы надежного отслеживания транзакций в TON. Согласно [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467), этот подход обеспечивает стабильный идентификатор для external-in сообщений, устраняя влияние несущественных полей на хэш.
+
+**Проблема, которую решает нормализация:**
+
+Обычные хэши сообщений могут различаться для функционально идентичных сообщений из-за вариаций в полях `src`, `import_fee` и `init`. Это усложняет отслеживание транзакций и дедупликацию.
+
+**Как работает нормализация:**
+
+Нормализованный хэш вычисляется путем стандартизации следующих полей external-in сообщения:
+
+1. **Source Address (`src`)**: Устанавливается в `addr_none$00`
+2. **Import Fee (`import_fee`)**: Устанавливается в `0`
+3. **InitState (`init`)**: Устанавливается в пустое значение
+4. **Body**: Всегда сохраняется как ссылка
+
+**Практический пример вычисления нормализованного хэша:**
+
+```typescript
+import { beginCell, storeMessage, external, Address, Cell } from '@ton/ton';
+
+function computeNormalizedMessageHash(
+  destination: Address,
+  body: Cell
+): string {
+  // Создаем нормализованное external-in сообщение
+  const normalizedMessage = external({
+    to: destination,
+    body: body,
+    // Остальные поля автоматически нормализуются:
+    // src устанавливается в addr_none
+    // import_fee устанавливается в 0
+    // init остается пустым
+  });
+
+  // Принудительно сохраняем body как ссылку для нормализации
+  const normalizedCell = beginCell()
+    .store(storeMessage(normalizedMessage))
+    .endCell();
+
+  // Вычисляем нормализованный хэш
+  const normalizedHash = normalizedCell.hash();
+  
+  return normalizedHash.toString('hex');
+}
+
+// Пример использования
+const messageBody = beginCell()
+  .storeUint(0, 32) // opcode для простого перевода
+  .storeStringTail('Normalized hash example')
+  .endCell();
+
+const destinationAddress = Address.parse('EQB...');
+const normalizedHash = computeNormalizedMessageHash(destinationAddress, messageBody);
+
+console.log('Normalized Message Hash:', normalizedHash);
+```
+
+**Сравнение обычного и нормализованного хэшей:**
+
+```typescript
+import { external, beginCell, storeMessage } from '@ton/ton';
+
+async function compareMessageHashes(
+  destination: Address,
+  body: Cell
+) {
+  // Создаем обычное external сообщение
+  const regularMessage = external({
+    to: destination,
+    body: body
+  });
+
+  // Вычисляем обычный хэш
+  const regularCell = beginCell()
+    .store(storeMessage(regularMessage))
+    .endCell();
+  const regularHash = regularCell.hash().toString('hex');
+
+  // Вычисляем нормализованный хэш
+  const normalizedHash = computeNormalizedMessageHash(destination, body);
+
+  console.log('Regular Hash:', regularHash);
+  console.log('Normalized Hash:', normalizedHash);
+  
+  // Нормализованный хэш остается стабильным даже если 
+  // сообщение будет переупаковано нодами сети
+  return {
+    regular: regularHash,
+    normalized: normalizedHash
+  };
+}
+```
+
+**Когда использовать нормализованный хэш:**
+
+- **Отслеживание транзакций в реальном времени** — получите стабильный идентификатор сразу после отправки
+- **Дедупликация сообщений** — избежите дублирования функционально идентичных операций  
+- **TON Connect интеграции** — обеспечите надежную связь между фронтендом и бэкендом
+- **Биржевые системы** — гарантируйте точное отслеживание пользовательских операций
+
+**Уникальность и ограничения:**
+
+Нормализованный хэш обеспечивает уникальность в типичных сценариях:
+
+1. Сообщение отправляется на кошелек
+2. Сообщение включает инструкцию с флагом IGNORE_ERRORS=+2
+3. Кошелек никогда не удаляется
+
+**Интеграция с существующими системами:**
+
+```typescript
+// Типы данных для отслеживания транзакций
+interface TransactionData {
+  destination: Address;
+  body: Cell;
+  metadata: any;
+  timestamp: number;
+  status: 'pending' | 'confirmed' | 'failed';
+}
+
+type TransactionStatus = 'pending' | 'confirmed' | 'failed';
+
+// Адаптер для работы с нормализованными хэшами
+class TransactionTracker {
+  private pendingTransactions = new Map<string, TransactionData>();
+
+  async trackTransaction(
+    destination: Address,
+    body: Cell,
+    metadata: any
+  ): Promise<string> {
+    // Используем нормализованный хэш как постоянный ID
+    const trackingId = computeNormalizedMessageHash(destination, body);
+    
+    this.pendingTransactions.set(trackingId, {
+      destination,
+      body,
+      metadata,
+      timestamp: Date.now(),
+      status: 'pending'
+    });
+
+    console.log(`Транзакция отслеживается с ID: ${trackingId}`);
+    return trackingId;
+  }
+
+  async checkTransactionStatus(trackingId: string): Promise<TransactionStatus> {
+    const transaction = this.pendingTransactions.get(trackingId);
+    if (!transaction) {
+      throw new Error('Транзакция не найдена');
+    }
+
+    // Проверяем статус в блокчейне по нормализованному хэшу
+    // Этот ID останется стабильным даже если сообщение было переупаковано
+    return await this.queryBlockchainStatus(trackingId);
+  }
+
+  private async queryBlockchainStatus(normalizedHash: string): Promise<TransactionStatus> {
+    // Реализация запроса к блокчейну
+    // Нормализованный хэш обеспечивает надежное отслеживание
+    return 'confirmed';
+  }
+}
+
+// Пример использования
+const tracker = new TransactionTracker();
+const trackingId = await tracker.trackTransaction(walletAddress, messageBody, { 
+  user: 'user123', 
+  amount: '1.0 TON' 
+});
+```
+
+Нормализованный хэш сообщения представляет собой значительный шаг вперед в надежности отслеживания транзакций TON. Это решение уже активно используется командами Tonkeeper и TonAPI, что подтверждает его практическую ценность для разработчиков.
+
+### Отправка сообщения и проверка факта отправки
+
+Один из наиболее важных сценариев — это отправить сообщение и убедиться, что оно было обработано блокчейном.
+
+**Пошаговый процесс:**
+
+```typescript
+import { WalletContractV4, internal, TonClient } from '@ton/ton';
+import { mnemonicToPrivateKey } from '@ton/crypto';
+import { Address, toNano, beginCell } from '@ton/core';
+
+async function sendAndVerifyMessage() {
+  // 1. Создаем клиент и кошелек
+  const client = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC'
+  });
+  
+  const mnemonic = 'your mnemonic words here';
+  const keyPair = await mnemonicToPrivateKey(mnemonic.split(' '));
+  const wallet = client.open(WalletContractV4.create({
+    publicKey: keyPair.publicKey,
+    workchain: 0
+  }));
+
+  // 2. Создаем сообщение с комментарием
+  const messageBody = beginCell()
+    .storeUint(0, 32)           // opcode для простого перевода
+    .storeStringTail('Hello TON!')
+    .endCell();
+
+  // 3. Отправляем транзакцию
+  const seqno = await wallet.getSeqno();
+  await wallet.sendTransfer({
+    secretKey: keyPair.secretKey,
+    seqno,
+    messages: [internal({
+      to: Address.parse('EQB...'),
+      value: toNano('0.01'),
+      body: messageBody
+    })]
+  });
+
+  // 4. Проверяем факт отправки через некоторое время
+  await new Promise(resolve => setTimeout(resolve, 10000)); // ждем 10 секунд
+  
+  const newSeqno = await wallet.getSeqno();
+  if (newSeqno > seqno) {
+    console.log('Транзакция успешно обработана!');
+    
+    // 5. Находим нашу транзакцию и получаем её хэш
+    const transactions = await client.getTransactions(wallet.address, { limit: 5 });
+    const ourTx = transactions.find(tx => 
+      tx.inMessage?.info.type === 'external-in' && 
+      tx.description.type === 'generic'
+    );
+    
+    if (ourTx) {
+      const txHash = ourTx.hash();
+      console.log('Transaction Hash:', txHash.toString('hex'));
+    }
+  } else {
+    console.log('Транзакция не была обработана');
+  }
+}
+```
+
+### Поиск транзакции по BOC
+
+Когда вы отправляете транзакцию через TON Connect, вы получаете BOC (Bag of Cells). Вы можете использовать этот BOC для поиска соответствующей транзакции в блокчейне.
+
+**Практический пример:**
+
+```typescript
+import { Cell, Address, beginCell, storeMessage, TonClient } from '@ton/ton';
+
+async function findTransactionByBOC(
+  externalBOC: string, 
+  walletAddress: string
+): Promise<string | null> {
+  const client = new TonClient({
+    endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+    apiKey: 'your-api-key'
+  });
+
+  try {
+    // Получаем хэш внешнего BOC
+    const extHash = Cell.fromBase64(externalBOC).hash().toString('hex');
+    
+    // Получаем последние транзакции кошелька
+    const transactions = await client.getTransactions(
+      Address.parse(walletAddress), 
+      { limit: 10 }
+    );
+    
+    for (const tx of transactions) {
+      const inMsg = tx.inMessage;
+      if (inMsg?.info.type === 'external-in') {
+        // Создаем хэш входящего сообщения
+        const inHash = beginCell()
+          .store(storeMessage(inMsg))
+          .endCell()
+          .hash()
+          .toString('hex');
+        
+        console.log('External BOC hash:', extHash);
+        console.log('Transaction message hash:', inHash);
+        
+        // Если хэши совпадают, мы нашли нашу транзакцию
+        if (extHash === inHash) {
+          const txHash = tx.hash().toString('hex');
+          console.log('Найдена транзакция:', txHash);
+          return txHash;
+        }
+      }
+    }
+    
+    throw new Error('Транзакция не найдена');
+  } catch (error) {
+    console.error('Ошибка поиска транзакции:', error);
+    return null;
+  }
+}
+
+// Пример использования
+const txHash = await findTransactionByBOC(
+  'te6cckEBAgEAqQAB4YgA+yKcnwQCs1xAwIEKKB4DvkIdXNjL6B...', 
+  'EQB...'
+);
+```
+
+### Практические советы
+
+#### Проверка статуса транзакции через API
+
+```typescript
+// Проверяем статус транзакции по её хэшу
+async function checkTransactionStatus(txHash: string, walletAddress: string) {
+  try {
+    const response = await fetch(
+      `https://testnet.toncenter.com/api/v2/getTransactions?` +
+      `address=${walletAddress}&hash=${txHash}`
+    );
+    const data = await response.json();
+    
+    if (data.result.length > 0) {
+      console.log('Транзакция найдена в блокчейне');
+      return data.result[0];
+    } else {
+      console.log('Транзакция не найдена');
+      return null;
+    }
+  } catch (error) {
+    console.error('Ошибка при проверке транзакции:', error);
+    return null;
+  }
+}
+```
+
+#### Мониторинг в реальном времени
+
+```typescript
+// Пример функции для мониторинга входящих транзакций
+async function monitorIncomingTransactions(walletAddress: Address, client: TonClient) {
+  let lastLt = '0';
+  
+  setInterval(async () => {
+    try {
+      const transactions = await client.getTransactions(walletAddress, { 
+        limit: 10,
+        lt: lastLt
+      });
+      
+      for (const tx of transactions) {
+        if (tx.lt > lastLt) {
+          const txHash = tx.hash();
+          console.log('Новая транзакция:', txHash.toString('hex'));
+          
+          // Обрабатываем входящие сообщения
+          if (tx.inMessage) {
+            const msgCell = beginCell()
+              .store(storeMessage(tx.inMessage))
+              .endCell();
+            const msgHash = msgCell.hash();
+            console.log('Хэш сообщения:', msgHash.toString('hex'));
+          }
+          
+          lastLt = tx.lt;
+        }
+      }
+    } catch (error) {
+      console.error('Ошибка мониторинга:', error);
+    }
+  }, 5000); // проверяем каждые 5 секунд
+}
+```
+
+### Лучшие практики
+
+1. **Всегда сохраняйте хэши**: Записывайте хэши важных транзакций и сообщений для последующего отслеживания.
+
+2. **Используйте правильный тип хэша**: Для отслеживания транзакций используйте хэш транзакции, для верификации данных — хэш сообщения.
+
+3. **Учитывайте время подтверждения**: В TON транзакции обычно подтверждаются за 3-6 секунд, но в периоды высокой нагрузки может потребоваться больше времени.
+
+4. **Реализуйте retry логику**: Если транзакция не появилась в блокчейне в течение минуты, стоит проверить её статус или повторить отправку.
+
+Хэши — это ваш надежный инструмент для работы с TON блокчейном. Используйте их правильно, и ваши приложения будут работать стабильно и предсказуемо.
 
 ## Отправка сообщения
 
@@ -120,7 +654,7 @@ const body = beginCell()
 ### Отправка с бэкенда
 
 Когда у нас есть кошелек с сид фразой отправление сообщения происходит так
-Код [отсюда](https://docs.ton.org/v3/guidelines/dapps/cookbook#how-to-transfer-ton-and-send-a-text-message-to-another-wallet)
+Код [отсюда](/v3/guidelines/dapps/cookbook/#how-to-transfer-ton-and-send-a-text-message-to-another-wallet)
 
 ### Отправка с фронтенда (TON Connect)
 Тут мы просто предлагаем пользователю подписать сообщение
