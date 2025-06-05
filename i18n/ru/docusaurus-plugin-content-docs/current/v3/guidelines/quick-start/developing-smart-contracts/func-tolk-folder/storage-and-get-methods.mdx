@@ -68,14 +68,9 @@ global int ctx_counter;
 ;; load_data присваивает значения переменным хранения, используя хранимые данные
 () load_data() impure {
     var ds = get_data().begin_parse();
-
-```
-ctx_id = ds~load_uint(32);
-ctx_counter = ds~load_uint(32);
-
-ds.end_parse();
-```
-
+    ctx_id = ds~load_uint(32);
+    ctx_counter = ds~load_uint(32);
+    ds.end_parse();
 }
 
 ;; save_data сохраняет значения переменных хранения в постоянное хранилище в формате ячейки 
@@ -134,17 +129,13 @@ fun saveData() {
 ```func title="/contracts/hello_world.fc"
 (int, int, int) load_data() {
     var ds = get_data().begin_parse();
+    int ctx_id = ds~load_uint(32);
+    int ctx_counter = ds~load_uint(32);
+    int ctx_counter_ext = ds~load_uint(256);
 
-```
-int ctx_id = ds~load_uint(32);
-int ctx_counter = ds~load_uint(32);
-int ctx_counter_ext = ds~load_uint(256);
+    ds.end_parse();
 
-ds.end_parse();
-
-return (ctx_id, ctx_counter, ctx_counter_ext);
-```
-
+    return (ctx_id, ctx_counter, ctx_counter_ext);
 }
 
 () save_data(int ctx_id, int ctx_counter, int ctx_counter_ext) impure {

@@ -49,8 +49,8 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 </TabItem>
 </Tabs>
 
-:::info\
-Вы можете найти полное описание отправки сообщений в этом [разделе](/ru/v3/documentation/smart-contracts/message-management/sending-messages#%D0%BC%D0%B0%D0%BA%D0%B5%D1%82-%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D1%8F).\
+:::info
+Вы можете найти полное описание отправки сообщений в этом [разделе](/ru/v3/documentation/smart-contracts/message-management/sending-messages#%D0%BC%D0%B0%D0%BA%D0%B5%D1%82-%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D1%8F).
 :::
 
 Из всего этого нам сейчас интересен исходный адрес сообщения, который мы можем извлечь из ячейки `msg_full`. Получив этот адрес и сравнив его с хранимым, мы при выполнении требуемого условия можем разрешить доступ к важнейшим частям функциональности нашего смарт-контракта. Обычный подход выглядит следующим образом:
@@ -80,11 +80,9 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 ;;no known operation were obtained for presented role
 ;;0xffff is not standard exit code, but is standard practice among TON developers
 throw(0xffff);
-```
-
 }
 
-````
+```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk
@@ -144,11 +142,9 @@ if (op == op::increment) {
 
 ;; Unknown operation
 throw(0xffff);
-```
-
 }
 
-````
+```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk
@@ -207,34 +203,30 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 ```func title="/contracts/hello_world.fc"
 () recv_external(slice in_msg) impure {
     accept_message();
+    var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
 
-```
-var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
+    var query_id = in_msg~load_uint(64);
+    var addr = in_msg~load_msg_addr();
+    var coins = in_msg~load_coins();
+    var increase_by = in_msg~load_uint(32);
 
-var query_id = in_msg~load_uint(64);
-var addr = in_msg~load_msg_addr();
-var coins = in_msg~load_coins();
-var increase_by = in_msg~load_uint(32);
+    var msg = begin_cell()
+        .store_uint(0x18, 6)
+        .store_slice(addr)
+        .store_coins(coins)
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .store_uint(op::increase, 32)
+        .store_uint(query_id, 64)
+        .store_uint(increase_by, 32);
+    send_raw_message(msg.end_cell(), 0);
 
-var msg = begin_cell()
-    .store_uint(0x18, 6)
-    .store_slice(addr)
-    .store_coins(coins)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-    .store_uint(op::increase, 32)
-    .store_uint(query_id, 64)
-    .store_uint(increase_by, 32);
-send_raw_message(msg.end_cell(), 0);
+    ctx_counter_ext += increase_by;
+    save_data(ctx_id, ctx_counter, ctx_counter_ext);
 
-ctx_counter_ext += increase_by;
-save_data(ctx_id, ctx_counter, ctx_counter_ext);
-
-return ();
-```
-
+    return ();
 }
 
-````
+```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk title="/contracts/HelloWorld.tolk"
