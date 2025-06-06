@@ -283,15 +283,15 @@ signature = Ed25519Sign(privkey, sha256(0xffff ++ utf8_encode("ton-connect") ++ 
 where:
 
 * `Address` is the wallet address encoded as a sequence:
- * `workchain`: 32-bit signed integer big endian;
- * `hash`: 256-bit unsigned integer big endian;
-* `AppDomain` is Length ++ EncodedDomainName
-- `Length` is 32-bit value of utf-8 encoded app domain name length in bytes
-- `EncodedDomainName` id `Length`-byte  utf-8 encoded app domain name
-* `Timestamp` 64-bit unix epoch time of the signing operation
+    * `workchain`: 32-bit signed integer big endian;
+    * `hash`: 256-bit unsigned integer big endian;
+* `AppDomain` is Length ++ EncodedDomainName:
+    - `Length` is number of bytes in UTF-8 encoded app domain name, 32-bit little endian;
+    - `EncodedDomainName` is `Length`-byte UTF-8 string encoding the app domain name;
+* `Timestamp` holds 64-bit Unix epoch time of the signing operation, little endian
 * `Payload` is a variable-length binary string.
 
-Note: payload is variable-length untrusted data. We put it last to avoid using unnecessary length prefixes.
+Note: payload is variable-length data controlled by server. TON Connect 2 put it last to avoid using unnecessary length prefixes.
 
 The signature must be verified using the public key:
 
