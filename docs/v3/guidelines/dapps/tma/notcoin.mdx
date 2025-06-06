@@ -40,11 +40,11 @@ The Notcoin jetton is forked from https://github.com/ton-blockchain/stablecoin-c
 Notcoin represents a standard TON jetton smart contract with additional functionality:
 - The admin of the jetton can change the jetton-minter code and its full data.
 
-:::Warning
+:::warning
 It is critically important for the issuer to carefully manage the admin's account private key to avoid any potential risks of being hacked. It is highly recommended to use a multi-signature wallet as the admin account, with private keys stored on different air-gapped hosts/hardware wallets.
 :::
 
-:::Warning
+:::warning
 The contract does not check the code and data on upgrade messages, so it is possible to brick the contract if you send invalid data or code. Therefore, always check the upgrade in the testnet before applying it on the main network.
 :::
 

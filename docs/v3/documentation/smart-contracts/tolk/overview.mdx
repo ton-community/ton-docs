@@ -12,10 +12,14 @@ Tolk compiler is a fork of FunC compiler, introducing familiar syntax similar to
 but leaving all low-level optimizations untouched. Think of Tolk as the next‑generation FunC.
 
 ```tolk
-import "storage.tolk"
+import "utils.tolk"
 
-fun loadData() {
-    ctxCounter = getContractData().beginParse().loadUint(32);
+struct Storage {
+    counter: int32;
+}
+
+fun Storage.load() {
+    return Storage.fromCell(contract.getData());
 }
 
 fun onInternalMessage(msgValue: int, msgFull: cell, msgBody: slice) {
@@ -27,9 +31,9 @@ fun onInternalMessage(msgValue: int, msgFull: cell, msgBody: slice) {
     ...
 }
 
-get currentCounter(): int {
-    loadData(); // fills global variables
-    return ctxCounter;
+get currentCounter(): int32 {
+    val st = Storage.load();
+    return st.counter;
 }
 ```
 
@@ -37,9 +41,11 @@ get currentCounter(): int {
   <summary><b>See same logic implemented with FunC</b></summary>
 
 ```func
-#include "storage.fc";
+#include "utils.fc";
 
-() load_data() impure {
+global int ctx_counter;
+
+int load_data() impure {
   slice cs = get_data().begin_parse();
   ctx_counter = cs~load_uint(32);
 }
@@ -85,7 +91,7 @@ It gives complete control over TVM assembler, allowing a programmer to make his 
 If you get used to it, you love it.
 
 But there is a problem.
-FunC is "functional C", and it's for ninja.
+FunC is **functional C**, and it's for ninja.
 If you are keen on Lisp and Haskell, you'll be happy.
 But if you are a JavaScript / Go / Kotlin developer, its syntax is peculiar for you, leading to occasional mistakes.
 A struggle with syntax may decrease your motivation for digging into TON.
@@ -101,7 +107,7 @@ If you know FunC and want to try a new syntax, your way is:
 
 1. Read [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short).
 2. With a blueprint, create a new Tolk contract (for example, a counter) and experiment around it. Remember that almost all stdlib functions are renamed to ~~verbose~~ clear names. Here is [a mapping](/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib).
-3. Try a [converter](https://github.com/ton-blockchain/convert-func-to-tolk) for your existing contracts or one from [FunC Contracts](/v3/documentation/smart-contracts/contracts-specs/examples). Remember that contracts written in Tolk from scratch look nicer than auto-converted ones. For instance, using logical operators instead of bitwise tremendously increases code readability.
+3. Try a [converter](https://github.com/ton-blockchain/convert-func-to-tolk) for your existing contracts or one from [FunC contracts](/v3/documentation/smart-contracts/contracts-specs/examples). Remember that contracts written in Tolk from scratch look nicer than auto-converted ones. For instance, using logical operators instead of bitwise tremendously increases code readability.
 
 ## How to try Tolk if you don't know FunC
 
@@ -142,9 +148,6 @@ The first released version of Tolk is v0.6, emphasizing [missing](/v3/documentat
 Here are some points to investigate:
 
 - type system improvements
-- structures and generics
-- auto-pack structures to/from cells, probably integrated with message handlers
-- methods for structures, generalized to cover built-in types
 - easier message sending
 - better experience for everyday use cases: jettons, NFT, etc.
 - gas and stack optimizations, AST inlining
@@ -152,7 +155,7 @@ Here are some points to investigate:
 - some ABI (how explorers "see" bytecode)
 - gas and fee management in general
 
-The following strategic milestone for **Tolk v1.0** is structures with auto-serialization into cells.
+The following strategic milestone for **Tolk v1.0** is structures with auto-serialization into cells (almost done).
 
 This milestone eliminates manual manipulations with builders and slices, allowing data and messages to be described declaratively.
 Closely related to this is the **ABI (interface) of contracts**.

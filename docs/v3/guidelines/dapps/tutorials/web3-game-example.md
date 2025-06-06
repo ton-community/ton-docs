@@ -271,11 +271,11 @@ gameFi.buyWithTon({
 
 ## Afterword
 
-TThat’s it for this tutorial! We explored the basic GameFi features, but the SDK offers additional functionality, such as player-to-player transfers and utilities for working with NFTs and collections. More features will be introduced in the future.
+That’s it for this tutorial! We explored the basic GameFi features, but the SDK offers additional functionality, such as player-to-player transfers and utilities for working with NFTs and collections. More features will be introduced in the future.
 
 To learn about all available GameFi features, read the documentation for [ton-org/game-engines-sdk](https://github.com/ton-org/game-engines-sdk) and [@ton-community/assets-sdk](https://github.com/ton-community/assets-sdk).
 
-et us know your thoughts in [Discussions](https://github.com/ton-org/game-engines-sdk/discussions)!
+Let us know your thoughts in [Discussions](https://github.com/ton-org/game-engines-sdk/discussions)!
 
 
 The complete implementation is available in the [flappy-bird](https://github.com/ton-community/flappy-bird) repository.

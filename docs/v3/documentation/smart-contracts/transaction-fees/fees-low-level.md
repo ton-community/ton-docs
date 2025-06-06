@@ -220,8 +220,16 @@ Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the 
 
 ### IHR
 
-:::tip
-At this moment (November 2024), [IHR](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) is not implemented, and if you set the `ihr_fee` to a non-zero value, it will always be added to the message value upon receipt. For now, there are no practical reasons to do this.
+:::info What is IHR?
+[**Instant Hypercube Routing (IHR)**](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) is an alternative mechanism for message delivery without intermediate hops between shards. To understand why IHR is not currently relevant:
+
+- **IHR is not implemented** and is not yet fully specified
+- **IHR would only be relevant** when the network has more than 16 shards and not all shards are neighbors to each other
+- **Current network settings forbid splitting deeper than 16 shards**, which means IHR is not relevant in any practical sense
+
+In the current TON network configuration, all message routing uses standard **Hypercube Routing (HR)**, which can handle message delivery efficiently with the current shard topology. The `ihr_fee` field exists in the message structure for future compatibility, but serves no functional purpose today. 
+
+If you set the `ihr_fee` to a non-zero value, it will always be added to the message value upon receipt. For now, there are no practical reasons to do this.
 :::
 
 ### Formula
@@ -290,9 +298,9 @@ All fees are nominated in nanotons or nanotons multiplied by 2^16 to [maintain a
 - out_fwd_fees = [p24](https://tonviewer.com/config#24), [p25](https://tonviewer.com/config#25)
 
 :::info
-[A direct link to the mainnet live config file](https://tonviewer.com/config)
+[A direct link to the mainnet live config file](https://tonviewer.com/config).
 
-For educational purposes [example of the old one](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05)
+For educational purposes [example of the old one](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05).
 :::
 
 ## References
@@ -301,7 +309,7 @@ For educational purposes [example of the old one](https://explorer.toncoin.org/c
 
 ## See also
 
-- [TON Fees overview](/v3/documentation/smart-contracts/transaction-fees/fees)
+- [TON fees overview](/v3/documentation/smart-contracts/transaction-fees/fees)
 - [Transactions and phases](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
 - [Fees calculation](/v3/guidelines/smart-contracts/fee-calculation)
 

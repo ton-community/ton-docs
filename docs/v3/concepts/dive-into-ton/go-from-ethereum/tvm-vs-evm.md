@@ -10,24 +10,25 @@ import Feedback from '@site/src/components/Feedback';
 ### Data presentation
 
 #### EVM
-1. Fundamental Data Units
- The EVM operates primarily on 256-bit integers, reflecting its design around Ethereum's cryptographic functions, such as Keccak-256 hashing and elliptic curve operations.
+1. Fundamental data units
+
+ - The EVM operates primarily on 256-bit integers, reflecting its design around Ethereum's cryptographic functions, such as Keccak-256 hashing and elliptic curve operations.
  - Data types are limited mainly to integers, bytes, and occasionally arrays of these types, but all must conform to 256-bit processing rules.
-2. State Storage
+2. State storage
 - The entire state of the Ethereum blockchain is a mapping of 256-bit addresses to 256-bit values. A data structure known as the **Merkle Patricia Trie (MPT)** maintains this mapping.
 - The MPT enables Ethereum to efficiently prove the consistency and integrity of the blockchain state through cryptographic verification, which is vital for a decentralized system like Ethereum.
-3. Data Structure Limitations
+3. Data structure limitations
 - The simplification to 256-bit word constraints means that the EVM is not inherently designed to handle complex or custom data structures directly.
 Developers often need to implement additional logic within smart contracts to simulate more complex data structures, which can increase gas costs and complexity.
 
 #### TVM
-1. Cell-Based Architecture
+1. Cell-based architecture
 - TVM uses a unique [bag of cells](/v3/documentation/data-formats/tlb/cell-boc/) model to represent data. Each cell can contain up to 128 data bytes and have up to 4 references to other cells.
 - This structure allows the TVM to natively support arbitrary algebraic data types and more complex constructions such as trees or directed acyclic graphs (DAGs) directly within its storage model.
-2. Flexibility and Efficiency
+2. Flexibility and efficiency
 - The cell model provides significant flexibility, enabling the TVM to handle various data structures more naturally and efficiently than the EVM.
 - For example, creating linked structures through cell references allows for dynamic and potentially infinite data structures, which is crucial for specific applications like decentralized social networks or complex decentralized finance (DeFi) protocols.
-3. Complex Data Handling
+3. Complex data handling
 - The ability to manage complex data types inherently within the VM architecture reduces the need for workaround implementations in smart contracts, potentially lowering the execution cost and increasing execution speed.
 TVM's design is particularly advantageous for applications requiring complex state management or interlinked data structures. It provides a robust foundation for developers to build sophisticated and scalable decentralized applications.
 

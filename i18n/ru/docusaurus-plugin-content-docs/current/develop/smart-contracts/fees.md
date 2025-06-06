@@ -1,1 +1,0 @@
-../../v3/documentation/smart-contracts/transaction-fees/fees.md

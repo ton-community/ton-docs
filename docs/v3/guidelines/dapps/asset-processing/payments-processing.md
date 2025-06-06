@@ -10,12 +10,12 @@ import TabItem from '@theme/TabItem';
 This page **explains how to process** (send and accept) digital assets on TON Blockchain. While it primarily focuses on handling TON coins, the **theoretical concepts** are also relevant for processing `jettons`.
 
 :::tip
-It's recommended to review the [Asset Processing Overview](/v3/documentation/dapps/assets/overview) before reading this tutorial.
+It's recommended to review the [Asset processing overview](/v3/documentation/dapps/assets/overview) before reading this tutorial.
 :::
 
 ## Wallet smart contract
 
-Wallet smart contracts on the TON Network allow external actors to interact with blockchain entities. They serve the following purposes:* Authenticates the owner: 
+Wallet smart contracts on the TON Network allow external actors to interact with blockchain entities. They serve the following purposes: 
 * Authenticating the owner: Rejects requests that attempt to process transactions or pay fees on behalf of unauthorized users.
 * Providing replay protection: Prevents the repeated execution of the same request, such as sending assets to another smart contract multiple times.
 * Initiating arbitrary interactions with other smart contracts.
@@ -41,7 +41,7 @@ To deploy a wallet via TonLib, follow these steps:
 6. Check the contract’s status after a few seconds using the [getAccountState](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L288) method.
 
 :::tip
-Read more in the [Wallet Tutorial](/v3/guidelines/smart-contracts/howto/wallet#-deploying-a-wallet)
+Read more on the [Wallet tutorial](/v3/guidelines/smart-contracts/howto/wallet#-deploying-a-wallet).
 :::
 
 ### Checking wallet address validity
@@ -108,7 +108,7 @@ Full Address description on the [Smart contract addresses](/v3/documentation/sma
 
 ### Check contract's transactions
 To retrieve a smart contract's transactions, use the [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get). method. This method fetches up to 10 transactions starting from a specified `last_transaction_id` and earlier. To process all incoming transactions, follow these steps:
-1. Obtain the latest `last_transaction_id` using [getAddressInformation](https://toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get)
+1. Obtain the latest `last_transaction_id` using [getAddressInformation](https://toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get).
 2. Load 10 transactions using the `getTransactions` method.
 3. Process transactions where the source field in the incoming message is not empty and the destination field matches the account address.
 4. Retrieve the next 10 transactions and repeat steps 2 and 3 until all incoming transactions are processed.
@@ -179,7 +179,7 @@ main();
 ### Send payments
 
 :::tip
-Learn the basics of payment processing from the [TMA USDT Payments demo](https://github.com/ton-community/tma-usdt-payments-demo)
+Learn the basics of payment processing from the [TMA USDT Payments demo](https://github.com/ton-community/tma-usdt-payments-demo).
 :::
 
 1. The service must deploy a `wallet` and keep it funded to prevent contract destruction due to storage fees. Storage fees are typically less than 1 Toncoin per year.
@@ -211,7 +211,7 @@ To accept payments based on attached comments, the service should:
 
 To calculate the **incoming message value** that a message brings to a contract, we need to analyze the transaction. This happens when a message enters the contract. The transaction can be retrieved using [getTransactions](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L268). For an incoming wallet transaction, the correct data consists of one incoming message and zero outgoing messages. Otherwise, either an outgoing message is sent to the wallet, in which case the owner spends the Toncoin, or the wallet is not deployed and the incoming transaction is returned.
 
-In any case, in general, the amount a message brings to a contract can be calculated as the incoming message value minus the sum of the outgoing message values ​​minus the fee: `value_{in_msg} - SUM(value_{out_msg}) - fee`. Technically, the transaction view contains three different fields with `fee` in the name: `fee`, `storage_fee` and `other_fee`, i.e. the total fee, the portion of the fee related to storage costs, and the portion of the fee related to processing the transaction. Only the first one should be used.
+In any case, in general, the amount a message brings to a contract can be calculated as the incoming message value minus the sum of the outgoing message values minus the fee: `value_{in_msg} - SUM(value_{out_msg}) - fee`. Technically, the transaction view contains three different fields with `fee` in the name: `fee`, `storage_fee` and `other_fee`, i.e. the total fee, the portion of the fee related to storage costs, and the portion of the fee related to processing the transaction. Only the first one should be used.
 
 
 
@@ -266,7 +266,7 @@ ton://transfer/<destination-address>?
 
 
 
-[Learn more about ton links here](https://github.com/tonkeeper/wallet-api#payment-urls)
+[Learn more about TON links here](https://github.com/tonkeeper/wallet-api#payment-urls).
 
 ## Explorers
 
@@ -280,7 +280,7 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 
 `https://explorer.toncoin.org/transaction?account={account address}&lt={lt as int}&hash={txhash as base64url}`
 
-Note: tonviewer and tonscan also support external-in message hashes instead of transaction hashes for explorer links. This is useful when generating an external message and needing an instant transaction link. Learn more about transactions and messages hashes [here](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash)
+Note: tonviewer and tonscan also support external-in message hashes instead of transaction hashes for explorer links. This is useful when generating an external message and needing an instant transaction link. Learn more about transactions and messages hashes [here](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
  
 ## Best practices
 

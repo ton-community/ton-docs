@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Fift deep dive
 
-Fift is a high-level stack-based language used for local manipulation of cells and other TVM primitives. Its primary purpose is to compile TVM assembly code into contract code as a bag-of-cells (BOC).
+Fift is a high-level stack-based language used for local manipulation of cells and other TVM primitives. Its primary purpose is to compile TVM assembly code into contract code as a bag-of-cells (BoC).
 
 :::caution
 **Advanced topic notice**
@@ -110,7 +110,7 @@ Comments in Fift are defined in `Fift.fif` and come in two forms:
 ```
 > Fift.fif
 
-#### How Comments Work
+#### How comments work
 
 Fift programs are sequences of words that transform the stack or define new words. Comments must work even during word definitions, requiring them to be **active words** (defined with `::`).
 
@@ -164,13 +164,13 @@ Fift provides built-in support for Ed25519 cryptographic operations:
 - **`runvmcode` and similar commands** - Executes TVM with a code slice taken from the stack  
 
 ### File operations
-- **Save BOC to file**:  
+- **Save BoC to file**:  
   ```fift
   boc>B ".../contract.boc" B>file
   ```
 
 ## Continue learning  
-- [Fift: A Brief Introduction](https://docs.ton.org/fiftbase.pdf) by Nikolai Durov  
+- [Fift: A Brief Introduction](https://docs.ton.org/fiftbase.pdf) - _Nikolai Durov_  
 
 <Feedback />
 

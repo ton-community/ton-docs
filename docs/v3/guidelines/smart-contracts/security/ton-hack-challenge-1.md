@@ -96,7 +96,7 @@ The wallet was protected with password, it's hash was stored in contract data. H
 
 :::note SECURITY RULE
 Always check for [bounced](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) messages.
-Don't forget about errors caused by [standard](/v3/documentation/smart-contracts/func/docs/stdlib/) functions.
+Don't forget about errors caused by [standard](/v3/documentation/smart-contracts/func/docs/stdlib) functions.
 Make your conditions as strict as possible.
 :::
 
@@ -157,10 +157,8 @@ Hope this article has shed some light on the non-obvious rules for FunC develope
 
 ## References
 
-Originally written by Dan Volkov
-
-- [dvlkv on GitHub](https://github.com/dvlkv)
-- [Original article](https://dev.to/dvlkv/drawing-conclusions-from-ton-hack-challenge-1aep)
+- [dvlkv on GitHub](https://github.com/dvlkv) - _Dan Volkov_
+- [Original article](https://dev.to/dvlkv/drawing-conclusions-from-ton-hack-challenge-1aep) - _Dan Volkov_
 
 <Feedback />
 

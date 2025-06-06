@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Transaction Fees
+# Transaction fees
 
 Every TON user should keep in mind that _commission depends on many factors_.
 
@@ -60,7 +60,7 @@ Check the [low-level fees overview](/v3/documentation/smart-contracts/transactio
 
 However, let's read more about how fees are supposed to function on TON.
 
-## Basic Fees Formula
+## Basic fees formula
 
 Fees on TON are calculated by this formula:
 
@@ -160,11 +160,11 @@ There is an article about [fee calculation](/v3/guidelines/smart-contracts/fee-c
 
 ## References
 
-- Based on the [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22) originally written by [menschee](https://github.com/menschee)
+- Based on the [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22) - _[menschee](https://github.com/menschee)_
 
 ## See also
 
-- ["Low-level fees overview"](/v3/documentation/smart-contracts/transaction-fees/fees-low-level)—read about the formulas for calculating commissions.
+- [Low-level fees overview](/v3/documentation/smart-contracts/transaction-fees/fees-low-level)—read about the formulas for calculating commissions.
 - [Smart contract function to calculate forward fees in FunC](https://github.com/ton-blockchain/token-contract/blob/main/misc/forward-fee-calc.fc)
 
 <Feedback />

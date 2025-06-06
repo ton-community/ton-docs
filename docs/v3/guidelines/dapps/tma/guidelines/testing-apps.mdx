@@ -9,8 +9,8 @@ import ConceptImage from '@site/src/components/conceptImage'
 To log in to the test environment, use one of the following methods:
 
 - **iOS:** Tap 10 times on the Settings icon. Navigate to > Accounts > Login to another account > Test.
-- **Telegram Desktop:** Open ☰ Settings > Shift + Alt + Right click ‘Add Account’ and select ‘Test Server’.
-- **macOS:** Click the Settings icon 10 times to open the Debug Menu. ⌘ + Click Add Account and log in using your phone number.
+- **Telegram Desktop:** Open ☰ Settings > Shift + Alt + Right click **Add Account** and select **Test Server**.
+- **macOS:** Click the Settings icon 10 times to open the Debug Menu. `⌘` + Click **Add Account** and log in using your phone number.
 
 The test environment is completely separate from the main environment. You must create a **new user account** and a **new bot** using [@BotFather](https://t.me/BotFather).
 
@@ -45,7 +45,7 @@ iOS WebView debugging requires the Safari desktop browser on macOS.
 
 **On macOS:**
 - Open Safari.
-- Open *Settings* (⌘ + ,).
+- Open *Settings* (`⌘` + `,`).
 - Select the *Advanced* tab.
 - Check *Show features for web developers*.
 
@@ -54,7 +54,7 @@ iOS WebView debugging requires the Safari desktop browser on macOS.
 - Open Mini App inside iOS Telegram client.
 - In Safari on macOS, go to *Develop* in the menu bar.
 - Select the connected iPhone.
-- (Optional) Select *Connect via network* and disconnect the cable.
+- (Optional) select *Connect via network* and disconnect the cable.
 - Under the *Telegram* block, select the opened WebView URL.
 
 ### Telegram Desktop on Windows, Linux, and macOS
@@ -77,24 +77,24 @@ Right-click inside the Mini App and choose *Inspect Element*.
 
 ![1](/img/docs/telegram-apps/eruda-1.png)
 
-### Step 1: Include Eruda library.
+### Step 1: include Eruda library
 
 To begin, add the Eruda library to your HTML file:
 
-**Option 1:** Use a CDN (recommended).
+**Option 1:** use a CDN (recommended).
 
 ```html
 <!-- Include Eruda from CDN (Recommended) -->
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 ```
 
-**Option 2:** Install via npm.
+**Option 2:** install via npm.
 
 ```bash npm2yarn
 npm install eruda --save
 ```
 
-### Step 2: Initialise Eruda.
+### Step 2: initialise Eruda
 
 If using the CDN, initialize Eruda when the page loads:
 
@@ -115,7 +115,7 @@ import eruda from 'eruda'
 eruda.init()
 ```
 
-### Step 3: Launch Eruda.
+### Step 3: launch Eruda
 
 After deploying your Mini App:
 

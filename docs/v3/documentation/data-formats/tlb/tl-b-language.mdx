@@ -428,7 +428,7 @@ _ _:(Example 4) = 2BitInteger;
 
 In this example, the `Example.value` type is determined at runtime.
 
-In the `2BitInteger` definition, we set the value to `Example 4`. To determine this type, we use the `Example (x * 2)` definition and calculate `x` using the formula `(y = 2, z = 4)`:
+In the `2BitInteger` definition, we set the value to `Example 4`. To determine this type, we use the `Example (x * 2)` definition and calculate `x` using the formula `(y = 2, z = 4)`:
 
 ```c++
 static inline bool mul_r1(int& x, int y, int z) {
@@ -443,7 +443,7 @@ _ {x:#} value:(## x) = ExampleSum (x + 3);
 _ _:(ExampleSum 4) = 1BitInteger;
 ```
 
-In the `1BitInteger` definition, we set the value to `ExampleSum 4`. To determine this type, we use the `ExampleSum (x + 3)` definition and calculate `x` using the formula `(y = 3, z = 4)`:
+In the `1BitInteger` definition, we set the value to `ExampleSum 4`. To determine this type, we use the `ExampleSum (x + 3)` definition and calculate `x` using the formula `(y = 3, z = 4)`:
 
 ```c++
 static inline bool add_r1(int& x, int y, int z) {
@@ -462,7 +462,7 @@ A simple example of the negate operator is the definition of a new variable base
 _ a:(## 32) { b:# } { ~b = a + 100 } = B_Calc_Example;
 ```
 
-After defining the new variable, you can use it to pass it to `Nat` types:
+After definition, you can use the new variable as input for `Nat` types:
 
 
 ```tlb
@@ -510,14 +510,14 @@ unary_succ$1 {n:#} x:(Unary ~n) = Unary ~(n + 1);
 _ u:(Unary Any) = UnaryChain;
 ```
 
-This example is explained clearly in the [TL-B types](/v3/documentation/data-formats/tlb/tl-b-types#unary) article. The main idea here is that `UnaryChain` recursively deserializes until it reaches `unary_zero$0` because we know the last element of the `Unary X` type by the definition `unary_zero$0 = Unary ~0`. The value of `X` is calculated at runtime due to the definition `Unary ~(n + 1)`.
+This example is explained well in the [TL-B types](/v3/documentation/data-formats/tlb/tl-b-types#unary) article. The main idea here is that `UnaryChain` recursively deserializes until it reaches `unary_zero$0` because we know the last element of the `Unary X` type by the definition `unary_zero$0 = Unary ~0`. The value of `X` is calculated at runtime due to the definition `Unary ~(n + 1)`.
 
 
 Note: `x:(Unary ~n)` means that `n` is defined during the serialization process of the `Unary` class.
 
 ## Special types
 
-TVM allows for different types of cells, which include:
+Currently, TVM allows the following types of cells:
 
 - Ordinary
 - PrunnedBranch

@@ -7,7 +7,7 @@ import Feedback from '@site/src/components/Feedback';
 [TON Sites](https://blog.ton.org/ton-sites) work similarly to regular websites but require additional steps to start. This guide walks you through the setup process.
 
 ## Running TON Site
-Install the [Tonutils Reverse Proxy](https://github.com/tonutils/reverse-proxy) to use TON Proxy for your website.
+Install the [Tonutils reverse proxy](https://github.com/tonutils/reverse-proxy) to use TON Proxy for your website.
 
 ### Installation on any Linux
 
@@ -68,12 +68,12 @@ You can check availability by opening the address with the `.adnl` suffix. Ensur
 ## References
 
  * [TON Sites, TON WWW and TON Proxy](https://blog.ton.org/ton-sites)
- * [Tonutils Reverse Proxy](https://github.com/tonutils/reverse-proxy)
+ * [Tonutils reverse proxy](https://github.com/tonutils/reverse-proxy)
  * Authors: [_Andrew Burnosov_](https://github.com/AndreyBurnosov) (TG: [@AndrewBurnosov](https://t.me/AndreyBurnosov)), [_Daniil Sedov_](https://gusarich.com) (TG: [@sedov](https://t.me/sedov)), [_George Imedashvili_](https://github.com/drforse)
 
 
 ## See also
-* [Run C++ Implementation](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)
+* [Run C++ implementation](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)
 
 <Feedback />
 

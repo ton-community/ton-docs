@@ -165,7 +165,6 @@ ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
 | Structure          | Type                                 | Required | Description                                                                                                                     |
 |--------------------|--------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------|
 | ext_in_msg_info$10 | Constructor                          | Required | The `$10` tag indicates that the `CommonMsgInfo` begins with `10` bits in serialization, denoting an external incoming message. |
-| ihr_disabled       | Bool                                 | Required | Flag indicating whether hyper routing is disabled. Currently, it is always set to `true`.                                       |
 | src                | [MsgAddressExt](#msgaddressext-tl-b) | Required | The external sender’s address.                                                                                                  |
 | dest               | [MsgAddressInt](#msgaddressint-tl-b) | Required | The destination smart contract address.                                                                                         |
 | import_fee         | [VarUInteger 16](#varuinteger-n)     | Required | The fee for executing and delivering the message.                                                                               |

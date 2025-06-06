@@ -29,7 +29,7 @@ If this process is repeated 10 times, and you answer correctly each time, the ve
 
 However, this method is interactive, meaning it requires multiple steps between the prover and verifier. In a decentralized application (DApp), having users send 30 transactions to prove a fact would be inefficient. This is why a non-interactive solution is needed—enter zk-SNARKs and zk-STARKs.
 
-For this tutorial, we’ll focus on zk-SNARKs. However, you can learn more about zk-STARKs on the [StarkWare website](https://starkware.co/stark/), and find a comparison of zk-SNARKs vs. zk-STARKs in this [Panther Protocol blog post](https://blog.pantherprotocol.io/zk-snarks-vs-zk-starks-differences-in-zero-knowledge-technologies/).**
+For this tutorial, we’ll focus on zk-SNARKs. However, you can learn more about zk-STARKs on the [StarkWare website](https://starkware.co/stark/), and find a comparison of zk-SNARKs vs. zk-STARKs in this [Panther Protocol blog post](https://blog.pantherprotocol.io/zk-snarks-vs-zk-starks-differences-in-zero-knowledge-technologies/).
 
 ### 🎯 Zk-SNARK: zero-knowledge succinct non-interactive argument of knowledge
 
@@ -137,7 +137,6 @@ You can remove the unnecessary files:
 ```bash
 rm pot14_0000.ptau pot14_0001.ptau pot14_0002.ptau pot14_beacon.ptau
 ```
-
 ### 📜 Circuit compilation
 
 To compile the circuit, run the following command from the `build/circuits` folder:
@@ -588,7 +587,7 @@ If you have any questions or run into any errors, feel free to reach out to the 
 - [Blueprint](https://github.com/ton-org/blueprint)
 
 
-## 📖 See Also
+## 📖 See also
 
 - [TON trustless bridge EVM contracts](https://github.com/ton-blockchain/ton-trustless-bridge-evm-contracts)
 - [Tonnel network: privacy protocol on TON](http://github.com/saberdotcoder/tonnel-network)
@@ -596,7 +595,7 @@ If you have any questions or run into any errors, feel free to reach out to the 
 
 
 ## 📬 About the author 
-- Saber on [Telegram](https://t.me/saber_coder), [GitHub](https://github.com/saberdotcoder), and [LinkedIn](https://www.linkedin.com/in/szafarpoor).
+- _Saber_ on [Telegram](https://t.me/saber_coder), [GitHub](https://github.com/saberdotcoder), and [LinkedIn](https://www.linkedin.com/in/szafarpoor).
 
 <Feedback />
 

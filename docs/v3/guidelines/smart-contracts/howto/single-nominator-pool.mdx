@@ -111,7 +111,7 @@ $ npm run test
 
 ### Create a single nominator pool
 
-1. Obtain a Toncenter API key from [@tonapibot](https://t.me/tonapibot) on Telegram.
+1. Obtain a TON Center API key from [@tonapibot](https://t.me/tonapibot) on Telegram.
 2. Set environment variables:
 
 ```bash
@@ -236,25 +236,31 @@ Alternatively, create and send the transaction manually:
 <TabItem value="toncore" label="JS (@ton)">
 
 ```js
-import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
+import {
+  Address,
+  beginCell,
+  internal,
+  storeMessageRelaxed,
+  toNano,
+} from "@ton/core";
 
 async function main() {
-    const single_nominator_address = Address.parse('single nominator address');
-    const WITHDRAW_OP = 0x1000;
-    const amount = 50000;
+  const single_nominator_address = Address.parse("single nominator address");
+  const WITHDRAW_OP = 0x1000;
+  const amount = 50000;
 
-    const messageBody = beginCell()
- .storeUint(WITHDRAW_OP, 32) // op code for withdrawal
- .storeUint(0, 64)            // query_id
- .storeCoins(amount)          // amount to withdraw
- .endCell();
+  const messageBody = beginCell()
+    .storeUint(WITHDRAW_OP, 32) // op code for withdrawal
+    .storeUint(0, 64) // query_id
+    .storeCoins(amount) // amount to withdraw
+    .endCell();
 
-    const internalMessage = internal({
-        to: single_nominator_address,
-        value: toNano('1'),
-        bounce: true,
-        body: messageBody
- });
+  const internalMessage = internal({
+    to: single_nominator_address,
+    value: toNano("1"),
+    bounce: true,
+    body: messageBody,
+  });
 }
 ```
 
@@ -293,11 +299,11 @@ func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, a
 
 ### Set up a single nominator pool
 
-Configure the single nominator pool contract using the [following instructions](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator).
+Configure the single nominator pool contract using the [following instructions](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-a-single-nominator-pool).
 
 ### Join the elections
 
-[Deposit](/v3/guidelines/smart-contracts/howto/single-nominator-pool#deposit-pool) the minimum stake amount into the single nominator pool.
+[Deposit](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-a-single-nominator-pool) the minimum stake amount into the single nominator pool.
 
 **MyTonCtrl** will automatically join the elections. You can set the stake amount that MyTonCtrl sends to the [elector contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector) approximately every 18 hours on Mainnet and 2 hours on Testnet.
 
@@ -394,7 +400,7 @@ MyTonCtrl> disable_mode validator
 
 1. Disable the `validator` mode to stop participating in elections.
 2. Wait for both stakes to return from the elector.
-3. Follow the [steps](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator) to set up a single nominator pool.
+3. Follow the [steps](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-a-single-nominator-pool) to set up a single nominator pool.
 
 ## Single nominator pool client
 
@@ -405,12 +411,12 @@ MyTonCtrl> disable_mode validator
 
 Initially, the owner of the vesting contract manages it with their wallet contract. This scheme involves managing interactions between multiple contracts.
 
-| Contracts               | Interface for managing       |
-|-------------------------|------------------------------|
-| `validator_wallet` | MyTonCtrl                    |
-| `vesting` | [vesting.ton.org](https://vesting.ton.org/) |
-| `owner_wallet` | Apps like Tonkeeper or MyTonWallet |
-| `single_nominator_pool` | MyTonCtrl                    |
+| Contracts               | Interface for managing                      |
+| ----------------------- | ------------------------------------------- |
+| `validator_wallet`      | MyTonCtrl                                   |
+| `vesting`               | [vesting.ton.org](https://vesting.ton.org/) |
+| `owner_wallet`          | Apps like Tonkeeper or MyTonWallet          |
+| `single_nominator_pool` | MyTonCtrl                                   |
 
 - `owner_wallet` – The TON wallet that owns the `vesting`.
 
@@ -447,11 +453,10 @@ MyTonCtrl> activate_single_pool my_s_pool
 
 6. After the `single_nominator_pool` address appears on-chain, request whitelisting from the person who provided the vesting contract.
 7. Once whitelisted, you can send locked tokens from the `vesting` contract to the `single_nominator_pool` using [vesting.ton.org](https://vesting.ton.org/):
-    - a. Connect the `owner_wallet` on [vesting.ton.org](https://vesting.ton.org/).
-    - b. Test by sending 10 TON from `vesting` to the `single_nominator_pool`.
-    - c. Return the remaining funds (~8 TON) to `vesting` with a message [amount 0, comment `w`] via the [vesting.ton.org](https://vesting.ton.org/) interface.
-    - d. Confirm the remaining funds are received in `vesting`.
+   - a. Connect the `owner_wallet` on [vesting.ton.org](https://vesting.ton.org/).
+   - b. Test by sending 10 TON from `vesting` to the `single_nominator_pool`.
+   - c. Return the remaining funds (~8 TON) to `vesting` with a message [amount 0, comment `w`] via the [vesting.ton.org](https://vesting.ton.org/) interface.
+   - d. Confirm the remaining funds are received in `vesting`.
 8. Transfer the required TON amount from `vesting` to `single_nominator_pool` for both cycles.
 9. Wait for the validators’ voting.
-<Feedback />
-
+   <Feedback />
