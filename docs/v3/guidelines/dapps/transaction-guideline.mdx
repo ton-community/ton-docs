@@ -766,32 +766,31 @@ Get collection data
 ## Blockchain HTTP API 
 * Основные сервисы в TON: TON Center, TON API, TONX API.
 * Транзакция это часть блока.
-* Подходы к получению транзакции из блокчейна.
-  * GetTranasction by external message.
-  * Перебор все транзакции с последнего блока MasterChain. 
-  * Использование верхнеуровневых интерфейсов для событий(или операций): GetJettons, GetNFTs, GetActions.
-* Фундаментальный подход к получению массива транзакций.
-Для получения всех транзакций используют метод сканирования сверху. Расмотрим алгоритм на примере TON Center HTTP API
+* Подходы к получению транзакции из API блокчейна (перевернуть порядок):
+  * Запрашивать транзакции по аккаунту который ты слушаешь (только APIv2) https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get
+  этот метод доступен везде, даже на Liteclient. До ~100 аккаунтов приемлимый.
+  * Перебор все транзакции с последнего блока MasterChain. Если от 1000 до infinity количество прослушиваемых аккаунтов.
+    * В api/v2 : shards -> compute shard diff -> getBlockTransactionsExt for each block (в доке: https://docs.toncenter.com/docs/ton-center-cookbook#how-to-scan-blockchain)
+    * В api/v3 не использовать алгоритм api/v2, метод https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_masterchain_block.
+  * GetTranasction by (external/internal) message (только api/v3). https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_message Очень хорошо когда следишь за 1 аккаунтом (до ~10). wallet-v4/wallet-v5 отправка, идеально. В основном используется для нахождения тр которая порождена ext. Важный момент, что есть задержка до 10 секунд. Поэтому лучше решается через pending.
+  * Использование верхнеуровневых интерфейсов для событий(или операций): Get /Actions, Get /Traces, GET /jetton/transfers(burns), GET /NFT, GET /Actions.
 
-- https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_masterchain_info
-- https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_masterchainBlockShardState
+Trace - можно получить для конкретной транзакции, чтобы их посмотреть. Биржи могут иногда использовать чтобы посмотреть что произошло, чтобы получить граф транзакций для дальнейшей. Можно использовать как дополнительный поиск jetton transfer без jetton notification.
+Нужно использовать тогда, когда обработка бизнес операции зависит от множества условий в согласованных транзакциях.
+Action - только для визуализации, никакой логики для движения средств.
 
-Получить seqno последного MasterChain блока. Пусть мы получили N.
-Метод api_v3_get_masterchainBlockShardState возращает последние блоки в каждом Shard каждого WorkChain (за исключением MasterChain, где всегда только один Shard).
-1. Запросить шард стет для MasterChain блока с seqno = N, сравнить его Shard state с Shard ateate для MasterChain блока N-1.
-2. Существует 3 возможных ситуации для каждого Shard:
-   a. Обычный случа: Было 0, 1 или более новых блоков в текущем шарде. Вам потребуется сканировать все эти блоки.
-   b. Split：　Один шард исчез, появилось два новых, с новыми ID шарда. Новых блоков не может быть созданно в процессе разделения.
-   с. Merge: Исчезло два шарда S1, S2 в N-1, и появился новый шард с seqno max(S1,S2)+ 1 в N. Нам нужны блоки которые появились в новом шарде.
-3. Соберите список всех "новых" блоков между MasterChain блоками N-1 и N.
-4. Получить все транзакции по этим блокам используя метод https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions .
 
-Этот алгоритм уже имплементирован в методе https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_masterchain_block.
+Результат это массив с одной или нескольими транзакциями: Transaction[]
+Транзакции уникальные на уровне API/v2 и API/v3
+
+Выбор: либо очень простая имплементация с высоким уровнем доверия крупным провайдерам, либо сложная имплементация в которой не приходится доверять провайдеру.
 Но для большей безопасности рекомендуется самостоятельно процессить транзакции по блокам.
 
 ## Транзакция
 
 ### Как разбирать данную транзакцию
+### Состав тела транзакции на TL-B
+### Состав тела транзакции в api/v2, api/v3
 ### Отношение Блока и Транзакции
 ### Транзакция в TVM и фазы
 ### Action, Events в Экосистеме TON
