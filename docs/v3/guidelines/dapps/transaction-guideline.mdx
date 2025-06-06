@@ -325,15 +325,11 @@ import { beginCell } from '@ton/core';
 
 // Создаем тело сообщения для увеличения счетчика
 const messageBody = beginCell()
-  .storeUint(0x34a3ff12, 32)  // opcode для операции "increase"
-  .storeUint(0, 64)           // query_id
-  .storeUint(5, 32)           // amount - увеличить на 5
-  .endCell();
-
-// Получаем хэш тела сообщения
-const bodyHash = messageBody.hash();
-console.log('Message Body Hash:', bodyHash.toString('hex'));
-// Вывод: Message Body Hash: a1b2c3d4e5f6789...
+        .storeUint(0, 32) // op code
+        .storeStringTail("Hello TON!")
+        .endCell();
+    
+console.log("Message Body Hash:", messageBody.hash().toString("hex"));
 ```
 
 **Когда использовать хэш тела сообщения:**
@@ -408,56 +404,6 @@ for (const tx of transactions) {
 }
 ```
 
-#### Хэш StateInit для верификации адресов
-
-В TON Connect часто требуется верифицировать соответствие между адресом кошелька и его StateInit. Хэш StateInit должен совпадать с хэш-частью адреса.
-
-**Практический пример верификации адреса:**
-
-```typescript
-import { Cell, Address, contractAddress } from '@ton/ton';
-
-async function verifyWalletAddress(
-  receivedAddress: string, 
-  stateInitBase64: string
-): Promise<boolean> {
-  try {
-    // Парсим StateInit из base64
-    const stateInit = Cell.fromBase64(stateInitBase64);
-    
-    // Получаем хэш StateInit
-    const stateInitHash = stateInit.hash();
-    
-    // Парсим полученный адрес
-    const address = Address.parse(receivedAddress);
-    
-    // Проверяем, что хэш-часть адреса совпадает с хэшем StateInit
-    const addressHashPart = stateInitHash.toString('hex');
-    const expectedAddress = address.hash.toString('hex');
-    
-    console.log('StateInit Hash:', addressHashPart);
-    console.log('Address Hash:', expectedAddress);
-    
-    return addressHashPart === expectedAddress;
-  } catch (error) {
-    console.error('Ошибка верификации адреса:', error);
-    return false;
-  }
-}
-
-// Пример использования в TON Connect
-const isValidAddress = await verifyWalletAddress(
-  '0:b2a1ecf5545e076cd36ae516ea7ebdf32aea008caa2b84af9866becb208895ad',
-  'te6cckECFgEAAwQAAgE0ARUBFP8A9KQT9LzyyAs...'
-);
-
-if (isValidAddress) {
-  console.log('Адрес верифицирован успешно!');
-} else {
-  console.log('Ошибка верификации адреса!');
-}
-```
-
 #### Нормализованный хэш сообщения
 
 Нормализованный хэш сообщения — это инновационное решение проблемы надежного отслеживания транзакций в TON. Согласно [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467), этот подход обеспечивает стабильный идентификатор для external-in сообщений, устраняя влияние несущественных полей на хэш.
@@ -478,31 +424,25 @@ if (isValidAddress) {
 **Практический пример вычисления нормализованного хэша:**
 
 ```typescript
-import { beginCell, storeMessage, external, Address, Cell } from '@ton/ton';
+import { toNano, beginCell, Cell, Address } from "@ton/core";
 
-function computeNormalizedMessageHash(
-  destination: Address,
-  body: Cell
-): string {
-  // Создаем нормализованное external-in сообщение
-  const normalizedMessage = external({
-    to: destination,
-    body: body,
-    // Остальные поля автоматически нормализуются:
-    // src устанавливается в addr_none
-    // import_fee устанавливается в 0
-    // init остается пустым
-  });
+function normalizeExternalMessage(destAddress: Address, bodyCell: Cell): Cell {
+    try {
+        const normalizedExtMessage = beginCell()
+            .storeUint(0b10, 2) // ext_msg prefix (10 in binary)
+            .storeUint(0, 2) // src -> addr_none (НОРМАЛИЗАЦИЯ!)
+            .storeAddress(destAddress) // Address.parse(destAddress.toString({ bounceable: false })) если пытаться использовать .address из WalletContractV4
+            .storeCoins(0) // import_fee:Grams -> 0 (НОРМАЛИЗАЦИЯ!)
+            .storeBit(false) // init:(Maybe (Either StateInit ^StateInit)) -> nothing$0 (НОРМАЛИЗАЦИЯ!)
+            .storeBit(true) // body:(Either X ^X) -> right$1 (НОРМАЛИЗАЦИЯ!)
+            .storeRef(bodyCell) // Store body as reference (НОРМАЛИЗАЦИЯ!)
+            .endCell();
 
-  // Принудительно сохраняем body как ссылку для нормализации
-  const normalizedCell = beginCell()
-    .store(storeMessage(normalizedMessage))
-    .endCell();
-
-  // Вычисляем нормализованный хэш
-  const normalizedHash = normalizedCell.hash();
-  
-  return normalizedHash.toString('hex');
+        return normalizedExtMessage;
+    } catch (error: any) {
+        console.error("❌ Error in normalization:", error.message);
+        throw error;
+    }
 }
 
 // Пример использования
@@ -512,7 +452,8 @@ const messageBody = beginCell()
   .endCell();
 
 const destinationAddress = Address.parse('EQB...');
-const normalizedHash = computeNormalizedMessageHash(destinationAddress, messageBody);
+const normalizedExternalMessage = normalizeExternalMessage(destinationAddress, messageBody);
+const normalizedHash = normalizedExternalMessage.hash().toString("hex");
 
 console.log('Normalized Message Hash:', normalizedHash);
 ```
@@ -520,37 +461,30 @@ console.log('Normalized Message Hash:', normalizedHash);
 **Сравнение обычного и нормализованного хэшей:**
 
 ```typescript
-import { external, beginCell, storeMessage } from '@ton/ton';
+import { toNano, beginCell, Cell, Address, external, internal } from '@ton/ton';
 
-async function compareMessageHashes(
-  destination: Address,
-  body: Cell
-) {
-  // Создаем обычное external сообщение
-  const regularMessage = external({
-    to: destination,
-    body: body
-  });
-
-  // Вычисляем обычный хэш
-  const regularCell = beginCell()
-    .store(storeMessage(regularMessage))
+// 1. Создание тела сообщения
+const messageBody = beginCell()
+    .storeUint(0, 32) // op code
+    .storeStringTail("Hello TON!")
     .endCell();
-  const regularHash = regularCell.hash().toString('hex');
 
-  // Вычисляем нормализованный хэш
-  const normalizedHash = computeNormalizedMessageHash(destination, body);
+// 2. Создание intenal message через wrapper
+const internalMessage = internal({
+    to: walletAddress,
+    value: toNano("0.01"),
+    body: messageBody
+});
+// 3. Создание external message через wrapper
+const externalMessage = await contract.createTransfer({
+    seqno,
+    secretKey: keyPair.secretKey,
+    messages: [internalMessage]
+});
 
-  console.log('Regular Hash:', regularHash);
-  console.log('Normalized Hash:', normalizedHash);
-  
-  // Нормализованный хэш остается стабильным даже если 
-  // сообщение будет переупаковано нодами сети
-  return {
-    regular: regularHash,
-    normalized: normalizedHash
-  };
-}
+const originalHash = externalMessage.hash().toString("hex");
+console.log("\nOriginal External Message Hash:", originalHash);
+
 ```
 
 **Когда использовать нормализованный хэш:**
@@ -567,70 +501,6 @@ async function compareMessageHashes(
 1. Сообщение отправляется на кошелек
 2. Сообщение включает инструкцию с флагом IGNORE_ERRORS=+2
 3. Кошелек никогда не удаляется
-
-**Интеграция с существующими системами:**
-
-```typescript
-// Типы данных для отслеживания транзакций
-interface TransactionData {
-  destination: Address;
-  body: Cell;
-  metadata: any;
-  timestamp: number;
-  status: 'pending' | 'confirmed' | 'failed';
-}
-
-type TransactionStatus = 'pending' | 'confirmed' | 'failed';
-
-// Адаптер для работы с нормализованными хэшами
-class TransactionTracker {
-  private pendingTransactions = new Map<string, TransactionData>();
-
-  async trackTransaction(
-    destination: Address,
-    body: Cell,
-    metadata: any
-  ): Promise<string> {
-    // Используем нормализованный хэш как постоянный ID
-    const trackingId = computeNormalizedMessageHash(destination, body);
-    
-    this.pendingTransactions.set(trackingId, {
-      destination,
-      body,
-      metadata,
-      timestamp: Date.now(),
-      status: 'pending'
-    });
-
-    console.log(`Транзакция отслеживается с ID: ${trackingId}`);
-    return trackingId;
-  }
-
-  async checkTransactionStatus(trackingId: string): Promise<TransactionStatus> {
-    const transaction = this.pendingTransactions.get(trackingId);
-    if (!transaction) {
-      throw new Error('Транзакция не найдена');
-    }
-
-    // Проверяем статус в блокчейне по нормализованному хэшу
-    // Этот ID останется стабильным даже если сообщение было переупаковано
-    return await this.queryBlockchainStatus(trackingId);
-  }
-
-  private async queryBlockchainStatus(normalizedHash: string): Promise<TransactionStatus> {
-    // Реализация запроса к блокчейну
-    // Нормализованный хэш обеспечивает надежное отслеживание
-    return 'confirmed';
-  }
-}
-
-// Пример использования
-const tracker = new TransactionTracker();
-const trackingId = await tracker.trackTransaction(walletAddress, messageBody, { 
-  user: 'user123', 
-  amount: '1.0 TON' 
-});
-```
 
 Нормализованный хэш сообщения представляет собой значительный шаг вперед в надежности отслеживания транзакций TON. Это решение уже активно используется командами Tonkeeper и TonAPI, что подтверждает его практическую ценность для разработчиков.
 
@@ -789,6 +659,23 @@ async function checkTransactionStatus(txHash: string, walletAddress: string) {
     console.error('Ошибка при проверке транзакции:', error);
     return null;
   }
+}
+```
+
+#### Хэш StateInit для верификации адресов
+
+В [TON Connect](v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#backend-example) часто требуется верифицировать соответствие между адресом кошелька и его StateInit. Хэш StateInit должен совпадать с хэш-частью адреса.
+
+**Практический пример верификации адреса:**
+
+```typescript
+import { Address, contractAddress } from '@ton/ton';
+
+// Пример использования в TON Connect
+const wantedAddress = Address.parse(payload.address);
+const address = contractAddress(wantedAddress.workChain, stateInit);
+if (!address.equals(wantedAddress)) {
+  return false;
 }
 ```
 
