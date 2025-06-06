@@ -27,7 +27,7 @@ For convenience, nearly the entire mainnet infrastructure (wallets, APIs, bridge
 ## TON Ecosystem services Testnet
 
 ### Wallets
-* To switch to [Tonkeeper's testnet](https://tonkeeper.com/), tap the version 5 times in the settings.
+- To use [Tonkeeper's testnet](https://tonkeeper.com/), tap the Wallets list and then Add Wallet, then use Testnet Account button.
 * Testnet CryptoBot: https://t.me/CryptoTestnetBot
 * Special link for TON Space Testnet: https://t.me/wallet/start?startapp=tonspace_settings
 * https://multisig.ton.org/?testnet=true
