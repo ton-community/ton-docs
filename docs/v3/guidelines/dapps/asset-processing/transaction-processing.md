@@ -176,6 +176,144 @@ Type Check Error - Exit code = 7. Возникает при неправильн
 ```
 Здесь были разобраны самые популярные exit codes, возникающие у разработчиков. Всегда пользуйтесь сканерами, ретрейсерами и пишите тесты для своих смарт-контрактов, чтобы избежать ошибок.
 
+## Build an internal message and wrap this in external message 
+
+Смарт-контракты взаимодействуют друг с другом, отправляя так называемые Internal сообщения. Когда Internal сообщение достигает своего адресата, создается обычная транзакция от имени акккаунта получателя, а Internal сообщение обрабатывается в соответствии с кодом и постоянными данными этого аккаунта (смарт-контракт).
+
+External же сообщения отправляются извне в смарт-контракты, находящиеся в блокчейне TON, чтобы заставить их выполнить определенные действия.
+
+Например, смарт-контракт кошелька ожидает получения External сообщений, содержащих заявки (например, Internal сообщения, которые должны быть отправлены из смарт-контракта кошелька), подписанных владельцем кошелька. Когда такое External сообщение получено смарт-контрактом кошелька, он сначала проверяет подпись, затем принимает сообщение (запуская примитив TVM ACCEPT), а затем выполняет все необходимые действия.
+
+## Serializators for messages
+
+Прежде чем погрузиться в создание сообщений, давайте познакомимся с концепцией ячеек, из которых состоят тела сообщений.
+
+### Что такое ячейка?
+
+Ячейка — это базовая структура данных в блокчейне TON. Она может хранить до 1023 бит и содержать до 4 ссылок на другие ячейки, что позволяет хранить более сложные структуры данных. Такие библиотеки, как @ton/core и @ton-community/assets-sdk, предоставляют эффективные способы обработки ячеек.
+
+### Создание ячейки
+
+Чтобы создать ячейку, используйте функцию beginCell(). Пока ячейка "открыта", вы можете хранить различные типы данных с помощью функций store...(). Когда работа закончена, закройте ячейку с помощью функции endCell().
+
+```
+import { Address, beginCell } from "@ton/ton";
+
+const cell = beginCell()
+  .storeUint(99, 64) // Stores uint 99 in 64 bits
+  .storeAddress(Address.parse('[SOME_ADDR]')) // Stores an address
+  .storeCoins(123) // Stores 123 as coins
+  .endCell() // Closes the cell
+```
+
+### Анализ ячейки
+
+Чтобы прочитать или проанализировать данные из ячейки, вызывается функция beginParse(). Вы считываете данные в том же порядке, в котором они были сохранены, используя аналогичные функции load...():
+
+```
+const slice = cell.beginParse();
+const uint = slice.loadUint(64);
+const address = slice.loadAddress();
+const coins = slice.loadCoins();
+```
+
+### Большие объемы данных
+
+Каждая ячейка имеет ограничение в 1023 бита. Если вы превысите его, возникнет ошибка:
+
+```
+// This will fail due to overflow
+const cell = beginCell()
+  .storeUint(1, 256)
+  .storeUint(2, 256)
+  .storeUint(3, 256)
+  .storeUint(4, 256) // Exceeds 1023-bit limit (256 + 256 + 256 + 256 = 1024)
+  .endCell()
+```
+Чтобы сохранить больше данных, ячейки могут ссылаться на другие ячейки. Вы можете использовать функцию storeRef() для создания вложенных ячеек:
+
+```
+const cell = beginCell()
+  .storeUint(1, 256)
+  .storeUint(2, 256)
+  .storeRef(beginCell()
+    .storeUint(3, 256)
+    .storeUint(4, 256)
+    .endCell())
+  .endCell()
+```
+
+Чтобы загрузить ячейку, на которую есть ссылка (вложенную), используйте loadRef():
+
+```
+const slice = cell.beginParse();
+const uint1 = slice.loadUint(256);
+const uint2 = slice.loadUint(256);
+const innerSlice = slice.loadRef().beginParse(); // Load and parse nested cell
+const uint3 = innerSlice.loadUint(256);
+const uint4 = innerSlice.loadUint(256);
+```
+
+### Необязательные ссылки и значения
+
+Ячейки могут хранить необязательные значения (которые могут быть нулевыми). Они сохраняются с помощью функций storeMaybe...():
+
+```
+const cell = beginCell()
+  .storeMaybeInt(null, 64) // Optionally stores an int
+  .storeMaybeInt(1, 64)
+  .storeMaybeRef(null) // Optionally stores a reference
+  .storeMaybeRef(beginCell()
+    .storeCoins(123)
+    .endCell());
+```
+
+Вы можете анализировать необязательные значения с помощью соответствующих функций loadMaybe...(). Возвращаемые значения могут быть нулевыми, поэтому не забудьте проверить их на нулевое значение!
+
+```
+const slice = cell.beginParse();
+const maybeInt = slice.loadMaybeUint(64);
+const maybeInt1 = slice.loadMaybeUint(64);
+const maybeRef = slice.loadMaybeRef();
+const maybeRef1 = slice.loadMaybeRef();
+if (maybeRef1) {
+  const coins = maybeRef1.beginParse().loadCoins();
+}
+```
+
+### Пример полноценного построения internal сообщения
+
+```
+import {Address, beginCell} from "@ton/core";
+
+// serialization
+const cell = beginCell()
+  .storeUint(260734629, 32)
+  .storeUint(42, 64)
+  .storeCoins(100)
+  .storeAddress(Address.parse('[DESTINATION]'))
+  .storeAddress(Address.parse('[RESPONSE_DESTINATION]'))
+  .storeMaybeRef(null)
+  .storeCoins(1)
+  .storeMaybeRef(null)
+  .endCell();
+
+// deserialization
+const slice = cell.beginParse();
+const op = slice.loadUint(32);
+const queryId = slice.loadUint(64);
+const amount = slice.loadCoins();
+const destination = slice.loadAddress();
+const responseDestination = slice.loadAddress();
+const customPayload = slice.loadMaybeRef();
+const fwdAmount = slice.loadCoins();
+const fwdPayload = slice.loadMaybeRef();
+
+const transferMessage = { op, queryId, amount, destination, responseDestination, customPayload, fwdAmount, fwdPayload };
+```
+
+# Types of message descriptors
+
 ## Анализ TL-B схемы
 
 Теперь после базового погружения в термины, мы можем приступить к практическому применению наших знаний на постройке скрипта на отправку сообщения, пользуясь tl-b.
@@ -244,7 +382,24 @@ func
 `.store_slice(owner_address)` - третьим по списку передаётся адрес, как и в tl-b всё соответствует. 
 `.store_ref(begin_cell().store_slice(in_msg_body).end_cell())` - четвёртым по списку передаётся cell, как и в tl-b всё соответствует.
 
-Теперь когда мы уверены в том, что вся информация передана правильно, можно составлять сообщение благодаря Blueprint SDK. 
+Теперь когда мы уверены в том, что вся информация передана правильно, можно составлять сообщение благодаря Blueprint SDK.
+
+## Assembler
+
+Код FunC по сути является списком объявлений/определений функций и объявлений глобальных переменных. Определять op-code можно не только по tl-b, но и напрямую через asm консрукции:
+
+```
+int op::transfer() asm "0x5fcc3d14 PUSHINT";
+int op::ownership_assigned() asm "0x05138d91 PUSHINT";
+int op::excesses() asm "0xd53276db PUSHINT";
+int op::get_static_data() asm "0x2fcb26a2 PUSHINT";
+int op::report_static_data() asm "0x8b771735 PUSHINT";
+int op::get_royalty_params() asm "0x693d3950 PUSHINT";
+int op::report_royalty_params() asm "0xa8cb00ad PUSHINT";
+```
+
+Стоит отметить, что есть op-code, которые являются core логикой TVM и если вы будете использовать для своих op-codes такие же числовые переменные, то будет выбрасываться ошибка Exit Code 6 (Compute Phase). 
+
 ## 3. Typescript реализация
 
 ### Настройка окружения
