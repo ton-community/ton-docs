@@ -96,10 +96,9 @@ Compare TON's on-chain metrics, including block time and time-to-finality, with 
 
 ### Average block size
 
-```bash 
-max block size param 29
-max_block_bytes:2097152
-```
+Max block size param: **29**
+
+Max block bytes size: **2,097,152**
 
 :::info
 For more up-to-date parameters, refer to the [Network configs](/v3/documentation/network/configs/network-configs) section.
