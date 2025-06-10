@@ -322,19 +322,19 @@ module.exports = [
             label: 'Basics',
             items: [
               {
-                type: 'link',
+                type: 'doc',
                 label: 'Basics: IF, c0, cc, save list',
-                href: '/v3/documentation/tvm/continuations/basics/basics-1-if-c0-cc-savelist',
+                id: 'v3/documentation/tvm/continuations/basics/basics-1-if-c0-cc-savelist',
               },
               {
-                type: 'link',
+                type: 'doc',
                 label: 'Basics 2: RET, RETALT, c1, c2, TRY, THROW',
-                href: '/v3/documentation/tvm/continuations/basics/basics-2-ret-retalt-c1-c2-try-throw',
+                id: 'v3/documentation/tvm/continuations/basics/basics-2-ret-retalt-c1-c2-try-throw',
               },
               {
-                type: 'link',
+                type: 'doc',
                 label: 'Basics 3: PUSHCTR, POPCTR, and JMP vs. EXECUTE',
-                href: '/v3/documentation/tvm/continuations/basics/basics-3-pushctr-popctr-jmp-vs-execute',
+                id: 'v3/documentation/tvm/continuations/basics/basics-3-pushctr-popctr-jmp-vs-execute',
               },
             ]
           },
