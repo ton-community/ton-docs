@@ -1,0 +1,180 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Continuations: Basics 2: RET, RETALT, c1, c2, TRY, THROW
+
+In the [previous article](./basics-1-if-c0-cc-savelist/), we explored the `c0` register and its role in control flow. In this article, we'll look at the other two control registers: `c1` (alternative return) and `c2` (exception handler).
+
+While the first article focused on the normal exit point of a continuation (when its code ends or `RET` is called), every continuation actually has three distinct exit points.
+
+## Normal Exit Point (`c0`)
+
+As a brief recap, the normal exit point is handled by the `c0` register. When a continuation finishes, TVM executes the continuation stored in `c0`. Instructions like `RET` or `IFRET` trigger this explicitly.
+
+```
+PUSHINT 4
+PUSHINT -1
+PUSHCONT {
+  EQINT 4 // 4 (from above) == 4 (here)
+  IFRET // if true -> return
+}
+IF
+// ...
+```
+
+This code actually looks like we are exiting the entire program, but in reality, we are just ending the execution of the current continuation. In a high-level language, this might look like:
+
+```kotlin
+if (4 == 4) block@{
+  break@block
+}
+// ...
+```
+
+## Alternative Exit Point (`c1`)
+
+We already know that `c0` contains the continuation which TVM will execute in the case of a normal continuation completion. The `c1` register, on the other hand, contains the continuation to which a jump will be made in the case of an **alternative** completion. For alternative exit points, instructions like `RETALT`, `IFRETALT`, and `IFNOTRETALT` are used.
+
+An alternative exit may seem strange at first, but it is a powerful feature of TVM as it allows for expressing complex control flow. In fact, you have already encountered alternative exit points in high-level languages. 
+
+Consider the following code:
+
+```C++
+for (int i = 0; i < 10; i++) {
+  // ... point 1
+  if (i == 5) {
+    continue; // -> point 1
+  }
+  if (i > 7) {
+    break; // -> point 2
+  }
+  // ...
+}
+// ... point 2
+```
+
+This code clearly shows that the loop code actually has two exit points: one is to exit the current iteration and continue to the next (if the condition is true), and the other is to terminate the entire loop.
+
+Let's look at a simple loop in TVM:
+
+```
+PUSHINT 4 // iteration count
+PUSHCONT {
+  PUSHINT 1
+}
+REPEAT
+```
+
+What if we want to exit the loop early if a certain condition is true? A simple approach won't work:
+
+```
+PUSHINT 4 // iteration count
+PUSHCONT {
+  PUSHINT 1
+  PUSHINT 2
+  EQUAL
+  IFNOTRET // break?
+
+  PUSHINT 1
+}
+REPEAT
+// ...
+```
+
+Because this is actually an implementation of... `continue`! The `REPEAT` instruction executes the continuation N times, so when we called `IFNOTRET`, we simply terminated the **current** iteration, just like `continue` does.
+
+But what if we still want to implement `break`? Let's think conceptually about what we want. If `RET` simply ends the current continuation, we need another exit that will jump to the code immediately after `REPEAT`, discarding the current continuation. Fortunately, loop instructions in TVM have special additional instructions ending with `BRK` that do exactly what we need. `REPEATBRK` will set `c1` to `cc`, just like `IF` sets `c0` to return to the code after the `IF`.
+
+```
+PUSHINT 4 // iteration count
+PUSHCONT {
+  PUSHINT 1
+  PUSHINT 2
+  EQUAL
+  IFNOTRETALT // break!
+
+  PUSHINT 1
+}
+REPEATBRK
+// ...
+```
+
+And now, by using `IFNOTRETALT`, we can exit the loop and continue executing the code after the loop.
+
+`c0` and `c1` are similar; they both describe the code that will be executed upon exiting a continuation, but they describe different exit points. 
+
+## Exception Exit Point (`c2`)
+
+Finally, let's look at the third exit point. While the first two handle normal and alternative control flow, the third handles abnormal control flow. This is managed by the `c2` register, which holds the **exception handler continuation**.
+
+Consider the following code:
+
+```
+PUSHINT -1
+THROWIF 10
+```
+
+If we execute this, we will get `default exception handler, terminating vm with exit code 10`. Since we explicitly threw an exception, TVM transferred control to the continuation from `c2`. By default, `c2` contains a special `ExcQuitCont` which prints the message above and terminates execution with the given exit code.
+
+But what if we want to handle the exception ourselves? For this, there is the `TRY` instruction:
+
+```
+PUSHCONT {
+  // body
+}
+PUSHCONT {
+  // handler
+}
+TRY
+```
+
+This instruction sets the value of `c2` to the continuation from the top of the stack and then calls the next continuation on the stack. Thus, since `c2` now points to our continuation, if we throw an exception in the body, TVM will call our continuation and pass the exception code to it:
+
+```
+PUSHCONT {
+  THROW 10
+}
+PUSHCONT { // on stack: [10]
+  // ...
+}
+TRY
+```
+
+The `TRY` instruction does the following:
+
+1. It sets the new value of `c2` while saving the old value in the save list of the continuation that represents the handler, and also saving it in the save list of the current continuation.
+
+2. It transfers control to the body continuation.
+3. If there was no exception inside the body, the continuation completes normally (we return to the continuation after `TRY`), and `c2` is restored to the saved value.
+4. If there was an exception, TVM executes the handler continuation, passing the exit code on the stack. In this case, `c2` inside the handler is set to the old `c2` value, which allows for re-throwing, as any `THROW` inside the handler will be handled by the old handler.
+
+Let's look at an example with re-throwing:
+
+```
+PUSHCONT {
+  THROW 10
+}
+PUSHCONT {   // on stack: [10]
+  DUP        // [10, 10]
+  EQINT 10   // [10, -1]
+  THROWANYIF // re-throw all exceptions with code 10
+}
+TRY
+```
+
+`THROWANYIF` is an instruction that takes a number from the stack and throws an exception if top of the stack is equal to -1.
+
+Let's summarize what we've learned:
+
+- Every continuation has three exit points, controlled by registers `c0`, `c1`, and `c2`.
+- `c0` handles the normal return path, `c1` handles an alternative path, and `c2` handles exceptions.
+- With these points, you can implement complex control flow such as break/continue and throw/re-throw.
+
+## Reference
+
+- `THROW` family instruction execution code: https://github.com/ton-blockchain/ton/blob/0fff1bd8c78e89aee179192e40f98545e825b28b/crypto/vm/contops.cpp#L1153
+- `TRY` execution code: https://github.com/ton-blockchain/ton/blob/0fff1bd8c78e89aee179192e40f98545e825b28b/crypto/vm/contops.cpp#L1186
+- `REPEAT` execution code: https://github.com/ton-blockchain/ton/blob/0fff1bd8c78e89aee179192e40f98545e825b28b/crypto/vm/contops.cpp#L489
+- How TVM executes `RET`: https://github.com/ton-blockchain/ton/blob/1835d84602bbaaa1593270d7ab3bb0b499920416/crypto/vm/vm.cpp#L311
+- How TVM executes `RETALT`: https://github.com/ton-blockchain/ton/blob/1835d84602bbaaa1593270d7ab3bb0b499920416/crypto/vm/vm.cpp#L323
+
+<Feedback/>

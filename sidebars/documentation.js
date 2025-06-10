@@ -306,6 +306,33 @@ module.exports = [
       },
       {
         type: 'category',
+        label: 'TVM Continuations',
+        items: [
+          {
+            type: 'category',
+            label: 'Basics',
+            items: [
+              {
+                type: 'link',
+                label: 'Basics: IF, c0, cc, savelist',
+                href: '/v3/documentation/tvm/continuations/basics/basics-1-if-c0-cc-savelist',
+              },
+              {
+                type: 'link',
+                label: 'Basics 2: RET, RETALT, c1, c2, TRY, THROW',
+                href: '/v3/documentation/tvm/continuations/basics/basics-2-ret-retalt-c1-c2-try-throw',
+              },
+              {
+                type: 'link',
+                label: 'Basics 3: PUSHCTR, POPCTR, and JMP vs. EXECUTE',
+                href: '/v3/documentation/tvm/continuations/basics/basics-3-pushctr-popctr-jmp-vs-execute',
+              },
+            ]
+          },
+        ]
+      },
+      {
+        type: 'category',
         label: 'TVM Specification',
         items: [
           'v3/documentation/tvm/specification/runvm',

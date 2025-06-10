@@ -1,0 +1,172 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Continuations: Basics: IF, c0, cc, save list
+
+TVM is different from other stack machines in that it lacks the usual `goto` instruction. In TVM, all executable code is represented by the `Continuation` type.
+
+If you are already familiar with the concept of a Slice in TVM, you can think of a `Continuation` as an executable `Slice`. As TVM executes instructions, it consumes them from the beginning of the slice. This means the continuation itself shrinks with each step, and the remaining code always represents what is left to be executed. This is an important concept for understanding how control flow works in TVM.
+
+:::note
+This article describes Ordinary Continuations, but there are other types in TVM.
+:::
+
+Let's look at a simple example:
+
+```
+PUSHINT 4
+PUSHINT 5
+ADD
+```
+
+This code is completely valid (even without `SETCP 0`) and can be executed in a local sandbox. This entire program is also a continuation with a special name: `cc`, or the *current continuation*. `cc` is initialized with the smart contract's code before execution begins.
+
+As TVM executes this code step-by-step, `cc` changes:
+
+1. ```
+   PUSHINT 5
+   ADD
+   ```
+
+2. ```
+   ADD
+   ```
+
+3. ```
+   <empty>
+   ```
+
+As mentioned, when code is executed, the first instruction in the continuation is always the next one to be processed. While this is happening, the VM's state (like the stack) also changes, but we will omit those details here.
+
+Let's consider a more interesting example with `IF`:
+
+```
+PUSHINT 1
+PUSHINT 2
+PUSHINT -1 // true
+PUSHCONT {
+  ADD
+}
+IF
+INC
+INC
+```
+
+This code adds `1` and `2` if the condition is true (which it always is in this example), and then, regardless of the condition, it executes `INC` twice.
+
+Let's break down the execution:
+
+The first two instructions simply push two numbers onto the stack. `PUSHINT -1` then pushes the condition value. `PUSHCONT` does something similar: it takes a block of code `{ ADD }` and pushes it onto the stack as a `Continuation`. No execution transfer occurs at this point; only the stack is modified.
+
+ The stack now looks like this (with the top element at the top):
+
+```
+Cont{}
+-1
+2
+1
+```
+
+Now for the most interesting part: the `IF` instruction.
+
+The `IF` instruction checks if the second value on the stack is `-1` (true). If it is, `IF` consumes both the condition and the continuation from the stack, and then prepares to execute that continuation. The stack now contains only the initial numbers:
+
+```
+2
+1
+```
+
+That is, only the previously pushed numbers will remain. The stack will look the same when TVM starts executing `{ ADD }`.
+
+Now let's move on to what happens under the hood to execute the body of `IF`.
+
+During preparation, we put a continuation with the code `{ ADD }` on the stack, and now we have extracted it and are ready to start executing it.
+
+But before that, let's take a step back and look at the three TVM registers. If you are not familiar with the concept of a register, think of them as variables that store some data.
+
+We are interested in registers `c0`, `c1` and `c2`, and specifically, for now, `c0`.
+
+Register `c0` describes the continuation to which we will switch when the current one ends. By default, it is equal to a special `QuitCont` with exit code 0. In other words, when the current continuation ends, the VM will terminate its execution with exit code 0.
+
+In the example above:
+
+```
+PUSHINT 4
+PUSHINT 5
+ADD
+```
+
+At the last step, when TVM has executed `ADD`, it will switch to continuation `c0` and thus successfully finish the execution.
+
+Now let's get back to the example with `IF`. 
+
+We can proceed to execute `{ ADD }`, but how will TVM return to the code after `IF` after its execution? The answer is very simple, TVM will set `c0` to the value of `cc`, that is, after TVM executes the body of `IF`, it will automatically return to the execution of the continuation of the entire smart contract code, and since the continuation always has as its first instruction the one that will be executed next, execution will begin with the instruction after `IF` (and not from the beginning of the code as one might think). 
+
+```
+IF ------> { 1. store cc (all instructions after IF) in c0
+               ADD
+               <end of continuation>
+INC <--------- 2. implicit return to continuation from c0 and restore cc from c0
+INC        }
+```
+
+So, `c0` acts as a return address. It tells TVM where to go after the current continuation is done.
+
+Let's look at a slightly more complex example, I'll omit everything unnecessary to make the example simpler:
+
+```
+// <- continuation CONT_MAIN
+PUSHCONT { // <- continuation CONT_1
+  PUSHINT -1
+  PUSHCONT { // <- continuation CONT_2
+    // ... some code ...
+  }
+  IF
+  // ...CODE_1
+}
+PUSHINT -1
+IF
+// ...CODE_MAIN
+```
+
+`...CODE_1`  and `...CODE_MAIN` represent arbitrary code that could be in their place. `CONT_MAIN`, `CONT_1` and `CONT_2` are continuation identifiers for ease of reference.
+
+This nested `IF` example helps illustrate how TVM manages multiple return points.
+
+The problem that arises here is that each `IF` needs to set `c0` to point to the code that should run after the `IF`'s body is finished. When we enter the outer `IF`, TVM sets `c0` to `...CODE_MAIN` and starts executing `CONT_1`. However, inside `CONT_1`, the inner `IF` also needs to set `c0`, this time to `...CODE_1`. If it did so directly, the original `c0` value (`...CODE_MAIN`) would be lost, and we would never return to the main continuation after `CONT_1` finishes.
+
+To solve this, TVM uses a **save list** associated with each continuation. Before executing a new continuation, instructions like `IF` save the current value of `c0` into the save list of the new continuation.
+
+When `CONT_2` is called by the inner `IF`, TVM does the following:
+1. It saves the current `c0` (which points to `...CODE_MAIN`) into the save list of `CONT_2`.
+2. It sets the new `c0` to point to `...CODE_1`.
+3. It starts executing `CONT_2`.
+
+When `CONT_2` finishes, it automatically restores the saved registers, so `c0` is set back to `...CODE_MAIN`. Then, execution jumps to the `c0` of `CONT_2` (which is `...CODE_1`). After `...CODE_1` finishes, it will jump to its `c0`, which is now correctly pointing to `...CODE_MAIN`.
+
+And that's it!
+
+This was a difficult journey, but we've learned a lot!
+
+Let's summarize what we learned in this article:
+
+- An Ordinary Continuation is a slice with code from which an instruction to be executed is cut off from the beginning at each step.
+- `cc` represents the current continuation that is being executed right now.
+- Register `c0` describes the continuation to return to when the execution of the current continuation is finished.
+- Each continuation has a so-called `save list` which saves the old values of the registers that will be restored after the continuation finishes its execution.
+
+<details>
+<summary>Bonus question: What does the `RET` instruction do?</summary>
+
+> The `RET` instruction jumps to the continuation from `c0`, while the rest of `cc` is discarded.
+</details>
+
+## Reference
+
+- `Continuation` class source code: https://github.com/ton-blockchain/ton/blob/b5734d2e30b9c93cfdacb4ea37c9ebdf11ca5d49/crypto/vm/continuation.h#L162
+- Ordinary continuation class source code: https://github.com/ton-blockchain/ton/blob/b5734d2e30b9c93cfdacb4ea37c9ebdf11ca5d49/crypto/vm/continuation.h#L332
+- `c0` implementation: https://github.com/ton-blockchain/ton/blob/b5734d2e30b9c93cfdacb4ea37c9ebdf11ca5d49/crypto/vm/continuation.h#L37
+- Save list implementation: https://github.com/ton-blockchain/ton/blob/b5734d2e30b9c93cfdacb4ea37c9ebdf11ca5d49/crypto/vm/continuation.h#L146
+- Code slice parsing: https://github.com/ton-blockchain/ton/blob/9f93888cf402f8421fef38406b67886be043ac58/crypto/vm/opctable.cpp#L117
+- Simple instruction execution: https://github.com/ton-blockchain/ton/blob/9f93888cf402f8421fef38406b67886be043ac58/crypto/vm/opctable.cpp#L172
+
+<Feedback/>

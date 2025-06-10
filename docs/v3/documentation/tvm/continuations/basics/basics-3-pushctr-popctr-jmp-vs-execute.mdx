@@ -1,0 +1,109 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Continuations: Basics 3: PUSHCTR, POPCTR, and JMP vs. EXECUTE
+
+In the [previous article](./basics-2-ret-retalt-c1-c2-try-throw/), we explored how TVM uses control registers (`c0`, `c1`, `c2`) automatically. In this part of the basics series, we'll see how to manipulate these registers directly using `PUSHCTR` and `POPCTR`, and clarify the crucial difference between the `JMP` and `EXECUTE` families of instructions.
+
+## Manual Register Control: `PUSHCTR` and `POPCTR`
+
+`PUSHCTR` pushes a copy of a control register's value (which is a continuation for `c0`, `c1`, or `c2`) onto the stack. `POPCTR` pops a continuation from the stack and sets it as the new value for a control register.
+
+These instructions give you fine-grained control over the flow of your program. For example, while `TRY` is the standard way to handle exceptions, you could set an exception handler manually:
+
+```
+PUSHCONT { // stack: [10]
+  // handler
+}
+POPCTR c2
+THROW 10
+```
+However, `TRY` does more than just set `c2`; it also manages the `save list` to handle re-throwing and state rollbacks, which a manual `POPCTR` does not.
+
+To simulate at least some of the behavior of `TRY`, you can use the following code:
+
+```
+// outer continuation like body of the TRY
+PUSHCONT { // stack: [MainCont]
+  // handler continuation
+  PUSHCONT { // stack: [MainCont, 10]
+    // ... code of the handler
+     
+    // epilog to make it work
+    DEPTH DEC ROLL // get cc from the bottom of the stack
+    POPCTR c0 // reset c0 with MainCont to return to main code
+  }
+  POPCTR c2
+
+  // body code
+  THROWARG 10
+}
+CALLCC
+
+// code after pseudo TRY
+PUSHINT 9
+```
+
+The `CALLCC` instruction calls a continuation from the stack while passing the old `cc` (the "main contract code" in this example) onto the stack for the new continuation to use. In the example, we then manually set `c2` to catch exceptions. The handler's logic retrieves the saved `cc` and places it into `c0`, ensuring that after the handler is done, execution returns to the code after the `CALLCC` call.
+
+The `PUSHCTR` instruction provides another way to manage context. Instead of passing `cc` into the continuation, we can use `PUSHCTR c0` to save the return address *before* we enter the new continuation. Let's see how that simplifies the code:
+
+```
+// outer continuation like body of the TRY
+PUSHCONT {     // stack: []
+  PUSHCTR c0 // [MainCont]
+
+  // handler continuation
+  PUSHCONT { // stack: [MainCont, 10]
+    // ... code of the handler
+
+    // epilog to make it work
+    DEPTH DEC ROLL // get cc from the bottom of the stack
+    POPCTR c0 // reset c0 with MainCont to return to main code
+  }
+  POPCTR c2
+
+  // body code
+  THROWARG 10
+}
+EXECUTE
+
+// code after pseudo TRY
+PUSHINT 9
+```
+
+This code achieves a similar result. The key difference is that it uses `EXECUTE`. As we'll see next, `EXECUTE` automatically handles setting up the return continuation (`c0`), making it a more common choice for this kind of "subroutine" call.
+
+## `JMP` vs. `EXECUTE`
+
+A key concept in TVM control flow is the difference between `JMP` and `EXECUTE`. Both transfer control to a new continuation, but they handle the return path (`c0`) differently.
+
+### `EXECUTE` Family: Call and Return
+
+Instructions like `EXECUTE`, `IF`, `REPEAT`, and `CALL` belong to the `EXECUTE` family. Think of them as a standard function call. Before jumping to the new continuation, they **automatically save the current continuation (`cc`) into `c0`**. This ensures that when the called continuation finishes, execution returns right back to where it left off.
+
+### `JMP` Family: One-Way Jump
+
+Instructions like `JMPX`, `IFJMP`, and `CALLCC` belong to the `JMP` family. Think of them as a `goto`. They **do not touch the `c0` register**; they simply jump to the new continuation, leaving `c0` as it is. If `c0` held the default exit handler, the program will terminate after the new continuation finishes.
+
+While the `JMP` family doesn't set `c0` automatically, you can always set it manually with `POPCTR` before the jump if needed.
+
+Let's summarize what we've learned:
+
+- `PUSHCTR` and `POPCTR` allow for direct manipulation of control registers.
+- The `EXECUTE` family of instructions works like a "call", saving the return address in `c0`.
+- The `JMP` family of instructions works like a "goto", leaving `c0` untouched.
+
+<details>
+<summary>Bonus question: What happens if you `JMPX` to a continuation that immediately calls `RET`?</summary>
+
+> The `RET` instruction simply executes the continuation currently in the `c0` register. Since `JMPX` does not modify `c0`, the `RET` would cause a jump to wherever `c0` was pointing *before* the `JMPX` occurred.
+</details>
+
+## Reference
+
+- `PUSHCTR` execution code: https://github.com/ton-blockchain/ton/blob/0fff1bd8c78e89aee179192e40f98545e825b28b/crypto/vm/contops.cpp#L765
+- `POPCTR` execution code: https://github.com/ton-blockchain/ton/blob/0fff1bd8c78e89aee179192e40f98545e825b28b/crypto/vm/contops.cpp#L794
+- How TVM executes `RET`: https://github.com/ton-blockchain/ton/blob/1835d84602bbaaa1593270d7ab3bb0b499920416/crypto/vm/vm.cpp#L311
+- How TVM executes `JMP`: https://github.com/ton-blockchain/ton/blob/1835d84602bbaaa1593270d7ab3bb0b499920416/crypto/vm/vm.cpp#L249
+
+<Feedback/>
