@@ -4,7 +4,7 @@ import Feedback from '@site/src/components/Feedback';
 
 In the [previous article](./basics-2-ret-retalt-c1-c2-try-throw/), we explored how TVM uses control registers (`c0`, `c1`, `c2`) automatically. In this part of the basics series, we'll see how to manipulate these registers directly using `PUSHCTR` and `POPCTR`, and clarify the crucial difference between the `JMP` and `EXECUTE` families of instructions.
 
-## Manual Register Control: `PUSHCTR` and `POPCTR`
+## Manual register control: `PUSHCTR` and `POPCTR`
 
 `PUSHCTR` pushes a copy of a control register's value (which is a continuation for `c0`, `c1`, or `c2`) onto the stack. `POPCTR` pops a continuation from the stack and sets it as the new value for a control register.
 
@@ -77,11 +77,11 @@ This code achieves a similar result. The key difference is that it uses `EXECUTE
 
 A key concept in TVM control flow is the difference between `JMP` and `EXECUTE`. Both transfer control to a new continuation, but they handle the return path (`c0`) differently.
 
-### `EXECUTE` Family: Call and Return
+### `EXECUTE` family: call and return
 
 Instructions like `EXECUTE`, `IF`, `REPEAT`, and `CALL` belong to the `EXECUTE` family. Think of them as a standard function call. Before jumping to the new continuation, they **automatically save the current continuation (`cc`) into `c0`**. This ensures that when the called continuation finishes, execution returns right back to where it left off.
 
-### `JMP` Family: One-Way Jump
+### `JMP` family: one-way jump
 
 Instructions like `JMPX`, `IFJMP`, and `CALLCC` belong to the `JMP` family. Think of them as a `goto`. They **do not touch the `c0` register**; they simply jump to the new continuation, leaving `c0` as it is. If `c0` held the default exit handler, the program will terminate after the new continuation finishes.
 

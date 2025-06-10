@@ -6,7 +6,7 @@ In the [previous article](./basics-1-if-c0-cc-savelist/), we explored the `c0` r
 
 While the first article focused on the normal exit point of a continuation (when its code ends or `RET` is called), every continuation actually has three distinct exit points.
 
-## Normal Exit Point (`c0`)
+## Normal exit point (`c0`)
 
 As a brief recap, the normal exit point is handled by the `c0` register. When a continuation finishes, TVM executes the continuation stored in `c0`. Instructions like `RET` or `IFRET` trigger this explicitly.
 
@@ -30,7 +30,7 @@ if (4 == 4) block@{
 // ...
 ```
 
-## Alternative Exit Point (`c1`)
+## Alternative exit point (`c1`)
 
 We already know that `c0` contains the continuation which TVM will execute in the case of a normal continuation completion. The `c1` register, on the other hand, contains the continuation to which a jump will be made in the case of an **alternative** completion. For alternative exit points, instructions like `RETALT`, `IFRETALT`, and `IFNOTRETALT` are used.
 
@@ -102,7 +102,7 @@ And now, by using `IFNOTRETALT`, we can exit the loop and continue executing the
 
 `c0` and `c1` are similar; they both describe the code that will be executed upon exiting a continuation, but they describe different exit points. 
 
-## Exception Exit Point (`c2`)
+## Exception exit point (`c2`)
 
 Finally, let's look at the third exit point. While the first two handle normal and alternative control flow, the third handles abnormal control flow. This is managed by the `c2` register, which holds the **exception handler continuation**.
 
