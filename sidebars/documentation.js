@@ -314,7 +314,7 @@ module.exports = [
             items: [
               {
                 type: 'link',
-                label: 'Basics: IF, c0, cc, savelist',
+                label: 'Basics: IF, c0, cc, save list',
                 href: '/v3/documentation/tvm/continuations/basics/basics-1-if-c0-cc-savelist',
               },
               {
