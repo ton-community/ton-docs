@@ -1,8 +1,8 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Continuations basics 2: RET, RETALT, c1, c2, TRY, THROW
+# Diving deeper: exit points of continuations
 
-In the [previous article](./basics-1-if-c0-cc-savelist/), we explored the `c0` register and its role in control flow. In this article, we'll look at the other two control registers: `c1` (alternative return) and `c2` (exception handler).
+In the [previous article](./basics-register-c0-cc-savelist-if-instruction), we explored the `c0` register and its role in control flow. In this article, we'll look at the other two control registers: `c1` (alternative return) and `c2` (exception handler).
 
 While the first article focused on the normal exit point of a continuation (when its code ends or `RET` is called), every continuation actually has three distinct exit points.
 

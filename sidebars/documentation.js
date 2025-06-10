@@ -315,28 +315,22 @@ module.exports = [
       },
       {
         type: 'category',
-        label: 'TVM Continuations',
+        label: 'TVM continuations',
         items: [
           {
-            type: 'category',
-            label: 'Basics',
-            items: [
-              {
-                type: 'doc',
-                label: 'IF, c0, cc, save list',
-                id: 'v3/documentation/tvm/continuations/basics/basics-1-if-c0-cc-savelist',
-              },
-              {
-                type: 'doc',
-                label: 'RET, RETALT, c1, c2, TRY, THROW',
-                id: 'v3/documentation/tvm/continuations/basics/basics-2-ret-retalt-c1-c2-try-throw',
-              },
-              {
-                type: 'doc',
-                label: 'PUSHCTR, POPCTR, and JMP vs. EXECUTE',
-                id: 'v3/documentation/tvm/continuations/basics/basics-3-pushctr-popctr-jmp-vs-execute',
-              },
-            ]
+            type: 'doc',
+            label: 'Basics: register c0, cc, save lists, IF instruction',
+            id: 'v3/documentation/tvm/continuations/basics/basics-register-c0-cc-savelist-if-instruction',
+          },
+          {
+            type: 'doc',
+            label: 'Diving deeper: exit points of continuations',
+            id: 'v3/documentation/tvm/continuations/basics/diving-deeper-exit-points-of-continuations',
+          },
+          {
+            type: 'doc',
+            label: 'Manual handling and JMP vs. EXECUTE',
+            id: 'v3/documentation/tvm/continuations/basics/manual-handling-and-jmp-vs-execute',
           },
         ]
       },
