@@ -6,6 +6,10 @@ import Feedback from '@site/src/components/Feedback';
 
 # Storefront bot with payments in TON
 
+:::caution
+The integration method described in this guide is one of the available approaches. With ongoing developments, Telegram Mini Apps provide additional capabilities that better suit modern security and functionality requirements.
+:::
+
 In this article, we'll guide you through the process of accepting payments in a Telegram bot.
 
 ## 📖 What you'll learn
@@ -862,7 +866,7 @@ Example of a working bot [@AirDealerBot](https://t.me/AirDealerBot)
 ## References
 
 - Made for TON as part of [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8)
-- By Lev ([Telegram @Revuza](https://t.me/revuza), [LevZed on GitHub](https://github.com/LevZed))
+- [Telegram @Revuza](https://t.me/revuza), [LevZed on GitHub](https://github.com/LevZed) - _Lev_
 
 <Feedback />
 

@@ -29,7 +29,7 @@ Suppose we have a known block ID:
 <TL BlockIdExt [wc=-1, shard=-9223372036854775808, seqno=31220993, root_hash=51ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a52c7b1f46c26406, file_hash=d4fcdc692de1a252deb379cd25774842b733e6a96525adf82b8ffc41da667bf5] >
 ```
 We then request the corresponding block header from a liteserver.
-The liteserver’s [response](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L35) includes a `header_proof` BoC.
+The liteserver’s [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L36) includes a `header_proof` BoC.
 
 
 <details>
@@ -294,7 +294,7 @@ Since this cell is trusted, we can also trust the shard block data  (`ShardState
 
 Next, let's prove the state of account `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG` for the same MasterChain block referenced at the beginning of this article.
 
-The liteserver [response](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L37) includes the MasterChain block ID, which must match the one sent to the liteserver, the shard block ID, and a `shard_proof` BoC, which must be verified as described above, along with a `proof` BoC and a `state` BoC.
+The liteserver [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L38) includes the MasterChain block ID, which must match the one sent to the liteserver, the shard block ID, and a `shard_proof` BoC, which must be verified as described above, along with a `proof` BoC and a `state` BoC.
 
 
 <details>
@@ -582,7 +582,7 @@ At this point, the account state data is verified and trusted.
 
 ## Account transactions
 
-For the [liteServer.getTransactions](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L71) request, we must provide the `lt` and `hash` of the transaction to start from.
+For the [liteServer.getTransactions](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L94) request, we must provide the `lt` and `hash` of the transaction to start from.
 If we want to retrieve an account's latest transactions, we can extract the `lt` and `hash` from the trusted `ShardAccount`, as described above.
 
 When the liteserver returns the transactions, it provides a BoC containing the requested number of transaction roots. Each root is a cell that should be deserialized using the [transaction](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L263-L269) TLB scheme.
@@ -593,7 +593,7 @@ For the first transaction cell, verify that its hash matches the `last_trans_has
 ## Block transactions
 
 Next, we query the liteserver for the list of transactions belonging to the block we started with at the beginning of this article.
-The liteserver [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L46) includes `ids` field with the transaction list and a `proof` BoC.
+The liteserver [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L47) includes `ids` field with the transaction list and a `proof` BoC.
 The first step is to deserialize the `proof`:
 
 ```json
@@ -724,13 +724,13 @@ assert block_tr.get_hash(0) == tr['hash']
 
 :::note
 In this example, checking the `ids` field was optional — we could have retrieved all transactions directly from the account blocks.
-However, verifying the transaction proofs becomes essential when using the [liteServer.listBlockTransactionsExt](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L80) method, and you must compare transaction hashes.
+However, verifying the transaction proofs becomes essential when using the [liteServer.listBlockTransactionsExt](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L48) method, and you must compare transaction hashes.
 :::
 
 ## Config
 
-Request the following [config params](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L83) from the liteserver: 1, 4, 5, 7, 8, and 15 for [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L82), where all parameters are returned, and the proof verification remains the same.
-The [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L53) includes `state_proof` and `config_proof`.
+Request the following [config params](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L101) from the liteserver: 1, 4, 5, 7, 8, and 15 for [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L100), where all parameters are returned, and the proof verification remains the same.
+The [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L54) includes `state_proof` and `config_proof`.
 
 
 First, deserialize the `state_proof` cell:
@@ -855,7 +855,7 @@ Compare the `Hash_1` from the Merkle proof (reference only) with the hash obtain
 ```python
 state_hash = check_block_header_proof(state_proof[0], block.root_hash, True)
 if config_proof[0].get_hash(0) != state_hash:
-    raise LiteClientError('hashes mismach')
+    raise LiteClientError('hashes mismatch')
 ```
 
 Next, deserialize the cell using the `ShardStateUnsplit` scheme:

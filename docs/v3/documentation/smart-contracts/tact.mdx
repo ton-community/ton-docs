@@ -25,7 +25,7 @@ Try it online!
 <Button href="https://docs.tact-lang.org/"
         colorType={'secondary'} sizeType={'sm'}>
 
-Tact Documentation
+Tact documentation
 
 </Button>
 
@@ -86,7 +86,7 @@ Some selected software and applications based on contracts written in Tact, depl
 
 ###### Open source or source available
 
-- [Proof of Capital](https://github.com/proof-of-capital/TON) - [Proof of Capital](https://proofofcapital.org/) is a market-making smart contract that protects interests of all holders.
+- [Proof-of-capital](https://github.com/proof-of-capital/TON) - [proof-of-capital](https://proofofcapital.org/) is a market-making smart contract that protects interests of all holders.
   - See the [security audit report](https://raw.githubusercontent.com/nowarp/public-reports/master/2025-01-proof-of-capital.pdf) by [Nowarp](https://nowarp.io).
 
 ###### Closed source
@@ -131,18 +131,19 @@ npm i -g @tact-lang/compiler
 
 It will make the `tact` compiler available on your PATH, as well as:
 
-- a convenient `unboc` disassembler of a contract's code compiled into a [Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells) `.boc` format.
+- a convenient `unboc` disassembler of a contract's code compiled into a [bag of cells](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells) `.boc` format.
 - a formatter `tact-fmt`, which can format or check the formatting of individual Tact files and directories.
 
 ### Tooling
 
 ###### Extensions and plugins
 
-- [VS Code extension](https://marketplace.visualstudio.com/items?itemName=tonstudio.vscode-tact) - Powerful and feature-rich extension for Visual Studio Code (VSCode) and VSCode-based editors like VSCodium, Cursor, Windsurf, and others.
+- [VS Code extension](https://marketplace.visualstudio.com/items?itemName=tonstudio.vscode-tact) - powerful and feature-rich extension for Visual Studio Code (VSCode) and VSCode-based editors like VSCodium, Cursor, Windsurf, and others.
   - Get it on the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=tonstudio.vscode-tact).
   - Get it on the [Open VSX Registry](https://open-vsx.org/extension/tonstudio/vscode-tact).
   - Or install from the [`.vsix` files in nightly releases](https://github.com/tact-lang/tact-language-server/releases).
-- [Language Server (LSP Server)](https://github.com/tact-lang/tact-language-server) - Supports Sublime Text, (Neo)Vim, Helix, and other editors with LSP support.
+- [JetBrains IDEs plugin](https://plugins.jetbrains.com/plugin/27290-tact#) - provides syntax highlighting, code navigation, and more.
+- [Language Server (LSP Server)](https://github.com/tact-lang/tact-language-server) - supports Sublime Text, (Neo)Vim, Helix, and other editors with LSP support.
 - [tact.vim](https://github.com/tact-lang/tact.vim) - Vim 8+ plugin.
 - [tact-sublime](https://github.com/tact-lang/tact-sublime) - Sublime Text 4 package.
   - Get it on the [Package Control](https://packagecontrol.io/packages/Tact).
@@ -155,7 +156,7 @@ It will make the `tact` compiler available on your PATH, as well as:
 ###### Utility
 
 - Formatter (`tact-fmt`) — The official formatter. It ships with the Tact Language Server, VS Code extension, and as a standalone binary with the compiler. You can invoke it by running `npx tact-fmt` in your Tact projects.
-- BoC Disassembler (`unboc`) — Disassembler for [`.boc`](http://localhost:3000/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells) files. Ships as a standalone binary with the compiler. You can invoke it by running `npx unboc` in your Tact projects.
+- BoC Disassembler (`unboc`) — Disassembler for [`.boc`](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells) files. Ships as a standalone binary with the compiler. You can invoke it by running `npx unboc` in your Tact projects.
 
 ### Getting started
 

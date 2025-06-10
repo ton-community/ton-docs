@@ -45,12 +45,12 @@ init(id: Int, owner: Address) {
 If we remove the `id` field from its initial storage, we can ensure that **only one** `HelloWorld` smart contract can exist for a particular owner.
 
 :::info Tokens
-This mechanism plays a crucial role in [Jetton Processing](/v3/guidelines/dapps/asset-processing/jettons/). Each non-native (jetton) token requires its own `Jetton Wallet` for a particular owner and, therefore, provides a calculable address for it, creating a **star scheme** with the basic wallet in the center.
+This mechanism plays a crucial role in [Jetton processing](/v3/guidelines/dapps/asset-processing/jettons). Each non-native (jetton) token requires its own `Jetton Wallet` for a particular owner and, therefore, provides a calculable address for it, creating a **star scheme** with the basic wallet in the center.
 :::
 
 ## Implementation
 
-Now that our smart contracts are fully tested, we are ready to deploy them to TON. In `Blueprint SDK`, this process is the same for both `Mainnet` and `Testnet` and for any of the presented languages in the guide: `FunC`, `Tact`, or `Tolk`.
+Now that our smart contracts are fully tested, we are ready to deploy them to TON. In `Blueprint`, this process is the same for both `Mainnet` and `Testnet` and for any of the presented languages in the guide: `FunC`, `Tact`, or `Tolk`.
 
 ### Step 1: update the deployment script
 
@@ -104,7 +104,7 @@ After that, you will see an interactive menu allowing you to choose a network:
 ```
 
 :::danger
-Before deployment to the `Mainnet`, ensure that your smart contracts correspond to [Security Measures](/v3/guidelines/smart-contracts/security/overview/). As we said before, the `HelloWorld` smart contract **doesn't**.
+Before deployment to the `Mainnet`, ensure that your smart contracts correspond to [Security measures](/v3/guidelines/smart-contracts/security/overview). As we said before, the `HelloWorld` smart contract **doesn't**.
 :::
 
 ### Step 4: choose wallet app
@@ -136,10 +136,24 @@ Contract deployed at address EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 You can view it at https://testnet.tonscan.org/address/EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 ```
 
-**Congratulations!** Your custom `smart contract` is ready to execute `get methods` the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs/) section and execute `transactions` the same as in the [Blockchain Interaction](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network) section — consider reading it to understand how to interact with `smart contracts` off-chain if you haven't already.
+**Congratulations!** Your custom `smart contract` is ready to execute `get methods` the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs) section and execute `transactions` the same as in the [Blockchain interaction](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network) section — consider reading it to understand how to interact with `smart contracts` off-chain if you haven't already.
 
 :::tip
-Using `Blueprint SDK` and wallet apps is not the only option. You can create a message with [state_init](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout/) by yourself. Moreover, you can do it even through a smart contract's [internal message](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout/).
+Using `Blueprint` and wallet apps is not the only option. You can create a message with [state_init](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) by yourself. Moreover, you can do it even through a smart contract's [internal message](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
 :::
+
+
+## What’s next?
+You’ve made it through the guide — great job!
+Now, it’s time to dive deeper and keep building. Here are some helpful resources to continue *your Tact journey*:
+- [Official website](https://tact-lang.org) - overview, news, and ecosystem links
+- [Tact documentation](https://docs.tact-lang.org) — the go-to reference for language features
+- [Tact github repo](https://github.com/tact-lang) — source code, issues, and contributions
+- [Tact by example](https://tact-by-example.org/all) — hands-on smart contract examples
+- [Tact smart battle](https://github.com/ton-studio/tact-smart-battle) — coding challenges to sharpen your skills
+- [@tact_kitchen](https://t.me/tact_kitchen) — channel with the latest Tact updates
+- [@tactlang](https://t.me/tactlang) — chat for dev discussions and help
+
+Stay curious, build boldly, and don’t hesitate to ask questions — the Tact community is here for you!
 
 <Feedback />

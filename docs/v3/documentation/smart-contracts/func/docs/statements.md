@@ -238,7 +238,7 @@ int z = x.inc(); ;; Also doesn't modify x
 
 
 ### Operators
-Note that all the unary and binary operators are currently integer operators. Logical operators are bitwise integer operators (cf. [absence of boolean type](/v3/documentation/smart-contracts/func/docs/types#absence-of-boolean-type)).
+Note that all the unary and binary operators are currently integer operators. Logical operators are bitwise integer operators (cf. [absence of boolean type](/v3/documentation/smart-contracts/func/docs/types#no-boolean-type)).
 
 
 #### Unary operators
@@ -353,7 +353,7 @@ while (x < 100) {
 }
 ;; x = 256
 ```
-Note that the truth value of condition `x < 100` is of type `int` (cf. [absence of boolean type](/v3/documentation/smart-contracts/func/docs/types#absence-of-boolean-type)).
+Note that the truth value of condition `x < 100` is of type `int` (cf. [absence of boolean type](/v3/documentation/smart-contracts/func/docs/types#no-boolean-type)).
 
 
 ### Until loop

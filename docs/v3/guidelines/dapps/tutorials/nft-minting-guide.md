@@ -1,4 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
 
 # Step by step NFT collection minting 
 
@@ -19,10 +21,9 @@ Non-fungible tokens (NFTs) have become one of the hottest topics in the world of
 ## 💡 Prerequisites
 You must already have a testnet wallet with at least 2 TON. You can get testnet coins from [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
 
-:::info How to open the testnet version of my Tonkeeper wallet?  
-1. Open settings and click the Tonkeeper logo at the bottom  5 times. 
-2. Activate Dev mode.  
-3. Return to the main menu and create a new Testnet wallet: Add wallet → Add Testnet Account.
+:::info How to use the testnet on my Tonkeeper wallet?  
+1. Open Wallets list.
+2. Create a new Testnet wallet: Add wallet → Add Testnet Account.
 :::
 
 We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key and api_secret. The official Pinata [documentation](https://docs.pinata.cloud/account-management/api-keys) can help with that. Once you have these API tokens, I’ll be waiting for you here!
@@ -554,10 +555,11 @@ const NftItemCodeCell = Cell.fromBase64(
 dataCell.storeRef(NftItemCodeCell);
 ```
 
-The smart contract stores royalty parameters using royaltyFactor, royaltyBase, and royaltyAddress. The royalty percentage is calculated using the formula: royaltyFactor / royaltyBase) * 100%. If we know royaltyPercent, calculating royaltyFactor is straightforward.
+The smart contract stores royalty parameters using royaltyFactor, royaltyBase, and royaltyAddress. The royalty percentage is calculated using the formula: <InlineMath math="\left( \frac{\text{royaltyFactor}}{\text{royaltyBase}} \right) \times 100\%" />
+. If we know royaltyPercent, calculating royaltyFactor is straightforward.
 
-​
- )×100%
+
+
 
 ```ts
 const royaltyBase = 1000;
@@ -578,7 +580,7 @@ return dataCell.endCell();
 ```
 
 
-Now, let's write a getter that returns the StateInit of our collection.
+Now, let's write a getter that returns the `StateInit` of our collection.
 ```ts
 public get stateInit(): StateInit {
   const code = this.createCodeCell();
@@ -588,7 +590,7 @@ public get stateInit(): StateInit {
 }
 ```
 
-We also need a getter that calculates the collection’s address. (In TON, a smart contract’s address is simply the hash of its StateInit.)
+We also need a getter that calculates the collection’s address. In TON, a smart contract’s address is simply the hash of its `StateInit`.
 ```ts
 public get address(): Address {
     return contractAddress(0, this.stateInit);
@@ -615,8 +617,8 @@ public async deploy(wallet: OpenedWallet) {
     return seqno;
   }
 ```
-Deploying a new smart contract in our case means sending a message from our wallet to the collection address (which we can calculate if we have StateInit) along with its StateInit.
-When the owner mints a new NFT, the collection accepts the owner's message and sends a new message to the created NFT smart contract (which requires a fee). Let’s write a method to replenish the collection’s balance based on the number of NFTs to be minted:
+Deploying a new smart contract in our case means sending a message from our wallet to the collection address, which we can calculate if we have `StateInit`, along with its `StateInit`.
+When the owner mints a new NFT, the collection accepts the owner's message and sends a new message to the created NFT smart contract, which requires a fee. Let’s write a method to replenish the collection’s balance based on the number of NFTs to be minted:
 ```ts
 public async topUpBalance(
     wallet: OpenedWallet,
@@ -882,7 +884,7 @@ export class NftMarketplace {
 }
 ```
 
-Implement a method to calculate the smart contract address based on StateInit.
+Implement a method to calculate the smart contract address based on `StateInit`.
 ```ts
 public get address(): Address {
     return contractAddress(0, this.stateInit);
@@ -918,7 +920,7 @@ Finally, add a few lines of code to `app.ts` to deploy the marketplace.
 import { NftMarketplace } from "./contracts/NftMarketplace";
 ```
 
-And then
+Then:
 
 ```ts
 console.log("Start deploy of new marketplace  ");
@@ -1031,7 +1033,7 @@ private createCodeCell(): Cell {
 
 To deploy the sale contract, we must form a message and send it to the marketplace:
 
-First, Create a cell storing the StateInit of the new sale contract
+First, create a cell storing the StateInit of the new sale contract
 
 ```ts
 public async deploy(wallet: OpenedWallet): Promise<number> {
@@ -1097,7 +1099,7 @@ static createTransferBody(params: {
 ```
 
 Include the following details:
-- op-code, query-id, and the new owner's address.
+- Op-code, query-id, and the new owner's address.
 - The address where a confirmation response will be sent.
 - The remaining incoming message coins.
 - The amount of TON sent to the new owner.
@@ -1207,7 +1209,7 @@ Today, you learned a lot about TON and successfully created your own NFT collect
 - [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
 
 ## About the author 
-- Coalus on [Telegram](https://t.me/coalus) or [GitHub](https://github.com/coalus)
+- _Coalus_ on [Telegram](https://t.me/coalus) or [GitHub](https://github.com/coalus)
 
 ## See also
  - [NFT use cases](/v3/documentation/dapps/defi/nft)

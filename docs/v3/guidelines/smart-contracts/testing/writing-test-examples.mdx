@@ -5,7 +5,7 @@ import ThemedImage from "@theme/ThemedImage";
 
 # Writing test examples
 
-This page demonstrates how to write tests for FunC contracts using the [Blueprint SDK](https://github.com/ton-org/blueprint) ([Sandbox](https://github.com/ton-org/sandbox)).  
+This page demonstrates how to write tests for FunC contracts using the [Blueprint](https://github.com/ton-org/blueprint) ([Sandbox](https://github.com/ton-org/sandbox)).
 The test suites focus on the demo contract [Fireworks](https://github.com/ton-community/fireworks-func), a smart contract that starts running with the `set_first` message.
 
 When you create a new FunC project using `npm create ton@latest`, the SDK automatically generates a test file `tests/contract.spec.ts` in the project directory for testing the contract:
@@ -503,7 +503,7 @@ This opcode must be called in the main function (e.g., `recv_internal`). If call
 
 ### Compute Phase | exit code = 2
 
-TVM is a [stack machine](/v3/documentation/tvm/tvm-overview#tvm-is-a-stack-machine). When interacting with different values, the system places them on the stack. If an opcode requires elements from the stack but finds it empty, the system throws this error.  
+TVM is a [stack machine](/v3/documentation/tvm/tvm-overview#tvm-as-a-stack-machine). When interacting with different values, the system places them on the stack. If an opcode requires elements from the stack but finds it empty, the system throws this error.
 
 This issue can arise when working directly with opcodes, as [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) assumes this problem will not occur. 
 

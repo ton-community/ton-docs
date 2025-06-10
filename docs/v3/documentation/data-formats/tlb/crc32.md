@@ -6,7 +6,7 @@ import Feedback from '@site/src/components/Feedback';
 
 CRC stands for **Cyclic Redundancy Check**, a widely used method for verifying the integrity of digital data. An error-detecting algorithm checks whether data has been altered during transmission or storage. CRC generates a short checksum or hash from the original data, which is appended to it. The checksum is recalculated and compared with the original upon retrieval or receipt. If the values match, the data is considered intact; if not, it indicates corruption and the data must be resent or recovered.
 
-The CRC32 IEEE variant is used in TL-B schemes. You can refer to this [NFT op code](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema)example to better understand how CRC32 values are calculated for various TL-B messages.
+The CRC32 IEEE variant is used in TL-B schemes. You can refer to this [NFT op code](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema) example to better understand how CRC32 values are calculated for various TL-B messages.
 
 ## Tools
 

@@ -59,7 +59,7 @@ Each transaction consists of up to five phases:
 The compute phase involves executing the contract code on TVM.
 
 :::tip
-- **TVM 4.3.5**: [TON blockchain paper](https://docs.ton.org/assets/files/tblkch-6aaf006b94ee2843a982ebf21d7c1247.pdf)
+- **TVM 4.3.5**: [TON Blockchain paper](https://docs.ton.org/assets/files/tblkch-6aaf006b94ee2843a982ebf21d7c1247.pdf)
 :::
 
 ### When the compute phase is skipped
@@ -84,14 +84,14 @@ At any point, the TVM state is defined by six properties:
 
 TVM operates as a stack machine, supporting seven variable types:
 - **Non-cell types**:
-- Integer: signed 257-bit integers.
-- Tuple: ordered collections of up to 255 elements.
-- Null.
+  - Integer: signed 257-bit integers.
+  - Tuple: ordered collections of up to 255 elements.
+  - Null.
 - **Cell types**:
-- Cell: basic data structure for storing information.
-- Slice: allows reading data from a cell.
-- Builder: enables creating new cells.
-- Continuation: treats a cell as a source of TVM instructions.
+  - Cell: basic data structure for storing information.
+  - Slice: allows reading data from a cell.
+  - Builder: enables creating new cells.
+  - Continuation: treats a cell as a source of TVM instructions.
 
 ### Control registers
 

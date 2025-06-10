@@ -13,7 +13,7 @@ import TabItem from '@theme/TabItem';
 Learning how wallets and transactions work on TON before beginning smart contracts development is essential. This knowledge will help developers understand the interaction between wallets, messages, and smart contracts to implement specific development tasks.
 
 :::tip
-Before starting this tutorial, we recommend reviewing the [Types of Wallet Contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) article.
+Before starting this tutorial, we recommend reviewing the [Wallet contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) article.
 :::
 
 This section will teach us to create operations without using pre-configured functions to understand development workflows. The references chapter contains all the necessary references for analyzing this tutorial.
@@ -72,7 +72,9 @@ npx tsc --init --rootDir src --outDir build \ --esModuleInterop --target es2020 
 
 :::info
 To help us carry out the following process, a `ts-node` executes TypeScript code directly without precompiling. `nodemon` restarts the node application automatically when file changes in the directory are detected.
-::: 4. Next, remove these lines from `tsconfig.json`:
+::: 
+
+4. Next, remove these lines from `tsconfig.json`:
 
 ```json
   "files": [
@@ -123,10 +125,10 @@ npm run start:dev
 The TON Community created an excellent tool for automating all development processes (deployment, contract writing, testing) called [Blueprint](https://github.com/ton-org/blueprint). However, we will not need such a powerful tool, so the instructions above should be followed.
 :::
 
-**OPTIONAL: ** When using Golang, follow these instructions:
+**OPTIONAL:** When using Golang, follow these instructions:
 
 1. Install the GoLand IDE.
-2. Create a project folder and a `go.mod` file with the following content. If the current version of Go is outdated, update it to the required version to proceed with this process:
+2. Create a project folder and a `go.mod` file with the following content. If the current version of Go is outdated, update it to the required version to proceed with this process:
 
 ```
 module main
@@ -162,7 +164,7 @@ It is also possible to use another IDE since GoLand isn’t free, but it is pref
 :::
 
 :::warning IMPORTANT
-Add all coding components to the `main` function created in the [⚙ Set Your Environment](/v3/guidelines/smart-contracts/howto/wallet#-set-your-environment) section.
+Add all coding components to the `main` function created in the [⚙ Set your environment](/v3/guidelines/smart-contracts/howto/wallet#-set-your-environment) section.
 
 Only the imports required for that specific code section are specified in each new section. Combine new imports with the existing ones as needed.
 :::
@@ -176,10 +178,10 @@ Our main task is to build messages using various objects and functions for @ton/
 :::note
 This tutorial may not explain particular details on occasion. In these cases, more details will be provided later.
 
-** IMPORTANT: ** Throughout this tutorial, the [wallet v3 code] (https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) is used to understand the wallet development process better. Version v3 has two sub-versions: r1 and r2. Currently, only the second version is being used, which means that when we refer to v3 in this document, it implies v3r2.
+**IMPORTANT:** Throughout this tutorial, the [wallet v3 code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) is used to understand the wallet development process better. Version v3 has two sub-versions: r1 and r2. Currently, only the second version is being used, which means that when we refer to v3 in this document, it implies v3r2.
 :::
 
-## 💎 TON blockchain wallets
+## 💎 TON Blockchain wallets
 
 All wallets operating on the TON Blockchain are smart contracts, and everything running on TON functions as a smart contract. Like most blockchains, TON allows users to deploy and customize smart contracts for various purposes, enabling full wallet customization.
 Wallet smart contracts on TON facilitate communication between the platform and other types of smart contracts. However, it’s essential to understand how wallet communication works.
@@ -215,9 +217,9 @@ Before exploring wallets in more detail, let’s examine how wallets accept exte
 >
 > ["load_bits()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_bits)
 >
-> ["get_data()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_bits)
+> ["get_data()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#get_data)
 >
-> ["begin_parse()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_bits)
+> ["begin_parse()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#begin_parse)
 >
 > ["end_parse()" in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#end_parse)
 >
@@ -432,7 +434,7 @@ Validators rewrite the above values (including src), excluding the State Init an
 If the number value fits within fewer bits than is specified, then the missing zeros are added to the left side of the value. For example, 0x18 fits within 5 bits -> `11000`. However, since 6 bits were specified, the result becomes `011000`.
 :::
 
-Next, we’ll prepare a message to send Toncoins to another wallet v3. For example, let’s say a user wants to send 0.5 TON to themselves with the comment "**Hello, TON!**". To learn how to send a message with a comment, refer to this documentation section: [How to Send a Simple Message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-simple-message).
+Next, we’ll prepare a message to send Toncoins to another wallet v3. For example, let’s say a user wants to send 0.5 TON to themselves with the comment "**Hello, TON!**". To learn how to send a message with a comment, refer to this documentation section: [How to send a simple message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-simple-message).
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -529,7 +531,7 @@ internalMessage := cell.BeginCell().
 
 ### Creating a message
 
-We must create a `client` to retrieve our wallet smart contract's `seqno` (sequence number). This client will send a request to execute the Get method `seqno` on our wallet. Additionally, we must include the seed phrase (saved during wallet creation [here](#--external-and-internal-messages)) to sign our message. Follow these steps to proceed:
+We must create a `client` to retrieve our wallet smart contract's `seqno` (sequence number). This client will send a request to execute the Get method `seqno` on our wallet. Additionally, we must include the seed phrase (saved during wallet creation [here](#-external-and-internal-messages)) to sign our message. Follow these steps to proceed:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -704,7 +706,7 @@ externalMessage := cell.BeginCell().
 0b10 (b - binary) denotes a binary record. Two bits are stored in this process: `1` and `0`. Thus, we specify that it's `ext_in_msg_info$10`.
 :::
 
-Now that we have a completed message ready to send to our contract, the next step is to serialize it into a `BOC` ([Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells)). Once serialized, we can send it using the following code:
+Now that we have a completed message ready to send to our contract, the next step is to serialize it into a `BoC` ([bag of cells](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells)). Once serialized, we can send it using the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
@@ -958,14 +960,14 @@ After the above processes are complete, the hashes match, confirming that the co
 
 Before building a message, it is essential to understand what a State Init is. First, let’s go through the [TL-B scheme](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L141-L143):
 
-|   Option    |                                                                                                                                                                                                                 Explanation                                                                                                                                                                                                                  |
-| :---------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| split_depth |         This option is designed for highly loaded smart contracts that can be split and distributed across multiple [shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards). For more details on how this works, refer to the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is not needed for wallet smart contracts, only a `0` bit is stored.          |
+|   Option    |                                                                                                                                                                                                                Explanation                                                                                                                                                                                                                 |
+| :---------: |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| split_depth |        This option is designed for highly loaded smart contracts that can be split and distributed across multiple [ShardChains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards). For more details on how this works, refer to the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is not needed for wallet smart contracts, only a `0` bit is stored.         |
 |   special   | This option is used for **TicTok** smart contracts that are automatically triggered for each block. Regular smart contracts, such as wallets, do not require this functionality. For more details, refer to [this section](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock) or the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is unnecessary for our use case, only a `0` bit is stored. |
 |             |
-|    code     |                                                                                                                                                                                    `1` bit means the presence of the smart contract code as a reference.                                                                                                                                                                                     |
-|    data     |                                                                                                                                                                                    `1` bit means the presence of the smart contract data as a reference.                                                                                                                                                                                     |
-|   library   |                      This option refers to a library that operates on the [MasterChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) and can be shared across multiple smart contracts. Since wallets do not require this functionality, its bit is set to `0`. For more information, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (section 1.8.4).                       |
+|    code     |                                                                                                                                                                                   `1` bit means the presence of the smart contract code as a reference.                                                                                                                                                                                    |
+|    data     |                                                                                                                                                                                   `1` bit means the presence of the smart contract data as a reference.                                                                                                                                                                                    |
+|   library   |                     This option refers to a library that operates on the [MasterChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) and can be shared across multiple smart contracts. Since wallets do not require this functionality, its bit is set to `0`. For more information, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (section 1.8.4).                      |
 
 Next, we’ll prepare the `initial data`, which will be present in our contract’s storage immediately after deployment:
 
@@ -1218,7 +1220,7 @@ if err != nil {
 </TabItem>
 </Tabs>
 
-Note that we sent an internal message using mode `3`. If you must redeploy the same wallet, **the smart contract can be destroyed**. To do this, set the [mode](/v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode160/) to `160` by adding `128` (take the entire balance of the smart contract) + `32` (destroy the smart contract). This will retrieve the remaining TON balance and allow you to deploy the wallet again.
+Note that we sent an internal message using mode `3`. If you must redeploy the same wallet, **the smart contract can be destroyed**. To do this, set the [mode](/v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode160) to `160` by adding `128` (take the entire balance of the smart contract) + `32` (destroy the smart contract). This will retrieve the remaining TON balance and allow you to deploy the wallet again.
 
 Remember that for each new transaction, the `seqno` must be incremented by one.
 
@@ -1684,11 +1686,11 @@ Below we’ll learn more about the basics of GET methods used with [V3](https://
 
 Now, let’s move to the methods that only the V4 wallet makes use of:
 
-|                     Method                     |                                                                                                                  Explanation                                                                                                                   |
-| :--------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-|             int get_subwallet_id()             |                                                                          Earlier in the tutorial, we considered this. This method allows you to retrive subwallet_id.                                                                          |
-| int is_plugin_installed(int wc, int addr_hash) | Let us know if the plugin has been installed. To call this method, you need to pass the [workchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules) and the plugin address hash. |
-|            tuple get_plugin_list()             |                                                                                           This method returns the address of the installed plugins.                                                                                            |
+|                     Method                     |                                                                                                                            Explanation                                                                                                                            |
+| :--------------------------------------------: |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|             int get_subwallet_id()             |                                                                                   Earlier in the tutorial, we considered this. This method allows you to retrive subwallet_id.                                                                                    |
+| int is_plugin_installed(int wc, int addr_hash) |         Let us know if the plugin has been installed. To call this method, you need to pass the [WorkChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-a-blockchain-with-your-own-rules) and the plugin address hash.          |
+|            tuple get_plugin_list()             |                                                                                                     This method returns the address of the installed plugins.                                                                                                     |
 
 Let’s consider the `get_public_key` and the `is_plugin_installed` methods. These two methods were chosen because we would first have to get a public key from 256 bits of data, and then we would have to learn how to pass a slice and different types of data to GET methods. This is very useful to help us learn how to properly use these methods.
 
@@ -2183,7 +2185,7 @@ In the contract storage, we can find the following fields:
 | last_clean_time | The time of the last cleanup. If `last_clean_time < (now() - timeout)`, old queries are moved to `old_queries`. If `last_clean_time < (now() - 2 * timeout)`, both `old_queries` and `queries` are cleared. |
 |     timeout     |                                                                          The time after which queries are moved to `old_queries`.                                                                           |
 
-We’ll explore how to work with processed queries in more detail in the [Replay Protection](#replay-protection) section.
+We’ll explore how to work with processed queries in more detail in the [Replay protection](#replay-protection) section.
 
 ### Shifts and bits numbers as query id
 
@@ -2591,7 +2593,7 @@ queryHandler.getNext();
 
 ## 🔥 High-load wallet v2 
 
-::: warning
+:::warning
 High-load wallet v2 is outdated. Do not use this for new projects.
 :::
 
@@ -2693,7 +2695,7 @@ do {
 >
 > [udict_delete_get_min()](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_delete_get_min)
 
-It is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](/v3/documentation/tvm/tvm-overview#tvm-is-a-stack-machine), during each interaction with the `f` variable, it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f variable at the top of the stack to optimize code execution.
+It is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](/v3/documentation/tvm/tvm-overview#tvm-as-a-stack-machine), during each interaction with the `f` variable, it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f variable at the top of the stack to optimize code execution.
 
 ### Bitwise operations
 
@@ -3196,7 +3198,7 @@ This helps us be independent of libraries and to understand the structure of TON
 
 ## 🧩 Next steps
 
-Reading the documentation provided above is a complex undertaking, and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning how to write smart contracts on TON by consulting the following resources: [FunC Overview](/v3/documentation/smart-contracts/func/overview), [Best Practices](/v3/guidelines/smart-contracts/guidelines), [Examples of Smart Contracts](/v3/documentation/smart-contracts/contracts-specs/examples), [FunC Cookbook](/v3/documentation/smart-contracts/func/cookbook)
+Reading the documentation provided above is a complex undertaking, and it’s difficult to understand the entirety of the TON platform. However, it is a good exercise for those passionate about building on the TON. Another suggestion is to begin learning how to write smart contracts on TON by consulting the following resources: [FunC overview](/v3/documentation/smart-contracts/func/overview), [Best practices](/v3/guidelines/smart-contracts/guidelines), [Examples of smart contracts](/v3/documentation/smart-contracts/contracts-specs/examples), [FunC cookbook](/v3/documentation/smart-contracts/func/cookbook).
 
 Additionally, it is recommended that readers familiarize themselves with the following documents in more detail: [ton.pdf](https://docs.ton.org/ton.pdf) and [tblkch.pdf](https://ton.org/tblkch.pdf) documents.
 
@@ -3218,23 +3220,16 @@ The primary sources of code:
 TON documentation:
 
 - [Internal messages](/v3/documentation/smart-contracts/message-management/internal-messages)
-
 - [External messages](/v3/documentation/smart-contracts/message-management/external-messages)
-
 - [Types of wallet contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)
-
 - [TL-B](/v3/documentation/data-formats/tlb/tl-b-language)
-
 - [Blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
 
 External references:
 
 - [Ton deep](https://github.com/xssnick/ton-deep-doc)
-
 - [Block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb)
-
 - [Standards in TON](https://github.com/ton-blockchain/TEPs)
-
 - Useful concept documents(may include outdated information): [ton.pdf](https://docs.ton.org/ton.pdf), [tblkch.pdf](https://ton.org/tblkch.pdf), [tvm.pdf](https://ton.org/tvm.pdf)
   
 

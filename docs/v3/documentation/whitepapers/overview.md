@@ -15,7 +15,7 @@ The code, comments, and documentation may reference "gram" and "nanogram." These
 
 * [TON Whitepaper](https://docs.ton.org/ton.pdf) - an overview of the TON (The Open Network) Blockchain.
 
-* [TON Virtual Machine](https://docs.ton.org/tvm.pdf) description may contain outdated opcode information; the current list is available in the [TVM instruction](/v3/documentation/tvm/tvm-overview)section.
+* [TON Virtual Machine](https://docs.ton.org/tvm.pdf) description may contain outdated opcode information; the current list is available in the [TVM instruction](/v3/documentation/tvm/tvm-overview) section.
 
 * [TON Blockchain](https://docs.ton.org/tblkch.pdf) description, which may contain outdated information.
 

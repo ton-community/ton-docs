@@ -24,6 +24,7 @@ module.exports = [
           {
             type: 'category',
             label: 'FunC & Tolk implementation',
+
             items: [
               'v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/blueprint-sdk-overview',
               'v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/storage-and-get-methods',
@@ -50,6 +51,12 @@ module.exports = [
   {
     type: 'category',
     label: 'TON Hello World series',
+    link: {
+      type: 'generated-index',
+      title: 'TON Hello World series',
+      slug: '/guidelines/hello-world',
+      keywords: ['HelloWorld'],
+    },
     items: [
       {
         type: 'link',
@@ -75,7 +82,13 @@ module.exports = [
   },
   {
     type: 'category',
-    label: ' Smart contracts guidelines',
+    label: 'Smart contracts guidelines',
+    link: {
+      type: 'generated-index',
+      title: 'Smart contracts guidelines',
+      slug: '/guidelines/smat-contracts-guidelines',
+      keywords: ['smart contracts guidelines'],
+    },
     items: [
       'v3/guidelines/smart-contracts/guidelines',
       'v3/guidelines/smart-contracts/get-methods',
@@ -87,6 +100,12 @@ module.exports = [
       {
         type: 'category',
         label: 'Testing',
+        link: {
+          type: 'generated-index',
+          title: 'Testing',
+          slug: '/guidelines/testing',
+          keywords: ['testing'],
+        },
         items: [
           'v3/guidelines/smart-contracts/testing/overview',
           'v3/guidelines/smart-contracts/testing/writing-test-examples',
@@ -95,6 +114,12 @@ module.exports = [
       {
         type: 'category',
         label: 'Security measures',
+        link: {
+          type: 'generated-index',
+          title: 'Security measures',
+          slug: '/guidelines/security-measures',
+          keywords: ['security'],
+        },
         items: [
           'v3/guidelines/smart-contracts/security/overview',
           'v3/guidelines/smart-contracts/security/secure-programming',
@@ -107,10 +132,22 @@ module.exports = [
       {
         type: 'category',
         label: 'How to',
+        link: {
+          type: 'generated-index',
+          title: 'How to',
+          slug: '/guidelines/how-to',
+          keywords: ['how to'],
+        },
         items: [
           {
             type: 'category',
             label: 'Compile from sources',
+            link: {
+              type: 'generated-index',
+              title: 'Compile from sources',
+              slug: '/guidelines/compile-from-sources',
+              keywords: ['compile'],
+            },
             items: [
               {
                 type: 'doc',
@@ -142,13 +179,25 @@ module.exports = [
   },
   {
     type: 'category',
-    label: ' DApps guidelines',
+    label: 'DApps guidelines',
+    link: {
+      type: 'generated-index',
+      title: 'DApps guidelines',
+      slug: '/guidelines/dapps',
+      keywords: ['dapps'],
+    },
     items: [
       'v3/guidelines/dapps/overview',
       'v3/guidelines/dapps/cookbook',
       {
         type: 'category',
         label: 'APIs and SDKs',
+        link: {
+          type: 'generated-index',
+          title: 'APIs and SDKs',
+          slug: '/guidelines/api-sdk',
+          keywords: ['api', 'sdk'],
+        },
         items: [
           'v3/guidelines/dapps/apis-sdks/overview',
           'v3/guidelines/dapps/apis-sdks/sdk',
@@ -160,6 +209,12 @@ module.exports = [
       {
         type: 'category',
         label: 'Tutorials & examples',
+        link: {
+          type: 'generated-index',
+          title: 'Tutorials & examples',
+          slug: '/guidelines/tutorials-and-examples',
+          keywords: ['tutorials', 'examples'],
+        },
         items: [
           {
             type: 'doc',
@@ -191,10 +246,23 @@ module.exports = [
           {
             type: 'category',
             label: 'Telegram bot examples',
+            link: {
+              type: 'generated-index',
+              title: 'Telegram bot examples',
+              slug: '/guidelines/tg-bot-examples',
+              keywords: ['bots', 'examples'],
+            },
             items: [
               'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot',
               'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-2',
               'v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-js',
+
+              {
+                type: 'link',
+                label: 'TMA USD₮ payments demo',
+                href: 'https://github.com/ton-community/tma-usdt-payments-demo',
+              },
+
             ],
           },
         ],
@@ -202,11 +270,23 @@ module.exports = [
       {
         type: 'category',
         label: 'Telegram Mini Apps',
+        link: {
+          type: 'generated-index',
+          title: 'Telegram Mini Apps',
+          slug: '/guidelines/tma',
+          keywords: ['tma', 'mini apps'],
+        },
         items: [
           'v3/guidelines/dapps/tma/overview',
           {
             type: 'category',
             label: 'Guidelines',
+            link: {
+              type: 'generated-index',
+              title: 'TMA guidelines',
+              slug: '/guidelines/tma-guidelines',
+              keywords: ['tma'],
+            },
             items: [
               'v3/guidelines/dapps/tma/guidelines/testing-apps',
               'v3/guidelines/dapps/tma/guidelines/publishing',
@@ -217,6 +297,12 @@ module.exports = [
           {
             type: 'category',
             label: 'Tutorials & examples',
+            link: {
+              type: 'generated-index',
+              title: 'TMA tutorials & examples',
+              slug: '/guidelines/tma-tutorials-and-examples',
+              keywords: ['tma', 'tutorials', 'examples'],
+            },
             items: [
               'v3/guidelines/dapps/tma/tutorials/step-by-step-guide',
               'v3/guidelines/dapps/tma/tutorials/app-examples',
@@ -230,6 +316,12 @@ module.exports = [
       {
         type: 'category',
         label: 'Advanced asset processing',
+        link: {
+          type: 'generated-index',
+          title: 'Advanced asset processing',
+          slug: '/guidelines/advanced-asset-processing',
+          keywords: ['assets'],
+        },
         items: [
           'v3/guidelines/dapps/asset-processing/payments-processing',
           'v3/guidelines/dapps/asset-processing/jettons',
@@ -239,6 +331,12 @@ module.exports = [
           {
             type: 'category',
             label: 'NFT processing',
+            link: {
+              type: 'generated-index',
+              title: 'NFT processing',
+              slug: '/guidelines/nft-processing',
+              keywords: ['nft'],
+            },
             items: [
               'v3/guidelines/dapps/asset-processing/nft-processing/nfts',
               'v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing',
@@ -251,11 +349,23 @@ module.exports = [
   {
     type: 'category',
     label: 'Blockchain nodes guidelines',
+    link: {
+      type: 'generated-index',
+      title: 'Blockchain nodes guidelines',
+      slug: '/guidelines/nodes-guidelines',
+      keywords: ['nodes'],
+    },
     items: [
       'v3/guidelines/nodes/overview',
       {
         type: 'category',
         label: 'Running nodes',
+        link: {
+          type: 'generated-index',
+          title: 'Running nodes',
+          slug: '/guidelines/running-nodes',
+          keywords: ['running nodes'],
+        },
         items: [
           'v3/guidelines/nodes/running-nodes/archive-node',
           'v3/guidelines/nodes/running-nodes/full-node',
@@ -270,6 +380,12 @@ module.exports = [
       {
         type: 'category',
         label: 'Maintenance guidelines',
+        link: {
+          type: 'generated-index',
+          title: 'Maintenance guidelines',
+          slug: '/guidelines/maintenance-guidelines',
+          keywords: ['maintenance'],
+        },
         items: [
           'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-backup-restore',
           'v3/guidelines/nodes/maintenance-guidelines/mytonctrl-validator-standby',
@@ -287,32 +403,52 @@ module.exports = [
     ]
   },
   {
+    label: 'Integrate with TON',
+    type: 'category',
+    link: {
+      type: 'generated-index',
+      title: 'Integrate with TON',
+      slug: '/guidelines/integrate-with-ton',
+    },
+
     items: [
       'v3/guidelines/ton-connect/overview',
       {
         type: 'category',
-        label: 'Integrate a DApp',
+        label: 'Integrate a dApp',
+        link: {
+          type: 'generated-index',
+          title: 'Integrate a dApp',
+          slug: '/guidelines/integrate-dapp',
+          keywords: ['dapp'],
+        },
         items: [
           'v3/guidelines/ton-connect/guidelines/how-ton-connect-works',
           'v3/guidelines/ton-connect/guidelines/creating-manifest',
           {
             type: 'category',
             label: 'Install TON Connect',
+            link: {
+              type: 'generated-index',
+              title: 'Install TON Connect',
+              slug: '/guidelines/install-ton-connect',
+              keywords: ['TON Connect'],
+            },
             items: [
               {
                 type: 'doc',
                 id: 'v3/guidelines/ton-connect/frameworks/react',
-                label: 'React Apps',
+                label: 'React apps',
               },
               {
                 type: 'doc',
                 id: 'v3/guidelines/ton-connect/frameworks/vue',
-                label: 'Vue Apps',
+                label: 'Vue apps',
               },
               {
                 type: 'doc',
                 id: 'v3/guidelines/ton-connect/frameworks/web',
-                label: 'HTML/JS Apps',
+                label: 'HTML/JS apps',
               },
             ],
           },
@@ -330,6 +466,11 @@ module.exports = [
       {
         type: 'category',
         label: 'Advanced',
+        link: {
+          type: 'generated-index',
+          title: 'Advanced',
+          slug: '/guidelines/advanced',
+        },
         items: [
           {
             type: 'link',
@@ -346,33 +487,55 @@ module.exports = [
       {
         type: 'category',
         label: 'Business',
+        link: {
+          type: 'generated-index',
+          title: 'Business',
+          slug: '/guidelines/business',
+          keywords: ['business'],
+        },
         items: [
           'v3/guidelines/ton-connect/business/ton-connect-for-business',
           'v3/guidelines/ton-connect/business/ton-connect-for-security'
         ],
       }
     ],
-    label: 'Integrate with TON',
-    type: 'category'
-  },
 
+  },
   {
-    'type': 'category',
-    'label': 'Web3 guidelines',
-    'items': [
+    type: 'category',
+    label: 'Web3 guidelines',
+    link: {
+      type: 'generated-index',
+      title: 'Web3 guidelines',
+      slug: '/guidelines/web3-guidelines',
+      keywords: ['web3'],
+    },
+    items: [
       'v3/guidelines/web3/overview',
       {
-        'type': 'category',
-        'label': 'TON DNS',
-        'items': [
+        type: 'category',
+        label: 'TON DNS',
+        link: {
+          type: 'generated-index',
+          title: 'TON DNS',
+          slug: '/guidelines/ton-dns',
+          keywords: ['dns'],
+        },
+        items: [
           'v3/guidelines/web3/ton-dns/dns',
           'v3/guidelines/web3/ton-dns/subresolvers',
         ],
       },
       {
-        'type': 'category',
-        'label': 'Proxy & sites',
-        'items': [
+        type: 'category',
+        label: 'Proxy & sites',
+        link: {
+          type: 'generated-index',
+          title: 'Proxy & sites',
+          slug: '/guidelines/proxy-and-sites',
+          keywords: ['proxy-and-sites'],
+        },
+        items: [
           'v3/guidelines/web3/ton-proxy-sites/how-to-run-ton-site',
           'v3/guidelines/web3/ton-proxy-sites/ton-sites-for-applications',
           'v3/guidelines/web3/ton-proxy-sites/connect-with-ton-proxy',
@@ -382,9 +545,15 @@ module.exports = [
         ],
       },
       {
-        'type': 'category',
-        'label': 'TON Storage',
-        'items': [
+        type: 'category',
+        label: 'TON Storage',
+        link: {
+          type: 'generated-index',
+          title: 'TON Storage',
+          slug: '/guidelines/ton-storage',
+          keywords: ['storage'],
+        },
+        items: [
           'v3/guidelines/web3/ton-storage/storage-daemon',
           'v3/guidelines/web3/ton-storage/storage-provider',
           'v3/guidelines/web3/ton-storage/storage-faq',

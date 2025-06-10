@@ -68,11 +68,12 @@ In this section, we delve into the practical usage of the TON HTTP API provided 
 
 ### Examples of common API calls
 
-You can use the ‘/getAddressBalance’ method to get the balance for a specific TON address:
+You can use the `/getAddressBalance` method to get the balance for a specific TON address:
 
-    curl --location --request GET 'https://go.getblock.io/[ACCESS-TOKEN]/getAddressBalance?address=EQDXZ2c5LnA12Eum-DlguTmfYkMOvNeFCh4rBD0tgmwjcFI-' \
-    
-    --header 'Content-Type: application/json'
+```
+curl --location --request GET 'https://go.getblock.io/[ACCESS-TOKEN]/getAddressBalance?address=EQDXZ2c5LnA12Eum-DlguTmfYkMOvNeFCh4rBD0tgmwjcFI-' \    
+--header 'Content-Type: application/json' 
+```
 
 Make sure to replace `ACCESS-TOKEN` with your actual access token provided by GetBlock.
 

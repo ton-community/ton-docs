@@ -111,7 +111,7 @@ As a TON validator, make sure you follow these crucial steps to ensure network s
 
 	- Please verify with `MyTonCtrl` using the `check_ef` command.
 
-	- Check [Build dashboard with APIs](/v3/guidelines/nodes/running-nodes/validator-node#validation-and-effectiveness-apis).
+	- Check [Build dashboard with APIs](/v3/guidelines/nodes/running-nodes/validator-node#validation-effectiveness-apis).
 
 :::info
 `MyTonCtrl` enables you to evaluate the performance of validators using the command `check_ef`. This command provides efficiency data for both the last round and the current round. The data is retrieved by calling the `checkloadall` utility. Make sure that your efficiency is above 90% for the entire round period.
@@ -159,7 +159,7 @@ If you run a regular node, then contact the group: [@mytonctrl_help](https://t.m
 
 ## See also
 
-* [Run a full Node](/v3/guidelines/nodes/running-nodes/full-node)
+* [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
 * [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
 * [Staking incentives](/v3/documentation/infra/nodes/validation/staking-incentives)
 <Feedback />
