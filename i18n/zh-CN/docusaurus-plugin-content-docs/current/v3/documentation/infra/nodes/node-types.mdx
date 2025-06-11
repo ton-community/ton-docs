@@ -1,95 +1,94 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
-# TON 节点类型
+# TON node types
 
-**区块链节点** 是运行TON区块链软件的设备，通常是计算机，因此参与区块链运行。
-一般来说，节点确保了 TON 网络的去中心化。
+**A blockchain node** is a device, usually a computer, that runs the TON blockchain's software and participates in blockchain operations. In general, nodes ensure the decentralization of the TON network.
 
-节点在 TON 协议中执行不同的功能：
+Nodes perform different functions within the TON protocol:
 
-- **全节点** 和 **存档节点** 维护区块链区块和交易历史，使用户和客户端应用程序能够查找区块和交易，并向区块链发送新的交易；
-- **验证器节点** 验证交易，确保区块链安全。
+- **Full** and **archive nodes** maintain the blockchain block and transaction history, enable users and client applications to look for blocks and transactions, and send new transactions into the blockchain;
+- **Validator nodes** verify transactions, ensuring blockchain security.
 
-下面将详细介绍每种节点类型，以及完整节点和归档节点与客户端应用程序的交互。
+Below, you find more detailed information about each node type and the interaction of full and archive nodes with client applications.
 
-## 全节点
+## Full node
 
-**全节点**是 TON 区块链中的一种基本节点类型。
-它们作为 TON 区块链的骨干，保存着区块历史，换句话说，就是保存着区块的_当前状态_。
+**The full node** is a basic node type within the TON blockchain. It serves as the backbone of the TON blockchain by keeping its block history—in other words, its _current state_.
 
-与**存档节点**相比，全节点只保留对确保网络稳定性和客户端应用程序运行至关重要的最新区块链状态。
-全节点对其保存的 TON 区块链状态进行_prune_（剪裁）--这意味着，对于网络而言变得不必要的早期区块会被全节点自动删除，以有效管理其数据量。
+Compared to **archive nodes**, full nodes keep only the latest part of the blockchain state, which is vital for ensuring client applications' network stability and operation. Full nodes _prune_ the state of the TON blockchain they keep. This means the full node automatically removes earlier blocks that become unnecessary for the network to manage its data volume effectively.
 
-为了允许客户端应用程序查找区块和交易，以及向 TON 区块链发送新交易，全节点都配备了 liteserver 功能：请参阅下文[与 TON 节点交互](#interacting-with-ton-nodes) 。
+To allow client applications to look for blocks and transactions and send new transactions into the TON blockchain, full nodes are equipped with the liteserver functionality: see [Interacting with TON nodes](#interacting-with-ton-nodes) below.
 
 <Button href="/v3/guidelines/nodes/running-nodes/full-node#run-a-node-video"
-colorType="primary" sizeType={'sm'}>
+        colorType="primary" sizeType={'sm'}>
 
-运行全节点
+  Running a full node
 
 </Button>
 
-## 存档节点
+## Archive node
 
-**Archive 节点**是一个完整的节点，保存着 TON 区块链的整个区块历史。
-此类节点是确保整个区块链历史一致性的去中心化真相点。
-它们是区块链探索者和其他依赖深度交易历史的应用程序的后台。
+The archive node is a full node that keeps the entire block history of the TON blockchain. These nodes act as the decentralized point of truth to ensure consistency of the whole blockchain history. They are a backend for blockchain explorers and other applications relying on deep transaction history.
 
-存档节点不会修剪区块链状态，这就提高了它们的系统要求，尤其是在存储方面。
-根据最新估计，全节点和验证器节点需要约 1 TB 磁盘空间，而存档节点需要约 8 TB 才能存储完整的区块链历史。
+Archive nodes do not prune the blockchain state, elevating system requirements, especially in storage. According to the latest estimations, while full and validator nodes require about 1 TB of disk space, archive nodes need about 12 TB to store the complete block history.
 
 <Button href="/v3/guidelines/nodes/running-nodes/archive-node"
-colorType="primary" sizeType={'sm'}>
-运行存档节点
+        colorType="primary" sizeType={'sm'}>
+
+  Running an archive node
+
 </Button>
 
-## 验证器节点
+## Validator node
 
-**验证节点**或**验证者**是TON网络参与者，他们根据TON的 _Proof-of-Stake_ 机制提出新区块并验证其中的交易。
-这样，验证者就为整个区块链的安全性做出了贡献。
+**Validator nodes** or **validators** are the TON network participants who propose new blocks and verify transactions according to the TON's _Proof-of-stake_ mechanism. In this way, validators contribute to the overall blockchain security.
 
-成功参与验证过程的验证者可获得[TON 中的奖励](/v3/documentation/infra/nodes/validation/staking-incentives)。
+Validators get [rewards in TON](/v3/documentation/infra/nodes/validation/staking-incentives/) for successful participation in the validation process.
 
-为了有权提议和验证区块，验证者由其他参与者根据其持有的 TON 数量（换句话说，就是其质押）选举产生：验证者的 TON 质押越多，当选、为网络验证区块和获得奖励的机会就越大。
-通常情况下，验证者会激励其他 TON 持有者与他们一起入股，以便从由此产生的奖励中获得被动收入。
-通过这种方式，验证者确保了网络的稳定性和安全性，并促进了网络的发展。
+To be entitled to propose and validate blocks, other participants elect validators based on the amount of TON they hold—in other words, their _stake_. The more TON a validator stakes, the higher its chances of being elected, validating blocks for the network, and earning rewards. As a rule, validator operators motivate other TON holders to stake with them to get passive income from the resulting rewards. In this way, validators ensure network stability and security and contribute to its growth.
 
 <Button href="/v3/guidelines/nodes/running-nodes/validator-node"
-colorType="primary" sizeType={'sm'}>
-运行验证器节点
+        colorType="primary" sizeType={'sm'}>
+
+  Running a validator node
+
 </Button>
 
-## 与 TON 节点互动
+## Interacting with TON nodes
 
-TON 节点配备了_Liteserver_功能，允许外部应用程序（换句话说，_lite 客户端_）通过它们与 TON 区块链交互。
-通常，liteserver 模式用于完整节点和存档节点，而验证器节点则不启用该模式，以提高验证性能。
+TON nodes can run in **liteserver mode**, which allows lite clients (external applications) to interact with the TON blockchain. In this mode, the nodes process requests from lite clients, enabling them to access blockchain data, send transactions, and retrieve information about blocks and transactions—for instance, to fetch and update wallet balances.
 
-liteserver 模式允许lite 客户端通过TON节点发送交易。 以及检索与方块和交易的信息——例如，获取和更新钱包余额。
+Full and archive nodes typically enable liteserver mode because they store blockchain history and handle external requests. In contrast, validator nodes do not need it as they focus on validating new blocks efficiently without extra workload from external queries.
 
-您有两个选项允许您的 lite 客户端应用程序与 TON 区块链进行交互：
+You have two options to allow your lite client application to interact with the TON blockchain:
 
-1. 要获得稳定的连接，可以在节点配置文件中启用 Liteserver 模式运行自己的全节点或归档节点。
-2. 如果您没有机会在自己的 TON 节点上安装 Liteserver，可以使用 TON 基金会提供的公共 Liteservers 网。为此，请使用以下配置文件：
-   - [公共 Liteserver 配置 - 主网](https://ton.org/global-config.json)
-   - [公共 Liteserver 配置 - testnet](https://ton.org/testnet-global.config.json)
+1. To have a stable connection, you can run your own full or archive node with a liteserver mode enabled in your node configuration file.
+2. If you cannot set up your TON node with a liteserver, you can use the mesh of public liteservers provided by the TON Foundation. For this purpose, use the following configuration files:
 
-:::caution 在生产中使用公共 Liteservers
-由于公共 Liteservers 的负载长期居高不下，它们中的大多数都有速率限制，因此不建议在生产中使用它们。
-这可能会导致精简版客户端应用程序不稳定。
+- [Public liteserver configurations - Mainnet](https://ton.org/global-config.json)
+- [Public liteserver configurations - Testnet](https://ton.org/testnet-global.config.json)
+
+:::caution Usage of public liteservers in production
+Because of a permanent high load on public liteservers, most of them are rate-limited, so it is not recommended that they be used in production.
+This may cause instability in your lite client application.
 :::
 
 <Button href="/v3/guidelines/nodes/running-nodes/liteserver-node"
 colorType="primary" sizeType={'sm'}>
-在节点中启用 Liteserver
+Enable liteserver in your node
 </Button>
 
-要与 Liteservers 交互，可以使用以下工具：
+To interact with liteservers, you can use the following tools:
 
-- TON [ADNL API](/v3/guidelines/dapps/apis-sdks/tton-adnl-apis) 是与区块链进行通信的最底层方式；
-- TON [SDKs](/v3/guidelines/dapps/apis-sdks/sdk) 为各种编程语言提供；
-- TON [基于 HTTP 的应用程序接口](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton) 在您的应用程序和 Liteserver 之间提供 REST API 中间件。
+- TON [ADNL API](/v3/guidelines/dapps/apis-sdks/ton-adnl-apis/), the lowest-level method for communicating with the blockchain;
+- TON [SDKs](/v3/guidelines/dapps/apis-sdks/sdk/), which are available for various programming languages;
+- TON [HTTP-based APIs](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton/) that provide REST API middleware between your application and a liteserver.
 
 <Button href="/v3/guidelines/dapps/apis-sdks/sdk"
 colorType="primary" sizeType={'sm'}>
-选择一个 TON SDK
+Choose a TON SDK
 </Button>
+
+<Feedback />
