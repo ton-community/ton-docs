@@ -1,14 +1,12 @@
-# Highload Wallet
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Highload wallet contracts
 
-При работе с большим количеством сообщений за короткий период времени необходим специальный кошелек под названием Highload Wallet. Highload Wallet V2 долгое время был основным кошельком на TON, но с ним нужно было быть очень осторожным. В противном случае можно было [заблокировать все средства](https://t.me/tonstatus/88).
+When working with many messages in a short period, there is a need for special wallet called Highload wallet. Highload wallet v2 was the main wallet on TON for a long time, but you had to be very careful with it. Otherwise, you could [lock all funds](https://t.me/tonstatus/88).
 
 [С появлением Highload Wallet V3](https://github.com/ton-blockchain/Highload-wallet-contract-v3) эта проблема была решена на уровне архитектуры контракта и потребляет меньше газа. В этой главе будут рассмотрены основы Highload Wallet V3 и важные нюансы, которые следует помнить.
 
-## Highload Wallet v3
+## Highload wallet v3
 
 Этот кошелек создан для тех, кому необходимо отправлять транзакции с очень высокой скоростью. Например, для криптобирж.
 
@@ -53,19 +51,22 @@ Highload v3 никогда не будет выполнять несколько
 :::
 
 1. **Ограничение размера хранилища.** В настоящее время размер хранилища контракта должен быть меньше 65535 ячеек. Если размер
- old_queries превысит этот предел, будет выдано исключение в ActionPhase, и транзакция завершится ошибкой.
- Неудачная транзакция может быть воспроизведена.
+  old_queries превысит этот предел, будет выдано исключение в ActionPhase, и транзакция завершится ошибкой.
+  Неудачная транзакция может быть воспроизведена.
 2. **Лимит газа.** В настоящее время лимит газа составляет 1 000 000 единиц газа, что означает, что существует ограничение на то, сколько старых запросов может быть очищено за одну транзакцию. Если количество истекших запросов будет больше, контракт зависнет.
 
-Это означает, что не рекомендуется устанавливать слишком большую дату истечения срока:
-количество запросов в течение периода истечения срока не должно превышать 1000.
+That means that it is not recommended to set too high expiration date:
+the number of queries during expiration time span should not exceed 1000.
 
-Кроме того, количество истекших запросов, очищенных за одну транзакцию, должно быть меньше 100.
+Also, the number of expired queries cleaned in one transaction should be below 100.
 
-## Как это сделать
+## How to
 
 Вы также можете прочитать статью [Руководство по Highload Wallet](/v3/guidelines/smart-contracts/howto/wallet#-high-load-wallet-v3).
 
 Исходный код кошелька:
 
 - [ton/crypto/smartcont/Highload-wallet-v2-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif)
+
+<Feedback />
+
