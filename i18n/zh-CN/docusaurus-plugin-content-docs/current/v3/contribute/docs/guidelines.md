@@ -1,24 +1,32 @@
-# 通用文档原则
+import Feedback from '@site/src/components/Feedback';
 
-为了获得最佳的用户体验和清晰度，请在创建 docs.ton.org 上的新内容时，牢记我们旨在应用于所有文档的一般性和重要要求列表。
+# Common Documentation Principals
 
-## 为专业人士制作的文档
+:::danger
+This page is outdated and will be deleted soon.
+See the [How to contribute](/v3/contribute/).
+:::
 
-文档页面主要是为了文档目的而非作为教程，因此在文本中最小化使用个人示例或类比非常重要。确保内容既适合专业人士也适合非专业人士，同时仍然提供有价值的信息。
+For optimal user experience and clarity, please keep in mind the list of general and important requirements that we aim to apply to all documentation on docs.ton.org while creating new content.
 
-## 使用一致的格式
+## Documentation crafted for Professionals
 
-为了使读者更容易浏览文档，使用整个文档中一致的格式非常重要。使用标题、副标题、项目符号列表和编号列表来分隔文本，使其更易于阅读。
+Documentations pages is primarily intended for documentation purposes and not as a tutorial, so it is important to minimize the use of personal examples or analogies in the text. It is crucial to ensure that the content is suitable for both professionals and non-professionals alike, while still providing valuable information.
 
-## 在特殊部分提供示例
+## Use a consistent format
 
-提供示例可以帮助读者更好地理解内容以及如何应用它。如果你正在编写文档页面并需要引用几个示例，请在“参考资料”和“参阅”部分之前创建一个特别的“示例”部分。请不要在文档页面中混合描述和示例。
-可以使用代码片段、截图或图表来阐述你的观点，使文档更具吸引力。
+To make it easier for readers to navigate through the documentation, it is important to use a consistent format throughout the document. Use headings, subheadings, bullet points, and numbered lists to break up the text and make it easier to read.
 
-## 保持内容更新
+## Provide examples in special section
 
-由于技术或软件更新可能导致技术文档迅速过时，因此定期审查和更新文档非常重要，以确保它保持准确和与当前软件版本相关。
+Providing examples can help readers better understand the content and how to apply it. If you are writing documentation page and need refer several examples, please create special section Examples right before References and See Also sections. Do not mix description and examples in documentation pages.
+Use code snippets, screenshots, or diagrams to illustrate your points and make the documentation more engaging.
 
-## 获取反馈
+## Keep it up to date
 
-在发布文档之前，最好从其他贡献者或用户那里获取反馈。这可以帮助识别可能令人困惑或不清楚的地方，并允许您在文档发布之前进行改进。
+Tech documentation can quickly become outdated due to changes in technology or software updates. It is important to review and update the documentation regularly to ensure that it remains accurate and relevant to the current version of the software.
+
+## Get feedback
+
+Before publishing the documentation, it is a good idea to get feedback from other contributors or users. This can help identify areas that may be confusing or unclear, and allow you to make improvements before the documentation is released. <Feedback />
+
