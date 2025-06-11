@@ -1,21 +1,19 @@
-# CRC32
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# CRC32
 
 ## Обзор
 
-CRC означает Cyclic Redundancy Check (циклическая проверка избыточности), широко используемый метод проверки целостности цифровых данных. Это алгоритм обнаружения ошибок, используемый для проверки того, возникли ли ошибки в цифровых данных во время передачи или хранения. CRC генерирует короткую контрольную сумму или хэш передаваемых или сохраняемых данных, который добавляется к данным. Когда данные принимаются или извлекаются, CRC пересчитывается и сравнивается с исходной контрольной суммой. Если две контрольные суммы совпадают, предполагается, что данные не были повреждены. Если они не совпадают, это означает, что произошла ошибка и данные необходимо повторно отправить или извлечь заново
+CRC stands for **Cyclic Redundancy Check**, a widely used method for verifying the integrity of digital data. An error-detecting algorithm checks whether data has been altered during transmission or storage. CRC generates a short checksum or hash from the original data, which is appended to it. The checksum is recalculated and compared with the original upon retrieval or receipt. If the values match, the data is considered intact; if not, it indicates corruption and the data must be resent or recovered.
 
-Версия CRC32 IEEE, используемая для схем TL-B. Просмотр этого примера [NFT op code](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema) позволяет лучше понять расчет TL-B для различных сообщений.
+The CRC32 IEEE variant is used in TL-B schemes. You can refer to this [NFT op code](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema)example to better understand how CRC32 values are calculated for various TL-B messages.
 
 ## Инструменты
 
 ### Онлайн-калькулятор
 
 - [Пример онлайн-калькулятора](https://emn178.github.io/online-tools/crc32.html)
-- [Tonwhales Introspection ID Generator](https://tonwhales.com/tools/introspection-id)
+- [Tonwhales introspection ID generator](https://tonwhales.com/tools/introspection-id)
 
 ### Расширение VS Code
 
@@ -62,4 +60,6 @@ function calculateResponseOpcode_2(str: string): string {
     return ((a | b) < 0 ? (a | b) + BigInt('4294967296') : a | b).toString(16);
 }
 ```
+
+<Feedback />
 
