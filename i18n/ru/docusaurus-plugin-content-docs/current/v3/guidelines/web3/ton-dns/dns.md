@@ -1,18 +1,16 @@
-# TON DNS и домены
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# TON DNS & domains
 
-TON DNS - это сервис для перевода понятных человеку доменных имен (например, test.ton или mysite.temp.ton) в адреса смарт-контрактов TON, адреса ADNL, используемые сервисами, работающими в сети TON (например, TON Sites) и т. д.
+TON DNS is a service that translates human-readable domain names like `test.ton` or `mysite.temp.ton` into TON smart contract addresses, ADNL addresses used by services on the TON Network such as TON Sites, and more.
 
 ## Стандарт
 
-[Стандарт TON DNS](https://github.com/ton-blockchain/TIPs/issues/81) описывает формат доменных имен, процесс разрешения домена, интерфейс смарт-контрактов DNS и формат записей DNS.
+The [TON DNS standard](https://github.com/ton-blockchain/TIPs/issues/81) outlines the domain name format, the domain resolution process, the interface for DNS smart contracts, and the structure of DNS records.
 
 ## SDK
 
-Работа с TON DNS реализована в JavaScript SDK [TonWeb](https://github.com/toncenter/tonweb) и [TonLib](https://ton.org/#/apis/?id=_2-ton-api).
+Support for working with TON DNS is available through the JavaScript SDK [TonWeb](https://github.com/toncenter/tonweb) and [TonLib](https://ton.org/#/apis/?id=_2-ton-api).
 
 ```js
 const address: Address = await tonweb.dns.getWalletAddress('test.ton');
@@ -22,28 +20,29 @@ const address: Address = await tonweb.dns.getWalletAddress('test.ton');
 const address: Address = await tonweb.dns.resolve('test.ton', TonWeb.dns.DNS_CATEGORY_WALLET);
 ```
 
-Также `lite-client` и `tonlib-cli` поддерживаются DNS-запросами.
+Also, `lite-client` and `tonlib-cli` are supported by DNS queries.
 
 ## Домен первого уровня
 
-В настоящее время только домены, заканчивающиеся на `.ton`, распознаются как допустимые домены DNS TON.
+Only domains ending in `.ton` are currently recognized as valid TON DNS domains.
 
-Исходный код смарт-контракта Root DNS - https://github.com/ton-blockchain/dns-contract/blob/main/func/root-dns.fc.
+You can view the root DNS smart contract source code [here](https://github.com/ton-blockchain/dns-contract/blob/main/func/root-dns.fc).
 
-Это может измениться в будущем. Добавление нового домена первого уровня потребует нового смарт-контракта root DNS и общего голосования для изменения [конфигурации сети #4](https://ton.org/#/smart-contracts/governance?id=config).
+This may change in the future. Adding a new top-level domain would require deploying a new root DNS smart contract and a community vote to update the [network config #4](https://ton.org/#/smart-contracts/governance?id=config).
 
 ## \*.ton домены
 
-Домены \*.ton реализованы в форме NFT. Поскольку они реализуют стандарт NFT, они совместимы с обычными службами NFT (например, NFT маркетплейсами) и кошельками, которые могут отображать NFT.
+`.ton` domains are implemented as NFTs. Because they follow the standard NFT format, they're compatible with most NFT marketplaces and wallets that support NFTs.
 
-Исходный код \*.ton доменов - https://github.com/ton-blockchain/dns-contract.
+The source code for `.ton` domains is available [here](https://github.com/ton-blockchain/dns-contract).
 
-Резольвер доменов .ton реализует интерфейс NFT collection, а домен .ton реализует интерфейс NFT item.
+The `.ton` domain resolver acts as an NFT collection, while each individual `.ton` domain functions as an NFT item.
 
-Первичная продажа доменов \*.ton происходит через децентрализованный открытый аукцион на https://dns.ton.org. Исходный код - https://github.com/ton-blockchain/dns.
+Primary sales of `.ton` domains occur through a decentralized open auction at [dns.ton.org](https://dns.ton.org). The auction's source code can be found [here](https://github.com/ton-blockchain/dns).
 
-## Поддомены
+## Subdomains
 
-Владелец домена может создавать поддомены, указав адрес смарт-контракта, отвечающего за разрешение поддоменов, в записи DNS `sha256("dns_next_resolver")`.
+Domain owners can create subdomains by setting the smart contract address responsible for subdomain resolution in the DNS record using the key `sha256("dns_next_resolver")`.
 
-Это может быть любой смарт-контракт, реализующий стандарт DNS.
+This address can point to any smart contract implementing the TON DNS standard. <Feedback />
+
