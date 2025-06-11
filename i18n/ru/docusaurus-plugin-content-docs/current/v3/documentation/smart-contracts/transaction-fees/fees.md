@@ -1,10 +1,8 @@
-# Комиссии за транзакции
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Transaction fees
 
-Каждый пользователь TON должен иметь в виду, что *комиссия зависит от многих факторов*.
+Каждый пользователь TON должен иметь в виду, что _комиссия зависит от многих факторов_.
 
 ## Газ
 
@@ -15,13 +13,13 @@
 Текущие настройки в basechain: 1 единица газа стоит 400 нанотон.
 
 ```cpp
-1 gas = 26214400 / 2^16 nanotons = 0,000 000 4 TON
+1 gas = 26214400 / 2^16 nanotons = 0.000 000 4 TON
 ```
 
 Текущие настройки в masterchain: 1 единица газа стоит 10 000 нанотон.
 
 ```cpp
-1 gas = 655360000 / 2^16 nanotons = 0,000 01 TON
+1 gas = 655360000 / 2^16 nanotons = 0.000 01 TON
 ```
 
 ### Средняя стоимость транзакции
@@ -38,11 +36,11 @@
 
 Комиссия за газ, как и многие другие параметры TON, настраивается и может быть изменена с помощью специального голосования в основной сети.
 
-Для изменения любого параметра требуется 66% голосов валидаторов.
+Changing any parameter requires approval from 66% of the validators' votes.
 
 #### Может ли газ стоить дороже?
 
-> *Значит ли это, что однажды цена на газ может вырасти в 1000 раз или больше?*
+> _Значит ли это, что однажды цена на газ может вырасти в 1000 раз или больше?_
 
 Технически да, но фактически нет.
 
@@ -52,7 +50,7 @@
 
 Комиссии в TON сложно рассчитать заранее, так как их размер зависит от времени выполнения транзакции, статуса аккаунта, содержимого и размера сообщения, настроек сети блокчейна и множества других переменных, которые нельзя определить до отправки транзакции.
 
-Поэтому даже NFT-маркеты обычно берут дополнительное количество TON (*~1 TON*) и возвращают (*`1 - transaction_fee`*) позже.
+That is why NFT marketplaces typically require an extra amount of TON (~1 TON) and refund the remaining amount (1 - transaction_fee) after the transaction.
 
 :::info
 Each contract should check incoming messages for the amount of TON attached to ensure it is enough to cover the fees.
@@ -62,7 +60,7 @@ Each contract should check incoming messages for the amount of TON attached to e
 
 Давайте подробнее разберёмся, как комиссии работают в сети TON.
 
-## Базовая формула расчёта комиссий
+## Basic fees formula
 
 Комиссии в TON рассчитываются по следующей формуле:
 
@@ -124,11 +122,11 @@ function FeeCalculator() {
 ## Элементы комиссии за транзакцию
 
 - `storage_fees` - это сумма, которую вы платите за хранение смарт-контракта в блокчейне. Фактически, вы платите за каждую секунду хранения смарт-контракта в блокчейне.
-  - *Пример*: ваш кошелёк TON - это тоже смарт-контракт, и он платит комиссию за хранение каждый раз, когда вы получаете или отправляете транзакцию. Подробнее о [расчёте комиссии за хранение](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee).
+  - _Пример_: ваш кошелёк TON - это тоже смарт-контракт, и он платит комиссию за хранение каждый раз, когда вы получаете или отправляете транзакцию. Подробнее о [расчёте комиссии за хранение](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee).
 - `in_fwd_fees` - это плата за импорт сообщений только из внешних источников, например, `external` сообщений. Каждый раз, когда вы совершаете транзакцию, её необходимо доставить валидаторам для обработки. Для обычных сообщений от контракта к контракту эта плата не взимается. Чтобы узнать больше о входящих сообщениях, прочтите [документацию TON Blockchain](https://docs.ton.org/tblkch.pdf).
-  - *Пример*: каждая транзакция, которую вы совершаете через приложение-кошелёк (например, Tonkeeper), должна сначала распределиться между узлами валидации.
+  - _Пример_: каждая транзакция, которую вы совершаете через приложение-кошелёк (например, Tonkeeper), должна сначала распределиться между узлами валидации.
 - `computation_fees` - это плата за выполнение кода в виртуальной машине. Чем больше код, тем выше плата.
-  - *Пример*: каждый раз, когда вы отправляете транзакцию через кошелёк (который является смарт-контрактом), вы выполняете код вашего кошелька и платите за это.
+  - _Пример_: каждый раз, когда вы отправляете транзакцию через кошелёк (который является смарт-контрактом), вы выполняете код вашего кошелька и платите за это.
 - `action_fees` - это плата за отправку исходящих сообщений смарт-контрактом, обновление кода смарт-контракта, библиотек и т. д.
 - `out_fwd_fees` - это плата за отправку сообщений за пределы блокчейна TON для взаимодействия с внешними сервисами (например, логами) и другими блокчейнами.
 
@@ -150,21 +148,24 @@ function FeeCalculator() {
 
 ### Стоимость хранения данных в TON?
 
-Хранение 1 МБ данных в течение года в TON обойдётся в 6.01 TON. Учтите, что обычно вам не нужно хранить большие объёмы данных on-chain. Если вам необходимо децентрализованное хранение, воспользуйтесь [TON Storage](/v3/guidelines/web3/ton-storage/storage-daemon).
+Saving 1 MB of data for one year on TON will cost 6.01 TON. Note that you usually don't need to store large amounts of data on-chain. Consider using [TON Storage](/v3/guidelines/web3/ton-storage/storage-daemon) if you need decentralized storage.
 
 ### Можно ли отправить транзакцию без газа?
 
 В TON возможны транзакции без использования газа с помощью [wallet v5](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#preparing-for-gasless-transactions) - ретранслятора, который оплачивает комиссию за транзакцию.
 
-### Как рассчитать?
+### How to calculate fees?
 
 В блокчейне TON есть статья о [расчете комиссий](/v3/guidelines/smart-contracts/fee-calculation).
 
 ## Ссылки
 
-- Основано на [статье @thedailyton](https://telegra.ph/Commissions-on-TON-07-22), изначально написанной [menschee](https://github.com/menschee)\*
+- Based on the [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22) - _[menschee](https://github.com/menschee)_
 
-## См. также
+## See also
 
-- ["Обзор низкоуровневых комиссий"](/v3/documentation/smart-contracts/transaction-fees/fees-low-level) - ознакомьтесь с формулами для расчёта комиссий.
+- [Low-level fees overview](/v3/documentation/smart-contracts/transaction-fees/fees-low-level)—read about the formulas for calculating commissions.
 - [Функция смарт-контракта для расчета forward fees в FunC](https://github.com/ton-blockchain/token-contract/blob/main/misc/forward-fee-calc.fc)
+
+<Feedback />
+
