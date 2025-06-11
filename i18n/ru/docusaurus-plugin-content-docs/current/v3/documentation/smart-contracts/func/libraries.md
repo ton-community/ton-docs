@@ -1,21 +1,22 @@
-# SDK и библиотеки для FunC
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# SDK и библиотеки для FunC
 
 ## Стандартные библиотеки
 
-- [stdlib](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) — Стандартная библиотека для FunC
-- mathlib](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/mathlib.fc) — Математическая библиотека с фиксированной точкой
+- [stdlib](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc/): the FunC standard library
+- [mathlib](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/mathlib.fc/): the FunC fixed-point math library
 
-## Библиотеки сообщества
+## Libraries from community
 
-- [continuation-team/openlib.func](https://github.com/continuation-team/openlib.func) - Снижает комиссию за транзакции в обычных сценариях.
-- [open-contracts/utils](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/utils) — библиотека утилит
-- [open-contracts/strings](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/strings) — предоставляет операции со строками
-- [open-contracts/math](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/math) — математическая библиотека, расширяющая арифметические операции FunC
-- [open-contracts/tuples](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/tuples) — коллекция функций, связанных с кортежами, для FunC
-- [open-contracts/crypto](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/crypto) — Предоставляет операции на кривой secp256k1
-- [toncli/test-libs](https://github.com/disintar/toncli/tree/master/src/toncli/lib/test-libs) - Операции над TLB, генерация и разбор обычных сообщений и типов
-- [ston-fi/funcbox](https://github.com/ston-fi/funcbox) - Коллекция фрагментов кода и утилит на FunC.
+- [continuation-team/openlib.func](https://github.com/continuation-team/openlib.func/): reduces transaction fees in common scenarios.
+- [open-contracts/utils](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/utils/): utility library.
+- [open-contracts/strings](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/strings/): provides string manipulation functions.
+- [open-contracts/math](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/math/): extends FunC arithmetic operations with additional math functions.
+- [open-contracts/tuples](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/tuples/): collection of tuple-related functions for FunC.
+- [open-contracts/crypto](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/crypto/): provides cryptographic operations for secp256k1 curves.
+- [toncli/test-libs](https://github.com/disintar/toncli/tree/master/src/toncli/lib/test-libs/): supports TLB operations, including message and type parsing and generation.
+- [ston-fi/funcbox](https://github.com/ston-fi/funcbox/): collection of FunC snippets and utilities.
+
+<Feedback />
+
