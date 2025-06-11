@@ -1,39 +1,47 @@
-# API 类型
+import Feedback from '@site/src/components/Feedback';
 
-**高可用性区块链API是在TON上安全、便捷、快速开发有效应用程序的核心元素。**
+# API types
 
-- [TON HTTP API](/develop/dapps/apis/toncenter) — 允许处理_索引化区块链信息_的API。
-- [TON ADNL API](/develop/dapps/apis/adnl) — 基于ADNL协议的与TON通信的安全API。
+**High availability blockchain APIs are essential for developing secure, efficient, and scalable applications on TON.**
 
-## Toncenter APIs
+- [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis) — An API that allows working with the _indexed blockchain information_.
+- [TON ADNL API](/v3/guidelines/dapps/apis-sdks/ton-adnl-apis) — A secure API for communicating with TON using the ADNL protocol.
 
-- [TON Index](https://toncenter.com/api/v3/) - TON Index从全节点收集数据到PostgreSQL数据库，并提供方便的API来访问索引化的区块链。
-- [toncenter/v2](https://toncenter.com/) - 此API通过HTTP访问TON区块链 - 获取账户和钱包信息，查询区块和交易，向区块链发送消息，调用智能合约的get方法等。
+:::tip TON Infrastructure Status
 
-## 第三方 APIs
+- [status.toncenter](https://status.toncenter.com/) - Displays various node activity statistics from the last hour.
+- [Tonstat.us](https://tonstat.us/) - A real-time Grafana dashboard, updated every 5 minutes.
+  :::
 
-- [tonapi.io](https://docs.tonconsole.com/tonapi/api-v2) - 快速索引API，提供关于账户、交易、区块的基本数据，以及NFT、拍卖、Jettons、TON DNS、订阅等应用特定数据。它还提供交易链的注释数据。
-- [dton.io](https://dton.io/graphql/) - GraphQL API，可以提供关于账户、交易和区块的数据，以及关于NFT、拍卖、Jettons和TON DNS的应用特定数据。
-- [ton-api-v4](https://mainnet-v4.tonhubapi.com) - 另一个专注于通过CDN的积极缓存以提高速度的轻量级API。
-- [docs.nftscan.com](https://docs.nftscan.com/reference/ton/model/asset-model) - TON区块链的NFT API。
-- [evercloud.dev](https://ton-mainnet.evercloud.dev/graphql) - 用于TON的基本查询的GraphQL API。
-- [everspace.center](https://everspace.center/toncoin) - 用于访问TON区块链的简单RPC API。
+## TON Center APIs
+
+- [TON Index](https://toncenter.com/api/v3/) - Collects data from a full node into a PostgreSQL database and provides a convenient API for accessing indexed blockchain data.
+- [toncenter/v2](https://toncenter.com/) - Enables HTTP access to TON Blockchain, allowing developers to retrieve account and wallet information, look up blocks and transactions, send messages to the blockchain, call smart contract methods, and more.
+
+## Third-party APIs
+
+- [tonapi.io](https://docs.tonconsole.com/tonapi) - A fast indexed API that provides basic data about accounts, transactions, blocks, application-specific data about NFT, auctions, jettons, TON DNS, and subscriptions. It also offers annotated transaction chain data.
+- [TONX API](https://docs.tonxapi.com/) - Designed for seamless dApp development, this API provides easy access to various tools and data.
+- [dton.io](https://dton.io/graphql/) - A GraphQL API that delivers data on accounts, transactions, and blocks, as well as application-specific data about NFT, auctions, jettons, and TON DNS.
+- [ton-api-v4](https://mainnet-v4.tonhubapi.com) - A lightweight API optimized for speed through aggressive CDN caching
+- [docs.nftscan.com](https://docs.nftscan.com/reference/ton/model/asset-model) - NFT APIs for TON Blockchain.
+- [everspace.center](https://everspace.center/toncoin) - A simple RPC API for accessing TON Blockchain.
 
 ## 其他 API
 
-### Toncoin 汇率 API
+### Toncoin rate APIs
 
-- https://tonapi.io/v2/rates?tokens=ton&currencies=ton%2Cusd%2Crub
+- https://docs.tonconsole.com/tonapi/rest-api/rates
 - https://coinmarketcap.com/api/documentation/v1/
 - https://apiguide.coingecko.com/getting-started
 
-### 地址转换 APIs
+### Address convert APIs
 
 :::info
-最好通过本地算法转换地址，更多信息请阅读文档中的[地址](/learn/overviews/addresses)部分。
+It is preferable to convert addresses using a local algorithm. See [Addresses](/v3/documentation/smart-contracts/addresses) section of documentation for details.
 :::
 
-#### 从友好形式到原始形式
+#### From friendly to raw form
 
 /api/v2/unpackAddress
 
@@ -54,7 +62,7 @@ curl -X 'GET' \
 }
 ```
 
-#### 从友好形式到原始形式
+#### From friendly to raw form
 
 /api/v2/packAddress
 
@@ -75,8 +83,11 @@ curl -X 'GET' \
 }
 ```
 
-## 参阅
+## See also
 
 - [TON HTTP API](/develop/dapps/apis/toncenter)
 - [SDK列表](/develop/dapps/apis/sdk)
-- [TON 开发手册](/develop/dapps/cookbook)
+- [TON cookbook](/v3/guidelines/dapps/cookbook)
+
+<Feedback />
+
