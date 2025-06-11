@@ -1,149 +1,170 @@
-# Награды за стейкинг
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Staking incentives
 
-## Выборы и стейкинг
+## Election and staking
 
-Блокчейн TON использует алгоритм консенсуса доказательства доли владения (PoS - Proof of Stake), что означает, что, как и во всех сетях PoS, безопасность и стабильность сети поддерживаются набором сетевых валидаторов. В частности, валидаторы предлагают кандидатов для новых блоков (состоящих из пакетов транзакций), в то время как другие валидаторы *проверяют* и утверждают их с помощью цифровых подписей.
+TON Blockchain uses the **Proof-of-stake (PoS)** consensus algorithm, meaning that, like all PoS networks, a set of network validators maintains the network's security and stability. In particular, validators propose candidates for new blocks (made up of transaction batches), while other validators _validate_ and approve them via digital signatures.
 
-Валидаторы выбираются с помощью специального [контракта управления Elector](/v3/documentation/smart-contracts/contracts-specs/governance#elector). Во время каждого раунда консенсуса кандидаты на валидаторы отправляют заявку на выборы вместе со своей долей и желаемым *max_factor* (параметром, который регулирует объем обслуживания, выполняемого валидатором за раунд консенсуса).
+Validators are chosen using a special [Elector governance contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector). During each consensus round, validator candidates send an application for election along with their stake and desired _max_factor_ (a parameter that regulates the amount of maintenance the validator performs per consensus round).
 
-В процессе выбора валидатора смарт-контракт управления выбирает следующий раунд валидаторов и назначает каждому валидатору вес голоса, чтобы максимизировать их общую долю, принимая во внимание также долю валидатора и *max_factor*. В этом отношении, чем выше доля и *max_factor*, тем выше вес голоса валидатора и наоборот.
+During the validator election process, the governance smart contract chooses the next round of validators and assigns a voting weight to each validator to maximize their total stake while also considering the validator’s stake and _max_factor_. In this respect, the higher the stake and _max_factor_, the higher the voting weight of the validator, and vice versa.
 
-Выбранные валидаторы выбираются для защиты сети путем участия в следующем раунде консенсуса. Однако, в отличие от многих других блокчейнов, для достижения горизонтальной масштабируемости каждый валидатор проверяет только часть сети:
+Elected validators are selected to secure the network by participating in the next consensus round. However, to achieve horizontal scalability, each validator verifies only a portion of the network, unlike many other blockchains:
 
-Для каждого шардчейна и мастерчейна существует выделенный набор валидаторов. Наборы валидаторов мастерчейна состоят из до 100 валидаторов, которые демонстрируют самый высокий вес голоса (определяется как сетевой параметр `Config16:max_main_validators`).
+Each ShardChain and MasterChain has a dedicated set of validators. Sets of master chain validators consist of up to 100 validators exhibiting the highest voting weight (defined as Network Parameter `Config16:max_main_validators`).
 
-Напротив, каждый шардчейн проверяется набором из 23 валидаторов (определяется как сетевой параметр `Config28:shard_validators_num`) и чередуется случайным образом каждые 1000 секунд (сетевой параметр `Config28:shard_validators_lifetime`).
+Each ShardChain is validated by 23 validators, as defined by Network Parameter `Config28:shard_validators_num`. These validators are rotated randomly every 1000 seconds according to Network Parameter `Config28:shard_validators_lifetime`.
 
-## Значения стейкинга: Максимально эффективный стейк
+## Values of stakes: max effective stake
 
-Текущий `max_factor` в конфигурации равен **3**, что означает, что стейк *наименьшего* валидатора не может быть меньше стейка *наибольшего* валидатора более чем в три раза.
+The current `max_factor` in config is **3**, meaning the stake of the _smallest_ validator cannot be more than three times less than the stake of the **largest** one.
 
 Формула с конфигурационными параметрами:
 
-`max_factor` =  [`max_stake_factor`](https://tonviewer.com/config#17) / [`validators_elected_for`](https://tonviewer.com/config#15)
+`max_factor` = [`max_stake_factor`](https://tonviewer.com/config#17) / [`validators_elected_for`](https://tonviewer.com/config#15)
 
-### (Упрощенный) алгоритм выбора
+### Selection algorithm review
 
 Этот алгоритм, запущенный [смарт-контрактом Elector](/v3/documentation/smart-contracts/contracts-specs/governance#elector), выбирает лучших кандидатов-валидаторов на основе их стейка. Вот как это работает:
 
-1. **Начальная выборка**: избиратели рассматривают всех кандидатов, которые имеют стейк больше установленной минимальной суммы (300 тыс., как указано в [конфигурации](https://tonviewer.com/config#17)).
+1. **Initial selection**: Elector considers all candidates who have staked more than a set minimum amount (300K, as specified in the [configuration](https://tonviewer.com/config#17)).
 
-2. **Сортировка кандидатов**: Затем эти кандидаты располагаются от самого высокого к самому низкому в зависимости от их стейка.
+2. **Ordering candidates**: These candidates are then arranged from highest to lowest based on their stake.
 
-3. **Уточнение**:
-   - Если количество кандидатов превышает максимально допустимое количество валидаторов ([см. конфигурацию](https://tonviewer.com/config#16)), то исключаются кандидаты с самым низким стейком.
-   - Затем Elector оценивает каждую потенциальную группу кандидатов, начиная с самой большой группы и переходя к меньшим:
-      - Он проверяет лучших кандидатов в упорядоченном списке, увеличивая число на единицу.
-      - Для каждого кандидата Elector вычисляет его "эффективный стейк". Если стейк кандидата значительно выше минимального, он корректируется (например, если кто-то поставил 310 тыс., а минимум составляет 100 тыс., но есть правило, ограничивающее минимум в три раза, его эффективный стейк считается равной 300 тыс.).
-      - Он суммирует эффективные стейки всех кандидатов в этой группе.
+3. **Narrowing down**:
 
-4. **Окончательный отбор**: группа кандидатов с наибольшим общим эффективным стейком выбирается Elector в качестве валидаторов.
+- Если количество кандидатов превышает максимально допустимое количество валидаторов ([см. конфигурацию](https://tonviewer.com/config#16)), то исключаются кандидаты с самым низким стейком.
 
-#### Алгоритм выбора валидатора
+- Затем Elector оценивает каждую потенциальную группу кандидатов, начиная с самой большой группы и переходя к меньшим:
+
+    - Он проверяет лучших кандидатов в упорядоченном списке, увеличивая число на единицу.
+
+    - For each candidate, Elector calculates their **effective stake**. If a candidate's stake is significantly higher than the minimum, it's adjusted down (e.g., if someone staked 310k and the minimum is 100k, but there's a rule capping at three times the minimum, their effective stake is considered as 300k).
+
+    - Он суммирует эффективные стейки всех кандидатов в этой группе.
+
+4. **Final selection**: The elector chooses the group of candidates with the highest total effective stake as the validators.
+
+#### Validator selection algorithm
 
 На основе доступных стейков потенциальных валидаторов определяются оптимальные значения минимального и максимального стейка с целью максимизации величины общего стейка:
 
 1. Elector выбирает всех кандидатов, у которых сумма стейка превышает минимальную ([300 тысяч в конфигурации](https://tonviewer.com/config#17)).
-2. Elector сортирует их в *порядке убывания* стейка.
+
+2. Elector sorts them in _descending_ order of stake.
+
 3. Если участников больше, чем [максимальное число](https://tonviewer.com/config#16) валидаторов, Elector удаляет последнюю часть списка. Затем Elector делает следующее:
 
-   - Для каждого цикла **i** от *1 до N* (оставшееся число участников) он берет первые **i** заявок из отсортированного списка.
-   - Он вычисляет эффективный стейк, учитывая `max_factor`. То есть, если человек вложил 310 тыс., но с `max_factor` 3, а минимальный стейк в списке составляет 100 тыс. Toncoin, то эффективный стейк будет минимум (310 тыс., 3\*100 тыс.) = 300 тыс. Один узел валидатора может использовать до 600 тыс. TON (в этом примере) в двух раундах (половина в нечетных раундах, половина в четных раундах). Чтобы увеличить стейк, необходимо настроить несколько узлов валидатора.
-   - Он вычисляет общий эффективнуый стейк всех **i** участников.
+    - Для каждого цикла **i** от _1 до N_ (оставшееся число участников) он берет первые **i** заявок из отсортированного списка.
 
-Как только Elector находит такой **i**, где общий эффективный стейк максимальный, мы объявляем этих **i** участников валидаторами.
+    - Он вычисляет эффективный стейк, учитывая `max_factor`. То есть, если человек вложил 310 тыс., но с `max_factor` 3, а минимальный стейк в списке составляет 100 тыс. Toncoin, то эффективный стейк будет минимум (310 тыс., 3\*100 тыс.) Один узел валидатора может использовать до 600 тыс. TON (в этом примере) в двух раундах (половина в нечетных раундах, половина в четных раундах). Чтобы увеличить стейк, необходимо настроить несколько узлов валидатора.
 
-## Положительные вознаграждения
+    - Он вычисляет общий эффективнуый стейк всех **i** участников.
 
-Как и во всех блокчейн сетях, каждая транзакция в TON требует платы за вычисления, называемый [газ](https://blog.ton.org/what-is-blockchain), который используется для хранения данных в сети и обработки транзакций on-chain. В TON эти платы накапливаются в контракте Elector в пуле вознаграждений.
+Once Elector identifies such an **i**, where the total effective stake is maximized, we declare these **i** participants as validators.
 
-Сеть также субсидирует создание блоков, добавляя субсидию в пул вознаграждений, равную 1,7 TON за каждый блок мастерчейна и 1 TON за каждый блок бейсчейна (параметры сети `Config14:masterchain_block_fee` и `Config14:basechain_block_fee`). Обратите внимание, что при разделении бейсчейна на несколько шардчейнов субсидия на блок шардчейна делится соответствующим образом. Этот процесс позволяет поддерживать субсидию за единицу времени практически постоянной.
+## Positive incentives
+
+Similarly to all blockchain networks, each transaction on TON requires a computation fee called [gas](https://blog.ton.org/what-is-blockchain) to store the network and process the transaction on-chain. On TON, these fees are accumulated within the Elector contract in a reward pool.
+
+The network also provides a subsidy for block creation by adding an amount of 1.7 TON to the reward pool for each MasterChain block and an amount equal to 1 TON for each BaseChain block (refer to Network Parameters `Config14:masterchain_block_fee` and `Config14:basechain_block_fee`). It is important to note that when a BaseChain is divided into multiple ShardChains, the subsidy for each ShardChain block is distributed accordingly. This approach helps maintain a consistent subsidy per unit of time.
 
 :::info
 В июне 2023 года был представлен [механизм дефляционного сжигания](https://blog.ton.org/ton-holders-and-validators-vote-in-favor-of-implementing-the-toncoin-real-time-burn-mechanism). С помощью этого механизма часть TON, сгенерированного сетью, сжигается вместо того, чтобы быть выделенной в пул вознаграждений.
 :::
 
-После раунда цикла валидации, длящегося 65536 секунд или ~18 часов (сетевой параметр `Config15:validators_elected_for`), каждый из проверяющих не сразу освобождает TON, а удерживает его в течение дополнительных 32768 секунд или ~9 часов (сетевой параметр `Config15:stake_held_for`. В течение этого периода снимается штраф (механизм наказания для неисправных валидаторов) с валидатора. После освобождения средств валидаторы могут выводить свои депозиты вместе с долей вознаграждений пула, пропорционально их весу голосования.
+After a validation cycle lasting 65536 seconds, or approximately 18 hours (as determined by the network parameter `Config15:validators_elected_for`), staked TON is not immediately released by each validator. Instead, it is held for an additional 32768 seconds, or about 9 hours (as specified by the network parameter `Config15:stake_held_for`). During this period, slashing penalties can be imposed on the validator as a consequence for any misbehavior. Once the funds are released, validators can withdraw their staked amount along with a share of the rewards accrued during the validation round, proportional to their voting **weight**.
 
 По состоянию на апрель 2023 года общий пул вознаграждений за раунд консенсуса для всех валидаторов в сети составляет приблизительно 40 000 TON, при этом среднее вознаграждение на валидатора составляет ~ 120 TON (максимальная разница между весом голоса и накопленными вознаграждениями составляет ~ 3 TON).
 
-Учитывая общий запас Toncoin (5 миллиардов TON), уровень инфляции составляет приблизительно 0,3–0,6% в год.
+The total supply of Toncoin (5 billion TON) has an inflation rate of approximately 0.3-0.6% annually.
 
-Однако этот уровень инфляции не всегда постоянен и может отклоняться в зависимости от текущего состояния сети. В конечном итоге он будет иметь тенденцию к дефляции после активации механизма дефляции и роста использования сети.
+This inflation rate, however, is not always constant and may deviate depending on the network’s current state. Eventually, it will tend to deflate after the Deflation mechanism is activated and network utilization grows.
 
 :::info
 Узнайте текущую статистику блокчейна TON [здесь](https://tontech.io/stats/).
 :::
 
-## Отрицательные стимулы
+## Negative incentives
 
-В блокчейне TON обычно есть два способа наказания валидаторов за неправильную работу: бездействие и злонамеренное ненадлежащее поведение; оба из них запрещены и могут привести к штрафу (в процессе, называемом слэшингом) за их действия.
+On TON Blockchain, there are generally two ways validators can be penalized for misbehaving: **idle** and **malicious** misbehaving. Both are prohibited and may result in fines (in a process called slashing) for their actions.
 
-Если валидатор не участвует в создании блоков и подписании транзакций в течение значительного периода времени во время раунда валидации, он потенциально оштрафован с использованием параметра *Standard fine*. По состоянию на апрель 2023 года накопленный стандартный штраф составляет 101 TON (сетевой параметр `ConfigParam40:MisbehaviorPunishmentConfig`).
+If a validator fails to participate in block creation and transaction signing for a significant period during a validation round, they may incur a fine based on the **Standard fine** parameter. As of April 2023, the Standard fine that can be accrued is 101 TON (Network Parameter `ConfigParam40:MisbehaviorPunishmentConfig`).
 
-В TON штрафы за слэшинг (штрафы, налагаемые валидаторам) позволяют любому участнику сети подать жалобу, если он считает, что валидатор ведет себя ненадлежащим образом. В ходе этого процесса участник, подающий жалобу, должен приложить криптографические доказательства ненадлежащего поведения для подачи Elector. В течение периода разрешения споров `stake_held_for` все валидаторы, работающие в сети, проверяют обоснованность жалоб и голосуют, будут ли они коллективно рассматривать жалобу (определяя при этом законность доказательств ненадлежащего поведения и распределение штрафов).
+On the TON network, slashing penalties—also known as fines imposed on validators—allow any participant to file a complaint if they suspect a validator is misbehaving. When submitting a complaint, the participant must provide cryptographic evidence of the alleged misbehavior for submission to the Electors.
 
-При достижении 66% одобрения валидатора (измеряемого равным весом голосования) с него списывается сумма штрафа, которая сокращает его общий стейк. Процесс валидации для штрафования и разрешения жалоб обычно проводится автоматически с помощью MyTonCtrl.
+During the `stake_held_for` dispute resolution period, all validators on the network assess the validity of the complaints and vote on whether to pursue each complaint collectively. They also evaluate the legitimacy of the provided evidence and determine the appropriate penalties.
 
-## Децентрализованная система штрафов
+If, based on weighted votes, at least 66% of the validators approve the complaint, the slashing penalty is applied. This penalty is deducted from the offending validator's total stake. Typically, the process of penalization and resolution of complaints is managed automatically using MyTonCtrl.
+
+## Decentralized system of penalties
 
 :::info
-Следующая система штрафов плохо работающих валидаторов полностью работоспособна с 9 сентября 2024 г.
+The following system of penalizing poorly performing validators was fully operational on September 9, 2024.
 :::
 
-### Определение плохой работы
+### Determination of poor work
 
-TON поставляется с утилитой [lite-client](https://github.com/newton-blockchain/ton/tree/master/lite-client). В lite-client есть команда `checkloadall`.
-Эта команда анализирует, сколько блоков должен был обработать валидатор, и сколько он фактически обработал за определенный период времени.
+The TON is supplied with the [lite-client](https://github.com/newton-blockchain/ton/tree/master/lite-client) utility. In lite-client, there is a `checkloadall` command.
 
-Если валидатор обработал менее 90% от ожидаемого количества блоков во время раунда валидации, он считается плохо работающим и должен быть оштрафован.
+This command analyses the number of blocks the validator should have processed and the number it actually processed in a given period of time.
+
+If the validator processed less than 90% of the expected number of blocks during a validation round, it is considered to be performing poorly and should be penalized.
+
 :::info
-Узнайте больше о техническом описании процесса [здесь](https://github.com/ton-blockchain/TIPs/issues/13#issuecomment-786627474)
+Learn more about the technical description of the process [here](https://github.com/ton-blockchain/TIPs/issues/13#issuecomment-786627474)
 :::
 
-### Рабочий процесс подачи жалоб
+### Complain workflow
 
-- Любой может подать жалобу и получить вознаграждение за правильную жалобу.
-- Проверка жалобы поддерживается валидаторами и полностью децентрализована.
+- Anyone can make a complaint and get a reward for the right complaint.
 
-#### Подать жалобу
+- Validation of complaints maintained by Validators and fully decentralized.
 
-После каждого раунда валидации (~18 часов) стейки валидаторов, участвовавших в этом раунде, остаются на смарт-контракте Elector еще ~9 часов.
-В это время любой может отправить жалобу на валидатора, который плохо выступил в указанном раунде. Это происходит on-chain на смарт-контракте Elector.
+#### Make complaint
 
-#### Проверка жалобы
+After each validation round (~18 hours), the validator stakes of the validators who participated in that round remain on the Elector smart contract for another ~9 hours.
 
-После каждого раунда проверки валидаторы получают список жалоб от смарт-контракта Elector и перепроверяют их, вызывая `checkloadall`.
-В случае подтверждения жалобы они голосуют on-chain в пользу этой жалобы.
+During this time, anyone can send a complaint against a validator who performed poorly in said round. This happens on-chain on the Elector smart contract.
 
-Эти действия встроены в `mytonctrl` и происходят автоматически.
-Если жалоба набирает 66% голосов валидаторов (по их весу), штраф снимается со стейка валидатора.
-Никто не может единолично оштрафовать кого-либо.
+#### Validation of complaint
 
-[@tonstatus_notifications](https://t.me/tonstatus_notifications) - список оштрафованных валидаторов в каждом раунде.
+After each validation round, validators receive a list of complaints from the Elector smart contract. They then double-check these complaints by calling `checkloadall`.
 
-### Штраф
+If a complaint is validated, a vote is conducted on-chain in favor of that complaint.
+
+These actions are integrated into MyTonCtrl and occur automatically.
+
+When a complaint receives 66% of the validators' votes (weighted by their stake), the validator's stake is penalized.
+
+No one has the authority to impose a fine on their own.
+
+The list of penalized validators for each round is available at [@tonstatus_notifications](https://t.me/tonstatus_notifications).
+
+### Fine value
 
 Размер штрафа фиксирован и равен 101 TON (сетевой параметр `ConfigParam40:MisbehaviourPunishmentConfig`), что примерно равно доходу валидатора за раунд.
 
-Размер штрафа может меняться, поскольку аудитория и количество транзакций в TON быстро растут, и крайне важно, чтобы качество работы было на высоте.
+The value of the fine may change due to the rapidly growing audience and the number of transactions in TON, and it is vital that the quality of work is at its best.
 
-### Распределение штрафа
+### Fine distribution
 
-Штраф распределяется между валидаторами за вычетом сетевых расходов и небольшого вознаграждения (~8 TON) первому жалобщику, который отправил правильную жалобу в Elector.
+The fine is distributed among the validators minus network costs, and a small reward (~8 TON) is given to the first complainer who sends the correct complaint to the Elector.
 
-### Руководство для валидатора
+### Validator guidelines
 
-Чтобы предотвратить штраф вашего узла валидатора, рекомендуется убедиться, что оборудование, мониторинг и операции валидатора настроены правильно.
-Убедитесь, что вы соблюдаете [руководства по обслуживанию валидатора](/v3/guidelines/nodes/running-nodes/validator-node#maintain-guidelines).
-Если вы не хотите этого делать, рассмотрите возможность использования услуг стейкинга https://ton.org/stake.
+To prevent your Validator node from being fined, it is advisable to ensure that the hardware, monitoring, and validator operations are set up properly.
 
-## См. также
+Please ensure you comply with the [validator maintain guidelines](/v3/guidelines/nodes/running-nodes/validator-node#maintain-guidelines).
 
-- [Запуск валидатора](/v3/guidelines/nodes/running-nodes/validator-node)
-- [Транзакционные сборы](/v3/documentation/smart-contracts/transaction-fees/fees)
+If you don't want to do this please consider [using staking services](https://ton.org/stake).
+
+## See also
+
+- [Running a validator](/v3/guidelines/nodes/running-nodes/validator-node)
+- [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
 - [Что такое блокчейн? Что такое смарт-контракт? Что такое газ?](https://blog.ton.org/what-is-blockchain)
+
+<Feedback />
+
