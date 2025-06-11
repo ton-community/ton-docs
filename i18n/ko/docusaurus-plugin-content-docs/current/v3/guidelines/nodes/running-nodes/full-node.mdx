@@ -1,0 +1,220 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Full node
+
+## OS 요구사항
+
+다음 지원되는 운영 체제로 MyTonCtrl 설치를 강력히 권장합니다:
+
+- Ubuntu 20.04
+- Ubuntu 22.04
+- Debian 11
+
+## 하드웨어 요구사항
+
+:::caution 개인용 로컬 기기에서의 노드 사용
+You shouldn't run any type of node on your personal local machine for extended periods, even if it meets the requirements. Nodes actively use disks, which can lead to rapid wear and potential damage.
+:::
+
+### validator 포함시
+
+- 16코어 CPU
+- 128GB RAM
+- 1TB NVME SSD _또는_ 64k+ IOPS 프로비저닝된 스토리지
+- 1 Gbit/s 네트워크 연결
+- 공인 IP 주소(_고정 IP 주소_)
+- 월 64TB 트래픽(최대 부하시 월 100TB)
+
+:::info 최대 부하에 대비하세요
+To reliably handle peak loads, a connection of at least 1 Gbit/s is typically required, while the average load is expected to be around 100 Mbit/s.
+:::
+
+### Port forwarding
+
+All types of nodes require a static external IP address, one UDP port forwarded for incoming connections, and all outgoing connections to be open—the node uses random ports for new outgoing connections. The node must also be visible to the outside world over the NAT.
+
+You can accomplish this by contacting your network provider or [renting a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
+
+:::info
+`netstat -tulpn` 명령을 사용하여 어떤 UDP 포트가 열려있는지 확인할 수 있습니다.
+:::
+
+### Recommended providers
+
+TON Foundation은 Validator 실행을 위해 다음 제공업체를 권장합니다:
+
+| Cloud Provider | Instance Type                   | CPU                     | RAM     | Storage                           | Network         | Public IP                               | 트래픽       |
+| -------------- | ------------------------------- | ----------------------- | ------- | --------------------------------- | --------------- | --------------------------------------- | --------- |
+| GCP            | `n2-standard-16`                | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `16 Gbps`       | Reserve a static external IP            | `월 64TB`  |
+| Alibaba Cloud  | `ecs.g6.4xlarge`                | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `최대 10 Gbps`    | Bind an Elastic IP                      | `월 64TB`  |
+| Tencent Cloud  | `M5.4XLARGE`                    | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `최대 10 Gbps`    | Associate an Elastic IP                 | `월 64TB`  |
+| Vultr          | `bare metal Intel E-2388G`      | `16 코어 / 32 스레드`        | `128GB` | `1.92TB NVMe SSD`                 | `10 Gbps`       | 인스턴스에 고정 IP 포함                          | `월 64TB`  |
+| DigitalOcean   | `general purpose premium Intel` | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `10 Gbps`       | 인스턴스에 고정 IP 포함                          | `월 64TB`  |
+| Latitude       | `c3.medium.x86`                 | `16 코어 / 32 스레드`        | `128GB` | `1.9TB NVMe SSD`                  | `10 Gbps`       | 인스턴스에 고정 IP 포함                          | `월 64TB`  |
+| AWS            | `i4i.8xlarge`                   | `32 vCPUs`              | `256GB` | `2 x 3,750 AWS Nitro SSD (고정)`    | `최대 25 Gbps`    | Bind an Elastic IP                      | `월 64TB`  |
+
+:::info
+**Note:** Prices, configurations, and availability can change. It is recommended to always refer to the official documentation and pricing pages of the respective cloud provider before making any decisions.
+:::
+
+## 노드 실행하기 (영상)
+
+[//]: # "<ReactPlayer controls={true} style={{borderRadius:'10pt', margin:'15pt auto', maxWidth: '100%'}} url='/docs/files/TON_nodes.mp4' />"
+
+다음 영상 단계별 튜토리얼을 확인하여 빠르게 시작하세요:
+
+<video
+  style={{
+    borderRadius: "10pt",
+    margin: "auto",
+    width: "100%",
+    maxWidth: "100%",
+  }}
+  controls={true}
+>
+  <source src="/files/TON_nodes.mp4" type="video/mp4" />
+</video>
+
+## Run a node (text)
+
+### Root가 아닌 사용자로 전환
+
+:::warning
+This step is required to successfully install and use MyTonCtrl—don't ignore non-root user creation. Without this step, there will be no errors during installation, but MyTonCtrl will not work properly.
+:::
+
+If you don't have a non-root user, you can create one with the following steps (otherwise, skip the first two steps and go to the third).
+
+1. root로 로그인하고 새 사용자 생성:
+
+```bash
+sudo adduser <username>
+```
+
+2. 사용자를 sudo 그룹에 추가:
+
+```bash
+sudo usermod -aG sudo <username>
+```
+
+3. 새 사용자로 로그인(ssh를 사용하는 경우 **현재 세션을 종료하고 올바른 사용자로 다시 연결해야 합니다**)
+
+```bash
+ssh <username>@<server-ip-address>
+```
+
+### MyTonCtrl 설치
+
+**sudo** 권한이 있는 **비root** 사용자 계정에서 설치 스크립트를 다운로드하고 실행:
+
+<Tabs groupId="operating-systems">
+  <TabItem value="ubuntu" label="Ubuntu">
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+sudo bash install.sh
+```
+
+</TabItem>
+  <TabItem value={'debian'} label={'Debian'}>
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+su root -c 'bash install.sh'
+```
+
+</TabItem>
+</Tabs>
+
+- `-d` - **mytonctrl**이 최신 블록체인 상태의 [덤프](https://dump.ton.org/)를 다운로드합니다.
+  이는 동기화 시간을 몇 배 단축시킵니다.
+- `-c <path>` - 동기화를 위해 공개 라이트서버가 아닌 다른 서버를 사용하려는 경우. _(선택사항)_
+- `-i` - 최소 요구사항 무시, 실제 노드 사용 없이 컴파일 과정만 확인하려는 경우에만 사용.
+- `-m` - 모드, `validator` 또는 `liteserver`일 수 있습니다.
+- `-t` - 텔레메트리 비활성화.
+
+**테스트넷을 사용하려면** `-c` 플래그에 `https://ton.org/testnet-global.config.json` 값을 제공해야 합니다.
+
+기본 `-c` 플래그 값은 `https://ton-blockchain.github.io/global.config.json`이며, 이는 기본 메인넷 설정입니다.
+
+### Running the MyTonCtrl
+
+1. **설치에 사용된 로컬 사용자 계정**에서 `MyTonCtrl` 콘솔 실행:
+
+```sh
+mytonctrl
+```
+
+2. `status` 명령을 사용하여 `MyTonCtrl` 상태 확인:
+
+```sh
+status
+```
+
+**테스트넷**에서는 `status` 대신 `status fast` 명령을 사용해야 합니다.
+
+다음 상태가 표시되어야 합니다:
+
+- **mytoncore status**: should display in green.
+- **local validator status**: should also display in green.
+- **local validator out of sync**: initially, a `n/a` string is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20, the validator is synchronized.
+
+**status** 명령 출력 예시:
+
+![status](/img/docs/nodes-validator/mytonctrl-status.png)
+
+:::caution status에 대해 동일한 출력이 있는지 확인하세요
+모든 노드 유형에 대해 **Local Validator status** 섹션이 나타나야 합니다.
+그렇지 않은 경우, [문제 해결 섹션](/v3/guidelines/nodes/nodes-troubleshooting#status-command-displays-without-local-node-section)과 [노드 로그 확인](/v3/guidelines/nodes/running-nodes/full-node#check-the-node-logs)을 확인하세요.
+:::
+
+Please wait until the `Local validator out of sync` status is less than 20 seconds.
+
+When a new node is started, even from a dump, it is important to wait up to 3 hours before the _out of sync_ number begins to decrease. This delay occurs because the node must establish its place in the network and propagate its addresses through the DHT tables, among other processes.
+
+### mytonctrl 제거
+
+스크립트를 다운로드하고 실행:
+
+```bash
+sudo bash /usr/src/mytonctrl/scripts/uninstall.sh
+```
+
+### mytonctrl 소유자 확인
+
+실행:
+
+```bash
+ls -lh /var/ton-work/keys/
+```
+
+## Tips & tricks
+
+### 사용 가능한 명령어 목록
+
+- `help`를 사용하여 사용 가능한 명령어 목록을 확인할 수 있습니다:
+
+![Help command](/img/docs/full-node/help.jpg)
+
+### Check the MyTonCtrl logs
+
+- To check **MyTonCtrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for root.
+
+![logs](/img/docs/nodes-validator/manual-ubuntu_mytoncore-log.png)
+
+### 노드 로그 확인
+
+실패 시 노드 로그 확인:
+
+```bash
+tail -f /var/ton-work/log.thread*
+```
+
+## 지원
+
+Contact technical support with [@ton_node_help](https://t.me/ton_node_help).
+
+<Feedback />
