@@ -1,198 +1,204 @@
-# 翻译风格指南
+import Feedback from '@site/src/components/Feedback';
 
-此翻译风格指南包含一些最重要的指南、说明和翻译技巧，帮助我们对网站进行本地化。
+# Translation style guide
 
-本文档是一份一般性指南，并不特定于任何一种语言。
+This translation style guide contains essential guidelines, instructions, and tips for translators, helping us localize the website.
 
-## 理解信息的精髓
+This document serves as a general guide and is not specific to any language.
 
-当翻译 TON 文档内容时，避免直译。
+## Capturing the essence of the message
 
-重要的是翻译要抓住信息的本质。 这可能意味着改写某些短语，或者使用描述性翻译而不是逐字翻译内容。
+When translating TON docs content, avoid literal translations.
 
-不同的语言有不同的语法规则、约定和词序。 翻译时，请注意目标语言中句子的结构，避免按字面翻译英文源，因为这会导致句子结构和可读性差。
+The translations must capture the essence of the message. This approach means rephrasing specific phrases or using descriptive translations instead of translating the content word for word.
 
-建议你阅读整个句子并对其进行调整以适应目标语言的惯例，而不是逐字翻译源文本。
+Different languages have different grammar rules, conventions, and word order. When translating, please be mindful of structuring sentences in the target languages, and avoid word-for-word translation of the English source, as this can lead to poor sentence structure and readability.
 
-## 正式与非正式
+Instead of translating the source text word for word, you should read the entire sentence and adapt it to fit the conventions of the target language.
 
-我们使用正式的称呼形式，这对所有访客来说始终是礼貌和适当的。
+## Formal vs. informal
 
-使用正式的称呼可以让我们避免听起来不官方或冒犯，并且无论访客的年龄和性别如何都可以通用。
+We use the formal form of address, which is always polite and appropriate for all visitors.
 
-大多数印欧语和亚非语语言使用特定性别的第二人称人称代词，以区分男性和女性。 在称呼用户或使用所有格代词时，我们可以避免假设访问者的性别，因为正式的称呼形式通常适用且一致，无论他们如何定位自己。
+Using the formal address allows us to avoid sounding unofficial or offensive and works regardless of the reader’s age and gender.
 
-## 简单明了的词汇和意思
+Most Indo-European and Afro-Asiatic languages use gender-specific second-person personal pronouns, distinguishing between males and females. When addressing the user or using possessive pronouns, we can avoid assuming the reader’s gender, as the formal address is generally applicable and consistent, regardless of how they identify.
 
-我们的目标是让尽可能多的人能够理解网站上的内容。
+## Straightforward vocabulary and meaning
 
-在大多数情况下，这可以通过使用易于理解的简短单词轻松实现。 如果你的语言中具有相同含义的某个单词有多种可能的翻译，那么最好的选择通常是清楚地反映含义的最短单词。
+Our goal is to make content on the website understandable to as many people as possible.
 
-## 书写系统
+In most cases, contributors can achieve this result by using short and simple words that are easily understandable. If multiple possible translations exist for a word in your language with the same meaning, the best option is often the shortest word reflecting the meaning.
 
-所有内容都应使用适合你的语言的正确书写系统进行翻译，并且不应包含使用拉丁字符书写的任何单词。
+## Writing system
 
-翻译内容时，应确保翻译内容一致且不包含任何拉丁字符。
+All of the content should be translated using the correct writing system for your language and should not include any words written using Latin characters.
 
-**以上规则不适用于通常不应翻译专有名词的语言。**
+When translating the content, you should ensure that the translations are consistent and do not include any Latin characters.
 
-## 翻译页面元数据
+**Do not translate proper names defined by glossary**
 
-某些页面包含页面上的元数据，例如“title”、“lang”、“description”、“sidebar”等。
+## Translating page metadata
 
-在将新页面上传到 Crowdin 时，我们隐藏了翻译人员不应翻译的内容，这意味着 Crowdin 中翻译人员可见的所有元数据都应该被翻译。
+Some pages contain metadata, such as 'title', 'lang', 'description', 'sidebar', etc.
 
-翻译源文本为“en”的任何字符串时，请特别注意。 这表示页面可用的语言，应翻译为[你的语言的 ISO 语言代码](https://www.andiamo.co.uk/resources/iso-language-codes/)。 这些字符串应始终使用拉丁字符而不是目标语言原生的书写脚本进行翻译。
+When uploading new pages to Crowdin, we hide content that translators should never translate. This feature makes visible to translators in Crowdin only the text that should be translated.
 
-如果你不确定要使用哪种语言代码，你可以查看 Crowdin 中的翻译记忆库，或在 Crowdin 在线编辑器的页面 URL 中找到你的语言的语言代码。
+Please be especially careful when translating strings where the source text is 'en'. This represents the language page, which is available and should be translated to the [ISO language code for your language](https://www.andiamo.co.uk/resources/iso-language-codes/). These strings should always be translated using Latin characters, not the writing script, native to the target language.
 
-使用最广泛的语言的语言代码示例：
+Some examples of language codes for the most widely spoken languages:
 
-- 英文 - en
-- 简体中文 - zh-CN
-- 俄语 - ru
-- 韩语 - ko
-- 波兰语 - pl
-- 乌克兰语 - uk
+- English - en
+- Chinese Simplified - zh-CN
+- Russian - ru
+- Korean - ko
+- Polish - pl
+- Ukrainian - uk
 
-## 外部文章标题
+## Titles of external articles
 
-一些字符串包含外部文章的标题。 我们的大多数开发人员文档页面都包含指向外部文章的链接，以供进一步阅读。 无论文章的语言如何，都需要翻译包含文章标题的字符串，以确保以他们的语言查看页面的访问者获得更一致的用户体验。
+Some strings contain titles of external articles. Most of our developer documentation pages contain links to external articles for further reading. The strings containing article titles need to be translated, regardless of the article's language, to ensure a more consistent user experience for visitors viewing the page in their language.
 
-## Crowdin 警告
+## Crowdin warnings
 
-Crowdin 有一个内置功能，可以在翻译人员即将出错时发出警告。 在保存翻译之前，如果你忘记在译文中加上原文中的标签、翻译了不应翻译的元素、添加了多个连续的空格、忘记结尾标点等，Crowdin 会自动提醒你。 如果你看到这样的警告，请返回并仔细检查建议的翻译。
+Crowdin has a built-in feature that warns translators when they are about to make a mistake. Crowdin will automatically alert you before saving your translation if you forget to include a tag from the source, translate elements that should not be translated, add several consecutive spaces, forget end punctuation, etc. If you see a warning like this, please double-check the suggested translation.
 
 :::warning
-永远不要忽略这些警告，因为它们通常意味着有问题，或者翻译缺少源文本的关键部分。
+Never ignore these warnings, as they usually mean something is wrong or the translation lacks a key part of the source text.
 :::
 
-## 简短与完整形式/缩写
+## Short vs. complete forms and abbreviations
 
-网站上使用了很多缩写，例如 dApp、NFT、DAO、DeFi 等。 这些缩写通常用于英语，并且大多数网站访问者都熟悉它们。
+The website uses many abbreviations, such as apps, DApps, NFT, DAO, DeFi, etc. These abbreviations are standard in English, and most visitors are familiar with them.
 
-由于它们通常没有其他语言的既定翻译，处理这些和类似术语的最佳方法是提供完整形式的描述性翻译，并在括号中添加英文缩写。
+Since they usually don’t have established translations in other languages, the best approach to these and similar terms is to provide a descriptive translation of the entire form and add the English abbreviation in brackets.
 
-不要翻译这些缩写，因为大多数人不熟悉它们，而且本地化版本对大多数访问者来说没有多大意义。
+Do not translate these abbreviations since most people are unfamiliar with them, and the localized versions would not make much sense to most visitors.
 
-如何翻译 dApp 的示例：
+Example of how to translate DApps:
 
-- Decentralized applications (dapps) → 完整的翻译形式 (括号中为英文缩写)
+- Decentralized applications (DApps) → Translated in complete form (English abbreviation in brackets)
 
-## 没有既定翻译的术语
+## Terms without established translations
 
-某些术语在其他语言中可能没有既定翻译，并且以原始英语术语而广为人知。 这些术语主要包括较新的概念，如工作量证明、权益证明、信标链、质押等。
+Some terms might not have established translations in other languages but are widely known by their original English names. Such terms include newer concepts, like proof-of-work, proof-of-stake, Beacon Chain, staking, etc.
 
-虽然翻译这些术语听起来不自然，但由于英文版本也常用于其他语言，因此强烈建议将它们翻译。
+While translating these terms can sound unnatural, since the English version is a basis for other languages, it is highly recommended that they be translated.
 
-翻译它们时，请随意发挥创意，使用描述性翻译，或直接按字面翻译。
+Feel free to get creative, use descriptive translations, or translate them literally.
 
-**大多数术语应该翻译而不是将其中一些保留英文的原因是，随着越来越多的人开始使用TON和相关技术，这种新术语将在未来变得更加普遍。 如果我们想让来自世界各地的更多人加入这个领域，我们需要以尽可能多的语言提供易于理解的术语，即使我们需要自行创建它。**
+Most terms should be translated instead of leaving some in English, as this new terminology will become more widespread as more people start using TON and related technologies. To onboard more people to TON, we must provide understandable terminology in as many languages as possible, even if we need to create it ourselves.
 
-## 按钮与行动号召
+## Buttons & CTAs
 
-网站包含许多按钮，其翻译方式应与其他内容不同。
+Do not translate the website's contents, such as buttons.
 
-可以通过查看上下文屏幕截图、与大多数字符串连接或通过检查编辑器中的上下文（包括短语“button”）来识别按钮文本。
+You may identify button text by viewing the context screenshots connected with most strings or by checking the context in the editor, which includes the phrase ‘’button’’.
 
-按钮的翻译应尽可能简短，以防止格式不匹配。 此外，按钮翻译应该是必要的，即呈现命令或请求。
+Button translations should be as short as possible to prevent formatting mismatches. Additionally, button translations, i.e., presenting a command or request, should be imperative.
 
-## 翻译包容性
+## Translating for inclusivity
 
-TON 文档的访问者来自世界各地和不同的背景。 因此，网站上的语言应该是中立的，欢迎所有人而不是排他性的。
+TON docs visitors come from all over the world and from different backgrounds. Therefore, the language on the website should be neutral, welcoming to everyone, and not exclusive.
 
-其中一个重要方面是性别中立。 这可以通过使用正式的地址形式并避免在翻译中使用任何特定性别的词来轻松实现。
+Gender neutrality is an essential aspect of this. Use the formal address form and avoid gender-specific words in the translations.
 
-另一种形式的包容性是，尝试面向全球观众翻译，而不是面向任何国家、种族或地区。
+Another form of inclusivity is trying to translate for a global audience, not specific to any country, race, or region.
 
-最后，语言应该适合所有大众和年龄段的读者。
+Finally, the language should be suitable for all audiences and ages.
 
-## 特定语言的翻译
+## Language-specific translations
 
-翻译时，重要的是要遵循你的语言中使用的语法规则、约定和格式，而不是从源复制。 源文本遵循英语语法规则和约定，而这不适用于许多其他语言。
+When translating, it is crucial to follow the grammar rules, conventions, and formatting used in your language instead of copying from the source. The source text follows English grammar rules and conventions, which do not apply to many other languages.
 
-你应该了解你的语言规则并进行相应的翻译。 如果你需要帮助，请与我们联系，我们将帮助你找到一些有关如何在你的语言中使用这些元素的资源。
+You should be aware of the rules for your language and translate accordingly. If you need help, contact us; we will help you with resources on translating elements for your language.
 
-一些需要特别注意的例子：
+Some examples of what to be particularly mindful of:
 
-### 标点、格式
+### Punctuation, formatting
 
-#### 大写
+#### Capitalization
 
-- 不同语言的大小写存在巨大差异。
-- 在英语中，通常将标题和名称、月份和日期、语言名称、假期等中的所有单词大写。 在许多其他语言中，这在语法上是不正确的，因为它们具有不同的大小写规则。
-- 一些语言也有关于人称代词、名词和某些形容词大写的规则，这些在英语中是不大写的。
+- There are vast differences in capitalization in different languages.
+- In English, it is common to capitalize all words in titles and names, months and days, language names, holidays, etc. In many other languages, this is grammatically incorrect, as they have different capitalization rules.
+- Some languages also have rules about capitalizing personal pronouns, nouns, and adjectives that you shouldn't capitalize in English.
 
-#### 间距
+#### Spacing
 
-- 正字法规则定义了每种语言的空格使用。 因为到处都使用空格，所以这些规则是最独特的，而空格是最容易误译的元素。
-- 英语和其他语言之间的一些常见间距差异：
-  - 计量单位和货币前的空格（例如 USD、EUR、kB、MB）
-  - 度数符号前的空格（例如°C、℉）
-  - 一些标点符号前的空格，尤其是省略号 (...)
-  - 斜杠前后的空格 (/)
+- Orthography rules define the use of spaces for each language. Because spaces are used everywhere, these rules are some of the most distinct, and spaces are some of the most mistranslated elements.
+- Some common differences in spacing between English and other languages:
+  - Space before units of measure and currencies. Example: USD, EUR, kB, MB
+  - Space before degree signs. Example: °C, ℉
+  - Space before some punctuation marks, especially the ellipsis. Example: Then… in summary
+  - Space before and after slashes. Example: if / else
 
-#### 列表
+#### Lists
 
-- 每种语言都有一套多样化和复杂的规则来编写列表。 这些可能与英语有很大不同。
-- 在某些语言中，每个新行的第一个单词需要大写，而在其他语言中，新行应该以小写字母开头。 许多语言对列表中的大小写也有不同的规则，具体取决于每行的长度。
-- 这同样适用于行项目的标点符号。 列表中的结束标点可以是句点 (.)、逗号 (,) 或分号 (；)具体取决于语言
+- Every language has a diverse and complex set of rules for writing lists. These can be significantly different from English.
+- In some languages, the first word of each new line needs to be capitalized, while in others, new lines should start with lowercase letters. Many languages also have different rules about capitalization in lists, depending on the length of each line.
+- The same applies to the punctuation of line items. The end punctuation in lists can be a period (.), comma (,), or semicolon (;), depending on the language.
 
-#### 引号
+#### Quotation marks
 
-- 语言使用许多不同的引号。 简单地从源中复制英文引号通常是不正确的。
-- 一些最常见的引号类型包括：
-  - “示例文本”
-  - ‘示例文本’
-  - »示例文本«
-  - “示例文本”
-  - ‘示例文本’
-  - «示例文本»
+- Languages use many different quotation marks. Simply copying the English quotation marks from the source is often incorrect.
+- Some of the most common types of quotation marks include:
+  - „example text“
+  - ‚example text’
+  - »example text«
+  - “example text”
+  - ‘example text’
+  - «example text»
 
-#### 连字符和破折号
+#### Hyphens and dashes
 
-- 在英语中，连字符 (-) 用于连接单词或单词的不同部分，而破折号 (-) 用于表示范围或停顿。
-- 许多语言对使用连字符和破折号有不同的规则，应遵守这些规则。
+- In English, a hyphen `-` is used to join words or different parts of a word, while a dash `—` indicates a range or a pause.
+  - Example: TON — is ... proof-of-stake.
+- Many languages have different rules for using hyphens and dashes that should be observed.
 
-### 格式
+### Formats
 
-#### 数字
+#### Numbers
 
-- 用不同语言书写数字的主要区别在于用于小数和千位的分隔符。 对于千数来说，这可以是句号、逗号或空格。 同样，一些语言使用小数点，而另一些语言使用小数点逗号。
-  - 一些大数的例子：
-    - 英语 - 1,000.50
-    - 西班牙语 - 1.000,50
-    - 法语 - 1 000,50
-- 翻译数字时的另一个重要考虑因素是百分号。 它可以用不同的方式编写：100%、100 % 或 %100。
-- 最后，负数可以不同地显示，具体取决于语言：-100、100-、(100) 或 [100]。
+- The main difference in writing numbers in different languages is the separator for decimals and thousands. For thousands, this can be a period, comma, or space. Similarly, some languages use a decimal point, while others use a decimal comma.
+  - Example:
+    - English – **1,000.50**
+    - Spanish – **1.000,50**
+    - French – **1 000,50**
+- The percent sign is another critical consideration when translating numbers. Write numbers in the typical format for the corresponding language.
+  - Example: **100%**, **100 %**, or **%100**.
+- Finally, negative numbers can be displayed differently, depending on the language
+  - Example: -100, 100-, (100) or [100].
 
-#### 日期
+#### Dates
 
-- 在翻译日期时，有许多基于语言的考虑因素和差异。 这些包括日期格式、分隔符、大写和前导零。 全长日期和数字日期之间也存在差异。
-  - 不同日期格式的一些示例：
-    - 英语（英国）(dd/mm/yyyy) – 1st January, 2022
-    - 英语（美国）(mm/dd/yyyy) – January 1st, 2022
-    - 中文 (yyyy-mm-dd) – 2022 年 1 月 1 日
-    - 法语 (dd/mm/yyyy) – 1er janvier 2022
-    - 意大利语 (dd/mm/yyyy) – 1º gennaio 2022
-    - 德语 (yyyy/mm/dd) – 1. Januar 2022
+- When translating dates, there are several considerations and differences based on the language. These include the date format, separator, capitalization, and leading zeros. There are also differences between full-length and numerical dates.
+  - Some examples of different date formats:
+    - English UK (dd/mm/yyyy) – 1st January, 2022
+    - English US (mm/dd/yyyy) – January 1st, 2022
+    - Chinese (yyyy-mm-dd) – 2022 年 1 月 1 日
+    - French (dd/mm/yyyy) – 1er janvier 2022
+    - Italian (dd/mm/yyyy) – 1º gennaio 2022
+    - German (dd/mm/yyyy) – 1. Januar 2022
 
-#### 货币
+#### Currencies
 
-- 由于格式、惯例和转换不同，货币转换可能具有挑战性。 作为一般规则，请保持货币与来源相同。 为了读者的利益，你可以在括号中添加你的当地货币和转换。
-- 用不同语言书写货币的主要区别包括符号位置、小数逗号与小数点、间距以及缩写与符号。
-  - 符号放置：美元 100或 100 美元
-  - 小数逗号和。小数点：100,50$ 或 100.50$
-  - 间距：100美元或 100 美元
-  - 缩写和符号：100$ 或 100 USD
+- Translating currencies can be challenging due to the different formats, conventions, and conversions. As a general rule, please keep currencies the same as the source. You can add your local currency and conversion in brackets for the reader's benefit.
+- The main differences in writing currencies in different languages include symbol placement, decimal commas vs. decimal points, spacing, and abbreviations vs. symbols.
+  - Symbol placement: $100 or 100$
+  - Decimal commas vs. decimal points: 100,50$ or 100.50$
+  - Spacing: 100$ or 100 $
+  - Abbreviations vs. symbols: 100 $ or 100 USD
 
-#### 计量单位
+#### Units of measure
 
-- 作为一般规则，请根据来源保留计量单位。 如果你所在的国家/地区使用不同的系统，你可以将转换包括在括号中。
-- 除了度量单位的本地化之外，注意语言处理这些单位的方式的差异也很重要。 主要区别在于数字和单位之间的间距，可以根据语言而有所不同。 这方面的示例包括 100kB 与 100 kB 或 50ºF 与 50ºF。
+- As a general rule, please keep the units of measure as per the source. You can include the conversion in brackets if your country uses a different system.
+- Aside from the localization of units of measure, it is also important to note the differences in how languages approach these units. The main difference is the spacing between the number and unit, which can differ based on the language. Examples of this include 100kB vs. 100 kB or 50ºF vs. 50 ºF.
 
-## 结论
+## Conclusion
 
-翻译时尽量不要着急。 放轻松，玩得开心！
+When translating, try not to rush. Take it easy and have fun!
 
-感谢你参与翻译计划并帮助我们让更广泛的受众可以访问网站。 TON社区是全球性的，我们很高兴你也成为其中的一员！
+Thank you for helping us localize the website and make it accessible to a wider audience. The TON community is global, and we are happy you are a part of it!
+
+<Feedback />
+
