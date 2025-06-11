@@ -1,43 +1,44 @@
-# Программа локализации
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Localization
 
-Локализация – это совместный проект по переводу связанных с TON документов на другие, отличные от английского, языки. Его реализация позволит сделать сайт доступным для миллиардов людей по всему миру
+The localization is a collaborative effort to translate various TON-related documents into multiple languages, making the website accessible to billions of non-English speakers worldwide.
 
-## Как устроен проект локализации
+## System design philosophy
 
 ![Принцип работы](/img/localizationProgramGuideline/localization-program.png)
 
-Проект локализации **разработан** и **активно развивается** компанией [**TownSquare Labs**](https://github.com/TownSquareXYZ), одним из ключевых партнеров **TON**.
+The localization process is fully maintained by [TownSquare Labs](https://github.com/TownSquareXYZ).
 
-Цель проекта локализации – создать открытую и понятную инфраструктуру для взаимодействия внутри многоязычного сообщества **TON**. Ее ключевыми свойствами являются:
+TownSquare is committed to creating an open infrastructure for multilingual community collaboration to advance TON to a better phase, which includes:
 
 - **Доступность для многоязычных сообществ**\
-  Программа для локализации поддерживает несколько языков, что обеспечивает вовлеченность и простоту доступа для пользователей из разных стран
+   Программа для локализации поддерживает несколько языков, что обеспечивает вовлеченность и простоту доступа для пользователей из разных стран
 
-- **Автоматизация разработки, интеграции и деплоя**\
-  С помощью инструментов автоматизации программа упрощает разработку, интеграцию и развертывание, сокращая ручные усилия и повышая эффективность и согласованность всех задач, связанных с локализацией
+- **Automate development, integration, and deployment**\
+   The program simplifies development, integration, and deployment through automation tools, reducing manual efforts and enhancing efficiency and consistency across localization efforts.
 
-- **Удобная ролевая модель**\
-  В проекте реализованы роли для разработчиков, переводчиков и верификаторов. Это позволяет каждому сосредоточиться на своих задачах, а также обеспечить высокое качество переводов и отсутствие конфликтных ситуаций
+- **Separation of roles for developer, translator, and verifier**\
+   Our approach divides the responsibilities of developers, translators, and verifiers, allowing each role to focus on their tasks and ensuring high-quality translations and seamless collaboration without role conflicts.
 
 - **Система поощрений**\
-  Мы предлагаем бонусы для членов сообщества, которые вносят весомый вклад в работу над локализацией. Мы уверены, что это способствует вовлеченности, поощряет активных участников, а также усиливает чувство причастности к международному проекту **TON**
+   Мы предлагаем бонусы для членов сообщества, которые вносят весомый вклад в работу над локализацией. Мы уверены, что это способствует вовлеченности, поощряет активных участников, а также усиливает чувство причастности к международному проекту **TON**
 
 - **Усовершенствованная интеграция AI для переводов**\
-  Встроенные системы искусственного интеллекта повышают точность и эффективность работы с текстом – предлагая подсказки, автоматизируя повторяющиеся задачи, тем самым обеспечивая высокое качество переводов при минимальных усилиях
+   Встроенные системы искусственного интеллекта повышают точность и эффективность работы с текстом – предлагая подсказки, автоматизируя повторяющиеся задачи, тем самым обеспечивая высокое качество переводов при минимальных усилиях
 
-Проект локализации позволяет обеспечить удобный процесс работы над переводами, тем самым оказывая поддержку глобальному сообществу разработчиков **TON**
+This project is designed to support speakers of multiple languages and serve the global developer ecosystem.
 
-## Сообщество
+## Acknowledgments
 
-Команда проекта благодарна за вклад каждого из тысяч участников сообщества. Мы хотим отметить результаты наших разработчиков, переводчиков, верификаторов и поддержать в их карьерном пути. В ближайшее время мы отметим самых активных участников, создав таблицы лидеров, а также список всех участников проекта локализации
+We sincerely appreciate the thousands of community members integral to the Translation Program. We aim to acknowledge our translators and support their career growth. In the future, we plan to create leaderboards and a list of all contributors.
 
-## Полезные ссылки
+## Guides and resources
 
-Полезные ресурсы, которые помогут сделать первые шаги в рамках проекта локализации:
+If you are participating in or considering joining the Translation Program, refer to the translation guides below:
 
-- [**Руководство по стилистике перевода**](/contribute/localization-program/translation-style-guide) - Инструкции и советы для переводчиков
-- [**Как работать в Crowdin**](https://support.crowdin.com/online-editor/) - Подробное руководство по взаимодействию с онлайн-редактором Crowdin, который используется в проекте
+- [Translation style guide](/v3/contribute/localization-program/translation-style-guide) – Instructions and tips for translators.
+- [Crowdin online editor guide](https://support.crowdin.com/online-editor/) – An in-depth guide to using the Crowdin online editor and some of Crowdin's advanced features.
+
+<Feedback />
+
