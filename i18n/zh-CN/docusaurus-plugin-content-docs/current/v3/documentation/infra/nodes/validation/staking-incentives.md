@@ -1,145 +1,170 @@
-# 质押激励
+import Feedback from '@site/src/components/Feedback';
 
-## 选举和质押
+# Staking incentives
 
-TON区块链使用权益证明（PoS）共识算法，这意味着与所有PoS网络一样，网络的安全和稳定性由一组网络验证者维护。特别是，验证者提出新区块（由交易批组成）的候选人，而其他验证者通过数字签名_验证_并批准它们。
+## Election and staking
 
-验证者是使用特殊的[选举治理合约](/develop/smart-contracts/governance#elector)选择的。在每个共识轮次中，验证者候选人发送选举申请，连同他们的质押代币和期望的_max_factor_（调节验证者每轮共识维护量的参数）。
+TON Blockchain uses the **Proof-of-stake (PoS)** consensus algorithm, meaning that, like all PoS networks, a set of network validators maintains the network's security and stability. In particular, validators propose candidates for new blocks (made up of transaction batches), while other validators _validate_ and approve them via digital signatures.
 
-在验证者选举过程中，治理智能合约选择下一轮验证者，并根据验证者的质押代币和_max_factor_为每个验证者分配投票权重，以最大化他们的总质押代币。在这方面，质押代币和_max_factor_越高，验证者的投票权重越高，反之亦然。
+Validators are chosen using a special [Elector governance contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector). During each consensus round, validator candidates send an application for election along with their stake and desired _max_factor_ (a parameter that regulates the amount of maintenance the validator performs per consensus round).
 
-被选中的验证者被选为通过参与下一个共识轮次来保护网络。然而，与许多其他区块链不同，为实现水平扩展，每个验证者只验证网络的一部分：
+During the validator election process, the governance smart contract chooses the next round of validators and assigns a voting weight to each validator to maximize their total stake while also considering the validator’s stake and _max_factor_. In this respect, the higher the stake and _max_factor_, the higher the voting weight of the validator, and vice versa.
 
-对于每个分片链和主链，都有专门的验证者集合。主链验证者集合由最高投票权重的多达100个验证者组成（定义为网络参数`Config16:max_main_validators`）。
+Elected validators are selected to secure the network by participating in the next consensus round. However, to achieve horizontal scalability, each validator verifies only a portion of the network, unlike many other blockchains:
 
-相比之下，每个分片链由一组23个验证者（定义为网络参数`Config28:shard_validators_num`）验证，并且每1000秒（网络参数`Config28:shard_validators_lifetime`）随机轮换一次。
+Each ShardChain and MasterChain has a dedicated set of validators. Sets of master chain validators consist of up to 100 validators exhibiting the highest voting weight (defined as Network Parameter `Config16:max_main_validators`).
 
-## 质押代币的价值：最大有效质押代币
+Each ShardChain is validated by 23 validators, as defined by Network Parameter `Config28:shard_validators_num`. These validators are rotated randomly every 1000 seconds according to Network Parameter `Config28:shard_validators_lifetime`.
 
-当前配置中的`max_factor`为__3__，意味着_最小_验证者的质押代币不能比_最大_验证者的质押代币多三倍。
+## Values of stakes: max effective stake
 
-配置参数的公式：
+The current `max_factor` in config is **3**, meaning the stake of the _smallest_ validator cannot be more than three times less than the stake of the **largest** one.
+
+The formula with the config parameters:
 
 `max_factor` = [`max_stake_factor`](https://tonviewer.com/config#17) / [`validators_elected_for`](https://tonviewer.com/config#15)
 
-### （简化的）选择算法
+### Selection algorithm review
 
-这个算法由[选举智能合约](/develop/smart-contracts/governance#elector)运行，根据验证者所承诺的质押代币选择最佳的验证者候选人。以下是它的工作原理：
+This algorithm, run by the [Elector smart contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector), selects the best validator candidates based on the stake they have committed. Here's a breakdown of how it works:
 
-1. **初始选择**：选举者考虑所有承诺超过设定最低金额（300K，如[配置](https://tonviewer.com/config#17)所述）的候选人。
+1. **Initial selection**: Elector considers all candidates who have staked more than a set minimum amount (300K, as specified in the [configuration](https://tonviewer.com/config#17)).
 
-2. **排序候选人**：这些候选人根据他们的质押代币从高到低进行排列。
+2. **Ordering candidates**: These candidates are then arranged from highest to lowest based on their stake.
 
-3. **缩小范围**：
-   - 如果候选人数量超过允许的最大验证者数量（[见配置](https://tonviewer.com/config#16)），质押代币最低的将被排除。
-   - 然后选举者评估每个可能的候选人组，从最大组开始逐渐减小：
-     - 它检查按顺序排列的顶部候选人，一个接一个地增加数量。
-     - 对于每个候选人，选举者计算他们的“有效质押代币”。如果候选人的质押代币明显高于最低限额，它会被调整下来（例如，如果某人质押代币310k，最低限额为100k，但有规则限制最多三倍最低限额，那么他们的有效质押代币被视为300k）。
-     - 它对这个组中所有候选人的有效质押代币进行求和。
+3. **Narrowing down**:
 
-4. **最终选择**：有效质押代币总和最高的候选人组被选举者选为验证者。
+- If the number of candidates exceeds the maximum allowed number of validators ([see configuration](https://tonviewer.com/config#16)), those with the lowest stakes are excluded.
 
-#### 验证者选择算法
+- The Elector then evaluates each potential group of candidates, starting from the largest group and moving to smaller ones:
 
-根据潜在验证者的可用质押代币，确定最小和最大质押代币的最佳值，目的是最大化总质押代币的量级：
+    - It examines the top candidates in the ordered list, increasing the number one by one.
 
-1. 选举者考虑所有质押代币高于最低限额（[配置中的300K](https://tonviewer.com/config#17)）的申请者。
-2. 选举者按质押代币_降序_排序他们。
-3. 如果参与者数量超过[最大验证者数量](https://tonviewer.com/config#16)，选举者将放弃列表的尾部。然后选举者执行以下操作：
+    - For each candidate, Elector calculates their **effective stake**. If a candidate's stake is significantly higher than the minimum, it's adjusted down (e.g., if someone staked 310k and the minimum is 100k, but there's a rule capping at three times the minimum, their effective stake is considered as 300k).
 
-   - 对于每个循环__i__从_1至N_（剩余参与者数量），它从排序列表中取出前__i__个申请。
-   - 它计算有效质押代币，考虑到`max_factor`。也就是说，如果某人质押代币310k，但`max_factor`为3，列表中的最低质押代币为100k Toncoin，那么有效质押代币将是min(310k, 3\*100k) = 300k。
-   - 它计算所有__i__个参与者的总有效质押代币。
+    - It sums up the effective stakes of all candidates in this group.
 
-一旦选举者找到这样的__i__，使得总有效质押代币最大，我们就宣布这些__i__个参与者为验证者。
+4. **Final selection**: The elector chooses the group of candidates with the highest total effective stake as the validators.
 
-## 积极激励
+#### Validator selection algorithm
 
-与所有区块链网络一样，TON上的每笔交易都需要一个称为[ gas ](https://blog.ton.org/what-is-blockchain)的计算费用，用于进行网络存储和链上交易处理。在TON上，这些费用积累在选举者合约中的奖励池中。
+Based on the available stakes of potential validators, optimal values for the minimum and maximum stake are determined, with the aim of maximizing the magnitude of the total stake:
 
-网络还通过向奖励池添加补贴来补贴区块创建，每个主链块1.7 TON，每个基本链块1 TON（网络参数`Config14:masterchain_block_fee`和`Config14:basechain_block_fee`）。请注意，当将基本链分割为多个分片链时，每个分片链块的补贴相应分割。这个过程允许每单位时间的补贴保持接近恒定。
+1. Elector takes all applicants who have a stake higher than the minimum ([300K in config](https://tonviewer.com/config#17)).
 
-:::info
-TON区块链计划在2023年第二季度引入通货紧缩机制。特别是，通过网络使用产生的TON的一部分将被销毁，而不是进入奖励池。
-:::
+2. Elector sorts them in _descending_ order of stake.
 
-经过65536秒或约18小时的验证周期轮次（网络参数`Config15:validators_elected_for`），验证者中的质押TON并未立即释放，而是持有额外的32768秒或约9小时（网络参数`Config15:stake_held_for`）。在此期间，可以从验证者中扣除削减（对行为不端验证者的惩罚机制）罚款。在资金释放后，验证者可以提取他们在验证轮次期间累积的奖励池份额，与他们的投票_权重_成比例。
+3. If there are more participants than the [maximum number](https://tonviewer.com/config#16) of validators, Elector discards the tail of the list. Then Elector does the following:
 
-截至2023年4月，网络上所有验证者每轮共识的总奖励池约为40,000 TON，每个验证者的平均奖励约为120 TON（投票权重与累积奖励之间的最大差异约为3 TON）。
+    - For each cycle **i** from _1 to N_ (the remaining number of participants), it takes the first **i** applications from the sorted list.
 
-考虑到Toncoin（50亿TON）的总供应量，其年通胀率约为0.3-0.6%。
+    - It calculates the effective stake, considering the `max_factor`. That is, if a person has put in 310k, but with a `max_factor` of 3, and the minimum stake in the list is 100k Toncoins, then the effective stake will be min(310k, 3\*100k) = 300k. One validator node may use up to 600k TON (in this example) in two rounds (half in odd rounds, half in even rounds). To increase the stake, it is necessary to set up multiple validator nodes.
 
-然而，这一通胀率并非始终恒定，可能会根据网络的当前状态而有所偏差。最终，在通货紧缩机制启动和网络利用率增长后，它将趋于通货紧缩。
+    - It calculates the total effective stake of all **i** participants.
+
+Once Elector identifies such an **i**, where the total effective stake is maximized, we declare these **i** participants as validators.
+
+## Positive incentives
+
+Similarly to all blockchain networks, each transaction on TON requires a computation fee called [gas](https://blog.ton.org/what-is-blockchain) to store the network and process the transaction on-chain. On TON, these fees are accumulated within the Elector contract in a reward pool.
+
+The network also provides a subsidy for block creation by adding an amount of 1.7 TON to the reward pool for each MasterChain block and an amount equal to 1 TON for each BaseChain block (refer to Network Parameters `Config14:masterchain_block_fee` and `Config14:basechain_block_fee`). It is important to note that when a BaseChain is divided into multiple ShardChains, the subsidy for each ShardChain block is distributed accordingly. This approach helps maintain a consistent subsidy per unit of time.
 
 :::info
-了解当前TON区块链统计数据[这里](https://tontech.io/stats/)。
+In June 2023, the [Deflationary Burn Mechanism](https://blog.ton.org/ton-holders-and-validators-vote-in-favor-of-implementing-the-toncoin-real-time-burn-mechanism) was introduced. With this mechanism, a portion of the TON generated by the network is burned instead of being allocated to the rewards pool.
 :::
 
-## 负面激励
+After a validation cycle lasting 65536 seconds, or approximately 18 hours (as determined by the network parameter `Config15:validators_elected_for`), staked TON is not immediately released by each validator. Instead, it is held for an additional 32768 seconds, or about 9 hours (as specified by the network parameter `Config15:stake_held_for`). During this period, slashing penalties can be imposed on the validator as a consequence for any misbehavior. Once the funds are released, validators can withdraw their staked amount along with a share of the rewards accrued during the validation round, proportional to their voting **weight**.
 
-在TON区块链上，通常有两种方式可以对行为不端的验证者进行处罚：闲置和恶意行为；这两种行为都是被禁止的，可能会因其行为而被罚款（在所谓的削减过程中）。
+As of April 2023, the total reward pool per consensus round for all validators on the network is approximately 40,000 TON, with the average reward per validator being ~ 120 TON (the maximum difference between voting weight and the accrued rewards is ~3 TON).
 
-如果验证者在验证轮次期间长时间不参与区块创建和交易签名，它可能会使用_标准罚款_参数被罚款。截至2023年4月，标准罚款累积为101 TON（网络参数`ConfigParam40:MisbehaviourPunishmentConfig`）。
+The total supply of Toncoin (5 billion TON) has an inflation rate of approximately 0.3-0.6% annually.
 
-在TON上，削减罚款（给验证者的罚款）允许任何网络参与者提出投诉，如果他们认为验证者行为不端。在此过程中，提出投诉的参与者必须附上用于选举者提交的行为不端的密码学证据。在`stake_held_for`争议解决期间，网络上的所有验证者检查投诉的有效性，并投票决定是否集体追究（同时确定行为不端证据的合法性和罚款分配）。
-
-一旦获得66%验证者批准（通过相等的投票权重衡量），削减罚款将从验证者中扣除，并从验证者的总质押代币中提取。对于处罚和投诉解决的验证过程通常使用 MyTonCtrl 自动进行。
-
-## 参阅
+This inflation rate, however, is not always constant and may deviate depending on the network’s current state. Eventually, it will tend to deflate after the Deflation mechanism is activated and network utilization grows.
 
 :::info
-2024 年 9 月 9 日，以下对表现不佳的审定者进行处罚的制度全面实施。
+Learn current TON Blockchain stats [here](https://tontech.io/stats/).
 :::
 
-### 不良工作的判定
+## Negative incentives
 
-TON 随 [lite-client](https://github.com/newton-blockchain/ton/tree/master/lite-client) 工具一起提供。lite-client 中有一条 `checkloadall` 命令。
-该命令分析验证器应该处理了多少数据块，以及在给定时间内实际处理了多少数据块。
+On TON Blockchain, there are generally two ways validators can be penalized for misbehaving: **idle** and **malicious** misbehaving. Both are prohibited and may result in fines (in a process called slashing) for their actions.
 
-如果验证器在一轮验证过程中处理的区块数少于预期的 90%，则被视为表现不佳，应受到处罚。
+If a validator fails to participate in block creation and transaction signing for a significant period during a validation round, they may incur a fine based on the **Standard fine** parameter. As of April 2023, the Standard fine that can be accrued is 101 TON (Network Parameter `ConfigParam40:MisbehaviorPunishmentConfig`).
+
+On the TON network, slashing penalties—also known as fines imposed on validators—allow any participant to file a complaint if they suspect a validator is misbehaving. When submitting a complaint, the participant must provide cryptographic evidence of the alleged misbehavior for submission to the Electors.
+
+During the `stake_held_for` dispute resolution period, all validators on the network assess the validity of the complaints and vote on whether to pursue each complaint collectively. They also evaluate the legitimacy of the provided evidence and determine the appropriate penalties.
+
+If, based on weighted votes, at least 66% of the validators approve the complaint, the slashing penalty is applied. This penalty is deducted from the offending validator's total stake. Typically, the process of penalization and resolution of complaints is managed automatically using MyTonCtrl.
+
+## Decentralized system of penalties
+
 :::info
-了解更多有关过程的技术描述[此处](https://github.com/ton-blockchain/TIPs/issues/13#issuecomment-786627474)
+The following system of penalizing poorly performing validators was fully operational on September 9, 2024.
 :::
 
-### 投诉工作流程
+### Determination of poor work
 
-- 任何人都可以提出投诉，并在正确的投诉中获得奖励。
-- 投诉的验证工作由验证员负责，完全分散进行。
+The TON is supplied with the [lite-client](https://github.com/newton-blockchain/ton/tree/master/lite-client) utility. In lite-client, there is a `checkloadall` command.
 
-#### 投诉
+This command analyses the number of blocks the validator should have processed and the number it actually processed in a given period of time.
 
-每轮验证结束后（约 18 个小时），参与该轮验证的验证者的质押会在 Elector 智能合约上再保留约 9 个小时。
-在此期间，任何人都可以对在该轮验证中表现不佳的验证者进行投诉。这发生在 Elector 智能合约的链上。
+If the validator processed less than 90% of the expected number of blocks during a validation round, it is considered to be performing poorly and should be penalized.
 
-#### 投诉确认
+:::info
+Learn more about the technical description of the process [here](https://github.com/ton-blockchain/TIPs/issues/13#issuecomment-786627474)
+:::
 
-每轮验证结束后，验证者会收到来自 Elector 智能合约的投诉列表，并通过调用 `checkloadall`对其进行双重检查。
-如果投诉被验证，他们就会在链上投票支持该投诉。
+### Complain workflow
 
-这些操作内置于 `mytonctrl`，并自动执行。
-如果投诉获得了 66% 验证人的投票（按权重计算），就会从验证人的股份中扣除罚金。
-任何人都无法单独罚款。
+- Anyone can make a complaint and get a reward for the right complaint.
 
-[@tonstatus_notifications](https://t.me/tonstatus_notifications) - 每轮被处罚的验证者名单。
+- Validation of complaints maintained by Validators and fully decentralized.
 
-### 罚款金额
+#### Make complaint
 
-罚款金额是固定的，等于 101  TON （网络参数 `ConfigParam40:MisbehaviourPunishmentConfig`），大致相当于验证者每轮的收入。
+After each validation round (~18 hours), the validator stakes of the validators who participated in that round remain on the Elector smart contract for another ~9 hours.
 
-由于 TON 的受众和交易数量增长迅速，工作质量达到最佳至关重要，因此罚款的价值可能会发生变化。
+During this time, anyone can send a complaint against a validator who performed poorly in said round. This happens on-chain on the Elector smart contract.
 
-### 罚款分配
+#### Validation of complaint
 
-罚款在验证者之间分配，扣除网络成本，并向第一个向选举人发送正确投诉的投诉者支付小额奖励（约 8  TON ）。
+After each validation round, validators receive a list of complaints from the Elector smart contract. They then double-check these complaints by calling `checkloadall`.
 
-### 验证器指南
+If a complaint is validated, a vote is conducted on-chain in favor of that complaint.
 
-为防止您的验证器节点被罚款，建议您确保硬件、监控和验证器操作设置正确。
-请确保您遵守 [validator 维护指南](/v3/guidelines/nodes/running-nodes/validator-node#maintain-guidelines)。
-如果您不想这样做，请考虑使用盯人服务 https://ton.org/stake。
+These actions are integrated into MyTonCtrl and occur automatically.
 
-## 参阅
+When a complaint receives 66% of the validators' votes (weighted by their stake), the validator's stake is penalized.
 
-- [运行验证器](/v3/guidelines/nodes/running-nodes/validator-node)
-- [交易费用](/v3/documentation/smart-contracts/transaction-fees/fees)
-- [什么是区块链？什么是智能合约？什么是 gas ？](https://blog.ton.org/what-is-blockchain)
+No one has the authority to impose a fine on their own.
+
+The list of penalized validators for each round is available at [@tonstatus_notifications](https://t.me/tonstatus_notifications).
+
+### Fine value
+
+The amount of the fine is fixed and equals 101 TON(Network Parameter `ConfigParam40:MisbehaviourPunishmentConfig`), which is roughly equal to the validator's income per round.
+
+The value of the fine may change due to the rapidly growing audience and the number of transactions in TON, and it is vital that the quality of work is at its best.
+
+### Fine distribution
+
+The fine is distributed among the validators minus network costs, and a small reward (~8 TON) is given to the first complainer who sends the correct complaint to the Elector.
+
+### Validator guidelines
+
+To prevent your Validator node from being fined, it is advisable to ensure that the hardware, monitoring, and validator operations are set up properly.
+
+Please ensure you comply with the [validator maintain guidelines](/v3/guidelines/nodes/running-nodes/validator-node#maintain-guidelines).
+
+If you don't want to do this please consider [using staking services](https://ton.org/stake).
+
+## See also
+
+- [Running a validator](/v3/guidelines/nodes/running-nodes/validator-node)
+- [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
+- [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
+
+<Feedback />
+
