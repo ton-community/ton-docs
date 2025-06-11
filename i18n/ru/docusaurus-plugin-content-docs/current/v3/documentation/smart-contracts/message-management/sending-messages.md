@@ -1,8 +1,6 @@
-# Отправка сообщений
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Отправка сообщений
 
 Составление, анализ и отправка сообщений лежат на пересечении [схем TL-B](/v3/documentation/data-formats/tlb/tl-b-language), [фаз транзакций и TVM](/v3/documentation/tvm/tvm-overview).
 
@@ -11,240 +9,340 @@
 Поскольку TON — это комплексная система с широким функционалом, сообщения, которым необходимо поддерживать весь этот функционал, могут показаться довольно сложными. Однако большая часть этого функционала не используется в обычных сценариях, и сериализацию сообщений в большинстве случаев можно упростить до:
 
 ```func
-  cell msg = begin_cell()
-    .store_uint(0x18, 6)
-    .store_slice(addr)
-    .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-    .store_slice(message_body)
-  .end_cell();
+ cell msg = begin_cell()
+ .store_uint(0x18, 6)
+ .store_slice(addr)
+ .store_coins(amount)
+ .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+ .store_slice(message_body)
+ .end_cell();
 ```
 
 Поэтому разработчику не стоит беспокоиться; если что-то в этом документе покажется непонятным при первом прочтении, это нормально. Просто поймите общую идею.
 
-Иногда в документации может встречаться слово **`gram`**, в основном в примерах кода; это просто устаревшее название **toncoin**.
+Sometimes, the word **`gram`** appears in the documentation, primarily in code examples; it is simply an outdated name for **Toncoin**.
 
 Давайте разберемся!
 
-## Типы сообщений
+## Отправка нескольких сообщений
 
 Существует три типа сообщений:
 
-- внешние — сообщения, отправляемые извне блокчейна в смарт-контракт внутри блокчейна. Такие сообщения должны быть явно приняты смарт-контрактами во время так называемого `credit_gas`. Если сообщение не принято, узел не должен принимать его в блок или передавать его другим узлам.
-- внутренние — сообщения, отправляемые из одной сущности блокчейна в другую. Такие сообщения, в отличие от внешних, могут нести некоторое количество TON и окупать себя. Таким образом, смарт-контракты, получающие такие сообщения, могут не принять их. В этом случае газ будет вычтен из стоимости сообщения.
-- логи — сообщения, отправляемые из сущности блокчейна во внешний мир. Как правило, не существует механизма отправки таких сообщений из блокчейна. Фактически, хотя все узлы в сети имеют консенсус относительно того, было ли создано сообщение или нет, нет никаких правил относительно того, как их обрабатывать. Логи могут быть напрямую отправлены в `/dev/null`, записаны на диск, сохранены в индексированной базе данных или даже отправлены не блокчейн-средствами (электронная почта/telegram/смс), все это остается на усмотрение данного узла.
+- **External** - messages sent from outside the blockchain to a smart contract inside the blockchain. Smart contracts should explicitly accept such messages during the so-called `credit_gas`. The node should not accept the message into a block or relay it to other nodes if it is not accepted.
+- **Internal** - messages sent from one blockchain entity to another. In contrast to external messages, such messages may carry some TON and pay for themselves. Thus, smart contracts that receive such messages may not accept them. In this case, gas will be deducted from the message value.
+- **Logs** - messages sent from a blockchain entity to the outer world. Generally, there is no mechanism for sending such messages out of the blockchain. While all nodes in the network have a consensus on whether a message was created, there are no rules for processing them. Logs may be directly sent to `/dev/null`, logged to disk, saved in an indexed database, or even sent by non-blockchain means (email/telegram/sms); these are at the sole discretion of the given node.
 
-## Макет сообщения
+## как отправлять сообщения из DApp в блокчейн
 
 Начнем с внутреннего макета сообщения.
 
-Схема TL-B, описывающая сообщения, которые могут быть отправлены смарт-контрактами, выглядит следующим образом:
+TL-B scheme, which describes messages that smart contracts can send, is as follows:
 
 ```tlb
-message$_ {X:Type} info:CommonMsgInfoRelaxed 
-  init:(Maybe (Either StateInit ^StateInit))
-  body:(Either X ^X) = MessageRelaxed X;
+message$_ {X:Type} info:CommonMsgInfoRelaxed
+ init:(Maybe (Either StateInit ^StateInit))
+ body:(Either X ^X) = MessageRelaxed X;
 ```
 
-Давайте сформулируем это словами. Сериализация любого сообщения состоит из трех полей: info (своего рода заголовок, который описывает источник, адресата и другие метаданные), init (поле, которое требуется только для инициализации сообщений) и body (полезная нагрузка сообщения).
+Let's put it into words: The serialization of any message consists of three fields:
+
+- `info`, a header that describes the source, destination, and other metadata.
+- `init`, a field that is only required for initializing messages.
+- `body`, the message payload.
 
 `Maybe` и `Either` и другие типы выражений означают следующее:
 
-- когда у нас есть поле `info:CommonMsgInfoRelaxed`, это означает, что сериализация `CommonMsgInfoRelaxed` внедряется непосредственно в ячейку сериализации.
-- когда у нас есть поле `body:(Either X ^X)`, это означает, что когда мы (де)сериализуем некоторый тип `X`, мы сначала ставим один бит `either`, который равен `0`, если `X` сериализуется в ту же ячейку, или `1`, если он сериализуется в отдельную ячейку.
-- когда у нас есть поле `init:(Maybe (Either StateInit ^StateInit))`, это означает, что мы сначала ставим `0` или `1` в зависимости от того, пусто это поле или нет; и если он не пустой, мы сериализуем `Either StateInit ^StateInit` (опять же, ставим один бит `either`, который равен `0`, если `StateInit` сериализуется в ту же ячейку, или `1`, если он сериализуется в отдельную ячейку).
+- When we have the field `info:CommonMsgInfoRelaxed`, it means that the serialization of `CommonMsgInfoRelaxed` is injected directly into the serialization cell.
+- When we have the field `body:(Either X ^X)`, it means that when we (de)serialize some type `X`, we first put one `either` bit, which is `0` if `X` is serialized to the same cell, or `1` if it is serialized to the separate cell.
+- When we have the field `init:(Maybe (Either StateInit ^StateInit))`, we first put `0` or `1` depending on whether this field is empty. If it is not empty, we serialize `Either StateInit ^StateInit` (again, put one `either` bit, which is `0` if `StateInit` is serialized to the same cell or `1` if it is serialized to a separate cell).
 
-Макет `CommonMsgInfoRelaxed` выглядит следующим образом:
+Let's focus on one particular `CommonMsgInforRelaxed` type, the internal message definition declared with the `int_msg_info$0` constructor.
 
 ```tlb
 int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
-  src:MsgAddress dest:MsgAddressInt 
-  value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
-  created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
-
-ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
-  created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
+ src:MsgAddress dest:MsgAddressInt
+ value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
+ created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
 ```
 
-Давайте пока сосредоточимся на `int_msg_info`.
-Он начинается с 1-битного префикса `0`, затем идут три 1-битных флага, а именно, отключена ли мгновенная маршрутизация гиперкуба (в настоящее время всегда true), следует ли отклонять сообщение, если во время его обработки возникли ошибки, является ли само сообщение результатом отклонения. Затем сериализуются адреса источника и назначения, за которыми следует значение сообщения и четыре целых числа, связанных с платой за пересылку сообщения и временем.
+It starts with the 1-bit prefix `0`.
 
-Если сообщение отправляется из смарт-контракта, некоторые из этих полей будут перезаписаны на правильные значения. В частности, валидатор перезапишет `bounced`, `src`, `ihr_fee`, `fwd_fee`, `created_lt` и `created_at`. Это означает две вещи: во-первых, другой смарт-контракт во время обработки сообщения может доверять этим полям (отправитель не может подделать исходный адрес, флаг `bounced` и т. д.); и во-вторых, во время сериализации мы можем поместить в эти поля любые допустимые значения (в любом случае эти значения будут перезаписаны).
+Then, there are three 1-bit flags:
+
+- Whether Instant Hypercube Routing is disabled (currently always true)
+- Whether a message should be bounced if there are errors during its processing
+- Whether the message itself is the result of a bounce.
+
+Then, source and destination addresses are serialized, followed by the message value and four integers related to message forwarding fees and time.
+
+If a message is sent from the smart contract, some fields will be rewritten to the correct values. In particular, the validator will rewrite `bounced`, `src`, `ihr_fee`, `fwd_fee`, `created_lt`, and `created_at`. That means two things: first, another smart contract while handling the message may trust those fields (sender may not forge source address, `bounced` flag, etc.), and second, during serialization, we may put to those fields any valid values because those values will be overwritten anyway.
 
 Прямая сериализация сообщения будет выглядеть следующим образом:
 
 ```func
-  var msg = begin_cell()
-    .store_uint(0, 1) ;; tag
-    .store_uint(1, 1) ;; ihr_disabled
-    .store_uint(1, 1) ;; allow bounces
-    .store_uint(0, 1) ;; not bounced itself
-    .store_slice(source)
-    .store_slice(destination)
-    ;; serialize CurrencyCollection (see below)
-    .store_coins(amount)
-    .store_dict(extra_currencies)
-    .store_coins(0) ;; ihr_fee
-    .store_coins(fwd_value) ;; fwd_fee 
-    .store_uint(cur_lt(), 64) ;; lt of transaction
-    .store_uint(now(), 32) ;; unixtime of transaction
-    .store_uint(0,  1) ;; no init-field flag (Maybe)
-    .store_uint(0,  1) ;; inplace message body flag (Either)
-    .store_slice(msg_body)
-  .end_cell();
+ var msg = begin_cell()
+ .store_uint(0, 1) ;; tag
+ .store_uint(1, 1) ;; ihr_disabled
+ .store_uint(1, 1) ;; allow bounces
+ .store_uint(0, 1) ;; not bounced itself
+ .store_slice(source)
+ .store_slice(destination)
+ ;; serialize CurrencyCollection (see below)
+ .store_coins(amount)
+ .store_dict(extra_currencies)
+ .store_coins(0) ;; ihr_fee
+ .store_coins(fwd_value) ;; fwd_fee
+ .store_uint(cur_lt(), 64) ;; lt of transaction
+ .store_uint(now(), 32) ;; unixtime of transaction
+ .store_uint(0,  1) ;; no init-field flag (Maybe)
+ .store_uint(0,  1) ;; inplace message body flag (Either)
+ .store_slice(msg_body)
+ .end_cell();
 ```
 
-Однако вместо пошаговой сериализации всех полей разработчики обычно используют сокращения. Итак, давайте рассмотрим, как можно отправлять сообщения из смарт-контракта на примере из [elector-code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/elector-code.fc#L153).
+However, instead of serializing all fields step-by-step, developers usually use shortcuts. Thus, let's consider how messages can be sent from the smart contract using an example from [elector-code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/elector-code.fc#L153).
 
 ```func
 () send_message_back(addr, ans_tag, query_id, body, grams, mode) impure inline_ref {
-  ;; int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 011000
-  var msg = begin_cell()
-    .store_uint(0x18, 6)
-    .store_slice(addr)
-    .store_coins(grams)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-    .store_uint(ans_tag, 32)
-    .store_uint(query_id, 64);
-  if (body >= 0) {
-    msg~store_uint(body, 32);
-  }
-  send_raw_message(msg.end_cell(), mode);
+ ;; int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 011000
+ var msg = begin_cell()
+ .store_uint(0x18, 6)
+ .store_slice(addr)
+ .store_coins(grams)
+ .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+ .store_uint(ans_tag, 32)
+ .store_uint(query_id, 64);
+ if (body >= 0) {
+ msg~store_uint(body, 32);
+ }
+ send_raw_message(msg.end_cell(), mode);
 }
 ```
 
-Сначала он помещает значение `0x18` в 6 бит, что помещается в `0b011000`. Что это?
+First, it combined `0b011000` into the `0x18` value. What is this?
 
-- Первый бит - `0` — префикс 1 бит, который указывает, что это `int_msg_info`.
+- The first bit is a `0` - 1-bit prefix, which indicates that it is `int_msg_info`.
 
-- Затем идут 3 бита `1`, `1` и `0`, что означает, что мгновенная маршрутизация гиперкуба отключена, сообщения могут быть отклонены, и это сообщение не является результатом самого отклонения.
+- Then there are 3 bits `1`, `1`, and `0`, meaning Instant Hypercube Routing is disabled, messages can be bounced, and that message is not the result of bouncing itself.
 
-- Затем должен быть адрес отправителя, однако, поскольку он в любом случае будет перезаписан с тем же эффектом, любой допустимый адрес может быть сохранен там. Самая короткая сериализация допустимого адреса — это `addr_none`, и она сериализуется как двухбитная строка `00`.
+- Then, there should be a sender address; however, since it will be rewritten with the same effect, any valid address may be stored there. The shortest valid address serialization is that of `addr_none`, which serializes as a two-bit string `00`.
 
-Таким образом, `.store_uint(0x18, 6)` — это оптимизированный способ сериализации тега и первых 4 полей.
+Thus, `.store_uint(0x18, 6)` is the optimized serialization method for the tag and the first four fields.
 
-Следующая строка сериализует адрес назначения.
+The following line serializes the destination address.
 
-Затем мы должны сериализовать значения. Обычно значение сообщения — это объект `CurrencyCollection` со следующей схемой:
+Then, we should serialize values. Generally, the message value is a `CurrencyCollection` object with the following scheme:
 
 ```tlb
 nanograms$_ amount:(VarUInteger 16) = Grams;
 
-extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) 
-                 = ExtraCurrencyCollection;
+extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32))
+ = ExtraCurrencyCollection;
 
-currencies$_ grams:Grams other:ExtraCurrencyCollection 
-           = CurrencyCollection;
+currencies$_ grams:Grams other:ExtraCurrencyCollection
+ = CurrencyCollection;
 ```
 
-Эта схема означает, что в дополнение к значению TON сообщение может содержать словарь дополнительных *дополнительных валют*. Однако в настоящее время мы можем пренебречь этим и просто предположить, что значение сообщения сериализуется как "количество nanotons как переменное целое число" и "`0` - пустой бит словаря".
+This scheme means the message may carry the dictionary of additional _extra-currencies_ with the TON value. However, we may neglect it and assume that the message value is serialized as number of nanotons as variable integer and "`0` - empty dictionary bit".
 
-Действительно, в коде выборщика выше мы сериализуем количество монет через `.store_coins(toncoins)`, но затем просто помещаем строку нулей длиной, равной `1 + 4 + 4 + 64 + 32 + 1 + 1`. Что это такое?
+Indeed, in the elector code above, we serialize coins amounts via `.store_coins(toncoins)` but then just put a string of zeros with a length equal to `1 + 4 + 4 + 64 + 32 + 1 + 1`. What is it?
 
-- Первый бит обозначает пустой словарь дополнительных валют.
-- Затем у нас есть два 4-битных поля. Они кодируют 0 как `VarUInteger 16`. Фактически, поскольку `ihr_fee` и `fwd_fee` будут перезаписаны, мы также можем поставить там нули.
-- Затем мы помещаем ноль в поля `created_lt` и `created_at`. Эти поля также будут перезаписаны; Однако, в отличие от комиссий, эти поля имеют фиксированную длину и, таким образом, кодируются как строки, длиной 64 и 32 бита.
-- *(мы уже сериализовали заголовок сообщения и перешли в init/body в этот момент)*
+- The first bit stands for empty extra-currencies dictionary.
+- Then we have two 4-bit long fields. They encode 0 as `VarUInteger 16`. Since `ihr_fee` and `fwd_fee` will be overwritten, we may as well put them as zeroes.
+- Then we put zero to the `created_lt` and `created_at` fields. Those fields will also be overwritten; however, in contrast to fees, these fields have a fixed length and are thus encoded as 64- and 32-bit long strings.
+  > _We had already serialized the message header and passed to init/body at that moment_
 - Следующий нулевой бит означает, что поля `init` нет.
 - Последний нулевой бит означает, что msg_body будет сериализован на месте.
-- После этого кодируется тело сообщения (с произвольной компоновкой).
+- After that, the message body (with an arbitrary layout) is encoded.
 
-Таким образом, вместо индивидуальной сериализации 14 параметров мы выполняем 4 примитива сериализации.
+Instead of individual serialization of 14 parameters, we execute 4 serialization primitives.
 
 ## Полная схема
 
-Полная схема компоновки сообщения и компоновка всех составляющих полей (а также схема ВСЕХ объектов в TON) представлены в [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb).
+The entire scheme of the message layout and the layout of all constituting fields, as well as the scheme of ALL objects in TON, are presented in [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb).
 
-## Размер сообщения
+## Sending the messages
 
 :::info размер ячейки
-Обратите внимание, что любая [ячейка](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) может содержать до `1023` бит. Если вам нужно сохранить больше данных, вы должны разбить их на части и сохранить в ссылочных ячейках.
+BoC is [bag of cells](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), the way data is stored in TON. If you need to store more data, you should split it into chunks and store it in reference cells.
 :::
 
-Если, например, размер тела вашего сообщения составляет 900 бит, вы не можете сохранить его в той же ячейке, что и заголовок сообщения.
-Действительно, в дополнение к полям заголовка сообщения общий размер ячейки будет превышать 1023 бит, и во время сериализации возникнет исключение `переполнение ячейки`. В этом случае вместо `0`, что означает "установить флаг в теле сообщения (либо)", должно быть `1`, а тело сообщения должно храниться в ссылочной ячейке.
+For example, if your message body is 900 bits long, you can't store it in the same cell as the message header. Including the message header fields would make the total cell size exceed 1023 bits, triggering a `cell overflow` exception during serialization.
 
-С этими вещами следует обращаться осторожно, поскольку некоторые поля имеют переменные размеры.
+In this case, use `1` instead of `0` for the in-place message body flag (Either), which will store the message body in a separate reference cell.
 
-Например, `MsgAddress` может быть представлен четырьмя конструкторами: `addr_none`, `addr_std`, `addr_extern`, `addr_var` с длиной от 2 бит (для `addr_none`) до 586 бит (для `addr_var` в самой большой форме). То же самое относится к количеству nanoton, которое сериализуется как `VarUInteger 16`. Это означает, что 4 бита указывают на длину байта целого числа, а затем указывают предыдущие байты для самого целого числа. Таким образом, 0 nanoton будут сериализованы как `0b0000` (4 бита, которые кодируют строку байтов нулевой длины, а затем ноль байтов), а 100.000.000 ТОНН (или 10000000000000000000000 nanoton) будут сериализованы как `0b10000000000101100011010001010111100010111000101000000000000000` (`0b1000` обозначает 8 байтов, а затем сами 8 байтов).
+Those things should be handled carefully because some fields have variable sizes.
 
-:::info размер сообщения
+For instance, `MsgAddress` may be represented by four constructors:
 
-Дополнительные параметры конфигурации и их значения можно найти [здесь](/v3/documentation/network/configs/blockchain-configs#param-43)
+- `addr_none`
+- `addr_std`
+- `addr_extern`
+- `addr_var`
+
+With length from 2 bits for `addr_none` to 586 bits for `addr_var` in the largest form.
+
+The same stands for nanotons' amounts, which is serialized as `VarUInteger 16`.
+That means 4 bits indicating the byte length of the integer and then bytes for the integer itself.
+
+That way:
+
+- `0` nanotons serialized as `0b0000` (4 bits indicating zero-length byte string + no bytes)
+- `100000000000000000` nanotons (100,000,000 TON) serializes as:
+  `0b10000000000101100011010001010111100001011101100010100000000000000000`
+  (where `0b1000` specifies 8 bytes length followed by the 8-byte value)
+
+:::info Before we proceed, let's talk about the format of the messages we will send.
+Note that the message has general size limits and cell count limits, too,
+e.g., the maximum message size must not exceed `max_msg_bits`, and the number of cells per message must not exceed `max_msg_cells`.
+
+More configuration parameters and their values can be found [here](/v3/documentation/network/configs/blockchain-configs#param-43).
 :::
 
-## Режимы сообщений
+## как отправить несколько сообщений в одной транзакции
 
-Как вы могли заметить, мы отправляем сообщения с `send_raw_message`, который, помимо потребления самого сообщения, также принимает режим. Этот режим используется для определения режима отправки сообщений, включая необходимость отдельной оплаты топлива и способ обработки ошибок. Когда виртуальная машина TON (TVM) анализирует и обрабатывает сообщения, она выполняет дифференцированную обработку в зависимости от значения режима. Легко спутать то, что значение параметра режима имеет две переменные, а именно режим и флаг. Режим и флаг имеют разные функции:
+:::info
+For the latest information, refer to the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook).
+:::
 
-- режим: определяет базовое поведение при отправке сообщения, например, следует ли переносить баланс, следует ли ждать результатов обработки сообщения и т. д. Различные значения режима представляют разные характеристики отправки, и разные значения можно комбинировать для удовлетворения конкретных требований отправки.
-- флаг: как дополнение к режиму, он используется для настройки определенного поведения сообщения, например, отдельной оплаты комиссий за перевод или игнорирования ошибок обработки. Флаг добавляется к режиму для создания окончательного режима отправки сообщения.
+As you may have noticed, we send messages using `send_raw_message`, which also accepts a mode parameter and consumes the message. This mode determines how the message is sent, including whether to pay for gas separately and how to handle errors. The TON Virtual Machine (TVM) processes messages differently depending on the mode value. It’s important to note that the mode parameter consists of two components, **mode** and **flag**, which serve different purposes:
 
-При использовании функции `send_raw_message` важно выбрать соответствующую комбинацию режима и флага для ваших нужд. Чтобы выяснить, какой режим лучше всего подходит для ваших нужд, взгляните на следующую таблицу:
+- **Mode**: Defines the basic behavior when sending a message, such as whether to carry a balance or wait for message processing results. Different mode values represent different sending characteristics, which can be combined to meet specific requirements.
+- **Flag**: Acts as an addition to the mode, configuring specific message behaviors, such as paying transfer fees separately or ignoring processing errors. The flag is added to the mode to create the final message-sending configuration.
+
+When using the `send_raw_message` function, choosing the appropriate combination of mode and flag for your needs is crucial. Refer to the following table to determine the best mode for your use case:
 
 | Режим | Описание                                                                                                               |
 | :---- | :--------------------------------------------------------------------------------------------------------------------- |
-| `0`   | Обычное сообщение                                                                                                      |
+| `0`   | This is a serialized external message, and two references are outgoing messages representations.       |
 | `64`  | Перенести все оставшееся значение входящего сообщения в дополнение к значению, изначально указанному в новом сообщении |
 | `128` | Перенести весь оставшийся баланс текущего смарт-контракта вместо значения, изначально указанного в сообщении           |
 
-| Флаг  | Описание                                                                                                                                           |
-| :---- | :------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `+1`  | Платите комиссию за перевод отдельно от стоимости сообщения                                                                                        |
-| `+2`  | Игнорируйте некоторые ошибки, возникающие при обработке этого сообщения на этапе действия (см. примечание ниже) |
-| `+16` | В случае сбоя действия - транзакция аннулируется. Если используется `+2`, это не влияет ни на что.                 |
-| `+32` | Текущий аккаунт должен быть уничтожен, если его итоговый баланс равен нулю (часто используется с режимом 128)                   |
+| Флаг  | Описание                                                                                                          |
+| :---- | :---------------------------------------------------------------------------------------------------------------- |
+| `+1`  | Платите комиссию за перевод отдельно от стоимости сообщения                                                       |
+| `+2`  | Ignore some errors arising while processing this message during the action phase                                  |
+| `+16` | In the case of action failure, bounce the transaction. No effect if `+2` is used. |
+| `+32` | Destroy the current account if its resulting balance is zero (often used with Mode 128)        |
 
-:::info флаг +2
+:::info +16 Flag
+If a contract receives a bounceable message, it processes the `storage` phase **before** the `credit` phase. Otherwise, it processes the `credit` phase **before** the `storage` phase.
 
-1. Недостаточно Toncoin:
- - Недостаточно стоимости для перевода с сообщением (вся стоимость входящего сообщения была израсходована).
- - Недостаточно средств для обработки сообщения.
- - Недостаточно стоимости, прикрепленной к сообщению, для оплаты комиссий за пересылку.
- - Недостаточно дополнительной валюты для отправки с сообщением.
- - Недостаточно средств для оплаты исходящего внешнего сообщения.
-2. Сообщение слишком большое (проверьте [размер сообщения](#message-size) для получения дополнительной информации).
-3. Сообщение имеет слишком большую глубину Меркла.
-
-Однако он не игнорирует ошибки в следующих сценариях:
-
-1. Сообщение имеет недопустимый формат.
-2. Режим сообщения включает как 64, так и 128 модификаций.
-3. Исходящее сообщение имеет недопустимые библиотеки в StateInit.
-4. Внешнее сообщение не является обычным или включает флаг +16 или +32 или оба
- :::
-
-:::info флаг +16
-
-В противном случае он обработает фазу `credit` **перед** фазой `storage`.
-
-Проверьте [исходный код с проверкой флага `bounce-enable`](https://github.com/ton-blockchain/ton/blob/master/validator/impl/collator.cpp#L2810)
+For more details, check the [source code with checks for the `bounce-enable` flag](https://github.com/ton-blockchain/ton/blob/master/validator/impl/collator.cpp#L2810).
 :::
 
 :::warning
 
-1. **Флаг +16** - не использовать во внешних сообщениях (например, на кошельках), так как нет отправителя, который мог бы получить отклоненное сообщение.
-2. **Флаг +2** - важно во внешних сообщениях (например, на кошельках).
- :::
+1. **+16 flag** - do not use it in external messages (e.g., to wallets) because there is no sender to receive the bounced message.
 
-### Пример с вариантами использования
+2. **+2 flag** - important in external messages (e.g. to wallets).
 
-Давайте рассмотрим пример, чтобы сделать его более понятным. Представим ситуацию, когда у нас на балансе смарт-контракта 100 Toncoin, и мы получаем внутреннее сообщение с 50 Toncoin и отправляем сообщение с 20 Toncoin, общая комиссия составляет 3 Toncoin.
+:::
 
-`ВАЖНО`: Результат случаев ошибки описывается, когда произошла ошибка.
+## Recommended approach: mode=3 {#mode3}
 
-| Кейс                                                                                                                                                                                                                                                                                                                         | Режим и флаги                  | Код                          | Результат                                                                                                  |
-| :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------- | :--------------------------- | :--------------------------------------------------------------------------------------------------------- |
-| Отправить обычное сообщение                                                                                                                                                                                                                                                                                                  | `mode` = 0, no `flag`          | `send_raw_message(msg, 0)`   | `balance` - 100 + 50 - 20 = 130, `send` - 20 - 3 = 17                                                      |
-| Отправить обычное сообщение, если при обработке действия произошла ошибка, не откатывать транзакцию и игнорировать ее                                                                                                                                                                                                        | `mode` = 0, `flag` = 2         | `send_raw_message(msg, 2)`   | `balance` - 100 + 50, `send` - 0                                                                           |
-| Отправить обычное сообщение, если при обработке действия произошла ошибка - откатить сообщение в дополнение к откату транзакции                                                                                                                                                                                              | `mode` = 0, `flag` = 16        | `send_raw_message(msg, 16)`  | `balance` - 100 + 50 = 167 + 17 (отклонено), `send` - 20 - 3 = `bounce` message with 17 |
-| Отправить обычное сообщение и оплатить комиссию за перевод отдельно                                                                                                                                                                                                                                                          | `mode` = 0, `flag` = 1         | `send_raw_message(msg, 1)`   | `balance` - 100 + 50 - 20 - 3 = 127, `send` - 20                                                           |
-| Отправить обычное сообщение и оплатить комиссию за перевод отдельно, если при обработке действия произошла ошибка - откатить сообщение в дополнение к откату транзакции                                                                                                                                                      | `mode` = 0, `flags` = 1 + 16   | `send_raw_message(msg, 17)`  | `balance` - 100 + 50 - 20 - 3 = 127 + `20 (отклонено)`, `send` - 20 = `bounce` сообщение с 20              |
-| Перенести всю оставшуюся стоимость входящего сообщения в дополнение к изначально указанной стоимости в новом сообщении                                                                                                                                                                                                       | `mode` = 64, `flag` = 0        | `send_raw_message(msg, 64)`  | `balance` - 100 - 20 = 80, `send` - 20 + 50 - 3 = 67                                                       |
-| Перенести всю оставшуюся стоимость входящего сообщения в дополнение к изначально указанной стоимости в новом сообщении и оплатить комиссию за перевод отдельно                                                                                                                                                               | `mode` = 64, `flag` = 1        | `send_raw_message(msg, 65)`  | `balance` - 100 - 20 - 3 = 77, `send` - 20 + 50 = 70                                                       |
-| Перенести всю оставшуюся стоимость входящего сообщения в дополнение к стоимости, изначально указанной в новом сообщении, и отдельно оплатить комиссию за перевод, если произошла ошибка при обработке действия - отклонить сообщение в дополнение к откату транзакции                                                        | `mode` = 64, `flags` = 1 + 16  | `send_raw_message(msg, 81)`  | `balance` - 100 - 20 - 3 = 77 + `70 (отклонено)`, `send` - 20 + 50 = `bounce` сообщение с 70               |
-| Отправить все полученные токены вместе с балансом контракта                                                                                                                                                                                                                                                                  | `mode` = 128, `flag` = 0       | `send_raw_message(msg, 128)` | `balance` - 0, `send` - 100 + 50 - 3 = 147                                                                 |
-| Отправить все полученные токены вместе с балансом контракта, если произошла ошибка при обработке действия - отклонить сообщение в дополнение к откату транзакции                                                                                                                                                             | `mode` = 128, `flag` = 16      | `send_raw_message(msg, 144)` | `balance` - 0 + `147 (отклонено)`, `send` - 100 + 50 - 3 = `bounce` сообщение с 147                        |
-| Отправить все полученные токены вместе с балансом контракта и уничтожить смарт-контракт                                                                                                                                                                                                                                      | `mode` = 128, `flag` = 32      | `send_raw_message(msg, 160)` | `balance` - 0, `send` - 100 + 50 - 3 = 147                                                                 |
-| Отправить все полученные токены вместе с балансом контракта и уничтожить смарт-контракт, если произошла ошибка при обработке действия - отклонить сообщение в дополнение к откату транзакции. `ВАЖНО: Избегайте такого поведения, поскольку возврат средств будет осуществляться на уже удаленный контракт.` | `mode` = 128, `flag` = 32 + 16 | `send_raw_message(msg, 176)` | `balance` - 0 + `147 (отклонено)`, `send` - 100 + 50 - 3 = `bounce` сообщение с 147                        |
+```func
+send_raw_message(msg, SEND_MODE_PAY_FEES_SEPARATELY | SEND_MODE_IGNORE_ERRORS); ;; stdlib.fc L833
+```
+
+The `mode=3` combines the `0` mode and two flags:
+
+- `+1` : Pay transfer fees separately from the message value
+- `+2` : Suppresses specific errors during message processing
+
+This combination is the standard method for sending messages in TON.
+
+---
+
+### Behavior without +2 flag
+
+If the `IGNORE_ERRORS` flag is omitted and a message fails to process (e.g., due to insufficient balance), the transaction reverts. For wallet contracts, this prevents updates to critical data like the `seqno`.
+
+```func
+throw_unless(33, msg_seqno == stored_seqno);
+throw_unless(34, subwallet_id == stored_subwallet);
+throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
+accept_message();
+set_data(begin_cell()
+ .store_uint(stored_seqno + 1, 32)
+ .store_uint(stored_subwallet, 32)
+ .store_uint(public_key, 256)
+ .store_dict(plugins)
+ .end_cell());
+commit(); ;; This will be reverted on action error.
+```
+
+As a result, unprocessed external messages can be replayed until they expire or drain the contract's balance.
+
+---
+
+### Error handling with +2 flag
+
+The `IGNORE ERRORS` flag (`+2`) suppresses these specific errors during the Action Phase:
+
+#### Suppressed errors
+
+1. **Insufficient funds**
+
+  - Отправка сложных транзакций
+  - Insufficient balance for message processing
+  - Inadequate attached value for forwarding fees
+  - Missing extra currency for message transfer
+  - Insufficient funds for external message delivery
+
+2. **[Oversized message](#message-size)**
+
+3. **Excessive Merkle depth**
+
+  Message exceeds allowed Merkle tree complexity.
+
+#### Non-suppressed errors
+
+1. Malformed message structure
+2. Conflicting mode flags (`+64` and `+128` used together)
+3. Invalid libraries in `StateInit` of the outbound message
+4. Non-ordinary external messages (e.g., using `+16` or `+32` flags)
+
+---
+
+### Security considerations
+
+#### Current mitigations
+
+- Most wallet apps auto-include `IGNORE_ERRORS` in transactions
+- Wallet UIs often display transaction simulation results
+- V5 wallets enforce `IGNORE_ERRORS` usage
+- Validators limit message replays per block
+
+#### Potential risks
+
+- **Race conditions** causing stale backend balance checks
+- **Legacy wallets** (V3/V4) without enforced checks
+- **Incomplete validations** by wallet applications
+
+---
+
+### Example: jetton transfer pitfall
+
+Consider this simplified Jetton wallet code:
+
+```func
+() send_jettons(slice in_msg_body, slice sender_address, int msg_value, int fwd_fee) impure inline_ref {
+int jetton_amount = in_msg_body~load_coins();
+balance -= jetton_amount;
+send_raw_message(msg, SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE | SEND_MODE_BOUNCE_ON_ACTION_FAIL);
+save_data(status, balance, owner_address, jetton_master_address); }
+```
+
+If a transfer using `mode=3` fails due to a suppressed error:
+
+1. Transfer action is not executed
+2. Contract state updates persist (no rollback)
+3. **Result:** permanent loss of `jetton_amount` from the balance
+
+**Best practice**
+
+Always pair `IGNORE_ERRORS` with robust client-side validations and real-time balance checks to prevent unintended state changes.
+
+<Feedback />
 
