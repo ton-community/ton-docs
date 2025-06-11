@@ -1,0 +1,117 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Shards
+
+Sharding is a well-established concept that originated in  [database design](https://en.wikipedia.org/wiki/Shard_(database_architecture)). It refers to splitting a single logical dataset into multiple independent databases that don’t share resources and can run across different servers.
+In simple terms, sharding enables horizontal scalability—breaking down data into smaller, manageable parts that can be processed in parallel. This technique has been crucial in the evolution from traditional data systems to [big data](https://en.wikipedia.org/wiki/Big_data).
+As datasets grow beyond the capacity of conventional systems, sharding becomes the only practical way to scale effectively.
+
+**Sharding in TON Blockchain**
+
+TON uses sharding to handle a high volume of transactions efficiently.
+The TON blockchain architecture includes one MasterChain and up to 2<sup>32</sup> WorkChains. Each WorkChain functions as an independent blockchain with its own rules. Furthermore, each WorkChain can be divided into up to 2<sup>60</sup> ShardChains or sub-shards, each responsible for a portion of the WorkChain’s state.
+
+Currently, TON operates with only one WorkChain, known as the BaseChain.
+
+The core principle behind sharding in TON is parallelism:
+For example, if account A sends a message to account B and account C sends a message to account D, both transactions can be processed asynchronously and independently.
+
+In the BaseChain (`workchain = 0`), the default configuration includes a single shard with the identifier `0x8000000000000000` which is `1000000000000000000000000000000000000000000000000000000000000000` in binary.
+The MasterChain (`workchain = -1`) always operates with exactly one shard.
+
+## MasterChain
+
+The MasterChain is the main blockchain in the TON network. It stores the network configuration and the final states of all WorkChains. The MasterChain can be considered the core directory or the single source of truth for all shards and chains in the ecosystem.
+It contains essential protocol-level information, including:
+
+- The current network configuration;
+- The list of active validators and their stakes;
+- All active WorkChains and their corresponding ShardChains;
+- The most recent block hashes of every WorkChain and ShardChain.
+
+This data is key to maintaining consensus and ensuring all network parts are synchronized and operating securely.
+
+## WorkChain
+
+The MasterChain is divided into individual blockchains called WorkChains. Each WorkChain is customized for specific transaction types or use cases and operates in parallel within the TON network.
+
+## 고유성
+
+Two key architectural decisions set the TON blockchain apart from other sharded blockchains.
+
+First, TON implements dynamic segmentation of the blockchain based on the network load. When the number of transactions reaches a critical threshold, the blockchain splits into two ShardChains. If the load on a shard continues to increase, it splits again—and this process continues recursively as needed. Conversely, when the transaction volume decreases, shards can merge back together. This adaptive sharding model enables the network to create as many shards as necessary at any given time.
+
+Second, TON employs a non-fixed shard count. Unlike platforms such as Ethereum 2.0, which supports a fixed number of shards, e.g., 64, TON allows the number of shards to scale dynamically based on demand, with a theoretical upper limit of 2<sup>60</sup> shards per WorkChain. This virtually limitless capacity means the system could assign over 100 million shards to every person on Earth and still have resources remaining. This approach enables truly dynamic scalability — a necessity given the unpredictable nature of global network demand.
+
+![](/img/docs/blockchain-fundamentals/scheme.png)
+
+## 분할
+
+In the TON blockchain, the sequence of transactions associated with a single account, e.g., `Tx1 -> Tx2 -> Tx3 -> ...`, is called an **AccountChain**. This highlights that it is a linear transaction history specific to one account. Multiple **AccountChains** are grouped within a single shard, forming a **ShardChain**, hereinafter simply as a “shard”. A shard is responsible for storing and processing all transactions within its scope, with each transaction chain corresponding to a particular group of accounts.
+
+These account groups are determined by a shared binary prefix, which clusters accounts into the same shard. This binary prefix is embedded in the shard ID, which is represented as a 64-bit integer with the following structure: `<binary prefix>100000...`. For example, a shard with the ID `1011100000...` contains all accounts that begin with the binary prefix `1011`.
+
+When the number of transactions within a shard grows beyond a certain threshold, the shard splits into two new shards. These new shards are assigned IDs based on the parent shard’s prefix: `<parent prefix>01000...` and `<parent prefix>11000...`. They then become responsible for accounts starting with `<parent prefix>0` and `<parent prefix>1`, respectively. Block sequence numbers (seqnos) in the new shards continue from the parent shard’s last seqno plus one. After the split, the new shards operate independently and may progress at different rates, leading to divergent seqnos.
+
+**Simple example**
+
+![](/img/docs/blockchain-fundamentals/shardchains-split.png)
+
+MasterChain block contains information about the state of all shards in its header. Once a shard block is included in the header, it is considered final and cannot be reverted.
+
+**Real example**
+
+- MasterChain block `seqno=34607821` includes two shards:
+
+  - `(0,4000000000000000,40485798)`
+  - and `(0,c000000000000000,40485843)`
+
+  [View source](https://toncenter.com/api/v2/shards?seqno=34607821)
+
+- The shard `4000000000000000` splits into two:
+  `shard=2000000000000000` and `shard=6000000000000000`
+  In the following MasterChain block `seqno=34607822`, three shards are listed:
+
+  - `(0,c000000000000000,40485844)`,
+  - `(0,2000000000000000,40485799)`,
+  - and `(0,6000000000000000,40485799)`
+
+    [View source](https://toncenter.com/api/v2/shards?seqno=34607822)
+
+    Note: The two new shards start with the same seqno but have different shard IDs.
+
+- After 100 more MasterChain blocks (at `seqno=34607921`), the shard states have diverged:
+
+  - `(0,2000000000000000,40485901)`
+  - `(0,6000000000000000,40485897)`
+
+  [View source](https://toncenter.com/api/v2/shards?seqno=34607921)
+
+## Merging
+
+When the shard load decreases, they can merge into a single shard.
+
+- Two shards are eligible to merge if they share a common parent. In this case, their shard IDs will follow the format `<parent prefix>010...` and `<parent prefix>110...`. The resulting merged shard will have the ID `<parent prefix>10...`.
+- For example, `10010...` + `10110...` merge into `1010...`.
+- The first block of the merged shard will have `seqno = max(seqno1, seqno2) + 1`.
+
+**Simple example**
+
+![](/img/docs/blockchain-fundamentals/shardchains-merge.png)
+
+**Actual example**
+
+- In Masterchain block `seqno=34626306`, two of the five shards with the latest blocks:
+   `(0,a000000000000000,40492030)` and `(0,e000000000000000,40492216)`
+    merged into a single shard with the block: `(0,c000000000000000,40492217)`
+
+  [View before merge](https://toncenter.com/api/v2/shards?seqno=34626306)
+
+  [View after merge](https://toncenter.com/api/v2/shards?seqno=34626307)
+
+## See also
+
+- [Infinity sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm)
+- [백서](/v3/documentation/백서/오버뷰)
+
+<Feedback />
