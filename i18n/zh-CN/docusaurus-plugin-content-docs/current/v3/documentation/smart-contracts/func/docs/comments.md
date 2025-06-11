@@ -1,32 +1,40 @@
-# 注释
+import Feedback from '@site/src/components/Feedback';
 
-FunC 有单行注释，以 `;;`（双分号）开始。例如：
+# Comments
+
+FunC supports both single-line and multi-line comments.
+
+**Single-line** comments start with `;;` (double semicolon). Example:
 
 ```func
-int x = 1; ;; assign 1 to x
+int x = 1; ;; assigns 1 to x
 ```
 
-它还有多行注释，以 `{-` 开始并以 `-}` 结束。请注意，与许多其他语言不同的是，FunC 的多行注释可以嵌套。例如：
+**Multi-line** comments begin with `{-` and end with `-}`.
+Unlike other languages, FunC allows nested multi-line comments.
+Example:
 
 ```func
 {- This is a multi-line comment
-    {- this is a comment in the comment -}
+    {- This is a comment inside a comment -}
 -}
 ```
 
-此外，多行注释中可以有单行注释，且单行注释 `;;` 比多行注释 `{- -}`“更强”。换句话说，在以下示例中：
+Additionally, single-line comments `;;` can appear inside multi-line comments, and they take precedence over multi-line comments `{- -}`. In the following example:
 
 ```func
 {-
   Start of the comment
 
-;; this comment ending is itself commented -> -}
+;; This comment’s ending is itself commented out -> -}
 
 const a = 10;
-;; this comment begining is itself commented -> {-
+
+;; This comment’s beginning is itself commented out -> {-
 
   End of the comment
 -}
 ```
 
-`const a = 10;` 在多行注释内，因此被注释掉了。
+Here, `const a = 10;` is inside a multi-line comment and is effectively commented out. <Feedback />
+
