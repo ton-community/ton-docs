@@ -1,46 +1,36 @@
+import Feedback from '@site/src/components/Feedback';
+
 # FAQ по TON Storage
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+## How to assign a TON domain to a TON Storage bag
 
-## Как назначить домен TON пакету файлов TON Storage
-
-1. [Загрузите](/v3/guidelines/web3/ton-storage/storage-daemon#creating-a-bag-of-files) пакет файлов в сеть и получите идентификатор Bag ID
-
-2. Откройте браузер Google Chrome на своем компьютере.
-
-3. Установите [расширение TON](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) для Google Chrome.
-   Вы также можете использовать [MyTonWallet](https://chrome.google.com/webstore/detail/mytonwallet/fldfpgipfncgndfolcbkdeeknbbbnhcc).
-
-4. Откройте расширение, нажмите «Import wallet» и импортируйте кошелек, которому принадлежит домен, используя фразу восстановления.
-
-5. Теперь откройте Ваш домен на https://dns.ton.org и нажмите «Manage domain».
-
-6. Скопируйте Bag ID в поле «TON Storage» и нажмите «Save».
+1. [Upload your bag of files](\\(/v3/guidelines/web3/ton-storage/storage-daemon#creating-a-bag-of-files\\))to the network and copy the bag ID.
+2. Open Google Chrome on your computer.
+3. Install a TON extension:
+   - [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd)
+   - or [MyTonWallet](https://chrome.google.com/webstore/detail/mytonwallet/fldfpgipfncgndfolcbkdeeknbbbnhcc)
+4. Open the extension, click "Import wallet", and import the wallet that owns the domain using your recovery phrase.
+5. Go to [dns.ton.org](https://dns.ton.org), open your domain, and click "Edit".
+6. Paste the bag ID into the "Storage" field and click "Save".
 
 ## Как разместить статический TON-сайт в TON Storage
 
-1. [Создайте](/v3/guidelines/web3/ton-storage/storage-daemon#creating-a-bag-of-files) пакет из папки с файлами сайта, загрузите его в сеть и получите Bag ID. Папка должна содержать файл `index.html`.
-
-2. Откройте браузер Google Chrome на своем компьютере.
-
-3. Установите [расширение TON](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) для Google Chrome.
-   Вы также можете использовать [MyTonWallet](https://chrome.google.com/webstore/detail/mytonwallet/fldfpgipfncgndfolcbkdeeknbbbnhcc).
-
-4. Откройте расширение, нажмите "Import wallet" и импортируйте кошелек, которому принадлежит домен, используя фразу восстановления.
-
-5. Теперь откройте ваш домен на https://dns.ton.org и нажмите «Manage domain».
-
-6. Скопируйте ID вашего пакета в поле «Site», установите флажок «Host in TON Storage» и нажмите «Save».
+1. [Create a bag](/v3/guidelines/web3/ton-storage/storage-daemon#creating-a-bag-of-files) from the folder containing your static website.
+2. The folder must contain an `index.html` file.
+3. Upload the bag to the network and copy the bag ID.
+4. Open Google Chrome and install a [TON extension](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) or [MyTonWallet](https://chrome.google.com/webstore/detail/mytonwallet/fldfpgipfncgndfolcbkdeeknbbbnhcc).
+5. Import the wallet that owns the domain using your recovery phrase.
+6. Go to [dns.ton.org](https://dns.ton.org), open your domain, and click "Edit".
+7. Paste the bag ID into the "Site" field, select "Host in TON Storage", and click "Save".
 
 ## Как перенести содержимое TON NFT в TON Storage
 
-Если вы использовали [стандартный смарт-контракт NFT](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-collection-editable.fc) для своей коллекции, вам необходимо отправить [сообщение](https://github.com/ton-blockchain/token-contract/blob/2d411595a4f25fba43997a2e140a203c140c728a/nft/nft-collection-editable.fc#L132) смарт-контракту коллекции из кошелька владельца коллекции с новым префиксом URL.
+If you're using a [standard NFT contract](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-collection-editable.fc), update the content prefix by sending a [message](https://github.com/ton-blockchain/token-contract/blob/2d411595a4f25fba43997a2e140a203c140c728a/nft/nft-collection-editable.fc#L132) to your NFT collection smart contract from the collection owner's wallet.
 
-Например, если раньше префикс url был `https://mysite/my_collection/`, то новый префикс будет `tonstorage://my_bag_id/`.
+- **Old URL prefix example:** `https://mysite/my_collection/`
+- **New URL prefix format:** `tonstorage://my_bag_id/`.
 
-## Как назначить домен TON пакету TON Storage (низкий уровень)
+## How to assign a TON domain to a TON Storage bag (low-level)
 
 Вам нужно присвоить следующее значение sha256("storage") DNS-записи вашего домена TON:
 
@@ -48,13 +38,16 @@
 dns_storage_address#7473 bag_id:uint256 = DNSRecord;
 ```
 
-## Как разместить статический сайт TON в TON Storage (низкий уровень)
+## How to host static TON site in TON Storage (low-level)
 
-[Создайте](/v3/guidelines/web3/ton-storage/storage-daemon#creating-a-bag-of-files) пакет из папки с файлами сайта, загрузите его в сеть и получите Bag ID. Папка должна содержать файл `index.html`.
+To host a static site via TON Storage directly:
 
-Вам нужно присвоить следующее значение sha256("site") DNS-записи вашего домена TON:
+- [Create a bag](/v3/guidelines/web3/ton-storage/storage-daemon#creating-a-bag-of-files) from your website folder. The folder must include `index.html`.
+- Assign the following value to the DNS record with key sha256("site"):
 
 ```
 dns_storage_address#7473 bag_id:uint256 = DNSRecord;
 ```
+
+<Feedback />
 
