@@ -1,81 +1,117 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # MyTonCtrl
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+## Описание
 
-## Общие сведения
+To install and manage your own node, use the **MyTonCtrl** open-source tool developed by the TON Foundation. **MyTonCtrl** is reliable and tested on most TON nodes.
 
-Чтобы установить свой собственный узел и управлять им, используйте инструмент с открытым исходным кодом **MyTonCtrl**, разработанный TON Foundation. Большинство узлов TON надежны и протестированы в **MyTonCtrl**.
-
-[MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) — это консольное приложение, которое является удобной оболочкой для fift, lite-client и validator-engine-console. Оно было специально разработано для оптимизации задач управления кошельком, доменом и валидатором в операционной системе Linux.
+[MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) is a console application that is a convenient wrapper for fift, lite-client, and validator-engine-console. It has been specifically developed to streamline the Linux operating system's wallet, domain, and validator management tasks.
 
 Мы активно собираем отзывы о процессе установки. Если у вас есть какие-либо вопросы или предложения, пожалуйста, [свяжитесь с нами](https://t.me/Alexgton).
 
-## Основные команды
+## Install the MyTonCtrl
+
+Download and execute the installation script from a **non-root** user account with **sudo** permissions:
+
+<Tabs groupId="operating-systems">
+  <TabItem value="ubuntu" label="Ubuntu">
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+sudo bash install.sh
+```
+
+</TabItem>
+  <TabItem value={'debian'} label={'Debian'}>
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+su root -c 'bash install.sh'
+```
+
+</TabItem>
+</Tabs>
+
+**Flags:**
+
+- `-d` - **MyTonCtrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state, significantly reducing synchronization time.
+- `-c <path>` - Specify a non-public liteserver for synchronization (optional).
+- `-i` - Ignore minimum requirements; use this only if you test the compilation process without running a real node.
+- `-m` - Sett the mode either `validator` or `liteserver`.
+- `-t` - Disable telemetry.
+
+**To use testnet**, `-c` flag with the value `https://ton.org/testnet-global.config.json`.
+
+The default value for the `-c` flag is `https://ton-blockchain.github.io/global.config.json`, which is default configuration for the mainnet.
+
+## Общие сведения
 
 ### help
 
-Без аргументов, выводит текст справки
+No args, prints help text.
 
 ### exit
 
-Без аргументов, выйти из консоли.
+No args, exits from the console.
 
 ### update
 
-Обновление mytonctrl. Комбинации параметров:
+Updates MyTonCtrl. Param combinations:
 
-| Формат имени                 | Формат                                                                     | Пример                                                                | Описание                                                                    |
-| :--------------------------- | :------------------------------------------------------------------------- | :-------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Без аргументов               | `update`                                                                   | `update`                                                              | Обновление из текущего репозитория                                          |
-| Формат URL                   | `update [https://github.com/author/repo/tree/branch]`                      | `update https://github.com/ton-blockchain/mytonctrl/tree/test`        | Обновление с указанного URL                                                 |
-| Только формат ветви          | `update [BRANCH]`                                                          | `update test`                                                         | Обновление из указанной ветви текущего репозитория                          |
-| Формат переопределения ветви | `update [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `update https://github.com/ton-blockchain/mytonctrl/tree/master test` | Обновление из ветки, указанной вторым аргументом после названия репозитория |
+| Format name                  | Format                                                                     | Пример                                                                | Description                                                                     |
+| :--------------------------- | :------------------------------------------------------------------------- | :-------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| No args                      | `update`                                                                   | `update`                                                              | Update from current repo                                                        |
+| Формат URL                   | `update [https://github.com/author/repo/tree/branch]`                      | `update https://github.com/ton-blockchain/mytonctrl/tree/test`        | Update from specified URL                                                       |
+| Только формат ветви          | `update [BRANCH]`                                                          | `update test`                                                         | Update from specified branch of current repo                                    |
+| Формат переопределения ветви | `update [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `update https://github.com/ton-blockchain/mytonctrl/tree/master test` | Update the branch specified by the second argument in the designated repository |
 
 ### upgrade
 
-Обновление узла. Комбинации параметров:
+Updates the node. Param combinations:
 
-| Формат имени                 | Формат                                                                      | Пример                                                              | Описание                                                                    |
-| :--------------------------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| Без аргументов               | `upgrade`                                                                   | `upgrade`                                                           | Обновление из текущего репозитория                                          |
-| Формат URL                   | `upgrade [https://github.com/author/repo/tree/branch]`                      | `upgrade https://github.com/ton-blockchain/ton/tree/master`         | Обновление с указанного URL                                                 |
-| Только формат ветви          | `upgrade [BRANCH]`                                                          | `upgrade master`                                                    | Обновление из указанной ветки текущего репозитория                          |
-| Формат переопределения ветви | `upgrade [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `upgrade https://github.com/ton-blockchain/ton/tree/master testnet` | Обновление из ветки, указанной вторым аргументом после названия репозитория |
+| Format name                  | Format                                                                      | Пример                                                              | Description                                                                           |
+| :--------------------------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| No args                      | `upgrade`                                                                   | `upgrade`                                                           | Upgrade from current repo                                                             |
+| Формат URL                   | `upgrade [https://github.com/author/repo/tree/branch]`                      | `upgrade https://github.com/ton-blockchain/ton/tree/master`         | Upgrade from specified URL                                                            |
+| Только формат ветви          | `upgrade [BRANCH]`                                                          | `upgrade master`                                                    | Upgrade from specified branch of current repo                                         |
+| Формат переопределения ветви | `upgrade [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `upgrade https://github.com/ton-blockchain/ton/tree/master testnet` | Upgrade from the branch specified by the second argument of the designated repository |
 
 ### status
 
-Получаем текущего состояния mytonctrl и узла. Комбинации параметров:
+Gets current MyTonCtrl and node status. Param combinations:
 
-| Формат имени   | Формат        | Пример        | Описание                                                                                                           |
-| -------------- | ------------- | ------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Без аргументов | `status`      | `status`      | Полный отчет о состоянии, включая эффективность валидатора и онлайн-валидаторы                                     |
-| Быстрота       | `status fast` | `status fast` | Необходимо использовать в TestNet. Отчет о состоянии без эффективности валидатора и количества онлайн-валидаторов. |
+| Format name     | Format        | Пример        | Description                                                                                                                     |
+| --------------- | ------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| No args         | `status`      | `status`      | Full status report including validator efficiency and online validators.                                                        |
+| Быстрота        | `status fast` | `status fast` | This must be used on Testnet. The status report should exclude the efficiency of validators and the count of online validators. |
 
 [Подробнее о выводе состояния](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-status)
 
 ### installer
 
-Без аргументов, запускает установщик модулей TON (скрипт /usr/src/mytonctrl/mytoninstaller.py)
+No args, runs the installer of TON modules (script `/usr/src/mytonctrl/mytoninstaller.py`).
 
 ### status_modes
 
-Нет аргументов, показать режимы MTC.
+No args, shows MTC modes.
 
 ### status_settings
 
-Без аргументов, показать все доступные настройки с их описанием и значениями.
+No args, shows all available settings with their description and values.
 
 ### enable_mode
 
-Включить определенный режим.
+Enables a specific mode.
 
 ```bash
 MyTonCtrl> enable_mode <mode_name>
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> enable_mode validator
@@ -83,13 +119,13 @@ MyTonCtrl> enable_mode validator
 
 ### disable_mode
 
-Отключить определенный режим.
+Disables a specific mode.
 
 ```bash
 MyTonCtrl> disable_mode <mode_name>
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> disable_mode validator
@@ -97,13 +133,13 @@ MyTonCtrl> disable_mode validator
 
 ### about
 
-Получить описание указанного режима
+Provides a description of the specified mode.
 
 ```bash
 MyTonCtrl> about <mode_name>
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> about validator
@@ -111,13 +147,13 @@ MyTonCtrl> about validator
 
 ### get
 
-Получить значение определенного параметра в формате JSON
+Gets the value of a specific setting in JSON format.
 
 ```bash
 MyTonCtrl> get <setting_name>
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> get stake
@@ -125,13 +161,13 @@ MyTonCtrl> get stake
 
 ### set
 
-Устанавливает указанное значение заданного параметра. Пропустить проверку существующего параметра, если включен параметр `--force`
+Sets the specified value for a given setting. Skip the check for setting existence if `--force` is enabled.
 
 ```bash
 MyTonCtrl> set <setting> <value> [--force]
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> set stake 9000
@@ -139,17 +175,17 @@ MyTonCtrl> set stake 9000
 
 ### rollback
 
-Без аргументов, откат к mytonctrl 1.0. Не следует использовать в mytonctrl 1.0.
+No args, rollbacks to MyTonCtrl 1.0. **You should avoid using MyTonCtrl 1.0 under any circumstances**.
 
 ### getconfig
 
-Извлекает и выводит JSON-представление конфигурации, указанной с помощью `<config-id>`
+Retrieves and displays the JSON representation of the configuration specified by `<config-id>`.
 
 ```bash
 MyTonCtrl> getconfig <config_id> # config id can be omitted
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> getconfig 0
@@ -157,13 +193,13 @@ MyTonCtrl> getconfig 0
 
 ### get_pool_data
 
-Извлекает и выводит JSON-представление данных пула, указанных с помощью `<pool-name>` или `<pool-addr>`.
+Retrieves and displays the JSON representation of the pool data specified by `<pool-name>` or `<pool-addr>`.
 
 ```bash
 MyTonCtrl> get_pool_data <<pool-name> | <pool-addr>>
 ```
 
-Пример:
+Example:
 
 ```bash
 get_pool_data pool_name # you can check possible pool names using ls /home/install_mytonctrl/.local/share/mytoncore/pools
@@ -171,39 +207,40 @@ get_pool_data pool_name # you can check possible pool names using ls /home/insta
 
 ## Оверлеи
 
-Подробнее о [оверлеях читайте здесь](/v3/guidelines/nodes/custom-overlays).
+To better understand overlays, read the information [here](/v3/guidelines/nodes/custom-overlays).
 
 ### add_custom_overlay
 
-Добавляет пользовательский оверлей с указанным `<name>`, используя конфигурацию, указанную в `<path_to_config>`
+Adds a custom overlay with the given `<name>` using the configuration specified by `<path_to_config>`.
 
 ```bash
 MyTonCtrl> add_custom_overlay <name> <path_to_config>
 ```
 
-Пример:
+Example:
 
 ```bash
-add_custom_overlay custom /config.json # check link from above to know what config this command requires (/v3/guidelines/nodes/custom-overlays)
+add_custom_overlay custom /config.json
+# check link from above to know what config this command requires (/v3/guidelines/nodes/custom-overlays)
 ```
 
 ### list_custom_overlays
 
-Без аргументов, выводит пользовательские оверлеи
+No args, prints custom overlays.
 
 ### delete_custom_overlay
 
-Удаляет пользовательский оверлей с указанным `<name>`
+Deletes the custom overlay with the specified `<name>`.
 
 ```bash
 MyTonCtrl> delete_custom_overlay <name>
 ```
 
-## Валидатор
+## Validator
 
 ### vo
 
-Голосует за предложение, указанное в `<offer-hash>`
+Votes for the offer specified by `<offer-hash>`.
 
 ```bash
 MyTonCtrl> vo <offer-hash> # use `ol` to get offers
@@ -211,7 +248,7 @@ MyTonCtrl> vo <offer-hash> # use `ol` to get offers
 
 ### ve
 
-Без аргументов, голосует за выборы
+No args, votes for election.
 
 ### vc
 
@@ -221,7 +258,7 @@ MyTonCtrl> vo <offer-hash> # use `ol` to get offers
 MyTonCtrl> vc <election-id> <complaint-hash>
 ```
 
-На самом деле, даже если это сработает, вам следует использовать данные из вашего текущего состояния mytonctrl:
+Actually, this will work as well, but you should use data from your current MyTonCtrl state:
 
 ```bash
 MyTonCtrl> vc 0 0
@@ -231,34 +268,34 @@ MyTonCtrl> vc 0 0
 
 Выводит данные об эффективности валидатора для текущего и предыдущих раундов.
 
-**Примечание**: данные об эффективности текущего раунда становятся более точными по мере его развития.
+**Note**: The accuracy of data improves as the current round progresses.
 
-На основе `validator index` (можно получить с помощью команды `status`) возможны три сценария:
+Based on the `validator index`, which can be obtained using the `status` command, there are three possible scenarios:
 
-- **Validator index is in the range [0, `max_main_validators`)**:
-  `validator efficiency` должен быть выше 90% (число может быть изменено в будущем на основе статистики) для всего раунда; в противном случае может быть наложен штраф.
+1. **Validator index in the range [0, `max_main_validators`)**:
+   The `validator efficiency` must remain above 90% for the entire round. This percentage may be adjusted in the future based on statistics. If it falls below this threshold, a penalty (fine) may be imposed.
 
-- **Validator index is in the range [`max_main_validators`, `max_validators`)**:
-  `validator efficiency` должен быть выше 90% (число может быть изменено в будущем на основе статистики) для всего раунда. В настоящее время штраф не применяется, но это может измениться в будущих обновлениях.
+2. **Validator index in the range [`max_main_validators`, `max_validators`)**:
+   The `validator efficiency` should still be above 90% for the full round (this percentage may be adjusted in the future based on statistics). Currently, no penalties will be applied; however, this may change in future updates.
 
-- **The user is not a validator**:
-  Штрафы не применяются, но пользователь также не имеет права на вознаграждение. Нет `validator efficiency` для проверки. Это может быть вызвано низким стейком или неправильной конфигурацией узла. Кроме того, убедитесь, что `mytonctrl` работает без перебоев.
+3. **The user is not a validator**:
+   No penalties apply, but the user is also not eligible for rewards. In this case, there is no `validator efficiency` to monitor. This situation can arise from having a low stake or an incorrect node configuration. Additionally, ensure that `MyTonCtrl` is running continuously.
 
-Узнайте больше о `max_validators` и `max_main_validators` [на странице параметров конфигурации](/v3/documentation/network/configs/blockchain-configs#configuration-parameters-for-the-number-of-validators-for-elections). Получите фактические значения [для mainnet](https://tonviewer.com/config#16) и [для testnet](https://testnet.tonviewer.com/config#16).
+Learn more about `max_validators` and `max_main_validators` [on config parameters page](/v3/documentation/network/configs/blockchain-configs#configuration-parameters-for-the-number-of-validators-for-elections). Get the current values [for mainnet](https://tonviewer.com/config#16) and [for testnet](https://testnet.tonviewer.com/config#16).
 
-## Команды пула
+## Pool commands
 
 Получите больше информации [на странице пула номинаторов](/v3/documentation/smart-contracts/contracts-specs/nominator-pool).
 
 ### deposit_to_pool
 
-Вносит указанное количество `<amount>` в пул, указанный `<pool-addr>`
+Deposits the specified `<amount>` to the pool specified by `<pool-addr>`.
 
 ```bash
 MyTonCtrl> deposit_to_pool <pool-addr> <amount>
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> deposit_to_pool kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX 1
@@ -272,7 +309,7 @@ MyTonCtrl> deposit_to_pool kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX 1
 MyTonCtrl> withdraw_from_pool <pool-addr> <amount>
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> withdraw_from_pool kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX 1
@@ -280,11 +317,11 @@ MyTonCtrl> withdraw_from_pool kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX 1
 
 ### cleanup
 
-Без аргументов, очистка базы данных валидатора
+No args, cleans up the validator database.
 
 ### benchmark
 
-Без аргументов, выводит таблицу с несколькими тестами
+No args, displays a table with several tests.
 
 ## Единый пул
 
@@ -292,13 +329,13 @@ MyTonCtrl> withdraw_from_pool kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX 1
 
 ### new_single_pool
 
-Создает новый единый пул с указанными `<pool-name>` и `<owner-address>`
+Creates a new single pool with the specified `<pool-name>` and `<owner-address>`.
 
 ```bash
 MyTonCtrl> new_single_pool <pool-name> <owner-address>
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> new_single_pool name kf9tZrL46Xjux3ZqvQFSgQkOIlteJK52slSYWbasqtOjrKUT
@@ -306,7 +343,7 @@ MyTonCtrl> new_single_pool name kf9tZrL46Xjux3ZqvQFSgQkOIlteJK52slSYWbasqtOjrKUT
 
 ### activate_single_pool
 
-Активирует единый пул, указанный `<pool-name>`
+Activates the single pool specified by `<pool-name>`.
 
 ```bash
 MyTonCtrl> activate_single_pool <pool-name> # pool name from above
@@ -316,7 +353,7 @@ MyTonCtrl> activate_single_pool <pool-name> # pool name from above
 
 ### Импорт кошелька
 
-MyTonCtrl поддерживает различные типы контрактов, подобных кошельку, включая wallet-v1, wallet-v3, [lockup-wallet](https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/universal) и другие. Он предоставляет простой способ взаимодействия с этими контрактами.
+MyTonCtrl supports various types of wallet-like contracts, including wallet-v1, wallet-v3, [lockup-wallet](https://github.com/ton-blockchain/lockup-wallet-contract/tree/main/universal), among others. It often offers a straightforward way to interact with these contracts.
 
 #### Импорт с использованием закрытого ключа
 
@@ -326,15 +363,15 @@ MyTonCtrl поддерживает различные типы контракт�
 MyTonCtrl> iw <wallet-addr> <wallet-secret-key>
 ```
 
-Здесь `<wallet-secret-key>` — ваш закрытый ключ в формате base64.
+In this context, `<wallet-secret-key>` is your private key in base64 format.
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> iw kf9tZrL46Xjux3ZqvQFSgQkOIlteJK52slSYWbasqtOjrKUT AAAH++/ve+/vXrvv73vv73vv73vv71DWu+/vWcpA1E777+92Ijvv73vv70iV++/ve+/vUTvv70d77+9UFjvv71277+9bO+/ve+/vXgzdzzvv71i77+977+9CjLvv73vv73vv71i77+9Bu+/vV0oJe+/ve+/vUPvv73vv73vv70=
 ```
 
-#### Импорт с использованием мнемонической фразы
+#### Importing using a mnemonic phrase
 
 Если у вас есть мнемоническая фраза (последовательность из 24 слов, например `tattoo during ...`), выполните следующие действия:
 
@@ -349,9 +386,9 @@ MyTonCtrl> iw kf9tZrL46Xjux3ZqvQFSgQkOIlteJK52slSYWbasqtOjrKUT AAAH++/ve+/vXrvv7
    ```
    node index.js word1 word2 ... word24 [address]
    ```
-4. Скрипт сгенерирует `wallet.pk` и `wallet.addr`. Переименуйте их в `imported_wallet.pk` и `imported_wallet.addr`.
+4. The script will generate `wallet.pk` and `wallet.addr`. Rename them to `imported_wallet.pk` and `imported_wallet.addr`.
 5. Скопируйте оба файла в каталог `~/.local/share/mytoncore/wallets/`.
-6. Откройте консоль mytonctrl и выведите список кошельков с помощью команды `wl`.
+6. Open the MyTonCtrl console and list the wallets using the `wl` command.
 7. Убедитесь, что кошелек был импортирован и отображает правильный баланс.
 8. Теперь вы можете отправлять средства с помощью команды `mg`. Введите `mg`, чтобы просмотреть справочную документацию.
    Не забудьте заменить заполнители (слова внутри `< >`) на ваши фактические значения при запуске команд.
@@ -366,13 +403,13 @@ MyTonCtrl> wl
 
 ### Создать новый локальный кошелек
 
-Также вы можете создать новый пустой кошелек:
+You can also create a new empty wallet:
 
 ```bash
 MyTonCtrl> nw <workchain-id> <wallet-name> [<version> <subwallet>]
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> nw 0 name v3 # by default subwallet is 0x29A9A317 + workchain
@@ -380,13 +417,13 @@ MyTonCtrl> nw 0 name v3 # by default subwallet is 0x29A9A317 + workchain
 
 ### Активировать локальный кошелек
 
-Если вы хотите использовать кошелек, его необходимо активировать:
+To use a wallet, you must activate it first:
 
 ```bash
 MyTonCtrl> aw <wallet-name>
 ```
 
-Но перед активацией отправьте 1 Toncoin на кошелек:
+Before activating, send 1 Toncoin to the wallet:
 
 ```bash
 MyTonCtrl> wl
@@ -425,7 +462,7 @@ MyTonCtrl> seqno <wallet-name>
 MyTonCtrl> swv <wallet-addr> <wallet-version>
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> swv kf9tZrL46Xjux3ZqvQFSgQkOIlteJK52slSYWbasqtOjrKUT v3
@@ -433,7 +470,7 @@ MyTonCtrl> swv kf9tZrL46Xjux3ZqvQFSgQkOIlteJK52slSYWbasqtOjrKUT v3
 
 ### Экспорт кошелька
 
-Можно получить определенный адрес кошелька и секретный ключ.
+It is possible to obtain a specific wallet address along with its secret key:
 
 ```bash
 MyTonCtrl> ew <wallet-name>
@@ -449,44 +486,46 @@ MyTonCtrl> dw <wallet-name>
 
 ![](/img/docs/mytonctrl/dw.png)
 
-## Команды для акааунта и транзакций
+## Account and transaction commands
 
 ### Состояние аккаунта
 
 Чтобы проверить состояние аккаунта и историю его транзакций, используйте следующую команду:
 
 ```bash
-MyTonCtrl> vas <account-addr> # for example you can get address of validator wallet by wl command and use vas to get more information
+MyTonCtrl> vas <account-addr>
+# For example, you can get the address of the validator wallet by the wl command and use vas to get more information.
 ```
 
 ![](/img/docs/mytonctrl/vas.png)
 
 ### История аккаунта
 
-Чтобы проверить историю транзакций аккаунта, используйте следующую команду, указав объем списка операций в качестве `limit`:
+To view your account transaction history, use the following command, specifying the number of listed operations as `limit`:
 
 ```bash
-MyTonCtrl> vah <account-addr> <limit> # limit is just unsigned integer number
+MyTonCtrl> vah <account-addr> <limit>
+# limit is just unsigned integer number
 ```
 
 ![](/img/docs/mytonctrl/vah.png)
 
 ### Перевод монет
 
-Перевод монет из локального кошелька на аккаунт:
+Transfer coins from the local wallet to another account:
 
 ```bash
 MyTonCtrl> mg <wallet-name> <account-addr | bookmark-name> <amount>
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> mg wallet_004 kQBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Psp 1
 ```
 
 :::caution
-Версия кошелька 'v4' не поддерживается для передачи
+Wallet version 'v4' is not supported for the transferring
 :::
 
 ### Перевод монет через прокси
@@ -497,13 +536,13 @@ MyTonCtrl> mg wallet_004 kQBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Psp 1
 MyTonCtrl> mgtp <wallet-name> <account-addr | bookmark-name> <amount>
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> mgtp wallet_004 kQBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Psp 1
 ```
 
-## Основные команды для пулов
+## General pools commands
 
 В **MyTonCtrl** есть два типа пулов:
 
@@ -528,13 +567,13 @@ MyTonCtrl> delete_pool <pool-name>
 
 ### Импорт пула
 
-Вы можете добавить уже созданный пул в список локальных пулов:
+You can add an existing pool to the list of local pools:
 
 ```bash
 MyTonCtrl> import_pool <pool-name> <pool-addr>
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonCtrl> import_pool name kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
@@ -542,7 +581,7 @@ MyTonCtrl> import_pool name kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
 
 ## Закладки
 
-Вы можете создать закладку (bookmark) для адреса аккаунта, чтобы упростить его использование.
+You can create an alias (bookmark) for an account address to simplify its usage.
 
 ### Создать новую закладку
 
@@ -568,22 +607,22 @@ MyTonCtrl> db <bookmark-name> <bookmark-type>
 
 ![](/img/docs/mytonctrl/db.png)
 
-## Другие команды mytonctrl
+## The other MyTonCtrl commands
 
 ### ol
 
-Показать список предложений
+Show offers list:
 
-| Формат имени        | Формат           | Описание                                                                              |
-| ------------------- | ---------------- | ------------------------------------------------------------------------------------- |
-| Без аргументов      | `ol`             | Выводит таблицу с сокращенными хэшами.                                                |
-| Вывод JSON          | `ol --json`      | Выводит JSON-представление `data`.                                                    |
-| Полный вывод хэша   | `ol hash`        | Выводит таблицу с полными хэшами.                                                     |
-| JSON с полным хэшем | `ol --json hash` | Выводит JSON-представление `data`. Аргумент `"hash"` в этом случае не имеет значения. |
+| Format name         | Format           | Description                                                                                 |
+| ------------------- | ---------------- | ------------------------------------------------------------------------------------------- |
+| No arguments        | `ol`             | Prints the table with the hashes reduced.                                                   |
+| JSON output         | `ol --json`      | Prints the JSON representation of `data`.                                                   |
+| Full hash output    | `ol hash`        | Prints the table with full hashes.                                                          |
+| JSON с полным хэшем | `ol --json hash` | Prints the JSON representation of `data`. The `"hash"` argument has no effect in this case. |
 
 ### od
 
-Извлекает разницу предложений
+Retrieves the offer diff.
 
 ```bash
 MyTonCtrl> od [offer-hash]
@@ -591,53 +630,53 @@ MyTonCtrl> od [offer-hash]
 
 ### el
 
-Показать список записей выборов
+Shows election entries list.
 
-| Формат имени                          | Формат                              | Описание                                                                   |
-| ------------------------------------- | ----------------------------------- | -------------------------------------------------------------------------- |
-| Без аргументов                        | `el`                                | Выводит таблицу с сокращенными ADNL, Pubkey и Wallet.                      |
-| Любая комбинация следующих аргументов | `el --json adnl pubkey wallet past` | Полные записи ADNL, Pubkey, Wallet и прошлых выборов в JSON представлении. |
+| Format name                       | Format                              | Description                                                                  |
+| --------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------- |
+| No arguments                      | `el`                                | Prints the table with ADNL, Pubkey, and Wallet reduced.                      |
+| Any combination of following args | `el --json adnl pubkey wallet past` | Full ADNL, Pubkey, Wallet, and past election entries in JSON representation. |
 
 Описания для каждого аргумента:
 
-- \--json: Выводит JSON-представление данных.
-- past: Включает записи прошлых выборов.
-- adnl: Выводит полный ADNL.
-- pubkey: Выводит полный Pubkey.
-- wallet: выводит полный кошелек.
+- `--json`: Prints the JSON representation of data.
+- `past`: Includes past election entries.
+- `adnl`: Prints full ADNL.
+- `pubkey`: Displays full pubkey.
+- `wallet`: Displays full wallet.
 
 ### vl
 
 Показать активных валидаторов
 
-| Формат имени                           | Формат                                 | Описание                                                                       |
-| -------------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------ |
-| Без аргументов                         | `vl`                                   | Выводит таблицу с сокращенными ADNL, Pubkey и Wallet.                          |
-| Любая комбинация следующих аргументов  | `vl --json adnl pubkey wallet past`    | Полные записи ADNL, Pubkey, Wallet и прошлых валидаторов в JSON представлении. |
+| Format name                       | Format                              | Description                                                                   |
+| --------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------- |
+| No arguments                      | `vl`                                | Prints the table with ADNL, Pubkey, and Wallet reduced.                       |
+| Any combination of following args | `vl --json adnl pubkey wallet past` | Full ADNL, Pubkey, Wallet, and past validator entries in JSON representation. |
 
 Описания для каждого аргумента:
 
-- \--json: выводит JSON-представление данных.
-- past: включает прошлые записи валидаторов.
-- adnl: выводит полный ADNL.
-- pubkey: выводит полный Pubkey.
-- wallet: выводит полный Wallet.
-- offline: исключает онлайн-валидаторы.
+- `--json`: Prints the JSON representation of data.
+- `past`: Includes past validator entries.
+- `adnl`: Prints full ADNL.
+- `pubkey`: Displays full Pubkey.
+- `wallet`: Displays full Wallet.
+- `offline`: Excludes online validators.
 
 ### cl
 
 Показать список жалоб
 
-| Формат имени                          | Формат                | Описание                                              |
-| ------------------------------------- | --------------------- | ----------------------------------------------------- |
-| Без аргументов                        | `cl`                  | Выводит таблицу с сокращенным ADNL.                   |
-| Любая комбинация следующих аргументов | `cl --json adnl past` | Полный ADNL с прошлыми жалобами в JSON представлении. |
+| Format name                       | Format                | Description                                            |
+| --------------------------------- | --------------------- | ------------------------------------------------------ |
+| No arguments                      | `cl`                  | Prints the table with ADNL reduced.                    |
+| Any combination of following args | `cl --json adnl past` | Full ADNL with past complaints in JSON representation. |
 
 Описания для каждого параметра:
 
-- \--json: Выводит представление данных в формате JSON.
-- past: Включает прошлые жалобы.
-- adnl: Выводит полный ADNL.
+- `--json`: Prints the JSON representation of data.
+- `past`: Includes past complaints.
+- `adnl`: Prints full ADNL.
 
 ## Установщик
 
@@ -647,11 +686,11 @@ MyTonCtrl> od [offer-hash]
 MyTonCtrl> installer
 ```
 
-Пример:
+Example:
 
 ![img.png](/img/docs/mytonctrl/installer.png)
 
-Все команды можно вызывать напрямую из консоли MyTonCtrl
+All commands can be called directly from MyTonCtrl console:
 
 ```bash
 MyTonCtrl> installer [command] [args]
@@ -659,46 +698,46 @@ MyTonCtrl> installer [command] [args]
 
 ### help
 
-выводит все доступные команды
+Displays all available commands.
 
 ### clear
 
-очистка терминала
+Clears terminal screen.
 
 ### exit
 
-Выход из терминала mytoninstaller
+Exits from `mytoninstaller` terminal
 
 ### status
 
-выводит состояние служб (полного узла, Mytoncore, V.console, Liteserver) и аргументы узла
+Displays services status of Full node, MyTonCore, V.console, liteserver and node arguments.
 
 ### set_node_argument
 
-| Формат имени                   | Формат                                      | Описание                                                                                                         |
-| ------------------------------ | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| Добавить или заменить аргумент | `set_node_argument [-ARG_NAME] [ARG_VALUE]` | Добавить аргумент или заменить его значение, если оно существует. `-ARG_NAME` должен иметь `-` или `--` в начале |
-| Удалить аргумент               | `set_node_argument [-ARG_NAME] -d`          | Удалить аргумент из списка.                                                                                      |
+| Format name                    | Format                                      | Description                                                                                       |
+| ------------------------------ | ------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Добавить или заменить аргумент | `set_node_argument [-ARG_NAME] [ARG_VALUE]` | Add argument or replace it value if it exists. `-ARG_NAME` must have `-` or `--` at the beginning |
+| Удалить аргумент               | `set_node_argument [-ARG_NAME] -d`          | Delete argument from list.                                                                        |
 
-Возможные аргументы:
+Available arguments:
 
-| Имя аргумента узла | Описание                                                                                                        | Значение по умолчанию                                                                   |
-| ------------------ | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `threads`          | количество потоков                                                                                              | `cpus count - 1`                                                                        |
-| `daemonize`        |                                                                                                                 | Нет значения                                                                            |
-| `global-config`    | путь к глобальной конфигурации                                                                                  | `/usr/bin/ton/global.config.json`                                                       |
-| `db`               | путь к базе данных                                                                                              | `/var/ton-work/db/`                                                                     |
-| `logname`          | путь к журналам                                                                                                 | `/var/ton-work/log`                                                                     |
-| `state-ttl`        | ttl состояний блокчейна, которые хранит узел                                                                    | 3600                                                                                    |
-| `archive-ttl`      | ttl блоков, которые хранит узел. _Чтобы заставить узел не хранить архивные блоки, используйте значение `86400`_ | 2592000, если режим liteserver был включен во время установки, в противном случае 86400 |
+| Имя аргумента узла | Description                                                                                                     | Значение по умолчанию                                                                       |
+| ------------------ | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `threads`          | количество потоков                                                                                              | `cpus count - 1`                                                                            |
+| `daemonize`        |                                                                                                                 | Нет значения                                                                                |
+| `global-config`    | путь к глобальной конфигурации                                                                                  | `/usr/bin/ton/global.config.json`                                                           |
+| `db`               | путь к базе данных                                                                                              | `/var/ton-work/db/`                                                                         |
+| `logname`          | путь к журналам                                                                                                 | `/var/ton-work/log`                                                                         |
+| `state-ttl`        | ttl состояний блокчейна, которые хранит узел                                                                    | 3600                                                                                        |
+| `archive-ttl`      | ttl блоков, которые хранит узел. _Чтобы заставить узел не хранить архивные блоки, используйте значение `86400`_ | 2592000, если режим liteserver был включен во время установки, в противном случае 86400     |
 
-Пример:
+Example:
 
 ```bash
 MyTonInstaller> set_node_argument --state-ttl 3601
 ```
 
-Пример:
+Example:
 
 ```bash
 MyTonInstaller> set_node_argument --state-ttl 3601
@@ -706,7 +745,7 @@ MyTonInstaller> set_node_argument --state-ttl 3601
 
 ### enable
 
-Включить один из режимов, для `ton-http-api` создает конфигурацию
+Enables one of the modes for `ton-http-api` and creates the necessary configuration:
 
 ```bash
 MyTonInstaller> enable <MODE_NAME>
@@ -714,16 +753,16 @@ MyTonInstaller> enable <MODE_NAME>
 
 Режимы могут иметь следующие названия:
 
-- FN - Full Node
-- VC - Validator Console
-- LS - Lite Server
-- DS - DHT Server
-- JR - Jsonrpc
-- THA - TON HTTP API
-- LSP - ls proxy
-- TSP - TON storage + TON storage provider
+- `FN` - Full Node
+- `VC` - Validator Console
+- `LS` - Lite Server
+- `DS` - DHT Server
+- `JR` - JSON RPC
+- `THA` - TON HTTP API
+- `LSP` - ls proxy
+- `TSP` - TON storage + TON storage provider
 
-Пример:
+Example:
 
 ```bash
 MyTonInstaller> enable FN
@@ -731,7 +770,7 @@ MyTonInstaller> enable FN
 
 ### update
 
-То же, что `enable` для mytoninstaller
+Same as `enable` of `mytoninstaller`
 
 ```bash
 MyTonInstaller> update FN
@@ -739,42 +778,44 @@ MyTonInstaller> update FN
 
 ### plsc
 
-Вывод конфигурации liteserver
+Displays liteserver config.
 
-Пример:
+Example:
 
 ```json
 {
-    "ip": 1111111111,
-    "port": 11111,
-    "id": {
-        "@type": "pub.ed25519",
-        "key": "UURGaaZZjsBbKHvnrBqslHerXYbMCVDKdswKNJvAHkc="
-    }
+  "ip": 1111111111,
+  "port": 11111,
+  "id": {
+    "@type": "pub.ed25519",
+    "key": "UURGaaZZjsBbKHvnrBqslHerXYbMCVDKdswKNJvAHkc="
+  }
 }
 ```
 
 ### clcf
 
-Создать локальный файл конфигурации (по умолчанию `/usr/bin/ton/local.config.json`)
+Creates a local config file (by default at `/usr/bin/ton/local.config.json`)
 
 ### print_ls_proxy_config
 
-Вывод конфигурации ls proxy
+Displays ls proxy config.
 
 ### create_ls_proxy_config_file
 
-Пока ничего не делает, на стадии этапа разработки
+Currently, it is in the development stage and is not functioning yet.
 
 ### drvcf
 
-Файл конфигурации опасного восстановления валидатора
+Dangerous recovery validator config file.
 
 ### setwebpass
 
-Без аргументов. Установите пароль для веб-интерфейса администратора, запустите `python3 /usr/src/mtc-jsonrpc/mtc-jsonrpc.py -p`.
+No args. Sets a password for the web admin interface, runs `python3 /usr/src/mtc-jsonrpc/mtc-jsonrpc.py -p`.
 
-## См. также
+## See also
 
 - [Часто задаваемые вопросы](/v3/guidelines/nodes/faq)
 - [Устранение неполадок](/v3/guidelines/nodes/nodes-troubleshooting)
+
+<Feedback />
