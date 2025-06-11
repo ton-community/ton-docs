@@ -1,45 +1,58 @@
-# TON 字典
+import Feedback from '@site/src/components/Feedback';
 
-智能合约可以使用字典--有序的键值映射。它们在内部由 cell 树表示。
+# Dictionaries in TON
+
+Smart contracts in TON can utilize dictionaries structured as ordered key-value mappings. Internally, these dictionaries are represented as tree-like structures composed of cells.
 
 :::warning
-Working with potentially large trees of cells creates a couple of considerations:
+Handling potentially large trees of cells in TON introduces several important considerations:
 
-1. 每次更新操作都会构建相当数量的 cell （每个构建的 cell 需要消耗 500 gas，详情请查看 [TVM 说明](/v3/documentation/tvm/instructions#gas-prices) 页面），这意味着如果不小心使用，这些操作可能会耗尽 gas。
-   - 特别是，钱包机器人在使用 highload-v2 钱包时遇到过一次这样的问题。无限制循环加上每次迭代时昂贵的字典更新导致 gas 耗尽，最终导致重复交易，如 [fd78228f352f582a544ab7ad7eb716610668b23b88dae48e4f4dbd4404b5d7f6](https://tonviewer.com/transaction/fd78228f352f582a544ab7ad7eb716610668b23b88dae48e4f4dbd4404b5d7f6)，耗尽了余额。
-2. N 个键值对的二叉树包含 N-1 个分叉，因此总共至少有 2N-1 个 cell 。智能合约的存储空间仅限于 65536 个唯一 cell ，因此字典中的最大条目数为 32768，如果有重复 cell ，条目数会稍多一些。
-   :::
+1. **Gas consumption for updates**
 
-## 词典种类
+- Every update operation generates many new cells, costing 500 gas, as detailed on the [TVM instructions](/v3/documentation/tvm/instructions#gas-prices) page.
+- Careless updates can lead to excessive gas usage, potentially causing operations to fail due to gas exhaustion.
+- Example: This issue occurred with the **Wallet bot** using the **highload-v2 wallet**. Each iteration's unbounded loop and expensive dictionary updates led to gas depletion. As a result, the bot triggered repeated transactions, eventually draining its balance ([see transaction details](https://tonviewer.com/transaction/fd78228f352f582a544ab7ad7eb716610668b23b88dae48e4f4dbd4404b5d7f6)).
 
-### "Hash"map
+2. **Storage limitation**
 
-显而易见，TON 中最著名、使用最多的字典是 hashmap。它有一整节的 TVM 操作码（[TVM Instructions](/v3/documentation/tvm/instructions#quick-search) - Dictionary Manipulation），通常用于智能合约。
+- A binary tree containing **N** key-value pairs requires **N-1 forks**, resulting in **at least 2N-1 cells**.
+- Since smart contract storage in TON is capped at 65,536 unique cells, the maximum number of dictionary entries is approximately 32,768. This limit may be slightly higher if some cells are reused within the structure.
 
-这些字典是同长度键（所述长度作为参数提供给所有函数）与值片段的映射。与名称中的 "散列 "不同，字典中的条目是有序的，可以通过键、上一个或下一个键值对方便地提取元素。值与内部节点标记以及可能的关键部分放置在同一 cell 中，因此不能使用全部 1023 位；`~udict_set_ref` 通常用于这种情况。
-
-空 hashmap 在 TVM 中表示为 "空"，因此不是 cell 。要在 cell 中存储字典，首先要保存一个比特（空为 0，否则为 1），然后在 hashmap 不为空的情况下添加引用。因此，`store_maybe_ref` 和 `store_dict` 是可以互换的，一些智能合约作者使用 `load_dict` 从传入的消息或存储中加载 `Maybe ^Cell`。
-
-hashmaps的可能操作
-
-- 从 slice 加载，存储到构建器
-- 按key 获取/设置/删除 value
-- 替换值（如果键已存在，则设置新值）/添加一个值（如果键未存在）
-- 按键的顺序移动到下一个/上一个键值对（如果不考虑 gas 限制，可用于[遍历字典](/v3/documentation/smart-contracts/func/cookbook#how-to-iterate-dictionaries)
-- 检索最小/最大键及其值
-- 按 键 获取函数（延续）并立即执行
-
-为了使合约不会因 gas 超限而中断，在处理一个事务时，只能进行有限次数的字典更新。如果合约的余额被用于根据开发者的条件维护地图，合约可以向自己发送继续清理的消息。
-
-:::info
-有检索子字典的说明：给定键范围内条目子集。这些指令尚未经过测试，因此只能以 TVM 汇编形式查看：`SUBDICTGET` 和类似的指令。
 :::
 
-#### Hashmap 示例
+## Dictionary kinds
 
-让我们看看 Hashmap 是什么样的，特别是 257 位整数键与空值片段的映射（这样的映射只表示元素的存在或不存在）。
+### "Hash" map
 
-快速检查的方法是在 Python 中运行以下脚本（可酌情用其他 SDK 替换 `pytoniq`）：
+Hashmaps are the most widely used dictionary type in TON. They have a dedicated set of TVM opcodes for manipulation and are commonly used in smart contracts (see [TVM instructions](/v3/documentation/tvm/instructions#quick-search) - Dictionary manipulation).
+
+Hashmaps map fixed-length keys, which are defined as an argument to all functions, to value slices. Despite the "hash" in its name, entries are ordered and allow efficient access to elements by key and retrieval of the previous or next key-value pair. Since values share space with internal node tags and possibly key fragments within the same cell, they cannot utilize the full 1023 bits. In such cases, the `~udict_set_ref` function often helps.
+
+An empty hashmap is represented as `null` in TVM, meaning it is not stored as a cell. A single bit is first saved to store a dictionary in a cell (0 for empty, 1 otherwise),
+followed by a reference if the hashmap is not empty. This makes `store_maybe_ref` and `store_dict` interchangeable. Some smart contract developers use `load_dict` to load a `Maybe ^Cell` from an incoming message or storage.
+
+**Available hashmap operations:**
+
+- Load from a slice, store to a builder;
+- Get/Set/Delete a value by key;
+- Replace a value (update an existing key) or add a new value (if the key is absent);
+- Move to the next/previous key-value pair (entries are ordered by keys, enabling [iteration](/v3/documentation/smart-contracts/func/cookbook#how-to-iterate-dictionaries) if gas constraints allow);
+- Retrieve the minimal or maximal key with its value;
+- Fetch and execute a function (continuation) by key.
+
+To prevent gas exhaustion, smart contracts should limit the number of dictionary updates per transaction. If a contract's balance is used to maintain the hashmap under specific conditions, it can send itself a message to continue processing in another transaction.
+
+:::info
+
+TVM provides instructions for retrieving a subdictionary—a subset of entries within a given key range. These operations (`SUBDICTGET` and similar) are currently untested and can only be explored at the TVM assembly level.
+
+:::
+
+#### Hashmap examples
+
+To illustrate, let's examine a hashmap that maps 257-bit integer keys to empty value slices. This type of hashmap serves as a presence indicator, storing only the existence of elements.
+
+You can quickly check this by running the following Python script. If needed, you can use a different SDK instead of `pytoniq`:
 
 ```python
 import pytoniq
@@ -52,7 +65,7 @@ k.set(6 - 2**256, em)
 print(str(pytoniq.begin_cell().store_maybe_ref(k.serialize()).end_cell()))
 ```
 
-该结构是二叉树，如果我们忽略根 cell ，它甚至是一棵平衡的树。
+This structure forms a binary tree, which appears balanced except for the root cell:
 
 ```
 1[80] -> {
@@ -69,14 +82,17 @@ print(str(pytoniq.begin_cell().store_maybe_ref(k.serialize()).end_cell()))
 }
 ```
 
-文档中有 [更多关于 hashmap 解析的示例](/v3/documentation/data-formats/tlb/tl-b-types#hashmap-parsing-example)。
+For further [examples of hashmap parsing](/v3/documentation/data-formats/tlb/tl-b-types#hashmap-parsing-example), refer to the official documentation.
 
-### 增强地图（每个节点都有附加数据）
+### Augmented maps
 
-TON 验证器内部使用这些映射来计算分片中所有合约的总余额（使用每个节点的总子树余额映射可以让它们快速验证更新）。目前还没有 TVM 原语来处理这些映射。
+Augmented maps with additional data in each node are used internally by TON validators to calculate the total balance of all contracts in a shard. By storing the total subtree balance in each node, validators can quickly validate updates. There are no TVM primitives for working with these maps.
 
-### 前缀字典
+### Prefix dictionary
 
 :::info
-测试表明，创建前缀字典的文档不足。除非完全了解相关操作码 `PFXDICTSET` 和类似代码的工作原理，否则不应在生产合约中使用它们。
+Testing shows that documentation on prefix dictionaries is insufficient. Avoid using them in production contracts unless you fully understand how the relevant opcodes, such as `PFXDICTSET`, work.
 :::
+
+<Feedback />
+
