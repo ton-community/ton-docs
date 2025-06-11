@@ -1,40 +1,38 @@
-# Как внести свой вклад
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# How to contribute
 
 :::info
-Узнайте, как отправить контент в документацию TON здесь.
+Learn how to submit content to TON documentation here.
 :::
 
-## Правила внесения вклада
+## Contribute rules
 
-### Политика ведения документации
+### Documentation maintain community
 
-Документация TON полностью открыта. Энтузиасты сообщества и ранние участники TON сыграли ключевую роль в создании этой открытой документации TON, превратив свои заметки в подробные страницы.
+TON Documentation is entirely open source. Community enthusiasts and early TON contributors have played a key role in creating this open-source TON documentation by turning their notes into detailed pages.
 
-Первоначально она была написана [участниками] TON (/v3/contribute/maintainers/) и поддерживается [TON Studio] (https://tonstudio.io/).
-Мы стремимся рассказать пользователям о TON с помощью понятного контента с возможностью простого поиска, который понравится техническим экспертам и обычным читателям.
+It was initially written by TON [contributors](/v3/contribute/maintainers/) and supported by [TON Studio](https://tonstudio.io/).
+We aim to educate users about TON through explicit, easily searchable content that appeals to technical experts and casual readers.
 
-### Как внести свой вклад
+### How to contribute
 
 :::info
-Эта документация написана на английском языке. Пожалуйста, обратитесь к [программе локализации](/v3/contribute/localization-program/how-to-contribute/) для других языков.
+This documentation is written in English. Please refer to [localization program](/v3/contribute/localization-program/how-to-contribute/) for other languages.
 :::
 
-1. Клонируйте текущую версию из репозитория GitHub [ton-docs](https://github.com/ton-community/ton-docs).
-2. Определите область для внесения вклада в соответствии с [руководством по стилю](/v3/contribute/style-guide/) и откройте связанную [задачу](https://github.com/ton-community/ton-docs/issues).
-3. Ознакомьтесь со [Стандартизацией контента](/v3/contribute/content-standardization/) и [Типографикой](/v3/contribute/typography/).
-4. Откройте запрос на извлечение ветки `main` с четким описанием и краткими обновлениями в соответствии с шаблоном.
+1. Clone a current version from the [ton-docs](https://github.com/ton-community/ton-docs) GitHub repository.
+2. Determine an area for contribution according to [Style guide](/v3/contribute/style-guide/) and open a related [issue](https://github.com/ton-community/ton-docs/issues).
+3. Familiarize yourself with [Content standardization](/v3/contribute/content-standardization/) and [Typography](/v3/contribute/typography/).
+4. Open a pull request against the `main` branch with a clear description and concise updates according to the template.
 
-#### Шаблон запроса на объединение в пул
+#### Pull request template
 
 ```md
 
 ## Description
 
-Please provide a brief description of the changes introduced in this pull request. Include any relevant issue numbers or links.
+Brief description of the changes introduced in this pull request. Include any relevant issue numbers or links.
+
+Closes [link to issue].
 
 ## Checklist
 
@@ -45,33 +43,33 @@ Please provide a brief description of the changes introduced in this pull reques
 
 ```
 
-4. Перед отправкой запроса на включение внесенных изменений выполните и проверьте каждый этап в контрольном списке описания.
+4. Before submitting your pull request, complete and verify each milestone in the description checklist.
 
 :::info
-Чтобы избежать чрезмерной доработки, прочтите рекомендации по внесению вклада в [Руководстве по стилю](/v3/contribute/style-guide/), [Стандартизации контента](/v3/contribute/content-standardization/) и [Типографики](/v3/contribute/typography/) перед внесением вклада. Не беспокойтесь о незначительных проблемах; сопровождающие помогут вам исправить их в процессе проверки.
+To avoid excessive rework, read the contribution guidelines in the [Style guide](/v3/contribute/style-guide/), [Content standardization](/v3/contribute/content-standardization/), and [Typography](/v3/contribute/typography/) before contributing. Don't worry about minor issues; maintainers will help you fix them during the review process.
 :::
 
-### Разработка
+### Development
 
-- Изучите процесс разработки документации на основе документа [ton-docs/README.md](https://github.com/ton-community/ton-docs?tab=readme-ov-file#set-up-your-environment-%EF%B8%8F).
+- Learn the documentation development flow from a [ton-docs/README.md](https://github.com/ton-community/ton-docs?tab=readme-ov-file#set-up-your-environment-%EF%B8%8F) document.
 
-#### Лучшая практика для запросов на извлечение
+#### Best practices for pull requests
 
-1. **Сделайте ваш pull request небольшим**. Меньшие pull requests (~300 строк различий) легче проходят проверку и вероятнее всего будут приняты. Убедитесь, что pull request выполняет только одно действие, в противном случае разделите его.
-2. **Используйте описательные заголовки**. Рекомендуется придерживаться стиля сообщений фиксации.
-3. **Протестируйте свои изменения**. Запустите сборку локально и убедитесь, что у вас нет сбоев.
-4. **Используйте мягкий перенос**: не переносите строки по 80 символов; настройте редактор на мягкий перенос.
+1. **Keep your pull request small**. Minor pull requests (~300 lines of diff) are easier to review and more likely to get merged. Make sure the pull request does only one thing; otherwise, please split it.
+2. **Use descriptive titles**. It would be best to follow the commit message style.
+3. **Test your changes**. Run build locally, and make sure you have no crashes.
+4. **Use soft wrap**: Don't wrap lines at 80 characters; configure your editor to soft-wrap.
 
-## Общайтесь с другими разработчиками
+## Communicate to other developers
 
-- [Задавайте вопросы, связанные с документацией TON, в чате TON Docs Club в Telegram.](https://t.me/+c-0fVO4XHQsyOWM8)
-- [Ознакомьтесь с наиболее часто задаваемыми вопросами в чате разработчиков TON.](https://t.me/tondev)
-- [Создайте задачу с вашими идеями по улучшению.](https://github.com/ton-community/ton-docs/issues)
-- [Найдите и получите доступные вознаграждения за документацию.](https://github.com/ton-society/ton-footsteps/issues?q=documentation)
-- [См. docs-ton на GitHub.](https://github.com/ton-community/ton-docs)
+- [Ask questions related to TON documentation in the TON Docs Club chat in Telegram.](https://t.me/+c-0fVO4XHQsyOWM8)
+- [Get familiar with the most frequently asked questions in the TON Developers.](https://t.me/tondev_eng)
+- [Create an issue with your ideas on improvement.](https://github.com/ton-community/ton-docs/issues)
+- [Find and take available bounties for the documentation.](https://github.com/ton-society/ton-footsteps/issues?q=documentation)
+- [See docs-ton on GitHub.](https://github.com/ton-community/ton-docs)
 
-## См. также
+## See also
 
-- [Руководство по стилю](/v3/contribute/style-guide/)
-- [Типографика](/v3/contribute/typography/)
-- [Программа локализации](/v3/contribute/localization-program/overview/)
+- [Style guide](/v3/contribute/style-guide/)
+- [Typography](/v3/contribute/typography/)
+- [Localization program](/v3/contribute/localization-program/overview/)
