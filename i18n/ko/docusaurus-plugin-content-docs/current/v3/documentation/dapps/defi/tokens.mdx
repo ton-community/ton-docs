@@ -1,0 +1,118 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Button from '@site/src/components/button'
+
+# 토큰 (FT, NFT)
+
+[TON 토큰 개요](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
+
+> TON의 토큰과 NFT는 중앙 집중식 실패 지점과 병목 현상을 피하고 분산화되어 있습니다.
+>
+> 컬렉션의 각 NFT는 별도의 스마트 컨트랙트입니다. 각 사용자의 토큰 잔액은 별도의 사용자 지갑에 저장됩니다.
+>
+> 스마트 컨트랙트는 서로 직접 상호 작용하여 전체 네트워크에 부하를 분산시킵니다.
+>
+> 사용자와 거래가 늘어나도 네트워크는 균일한 부하를 유지하여 원활한 확장성을 제공합니다.
+
+## TON Course: jettons & NFTs
+
+:::tip
+과정을 시작하기 전에 블록체인 기술의 기본을 잘 이해하고 있어야 합니다. 지식에 부족한 부분이 있다면 [TON으로 배우는 블록체인 기초](https://stepik.org/course/201294/promo) ([러시아어 버전](https://stepik.org/course/202221/), [중국어 버전](https://stepik.org/course/200976/))를 수강하는 것을 추천합니다.
+모듈 4는 NFT & 제톤의 기본 지식을 다룹니다.
+:::
+
+[TON 블록체인 과정](https://stepik.org/course/176754/)은 TON 블록체인 개발에 대한 종합 가이드입니다.
+
+모듈 7은 **NFT & 제톤** 개발을 완벽하게 다룹니다.
+
+<Button href="https://stepik.org/course/176754/promo"
+        colorType={'primary'} sizeType={'sm'}>
+
+TON 블록체인 과정 확인
+
+</Button>
+
+<Button href="https://stepik.org/course/201638/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+CHN
+
+</Button>
+
+<Button href="https://stepik.org/course/201855/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+RU
+
+</Button>
+
+## 튜토리얼
+
+- [Web3 게임 튜토리얼](/v3/guidelines/dapps/tutorials/web3-game-example) - TON 블록체인으로 Web3 게임을 만드는 방법을 배웁니다.
+- [첫 제톤 발행하기](/v3/guidelines/dapps/tutorials/mint-your-first-token/) — 첫 제톤을 배포하고 커스터마이즈하는 방법을 배웁니다
+- [[YouTube] TON Keeper 창립자 Oleg Andreev와 Oleg Illarionov의 TON 제톤 이야기](https://www.youtube.com/watch?v=oEO29KmOpv4)
+
+### TON speed run
+
+- [🚩 챌린지 1: 간단한 NFT 배포](https://github.com/romanovichim/TONQuest1)
+- [🚩 챌린지 2: 챗봇 컨트랙트](https://github.com/romanovichim/TONQuest2)
+- [🚩 챌린지 3: 제톤 자판기](https://github.com/romanovichim/TONQuest3)
+- [🚩 챌린지 4: 복권/추첨](https://github.com/romanovichim/TONQuest4)
+- [🚩 챌린지 5: 5분 만에 컨트랙트와 상호작용하는 UI 만들기](https://github.com/romanovichim/TONQuest5)
+- [🚩 챌린지 6: Getgems 마켓플레이스의 NFT 판매 분석](https://github.com/romanovichim/TONQuest6)
+
+## Jettons (fungible tokens)
+
+### 가이드
+
+- [TON 제톤 처리](/v3/guidelines/dapps/asset-processing/jettons)
+- [TON 메타데이터 파싱](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing)
+
+### 표준
+
+- [제톤 표준](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
+
+### Smart contracts
+
+- [스마트 컨트랙트 구현(FunC)](https://github.com/ton-blockchain/token-contract/)
+
+### Jetton deployer
+
+제톤은 TON 블록체인의 커스텀 대체 가능 토큰입니다. 다음 제톤 배포자 예시를 사용하여 TON 블록체인에서 자신만의 토큰을 만들 수 있습니다:
+
+- **[TON Minter](https://minter.ton.org/)** — 오픈소스 제톤 배포자 dApp
+- [제톤 배포자 — 컨트랙트](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
+- [제톤 배포자 — 웹클라이언트](https://github.com/ton-defi-org/jetton-deployer-webclient) (React, TypeScript)
+
+### Tools to work with jettons
+
+- [NFT 제톤 판매 컨트랙트](https://github.com/dvlkv/nft-jetton-sale-smc) - 제톤 지원 NFT 판매 컨트랙트
+- [Scaleton](http://scaleton.io) — 커스텀 토큰 잔액 확인
+- [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example) — 제톤 정보를 조회하는 SDK
+
+## NFT
+
+### 표준
+
+- [NFT 표준](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
+- [SBT (영혼 결속 NFT) 표준](https://github.com/ton-blockchain/TEPs/blob/master/text/0085-sbt-standard.md)
+- [NFT 로열티 표준 확장](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
+
+### Smart contracts
+
+- [스마트 컨트랙트 구현(FunC)](https://github.com/ton-blockchain/token-contract/)
+- [Getgems NFT, 판매, 경매 스마트 컨트랙트(FunC)](https://github.com/getgems-io/nft-contracts)
+
+### NFT 민터
+
+- [NFT 배포자](https://github.com/tondiamonds/ton-nft-deployer) by TON Diamonds (TypeScript, 주석 없음)
+- [NFT 민터 예시](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript, 주석 있음)
+- [React를 사용한 NFT 민터](https://github.com/tonbuilders/tonbuilders-minter) (React, 주석 없음)
+- [NFT 배포자](https://github.com/anomaly-guard/nft-deployer) (Python, 주석 있음)
+- [Golang을 사용한 NFT 민터](https://github.com/xssnick/tonutils-go#nft) (Golang 라이브러리, 주석과 전체 예시 포함)
+
+### NFT 작업 도구
+
+- [LiberMall/tnt](https://github.com/LiberMall/tnt) — TNT는 The Open Network에서 대체 불가능 토큰을 조회, 편집, 발행하는 올인원 커맨드라인 도구입니다.
+
+<Feedback />
