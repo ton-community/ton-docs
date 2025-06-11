@@ -1,25 +1,20 @@
-# Руководство Airdrop Claiming
+import Feedback from '@site/src/components/Feedback';
 
-В этой статье мы рассмотрим вымышленное _решение_ для клейма, попытаемся выявить его проблемы с производительностью и решить их.
-Мы сосредоточимся на взаимодействии контрактов и их влиянии на общую производительность и не будем затрагивать код, аспекты безопасности и другие нюансы.
+# Airdrop claiming guidelines
 
-## Claim Machine
+In this article, we'll explore an imaginary claim solution, identify its performance issues, and propose solutions. The focus will be on contract interactions and their impact on overall performance. Code, security aspects, and other nuances are beyond the scope of this discussion.
+
+## Claim machine
 
 :::info
-Как работает практически любое решение для клейма?
-Давайте подумаем.
+How does a typical claim solution work? Let's break it down.
 :::
 
-Пользователь отправляет некое доказательство, пруф того, что он имеет право на клейм. Разработанный алгоритм решения осуществляет проверку доказательства и при ее успешности отправляет жетоны.
-В данном случае используется [доказательство Меркла](/v3/documentation/data-formats/tlb/exotic-cells#доказательство-меркла), но это вполне могут быть просто подписанные данные или любой другой метод авторизации.
-Отправка жетонов осуществляется с помощью Jetton wallet и Jetton minter.
-Также, нужно убедиться, что хитрые пользователи не смогут клеймить дважды – для этого необходим контракт с защитой от двойного списания.
-И, наверное, заработать немного денег, не так ли? Значит потребуется, по меньшей мере, один кошелек для клейма.
-Подведем итог:
+The user submits some form of proof to demonstrate eligibility for the claim. The solution verifies the proof and sends jettons to the user. In this case, `proof` refers to a [merkle proof](/v3/documentation/data-formats/tlb/exotic-cells#merkle-proof), but it could also be signed data or any other authorization method. To send jettons, we'll need a jetton wallet and minter. Additionally, we must prevent users from claiming twice—this requires a double-spend protection contract. And, of course, we'd like to monetize this, right? So, we'll need at least one claim wallet. Let's summarize:
 
 ### Дистрибьютор
 
-Принимает доказательство от пользователя, проверяет его, выпускает жетоны.
+Takes the proof from the user, checks it, and releases the jettons.
 State init: `(merkle_root, admin, fee_wallet_address)`.
 
 ### Двойное списание
@@ -28,8 +23,8 @@ State init: `(merkle_root, admin, fee_wallet_address)`.
 
 ### Jetton wallet
 
-Jetton wallet, с которого токены будут отправлены _дистрибьютором_.
-Jetton minter выходит за рамки этой статьи.
+Jetton wallet, where the tokens will be sent from by the _distributor_.
+Jetton minter is out of the scope of this article.
 
 ### Кошелек для комиссии
 
@@ -39,27 +34,30 @@ Jetton minter выходит за рамки этой статьи.
 
 ### V1
 
-Один из возможных вариантов реализации:
+The initial design that comes to mind is as follows:
 
-- Пользователь отправляет доказательство дистрибьютору
-- Дистрибьютор проверяет доказательство и разворачивает смарт-контракт `двойного списания`
-- Дистрибьютор передает сообщение контракту двойного списания
-- Контракт двойного списания отправляет `claim_ok` дистрибьютору, если он не был развернут ранее
-- Дистрибьютор отправляет комиссию за клейм на кошелек для оплаты комиссии
-- Дистрибьютор отпускает жетоны пользователю
+1. The user sends proof to the distributor.
+2. The distributor verifies the proof and deploys a `double spend` contract.
+3. The distributor sends a message to the double spend contract.
+4. If the double spend contract has not been deployed previously, it sends a `claim_ok` message to the distributor.
+5. The distributor sends the claim fee to the fee wallet.
+6. The distributor releases the jettons to the user.
 
+**NAIVE ART AHEAD!**
 
-
-Что здесь не так? Похоже, что цикл избыточен.
+Что здесь не так?
+Похоже, что цикл избыточен.
 
 ### V2
 
-Линейная структура намного лучше:
+A linear design is more effective:
 
-- Пользователь разворачивает контракт `двойного списания`, который в свою очередь передает доказательство дистрибьютору
-- Дистрибьютор проверяет адрес отправки смарт-контракта `двойного списания` по state init `(distributor_address, user_address?)`
-- Дистрибьютор проверяет доказательство и выпускает жетоны. В данном случае индекс пользователя должен быть частью доказательства.
-- Дистрибьютор отправляет комиссию на кошелек для оплаты комиссии
+1. The user deploys the `double spend` contract, which proxies the proof to the distributor.
+2. The distributor verifies the `double spend` contract's address using the state init `(distributor_address, user_address?)`.
+3. The distributor checks the proof (with the user index included as part of the proof) and releases the jettons.
+4. The distributor sends the fee to the fee wallet.
+
+**More naive art**
 
 ## Оптимизация шардов
 
@@ -67,43 +65,29 @@ Jetton minter выходит за рамки этой статьи.
 
 ### Что это такое?
 
-Для того чтобы получить базовое представление, рекомендуется ознакомиться со статьей [Создание кошелька для разных шардов](/v3/guidelines/dapps/asset-processing/payments-processing/#создание-кошелька-для-разных-шардов).
-Вкратце, шард – это четырехбитный префикс адреса контракта. Как в сетевых технологиях.
-Когда контракт находится в одном сегменте сети, сообщения обрабатываются без маршрутизации, а значит гораздо быстрее.
+To build a fundamental understanding, refer to [wallet creation for different shards](/v3/guidelines/dapps/asset-processing/payments-processing/#wallet-creation-for-different-shards). In short, a shard is a 4-bit address prefix, similar to networking. When contracts are in the same network segment, messages are processed without routing, making them significantly faster.
 
-### Идентификация адресов, которые мы можем контролировать
+### Identifying addresses we can control
 
 #### Адрес дистрибьютора
 
-Мы полностью контролируем данные дистрибьютора, поэтому должны иметь возможность поместить их в любой шард.
-Как это сделать?
-Помните, что адрес смарт-контракта [определяется его состоянием](/v3/documentation/smart-contracts/addresses#идентификатор-аккаунта).
-Нужно использовать некоторые поля данных контракта в качестве nonce и продолжать попытки до тех пор, пока не получим желаемый результат.
-Примером хорошего nonce в реальных контрактах может быть (subwalletId/publicKey) для смарт-контракта кошелька.
-Любое поле, которое можно изменить после развертывания или которое не влияет на логику контракта (как subwalletId), подойдет для этого.
-Можно даже создать неиспользуемое поле специально для этой цели, как это делает [vanity-contract](https://github.com/ton-community/vanity-contract).
+We have full control over the distributor's data and can place it in any shard. How? Remember, the contract address is [defined by its state](/v3/documentation/smart-contracts/addresses#account-id). We can use one of the contract's data fields as a nonce and keep trying until we achieve the desired result. A good example of a nonce in actual contracts is the `subwalletId` or `publicKey` for a wallet contract. Any field that can be modified after deployment or doesn't impact the contract logic (like `subwalletId`) will work. You could even create an unused field explicitly for this purpose, as demonstrated by [vanity-contract](https://github.com/ton-community/vanity-contract).
 
 #### Адрес Jetton wallet
 
-Мы не можем контролировать адрес полученного jetton wallet напрямую.
-Однако, если мы контролируем адрес дистрибьютора, то можем подобрать его таким образом, чтобы jetton wallet для дистрибьютора оказался в том же шарде.
-Но как это сделать? Для этого существует [данная библиотека](https://github.com/Trinketer22/turbo-wallet)!
-В настоящее время она поддерживает только кошельки, но добавить поддержку произвольных контрактов достаточно просто.
-Посмотрите, как это сделано для [Highload-кошелька V3](https://github.com/Trinketer22/turbo-wallet/blob/44fe7ee4300e37e052871275be8dd41035d45c3a/src/lib/contracts/HighloadWalletV3.ts#L20).
+We can't directly control the resulting jetton wallet address. However, if we control the distributor address, we can choose it so that the resulting jetton wallet ends up in the same shard. How? There's a [library](https://github.com/Trinketer22/turbo-wallet) for that! While it currently supports only wallets, extending it to arbitrary contracts is relatively easy. Please take a look at how it's implemented for [HighloadV3](https://github.com/Trinketer22/turbo-wallet/blob/44fe7ee4300e37e052871275be8dd41035d45c3a/src/lib/contracts/HighloadWalletV3.ts#L20).
 
-### Смарт-контракт двойное списание
+### Double spend contract
 
-Контракт двойного списания должен быть уникальным для каждого доказательства, поэтому сможем ли мы настроить его на шарде? Если подумать, то это зависит от структуры доказательства. Первое, что приходит на ум, это та же структура, что и у [mintless jetton](https://github.com/tonkeeper/TEPs2/blob/mintles/text/0177-mintless-jetton-standard.md#handlers):
+The double-spend contract should be unique per proof, so can we shard-tune it? Let's think about it. If you consider the proof structure, it depends on how the data is organized. The first idea that comes to mind is a structure similar to [mintless jettons](https://github.com/tonkeeper/TEPs2/blob/mintles/text/0177-mintless-jetton-standard.md#handlers):
 
 ```
 _ amount:Coins start_from:uint48 expired_at:uint48 = AirdropItem;
 
 _ _(HashMap 267 AirdropItem) = Airdrop;
-
 ```
 
-К сожалению, такая настройка не подходит потому, что распределение адресов происходит случайным образом, а все поля будут иметь значимые данные.
-Но ничто не мешает нам попробовать такой вариант:
+In this case, the address distribution is random, and all data fields are meaningful, making it untunable. However, nothing stops us from modifying it like this:
 
 ```
 _ amount:Coins start_from:uint48 expired_at:uint48 nonce:uint64 = AirdropItem;
@@ -111,63 +95,62 @@ _ amount:Coins start_from:uint48 expired_at:uint48 nonce:uint64 = AirdropItem;
 _ _(HashMap 267 AirdropItem) = Airdrop;
 ```
 
-или даже:
+Or even:
 
 ```
 _ amount:Coins start_from:uint48 expired_at:uint48 addr_hash: uint256 = AirdropItem;
 
 _ _(HashMap 64 AirdropItem) = Airdrop;
-
 ```
 
-где 64-битный индекс может быть использован в качестве nonce, а адрес становится частью данных для верификации.
-Таким образом, если данные смарт-контракта двойного списания строятся из `(distributor_address, index)`, где индекс является частью данных, мы по-прежнему имеем исходную надежность, но теперь шард адреса может настраиваться с помощью параметра index.
+Here, a 64-bit index can act as a nonce, and the address becomes part of the data payload for verification. If the double-spend data is constructed from `(distributor_address, index)`, where the index is part of the data, we maintain reliability while making the address shard tunable via the index parameter.
 
 #### Адрес пользователя
 
-Очевидно, что мы не контролируем адреса пользователей, не так ли?
-Да, **НО** мы можем сгруппировать их таким образом, чтобы шард пользовательских адресов совпадал с шардом дистрибьюторов.
-В таком случае каждый дистрибьютор будет обрабатывать _merkle root_, состоящий исключительно из пользователей его шарда.
+We don't control user addresses, right? Yes, **BUT** we can group them so that the user address shard matches the distributor shard. In this case, each distributor processes a `merkle root` consisting entirely of users from its shard.
+
+Here's the improved and more polished version of your text:
 
 #### Резюме
 
-Мы можем поместить `double_spend -> dist -> dist_jetton` часть цепочки в один шард.
-Для других шардов останется только `dist_jetton -> user_jetton -> user_wallet`.
+We can place the `double_spend -> dist -> dist_jetton` chain in the same shard. What remains for other shards is the `dist_jetton -> user_jetton -> user_wallet` path.
 
-### Как же развернуть такую установку
+### How to deploy such a setup
 
-Одно из требований заключается в том, чтобы контракт _дистрибьютора_ имел обновляемый _merkle root_. Давайте выполним по шагам:
+Let's break it down step by step. One key requirement is that the _distributor_ contract must have an updatable _merkle root_.
 
-- Разверните смарт-контракт дистрибьютора в каждом шарде (0-15) – в пределах тех же шардов, что и их jetton wallet, используя начальный `merkle_root` в качестве nonce
-- Сгруппируйте пользователей по шардам
-- Для каждого пользователя найдите такой индекс, чтобы контракт _двойного списания_ `(distributor, index)` оказался в том же шарде, что и адрес пользователя
-- Сгенерируйте _merkle roots_ с индексами из шага выше
-- Обновите _дистрибьюторов_ в соответствии с _merkle roots_
+1. Deploy a distributor in each shard (0-15), using the initial `merkle_root` as a nonce to ensure it resides in the same shard as its Jetton wallet.
+2. Group users by their distributor shard.
+3. For each user, find an index such that the _double spend_ contract `(distributor, index)` ends up in the same shard as the user's address.
+4. Generate _merkle roots_ using the indexes from the previous step.
+5. Update the _distributors_ with the corresponding _merkle roots_.
 
-Теперь все должно быть в порядке!
+Now, everything should be ready to go!
 
 ### V3
 
-- Пользователь разворачивает контракт _двойного списания_ в одном шарде, используя настройку индекса
-- Дистрибьютор в шарде пользователя проверяет адрес отправки `двойного списания` по state init `(distributor_address, index)`
-- Дистрибьютор отправляет комиссию на кошелек для оплаты комиссии
-- Дистрибьютор проверяет доказательство и выпускает жетоны через jetton wallet на том же шарде. В данном случае индекс пользователя должен быть частью доказательства
+1. Index tuning enables users to deploy the _double spend_ contract in the same shard.
+2. The distributor in the user's shard verifies the sending `double spend` address by checking the state init `(distributor_address, index)`.
+3. The distributor sends the fee to the fee wallet.
+4. The distributor checks the proof (with the user index included) and releases jettons via the jetton wallet in the same shard.
 
-Какой недостаток у данной структуры? Давайте посмотрим внимательно. Правильно! Существует только один кошелек для комиссии – таким образом сборы комиссий скапливаются в очередь на одном шарде. Это могло бы стать катастрофой! (Интересно, случалось ли такое в реальности?)
+**More naive art**
+
+Is there anything wrong with this approach? Let's take a closer look.\
+...\
+Yes, there is! There's only one fee wallet, and fees queue up to a single shard. This could have been a disaster! (Has this ever happened in real life?).
 
 ### V4
 
-- То же самое, что и в V3, но теперь 16 кошельков для получения комиссии, каждый из которых находится в том же шарде, что и его _дистрибьютор_
-- Придется сделать адрес _кошелька для комиссии_ обновляемым
+1. It's the same as V3, but now there are 16 fee wallets, each in the same shard as its _distributor_.
+2. Make the _fee wallet_ address updatable.
 
+**A bit more art**
 
-
-Как вам теперь? Выглядит хорошо.
+Как вам теперь? LGTM.
 
 ## Что дальше?
 
-Мы всегда можем пойти еще дальше.
-Ознакомьтесь с кастомным смарт-контрактом [jetton wallet](https://github.com/ton-community/mintless-jetton/blob/main/contracts/jetton-utils.fc#L142), который имеет встроенную оптимизацию шардов.
-В результате пользовательский jetton wallet оказывается на том же шарде, что и пользователь, с вероятностью 87%.
-Но это все еще довольно-таки неизведанная территория, так что вам придется действовать самостоятельно.
-Удачи с TGE!
+We can always push further. For example, consider a custom [jetton wallet](https://github.com/ton-community/mintless-jetton/blob/main/contracts/jetton-utils.fc#L142) with built-in shard optimization. This ensures the user's jetton wallet ends up in the same shard as the user with an 87% probability. However, this is relatively uncharted territory, so you'll need to explore it on your own. Good luck with your TGE!
+
+<Feedback />
