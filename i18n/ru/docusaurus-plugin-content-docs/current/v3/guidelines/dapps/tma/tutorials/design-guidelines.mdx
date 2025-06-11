@@ -1,56 +1,54 @@
-# Рекомендации по дизайну мини-пиложений Telegram (TMA)
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# TMA design guidelines
 
 :::info
-Начиная с версии **6.10**, Telegram обновил цветовую палитру для веб-приложений: исправлены несколько старых цветов и добавлены новые.
+Starting with version **6.10**, Telegram updated the Mini App color palette by fixing some old colors and adding new ones.
+
 :::
 
-Для контекста вспомним историю обновлений.
+For context, let's look back at the update history.
 
-Журнал изменений.
+### Changelog
 
-1. Обновлены `bg_color` и `secondary_bg_color`.
+1. `bg_color` and `secondary_bg_color` have been updated.
 
 ![](/img/docs/tma-design-guidelines/tma-design_1.png)
 
-Причины:
+### Reasons for these changes
 
-- Эти цвета изначально предназначались для фона страниц, а не для элементов интерфейса.
+• These colors were originally intended for page backgrounds, not UI controls.
 
-Чтобы улучшить внешний вид ваших приложений, слегка скорректируйте использование цветовых переменных.
+• To maintain consistency, they have been updated.
 
-Выше приведен наглядный пример, который показывает, что изменится для iOS. Для Android изменений нет.
+• `section_bg_color` was introduced to color the backgrounds of different sections and cards.
 
-Новые цвета.
-Также добавлено множество новых цветов. Большинство из них наиболее заметны на Android. Поэтому приведенные примеры будут показаны на базе Android, но актуальны для всех платформ.
+To enhance your app’s appearance, adjust how you use color variables.
+
+The example above clearly shows what will change on iOS. There should be no changes on Android.
+
+1. New colors.
+   Many new colors have been added with most being noticeable on Android. The examples focus on Android but apply to all platforms.
 
 ![](/img/docs/tma-design-guidelines/tma-design_2.png)
 
-Новые цвета.
-Также добавлено множество новых цветов. Большинство из них наиболее заметны на Android. Поэтому приведенные примеры будут показаны на базе Android, но актуальны для всех платформ.
+2. Telegram header colors has become available for Mini Apps.
 
 ![](/img/docs/tma-design-guidelines/tma-design_3.png)
 
-2. Стал доступен маркер accent_text_color, который пригодится для любых акцентных элементов в приложениях. Раньше все использовали менее подходящий темный link_color.
+3. accent_text_color is now available for highlighting accent elements in your apps. Previously, everyone used the less suitable dark link_color.
 
 ![](/img/docs/tma-design-guidelines/tma-design_4.png)
 
-3. Для всех дополнительных элементов ячеек теперь лучше использовать `subtitle_text_color`. Это позволит сделать надписи более контрастными и улучшит доступность ваших приложений.
+4. For all secondary cell labels, use `subtitle_text_color` to create more contrast and improve the accessibility.
 
 ![](/img/docs/tma-design-guidelines/tma-design_5.png)
 
-4. Для заголовков разделов карточек добавлен специальный маркер: `section_header_text_color`.
+5. A new token `section_header_text_color` is now available for section headers of cards.
 
 ![](/img/docs/tma-design-guidelines/tma-design_6.png)
 
-5. Для элементов, нажатие на которые приведет к разрушительному действию, теперь можно использовать `destructive_text_color` вместо пользовательских.
-
-![](/img/docs/tma-design-guidelines/tma-design_6.png)
-
-6. Как использовать `link_color` и `hint_color`?
+6. For cells that trigger a destructive action, use `destructive_text_color` instead of custom color.
 
 <p align="center">
     <br />
@@ -58,10 +56,12 @@
     <br />
 </p>
 
-7. Как использовать `link_color` и `hint_color`?
+7. A reasonable question arises: how should `link_color` and `hint_color` be used now?
 
-Рекомендуется использовать их в качестве цветов подсказок под разделами, а также в качестве цвета ссылок для таких фонов - как `secondary_bg_color`.
+Use `hint_color` for hint sections under different sections. For backgrounds like `secondary_bg_color`, use `link_color`.
 
-## См. также
+## See also
 
-- [Источник](https://telegra.ph/Changes-in-Color-Variables-for-Telegram-Mini-Apps-11-20)
+- [Original source](https://telegra.ph/Changes-in-Color-Variables-for-Telegram-Mini-Apps-11-20)
+
+<Feedback />
