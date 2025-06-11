@@ -1,46 +1,42 @@
-# Стейкинг с помощью номинатор-пулов
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Staking with nominator pools
 
-## Общие сведения
+## Overview
 
 С помощью смарт-контрактов TON вы можете реализовать любые механики стейкинга и депозитов, которые вам нужны.
 
-Однако в блокчейне TON есть "втроенный стейкинг" - вы можете выдавать TON валидаторам для стейкинга и делиться вознаграждением за их работу.
+However, there is native staking in TON Blockchain - you can lend Toncoin to validators for staking and share the reward for validation.
 
 Тот, кто предоставляет средства валидатору, называется **номинатором**.
 
-Смарт-контракт, называемый [**номинатор-пул**](/v3/documentation/smart-contracts/contracts-specs/nominator-pool), предоставляет возможность одному или нескольким номинаторам выдавать Toncoin валидатору для стейкинга и гарантирует, что валидатор сможет использовать эти Toncoin только для подтверждения транзакций. Смарт-контракт также обеспечивает распределение вознаграждений.
+A smart contract, called a [**nominator pool**](/v3/documentation/smart-contracts/contracts-specs/nominator-pool), provides the ability for one or more nominators to lend Toncoin in a validator stake, and ensures that the validator can use that Toncoin only for validation. This smart contract guarantees the distribution of the reward.
 
-## Валидаторы против номинаторов
+If you are familiar with cryptocurrencies, you must have heard about **validators** and **nominators**. Now, the time has come to find out what they are — the two major actors ruling the blockchain.
 
-Если Вы знакомы с криптовалютами, то наверняка слышали о **валидаторах** и **номинаторах**. Эти слова часто встречаются в каналах, посвященных криптовалютам (наш канал не исключение). Теперь пришло время выяснить, кто они такие – два основных действующих лица, управляющих блокчейном.
+## Validator
 
-### Валидаторы
+A validator is a network node that helps keep the blockchain running by verifying (or validating) suggested blocks and recording them on the blockchain.
 
-Сначала давайте поговорим о валидаторах. Валидатор - это сетевой узел, который помогает поддерживать работу блокчейна, проверяя (или валидируя) предлагаемые блоки и записывая их в блокчейн.
+To become a validator, you must meet two requirements: have a high-performance server and obtain at least 300,000 Toncoins, in order to make a stake. At the time of writing, there are up to 400 validators per round on TON.
 
-Чтобы стать валидатором, вы должны соответствовать двум требованиям: иметь высокопроизводительный сервер и иметь серьезную сумму в TON (600 000), чтобы положить ее в стейк. На момент написания статьи на TON было 227 валидаторов.
-
-### Номинаторы
+## Nominator
 
 :::info
-Доступна новая версия номинатор-пула, подробнее читайте на страницах Единого номинатора и Контракт вестинга.
+New version of [nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool/) available, read more in the [Single nominator pool](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool/) and [Vesting contract](/v3/documentation/smart-contracts/contracts-specs/vesting-contract/) pages.
 :::
 
 Конечно, не каждый может позволить себе иметь на балансе 100 000 Toncoin - вот тут-то и вступают в игру номинаторы. Проще говоря, номинатор - это пользователь, который одалживает свои TON валидаторам. Каждый раз, когда валидатор зарабатывает вознаграждение за подтверждение блоков, оно распределяется между участниками.
 
-Некоторое время назад компания Ton Whales запустила первый стейкинг-пул на TON с минимальным депозитом в 50 TON. Позже TON Foundation представил первый открытый номинатор-пул. Теперь пользователи могут стейкать Toncoin полностью децентрализованно, начиная с **10 000 TON**.
+TON Whales pool allows a minimum deposit of 50 TON. TON Foundation open nominator pool allows users to stake Toncoin in a fully decentralized way, starting with **10,000 TON**.
 
-*Из [сообщения TON Community RUS](https://t.me/toncoin_rus/362).*
+_Из [сообщения TON Community RUS](https://t.me/toncoin_rus/362)._
 
 На балансе пула всегда должно быть **10 TON** - это минимальный баланс для оплаты сетевого хранения.
 
 ## Стоимость в месяц
 
-Так как раунд валидации длится примерно ~18 часов, на каждый раунд требуется около **5 TON**, а один номинатор-пул участвует в четных и нечетных раундах валидации, то для работы пула потребуется примерно **~105 TON в месяц**.
+Since validation round lasts ~18 hours, takes about 5 TON per validation round and 1 nominator pool takes part in even and odd validation rounds it will take **~105 TON per month** to operate the pool.
 
 ## Как принять участие?
 
@@ -48,8 +44,16 @@
 
 ## Исходный код
 
-- [Исходный код смарт-контракта Номинатор-пул](https://github.com/ton-blockchain/nominator-pool)
+- [Nominator pool smart contract source code](https://github.com/ton-blockchain/nominator-pool)
 
 :::info
 Теория номинаторов описана в [TON Whitepaper](https://docs.ton.org/ton.pdf), главы 2.6.3, 2.6.25.
 :::
+
+## See also
+
+- [Running validator node](/v3/guidelines/nodes/running-nodes/validator-node)
+- [Nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool/)
+- [Single nominator pool](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool/) <Feedback />
+  <Feedback />
+
