@@ -56,6 +56,7 @@ For example, if you assign 256 to uint8, asm command "8 STU" will fail with code
 | `Cell<T>?`                | maybe typed reference, TL-B `(Maybe ^T)` | `STOPTREF`                          |
 | `RemainingBitsAndRefs`    | rest of slice                            | `STSLICE`                           |
 | `builder`                 | only for writing, not for reading        | `STBR`                              |
+| `slice`                   | only for writing, not for reading        | `STSLICE`                           |
 | `T?`                      | TL-B `(Maybe T)`                         | `1 STI` + IF ...                    |
 | `T1 \| T2`                | TL-B `(Either T1 T2)`                    | `1 STI` + IF ... + ELSE ... (3)     |
 | `T1 \| T2 \| ...`         | TL-B multiple constructors               | IF ... + ELSE IF ... + ELSE ... (4) |
