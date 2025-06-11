@@ -1,36 +1,45 @@
-# 概览
+import Feedback from '@site/src/components/Feedback';
 
-本文旨在帮助您在 TON 生态系统中选择合适的应用程序开发工具。
+# Overview
 
-## TMA 开发
+This article helps you choose the right tools for application development in TON Ecosystem.
 
-- 使用 [Mini Apps SDKs](/v3/guidelines/dapps/tma/overview#mini-apps-sdks) 进行 [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview) 开发。
-- 选择 [基于 JS/TS 的 SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript) 与 TON 区块链进行交互。
+## TMA development
 
-## DApps 开发
+- Use [Mini Apps SDKs](/v3/guidelines/dapps/tma/overview#mini-apps-sdks) for [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview) development.
+- Choose [JS/TS-based SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript) to interact with TON Blockchain.
 
-- 如果需要，使用 Tolk、FunC 或 Tact [编程语言](/v3/documentation/smart-contracts/overview#programming-languages) 为您的 [DApp](/v3/guidelines/dapps/overview) 开发 TON 区块链智能合约。
-- 要与 TON 区块链交互并处理其数据，请选择列出的 [SDK](/v3/guidelines/dapps/apis-sdks/sdk)。为此目的，最常用的语言之一是
-  - [JS/TS](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript)
-  - [Go](/v3/guidelines/dapps/apis-sdks/sdk#go)
-  - [Python](/v3/guidelines/dapps/apis-sdks/sdk#python)
-- 要将用户身份验证与其 TON 钱包（以及支付处理逻辑）整合到您的 DApp 中，请使用 [TON Connect](/v3/guidelines/ton-connect/overview) 。
+## DApps development
 
-## TON 统计分析仪
+- Use Tolk, FunC, or Tact [programming languages](/v3/documentation/smart-contracts/overview#programming-languages) to develop TON Blockchain smart contracts for your [DApp](/v3/guidelines/dapps/overview).
+- To interacts with TON Blockchain and process its data, choose one of the listed [SDKs](/v3/guidelines/dapps/apis-sdks/sdk). One of the most popular languages for this purpose include:
+    - [JavaScript/TypeScript](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript)
+    - [Go](/v3/guidelines/dapps/apis-sdks/sdk#go)
+    - [Python](/v3/guidelines/dapps/apis-sdks/sdk#python)
+- To integrate user authentication and payments processing via with their TON wallets, use [TON Connect](/v3/guidelines/ton-connect/overview).
 
-您可能需要与 TON 区块链进行快速交互，或收集和分析其数据。为此，运行自己的 [Ton Node](/v3/documentation/infra/nodes/node-types) 可能会有所帮助。
+## TON data analytics
 
-- [Liteserver 节点](/v3/guidelines/nodes/running-nodes/liteserver-node) - 仅用于与区块链交互。
-- [存档节点](/v3/guidelines/nodes/running-nodes/archive-node) - 收集区块链的扩展历史数据。
+Developers often need to run analytical queries on top of on-chain data—for example, to track historical changes and aggregate data from multiple accounts.
+Since blockchains are not designed for analytical workloads, you need to build an indexing pipeline and run off-chain analytical queries. Creating such pipelines
+from scratch can be resource-consuming, so you can use one of these alternatives:
 
-使用支持本地 [ADNL](/v3/documentation/network/protocols/adnl/adnl-tcp)的 SDK：
+- Dune analytics provides tables with TON data, including raw transactions and messages, jetton events, and DEX trades. Dune allows building custom charts and dashboards, fetch query results via API and set up alerts. Before writing queries, check this guide for best practices, tips, and tricks.
+- Dune integration is runs on the public data lake from the [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/datalake/README.md) project. This parsing and decoding pipeline dumps raw and decoded data into an S3 bucket **s3://ton-blockchain-public-datalake/v1/** in AVRO format. The bucket is publicly available and everyone can use it with [Amazon Athena](https://aws.amazon.com/athena/) (see [DDLs](https://github.com/re-doubt/ton-etl/blob/main/datalake/athena_ddl.sql)) or Apache Spark. The data updates daily.
+- If you need real-time on-chain data tracking, you can run your own [TON node](/v3/documentation/infra/nodes/node-types) and launch [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/README.md) or [ton-index-worker](https://github.com/toncenter/ton-index-worker).
+- [Chainbase](https://docs.chainbase.com/catalog/Ton/Overview) offers a set of raw and decoded tables with TON data. It allows you to run SQL queries and fetch results via API.
 
-- [Go](https://github.com/xssnick/tonutils-go)
-- [Python](https://github.com/yungwine/pytoniq)
+## Infrastructure status
 
-## 另请参见
+- [status.toncenter](https://status.toncenter.com/) - Displays various node activity statistics from the last hour.
+- [Tonstat.us](https://tonstat.us/) - A real-time Grafana dashboard, updated every 5 minutes.
+
+## See also
 
 - [SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
-- [TMA教程](/v3/guidelines/dapps/tma/tutorials/step-by-step-guide)
-- [TON Connect 教程](/v3/guidelines/ton-connect/guidelines/how-ton-connect-works)
-- [支付处理](/v3/guidelines/dapps/asset-processing/payments-processing)
+- [TMA tutorials](/v3/guidelines/dapps/tma/tutorials/step-by-step-guide)
+- [TON Connect tutorials](/v3/guidelines/ton-connect/guidelines/how-ton-connect-works)
+- [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing)
+
+<Feedback />
+
