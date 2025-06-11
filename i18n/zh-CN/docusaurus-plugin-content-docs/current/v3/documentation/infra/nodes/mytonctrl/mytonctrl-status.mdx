@@ -1,153 +1,159 @@
-# MyTonCtrl 状态
+import Feedback from '@site/src/components/Feedback';
 
-下面是对 `status` 命令输出的解释。
+# MyTonCtrl status
 
-![状态](/img/docs/mytonctrl/status.png)
+This document serves as a comprehensive guide to help you understand the output of **MyTonCtrl**'s `status` command.
+
+![status](/img/docs/mytonctrl/status.png)
 
 ## TON network status
 
 ### Network name
 
-可能的值：`mainnet`, `testnet`, `unknown`。`unknown`必须永远不被打印。
+Possible values are: `mainnet`, `testnet`, and `unknown`. However, the value `unknown` should never be displayed.
 
 ### Number of validators
 
-有两个值：一个绿色，一个黄色。绿色是在线验证器的数量，黄色是所有
-验证器的数量。
-必须是大于 0 的整数，MyTonCtrl 通过命令 `getconfig 34` 获取，
-查看 [this (param 32-34 and-36) section](/v3/documentation/network/configs/blockchain-configs#param-32-34 and-36) 以获取更多信息。
+There are two key values: one represented in green and the other in yellow. The green value indicates the number of online validators, while the yellow value represents the total number of validators.
+
+Both values must be integers greater than 0. You can obtain the green value using the command `getconfig 34` with MyTonCtrl. For more information, please check the [relevant section here](/v3/documentation/network/configs/blockchain-configs#param-32-34-and-36) regarding parameters 32, 34, and 36.
 
 ### Number of shardchains
 
-必须是大于 0 的整数，颜色为绿色。
+This value must be an integer greater than 0 and is displayed in green.
 
 ### Number of offers
 
-有两个值：一个绿色，一个黄色。绿色是 "新提案 "的数量，黄色是 "所有提案 "的数量。
+- There are two values to note:
+  - **Green**: Represents the number of `new offers`.
+  - **Yellow**: Represents the total number of `all offers`.
 
 ### Number of complaints
 
-有两个值：一个绿色，一个黄色。绿色是 "新投诉 "的数量，黄色是 "所有投诉 "的数量
-。
+- Similarly, there are two values to consider:
+  - **Green**: Indicates the number of `new complaints`.
+  - **Yellow**: Indicates the total number of `all complaints`.
 
 ### Election status
 
-可以是绿色文本 "打开 "或黄色文本 "关闭"。
+The election status can be indicated with green text for `open` or yellow text for `closed`.
 
 ## Local validator status
 
-### Validator Index
+### Validator index
 
-如果验证器指数大于或等于 0（如果激活了验证器模式，则应如此），则必须为绿色，否则为红色。
+The validator index should be greater than or equal to 0 (which is the case if the validator mode is active). If it meets this requirement, it should be displayed in green; otherwise, it should be red.
 
 ### ADNL address of local validator
 
-仅ADNL地址。
+This section contains only the ADNL address.
 
 ### Local validator wallet address
 
-用于标记的地址必须是有效的 TON 地址。 
+The wallet address used for staking must be a valid TON address.
 
 ### Local validator wallet balance
 
-钱包的余额
+This section shows the current balance of the wallet.
 
 ### Load average
 
-格式为 `[int]: int, int, int` 。第一个是 cpus 数量，其他代表过去 1 分钟、5 分钟和 15 分钟的平均系统负载。
+The `load average` format is `[int]: int, int, int`. The first integer represents the number of CPUs, while the subsequent integers indicate the system load average for the last 1, 5, and 15 minutes.
 
 ### Network load average
 
-三个整数，逻辑与 `load average` 相同：过去 1 分钟、5 分钟和 15 分钟的系统平均负载。
+This section also displays three integers, following the same logic as the `load average`: it presents the system load average for the last 1, 5, and 15 minutes.
 
 ### Memory load
 
-两对整数，分别是内存和 swap 的绝对和相对内存使用量。
+**Absolute and Relative Memory Usage:** This refers to the usage of RAM and swap memory in two pairs of integers.
 
-### Disks load average
+### Disk load average
 
-与 "内存负载 "相同，但针对所有磁盘。
+This is similar to the `memory load`. However, it relates to the usage of all disk space instead.
 
 ### Mytoncore status
 
-应该是绿色的，说明 Mytoncore 运行了多长时间。
+The status indicator should be green, showing how long Mytoncore has been operational.
 
 ### Local validator status
 
-应为绿色，显示本地验证器的运行时间。
+This indicator should also be green, displaying the uptime of the local validator.
 
 ### Local validator out of sync
 
-整数应小于 20（绿色）。
+This integer value should be less than 20, indicating that it is functioning properly (it will appear green).
 
 ### Local validator last state serialization
 
-显示停止服务的主链区块数量
+This entry displays the number of MasterChain blocks that are currently out of service.
 
-### Local validator database size
+### Local Validator database size
 
-绝对负载应小于 1000 GB，相对负载应小于 80%。
+The absolute load size should be less than 1000 GB, and the relative load should be under 80%.
 
-### Version mytonctrl
+### Version of MyTonCtrl
 
-提交的哈希值和分支名称。
+This indicates the hash of the commit and the name of the branch.
 
-### Version validator
+### Version of validator
 
-提交的哈希值和分支名称。
+This shows the hash of the commit and the name of the branch.
 
 ## TON network configuration
 
 ### Configurator address
 
-配置器地址，更多信息请查看 [this param 0](/v3/documentation/network/configs/blockchain-configs#param-0)。
+The address of the configurator. Refer to [this parameter-0](/v3/documentation/network/configs/blockchain-configs#param-0) for more information.
 
 ### Elector address
 
-选举人地址，详情请查看 [this param 1](/v3/documentation/network/configs/blockchain-configs#param-1)。
+The address of the elector. Refer to [this parameter-1](/v3/documentation/network/configs/blockchain-configs#param-1) for additional details.
 
 ### Validation period
 
-验证周期（以秒为单位），更多信息请查看 [this param 15](/v3/documentation/network/configs/blockchain-configs#param-15)。
+The duration of the validation period in seconds. Check [this parameter-15](/v3/documentation/network/configs/blockchain-configs#param-15).
 
 ### Duration of elections
 
-选举持续时间，以秒为单位，更多信息请查看 [this param 15](/v3/documentation/network/configs/blockchain-configs#param-15)。
+This refers to the duration of elections in seconds. To know more, refer to [this parameter-15](/v3/documentation/network/configs/blockchain-configs#param-15).
 
 ### Hold period
 
-以秒为单位的保持时间，更多信息请查看 [this param 15](/v3/documentation/network/configs/blockchain-configs#param-15)。
+The hold period in seconds, with details available at [this parameter-15](/v3/documentation/network/configs/blockchain-configs#param-15).
 
 ### Minimum stake
 
-以 TON 为单位的最小质押，详情请查看 [this param 17](/v3/documentation/network/configs/blockchain-configs#param-17)。
+The minimum stake required in TONs. Check [this parameter-17](/v3/documentation/network/configs/blockchain-configs#param-17).
 
 ### Maximum stake
 
-以 TON 为单位的最大质押，详情请查看 [this param 17](/v3/documentation/network/configs/blockchain-configs#param-17)。
+The maximum stake allowed in TONs. Check [this parameter-17](/v3/documentation/network/configs/blockchain-configs#param-17).
 
 ## TON timestamps
 
-### TON Network Launch
+### TON network launch
 
-当前网络（主网或测试网）启动的时间。
+This indicates the launch time of the current network, whether it is the Mainnet or Testnet.
 
-### Start of the Validation Cycle
+### Start of the validation cycle
 
-验证周期开始的时间戳；如果是未来时刻，则为绿色。
+The timestamp indicates the beginning of the validation cycle. If it represents a future event, it will be displayed in green.
 
-### End of the Validation Cycle
+### End of the validation cycle
 
-验证周期结束的时间戳；如果是未来时刻，则为绿色。
+This is the timestamp for the end of the validation cycle; it will also appear green if it indicates a future date.
 
-### Start of Elections
+### Start of elections
 
-选举开始的时间戳；如果是未来时刻，则为绿色。
+The timestamp for when elections begin. This will be green if it represents a future date.
 
-### End of Elections
+### End of elections
 
-选举结束的时间戳；如果代表未来时刻，则为绿色。
+The timestamp indicating the end of elections is displayed in green if it predicts a future date.
 
-### Beginning of the Next Elections
+### Beginning of the next elections
 
-下次选举开始的时间戳；如果是未来时刻，则为绿色。
+The timestamp for the start of the next elections will appear green if it signifies a future event.
+
+<Feedback />
