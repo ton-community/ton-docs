@@ -1,0 +1,315 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Button from '@site/src/components/button'
+
+# TMA examples
+
+Explore the examples below to learn how to create your own Telegram Mini App.
+
+## Basic TMA example
+
+<p align="center">
+  <br />
+    <img width="240" src="/img/docs/telegram-apps/tapps.png" alt="logo of telegram mini apps" />
+      <br />
+</p>
+
+This example demonstrates a simple Telegram Mini App using plain JavaScript, HTML, and CSS. The goal is to provide a minimalistic starting point for creating a TMA without relying on complex build tools or advanced libraries.
+
+- App is available at: [t.me/simple_telegram_mini_app_bot/app](https://t.me/simple_telegram_mini_app_bot/app).
+- Bot menu button: [t.me/simple_telegram_mini_app_bot](https://t.me/simple_telegram_mini_app_bot).
+- Deployment URL: [https://telegram-mini-apps-dev.github.io/vanilla-js-boilerplate/](https://telegram-mini-apps-dev.github.io/vanilla-js-boilerplate/).
+
+<Button href="https://t.me/simple_telegram_mini_app_bot/app" colorType={'primary'} sizeType={'sm'}>
+
+Open demo
+
+</Button>
+
+<Button href="https://github.com/Telegram-Mini-Apps-Dev/vanilla-js-boilerplate.git" colorType={'secondary'} sizeType={'sm'}>
+
+GitHub
+
+</Button>
+
+### Features
+
+- Minimalistic user interface.
+- No external libraries or frameworks.
+- Easy to understand and modify.
+
+### Getting started
+
+#### Prerequisites
+
+A modern web browser with JavaScript enabled.
+
+#### Installation
+
+1. Clone this repository to your local machine:
+
+```bash
+git clone https://github.com/Telegram-Mini-Apps-Dev/vanilla-js-boilerplate.git
+```
+
+2. Navigate to the project directory:
+
+```bash
+cd vanilla-js-boilerplate
+```
+
+Open `index.html` in your preferred code editor or IDE.
+
+### Usage
+
+1. Open index.html in your preferred code editor or IDE.
+2. Make any necessary modifications.
+3. Create your own GitHub repository, commit, and push your updates.
+4. In GitHub, navigate to Settings > Pages > Build and Deployment.
+5. If GitHub Actions is enabled, your assets will deploy automatically, and you'll receive a public URL like:`https://<username>.github.io/vanilla-js-boilerplate/`.
+6. Use this URL with [@BotFather](https://t.me/BotFather) to create your own Telegram Web App (TWA).
+
+## Modern TMA example
+
+### Introduction
+
+Vite is a front-end build tool and development server designed to improve development speed and efficiency. This example shows how to use Vite to create a modern Telegram Mini App.
+
+You can find the example project here [https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate](https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate) or you follow the following instructions.
+
+### Prerequisites
+
+To start, we will scaffold a Vite project.
+
+With npm:
+
+```bash
+$ npm create vite@latest
+```
+
+With yarn:
+
+```bash
+$ yarn create vite
+```
+
+Follow the on-screen prompts.
+
+Or you can simply run this command to create a React project with TypeScript Support:
+
+```bash
+# npm 7+, extra double-dash is needed:
+npm create vite my-react-telegram-web-app -- --template react-ts
+
+# or yarn
+yarn create vite my-react-telegram-web-app --template react-ts
+
+# this will change the directory to recently created project
+cd my-react-telegram-web-app
+```
+
+### Development of a Mini App
+
+To start the development mode of the project, run the following commands in the terminal:
+
+```bash
+# npm
+npm install
+npm run dev --host
+
+# or yarn
+yarn
+yarn dev --host
+```
+
+The `--host` option provides a URL with an IP address, which can be used for testing during development. In development mode, a self-signed SSL certificate is used. This allows testing with hot reload only in the web version of Telegram [https://web.telegram.org](https://web.telegram.org/a/#6549734463)/ due to platform restrictions on iOS, Android, and macOS.
+
+```bash npm2yarn
+npm install @vitejs/plugin-basic-ssl
+```
+
+Then change `vite.config.ts`. Add import:
+
+```jsx
+import basicSsl from '@vitejs/plugin-basic-ssl';
+```
+
+And add the plugin
+
+```jsx
+export default defineConfig({
+   plugins: [react(), basicSsl()]
+});
+```
+
+You can use `ngrok` to expose your local server to the internet with an SSL certificate. This enables hot module replacement on all Telegram platforms.
+
+```bash
+# where 5173 is the port number from npm/yarn dev --host
+ngrok http 5173
+```
+
+Also, we are going to prepare our project for deployment:
+
+```jsx
+export default defineConfig({
+   plugins: [react(), basicSsl()],
+	 build: {
+	   outDir: './docs'
+	 },
+   base: './'
+});
+```
+
+We will use the deploy script for GitHub Actions that will run on pushes targeting the master branch. From the root of your project:
+
+```bash
+# we are going to create GitHub Actions config for deployment
+mkdir .github
+cd .github
+mkdir workflows
+cd workflows
+touch static.yml
+```
+
+Now add this config to `static.yml`:
+
+```yaml
+# Simple workflow for deploying static content to GitHub Pages
+name: Deploy static content to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ['master']
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets the GITHUB_TOKEN permissions to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  # Single deploy job since we're just deploying
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+          cache-dependency-path: './'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload dist repository
+          path: './docs'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+```
+
+In GitHub repository settings, go to Settings → Pages and choose GitHub Actions for Build and Deployment. After each push to master, GitHub Pages will automatically deploy your code.
+![Screenshot 2023-09-11 at 22.07.44.png](/img/docs/telegram-apps/modern-1.png)
+
+Telegram provides an SDK via a direct [link](https://core.telegram.org/bots/webapps#initializing-web-apps), but using `@twa-dev/sdk` offers TypeScript support and better integration.
+
+```bash npm2yarn
+npm install @twa-dev/sdk
+```
+
+Open `/src/main.tsx` file and add following:
+
+```tsx
+import WebApp from '@twa-dev/sdk'
+
+WebApp.ready();
+
+ReactDOM.createRoot...
+```
+
+`WebApp.ready()`method informs Telegram that the Mini App is ready to display. This method should be called as early as possible to ensure all interface elements load before the app appears.
+
+Then add some interaction with the user. Go to `src/App.tsx` and add a button that triggers an alert.
+
+```tsx
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+
+import WebApp from '@twa-dev/sdk'
+
+function App() {
+  const [count, setCount] = useState(0)
+
+  return (
+    <>
+      <div>
+        <a href="https://vitejs.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+      </div>
+		{/* Here we add our button with alert callback */}
+      <div className="card">
+        <button onClick={() => WebApp.showAlert(`Hello World! Current count is ${count}`)}>
+            Show Alert
+        </button>
+      </div>
+    </>
+  )
+}
+
+export default App
+```
+
+And now we need to create a Telegram Bot so that we can launch Telegram Mini App within the messenger application.
+
+### Setting up a bot for the App
+
+To launch the Telegram Mini App within the messenger, you need to create a bot and configure it. Follow these steps:
+
+<Button href="/v3/guidelines/dapps/tma/tutorials/step-by-step-guide#setting-up-a-bot-for-the-app" colorType={'primary'} sizeType={'sm'}>
+
+Setup a bot
+
+</Button>
+
+### Hints
+
+When using a self-signed SSL certificate, you may see security warnings.
+
+**Fix:** Click **Advanced** and then **Proceed to `<local dev server address>`** to continue debugging in the web version of Telegram.
+
+![Screenshot 2023-09-11 at 18.58.24.png](/img/docs/telegram-apps/modern-2.png)
+
+<Feedback />
