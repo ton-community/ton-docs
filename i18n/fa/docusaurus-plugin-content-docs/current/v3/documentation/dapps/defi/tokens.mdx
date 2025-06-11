@@ -1,0 +1,118 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Button from '@site/src/components/button'
+
+# توکن‌ها (FT, NFT)
+
+[مروری بر توکن‌های توزیع شده TON](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
+
+> TON-powered tokens and NFTs are decentralized, avoiding single points of failure and bottlenecks.
+>
+> Each NFT in a given collection is a separate smart contract. The token balance for each user is stored in a separate user wallet.
+>
+> Smart contracts interact directly with one another, distributing the load across the entire network.
+>
+> As the number of users and transactions grows, the network maintains an even load, enabling seamless scalability.
+
+## TON Course: jettons & NFTs
+
+:::tip
+Before starting the course, make sure you have a good understanding of the basics of blockchain technology. If you have gaps in your knowledge, we recommend taking the [Blockchain Basics with TON](https://stepik.org/course/201294/promo) ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)) course.
+Module 4 covers the basic knowledge of NFT & Jettons.
+:::
+
+[دوره بلاکچین TON](https://stepik.org/course/176754/) راهنمای جامعی برای توسعه بلاکچین TON است.
+
+ماژول ۷ به‌طور کامل توسعه **NFT و Jettonها** را پوشش می‌دهد.
+
+<Button href="https://stepik.org/course/176754/promo"
+        colorType={'primary'} sizeType={'sm'}>
+
+بررسی دوره بلاکچین TON
+
+</Button>
+
+<Button href="https://stepik.org/course/201638/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+چینی
+
+</Button>
+
+<Button href="https://stepik.org/course/201855/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+روسی
+
+</Button>
+
+## آموزش‌ها
+
+- [آموزش بازی Web3](/v3/guidelines/dapps/tutorials/web3-game-example) - یاد بگیرید چگونه یک بازی Web3 با بلاکچین TON بسازید.
+- [اولین Jetton خود را ضرب کنید](/v3/guidelines/dapps/tutorials/mint-your-first-token/) — بیاموزید که چگونه اولین Jetton خود را راه‌اندازی و سفارشی کنید
+- [[یوتیوب] بنیان‌گذاران TON Keeper اولگ آندرییف و اولگ ایلاریونوف درباره jettonها در TON](https://www.youtube.com/watch?v=oEO29KmOpv4)
+
+### TON speed run
+
+- [🚩 چالش ۱: استقرار ساده NFT](https://github.com/romanovichim/TONQuest1)
+- [🚩 چالش ۲: قرارداد چت‌بات](https://github.com/romanovichim/TONQuest2)
+- [🚩 چالش ۳: دستگاه فروش Jetton](https://github.com/romanovichim/TONQuest3)
+- [🚩 چالش ۴: قرعه‌کشی/بخت‌آزمایی](https://github.com/romanovichim/TONQuest4)
+- [🚩 چالش ۵: ایجاد رابط کاربری برای تعامل با قرارداد در ۵ دقیقه](https://github.com/romanovichim/TONQuest5)
+- [🚩 چالش ۶: تحلیل فروش NFT در بازار Getgems](https://github.com/romanovichim/TONQuest6)
+
+## Jettons (fungible tokens)
+
+### راهنماها
+
+- [پردازش Jetton در TON](/v3/guidelines/dapps/asset-processing/jettons)
+- [پردازش متادیتا TON](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing)
+
+### استانداردها
+
+- [استاندارد Jettonها](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
+
+### Smart contracts
+
+- [پیاده‌سازی قراردادهای هوشمند (FunC)](https://github.com/ton-blockchain/token-contract/)
+
+### Jetton deployer
+
+Jettons are custom fungible tokens on TON Blockchain. You can create your own token on TON Blockchain using the Jetton Deployer example below:
+
+- **[TON Minter](https://minter.ton.org/)** — یک dApp اوپن سورس Jetton Deployer
+- [Jetton Deployer — قراردادها](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
+- [Jetton Deployer — کلاینت وب](https://github.com/ton-defi-org/jetton-deployer-webclient) (React, TypeScript)
+
+### Tools to work with jettons
+
+- [قرارداد فروش NFT با Jetton](https://github.com/dvlkv/nft-jetton-sale-smc) - قرارداد فروش NFT با پشتیبانی از jetton
+- [Scaleton](http://scaleton.io)—موجودی توکن سفارشی خود را ببینید
+- [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example)—SDK برای درخواست اطلاعات در مورد Jettonها
+
+## NFT
+
+### استانداردها
+
+- [استاندارد NFT](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
+- [استاندارد SBT (Soulbound NFT)](https://github.com/ton-blockchain/TEPs/blob/master/text/0085-sbt-standard.md)
+- [افزونه استاندارد NFTRoyalty](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
+
+### Smart contracts
+
+- [پیاده‌سازی قراردادهای هوشمند (FunC)](https://github.com/ton-blockchain/token-contract/)
+- [قراردادهای هوشمند Getgems NFT، فروش، حراج‌ها (FunC)](https://github.com/getgems-io/nft-contracts)
+
+### مینترهای NFT
+
+- [NFT Deployer](https://github.com/tondiamonds/ton-nft-deployer) توسط TON Diamonds (TypeScript، بدون توضیح)
+- [مثال مینتر NFT](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript، با توضیحات)
+- [مینتر NFT با استفاده از React](https://github.com/tonbuilders/tonbuilders-minter) (React، بدون نظر)
+- [NFT Deployer](https://github.com/anomaly-guard/nft-deployer) (Python، با نظرات)
+- [مینتر NFT با استفاده از Golang](https://github.com/xssnick/tonutils-go#nft) (کتابخانه Golang، با نظرات و مثال‌های کامل)
+
+### ابزارها برای کار با NFTها
+
+- [LiberMall/tnt](https://github.com/LiberMall/tnt)—TNT یک ابزار خط فرمان همه چیز در یک جا است که برای پرس و جو، ویرایش و استخراج توکن‌های غیرقابل تعویض جدید در شبکه باز استفاده می‌شود.
+
+<Feedback />
