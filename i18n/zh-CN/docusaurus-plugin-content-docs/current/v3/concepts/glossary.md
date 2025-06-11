@@ -1,8 +1,10 @@
-# 词汇表
+import Feedback from '@site/src/components/Feedback';
 
-## 介绍
+# Glossary
 
-在这个词汇表中，您可以找到任何与TON和加密相关的词汇
+## Introduction
+
+In this glossary, you can find any TON- and crypto-related buzzwords.
 
 ____________
 
@@ -10,23 +12,23 @@ ____________
 
 ### Airdrop
 
-**Airdrop** — 一种在特定参与者之间免费分发代币的活动。
+**Airdrop** — a free distribution of tokens among specific participants.
 
 ### Altcoin
 
-**Altcoin** — 所有加密货币，除了比特币以外，都被称为山寨币。
+**Altcoin** — all cryptocurrencies, except Bitcoin, are called altcoins.
 
 ### AMA
 
-**AMA** — 一种在线问答活动，称为“问我任何事”，项目领导回答社区关于产品或服务的问题。
+**AMA** — an online Q&A called “ask me anything” where project leaders answer questions from the community about a product or service.
 
 ### API
 
-**API** — 应用程序编程接口，一种允许两个程序通过一系列协议进行交互的机制。
+**API** — Application Programming Interface, a mechanism that allows two programs to interact with each other through a series of protocols.
 
 ### APY
 
-**APY** — 年百分比收益率，用于计算给定资产的年利率。
+**APY** — Annual Percentage Yield, a calculated yearly interest rate for a given asset.
 
 ____________
 
@@ -34,47 +36,47 @@ ____________
 
 ### Bearish
 
-**Bearish** — 当资产价格由于投资者抛售而下降时使用的术语。（该术语通常用于描述整体市场情绪。）
+**Bearish** — the term “bearish” is used when the price of an asset has declined due to investors selling. (The term is often used to describe the overall market sentiment.)
 
 ### Binance
 
-**Binance** — 按日交易量计算的全球最大的加密货币交易所。
+**Binance** — the world’s biggest cryptocurrency exchange by daily trading volume.
 
-### Bitcoin（BTC）
+### Bitcoin (BTC)
 
-**Bitcoin（BTC）** — 首个具有开源代码的加密货币，也是第一个去中心化网络，为区块链技术的普及奠定了基础。
+**Bitcoin (BTC)** — the preeminent cryptocurrency and the first decentralized network with open-source code, which laid the groundwork for the proliferation of blockchain technology.
 
 ### Blockchain
 
-**Blockchain** — 一种以区块链形式记录网络上每个事件的数据的分布式账本。
+**Blockchain** — a distributed ledger of data in the form of a chain of blocks recording transaction information for every event on the network.
 
 ### Bloodbath
 
-**Bloodbath** — 通常用来描述严重且持续的市场崩溃的口头用语，导致价格图表上出现多个深红条。
+**Bloodbath** — a colloquial term often used to describe a severe and sustained market crash, which results in multiple deep red bars on price charts.
 
 ### BoC
 
-**BoC** —  cell 包。通常在代码中使用。
+**BoC** — Bag of Cells. Usually, used in code.
 
 ### BoF
 
-**BoF** — 文件袋。通常在代码中使用。
+**BoF** — Bag of Files. Usually, used in code.
 
 ### Bot
 
-**Bot** — 为两个生态系统编写的程序，例如开放网络和Telegram信使。在Telegram上，机器人是由软件操作的信使中的账户。
+**Bot** — a program written for two ecosystems to interact with each other — e.g., The Open Network and the Telegram messenger. On Telegram, bots are accounts in the messenger operated by software.
 
 ### Bridge
 
-**Bridge** — 一种连接各种区块链以在网络之间传输代币和数据的程序。TON桥可以在此链接找到。
+**Bridge** — a program connecting various blockchains to transfer tokens and data from one network to another. TON Bridge is available at this [link](https://ton.org/bridge/).
 
 ### Bullish
 
-**Bullish** — 用于描述价值上升的资产的术语。（“牛市”是市场整体价值增长的相反情况。）
+**Bullish** — the term “bullish” is used to describe an asset whose value is appreciating. (“Bullish” is the opposite of “bearish” — i.e. when the market’s overall value is increasing.)
 
 ### Burning
 
-**Burning** — 燃烧或从流通和总供应中移除一定数量的代币的行为，通常导致需求增加。
+**Burning** — the act of burning or removing a number of tokens from the circulating and total supply, which often results in increased demand.
 
 ___________
 
@@ -82,23 +84,23 @@ ___________
 
 ### CEX
 
-**CEX** — 用于交易代币的中心化加密货币交易所。
+**CEX** — a centralized cryptocurrency exchange to trade tokens.
 
 ### CMC
 
-**CMC** — CoinMarketCap，一个密切关注代币价格和市值变化的加密信息聚合器。
+**CMC** — CoinMarketCap, a crypto information aggregator that closely follows changes in token prices and market capitalization.
 
 ### Coinbase
 
-**Coinbase** — 美国最大的加密货币交易所。
+**Coinbase** — the biggest crypto exchange in the United States.
 
 ### Cryptobot
 
-**Cryptobot** — 用于在Telegram上购买、交易和出售Toncoin和其他加密货币的点对点（P2P）机器人服务，无需进行了解您的客户（KYC）验证。
+**Cryptobot** — a peer-to-peer (P2P) bot service for buying, trading, and selling Toncoin and other cryptocurrencies without Know Your Customer (KYC) verification.
 
 ### Custodial
 
-**Custodial** — 一种加密货币钱包，其中第三方存储加密货币，而不是其真正的所有者。
+**Custodial** — a type of crypto wallet where a third party stores cryptocurrencies, and not their true owner.
 
 ___________
 
@@ -106,51 +108,51 @@ ___________
 
 ### DApps
 
-**DApps** — 为由节点组支持的区块链而制作的去中心化应用程序，而不是由中央服务器支持。
+**DApps** — decentralized applications made for blockchains supported by a group of nodes instead of a centralized server.
 
 ### DCA
 
-**DCA** — 定期投资，一种投资策略，投资者以低但固定的价格购买加密资产，以降低风险敞口。
+**DCA** — dollar-cost averaging, an investment strategy whereby investors buy crypto assets at a low yet fixed price to reduce exposure to risks.
 
 ### Decentralization
 
-**Decentralization** — 是TON和其他区块链的主要原则之一。没有去中心化，将无法实现Web3；因此，TON生态系统的每个元素都围绕最大化去中心化展开。
+**Decentralization** — one of the main tenets behind TON and other blockchains. Without decentralization, Web3 would be impossible to achieve; therefore, every element of the TON Ecosystem revolves around maximizing decentralization.
 
 ### DeFi
 
-**DeFi** — 是传统金融的去中心化模拟，包括基于智能合约的可访问金融服务和应用程序。
+**DeFi** — the decentralized analog to traditional finance, it includes accessible financial services and applications based on smart contracts.
 
 ### DEX
 
-**DEX** — 去中心化交易所（DEX），用户可以在没有任何中介的情况下交易加密货币。确保安全交易所需的在线实体是区块链本身。
+**DEX** — a decentralized exchange (DEX) where users can trade cryptocurrencies without any intermediaries. The online entity needed to guarantee safe transactions is the blockchain itself.
 
 ### Diamond hands
 
-**Diamond hands** — 一个俚语术语，用于描述那些不打算出售其资产的投资者 — 即使市场崩溃或市场熊市。
+**Diamond hands** — a colloquial term describing an investor who has no intention of selling their assets regardless of the state of the market — even if there’s a crash or the market is bearish.
 
 ### DNS
 
-**DNS** — 域名系统，一种允许用户在人类可读的域名（ton.org）和机器可读的IP地址（192.0.2.44）之间进行交易的技术。
+**DNS** — Domain Name System, a technology that allows users to make transactions between human-readable domain names (ton.org) and machine-readable IP addresses (192.0.2.44).
 
 ### Dolphin
 
-**Dolphin** — 一个资本水平较低但在社区中具有影响力的投资者。
+**Dolphin** — an investor who has low-level capital but has an influence on the community.
 
 ### Donate
 
-**Donate** — 通过Telegram上的机器人服务，人们可以捐款，或内容创作者可以在Telegram上通过Toncoin进行变现。
+**Donate** — a bot service on Telegram through which people can either donate money or content creators can monetize their channels and services on Telegram, with a payment option in Toncoin.
 
 ### Dump
 
-**Dump** — 操纵代币或加密货币价值的增加，然后卖出。
+**Dump** — manipulating the increase in value of a token or cryptocurrency and then cashing out.
 
 ### Durov
 
-**Durov** — Pavel Durov，一位因创办VK社交网络和Telegram信使而闻名的俄罗斯企业家。Nikolai Durov是Pavel的兄弟，参与了VK、Telegram以及TON的开发。
+**Durov** — Pavel Durov, a Russian entrepreneur who is famous for having founded the VK social network and Telegram messenger. Nikolai Durov is Pavel's brother who participated in developing VK, Telegram and also TON.
 
 ### DYOR
 
-**DYOR** — 做你自己的研究，即在决定投资之前对项目、公司或加密货币进行研究的过程。
+**DYOR** — _Do Your Own Research_, the process by which you do research on a project, company or cryptocurrency before deciding to invest.
 
 ___________
 
@@ -158,11 +160,11 @@ ___________
 
 ### EVM
 
-**EVM** — 以太坊虚拟机，一台表现得像去中心化计算机的机器，它在每个新区块后计算以太坊区块链的状态并执行智能合约。
+**EVM** — Ethereum Virtual Machine, a machine behaving like a decentralized computer, it computes the state of the Ethereum blockchain after each new block and executes smart contracts.
 
 ### Exchange
 
-**Exchange** — 用于交易和使用其他市场工具的场所。
+**Exchange** — a place for trading and using other market instruments.
 
 ___________
 
@@ -170,31 +172,31 @@ ___________
 
 ### Farming
 
-**Farming** — 将您的加密货币资产借出以获得奖
+**Farming** — lending your crypto assets to receive rewards.
 
 ### Fiat
 
-**Fiat** - 中央银行或金融当局发行的常规货币。
+**Fiat** — regular money issued by central banks or financial authorities.
 
 ### FOMO
 
-**FOMO**--"害怕错过"，这是一种心理状态，当一些投资者想到可能会失去某个机会的潜在收益时，就会产生这种心理。它通常出现在牛市期间，以及交易者没有尽职尽责地分析某个项目时。
+**FOMO** — “fear of missing out,” a psychological state that consumes some investors when the idea of losing potential gains from an opportunity is present. It usually appears during a bull market and when traders don’t do their due diligence analyzing a particular project.
 
 ### Fungible tokens
 
-**Fungible tokens**--在任何特定时刻都与任何其他同类代币具有相同价值的加密货币。
+**Fungible tokens** — cryptocurrencies that carry the same value as any other token of the same kind at any given moment.
 
 ### FUD
 
-**FUD**--"恐惧、不确定性和疑虑"，基于多种因素的市场情绪。
+**FUD** — “Fear, uncertainty and doubt,” market sentiments based on many factors.
 
 ### Full Node
 
-**Full Node** - TON 区块链上的计算机，用于同步和复制整个 TON 区块链。
+**Full Node** — a computer on TON Blockchain that synchronizes and copies the entire TON Blockchain.
 
 ### FunC
 
-**FunC** - TON 上的智能合约语言。
+**FunC** — the smart contract language on TON.
 
 ___________
 
@@ -202,11 +204,11 @@ ___________
 
 ### Gas
 
-**Gas** - 为区块链上的交易支付的费用。
+**Gas** — the fee paid for transactions on the blockchain.
 
 ### GitHub
 
-**GitHub** - 开发人员聚集在一起创建程序基础代码的平台。
+**GitHub** — a platform where developers gather to create base code for programs.
 
 ___________
 
@@ -214,35 +216,35 @@ ___________
 
 ### Hackathon
 
-**Hackathon** - 程序员聚集在一起开发软件、程序、应用程序等。
+**Hackathon** — a gathering of programmers to develop software, programs, applications, etc.
 
 ### Hash
 
-**Hash** - 通过哈希算法创建的交易数据信息。
+**Hash** — information about transaction data, created by a hashing algorithm.
 
 ### Hash rate
 
-**Hash rate** - 表明网络上用于加密货币挖矿的计算能力。
+**Hash rate** — the indication of how much computational power is being used on a network for crypto mining.
 
 ### Hold
 
-**Hold** - 保留--即不出售--投资组合中的一项或多项资产。
+**Hold** — saving — i.e. not selling — an asset or assets from your portfolio.
 
 ___________
 
 ## I
 
-###
+### ICO
 
-**ICO**--首次代币发行，这是加密项目在早期阶段吸引资金的一种方法。
+**ICO** — initial coin offering, a method for crypto projects to attract capital in the early stages.
 
 ### IDO
 
-**IDO** - 首次去中心化交易所发行，是在去中心化交易所发行加密货币或代币时吸引资本的另一种方法。
+**IDO** — initial decentralized exchange offering, another method of attracting capital when launching a cryptocurrency or token on a decentralized exchange.
 
 ### Inflation
 
-**Inflation** - 一种货币（如美元或欧元）价值下降的过程。 Toncoin （和其他加密货币）的发行具有高度的透明度和可预测性，具有通货紧缩的特性。
+**Inflation** — the process when the value of a currency — e.g., U.S. dollar or the euro — decreases. Toncoin (and other cryptocurrencies) are emitted with a high degree of transparency and a predictable issuance, which has deflationary properties.
 
 ___________
 
@@ -250,7 +252,7 @@ ___________
 
 ### KYC
 
-**KYС** - *Know Your Customer*，用户在创建加密服务账户时验证身份的过程。
+**KYС** — _Know Your Customer_, the process by which a user verifies their identity when creating an account for a crypto service.
 
 ___________
 
@@ -258,11 +260,11 @@ ___________
 
 ### Launchpad
 
-\*\* Launchpad\*\*--一个将投资者和项目聚集在一起的加密初创企业平台。TON生态系统的主要启动平台是Tonstarter。
+**Launchpad** — a platform for crypto startups that brings investors and projects together. The main launchpad in the TON Ecosystem is Tonstarter.
 
 ### Liquidity pool
 
-**Liquidity pool**--将加密资产组合在一起并冻结在智能合约中。流动池可用于去中心化交易、贷款和其他活动。
+**Liquidity pool** — grouping together crypto assets and freezing them in a smart contract. Liquidity pools are used for decentralized trading, loans, and other endeavors.
 
 __________
 
@@ -270,23 +272,23 @@ __________
 
 ### Mainnet
 
-**Mainnet** - 区块链的主网络。
+**Mainnet** — the main network of a blockchain.
 
-### Market cap (capitalization)
+### Market cap
 
-**Market cap (capitalization)**--加密货币代币数量总和的总价值。
+**Market capitalization (Market cap)** — the total value of a cryptocurrency’s combined number of tokens.
 
 ### Masterchain
 
-**Masterchain** - 在多层区块链中，主链是最重要的。对于 TON 来说，主链是网络的主链。在区块链上进行的操作都是在主链上进行的。
+**Masterchain** — in a multi-layered blockchain, the masterchain is the most important. For TON, the masterchain is the main chain of the network. When operations happen on the blockchain, they do so on the masterchain.
 
 ### Metaverse
 
-**Metaverse** - 一个类似电子游戏的数字宇宙，用户在其中创建化身，并与其他人或用户的数字代表互动。
+**Metaverse** — a digital universe similar to a video game where users create avatars and interact with the digital representations of other people or users.
 
 ### Moon
 
-**Moon** - 一个加密术语，描述加密资产在价格图表上的垂直轨迹，即迅速增值。
+**Moon** — a crypto term that describes a crypto asset’s vertical trajectory on a price chart — i.e. it quickly gains value.
 
 __________
 
@@ -294,19 +296,19 @@ __________
 
 ### NFA
 
-**NFA**--非金融建议，这个首字母缩写词被用作免责声明，以避免投资者在与他人讨论加密货币或项目时承担责任或义务。
+**NFA** — not financial advice, this acronym is used as a disclaimer to avoid liability or responsibility when investors discuss cryptocurrencies or projects with other people.
 
 ### NFT
 
-**NFT**--不可篡改的代币，是区块链上独一无二的数字代币，无法复制或铸造多次。
+**NFT** — non-fungible token, a unique digital token on a blockchain that cannot be duplicated or minted more than once.
 
 ### Nominator
 
-**分母**--向验证者提供资金的人，以便后者能够在 TON 区块链上确认区块。
+**Nominator** — those who provide financial resources to validators so the latter can confirm blocks on TON Blockchain.
 
 ### Non-custodial
 
-**Non-custodial** - 一种加密钱包，可让所有者/用户完全控制资产。
+**Non-custodial** — a kind of crypto wallet that gives full control over assets to the owner/user.
 
 __________
 
@@ -314,15 +316,15 @@ __________
 
 ### Off-ramp
 
-**Off-ramp** - 将加密货币转换为法定货币的方法。
+**Off-ramp** — ways to convert cryptocurrencies into fiat money.
 
 ### On-ramp
 
-**On-ramp** - 通过花费法币转换（购买）加密货币的方法。
+**On-ramp** — ways to convert (buy) cryptocurrency by spending fiat money.
 
 ### Onion routing
 
-**Onion routing** - 一种类似于 TOR 的技术，允许在网络上进行匿名交互。所有信息都经过层层加密，就像洋葱一样。TON Proxy 就采用了这种技术。
+**Onion routing** — a technology similar to TOR that allows anonymous interactions on a network. All messages are encrypted in various layers akin to an onion. TON Proxy applies such a technique.
 
 __________
 
@@ -330,27 +332,27 @@ __________
 
 ### Paper hands
 
-**Paper hands**--倾向于恐慌性抛售的投资者--缺乏经验的投资者。
+**Paper hands** — an investor who’s inclined to panic-sell — an inexperienced investor.
 
 ### Proof-of-stake
 
-**Proof-of-stake**--一种共识机制，用于处理区块链上新区块的交易。
+**Proof-of-stake** — a consensus mechanism to process transactions in new blocks on the blockchain.
 
 ### Proof-of-work
 
-**Proof-of-work** - 一种共识算法，一方向另一方证明已花费了特定数量的计算工作。通过消耗一点能量，一方可以验证这一点。
+**Proof-of-work** — a consensus algorithm where one party proves to another that a specific amount of computational work was spent. By expending a little energy, a party can verify this.
 
 ### Proxy
 
-**Proxy** - 计算机网络上的一种服务，允许客户端安装与其他网络服务的间接网络连接。
+**Proxy** — a service on a computer network that allows clients to install indirect network connections with other network services.
 
 ### Pump
 
-**Pump** - 人为抬高加密货币或资产的价格。
+**Pump** — artificially inflating the price of a cryptocurrency or asset.
 
 ### P2P
 
-**P2P** - 点对点，用户之间的交易，无需第三方或中介的帮助。
+**P2P** — _peer-to-peer_, transactions among users without the help of a third party or intermediary.
 
 __________
 
@@ -358,11 +360,11 @@ __________
 
 ### Roadmap
 
-**Roadmap** - 一个项目的战略计划，显示其产品、服务、更新等的发布时间。
+**Roadmap** — a project’s strategic plan that displays when its products, services, updates, etc. will be released.
 
 ### ROI
 
-**ROI**--投资回报率，从投资中获得的利润。
+**ROI** — _return on investment_, the profits made from investments.
 
 _________
 
@@ -370,39 +372,39 @@ _________
 
 ### SBT
 
-**SBT** - *Soulbound token*，一种永远无法转让的 NFT，因为它包含了其所有者及其成就的信息。
+**SBT** — _Soulbound token_, an NFT that can never be transferred because it contains information about its owner and their accomplishments.
 
 ### Scalability
 
-**Scalability**--区块链网络处理复杂交易和大量交易的能力。
+**Scalability** — the ability of a blockchain network to process complex transactions as well as a large number of them.
 
 ### SEC
 
-**SEC** - 证券交易委员会，美国的金融监管机构。
+**SEC** — Securities and Exchange Commission, a financial regulator in the United States.
 
 ### Shard
 
-**Shard**--一种机制，通过分解成较小的区块链来缓解网络拥堵，从而帮助区块链网络进行扩展--TON 区块链就是这样做的。
+**Shard** — a mechanism that helps a blockchain network to scale by breaking into smaller blockchains to relieve network congestion — something which TON Blockchain does.
 
 ### Smart contract
 
-**Smart contract**--自动执行代码，在数学算法的帮助下监督和实现操作，无需人工干预。
+**Smart contract** — self-executing code that oversees and enables operations with the help of mathematical algorithms and without human intervention.
 
 ### Spot trading
 
-**Spot trading** - 交易金融资产赚钱。
+**Spot trading** — trading a financial asset for money.
 
 ### Stablecoin
 
-**Stablecoin** - 一种价值稳定（通常与法定货币挂钩）且不会崩溃的加密货币。
+**Stablecoin** — a cryptocurrency whose value is stable (usually pegged to a fiat currency) and does not crash.
 
 ### Staking
 
-**Staking**--用户通过在押注证明算法中存储硬币或代币赚取被动收入的一种方式，而押注证明算法反过来又能确保区块链顺利运行。为此，他们可以获得奖励作为激励。
+**Staking** — a way for users to earn a passive income by storing coins or tokens in a proof-of-stake algorithm, which, in turn, ensures the blockchain runs smoothly. For this, they earn rewards as an incentive.
 
 ### Swap
 
-**Swap** - 两种金融资产的交换，如用 Toncoin 交换 USDT。
+**Swap** — the exchange of two financial assets — e.g. Toncoin for USDT.
 
 ________
 
@@ -410,47 +412,47 @@ ________
 
 ### TEP
 
-**TEP** - [TON Enhancement Proposals](https://github.com/ton-blockchain/TEPs)，一套与 TON 生态系统各部分交互的标准方法。
+**TON Enhancement Proposals (TEP)**—a [standard set](https://github.com/ton-blockchain/TEPs) of ways to interact with various parts of the TON ecosystem.
 
 ### Testnet
 
-**Testnet** - 在主网启动前测试项目或服务的网络。
+**Testnet** — a network for testing projects or services before launching on the mainnet.
 
 ### Ticker
 
-**Ticker** - 交易所、交易服务或其他 DeFi 解决方案中加密货币、资产或代币的简称 - 例如，TON 表示 Toncoin。
+**Ticker** — the short form of a cryptocurrency, asset, or token on exchanges, trading services, or other DeFi solutions — e.g. TON for Toncoin.
 
 ### The Merge
 
-**The Merge**--以太坊从工作量证明向权益证明转换的过渡过程。
+**The Merge** — the transition process of Ethereum switching from proof-of-work to proof-of-stake.
 
 ### Token
 
-**Token** - 一种数字资产形式；可具有多种功能。
+**Token** — a form of digital asset; it can have multiple functions.
 
 ### Tokenomics
 
-**代币经济学** - 一种加密货币（或代币）的经济计划和发行策略。
+**Tokenomics** — the economic plan and distribution strategy of a cryptocurrency (or token).
 
 ### To the moon
 
-**To the moon**--这是人们产生 FOMO 时使用的一个俗语。它指的是希望加密货币的价值迅速获得大量增值--因此它的轨迹是奔月。
+**To the moon** — a colloquial phrase used when people create FOMO. It refers to hopefuls wanting the value of a cryptocurrency rapidly gaining a lot of value — hence its trajectory to the moon.
 
 ### Toncoin
 
-**Toncoin** - TON 生态系统的本地加密货币，用于开发服务以及支付费用和服务。它可以买卖和交易。
+**Toncoin** — the native cryptocurrency of the TON Ecosystem, which is used to develop services and pay for fees and services. It can be bought, sold, and traded.
 
 ### Trading
 
-**Trading** - 以盈利为目的买卖加密货币。
+**Trading** — buying and selling cryptocurrencies with the goal of making a profit.
 
 ### TVL
 
-**TVL**（锁定的总价值）--锁定的总价值表示当前在特定协议中被锁定的资产数量。
+**TVL** (Total Value Locked) — Total value locked represents the number of assets currently being staked in a specific protocol.
 
 ### TVM
 
-**TVM**--Ton 虚拟机（Ton Virtual Machine），这是一种行为类似于去中心化计算机的机器，它会在每个新区块之后计算 Ton 区块链的状态，并执行智能合约。
+**TVM** — Ton Virtual Machine, a machine behaving like a decentralized computer, it computes the state of the Ton blockchain after each new block and executes smart contracts.
 
 ___________
 
@@ -458,7 +460,7 @@ ___________
 
 ### Validator
 
-**Validator** - 在 TON 区块链上验证新区块的人。
+**Validator** — those who verify new blocks on TON Blockchain.
 
 ___________
 
@@ -466,35 +468,35 @@ ___________
 
 ### WAGMI
 
-**WAGMI**--"我们都会成功的"，这是加密货币社区经常使用的一句话，用来表达有朝一日通过投资加密货币致富的愿望。
+**WAGMI** — “we’re all gonna make it,” a sentence often used in the crypto community to express the aspirations of becoming rich one day by investing in cryptocurrencies.
 
 ### Wallet
 
-**Wallet** - 通过购买或出售加密货币和代币所需的私钥系统存储加密货币的软件。它也是 TON 生态系统中用于买卖 Toncoin 的机器人。
+**Wallet** — software that stores cryptocurrencies through a system of private keys needed to buy or sell cryptocurrencies and tokens. It is also a bot in the TON ecosystem for buying and selling Toncoin.
 
 ### Web3
 
-**Web3**--基于区块链技术的新一代互联网，包括去中心化和代币经济。
+**Web3** — a new generation of the internet based on blockchain technology that includes decentralization and tokenomics.
 
 ### Whale
 
-**Whale** - 拥有大量加密货币和代币的投资者。
+**Whale** — an investor who owns a large number of cryptocurrencies and tokens.
 
 ### Whitelist
 
-**Whitelist** - 授予人们特殊津贴的名单。
+**Whitelist** — a list awarding people special perks.
 
 ### White paper
 
-**White paper** - 由项目开发人员撰写的项目主要文件。它解释了技术和项目目标。
+**White paper** — the main document of a project written by its developers. It explains the technology and the project’s goals.
 
 ### Watchlist
 
-**Wаtchlist** - 可定制的加密货币列表，投资者希望跟踪其价格走势。
+**Watchlist** — a customizable list of cryptocurrencies whose price action an investor wishes to follow.
 
 ### Workchain
 
-**Workchain** - 连接到主链的次级链。它们可以包含大量不同的连接链，这些链有自己的共识规则。它们还可以包含地址和交易信息以及智能合约的虚拟机。此外，它们还可以与主链兼容并相互影响。
+**Workchain** — secondary chains that connect to the masterchain. They can contain a massive number of different connected chains that have their own consensus rules. They can also contain address and transaction information and virtual machines for smart contracts. Additionally, they can be compatible with the masterchain and interact with one another.
 
 ___________
 
@@ -502,8 +504,11 @@ ___________
 
 ### Yield farming
 
-**Yield farming**--在智能合约中出借或放置加密货币或代币，以赚取交易费形式的奖励。
+**Yield farming** — lending or placing cryptocurrencies or tokens in a smart contract to earn rewards in the form of transaction fees.
 
 ### Yolo
 
-**Yolo**--"你只能活一次"，这是一个俚语缩写，用来号召人们尽情享受生活，而不考虑所做努力的风险。
+**Yolo** — “you only live once,” a slang acronym used as a call to live life to the fullest without taking into account the risk of the given endeavor.
+
+<Feedback />
+
