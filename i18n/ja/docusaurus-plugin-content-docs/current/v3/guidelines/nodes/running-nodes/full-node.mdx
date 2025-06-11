@@ -1,0 +1,222 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Full node
+
+## OS 要件
+
+サポートされているオペレーティングシステムを使用して MyTonCtrl をインストールすることを強くお勧めします:
+
+- Ubuntu 20.04
+- Ubuntu 22.04
+- Debian 11
+
+## ハードウェア要件
+
+:::caution 個人のローカルマシンでのノードの使用
+You shouldn't run any type of node on your personal local machine for extended periods, even if it meets the requirements. Nodes actively use disks, which can lead to rapid wear and potential damage.
+:::
+
+### With validator
+
+- 16 コア CPU
+- 128 GB RAM
+- 1TB NVME SSD _OR_ Provisioned 64+k IOPSストレージ
+- 1 Gbit/s ネットワーク接続
+- パブリック IP アドレス (_fixed IP address_)
+- 64 TB/月トラフィック（最大荷重時は 100 TB/月）
+
+:::info ピーク負荷の準備をする
+To reliably handle peak loads, a connection of at least 1 Gbit/s is typically required, while the average load is expected to be around 100 Mbit/s.
+:::
+
+### Port forwarding
+
+All types of nodes require a static external IP address, one UDP port forwarded for incoming connections, and all outgoing connections to be open—the node uses random ports for new outgoing connections. The node must also be visible to the outside world over the NAT.
+
+You can accomplish this by contacting your network provider or [renting a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
+
+:::info
+`netstat -tulpn`コマンドを使用して、どのUDPポートが開いているかを調べることができます。
+:::
+
+### Recommended providers
+
+TON Foundation は、Validator を実行するために以下のプロバイダーを推奨します。
+
+| Cloud Provider | Instance Type                   | CPU                     | RAM     | Storage                           | Network         | Public IP                               | トラフィック        |
+| -------------- | ------------------------------- | ----------------------- | ------- | --------------------------------- | --------------- | --------------------------------------- | ------------- |
+| GCP            | `n2-standard-16`                | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `16 Gbps`       | Reserve a static external IP            | `64 TB/month` |
+| Alibaba Cloud  | `ecs.g6.4xlarge`                | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `最大 10 Gbps`    | Bind an Elastic IP                      | `64 TB/month` |
+| Tencent Cloud  | `M5.4XLARGE`                    | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `最大 10 Gbps`    | Associate an Elastic IP                 | `64 TB/month` |
+| Vultr          | `bare metal Intel E-2388G`      | `16 コア/ 32 スレッド`        | `128GB` | `1.92TB NVMe SSD`                 | `10 Gbps`       | インスタンスに含まれる固定IPアドレス：                    | `64 TB/month` |
+| DigitalOcean   | `汎用プレミアムインテル`                   | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `10 Gbps`       | インスタンスに含まれる固定IPアドレス：                    | `64 TB/month` |
+| Latitude       | `c3.medium.x86`                 | `16 コア/ 32 スレッド`        | `128GB` | `1.9TB NVMe SSD`                  | `10 Gbps`       | インスタンスに含まれる固定IPアドレス：                    | `64 TB/month` |
+| AWS            | `i4i.8xlarge`                   | `32 vCPUs`              | `256GB` | `2 x 3,750 AWS Nitro SSD（固定）`     | `最大 25 Gbps`    | Bind an Elastic IP                      | `64 TB/month` |
+
+:::info
+**Note:** Prices, configurations, and availability can change. It is recommended to always refer to the official documentation and pricing pages of the respective cloud provider before making any decisions.
+:::
+
+## ノードの実行 (ビデオ)
+
+[//]: # "<ReactPlayer controls={true} style={{borderRadius:'10pt', margin:'15pt auto', maxWidth: '100%'}} url='/docs/files/TON_nodes.mp4' />"
+
+このビデオをステップバイステップのチュートリアルで確認して、迅速に開始してください:
+
+<video
+  style={{
+    borderRadius: "10pt",
+    margin: "auto",
+    width: "100%",
+    maxWidth: "100%",
+  }}
+  controls={true}
+>
+  <source src="/files/TON_nodes.mp4" type="video/mp4" />
+</video>
+
+## Run a node (text)
+
+### 非rootユーザーに切り替える
+
+:::warning
+This step is required to successfully install and use MyTonCtrl—don't ignore non-root user creation. Without this step, there will be no errors during installation, but MyTonCtrl will not work properly.
+:::
+
+If you don't have a non-root user, you can create one with the following steps (otherwise, skip the first two steps and go to the third).
+
+1. root としてログインし、新規ユーザーを作成
+
+```bash
+sudo adduser <username>
+```
+
+2. あなたのユーザーをsudoグループに追加します:
+
+```bash
+sudo usermod -aG sudo <username>
+```
+
+3. 新しいユーザーにログインします(sshを使用している場合、**現在のセッションを停止し、正しいユーザーと再接続する必要があります**)
+
+```bash
+ssh <username>@<server-ip-address>
+```
+
+### MyTonCtrlをインストール
+
+**sudo** の権限を持つ **non-root** ユーザアカウントからインストールスクリプトをダウンロードして実行します。
+
+<Tabs groupId="operating-systems">
+  <TabItem value="ubuntu" label="Ubuntu">
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+sudo bash install.sh
+```
+
+</TabItem>
+  <TabItem value={'debian'} label={'Debian'}>
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+su root -c 'bash install.sh'
+```
+
+</TabItem>
+</Tabs>
+
+- `-d` - **mytonctrl** は最新のブロックチェーン状態の [dump](https://dump.ton.org/) をダウンロードします。
+  これは同期時間を数回短縮します。
+  This will reduce synchronization time by several times.
+- `-c <path>` - 公共の場所で同期を行わない場合。 _(必須ではありません)_ _(not required)_
+- `-i` - 最小要件を無視します。実際のノードを使用せずにコンパイルプロセスを確認したい場合にのみ使用します。
+- `-m` - モードでは、 `validator` または `liteserver` にすることができます。
+- `-t` - テレメトリーを無効にします。
+
+**testnet**を使用するには、`https://ton.org/testnet-global.config.json`の値を指定してください。
+
+デフォルトの `-c` フラグ値は `https://ton-blockchain.github.io/global.config.json` で、デフォルトの mainnet 設定です。
+
+### Running the MyTonCtrl
+
+1. インストールに使用されるローカルユーザーアカウントから `MyTonCtrl` コンソールを実行します。
+
+```sh
+mytonctrl
+```
+
+2. `status` コマンドを使用して、`MyTonCtrl` ステータスを確認します。
+
+```sh
+status
+```
+
+**テストネット** `status fast` コマンドは `status` の代わりに使用する必要があります。
+
+以下のステータスを表示する必要があります：
+
+- **mytoncore status**: should display in green.
+- **local validator status**: should also display in green.
+- **local validator out of sync**: initially, a `n/a` string is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20, the validator is synchronized.
+
+**status** コマンド出力の例:
+
+![status](/img/docs/nodes-validator/mytonctrl-status.png)
+
+:::caution ステータスに同じ出力があることを確認してください
+For all nodes type **Local Validator status** section should appear.
+すべてのノードで **Local Validator status** セクションが表示されるはずです。
+そうでない場合は、[check troubleshooting section](/v3/guidelines/nodes/nodes-troubleshooting#status-command-displays-without-local-node-section) と [check node logs](/v3/guidelines/nodes/running-nodes/full-node#check-the-node-logs) を参照してください。
+:::
+
+Please wait until the `Local validator out of sync` status is less than 20 seconds.
+
+When a new node is started, even from a dump, it is important to wait up to 3 hours before the _out of sync_ number begins to decrease. This delay occurs because the node must establish its place in the network and propagate its addresses through the DHT tables, among other processes.
+
+### Mytonctrlをアンインストール
+
+スクリプトをダウンロードして実行します:
+
+```bash
+sudo bash /usr/src/mytonctrl/scripts/uninstall.sh
+```
+
+### Mytonctrl の所有者を確認
+
+実行:
+
+```bash
+ls -lh /var/ton-work/keys/
+```
+
+## Tips & tricks
+
+### 利用可能なコマンドの一覧
+
+- `help` を使って、利用可能なコマンドのリストを取得できます。
+
+![Help command](/img/docs/full-node/help.jpg)
+
+### Check the MyTonCtrl logs
+
+- To check **MyTonCtrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for root.
+
+![logs](/img/docs/nodes-validator/manual-ubuntu_mytoncore-log.png)
+
+### ノードログを確認する
+
+失敗した場合はノードログを確認してください:
+
+```bash
+tail -f /var/ton-work/log.thread*
+```
+
+## サポート
+
+Contact technical support with [@ton_node_help](https://t.me/ton_node_help).
+
+<Feedback />
