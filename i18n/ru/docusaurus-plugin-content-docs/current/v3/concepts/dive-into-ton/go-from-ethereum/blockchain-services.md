@@ -1,32 +1,36 @@
-# Блокчейн сервисы
+import Feedback from '@site/src/components/Feedback';
 
-## Система доменных имен
+# Blockchain services
 
-В Ethereum пользователи используют cервис доменных имен Ethereum Name Service (ENS), который является децентрализованной системой имен, построенной на основе блокчейна Ethereum.
+## Domain name systems
 
-В свою очередь блокчейн TON использует встроенную систему доменных имен, известную как TON DNS. Это децентрализованный сервис, который позволяет пользователям регистрировать понятные для человека доменные имена для своих смарт-контрактов, веб-сайтов или любого другого онлайн-контента. Такое устройство облегчает взаимодействие с децентрализованными приложениями (DApps) и другими ресурсами на блокчейне TON. Система DNS в TON функционирует аналогично традиционным системам DNS в Интернете, но ее децентрализованная природа устраняет необходимость в централизованном органе для контроля и управления доменными именами, тем самым снижая риски цензуры, мошенничества и перехвата доменных имен.
+In Ethereum, users use the **Ethereum Name Service (ENS)**, a decentralized naming system built on top of the Ethereum blockchain.
 
-## WWW
+The TON blockchain includes an embedded domain name system called the TON DNS. This service allows users to register human-readable domain names for smart contracts, websites, or other online content. Such a device facilitates interaction with **decentralized applications (DApps)** and other resources on the TON blockchain.
 
-TON WWW — это часть блокчейна TON, которая позволяет создавать и взаимодействовать с децентрализованными веб-сайтами напрямую через блокчейн. В отличие от традиционных веб-сайтов, веб-сайты на TON доступны через специальные URL-адреса, заканчивающиеся на `.ton`, и поддерживают уникальные гиперссылки формата `ton://`, которые позволяют проводить транзакции и другие операции непосредственно из URL-адреса.
+The DNS system in TON functions similarly to traditional Internet DNS systems, but its decentralized nature eliminates the need for a centralized authority to control and manage domain names, thereby reducing the risks of censorship, fraud, and domain name hijacking.
 
-Одной из ключевых особенностей TON WWW является возможность прямой привязки криптокошельков к доменным именам, что позволяет пользователям отправлять криптовалюту на адреса типа alice.place.ton без передачи дополнительных данных. Это значительно упрощает процесс создания пожертвований и платежей, делая его более интуитивным и удобным.
+One key feature of TON DNS is the ability to bind crypto wallets to domain names directly. This feature allows users to send cryptocurrency to addresses like `alice.place.ton` without additional details. This feature simplifies the process of donations and payments, making it more intuitive and convenient.
 
-## Прокси
+## Proxy
 
-TON Proxy — это инструмент на основе протокола TON, который обеспечивает высокий уровень безопасности и анонимности. Все данные, которые передаются через TON Proxy, зашифрованы, что в свою очередь позволяет защитить конфиденциальную информацию пользователей.
+TON Proxy is a tool based on the TON protocol that offers high security and anonymity. All data transmitted through TON Proxy is encrypted, thus protecting users' confidential information.
 
-Одним из ключевых преимуществ TON Proxy является его способность обходить блокировки, накладываемые интернет-провайдерами или государственными органами. Это делает его незаменимым инструментом для пользователей, которым необходим свободный доступ к информации в Интернете без ограничений.
+One of TON Proxy's key advantages is bypassing blockades imposed by ISPs or government agencies. This property makes it an essential tool for users who need free access to information on the Internet without restrictions.
 
-Более того, TON Proxy также позволяет ускорить скорость подключения к Интернету. Он автоматически выбирает серверы с наименьшей нагрузкой, что улучшает качество соединения и скорость доступа к Интернету.
+In addition, TON Proxy helps to speed up Internet connection speeds. It automatically selects the servers with the lowest load, improving the quality of connection and Internet access speed.
 
-## Децентрализованное хранилище
+## Decentralized storage
 
-Ethereum не подходит для хранения больших объемов данных. Поэтому под децентрализованным хранилищем на Ethereum обычно подразумевается использование распределенных файловых систем для хранения и извлечения данных децентрализованным и безопасным образом. Одним из популярных подходов к децентрализованному хранению на Ethereum является InterPlanetary File System (IPFS), которая представляет собой одноранговую файловую систему, позволяющую пользователям хранить и извлекать файлы из сети распределенных узлов.
+Ethereum is not suitable for storing large amounts of data. Therefore, decentralized storage on Ethereum typically involves using distributed file systems to store and retrieve data in a decentralized and secure manner. One popular approach to decentralized storage on Ethereum is the **InterPlanetary File System (IPFS)**, a peer-to-peer file system that allows users to store and retrieve files from a distributed network.
 
-В свою очередь сеть TON имеет собственную децентрализованную службу хранения, которая используется блокчейном TON для хранения архивных копий блоков и данных о состоянии, снепшотов, а также может быть использована для хранения пользовательских файлов или других служб, работающих на платформе, используя технологию доступа подобную торренту. Наиболее популярным вариантом использования такой системы является хранение метаданных NFT непосредственно в хранилище TON, без использования дополнительных распределенных служб хранения файлов, таких как IPFS.
+The TON network has its own decentralized storage service called snapshots, which the TON blockchain uses to store archive copies of blocks and status data. The service can also store users’ files or other services running on the platform with torrent-like access technology. The most popular use case is to store NFT metadata directly on TON storage, not using additional distributed file storage services like IPFS.
 
-## Платежные сервисы
+## Payment services
 
-TON Payments — это решение для мгновенных транзакций с нулевыми сетевыми сборами на блокчейне TON. Хоть для большинства задач достаточно только блокчейна TON, некоторые приложения, такие как TON Proxy, TON Storage или определенные виды DApps, требуют микротранзакций с гораздо более высокой скоростью и меньшими затратами. Для решения этой проблемы были созданы платежные каналы, также известные как сеть Lightning. Платежные каналы позволяют двум сторонам совершать транзакции вне блокчейна, создавая специальный смарт-контракт на блокчейне со своими начальными балансами. Затем они могут выполнять неограниченное количество транзакций без каких-либо лимитов по скорости или коммисий. Сетевые сборы взимаются только при открытии и закрытии канала. Данная технология также гарантирует корректную работу между пользователями, позволяя одной стороне самостоятельно закрывать канал, если другая сторона обманывает или исчезает.
+TON Payments is a solution for lightning-fast transactions with zero network fees on the TON blockchain. While the TON blockchain is sufficient for most tasks, some applications, such as TON Proxy, TON Storage, or a particular decentralized application, require micro-transactions with much higher speed and lower costs. In TON, Payment channels solve this problem.
+
+Payment channels allow two parties to make transactions off-chain by creating a special smart contract on the blockchain with their initial balances. They can then perform as many transactions between them as they want without any speed limits or fees. The network charges fees only when opening and closing the channel. The technology guarantees proper operation by allowing a party to close the channel if the other party cheats or disappears.
+
+<Feedback />
 
