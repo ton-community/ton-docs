@@ -1,0 +1,118 @@
+import Feedback from '@site/src/components/Feedback';
+
+import ThemedImage from '@theme/ThemedImage';
+
+# Pyth oracles
+
+## How to use real-time data in TON contracts
+
+TON의 Pyth 가격 피드는 메인 TON Pyth 스마트 컨트랙트를 통해 관리되어 온체인 데이터와 원활하게 상호작용할 수 있습니다. TON에서 이러한 상호작용은 Pyth 수신자 컨트랙트 내의 특정 함수를 통해 이루어집니다. 이 컨트랙트는 Pyth 가격 피드에 대한 인터페이스 역할을 하며, 가격 데이터의 검색과 업데이트를 처리합니다.
+
+## Pyth SDK 설치
+
+npm 또는 yarn을 사용하여 Pyth TON SDK와 기타 필요한 의존성을 설치하세요:
+
+```ts
+   npm install @pythnetwork/pyth-ton-js @pythnetwork/hermes-client
+   @ton/core @ton/ton @ton/crypto
+```
+
+   또는
+
+```ts
+   yarn add @pythnetwork/pyth-ton-js @pythnetwork/hermes-client
+   @ton/core @ton/ton @ton/crypto
+```
+
+## Write client code
+
+다음 코드는 가격 업데이트를 가져오고, TON의 Pyth 컨트랙트와 상호작용하며, 가격 피드를 업데이트하는 방법을 보여줍니다:
+
+- TON 메인넷: [EQBU6k8HH6yX4Jf3d18swWbnYr31D3PJI7PgjXT-flsKHqql](https://docs.pyth.network/price-feeds/contract-addresses/ton)
+- TON 테스트넷: [EQB4ZnrI5qsP_IUJgVJNwEGKLzZWsQOFhiaqDbD7pTt_f9oU](https://docs.pyth.network/price-feeds/contract-addresses/ton)
+
+다음 예제는 테스트넷 컨트랙트를 사용합니다. 메인넷 사용 시에는 `PYTH_CONTRACT_ADDRESS_TESTNET`을 `PYTH_CONTRACT_ADDRESS_MAINNET`으로 적절히 변경하세요. 
+
+<details>
+```ts
+import { TonClient, Address, WalletContractV4 } from "@ton/ton";
+import { toNano } from "@ton/core";
+import { mnemonicToPrivateKey } from "@ton/crypto";
+import { HermesClient } from "@pythnetwork/hermes-client";
+import {
+  PythContract,
+  PYTH_CONTRACT_ADDRESS_TESTNET,
+  calculateUpdatePriceFeedsFee,
+} from "@pythnetwork/pyth-ton-js";
+const BTC_PRICE_FEED_ID =
+  "0xe62df6c8b4a85fe1a67db44dc12de5db330f7ac66b72dc658afedf0f4a415b43";
+async function main() {
+  // Initialize TonClient
+  const client = new TonClient({
+    endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
+    apiKey: "your-api-key-here", // Optional
+  });
+  // Create PythContract instance
+  const contractAddress = Address.parse(PYTH_CONTRACT_ADDRESS_TESTNET);
+  const contract = client.open(PythContract.createFromAddress(contractAddress));
+  // Get current guardian set index
+  const guardianSetIndex = await contract.getCurrentGuardianSetIndex();
+  console.log("Guardian Set Index:", guardianSetIndex);
+  // Get BTC price from TON contract
+  const price = await contract.getPriceUnsafe(BTC_PRICE_FEED_ID);
+  console.log("BTC Price from TON contract:", price);
+  // Fetch latest price updates from Hermes
+  const hermesEndpoint = "https://hermes.pyth.network";
+  const hermesClient = new HermesClient(hermesEndpoint);
+  const priceIds = [BTC_PRICE_FEED_ID];
+  const latestPriceUpdates = await hermesClient.getLatestPriceUpdates(
+    priceIds,
+    { encoding: "hex" }
+  );
+  console.log("Hermes BTC price:", latestPriceUpdates.parsed?.[0].price);
+  // Prepare update data
+  const updateData = Buffer.from(latestPriceUpdates.binary.data[0], "hex");
+  console.log("Update data:", updateData);
+  // Get update fee
+  const updateFee = await contract.getUpdateFee(updateData);
+  console.log("Update fee:", updateFee);
+  const totalFee =
+    calculateUpdatePriceFeedsFee(BigInt(updateFee)) + BigInt(updateFee);
+  // Update price feeds
+  const mnemonic = "your mnemonic here";
+  const key = await mnemonicToPrivateKey(mnemonic.split(" "));
+  const wallet = WalletContractV4.create({
+    publicKey: key.publicKey,
+    workchain: 0,
+  });
+  const provider = client.open(wallet);
+  await contract.sendUpdatePriceFeeds(
+    provider.sender(key.secretKey),
+    updateData,
+    totalFee
+  );
+  console.log("Price feeds updated successfully.");
+}
+main().catch(console.error);
+```
+</details>
+
+이 코드는 다음과 같은 작업을 수행합니다:
+
+1. `TonClient`를 초기화하고 `PythContract` 인스턴스를 생성합니다.
+2. TON 컨트랙트에서 현재 가디언 세트 인덱스와 BTC 가격을 검색합니다.
+3. Hermes에서 최신 가격 업데이트를 가져옵니다.
+4. 업데이트 데이터를 준비하고 업데이트 수수료를 계산합니다.
+5. TON 컨트랙트에서 가격 피드를 업데이트합니다.
+
+## Additional resources
+
+TON 애플리케이션 개발에 도움이 될 만한 추가 리소스:
+
+- [TON documentation](https://ton.org/docs/)
+- [Pyth price feed IDs](https://pyth.network/developers/price-feed-ids)
+- [Pyth TON contract](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/contracts)
+- [Pyth TON SDK](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/sdk)
+- [Pyth TON example](https://github.com/pyth-network/pyth-examples/tree/main/price_feeds/ton/sdk_js_usage)
+
+<Feedback />
