@@ -1,62 +1,63 @@
-# Инструменты массового выпуска
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Mass minting tools
 
-В эпоху запуска крупных on-chain-проектов с миллионами пользователей пиковые нагрузки могут привести к проблемам в пользовательском опыте во всей экосистеме TON.
+In an era of launching major on-chain projects with millions of users, peak loads can impact the user experience across entire TON Ecosystem.
 
-Чтобы предотвратить эту ситуацию и обеспечить плавный запуск, мы предлагаем использовать представленную на этой странице систему распределения высокой нагрузки.
+To prevent these issues and ensure a smooth launch, we recommend using the high-load distribution system provided on this page.
 
-### Массовая отправка
+### Mass sender
 
 :::info
-Рекомендуемый подход к эйрдропам токенов в сентябре, проверен в бою на Notcoin, DOGS
+Recommended for token airdrops. Battle-tested on Notcoin and DOGS in September.
+
 :::
 
-Доступ: [Массовая отправка](https://docs.tonconsole.com/tonconsole/jettons/mass-sending)
+Access: [Mass sender](https://docs.tonconsole.com/tonconsole/jettons/mass-sending)
 
-Спецификация:
+Specification:
 
-- Прямое распределение токенов, проект тратит деньги на газ во время выпуска
-- Минимальная нагрузка на сеть (последние версии оптимизированы)
-- Автоматическая регулировка нагрузки (замедляет распределение в случае перегрузки сети)
+- Directly distributes tokens, with the project covering gas fees during claims.
+- Low network load (latest versions are optimized).
+- Self-regulates load by slowing distribution when network activity is high.
 
-### Mintless Jettons
+### Mintless jettons
 
-Доступ: [Mintless Jettons](/v3/guidelines/dapps/asset-processing/mintless-jettons)
+Access: [Mintless jettons](/v3/guidelines/dapps/asset-processing/mintless-jettons)
 
 :::info
-  Проверено в бою на HAMSTER
+  battle-tested on HAMSTER
 :::
 
-Спецификация:
+Specification:
 
-- Пользователи претендуют на эйрдроп токены без транзакций
-- Проекты не зарабатывают на запросах
-- Минимальная нагрузка на сеть
+- Users claim airdrop tokens without transactions,
+- Projects don't earn from claims,
+- Minimal network load.
 
 ### TokenTable v4
 
 :::info
-  Проверено в бою на Avacoin, DOGS
+  battle-tested on Avacoin, DOGS
 :::
 
-Доступ: [www.tokentable.xyz](https://www.tokentable.xyz/)
+Access: [www.tokentable.xyz](https://www.tokentable.xyz/)
 
-- Более высокая нагрузка на сеть, чем у массовой отправки, пользователи совершают транзакции при запросе
-- Проекты также могут зарабатывать на запросах пользователей
-- Проекты оплачивают TokenTable за настройку
+- Higher network load than mass sender, as users make transactions when claiming,
+- Projects can also earn from user claims,
+- Projects pay TokenTable for setup.
 
 ### Gigadrop
 
 :::info
-  Проверено в бою на HAMSTER
+  battle-tested on HAMSTER
 :::
 
-Доступ: [gigadrop.io](https://gigadrop.io/)
+Access: [gigadrop.io](https://gigadrop.io/)
 
-- Более высокая нагрузка на сеть, чем у массовой отправки, пользователи совершают транзакции при запросе
-- Гибкое управление нагрузкой
-- Интеграция запроса в ваше приложение
-- Проекты также могут зарабатывать на запросах пользователей
+- Higher network load than mass sender, as users make transactions when claiming,
+- Flexible load control,
+- Claim integration within your app,
+- Projects can also earn from user claims.
+
+<Feedback />
