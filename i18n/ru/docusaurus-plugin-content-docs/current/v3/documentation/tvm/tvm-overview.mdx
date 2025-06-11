@@ -1,35 +1,32 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
-# Обзор TVM
+# Overview of TVM
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+The TON Virtual Machine (TVM) executes all TON smart contracts. TVM operates on the **stack principle**, which ensures efficiency and ease of implementation.
 
-Все смарт-контракты TON выполняются на собственной виртуальной машине TON (TVM). TVM построена по _принципу стека_, что делает ее эффективной и простой в реализации.
-
-В этом документе представлен общий обзор того, как TVM выполняет транзакции.
+This document provides a high-level overview of how TVM processes transactions.
 
 :::tip
 
-- Исходный код TVM — [**Реализация TVM C++**](https://github.com/ton-blockchain/ton/tree/master/crypto/vm)
-- [TVM Retracer](https://retracer.ton.org/)
+- **TVM source**: [TVM C++ implementation](https://github.com/ton-blockchain/ton/tree/master/crypto/vm)
+- [TVM retracer](https://retracer.ton.org/)
   :::
 
-## Курс TON: TVM
+## TON course: TVM
 
 :::tip
-Перед началом курса убедитесь, что вы хорошо понимаете основы технологии блокчейн. Если у вас есть пробелы в знаниях, рекомендуем пройти курс [Основы блокчейна с TON](https://stepik.org/course/201294/promo) ([версия RU](https://stepik.org/course/202221/), [версия CHN](https://stepik.org/course/200976/)).
+:::tip
+Before starting the course, ensure you have a solid understanding of blockchain basics. If you need to fill knowledge gaps, consider taking the [Blockchain basics with TON](https://stepik.org/course/201294/promo) course ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)).
 :::
 
-[Курс по блокчейну TON](https://stepik.org/course/176754/) — это комплексное руководство по разработке на блокчейне TON.
-
-Модуль 2 полностью охватывает **TVM**, транзакции, масштабируемость и бизнес-кейсы.
+The [TON blockchain course](https://stepik.org/course/176754/) is a comprehensive guide to TON blockchain development. Module 2 covers **TVM**, transactions, scalability, and business cases in detail.
 
 <Button href="https://stepik.org/course/176754/promo"
         colorType={'primary'} sizeType={'sm'}>
 
-Пройдите курс по блокчейну TON
+Explore TON blockchain course
 
 </Button>
 
@@ -49,100 +46,96 @@ RU
 
 ## Транзакции и фазы
 
-Когда на аккаунте в одной из цепочек TON происходит какое-либо событие, оно вызывает **транзакцию**. Наиболее распространенным событием является "получение некоторого сообщения", но, вообще говоря, могут быть `tick-tock`, `merge`, `split` и другие события.
+When an event occurs on an account in the TON blockchain, it triggers a **transaction**. The most common event is receiving a message, but other events like `tick-tock`, `merge`, and `split` can also initiate transactions.
 
-Каждая транзакция состоит из 5 фаз:
+Each transaction consists of up to five phases:
 
-1. **Фаза хранения** - на этой фазе рассчитываются сборы за хранение, накопленные контрактом из-за занятия некоторого пространства в состоянии цепочки. Подробнее читайте в разделе [плата за хранение](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee).
-2. **Фаза кредита** - на этой фазе рассчитывается баланс контракта относительно (возможной) стоимости входящего сообщения и собранной платы за хранение.
-3. **Фаза вычислений** - на этом этапе TVM выполняет контракт (см. ниже), а результатом выполнения контракта является совокупность `exit_code`, `actions` (сериализованный список действий), `gas_details`, `new_storage` и некоторых других.
-4. **Фаза действий** - если фаза вычислений прошла успешно, на этом этапе обрабатываются `actions` из фазы вычислений. В частности, действия могут включать отправку сообщений, обновление кода смарт-контракта, обновление библиотек и т. д. Обратите внимание, что некоторые действия могут завершиться неудачей во время обработки (например, если мы попытаемся отправить сообщение с большим количеством TON, чем есть в контракте), в этом случае вся транзакция может быть отменена или это действие может быть пропущено (это зависит от режима действий, другими словами, контракт может отправить сообщение типа `send-or-revert` или `try-send-if-no-ignore`).
-5. **Фаза возврата** — если фаза вычислений не удалась (возвращено `exit_code >= 2`), в этой фазе формируется _сообщение о возврате_ для транзакций, инициированных входящим сообщением.
+1. **Storage phase**: calculates storage fees for the contract based on the space it occupies in the blockchain state. Learn more in [storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee).
+2. **Credit phase**: updates the contract's balance by accounting for incoming message values and storage fees.
+3. **Compute phase**: executes the contract code on TVM. The result includes `exit_code`, `actions`, `gas_details`, `new_storage`, and other data.
+4. **Action phase**: processes actions from the compute phase if it succeeds. Actions may include sending messages, updating contract code, or modifying libraries. If an action fails, for example, due to lack of funds, the transaction may revert or skip the action, depending on its mode (`send-or-revert` or `try-send-if-no-ignore`).
+5. **Bounce phase**: if the compute phase fails (`exit_code >= 2`), this phase generates a bounce message for transactions initiated by an incoming message.
 
 ## Фаза вычислений
 
-В этой фазе происходит выполнение TVM.
+The compute phase involves executing the contract code on TVM.
 
 :::tip
 
-- TVM 4.3.5 - [**Документ по блокчейну TON**](https://docs.ton.org/assets/files/tblkch-6aaf006b94ee2843a982ebf21d7c1247.pdf)
+- **TVM 4.3.5**: [TON Blockchain paper](https://docs.ton.org/assets/files/tblkch-6aaf006b94ee2843a982ebf21d7c1247.pdf)
   :::
 
-### Пропуск фазы вычислений
+### When the compute phase is skipped
 
-Фаза вычислений заключается в вызове TVM с правильными входными данными. В некоторых случаях TVM вообще не может быть вызван (например, если аккаунт отсутствует, не инициализирован или заморожен, а обрабатываемое входящее сообщение не имеет полей кода или данных или эти поля имеют неверный хеш)
+The compute phase may be skipped under certain conditions, such as when the account is missing, uninitialized, or frozen, or when the incoming message lacks code or data fields. These scenarios are represented by specific constructors:
 
-Это отражено в соответствующих [конструкторах](https://github.com/ton-blockchain/ton/blob/5c392e0f2d946877bb79a09ed35068f7b0bd333a/crypto/block/block.tlb#L314):
-
-- `cskip_no_state$00` - [Отсутствие состояния](https://testnet.tonviewer.com/transaction/7e78394d082882375a5d21affa6397dec60fc5a3ecbea87f401b0e460fb5c80c) (т. е. код и данные смарт-контракта) как в аккаунте (несуществующем, неинициализированном или замороженном), так и в сообщении.
-
-- `cskip_bad_state$01` - Недопустимое состояние, переданное в сообщении (т. е. хэш состояния отличается от ожидаемого значения) замороженного или неинициализированного аккаунта.
-
-- `cskip_no_gas$10` - [Отсутствие средств](https://testnet.tonviewer.com/transaction/a1612cde7fd66139a7d04b30f38db192bdb743a8b12054feba3c16061a4cb9a6) для покупки газа. (Около < 0,00004 TON к [08.2024](https://testnet.tonviewer.com/transaction/9789306d7b29318c90477aa3df6599ee4a897031162ad41a24decb87db65402b))
+- `cskip_no_state$00`: the account or message lacks a valid state (for example, [missing code or data](https://testnet.tonviewer.com/transaction/7e78394d082882375a5d21affa6397dec60fc5a3ecbea87f401b0e460fb5c80c)).
+- `cskip_bad_state$01`: the message contains an invalid state (for example, incorrect hash) for a frozen or uninitialized account.
+- `cskip_no_gas$10`: the account lacks enough funds to cover gas costs (less than ~0.00004 TON as of [August 2024](https://testnet.tonviewer.com/transaction/9789306d7b29318c90477aa3df6599ee4a897031162ad41a24decb87db65402b)).
 
 ### Состояние TVM
 
-В любой момент состояние TVM полностью определяется 6 свойствами:
+At any point, the TVM state is defined by six properties:
 
-- Стек (см. ниже)
-- Регистры управления - (см. ниже) проще говоря, это означает до 16 переменных, которые могут быть напрямую установлены и прочитаны во время выполнения
-- Текущее продолжение - объект, который описывает текущую выполняемую последовательность инструкций
-- Текущая кодовая страница - проще говоря, это версия TVM, которая в данный момент запущена
-- Лимиты газа - набор из 4 целочисленных значений; текущий лимит газа g<sub>l</sub>, максимальный лимит газа g<sub>m</sub>, оставшийся газ g<sub>r</sub> и кредит газа g<sub>c</sub>
-- Контекст библиотеки - хэш-карта библиотек, которые может вызывать TVM
+- **Stack**: a last-in-first-out data structure.
+- **Control registers**: up to 16 variables that can be directly accessed during execution.
+- **Current continuation**: describes the sequence of instructions being executed.
+- **Current codepage**: specifies the TVM version in use.
+- **Gas limits**: includes the current gas limit (`g<sub>l</sub>`), maximum gas limit (`g<sub>m</sub>`), remaining gas (`g<sub>r</sub>`), and gas credit (`g<sub>c</sub>`).
+- **Library context**: a hashmap of libraries available for TVM.
 
-### TVM - это стековая машина
+### TVM as a stack machine
 
-TVM - это стековая машина по принципу "последний вошел - первый вышел". Всего существует 7 типов переменных, которые могут храниться в стеке — три типа, не являющихся ячейками:
+TVM operates as a stack machine, supporting seven variable types:
 
-- Integer — 257-битные целые числа со знаком
-- Tuple — упорядоченная коллекция из до 255 элементов с произвольными типами значений, возможно, разными.
-- Null
+- **Non-cell types**:
+  - Integer: signed 257-bit integers.
+  - Tuple: ordered collections of up to 255 elements.
+  - Null.
+- **Cell types**:
+  - Cell: basic data structure for storing information.
+  - Slice: allows reading data from a cell.
+  - Builder: enables creating new cells.
+  - Continuation: treats a cell as a source of TVM instructions.
 
-И четыре различных вида ячеек:
+### Control registers
 
-- Cell — базовая (возможно, вложенная) непрозрачная структура, используемая блокчейном TON для хранения всех данных
-- Slice — специальный объект, позволяющий читать из ячейки
-- Builder — специальный объект, позволяющий создавать новые ячейки
-- Continuation — специальный объект, позволяющий использовать ячейку в качестве источника инструкций TVM
+- `c0`: stores the next or return continuation, similar to a return address.
+- `c1`: stores the alternative continuation.
+- `c2`: contains the exception handler. Continuation.
+- `c3`: holds the current dictionary like a hashmap of functions codes. Continuation.
+- `c4`: stores the persistent data (contract's `data` section). Cell.
+- `c5`: contains output actions. Cell.
+- `c7`: stores temporary data. Tuple.
 
-### Управляющие регистры
+### Initializing TVM
 
-- `c0` — Содержит следующее продолжение или возврат продолжения (аналогично адресу возврата подпрограммы в обычных конструкциях). Это значение должно быть продолжением.
-- `c1` — Содержит альтернативное (возвратное) продолжение; это значение должно быть продолжением.
-- `c2` — Содержит обработчик исключений. Это значение является продолжением, которое вызывается при возникновении исключения.
-- `c3` — Вспомогательный регистр, содержит текущий словарь, по сути хэш-карту, содержащую код всех функций, используемых в программе. Это значение должно быть продолжением.
-- `c4` — Содержит корень постоянных данных или просто раздел `data` контракта. Это значение является ячейкой.
-- `c5` — Содержит выходные действия. Это значение является ячейкой.
-- `c7` — Содержит корень временных данных. Это кортеж.
-
-### Инициализация TVM
-
-TVM инициализируется, когда выполнение транзакции достигает фазы вычисления, а затем выполняет команды (коды операций) из _текущего продолжения_, пока не останется больше команд для выполнения (и продолжения для возвратных переходов).
-
-Подробное описание процесса инициализации можно найти здесь: [Инициализация TVM](/v3/documentation/tvm/tvm-initialization)
+TVM initializes during the compute phase and executes commands/opcodes from the **current continuation** until no more commands remain. For a detailed explanation, see [TVM initialization](/v3/documentation/tvm/tvm-initialization).
 
 ## Инструкции TVM
 
-Список инструкций TVM можно найти здесь: [Инструкции TVM](/v3/documentation/tvm/instructions).
+For a complete list of TVM instructions, visit [TVM instructions](/v3/documentation/tvm/instructions).
 
-### Результат выполнения TVM
+### Results of TVM execution
 
-Помимо exit_code и данных о потребленном газе, TVM косвенно выводит следующие данные:
+Besides `exit_code` and gas consumption, TVM outputs:
 
-- Регистр c4 — ячейка, которая будет сохранена как новая `data` смарт-контракта (если выполнение не будет отменено на этой или последующих фазах)
-- Регистр c5 — (список выходных действий) ячейка с последним действием в списке и ссылка на ячейку с предыдущим действием (рекурсивно)
+- `c4`: the new `data` cell for the contract (if execution succeeds).
+- `c5`: a cell containing output actions.
 
-Всеми остальными значениями регистра можно пренебречь.
+Other register values are discarded. Note:
 
-Обратите внимание, что существует глобальное ограничение на максимальную глубину ячейки `<1024` во время выполнения контракта. Однако регистры c4 и c5 должны быть `<=512` в глубину. Выход за эти пределы приводит к ошибке в конце фазы вычислений.
-Дополнительное ограничение накладывается на фазе действий. Контракт не может создать более 255 выходных действий.
+- The maximum cell depth during execution is `<1024`, but `c4` and `c5` must not exceed a depth of `512`.
+- A contract can't create more than 255 output actions.
 
 :::tip
-Если контракт хочет отправить более 255 сообщений, он может сделать это, отправив сообщение самому себе, в котором будет содержаться запрос на отправку оставшихся сообщений. Пример такого подхода можно увидеть по ссылке https://github.com/ton-blockchain/highload-wallet-contract-v3/blob/main/contracts/highload-wallet-v3.func#L50.
+:::tip
+To send more than 255 messages, a contract can send a message to itself with a request to process the remaining messages. See an example in the [highload wallet contract](https://github.com/ton-blockchain/highload-wallet-contract-v3/blob/main/contracts/highload-wallet-v3.func#L50).
 :::
 
-## См. также
+## See also
 
-- [Инструкции TVM](/v3/documentation/tvm/instructions)
-- [TON TVM](https://ton.org/tvm.pdf) Концепции TVM (могут содержать устаревшую информацию)
+- [TVM instructions](/v3/documentation/tvm/instructions)
+- [TON TVM concepts](https://ton.org/tvm.pdf) (may include outdated information)
+
+<Feedback />
