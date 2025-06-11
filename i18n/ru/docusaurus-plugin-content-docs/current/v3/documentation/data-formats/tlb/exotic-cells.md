@@ -1,13 +1,10 @@
-# Экзотические ячейки
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Exotic cells
 
-Каждая ячейка имеет свой собственный тип, закодированный целым числом от -1 до 255.
-Ячейка с типом -1 является `ordinary` ячейкой, а все остальные ячейки называются `exotic` или `special`.
-Тип экзотической ячейки хранится в виде первых восьми бит ее данных. Если экзотическая ячейка имеет менее восьми бит данных, она недействительна.
-В настоящее время существует 4 типа экзотических ячеек:
+Each cell has a type encoded by an integer ranging from -1 to 255. A cell with a type of -1 is considered an `ordinary` cell, while all other cells are classified as `exotic` or `special`.
+The type of an exotic cell is stored in the first eight bits of its data. It is considered invalid if an exotic cell contains fewer than eight data bits.
+Currently, there are 4 exotic cell types:
 
 ```json
 {
@@ -18,51 +15,61 @@
 }
 ```
 
-### Обрезанная ветвь
+### Pruned branch
 
-Обрезанные ветви - это ячейки, которые представляют удаленные поддеревья ячеек.
+Pruned branches are cells that represent deleted subtrees of other cells.
 
-Они могут иметь уровень `1 <= l <= 3` и содержать ровно `8 + 8 + 256 * l + 16 * l` бит.
+They can have a level `1 <= l <= 3` and contain exactly `8 + 8 + 256 * l + 16 * l` bits.
 
-Первый байт всегда `01` — тип ячейки. Второй — маска уровня обрезанной ветви. Затем идут `l * 32` байта хэшей удаленных поддеревьев, а затем `l * 2` байта глубины удаленных поддеревьев.
+The structure of a pruned branch cell is as follows:
 
-Уровень `l` ячейки обрезанной ветви можно назвать ее индексом Де Брейна, поскольку он определяет внешнее доказательство Меркла или обновление Меркла, во время построения которого ветвь была обрезана.
+- The first byte is always `01`, indicating the cell type.
+- The second byte contains the pruned branch-level mask.
+- Next,  `l * 32` bytes represent hashes of the deleted subtrees.
+- Then, `l * 2` bytes represent the depths of the deleted subtrees.
 
-Более высокие хеши обрезанных ветвей хранятся в их данных и могут быть получены следующим образом:
+The level `l` of a pruned branch cell is also called its De Bruijn index, as it determines the outer Merkle proof or Merkle update during the construction process in which the branch was pruned.
+
+Higher-level hashes of pruned branches are stored within their data and can be obtained as follows:
 
 ```cpp
 Hash_i = CellData[2 + (i * 32) : 2 + ((i + 1) * 32)]
 ```
 
-### Ссылка на библиотеку
+### Library reference
 
-Ячейки ссылок на библиотеку используются для использования библиотек в смарт-контрактах.
+Library reference cells are used to incorporate libraries in smart contracts.
 
-Они всегда имеют уровень 0 и содержат `8 + 256` бит.
+They always have a level of 0 and contain precisely `8 + 256` bits.
 
-Первый байт всегда `02` - тип ячейки. Следующие 32 байта - [хеш представления](/v3/documentation/data-formats/tlb/cell-boc#standard-cell-representation-hash-calculation) ячейки библиотеки, на которую делается ссылка.
+The first byte is always `02`, indicating the cell type.
+The following 32 bytes represent the referenced library cell's [Representation hash](/v3/documentation/data-formats/tlb/cell-boc#standard-cell-representation-hash-calculation).
 
-### Доказательство Меркла
+### Merkle proof
 
-Ячейки доказательства Меркла используются для проверки того, что часть данных дерева ячейки принадлежит полному дереву. Такая конструкция позволяет верификатору не хранить все содержимое дерева, при этом сохраняя возможность проверки содержимого по корневому хешу.
+Merkle proof cells verify that some cell tree data belongs to the full tree. This design allows the verifier to avoid storing the entire tree's content while still being able to verify the content using the root hash.
 
-Доказательство Меркла имеет ровно одну ссылку, а ее уровень `0 <= l <= 3` должен быть `max(Lvl(ref) - 1, 0)`. Эти ячейки содержат ровно `8 + 256 + 16 = 280` бит.
+A Merkle proof cell contains exactly one reference. Its level `0 <= l <= 3` must be `max(Lvl(ref) - 1, 0)`. These cells contain exactly `8 + 256 + 16 = 280` bits.
 
-Первый байт всегда `03` - тип ячейки. Следующие 32 байта - `Hash_1(ref)` (или `ReprHash(ref)`, если уровень ссылки равен 0). Следующие 2 байта - глубина удаленного поддерева, которое было заменено ссылкой.
+The first byte is always `03`, indicating the cell type.
+The following 32 bytes are `Hash_1(ref)` or `ReprHash(ref)` if the reference level is 0.
+The following 2 bytes represent the depth of the deleted subtree that was replaced by the reference.
 
-Более высокие хеши `Hash_i` ячейки доказательства Меркла вычисляются аналогично более высоким хешам обычной ячейки, но вместо `Hash_i(ref)` используется `Hash_i+1(ref)`.
+Higher-level hashes `Hash_i` of a Merkle proof cell are computed similarly to the higher hashes of an ordinary cell but with `Hash_i+1(ref)` used instead of `Hash_i(ref)`.
 
-### Обновление Меркла
+### Merkle update
 
-Ячейки обновления Меркла всегда имеют 2 ссылки и ведут себя как доказательство Меркла для обоих из них.
+Merkle update cells always have two references and behave like a Merkle proof for both.
 
-Уровень обновления Меркла `0 <= l <= 3` равен `max(Lvl(ref1) − 1, Lvl(ref2) − 1, 0)`. Они содержат ровно `8 + 256 + 256 + 16 + 16 = 552` бит.
+The level of a Merkle update cell `0 <= l <= 3` is determined by `max(Lvl(ref1) − 1, Lvl(ref2) − 1, 0)`. These cells contain exactly `8 + 256 + 256 + 16 + 16 = 552` bits.
 
-Первый байт всегда `04` - тип ячейки. Следующие 64 байта - `Hash_1(ref1)` и `Hash_2(ref2)` - называются старым хешем и новым хешем. Затем идут 4 байта с фактической глубиной удаленного старого поддерева и удаленного нового поддерева.
+The first byte is always `04`, indicating the cell type.
+The following 64 bytes represent `Hash_1(ref1)` and `Hash_2(ref2)`, the old and new hashes, respectively.
+Following that, 4 bytes represent the depth of the deleted old and new subtrees.
 
-## Простой пример проверки доказательства
+## Simple proof verifying example
 
-Предположим, что есть ячейка `c`:
+Let's assume there is a cell `c`:
 
 ```json
 24[000078] -> {
@@ -83,10 +90,10 @@ Hash_i = CellData[2 + (i * 32) : 2 + ((i + 1) * 32)]
 }
 ```
 
-Но мы знаем только ее хэш `44efd0fdfffa8f152339a0191de1e1c5901fdcfe13798af443640af99616b977`, и мы хотим доказать, что ячейка `a` `267[800DEB78CF30DC0C8612C3B3BE0086724D499B25CB2FBBB154C086C8B58417A2F040]` на самом деле является частью `c`, не получая при этом весь `c`.
-Поэтому мы просим доказывающего создать доказательство Меркла, заменив все ветви, которые нам не интересны, на ячейки обрезанных ветвей.
+We know only the cell's hash: `44efd0fdfffa8f152339a0191de1e1c5901fdcfe13798af443640af99616b977`. We want to prove that cell `a` (`267[800DEB78CF30DC0C8612C3B3BE0086724D499B25CB2FBBB154C086C8B58417A2F040]`) is actually part of `c` without receiving the entire `c`.
+To achieve this, we request the prover to generate a Merkle proof, replacing all branches that are not relevant to the proof with pruned branch cells.
 
-Первый потомок `c`, из которого нет способа добраться до `a`, это `ref1`:
+The first descendant of `c` from which there is no way to reach `a` is `ref1`:
 
 ```json
 32[0000000F] -> {
@@ -99,9 +106,11 @@ Hash_i = CellData[2 + (i * 32) : 2 + ((i + 1) * 32)]
 }
 ```
 
-Поэтому доказывающий вычисляет свой хэш (`ec7c1379618703592804d3a33f7e120cebe946fa78a6775f6ee2e28d80ddb7dc`), создает сокращенную ветвь `288[0101EC7C1379618703592804D3A33F7E120CEBE946FA78A6775F6EE2E28D80DDB7DC0002]` и заменяет `ref1` этой сокращенной ветвью.
+The prover computes the hash of `ref1` `[ec7c1379618703592804d3a33f7e120cebe946fa78a6775f6ee2e28d80ddb7dc]`, creates a pruned branch `288[0101EC7C1379618703592804D3A33F7E120CEBE946FA78A6775F6EE2E28D80DDB7DC0002]`, and replaces `ref1` with this pruned branch.
 
-Второй - `512[0000000...00000000064]`, поэтому проверяющий создает сокращенную ветвь, чтобы заменить и эту ячейку:
+The next cell is `512[0000000...00000000064]`.
+
+The prover creates a pruned branch to replace this cell as well:
 
 ```json
 24[000078] -> {
@@ -115,7 +124,7 @@ Hash_i = CellData[2 + (i * 32) : 2 + ((i + 1) * 32)]
 }
 ```
 
-Результат доказательства Меркла, который проверяющий отправляет верификатору (в данном примере нам), выглядит следующим образом:
+The resulting Merkle proof that the prover sends to the verifier (us, in this example) looks like this:
 
 ```json
 280[0344EFD0FDFFFA8F152339A0191DE1E1C5901FDCFE13798AF443640AF99616B9770003] -> {
@@ -131,12 +140,15 @@ Hash_i = CellData[2 + (i * 32) : 2 + ((i + 1) * 32)]
 }
 ```
 
-Когда мы (проверяющий) получаем ячейку Proof, мы убеждаемся, что ее данные содержат хэш `c`, а затем вычисляем `Hash_1` из единственной ссылки Proof: `44efd0fdfffa8f152339a0191de1e1c5901fdcfe13798af443640af99616b977`, и сравниваем его с хешем `c`.
+When we receive the proof cell, as the verifier, we first ensure that its data contains the `c` hash. We then compute `Hash_1` from the only reference in the proof: `44efd0fdfffa8f152339a0191de1e1c5901fdcfe13798af443640af99616b977`, and compare it to the hash of `c`.
 
-Теперь, когда мы проверили, что хеши совпадают, нам нужно углубиться в ячейку и убедиться, что там есть ячейка `a` (которая нас интересовала).
+Once we have verified that the hashes match, we traverse deeper into the cell structure to ensure that the target cell `a`, which we are interested in, is indeed present.
 
-Такие доказательства многократно снижают вычислительную нагрузку и объем данных, которые необходимо отправить или сохранить в верификаторе.
+Such proofs significantly reduce computational load and minimize the amount of data that the verifier must transmit or store.
 
-## См. также
+## See also
 
-- [Примеры проверки расширенных доказательств](/v3/documentation/data-formats/tlb/proofs)
+- [Advanced proofs verifying examples](/v3/documentation/data-formats/tlb/proofs)
+
+<Feedback />
+
