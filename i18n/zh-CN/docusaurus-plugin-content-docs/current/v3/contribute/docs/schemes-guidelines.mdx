@@ -1,74 +1,82 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ConceptImage from '@site/src/components/conceptImage';
 import ThemedImage from '@theme/ThemedImage';
 
-# 图形解释指南
+# Graphic Explanations Guidelines
 
-在文档中保持一致性至关重要，为此，已经制定了一个特定的标准，用于可视化智能合约中的流程。
+:::danger
+This page is outdated and will be deleted soon.
+See the [How to contribute](/v3/contribute/).
+:::
 
-## 图形解释符号
+Maintaining consistency in documentation is crucial, and to achieve this, a specific standard for visualizing processes in smart contracts has been developed.
 
-### 消息处理图
+## Graphic Explanation Notation
 
-为了描述消息处理，建议使用类似于智能合约图的图形表示，包括交易和消息的标签。
+### Message Processing Graph
 
-如果交易的顺序不重要，可以省略它们的标签。这简化了图表，使其更易于阅读和理解与消息和合约相关的细节。
+To depict message processing, it's advisable to utilize a graphical representation resembling a smart contract graph, complete with labels for transactions and messages.
 
-#### 注释基本图形
+If the order of transactions doesn't matter, you can omit their labels. This simplifies the diagram, making it easier to read and understand the details related to messages and contracts.
 
-| 图形                                                                                                         | 描述            |
-| ---------------------------------------------------------------------------------------------------------- | ------------- |
-| ![](/img/docs/scheme-templates/message-processing-graphs/circle_for_smart_contract.svg?raw=true)           | 圆形 - 智能合约实体   |
-| ![](/img/docs/scheme-templates/message-processing-graphs/rectangle_for_regular_message.svg?raw=true)       | 矩形 - 消息实体     |
-| ![](/img/docs/scheme-templates/message-processing-graphs/dashed_rectgl_for_optional_message.svg?raw=true)  | 虚线矩形 - 可选消息实体 |
-| ![](/img/docs/scheme-templates/message-processing-graphs/line_for_transaction.svg?raw=true)                | 交易（编号可选）      |
-| ![](/img/docs/scheme-templates/message-processing-graphs/person_figure_for_actor.svg?raw=true)             | 参与者           |
+#### Annotation Primitives
 
-- 避免使用大量不同和鲜艳的颜色。
-- 使用图形的修改，例如使用虚线边框。
-- 为了更好的理解，不同的交易可以用不同的线条样式（实线和虚线）显示。
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1.png?raw=true',
+    dark: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1_dark.png?raw=true',
+  }}
+/>
+<br></br>
 
-#### 消息处理示例
+- Avoid using big quantity different and bright colors.
+- Use the modification of figures, such as using a dashed border line.
+- For better comprehension, different transactions could be displayed with distinct line styles (solid and dashed).
+
+#### Message Processing Example
 
 <br></br>
 <ThemedImage
   alt=""
   sources={{
     light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
   }}
 />
 <br></br>
 
-可以直接从 Visio 学习参考内容 [message-processing.vsdx](/static/schemes-visio/message-processing.vsdx)。
+Learn references directly from Visio [message-processing.vsdx](/schemes-visio/message_processing.vsdx).
 
-### 格式和颜色
+### Formats and Colors
 
-#### 字体
+#### Fonts
 
-- 图表中所有文本使用 **Inter** 字体系列。
+- **Inter** fonts family  for all text within diagrams.
 
-#### 颜色 - 亮模式
+#### Colors - Light Mode
 
-- 铅笔手绘(默认主题)
+- Pencil Hand Drawn(default theme)
 
-#### 颜色 - 暗模式
+#### Colors - Dark Mode
 
-- 字体 `#e3e3e3`
-- 背景 `#232328`
-- 浅色高亮（箭头和方案边界） `#058dd2`
-- 深色高亮（箭头和方案边界） `#0088cc`
-- 内部背景（嵌套块） `#333337`
+- Font `#e3e3e3`
+- Background `#232328`
+- Light Highlight(arrows and scheme borders) `#058dd2`
+- Dark Highlight(arrows and scheme borders) `#0088cc`
+- InnerBackGround(for nested blocks) `#333337`
 
-#### 版本控制政策
+#### Version Control Policy
 
-- 以 SVG 格式设置文档中的图表，以确保在各种设备上的可读性。
-- 在项目的 Git 库的 "/static/visio" 目录下存储原始文件，以便将来更容易修改。
+- Set diagrams in the documentation by SVG format for schemes to ensure readability on various devices.
+- Store original files in the project's Git repository under the "/static/visio" directory, making them easier to modify in the future.
 
-### 时序图
+### Sequence Diagram
 
-在涉及 2-3 个actor之间的复杂和重复的通信方案时，建议使用时序图。对于消息，使用常见同步消息箭头的表示。
+In the case of complex and repetitive communication schemes between 2-3 actors, it is advisable to use a sequence diagram. For messages, use the notation of a common synchronous message arrow.
 
-#### 示例
+#### Example
 
 <br></br>
 <div class="text--center">
@@ -76,12 +84,14 @@ import ThemedImage from '@theme/ThemedImage';
   alt=""
   sources={{
     light: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_7_dark.png?raw=true',
   }}
 />
 </div>
 <br></br>
 
-### 方案参考
+### Scheme References
 
 - [message-processing.vsdx](/schemes-visio/message_processing.vsdx)
+
+<Feedback />
