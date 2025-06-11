@@ -1,78 +1,99 @@
-# Обновление TVM 2024.04
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# TVM upgrade Apr 2024
 
-## Добавлены новые инструкции по расчету дешевых комиссионных сборов
+## Introduction of new instructions for low fees calculation
 
 :::tip
-Это обновление активно в основной сети с 16 марта (см. https://t.me/tonstatus/101). Предварительный просмотр этого обновления для blueprint доступен в пакетах `@ton/sandbox@0.16.0-tvmbeta.3`, `@ton-community/func-js@0.6.3-tvmbeta.3` и `@ton-community/func-js-bin@0.4.5-tvmbeta.3`.
+This upgrade is active on the Mainnet since Mar 16, 2024. See the details [here](https://t.me/tonstatus/101). A preview of the update for blueprints is available in the following packages: `@ton/sandbox@0.16.0-tvmbeta.3`, `@ton-community/func-js@0.6.3-tvmbeta.3`, and `@ton-community/func-js-bin@0.4.5-tvmbeta.3`.
 :::
 
-Это обновление активируется Config8 `version` >= 6.
+This update is enabled with Config8 `version >= 6`.
 
-## c7
+## `c7`
 
-**c7** кортеж расширен с 14 до 16 элементов:
+The `c7` tuple has been extended from 14 to 16 elements as follows:
 
-- **14**: кортеж, содержащий некоторые параметры конфигурации в виде срезов ячеек. Если параметр отсутствует в конфигурации, значение равно null.
-  - **0**: `StoragePrices` из `ConfigParam 18`. Не весь словарь, а только одна запись StoragePrices, которая соответствует текущему времени.
-  - **1**: `ConfigParam 19` (глобальный идентификатор).
-  - **2**: `ConfigParam 20` (цены на газ mc).
-  - **3**: `ConfigParam 21` (цены на газ).
-  - **4**: `ConfigParam 24` (стоимость пересылки mc).
-  - **5**: `ConfigParam 25` (стоимость пересылки).
-  - **6**: `ConfigParam 43` (ограничения по размеру).
-- **15**: "[причитающийся платеж](https://github.com/ton-blockchain/ton/blob/8a9ff339927b22b72819c5125428b70c406da631/crypto/block/block.tlb#L237)" - текущий долг за плату за хранение (nanoton). Код операции Asm: `DUEPAYMENT`.
-- **16**: "использование предварительно скомпилированного газа" - использование газа для текущего контракта, если он предварительно скомпилирован (см. ConfigParam 45), в противном случае null. Код операции Asm: `GETPRECOMPILEDGAS`.
+- **14**: a tuple containing various config parameters as cell slices. If a parameter is absent from the config, its value is null.
+  - **0**: `StoragePrices` from `ConfigParam 18`. Not the entire dictionary but the specific `StoragePrices` entry corresponding to the current time.
+  - **1**: `ConfigParam 19` - global ID.
+  - **2**: `ConfigParam 20` - MasterChain gas prices.
+  - **3**: `ConfigParam 21` - gas prices.
+  - **4**: `ConfigParam 24` - MasterChain forward fees.
+  - **5**: `ConfigParam 25` - forward fees.
+  - **6**: `ConfigParam 43` - size limits.
+- **15**: "[Due payment](https://github.com/ton-blockchain/ton/blob/8a9ff339927b22b72819c5125428b70c406da631/crypto/block/block.tlb#L237)" - current debt for the storage fee in nanotons. `asm` opcode: `DUEPAYMENT`.
+- **16**: "Precompiled gas usage" - gas usage for the current contract if precompiled as defined in ConfigParam 45; null otherwise.
+  `asm` opcode: `GETPRECOMPILEDGAS`.
 
-Идея этого расширения c7 распакованными параметрами конфигурации заключается в следующем: эти данные будут извлечены из глобальной конфигурации исполнителем транзакции, поэтому они уже представлены в памяти исполнителя. Однако (до расширения) смарт-контракту необходимо получать все эти параметры по одному из словаря конфигурации, что является дорогостоящим и потенциально непредсказуемым по газу (поскольку стоимость зависит от количества параметров).
+The extension of `c7` with unpacked config parameters aims to improve efficiency. Now, this data is retrieved from the global configuration by the transaction executor, making it readily available in the executor's memory. Previously, the smart contract had to fetch each parameter one by one from the configuration dictionary. This method was costly and gas-inefficient, as the cost depended on the number of parameters.
 
-Необходима оплата по факту, чтобы контракт мог правильно оценить плату за хранение: когда сообщение отправляется в режиме по умолчанию (возвращаемом) в смарт-контракт, плата за хранение вычитается (или добавляется в поле due_payment, содержащее долг, связанный с платой за хранение), предыдущее значение сообщения добавляется к балансу. Таким образом, если контракт после обработки сообщения отправляет излишки газа обратно с режимом = 64, это означает, что если баланс контракта достигнет 0, при следующих транзакциях плата за хранение начнет накапливаться в due_payment (а не вычитаться из входящих сообщений). Таким образом, долг будет молча накапливаться до тех пор, пока аккаунт не будет заморожен. `DUEPAYMENT` позволяет разработчику явно учитывать/удерживать комиссию за хранение и тем самым предотвращать любые проблемы.
+**Due payment field**
+
+The due payment field is crucial for accurately managing storage fees. Here's how it works:
+
+- When a message is sent in the default (bounceable) mode to a smart contract, storage fees are either:
+  - **Deducted**, or
+  - **Added** to the `due_payment` field, which stores the storage fee-related debt.
+- These adjustments happen **before** the message value is added to the contract's balance.
+- If the contract processes the message and sends back excess gas with `mode=64`, the following occurs:
+  - If the contract's balance reaches 0, storage fees will accumulate in the `due_payment` field on subsequent transactions instead of being deducted from incoming messages.
+  - This results in the debt silently accumulating until the account is frozen.
+
+The `DUEPAYMENT` opcode allows developers to explicitly account for or withhold storage fees, preventing potential issues.
 
 ## Новые коды операций
 
-### Коды операций для работы с новыми значениями c7
+### Opcodes for new `c7` values
 
-26 газа для каждого, за исключением `SENDMSG` (из-за операций с ячейками).
+Each opcode consumes **26 gas**, except for `SENDMSG`, due to cell operations.
 
-| <br/>Синтаксис Fift   | <br/>Стек         | <br/>Описание                                                                                                                                                                         |
-| :-------------------- | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `UNPACKEDCONFIGTUPLE` | *`- c`*           | Извлекает кортеж срезов конфигураций из c7                                                                                                                                            |
-| `DUEPAYMENT`          | *`- i`*           | Извлекает значение причитающегося платежа из c7                                                                                                                                       |
-| `GLOBALID`            | *`- i`*           | Теперь извлекает `ConfigParam 19` из from c7, формируя словарь конфигурации.                                                                                          |
-| `SENDMSG`             | Режим *`msg - i`* | Теперь извлекает `ConfigParam 24/25` (цены сообщений) и `ConfigParam 43` (`max_msg_cells`) из c7, а не из словаря конфигурации. |
+| Fift syntax           | Stack             | Description                                                                                                                                                                                   |
+| :-------------------- | :---------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `UNPACKEDCONFIGTUPLE` | _`- c`_           | Retrieves the tuple of config slices from `c7`.                                                                                                                               |
+| `DUEPAYMENT`          | _`- i`_           | Retrieves the value of due payment from `c7`.                                                                                                                                 |
+| `GLOBALID`            | _`- i`_           | Retrieves `ConfigParam 19` from `c7` instead of the configuration dictionary.                                                                                                 |
+| `SENDMSG`             | Режим _`msg - i`_ | Retrieves `ConfigParam 24/25` (message prices) and `ConfigParam 43` (`max_msg_cells`) from `c7` rather than from the config dictionary. |
 
 ### Коды операций для обработки параметров конфигурации
 
-Введение кортежа срезов конфигураций в исполнителе транзакций TON сделало анализ параметров комиссии более экономичным. Однако, поскольку в будущем могут быть введены новые конструкторы параметров конфигурации, может потребоваться обновление смарт-контрактов для интерпретации этих новых параметров. Для решения этой проблемы были введены специальные коды операций для расчета платы. Эти коды операций считывают параметры из c7 и рассчитывают плату таким же образом, как исполнитель. С введением новых конструкторов параметров эти коды операций будут обновлены для учета изменений. Это позволяет смарт-контрактам полагаться на эти инструкции для расчета платы без необходимости интерпретировать все типы конструкторов.
+Introducing the configuration tuple in the TON transaction executor makes parsing fee parameters more cost-effective. However, smart contracts may require updates to interpret new configuration parameter constructors as they are introduced.
 
-26 газа для каждого.
+To address this, special opcodes for fee calculation are introduced. These opcodes:
 
-| <br/>Синтаксис Fift   | <br/>Стек                            | <br/>Описание                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| :-------------------- | :----------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GETGASFEE`           | *`gas_used is_mc - price`*           | Рассчитывает стоимость вычислений в nanoton для транзакции, которая потребляет *`gas_used`* газа.                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| `GETSTORAGEFEE`       | *`cells bits seconds is_mc - price`* | Рассчитывает плату за хранение в nanoton для контракта на основе текущих цен на хранение. `cells` и `bits` — это размер [`AccountState`](https://github.com/ton-blockchain/ton/blob/8a9ff339927b22b72819c5125428b70c406da631/crypto/block/block.tlb#L247) (с дедупликацией, включая корневую ячейку).                                                                                                                                                                                                                            |
-| `GETFORWARDFEE`       | *`cells bits is_mc - price`*         | Рассчитывает стоимость пересылки в nanoton для исходящего сообщения. *`is_mc`* равно true, если источник или получатель находятся в мастерчейне, false, если оба находятся в бейсчейне. Обратите внимание, что ячейки и биты в сообщении следует подсчитывать с учетом дедупликации и правил *root-is-not-counted*.                                                                                                                                                                                                                 |
-| `GETPRECOMPILEDGAS`   | *`- null`*                           | зарезервировано, в настоящее время возвращает `null`. Возвращает стоимость выполнения контракта в единицах газа, если этот контракт *предварительно скомпилирован*                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `GETORIGINALFWDFEE`   | *`fwd_fee is_mc - orig_fwd_fee`*     | вычисляет `fwd_fee * 2^16 / first_frac`. Может использоваться для получения исходного `fwd_fee` сообщения (в качестве замены для жестко закодированных значений, таких как [это](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L224C17-L224C46)) из `fwd_fee`, проанализированного из входящего сообщения. *`is_mc`* имеет значение true, если отправитель или получатель находятся в мастерчейне, и false, если оба находятся в бейсчейне. |
-| `GETGASFEESIMPLE`     | *`gas_used is_mc - price`*           | Рассчитывает дополнительные вычислительные затраты в nanoton для транзакции, которая потребляет дополнительные *`gas_used`*. Другими словами, то же самое, что `GETFORWARDFEESIMPLE`, но без фиксированной цены (просто `(gas_used * price) / 2^16`).                                                                                                                                                                                                                                                                            |
-| `GETFORWARDFEESIMPLE` | *`cells bits is_mc - price`*         | Вычисляет дополнительную стоимость пересылки в nanoton для сообщения, содержащего дополнительные *`cells`* и *`bits`*. Другими словами, то же самое, что `GETFORWARDFEE`, но без фиксированной цены (просто `(bits*bit_price + cells*cell_price) / 2^16`).                                                                                                                                                                                                                                                                       |
+- Retrieve parameters from `c7`.
+- Calculate fees in the same way as the executor.
 
-`gas_used`, `cells`, `bits`, `time_delta` — целые числа в диапазоне `0..2^63-1`.
+As new parameter constructors are introduced, these opcodes are updated accordingly. This ensures that smart contracts can rely on these instructions for fee calculation without needing to interpret each new constructor.
 
-### Операции на уровне ячеек
+Each opcode consumes 26 gas.
 
-Операции для работы с доказательствами Меркла, где ячейки могут иметь ненулевой уровень и несколько хешей. 26 газа для каждого.
+| Fift syntax           | Stack                                | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| :-------------------- | :----------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GETGASFEE`           | _`gas_used is_mc - price`_           | Calculates the computation cost in nanotons for a transaction that consumes `gas_used` gas.                                                                                                                                                                                                                                                                                                                                                                                                |
+| `GETSTORAGEFEE`       | _`cells bits seconds is_mc - price`_ | Calculates the storage fees in nanotons for the contract based on current storage prices.`cells` and `bits` represent the size of the [`AccountState`](https://github.com/ton-blockchain/ton/blob/8a9ff339927b22b72819c5125428b70c406da631/crypto/block/block.tlb#L247) with deduplication, including the root cell.                                                                                                                                                       |
+| `GETFORWARDFEE`       | _`cells bits is_mc - price`_         | Calculates forward fees in nanotons for an outgoing message.`is_mc` is true if the source or the destination is in the MasterChain and false if both are in the basechain. **Note:** `cells` and `bits` in the message should be counted with deduplication and the _root-not-counted_ rules.                                                                                                                                              |
+| `GETPRECOMPILEDGAS`   | _`- null`_                           | Reserved; currently returns null. It returns the cost of contract execution in gas units if the contract is _precompiled_.                                                                                                                                                                                                                                                                                                                                                 |
+| `GETORIGINALFWDFEE`   | _`fwd_fee is_mc - orig_fwd_fee`_     | Calculates `fwd_fee * 2^16 / first_frac`. It can be used to get the original `fwd_fee` of the message as a replacement for hardcoded values like [this](https://github.com/ton-blockchain/token-contract/blob/21e7844fa6dbed34e0f4c70eb5f0824409640a30/ft/jetton-wallet.fc#L224C17-L224C46) from the `fwd_fee` parsed from an incoming message. `is_mc` is true if the source or destination is in the MasterChain and false if both are in the basechain. |
+| `GETGASFEESIMPLE`     | _`gas_used is_mc - price`_           | Calculates the additional computation cost in nanotons for a transaction that consumes additional `gas_used` gas. This is the same as `GETGASFEE`, but without the flat price calculated as `(gas_used * price) / 2^16.`                                                                                                                                                                                                                                                                   |
+| `GETFORWARDFEESIMPLE` | _`cells bits is_mc - price`_         | Calculates the additional forward cost in nanotons for a message containing additional `cells` and `bits`. This is the same as `GETFORWARDFEE`, but without the lump price calculated as `(bits * bit_price + cells * cell_price) / 2^16)`.                                                                                                                                                                                                                                |
 
-| <br/>Синтаксис Fift | <br/>Стек             | <br/>Описание                    |
-| :------------------ | :-------------------- | :------------------------------- |
-| `CLEVEL`            | *`cell - level`*      | Возвращает уровень ячейки        |
-| `CLEVELMASK`        | *`cell - level_mask`* | Возвращает маску уровня ячейки   |
-| `i CHASHI`          | *`cell - hash`*       | Возвращает `i`-й хэш ячейки      |
-| `i CDEPTHI`         | *`cell - depth`*      | Возвращает `i`-ую глубину ячейки |
-| `CHASHIX`           | *`cell i - depth`*    | Возвращает `i`-й хэш ячейки      |
-| `CDEPTHIX`          | *`cell i - depth`*    | Возвращает `i`-ую глубину ячейки |
+**Note:** `gas_used`, `cells`, `bits`, and `time_delta` are integers in the range `0..2^63-1`.
 
-`i` находится в диапазоне `0..3`.
+### Cell-level operations
+
+These operations work with Merkle proofs, where cells can have a non-zero level and multiple hashes. Each operation consumes 26 gas.
+
+| Fift syntax  | Stack                 | Description                                           |
+| :----------- | :-------------------- | :---------------------------------------------------- |
+| `CLEVEL`     | _`cell - level`_      | Returns the level of the cell.        |
+| `CLEVELMASK` | _`cell - level_mask`_ | Returns the level mask of the cell.   |
+| `i CHASHI`   | _`cell - hash`_       | Returns the `i`-th hash of the cell.  |
+| `i CDEPTHI`  | _`cell - depth`_      | Returns the `i`-th depth of the cell. |
+| `CHASHIX`    | _`cell i - depth`_    | Returns the `i`-th hash of the cell.  |
+| `CDEPTHIX`   | _`cell i - depth`_    | Returns the `i`-th depth of the cell. |
+
+The value of `i` is in the range `0..3`.
+
+<Feedback />
+
