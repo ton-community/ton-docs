@@ -1,0 +1,139 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Button from '@site/src/components/button'
+
+# Overview of TVM
+
+The TON Virtual Machine (TVM) executes all TON smart contracts. TVM operates on the **stack principle**, which ensures efficiency and ease of implementation.
+
+This document provides a high-level overview of how TVM processes transactions.
+
+:::tip
+
+- **TVM source**: [TVM C++ implementation](https://github.com/ton-blockchain/ton/tree/master/crypto/vm)
+- [TVM retracer](https://retracer.ton.org/)
+  :::
+
+## TON course: TVM
+
+:::tip
+Before starting the course, ensure you have a solid understanding of blockchain basics. If you need to fill knowledge gaps, consider taking the [Blockchain basics with TON](https://stepik.org/course/201294/promo) course ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)).
+:::
+
+The [TON blockchain course](https://stepik.org/course/176754/) is a comprehensive guide to TON blockchain development. Module 2 covers **TVM**, transactions, scalability, and business cases in detail.
+
+<Button href="https://stepik.org/course/176754/promo"
+        colorType={'primary'} sizeType={'sm'}>
+
+Explore TON blockchain course
+
+</Button>
+
+<Button href="https://stepik.org/course/201638/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+چینی
+
+</Button>
+
+<Button href="https://stepik.org/course/201855/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+روسی
+
+</Button>
+
+## تراکنش‌ها و مراحل
+
+When an event occurs on an account in the TON blockchain, it triggers a **transaction**. The most common event is receiving a message, but other events like `tick-tock`, `merge`, and `split` can also initiate transactions.
+
+Each transaction consists of up to five phases:
+
+1. **Storage phase**: calculates storage fees for the contract based on the space it occupies in the blockchain state. Learn more in [storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee).
+2. **Credit phase**: updates the contract's balance by accounting for incoming message values and storage fees.
+3. **Compute phase**: executes the contract code on TVM. The result includes `exit_code`, `actions`, `gas_details`, `new_storage`, and other data.
+4. **Action phase**: processes actions from the compute phase if it succeeds. Actions may include sending messages, updating contract code, or modifying libraries. If an action fails, for example, due to lack of funds, the transaction may revert or skip the action, depending on its mode (`send-or-revert` or `try-send-if-no-ignore`).
+5. **Bounce phase**: if the compute phase fails (`exit_code >= 2`), this phase generates a bounce message for transactions initiated by an incoming message.
+
+## مرحله محاسبه
+
+The compute phase involves executing the contract code on TVM.
+
+:::tip
+
+- **TVM 4.3.5**: [TON Blockchain paper](https://docs.ton.org/assets/files/tblkch-6aaf006b94ee2843a982ebf21d7c1247.pdf)
+  :::
+
+### When the compute phase is skipped
+
+The compute phase may be skipped under certain conditions, such as when the account is missing, uninitialized, or frozen, or when the incoming message lacks code or data fields. These scenarios are represented by specific constructors:
+
+- `cskip_no_state$00`: the account or message lacks a valid state (for example, [missing code or data](https://testnet.tonviewer.com/transaction/7e78394d082882375a5d21affa6397dec60fc5a3ecbea87f401b0e460fb5c80c)).
+- `cskip_bad_state$01`: the message contains an invalid state (for example, incorrect hash) for a frozen or uninitialized account.
+- `cskip_no_gas$10`: the account lacks enough funds to cover gas costs (less than ~0.00004 TON as of [August 2024](https://testnet.tonviewer.com/transaction/9789306d7b29318c90477aa3df6599ee4a897031162ad41a24decb87db65402b)).
+
+### وضعیت TVM
+
+At any point, the TVM state is defined by six properties:
+
+- **Stack**: a last-in-first-out data structure.
+- **Control registers**: up to 16 variables that can be directly accessed during execution.
+- **Current continuation**: describes the sequence of instructions being executed.
+- **Current codepage**: specifies the TVM version in use.
+- **Gas limits**: includes the current gas limit (`g<sub>l</sub>`), maximum gas limit (`g<sub>m</sub>`), remaining gas (`g<sub>r</sub>`), and gas credit (`g<sub>c</sub>`).
+- **Library context**: a hashmap of libraries available for TVM.
+
+### TVM as a stack machine
+
+TVM operates as a stack machine, supporting seven variable types:
+
+- **Non-cell types**:
+  - Integer: signed 257-bit integers.
+  - Tuple: ordered collections of up to 255 elements.
+  - Null.
+- **Cell types**:
+  - Cell: basic data structure for storing information.
+  - Slice: allows reading data from a cell.
+  - Builder: enables creating new cells.
+  - Continuation: treats a cell as a source of TVM instructions.
+
+### Control registers
+
+- `c0`: stores the next or return continuation, similar to a return address.
+- `c1`: stores the alternative continuation.
+- `c2`: contains the exception handler. Continuation.
+- `c3`: holds the current dictionary like a hashmap of functions codes. Continuation.
+- `c4`: stores the persistent data (contract's `data` section). Cell.
+- `c5`: contains output actions. Cell.
+- `c7`: stores temporary data. Tuple.
+
+### Initializing TVM
+
+TVM initializes during the compute phase and executes commands/opcodes from the **current continuation** until no more commands remain. For a detailed explanation, see [TVM initialization](/v3/documentation/tvm/tvm-initialization).
+
+## دستورات TVM
+
+For a complete list of TVM instructions, visit [TVM instructions](/v3/documentation/tvm/instructions).
+
+### Results of TVM execution
+
+Besides `exit_code` and gas consumption, TVM outputs:
+
+- `c4`: the new `data` cell for the contract (if execution succeeds).
+- `c5`: a cell containing output actions.
+
+Other register values are discarded. Note:
+
+- The maximum cell depth during execution is `<1024`, but `c4` and `c5` must not exceed a depth of `512`.
+- A contract can't create more than 255 output actions.
+
+:::tip
+To send more than 255 messages, a contract can send a message to itself with a request to process the remaining messages. See an example in the [highload wallet contract](https://github.com/ton-blockchain/highload-wallet-contract-v3/blob/main/contracts/highload-wallet-v3.func#L50).
+:::
+
+## See also
+
+- [TVM instructions](/v3/documentation/tvm/instructions)
+- [TON TVM concepts](https://ton.org/tvm.pdf) (may include outdated information)
+
+<Feedback />
