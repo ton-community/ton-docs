@@ -1,23 +1,31 @@
-# Шардинг в блокчейне TON
+import Feedback from '@site/src/components/Feedback';
 
-[//]: # "TODO, это из gpt"
+# Sharding in TON
 
-В блокчейне TON используются усовершенствованные механизмы шардинга для повышения масштабируемости и производительности, позволяющие эффективно обрабатывать огромное количество транзакций.
-Основная концепция заключается в разделении блокчейна на более мелкие, независимые части, называемые **шардами**. Эти шарды могут обрабатывать транзакции параллельно, обеспечивая высокую пропускную способность даже по мере роста сети.
+Sharding in TON refers to dividing the blockchain into smaller, manageable pieces, or shards, for scalability. An independent set of validators operates and maintains a shard as a smaller piece of the blockchain.
 
-В TON шардинг очень динамичен. В отличие от других блокчейнов, которые имеют фиксированное количество шардов, TON может создавать новые шарды по требованию.
-При увеличении нагрузки на транзакции шарды разделяются, а при уменьшении нагрузки - объединяются.
-Такая гибкость гарантирует, что система сможет адаптироваться к меняющейся рабочей нагрузке, сохраняя при этом эффективность.
+Validators in separate shards can handle transactions in parallel, ensuring high throughput even as the network grows. This approach unlocks the execution of a massive number of transactions.
 
-**Мастерчейн** играет важнейшую роль, поддерживая конфигурацию сети и конечное состояние всех **воркчейнов** и **шардчейнов**.
-В то время как мастерчейн отвечает за общую координацию, **воркчейны** работают по своим особым правилам и могут быть разделены на шардчейны.
-В настоящее время на TON работает только один воркчейн (**Basechain**).
+In TON, sharding is highly dynamic. Unlike other blockchains with a fixed number of shards, TON can create new shards on demand.
+Shards split as the transaction load increases, and as the load decreases, they merge.
+This flexibility ensures the system can adapt to varying workloads while maintaining efficiency.
 
-В основе эффективности TON лежит **Парадигма Бесконечного Шардинга**, которая рассматривает каждый счет как часть собственного "чейна счетов". Затем эти чейны счетов объединяются в блоки шардчейна, что способствует эффективной обработке транзакций.
+![](/img/docs/blockchain-fundamentals/scheme.png)
 
-Помимо динамического создания шардов, TON использует функцию **Split Merge**, которая позволяет сети эффективно реагировать на изменение нагрузки, зависящее от количества транзакций. Подобная система улучшает масштабируемость и взаимодействие внутри сети блокчейна. Она демонстрирует уникальность подхода TON к решению общей проблемы блокчейнов, делая акцент на эффективность и глобальную согласованность.
+The **MasterChain** is crucial in maintaining the network configuration and the final state of all **WorkChains** and **ShardChains**.
+While the MasterChain is responsible for overall coordination, WorkChains operate under their specific rules, each of which can be split further into SharChains.
+Only one WorkChain - the **BaseChain**, currently operates on TON.
 
-## См. также
+At the heart of TON's efficiency is the [Infinity sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm/), which treats each account as part of its own AccountChain.
+These AccountChains are then aggregated into ShardChain blocks, facilitating efficient transaction processing.
 
-- [Шарды](/v3/documentation/smart-contracts/shards/shards-intro)
-- [# Парадигма Бесконечного Шардинга](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm)
+In addition to dynamically creating shards, TON uses **split merge** functionality, which allows the network to efficiently respond to changing transaction loads. This system enhances scalability and interaction within the blockchain network, exemplifying TON's approach to resolving typical blockchain challenges with a focus on efficiency and global consistency.
+
+## See also
+
+- [Blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/)
+- [Shards dive in](/v3/documentation/smart-contracts/shards/shards-intro/)
+- [Infinity sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm/)
+
+<Feedback />
+
