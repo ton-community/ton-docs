@@ -1,56 +1,58 @@
-# 如何使用提名池？
+import Feedback from '@site/src/components/Feedback';
+
+# How to use the nominator pool
 
 :::tip
-建议在阅读本教程之前先熟悉一下 [提名池](/v3/documentation/smart-contracts/contracts-specs/nominator-pool)。
+Before reading this tutorial, you should familiarize yourself with [nominator pool specification](/v3/documentation/smart-contracts/contracts-specs/nominator-pool).
 :::
 
-## 在提名池模式下运行验证器
+## Running the validator in nominator pool mode {#validator-pool-mode}
 
-1. 为验证器设置硬件：需要 8 个 vCPU、128GB 内存、1TB SSD、固定 IP 地址和 1Gb/s 网速。
+1. Set up the hardware for the validator - you will need 8 vCPUs, 128GB memory, 1TB SSD, a fixed IP address, and 1Gb/s internet speed.
 
-   为了保持网络的稳定性，建议将验证器节点分布在全球不同的地理位置，而不是集中在一个数据中心。您可以使用 [this site](https://status.toncenter.com/) 来评估不同地点的负载情况。地图显示，欧洲的数据中心利用率很高，尤其是芬兰、德国和巴黎。因此，不建议使用 Hetzner 和 OVH 等提供商。
+   To maintain network stability, distribute validator nodes across different geographical locations worldwide rather than concentrating them in a single data center. Use [this site](https://status.toncenter.com/) to assess the load of various locations. The map indicates high data center utilization in Europe, especially in Finland, Germany, and Paris. Therefore, avoid using providers such as Hetzner and OVH.
 
-   > 确保您的硬件符合或超过上述规格。在硬件不足的情况下运行验证器会对网络造成负面影响，并可能导致处罚。
+   > Ensure your hardware meets or exceeds the specifications above. Running the validator on insufficient hardware negatively impacts the network and could result in penalties.
    >
-   > 请注意，自 2021 年 5 月起，Hetzner 已禁止在其服务器上挖矿，该禁令包括 PoW 和 PoS 算法。即使安装普通节点也可能被视为违反其服务条款。
+   > Note that as of May 2021, Hetzner has prohibited mining on its servers. This ban includes both PoW and PoS algorithms. Even installing a regular node may violate their terms of service.
    >
-   > **推荐的提供商包括：** [Amazon](https://aws.amazon.com/), [DigitalOcean](https://www.digitalocean.com/), [Linode](https://www.linode.com/), [Alibaba Cloud](https://alibabacloud.com/), [Latitude](https://www.latitude.sh/).
+   > **Recommended providers include:** [Amazon](https://aws.amazon.com/), [DigitalOcean](https://www.digitalocean.com/), [Linode](https://www.linode.com/), [Alibaba Cloud](https://alibabacloud.com/), [Latitude](https://www.latitude.sh/).
 
-2. 按照指南 [此处](/v3/guidelines/nodes/running-nodes/full-node#install-the-mytonctrl) 所述，安装并同步**mytonctrl**。
+2. Install and synchronize **mytonctrl** as described in the guide [here](/v3/guidelines/nodes/running-nodes/full-node#install-the-mytonctrl).
 
-   您还可以参考此 [Video Instruction](/v3/guidelines/nodes/running-nodes/full-node#run-a-node-video)，以获得更多帮助。
+   For additional help, refer to this [video instruction](/v3/guidelines/nodes/running-nodes/full-node#run-a-node-video).
 
-3. 向 "wl "列表中显示的验证器钱包地址转账 1  TON 。
+3. Transfer 1 TON to the validator wallet address in the `wl` list.
 
-4. 使用 `aw` 命令激活验证器钱包。
+4. Use the `aw` command to activate your validator wallet.
 
-5. 激活池模式：
+5. Activate pool mode:
 
    ```bash
    enable_mode nominator-pool
    set stake null
    ```
 
-6. 创建两个池（用于偶数和奇数验证轮）：
+6. Create two pools (for even and odd validation rounds):
 
    ```bash
    new_pool p1 0 1 1000 300000
    new_pool p2 0 1 1001 300000
    ```
 
-   其中：
+   Where:
 
-   - `p1` 为池名称；
-   - `0` % 是验证器的奖励份额（例如，用 40 表示 40%）；
-   - `1` 是提名池中提名人的最大数量（应 \<= 40）；
-   - `1000`  TON 是最小验证器质押（应 >= 1K  TON ）；
-   - `300000`  TON 是最低提名人质押（应 >= 10K  TON ）；
+   - `p1` is the pool name;
+   - `0` % is the validator's reward share (e.g., use 40 for 40%);
+   - `1` is the maximum number of nominators in the pool (should be \<= 40);
+   - `1000` TON is the minimum validator stake (should be >= 1K TON);
+   - `300000` TON is the minimum nominator stake (should be >= 10K TON);
 
-   > (!) 池配置不一定要完全相同，您可以在一个池的最低质押额上加 1，使其有所不同。
+   > (!) Pool configurations do not have to be identical. You can add 1 to the minimum stake of one pool to make them different.
    >
-   > (!) 使用 https://tonmon.xyz/ 确定当前的最小验证器质押。
+   > (!) Use https://tonmon.xyz/ to determine the current minimum validator stake.
 
-7. 键入 `pools_list` 显示池地址：
+7. Type `pools_list` to display pool addresses:
 
    ```bash
    pools_list
@@ -59,7 +61,7 @@
    p2    empty   0        0f9qtmnzs2-PumMisKDmv6KNjNfOMDQG70mQdp-BcAhnV5jL
    ```
 
-8. 向每个池发送 1  TON 并激活池：
+8. Send 1 TON to each pool and activate the pools:
 
    ```bash
    mg validator_wallet_001 0f98YhXA9wnr0d5XRXT-I2yH54nyQzn0tuAYC4FunT780qIT 1
@@ -68,7 +70,7 @@
    activate_pool p2
    ```
 
-9. 键入 `pools_list` 显示池：
+9. Type `pools_list` to display pools:
 
    ```bash
    pools_list
@@ -77,47 +79,63 @@
    p2    active  0.731199806  kf9qtmnzs2-PumMisKDmv6KNjNfOMDQG70mQdp-BcAhnV8UO
    ```
 
-10. 通过链接 "https://tonscan.org/nominator/{address_of_pool}" 打开每个池，并验证池配置。
+10. Open each pool via the link "https://tonscan.org/nominator/{address_of_pool}" and verify pool configurations.
 
-11. 继续将验证器存入每个池：
+11. Proceed with the validator deposit to each pool:
 
     ```bash
     deposit_to_pool validator_wallet_001 <address_of_pool_1> 1005
     deposit_to_pool validator_wallet_001 <address_of_pool_2> 1005
     ```
 
-   在这些命令中，`1005` TON 是存款金额。请注意，资金池在处理存款时将扣除 1  TON 。
+In these commands, `1005` TON is the deposit amount. The pool will deduct 1 TON to process the deposit.
 
-12. 继续向每个提名池交存提名人押金：
+12. Proceed with the nominator deposit to each pool:
 
-    访问池链接（来自**步骤 9**）并点击**添加质押**。
-    您也可以使用 **mytonctrl**，使用以下命令存款：
+    Visit the pool link (from **Step 9**) and click **ADD STAKE**.
+    You can also make a deposit using **mytonctrl**, using the following commands:
 
     ```bash
     mg nominator_wallet_001 <address_of_pool_1> 300001 -C d
     mg nominator_wallet_001 <address_of_pool_2> 300001 -C d
     ```
 
-> (提名人钱包必须在基链（工作链 0）中初始化。）
+> (!) The nominator wallet must be initialized in the basechain (workchain 0).
 >
-> (!) 请注意，验证者钱包和提名者钱包必须分开存储！验证者钱包应与验证者节点一起存储在服务器上，以确保处理所有系统交易。同时，提名者钱包应存储在您的冷加密货币钱包中。
+> (!) Remember that the validator and nominator wallets must be stored separately! Store the validator wallet on the server with the validator node to ensure the processing of all system transactions. Meanwhile, store the nominator wallet in your cold cryptocurrency wallet.
 >
-> 要提取提名人存款，请向资金池地址发送带注释 `w` 的交易（附加 1  TON 以处理交易）。您也可以使用 **mytonctrl** 执行此操作。
+> To withdraw a nominator deposit, send a transaction with the comment `w` to the pool address (attach 1 TON to process the transaction). You can also perform this action using **mytonctrl**.
 
-13. 邀请提名者存入您的池。参与验证将自动开始。
+13. Invite nominators to deposit into your pools. The participation in validation will commence automatically.
 
-    > (!) 确保您的验证器钱包中至少有 200  TON /月的操作费。
+> (!) Ensure you have at least 200 TON/month in your validator wallet for operation fees.
+>
+> In the TON blockchain, the validator cycle is approximately 18 hours, and there are roughly 40.5 validation rounds per month (assuming a 30-day month).
+>
+> Here's the breakdown of costs based on participation:
+>
+> - **Participating in only odd or even cycles (half of the rounds):**
+>
+>   - Rounds per month: ~20.25
+>   - Cost per round: ~5 Toncoins
+>   - `total cost = 20.25 * 5 -> ~101.25 Toncoins`
+>
+> - **Participating in both odd and even cycles (all rounds):**
+>   - Rounds per month: ~40.5
+>   - Cost per round : ~ 5 Toncoins
+>   - `total cost = 40.5 * 5 -> ~202.50 Toncoins`
 
-## 池配置
+## Pool configuration
 
-如果你打算借给自己，请使用 `new_pool p1 0 1 1000 300000`（最多 1 个提名人，0% 验证人份额）。
+If you intend to lend to yourself, use `new_pool p1 0 1 1000 300000` (maximum of 1 nominator, 0% validator share).
 
-如果要为众多提名者创建一个奖池，可以使用类似下面的方法：`new_pool p1 40 40 10000 10000`（最多 40 个提名者，40% 验证者份额，最小参与者质押为 10K TON）。
+If you're creating a pool for numerous nominators, you might use something like this: `new_pool p1 40 40 10000 10000` (maximum of 40 nominators, 40% validator share, minimum participant stakes of 10K TON).
 
-## 将常规校验器过渡到提名器池模式
+## Transitioning a regular validator to nominator pool mode
 
-1. 输入 `set stake 0`，停止参与选举。
+1. Input `set stake 0` to discontinue election participation.
 
-2. 等待选举人归还你们的质押。
+2. Await the return of both your stakes from the elector.
 
-3. 从 **第 4 步** 开始，继续执行 "在提名池模式下运行验证器" 下的步骤。
+3. Proceed with the steps under [Running the validator in nominator pool mode](#validator-pool-mode) from the **4th step** onwards.
+   <Feedback />
