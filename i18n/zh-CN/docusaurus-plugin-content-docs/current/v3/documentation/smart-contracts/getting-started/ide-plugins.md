@@ -1,31 +1,80 @@
-# IDE 插件
+import Feedback from '@site/src/components/Feedback';
 
-## IntelliJ IDEs 插件
+# IDE plugins
+
+Select the IDE or editor in the table of contents on the right and install the relevant plugin for your language of choice.
+
+Using the [TON Web IDE](https://ide.ton.org/), you can try FunC or Tact online without installing anything locally.
+
+## IntelliJ IDEs
+
+### FunC
 
 ![](/img/docs/ton-jetbrains-plugin.png)
 
 :::info
-此插件可与任何 JetBrains 产品一起使用。
-（IntelliJ IDEA、WebStorm、PyCharm、CLion 等）
+This plugin can be used with any JetBrains product.
+(IntelliJ IDEA, WebStorm, PyCharm, CLion, etc.)
 :::
 
-有几种安装插件的方法：
+There are several ways to install a plugin:
 
-- 在 IDE 插件部分直接搜索带有 "**TON**" 关键词的插件
-- [Marketplace 链接](https://plugins.jetbrains.com/plugin/23382-ton)
-- [GitHub 代码库](https://github.com/ton-blockchain/intellij-ton)
+- Find plugin directly in the IDE plugins section with "**TON**" keywords
+- [Marketplace link](https://plugins.jetbrains.com/plugin/23382-ton)
+- [GitHub repository](https://github.com/ton-blockchain/intellij-ton)
 
-## VS Code 插件
+### Tact
 
-Visual Studio Code 是开发者的免费且受欢迎的 IDE。
+There are several ways to install a plugin:
 
-- [Marketplace 链接](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
-- [GitHub 代码库](https://github.com/ton-foundation/vscode-func)
+- Find the plugin directly in the IDE plugins section with "**Tact**" keywords
+- [Marketplace link](https://plugins.jetbrains.com/plugin/27290-tact)
+- [GitHub repository](https://github.com/tact-lang/intelli-tact)
 
-## FunC Sublime Text 插件
+## VS Code
 
-- [GitHub 代码库](https://github.com/savva425/func_plugin_sublimetext3)
+Visual Studio Code is a free and popular IDE for developers.
+
+### FunC
+
+- [Marketplace link](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
+- [GitHub repository](https://github.com/ton-foundation/vscode-func)
+
+### Tact
+
+- [Marketplace link](https://marketplace.visualstudio.com/items?itemName=tonstudio.vscode-tact)
+- [Open VSX registry link](https://open-vsx.org/extension/tonstudio/vscode-tact)
+- [GitHub repository](https://github.com/tact-lang/tact-language-server)
+
+## Sublime Text
+
+### FunC
+
+- [GitHub repository](https://github.com/savva425/func_plugin_sublimetext3)
+
+### Tact
+
+- [Package Control link](https://packagecontrol.io/packages/Tact)
+- [GitHub repository](https://github.com/tact-lang/tact-sublime)
+
+## Vim
+
+All-in-one Vim 8+ plugin for Tact language.
+
+- [GitHub repository](https://github.com/tact-lang/tact.vim)
 
 ## Neovim
 
-要在 Neovim 中启用语法高亮，请按照 [nvim-treesitter 快速入门指南](https://github.com/nvim-treesitter/nvim-treesitter#quickstart) 中的安装说明进行操作。
+To enable syntax highlighting in Neovim, follow the installation instructions in the [nvim-treesitter quickstart guide](https://github.com/nvim-treesitter/nvim-treesitter#quickstart).
+
+To make sure `.tact` extension is properly recognized, install the [tact.vim](https://github.com/tact-lang/tact.vim) plugin.
+
+## Helix
+
+To enable support of the Tact language, refer to the following instructions:
+
+1. For latest syntax highlighting, setup [tree-sitter-tact](https://github.com/tact-lang/tree-sitter-tact#helix)
+2. For editor intelligence, setup [tact-language-server](https://github.com/tact-lang/tact-language-server#other-editors)
+
+<Feedback />
+
