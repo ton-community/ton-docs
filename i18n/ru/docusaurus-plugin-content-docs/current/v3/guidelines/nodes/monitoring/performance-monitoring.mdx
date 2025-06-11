@@ -1,17 +1,15 @@
-# Мониторинг производительности
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Performance monitoring
 
 ## Мониторинг производительности сервера TON
 
-Такие инструменты, как `htop`, `iotop`, `iftop`, `dstat`, `nmon` и другие, подходят для измерения производительности в реальном времени, но их функционала не хватает для изучения проблем производительности в прошлом.
+Tools such as `htop`, `iotop`, `iftop`, `dstat`, and `nmon` are effective for measuring real-time system performance; however, they fall short when it comes to troubleshooting performance issues that have occurred in the past.
 
-Это руководство рекомендует и объясняет, как использовать утилиту Linux sar (System Activity Report) для мониторинга производительности сервера TON.
+This guide recommends using the Linux SAR (System Activity Report) utility for monitoring the performance of TON servers, and it provides an explanation of how to use it effectively.
 
 :::tip
-Эта рекомендация помогает определить, испытывает ли Ваш сервер нехватку ресурсов, а не то, что движок валидатора работает плохо.
+This guideline helps to identify whether your server experiences a resource shortage, not whether the validator engine performs badly.
 :::
 
 ### Установка
@@ -42,7 +40,7 @@ sudo systemctl start sysstat sysstat-collect.timer sysstat-summary.timer
 
 ### Использование
 
-По умолчанию sar собирает статистику каждые 10 минут и показывает статистику за текущий день, начиная с полуночи. Это можно проверить, запустив sar без параметров:
+By default, the SAR gathers statistics every 10 minutes and shows statistics for the current day, starting at midnight. You can check it by running the SAR without parameters:
 
 ```bash
 sar
@@ -55,15 +53,15 @@ sar -1   # previous day
 sar -2   # two days ago
 ```
 
-Для точной даты используйте опцию f, с указанием файла определенного дня месяца. Таким образом, для 23 сентября это будет:
+For the exact date, you should use the f option to point to the `sa` file of a given day within a month. Thus, for the September 23rd it would be:
 
 ```bash
 sar -f /var/log/sysstat/sa23
 ```
 
-Какие отчеты sar нужно запускать и как их читать, чтобы выявить проблемы с производительностью?
+To identify performance issues, it is essential to run specific SAR reports and analyze their results effectively.
 
-Ниже приведен список команд sar, которые можно использовать для сбора различной системной статистики. Вы можете дополнить их приведенными выше параметрами, чтобы быстро получить отчет за нужную дату.
+The following list outlines the SAR commands that can be used to gather various system statistics. By combining these commands with the provided options, you can quickly generate reports for the desired date.
 
 ### Отчет о памяти
 
@@ -71,19 +69,19 @@ sar -f /var/log/sysstat/sa23
 sar -rh
 ```
 
-Поскольку движок валидатора TON использует функцию jemalloc, он кэширует много данных. По этой причине команда sar -rh чаще всего возвращает низкое число в колонке `%memused`.
+The TON validator engine uses the **jemalloc** feature, which allows it to cache a significant amount of data. As a result, the `sar —rh` command often returns a low number in the `%memused` column.
 
-В то же время, в колонке `kbcached` всегда будет высокое число. По той же причине Вам не стоит беспокоиться о низком количестве свободной оперативной памяти, показанном в колонке `kbmemfree`. Однако важным показателем является число, полученное из столбца `%memused`.
+Meanwhile, you will typically see a high number in the `kbcached` column. Therefore, there is no need to worry about the low amount of free RAM indicated in the `kbmemfree` column. The key indicator to monitor is the value shown in the `%memused` column.
 
-Если оно превышает 90%, Вам следует задуматься о добавлении большего объема оперативной памяти и следить за тем, не останавливается ли движок валидатора по причине OOM (out of memory - нехватка памяти) - лучший способ проверить это - поискать сообщения Signal в файле `/var/ton-work/log`.
+If the percentage exceeds 90%, you should consider adding more RAM. Additionally, keep an eye on your validator engine to ensure it doesn't stop unexpectedly due to an out-of-memory (OOM) issue. The best way to check for this is to grep the `/var/ton-work/log` file for any **Signal** messages.
 
-Использование свопа
+**Swap usage:**
 
 ```bash
 sar -Sh
 ```
 
-Если Вы заметили, что используется своп, желательно увеличить объём оперативной памяти. В целом, команда TON Core рекомендует отключить своп.
+If you notice that a swap is used, you should consider adding more RAM. The general recommendation from the **TON Core team** is to disable the swap.
 
 ### Отчет по процессору
 
@@ -91,7 +89,7 @@ sar -Sh
 sar -u
 ```
 
-Если Ваш сервер в среднем использует процессор на 70% (см. колонку '%user'), это можно считать хорошим показателем.
+If your server utilizes CPU on average up to 70% (see the `%user` column), this should be considered as good.
 
 ### Отчет об использовании диска
 
@@ -99,9 +97,11 @@ sar -u
 sar -dh
 ```
 
-Следите за колонкой '%util' и реагируйте соответственно, если она остается выше 90% для определенного диска.
+Watch the `%util` column and react accordingly if it stays above 90% for a particular disk.
 
 ### Сетевой отчет
+
+Use the commands :
 
 ```bash
 sar -n DEV -h
@@ -124,39 +124,45 @@ cat /sys/class/net/<interface>/speed
 ```
 
 :::info
-Это не скорость соединения от провайдера.
+The speed you're experiencing is not what your provider promised you.
 :::
 
-Подумайте о повышении скорости соединения, если `%ifutil` говорит об использовании выше 70%, или колонки rxkB/s и txkB/s показывают значения близкие к пропускной способности, предоставляемой Вашим провайдером.
+Consider upgrading your link speed if `%ifutil` shows above 70% usage or columns `rxkB/s` and `txkB/s` reporting values close to a bandwidth provided by your provider.
 
 ### Сообщение о проблеме производительности
 
-Прежде чем сообщать о проблемах с производительностью, убедитесь, что минимальные требования к узлу удовлетворены. Затем выполните следующие команды:
+Before reporting any performance issues, ensure that you meet the minimum requirements for the node. Then, execute the following commands:
+
+To generate today's report, run:
 
 ```bash
 sar -rudh | cat && sar -n DEV -h --iface=eno1 | cat > report_today.txt
 ```
 
-Для вчерашнего отчета выполните:
+For yesterday's report, use the following command:
 
 ```bash
 sar -rudh -1 | cat && sar -n DEV -h --iface=eno1 -1 | cat > report_yesterday.txt
 ```
 
-Также остановите узел TON и измерьте скорость дискового ввода-вывода и скорость сети.
+Additionally, stop the TON node and measure your disk I/O and network speed with the command below:
 
 ```bash
 sudo fio --randrepeat=1 --ioengine=io_uring --direct=1 --gtod_reduce=1 --name=test --filename=/var/ton-work/testfile --bs=4096 --iodepth=1 --size=40G --readwrite=randread --numjobs=1 --group_reporting
 ```
 
-Найдите значение `read: IOPS=` и отправьте его вместе с отчетом. Значение выше 10k IOPS должно считаться хорошим.
+Look for the value at `read: IOPS=` and include it in your report. A value above **10K IOPS** is considered good.
+
+Check your download and upload speeds using the following command:
 
 ```bash
 curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -
 ```
 
-Скорость загрузки и выгрузки свыше 700 Мбит/с должна считаться хорошей.
+Speeds exceeding **700 Mbit/s** are deemed satisfactory.
 
-При составлении отчета, пожалуйста, отправьте отчет SAR, а также результаты IOPS и скорости сети на [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot).
+When reporting, please send the SAR report, IOPS, and network speed results to [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot).
 
-Первоначальная версия от [@neodix](https://t.me/neodix) - Команда Ton Core, 23 сентября 2024 г.
+Initial version - _[@neodix](https://t.me/neodix) - TON Core team_, Sep 23, 2024
+
+<Feedback />
