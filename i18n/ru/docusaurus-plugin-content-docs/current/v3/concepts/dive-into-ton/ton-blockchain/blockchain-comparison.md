@@ -1,14 +1,15 @@
-# Сравнение блокчейнов
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Comparison of blockchains
 
-В этом документе представлен сравнительный анализ TON с Ethereum и Solana.
+This document provides a comparative analysis of TON against Ethereum and Solana.
 
-|                            | Ethereum 2.0 (ETH 2.0) | Solana (SOL)          | TON                              |
-| -------------------------- | ------------------------------------------------------------------------- | ---------------------------------------- | -------------------------------- |
-| **Консенсус**              | Proof of Stake                                                            | Proof of History                         | BFT PoS                          |
-| **TPS**                    | 100 000 TPS                                                               | 59 400 TPS                               | 104 715 TPS                      |
-| **Время блока**            | 12 сек                                                                    | < 1 сек         | 5 сек                            |
-| **Время завершения блока** | 10-15 мин                                                                 | ~6.4 сек | < 6 сек |
+|                            | Ethereum 2.0 (ETH 2.0) | Solana (SOL)  | TON                              |
+| -------------------------- | ------------------------------------------------------------------------- | -------------------------------- | -------------------------------- |
+| **Consensus**              | Proof of Stake                                                            | Proof of History                 | BFT PoS                          |
+| **TPS**                    | 100,000 TPS                                                               | 59,400 TPS                       | 104,715 TPS                      |
+| **Block Time**             | 12 sec                                                                    | < 1 sec | < 1 sec |
+| **Time to Finalize Block** | 10-15 min                                                                 | ~13 sec          | < 3 sec |
+
+<Feedback />
+
