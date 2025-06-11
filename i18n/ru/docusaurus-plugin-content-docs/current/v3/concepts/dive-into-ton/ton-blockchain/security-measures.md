@@ -1,52 +1,53 @@
-# Аудиты безопасности
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# TON security audits
 
-Безопасность экосистемы блокчейна TON является критически важной. Ниже приведен обзор завершенных аудитов ключевых компонентов TON Blockchain, проведенных известными аудиторскими фирмами.
+The security of the TON blockchain ecosystem is of utmost importance. Below is a summary of completed audits conducted by renowned auditing firms for key components of the TON blockchain.
 
-## Блокчейн TON
+## TON Blockchain
 
-Основные блокчейн-модули были проверены на надежность и безопасность.
+Various security providers audited core blockchain modules to ensure their robustness and security.
 
-**Аудиторские компании**: Trail of Bits, SlowMist, CertiK\
-**Аудиторские отчеты**:
+**Audit firms**: Trail of Bits, SlowMist, CertiK\
+**Audit reports**:
 
-- [Trail of Bits: Отчет об аудите блокчейна TON](https://docs.ton.org/audits/TON_Blockchain_ToB.pdf)
-- [SlowMist: Отчет об аудите блокчейна TON](https://docs.ton.org/audits/TON_Blockchain_SlowMist.pdf)
-- [CertiK: Отчет об аудите блокчейна TON](https://docs.ton.org/audits/TON_Blockchain_CertiK.pdf)
-- [CertiK: Формальная верификация контрактов Мастерчейна TON](https://docs.ton.org/audits/TON_Blockchain_Formal_Verification_CertiK.pdf)
+- [Trail of Bits: TON Blockchain Audit Report](https://docs.ton.org/audits/TON_Blockchain_ToB.pdf)
+- [SlowMist: TON Blockchain Audit Report](https://docs.ton.org/audits/TON_Blockchain_SlowMist.pdf)
+- [CertiK: TON Blockchain Audit Report](https://docs.ton.org/audits/TON_Blockchain_CertiK.pdf)
+- [CertiK: TON Masterchain Contracts Formal Verification](https://docs.ton.org/audits/TON_Blockchain_Formal_Verification_CertiK.pdf)
 
-## Библиотека блокчейна TON (tonlib)
+## TON Blockchain library (tonlib)
 
-С 16 октября по 17 ноября 2023 г. компания Zellic провела оценку безопасности для TON. В ходе этого проекта Zellic проверил код Tonlib на предмет уязвимостей безопасности, проблем проектирования и общих недостатков в состоянии безопасности.
+Zellic conducted a security assessment for TON from October 16th to November 17th, 2023. During this engagement, Zellic reviewed Tonlib’s code for security vulnerabilities, design issues, and general weaknesses in security posture.
 
-**Аудиторская компания**: Zellic\
-**Отчет об аудите**:
+**Audit firm**: Zellic\
+**Audit report**:
 
-- [Zellic: Отчет об аудите](https://docs.ton.org/audits/TON_Blockchain_tonlib_Zellic.pdf)
+- [Zellic: Audit Report](https://docs.ton.org/audits/TON_Blockchain_tonlib_Zellic.pdf)
 
-## TVM и Fift
+## TVM and Fift
 
-Виртуальная машина TON и язык программирования Fift.
+Audit for TON Virtual Machine and the Fift programming language.
 
-**Аудиторская компания**: Trail of Bits\
-**Отчет об аудите**:
+**Audit firm**: Trail of Bits\
+**Audit report**:
 
-- [Отчет об аудите Trail of Bits - TVM & Fift](https://docs.ton.org/audits/TVM_and_Fift_ToB.pdf)
+- [Trail of Bits Audit Report - TVM & Fift](https://docs.ton.org/audits/TVM_and_Fift_ToB.pdf)
 
-## Обновление TVM 2023.07
+## TVM Upgrade Jul 2023
 
-Обновление TVM 2023.07 было проанализировано на предмет безопасности и потенциальных уязвимостей.
+Audit for security and potential vulnerabilities in TVM Upgrade 2023.07.
 
-**Аудиторская компания**: Trail of Bits\
-**Отчет об аудите**:
+**Audit firm**: Trail of Bits\
+**Audit report**:
 
-- [Отчет об аудите Trail of Bits - обновление TVM](https://docs.ton.org/audits/TVM_Upgrade_ToB_2023.pdf)
+- [Trail of Bits Audit Report - TVM Upgrade](https://docs.ton.org/audits/TVM_Upgrade_ToB_2023.pdf)
 
 ---
 
-## Программа вознаграждений за ошибки
+## Bug bounty program
 
-Чтобы еще больше повысить безопасность экосистемы TON, мы призываем исследователей и разработчиков в области безопасности принять участие в [Программе вознаграждения за обнаруженные ошибки в блокчейне TON](https://github.com/ton-blockchain/bug-bounty).
+To further enhance the security of the TON ecosystem, we encourage security researchers and developers to participate in the [TON security bug bounty](https://github.com/ton-blockchain/bug-bounty) program.
+
+<Feedback />
+
