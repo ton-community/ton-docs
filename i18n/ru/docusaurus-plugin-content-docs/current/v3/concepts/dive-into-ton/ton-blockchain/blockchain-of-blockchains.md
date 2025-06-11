@@ -1,69 +1,88 @@
-# Блокчейн блокчейнов
+import Feedback from '@site/src/components/Feedback';
+
+# Blockchain of blockchains
 
 :::tip
-Термины **смарт-контракт**, **аккаунт** и **актор** используются взаимозаменяемо в этом документе для описания сущности блокчейна.
+Terms '**smart contract**', '**account**', and '**actor**' are used interchangeably in this document to describe a blockchain entity.
 :::
 
-## Отдельный актор
+## Single actor
 
-Рассмотрим один смарт-контракт.
+Let's consider one smart contract.
 
-В TON это *сущность* с такими свойствами как `address`, `code`, `data`, `balance` и другие. Другими словами, это объект, который имеет *хранилище* и определенное *поведение*. Это поведение в основном принимает следующий вид:
+In TON, it is a _thing_ with properties like `address`, `code`, `data`, `balance` and others. In other words, it is an object with some _storage_ and _behavior_.
+That behavior has the following pattern:
 
-- происходит событие (наиболее распространенная ситуация — контракт получает сообщение)
-- контракт обрабатывает это событие в соответствии со своими свойствами, исполняя `код` в виртуальной машине TON.
-- контракт изменяет свои свойства (`code`, `data` и другие)
-- контракт опционально генерирует исходящие сообщения
-- контракт переходит в режим ожидания, пока не произойдет следующее событие
+- contract receives a message
+- contract handles that event according to its properties by executing its `code` in TON Virtual Machine
+- contract modifies its properties consisting of `code`, `data`, and others
+- contract optionally generates outgoing messages
+- contract goes into standby mode until the next event occurs
 
-Комбинация этих шагов называется **транзакцией**. Важно, чтобы описанные выше события обрабатывались одно за другим, поэтому *транзакции* в блокчейне строго упорядочены и не могут прерывать друг друга.
+A combination of these steps is called a **transaction**. Since it is essential to handle events one by one, transactions follow a strict order and cannot interrupt each other.
 
-Данная модель обработки и называется `Актор`.
+This behavior pattern is well known and called **actor**.
 
-### Самый низкий уровень: AccountChain
+### The lowest level: AccountChain
 
-Последовательность *транзакций* `Tx1 -> Tx2 -> Tx3 -> ....` можно назвать **цепочкой**. В рассматриваемом нами случае, так как эта *цепочка* транзакций относится к одному аккаунту, мы можем использовать термин `AccountChain`.
+A **chain** can be viewed as a sequence of transactions, such as `Tx1 → Tx2 → Tx3 → …`. When this transaction sequence pertains to a single account, it is specifically termed an **AccountChain**.
 
-Далее, так как обрабатывающие транзакции узлы время от времени должны координировать состояние смарт-контракта, достигать *консенсуса* о состоянии, эти *транзакции* собираются в батчи: `[Tx1 -> Tx2] -> [Tx3 -> Tx4 -> Tx5] -> [] -> [Tx6]`.Собранные батчи не вмешивается в последовательность, каждая транзакция по-прежнему имеет только одну `предыдущую` и максимум одну `последующую`, однако теперь эта общая последовательность будет разбита на отдельные **блоки**.
+Since nodes processing these transactions periodically need to synchronize the smart contract state to achieve consensus, transactions are grouped into batches called **blocks**. For instance:
 
-Также будет целесообразно включать в *блоки* и очереди входящих и исходящих сообщений. В этом случае *блок* будет содержать полный набор информации, которая определяет и описывает, что произошло со смарт-контрактом во время исполнения этого блока.
+```
+[Tx1 → Tx2] → [Tx3 → Tx4 → Tx5] → [] → [Tx6]
+```
 
-## Множество AccountChains: Шарды
+Batching does not alter the underlying sequence. Each transaction still references exactly one preceding transaction (`prev tx`) and at most one succeeding transaction (`next tx`). Batching simply organizes this sequence into manageable blocks for consensus purposes.
 
-Теперь давайте рассмотрим множество аккаунтов. Мы можем получить несколько *AccountChains* и хранить их вместе. Подобный набор *AccountChains* называется *Шардчейн*.Схожим образом мы можем разбить **Шардчейн** на **Шардблоки**, которые будут являться совокупностью отдельных *AccountBlocks*.
+Additionally, each block can contain queues of incoming and outgoing messages. Incorporating these queues ensures that a block fully encapsulates all events and state changes relevant to the smart contract within the block period.
 
-### Динамическое разделение и объединение шардчейнов
+## Many AccountChains: Shards
 
-Важно отметить, что поскольку *Шардчейн* состоит из явно различимых *AccountChains*, мы сможем его легко разделять.К примеру, если у нас есть 1 *Шардчейн*, который описывает происходящие с 1 миллионом аккаунтов события, и в одну секунду происходит слишком много транзакций для обработки и хранения в одном узле, то мы можем просто разделить эту цепочку на два меньших *Шардчейна*. При этом каждая цепочка будет работать с выделенным полмиллионом аккаунтов, а также она будет обрабатываться на отдельном подмножестве узлов.
+Now let's consider many accounts. We can get a few AccountChains and store them together; such a set of AccountChains is called a **ShardChain**. In the same way, we can cut ShardChain into **ShardBlocks**, which are an aggregation of individual AccountBlocks.
 
-Аналогично, если некоторые шарды станут слишком свободными, их можно **объединить** в один более крупный шард.
+### Dynamic splitting and merging of ShardChains
 
-Очевидно, что есть два предельных случая – когда шард содержит только один аккаунт (и, следовательно, не может быть разделен дальше) и когда шард содержит все аккаунты.
+Note that since a ShardChain consists of easily distinguished AccountChains, we can easily split it. That way, if we have one ShardChain that describes events that happen with one million accounts and there are too many transactions per second to be processed and stored in one node, so we just **split** that chain into two smaller ShardChains with each chain accounting for half a million accounts and each chain processed on a separate subset of nodes.
 
-Аккаунты могут взаимодействовать друг с другом, отправляя сообщения. Существует специальный механизм маршрутизации, который перемещает сообщения из исходящих очередей в соответствующие входящие очереди и гарантирует, что все сообщения будут *доставлены*, а также, что эти сообщения будут доставлены *последовательно* (сообщение, отправленное раньше, достигнет получателя раньше).
+Analogously, if some shards become too unoccupied, they can be **merged** into one more enormous shard.
 
-:::info ПРИМЕЧАНИЕ
-Чтобы сделать разделение и слияние детерминированными, агрегация AccountChains в шарды основана на битовом представлении адресов аккаунтов. Например, адрес выглядит как `(shard prefix, address)`. Таким образом, все аккаунты в шарде будут иметь точно такой же двоичный префикс (например, все адреса будут начинаться с `0b00101`).
+There are two limiting cases: when the shard contains only one account (and thus cannot be split further) and when the shard contains all accounts.
+
+Accounts can interact with each other by sending messages.  A unique routing mechanism moves messages from outgoing queues to corresponding incoming queues and ensures:
+
+1. The delivery of all messages
+2. Consecutive delivery of messages — a message sent earlier will reach the destination earlier
+
+:::info SIDE NOTE
+An aggregation of AccountChains into shards is based on the bit-representation of account addresses to make splitting and merging deterministic. For example, an address looks like `(shard prefix, address)`. That way, all accounts in the ShardChain will have the same binary prefix (for instance, all addresses will start with `0b00101`).
 :::
 
-## Блокчейн
+## Blockchain
 
-Объединение всех шардов, содержащее все аккаунты, работающие по одному набору правил, называется **Блокчейном**.
+An aggregation of all shards, which contains all accounts behaving according to one set of rules, is called a Blockchain.
 
-В TON может быть много наборов правил и, следовательно, много блокчейнов. Все они будут работать одновременно, а также они могут взаимодействовать друг с другом, отправляя сообщения по всей цепочке таким же образом, как аккаунты одной цепочки могут взаимодействовать друг с другом.
+In TON, there can be many sets of rules, and thus, many blockchains operate simultaneously and can interact with each other by sending messages cross-chain in the same way that accounts of one chain can interact with each other.
 
-### Воркчейн: Блокчейн с вашими собственными правилами
+### WorkChain: a blockchain with your own rules
 
-Если вы хотите настроить свои правила группы шардчейнов, вы можете создать **Воркчейн**. Хорошим примером является создание воркчейна, который работает на базе EVM, чтобы запускать на нем смарт-контракты Solidity.
+If you want to customize the rules of the ShardChains group, you could create a **WorkChain**. A good example is to make a workchain that works on the base of EVM to run Solidity smart contracts on it.
 
-Теоретически, каждый в сообществе может создать собственный воркчейн. На деле же – это крайне трудоемкая задача. Более того, для его создания необходимо заплатить ощутимую цену, а также получить 2/3 голосов от валидаторов, которые необходимы для одобрения создания вашего Воркчейна.
+Theoretically, everyone in the community can create their own WorkChain. Building it isn't very easy, and then you have to pay a high price and receive 2/3 of votes from validators to approve it.
 
-TON позволяет создавать до `2^32` воркчейнов, каждый из которых подразделяется на `2^60` шардов.
+TON allows creating up to `2^32` workchains, subdivided into `2^60` shards.
 
-В настоящее время в TON есть только два воркчейна: Мастерчейн и Бейсчейн.
+Nowadays, there are only two workchains in TON: MasterChain and BaseChain.
 
-Бейсчейн используется для повседневных транзакций между участниками, ввиду его дешевизны. В свою очередь Мастерчейн выполняет важную для TON функцию.
+BaseChain is used for everyday transactions between actors because it's cheap, while MasterChain has a crucial function for TON.
 
-### Мастерчейн: Блокчейн Блокчейнов
+### MasterChain: blockchain of blockchains
 
-В блокчейне существует необходимость в синхронизации маршрутизации сообщений и выполнения транзакций. Другими словами, узлам сети нужен способ зафиксировать некоторую "точку" в состоянии мультичейна и достичь консенсуса относительно этого состояния.В TON для этой цели используется специальная цепочка под названием **Мастерчейн**. Блоки *Мастерчейна* содержат дополнительную информацию, последние хэши блоков, обо всех других цепочках в этой системе. Таким образом, любой наблюдатель однозначно может определить состояние всех систем мультичейна в одном блоке Мастерчейна.
+There is a necessity for the synchronization of message routing and transaction execution. In other words, nodes in the network need a way to fix some 'point' in a multichain state and reach a consensus about that state. In TON, a special chain called **MasterChain** is used for that purpose. Blocks of MasterChain contain additional information, like the latest block hashes, about all other chains in the system, thus any observer unambiguously determines the state of all multichain systems at a single MasterChain block.
+
+## See also
+
+- [Smart contract addresses](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses)
+
+<Feedback />
+
