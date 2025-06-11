@@ -1,54 +1,56 @@
-# 交易费用
+import Feedback from '@site/src/components/Feedback';
 
-每个TON用户都应该记住，*手续费取决于许多因素*。
+# Transaction fees
+
+每个TON用户都应该记住，_手续费取决于许多因素_。
 
 ## Gas
 
-所有费用都以Gas计算。这是TON中用作费用的特殊货币。
+All [computation costs](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#computation-fees) are nominated in gas units and fixed in a certain gas amount.
 
-所有费用都以一定数量的gas来指定和固定，但gas价格本身并不固定。今天的gas价格为：
+The price of gas units is determined by the [chain configuration](https://tonviewer.com/config#20) and may be changed only by consensus of validators. Note that unlike in other systems, the user cannot set his own gas price, and there is no fee market.
 
 当前的基础链设置如下：1 单位 gas 耗费 400  nanotons  。
 
 ```cpp
-1 gas = 26214400 / 2^16 nanotons = 0,000 000 4 TON
+1 gas = 26214400 / 2^16 nanotons = 0.000 000 4 TON
 ```
 
 主链的当前设置如下：1 单位 gas 耗费 10000  nanotons  。
 
 ```cpp
-1 gas = 655360000 / 2^16 nanotons = 0,000 01 TON
+1 gas = 655360000 / 2^16 nanotons = 0.000 01 TON
 ```
 
 ### 平均交易成本
 
 > **TLDR：** 今天，每笔交易的成本约为 **~0.005  TON**
 
-像TON的许多其他参数一样，gas费用是可配置的，可以通过主网上的特殊投票来更改。
+Even if TON price increases 100 times, transactions will remain ultra-cheap; about $0.01. Moreover, validators may lower this value if they see commissions have become expensive [read why they're interested](#gas-changing-voting-process).
 
 :::info
 当前 gas 量分别写入主链和基链的网络配置 [param 20](https://tonviewer.com/config#20) 和 [param 21](https://tonviewer.com/config#21)。
 :::
 
-### Gas 的成本会更高吗？
+### Gas changing voting process
 
 与 TON 的许多其他参数一样， gas 费也是可配置的，可以通过主网的特别投票进行更改。
 
-从技术上讲，是的；但实际上，不会。
+Changing any parameter requires approval from 66% of the validators' votes.
 
 #### gas 价格会更贵吗？
 
-> *这是否意味着有一天gas价格可能会上涨1000倍甚至更多？*
+> _这是否意味着有一天gas价格可能会上涨1000倍甚至更多？_
 
-TON上的费用难以提前计算，因为它们的数量取决于交易运行时间、账户状态、消息内容和大小、区块链网络设置以及无法在交易发送之前计算的其他许多变量。阅读关于[计算费用](/develop/howto/fees-low-level#computation-fees)的低层级文章概述。
+Technically, yes; but in fact, no.
 
-这就是为什么即使NFT市场通常会额外收取大约1 TON的TON，并在稍后返还(*`1 - transaction_fee`*)。
+Validators receive a small fee for processing transactions, and charging higher commissions would lead to a decrease in the number of transactions, making the validating process less beneficial.
 
 ### 如何计算费用？
 
 TON 的费用很难提前计算，因为其金额取决于交易运行时间、账户状态、信息内容和大小、区块链网络设置以及其他一些变量，在交易发送之前无法计算。
 
-根据[低层级费用概述](/develop/howto/fees-low-level)，TON上的费用按照以下公式计算：
+That is why NFT marketplaces typically require an extra amount of TON (~1 TON) and refund the remaining amount (1 - transaction_fee) after the transaction.
 
 :::info
 Each contract should check incoming messages for the amount of TON attached to ensure it is enough to cover the fees.
@@ -58,62 +60,112 @@ Each contract should check incoming messages for the amount of TON attached to e
 
 不过，让我们进一步了解一下 TON 的收费功能。
 
-## 存储费
+## Basic fees formula
 
-TON验证者从智能合约收取存储费用。
+Fees on TON are calculated by this formula:
 
 ```cpp
 transaction_fee = storage_fees
-                + in_fwd_fees
+                + in_fwd_fees // also named import_fee
                 + computation_fees
                 + action_fees
                 + out_fwd_fees
 ```
 
-## 交易费要素
+```jsx live
+// Welcome to LIVE editor!
+// feel free to change any variables
+// Check https://retracer.ton.org/?tx=b5e14a9c4a4e982fda42d6079c3f84fa48e76497a8f3fca872f9a3737f1f6262
 
-- `storage_fees`是您为在区块链上存储智能合约而支付的金额。实际上，您支付的是智能合约在区块链上存储的每一秒钟。
-  - *示例*：您的TON钱包也是一个智能合约，每次您接收或发送交易时都会支付存储费用。阅读更多关于[如何计算存储费用](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee)。
-- `in_fwd_fees` 是只从区块链之外导入消息的收费，如`external` 消息。 每次您进行交易时，它都必须递交给将处理它的验证器。 对于从合同到订约的普通信息，这笔费用不适用。请阅读[TON Blockchain paper](https://docs.ton.org/tblkch.pdf) 了解更多关于入站信息的信息。
-  - *示例*：您使用的每个钱包应用程序（如Tonkeeper）进行的每笔交易都需要首先在验证节点之间分发。
-- `computation_fees` 是您为在虚拟机中执行代码而支付的金额。代码越大，必须支付的费用就越多。
-  - *示例*：每次您使用钱包（即智能合约）发送交易时，您都会执行钱包合约的代码并为此付费。
-- `action_fees` 是发送智能合约发出的消息的费用，更新智能合约代码，更新库等。
-- `out_fwd_fees` 代表从TON区块链发送消息到外部服务（例如，日志）和外部区块链的费用。
+function FeeCalculator() {
+  // https://tonviewer.com/config#25
+  const lump_price = 400000;
+  const bit_price = 26214400;
+  const cell_price = 2621440000;
+  const ihr_price_factor = 98304;
+  const first_frac = 21845;
+  const nano = 10 ** -9;
+  const bit16 = 2 ** 16;
 
-## 常见问题
+  const ihr_disabled = 0; // First of all define is ihr gonna be counted
 
-如果您在相当长的时间内（1年）没有使用您的TON钱包，*您将不得不支付比平常更大的手续费，因为钱包在发送和接收交易时支付手续费*。
+  let fwd_fee =
+    lump_price + Math.ceil((bit_price * 0 + cell_price * 0) / bit16);
 
-### 公式
+  if (ihr_disabled) {
+    var ihr_fee = 0;
+  } else {
+    var ihr_fee = Math.ceil((fwd_fee * ihr_price_factor) / bit16);
+  }
 
-您可以使用以下公式大致计算智能合约的存储费用：
+  let total_fwd_fees = fwd_fee + ihr_fee;
+  let gas_fees = 0.0011976; // Gas fees out of scope here
+  let storage_fees = 0.000000003; // And storage fees as well
+  let total_action_fees = +((fwd_fee * first_frac) / bit16).toFixed(9);
+  let import_fee =
+    lump_price + Math.ceil((bit_price * 528 + cell_price * 1) / bit16);
+  let total_fee =
+    gas_fees + storage_fees + total_action_fees * nano + import_fee * nano;
 
-### 发送 Jettons 的费用？
+  return (
+    <div>
+      <p> Total fee: {+total_fee.toFixed(9)} TON</p>
+      <p> Action fee: {+(total_action_fees * nano).toFixed(9)} TON </p>
+      <p> Fwd fee: {+(total_fwd_fees * nano).toFixed(9)} TON </p>
+      <p> Import fee: {+(import_fee * nano).toFixed(9)} TON </p>
+      <p> IHR fee: {+(ihr_fee * nano).toFixed(9)} TON </p>
+    </div>
+  );
+}
+```
 
-让我们更仔细地检查每个值：
+## Elements of transaction fee
 
-### 铸造 NFT 的成本？
+- `storage_fees` is the amount you pay for storing a smart contract in the blockchain. In fact, you pay for every second the smart contract is stored on the blockchain.
+  - _Example_: your TON wallet is also a smart contract, and it pays a storage fee every time you receive or send a transaction. Read more about [how storage fees are calculated](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee).
+- `in_fwd_fees` is a charge for importing messages only from outside the blockchain, e.g. `external` messages. Every time you make a transaction, it must be delivered to the validators who will process it. For ordinary messages from contract to contract this fee is not applicable. Read [the TON Blockchain paper](https://docs.ton.org/tblkch.pdf) to learn more about inbound messages.
+  - _Example_: each transaction you make with your wallet app (like Tonkeeper) requires first to be distributed among validation nodes.
+- `computation_fees` is the amount you pay for executing code in the virtual machine. The larger the code, the more fees must be paid.
+  - _Example_: each time you send a transaction with your wallet (which is a smart contract), you execute the code of your wallet contract and pay for it.
+- `action_fees` is a charge for sending outgoing messages made by a smart contract, updating the smart contract code, updating the libraries, etc.
+- `out_fwd_fees` stands for a charge for sending messages outside the TON Blockchain to interact with off-chain services (e.g., logs) and external blockchains.
 
-`cell_price`和`bit_price`都可以从网络配置[参数18](https://explorer.toncoin.org/config?workchain=-1\&shard=8000000000000000\&seqno=22185244\&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382\&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05#configparam18)中获得。
+## FAQ
 
-### 在 TON 上保存数据的成本？
+Here are the most frequently asked questions by visitors of TON:
 
-在TON上保存1 MB数据一年的成本为6.01 TON。请注意，您通常不需要在链上存储大量数据。如果您需要去中心化存储，请考虑[TON Storage](/v3/guidelines/web3/ton-storage/storage-daemon)。
+### Fees for sending TON?
 
-### 计算器示例
+The average fee for sending any amount of TON is 0.0055 TON.
 
-您可以使用此JS脚本计算工作链中1 MB存储1年的存储价格
+### Fees for sending Jettons?
 
-### 如何计算？
+The average fee for sending any amount of a custom Jettons is 0.037 TON.
 
-TON Blockchain中有一篇关于 [费用计算](/v3/guidelines/smart-contracts/fee-calculation) 的文章。
+### Cost of minting NFTs?
 
-## 参考文献
+The average fee for minting one NFT is 0.08 TON.
 
-- 根据[@thedailyton文章](https://telegra.ph/Commissions-on-TON-07-22)改编，原作者[menschee](https://github.com/menschee)\*
+### Cost of saving data in TON?
 
-## 参阅
+Saving 1 MB of data for one year on TON will cost 6.01 TON. Note that you usually don't need to store large amounts of data on-chain. Consider using [TON Storage](/v3/guidelines/web3/ton-storage/storage-daemon) if you need decentralized storage.
 
-- ["低级收费概述"](/v3/documentation/smart-contracts/transaction-fees/fees-low-level)--了解佣金计算公式。
-- [在 FunC 中计算远期费用的智能合约函数](https://github.com/ton-blockchain/token-contract/blob/main/misc/forward-fee-calc.fc)
+### Is it possible to send a gasless transaction?
+
+In TON, gasless transactions are possible using [wallet v5](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#preparing-for-gasless-transactions) a relayer that pays the gas fee for transaction.
+
+### How to calculate fees?
+
+There is an article about [fee calculation](/v3/guidelines/smart-contracts/fee-calculation) in TON Blockchain.
+
+## References
+
+- Based on the [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22) - _[menschee](https://github.com/menschee)_
+
+## See also
+
+- [Low-level fees overview](/v3/documentation/smart-contracts/transaction-fees/fees-low-level)—read about the formulas for calculating commissions.
+- [Smart contract function to calculate forward fees in FunC](https://github.com/ton-blockchain/token-contract/blob/main/misc/forward-fee-calc.fc)
+
+<Feedback />
+
