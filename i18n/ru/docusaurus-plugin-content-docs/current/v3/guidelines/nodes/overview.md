@@ -1,25 +1,25 @@
-# Общие сведения
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Overview
 
-На этой странице собраны некоторые рекомендации, которым можно следовать для управления узлами в блокчейне TON.
+This page collects some recommendations that could be followed to manage Nodes on TON Blockchain.
 
-- [Типы узлов в сети TON](/v3/documentation/infra/nodes/node-types)
+- [TON node types](/v3/documentation/infra/nodes/node-types)
 
-## Запуск узла TON
+## Running TON node
 
-- [Запуск узла валидатора](/v3/guidelines/nodes/running-nodes/validator-node)
-- [Запуск полного узла](/v3/guidelines/nodes/running-nodes/full-node)
-- [Запуск liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node)
-- [Запуск архивного узла](/v3/guidelines/nodes/running-nodes/archive-node)
+- [Running validator node](/v3/guidelines/nodes/running-nodes/validator-node)
+- [Running full node](/v3/guidelines/nodes/running-nodes/full-node)
+- [Running liteserver node](/v3/guidelines/nodes/running-nodes/liteserver-node)
+- [Running archive node](/v3/guidelines/nodes/running-nodes/archive-node)
 
-## Техническое обслуживание
+## Maintenance
 
-Если у вас возникают проблемы с запуском узлов, рекомендуется ознакомиться с следующими статьями.
+If you have problems with running nodes it's recommended to get acquainted with the following articles.
 
-- [Устранение неполадок](/v3/guidelines/nodes/nodes-troubleshooting)
-- [Техническое обслуживание и безопасность](/v3/guidelines/nodes/node-maintenance-and-security)
-- [Часто задаваемые вопросы](/v3/guidelines/nodes/faq)
+- [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
+- [Maintenance and security](/v3/guidelines/nodes/node-maintenance-and-security)
+- [FAQ](/v3/guidelines/nodes/faq)
+
+<Feedback />
 
