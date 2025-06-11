@@ -1,25 +1,24 @@
-# ADNL UDP - Межузловое взаимодействие
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# ADNL UDP - internode
 
-ADNL через UDP используется узлами и компонентами TON для связи друг с другом. Это низкоуровневый протокол, поверх которого работают другие, более высокоуровневые протоколы TON, такие как DHT и RLDP.
-В этой статье мы узнаем, как ADNL через UDP работает для базовой связи между узлами.
+ADNL over UDP is a low-level protocol used by nodes and TON components to communicate with one another. It serves as the foundation for other higher-level TON protocols, such as DHT (Distributed Hash Table) and RLDP (Reliable Large Datagram Protocol).
 
-В отличие от ADNL через TCP, в реализации UDP обмен данными происходит в другой форме, и используется дополнительный уровень в виде каналов, но другие принципы схожи:
-ключи шифрования также генерируются на основе нашего закрытого ключа и открытого ключа партнера, который заранее известен из конфигурации или получен от других узлов сети.
+This article will explain how ADNL over UDP facilitates basic communication between nodes.
 
-В UDP-версии ADNL соединение устанавливается одновременно с получением исходных данных от однорангового узла, если инициатор отправил сообщение "создать канал", ключ канала будет вычислен и создание канала будет подтверждено.
-Когда канал будет установлен, дальнейшая связь будет продолжаться внутри него.
+Unlike ADNL over TCP, the UDP implementation involves a different form of handshake and includes an additional layer in the form of channels. However, the underlying principles remain similar: encryption keys are generated based on our private key and the peer's public key, which is either known in advance from the configuration or received from other network nodes.
+
+In the UDP version of ADNL, the connection is established simultaneously with the reception of initial data from the peer. If the initiator sends a **create channel** message, the channel’s key will be calculated, and the channel's creation will be confirmed.
+
+Once the channel is established, further communication continues within it.
 
 ## Структура пакетов и обмен данными
 
 ### Первые пакеты
 
-Давайте проанализируем инициализацию соединения с узлом DHT и получение подписанного списка его адресов, чтобы понять, как работает протокол.
+Let's analyze the connection initialization with the DHT node and obtain a signed list of its addresses to understand how the protocol functions.
 
-Найдите нужный вам узел в [global config](https://ton-blockchain.github.io/global.config.json), в разделе `dht.nodes`. Например:
+Find a node you prefer in the [global config](https://ton-blockchain.github.io/global.config.json), specifically in the `dht.nodes` section.  For example:
 
 ```json
 {
@@ -47,19 +46,21 @@ ADNL через UDP используется узлами и компонент�
 }
 ```
 
-1. Возьмем его ключ ED25519, `fZnkoIAxrTd4xeBgVpZFRm5SvVvSx7eN3Vbe8c83YMk`, и декодируем его из base64
-2. Возьмем его IP-адрес `1091897261` и переведем его в понятный формат с помощью [сервиса](https://www.browserling.com/tools/dec-to-ip) или с помощью преобразования в little endian байтов, получим `65.21.7.173`
-3. Объединим с портом, получим `65.21.7.173:15813` и установим UDP-соединение.
+Let's take the ed25519 key, `fZnkoIAxrTd4xeBgVpZFRm5SvVvSx7eN3Vbe8c83YMk`, and decode it from base64.
 
-Мы хотим открыть канал для связи с узлом и получить некоторую информацию, а как основная задача - получить от него список подписанных адресов. Для этого мы сгенерируем 2 сообщения, первое - [создать канал](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L129):
+Next, we will take its IP address, 1091897261, and convert it into a readable format using [this service](https://www.browserling.com/tools/dec-to-ip) or by converting it to little-endian bytes. This will give us the IP address `65.21.7.173`.
+
+Finally, we will combine this IP address with the port to obtain `65.21.7.173:15813` and establish a UDP connection.
+
+We aim to establish a communication channel with the node to obtain specific information, particularly a list of signed addresses. To achieve this, we will generate two messages. The first message will be to create the channel [(see the code)](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L129):
 
 ```tlb
 adnl.message.createChannel key:int256 date:int = adnl.Message
 ```
 
-Здесь у нас есть 2 параметра - ключ и дата. В качестве даты мы укажем текущую временную метку unix. А для ключа - нам нужно сгенерировать новую пару закрытый+открытый ключ ED25519 специально для канала, они будут использоваться для инициализации [открытого ключа шифрования](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-a-shared-key-using-ecdh). Мы будем использовать наш сгенерированный открытый ключ в параметре `key` сообщения, а закрытый пока просто сохраним.
+We have two parameters to consider: a key and a date. The date will be represented by the current Unix timestamp. For the key, we need to generate a new ed25519 private and public key pair specifically for the channel. This key pair will be used to initialize the public encryption key, as outlined in the [link here](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-a-shared-key-using-ecdh). We will use the generated public key as the value for the `key` parameter in the message, while we will store the private key for future use.
 
-Сериализуем заполненную структуру TL и получаем:
+Next, we will serialize the populated TL structure to get the final result:
 
 ```
 bbc373e6                                                         -- TL ID adnl.message.createChannel 
@@ -67,23 +68,23 @@ d59d8e3991be20b54dde8b78b3af18b379a62fa30e64af361c75452f6af019d7 -- key
 555c8763                                                         -- date
 ```
 
-Далее перейдем к нашему основному запросу - [получить список адресов](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L198).
-Чтобы выполнить его, нам сначала нужно сериализовать его структуру TL:
+Next, let's proceed to our main query - [retrieve a list of addresses](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L198).
+
+To execute it, we first need to serialize its TL structure:
 
 ```tlb
 dht.getSignedAddressList = dht.Node
 ```
 
-У него нет параметров, поэтому мы просто сериализуем его. Это будет просто его идентификатор - `ed4879a9`.
+There are no parameters to consider, so we will simply serialize it. The result will be just its ID: `ed4879a9`.
 
-Далее, поскольку это запрос более высокого уровня протокола DHT, нам нужно сначала обернуть его в структуру TL `adnl.message.query`:
+Next, since this is a higher-level request within the DHT protocol, we must first wrap it in an `adnl.message.query` TL structure:
 
 ```tlb
 adnl.message.query query_id:int256 query:bytes = adnl.Message
 ```
 
-В качестве `query_id` мы генерируем случайные 32 байта, в качестве `query` мы используем наш основной запрос, [обернутый в массив байтов](/v3/documentation/data-formats/tl#encoding-bytes-array).
-Мы получим:
+We generate a random 32 bytes for `query_id`, and the `query` represents our main request, [wrapped as an array of bytes](/v3/documentation/data-formats/tl#encoding-bytes-array):
 
 ```
 7af98bb4                                                         -- TL ID adnl.message.query
@@ -93,7 +94,7 @@ d7be82afbc80516ebca39784b8e2209886a69601251571444514b7f17fcd8875 -- query_id
 
 ### Построение пакета
 
-Вся коммуникация осуществляется с помощью пакетов, содержимое которых представляет собой [структуру TL](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L81):
+All communication is conducted using packets, which contain the following structure: [TL structure](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L81):
 
 ```tlb
 adnl.packetContents 
@@ -117,15 +118,19 @@ adnl.packetContents
         
 ```
 
-После того, как мы сериализовали все сообщения, которые хотим отправить, мы можем начать создание пакета.
-Пакеты, которые должны быть отправлены в канал, отличаются по содержимому от пакетов, которые отправляются до инициализации канала.
-Сначала проанализируем основной пакет, который используется для инициализации.
+Once we have serialized all the messages we wish to send, we can begin building the packet.
 
-Во время начального обмена данными, за пределами канала, сериализованная структура содержимого пакета префиксируется открытым ключом одноранговой стороны - 32 байта.
-Наш открытый ключ - 32 байта, хэш sha256 сериализованного TL структуры содержимого пакета - 32 байта.
-Содержимое пакета зашифровано с помощью [общего ключа](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-a-shared-key-using-ecdh), полученного из нашего закрытого ключа и открытого ключа сервера.
+Packets sent to a channel have a different content structure compared to packets sent before the channel is initialized.
 
-Сериализуем структуру содержимого нашего пакета и разберем ее побайтно:
+First, let’s examine the main packet used for initialization.
+
+During the initial data exchange, before the channel is established, the packet's serialized content structure is prefixed with the peer's public key, which is 32 bytes.
+
+Our public key is also 32 bytes, and the SHA-256 hash of the serialized TL of the packet's content structure is another 32 bytes.
+
+The content of the packet is encrypted using the [shared key](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-a-shared-key-using-ecdh), which is derived from our private key and the public key of the server.
+
+Let's serialize the structure of our packet content and parse it byte by byte:
 
 ```
 89cd42d1                                                               -- TL ID adnl.packetContents
@@ -158,8 +163,9 @@ c6b41348                                                                  -- TL 
 0f 2b6a8c0509f85da9f3c7e11c86ba22                                      -- rand2, 15 (0f) random bytes
 ```
 
-После сериализации - нам нужно подписать полученный массив байтов ключом ED25519 нашего частного клиента (не канала), который мы сгенерировали и сохранили ранее.
-После того, как мы сгенерировали подпись (размером 64 байта), нам нужно добавить ее в пакет, снова сериализовать, но теперь добавить 11-й бит к флагу, который означает наличие подписи:
+After serialization, we need to sign the resulting byte array using our private client's key, specifically ed25519, which we generated and saved earlier.
+
+Once we have created the signature (which is 64 bytes in size), we must add it to the packet and serialize it again. This time, we will also set the 11th bit in the flag to indicate the presence of the signature:
 
 ```
 89cd42d1                                                               -- TL ID adnl.packetContents
@@ -195,12 +201,13 @@ c6b41348                                                                  -- TL 
 0f 2b6a8c0509f85da9f3c7e11c86ba22                                      -- rand2, 15 (0f) random bytes
 ```
 
-Теперь у нас есть собранный, подписанный и сериализованный пакет, представляющий собой массив байтов.
-Для последующей проверки его целостности получателем нам нужно вычислить хэш sha256 пакета. Например, пусть это будет `408a2a4ed623b25a2e2ba8bbe92d01a3b5dbd22c97525092ac3203ce4044dcd2`.
+We now have an assembled, signed, and serialized packet, which consists of an array of bytes.
 
-Теперь давайте зашифруем содержимое нашего пакета с помощью шифра AES-CTR, используя [общий ключ](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-a-shared-key-using-ecdh), полученный из нашего закрытого ключа и открытого ключа одноранговой сети (не ключа канала).
+Next, we need to calculate the packet's SHA-256 hash, allowing the recipient to verify its integrity later. For instance, let’s say the hash is `408a2a4ed623b25a2e2ba8bbe92d01a3b5dbd22c97525092ac3203ce4044dcd2`.
 
-Мы почти готовы к отправке, осталось только [вычислить ID](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-key-id) ключа одноранговой сети ED25519 и объединить все вместе:
+Now, we will encrypt the contents of our packet using the AES-CTR cipher, utilizing the [shared key](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-a-shared-key-using-ecdh) that is derived from our private key and the peer’s public key (not the channel's key).
+
+We are almost ready to send the packet; we just need to [calculate the ID](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-key-id) of the ed25519 peer key and concatenate everything together:
 
 ```
 daa76538d99c79ea097a67086ec05acca12d1fefdbc9c96a76ab5a12e66c7ebb  -- server Key ID
@@ -209,9 +216,9 @@ afc46336dd352049b366c7fd3fc1b143a518f0d02d9faef896cb0155488915d6  -- our public 
 ...                                                               -- encrypted content of the packet
 ```
 
-Теперь мы можем отправить наш собранный пакет одноранговой сети по UDP и ждать ответа.
+We can now send our constructed packet to the peer via UDP and await a response.
 
-В ответ мы получим пакет с похожей структурой, но с другими сообщениями. Он будет состоять из:
+In response, we will receive a packet with a similar structure, but containing different messages. It will consist of:
 
 ```
 68426d4906bafbd5fe25baf9e0608cf24fffa7eca0aece70765d64f61f82f005  -- ID of our key
@@ -220,12 +227,12 @@ f32fa6286d8ae61c0588b5a03873a220a3163cad2293a5dace5f03f06681e88a  -- sha256 cont
 ...                                                               -- the encrypted content of the packet
 ```
 
-Десериализация пакета с сервера выглядит следующим образом:
+The process of deserializing the packet from the server is as follows:
 
-1. Проверяем идентификатор ключа из пакета, чтобы понять, что пакет для нас.
-2. Используя открытый ключ сервера из пакета и наш закрытый ключ, вычисляем общий ключ и расшифровываем содержимое пакета
-3. Сравниваем отправленный нам хеш sha256 с полученным хешем из расшифрованных данных, они должны совпадать
-4. Начинаем десериализацию содержимого пакета с помощью схемы TL `adnl.packetContents`
+- We first check the ID of the key within the packet to confirm that the packet is intended for us.
+- Using the server's public key found in the packet along with our private key, we calculate a shared key to decrypt the packet's content.
+- We then compare the SHA-256 hash provided to us with the hash obtained from the decrypted data; they must match.
+- Finally, we begin deserializing the packet content using the `adnl.packetContents` TL schema.
 
 Содержимое пакета будет выглядеть так:
 
@@ -259,13 +266,15 @@ ee354563                                                               -- reinit
 0f c3354d35749ffd088411599101deb2                                      -- rand2, 15 (0f) random bytes
 ```
 
-Сервер ответил нам двумя сообщениями: `adnl.message.confirmChannel` и `adnl.message.answer`.
-С `adnl.message.answer` все просто, это ответ на наш запрос `dht.getSignedAddressList`, мы разберем его в статье про DHT.
+The server responded with two messages: `adnl.message.confirmChannel` and `adnl.message.answer`.
 
-Давайте сосредоточимся на `adnl.message.confirmChannel`, что означает, что пир подтвердил создание канала и отправил нам свой открытый ключ канала. Теперь, имея наш закрытый ключ канала и открытый ключ канала пира, мы можем вычислить [общий ключ](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-a-shared-key-using-ecdh).
+The `adnl.message.answer` is straightforward; it is the response to our request for `dht.getSignedAddressList`, which we will explore further in the article about DHT.
 
-Теперь, когда мы вычислили общий ключ канала, нам нужно сделать из него 2 ключа — один для шифрования исходящих сообщений, другой для расшифровки входящих сообщений.
-Сделать из него 2 ключа довольно просто, второй ключ равен общему ключу, записанному в обратном порядке. Пример:
+Now, let’s focus on `adnl.message.confirmChannel`. This indicates that the peer has confirmed the creation of the channel and has sent us its public channel key. With our private channel key and the peer's public channel key, we can compute the [shared key](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-a-shared-key-using-ecdh).
+
+Once we have calculated the shared channel key, we need to derive two keys from it: one for encrypting outgoing messages and another for decrypting incoming messages.
+
+Deriving these two keys is quite simple. The second key is simply the shared key written in reverse order. For example:
 
 ```
 Shared key : AABB2233
@@ -274,7 +283,9 @@ First key: AABB2233
 Second key: 3322BBAA
 ```
 
-Осталось определить, какой ключ для чего использовать, мы можем сделать это, сравнив идентификатор нашего открытого ключа канала с идентификатором открытого ключа канала сервера, преобразовав их в числовой вид — uint256. Этот подход используется для того, чтобы и сервер, и клиент определяли, какой ключ для чего использовать. Если сервер использует первый ключ для шифрования, то при таком подходе клиент всегда будет использовать его для расшифровки.
+We need to determine which key to use for specific purposes. To do this, we can compare the ID of our public key with the ID of the server's public key, converting both to a numerical format (uint256).
+
+This method ensures that both the server and the client agree on which key is used for what function. If the server uses the first key for encryption, this approach guarantees that the client will always use it for decryption.
 
 Условия использования:
 
@@ -292,14 +303,15 @@ Encryption: First Key
 Decryption: First Key
 ```
 
-[[Пример реализации]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/adnl.go#L502)
+[[Please see implementation example]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/adnl.go#L502).
 
-### Обмен данными в канале
+### Communication in a channel
 
-Весь последующий обмен пакетами будет происходить внутри канала, а ключи канала будут использоваться для шифрования.
-Давайте отправим тот же запрос `dht.getSignedAddressList` внутри только что созданного канала, чтобы увидеть разницу.
+All future packet exchanges will take place within the channel, and the channel keys will be utilized for encryption.
 
-Давайте создадим пакет для канала, используя ту же структуру `adnl.packetContents`:
+Let's send the same `dht.getSignedAddressList` request within a newly created channel to observe the differences.
+
+We will construct the packet for the channel using the same `adnl.packetContents` structure:
 
 ```
 89cd42d1                                                               -- TL ID adnl.packetContents
@@ -314,10 +326,11 @@ fe3c0f39a89917b7f393533d1d06b605b673ffae8bbfab210150fe9d29083c35          -- que
 07 e4092842a8ae18                                                      -- rand2, 7 (07) random bytes
 ```
 
-Пакеты в канале довольно просты и по сути состоят из последовательностей (seqno) и самих сообщений.
+The packets in a channel are quite straightforward and essentially consist of a sequence number (seqno) and the messages themselves.
 
-После сериализации, как и в прошлый раз, мы вычисляем хэш sha256 пакета. Затем мы шифруем пакет, используя ключ, предназначенный для исходящих пакетов канала.
-[Вычисляем](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-key-id) `pub.aes` идентификатор ключа шифрования наших исходящих сообщений, и создаем наш пакет:
+After serialization, as we did last time, we calculate the SHA256 hash of the packet. Next, we encrypt the packet using the designated key for outgoing packets in the channel.
+
+To do this we [calculate](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-key-id) `pub.aes` - ID of the encryption key for our outgoing messages and then build our packet:
 
 ```
 bcd1cf47b9e657200ba21d94b822052cf553a548f51f539423c8139a83162180 -- ID of encryption key of our outgoing messages 
@@ -325,15 +338,15 @@ bcd1cf47b9e657200ba21d94b822052cf553a548f51f539423c8139a83162180 -- ID of encryp
 ...                                                              -- the encrypted content of the packet
 ```
 
-Мы отправляем пакет по UDP и ждем ответа. В ответ мы получим пакет того же типа, что и отправили (те же поля), но с ответом на наш запрос `dht.getSignedAddressList`.
+We send a packet via UDP and wait for a response. In response, we receive a packet of the same type as the one we sent, containing the answer to our request for `dht.getSignedAddressList`.
 
 ## Другие типы сообщений
 
-Для базовой коммуникации используются сообщения типа `adnl.message.query` и `adnl.message.answer`, которые мы обсуждали выше, но для некоторых ситуаций используются и другие типы сообщений, которые мы обсудим в этом разделе.
+For basic communication, messages such as `adnl.message.query` and `adnl.message.answer` are utilized, which we discussed earlier. However, there are also other types of messages used for specific situations, which we will cover in this section.
 
 ### adnl.message.part
 
-Этот тип сообщения является частью одного из других возможных типов сообщений, например `adnl.message.answer`. Этот метод передачи данных используется, когда сообщение слишком велико для передачи в одной UDP-датаграмме.
+This message type is part of another possible message type, such as `adnl.message.answer`. This method of data transfer is used when a message is too large to be sent in a single UDP datagram.
 
 ```tlb
 adnl.message.part 
@@ -344,8 +357,9 @@ data:bytes             -- piece of data of the original message
    = adnl.Message;
 ```
 
-Таким образом, чтобы собрать исходное сообщение, нам нужно получить несколько частей и, в соответствии со смещениями, объединить их в один массив байтов.
-А затем обработать его как сообщение (в соответствии с префиксом ID в этом массиве байтов).
+To reconstruct the original message, we need to gather several parts and concatenate them into a single-byte array based on the specified offsets.
+
+We will then process this array as a message using the ID prefix contained within it.
 
 ### adnl.message.custom
 
@@ -353,13 +367,13 @@ data:bytes             -- piece of data of the original message
 adnl.message.custom data:bytes = adnl.Message;
 ```
 
-Такие сообщения используются, когда логика на более высоком уровне не соответствует формату запрос-ответ, сообщения такого типа позволяют полностью перенести обработку на более высокий уровень, так как сообщение несет в себе только массив байт, без query_id и других полей.
-Сообщения такого типа используются, например, в RLDP, так как на множество запросов может быть только один ответ, эта логика контролируется самим RLDP.
+Messages of this type are utilized when the logic at a higher level does not align with the typical request-response format. These messages allow for the complete relocation of processing to a higher level, as they consist solely of an array of bytes without including query IDs or other fields.
 
-### Заключение
+For instance, in RLDP, such messages are used since there can be only one response to multiple requests. RLDP itself manages this logic.
 
-Дальнейший обмен данными осуществляется на основе логики, описанной в этой статье, но содержимое пакетов зависит от протоколов более высокого уровня, таких как DHT и RLDP.
+Further communication occurs based on the logic outlined in this article, though the content of the packets relies on higher-level protocols like DHT and RLDP.
 
 ## Ссылки
 
-*Вот [ссылка на оригинальную статью](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-UDP-Internal.md) [Олега Баранова](https://github.com/xssnick).*
+Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-UDP-Internal.md) - _[Oleg Baranov](https://github.com/xssnick)._ <Feedback />
+
