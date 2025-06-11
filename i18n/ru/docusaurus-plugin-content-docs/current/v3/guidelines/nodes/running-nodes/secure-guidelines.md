@@ -1,98 +1,106 @@
-# Рекомендации по безопасности для узлов
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+# Secure guidelines for nodes
+
+Ensuring the security of nodes, particularly in decentralized networks such as blockchain or distributed systems, is essential for maintaining data integrity, confidentiality, and availability. The guidelines for securing nodes should cover several layers, including network communication, hardware, and software configurations. Below are a set of guidelines to enhance node security:
+
+### 1. Use the server exclusively to operate the TON node:
+
+- Using the server for additional tasks presents a potential security risk.
+
+### 2. Update and patch regularly:
+
+- Keep your system updated with the latest security patches.
+
+- Regularly use package management tools like apt (Debian/Ubuntu) or yum/dnf (CentOS/Fedora) to perform updates.
+
+    ```bash
+    #Debian/Ubuntu
+    sudo apt update && sudo  apt  upgrade  -y
+
+    #CentOS
+    sudo yum update && sudo yum upgrade -y
+
+    #Fedora
+    sudo dnf update && sudo dnf upgrade -y
+    ```
+
+- Consider automating security updates by enabling unattended upgrades for your system.
+
+### 3. Ensure a robust SSH configuration:
+
+- **Disable root login:** Prevent root access through SSH by editing the `/etc/ssh/sshd_config` file.
+
+    ```bash
+    PermitRootLogin no
+    ```
+- **Use SSH keys:** For a more secure connection, opt for SSH keys instead of password authentication.
+    ```bash
+    PasswordAuthentication no
+    ```
+- **Modify the default SSH port:** Changing the default SSH port can help reduce automated brute-force attacks:
+
+    ```bash
+    Port 2222
+    ```
+- **Restrict SSH access:** Allow SSH connections only from trusted IP addresses by implementing firewall rules.
+
+### 4. Implement a firewall
+
+- Set up a firewall to permit only essential services. Common tools are **ufw (Uncomplicated Firewall)** and **iptables**:
+
+    ```bash
+    sudo ufw allow 22/tcp # Allow SSH
+    sudo ufw allow 80/tcp # Allow HTTP
+    sudo ufw allow 443/tcp # Allow HTTPS
+    sudo ufw enable # Enable firewall
+    ```
+
+### 5. Monitor logs
+
+- Regularly monitor system logs to detect suspicious activities:
+    - `/var/log/auth.log` (for authentication attempts)
+    - `/var/log/syslog` or `/var/log/messages`
+- Consider implementing centralized logging.
+
+### 6. Limit user privileges
+
+- Grant root or sudo privileges only to trusted users. Use the sudo command carefully and audit the `/etc/sudoers` file to limit access.
+
+- Regularly review user accounts and remove any unnecessary or inactive users.
+
+### 7. Utilize SELinux or AppArmor
+
+- **SELinux** (on RHEL/CentOS) and **AppArmor** (on Ubuntu/Debian) provide mandatory access control, adding an extra layer of security by restricting programs from accessing specific system resources.
+
+### 8. Install security tools
+
+- Utilize tools such as **Lynis** to conduct regular security audits and identify potential vulnerabilities:
+
+    ```bash
+    sudo apt install lynis
+    sudo lynis audit system
+    ```
+
+### 9. Disable unnecessary services
+
+- To minimize the attack surface, disable or remove any unused services. For instance, if FTP or mail services are not needed, ensure to disable them:
+
+    ```bash
+    sudo systemctl disable service_name
+    ```
+
+### 10. Implement intrusion detection and prevention systems (IDS/IPS)
+
+- Use tools like **Fail2ban** to block IP addresses after multiple failed login attempts:
+
+    ```bash
+    sudo apt install fail2ban
+    ```
+
+- Utilize **AIDE (Advanced Intrusion Detection Environment)** to monitor file integrity and identify any unauthorized changes.
+
+:::caution
+Please remain vigilant and ensure that your node is secure at all times.
 :::
 
-Обеспечение безопасности узлов, особенно в децентрализованных сетях, таких как блокчейн или распределенные системы, имеет решающее значение для поддержания целостности, конфиденциальности и доступности данных. Рекомендации по обеспечению безопасности узлов должны касаться различных уровней, от сетевых коммуникаций до конфигурации аппаратного и программного обеспечения. Вот набор рекомендаций по обеспечению безопасности узлов:
-
-### 1. Используйте сервер только для запуска узла TON
-
-- Использование сервера для других задач представляет потенциальную угрозу безопасности
-
-### 2. Регулярно обновляйте и устанавливайте исправления
-
-- Убедитесь, что ваша система всегда обновлена с помощью последних исправлений безопасности.
-- Используйте инструменты управления пакетами, такие как apt (для Debian/Ubuntu) или yum/dnf (для CentOS/Fedora), для регулярного обновления:
-
-```bash
-sudo apt update && sudo apt upgrade -y
-```
-
-- Рассмотрите возможность автоматизации обновлений системы безопасности, включив автоматическое обновление.
-
-### 3. Используйте надежную конфигурацию SSH
-
-- Отключите вход с Root правами: запретите доступ с правами суперпользователя по SSH. Отредактируйте файл /etc/ssh/sshd_config:
-
-```bash
-PermitRootLogin no
-```
-
-- Используйте SSH-ключи: Избегайте аутентификации по паролю и вместо этого используйте SSH-ключи.
-
-```bash
-PasswordAuthentication no
-```
-
-- Измените порт SSH по умолчанию: Перенесите SSH на нестандартный порт, это уменьшит количество автоматических атак методом перебора. Например:
-
-```bash
-Port 2222
-```
-
-- Ограничьте доступ к SSH: Разрешайте SSH только с доверенных IP-адресов с помощью правил брандмауэра
-
-### 4. Настройте брандмауэр
-
-- Настройте брандмауэр, чтобы разрешить только необходимые службы. Общие инструменты - это ufw (Uncomplicated Firewall) или iptables:
-
-```bash
-sudo ufw allow 22/tcp   # Allow SSH
-sudo ufw allow 80/tcp   # Allow HTTP
-sudo ufw allow 443/tcp  # Allow HTTPS
-sudo ufw enable         # Enable firewall
-```
-
-### 5. Отслеживайте логи
-
-- Регулярно проверяйте системные журналы для выявления подозрительной активности:
-   - */var/log/auth.log* (для попыток аутентификации)
-   - */var/log/syslog* или */var/log/messages*
-- Рассмотрите возможность централизованного ведения журнала
-
-### 6. Ограничьте права пользователей
-
-- Предоставьте root права или sudo только доверенным пользователям. Используйте команду sudo с осторожностью и проведите аудит */etc/sudoers*, для ограничения доступа.
-- Регулярно просматривайте учетные записи пользователей и удаляйте ненужных или неактивных пользователей.
-
-### 7. Настройте SELinux или AppArmor
-
-- **SELinux** (на RHEL/CentOS) и **AppArmor** (на Ubuntu/Debian) обеспечивают обязательный контроль доступа, добавляя дополнительный уровень безопасности, ограничивая доступ программ к определенным системным ресурсам.
-
-### 8. Установите инструменты безопасности
-
-- Используйте такие инструменты, как Lynis, для проведения регулярных проверок безопасности и выявления потенциальных уязвимостей:
-
-```bash
-sudo apt install lynis
-sudo lynis audit system
-```
-
-### 9. Отключите ненужные службы
-
-- Отключите или удалите неиспользуемые службы, чтобы свести к минимуму вероятность атаки. Например, если вам не нужны службы FTP или почты, отключите их с помощью:
-
-```bash
-sudo systemctl disable service_name
-```
-
-### 10. Используйте системы обнаружения и предотвращения вторжений (IDS/IPS)
-
-- Установите такие инструменты, как Fail2ban, чтобы блокировать IP-адреса после слишком большого количества неудачных попыток входа в систему:
-
-```bash
-sudo apt install fail2ban
-```
-
-- Используйте AIDE (Advanced Intrusion Detection Environment) для контроля целостности файлов и обнаружения несанкционированных изменений.
