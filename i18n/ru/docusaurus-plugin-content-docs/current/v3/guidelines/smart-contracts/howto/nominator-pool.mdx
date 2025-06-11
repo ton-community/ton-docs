@@ -1,56 +1,58 @@
-# Как использовать пул номинаторов
+import Feedback from '@site/src/components/Feedback';
+
+# How to use the nominator pool
 
 :::tip
-Перед чтением этого руководства рекомендуется ознакомиться со [спецификацией Nominator Pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool).
+Before reading this tutorial, you should familiarize yourself with [nominator pool specification](/v3/documentation/smart-contracts/contracts-specs/nominator-pool).
 :::
 
-## Запуск валидатора в режиме пула номинаторов
+## Running the validator in nominator pool mode {#validator-pool-mode}
 
-1. Настройте аппаратное обеспечение валидатора, для этого потребуется: 8 vCPUs, 128 ГБ RAM, 1 ТБ SSD, фиксированный IP-адрес и скорость канала 1 Гб/с.
+1. Set up the hardware for the validator - you will need 8 vCPUs, 128GB memory, 1TB SSD, a fixed IP address, and 1Gb/s internet speed.
 
-   Для поддержания стабильности сети рекомендуется распределять узлы валидаторов в разных географических точках по всему миру, а не концентрировать их в одном дата-центре. Вы можете воспользоваться [этим сайтом](https://status.toncenter.com/), чтобы оценить загрузку различных локаций. Карта показывает загрузку центров обработки данных в Европе, в частности в Финляндии, Германии и Франции, поэтому использовать таких провайдеров, как Hetzner и OVH, не рекомендуется.
+   To maintain network stability, distribute validator nodes across different geographical locations worldwide rather than concentrating them in a single data center. Use [this site](https://status.toncenter.com/) to assess the load of various locations. The map indicates high data center utilization in Europe, especially in Finland, Germany, and Paris. Therefore, avoid using providers such as Hetzner and OVH.
 
-   > Убедитесь, что оборудование соответствует или превосходит указанные выше характеристики. Запуск валидатора на несоответствующем оборудовании негативно сказывается на работе сети и может привести к штрафам.
+   > Ensure your hardware meets or exceeds the specifications above. Running the validator on insufficient hardware negatively impacts the network and could result in penalties.
    >
-   > Обратите внимание, что с мая 2021 года компания Hetzner запретила майнинг на своих серверах, данный запрет распространяется как на алгоритмы PoW, так и на PoS. Даже установка обычного узла может быть расценена как нарушение условий обслуживания.
+   > Note that as of May 2021, Hetzner has prohibited mining on its servers. This ban includes both PoW and PoS algorithms. Even installing a regular node may violate their terms of service.
    >
-   > **Рекомендуемые провайдеры:** [Amazon](https://aws.amazon.com/), [DigitalOcean](https://www.digitalocean.com/), [Linode](https://www.linode.com/), [Alibaba Cloud](https://alibabacloud.com/), [Latitude](https://www.latitude.sh/).
+   > **Recommended providers include:** [Amazon](https://aws.amazon.com/), [DigitalOcean](https://www.digitalocean.com/), [Linode](https://www.linode.com/), [Alibaba Cloud](https://alibabacloud.com/), [Latitude](https://www.latitude.sh/).
 
-2. Установите и синхронизируйте **MyTonCtrl**, как описано в руководстве [здесь](/v3/guidelines/nodes/running-nodes/full-node#установите-mytonctrl).
+2. Install and synchronize **mytonctrl** as described in the guide [here](/v3/guidelines/nodes/running-nodes/full-node#install-the-mytonctrl).
 
-   Также доступна [видео-инструкция](/v3/guidelines/nodes/running-nodes/full-node#запуск-узла-видео).
+   For additional help, refer to this [video instruction](/v3/guidelines/nodes/running-nodes/full-node#run-a-node-video).
 
-3. Переведите 1 TON на адрес кошелька валидатора. Адрес можно узнать в MyTonCtrl с помощью команды `wl`.
+3. Transfer 1 TON to the validator wallet address in the `wl` list.
 
-4. Используйте команду `aw`, чтобы активировать ваш кошелек валидатора.
+4. Use the `aw` command to activate your validator wallet.
 
-5. Активируйте режим пула:
+5. Activate pool mode:
 
    ```bash
    enable_mode nominator-pool
    set stake null
    ```
 
-6. Создайте два пула (для четных и нечетных раундов проверки):
+6. Create two pools (for even and odd validation rounds):
 
    ```bash
    new_pool p1 0 1 1000 300000
    new_pool p2 0 1 1001 300000
    ```
 
-   где:
+   Where:
 
-   - `p1` – имя пула;
-   - `0` % – доля вознаграждения валидатора (например, введите 40 для 40%);
-   - `1` – максимальное количество номинаторов в пуле (\<= 40);
-   - `1000` TON – минимальная ставка валидатора (>= 1 000 TON);
-   - `300000` TON – минимальная ставка номинатора (>= 10 000 TON);
+   - `p1` is the pool name;
+   - `0` % is the validator's reward share (e.g., use 40 for 40%);
+   - `1` is the maximum number of nominators in the pool (should be \<= 40);
+   - `1000` TON is the minimum validator stake (should be >= 1K TON);
+   - `300000` TON is the minimum nominator stake (should be >= 10K TON);
 
-   > (!) Конфигурации пулов не обязательно должны быть одинаковыми, можно добавить 1 к минимальной ставке одного пула, чтобы сделать их разными.
+   > (!) Pool configurations do not have to be identical. You can add 1 to the minimum stake of one pool to make them different.
    >
-   > (!) Воспользуйтесь https://tonmon.xyz/, чтобы определить текущую минимальную ставку валидатора.
+   > (!) Use https://tonmon.xyz/ to determine the current minimum validator stake.
 
-7. Введите `pools_list`, чтобы отобразить адреса пулов:
+7. Type `pools_list` to display pool addresses:
 
    ```bash
    pools_list
@@ -59,7 +61,7 @@
    p2    empty   0        0f9qtmnzs2-PumMisKDmv6KNjNfOMDQG70mQdp-BcAhnV5jL
    ```
 
-8. Отправьте по 1 TON в каждый пул и активируйте пулы:
+8. Send 1 TON to each pool and activate the pools:
 
    ```bash
    mg validator_wallet_001 0f98YhXA9wnr0d5XRXT-I2yH54nyQzn0tuAYC4FunT780qIT 1
@@ -68,7 +70,7 @@
    activate_pool p2
    ```
 
-9. Введите `pools_list`, чтобы отобразить пулы:
+9. Type `pools_list` to display pools:
 
    ```bash
    pools_list
@@ -77,47 +79,63 @@
    p2    active  0.731199806  kf9qtmnzs2-PumMisKDmv6KNjNfOMDQG70mQdp-BcAhnV8UO
    ```
 
-10. Откройте каждый пул по ссылке "https://tonscan.org/nominator/{address_of_pool}" и проверьте конфигурацию пула.
+10. Open each pool via the link "https://tonscan.org/nominator/{address_of_pool}" and verify pool configurations.
 
-11. Продолжайте вносить депозит валидатора в каждый пул:
+11. Proceed with the validator deposit to each pool:
 
     ```bash
     deposit_to_pool validator_wallet_001 <address_of_pool_1> 1005
     deposit_to_pool validator_wallet_001 <address_of_pool_2> 1005
     ```
 
-`1005` – это сумма депозита в TON. Имейте в виду, что за обработку депозита пулом будет вычтен 1 TON.
+In these commands, `1005` TON is the deposit amount. The pool will deduct 1 TON to process the deposit.
 
-12. Продолжайте вносить депозит номинатора в каждый пул:
+12. Proceed with the nominator deposit to each pool:
 
-    Перейдите по ссылке на пул (из **шага 10**) и нажмите **ADD STAKE**.
-    Также можно внести депозит с помощью **MyTonCtrl**, используя следующие команды:
+    Visit the pool link (from **Step 9**) and click **ADD STAKE**.
+    You can also make a deposit using **mytonctrl**, using the following commands:
 
     ```bash
     mg nominator_wallet_001 <address_of_pool_1> 300001 -C d
     mg nominator_wallet_001 <address_of_pool_2> 300001 -C d
     ```
 
-> (!) Кошелек номинатора должен быть инициализирован в basechain (воркчейн 0).
+> (!) The nominator wallet must be initialized in the basechain (workchain 0).
 >
-> (!) Помните, что кошелек валидатора и кошелек номинатора должны храниться отдельно! Кошелек валидатора должен храниться на сервере с узлом валидатора, чтобы обеспечить обработку всех системных транзакций. Кошелек номинатора должен храниться в вашем холодном криптовалютном кошельке.
+> (!) Remember that the validator and nominator wallets must be stored separately! Store the validator wallet on the server with the validator node to ensure the processing of all system transactions. Meanwhile, store the nominator wallet in your cold cryptocurrency wallet.
 >
-> Чтобы вывести депозит номинатора, отправьте транзакцию с комментарием `w` на адрес пула (приложите 1 TON для обработки транзакции). Также можно выполнить это действие с помощью **MyTonCtrl**.
+> To withdraw a nominator deposit, send a transaction with the comment `w` to the pool address (attach 1 TON to process the transaction). You can also perform this action using **mytonctrl**.
 
-13. Предложите номинаторам внести депозит в ваши пулы. Участие в валидации начнется автоматически.
+13. Invite nominators to deposit into your pools. The participation in validation will commence automatically.
 
-    > (!) Убедитесь, что на вашем кошельке валидатора есть не менее 200 TON в месяц для оплаты комиссий.
+> (!) Ensure you have at least 200 TON/month in your validator wallet for operation fees.
+>
+> In the TON blockchain, the validator cycle is approximately 18 hours, and there are roughly 40.5 validation rounds per month (assuming a 30-day month).
+>
+> Here's the breakdown of costs based on participation:
+>
+> - **Participating in only odd or even cycles (half of the rounds):**
+>
+>   - Rounds per month: ~20.25
+>   - Cost per round: ~5 Toncoins
+>   - `total cost = 20.25 * 5 -> ~101.25 Toncoins`
+>
+> - **Participating in both odd and even cycles (all rounds):**
+>   - Rounds per month: ~40.5
+>   - Cost per round : ~ 5 Toncoins
+>   - `total cost = 40.5 * 5 -> ~202.50 Toncoins`
 
-## Конфигурация пула
+## Pool configuration
 
-Если вы собираетесь давать в долг самому себе, используйте `new_pool p1 0 1 1000 300000` (максимум 1 номинатор, доля валидаторов 0%).
+If you intend to lend to yourself, use `new_pool p1 0 1 1000 300000` (maximum of 1 nominator, 0% validator share).
 
-Если вы создаете пул для большого количества номинаторов, то можно использовать: `new_pool p1 40 40 10000 10000` (максимум 40 номинаторов, доля валидаторов 40%, минимальная ставка участника 10 000 TON).
+If you're creating a pool for numerous nominators, you might use something like this: `new_pool p1 40 40 10000 10000` (maximum of 40 nominators, 40% validator share, minimum participant stakes of 10K TON).
 
-## Переход обычного валидатора в режим пула номинаторов
+## Transitioning a regular validator to nominator pool mode
 
-1. Введите `set stake 0`, чтобы прекратить участие в выборах.
+1. Input `set stake 0` to discontinue election participation.
 
-2. Ожидайте возврата двух ваших ставок от избирателя.
+2. Await the return of both your stakes from the elector.
 
-3. Выполните действия из раздела [Запуск валидатора в режиме пула номинаторов](#запуск-валидатора-в-режиме-пула-номинаторов), начиная с **4-го шага** и далее.
+3. Proceed with the steps under [Running the validator in nominator pool mode](#validator-pool-mode) from the **4th step** onwards.
+   <Feedback />
