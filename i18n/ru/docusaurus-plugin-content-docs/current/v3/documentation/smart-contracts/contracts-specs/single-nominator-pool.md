@@ -1,27 +1,34 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Single Nominator Pool
+# Single nominator pool
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-[Single Nominator](https://github.com/ton-blockchain/single-nominator) – это простой брандмауэрный смарт-контракт TON, который обеспечивает безопасную валидацию блокчейна TON через холодный кошелек. Контракт предназначен для валидаторов TON, которые имеют достаточный объем средств для стейкинга и проведения самостоятельной валидации, не полагаясь на ставки сторонних номинаторов. Контракт предоставляет альтернативную упрощенную реализацию смарт-контракта [Nominator Pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool), который поддерживает только одного номинатора. Преимущество этой реализации в том, что она более безопасна, поскольку поверхность атаки значительно меньше. Это происходит благодаря значительному снижению сложности смарт-контракта пула номинаторов, который обычно поддерживает несколько сторонних номинаторов.
+The [single nominator](https://github.com/ton-blockchain/single-nominator) contract is a security-focused smart contract that lets validators securely stake Toncoins without needing other participants. Designed for validators with sufficient self-stake, it keeps signing keys separate from staked funds using a cold wallet for maximum security. The contract provides an alternative simplified implementation for the [nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) smart contract that supports a single nominator only. The benefit of this implementation is that it's more secure since the attack surface is considerably smaller. This is due to a massive reduction in the complexity of the nominator pool that has to support multiple third-party nominators.
 
 ## Подходящее решение для валидаторов
 
-Этот смарт-контракт предназначен для валидаторов TON, которые имеют достаточный объем средств для стейкинга и самостоятельной валидации. Другими доступными альтернативами являются:
+This smart contract is the recommended solution for TON validators with a sufficient stake to validate independently. Other options include:
 
-- использование [горячего кошелька](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) (небезопасно, поскольку холодный кошелек необходим для предотвращения кражи в случае взлома узла валидатора)
-- использование [restricted-кошелька](https://github.com/EmelyanenkoK/nomination-contract/blob/master/restricted-wallet/wallet.fc) (который не поддерживается и имеет нерешенные векторы атак, например, атаки на слив газа)
-- использование [Пула номинаторов](https://github.com/ton-blockchain/nominator-pool) с max_nominators_count = 1 (излишне сложно при большой площади атаки)
+1. **Hot wallet**\
+   [Standard wallet implementation](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)\
+   _Risk_: Vulnerable to theft if the validator node is compromised
 
-Смотрите более подробное [сравнение существующих альтернатив](#сравнение-существующих-альтернатив).
+2. **Restricted wallet**\
+   [Legacy implementation](https://github.com/EmelyanenkoK/nomination-contract/blob/master/restricted-wallet/wallet.fc)\
+   _Issues_: Unmaintained and susceptible to gas drainage attacks
+
+3. **Nominator pool**\
+   [Single-nominator setup](https://github.com/ton-blockchain/nominator-pool)\
+   _Drawback_: Unnecessary complexity for solo validators
+
+For a complete feature comparison, see:\
+[Comparison of existing alternatives](#comparison-of-existing-alternatives)
 
 ## Официальный хэш-код
 
-Проверьте смарт-контракт на сайте https://verifier.ton.org, прежде чем отправлять средства на реальный контракт.
+Check this in https://verifier.ton.org before sending funds to a live contract.
 
 Single nominator v1.0:
 
@@ -37,152 +44,160 @@ zA05WJ6ywM/g/eKEVmV6O909lTlVrj+Y8lZkqzyQT70=
 
 ## Архитектура
 
-Архитектура практически идентична смарт-контракту [Nominator Pool](https://github.com/ton-blockchain/nominator-pool):
+The architecture is nearly identical to the [nominator pool](https://github.com/ton-blockchain/nominator-pool) contract:
 
 ![image](/img/nominator-pool/single-nominator-architecture.png)
 
 ### Разделение на две роли
 
-- *Владелец* – холодный кошелек (приватный ключ, не подключенный к интернету), который владеет средствами, используемыми для стейкинга, и выступает в качестве single nominator
-- *Валидатор* – кошелек, чей приватный ключ находится на узле валидатора (может подписывать блоки, но не может украсть средства, используемые для ставки)
+- _Owner_ - cold wallet (private key that is not connected to the Internet) that owns the funds used for staking and acts as the single nominator
+- _Validator_ - the wallet whose private key is on the validator node (can sign blocks but can't steal the funds used for stake)
 
 ### Рабочий процесс
 
-1. *Владелец* хранит средства для стейкинга (\$$$) в своем защищенном холодном кошельке.
-2. *Владелец* вносит депозит (\$$$) в контракт *Single Nominator* (этот контракт).
-3. *MyTonCtrl* запускается на узле валидатора, подключенном к интернету.
-4. *MyTonCtrl* использует кошелек *Валидатора*, чтобы дать указание *Single Nominator* восстановить ставку в следующем избирательном цикле.
-5. *Single Nominator* отправляет ставку (\$$$) *Избирателю* на один цикл.
-6. Избирательный цикл закончился, ставка может быть восстановлена.
-7. *MyTonCtrl* использует кошелек *Валидатора*, чтобы дать указание *Single Nominator* восстановить ставку в следующем избирательном цикле.
-8. *Single Nominator* восстанавливает ставку (\$$$) из предыдущего цикла у *Избирателя*.
-9. Шаги 4-8 повторяются до тех пор, пока *Владелец* будет готов продолжать валидацию.
-10. *Владелец* выводит средства (\$$$) из контракта *Single Nominator* и забирает их.
+1. _Owner_ holds the funds for staking (\\$$$) in their secure cold wallet
+2. _Owner_ deposits the funds (\\$$$) in the _SingleNominator_ contract (this contract)
+3. _MyTonCtrl_ starts running on the validator node connected to the Internet
+4. _MyTonCtrl_ uses _Validator_ wallet to instruct _SingleNominator_ to enter the next election cycle
+5. _SingleNominator_ sends the stake (\\$$$) to the _Elector_ for one cycle
+6. The election cycle is over, and stake can be recovered
+7. _MyTonCtrl_ uses _Validator_ wallet to instruct _SingleNominator_ to recover the stake from the election cycle
+8. _SingleNominator_ recovers the stake (\\$$$) of the previous cycle from the _Elector_
+9. Steps 4-8 repeat as long as _Owner_ is happy to keep validating
+10. _Owner_ withdraws the funds (\\$$$) from the _SingleNominator_ contract and takes them back home
 
 ## Ослабление векторов атак
 
-- Для подписи новых блоков узлу-валидатору требуется горячий кошелек. Данный кошелек небезопасен по своей сути, поскольку его приватный ключ имеет доступ к интернету. Если этот ключ будет скомпрометирован, *Валидатор* не сможет извлечь средства, используемые для валидации. Только *Владелец* может вывести эти средства.
+- The validator node requires a hot wallet to sign new blocks. This wallet is inherently insecure because its private key is connected to the Internet. Even if this key is compromised, the _Validator_ cannot extract the funds used for validation. Only _Owner_ can withdraw these funds.
 
-- Даже если кошелек *Валидатора* скомпрометирован, *Владелец* может попросить *Single Nominator* изменить адрес валидатора. Это не позволит злоумышленнику в дальнейшем взаимодействовать с *Single Nominator*. Здесь нет состояния гонки, *Владелец* всегда будет иметь приоритет.
+- Even if the _Validator_ wallet is compromised, _Owner_ can tell _SingleNominator_ to change the validator address. This will prevent the attacker from interacting with _SingleNominator_ further. There is no race condition here; _Owner_ will always take precedence.
 
-- На балансе *Single Nominator* хранятся только основные средства для стейкинга – этот баланс не используется для затрат газа. Деньги на газ для начала избирательного цикла хранятся в кошельке *Валидатора*. Это решение не позволит злоумышленнику, скомпрометировавшему валидатора, слить средства для стейкинга с помощью атаки на трату газа.
+- The _SingleNominator_ balance holds the principal staking funds only—its balance is not used for gas fees. Gas money for entering election cycles is held in the _Validator_ wallet. This prevents an attacker who compromised the validator from draining the principal via a gas spending attack.
 
-- *Single Nominator* проверяет формат всех операций, выполняемых *Валидатором*, чтобы убедиться, что он не передает недействительные сообщения *Избирателю*.
+- _SingleNominator_ verifies the format of all operations given by _Validator_ to ensure it doesn't forward invalid messages to the _Elector_.
 
-- В случае необходимости, например, если контракт *Избирателя* был обновлен и изменил свой интерфейс, *Владелец* все еще может отправить любое необработанное сообщение как *Single Nominator*, чтобы вернуть ставку от *Избирателя*.
+- In an emergency, for example, if the _Elector_ contract was upgraded and changed its interface, _Owner_ can still send any raw message as _SingleNominator_ to recover the stake from _Elector_.
 
-- В случае крайней необходимости, *Владелец* может установить код *Single Nominator* и переопределить его текущую логику работы для устранения непредвиденных обстоятельств.
+- In an extreme emergency, _Owner_ can set the code of _SingleNominator_ and override its current logic to address unforeseen circumstances.
 
-Некоторые из этих векторов атак невозможно ослабить с помощью обычного контракта [Nominator Pool](https://github.com/ton-blockchain/nominator-pool), поскольку это позволит человеку, управляющему валидатором, красть средства у своих номинаторов. Это не проблема с *Single Nominator* потому, что *Владелец* и *Валидатор* принадлежат одной и той же стороне.
+The standard [nominator pool](https://github.com/ton-blockchain/nominator-pool) can't prevent all attack scenarios - a malicious validator operator could potentially steal from nominators. This risk doesn't exist with _SingleNominator_ since both the _Owner_ and _Validator_  are controlled by the same entity.
 
 ### Аудиты безопасности
 
-Полный аудит безопасности, проведенный компанией Certik, доступен в репозитории: [Certik Audit](https://github.com/ton-blockchain/single-nominator/blob/main/certik-audit.pdf).
+Certik conducted a full security audit, which is available in this repo: [Certik audit](https://github.com/ton-blockchain/single-nominator/blob/main/certik-audit.pdf).
 
 ## Сравнение существующих альтернатив
 
-Предполагая, что вы валидатор с достаточной ставкой для самостоятельной валидации, вот альтернативные настройки, которые вы можете использовать с MyTonCtrl:
-
----
+Assuming that you are a validator with enough stake to validate independently, these are the alternative setups you can use with MyTonCtrl:
 
 ### 1. Обычный горячий кошелек
 
-Это простейшая настройка, при которой MyTonCtrl подключен к тому же [standard wallet](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc), на котором хранятся средства. Поскольку этот кошелек подключен к интернету, он считается горячим кошельком.
+This basic setup connects MyTonCtrl directly to the [standard wallet](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc) holding your funds. Because this wallet remains internet-connected, it operates as a hot wallet.
 
 ![image](/img/nominator-pool/hot-wallet.png)
 
-Использование небезопасно, так как злоумышленник может получить приватный ключ, поскольку кошелек подключен к интернету. С помощью приватного ключа злоумышленник может отправить средства в стейкинг кому угодно.
-
----
+This is insecure because an attacker can get the private key as soon as it's connected to the Internet. With the private key, the attacker can send the staking funds to anyone.
 
 ### 2. Restricted-кошелек
 
-Эта настройка заменяет стандартный кошелек на [restricted wallet](https://github.com/EmelyanenkoK/nomination-contract/blob/master/restricted-wallet/wallet.fc), который позволяет отправлять исходящие транзакции только заранее определенным адресам назначения, таким как *Избиратель* и *Владелец*.
+This setup replaces the standard wallet with a [restricted-wallet](https://github.com/EmelyanenkoK/nomination-contract/blob/master/restricted-wallet/wallet.fc) that allows outgoing transactions to be sent only to restricted destinations such as the _Elector_ and the owner's address.
 
 ![image](/img/nominator-pool/restricted-wallet.png)
 
-Данный тип кошелька не обслуживается (заменен на Пул номинаторов) и имеет нерешенные векторы атак, например, атаки на трату газа. Поскольку в одном и том же кошельке на одном балансе хранятся и плата за газ и основная сумма ставки, злоумышленник, скомпрометировавший приватный ключ, может генерировать транзакции, что повлечет за собой значительные убытки. Кроме того, при попытке вывода средств злоумышленник и владелец могут столкнуться с состоянием гонки из-за коллизий seqno.
-
----
+The restricted wallet is unmaintained (replaced by nominator-pool) and has unresolved attack vectors like gas drainage attacks. Since the same wallet holds gas fees and the stake principal in the same balance, an attacker who compromises the private key can generate transactions that will cause significant principal losses. In addition, there's a race condition between the attacker and the owner when trying to withdraw due to seqno collisions.
 
 ### 3. Пул номинаторов
 
-[Пул номинаторов](https://github.com/ton-blockchain/nominator-pool) первым ввел четкое разграничение между владельцами ставок (номинаторами) и валидатором, подключенным к интернету. Пул номинаторов поддерживает до 40 номинаторов, делающих ставки вместе на одном валидаторе.
+The [nominator-pool](https://github.com/ton-blockchain/nominator-pool) was the first to introduce a clear separation between the stake owners (nominators) and the validator connected to the Internet. This setup supports up to 40 nominators staking together on the same validator.
 
 ![image](/img/nominator-pool/nominator-pool.png)
 
-Смарт-контракт пул номинаторов чрезмерно сложен из-за поддержки 40 одновременно работающих номинаторов. Также, контракт должен защищать номинаторов от диплоера контракта, поскольку это отдельные сущности. Такая схема считается нормальной, но ее очень сложно проверить полностью из-за размера поверхности атаки. Это решение имеет смысл в том случае, если валидатор не имеет достаточно средств на стейкинг для самостоятельной валидации или хочет разделить прибыль со сторонними стейкхолдерами.
-
----
+The nominator pool contract is overly complex due to the support of 40 concurrent nominators. In addition, the contract has to protect the nominators from the contract deployer because those are separate entities. This setup is considered ok but is very difficult to audit in full due to the size of the attack surface. The solution makes sense mostly when the validator does not have enough stake to validate alone or wants to do a rev-share with third-party stakeholders.
 
 ### 4. Single nominator
 
-Именно такая настройка реализована в этом репо. Это очень упрощенная версия пула номинаторов, которая поддерживает одного номинатора и не нуждается в защите этого номинатора от разработчика смарт-контракта, поскольку они являются одной и той же сущностью.
+This is the setup implemented in this repo. It's a very simplified version of the nominator pool that supports a single nominator. There is no need to protect this nominator from the contract deployer, as they are the same entity.
 
 ![image](/img/nominator-pool/single-nominator-architecture.png)
 
-Если у вас есть single nominator, который располагает всеми ставками для валидации, это самая надежная схема, которую можно использовать. Помимо простоты, этот смарт-контракт позволяет использовать владельцу различные аварийные защитные функции, например, восстановление ставки при возможном сценарии обновления *Избирателя*, которое может разрушить интерфейс восстановления ставки.
+If you have a single nominator who holds all stakes for validation, this is the most secure setup you can use. In addition to its simplicity, this contract provides the owner multiple emergency safeguards to recover stakes even in extreme scenarios like _Elector_ upgrades that break the recover stake interface.
 
-### Сообщения владельца
+## Сообщения владельца
 
 Владелец номинатора может выполнить 4 операции:
 
-#### 1. `withdraw`
+#### 1. Withdraw
 
-Используется для вывода средств на кошелек владельца. Чтобы вывести средства, владелец должен отправить сообщение, содержащее: opcode=0x1000 (32 бита), query_id (64 бита) и сумму вывода (переменная coin). Смарт-контракт номинатора отправит средства с флагом BOUNCEABLE и mode=64. <br/><br/>
-Если владелец использует **горячий кошелек** (не рекомендуется), [withdraw-deeplink.ts](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/ts/withdraw-deeplink.ts) может использоваться для создания deeplink, чтобы инициировать вывод средств с кошелька tonkeeper. <br/>
-Командная строка: `ts-node scripts/ts/withdraw-deeplink.ts single-nominator-addr withdraw-amount`, где:
+Used to withdraw funds to the owner's wallet. To withdraw the funds the owner should send a message with a body that includes: opcode=0x1000 (32 bits), query_id (64 bits) and withdraw amount (stored as coin variable). The nominator contract will send the funds with BOUNCEABLE flag and mode=64. <br/><br/>
+In case the owner is using a **hot wallet** (not recommended), [withdraw-deeplink.ts](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/ts/withdraw-deeplink.ts) can be used to generate a deeplink to initiate a withdrawal from tonkeeper wallet. <br/>
+
+Command line: `ts-node scripts/ts/withdraw-deeplink.ts single-nominator-addr withdraw-amount` where:
 
 - single-nominator-addr – адрес single nominator, с которого владелец хочет вывести средства.
-- withdraw-amount – сумма вывода. Смарт-контракт номинатора оставит в контракте 1 TON, поэтому фактическая сумма, которая будет отправлена на адрес владельца, будет минимальной между запрошенной суммой и балансом контракта -1. <br/>
-  Владелец должен запустить deeplink с телефона с кошельком tonkeeper. <br/>
+- withdraw-amount is the amount to withdraw. The nominator contract will leave 1 TON in the contract, so the amount sent to the owner's address will be the minimum between the requested amount and the contract balance - 1.
 
-Если владелец использует **холодный кошелек** (рекомендуется), [withdraw.fif](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/fift/withdraw.fif) может использоваться для создания тела boc, содержащего опкод withdraw и сумму для вывода. <br/>
-Командная строка: `fift -s scripts/fif/withdraw.fif withdraw-amount`, <br/> где withdraw-amount – сумма для вывода средств из контракта номинатора на кошелек владельца. Как указано выше, в контракте номинатора будет оставлено не менее 1 TON. <br/>
-Этот скрипт сгенерирует тело boc (с именем withdraw.boc), которое должно быть подписано и отправлено с кошелька владельца. <br/>
-С черного компьютера владелец должен запустить:
+The owner should run the deeplink from a phone with the tonkeeper wallet.
 
-- создайте и подпишите tx: `fift -s wallet-v3.fif my-wallet single_nominator_address sub_wallet_id seqno amount -B withdraw.boc`, где my-wallet – это pk-файл владельца (без расширения). Суммы 1 TON должно быть достаточно, чтобы оплатить комиссию (оставшаяся сумма будет возвращена владельцу). Файл withdraw.boc – это boc, сгенерированный выше.
-- с компьютера с доступом в интернет выполните следующие действия: `lite-client -C global.config.json -c 'sendfile wallet-query.boc'`, чтобы отправить boc-файл (wallet-query.boc), созданный на предыдущем шаге.
+If the owner is using a **cold wallet** (recommended), [withdraw.fif](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/fift/withdraw.fif) can be used to generate a boc body that includes the withdraw opcode and the amount to withdraw.
 
-#### 2. `change-validator`
+Command line: `fift -s scripts/fif/withdraw.fif withdraw-amount` where withdraw-amount is the amount to withdraw from the nominator contract to the owner's wallet. As described above, the nominator contract will leave at least 1 TON in the contract.
 
-Используется для изменения адреса валидатора. Валидатор может отправить избирателю только NEW_STAKE и RECOVER_STAKE. Если приватный ключ валидатора был скомпрометирован, адрес валидатора может быть изменен. Обратите внимание, что в этом случае средства находятся в безопасности, так как только владелец может вывести средства.<br/>
+This script will generate a boc body (named withdraw.boc) that should be signed and sent from the owner's wallet.
 
-Если владелец использует **горячий кошелек** (не рекомендуется), [change-validator-deeplink.ts](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/ts/change-validator-deeplink.ts) может использоваться для создания deeplink, чтобы изменить адрес валидатора. <br/>
-Командная строка: `ts-node scripts/ts/change-validator-deeplink.ts single-nominator-addr new-validator-address`, где:
+From the black computer, the owner should run the following:
+
+- create and sign the tx: `fift -s wallet-v3.fif my-wallet single_nominator_address sub_wallet_id seqno amount -B withdraw.boc` where my-wallet is the owner's pk file (without extension). The amount of 1 TON should be enough to pay fees (the remaining amount will be returned to the owner). The withdraw.boc is the boc generated above.
+- from a computer with access to the internet, run: `lite-client -C global.config.json -c 'sendfile wallet-query.boc'` to send the boc file (wallet-query.boc) generated in the previous step.
+
+### 2. Change validator
+
+Used to change the validator address. The validator can only send NEW_STAKE and RECOVER_STAKE to the elector. If the validator's private key is compromised, the validator's address can be changed. The funds are safe in this case, as only the owner can withdraw them.
+
+In case the owner is using a **hot wallet** (not recommended), [change-validator-deeplink.ts](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/ts/change-validator-deeplink.ts) can be used to generate a deeplink to change the validator address.
+
+Command line: `ts-node scripts/ts/change-validator-deeplink.ts single-nominator-addr new-validator-address` where:
 
 - single-nominator-addr – адрес  single nominator.
-- new-validator-address (по-умолчанию адрес ZERO) – это адрес нового валидатора. Если вы хотите сразу же отключить валидатора и установить нового позже, возможно, будет удобно установить в качестве адреса валидатора адрес ZERO. Владелец должен запустить deeplink с телефона с кошельком tonkeeper. <br/>
+- new-validator-address (defaults to ZERO address) is the address of the new validator. If you want to disable the validator immediately and only later set a new validator, it might be convenient to set the validator address to the ZERO address.
 
-Если владелец использует **холодный кошелек** (рекомендуется), [change-validator.fif](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/fift/change-validator.fif) может использоваться для создания тела boc, содержащего опкод change-validator и новый адрес валидатора. <br/>
-Командная строка: `fift -s scripts/fif/change-validator.fif new-validator-address`.
-Этот скрипт сгенерирует тело boc (с именем change-validator.boc), которое должно быть подписано и отправлено из кошелька владельца. <br/>
-С черного компьютера владелец должен запустить:
+The owner should run the deeplink from a phone with a tonkeeper wallet.
 
-- создайте и подпишите tx: `fift -s wallet-v3.fif my-wallet single_nominator_address sub_wallet_id seqno amount -B change-validator.boc`, где my-wallet – это pk-файл владельца (без расширения). Суммы 1 TON должно быть достаточно, чтобы оплатить комиссию (оставшаяся сумма будет возвращена владельцу). Файл change-validator.boc – это boc, сгенерированный выше.
-- с компьютера с доступом в интернет выполните следующие действия: `lite-client -C global.config.json -c 'sendfile wallet-query.boc'`, чтобы отправить boc-файл (wallet-query.boc), созданный на предыдущем шаге.
+If the owner is using a **cold wallet** (recommended), [change-validator.fif](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/fift/change-validator.fif) can be used to generate a boc body that includes the change-validator opcode and the new validator address.
 
-#### 3. `send-raw-msg`
+Command line: `fift -s scripts/fif/change-validator.fif new-validator-address`.
+This script will generate a boc body (change-validator.boc) that should be signed and sent from the owner's wallet.
 
-Этот опкод не предполагается для использования в обычных условиях. <br/>
-Опкод предназначен для отправки **любого** сообщения из смарт-контракта номинатора (должно быть подписано и отправлено из кошелька владельца). <br/>
-Вы можете использовать этот опкод, когда адрес смарт-контракта избирателя был неожиданно изменен, и средства все еще заблокированы у избирателя. В этом случае RECOVER_STAKE от валидатора не сработает, и владельцу придется создавать определенное сообщение. <br/>
-Тело сообщения должно содержать: opcode=0x7702 (32 бита), query_id (64 бита), mode (8 бит), ссылку на ячейку msg, которая будет отправлена как необработанное сообщение. <br/>
+From the black computer, the owner should run the following:
 
-#### 4. `upgrade`
+- create and sign the tx: `fift -s wallet-v3.fif my-wallet single_nominator_address sub_wallet_id seqno amount -B change-validator.boc` where my-wallet is the owner's pk file (without extension). The amount of 1 TON should be enough to pay fees (the remaining amount will be returned to the owner). The change-validator.boc is the boc generated above.
+- from a computer with access to the internet, run: `lite-client -C global.config.json -c 'sendfile wallet-query.boc'` to send the boc file (wallet-query.boc) generated in the previous step.
 
-Экстренный опкод, который, вероятно, никогда не должен быть использован.<br/>
-Опкод предназначен для обновления смарт-контракта номинатора. <br/>
-Тело сообщения должно содержать: opcode=0x9903 (32 бита), query_id (64 бита), ссылку на новую ячейку кода. <br/>
+### 3. Send raw msg
 
-## См. также
+This opcode is not expected to be used under normal conditions.
 
-- [Single Nominator Pool](https://github.com/ton-blockchain/single-nominator)
-- [Как использовать Single Nominator Pool](/v3/guidelines/smart-contracts/howto/single-nominator-pool)
-- [Orbs Single Nominator Pool (legacy)](https://github.com/orbs-network/single-nominator)
+It can be used to send **any** message from the nominator contract (it must be signed and sent from the owner's wallet).
 
+Use this opcode to recover funds from a changed Elector contract address where standard RECOVER_STAKE fails. The owner must construct a custom message containing the following:
 
+- `opcode=0x7702` (32 bits)
+- `query_id` (64 bits)
+- `mode` (8 bits)
+- The raw message cell reference
 
+### 4. Upgrade
 
+This emergency opcode (0x9903) should only be used to upgrade the nominator contract in critical situations. The message must include:
+
+- `opcode=0x9903` (32 bits)
+- `query_id` (64 bits)
+- New contract code cell reference
+
+## See also
+
+- [Single nominator pool](https://github.com/ton-blockchain/single-nominator)
+- [How to use single nominator pool](/v3/guidelines/smart-contracts/howto/single-nominator-pool)
+- [Orbs single nominator pool contract(legacy)](https://github.com/orbs-network/single-nominator)
+
+<Feedback />
 
