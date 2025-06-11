@@ -1,49 +1,62 @@
-# Сравнение Solidity и FunC
+import Feedback from '@site/src/components/Feedback';
 
-Разработка смарт-контрактов предполагает знание таких языков, как Solidity для Ethereum и FunC для TON. Solidity - это объектно-ориентированный, высокоуровневый, строго типизированный язык, основанный на C++, Python и JavaScript, и специально разработанный для написания смарт-контрактов, которые выполняются на блокчейн-платформе Ethereum.
+# Solidity vs FunC
 
-FunC также является языком высокого уровня, используемым для программирования смарт-контрактов на блокчейне TON, объектно-ориентированный, C-подобный, статически типизированный язык.
+## Introduction
 
-В следующих разделах будет приведен краткий анализ и сравнение двух языков по типам данных, хранилищам, функциям, структурам управления потоком и словарям, хеш-картам.
+Smart contract development involves using predefined languages such as Solidity for Ethereum and FunC for TON.
+Solidity is an object-oriented, high-level, strictly typed language influenced by C++, Python, and JavaScript. It is designed explicitly to write smart contracts on Ethereum blockchain platforms.
 
-## Схема хранения
+FunC is a high-level language used to program smart contracts on TON Blockchain. It is a domain-specific, C-like, statically typed language.
 
-Solidity обеспечивает плоскую модель хранения, которая означает, что все переменные состояния хранятся в едином непрерывном блоке памяти, называемом хранилищем. Хранилище состоит из набора данных типа ключ-значение, где каждый ключ есть 256-битное (32-байтовое) целое число, представляющее собой номер ячейки хранения, а каждое значение – это 256-битное слово, хранящееся в этой ячейке. Ячейки нумеруются последовательно, начиная с нуля, и в каждой ячейке может храниться только одно слово. Solidity позволяет разработчику сформировать структуру хранилища, используя ключевое слово storage для определения переменных состояния. Порядок, в котором задаются переменные, определяет их положение в хранилище.
+The sections below will analyze briefly the following aspects of these languages: data types, storage, functions, flow control structures, and dictionaries (hashmaps).
 
-Данные постоянного хранилища в блокчейне TON хранятся в виде ячеек. Ячейки играют роль памяти в стековой TVM. Ячейка может быть преобразована в фрагмент, Slice, а затем биты данных и ссылки на другие ячейки из ячейки могут быть получены путем их загрузки из этого фрагмента. Биты данных и ссылки на другие ячейки могут быть сохранены в компоновщике, Builder'e, а затем компоновщик может быть преобразован в новую ячейку.
+## Differences of Solidity and FunC
 
-## Типы данных
+### Storage layout
 
-Solidity включает следующие базовые типы данных:
+#### Solidity
 
-- Целые числа со знаком/без знака
-- Булевые значения
-- Адреса — используются для хранения адресов кошельков Ethereum или смарт-контрактов, обычно около 20 байт. Тип адреса может быть дополнен ключевым словом `payable`, что ограничивает его использование хранением только адресов кошельков, а также только использованием функций передачи и отправки криптовалюты.
-- Массивы байтов — объявляются ключевым словом "bytes", представляют собой массив фиксированного размера, используемый для хранения предопределенного количества байтов до 32, обычно задаются вместе с ключевым словом.
-- Литералы – неизменяемые значения, такие как адреса, рациональные и целые числа, строки, юникод и шестнадцатеричные числа, которые могут храниться в переменной.
-- Перечисления
-- Массивы (фиксированные/динамические)
-- Структуры
-- Маппинги
+Solidity uses a flat storage model, meaning it stores all state variables in a single, continuous block of memory called storage. The storage is a key-value store where each key is a 256-bit integer representing the storage slot number, and each value is the 256-bit word stored at that slot. Ethereum numbers the slots sequentially, starting from zero, and each slot can store a single word. Solidity allows the programmer to specify the storage layout using the storage keyword to define state variables. The order in which you define the variables determines their position in the storage.
 
-В случае FunC основными типами данных являются:
+#### FunC
 
-- Целые числа
-- Cell — базовая для TON непрозрачная структура данных, которая содержит до 1023 бит и до 4 ссылок на другие ячейки
-- Slice и Builder — специальные объекты для чтения и записи в ячейки
-- Continuation — еще одна разновидность ячейки, которая содержит готовый к выполнению байт-код TVM
-- Tuples — упорядоченная коллекция из до 255 компонентов, имеющих произвольные типы значений, возможно, различные.
-- Tensors — это упорядоченная коллекция, готовая к массовому присвоению типа: (int, int) a = (2, 4). Частным случаем тензорного типа является тип unit (). Он означает, что функция не возвращает никакого значения или не имеет аргументов.
+Permanent storage data in TON Blockchain is stored as a cell. Cells play the role of memory in the stack-based TVM. To read data from a cell, you need to transform a cell into a slice and then obtain the data bits and references to other cells by loading them from the slice. To write data, you must store data bits and references to other cells in a builder and cast the builder into a new cell.
 
-В настоящее время FunC не поддерживает определение пользовательских типов.
+### Data types
 
-### См. также
+#### Solidity
 
-- [Операторы](/v3/documentation/smart-contracts/func/docs/statements)
+Solidity includes the following basic data types:
 
-## Объявление и использование переменных
+- **Signed** and **Unsigned** integers
+- **Boolean**
+- **Addresses**, typically around 20 bytes, are used to store Ethereum wallet or smart contract addresses. If the address type contains the suffix keyword `payable,` it restricts it from storing only wallet addresses and using the transfer and send crypto functions.
+- **Byte arrays** — declared with the keyword **bytes**, is a fixed-size array used to store a predefined number of bytes up to 32, usually declared along with the keyword.
+- **Literals** — Immutable values such as addresses, rationals and integers, strings, Unicode, and hexadecimal can be stored in a variable.
+- **Enums**
+- **Arrays** fixed or dynamic
+- **Structs**
+- **Mappings**
 
-Solidity - это язык со статической типизацией, что означает, что тип каждой переменной должен быть указан при ее объявлении.
+#### FunC
+
+In the case of FunC, the main data types are:
+
+- **Integers**
+- **Cell** — basic for TON opaque data structure, which contains up to 1,023 bits and up to 4 references to other cells
+- **Slice** and **Builder** — special flavors of the cell to read from and write to cells,
+- **Continuation** — another flavour of cell that contains ready-to-execute TVM byte-code
+- **Tuples** — is an ordered collection of up to 255 components, having arbitrary value types, possibly distinct.
+- **Tensors** — is an ordered collection ready for mass assigning like: `(int, int) a = (2, 4)`. A special case of tensor type is the unit type `()`. It represents that a function doesn’t return any value or has no arguments.
+
+Currently, FunC does not support defining custom types. Read more about types in the [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
+
+### Declaring and using variables
+
+#### Solidity
+
+Solidity is a statically typed language, meaning each variable's type must be specified when declared.
 
 ```js
 uint test = 1; // Declaring an unsigned variable of integer type
@@ -51,22 +64,24 @@ bool isActive = true; // Logical variable
 string name = "Alice"; // String variable
 ```
 
-FunC - более абстрактный и функционально-ориентированный язык, он поддерживает динамическую типизацию и функциональный стиль программирования.
+#### FunC
+
+FunC is a more abstract and function-oriented language. It supports dynamic typing and functional programming styles.
 
 ```func
 (int x, int y) = (1, 2); // A tuple containing two integer variables
 var z = x + y; // Dynamic variable declaration 
 ```
 
-### См. также
+Read more on the [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
-- [Операторы](/v3/documentation/smart-contracts/func/docs/statements)
+### Loops
 
-## Циклы
+#### Solidity
 
-Solidity поддерживает циклы `for`, `while` и `do { ... } while`.
+Solidity supports `for`, `while`, and `do { ... } while` loops.
 
-Если вы хотите сделать что-то 10 раз, вы можете сделать это следующим образом:
+If you want to do something 10 times, you can do it this way:
 
 ```js
 uint x = 1;
@@ -78,7 +93,9 @@ for (uint i; i < 10; i++) {
 // x = 1024
 ```
 
-FunC, в свою очередь, поддерживает циклы `repeat`, `while` и `do { ... } until`. Цикл for не поддерживается. Если вы хотите выполнить тот же код, что и в примере выше, но на Func, вы можете использовать `repeat`
+#### FunC
+
+FunC, in turn, supports `repeat`, `while`, and `do { ... } until` loops. The `for` loop is not supported. If you want to execute the same code as in the example above on Func, you can use `repeat`
 
 ```func
 int x = 1;
@@ -88,13 +105,15 @@ repeat(10) {
 ;; x = 1024
 ```
 
-### См. также
+Read more on the [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
-- [Операторы](/v3/documentation/smart-contracts/func/docs/statements)
+### Functions
 
-## Функции
+#### Solidity
 
-Подход Solidity к объявлениям функций является сочетанием ясности и контроля. В этом языке программирования каждая функция инициируется ключевым словом "function", за которым следует имя функции и ее параметры. Тело функции заключено в фигурные скобки, явно определяющие область действия. Кроме того, возвращаемые значения указываются с помощью ключевого слова "returns".Основное отличие Solidity заключается в определении области видимости функций. Они могут быть обозначены как `public`, `private`, `internal` или `external`, тем самым описывая условия, при которых к ним может быть получен доступ и осуществлен вызов из других частей смарт-контракта или внешних сущностей. Ниже приведен пример, в котором мы задаем глобальную переменную `num` в языке Solidity:
+Solidity approaches function declarations with a blend of clarity and control. In this programming language, each function is initiated with the keyword `function`, followed by the function's name and its parameters. The function's body is enclosed within curly braces, clearly defining the operational scope. Additionally, return values are indicated using the `returns` keyword.
+
+What sets Solidity apart is its categorization of function visibility—you can designate functions as `public`, `private`, `internal`, or `external`. These definitions dictate the conditions under which developers can access and call other parts of the contract or external entities. Below is an example in which we set the global variable `num` in the Solidity language:
 
 ```js
 function set(uint256 _num) public returns (bool) {
@@ -103,7 +122,11 @@ function set(uint256 _num) public returns (bool) {
 }
 ```
 
-В свою очередь программа, написанная на FunC, по сути представляет собой список объявляемых функций и глобальных переменных. Объявление функции в FunC обычно начинается с необязательного декларатора, за которым следует возвращаемый тип и имя функции. Далее перечисляются параметры, а объявление заканчивается выбором спецификаторов, таких как `impure`, `inline/inline_ref` и `method_id`.Эти спецификаторы регулируют область видимости функции, ее способность изменять хранилище контрактов и ее поведение при встраивании.Ниже приведен пример, в котором мы сохраняем переменную хранилища как ячейку в постоянном хранилище на языке Func:
+#### FunC
+
+Transitioning to FunC, the FunC program is essentially a list of function declarations/definitions and global variable declarations. A FunC function declaration typically starts with an optional declarator, followed by the return type and the function name.
+
+Parameters are listed next, and the declaration ends with a selection of specifiers—such as `impure`, `inline/inline_ref`, and `method_id`. These specifiers adjust the function's visibility, ability to modify contract storage, and inlining behavior. Below is an example in which we store a storage variable as a cell in persistent storage in the Func language:
 
 ```func
 () save_data(int num) impure inline {
@@ -114,39 +137,47 @@ function set(uint256 _num) public returns (bool) {
 }
 ```
 
-### См. также
+Read more on [Functions](/v3/documentation/smart-contracts/func/docs/functions/) page.
 
-- [Функции](/v3/documentation/smart-contracts/func/docs/functions)
+### Flow control structures
 
-## Операторы выбора и перехода
+#### Solidity
 
-Большинство операторов из известных языков с фигурными скобками доступны и в Solidity, включая: `if`, `else`, `while`, `do`, `for`, `break`, `continue`, `return`, с обычной семантикой, известной из C или JavaScript.
+Most of the control structures known from curly-braces languages are available in Solidity, including: `if`, `else`, `while`, `do`, `for`, `break`, `continue`, `return`, with the usual semantics known from C or JavaScript.
 
-FunC поддерживает классические операторы `if-else`, а также циклы `ifnot`, `repeat`, `while` и `do/until`. Также с версии v0.4.0 поддерживаются операторы `try-catch`.
+#### FunC
 
-### См. также
+FunC supports classic `if-else` statements, `ifnot`, `repeat`, `while`, and `do/until` loops.  Also, since v0.4.0, `try-catch` statements are supported.
 
-- [Операторы](/v3/documentation/smart-contracts/func/docs/statements)
+Read more on the [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
-## Словари
+### Dictionaries
 
-Словари, hashmap/mapping, крайне важны для разработки контрактов Solidity и FunC, так как позволяют разработчикам эффективно хранить и извлекать данные в смарт-контрактах. В частности данные, связанные с определенным ключом, к примеру, баланс счета пользователя или факт владения активом.
+Dictionary or hashmap data structure is essential for Solidity and FunC contract development because it allows developers to efficiently store and retrieve data in smart contracts, specifically data related to a specific key, such as a user’s balance or ownership of an asset.
 
-Mapping — это хэш-таблица в Solidity, которая хранит данные в виде пар ключ-значение, где ключ может принимать значение любого из встроенных типов данных, кроме ссылочного. В свою очередь значение может быть любым, даже ссылочным. Mapping чаще всего используются в Solidity и блокчейне Ethereum для соединения уникального адреса Ethereum с соответствующим типом значения. В любом другом языке программирования Mapping является эквивалентом словарю.
+#### Solidity
 
-В Solidity структура Mapping не имеет размера и не имеет функционала задания ключа или значения. Mapping применим только к переменным состояния, которые служат типами ссылок на хранилище. Когда происходит инициализация Mapping структуры, он включает в себя все возможные ключи, которые соединены с значениями, байтовые представления которых состоят из одних нулей.
+Mapping is a hash table in Solidity that stores data as key-value pairs, where the key can be any of the built-in data types, excluding reference types, and the data type's value can be any type. In Solidity and on the Ethereum blockchain, mappings typically connect a unique Ethereum address to a corresponding value type. In any other programming language, a mapping is equivalent to a dictionary.
 
-Аналогом Mapping в FunC являются словари или TON hashmap. В контексте TON, hashmap представляет собой структуру данных, представленную деревом ячеек. Hashmap маппит ключи в значения произвольного типа, чтобы обеспечить возможность их быстрого поиска и изменения. Абстрактное представление hashmap в TVM — это дерево Patricia или компактное двоичное дерево.Работа с потенциально большими деревьями ячеек может содержать несколько сложностей. Каждая операция обновления создает значительное количество ячеек, а каждая построенная ячейка стоит 500 единиц газа, что в свою очередь означает, что эти операции могут исчерпать имеющиеся ресурсы, если их использовать неосторожно.Чтобы избежать превышения лимита газа, ограничьте количество обновлений словаря за одну транзакцию. Кроме того, двоичное дерево для `N` пар ключ-значение содержит `N-1` форков, что означает в общей сложности не менее `2N-1` ячеек. Хранилище смарт-контракта ограничено `65536` уникальными ячейками, поэтому максимальное количество записей в словаре составляет `32768` или чуть больше, если есть повторяющиеся ячейки.
+In Solidity, mappings don't have a length or the concept of setting a key or a value. Mappings are only applicable to state variables that serve as store reference types. When you initialize mappings, they include every possible key and map to values whose byte representations are all zeros.
 
-### См. также
+#### FunC
 
-- [Словари в TON](/v3/documentation/smart-contracts/func/docs/dictionaries)
+An analogy of mappings in FunC is dictionaries or TON hashmaps. In the context of TON, a hashmap is a data structure represented by a tree of cells. Hashmap maps keys to values ​​of arbitrary type so that quick lookup and modification are possible. The abstract representation of a hashmap in TVM is a Patricia tree or a compact binary trie.
 
-## Взаимодействие смарт-контрактов
+Working with potentially large cell trees can create several problems. Each update operation builds an appreciable number of cells (each cell built costs 500 gas), meaning these operations can run out of resources if used carelessly. To avoid exceeding the gas limit, limit the number of dictionary updates in a single transaction.
 
-Solidity и FunC предоставляют разные подходы к взаимодействию со смарт-контрактами. Основное различие заключается в механизмах вызова и взаимодействия между контрактами.
+Also, a binary tree for `N` key-value pairs contains `N-1` forks, which means a total of at least `2N-1` cells. The storage of a smart contract is limited to `65536` unique cells, so the maximum number of entries in the dictionary is `32768`, or slightly more if there are repeating cells.
 
-Solidity использует объектно-ориентированный подход, при котором контракты взаимодействуют друг с другом посредством вызовов методов. Это похоже на вызовы методов в традиционных объектно-ориентированных языках программирования.
+Read more about [Dictionaries in TON](/v3/documentation/smart-contracts/func/docs/dictionaries/).
+
+### Smart contract communication
+
+Solidity and FunC provide different approaches to interacting with smart contracts. The main difference lies in the mechanisms of invocation and interaction between contracts.
+
+#### Solidity
+
+Solidity uses object-orienteered contracts that interact with each other through method calls. This design is similar to method calls in traditional object-oriented programming languages.
 
 ```js
 // External contract interface
@@ -162,11 +193,13 @@ contract Sender {
 }
 ```
 
-FunC, используемый в экосистеме блокчейна TON, работает с сообщениями для вызова и взаимодействия между смарт-контрактами. Вместо прямого вызова методов контракты отправляют друг другу сообщения, которые могут содержать данные и код для выполнения.
+#### FunC
 
-Рассмотрим пример, в котором отправитель смарт-контракта должен отправить сообщение с номером, а получатель смарт-контракта должен получить этот номер и выполнить над ним некоторые манипуляции.
+FunC, used in the TON blockchain ecosystem, operates on messages to invoke and interact between smart contracts. Instead of calling methods directly, contracts send messages to each other, which can contain data and code for execution.
 
-Изначально получатель смарт-контракта должен описать, как он будет получать сообщения.
+Consider an example where a smart contract sender must send a message with a number, and a smart contract receiver must receive that number and perform some manipulation on it.
+
+Initially, the smart contract recipient must describe how it will receive messages.
 
 ```func
 () recv_internal(int my_balance, int msg_value, cell in_msg, slice in_msg_body) impure {
@@ -184,15 +217,15 @@ FunC, используемый в экосистеме блокчейна TON, �
 }
 ```
 
-Давайте подробнее обсудим, как выглядит получение сообщения в нашем целевом контракте:
+**Receiving message flow:**
 
-1. `recv_internal()` - эта функция выполняется, когда к контракту обращаются напрямую в блокчейне. Например, когда контракт обращается к нашему контракту.
-2. Функция принимает сумму баланса контракта, сумму входящего сообщения, ячейку с исходным сообщением и срез `in_msg_body`, в котором хранится только тело полученного сообщения.
-3. Наше тело сообщения будет хранить два целых числа. Первое число — это 32-битное беззнаковое целое число `op`, определяющее операцию, которую нужно выполнить, или `method` смарт-контракта, который нужно вызвать. Можно провести аналогию с Solidity и представить себе `op` как сигнатуру функции. Второе число — это число, с которым нам нужно произвести некоторые манипуляции.
-4. Чтобы прочитать из полученного Slice `op` и `наше число`, мы используем `load_uint()`.
-5. Далее мы уже взаимодействуем с числом (мы опустили эту функциональность в этом примере).
+1. `recv_internal()` function is executed when a contract is accessed directly within the blockchain. For example, when a contract accesses our contract.
+2. The function accepts the amount of the contract balance, the amount of the incoming message, the cell with the original message, and the `in_msg_body` slice, which stores only the body of the received message.
+3. Our message body will store two integer numbers. The first number is a 32-bit unsigned integer `op` defining the smart contract's operation. You can draw some analogy with Solidity and think of `op` as a function signature.
+4. We use `load_uint ()` to read `op` as a number from the resulting slice.
+5. Next, we execute business logic for a given operation. Note that we omitted this functionality in this example.
 
-Далее смарт-контракт отправителя должен корректно отправить сообщение. Для этого используется `send_raw_message`, который ожидает сериализованное сообщение в качестве аргумента.
+Next, the sender's smart contract is to send the message correctly. This is accomplished with`send_raw_message`, which expects a serialized message as an argument.
 
 ```func
 int num = 10;
@@ -200,7 +233,7 @@ cell msg_body_cell = begin_cell().store_uint(1,32).store_uint(num,32).end_cell()
 
 var msg = begin_cell()
             .store_uint(0x18, 6)
-            .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; in the example, we just hardcode the recipient's address
+            .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; in the example, we hardcode the recipient's address
             .store_coins(0)
             .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
             .store_ref(msg_body_cell)
@@ -209,17 +242,20 @@ var msg = begin_cell()
 send_raw_message(msg, mode);
 ```
 
-Давайте более подробно рассмотрим то, как выглядит отправка сообщения нашим смарт-контрактом получателю:
+**Sending message flow:**
 
-1. Сначала нам нужно построить наше сообщение. Полную структуру отправки можно найти [здесь](/v3/documentation/smart-contracts/message-management/sending-messages). Мы не будем детально описывать процесс создания сообщения здесь – вы можете прочитать об этом по ссылке.
-2. Тело сообщения представляет собой ячейку. В `msg_body_cell` мы делаем: `begin_cell()` - создает `Builder` для будущей ячейки, сначала `store_uint` - сохраняет первый `uint` в `Builder` (1 - это наш `op`), затем `store_uint` - сохраняет второй `uint` в `Builder` (num - это наш номер, которым мы будем манипулировать в контракте-получателе), `end_cell()` - создает ячейку.
-3. Чтобы прикрепить тело, которое придет в `recv_internal` в сообщении, мы ссылаемся на собранную ячейку в самом сообщении с помощью `store_ref`.
-4. Отправка сообщения.
+1. Initially, we need to build our message. The complete structure of the send can be found [here](/v3/documentation/smart-contracts/message-management/sending-messages/).
+2. The body of the message represents a cell. In `msg_body_cell` we do: `begin_cell()` - creates `Builder` for the future cell, first `store_uint` - stores the first uint into `Builder` (1 - this is our `op`), second `store_uint` - stores the second uint into `Builder` (num - this is our number that we will manipulate in the receiving contract), `end_cell()` - creates the cell.
+3. To attach the body that will come in `recv_internal` in the message,  we reference the collected cell in the message itself with `store_ref`.
+4. Sending a message.
 
-В этом примере показано, как смарт-контракты могут общаться друг с другом.
+This example presented how smart contracts can communicate with each other.
 
-### См. также
+Read more on the [Internal messages](/v3/documentation/smart-contracts/overview/) page.
 
-- [Внутренние сообщения](/v3/documentation/smart-contracts/message-management/internal-messages)
-- [Отправка сообщений](/v3/documentation/smart-contracts/message-management/sending-messages)
-- [Невозвратные сообщения](/v3/documentation/smart-contracts/message-management/non-bounceable-messages)
+## See also
+
+- [TON documentation](/v3/documentation/ton-documentation/)
+- [FunC overview](/v3/documentation/smart-contracts/func/overview/)
+
+<Feedback />
