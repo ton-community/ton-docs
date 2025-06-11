@@ -1,19 +1,24 @@
-# ADNL UDP - 节点间通信
+import Feedback from '@site/src/components/Feedback';
 
-ADNL通过UDP用于节点和TON组件之间的通信。它是一个低层级协议，其他更高级的TON协议（如DHT和RLDP）都是在其基础上运行的。在这篇文章中，我们将了解ADNL通过UDP在节点之间进行基本通信的工作方式。
+# ADNL UDP - internode
 
-与ADNL通过TCP不同，在UDP实现中，握手以不同的形式发生，并且使用了通道的额外层，但其他原则相似：
-基于我们的私钥和预先从配置或从其他网络节点收到的对方的公钥生成加密密钥。
+ADNL over UDP is a low-level protocol used by nodes and TON components to communicate with one another. It serves as the foundation for other higher-level TON protocols, such as DHT (Distributed Hash Table) and RLDP (Reliable Large Datagram Protocol).
 
-在ADNL的UDP版本中，连接是在从对方接收初始数据的同时建立的，如果发起方发送了'创建通道'消息，通道的密钥将被计算，并将确认通道的创建。建立通道后，进一步的通信将继续在通道内进行。
+This article will explain how ADNL over UDP facilitates basic communication between nodes.
 
-## 数据包结构和通信
+Unlike ADNL over TCP, the UDP implementation involves a different form of handshake and includes an additional layer in the form of channels. However, the underlying principles remain similar: encryption keys are generated based on our private key and the peer's public key, which is either known in advance from the configuration or received from other network nodes.
 
-### 首个数据包
+In the UDP version of ADNL, the connection is established simultaneously with the reception of initial data from the peer. If the initiator sends a **create channel** message, the channel’s key will be calculated, and the channel's creation will be confirmed.
 
-让我们分析与DHT节点建立连接并获取其签名地址列表的初始化，以便了解协议的工作方式。
+Once the channel is established, further communication continues within it.
 
-在[全局配置](https://ton-blockchain.github.io/global.config.json)中找到您喜欢的节点，在`dht.nodes`部分。例如：
+## Packet structure and communication
+
+### First packets
+
+Let's analyze the connection initialization with the DHT node and obtain a signed list of its addresses to understand how the protocol functions.
+
+Find a node you prefer in the [global config](https://ton-blockchain.github.io/global.config.json), specifically in the `dht.nodes` section.  For example:
 
 ```json
 {
@@ -41,19 +46,21 @@ ADNL通过UDP用于节点和TON组件之间的通信。它是一个低层级协�
 }
 ```
 
-1. 我们取其ED25519密钥`fZnkoIAxrTd4xeBgVpZFRm5SvVvSx7eN3Vbe8c83YMk`，并从base64解码。
-2. 取其IP地址`1091897261`，并使用[服务](https://www.browserling.com/tools/dec-to-ip)或转换为小端字节，得到`65.21.7.173`。
-3. 与端口结合，得到`65.21.7.173:15813`并建立UDP连接。
+Let's take the ed25519 key, `fZnkoIAxrTd4xeBgVpZFRm5SvVvSx7eN3Vbe8c83YMk`, and decode it from base64.
 
-我们想要打开一个通道与节点通信并获取一些信息，主要任务是接收其签名地址列表。为此，我们将生成2个消息，第一个是[创建通道](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L129)：
+Next, we will take its IP address, 1091897261, and convert it into a readable format using [this service](https://www.browserling.com/tools/dec-to-ip) or by converting it to little-endian bytes. This will give us the IP address `65.21.7.173`.
+
+Finally, we will combine this IP address with the port to obtain `65.21.7.173:15813` and establish a UDP connection.
+
+We aim to establish a communication channel with the node to obtain specific information, particularly a list of signed addresses. To achieve this, we will generate two messages. The first message will be to create the channel [(see the code)](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L129):
 
 ```tlb
 adnl.message.createChannel key:int256 date:int = adnl.Message
 ```
 
-这里有两个参数 - key和date。作为date，我们将指定当前的unix时间戳。对于key，我们需要为通道专门生成一个新的ED25519私钥+公钥对，它们将用于初始化[公共加密密钥](/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh)。我们将在消息的`key`参数中使用生成的公钥，并暂时保存私钥。
+We have two parameters to consider: a key and a date. The date will be represented by the current Unix timestamp. For the key, we need to generate a new ed25519 private and public key pair specifically for the channel. This key pair will be used to initialize the public encryption key, as outlined in the [link here](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-a-shared-key-using-ecdh). We will use the generated public key as the value for the `key` parameter in the message, while we will store the private key for future use.
 
-序列化填充的TL结构，得到：
+Next, we will serialize the populated TL structure to get the final result:
 
 ```
 bbc373e6                                                         -- TL ID adnl.message.createChannel 
@@ -61,22 +68,23 @@ d59d8e3991be20b54dde8b78b3af18b379a62fa30e64af361c75452f6af019d7 -- key
 555c8763                                                         -- date
 ```
 
-接下来，我们转到我们的主要查询 - [获取地址列表](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L198)。为此，我们首先需要序列化其TL结构：
+Next, let's proceed to our main query - [retrieve a list of addresses](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L198).
+
+To execute it, we first need to serialize its TL structure:
 
 ```tlb
 dht.getSignedAddressList = dht.Node
 ```
 
-它没有参数，因此我们只需序列化它。它将只是它的id - `ed4879a9`。
+There are no parameters to consider, so we will simply serialize it. The result will be just its ID: `ed4879a9`.
 
-接下来，由于这是DHT协议更高级别的请求，我们需要首先将它包裹在`adnl.message.query` TL结构中：
+Next, since this is a higher-level request within the DHT protocol, we must first wrap it in an `adnl.message.query` TL structure:
 
 ```tlb
 adnl.message.query query_id:int256 query:bytes = adnl.Message
 ```
 
-作为`query_id`，我们生成随机的32字节，作为`query`，我们使用我们的主要请求，[包裹在字节数组中](/develop/data-formats/tl#encoding-bytes-array)。
-我们将得到：
+We generate a random 32 bytes for `query_id`, and the `query` represents our main request, [wrapped as an array of bytes](/v3/documentation/data-formats/tl#encoding-bytes-array):
 
 ```
 7af98bb4                                                         -- TL ID adnl.message.query
@@ -84,9 +92,9 @@ d7be82afbc80516ebca39784b8e2209886a69601251571444514b7f17fcd8875 -- query_id
 04 ed4879a9 000000                                               -- query
 ```
 
-### 构建数据包
+### Building the packet
 
-所有通信都是通过数据包进行的，其内容是[TL结构](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L81)：
+All communication is conducted using packets, which contain the following structure: [TL structure](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L81):
 
 ```tlb
 adnl.packetContents 
@@ -110,11 +118,19 @@ adnl.packetContents
         
 ```
 
-一旦我们序列化了所有想要发送的消息，我们就可以开始构建数据包。发送到通道的数据包与初始化通道之前发送的数据包在内容上有所不同。首先，让我们分析用于初始化的主数据包。
+Once we have serialized all the messages we wish to send, we can begin building the packet.
 
-在通道外的初始数据交换期间，数据包的序列化内容结构前缀为对方的公钥 - 32字节。我们的公钥为32字节，数据包内容结构的序列化TL的sha256哈希 - 32字节。数据包内容使用从我们的私钥和对方的公钥（不是通道的密钥）获得的[共享密钥](/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh)进行加密。
+Packets sent to a channel have a different content structure compared to packets sent before the channel is initialized.
 
-序列化我们的数据包内容结构，然后逐字节解析：
+First, let’s examine the main packet used for initialization.
+
+During the initial data exchange, before the channel is established, the packet's serialized content structure is prefixed with the peer's public key, which is 32 bytes.
+
+Our public key is also 32 bytes, and the SHA-256 hash of the serialized TL of the packet's content structure is another 32 bytes.
+
+The content of the packet is encrypted using the [shared key](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-a-shared-key-using-ecdh), which is derived from our private key and the public key of the server.
+
+Let's serialize the structure of our packet content and parse it byte by byte:
 
 ```
 89cd42d1                                                               -- TL ID adnl.packetContents
@@ -147,8 +163,9 @@ c6b41348                                                                  -- TL 
 0f 2b6a8c0509f85da9f3c7e11c86ba22                                      -- rand2, 15 (0f) random bytes
 ```
 
-序列化后 - 我们需要使用我们之前生成并保存的私有客户端（不是通道的）ED25519密钥对结果字节数组进行签名。
-生成签名（大小为64字节）后，我们需要将其添加到数据包中，再次序列化，但现在在标志位中添加第11位，表示存在签名：
+After serialization, we need to sign the resulting byte array using our private client's key, specifically ed25519, which we generated and saved earlier.
+
+Once we have created the signature (which is 64 bytes in size), we must add it to the packet and serialize it again. This time, we will also set the 11th bit in the flag to indicate the presence of the signature:
 
 ```
 89cd42d1                                                               -- TL ID adnl.packetContents
@@ -184,12 +201,13 @@ c6b41348                                                                  -- TL 
 0f 2b6a8c0509f85da9f3c7e11c86ba22                                      -- rand2, 15 (0f) random bytes
 ```
 
-现在我们有一个组装好的、签名的和序列化的数据包，它是一个字节数组。
-为了让接收方随后验证其完整性，我们需要计算数据包的sha256哈希。例如，让这个哈希是`408a2a4ed623b25a2e2ba8bbe92d01a3b5dbd22c97525092ac3203ce4044dcd2`。
+We now have an assembled, signed, and serialized packet, which consists of an array of bytes.
 
-现在让我们使用AES-CTR密码对数据包内容进行加密，使用从我们的私钥和对方的公钥（不是通道的密钥）获得的[共享密钥](/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh)。
+Next, we need to calculate the packet's SHA-256 hash, allowing the recipient to verify its integrity later. For instance, let’s say the hash is `408a2a4ed623b25a2e2ba8bbe92d01a3b5dbd22c97525092ac3203ce4044dcd2`.
 
-我们几乎准备好发送了，只剩下计算ED25519对等密钥的[ID](/develop/network/adnl-tcp#getting-key-id)，并将所有内容连接在一起：
+Now, we will encrypt the contents of our packet using the AES-CTR cipher, utilizing the [shared key](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-a-shared-key-using-ecdh) that is derived from our private key and the peer’s public key (not the channel's key).
+
+We are almost ready to send the packet; we just need to [calculate the ID](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-key-id) of the ed25519 peer key and concatenate everything together:
 
 ```
 daa76538d99c79ea097a67086ec05acca12d1fefdbc9c96a76ab5a12e66c7ebb  -- server Key ID
@@ -198,9 +216,9 @@ afc46336dd352049b366c7fd3fc1b143a518f0d02d9faef896cb0155488915d6  -- our public 
 ...                                                               -- encrypted content of the packet
 ```
 
-现在我们可以通过UDP发送我们构建的数据包，并等待响应。
+We can now send our constructed packet to the peer via UDP and await a response.
 
-作为响应，我们将收到具有类似结构的数据包，但消息不同。它将包括：
+In response, we will receive a packet with a similar structure, but containing different messages. It will consist of:
 
 ```
 68426d4906bafbd5fe25baf9e0608cf24fffa7eca0aece70765d64f61f82f005  -- ID of our key
@@ -209,14 +227,14 @@ f32fa6286d8ae61c0588b5a03873a220a3163cad2293a5dace5f03f06681e88a  -- sha256 cont
 ...                                                               -- the encrypted content of the packet
 ```
 
-从服务器的数据包的反序列化如下：
+The process of deserializing the packet from the server is as follows:
 
-1. 我们检查数据包中的密钥ID，以了解该数据包是为我们准备的。
-2. 使用数据包中的服务器公钥和我们的私钥，我们计算共享密钥并解密数据包内容
-3. 比较我们收到的sha256哈希和从解密数据获得的哈希，它们必须匹配
-4. 使用`adnl.packetContents` TL模式开始反序列化数据包内容
+- We first check the ID of the key within the packet to confirm that the packet is intended for us.
+- Using the server's public key found in the packet along with our private key, we calculate a shared key to decrypt the packet's content.
+- We then compare the SHA-256 hash provided to us with the hash obtained from the decrypted data; they must match.
+- Finally, we begin deserializing the packet content using the `adnl.packetContents` TL schema.
 
-数据包内容将如下所示：
+The content of the packet will look like this:
 
 ```
 89cd42d1                                                               -- TL ID adnl.packetContents
@@ -248,13 +266,15 @@ ee354563                                                               -- reinit
 0f c3354d35749ffd088411599101deb2                                      -- rand2, 15 (0f) random bytes
 ```
 
-服务器用两条消息回应我们：`adnl.message.confirmChannel`和`adnl.message.answer`。
-对于`adnl.message.answer`，一切都很简单，这是我们请求`dht.getSignedAddressList`的回答，我们将在关于DHT的文章中分析。
+The server responded with two messages: `adnl.message.confirmChannel` and `adnl.message.answer`.
 
-让我们关注`adnl.message.confirmChannel`，这意味着对方已确认创建通道并发送给我们其公共通道密钥。现在，有了我们的私有通道密钥和对方的公共通道密钥，我们可以计算[共享密钥](/develop/network/adnl-tcp#getting-a-shared-key-using-ecdh)。
+The `adnl.message.answer` is straightforward; it is the response to our request for `dht.getSignedAddressList`, which we will explore further in the article about DHT.
 
-现在我们计算出共享通道密钥后，我们需要从中生成2个密钥 - 一个用于加密发出的消息，另一个用于解密传入的消息。
-从中生成2个密钥相当简单，第二个密钥等于共享密钥的倒序写法。例如：
+Now, let’s focus on `adnl.message.confirmChannel`. This indicates that the peer has confirmed the creation of the channel and has sent us its public channel key. With our private channel key and the peer's public channel key, we can compute the [shared key](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-a-shared-key-using-ecdh).
+
+Once we have calculated the shared channel key, we need to derive two keys from it: one for encrypting outgoing messages and another for decrypting incoming messages.
+
+Deriving these two keys is quite simple. The second key is simply the shared key written in reverse order. For example:
 
 ```
 Shared key : AABB2233
@@ -263,9 +283,11 @@ First key: AABB2233
 Second key: 3322BBAA
 ```
 
-剩下的就是确定哪个密钥用于什么，我们可以通过将我们的公共通道密钥的ID与服务器通道的公钥的ID比较，将它们转换为数值形式 - uint256。这种方法用于确保服务器和客户端都确定哪个密钥用于什么。如果服务器使用第一个密钥进行加密，那么使用这种方法，客户端将始终将其用于解密。
+We need to determine which key to use for specific purposes. To do this, we can compare the ID of our public key with the ID of the server's public key, converting both to a numerical format (uint256).
 
-使用条款是：
+This method ensures that both the server and the client agree on which key is used for what function. If the server uses the first key for encryption, this approach guarantees that the client will always use it for decryption.
+
+The terms of use are:
 
 ```
 The server id is smaller than our id:
@@ -281,14 +303,15 @@ Encryption: First Key
 Decryption: First Key
 ```
 
-[[实现示例]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/adnl.go#L502)
+[[Please see implementation example]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/adnl.go#L502).
 
-### 通道内通信
+### Communication in a channel
 
-所有后续的数据包交换将在通道内发生，通道密钥将用于加密。
-让我们在新创建的通道内发送相同的`dht.getSignedAddressList`请求，看看区别。
+All future packet exchanges will take place within the channel, and the channel keys will be utilized for encryption.
 
-让我们使用相同的`adnl.packetContents`结构为通道构建数据包：
+Let's send the same `dht.getSignedAddressList` request within a newly created channel to observe the differences.
+
+We will construct the packet for the channel using the same `adnl.packetContents` structure:
 
 ```
 89cd42d1                                                               -- TL ID adnl.packetContents
@@ -303,9 +326,11 @@ fe3c0f39a89917b7f393533d1d06b605b673ffae8bbfab210150fe9d29083c35          -- que
 07 e4092842a8ae18                                                      -- rand2, 7 (07) random bytes
 ```
 
-通道内的数据包非常简单，实质上由序列（seqno）和消息本身组成。
+The packets in a channel are quite straightforward and essentially consist of a sequence number (seqno) and the messages themselves.
 
-序列化后，像上次一样，我们计算数据包的sha256哈希。然后我们使用用于通道传出数据包的密钥加密数据包。[计算](/develop/network/adnl-tcp#getting-key-id)我们传出消息的加密密钥的`pub.aes` ID，并构建我们的数据包：
+After serialization, as we did last time, we calculate the SHA256 hash of the packet. Next, we encrypt the packet using the designated key for outgoing packets in the channel.
+
+To do this we [calculate](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-key-id) `pub.aes` - ID of the encryption key for our outgoing messages and then build our packet:
 
 ```
 bcd1cf47b9e657200ba21d94b822052cf553a548f51f539423c8139a83162180 -- ID of encryption key of our outgoing messages 
@@ -313,15 +338,15 @@ bcd1cf47b9e657200ba21d94b822052cf553a548f51f539423c8139a83162180 -- ID of encryp
 ...                                                              -- the encrypted content of the packet
 ```
 
-我们通过UDP发送数据包，并等待响应。作为回应，我们将收到与我们发送的同类型的数据包（相同字段），但带有我们请求`dht.getSignedAddressList`的回复。
+We send a packet via UDP and wait for a response. In response, we receive a packet of the same type as the one we sent, containing the answer to our request for `dht.getSignedAddressList`.
 
-## 其他消息类型
+## Other message types
 
-对于基本通信，使用像`adnl.message.query`和`adnl.message.answer`这样的消息，我们在上面讨论了，但对于某些情况，也使用其他类型的消息，我们将在本节中讨论。
+For basic communication, messages such as `adnl.message.query` and `adnl.message.answer` are utilized, which we discussed earlier. However, there are also other types of messages used for specific situations, which we will cover in this section.
 
 ### adnl.message.part
 
-此消息类型是其他可能消息类型的一部分，例如`adnl.message.answer`。当消息太大而无法通过单个UDP数据报传输时，使用此传输数据的方法。
+This message type is part of another possible message type, such as `adnl.message.answer`. This method of data transfer is used when a message is too large to be sent in a single UDP datagram.
 
 ```tlb
 adnl.message.part 
@@ -332,8 +357,9 @@ data:bytes             -- piece of data of the original message
    = adnl.Message;
 ```
 
-因此，为了组装原始消息，我们需要获取几个部分，并根据偏移量将它们连接成一个字节数组。
-然后将其作为消息处理（根据这个字节数组中的ID前缀）。
+To reconstruct the original message, we need to gather several parts and concatenate them into a single-byte array based on the specified offsets.
+
+We will then process this array as a message using the ID prefix contained within it.
 
 ### adnl.message.custom
 
@@ -341,12 +367,13 @@ data:bytes             -- piece of data of the original message
 adnl.message.custom data:bytes = adnl.Message;
 ```
 
-当更高级别的逻辑与请求-响应格式不符时，使用此类消息，这种消息类型允许将处理完全转移到更高级别，因为消息只携带一个字节数组，没有query_id和其他字段。例如，RLDP使用此类消息，因为对许多请求只有一个响应，这种逻辑由RLDP本身控制。
+Messages of this type are utilized when the logic at a higher level does not align with the typical request-response format. These messages allow for the complete relocation of processing to a higher level, as they consist solely of an array of bytes without including query IDs or other fields.
 
-### 结论
+For instance, in RLDP, such messages are used since there can be only one response to multiple requests. RLDP itself manages this logic.
 
-此后的通信基于本文描述的逻辑进行，但数据包的内容取决于更高级别的协议，如DHT和RLDP。
+Further communication occurs based on the logic outlined in this article, though the content of the packets relies on higher-level protocols like DHT and RLDP.
 
-## 参考
+## References
 
-*这里是[原文链接](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-UDP-Internal.md)，作者是[Oleg Baranov](https://github.com/xssnick)。*
+Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-UDP-Internal.md) - _[Oleg Baranov](https://github.com/xssnick)._ <Feedback />
+
