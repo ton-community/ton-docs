@@ -1,44 +1,42 @@
-# Протокол ADNL
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# ADNL protocol
 
-Реализация:
+Please see the [**implementation**](https://github.com/ton-blockchain/ton/tree/master/adnl) first.
 
-- https://github.com/ton-blockchain/ton/tree/master/adnl
+## Overview
 
-## Общие сведения
+The Abstract Datagram Network Layer (ADNL) is a fundamental component of the TON.
 
-Краеугольным камнем TON является абстрактный сетевой уровень датаграмм (ADNL - Abstract Datagram Network Layer).
+ADNL is an overlay, peer-to-peer, unreliable (small-size) datagram protocol that operates over **UDP** in **IPv4**, with plans to support **IPv6** in the future. Additionally, it has an optional **TCP fallback** for instances when UDP is unavailable.
 
-Это оверлейный, одноранговый, недоверенный (небольшого размера) протокол датаграмм, работающий поверх **UDP** в **IPv4** (в будущем IPv6), с дополнительным **резервным протоколом TCP**, если UDP недоступен.
+## ADNL address
 
-## Адрес ADNL
+Each participant in the network possesses a 256-bit ADNL Address.
 
-Каждый участник имеет 256-битный адрес ADNL.
+The ADNL Protocol enables the sending and receiving of datagrams using only ADNL Addresses, concealing the underlying IP Addresses and Ports.
 
-Протокол ADNL позволяет отправлять (недоверенные) и получать датаграммы, используя только адреса ADNL. IP-адреса и порты скрыты протоколом ADNL.
+An ADNL Address effectively functions as a 256-bit ECC public key, which can be generated arbitrarily, allowing for the creation of multiple network identities as needed by the node.
 
-Адрес ADNL по сути равен 256-битному открытому ключу ECC. Этот открытый ключ может быть сгенерирован произвольно, тем самым создавая столько различных сетевых идентификаторов, сколько нужно узлу.
-Однако необходимо знать соответствующий закрытый ключ, чтобы получать (и расшифровывать) сообщения, предназначенные для адреса получателя.
+However, the corresponding private key must be known to receive and decrypt messages intended for a specific address.
 
-На самом деле, адрес ADNL не является самим открытым ключом; вместо этого это 256-битный хэш SHA256 сериализованного TL-объекта, который может описывать несколько типов открытых ключей и адресов в зависимости от его конструктора.
+In practice, the ADNL Address is not the public key itself; rather, it is a 256-bit SHA256 hash of a serialized TL object. Depending on its constructor, this TL object can represent various types of public keys and addresses.
 
-## Шифрование и безопасность
+## Encryption and security
 
-Обычно каждая отправленная датаграмма подписывается отправителем и шифруется, так что только получатель может расшифровать сообщение и проверить его целостность с помощью подписи.
+Typically, each datagram sent is signed by the sender and encrypted so that only the intended recipient can decrypt the message and verify its integrity using the signature.
 
-## Таблицы соседей
+## Neighbor tables
 
-Обычно узел TON ADNL будет имеет некоторую "таблицу соседей", которая содержит информацию о других известных узлах, такую ​​как их абстрактные адреса, открытые ключи, IP-адреса и порты UDP. Со временем он постепенно
-расширит эту таблицу, используя информацию, собранную с этих известных узлов. Эта новая информация может быть в форме ответов на специальные запросы или иногда удаления устаревших записей.
+A TON ADNL node will typically maintain a **neighbor table** that contains information about other known nodes, including their abstract addresses, public keys, IP addresses, and UDP ports. Over time, this table expands with information gathered from these known nodes, which may come from responses to specific queries or by removing outdated records.
 
-ADNL позволяет вам настраивать каналы и туннели точка-точка (цепочку прокси).
+ADNL facilitates the establishment of point-to-point channels and tunnels (chains of proxies).
 
-Поверх ADNL можно построить потоковый протокол, подобный TCP.
+A TCP-like stream protocol can be constructed on top of ADNL.
 
-## Что дальше?
+## What's next?
 
-- Подробнее об ADNL читайте в [статье о низкоуровневом ADNL](/v3/documentation/network/protocols/adnl/low-level-adnl)
-- Глава 3.1 [TON Whitepaper] (https://docs.ton.org/ton.pdf).
+- To learn more about ADNL, refer to the [Low-level ADNL documentation](/v3/documentation/network/protocols/adnl/low-level-adnl).
+- See Chapter 3.1 of the [TON Whitepaper](https://docs.ton.org/ton.pdf).
+  <Feedback />
+
