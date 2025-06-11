@@ -1,50 +1,61 @@
-# 在低内存机器上编译TON
+import Feedback from '@site/src/components/Feedback';
+
+# Compile TON on low-memory machines
 
 :::caution
-本节描述了与TON进行低层级交互的说明和手册。
+This section provides low-level instructions for working with TON.
 :::
 
-在内存较小（小于1GB）的计算机上创建交换分片以编译TON。
+To compile TON on systems with limited memory (< 1 GB), you need to create swap partitions.
 
 ## 必要条件
 
-在Linux系统中进行C++编译时出现以下错误，导致编译中止：
+When compiling C++ components on Linux, you may encounter memory-related failures:
 
 ```
-C++: fatal error: Killed signal terminated program cc1plus compilation terminated.
+C++: fatal error: Killed signal terminated program cc1plus
+compilation terminated.
 ```
 
 ## 解决方案
 
-这是由于内存不足引起的，通过创建交换分片来解决。
+Follow these steps to create a 4GB swap partition:
 
 ```bash
-# Create the partition path
+# Create swap partition
 sudo mkdir -p /var/cache/swap/
-# Set the size of the partition
-# bs=64M is the block size, count=64 is the number of blocks, so the swap space size is bs*count=4096MB=4GB
+
+# Allocate 4GB swap space (64MB blocks × 64)
 sudo dd if=/dev/zero of=/var/cache/swap/swap0 bs=64M count=64
-# Set permissions for this directory
+
+# Set secure permissions
 sudo chmod 0600 /var/cache/swap/swap0
-# Create the SWAP file
+
+# Initialize swap
 sudo mkswap /var/cache/swap/swap0
-# Activate the SWAP file
+
+# Activate swap
 sudo swapon /var/cache/swap/swap0
-# Check if SWAP information is correct
+
+# Verify activation
 sudo swapon -s
 ```
 
-删除交换分片的命令：
+### Swap management commands
+
+**Remove swap partition:**
 
 ```bash
 sudo swapoff /var/cache/swap/swap0
 sudo rm /var/cache/swap/swap0
 ```
 
-释放空间命令：
+**Free all swap space:**
 
 ```bash
 sudo swapoff -a
-#Detailed usage: swapoff --help
-#View current memory usage: --swapoff: free -m
+# Check memory: free -m
 ```
+
+<Feedback />
+
