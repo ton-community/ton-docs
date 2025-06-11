@@ -1,12 +1,10 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
-# Оракулы Pyth
+# Pyth oracles
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-## Как использовать данные в режиме реального времени в контрактах TON
+## How to use real-time data in TON contracts
 
 Ценовые каналы Pyth в TON управляются через главный смарт-контракт TON Pyth, что обеспечивает бесперебойное взаимодействие с данными on-chain. В TON эти взаимодействия облегчаются специальными функциями в контракте Pyth receiver. Этот контракт служит интерфейсом для Pyth price feeds, обеспечивая поиск и обновление ценовых данных.
 
@@ -26,7 +24,7 @@ import ThemedImage from '@theme/ThemedImage';
    @ton/core @ton/ton @ton/crypto
 ```
 
-## Напишите код клиента
+## Write client code
 
 Следующий фрагмент кода демонстрирует, как получать обновления цен, взаимодействовать с контрактом Pyth в TON и обновлять потоки цен:
 
@@ -35,6 +33,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 В следующем примере используется контракт testnet. Для использования mainnet измените `PYTH_CONTRACT_ADDRESS_TESTNET` на `PYTH_CONTRACT_ADDRESS_MAINNET` соответственно. 
 
+<details>
 ```ts
 import { TonClient, Address, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core";
@@ -96,6 +95,7 @@ async function main() {
 }
 main().catch(console.error);
 ```
+</details>
 
 В этом фрагменте кода выполняется следующее:
 
@@ -105,12 +105,14 @@ main().catch(console.error);
 4. Подготавливает данные обновления и рассчитывает плату за обновление.
 5. Обновляет информацию о ценах в контракте TON.
 
-## Дополнительные ресурсы
+## Additional resources
 
 Вам могут пригодиться эти дополнительные ресурсы для разработки вашего приложения TON:
 
-- [Документация TON](https://ton.org/docs/)
-- [Pyth Price Feed IDs](https://pyth.network/developers/price-feed-ids)
-- [Pyth TON Contract](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/contracts)
+- [TON documentation](https://ton.org/docs/)
+- [Pyth price feed IDs](https://pyth.network/developers/price-feed-ids)
+- [Pyth TON contract](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/contracts)
 - [Pyth TON SDK](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/sdk)
-- [Пример Pyth TON](https://github.com/pyth-network/pyth-examples/tree/main/price_feeds/ton/sdk_js_usage)
+- [Pyth TON example](https://github.com/pyth-network/pyth-examples/tree/main/price_feeds/ton/sdk_js_usage)
+
+<Feedback />
