@@ -1,44 +1,45 @@
-# Обзор
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Overview
 
-Цель этого статьи - помочь вам выбрать правильные инструменты для разработки приложений в экосистеме TON.
+This article helps you choose the right tools for application development in TON Ecosystem.
 
-## Разработка TMA
+## TMA development
 
-- Используйте [Mini Apps SDKs](/v3/guidelines/dapps/tma/overview#mini-apps-sdks) для разработки [Мини приложений Telegram](/v3/guidelines/dapps/tma/overview).
-- Выберите [SDK, базирующийся на JS/TS](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript) для взаимодействия с блокчейном TON.
+- Use [Mini Apps SDKs](/v3/guidelines/dapps/tma/overview#mini-apps-sdks) for [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview) development.
+- Choose [JS/TS-based SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript) to interact with TON Blockchain.
 
-## Разработка DApps
+## DApps development
 
-- Используйте Tolk, FunC или Tact [языки программирования](/v3/documentation/smart-contracts/overview#programming-languages), если требуется разработка умных контрактов на блокчейне TON для вашего [DApp](/v3/guidelines/dapps/overview).
-- Чтобы взаимодействовать с блокчейном TON и обрабатывать его данные, выберите один из перечисленных [SDK](/v3/guidelines/dapps/apis-sdks/sdk). Одними из самых популярных языков для этого назначения:
-    - [JS/TS](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript)
+- Use Tolk, FunC, or Tact [programming languages](/v3/documentation/smart-contracts/overview#programming-languages) to develop TON Blockchain smart contracts for your [DApp](/v3/guidelines/dapps/overview).
+- To interacts with TON Blockchain and process its data, choose one of the listed [SDKs](/v3/guidelines/dapps/apis-sdks/sdk). One of the most popular languages for this purpose include:
+    - [JavaScript/TypeScript](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript)
     - [Go](/v3/guidelines/dapps/apis-sdks/sdk#go)
     - [Python](/v3/guidelines/dapps/apis-sdks/sdk#python)
-- Чтобы интегрировать аутентификацию пользователей с их кошельками TON (включая логику обработки платежей) в ваш DApp, используйте [TON Connect](/v3/guidelines/ton-connect/overview).
+- To integrate user authentication and payments processing via with their TON wallets, use [TON Connect](/v3/guidelines/ton-connect/overview).
 
-## Аналитика данных TON
+## TON data analytics
 
-Довольно часто разработчикам необходимо выполнять аналитические запросы поверх данных on-chain: например, для отслеживания исторических изменений и агрегирования данных из нескольких аккаунтов.
-Блокчейны не предназначены для такого рода рабочей нагрузки, и необходимо построить конвейер индексации и запустить аналитические запросы off-chain. Создание таких конвейеров
-с нуля может быть ресурсоемким, поэтому можно использовать одну из следующих альтернатив:
+Developers often need to run analytical queries on top of on-chain data—for example, to track historical changes and aggregate data from multiple accounts.
+Since blockchains are not designed for analytical workloads, you need to build an indexing pipeline and run off-chain analytical queries. Creating such pipelines
+from scratch can be resource-consuming, so you can use one of these alternatives:
 
-- Dune Analytics содержит набор таблиц с данными TON: необработанные транзакции и сообщения, события с жетонами и сделки на DEX. Dune позволяет создавать пользовательские диаграммы и панели мониторинга, получать результаты запросов через API и настраивать оповещения. Перед началом написания запросов, пожалуйста, ознакомьтесь с этим руководством для получения рекомендаций, советов и трюков.
-- Интеграция Dune основана на базе общедоступного хранилища данных проекта [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/datalake/README.md). Это конвейер анализа и декодирования, который загружает необработанные и декодированные данные в контейнер S3 **s3://ton-blockchain-public-datalake/v1/** в формате AVRO. Контейнер общедоступный, и каждый может использовать его с такими инструментами, как [Amazon Athena](https://aws.amazon.com/athena/) (см. [DDL](https://github.com/re-doubt/ton-etl/blob/main/datalake/athena_ddl.sql)) или Apache Spark. Данные обновляются ежедневно.
-- Если вам необходимо отслеживать данные в цепочке практически в режиме реального времени, вы можете запустить свой собственный [Узел Ton](/v3/documentation/infra/nodes/node-types) и запустить [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/README.md) или [ton-index-worker](https://github.com/toncenter/ton-index-worker).
-- [chainbase](https://docs.chainbase.com/catalog/Ton/Overview) поставляется с набором необработанных и декодированных таблиц с данными TON. Позволяет выполнять SQL-запросы и получать результаты через API.
+- Dune analytics provides tables with TON data, including raw transactions and messages, jetton events, and DEX trades. Dune allows building custom charts and dashboards, fetch query results via API and set up alerts. Before writing queries, check this guide for best practices, tips, and tricks.
+- Dune integration is runs on the public data lake from the [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/datalake/README.md) project. This parsing and decoding pipeline dumps raw and decoded data into an S3 bucket **s3://ton-blockchain-public-datalake/v1/** in AVRO format. The bucket is publicly available and everyone can use it with [Amazon Athena](https://aws.amazon.com/athena/) (see [DDLs](https://github.com/re-doubt/ton-etl/blob/main/datalake/athena_ddl.sql)) or Apache Spark. The data updates daily.
+- If you need real-time on-chain data tracking, you can run your own [TON node](/v3/documentation/infra/nodes/node-types) and launch [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/README.md) or [ton-index-worker](https://github.com/toncenter/ton-index-worker).
+- [Chainbase](https://docs.chainbase.com/catalog/Ton/Overview) offers a set of raw and decoded tables with TON data. It allows you to run SQL queries and fetch results via API.
 
-## Состояние инфраструктуры
+## Infrastructure status
 
-- [status.toncenter](https://status.toncenter.com/) - различная статистика активности узлов за последний час.
-- [Tonstat.us](https://tonstat.us/) - Графана в реальном времени, обновляется каждые 5 минут.
+- [status.toncenter](https://status.toncenter.com/) - Displays various node activity statistics from the last hour.
+- [Tonstat.us](https://tonstat.us/) - A real-time Grafana dashboard, updated every 5 minutes.
 
-## См. также
+## See also
 
-- [SDK](/v3/guidelines/dapps/apis-sdks/sdk)
-- [Руководства по разработке TMA](/v3/guidelines/dapps/tma/tutorials/step-by-step-guide)
-- [Руководства по TON Connect](/v3/guidelines/ton-connect/guidelines/how-ton-connect-works)
-- [Обработка платежей](/v3/guidelines/dapps/asset-processing/payments-processing)
+- [SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
+- [TMA tutorials](/v3/guidelines/dapps/tma/tutorials/step-by-step-guide)
+- [TON Connect tutorials](/v3/guidelines/ton-connect/guidelines/how-ton-connect-works)
+- [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing)
+
+<Feedback />
+
