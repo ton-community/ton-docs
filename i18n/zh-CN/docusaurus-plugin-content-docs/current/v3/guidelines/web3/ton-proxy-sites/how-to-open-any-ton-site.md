@@ -1,43 +1,55 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 如何打开任何 TON 网站？
 
-在这篇文章中，我们将看看从不同设备访问TON网站的最常用方法。
+This article explains the most common ways to access TON Sites from different devices.
 
-每种方法都有其优缺点，我们将在这里分析。
+Each method has its advantages and limitations. The list begins with the most straightforward options and progresses to more advanced configurations.
 
-我们将从最简单的方法开始，最后介绍最高级的方法。
-
-## 😄 简单方法
+## Easy methods
 
 ### 通过ton.run浏览
 
-打开TON网站最简单的方法是通过[ton.run](https://ton.run)。您无需在设备上安装或设置任何东西 - 只需打开**ton.run**，您就可以探索TON网站。
+The simplest way to access a TON Site is through services like [ton.run](https://ton.run). No installation or setup is required — just open the **ton.run** or **tonp.io** and browse TON Sites.
 
-对于偶尔浏览TON网站或进行一些检查，这种方法可能适合，但不适合常规使用，因为它也有缺点：
+This method is helpful for casual browsing or quick checks. However, it is not recommended for regular use due to several drawbacks:
 
-- 您信任您的互联网流量给**ton.run**
-- 它可能随时离线或出故障
-- 它可能被您的互联网提供商封锁
+- Your internet traffic is routed through a third-party service, e.g., ton.run.
+- The service may go offline or stop functioning at any time.
+- Your internet service provider may block it.
 
 ### TON Wallet 和 MyTonWallet 扩展
 
-稍微困难一点但更好的方法是使用某些浏览器扩展，它将连接您到TON代理，并允许您在没有任何中间服务（如ton.run）的情况下浏览TON网站。
+A more reliable and private method is to use a browser extension that connects directly to the TON Proxy without relying on third-party services.
+Currently:
 
-目前，TON代理已经在[MyTonWallet](https://mytonwallet.io/)扩展中可用，并且很快也将在[TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd)扩展中可用。
+- [MyTonWallet](https://mytonwallet.io/) supports TON Proxy in its browser extension.
+- [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) will support it soon.
 
-这种方法也相当简单，但您需要在浏览器中安装一个扩展才能使其工作。它适合大多数用户。
+This method requires installing a browser extension and is suitable for regular use by most users.
 
-## 连接到公共代理
+## Advanced methods
 
 ### 使用Tonutils-Proxy
 
-此方法在此处描述：
+This is the most secure way of accessing TON Sites.
 
-1. [通过TON代理连接](/participate/web3/setting-proxy/)
+1. Download the latest version [from here](https://github.com/xssnick/Tonutils-Proxy#download-precompiled-version)
 
 2. 启动它并按“启动网关”
 
 3. 完成！
 
-## 🤓 高级方法
+For the most secure and independent access to TON Sites, use Tonutils-Proxy.
 
-- [运行 C++ 实现](/v3/guidelines/web3/ton-proxy-sites/running-your-your-ton-proxy)
+**To get started:**
+
+1. Download the latest release from [GitHub](https://github.com/xssnick/Tonutils-Proxy#download-precompiled-version).
+2. Launch the application and click “Start Gateway”.
+
+## See also
+
+- [Run C++ implementation](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)
+
+<Feedback />
+
