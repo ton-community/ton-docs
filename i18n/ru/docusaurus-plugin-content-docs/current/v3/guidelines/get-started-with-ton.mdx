@@ -1,30 +1,33 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 import ConceptImage from '@site/src/components/conceptImage'
 import Player from '@site/src/components/player'
 
-# Начните работу с TON
+# Get started with TON
 
-Давайте создадим с нуля ваше первое приложение на блокчейне TON. Вы сможете оценить предлагаемые блокчейном TON скорость, надежность, а также ознакомиться с основными концепциями асинхронного мышления.
+Discover the speed, reliability, and core principles of asynchronous thinking by building your first application on the TON blockchain — from scratch.
 
 :::tip Руководство для новичков
-Если вы только делаете первые шаги в программировании, это руководство станет для вас отличной отправной точкой.
+This is the perfect place to start if you're entirely new to programming.
 :::
 
-Данный обучающий курс включает в себя **5 модулей**, а его прохождение займет примерно **45 минут**.
+This learning path is split into **5** beginner-friendly modules and takes approximately **45 minutes**.
 
-## 🛳 Чему вы научитесь
+## What you will learn
 
-Из этого руководства вы поймете, на сколько просто совершать транзакции в блокчейне с помощью JavaScript. Конечно вы можете научиться это делать и без руководства, но с ним будет гораздо легче, эффективнее и понятнее.
+In this step-by-step guide, you'll learn how to create and interact with the TON blockchain applications using JavaScript. While it's possible to figure it out independently, this path offers a faster, smoother experience — especially if you're starting.
 
-1. Вы создадите свой собственный кошелек TON с помощью Tonkeeper
-2. Воспользуетесь краном Testnet для пополнения своего тестового кошелька
-3. Разберётесь в ключевых концепциях смарт-контрактов TON (адреса, ячейки)
-4. Научитесь взаимодействовать с TON с помощью TypeScript SDK и API-провайдера
-5. Скомпилируете свою первую транзакцию с помощью консольного приложения NFT Miner
+Here's what you'll do:
 
- _И, главное – вы добудете NFT-достижение "Ракета"!!!_
+1. Create your TON wallet using Tonkeeper.
+2. Use a Testnet faucet to top up your wallet with test tokens.
+3. Learn key smart contract concepts like **addresses** and **cells**.
+4. Interact with the TON blockchain using the TypeScript SDK and an API provider.
+5. Compile and send your first transaction using the NFT Miner console app.
 
-Ровно так же как и первые майнеры на TON, вы будете взаимодействовать со смарт-контрактом Proof-of-Work и по завершению получите секретное вознаграждение для вашего кошелька TON. Полный вперед!
+_You're about to mine your first NFT rocket achievement!_
+As one of the first TON explorers, you'll complete a Proof-of-work smart contract and unlock a hidden reward for your wallet. Let's dive in:
 
 <div style={{width: '100%', maxWidth:'250pt',  textAlign: 'center', margin: '0 auto' }}>
   <video width={'300'} style={{width: '100%', maxWidth:'250pt', borderRadius: '10pt', margin: '15pt auto' }} muted={true} autoPlay={true} loop={true}>
@@ -35,19 +38,19 @@ import Player from '@site/src/components/player'
 
 Наша цель на сегодня – добыть NFT! Это достижение останется с вами _навсегда_.
 
-В последствии, вы сможете добыть это NFT достижение даже в основной сети, mainnet. _Это стоит всего 0,05 TON!_.
+Finally, you can mine this NFT achievement even in the Mainnet. (_it costs only 0,05 TON!_).
 
-### Видеоурок
+### Video tutorial
 
-Для более подробного изучения материала, ознакомьтесь с очень полезным видеоуроком от Владимира Алефмана.
+For a smoother walkthrough, check out this carefully crafted video tutorial by _Vladimir Alefman_.
 
 <Player url="https://youtu.be/mgVUY04I_3A" />
 
 ### Майнинг на блокчейне TON
 
-Сейчас мы разберем принципы майнинга на блокчейне TON. Этот материал позволит вам понять не только важность этого процесса, а также то, почему майнинг биткоинов помог совершить революцию в индустрии.
+Today, we are going to teach our prospective builders how to mine on TON Blockchain. This experience helps you understand the significance of mining and why Bitcoin mining helped revolutionize the industry.
 
-Хотя структура смарт-контрактов PoW Giver, определявшая начальный процесс майнинга и заложившая основу для TON, была завершена на старте, последний TON был добыт в июне 2022 года, завершим тем самым механизм распределения токенов через Proof-of-Work (PoW). Тем не менее, с нашим недавним переходом на Proof-of-Stake (PoS) эпоха стекинга в TON только начинается.
+Although the proof-of-work giver smart contract framework, which defined the initial mining process that laid the foundation for TON, was completed at launch, the last TON was mined in June 2022 to conclude TON's proof-of-work (PoW) token distribution mechanism. That said, with our recent transition to proof-of-stake (PoS), the era of staking on TON has just begun.
 
 - [Погрузитесь глубже в нашу экономическую модель и майнинг на TON](https://ton.org/mining)
 
@@ -55,45 +58,45 @@ import Player from '@site/src/components/player'
 
 <div style={{ width: '100%', textAlign: 'center', margin: '0 auto' }}>
   <video style={{ width: '100%', borderRadius: '10pt', margin: '15pt auto', maxWidth: '90%' }} muted={true} autoPlay={true}
-         loop={true}>
-    <source src="/files/onboarding.mp4" type="video/mp4" />
+         loop={true}>. <source src="/files/onboarding.mp4" type="video/mp4" />
 
 Ваш браузер не поддерживает тег видео.
 
 </video>
 </div>
 
-Создание подобного майнера при сфокусированной работе займет около получаса.
+If we stay focused on the task at hand, we can create a miner in about half an hour.
 
-## 🦄 Начало работы
+## Getting started
 
 Для начала работы, вам понадобятся следующие компоненты:
 
 - **Кошелек**: Вам понадобится некостодиальный кошелек для хранения NFT в режиме тестовой сети.
 - **Репозиторий**: Мы будем использовать готовый шаблон, созданный специально для вас.
-- **Среда разработки**:  Разработчикам нужно будет выбрать в какой среде они будут майнить – локальной или облачной.
+- **Developer Environment**:  Developers need to determine whether they want to mine in a local or cloud environment.
 
-### Загрузка и создание кошелька
+### Download and create a wallet
 
-Для начала вам понадобится некостодиальный кошелек, который позволит вам получать и хранить ваши TON. В данном руководстве мы используем Tonkeeper. Вам необходимо будет включить режим Testnet в кошельке, для того чтобы иметь возможность получать тестовые Toncoin. Эти токены будут использованы позже для отправки финальной транзакции майнинга в смарт-контракт.
+First, you need a non-custodial wallet to receive and store your TON. For this guide, we are using Tonkeeper.
+You need to enable Testnet mode within the wallet to receive Testnet TON coins. These tokens will be used later to send a final minting transaction to the smart contract.
 
 :::info
 При использовании некастодиального кошелька, пользователь является владельцем кошелька, а также хранит приватный ключ самостоятельно.
 :::
 
-Чтобы загрузить и создать кошелек TON, выполните следующие простые шаги:
+To download and create a TON wallet, follow these simple steps:
 
 1. Установите приложение Tonkeeper на свой смартфон. Его можно скачать [здесь](https://Tonkeeper.com/).
-2. Далее вам необходимо [включить тестовый режим](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#tonkeeper-test-environment) в Tonkeeper.
+2. Next, you need to [enable test mode](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#tonkeeper-test-environment) within Tonkeeper.
 
 Отлично! Теперь перейдем к разработке.
 
 ### Настройка проекта
 
-Чтобы упростить процесс и избежать рутинных низкоуровневых задач, мы будем использовать шаблонный проект.
+We use a boilerplate to simplify your life and skip routine low-level tasks.
 
 :::tip
-Обратите внимание, что для дальнейшей работы вам потребуется [войти](https://github.com/login) в свою учётную запись GitHub.
+Note that you need to [sign in](https://github.com/login) to GitHub for further work.
 :::
 
 Пожалуйста, используйте шаблон [ton-onboarding-challenge](https://github.com/ton-community/ton-onboarding-challenge) для создания вашего проекта. Для этого нажмите кнопку "Use this template" и выберите вкладку "Create a new repository", как показано ниже:
@@ -108,14 +111,14 @@ import Player from '@site/src/components/player'
 />
 <br></br>
 
-После выполнения этого шага, вы получите доступ к высокопроизводительному репозиторию, который станет основой вашего майнера. Поздравляем! ✨
+After completing this step, you'll have access to a highly performant repository that can serve as your miner's core. Congratulations!
 
-### Среды разработки
+### Development environments
 
-Следующий шаг – выбрать среду разработки, которая лучше всего соответствует вашим потребностям, уровню опыта и навыкам. Как видите, этот процесс можно выполнить как в облачной, так и в локальной среде. Разработка в "облаке" часто считается более простой и легкой для начала работы. Ниже мы рассмотрим шаги, необходимые для обоих подходов.
+The next step is to choose which developer environment best suits your needs, experience level, and overall skill set. As you can see, this process can be carried out using either a cloud-based or local environment. Developing on the cloud is often considered simpler and easier to get started. Below, we’ll outline the steps required for both approaches.
 
 :::tip
-Убедитесь, что вы открыли репозиторий в своем профиле GitHub, созданный на основе шаблона в предыдущем шаге.
+Ensure you have opened the repository in your GitHub profile generated from the template in the previous step.
 :::
 
 <br></br>
@@ -128,15 +131,15 @@ import Player from '@site/src/components/player'
 />
 <br></br>
 
-#### Локальные и облачные среды разработки
+#### Local and cloud development environments
 
-- Если вы не знакомы с JavaScript, работа в IDE может оказаться для вас сложной задачей, особенно если компьютер и инструменты не настроены для этого.
+- Using a Javascript IDE can be challenging for users unfamiliar with it, especially if your computer and tooling systems are not configured for this purpose.
 
 - Но если вы знакомы с NodeJS и Git и умеете работать с `npm`, то использовать **локальную среду разработки** может быть удобнее.
 
-#### Облачные пространства
+#### Cloud codespaces
 
-Если вы решили работать в облачной среде, то начать можно в пару кликов: сначала выберите вкладку _Code_, а затем нажмите кнопку _Create codespace on master_ в репозитории GitHub, как показано ниже:
+If you choose the cloud development environment, it's easy to get started by first selecting the _Code_ tab and then by clicking on the _Create codespace on master_ button within the GitHub repository shown below:
 
 <br></br>
 <ThemedImage
@@ -150,23 +153,23 @@ import Player from '@site/src/components/player'
 
 Затем GitHub создаст специальное облачное рабочее пространство, дающее вам доступ к VSCode Online IDE (интегрированная онлайн-среда разработки Visual Studio Code).
 
-После получения доступа (обычно codespace запускается примерно за 30 секунд), у вас будет все необходимое для работы без установки Git, Node.js или других инструментов.
+Once access is granted (the codespace typically starts in about 30 seconds), you have everything required to begin without installing Git, Node.js, or other developer tools.
 
-#### Локальные среды разработки
+#### Local development environments
 
-Для настройки локальной среды разработки вам потребуется доступ к трем основным инструментам:
+To set up a local development environment, you require access to these three essential tools:
 
-- **Git**. Необходимый инструмент для работы с репозиториями. Скачать можно [здесь](https://git-scm.com/downloads).
+- **Git**: Git is an essential tool for every developer working with repositories. It can be downloaded [here](https://git-scm.com/downloads).
 - **NodeJS**. Среда выполнения JavaScript и TypeScript, обычно используемая для разработки приложений на TON. Скачать можно [здесь] (https://nodejs.org/en/download/).
 - **JavaScript IDE**. Обычно используются для разработки в локальной среде. Например - Visual Studio Code ([VSCode](https://code.visualstudio.com/download)).
 
-Чтобы приступить к работе клонируйте ваш шаблонный репозиторий с GitHub и откройте нужный репозиторий в вашей интегрированной среде разработки (IDE).
+To get started, you need to clone your GitHub repository boilerplate and open the correct repository in your Integrated Development Environment (IDE).
 
-#### Выполнение скриптов
+#### Running scripts
 
-В этом руководстве мы будем запускать скрипты на TypeScript. Все команды, такие как запуск скриптов или установка модулей, выполняются через командную строку в рабочей области терминала IDE. Обычно она находится в нижней части интерфейса.
+In this guide, you'll need to run TypeScript scripts. All commands, such as running scripts or installing modules, are executed through the command line, which is located in the IDE's Terminal workspace, which is typically found at the bottom of the IDE.
 
-Например, если в облачном Codespaces еще не открыто рабочее пространство терминала, его можно открыть следующим образом:
+For example, in the Cloud Codespaces, you should open the Terminal workspace if it is not already open:
 
 <br></br>
 <ThemedImage
@@ -190,28 +193,28 @@ import Player from '@site/src/components/player'
 />
 <br></br><br></br>
 
-Терминал также можно использовать как отдельное приложение. Выберите подходящую версию в зависимости от вашей IDE и операционной системы.
+The terminal is also available as a separate application. Please choose the appropriate version based on your IDE and OS.
 
-Отлично! Теперь вы готовы глубже погрузиться в секреты блокчейна TON. 👀
+Great! After these steps, you're ready to get deeper into TON Blockchain secrets.
 
-## 🎯 Подключение к TON
+## Connect to TON
 
 Итак, что потребуется для подключения к блокчейну TON?
 
-- **Адрес смарт-контракта**  — как точка назначения. Мы будем добывать NFT из proof-of-work смарт-контракта, поэтому нам нужен его адрес, чтобы узнать текущую сложность майнинга.
+- **Smart contract address** as a point of destination. We aim to mine an NFT from the _proof-of-work smart contract_, so we need an address to determine the current mining complexity.
 - **API-провайдер**, чтобы отправлять запросы в блокчейн TON. Существует несколько [типов API](/v3/guidelines/dapps/apis-sdks/api-types) для разных задач. Мы будем использовать тестовую версию API [toncenter.com](https://toncenter.com/).
-- **JavaScript SDK** (Software Development Kit или SDK — набор инструментов для разработки) — нужен, чтобы обработать адрес смарт-контракта и подготовить его для API-запроса. Подробнее про адреса TON и их обработку, можно прочитать [здесь](/v3/documentation/smart-contracts/addresses). Для выполнения этого процесса мы будем использовать [`@ton/ton`](https://github.com/ton-org/ton).
+- **JavaScript SDK**: a JavaScript SDK (recall that an SDK is a Software Development Kit) is needed to parse the smart contract address used and prepare it to create an API request. To better understand TON addresses and why they need to be parsed to carry out this process, please see this [resource](/v3/documentation/smart-contracts/addresses) to understand why we should parse it. To carry out this procedure, we use [`@ton/ton`](https://github.com/ton-org/ton).
 
-В следующем разделе мы разберем, как отправлять первые запросы в блокчейн TON через API TONCenter и `@ton/ton` для получения данных от смарт-контракта PoW.
+In the next section, we describe how users send their initial requests to TON Blockchain using the TON Center API and `@ton/ton` to receive data from the PoW smart contract.
 
-### Адреса смарт-контрактов
+### Smart contract addresses
 
-Чтобы майнер работал правильно, нужно добавить два разных типа адресов смарт-контрактов:
+Let's cover the Mining Data command that translates different data parameters when programming mining data into TON Blockchain. These include:
 
-1. **Адрес кошелька**. Он необходим, для получения вознаграждения за майнинг. В данном случае нужно использовать режим [Tonkeeper Testnet](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#tonkeeper-test-environment).
-2. **Адрес коллекции**. Необходим для корректного майнинга NFT смарт-контрактом. Для выполнения процесса, скопируйте адрес коллекции NFT под названием "TON onboarding challenge" с сайта [Getgems](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX).
+1. **Wallet address**: a wallet address is required for the miner to receive their mining reward (in this case, we must use the [Tonkeeper Testnet mode](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#tonkeeper-test-environment)).
+2. **Collection address**: a collection address is required to act as a smart contract to correctly mine an NFT (to carry out this process, copy the NFT collection address under the TON onboarding challenge collection name from the [Getgems website](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX)).
 
-Теперь давайте откроем файл `./scripts/mine.ts` в вашем майнере и создадим функцию `mine()`, в которой определим основные константы следующим образом:
+Next, we open the `./scripts/mine.ts` file in your miner and create a `mine()` function composed of initial constants as follows:
 
 ```ts title="./scripts/mine.ts"
 import {Address} from '@ton/ton';
@@ -227,23 +230,23 @@ async function mine () {
 mine();
 ```
 
-#### Использование функции async mine()
+#### Using the async mine() function
 
-В процессе создания TON NFT майнера мы будем отправлять несколько запросов к публичному API, чтобы получать ответы и передавать их в нужные части кода. Использование функции async/await значительно упростит написание кода.
+Later, when creating a TON NFT Miner, several requests will be executed to the public API to relay responses to the correct code string in exchange for the desired instructions. Leveraging the async/await function dramatically improves code simplicity.
 
-#### Парсинг адресов
+#### Address parsing
 
-На TON адреса смарт-контрактов имеют разные форматы и используют множество типов флагов. В данном случае мы будем использовать _удобный для пользователя формат адреса_. Если вы хотите узнать больше о типах адресов смарт-контрактов, изучите даный [раздел](/v3/documentation/smart-contracts/addresses) в нашей документации.
+On TON, smart contract addresses come in different forms that employ numerous flag types. In this context specifically, we use the _user-friendly address form_. If you are curious to learn more about the different smart contract address types, feel free to check out this additional [resource](/v3/documentation/smart-contracts/addresses) in our documentation.
 
-Чтобы майнер работал корректно, нужно добавить два разных типа адресов смарт-контрактов, таких как:
+Чтобы майнер работал корректно, нужно добавить два разных типа адресов смарт-контрактов, таких как: These include:
 
 Метод `Address.parse()`, расположенный в `@ton/ton` SDK, позволяет разработчику создать объект адреса для упрощенного преобразования адресов из одного формата в другой.
 
-### Подключение к API-провайдеру
+### Connect to an API provider
 
-На этом этапе мы подключимся к TON через API-провайдера TONCenter (размещенного на toncenter.com), используя специальные команды в скрипте.
+In this step, we'll connect with TON via TON Center, which is hosted on the toncenter.com API provider, using specific commands in the script.
 
-Самый простой способ - это указать тестовый эндпоинт `https://testnet.toncenter.com/api/v2/jsonRPC`.
+The simplest way to do it is by specifying the Testnet endpoint `https://testnet.toncenter.com/api/v2/jsonRPC`.
 
 <br></br>
 
@@ -257,7 +260,7 @@ mine();
 
 <br></br>
 
-Нужно добавить `client` и `endpoint` в скрипт `./scripts/mine.ts`, используя _TonClient_ и тестовый эндпоинт Toncenter `https://testnet.toncenter.com/api/v2/jsonRPC`:
+We add `client` and `endpoint` in the `./scripts/mine.ts` script using _TonClient_ and Testnet TON Center endpoint `https://testnet.toncenter.com/api/v2/jsonRPC`:
 
 ```ts title="./scripts/mine.ts"
 import {Address, TonClient} from "@ton/ton"
@@ -271,17 +274,17 @@ const endpoint = "https://testnet.toncenter.com/api/v2/jsonRPC"
 const client = new TonClient({ endpoint });
 ```
 
-:::info что делать в продакшене?
-Лучше всего использовать провайдера RPC-узлов или запустить собственный экземпляр ton-http-api. Подробнее читайте на странице [TonCenter API](/v3/guidelines/dapps/apis-sdks/ton-http-apis).
+:::info what to do in production?
+Using an RPC node provider or running your own ton-http-api instance is better for that. Read more at the [TON Center API page](/v3/guidelines/dapps/apis-sdks/ton-http-apis).
 :::
 
-### Получение данных майнинга из блокчейна TON
+### Receiving mining data from TON Blockchain
 
 Следующий шаг — получить конкретные данные о майнинге из блокчейна TON.
 
-Откройте [файл README](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive), который поможет пройти TON-онбординг-челлендж. Актуальные данные о майнинге TON можно получить, запустив метод `get_mining_data`.
+Откройте [файл README](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive), который поможет пройти TON-онбординг-челлендж. Актуальные данные о майнинге TON можно получить, запустив метод `get_mining_data`. Once initiated, the result will be as follows:
 
-В результате мы должны получить массив с такими полями:
+As a result, we should receive an array with these fields:
 
 ```bash
 (
@@ -294,10 +297,10 @@ const client = new TonClient({ endpoint });
 )
 ```
 
-#### Запуск Get-методов смарт-контрактов на TON
+#### Running smart contract get methods on TON
 
-С помощью `@ton/ton` можно выполнить функцию `client.runMethod(SMART_CONTRACT_ADDRESS, METHOD)`.
-После запуска этой команды в консоли появится следующий вывод:
+Using `@ton/ton` is possible to run the `client.runMethod(SMART_CONTRACT_ADDRESS, METHOD)` function.
+Running this code will result in the following console output:
 
 ```ts title="./scripts/mine.ts"
 // ... previous code
@@ -314,10 +317,10 @@ npm run start:script
 ```
 
 :::tip
-Чтобы избежать непредвиденных проблем, убедитесь, что вы выполнили все предыдущие шаги, включая ввод адресов контрактов.
+To avoid unexpected issues, ensure you have finalized all previous steps, including inputting contract addresses.
 :::
 
-Отлично! Если все вышеуказанные шаги выполнены правильно, API подключится успешно, а в консоли отобразятся нужные данные. Правильный вывод будет выглядеть так:
+Good! As long as the above processes are executed correctly, a successful connection to the API will be achieved, and the necessary data will be displayed in the console. The correct console output should be initiated as follows:
 
 ```bash
 TupleReader {
@@ -336,24 +339,24 @@ TupleReader {
 
 ```
 
-Приведенный выше содержит данные о выполнении процесса в виде набора числовых (_int_) значений. Теперь наша задача — преобразовать их в более удобный для использования формат.
+The output above shows data on executing a process with a collection of numerical (_int_) values. The current focus is to convert this numerical output into a more practical format.
 
-Нам нужно преобразовать шестнадцатеричный вывод во что-то более _удобное_.
+We need to convert the hex output to something _useful_.
 
 :::info ПАРАМЕТРЫ ГАЗА НА TON
 
-1. Чтобы лучше разобраться, как работает виртуальная машина TON (TVM - TON Virtual Machine) и _как TON обрабатывает транзакции_, изучите раздел ["Обзор TVM"](/v3/documentation/tvm/tvm-overview).
-2. Если вам интересно узнать больше о комиссиях за транзакции и расходе газа на TON, загляните в [этот раздел](/v3/documentation/smart-contracts/transaction-fees/fees) нашей документации.
-3. И, наконец, чтобы разобраться в точных значениях газа, необходимых для выполнения инструкций TVM, обратитесь к [этому разделу](/v3/documentation/tvm/instructions#gas-prices) документации.
+1. To better understand how TON Virtual Machine (TVM) operates and _how TON processes transactions_, check out [TVM overview section](/v3/documentation/tvm/tvm-overview).
+2. Secondly, if you want to learn more about how transaction and gas fees work on TON, consider diving into [this section](/v3/documentation/smart-contracts/transaction-fees/fees) of our documentation.
+3. Finally, to better understand the exact gas values needed to carry out TVM instructions, see [this section](/v3/documentation/tvm/instructions#gas-prices) of our documentation.
    :::
 
 А теперь давайте вернемся к руководству!
 
-#### Числовые данные майнинга в удобном формате
+#### Numerical mining data in a user-friendly format
 
-В предыдущем разделе мы рассмотрели числовые (_int_) значения, необходимые для получения данных о майнинге. Перед дальнейшей обработкой, эти данные нужно перевести в более удобный и понятный формат.
+In the section above, we discuss numerical (_int_) values needed to receive mining data. Before processing, further received data must be converted into a more easily understandable and usable format.
 
-Как видно из приведенного вывода, числа могут быть очень большими. Для работы с такими выводами мы будем использовать `bigint` — способ реализации больших чисел в JavaScript. `BigInt` позволяет обрабатывать числа, превышающие максимальное целочисленное значение `number`. Давайте разберем пример, чтобы лучше понять, какие _данные о майнинге_ нужны для этого процесса:
+As it is clear when examining the given output, numbers can be substantial. We will use `bigint` (the big number implementation in JavaScript) to deal with them. `BigInt` works with large numbers that are more significant than the maximum `number` integer values. Let’s use this example to get a better idea of the _Mining Data_ required for this process:
 
 ```ts title="./scripts/mine.ts"
 // ... previous code
@@ -370,7 +373,7 @@ const maxCpl = stack.readBigNumber();
 console.log({ complexity, lastSuccess, seed, targetDelta, minCpl, maxCpl });
 ```
 
-Как показано выше, разные компоненты _miningData_ используют стековые числа для различных параметров, о которых мы поговорим дальше. Чтобы получить нужное значение, мы воспользовались функцией `stack.readBigNumber()` которая считывает `bigint` из стека.
+As shown above, the different components of _miningData_ use stack-based numbers for different parameters, which will be introduced in the section below. To achieve the desired value outcome, we used the `stack.readBigNumber()` function to read a `bigint` from the stack.
 
 После завершения этого процесса мы можем вывести значения в консоль. Попробуйте запустить скрипт снова, выполнив команду:
 
@@ -391,33 +394,33 @@ npm run start:script
 }
 ```
 
-Давайте разберем команду Mining Data, которая используется для обработки различных параметров данных при программировании данных майнинга в блокчейне TON. К ним относятся:
+Let's cover the Mining Data command that translates different data parameters when programming mining data into TON Blockchain. These include:
 
 - `complexity` - наиболее важный параметр для майнеров. Он определяет сложность Proof-of-Work для значений. Хеш считается найденным, _если его значение меньше сложности_.
-- `lastSuccess` - это временная метка [unix timestamp](https://www.unixtimestamp.com/), фиксирующая время и дату последней майнинговой транзакции в TON. При каждом изменении last_success, майнер нужно запускать заново, так как вместе с этим изменяется и seed.
-- `seed` обозначает уникальное значение, генерируемое смарт-контрактом для вычисления целевого хеша. Чтобы лучше понять этот процесс и узнать больше о том, как и почему изменяется seed, ознакомьтесь с папкой файлов проекта, используя ключевое слово ctx_seed (Ctrl+F с ключевым словом "ctx_seed").
+- `lastSuccess` is a [unix timestamp](https://www.unixtimestamp.com/) date and time representation that keeps track of the last mining transaction on TON. Each time the last_success metric changes, it's necessary to rerun the miner because the seed also changes during this process.
+- `seed` denotes a unique value a smart contract generates to calculate the desired hash. To better understand this process and learn more about how the seed changes and why, look at the project files folder using the `ctx_seed` keyword (Ctrl+F with the keyword `ctx_seed`).
 - `targetDelta`, `minCpl` и `maxCpl` не будут использоваться в данном руководстве. Однако вы всегда можете узнать больше о том, как они используются в смарт-контрактах для расчета сложности proof-of-work, в исходных файлах коллекции вашего проекта.
 
-Мы разобрались с различными параметрами и теперь можем использовать значения `complexity`, `lastSuccess`, `seed`, в нашем NFT майнере. Давайте перейдем к следующему разделу.
+Now that we understand the parameters discussed above, we have the values(`complexity`, `lastSuccess`, `seed`) that we will use in our NFT Miner in the next chapter.
 
-## 🛠 Подготовка NFT майнера
+## Prepare an NFT miner
 
-Всё получилось? Отлично! Идем дальше.
+Здорово получается!
 
-Мы уже подключились к TON и получили необходимые данные майнинга из блокчейна для создания NFT-майнера. Теперь давайте разберемся со следующими шагами.
+After connecting to TON and retrieving the necessary mining data from the blockchain to create an NFT miner, let's focus on the next steps in this process to achieve our goal.
 
-В этой главе вы _подготовите сообщение для майнинга_ и _вычислите его хеш_. После этого вы _найдете хеш, который будет меньше (`<`) сложности_, полученной нами из смарт-контракта.
+In this chapter, you will _prepare a mining message_ and _calculate a hash_ of the message. After that, you will _find a hash that's less(`<`) than the complexity_ we got from the smart contract.
 
 Вот что такое майнер! Просто, не правда ли?
 
-### Подготовка сообщений для майнинга
+### Preparing mining messages
 
-Сначала мы должны подготовить сообщение для майнинга. Важно убедиться, что параметры указаны правильно. Это гарантирует корректность процесса и целостность данных.
+First, we must prepare a mining message by ensuring the correct parameters to ensure this process's validity and data integrity.
 
-К счастью, [файл README](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive) содержит необходимые инструкции, которые помогут нам в этом. В нем представлена таблица с нужными полями и типами ячеек (раздел "Layout of Proof of Work Cell"). Она поможет правильно настроить процесс.
+Thankfully, the [README file](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive) allows us to retrieve the correct guidelines to achieve this goal. As you can see, the above README file comprises a table with specific fields and cell types (titled "Layout of proof of work cell') to help achieve our desired result.
 
-:::info Что такое ячейки?
-Ячейки — это структуры хранения данных в TON, выполняющие множество задач, в том числе повышение масштабируемости сети и ускорение транзакций смарт-контрактов. Мы не будем сейчас вдаваться в детали, но если вам интересно разобраться в устройстве ячеек и принципах их работы, загляните в [этот раздел](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) нашей документации.
+:::info :::info Что такое ячейки?
+Cells are data storage structures on TON that fulfill numerous purposes, including increasing network scalability and smart contract transaction speeds. We won't get into specifics here, but if you're interested in understanding the complexity of cells and how they work, consider diving into [this](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) section of our documentation.
 :::
 
 К счастью, все структуры данных, используемые в этом руководстве, уже написаны на TypeScript. Вы можете использовать объект `MineMessageParams` из _NftGiver.data.ts_, чтобы создать транзакцию с помощью _Queries_:
@@ -438,26 +441,27 @@ const mineParams: MineMessageParams = {
 let msg = Queries.mine(mineParams); // transaction builder
 ```
 
-Давайте разберемся, где находятся _op_ и _data2_ из [этой таблицы](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive):
+Probably you have a question: where are the _op_ and _data2_ from the [table](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive)?
 
-- В таблице числовое значение data1 должно совпадать со значением data2. Чтобы не заполнять значение data2, конструктор транзакций выполняет низкоуровневый процесс (см. исходный код Queries.mine()).
-- Поскольку классификация `op` всегда постоянна, она уже реализована в конструкторе транзакций _Queries_ и в _OpCodes_. Вы можете найти код op, посмотрев исходный код метода `mine()`.
+- In the table, the numerical value of data1 must equal that of data2. To omit the filling of the data2 value, the transaction builder performs a low-level process (see Queries.mine() sources).
+- Because the `op` classification is always constant, it is already implemented in transaction builder _Queries_ and in _OpCodes_. You can find the opcode by going to the source code of the `mine()` method.
 
 :::tip
-Вы можете ознакомиться с исходным кодом (`../wrappers/NftGiver.ts`) — это интересно, но не обязательно.
+Though it may be interesting to check out the source code (`../wrappers/NftGiver.ts`), but it is unnecessary.
 :::
 
-### Создание TON NFT майнеров
+### Creating TON NFT miners
 
-Теперь, когда мы подготовили сообщения для нашего майнера TON, давайте разберемся с процессом создания самого майнера. Начнем с этой строки кода:
+Now that we have completed the process to prepare messages for our TON miner, let’s jump into the initial process to create a miner.
+First, let’s consider this line of code:
 
 ```ts
 let msg = Queries.mine(mineParams);
 ```
 
-На предыдущем шаге мы скомпилировали значение `msg`. Идея майнинга заключается в том, чтобы найти хеш `msg.hash()`, который будет меньше `complexity` полученного из последнего _get_mining_data()_. Мы можем увеличивать `data1` столько раз, сколько нам нужно.
+Above, we compiled a `msg` value. The idea of mining is to find a hash `msg.hash()` that will be less than `complexity` from the last received _get_mining_data()_. We can increment `data1` as many times as we need.
 
-Чистый майнер будет продолжать работать бесконечно, пока `msg.hash()` будет больше `complexity` (хеш сообщения больше сложности майнинга PoW).
+The pure miner will continue to run indefinitely if `msg.hash()` is bigger than `complexity` (message hash is larger than PoW mining complexity).
 
 Вот пример выполнения кода, относящегося к `BigInt` на TypeScript:
 
@@ -475,15 +479,15 @@ while (bufferToBigint(msg.hash()) > complexity) {
 console.log('Yoo-hoo, you found something!');
 ```
 
-Мы преобразуем хеш из `msg.hash()` в `bigint` с помощью функции `bufferToBigint()`. Это необходимо для сравнения хеша с `complexity`.
+We convert the hash from the `msg.hash()` to `bigint `with the `bufferToBigint()` function. This is done to use this hash in comparison with `complexity`.
 
-Теперь, после выполнения всех вышеописанных шагов, наш майнер будет работать правильно. Но визуально он будет иметь непривлекательный вид (попробуйте `npm run start:script`). Давайте это исправим.
+Though the miner will work properly after completing the above steps, it will have a visually unappealing appearance (try `npm run start:script`). Therefore, we must address this issue. Let’s jump in.
 
-#### Улучшение внешнего вида TON майнера ✨
+#### Improving TON miner appearance
 
 Теперь нам нужно сделать так, чтобы майнер выглядел привлекательно! Как это сделать?
 
-Просто следуйте дальнейшим инструкциям.
+Just follow me, my friend, follow me.
 
 Давайте добавим следующие команды:
 
@@ -514,7 +518,7 @@ console.log('msg_hash < pow_complexity: ', bufferToBigint(msg.hash()) < complexi
 return msg;
 ```
 
-Здорово получается! Давайте выполним следующую команду:
+Just check it out! Давайте выполним следующую команду:
 
 ```bash
 npm run start:script
@@ -530,24 +534,24 @@ npm run start:script
 />
 <br></br>
 
-Круто, не правда ли? 😏
+_Cool, isn't it?_
 
-После успешного выполнения этих команд у нас получится визуально привлекательный NFT майнер. В следующем разделе мы разберемся, как подключить кошелек и создать платежный канал для приема и отправки транзакций в блокчейне TON.
+After executing these commands correctly, we'll have a visually appealing NFT miner. In the next section, we'll focus on connecting a wallet to the miner to create a payment channel that accepts and receives transactions from TON Blockchain.
 
-## 🎨 Подготовка транзакции
+## Prepare a transaction
 
-Далее разберем, как сформировать сообщение и отправить его в блокчейн через ваш [кошелек Tonkeeper](https://Tonkeeper.com/).
-Эти шаги помогут вам завершить процесс **майнинга NFT** на TON.
+Next, we'll outline the steps to compile a message and send it to the blockchain with your [Tonkeeper wallet](https://Tonkeeper.com/).
+The upcoming steps will guide you in completing the process of **mining an NFT** on TON.
 
-#### Пополнение баланса кошелька через кран тестовых токенов
+#### Top up wallet balance via the token faucet
 
-Чтобы продолжить, нам нужно получить несколько тестовых токенов TON. Это можно сделать через [кран Testnet по этой ссылке](https://t.me/testgiver_ton_bot).
+We need to acquire some TON Testnet tokens to proceed to the next step. This can be achieved using the Testnet [faucet found here](https://t.me/testgiver_ton_bot).
 
-### Использование возможностей Blueprint для транзакций
+### Leverage Blueprint transaction opportunities
 
-Чтобы процесс майнинга NFT прошел корректно, а пользователь мог безопасно хранить свои NFT, мы будем использовать [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript). Этот инструмент позволит нам одновременно взаимодействовать с блокчейном TON и кошельком Tonkeeper.
+To ensure that the NFT mining process is carried out correctly and that the user can store their NFT properly, we will use [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript) to simultaneously interact with TON Blockchain and the Tonkeeper wallet.
 
-Для этого мы создадим и отправим транзакцию с помощью стандартной функции `run()`:
+To achieve this goal, we'll use the standard `run()` function to run to the creation of the transaction and send it:
 
 ```ts title="./scripts/mine.ts"
 import { toNano } from '@ton/ton';
@@ -575,9 +579,9 @@ export async function run(provider: NetworkProvider) {
 npm start
 ```
 
-Обратите внимание, что мы используем `npm start` вместо `npm run start:script`. Это нужно для работы с blueprint (в основе используется команда `blueprint run`).
+Note that we use `npm start` instead of `npm run start:script`. This is because we need to leverage the advantages of the blueprint (under the hood, `blueprint run` is called).
 
-Далее, чтобы подключить ваш кошелек Tonkeeper, ответьте на вопросы, как показано ниже:
+After running this command, answer the questions as shown below to connect your Tonkeeper wallet:
 
 ```
 ? Which network do you want to use?
@@ -588,52 +592,53 @@ npm start
 > Tonkeeper
 ```
 
-Отсканируйте QR-код в терминале с помощью Tonkeeper, чтобы установить соединение (пока без отправки транзакции). После подключения подтвердите транзакцию в Tonkeeper.
+Scan the QR code shown in the terminal with your Tonkeeper wallet to establish a connection; no transaction has been sent yet.
+Once connected, confirm the transaction in Tonkeeper.
 
-Чувствуете, как прокачиваются ваши навыки? Еще немного — и вы станете настоящим разработчиком TON.
+Do you sense the _experience_ in the air? That's you on your way to becoming a TON developer.
 
-## ⛏ Майнинг NFT с помощью кошелька
+## Mine NFT with a wallet
 
 Существует два основных способа майнинга NFT на TON:
 
 - [Простой — майнинг NFT в тестовой сети](/v3/guidelines/get-started-with-ton#simple-nft-testnet-mining)
 - [Продвинутый — майнинг NFT в основной сети](/v3/guidelines/get-started-with-ton#genuine-nft-mainnet-mining)
 
-### Простой способ: майнинг NFT в тестовой сети
+### Simple: NFT Testnet mining
 
 Ниже приведены шаги, которые помогут вам совершить первую тестовую транзакцию для майнинга NFT:
 
 1. Активируйте [режим Testnet в вашем кошельке Tonkeeper](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#tonkeeper-test-environment)
-2. Введите адрес вашего кошелька testnet из Tonkeeper в переменную `walletAddress` в файле `./scripts/mine.ts`
-3. Введите адрес [коллекции NFT из Testnet](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX) в переменную `collectionAddress` в `./scripts/mine.ts`
+2. Input our Testnet wallet address from Tonkeeper into the `walletAddress` variable in the `./scripts/mine.ts`.
+3. Input address of the [NFT collection from Testnet](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX) into `collectionAddress` variable in the `./scripts/mine.ts`.
 
-#### Майнинг NFT "Ракета" в тестовой сети
+#### Mine a Testnet NFT rocket
 
-Для успешного майнинга NFT "Ракета" в тестовой сети, выполните следующие шаги:
+To successfully mine an NFT rocket on Testnet, it is necessary to follow these steps:
 
 1. _Откройте_ кошелек Tonkeeper на вашем телефоне (в нем должны быть несколько недавно полученных токенов TON из тестовой сети).
 2. _Выберите_ режим сканирования в кошельке, чтобы отсканировать QR-код.
 3. _Запустите_ ваш майнер для получения корректного хеша (этот процесс занимает от 30 до 60 секунд).
-4. _Следуйте_ инструкциям в диалоговом окне Blueprint.
+4. _Follow_ the steps in the Blueprint dialogue.
 5. _Отсканируйте_ сгенерированный QR-код из майнера.
 6. _Подтвердите_ транзакцию в вашем кошельке Tonkeeper.
 
 :::tip Финальный совет
-Другие разработчики тоже могут пытаться добыть свой NFT. Если кто-то успеет раньше вас, вам придется повторить процесс. Возможно, понадобится несколько попыток, чтобы у вас все получилось.
+Because other developers may be carrying out the same process in an attempt to mine their own NFT, you may need to try the process a couple of times to succeed, as another user could mine the next NFT available right before you.
 :::
 
-Вскоре после начала этого процесса вы успешно добудете свой первый NFT на TON. Он появится в вашем кошельке Tonkeeper.
+Soon after initiating this process, you will have successfully mined your first NFT on TON, and it should appear in your Tonkeeper wallet.
 
 ![](/img/tutorials/onboarding/8.svg)
 
-Теперь вы **настоящий разработчик на TON**! Вы сделали это. 🛳
+Welcome aboard, **a true TON Developer**! You did it.
 
-### Продвинутый способ: майнинг NFT в основной сети
+### Genuine: NFT Mainnet mining
 
-Если вы хотите добыть NFT в основной сети TON, следуйте этим инструкциям:
+Hey! Если вы хотите добыть NFT в основной сети TON, следуйте этим инструкциям:
 
-1. Активируйте режим _mainnet_ в вашем Tonkeeper (на счету должно быть не менее 0,1 TON).
-2. Введите адрес кошелька _mainnet_ из Tonkeeper в переменную `walletAddress` в файле `./scripts/mine.ts`
+1. You have activated _Mainnet_ mode in your Tonkeeper (it should hold at least 0.1 TON).
+2. Input our _Mainnet_ wallet address from Tonkeeper into the `walletAddress` variable in the `./scripts/mine.ts`
 3. Введите адрес [коллекции NFT из Mainnet](https://getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX) в переменную `collectionAddress` в файле `./scripts/mine.ts`
 4. Замените **endpoint** на _Mainnet_:
 
@@ -642,19 +647,19 @@ npm start
 const endpoint = "https://toncenter.com/api/v2/jsonRPC"
 ```
 
-#### Майнинг NFT ракеты в основной сети
+#### Mine a Mainnet NFT rocket
 
-Для успешного майнинга NFT ракеты в основной сети (аналогично как в тестовой сети) необходимо выполнить следующие шаги:
+As we outlined in the Testnet NFT rocket mining process, to successfully mine an NFT rocket on the Mainnet, it is necessary to follow these steps:
 
 1. _Откройте_ кошелек Tonkeeper на вашем телефоне (помните, на счету должны быть токены TON).
 2. _Выберите_ режим сканирования в кошельке, чтобы отсканировать QR-код.
 3. _Запустите_ ваш майнер для получения корректного хеша (этот процесс занимает от 30 до 60 секунд).
-4. _Следуйте_ инструкциям в диалоговом окне Blueprint.
+4. _Follow_ the steps in the Blueprint dialogue.
 5. _Отсканируйте_ сгенерированный QR-код из майнера.
 6. _Подтвердите_ транзакцию в вашем кошельке Tonkeeper.
 
 :::tip Финальный совет
-Другие разработчики тоже могут пытаться добыть свой NFT. Если кто-то успеет раньше вас, вам придется повторить процесс. Возможно, понадобится несколько попыток, чтобы у вас все получилось.
+Because other developers may be carrying out the same process to mine their own NFT, you may have to try the process a couple of times to be successful (as another user could mine the next NFT available right before you).
 :::
 
 Совсем немного и вы **добудете свой NFT**, став разработчиком на блокчейне TON. Готово! Проверьте свой NFT в Tonkeeper.
@@ -668,18 +673,18 @@ const endpoint = "https://toncenter.com/api/v2/jsonRPC"
 </video>
 </div>
 
-Добро пожаловать на борт, **Разработчик на TON**! Вы сделали это. 🛳
+Welcome aboard, **a TON Developer**! You did it.
 
-## 🧙 Что дальше?
+## What's next?
 
 _Сначала отдохните! Вы проделали большую работу! Теперь вы разработчик TON. Но это только начало долгого пути._
 
-## См. также
+## See also
 
-Вы завершили онбординг-челлендж TON и успешно добыли NFT. Теперь советуем изучить материалы ниже — они подробно рассказывают о разных частях экосистемы TON:
+After finishing the TON onboarding challenge, where we successfully mined an NFT, consider taking a look at some of these materials that detail different portions of TON's Ecosystem:
 
 - [Что такое блокчейн? Что такое смарт-контракт? Что такое газ?](https://blog.ton.org/what-is-blockchain)
-- [TON Hello World: пошаговое руководство по написанию вашего первого смарт-контракта](https://helloworld.tonstudio.io/02-contract/)
+- [TON Hello World: Step-by-step guide for writing your first smart contract](https://helloworld.tonstudio.io/02-contract/)
 - [Разработка смарт-контрактов: введение](/v3/documentation/smart-contracts/overview)
 - [[YouTube] Ton Dev Study - FunC & Blueprint](https://www.youtube.com/playlist?list=PLyDBPwv9EPsDjIMAF3XqNI2XGNwdcB3sg)
 - [Как работать со смарт-контрактами для кошельков](/v3/guidelines/smart-contracts/howto/wallet)
@@ -692,3 +697,5 @@ _Сначала отдохните! Вы проделали большую ра�
 :::info есть комментарии?
 Вы - один из первых исследователей здесь. Если заметите ошибки или почувствуете, что зашли в тупик, пожалуйста, напишите ваш комментарий сюда [@SwiftAdviser](https://t.me/SwiftAdviser). Я исправлю это как можно скорее! :)
 :::
+
+<Feedback />
