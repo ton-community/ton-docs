@@ -1,0 +1,97 @@
+import Feedback from '@site/src/components/Feedback';
+
+import ConceptImage from '@site/src/components/conceptImage';
+import ThemedImage from '@theme/ThemedImage';
+
+# グラフィック解説ガイドライン
+
+:::danger
+This page is outdated and will be deleted soon.
+See the [How to contribute](/v3/contribute/).
+:::
+
+ドキュメントの一貫性を保つことは非常に重要であり、これを達成するために、スマートコントラクトのプロセスを可視化するための特定の標準が開発されました。
+
+## グラフィック説明表記
+
+### メッセージ処理のグラフ
+
+メッセージ処理を描写するには、スマートコントラクトのグラフに似たグラフィカルな表現を利用するのが望ましいです。
+
+トランザクションの順序が重要でない場合は、ラベルを省略することができます。こうすることで、ダイアグラムが簡素化され、メッセー ジや契約に関連する詳細を読みやすく、理解しやすくなります。 This simplifies the diagram, making it easier to read and understand the details related to messages and contracts.
+
+#### Annotation Primitives
+
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1.png?raw=true',
+    dark: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1_dark.png?raw=true',
+  }}
+/>
+<br></br>
+
+- 大量の異なる明るい色を使用しないでください。
+- 破線の枠線を使用するなど、図を修正して使用してください。
+- 理解を深めるために、異なるトランザクションを別々の線スタイル(実線と破線) で表示することができます。
+
+#### メッセージ処理の例
+
+<br></br>
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
+  }}
+/>
+<br></br>
+
+Visio [message-processing.vsdx](/schemes-visio/message_processing.vsdx) から直接参照を学習します。
+
+### 書式と色
+
+#### フォント
+
+- 図内すべてのテキストに使用される**Inter**フォント・ファミリー。
+
+#### 色 - ライトモード
+
+- 鉛筆手描き（デフォルトテーマ）
+
+#### 色 - ダークモード
+
+- フォント `#e3e3e3`
+- 背景 `#232328`
+- ライトハイライト(矢印とスキームの境界線) `#058dd2`
+- ダークハイライト(矢印とスキームの境界線) `#0088cc`
+- 内部背景(入れ子ブロック用) `#333337`
+
+#### バージョン管理方針
+
+- 様々なデバイスでの読みやすさを確保するために、ドキュメント内の図をSVGフォーマットでスキームに設定する。
+- 元のファイルを "/static/visio" ディレクトリの下にプロジェクトの Git リポジトリに保存すると、今後の変更が容易になります。
+
+### 配列図
+
+2-3アクター間の複雑で反復的な通信方式の場合は、配列図を使用することをお勧めします。 メッセージの場合は、共通の同期メッセージ矢印の表記を使用します。 For messages, use the notation of a common synchronous message arrow.
+
+#### 例
+
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_7_dark.png?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
+### スキームの参照
+
+- [メッセージ処理.vsdx](/schemes-visio/message_processing.vsdx)
+
+<Feedback />
