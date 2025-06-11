@@ -1,14 +1,11 @@
 ---
-description: Мини-приложения Telegram (или TMA) - это веб-приложения, которые запускаются внутри мессенджера Telegram. Их создают с использованием веб-технологий - HTML, CSS и JavaScript.
+description: Telegram Mini Apps (or TMAs) are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript.
 ---
 
-import Button from '@site/src/components/button'
+import Feedback from "@site/src/components/Feedback";
+import Button from "@site/src/components/button";
 
-# Что такое мини-приложения?
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# What are Mini Apps?
 
 <div style={{width: '100%', textAlign:'center', margin: '10pt auto'}}>
   <video style={{width: '100%',maxWidth: '600px', borderRadius: '10pt'}} muted={true} autoPlay={true} loop={true}>
@@ -21,75 +18,77 @@ Your browser does not support the video tag.
 </video>
 </div>
 
-Мини-приложения Telegram (или TMA) - это веб-приложения, которые запускаются внутри мессенджера Telegram. Их создают с использованием веб-технологий - HTML, CSS и JavaScript.
+Telegram Mini Apps (or TMAs) are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript.
 
 :::tip
-Поскольку TMA являются веб-страницами и используют JavaScript, Вам необходимо выбрать [JS/TS-based SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript).
+Since TMAs are web pages and use JavaScript, you need to choose [JS/TS-based SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript).
 :::
 
-Откройте доступ к **900-миллионной аудитории Telegram**. Представьте, что вы можете предложить свое приложение или услугу этой огромной базе пользователей всего одним щелчком мыши.
+Unlock access to **Telegram’s 900 million users**. With just one click, you can offer your app or service to a massive audience.
 
 <Button href="/v3/guidelines/dapps/tma/tutorials/step-by-step-guide" colorType={'primary'} sizeType={'sm'}>
 
-Пошаговое руководство
+Step-by-step guide
 
 </Button>
 
 <Button href="/v3/guidelines/dapps/tma/tutorials/app-examples" colorType={'secondary'} sizeType={'sm'}>
 
-Смотрите примеры
+See examples
 
 </Button>
 
-## Обзор
+## Overview
 
-Telegram-боты могут полностью заменить любой вебсайт. Они поддерживают простую авторизацию, интегрированные платежи через 20 платежных систем (включая Google Pay и Apple Pay), рассылку персонализированных push-уведомлений пользователям и многое другое.
+Telegram bots can fully replace traditional websites, offering seamless user authorization, Integrated payments with 20+ payment providers (including Google Pay & Apple Pay), tailored push notifications for engaging users, and much more.
 
-Благодаря мини-приложениям боты получают совершенно новые возможности. Разработчики ботов могут создавать бесконечно гибкие интерфейсы с помощью JavaScript, самого распространенного языка программирования в мире.
+With Mini Apps, bots gain an entirely new dimension. Developers can create highly flexible interfaces using JavaScript, the world's most widely used programming language.
 
-Вот несколько ключевых особенностей о мини-приложениях Telegram:
+Here are some key features of Telegram Mini Apps:
 
-- **Интеграция в Telegram**. Мини-приложения (TMA) легко интегрируются в приложение Telegram, предоставляя пользователям единый интерфейс. Доступ к ним можно получить из чата Telegram или групповой беседы.
-- **Расширенная функциональность**: Мини-приложения Telegram (TMA) могут предложить широкий спектр функциональных возможностей. Их можно использовать для различных целей, таких как игры, обмен контентом, инструменты продуктивности и многое другое. Эти приложения расширяют возможности платформы Telegram выходя за рамки базового обмена сообщениями.
-- **Кроссплатформенная совместимость**: Поскольку мини-приложения Telegram работают через Интернет, они доступны в приложениях Telegram для Android, iOS, PC, Mac и Linux. Пользователи могут получить к ним доступ в один клик без необходимости дополнительных установок.
-- **Взаимодействие с ботами**. Мини-приложения Telegram (TMA) часто используют ботов Telegram для обеспечения интерактивного и автоматизированного взаимодействия. Боты могут реагировать на вводимые пользователем данные, выполнять задачи и облегчать взаимодействие внутри мини-приложения.
-- **Фреймворки для разработки**: Разработчики могут создавать мини-приложения Telegram (TMA), используя такие технологии веб-разработки, как HTML, CSS и JavaScript. Кроме того, Telegram предоставляет инструменты разработчика и API для создания приложений и их интеграции с платформой Telegram.
-- **Возможности монетизации**. Мини-приложения Telegram (TMA) можно монетизировать различными способами, например, с помощью покупок в приложении, моделей подписки или рекламы, что делает их привлекательными для разработчиков и бизнесов.
-- **Подходит для Web3**: TON SDK; TON Connect (это коммуникационный протокол, который облегчает связь между кошельками и приложениями на блокчейне TON); токены.
-- **Развитие сообщества**. Telegram имеет обширное сообщество разработчиков, а также многие сторонние разработчики создают свои мини-приложения Telegram (TMA) и делятся этим с пользователями. Такой подход, основанный на сообществе, способствует инновациям и разнообразию доступных приложений.
+- **Integration within Telegram**: Telegram Mini Apps are designed to blend smoothly into Telegram, providing a native-like user experience. Users can access them from chats, groups, or inline bot interactions.
+- **Enhanced Functionality**: TMAs go beyond messaging—they can power games, content-sharing apps, productivity tools, financial services, and more.
+- **Cross-Platform Compatibility**: Since TMAs are web-based, they work seamlessly across Android, iOS, Windows, Mac, and Linux—no extra installations required.
+- **Bot Interaction**: Many TMAs use Telegram bots for interactive, automated experiences, allowing users to receive real-time responses and dynamic content.
+- **Development Frameworks**: Developers can build TMAs with HTML, CSS, and JavaScript, leveraging Telegram’s APIs to create feature-rich applications.
+- **Monetization Opportunities**: TMAs can be monetized through in-app purchases, subscriptions, and ads, making them an attractive option for developers and businesses.
+- **Web3 Ready**: TMAs support TON SDK, TON Connect, and token-based transactions, allowing seamless integration with blockchain-powered applications.
+- **Community Development**: Telegram has a strong developer ecosystem, where third-party developers actively create and share TMAs, fostering innovation and diversity.
 
-В целом, мини-приложения Telegram (TMA) служат средством расширения возможностей работы с Telegram, предлагая дополнительные функции и услуги, а также предоставляя разработчикам возможность создавать и распространять свои приложения в экосистеме Telegram.
+Telegram Mini Apps enhance the Telegram experience by bringing powerful new functionalities, while giving developers an opportunity to create, distribute, and monetize their apps within the Telegram ecosystem.
 
-## Начало работы
+## Getting started
 
-### Документация TMA
+### TMA documentation
 
-- [Документация мини-приложений Telegram](https://docs.telegram-mini-apps.com) - документация для TWA, разработанная сообществом.
-- [Документация TMA от Telegram](https://core.telegram.org/bots/webapps) - полное руководство на сайте Telegram.
+- [Telegram Mini Apps documentation](https://docs.telegram-mini-apps.com) — a community-driven documentation for TWA.
+- [TMA documentation by Telegram](https://core.telegram.org/bots/webapps) — a full description on the Telegram website.
 
-### Сообщество разработчиков Telegram
+### Telegram developers community
 
-Присоединяйтесь к специальному чату разработчиков Telegram, чтобы обсудить разработку мини-приложений и получить поддержку:
+Join a special Telegram developers chat to discuss Mini Apps development and get support:
 
 <Button href="https://t.me/+1mQMqTopB1FkNjIy" colorType={'primary'} sizeType={'sm'}>
 
-Присоединяйтесь к чату
+Join chat
 
 </Button>
 
-### SDK для мини-приложений
+### Mini Apps SDKs
 
-- [twa-dev/sdk](https://github.com/twa-dev/sdk) - NPM-пакет для TMA SDK
-- [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) - еще один шаблон для нового TWA.
-- [twa-dev/Mark42](https://github.com/twa-dev/Mark42) - Mark42 - это простая легко настраиваемая библиотека пользовательского интерфейса для TWA.
-- [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) - шаблон для нового взаимодействия TWA с TON.
+- [twa-dev/sdk](https://github.com/twa-dev/sdk) — NPM package for TMA SDK.
+- [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) — Another boilerplate for a new TWA.
+- [twa-dev/Mark42](https://github.com/twa-dev/Mark42) — Mark42 is a simple lightweight tree-shakable UI library for TWA.
+- [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) — Template for new TWA interaction with TON.
 
-## Интеграция с TON Connect
+## Integrate with TON Connect
 
-Подключение кошельков пользователей с помощью протокола TON Connect. Подробнее об этом читайте здесь:
+Connect with users wallets with the help of the TON Connect protocol. Read more about it here:
 
 <Button href="/v3/guidelines/ton-connect/overview" colorType={'primary'} sizeType={'sm'}>
 
-Откройте для себя TON Connect
+Discover TON Connect
 
 </Button>
+
+<Feedback />
