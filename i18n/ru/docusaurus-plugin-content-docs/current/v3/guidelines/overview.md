@@ -1,7 +1,6 @@
-# Обзор
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Overview
 
-// TODO: необходимо написать
+// TODO: need to be written <Feedback />
+
