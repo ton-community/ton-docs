@@ -1,43 +1,39 @@
-# Пользовательские оверлеи
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Custom overlays
 
-Узлы TON взаимодействуют друг с другом, формируя подсети, называемые *оверлеями*. Существует несколько общих оверлеев, в которых участвуют узлы, например: публичные оверлеи для каждого шарда, валидаторы также участвуют в общем оверлее валидаторов и оверлеях для конкретных наборов валидаторов.
+TON nodes communicate with each other by forming subnets called **overlay**. A few common overlay nodes participate, such as public overlays for each shard. Validators also participate in general validator overlays and overlays for specific validator sets.
 
-Узлы также могут быть настроены для присоединения к пользовательским оверлеям.
-В настоящее время эти оверлеи используются для двух целей:
+Nodes can also be configured to join custom overlays for two primary purposes: broadcasting external messages and broadcasting block candidates.
 
-- трансляция внешних сообщений
-- трансляция кандидатов на блоки.
+Participation in custom overlays allows for the avoidance of uncertainty of public overlays and improves delivery reliability and delays.
 
-Участие в пользовательских оверлеях позволяет избежать неопределенности публичных оверлеев и повысить надежность доставки и сократить задержки.
+Each custom overlay has a strictly determined list of participants with predefined permissions, particularly permission to send external messages and blocks. The overlay's configuration should be the same on all participating nodes.
 
-Каждый пользовательский оверлей имеет строго определенный список участников с заранее заданными правами, в частности право на отправку внешних сообщений и блоков. Конфигурация оверлея должна быть одинаковой на всех участвующих узлах.
-
-Если у вас под контролем несколько узлов, целесообразно объединить их в пользовательский оверлей, где все валидаторы смогут отправлять кандидатов на блок, а все LS смогут отправлять внешние сообщения. Таким образом, LS будет синхронизироваться быстрее, в то время как скорость доставки внешних сообщений будет выше (и доставка в целом более надежной). Обратите внимание, что дополнительный оверлей вызывает дополнительную нагрузку на трафик сети.
+If you have multiple nodes under your control, it is expedient to unite them into a custom overlay, where all validators can send block candidates and all LS can send external messages. That way, LS will synchronize faster while simultaneously increasing the external message delivery rate (and delivery more robust in general). Note that additional overlay causes additional network traffic.
 
 ## Пользовательские оверлеи по умолчанию
 
-Mytonctrl использует пользовательские оверлеи по умолчанию, доступные по адресу https://ton-blockchain.github.io/fallback_custom_overlays.json. Этот оверлей используется нечасто и предназначен для экстренной ситуации при проблемах с подключением к публичному оверлею.
-Чтобы прекратить участие в пользовательских оверлеях по умолчанию, выполните команды
+MyTonCtrl utilizes default custom overlays, which can be found [here](https://ton-blockchain.github.io/fallback_custom_overlays.json). These overlays are typically not in use and are meant for emergency situations when there are connectivity issues with the public overlay.
+
+If you wish to stop participating in default custom overlays, please run the following commands:
 
 ```bash
 MyTonCtrl> set useDefaultCustomOverlays false
 MyTonCtrl> delete_custom_overlay default
 ```
 
-## Создание пользовательского оверлея
+## Creating a custom overlay
 
-### Сборка adnl адреса
+### Collect ADNL  addresses
 
-Чтобы добавить валидаторы в пользовательский оверлей, вы можете использовать либо их `fullnode adnl id`, доступный с помощью `validator-console -c getconfig`, либо `validator adnl id`, который можно найти в статусе mytonctrl.
-Чтобы добавить liteservers в пользовательский оверлей, вы должны использовать их `fullnode adnl id`.
+To add validators to a custom overlay, you can use either their `fullnode adnl id` available with `validator-console -c getconfig` or `validator adnl id`, which can be found in MyTonCtrl's status.
+
+To add liteservers to a custom overlay, you must use their `fullnode adnl id`.
 
 ### Создание файла конфигурации
 
-Создайте файл конфигурации в формате:
+Create a config file in the following format:
 
 ```json
 {
@@ -56,52 +52,64 @@ MyTonCtrl> delete_custom_overlay default
 }
 ```
 
-`msg_sender_priority` определяет порядок включения внешних сообщений в блоки: сначала обрабатываются сообщения из источников более высокого приоритета. Сообщения из публичного оверлея и локального LS имеют приоритет 0.
+`msg_sender_priority` determines the order of external message inclusion in blocks: messages from higher-priority sources are first processed. Messages from the public overlay and local LS have priority 0.
 
-**Обратите внимание, что все узлы, перечисленные в конфигурации, должны участвовать в оверлее (другими словами, им нужно добавить оверлей с точно такой же конфигурацией), в противном случае связь будет плохой, а трансляции прекратятся**
+:::caution
+All nodes listed in the configuration **must** participate in the overlay; if they do not add an overlay with the exact same configuration, connectivity will be poor and broadcasts may fail.
+:::
 
-Существует специальное слово `@validators` для создания динамического пользовательского оверлея, который mytonctrl будет автоматически генерировать в каждом раунде, добавляя всех текущих валидаторов.
+There is a special word `@validators` to create a dynamic custom overlay that MyTonCtrl will generate automatically each round adding all current validators.
 
 ### Добавление пользовательского оверлея
 
-Используйте команду mytonctrl для добавления пользовательского оверлея:
+Use the following MyTonCtrl command to add a custom overlay:
 
 ```bash
 MyTonCtrl> add_custom_overlay <name> <path_to_config>
 ```
 
-Обратите внимание, что имя и файл конфигурации должны быть одинаковыми для всех участников оверлея. Проверьте, что оверлей был создан с помощью команды mytonctrl `list_custom_overlays`.
+:::caution
+The name and config file **must** be the same on all overlay members. Check that the overlay has been created using MyTonCtrl's `list_custom_overlays` command.
+:::
 
-### Режим отладки
+### Debug
 
-Вы можете установить уровень детализации узла равным 4 и отфильтровать логи с помощью ключевого слова "CustomOverlay".
+You can set the node verbosity level equal to 4, and grep logs with the **CustomOverlay** word.
 
-## Удаление пользовательского оверлея
+## Deleting a custom overlay
 
-Чтобы удалить пользовательский оверлей с узла, используйте команду mytonctrl `delete_custom_overlay <name>`. Если оверлей является динамическим (т. е. в конфигурации есть слово `@validators`), он будет удален через минуту, иначе удаление произойдет немедленно. Чтобы убедиться, что узел удалил пользовательский оверлей, выполните команды `list_custom_overlays` mytonctrl и `showcustomoverlays` validator-console.
+To remove a custom overlay from a node, use the MyTonCtrl command `delete_custom_overlay <name>.`
 
-## Низкоуровневые операции
+If the overlay is dynamic (i.e., there is a `@validators` word in the config), it will be deleted within one minute; otherwise, it will be removed instantly.
 
-Список команд validator-console для работы с пользовательскими оверлеями:
+To make sure that the node has deleted the custom overlay, check MyTonCtrl's `list_custom_overlays`  and `showcustomoverlays` validator-console commands.
 
-- `addcustomoverlay <path_to_config>` - добавить пользовательский оверлей на локальный узел. Обратите внимание, что эта конфигурация должна быть в формате отличном от конфигурации для mytonctrl:
-  ```json
-  {
-    "name": "OverlayName",
-    "nodes": [
-      {
-        "adnl_id": "adnl_address_b64_1",
-        "msg_sender": true,
-        "msg_sender_priority": 1
-      },
-      {
-        "adnl_id": "adnl_address_b64_2",
-        "msg_sender": false
-      }, ...
-    ]
-  }
-  ```
-- `delcustomoverlay <name>` - удалить пользовательский оверлей из узла.
-- `showcustomoverlays` - показать список пользовательских оверлеев, о которых знает узел.
+## Low level
 
+List of validator-console commands for managing custom overlays:
+
+- `addcustomoverlay <path_to_config>`: Adds a custom overlay to the local node. Note that this configuration must be in a format different from the config used for MyTonCtrl:
+
+    ```json
+    {
+      "name": "OverlayName",
+      "nodes": [
+        {
+          "adnl_id": "adnl_address_b64_1",
+          "msg_sender": true,
+          "msg_sender_priority": 1
+        },
+        {
+          "adnl_id": "adnl_address_b64_2",
+          "msg_sender": false
+        }, ...
+      ]
+    }
+    ```
+
+- `delcustomoverlay <name>`: Removes the custom overlay from the node.
+
+- `showcustomoverlays`: Displays a list of custom overlays known to the node.
+
+<Feedback />
 
