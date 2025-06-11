@@ -1,146 +1,201 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Провайдер хранилища
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+A **storage provider** is a service that stores files for a fee.
 
-*Провайдер хранилища* — это сервис, который хранит файлы за комиссию.
+## Binaries
 
-## Двоичные файлы
-
-Вы можете загрузить двоичные файлы `storage-daemon` и `storage-daemon-cli` для Linux/Windows/macOS из [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
+Precompiled binaries of `storage-daemon` and `storage-daemon-cli` are available for Linux, Windows, and macOS at [TON auto builds](https://github.com/ton-blockchain/ton/releases/latest).
 
 ## Компилляция из исходного кода
 
-Вы можете скомпилировать `storage-daemon` и `storage-damon-cli` из исходников, используя эту [инструкцию](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#storage-daemon).
+To build `storage-daemon` and `storage-daemon-cli` from the source, follow the [instruction](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#storage-daemon).
 
 ## Основные понятия
 
-Он состоит из смарт-контракта, который принимает запросы на хранение и управляет платежами от клиентов, а также приложения, которое загружает и обслуживает файлы для клиентов. Вот как это работает:
+A storage provider consists of:
 
-1. Владелец провайдера запускает `storage-daemon`, развертывает основной смарт-контракт и настраивает параметры. Адрес контракта передается потенциальным клиентам.
-2. Используя `storage-daemon`, клиент создает Bag из своих файлов и отправляет специальное внутреннее сообщение в смарт-контракт провайдера.
-3. Смарт-контракт провайдера создает контракт хранения для обработки этого конкретного Bag.
-4. Провайдер, обнаружив запрос в блокчейне, загружает Bag и активирует контракт хранения.
-5. Затем клиент может перевести оплату за хранение на контракт хранения. Чтобы получить оплату, провайдер регулярно представляет контракт с доказательством того, что он все еще хранит Bag.
-6. Если средства на контракте хранения заканчиваются, контракт считается неактивным, и поставщику больше не требуется хранить Bag. Клиент может либо пополнить контракт, либо получить свои файлы.
+- A smart contract that handles storage requests and manages client payments.
+- A daemon application that uploads and serves files to clients.
+
+The process works as follows:
+
+1. The owner of the provider launches the `storage-daemon`, deploying the main smart contract, and configuring the necessary parameters. The contract address is then shared with potential clients.
+
+2. A client uses the `storage-daemon` to create **a bag** from their files and sends an internal message to the provider's smart contract.
+
+3. The smart contract creates a storage contract for **this bag**.
+
+4. The provider detects the request on-chain, downloads the bag, and activates the storage contract.
+
+5. The client transfers payment to the storage contract. The provider must regularly submit proof that the bag is still being stored to continue receiving payment.
+
+6. If the contract's funds are depleted, it becomes inactive, and the provider is no longer obligated to store the bag. The client can either refill the contract or retrieve their files.
 
 :::info
-Клиент также может получить свои файлы в любое время, предоставив доказательство права собственности на контракт хранения. Затем контракт передаст файлы клиенту и деактивируется.
+Clients can retrieve their files anytime by providing proof of ownership to the storage contract. Once validated, the contract releases the files and deactivates itself.
 :::
 
 ## Смарт-контракт
 
-[Исходный код смарт-контракта](https://github.com/ton-blockchain/ton/tree/master/storage/storage-daemon/smartcont).
+View the [smart contract source code](https://github.com/ton-blockchain/ton/tree/master/storage/storage-daemon/smartcont).
 
-## Использование провайдера клиентами
+## Using a provider by clients
 
-Чтобы использовать провайдера хранения, вам необходимо знать адрес его смарт-контракта. Клиент может получить параметры провайдера с помощью следующей команды в `storage-daemon-cli`:
+To use a storage provider, you need to first know the address of its smart contract. You can retrieve the provider's parameters using the following command in `storage-daemon-cli`:
 
 ```
 get-provider-params <address>
 ```
 
-### Параметры провайдера:
+### Provider parameters
 
 - Принимаются ли новые контракты на хранение.
-- Минимальный и максимальный размер *Bag* (в байтах).
+- Минимальный и максимальный размер _Bag_ (в байтах).
 - Ставка — стоимость хранения. Указывается в nanoTON за мегабайт в день.
-- Максимальный объем — как часто провайдер должен предоставлять доказательства хранения *Bag*.
+- Максимальный объем — как часто провайдер должен предоставлять доказательства хранения _Bag_.
+
+The output includes the following parameters:
+
+- Whether new storage contracts are currently accepted.
+- Minimum and maximum **bag** size (in bytes).
+- Rate – the cost of storage specified in nanoTON per megabyte per day.
+- Max span – the interval at which the provider must submit proof of **bag** storage.
 
 ### Запрос на хранение
 
-Вам необходимо создать *Bag* и сгенерировать сообщение с помощью следующей команды:
+To request storage, you need to create a **bag** and generate a message using the following command:
 
 ```
 new-contract-message <BagID> <file> --query-id 0 --provider <address>
 ```
 
-### Информация:
+### Notes
 
-Выполнение этой команды может занять некоторое время для больших *Bag*. Тело сообщения будет сохранено в `<file>` (не все внутреннее сообщение). Идентификатор запроса может быть любым числом от 0 до `2^64-1`. Сообщение содержит параметры провайдера (скорость и максимальный диапазон). Эти параметры будут выведены после выполнения команды, поэтому их следует дважды проверить перед отправкой. Если владелец провайдера изменит параметры, сообщение будет отклонено, поэтому условия нового контракта на хранение будут в точности соответствовать ожиданиям клиента.
+- This command may take some time to execute for large **bags**.
+- The generated message body, not the full internal message, is saved to `<file>`.
+- Query ID can be any integer from `0` to `2^64 - 1`.
+- The generated message includes the provider's current rate and max span parameters. These values are displayed after execution and should be reviewed before sending.
+- If the provider updates their parameters before the message is submitted, it will be rejected. This ensures that the storage contract is created under the client's agreed-upon conditions.
 
-Затем клиент должен отправить сообщение с этим телом на адрес провайдера. В случае ошибки сообщение вернется к отправителю (возврат). В противном случае будет создан новый контракт на хранение, и клиент получит от него сообщение с [`op=0xbf7bd0c1`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L3) и тем же идентификатором запроса.
+The client must then send the generated message body to the provider's smart contract address. If an error occurs, the message bounces back to the sender. If successful, a new storage contract is created, and the client receives a message from the contract with [`op=0xbf7bd0c1`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L3) and the same query ID.
 
-На этом этапе контракт еще не активен. Как только поставщик загрузит *Bag*, он активирует контракт на хранение, и клиент получит сообщение с [`op=0xd4caedcd`](https://github.com/SpyCheese/ton/blob/tonstorage/storage/storage-daemon/smartcont/constants.fc#L4) (также из контракта на хранение).
+At this stage, the contract is not yet active. Once the provider downloads the bag, the contract is activated, and the client receives another message from the same contract with  [`op=0xd4caedcd`](https://github.com/SpyCheese/ton/blob/tonstorage/storage/storage-daemon/smartcont/constants.fc#L4).
 
-Контракт на хранение имеет `клиентский баланс` — это средства, которые клиент перевел на контракт и которые еще не были выплачены поставщику. Средства постепенно списываются с этого баланса (по ставке, равной ставке за мегабайт в день). Первоначальный баланс — это то, что клиент перевел с запросом на создание контракта хранения. Затем клиент может пополнить баланс, совершая простые переводы на контракт хранения (это можно сделать с любого адреса). Оставшийся баланс клиента возвращается get методом [`get_storage_contract_data`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/storage-contract.fc#L222) в качестве второго значения (`balance`).
+#### Client balance
 
-### Контракт может быть закрыт в следующих случаях:
+The storage contract maintains a client balance, which consists of the funds transferred by the client that have not yet been paid to the provider. This balance gradually reduces over time based on the provider's rate (in nanoTON per megabyte per day).
+
+- The initial balance is the amount sent when creating the storage contract with the request.
+- The client can top up the contract anytime by making transfers to the storage contract — this can be done from any wallet address.
+- The current balance can be retrieved using the [`get_storage_contract_data`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/storage-contract.fc#L222) getter method. It is returned as the second value: `balance`.
+
+### Contract closure
 
 :::info
-В случае закрытия контракта хранения клиент получает сообщение с остатком баланса и [`op=0xb6236d63`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L6).
+If the storage contract is closed, the client receives a message with the remaining balance and [`op=0xb6236d63`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L6).
 :::
 
-- Сразу после создания, перед активацией, если провайдер отказывается принять контракт (превышен лимит провайдера или другие ошибки).
-- Баланс клиента достигает 0.
-- Провайдер может добровольно закрыть контракт.
-- Клиент может добровольно закрыть контракт, отправив сообщение с [`op=0x79f937ea`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L2) со своего адреса и любого идентификатора запроса.
+A storage contract may be closed under the following conditions:
 
-## Запуск и настройка провайдера
+- Immediately after creation, before activation, if the provider declines the request, e.g., due to capacity limits or configuration issues.
+- When the client balance reaches 0.
+- Voluntarily by the provider.
+- Voluntarily by the client by sending a message with [`op=0x79f937ea`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L2) from the address with any query ID.
 
-Провайдер хранилища является частью `storage-daemon` и управляется `storage-daemon-cli`. `storage-daemon` необходимо запустить с флагом `-P`.
+## Running and configuring a provider
+
+The storage provider is a component of the `storage-daemon` and is managed using the `storage-daemon-cli`. To run the provider, launch `storage-daemon` with the `-P` flag.
 
 ### Создание основного смарт-контракта
 
-Вы можете сделать это из `storage-daemon-cli`:
+To deploy the provider’s smart contract from `storage-daemon-cli`, run:
 
 ```
 deploy-provider
 ```
 
 :::info ВАЖНО!
-Для инициализации провайдера вам будет предложено отправить на указанный адрес сообщение с 1 TON, которое не подлежит возврату. Вы можете проверить, что контракт был создан, с помощью команды `get-provider-info`.
+During deployment, you’ll be prompted to send a non-bounceable message with 1 TON to the specified address to initialize the provider. You can verify successful deployment with the `get-provider-info` command.
 :::
 
-По умолчанию контракт настроен на то, чтобы не принимать новые контракты на хранение. Перед его активацией вам необходимо настроить провайдера. Настройки провайдера состоят из конфигурации (хранящейся в `storage-daemon`) и параметров контракта (хранящихся в блокчейне).
+By default, the contract does not accept new storage contracts. Before activating it, you must configure the provider configuration, which is stored in  `storage-daemon`, and contract parameters stored on-chain.
 
-### Конфигурация:
+### Configuration
 
-- `max contract` - максимальное количество контрактов на хранение, которые могут существовать одновременно.
-- `max total size` - максимальный общий размер *Bag* в контрактах на хранение.
-  Вы можете просмотреть значения конфигурации с помощью `get-provider-info` и изменить их с помощью:
+The provider configuration includes:
+
+- `max contracts` - maximum number of concurrent storage contracts.
+- `max total size` - maximum total size of _bags_ in storage contracts.
+
+To view the current configuration:
+
+```
+get-provider-info
+```
+
+To update the configuration:
 
 ```
 set-provider-config --max-contracts 100 --max-total-size 100000000000
 ```
 
-### Параметры контракта:
+### Contract parameters
 
 - `accept` - нужно ли принимать новые контракты на хранение.
-- `max file size`, `min file size` - ограничения по размеру для одного *Bag*.
-- `rate` - стоимость хранения (указывается в nanoTON за мегабайт в день).
+- `max file size`, `min file size` - size limits for one _bag_.
+- `rate` - cost of storage specified in nanoTON per megabyte per day.
 - `max span` - как часто провайдер должен будет предоставлять доказательства хранения.
 
-Просмотреть параметры можно с помощью `get-provider-info`, а изменить их с помощью:
+To view the current parameters:
+
+```
+get-provider-info
+```
+
+To update the parameters:
 
 ```
 set-provider-params --accept 1 --rate 1000000000 --max-span 86400 --min-file-size 1024 --max-file-size 1000000000
 ```
 
-### На это стоит обратить внимание
+**Note:** in the `set-provider-params` command, you may update only a subset of parameters. Any omitted values will retain their current settings. Since blockchain data is not updated instantly, executing multiple `set-provider-params` commands quickly can lead to inconsistent results.
 
-Примечание: в команде `set-provider-params` можно указать только часть параметров. Остальные будут взяты из текущих параметров. Поскольку данные в блокчейне не обновляются мгновенно, несколько последовательных команд `set-provider-params` могут привести к неожиданным результатам.
+It is recommended that the provider’s smart contract be funded with more than 1 TON after deployment to cover future transaction fees. However, avoid transferring large amounts during the initial non-bounceable setup.
 
-Рекомендуется изначально положить на баланс провайдера более 1 TON, чтобы было достаточно средств для покрытия комиссий за работу с контрактами хранения. Однако не отправляйте слишком много TON с первым невозвратным сообщением.
+После установки параметра `accept` в `1` смарт-контракт начнет принимать запросы от клиентов и создавать контракты хранения, а демон хранения автоматически их обработает: загрузит и распределит _Bag_, сгенерирует доказательства хранения.
 
-После установки параметра `accept` в `1` смарт-контракт начнет принимать запросы от клиентов и создавать контракты хранения, а демон хранения автоматически их обработает: загрузит и распределит *Bag*, сгенерирует доказательства хранения.
+- The provider begins accepting client requests once the `accept` parameter is set to `1` and creates storage contracts. The storage daemon will automatically:
+- Download and distribute **bags**.
+- Generate and submit storage proofs.
 
-## Дальнейшая работа с провайдером
+## Further work with the provider
 
 ### Список существующих контрактов хранения
+
+To list all active storage contracts and their balances:
 
 ```
 get-provider-info --contracts --balances
 ```
 
-В каждом контракте хранения указаны балансы `Client$` и `Contract$`; разницу между ними можно вывести на основной контракт провайдера с помощью команды `withdraw <address>`.
+Each contract displays:
 
-Команда `withdraw-all` выведет средства со всех контрактов, у которых доступно не менее `1 TON`.
+- `Client$`: funds provided by the client.
+- `Contract$`: total funds in the contract.
 
-Любой контракт хранения можно закрыть с помощью команды `close-contract <address>`. Это также переведет средства на основной контракт. То же самое произойдет автоматически, когда баланс клиента закончится. Файлы *Bag* в этом случае будут удалены (если нет других контрактов, использующих тот же *Bag*).
+The difference between these values represents the provider’s earnings, which can be withdrawn using `withdraw <address>`.
 
-### Перевод
+To withdraw from all contracts with at least 1 TON available:
+`withdraw-all`
+
+To close a specific contract:
+`close-contract <address>`
+
+Closing a contract automatically transfers available funds to the main provider contract. The exact process occurs automatically when the client’s balance is depleted. In both cases, the associated bag files will be deleted—unless other active contracts still use them.
+
+### Transfer
 
 Вы можете перевести средства с основного смарт-контракта на любой адрес (сумма указывается в nanoTON):
 
@@ -150,5 +205,8 @@ send-coins <address> <amount> --message "Some message"
 ```
 
 :::info
-Все *Bag*, хранящиеся у провайдера, доступны с помощью команды `list` и могут использоваться как обычно. Чтобы не нарушать работу провайдера, не удаляйте их и не используйте этот демон хранилища для работы с другими *Bag*.
+All _bags_ stored by the provider are available with the command `list` and can be used as usual. To prevent disrupting the provider's operations, do not delete them or use this storage daemon to work with any other _bags_.
 :::
+
+<Feedback />
+
