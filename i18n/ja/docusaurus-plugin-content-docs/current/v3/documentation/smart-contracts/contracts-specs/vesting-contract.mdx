@@ -1,0 +1,152 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Vesting contract
+
+The vesting contract is a smart contract implementation on the TON blockchain, enabling secure, scheduled distribution of Toncoin assets. This contract provides a robust framework for token management, ensuring the controlled release of funds based on predetermined schedules and conditions.
+
+## Core functionality
+
+The contract is a secure escrow service that locks a specified amount of Toncoin for a defined period and gradually releases it according to configurable parameters. This mechanism ensures predictable token distribution while maintaining strict control over asset release schedules.
+
+## Contract parameters
+
+During deployment, the system establishes the following parameters, which cannot be changed and remain fixed throughout the entire duration of the contract:
+
+| Parameter                | Description                                     | Example values       |
+| ------------------------ | ----------------------------------------------- | -------------------- |
+| `vesting_total_amount`   | Total locked Toncoins (in nanotons)             | 500 TON              |
+| `vesting_start_time`     | Unix timestamp marking vesting period beginning | Current time + delay |
+| `vesting_total_duration` | Total vesting period duration (seconds)         | 31104000 (one year)  |
+| `unlock_period`          | Time interval between releases (seconds)        | 2592000 (monthly)    |
+| `cliff_duration`         | Initial lock period before first release        | 5184000 (two months) |
+| `vesting_sender_address` | Authorized address for locked funds management  | Configurable         |
+| `owner_address`          | Beneficiary address for Toncoin distribution    | Configurable         |
+
+You can acquire these specific parameters using the `get_vesting_data()` method.
+
+The parameters must satisfy these conditions:
+
+```
+vesting_total_duration > 0
+vesting_total_duration <= 135 years (2^32 seconds)
+unlock_period > 0
+unlock_period <= vesting_total_duration
+cliff_duration >= 0
+cliff_duration < vesting_total_duration
+vesting_total_duration mod unlock_period == 0
+cliff_duration mod unlock_period == 0
+```
+
+Before sending Toncoins to the deployed smart contract, users can verify parameter compliance using the get method, even though the contract itself does not perform these checks.
+
+## Lock mechanism
+
+Before `vesting_start_time`, the contract locks the entire `vesting_total_amount`.
+
+Starting at `vesting_start_time`, it unlocks the amount proportionately. For example, if the `vesting_total_duration` is 10 months, the `unlock_period` is 1 month, and the `vesting_total_amount` is 500 TON, then the contract unlocks 50 TON (500 \* 10/100) each month, fully releasing all 500 TON in 10 months.
+
+If a cliff period exists, no amount unlocks during that time. Once the cliff period ends, the contract unlocking according to the same formula. For instance, with a `cliff_period` of 3 months, the contract unlocks nothing in the first 3 months, then unlocks 150 TON at once, followed by 50 TON each month thereafter.
+
+You can use the `get_locked_amount(int at_time)` method to calculate how much will be locked at a specific time. The contract allows you to transfer locked Toncoins only to whitelisted addresses or the `vesting_sender_address`. Once unlocked, you can freely send the Toncoins wherever you like.
+
+## ホワイトリスト
+
+A whitelist contains addresses to which you can send Toncoins, even if the coins remain locked.
+
+The `get_whitelist()` method retrieves all whitelist addresses as a list of (wc, hash_part) tuples. You can use the `is_whitelisted(slice address)` method to check if a specific address is on the whitelist.
+
+The `vesting_sender_address` can add new addresses to the whitelist at any time using the `op::add_whitelist` message, but no addresses can be removed from the whitelist. You can always send locked coins to the `vesting_sender_address` without adding it to the whitelist.
+
+## トップアップ
+
+You can send Toncoins to the vesting contract from any address.
+
+## ウォレットスマートコントラクト（スマートコントラクト）
+
+This [contract](https://github.com/ton-blockchain/vesting-contract/blob/2a63cb96942332abf92ed8425b37645fe4f41f86/contracts/vesting_wallet.fc#L366) is similar to the [standard wallet V3 smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc).
+
+The contract maintains `seqno`, `subwallet_id`, and `public_key`, accepts external messages in the same format, and offers get-methods `seqno()`, `get_subwallet_id()`, and `get_public_key()`. Unlike standard wallets, this vesting contract restricts sending to one message at a time.
+
+## 送信
+
+The public key owner can initiate the sending of Toncoins from the vesting contract by an external message, just like in standard wallets.
+
+The owner initiates Toncoin transfers by sending an `op::send` internal message from their owner address. In typical usage, the same user owns both the public key and the `owner address`.
+
+## ホワイトリストの制限
+
+The contract restricts messages sent to the `vesting_sender_address` by allowing only `send_mode == 3`.
+
+Users typically add addresses to the whitelist to enable validation using locked coins or staking locked coins in pools.
+
+Whitelisted addresses must adhere to these restrictions to prevent Toncoin theft:
+
+- Only `send_mode == 3` is permitted
+- Messages must be bounceable
+- No `state_init` attachments are allowed
+
+System elector addresses accept only these operations:
+
+- `op::elector_new_stake`
+- `op::elector_recover_stake`
+- `op::vote_for_complaint`
+- `op::vote_for_proposal`
+
+System config addresses accept only:
+
+- `op::vote_for_proposal`
+
+Other whitelisted destinations permit:
+
+- Empty messages and empty text messages
+- Text messages starting with "d," "w," "D," or "W"
+- Specific operations:
+  - `op::single_nominator_pool_withdraw`
+  - `op::single_nominator_pool_change_validator`
+  - `op::ton_stakers_deposit`
+  - `op::jetton_burn`
+  - `op::ton_stakers_vote`
+  - `op::vote_for_proposal`
+  - `op::vote_for_complaint`
+
+Addresses outside the whitelist operate without restrictions. Unlocked Toncoins remain unrestricted regardless of destination, including whitelisted addresses and `vesting_sender_address`.
+
+## プロジェクトの構成
+
+- `contracts` - プロジェクトのすべてのスマートコントラクトとその依存関係のソースコード。
+- `wrappers` - [de]シリアライズプリミティブとコンパイル関数を含む、契約のラッパークラス (`Contract` をton-coreから実装) 。
+- `tests` - コントラクトのテスト。
+- `scripts` - プロジェクトで使用されるスクリプト、主にデプロイスクリプト。
+
+## 使い方
+
+### ビルド
+
+```bash
+npx blueprint build` or `yarn blueprint build`
+```
+
+### テスト
+
+```bash
+npx blueprint test` or `yarn blueprint test`
+```
+
+### 他のスクリプトをデプロイまたは実行
+
+```bash
+npx blueprint run` or `yarn blueprint run`
+```
+
+### 新しいコントラクトを追加
+
+```bash
+npx blueprint create ContractName` or `yarn blueprint create ContractName`
+```
+
+## See also
+
+- [シングルノミネーター](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool)
+- [ベスティングコントラクト](https://github.com/ton-blockchain/vesting-contract)
+
+<Feedback />
