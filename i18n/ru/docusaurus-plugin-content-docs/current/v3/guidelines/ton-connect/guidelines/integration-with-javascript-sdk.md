@@ -1,7 +1,9 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Руководство по интеграции с JavaScript SDK
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::danger
+The page is outdated and will be deleted soon. Learn actual JS flow from [the guideline for web](/v3/guidelines/ton-connect/frameworks/web).
 :::
 
 В этом руководстве мы создадим пример веб-приложения, поддерживающего аутентификацию TON Connect 2.0. Это позволит выполнить проверку подписи, чтобы исключить возможность мошеннической выдачи себя за другое лицо без необходимости заключения соглашения между сторонами.
@@ -12,7 +14,7 @@
 2. [Протокол обмена сообщениями между кошельком и приложением](https://github.com/ton-connect/docs/blob/main/requests-responses.md)
 3. [Реализация Tonkeeper на стороне кошелька](https://github.com/tonkeeper/wallet/tree/main/packages/mobile/src/tonconnect)
 
-## Необходимые компоненты
+## Prerequisites
 
 Для обеспечения бесперебойной связи между приложениями и кошельками веб-приложение должно использовать манифест, доступный через приложения кошелька. Основным требованием к этому является обычный хост для статических файлов. Например, если разработчик хочет использовать GitHub pages или развернуть свой веб-сайт с помощью TON Sites, размещенных на его компьютере. Это означает, что веб-приложение должно быть общедоступно.
 
@@ -85,7 +87,8 @@
 
 ## Отображение кнопок для различных приложений кошелька
 
-Кнопки могут различаться в зависимости от дизайна вашего веб-приложения. Текущая страница выдает следующий результат:
+Кнопки могут различаться в зависимости от дизайна вашего веб-приложения.
+Текущая страница выдает следующий результат:
 
 ```html
 <!DOCTYPE html>
@@ -473,7 +476,7 @@ verify_key = nacl.signing.VerifyKey(bytes(public_key))
 > - `Payload` обозначает двоичную строку переменной длины
 > - `utf8_encode` создает простую байтовую строку без префиксов длины.
 
-Давайте перепишем это на Python. Порядок байтов некоторых целых чисел выше не указан, поэтому необходимо рассмотреть несколько примеров. Пожалуйста, обратитесь к следующей реализации Tonkeeper, в которой подробно описаны некоторые связанные примеры: [ConnectReplyBuilder.ts](https://github.com/tonkeeper/wallet/blob/77992c08c663dceb63ca6a8e918a2150c75cca3a/src/tonconnect/ConnectReplyBuilder.ts#L42).
+Давайте перепишем это на Python.  Порядок байтов некоторых целых чисел выше не указан, поэтому необходимо рассмотреть несколько примеров. Пожалуйста, обратитесь к следующей реализации Tonkeeper, в которой подробно описаны некоторые связанные примеры: [ConnectReplyBuilder.ts](https://github.com/tonkeeper/wallet/blob/77992c08c663dceb63ca6a8e918a2150c75cca3a/src/tonconnect/ConnectReplyBuilder.ts#L42).
 
 ```python
 received_timestamp = 1674392728
@@ -499,6 +502,11 @@ verify_key.verify(hashlib.sha256(signed).digest(), base64.b64decode(signature))
 nacl.exceptions.BadSignatureError: Signature was forged or corrupt.
 ```
 
+## See also
+
+- [Preparing Messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+- [Sending Messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
+
 ## Следующие шаги
 
 При написании dApp также следует учитывать следующее:
@@ -510,3 +518,6 @@ nacl.exceptions.BadSignatureError: Signature was forged or corrupt.
   - текущий пользователь может войти, используя другой тип контракта вместо кошелька. Благодаря этому это будет содержать публичный ключ в ожидаемом месте
 
 Удачи и получайте удовольствие от написания dApps!
+
+<Feedback />
+
