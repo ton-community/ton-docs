@@ -1,8 +1,6 @@
-# Собственный токен: Toncoin
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Собственный токен: Toncoin
 
 Собственная криптовалюта блокчейна TON — **Toncoin**.
 
@@ -31,3 +29,6 @@ TLB: `extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) = ExtraCurrencyColl
 [Жетоны](/v3/documentation/dapps/defi/tokens#jettons-fungible-tokens) подходят для других задач.
 
 На данный момент на блокчейне TON не создано дополнительных валют. Блокчейн TON имеет полную поддержку дополнительных валют для аккаунтов и сообщений, но контракт системы minter для их создания еще не создан.
+
+<Feedback />
+
