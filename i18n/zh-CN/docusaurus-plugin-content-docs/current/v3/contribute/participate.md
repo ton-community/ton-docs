@@ -1,49 +1,59 @@
-# 贡献指南
+import Feedback from '@site/src/components/Feedback';
 
-这是用 TON 文档撰写教程的逐步指南。
+# Contribution Guide
 
-:::tip 机会
-很幸运！这是一个改善 TON 生态系统的好机会。
+:::danger
+This page is outdated and will be deleted soon.
+See the [How to contribute](/v3/contribute/).
 :::
 
-如果你决定编写教程，你可以因杰出的贡献而获得奖励：
+Here is a step-by-step guide of contributing to TON Documentation with Tutorials.
 
-- **Special TON Footsteps NFT: 对 TON 最有价值的贡献**
-- **TON 奖励: 作为报酬提供给被批准的高质量的贡献（如教程）**
+:::tip opportunity
+You're lucky! It's a good opportunity to improve TON Ecosystem here.
+:::
 
-让我们看看你如何参与贡献过程。
+If you decide to write tutorial, you can get some reward for outstanding materials:
 
-## 决定你想写什么
+- **Special TON Bounty NFT** for the most valuable contributing to TON
+- **Reward in TON** as payment for approved high-quality contribution like tutorial
 
-找到或编写你想描述的材料。
+Let's see how you can participate in contributing process.
 
-1. 检查带有 `tutorial` 标签的 [TON Docs GitHub 上的问题列表](https://github.com/ton-community/ton-docs/issues)。
-2. *或者* 在 TON Docs GitHub 上用 [教程模板](https://github.com/ton-community/ton-docs/issues/new?assignees=\\&labels=feature+%3Asparkles%3A%2Ccontent+%3Afountain_pen%3A\\&template=suggest_tutorial.yaml\\&title=Suggest+a+tutorial)写下你自己的想法。
+## Decide what you want to write
 
-## 描述问题以获得奖励
+Find or write a material which you want to describe.
 
-编写 *ton-footstep* 来获得你的贡献资金。
+1. Check a [list of issues on TON Docs GitHub](https://github.com/ton-community/ton-docs/issues) with `tutorial` label.
+2. _OR_ write your own idea on TON Docs GitHub with tutorial template.
 
-1. 更详细地了解 [TON Footsteps](https://github.com/ton-society/ton-footsteps) 计划。
-   1. **简而言之**：使用 [“探索者”封面文章](https://github.com/ton-society/ton-footsteps/issues/61) 作为示例。
-2. 编写[你自己的footstep](https://github.com/ton-society/ton-footsteps/issues/new/choose)来参与并等待批准。
-3. 在收到 `approved` 标签后开始编写你的教程。
+## Describe a problem to get a reward
 
-## 编写教程
+Write a _ton-footstep_ to receive a funding for your contributing.
 
-**准备工作**。尽量减少将来被要求更改的次数，从而_节省你的时间_：
+1. Read about [TON Bounties](https://github.com/ton-society/grants-and-bounties/blob/main/bounties/BOUNTIES_PROGRAM_GUIDELINES.md) program more detailed.
+    1. **TLDR:** Use [Improve TVM Instructions article](https://github.com/ton-society/grants-and-bounties/issues/361) as an example.
+2. Write [your own bounty](https://github.com/ton-society/grants-and-bounties/issues/new/choose) to participate and wait for approve. [TON Bounties Creator Bot](https://t.me/footsteps_helper_bot) will help you.
+3. After received `approved` label start to write your tutorial.
 
-1. 遵循 [教程指南](/contribute/guidelines) 并使用 [示例教程结构](/contribute/sample-tutorial) 来检查。
-2. 阅读 [优秀教程原则](/contribute/principles-of-a-good-tutorial) 来编写出色的教程 :)
-3. 可以从源代码中以 [铸造你的第一个 Jetton](/develop/dapps/tutorials/jetton-minter) 作为示例来找到灵感。
-4. **设置环境**。[检查教程](/contribute#online-one-click-contribution-setup) 是在本地或使用 Gitpod 运行你的 fork。
-5. **编写教程**。用到相应的环境，查看教程在你的 fork 上的样子。
-6. **发起 Pull Request**。打开 PR 以获取维护者的反馈。
-7. 合并！
+## Writing a tutorial
 
-## 收到奖励
+**Preparations**. Minimize future amount of requested changes, _save your time_:
 
-1. 在 TON Docs中的 PR 合并后，请在你的 ton-footsteps 任务中进行记录。
-2. 遵循指南 [如何完成 ton-footstep？](https://github.com/ton-society/ton-footsteps#how-to-complete-something-from-the-list) 完成footstep并获得奖励。
-3. 在你的任务中，你将被要求提供一个钱包，从而可以给你发送奖励。
-4. 获得奖励！
+1. Follow [Tutorial Guidelines](/v3/contribute/contribution-rules) and check them with [Sample Tutorial Structure](/v3/contribute/tutorials/sample-tutorial)
+2. Read [Principles of a Good Tutorial](/v3/contribute/tutorials/principles-of-a-good-tutorial) to write amazing tutorial :)
+3. Inspire with [Mint your first Jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token) example in sources.
+4. **Setup environment**. [Check the tutorial](/v3/contribute#online-one-click-contribution-setup) running your fork locally or using Gitpod.
+5. **Write tutorial**. Using the environment, see how tutorial looks like on your fork.
+6. **Make a Pull Request**. Open PR to get some feedback from maintainers.
+7. Get merged!
+
+## Receiving a reward
+
+1. After your PR in TON Docs got merged, please write in your ton-footsteps task.
+2. Follow a guide [How to complete ton-bounty?](https://github.com/ton-society/grants-and-bounties/blob/main/bounties/BOUNTIES_PROGRAM_GUIDELINES.md#got-assigned-submit-a-questbook-proposal) to complete bounty and get reward.
+3. In your task, you will be asked for a wallet to send a reward.
+4. Get rewarded!
+
+<Feedback />
+
