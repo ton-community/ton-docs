@@ -1,63 +1,67 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# 资产处理概述
+# Asset processing overview
 
-在这里您可以找到关于[TON转账如何工作](/v3/documentation/dapps/assets/overview#overview-on-messages-and-transactions)的**简短概述**、您可以在 TON 中找到哪些 [资产类型](/v3/documentation/dapps/assets/overview#digital-asset-types-on-ton)（以及您将阅读 [下一个](/v3/documentation/dapps/assets/overview#read-next)），以及如何使用您的编程语言 [与 TON 交互](/v3/documentation/dapps/assets/overview#interaction-with-ton-blockchain)、建议在进入下一页之前，先了解下面发现的所有信息。
+Here you can find a **short overview** on [how TON transfers work](/v3/documentation/dapps/assets/overview#overview-on-messages-and-transactions), what [asset types](/v3/documentation/dapps/assets/overview#digital-asset-types-on-ton) can you find in TON (and what about will you read [next](/v3/documentation/dapps/assets/overview#read-next)) and how to [interact with ton](/v3/documentation/dapps/assets/overview#interaction-with-ton-blockchain) using your programming language, it's recommended to understand all information, discovered below, before going to the next pages.
 
-## 消息和交易概述
+## Overview on messages and transactions
 
-TON 区块链采用完全异步的方式，涉及一些传统区块链不常见的概念。特别是，任何行为者与区块链的每次交互都由智能合约和/或外部世界之间异步传输的 [消息](/v3/documentation/smart-contracts/message-management/messages-and-transactions) 组成。每笔交易由一条传入消息和最多 255 条传出消息组成。
+Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions) between smart contracts and/or the external world. Each transaction consists of one incoming message and up to 255 outgoing messages.
 
-[这里](/v3/documentation/smart-contracts/message-management/sending-messages#types-of-messages) 全面介绍了 3 种信息类型。简而言之
+There are 3 types of messages, that are fully described [here](/v3/documentation/smart-contracts/message-management/sending-messages#types-of-messages). To put it briefly:
 
 - [external message](/v3/documentation/smart-contracts/message-management/external-messages):
-  - `external in message`（有时也称为 `external message`）是指从区块链外部*向区块链内部*的智能合约发送的消息。
-  - `external in message`（有时也称为 `external message`）是指从区块链外部*向区块链内部*的智能合约发送的消息。
-- [internal message](/v3/documentation/smart-contracts/message-management/internal-messages)从一个*区块链实体*发送到*另一个*，可携带一定数量的数字资产和任意部分的数据。
+  - `external in message` (sometimes called just `external message`) is message that is sent from _outside_ of the blockchain to a smart contract _inside_ the blockchain.
+  - `external out message` (usually called `logs message`) is sent from a _blockchain entity_ to the _outer world_.
+- [internal message](/v3/documentation/smart-contracts/message-management/internal-messages) is sent from one _blockchain entity_ to _another_, can carry some amount of digital assets and arbitrary portion of data.
 
-任何交互的共同路径都是从向 `钱包` 智能合约发送外部消息开始的，`钱包` 智能合约使用公钥加密技术验证消息发送者的身份，负责支付费用，并发送内部区块链消息。信息队列形成定向非循环图或树状图。
+The common path of any interaction starts with an external message sent to a `wallet` smart contract, which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends internal blockchain messages. That messages queue form directional acyclic graph, or a tree.
 
-例如
+For example:
 
 ![](/img/docs/asset-processing/alicemsgDAG.svg)
 
-- `Alice` 使用 [Tonkeeper](https://tonkeeper.com/) 向她的钱包发送 `external message`。
-- `external message` 是 `wallet A v4` 合约的输入信息，其来源为空（不知从何而来的信息，如 [Tonkeeper](https://tonkeeper.com/)）。
-- `outgoing message` 是  `wallet A v4`  合约的输出信息和 `wallet B v4` 合约的输入信息，`wallet A v4` 是来源地，`wallet B v4` 是目的地。
+- `Alice` use e.g [Tonkeeper](https://tonkeeper.com/) to send an `external message` to her wallet.
+- `external message` is the input message for `wallet A v4` contract with empty source (a message from nowhere, such as [Tonkeeper](https://tonkeeper.com/)).
+- `outgoing message` is the output message for `wallet A v4` contract and input message for `wallet B v4` contract with `wallet A v4` source and `wallet B v4` destination.
 
-因此，有 2 个事务及其输入和输出信息集。
+As a result there are 2 transactions with their set of input and output messages.
 
-当合约将消息作为输入（由其触发）时，对其进行处理并生成或不生成外发消息作为输出的每个动作都称为 "事务"。点击 [这里 ](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-transaction)阅读更多关于事务的信息。
+Each action, when contract take message as input (triggered by it), process it and generate or not generate outgoing messages as output, called `transaction`. Read more about transactions [here](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-transaction).
 
-这种 "事务" 可以跨越一段**长**的时间。从技术上讲，具有信息队列的交易被汇总到验证器处理的区块中。TON区块链的异步性质**无法在发送消息阶段预测交易**的哈希值和逻辑时间。
+That `transactions` can span a **prolonged period** of time. Technically, transactions with queues of messages are aggregated into blocks processed by validators. The asynchronous nature of the TON Blockchain **does not allow to predict the hash and lt (logical time) of a transaction** at the stage of sending a message.
 
-区块接受的 "交易" 是最终的，不能修改。
+The `transaction` accepted to the block is final and cannot be modified.
 
-:::info 交易确认
-TON 交易只需确认一次就不可逆转。为获得最佳用户体验，建议在 TON 区块链上完成交易后避免等待其他区块。更多信息请参见 [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3)。
+:::info Transaction Confirmation
+TON transactions are irreversible after just one confirmation. For the best user experience, it is suggested to avoid waiting on additional blocks once transactions are finalized on the TON Blockchain. Read more in the [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
 :::
 
-智能合约为交易支付多种类型的[手续费](/v3/documentation/smart-contracts/transaction-fees/fees)（通常从收到的消息余额中支付，行为取决于[消息模式](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes)）。费用金额取决于工作链配置，"主链 "上的费用最高，"基础链 "上的费用最低。
+Smart contracts pay several types of [fees](/v3/documentation/smart-contracts/transaction-fees/fees) for transactions (usually from the balance of an incoming message, behavior depends on [message mode](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes)). Amount of fees depends on workchain configs with maximal fees on `masterchain` and substantially lower fees on `basechain`.
 
-## TON 上的数字资产类型
+## Digital asset types on TON
 
-TON 拥有三类数字资产。
+TON has three types of digital assets.
 
-- Toncoin 是网络的主要代币。它可用于区块链上的所有基本操作，例如支付
-  gas 费或为验证进行押注。
-- 合约资产，如代币和 NFT，类似于 ERC-20/ERC-721 标准，由任意合约管理，因此可能需要自定义处理规则。你可以在 [process NFTs](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) 和 [process Jettons](/v3/guidelines/dapps/asset-processing/jettons) 两篇文章中找到更多关于其处理的信息。
-- 原生代币，是一种可以附加到网络上任何信息的特殊资产。但由于发行新原生代币的功能已经关闭，这些资产目前还没有被使用。
+- Toncoin, the main token of the network. It is used for all basic operations on the blockchain, for example, paying gas fees or staking for validation.
+- Contract assets, such as tokens and NFTs, which are analogous to the ERC-20/ERC-721 standards and are managed by arbitrary contracts and thus can require custom rules for processing. You can find more info on it's processing in [process NFTs](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) and [process Jettons](/v3/guidelines/dapps/asset-processing/jettons) articles.
+- Native token, which is special kind of assets that can be attached to any message on the network. But these asset is currently not in use since the functionality for issuing new native tokens is closed.
 
-## 与 TON 区块链的互动
+## Interaction with TON Blockchain
 
-TON 区块链上的基本操作可通过 TonLib 进行。它是一个共享库，可以与 TON 节点一起编译，并通过所谓的精简版服务器（精简版客户端的服务器）公开与区块链交互的 API。TonLib 采用无信任方法，检查所有传入数据的证明；因此，无需可信数据提供者。TonLib 可用的方法在[TL 方案](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L234) 中列出。这些方法可通过[wrappers](/v3/guidelines/dapps/asset-processing/payments-processing/#sdks) 作为共享库使用。
+Basic operations on TON Blockchain can be carried out via TonLib. It is a shared library which can be compiled along with a TON node and expose APIs for interaction with the blockchain via so-called lite servers (servers for lite clients). TonLib follows a trustless approach by checking proofs for all incoming data; thus, there is no necessity for a trusted data provider. Methods available to TonLib are listed [in the TL scheme](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L234). They can be used either as a shared library via [wrappers](/v3/guidelines/dapps/asset-processing/payments-processing/#sdks).
 
-## 阅读下一页
+## Read next
 
-阅读本文后，您可以查看
+After reading this article you can check:
 
-1. [支付处理](/v3/guidelines/dapps/asset-processing/payments-processing)，了解如何使用 "TON coins"。
-2. [Jetton处理](/v3/guidelines/dapps/asset-processing/jettons) 以了解如何使用 "jettons"（有时称为 "tokens"）。
-3. [NFT处理](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) 以了解如何使用 "NFT"（即 "jetton "的特殊类型）。
+1. [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing) to get how to work with `TON coins`
+2. [Jetton processing](/v3/guidelines/dapps/asset-processing/jettons) to get how to work with `jettons` (sometime called `tokens`)
+3. [NFT processing](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) to get how to work with `NFT` (that is the special type of `jetton`)
+
+<Feedback />
+
