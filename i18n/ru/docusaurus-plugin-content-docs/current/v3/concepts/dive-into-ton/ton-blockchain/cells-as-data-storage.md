@@ -1,16 +1,18 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ConceptImage from '@site/src/components/conceptImage';
 import ThemedImage from '@theme/ThemedImage';
 
-# Ячейки как хранилище данных
+# Cells as data storage
 
-Все в TON хранится в ячейках. Ячейка — это структура данных, содержащая:
+In TON, a **cell** is a built material for the entire blockchain. The cell is a data structure containing:
 
-- до **1023 бит** данных (не байтов!)
-- до **4 ссылок** на другие ячейки
+- up to **1023 bits** of data
+- up to **4 references** to other cells
+- cell stores bits and references separately
+- cell forbids circular references: for any cell, none of its descendant cells can reference this original cell.
 
-Биты и ссылки нельзя смешивать – они хранятся отдельно. Циклические ссылки запрещены. Это означает, что для любой ячейки ни одна из ее дочерних ячеек не может иметь эту исходную ячейку в качестве ссылки.
-
-Таким образом, все ячейки формируют направленный ациклический граф (DAG), наглядная иллюстрация предоставлена ниже:
+Thus, all cells constitute a directed acyclic graph (DAG). Here's a good picture to illustrate:
 
 <br></br>
 <ThemedImage
@@ -21,40 +23,46 @@ dark: '/img/docs/cells-as-data-storage/Cells-as-data-storage_1_dark.png?raw=true
 }}
 /> <br></br>
 
-## Типы ячеек
+## Cell types
 
-В настоящее время существует 5 типов ячеек: *обычные* и 4 *экзотических*. Экзотические типы следующие:
+Currently, there are five types of cells: one ordinary cell and four exotic cells.
+The exotic types are the following:
 
-- Ячейка с обрезанной ветвью
-- Ячейка библиотечной ссылки
-- Ячейка с доказательством Меркла
-- Ячейка обновления Меркла
+- Pruned branch cell
+- Library reference cell
+- Merkle proof cell
+- Merkle update cell
 
 :::tip
-Подробнее об экзотических ячейках см: [**TVM Whitepaper, раздел 3**](https://ton.org/tvm.pdf).
+See [**Exotic cells**](https://ton.org/tvm.pdf).
 :::
 
-## Варианты ячеек
+## Cell flavors
 
-Ячейка — это непрозрачный объект, оптимизированный для компактного хранения.
+A cell is an opaque object optimized for compact storage.
 
-В частности, он необходим для дедуплицикации данных. Если существует несколько эквивалентных подъячеек, на которые есть ссылки в разных ветвях, то их содержимое будет сохранено только один раз.В свою очередь свойство непрозрачности означает, что ячейку нельзя изменять или читать напрямую. Таким образом, появляются 2 дополнительных разновидности ячеек:
+It deduplicates data: it only stores the content of several equivalent sub-cells referenced in different branches once. However, one cannot modify or read a cell directly because of its opacity. Thus, there are two additional flavors of the cells:
 
-- *Builder* – для частично построенных ячеек, для которых можно определить быстрые операции добавления битовых строк, целых чисел, других ячеек и ссылок на другие ячейки.
-- *Slice* – для "разрезанных" ячеек, представляющих собой либо остаток частично разобранной ячейки, либо значение, подъячейку, находящееся внутри такой ячейки и извлеченное из нее с помощью парсинг-инструкции.
+- **Builder** is a flavor for constructing cells
+- **Slice** for a flavor for reading cells
 
-Также в TVM используется еще одна особая разновидность ячеек:
+Another unique cell flavor in TVM:
 
-- *Continuation* – для ячеек, содержащих opcode (инструкции) для виртуальной машины TON, см. [обзор TVM](/v3/documentation/tvm/tvm-overview).
+- **Continuation**  for cells containing opcodes instructions for TON Virtual Machine, see [TVM bird's-eye overview](/v3/documentation/tvm/tvm-overview).
 
-## Сериализация данных в ячейки
+## Serialization of data to cells
 
-Любой объект в TON (сообщение, очередь сообщений, блок, состояние всего блокчейна, код контракта и данные) сериализуется в ячейку.
+Any object in TON, like the message, block, or whole blockchain state, serializes to a cell.
 
-Процесс сериализации описывается схемой TL-B. Это формальное описание того, как этот объект может быть сериализован в *Builder* или как проанализировать объект заданного типа из *Slice*. TL-B для ячеек — это то же самое, что TL или ProtoBuf для байтовых потоков.
+A TL-B scheme describes the serialization process: a formal description of how this object can be serialized into _builder_ or how to parse an object of a given type from the _Slice_.
+TL-B for cells is the same as TL or ProtoBuf for byte-streams.
 
-Если вы хотите узнать больше подробностей о (де)сериализации ячеек, вы можете прочитать статью [Cell & Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc).
+If you want more details about cell serialization and deserialization, read [Cell & bag of cells](/v3/documentation/data-formats/tlb/cell-boc) article.
 
-## См. также
+## See also
 
-- [Язык TL-B](/v3/documentation/data-formats/tlb/tl-b-language)
+- [Blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
+- [TL-B language](/v3/documentation/data-formats/tlb/tl-b-language)
+
+<Feedback />
+
