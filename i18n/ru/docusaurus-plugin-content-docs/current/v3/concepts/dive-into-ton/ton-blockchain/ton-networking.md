@@ -1,18 +1,31 @@
-# TON Сеть
+import Feedback from '@site/src/components/Feedback';
 
-Проект TON использует собственные одноранговые сетевые протоколы.
+# TON networking
 
-- Блокчейн **TON использует эти протоколы** для распространения новых блоков, отправки и сбора очереди на транзакцию и тому подобные операции.
+TON Ecosystem uses its peer-to-peer network protocols.
 
-  Сетевые требования проектов с одним блокчейном, таких как Bitcoin или Ethereum, могут быть удовлетворены довольно легко  – по сути нужно построить одноранговую оверлейную сеть, а затем распространять все новые блоки и кандидатов на транзакции через протокол [gossip](https://en.wikipedia.org/wiki/Gossip_protocol).В свою очередь проекты с несколькими блокчейнами, такие как TON, гораздо более требовательны к устройству сети. Например, нужно иметь возможность подписываться на обновления только некоторых из всего множества шардчейнов.
+- **TON Blockchain** uses these protocols to propagate new blocks, send and collect transaction candidates, etc.
 
-- Сервисы экосистемы **TON (например, TON Proxy, TON Sites, TON Storage) работают на этих протоколах.**
+  While the networking demands of single-blockchain projects, such as Bitcoin or Ethereum, can be met quite easily: one essentially needs to construct a peer-to-peer overlay network and then propagate all new blocks and transaction candidates via a [gossip](https://en.wikipedia.org/wiki/Gossip_protocol) protocol.
 
-  Как только будут внедрены более сложные сетевые протоколы, необходимые для поддержки блокчейна TON, окажется, что их можно легко переиспользовать для целей, не связанных с непосредственными потребностями самого блокчейна, тем самым предоставя больше возможностей и гибкости для создания новых сервисов в самой TON экосистеме.
+Multi-blockchain projects, such as TON, are much more demanding. For example, one must be able to subscribe to updates for only some shardchains, not necessarily all of them.
 
-## См. также
+- **TON Ecosystem services** like TON Proxy, TON Sites, TON Storage, and dApps run on these protocols.
 
-- [Протокол ADNL](/v3/documentation/network/protocols/adnl/overview)
-- [Оверлейные подсети](/v3/documentation/network/protocols/overlay)
-- [Протокол RLDP](/v3/documentation/network/protocols/rldp)
-- [Служба TON DHT](/v3/documentation/network/protocols/dht/ton-dht)
+  Once the more sophisticated network protocols are in place to support the TON blockchain.
+  They can easily be used for purposes not necessarily related to the immediate demands of the blockchain itself, thus providing more possibilities and flexibility for creating new services in TON Ecosystem.
+
+## TON network protocols
+
+- [TON Connect](/v3/guidelines/ton-connect/overview/)
+- [ADNL protocol](/v3/documentation/network/protocols/adnl/overview/)
+- [Overlay subnetworks](/v3/documentation/network/protocols/overlay/)
+- [RLDP protocol](/v3/documentation/network/protocols/rldp/)
+- [TON DHT service](/v3/documentation/network/protocols/dht/ton-dht/)
+
+## See also
+
+- [TON security audits](/v3/concepts/dive-into-ton/ton-blockchain/security-measures/)
+
+<Feedback />
+
