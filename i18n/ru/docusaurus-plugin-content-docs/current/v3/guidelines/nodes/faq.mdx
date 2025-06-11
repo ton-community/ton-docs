@@ -1,22 +1,20 @@
-# ЧАСТО ЗАДАВАЕМЫЕ ВОПРОСЫ
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# FAQ
 
-## Использование каталога MyTonCtrl
+## MyTonCtrl directory usage
 
-MyTonCtrl является оболочкой, которая хранит свои файлы в двух местах:
+MyTonCtrl is a wrapper that stores its files in two locations:
 
-1. `~/.local/share/mytonctrl/` - здесь хранятся долгосрочные файлы, такие как журналы.
-2. `/tmp/mytonctrl/` - здесь хранятся временные файлы.
+1. `~/.local/share/mytonctrl/`: Long-term files such as logs are stored here.
+2. `/tmp/mytonctrl/`: Temporary files are stored here.
 
-MyTonCtrl также включает в себя другой скрипт, mytoncore, который, в свою очередь, хранит файлы в следующих местах:
+MyTonCtrl includes another script called `mytoncore`, which stores files in the following locations:
 
-1. `~/.local/share/mytoncore/` - здесь хранятся постоянные файлы, основная конфигурация.
-2. `/tmp/mytoncore/` - здесь хранятся временные файлы, параметры, используемые для выборов.
+1. `~/.local/share/mytoncore/`: Permanent files, the main configuration will be stored here.
+2. `/tmp/mytoncore/`: Temporary files and parameters used for elections will be saved here.
 
-MyTonCtrl загружает исходный код для себя и валидатора в следующие каталоги:
+MyTonCtrl downloads its source code, along with the validator, into the following directories:
 
 1. `/usr/src/mytonctrl/`
 2. `/usr/src/ton/`
@@ -49,62 +47,63 @@ sudo bash /usr/src/mytonctrl/scripts/uninstall.sh
 sudo rm -rf /usr/bin/ton
 ```
 
-Во время этого процесса убедитесь, что у вас достаточно прав для удаления или изменения этих файлов или каталогов.
+Ensure you have the necessary permissions to delete or modify files and directories.
 
-## Изменение каталога с помощью MyTonCtrl
+## Directory changes with MyTonCtrl
 
-### Изменение рабочего каталога валидатора перед установкой
+### Changing validator working directory pre-installation
 
-Если вы хотите изменить рабочий каталог валидатора перед установкой, это можно сделать двумя способами:
+If you want to change the working directory of the validator before installation, you have two options:
 
-1. **Создать форк проекта** - Вы можете создать форк проекта и внести в него свои изменения. Узнайте, как создать форк проекта с помощью `man git-fork`.
-2. **Создать символьную ссылку** - Вы также можете создать символьную ссылку с помощью следующей команды:
+1. **Fork the project**: You can fork the project and make your modifications there. To learn how to fork a project, use the command `man git-fork`.
 
-   ````
+2. **Create a symbolic link**: Alternatively, you can create a symbolic link with the following command:
+
    ```bash
-   ln -s /opt/ton/var/ton
+   ln -s /opt/ton/var/ton /var/ton
    ```
-   ````
 
-   Эта команда создаст ссылку `/var/ton`, которая указывает на `/opt/ton`.
+This command will create a link at `/var/ton` that points to `/opt/ton`.
 
-### Изменение рабочего каталога валидатора после установки
+### Changing validator working directory post-installation
 
-Если вы хотите изменить рабочий каталог валидатора с `/var/ton/`, выполните следующие действия:
+To change the working directory of the validator from `/var/ton/` after installation, follow these steps:
 
-1. **Остановка служб** - Вам нужно будет остановить службы с помощью этих команд:
+1. **Stop services**: First, stop the services using the following commands:
 
    ```bash
    systemctl stop validator.service
    systemctl stop mytoncore.service
    ```
 
-2. **Перемещение файлов валидатора** - Затем вам нужно переместить файлы валидатора с помощью этой команды:
+2. **Move validator files**: Next, move the validator files with this command:
 
    ```bash
    mv /var/ton/* /opt/ton/
    ```
 
-3. **Обновление путей конфигурации** - Замените пути в конфигурации, находящиеся по адресу `~/.local/share/mytoncore/mytoncore.db`.
+3. **Update configuration paths**: Ensure you update the paths in the configuration file located at `~/.local/share/mytoncore/mytoncore.db`.
 
-4. **Примечание** - Опыта такого переноса нет, поэтому учтите это, когда будете двигаться дальше.
+4. **Consider experience**: Note that there might be limited experience with this type of transfer, so take this into account as you proceed.
 
-Не забудьте убедиться, что у вас есть достаточные права для внесения этих изменений или запуска этих команд.
+Make sure you have sufficient permissions to execute these commands and make these changes.
 
-## Понимание состояния валидатора и перезапуск валидатора в MyTonCtrl
+## Understanding validator status and restarting validator in MyTonCtrl
 
-Этот документ поможет вам понять, как подтвердить, что MyTonCtrl стал полноценным валидатором, и как перезапустить ваш валидатор.
+This [document](/v3/guidelines/nodes/running-nodes/validator-node) will help you confirm if MyTonCtrl has become a full validator.
 
-## Перезапуск вашего валидатора
+## Restarting your validator
 
-Если вам нужно перезапустить ваш валидатор, вы можете это сделать, запустив следующую команду:
+If you need to restart your validator, run this command:
 
 ```bash
 systemctl restart validator.service
 ```
 
-Убедитесь, что у вас достаточно прав для выполнения этих команд и внесения необходимых изменений. Всегда помните о резервном копировании важных данных перед выполнением операций, которые могут потенциально повлиять на ваш валидатор.
+Please ensure you have the necessary permissions to execute these commands and make any needed adjustments. <u>**Remember to back up important data before performing operations that may affect your validator.**</u>
 
-## См. также
+## See also
 
 - [Устранение неполадок](/v3/guidelines/nodes/nodes-troubleshooting)
+
+<Feedback />
