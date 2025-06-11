@@ -1,72 +1,67 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Узел Liteserver
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Liteserver node
 
 :::info
-Прочитайте о [Полном узле](/v3/guidelines/nodes/running-nodes/full-node) перед этой статьей
+Before reading this article, please refer to the section on [Full node](/v3/guidelines/nodes/running-nodes/full-node) for more information.
 :::
 
-Когда конечная точка активирована в полном узле, узел принимает на себя роль **Liteserver**. Этот тип узла может отправлять запросы от Легких клиентов и отвечать на них, обеспечивая бесперебойное взаимодействие с блокчейном TON.
+When an endpoint is activated in a full node, that node becomes a **liteserver**. This type of node can handle and respond to requests from the lite-client, facilitating smooth interaction with the TON Blockchain.
 
 ## Требования к оборудованию
 
-По сравнению с [validator](/v3/guidelines/nodes/running-nodes/full-node#hardware-requirements), режим liteserver требует меньше ресурсов. Тем не менее, для запуска liteserver по-прежнему рекомендуется использовать мощный компьютер.
+Running a liteserver mode requires fewer resources than a [validator](/v3/guidelines/nodes/running-nodes/full-node#hardware-requirements), but it is still recommended that you use a powerful machine:
 
-- не менее 16 ядер процессора
-- не менее 128 ГБ оперативной памяти
-- твердотельный накопитель объемом 1 ТБ *или* Оборудованное хранилище с более 64 000 операций ввода/вывода в секунду (IOPS)
-- Подключение к сети со скоростью 1 Гбит/с
-- 16 ТБ/месяц трафика при пиковой нагрузке
-- общедоступный IP-адрес (*фиксированный IP-адрес*)
+- minimum of 16-core CPU
+- minimum of 128 GB RAM
+- at least 1 TB NVMe SSD or provisioned storage with 64,000+ IOPS
+- 1 Gbps network connectivity
+- 16 TB of traffic per month during peak load
+- fixed public IP address
 
-### Рекомендованные провайдеры
+### Recommended providers
 
-Не стесняйтесь использовать облачных провайдеров, перечисленных в разделе [Рекомендуемые провайдеры](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers).
+Feel free to use the cloud providers listed in the [recommended providers](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) section.
 
-На Hetzner и OVH запрещено запускать валидатора, но Вы можете использовать их для запуска liteserver:
+Hetzner and OVH are not allowed to run a validator, but you can use them to run a liteserver:
 
 - **Hetzner**: EX101, AX102
 - **OVH**: RISE-4
 
 ## Установка liteserver
 
-Если у Вас нет mytonctrl, установите его с флагом `-m liteserver`:
+If you don't have `MyTonCtrl`, install it using the `-m liteserver` flag.
 
 <Tabs groupId="operating-systems">
   <TabItem value="ubuntu" label="Ubuntu">
 
-```bash
-wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-sudo bash ./install.sh -m liteserver
-```
+  ```bash
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+  sudo bash ./install.sh -m liteserver
+  ```
 
   </TabItem>
   <TabItem value={'debian'} label={'Debian'}>
 
-```bash
-wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
-su root -c 'bash ./install.sh -m liteserver'
-```
+  ```bash
+  wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+  su root -c 'bash ./install.sh -m liteserver'
+  ```
 
   </TabItem>
 </Tabs>
 
-- `-d` - **mytonctrl** загрузит [дамп](https://dump.ton.org/) последнего состояния блокчейна.
-  Это сократит время синхронизации в несколько раз.
-- `-c <path>` - если вы хотите использовать не общедоступные liteservers для синхронизации. *(не обязательно)*
-- `-i` - Игнорировать минимальные требования. Используйте только для проверки процесса компиляции без реального использования узла.
-- `-m` - Режим, может быть `validator` или `liteserver`.
+- `-d`: The `MyTonCtrl` command will download a [dump](https://dump.ton.org/) of the latest blockchain state, significantly reducing synchronization time.
+- `-c <path>`: This option allows you to use private liteservers for synchronization. _(This option is not required.)_
+- `-i`: Use this flag to ignore minimum requirements. It should only be used if you want to check the compilation process without utilizing a real node.
+- `-m`: This specifies the mode and can be set to either `validator` or `liteserver`.
 
-**Чтобы использовать testnet**, флагу `-c` должно быть присвоено значение `https://ton.org/testnet-global.config.json`.
+To use the Testnet, you must provide the `-c` flag with the value `https://ton.org/testnet-global.config.json.` The default value for the `-c` flag is `https://ton-blockchain.github.io/global.config.json`, which refers to the mainnet configuration.
 
-Значение по умолчанию для флага `-c` равно `https://ton-blockchain.github.io/global.config.json`, что является конфигурацией по умолчанию для основной сети (mainnet).
-
-Если у вас уже установлен mytonctrl, запустите:
+If you already have `MyTonCtrl` installed, run:
 
 ```bash
 user@system:~# mytonctrl
@@ -75,7 +70,7 @@ MyTonCtrl> enable_mode liteserver
 
 ## Проверьте настройки брандмауэра
 
-Сначала убедитесь, что указан правильный порт Liteserver в файле`/var/ton-work/db/config.json`. Этот порт меняется при каждой новой установке `MyTonCtrl`. Он находится в поле `port`:
+Firstly, check the liteserver port specified in your `/var/ton-work/db/config.json` file. This port may vary with each new installation of `MyTonCtrl` and can be found in the `port` field.
 
 ```json
 {
@@ -90,28 +85,28 @@ MyTonCtrl> enable_mode liteserver
 }
 ```
 
-Если вы используете облачный провайдер, вам нужно открыть этот порт в настройках брандмауэра. Например, если вы используете AWS, вам нужно открыть порт в [группе безопасности](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html).
+If you use a cloud provider, open this port in the firewall settings. For instance, if you are using AWS, you should open the port in the [security group](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-security-groups.html).
 
-Вот пример открытия порта в брандмауэре сервера без виртуальной машины.
+Here is an example of how to open a port in the firewall of a bare metal server:
 
 ### Открытие порта в брандмауэре
 
-Мы будем использовать утилиту `ufw` ([cheatsheet](https://www.cyberciti.biz/faq/ufw-allow-incoming-ssh-connections-from-a-specific-ip-address-subnet-on-ubuntu-debian/)). Вы можете использовать ту, которая вам больше нравится.
+We will use the `ufw` utility (see the [cheatsheet](https://www.cyberciti.biz/faq/ufw-allow-incoming-ssh-connections-from-a-specific-ip-address-subnet-on-ubuntu-debian/)). However, feel free to use any alternative that you prefer.
 
-1. Установите `ufw`, если он не установлен:
+1. If `ufw` is not already installed, install it:
 
 ```bash
 sudo apt update
 sudo apt install ufw
 ```
 
-2. Разрешите ssh-соединение:
+2. Enable SSH connections:
 
 ```bash
 sudo ufw allow ssh
 ```
 
-3. Разрешите порт, указанный в файле `config.json`:
+3. Ensure that you allow the port indicated in the `config.json` file:
 
 ```bash
 sudo ufw allow <port>
@@ -129,178 +124,180 @@ sudo ufw enable
 sudo ufw status
 ```
 
-Таким образом, вы можете открыть порт в настройках брандмауэра вашего сервера.
+To do this, you can open the port in your server's firewall settings.
 
-## Взаимодействие с Liteserver (lite-client)
+## Interaction with liteserver (lite-client)
 
-0. Создайте пустой проект на своем компьютере и вставьте `config.json` в каталог проекта. Эту конфигурацию можно получить, выполнив команду:
+1. Create a new project directory on your machine and place the `config.json` file in it. You can obtain this configuration by running the following command:
 
 ```bash
 installer clcf # in mytonctrl
 ```
 
-Это создаст `/usr/bin/ton/local.config.json` на вашем компьютере, где установлен mytonctrl. Проверьте [документацию по mytonctrl для получения дополнительной информации] (/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#clcf).
+It will create a file at `/usr/bin/ton/local.config.json` on your machine where `MyTonCtrl` is installed. Check the [MyTonCtrl documentation for more information](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#clcf).
 
-1. Установите библиотеки.
-
-<Tabs groupId="code-examples">
-  <TabItem value="js" label="JavaScript">
-
-```bash
-npm i --save ton-core ton-lite-client
-```
-
-  </TabItem>
-  <TabItem value="python" label="Python">
-
-```bash
-pip install pytonlib
-```
-
-  </TabItem>
-  <TabItem value="go" label="Golang">
-
-```bash
-go get github.com/xssnick/tonutils-go
-go get github.com/xssnick/tonutils-go/lite
-go get github.com/xssnick/tonutils-go/ton
-```
-
-  </TabItem>
-</Tabs>
-
-2. Инициализируйте и запросите информацию о masterchain, чтобы убедиться, что liteserver работает.
+2. Установите библиотеки.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
 
-Измените тип проекта на `module` в файле `package.json`:
-
-```json
-{
-    "type": "module"
-}
-```
-
-Создайте файл `index.js` со следующим содержимым:
-
-```js
-import { LiteSingleEngine } from 'ton-lite-client/dist/engines/single.js'
-import { LiteRoundRobinEngine } from 'ton-lite-client/dist/engines/roundRobin.js'
-import { Lite } from 'ton-lite-client/dist/.js'
-import config from './config.json' assert {type: 'json'};
-
-
-function intToIP(int ) {
-    var part1 = int & 255;
-    var part2 = ((int >> 8) & 255);
-    var part3 = ((int >> 16) & 255);
-    var part4 = ((int >> 24) & 255);
-
-    return part4 + "." + part3 + "." + part2 + "." + part1;
-}
-
-let server = config.liteservers[0];
-
-async function main() {
-    const engines = [];
-    engines.push(new LiteSingleEngine({
-        host: `tcp://${intToIP(server.ip)}:${server.port}`,
-        publicKey: Buffer.from(server.id.key, 'base64'),
-    }));
-
-    const engine = new LiteRoundRobinEngine(engines);
-    const  = new Lite({ engine });
-    const master = await .getMasterchainInfo()
-    console.log('master', master)
-
-}
-
-main()
-
-```
+  ```bash
+  npm i --save ton-core ton-lite-client
+  ```
 
   </TabItem>
   <TabItem value="python" label="Python">
 
-```python
-  from pytoniq import LiteClient
-
-  async def main():
-      client = LiteClient.from_mainnet_config(  # choose mainnet, testnet or custom config dict
-          ls_i=0,  # index of liteserver from config
-          trust_level=2,  # trust level to liteserver
-          timeout=15  # timeout not includes key blocks synchronization as it works in pytonlib
-      )
-  
-      await client.connect()
-  
-      await client.get_masterchain_info()
-  
-      await client.reconnect()  # can reconnect to an exising object if had any errors
-  
-      await client.close()
-  
-      """ or use it with context manager: """
-      async with LiteClient.from_mainnet_config(ls_i=0, trust_level=2, timeout=15) as client:
-          await client.get_masterchain_info()
-
-```
+  ```bash
+  pip install pytonlib
+  ```
 
   </TabItem>
   <TabItem value="go" label="Golang">
 
-```go
-package main
-
-import (
-    "context"
-    "encoding/json"
-    "io/ioutil"
-    "log"
-    "github.com/xssnick/tonutils-go/liteclient"
-    "github.com/xssnick/tonutils-go/ton"
-)
-
-func main() {
-    client := liteclient.NewConnectionPool()
-
-    content, err := ioutil.ReadFile("./config.json")
-    if err != nil {
-        log.Fatal("Error when opening file: ", err)
-    }
-
-    config := liteclient.GlobalConfig{}
-    err = json.Unmarshal(content, &config)
-    if err != nil {
-        log.Fatal("Error during Unmarshal(): ", err)
-    }
-
-    err = client.AddConnectionsFromConfig(context.Background(), &config)
-    if err != nil {
-        log.Fatalln("connection err: ", err.Error())
-        return
-    }
-
-    // initialize ton API lite connection wrapper
-    api := ton.NewAPIClient(client)
-
-    master, err := api.GetMasterchainInfo(context.Background())
-    if err != nil {
-        log.Fatalln("get masterchain info err: ", err.Error())
-        return
-    }
-
-    log.Println(master)
-}
-
-```
+  ```bash
+  go get github.com/xssnick/tonutils-go
+  go get github.com/xssnick/tonutils-go/lite
+  go get github.com/xssnick/tonutils-go/ton
+  ```
 
   </TabItem>
 </Tabs>
 
-3. Теперь вы можете взаимодействовать со своим собственным liteserver.
+3. Initialize and request MasterChain information to confirm that the liteserver is running properly.
+
+<Tabs groupId="code-examples">
+  <TabItem value="js" label="JavaScript">
+
+Update the project type to `module` in your `package.json` file.
+
+  ```json
+  {
+      "type": "module"
+  }
+  ```
+
+Create a file named `index.js` and include the following content:
+
+  ```js
+  import { LiteSingleEngine } from 'ton-lite-client/dist/engines/single.js'
+  import { LiteRoundRobinEngine } from 'ton-lite-client/dist/engines/roundRobin.js'
+  import { Lite } from 'ton-lite-client/dist/.js'
+  import config from './config.json' assert {type: 'json'};
+  
+  
+  function intToIP(int ) {
+      var part1 = int & 255;
+      var part2 = ((int >> 8) & 255);
+      var part3 = ((int >> 16) & 255);
+      var part4 = ((int >> 24) & 255);
+  
+      return part4 + "." + part3 + "." + part2 + "." + part1;
+  }
+  
+  let server = config.liteservers[0];
+  
+  async function main() {
+      const engines = [];
+      engines.push(new LiteSingleEngine({
+          host: `tcp://${intToIP(server.ip)}:${server.port}`,
+          publicKey: Buffer.from(server.id.key, 'base64'),
+      }));
+  
+      const engine = new LiteRoundRobinEngine(engines);
+      const  = new Lite({ engine });
+      const master = await .getMasterchainInfo()
+      console.log('master', master)
+  
+  }
+  
+  main()
+  
+  ```
+
+  </TabItem>
+  <TabItem value="python" label="Python">
+
+  ```python
+    from pytoniq import LiteClient
+  
+    async def main():
+        client = LiteClient.from_mainnet_config(  # choose mainnet, testnet or custom config dict
+            ls_i=0,  # index of liteserver from config
+            trust_level=2,  # trust level to liteserver
+            timeout=15  # timeout not includes key blocks synchronization as it works in pytonlib
+        )
+    
+        await client.connect()
+    
+        await client.get_masterchain_info()
+    
+        await client.reconnect()  # can reconnect to an exising object if had any errors
+    
+        await client.close()
+    
+        """ or use it with context manager: """
+        async with LiteClient.from_mainnet_config(ls_i=0, trust_level=2, timeout=15) as client:
+            await client.get_masterchain_info()
+  
+  ```
+
+  </TabItem>
+  <TabItem value="go" label="Golang">
+
+  ```go
+  package main
+  
+  import (
+      "context"
+      "encoding/json"
+      "io/ioutil"
+      "log"
+      "github.com/xssnick/tonutils-go/liteclient"
+      "github.com/xssnick/tonutils-go/ton"
+  )
+  
+  func main() {
+      client := liteclient.NewConnectionPool()
+  
+      content, err := ioutil.ReadFile("./config.json")
+      if err != nil {
+          log.Fatal("Error when opening file: ", err)
+      }
+  
+      config := liteclient.GlobalConfig{}
+      err = json.Unmarshal(content, &config)
+      if err != nil {
+          log.Fatal("Error during Unmarshal(): ", err)
+      }
+  
+      err = client.AddConnectionsFromConfig(context.Background(), &config)
+      if err != nil {
+          log.Fatalln("connection err: ", err.Error())
+          return
+      }
+  
+      // initialize ton API lite connection wrapper
+      api := ton.NewAPIClient(client)
+  
+      master, err := api.GetMasterchainInfo(context.Background())
+      if err != nil {
+          log.Fatalln("get masterchain info err: ", err.Error())
+          return
+      }
+  
+      log.Println(master)
+  }
+  
+  ```
+
+  </TabItem>
+</Tabs>
+
+4. You can now interact with your own liteserver.
 
 ## См. также
 
-- [[YouTube]инструкция по запуску liteserver]] (https://youtu.be/p5zPMkSZzPc)
+- [YouTube-Tutorial how to launch a liteserver](https://youtu.be/p5zPMkSZzPc) <Feedback />
+  <Feedback />
+
