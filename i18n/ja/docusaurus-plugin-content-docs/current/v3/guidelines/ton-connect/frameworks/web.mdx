@@ -1,0 +1,169 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# JS に接続する
+
+This guide will help you integrate TON Connect into your Javascript app for user authentication and transactions.
+
+If using React for your DApp, look at the [TON Connect UI React SDK](/v3/guidelines/ton-connect/frameworks/react).
+
+If you're using Vue for your DApp, look at the [TON Connect UI Vue SDK](/v3/guidelines/ton-connect/frameworks/vue).
+
+## 実装
+
+### インストール
+
+<Tabs groupId="Installation">
+  <TabItem value="CDN" label="CDN">
+Add the script to the `<HEAD>` element of your website:
+    <br/>
+    <br/>
+
+```html
+<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+```
+
+</TabItem>
+  <TabItem value="NPM" label="NPM">
+   Install the [@tonconnect/ui](https://www.npmjs.com/package/@tonconnect/ui) package:
+
+```bash npm2yarn
+npm i @tonconnect/ui
+```
+
+</TabItem>
+</Tabs>
+
+### TON Connect initiation
+
+After installing the package, create a `manifest.json` file for your app.
+More information on how to create a `manifest.json` file can be found [here](/v3/guidelines/ton-connect/guidelines/creating-manifest).
+
+Add a button with a `ton-connect` id to connect to the wallet:
+
+```html
+<div id="ton-connect"></div>
+```
+
+_After this tag_, add a script for `tonConnectUI` in the `<body>` part of the app page:
+
+```html
+<script>
+    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+        manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+        buttonRootId: 'ton-connect'
+    });
+</script>
+```
+
+### Connect to the wallet
+
+The `'ton-connect'` button in `buttonRootId` will automatically manage clicks.
+
+But you can open **connect modal** programmatically, for example, after clicking on the custom button:
+
+```html
+<script>
+    async function connectToWallet() {
+        const connectedWallet = await tonConnectUI.connectWallet();
+        // Do something with connectedWallet if needed
+        console.log(connectedWallet);
+    }
+
+    // Call the function
+    connectToWallet().catch(error => {
+        console.error("Error connecting to wallet:", error);
+    });
+</script>
+```
+
+### リダイレクト
+
+#### 返品戦略のカスタマイズ
+
+接続後にユーザーを特定の URL にリダイレクトするには、[リターン戦略のカスタマイズ](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy) を使用します。
+
+#### Telegram ミニアプリ
+
+ウォレット接続後、[Telegram Mini App](/v3/guidelines/dapps/tma/overview)にユーザーをリダイレクトするには、`twaReturnUrl`オプションを使用します。
+
+```tsx
+tonConnectUI.uiOptions = {
+      twaReturnUrl: 'https://t.me/YOUR_APP_NAME'
+  };
+```
+
+[SDKドキュメントで詳しく理解する](https://github.com/ton-connect/sdk/tree/main/packages/ui#use-inside-twa-telegram-web-app)
+
+### UI のカスタマイズ
+
+TonConnect UIは、さまざまなアプリを使用するときに使い慣れた、認識できるインターフェイスを提供します。 ただし、アプリ開発者はこのインターフェイスを変更して、アプリのインターフェイスと一貫性を保つことができます。 However, the app developer can modify this interface to keep it consistent with the app's interface.
+
+- [TonConnect UI documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customization)
+
+## SDK documentation
+
+- [SDK documentation](https://github.com/ton-connect/sdk/blob/main/packages/ui/README.md)
+- [最新のAPIドキュメント](https://ton-connect.github.io/sdk/modules/_tonconnect_ui.html)
+
+## 使用法
+
+Let's look at the example of using the TON Connect UI in the app.
+
+### メッセージを送信中
+
+Here's an example of sending a transaction using the TON Connect UI:
+
+```js
+import TonConnectUI from '@tonconnect/ui';
+
+const tonConnectUI = new TonConnectUI({ //connect application
+    manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+    buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+});
+
+const transaction = {
+  validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
+  messages: [
+        {
+            address: "EQABa48hjKzg09hN_HjxOic7r8T1PleIy1dRd8NvZ3922MP0", // destination address
+            amount: "20000000" //Toncoin in nanotons
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+:::tip
+Get more examples on the [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages) page.
+:::
+
+### Understanding transaction status by hash
+
+Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions) using the tonweb library.
+
+### Signing and verification
+
+TON 接続を使用してメッセージに署名して検証する方法を理解してください:
+
+- [Signing and verification](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
+- [TON Connect UI implementation on GitHub](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-connect-request-paramers-ton_proof)
+
+### Wallet disconnection
+
+ウォレットを切断するために呼び出します:
+
+```js
+await tonConnectUI.disconnect();
+```
+
+## See also
+
+- [UI customization](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
+- [[YouTube] TON Connect UI React [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=1747)
+- [[YouTube] Connect TON Connect UI to site [RU]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
+
+<Feedback />
