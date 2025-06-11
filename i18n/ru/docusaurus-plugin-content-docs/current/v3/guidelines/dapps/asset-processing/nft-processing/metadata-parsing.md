@@ -1,27 +1,25 @@
-# Разбор метаданных
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Metadata parsing
 
-Стандарт метаданных, который включает NFT, коллекции NFT и Jettons, описан в TON Enhancement Proposal 64 [TEP-64] (https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
+The metadata standard covering NFTs, NFT collections, and jettons, is outlined in TON Enhancement Proposal 64 [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 
 В TON сущности могут иметь три типа метаданных: on-chain, semi-chain, и off-chain.
 
 - **On-chain метаданные:** хранятся внутри блокчейна, включая название, атрибуты и изображение.
-- **Off-chain метаданные:** хранятся с помощью ссылки на файл метаданных, размещенного вне блокчейна.
-- **Semi-chain метаданные:** гибрид между этими двумя способами, который позволяет хранить небольшие поля, такие как имена или атрибуты, внутри блокчейне, в то время как изображение хранятся за пределами блокчейна и при этом только ссылка на него.
+- **Off-chain metadata:** stored using a link to a metadata file hosted outside the chain.
+- **Semi-chain metadata:** a hybrid approach that allows storing small fields such as names or attributes on the blockchain while hosting the image off-chain and storing only a link to it.
 
-## Кодирование данных Snake
+## Snake data encoding
 
-Формат кодирования Snake позволяет часть данных хранить в стандартной ячейке, а оставшуюся часть - в дочерней ячейке (рекурсивно). Формат кодирования Snake должен иметь префикс в виде байта 0x00. Схема TL-B:
+The Snake encoding format allows part of the data to be stored in a standardized cell, while the remaining portion is stored in a child cell recursively. The Snake encoding format must be prefixed using the 0x00 byte. The TL-B scheme:
 
-```
+```tlb
 tail#_ {bn:#} b:(bits bn) = SnakeData ~0;
 cons#_ {bn:#} {n:#} b:(bits bn) next:^(SnakeData ~n) = SnakeData ~(n + 1);
 ```
 
-Формат Snake используется для хранения дополнительных данных в ячейке, когда данные превышают максимальный размер, который можно хранить в одной ячейке. Это достигается путем хранения части данных в корневой ячейке, а оставшиеся части - в первой дочерней ячейке, и так продолжается рекурсивно до тех пор, пока все данные не будут сохранены.
+The Snake format stores additional data in a cell when the data exceeds the maximum size that a single cell can store. It does this by placing part of the data in the root cell and the remaining portion in the first child cell, continuing recursively until all data is stored.
 
 Вот пример кодирования и декодирования формата Snake в TypeScript:
 
@@ -76,17 +74,17 @@ export function flattenSnakeCell(cell: Cell): Buffer {
 }
 ```
 
-Следует отметить, что префикс `0x00` байт в корневой ячейке не всегда требуется при использовании формата snake, как в случае с off-chain содержимым NFT. Также ячейки заполняются байтами вместо битов для упрощения анализа. Чтобы избежать проблемы добавления ссылки (в пределах следующей дочерней ячейки) на ссылку после того, как она уже была записана в родительскую ячейку, snake ячейка строится в обратном порядке.
+The 0x00 byte prefix is not always required in the root cell when using the Snake format, such as with off-chain NFT content. Additionally, cells are filled with bytes instead of bits to simplify parsing. To prevent issues when adding a reference in a child cell after it has already been written to its parent cell, the Snake cell is constructed in reverse order.
 
-## Кодирование Chunked
+## Chunked encoding
 
-Формат кодирования chunked используется для хранения данных с помощью словарной структуры данных, начиная с chunk_index и заканчивая chunk. Кодировка chunked должна иметь префикс из байта `0x01`. Схема TL-B:
+The chunked encoding format stores data using a dictionary structure, mapping a chunk_index to a chunk. Chunked encoding must be prefixed with the 0x01 byte. The TL-B scheme:
 
-```
+```tlb
 chunked_data#_ data:(HashMapE 32 ^(SnakeData ~0)) = ChunkedData;
 ```
 
-Вот пример декодирования данных в формате chunked с помощью TypeScript:
+Below is an example of chunked data decoding in TypeScript:
 
 ```typescript
 interface ChunkDictValue {
@@ -116,66 +114,66 @@ export function ParseChunkDict(cell: Slice): Buffer {
 
 ## Атрибуты метаданных NFT
 
-| Атрибут       | Тип          | Условие                 | Описание                                                                                                                     |
-| ------------- | ------------ | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| `uri`         | ASCII string | необязательный параметр | URI, указывающий на JSON-документ с метаданными, который используется в формате "Semi-chain content layout". |
-| `name`        | UTF8 string  | необязательный параметр | идентифицирует asset                                                                                                         |
-| `description` | UTF8 string  | необязательный параметр | описывает актив                                                                                                              |
-| `image`       | ASCII string | необязательный параметр | URI, указывающий на ресурс с типом mime image                                                                                |
-| `image_data`  | binary\*     | необязательный параметр | либо двоичное представление изображения для on-chain размещения, либо base64 для off-chain размещения                        |
+| Атрибут       | Тип          | Requirement | Описание                                                                                                                |
+| ------------- | ------------ | ----------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `uri`         | ASCII string | optional    | A URI pointing to the JSON document with metadata used by the "Semi-chain content layout."              |
+| `name`        | UTF8 string  | optional    | Identifies the asset.                                                                                   |
+| `description` | UTF8 string  | optional    | Describes the asset.                                                                                    |
+| `image`       | ASCII string | optional    | A URI pointing to a resource with a MIME type image.                                                    |
+| `image_data`  | binary\*     | optional    | Either a binary representation of the image for the on-chain layout or base64 for the off-chain layout. |
 
 ## Атрибуты метаданных Jetton
 
 1. `uri` - Необязательный параметр. Используется в формате "Semi-chain content layout". Строка ASCII. URI, указывающий на JSON-документ с метаданными.
 2. `Имя` - Необязательный параметр. Строка в формате UTF8. Идентифицирует asset.
 3. `description` - Необязательный параметр. Строка в формате UTF8. Описывает asset.
-4. `image` - Необязательный параметр. Строка ASCII. URI, указывающий на ресурс с типом mime image.
-5. `image_data` - Необязательный параметр. Либо двоичное представление изображения для onchain размещения, либо base64 для offchain размещения.
+4. `image` - Optional. ASCII string. A URI pointing to a resource with a mime type image.
+5. `image_data` - Optional. Either a binary representation of the image for onchain layout or base64 for offchain layout.
 6. `symbol` - Необязательный параметр. Строка в формате UTF8. Символ токена - например, "XMPL". Используется в форме "Вы получили 99 XMPL".
-7. `decimals` - Необязательный параметр. Если не указано, по умолчанию используется значение 9. Строковое значение с числом от 0 до 255, кодированное в UTF8. Количество десятичных знаков, которые использует токен — например, 8, означает разделить количество токенов на 100000000 для получения его пользовательского представления.
-8. `amount_style` - Необязательный параметр. Необходим для внешних приложений, чтобы они понимали формат отображения количества jetton.
+7. `decimals` - Optional. If not specified, 9 is used by default. UTF8 encoded string with number from 0 to 255. The number of decimals the token uses - e.g. 8, means that the token amount must be divided by 100000000 to get its custom representation.
+8. `amount_style` - Optional. Necessary for external applications to understand the format of displaying the number of tokens.
 
-- "n" - количество jetton (значение по умолчанию). Если у пользователя 100 токенов с десятичным числом 0, то отображается, что у пользователя 100 токенов
-- "n-of-total" - количество jetton из общего количества выпущенных jetton. Например, totalSupply Jetton = 1000. У пользователя есть 100 jetton в jetton wallet. Например, должно отображаться в кошельке пользователя как 100 из 1000 или любым другим текстовым или графическим способом, чтобы показать конкретное значение в общем контексте.
-- "%" - процент от общего количества выпускаемых jetton. Например, totalSupply Jetton = 1000. У пользователя есть 100 jetton в jetton wallet. Например, должно отображаться в кошельке пользователя как 10%.
+- "n" - Displays the number of jettons as-is. For example, if a user has 100 tokens with 0 decimals, it displays "100 tokens".
+- "n-of-total" - Displays the number of jettons relative to the total supply. If totalSupply = 1000 and a user holds 100 jettons, it is displayed as "100 of 1000".
+- "%" - Displays jettons as a percentage of the total supply. If totalSupply = 1000 and a user holds 100 jettons, it is displayed as "10%".
 
-9. `render_type` - Необязательный параметр. Необходим для внешних приложений, чтобы они понимали к какой группе относится jetton и как его отображать.
+9. `render_type` - Optional. Required by external applications to understand which group a token belongs to and how to display it.
 
-- "currency" - отображать как валюту (значение по умолчанию).
-- "game" - отображать для игр. Будет отображаться как NFT, но при этом отображать количество jetton, учитывая параметр `amount_style`
+- "currency" - Displays as a currency (default value).
+- "game" - Displays as an NFT while also considering the `amount_style`.
 
-| Атрибут        | Тип          | Условие                 | Описание                                                                                                                                                                                                                                                                                                                                                                                                         |
-| -------------- | ------------ | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `uri`          | ASCII string | необязательный параметр | URI, указывающий на JSON-документ с метаданными, который используется в формате "Semi-chain content layout".                                                                                                                                                                                                                                                                                     |
-| `name`         | UTF8 string  | необязательный параметр | идентифицирует asset                                                                                                                                                                                                                                                                                                                                                                                             |
-| `description`  | UTF8 string  | необязательный параметр | описывает asset                                                                                                                                                                                                                                                                                                                                                                                                  |
-| `image`        | ASCII string | необязательный параметр | URI, указывающий на ресурс с типом mime image                                                                                                                                                                                                                                                                                                                                                                    |
-| `image_data`   | binary\*     | необязательный параметр | либо двоичное представление изображения для on-chain размещения, либо base64 для off-chain размещения                                                                                                                                                                                                                                                                                                            |
-| `symbol`       | UTF8 string  | необязательный параметр | символ токена - например, "XMPL" и используется в форме "Вы получили 99 XMPL"                                                                                                                                                                                                                                                                                                                                    |
-| `decimals`     | UTF8 string  | необязательный параметр | количество десятичных знаков, которые использует токен. Если не указано, по умолчанию используется значение 9. Строковое значение с числом от 0 до 255, например 8, означает, что количество токенов должно быть разделено на 100000000 для получения его пользовательского представления.                                                                       |
-| `amount_style` |              | необязательный параметр | необходим внешним приложениям, чтобы они понимали формат отображения количества jetton. Определяется с помощью *n*, *n-of-total*, *%*.                                                                                                                                                                                                                                           |
-| `render_type`  |              | необязательный параметр | Необходим для внешних приложений, чтобы они понимали в какую группу относится jetton и как его отображать. "currency" — отображается как валюта (значение по умолчанию). "game" — используется для игр, которые отображаются как NFT, но также показывают количество jetton и учитывают значение параметра amount_style. |
+| Атрибут        | Тип          | Requirement | Описание                                                                                                                                                                                                                                                                                                                                                              |
+| -------------- | ------------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `uri`          | ASCII string | optional    | A URI pointing to the JSON document with metadata used by the "Semi-chain content layout."                                                                                                                                                                                                                                                            |
+| `name`         | UTF8 string  | optional    | Identifies the asset                                                                                                                                                                                                                                                                                                                                                  |
+| `description`  | UTF8 string  | optional    | Describes the asset                                                                                                                                                                                                                                                                                                                                                   |
+| `image`        | ASCII string | optional    | A URI pointing to a resource with a mime type image                                                                                                                                                                                                                                                                                                                   |
+| `image_data`   | binary\*     | optional    | Either a binary representation of the image of an on-chain layout or base64 for off-chain layout                                                                                                                                                                                                                                                                      |
+| `symbol`       | UTF8 string  | optional    | Token symbol - for example, "XMPL" and uses the form "You have received 99 XMPL"                                                                                                                                                                                                                                                                                      |
+| `decimals`     | UTF8 string  | optional    | The number of decimal places used by the token. If not specified, the default is 9. A UTF8-encoded string with numbers from 0 to 255. - for example, 8 means that the token amount must be divided by 100000000 to get its custom representation.                                                     |
+| `amount_style` |              | optional    | Required by external applications to understand the format of displaying the number of tokens. Defined using _n_, _n-of-total_, _%_.                                                                                                                                                                                                  |
+| `render_type`  |              | optional    | Needed by external applications to understand what group a token belongs to and how to display it. "currency" - displays as currency (default). "game" - display used for games, displays as NFT, but also displays the number of tokens and respects the amount_style value. |
 
 > Параметры `amount_style`:
 
-- *n* — количество jetton (значение по умолчанию). Если пользователь имеет 100 токенов с 0 десятичных знаков, то отображается, что у пользователя 100 токенов.
-- *n-of-total* — количество jetton от общего количества выпущенных jetton. Например, если totalSupply выпускаемых jetton равно 1000 и у пользователя есть 100 jetton в кошельке, то должно отображаться в кошельке пользователя как 100 из 1000 или другим текстовым или графическим способом, чтобы показать соотношение токенов пользователя к общему количеству доступных токенов.
-- *%* — процент от общего количества выпущенных jetton. Например, если общее количество выпускаемых jetton равно 1000 и у пользователя есть 100 jetton, то процент должен быть отображен как 10% от баланса кошелька пользователя (100 ÷ 1000 = 0,1 или 10%).
+- _n_ — количество jetton (значение по умолчанию). Если пользователь имеет 100 токенов с 0 десятичных знаков, то отображается, что у пользователя 100 токенов.
+- _n-of-total_ - the number of jettons out of the total number of issued jettons. For example, if the totalSupply of jettons is 1000 and the user has 100 jettons in their wallet, it must be displayed in the user's wallet as 100 of 1000 or in another textual or graphical way to demonstrate the ratio of user tokens to the total amount of tokens available.
+- _%_ - the percentage of jettons from the total number of jettons issued. For example, if the total number of tokens is 1000 and the user has 100 tokens, the percentage should be displayed as 10% of the user's wallet balance (100 ÷ 1000 = 0.1 or 10%).
 
 > Параметры `render_type`:
 
-- *currency* - отображается как валюта (значение по умолчанию).
-- *game* - используется для игр, которые отображаются как NFT, но также показывают количество jetton и учитывают значение параметра `amount_style`.
+- _currency_ - отображается как валюта (значение по умолчанию).
+- _game_ - display used for games that appears as an NFT but also displays the number of tokens and takes into account the `amount_style` value.
 
-## Разбор метаданных
+## Parsing metadata
 
-Чтобы разобрать метаданные, сначала необходимо получить данные NFT из блокчейна. Чтобы лучше понять этот процесс, рекомендуем ознакомиться с разделом [Получение данных NFT](/v3/guidelines/dapps/asset-processing/nft-processing/nfts#retrieving-nft-data) нашей документации по обработке активов в TON.
+To parse metadata, NFT data must first be obtained from the blockchain. To better understand this process, consider reading the [retrieving NFT data](/v3/guidelines/dapps/asset-processing/nft-processing/nfts#retrieving-nft-data) section of our TON asset processing documentation section.
 
 После того, как данные NFT в блокчейне получены, их необходимо разобрать. Чтобы выполнить этот процесс, необходимо определить тип содержимого NFT, прочитав первый байт, составляющий внутреннюю структуру NFT.
 
 ### Off-chain
 
-Если строка байтов метаданных начинается с `0x01`, это означает, что тип содержимого NFT находится off-chain. Оставшаяся часть содержимого NFT декодируется с помощью формата кодирования Snake как ASCII-строка. После того, как правильно будет отпределен NFT URL и получены данные идентификации NFT, процесс завершен. Ниже приведен пример URL, который использует разбор метаданных содержимого NFT off-chain:
+f the metadata byte string starts with 0x01, it signifies off-chain NFT content. The remaining portion of the NFT content is decoded using the Snake encoding format as an ASCII string. Once the NFT URL is obtained and the NFT identification data is retrieved, the process is complete. Here is an example of a URL using off-chain NFT content metadata parsing::
 `https://s.getgems.io/nft/b/c/62fba50217c3fe3cbaad9e7f/95/meta.json`
 
 Содержимое URL (сверху):
@@ -190,35 +188,40 @@ export function ParseChunkDict(cell: Slice): Buffer {
 }
 ```
 
-### On-chain и Semi-chain
+### On-chain and semi-chain
 
-Если строка байтов метаданных начинается с `0x00`, это указывает на то, что NFT использует либо on-chain, либо semi-chain формат.
+If the metadata byte string starts with `0x00`, it indicates on-chain or semi-chain NFT metadata.
 
-Метаданные для нашего NFT хранятся в словаре, где ключ - это SHA256-хэш имени атрибута, а значение - данные, хранящиеся либо в формате Snake, либо в формате Chunked.
+The metadata is stored in a dictionary where the key is the SHA256 hash of the attribute name, and the value is the data stored using the Snake or Chunked format.
 
-Чтобы определить тип используемого NFT, разработчик должен прочитать известные атрибуты NFT, такие как `uri`, `name`, `image`, `description` и `image_data`. Если поле `uri` присутствует в метаданных, это указывает на semi-chain расположение. В таких случаях off-chain содержимое, указанное в поле uri, должно быть загружено и объединено со значениями словаря.
+To determine the NFT type, a developer must read known NFT attributes such as `uri`, `name`, `image`, `description`, and `image_data`. If the `uri` field is present within the metadata, it indicates a semi-chain layout, requiring the off-chain content specified in uri to be downloaded and merged with the dictionary values.
 
-Пример on-chain NFT: [EQBq5z4N_GeJyBdvNh4tPjMpSkA08p8vWyiAX6LNbr3aLjI0](https://getgems.io/collection/EQAVGhk_3rUA3ypZAZ1SkVGZIaDt7UdvwA4jsSGRKRo-MRDN/EQBq5z4N_GeJyBdvNh4tPjMpSkA08p8vWyiAX6LNbr3aLjI0)
+Examples:
 
-Пример semi-chain NFT: [EQB2NJFK0H5OxJTgyQbej0fy5zuicZAXk2vFZEDrqbQ_n5YW](https://getgems.io/nft/EQB2NJFK0H5OxJTgyQbej0fy5zuicZAXk2vFZEDrqbQ_n5YW)
+On-chain NFT: [EQBq5z4N_GeJyBdvNh4tPjMpSkA08p8vWyiAX6LNbr3aLjI0](https://getgems.io/collection/EQAVGhk_3rUA3ypZAZ1SkVGZIaDt7UdvwA4jsSGRKRo-MRDN/EQBq5z4N_GeJyBdvNh4tPjMpSkA08p8vWyiAX6LNbr3aLjI0)
 
-Пример on-chain Jetton Master: [EQA4pCk0yK-JCwFD4Nl5ZE4pmlg4DkK-1Ou4HAUQ6RObZNMi](https://tonscan.org/jetton/EQA4pCk0yK-JCwFD4Nl5ZE4pmlg4DkK-1Ou4HAUQ6RObZNMi)
+Semi-chain NFT: [EQB2NJFK0H5OxJTgyQbej0fy5zuicZAXk2vFZEDrqbQ_n5YW](https://getgems.io/nft/EQB2NJFK0H5OxJTgyQbej0fy5zuicZAXk2vFZEDrqbQ_n5YW)
 
-Пример разбора on-chain NFT: [stackblitz/ton-onchain-nft-parser](https://stackblitz.com/edit/ton-onchain-nft-parser?file=src%2Fmain.ts)
+On-chain jetton master: [EQA4pCk0yK-JCwFD4Nl5ZE4pmlg4DkK-1Ou4HAUQ6RObZNMi](https://tonscan.org/jetton/EQA4pCk0yK-JCwFD4Nl5ZE4pmlg4DkK-1Ou4HAUQ6RObZNMi)
 
-## Важные замечания по метаданным NFT
+On-chain NFT parser: [stackblitz/ton-onchain-nft-parser](https://stackblitz.com/edit/ton-onchain-nft-parser?file=src%2Fmain.ts)
+
+## Important notes on NFT metadata
 
 1. Для метаданных NFT обязательными являются поля `name`, `description` и `image` (или `image_data`), чтобы отображать NFT.
-2. Для метаданных Jetton обязательными являются поля `name`, `symbol`, `decimals` и `image`(или `image_data`).
-3. Важно помнить, что любой может создать NFT или jetton с любым `name`, `description` или `image`. Чтобы избежать путаницы и потенциального мошенничества, пользователи всегда должны отображать свои NFT так, чтобы они четко отличались от других частей приложения. Вредоносные NFT и jetton могут быть отправлены в кошелек пользователя с вводящей в заблуждение или ложной информацией.
-4. Некоторые элементы могут иметь поле `video`, которое ссылается на видео-содержимое, связанное с NFT или Jetton.
+2. For jetton metadata, the `name`, `symbol`, `decimals` and `image`(or `image_data`) fields are primary.
+3. Anyone can create an NFT or Jetton using any `name`, `description`, or `image`. To prevent scams and confusion, apps should clearly distinguish NFTs from other assets.
+4. Some items may include a `video` field linking to video content associated with the NFT or jetton.
 
 ## Ссылки
 
 - [TON Enhancement Proposal 64 (TEP-64)](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md)
 
-## См. также
+## See also
 
 - [Обработка TON NFT](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
-- [Обработка TON Jetton](/v3/guidelines/dapps/asset-processing/jettons)
-- [Создайте свой первый jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token)
+- [TON jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
+- [Mint your first jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token)
+
+<Feedback />
+
