@@ -1,0 +1,200 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Infinity Sharding Paradigm
+
+## Understanding split merge in TON Blockchain
+
+The TON (The Open Network) blockchain introduces innovative mechanisms for scalability and efficiency. One of the key features is **split-merge**, a fundamental component of its architecture. This article outlines the core principles of split-merge within the Infinite Sharding Paradigm (ISP) framework.
+
+#### ISP and its application
+
+At the heart of TON's design is the ISP, which treats each account as its own **AccountChain**—a unique chain of transactions associated with a single account. These AccountChains are grouped into ShardChain blocks to improve processing efficiency. The state of a ShardChain is derived from the combined states of all the AccountChains it contains. As a result, a ShardChain block can be viewed as a collection of virtual blocks corresponding to individual accounts.
+
+- **ShardState**: approximated as `Hashmap(n, AccountState)`, where `n` is the bit length of the `account_id`.
+- **ShardBlock**: approximated as `Hashmap(n, AccountBlock)`.
+
+Each ShardChain block is uniquely identified by a combination consisting of the `workchain_id` and a binary prefix `s` of the `account_id`.
+
+## 분할 또는 병합을 결정하는 알고리즘
+
+The decision to split or merge shards proceeds as follows:
+
+1. Each block is evaluated using key metrics, such as block size, gas consumption, and logical time (LT) delta.
+2. These metrics are used to determine whether the block is **overloaded** or **underloaded**.
+3. Each shard maintains a history of overload and underload events. Based on recent trends, it sets `want_split` or `want_merge` flags.
+4. Validators make split or merge decisions using these flags by configuration parameters.
+
+### 1. Evaluating the current block state
+
+Each block includes three core parameters that are used to assess load:
+
+1. **Block size estimate:** an estimated value computed during block collation (not the actual block size).
+2. **Gas consumption:** total gas consumed by all transactions in the block, excluding ticktock, mint, and recover transactions.
+3. **LT delta:** the difference between the block's starting and ending logical times.
+
+### 2. 블록 제한과 분류
+
+Limits for these metrics are defined in [configuration parameters 22 and 23](/v3/documentation/network/configs/blockchain-configs#param-22-and-23).
+Each parameter has three thresholds: **underload**, **soft**, and **hard**:
+
+#### Threshold table
+
+| **Parameter**     | **Underload / Soft / Hard (BaseChain)** | **Underload / Soft / Hard (MasterChain)**  |
+| ----------------- | --------------------------------------- | ------------------------------------------ |
+| Block size        | 128 / 256 / 512 KiB                     | N/A                                        |
+| Gas consumption   | 2M / 10M / 20M                          | 200K / 1M / 2.5M                           |
+| LT delta          | 1000 / 5000 / 10000                     | Same as BaseChain                          |
+
+A **medium limit** is also defined as `(soft + hard) / 2`.
+
+Each parameter is classified as follows:
+
+- `0` - 부족부하 제한에 도달하지 않음.
+- `1` - 부족부하 제한을 초과함.
+- `2` - 소프트 제한을 초과함.
+- `3` - 중간 제한을 초과함.
+- `4` - 하드 제한을 초과함.
+
+The block classification is the maximum of the three individual classifications (`Classification of size`, `Classification of gas`, `Classification of lt delta`).
+
+Example: size = 2, gas = 3, lt = 1 → block classification = 3.
+
+Based on classification:
+
+- 0 (Underload): merge candidate.
+- 2 (Soft): internal messages are no longer processed; candidate for split.
+- 3 (Medium): external messages are skipped.
+
+### 3. Overload and underload determination
+
+Additional heuristics are applied beyond classification based on the message queue status:
+
+- A block is **overloaded** if:
+  - Classification ≥ `2` (soft) and message queue size ≤ `SPLIT_MAX_QUEUE_SIZE = 100000`
+  - Dispatch queue limit is reached, and message queue size ≤ `SPLIT_MAX_QUEUE_SIZE = 100000`
+  - Message queue size is  ≥ `FORCE_SPLIT_QUEUE_SIZE = 4096`, and ≤ `SPLIT_MAX_QUEUE_SIZE = 100000`
+- A block is **underloaded** if:
+  - Classification = `0` (underload) and message queue size ≤ `MERGE_MAX_QUEUE_SIZE = 2047`
+
+### 4. 분할 또는 병합 결정
+
+Each block maintains a history of underload and overload conditions — represented as a 64-bit mask tracking the status of the last 64 blocks. This mask is used to determine whether a shard should split or merge.
+
+The underload and overload histories are evaluated using a weighted formula:
+
+`one_bits(mask & 0xffff) * 3 + one_bits(mask & 0xffff0000) * 2 + one_bits(mask & 0xffff00000000) - (3 + 2 + 1) * 16 * 2 / 3`
+
+Here, `one_bits` counts the number of `1`-bits in the mask. Lower-order bits correspond to the most recent blocks.
+
+The respective `want_merge` or `want_split` flag is set if the computed weight is non-negative.
+
+### 5. 최종 결정
+
+검증자들은 `want_split`과 `want_merge` 플래그 및 [워크체인 구성 매개변수](/v3/documentation/network/configs/blockchain-configs#param-12)를 사용하여 샤드를 분할하거나 병합할지 결정합니다.
+
+Validators determine whether to split or merge shards based on the `want_split` and `want_merge` flags, along with [WorkChain configuration parameters](/v3/documentation/network/configs/blockchain-configs#param-12):
+
+- If a shard's depth is less than `min_split`, it will split.
+- If a shard's depth exceeds `max_split`, it will merge.
+- Shards at `min_split` depth cannot merge; shards at `max_split` depth cannot split.
+- If the block has the `want_split` flag, the shard will split.
+- The shards will merge if both the block and its sibling have the `want_merge` flag.
+
+Shards perform the split or merge after a delay of `split_merge_delay = 100` seconds from the decision.
+
+## Messages and instant hypercube routing (instant hypercube routing)
+
+In the infinite sharding paradigm, each account or smart contract is treated as if it were a part of its own ShardChain.
+Interactions between accounts occur exclusively through message passing, following the **actor model**, where accounts act as actors.
+An efficient messaging system between ShardChains is essential for the operation of the TON blockchain. A key feature supporting this is **Instant Hypercube Routing**, which enables near-instantaneous message delivery and processing across ShardChains. Messages created in one ShardChain block are processed in the next block of the target ShardChain — regardless of how many messages are in the system.
+
+### Current Status of IHR
+
+:::info Important Clarification
+
+- **IHR is not implemented** and is not yet fully specified
+- **IHR is only relevant** when there are more than 16 shards and not all shards are neighbors to each other
+- **Current network settings forbid splitting deeper than 16 shards**, so IHR is not relevant in any practical sense today
+
+Currently, TON uses standard **Hypercube Routing (HR)** for message delivery between shards, which routes messages through intermediate shards when necessary. IHR would provide a more direct routing mechanism, but only becomes necessary in much larger shard configurations than are currently possible.
+:::
+
+### Message Routing Mechanisms
+
+TON blockchain supports two conceptual message routing mechanisms:
+
+1. **Hypercube Routing (HR)** - Currently implemented mechanism that routes messages between shards through intermediate hops when necessary
+2. **Instant Hypercube Routing (IHR)** - Alternative mechanism (not implemented) that would allow direct message delivery without intermediate hops
+
+The choice between these mechanisms would depend on the network topology and shard configuration, but given current limitations on shard depth, only HR is relevant.
+
+## Sharding example
+
+![](/img/docs/blockchain-fundamentals/shardchains.png)
+
+In the diagram above:
+
+- The shards of a WorkChain are shown over time and separated by dashed lines.
+- Blocks 222, 223, and 224 correspond to MasterChain block `seqno = 102`. Block 222 belongs to one shard, while blocks 223 and 224 belong to another.
+- If a split or merge event occurs, the affected shards pause operations until the next MasterChain block is produced.
+
+In summary, **split-merge** in the TON blockchain is a sophisticated yet efficient mechanism that enhances scalability and inter-shard communication. It exemplifies TON's approach to solving core blockchain challenges by prioritizing efficiency and global consistency.
+
+## Sharding details
+
+#### Split and non-split parts of shardchain
+
+A ShardChain block and its corresponding state are divided into two components:
+
+1. **Split part:** conforms to the ISP (Independent State Part) form and contains account-specific data.
+2. **Non-split part:** contains data related to interactions with other blocks and external systems.
+
+#### Interaction with other blocks
+
+The non-split parts are vital in maintaining global consistency across the network. They address both internal and external local consistency conditions and are responsible for:
+
+- Forwarding messages between ShardChains
+- Facilitating cross-shard transactions
+- Guaranteeing delivery and verifying a block's initial state against its predecessor
+
+#### Inbound and outbound messages
+
+Key components of the non-split part include:
+
+- **InMsgDescr**: describes all messages imported into the block. These messages are either:
+  - processed by a block or transit transaction, i.e., temporarily forwarded as per `Hypercube Routing`.
+- **OutMsgDescr**: describes all messages exported or generated by the block. These may be:
+  - newly generated messages from a transaction in the block or
+  - transit messages are forwarded to a destination outside the current ShardChain forwarded from `InMsgDescr`.
+
+#### Block header and validator signatures
+
+The block header, part of the non-split section, includes metadata such as:
+
+- `workchain_id`
+- Binary prefix of `account_ids`
+- Block sequence number. The smallest non-negative integer greater than its predecessors' sequence numbers.
+- Logical time and UNIX time of generation
+- Hashes of:
+  - The block's predecessor(s) (two, in the case of a merge)
+  - The block's initial and final states
+  - The latest known MasterChain block at the time of block generation
+
+After the block is created, validator signatures are appended to produce a signed block.
+
+#### Outbound message queue
+
+The `OutMsgQueue` is another crucial non-split component of the ShardChain state. It holds undelivered outbound messages, as recorded in `OutMsgDescr`, from either the latest block or one of its predecessors.
+Each outgoing message is initially placed in `OutMsgQueue`, which remains until it is successfully delivered to its target.
+
+#### Shard split and merge mechanics
+
+Shard configurations can change over time due to split or merge events in dynamic sharding. These changes are coordinated via the MasterChain.
+When a split or merge is triggered, the affected shards pause and wait for the next MasterChain block before resuming activity.
+
+## See also
+
+- [Block layout](/v3/documentation/data-formats/tlb/block-layout)
+- [백서](/v3/documentation/whitepapers/overview)
+
+<Feedback />
