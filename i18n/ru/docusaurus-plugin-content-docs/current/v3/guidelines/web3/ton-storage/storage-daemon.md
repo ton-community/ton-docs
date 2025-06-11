@@ -1,56 +1,67 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Демон хранения
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+A **storage daemon** is a program used to download and share files in the TON network. The `storage-daemon-cli` console program manages a running storage daemon.
 
-*Демон хранения (storage daemon) — это программа, используемая для загрузки и обмена файлами в сети TON. Другая программа `storage-daemon-cli` используется для управления уже запущенным демоном хранения из консоли.*
-
-Текущую версию демона хранения можно найти в репозитории в ветви [Testnet](https://github.com/ton-blockchain/ton/tree/testnet).
+The current version of the storage daemon is available in the [Testnet](https://github.com/ton-blockchain/ton/tree/testnet) branch.
 
 ## Требования к аппаратному обеспечению
 
-- не менее 1 ГГц частоты и 2 ядер у процессора
-- не менее 2 ГБ оперативной памяти
-- не менее 2 ГБ SSD (без учета места для торрентов)
-- пропускная способность сети 10 Мб/с со статическим IP
+- At least 1GHz dual-core CPU
+- At least 2 GB RAM
+- At least 2 GB SSD, excluding space for torrents
+- 10 Mb/s network bandwidth with a static IP
 
-## Бинарные файлы
+## Binaries
 
-Вы можете скачать бинарные файлы `storage-daemon` и `storage-daemon-cli` для Linux/Windows/MacOS из [раздела сборок](https://github.com/ton-blockchain/ton/releases/latest) в GitHub-репозитории.
+You can download `storage-daemon` and `storage-daemon-cli` for Linux, Windows, and macOS from [TON auto builds](https://github.com/ton-blockchain/ton/releases/latest).
 
 ## Компиляция исходного кода
 
-Вы можете самостоятельно скомпилировать `storage-daemon` и `storage-damon-cli` из файлов с исходным кодом, используя [инструкцию](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#storage-daemon).
+You can compile `storage-daemon` and `storage-daemon-cli` from the source using this [instruction](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#storage-daemon).
 
 ## Ключевые понятия
 
-- *Пакет файлов* («bag of files») или просто *Пакет* — коллекция файлов, распространяемых через хранилище TON
-- Сетевая часть TON Storage основана на технологии, схожей с торрентами, поэтому термины *торрент*, *пакет файлов* и *пакет* будут использоваться как взаимозаменяемые. Однако важно отметить некоторые различия: TON Storage передает данные по протоколу [ADNL](/v3/documentation/network/protocols/adnl/overview) по протоколу [RLDP](/v3/documentation/network/protocols/rldp), каждый *пакет* распространяется через свой собственный сетевой оверлей, меркловая структура может существовать в двух вариантах — с большими чанками для эффективного скачивания и маленькими для эффективного доказательства права собственности, а для поиска пиров используется сеть [TON DHT](/v3/documentation/network/protocols/dht/ton-dht).
-- *Пакет файлов* состоит из *информации о торренте* и блока данных.
-- Блок данных начинается с *заголовка торрента* — структуры, содержащей список файлов с их именами и размерами. Далее в блоке данных следуют сами файлы.
-- Блок данных делится на так называемые «чанки» (по умолчанию 128 КБ), и на основе SHA256-хэшей этих чанков строится *дерево Меркла* (из TVM-ячеек). Это позволяет создавать и проверять *доказательства Меркла* для отдельных фрагментов, а также эффективно воссоздавать *пакет*, обмениваясь только доказательством измененного чанка.
-- *Информация о торренте* содержит *Меркловый корень* следующих данных:
-    - Размер чанка (блок данных)
-    - список размеров чанков
-    - Хэш *дерева Меркла*
-    - Описание – любой текст, указанный создателем торрента
-- *Информация о торренте* сериализуется в TVM-ячейку. Хэш этой ячейки называется *BagID*, и он уникально идентифицирует *Bag*.
-- *Bag meta* — это файл, содержащий *информацию о торренте* и *заголовок торрента*.\* Это аналог файлов с расширением `.torrent`.
+- **Bag of files** or **bag** – a collection of files distributed via TON Storage.
+
+- TON Storage uses torrent-like technology, so terms like _Torrent_, _bag of files_, and _bag_ are used interchangeably. However, there are some important differences:
+  - Data is transferred over [ADNL](/v3/documentation/network/protocols/adnl/overview) using the [RLDP](/v3/documentation/network/protocols/rldp) protocol.
+  - Each bag is distributed via its overlay network.
+  - The Merkle structure can exist in two formats: one with large chunks for efficient downloading and one with smaller chunks for efficient proof of ownership.
+  - The [TON DHT](/v3/documentation/network/protocols/dht/ton-dht) network is used to discover peers.
+
+- A **bag of files** includes:
+  - Torrent info.
+  - Data block - starts with a torrent header including file names and sizes, followed by the files themselves.
+
+The data block is divided into chunks, with a default size of 128 KB. A merkle tree built from TVM cells is constructed on the SHA256 hashes of these chunks. This structure enables the creation and verification of _merkle proofs_ for individual chunks and allows efficient reconstruction of the _bag_ by exchanging only the proof of the changed chunk.
+
+- **Torrent info** contains the merkle root of the following:
+  - The chunk size (data block)
+  - The list of chunk sizes
+  - Hash-based merkle tree
+  - Description, which is any text specified by the creator of the torrent
+
+- Torrent info is serialized into a TVM cell. The hash of this cell is called the **bagID**, and it uniquely identifies the **bag**.
+
+- The **bag meta** is a file that includes the _torrent info_ and _header_. This file serves the same purpose as a `.torrent` file.
 
 ## Запуск storage-daemon и storage-daemon-cli
 
-### Пример команды для запуска storage-daemon:
+### Starting storage-daemon:
+
+**Example**
 
 `storage-daemon -v 3 -C global.config.json -I <ip>:3333 -p 5555 -D storage-db`
 
 - `-v` - уровень многословия (INFO)
-- `-C` - глобальная конфигурация сети ([скачать глобальную конфигурацию](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config))
-- `-I` - IP-адрес и порт для ADNL
-- `-p` - TCP-порт для консольного интерфейса
-- `-D` - каталог для базы данных демона хранения
+- `-C` - global network config ([download](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config))
+- `-I` - IP address and port for ADNL
+- `-p` - TCP port for the console interface
+- `-D` - path to the storage daemon’s database
 
-### Управление storage-daemon-cli
+### Starting storage-daemon-cli
 
 Его начинают так:
 
@@ -58,67 +69,74 @@
 storage-daemon-cli -I 127.0.0.1:5555 -k storage-db/cli-keys/client -p storage-db/cli-keys/server.pub
 ```
 
-- `-I` - это IP-адрес и порт демона (порт тот же, что указан в параметре `-p` выше)
-- `-k` и `-p` - это приватный ключ клиента и публичный ключ сервера (аналогично `validator-engine-console`). Эти ключи генерируются при первом запуске демона и помещаются в папку `<db>/cli-keys/`.
+- `-I` - IP address and port of the daemon (same as `-p` above)
+- `-k` and `-p` - client private and server public keys (similar to `validator-engine-console`). These are auto-generated at first daemon startup and stored in `<db>/cli-keys/`.
 
 ### Список команд
 
-Список команд `storage-daemon-cli` можно получить с помощью команды `help`.
+You can view the list of `storage-daemon-cli` commands using the `help` command.
 
-У команд бывают позиционные параметры и флаги. Параметры с пробелами должны быть заключены в кавычки (`'` или `"`), также пробелы могут быть экранированы. Возможны и другие варианты экранирования, например:
+Commands include _positional parameters_ and _flags_.
+
+- Parameters that contain spaces must be enclosed in quotes, using either single `'` or double `"` quotation marks.
+- Alternatively, spaces can be escaped.
+- Other common escape sequences are also supported.
+
+**Example**
 
 ```
 create filename\ with\ spaces.txt -d "Description\nSecond line of \"description\"\nBackslash: \\"
 ```
 
-Все параметры после флага `--` являются позиционными. Его можно использовать для указания имен файлов, начинающихся с тире:
+All parameters following the `--` flag are treated as positional parameters. This allows specifying filenames that begin with a dash:
 
 ```
 create -d "Description" -- -filename.txt
 ```
 
-`storage-daemon-cli` можно запустить в неинтерактивном режиме, передав ему команды для выполнения:
+You can run `storage-daemon-cli` in non-interactive mode by passing it commands to execute:
 
 ```
 storage-daemon-cli ... -c "add-by-meta m" -c "list --hashes"
 ```
 
-## Добавление пакета файлов
+## Adding a bag of files
 
-Чтобы загрузить *пакет файлов*, Вам необходимо знать его `BagID` или иметь мета-файл. Следующие команды могут быть использованы для добавления *пакета* для загрузки:
+To download a **bag of files**, you need its hash `bagID` or a metafile. Use the following commands to add a _bag_ for download:
 
 ```
 add-by-hash <hash> -d directory
 add-by-meta <meta-file> -d directory
 ```
 
-*Пакет* будет загружен в указанную директорию. Вы можете опустить этот параметр, тогда пакет будет сохранен в директории демона хранения.
+The bag will be downloaded to the specified directory. It will be saved to the default storage daemon directory if not specified.
 
 :::info
-Хэш указывается в шестнадцатеричной форме (длина — 64 символа).
+The hash must be provided in hexadecimal format with a length of 64 characters.
 :::
 
-При добавлении *пакета* с помощью мета-файла информация о *пакете* будет доступна сразу: размер, описание, список файлов. При добавлении по хэшу вам придется подождать, пока эта информация будет загружена.
+When adding a bag via a metafile, information such as size, description, and file list becomes available immediately. When adding by hash, this information may take time to load.
 
-## Управление добавленными пакетами
+## Managing added bags
 
-- Команда `list` выводит список *пакетов*.
-- `list --hashes` выводит список с полными хэшами.
+- The `list` command shows all added bags.
+- The `list --hashes` command shows full hashes.
 
-Во всех последующих командах `<BagID>` — это либо хэш (шестнадцатеричный), либо порядковый номер *пакета* в рамках сессии (номер, который можно увидеть в списке, вызываемом командой `list`). Порядковые номера *пакетами* не сохраняются между перезапусками storage-daemon-cli и недоступны в неинтерактивном режиме.
+In the following commands, `<BagID>` can be either a bag's hexadecimal hash or its ordinal number in the current session, which is visible in the list output using `list` command. Note that ordinal numbers of bags are not persistent and are unavailable in non-interactive mode.
 
 ### Методы
 
-- `get <BagID>` — выводит подробную информацию о *пакете*: описание, размер, скорость загрузки, список файлов.
-- `get-peers <BagID>` — выводит список пиров.
-- `download-pause <BagID>`, `download-resume <BagID>` — приостанавливает или возобновляет загрузку.
-- `upload-pause <BagID>`, `upload-resume <BagID>` — приостанавливает или возобновляет загрузку.
-- `remove <BagID>` — удаляет *пакет*. `remove --remove-files` также удаляет все файлы из *пакета*. Обратите внимание, что если *пакет* сохранен во внутренней директории демона хранения, файлы будут удалены в любом случае.
+- `get <BagID>` - shows full information about the Bag: description, size, download speed, and file list.
+- `get-peers <BagID>` - lists connected peers.
+- `download-pause <BagID>`, `download-resume <BagID>` - pauses or resumes download.
+- `upload-pause <BagID>`, `upload-resume <BagID>` - pauses or resumes upload.
+- `remove <BagID>` - removes the bag.
+- `remove --remove-files` also removes the bag and its files. Note that if the bag is saved in the internal storage daemon directory, the files will be deleted in any case.
 
-## Частичная загрузка, Приоритеты
+## Partial download, priorities
 
 :::info
-При добавлении *пакета* вы можете указать, какие файлы хотите загрузить из него:
+When adding a bag, you can specify which files to download:
 :::
 
 ```
@@ -126,38 +144,43 @@ add-by-hash <hash> -d dir --partial file1 file2 file3
 add-by-meta <meta-file> -d dir --partial file1 file2 file3
 ```
 
-### Приоритеты
+### Priorities
 
-Каждый файл в *пакете файлов* имеет приоритет — число от 0 до 255. Приоритет 0 означает, что файл не будет загружен. Флаг `--partial` устанавливает указанным файлам приоритет 1, остальным — 0.
+Each file in a bag has a priority from 0 to 255. A priority of 0 means the file will not be downloaded. The `--partial` flag sets selected files to priority 1 and all others to 0.
 
-Вы можете изменить приоритеты уже добавленному *пакету* с помощью следующих команд:
+To update priorities after adding a bag:
 
-- `priority-all <BagID> <priority>` — для всех файлов.
-- `priority-idx <BagID> <idx> <priority>` — для одного файла по номеру (увидеть его можно с помощью команды `get`).
-- `priority-name <BagID> <name> <priority>` — для одного файла по имени.
-    Приоритеты могут быть установлены еще до загрузки списка файлов.
+- `priority-all <BagID> <priority>` - sets priority for all files.
+- `priority-idx <BagID> <idx> <priority>` - sets priority by file index (shown by the `get` command).
+- `priority-name <BagID> <name> <priority>` - sets priority by file name.
 
-## Создание пакета файлов
+You can set priorities even before the file list is fully available.
 
-Чтобы создать *пакет* и начать его распространение, воспользуйтесь командой `create`:
+## Creating a bag of files
+
+To create and start sharing a bag, use the `create` command:
 
 ```
 create <path>
 ```
 
-`<path>` может указывать как на отдельный файл, так и на директорию. При создании *пакета* вы можете указать описание:
+`<path>` can be a file or a directory. Add a description if needed:
 
 ```
 create <path> -d "Bag of Files description"
 ```
 
-После того, как *пакет* будет создан, в консоли появится подробная информация о нем (включая хэш — `BagID`, по которому *пакет* будет идентифицироваться), и демон начнет раздачу торрента. Дополнительные опции для команды `create`:
+After creation, detailed information, including the hash `BagID`, is shown in the console, and the daemon begins sharing the torrent.
+Additional options for the `create` command:
 
-- `--no-upload` — демон не будет распространять файлы среди пиров. Загрузка может быть запущена с помощью `upload-resume`.
-- `--copy` — файлы будут скопированы во внутреннюю директорию демона хранения.
+- `--no-upload` - daemon will not distribute files to peers. Upload can be started using the `upload-resume` command.
+- `--copy` - files will be copied to the internal directory of the storage daemon.
 
-Чтобы скачать *пакет*, другим пользователям достаточно знать его хэш. Вы также можете сохранить мета-файл торрента:
+To download the bag, other users need to know its hash. You can also save the torrent metafile:
 
 ```
 get-meta <BagID> <meta-file>
 ```
+
+<Feedback />
+
