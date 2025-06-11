@@ -1,60 +1,66 @@
-# TVM 与 EVM
+import Feedback from '@site/src/components/Feedback';
 
-以太坊虚拟机（EVM）和 TON 虚拟机（TVM）都是为运行智能合约代码而开发的基于栈的虚拟机。虽然它们有共同的特点，但也有明显的区别。
+# TVM vs EVM
 
-## 数据介绍
+## Introduction
 
-### 以太坊虚拟机 (EVM)
+**Ethereum Virtual Machine (EVM)** and **TON Virtual Machine (TVM)** are stack-based virtual machines developed for running smart contract code. Although they have standard features, there are notable distinctions between them.
 
-1. 基本数据单位
+## Differences of TVM and EVM
 
-- EVM 主要在 256 位整数上运行，反映了其围绕以太坊加密功能（如 Keccak-256 散列和椭圆曲线操作）的设计。
-- 数据类型主要限于整数和字节，有时也包括这些类型的数组，但所有数据类型都必须符合 256 位处理规则。
+### Data presentation
 
-2. 状态存储
+#### EVM
 
-- 以太坊区块链的整个状态是 256 位地址到 256 位值的映射。这种映射保存在一种名为默克尔帕特里夏字典树（Merkle Patricia Trie，MPT）的数据结构中。
-- MPT 使以太坊能够通过加密验证有效地证明区块链状态的一致性和完整性，这对于像以太坊这样的去中心化系统至关重要。
+1. Fundamental data units
 
-3. 数据结构限制
+- The EVM operates primarily on 256-bit integers, reflecting its design around Ethereum's cryptographic functions, such as Keccak-256 hashing and elliptic curve operations.
+- Data types are limited mainly to integers, bytes, and occasionally arrays of these types, but all must conform to 256-bit processing rules.
 
-- 简化为 256 位字限制意味着，EVM 本身并不是为直接处理复杂或自定义数据结构而设计的。
-- 开发人员往往需要在智能合约中执行额外的逻辑，以模拟更复杂的数据结构，这可能会导致 gas 成本和复杂性增加。
+2. State storage
 
-### TON 虚拟机（TVM）
+- The entire state of the Ethereum blockchain is a mapping of 256-bit addresses to 256-bit values. A data structure known as the **Merkle Patricia Trie (MPT)** maintains this mapping.
+- The MPT enables Ethereum to efficiently prove the consistency and integrity of the blockchain state through cryptographic verification, which is vital for a decentralized system like Ethereum.
 
-1. 基于 Cell 的架构
+3. Data structure limitations
 
-- TVM 使用独特的 "bag of cells" 模型来表示数据。每个 cell 最多可包含 128 个数据字节，最多可有 4 个指向其他 cell 的引用。
-- 这种结构允许 TVM 在其存储模型中直接支持任意代数数据类型和更复杂的结构，如树或有向无环图 (DAG)。
+- The simplification to 256-bit word constraints means that the EVM is not inherently designed to handle complex or custom data structures directly.
+    Developers often need to implement additional logic within smart contracts to simulate more complex data structures, which can increase gas costs and complexity.
 
-2. 灵活性和效率
+#### TVM
 
-- cell 模型具有极大的灵活性，使 TVM 能够比 EVM 更自然、更高效地处理各种数据结构。
-- 例如，通过 cell 引用创建链接结构的能力允许动态和潜在的无限数据结构，这对于某些类型的应用（如分散式社交网络或复杂的分散式金融（DeFi）协议）至关重要。
+1. Cell-based architecture
 
-3. 复杂数据处理
+- TVM uses a unique [bag of cells](/v3/documentation/data-formats/tlb/cell-boc/) model to represent data. Each cell can contain up to 128 data bytes and have up to 4 references to other cells.
+- This structure allows the TVM to natively support arbitrary algebraic data types and more complex constructions such as trees or directed acyclic graphs (DAGs) directly within its storage model.
 
-- 虚拟机架构中固有的管理复杂数据类型的能力减少了智能合约中变通实现的需要，从而有可能降低执行成本并提高执行速度。
-- TVM 的设计对于需要复杂状态管理或互联数据结构的应用尤其有利，为开发人员构建复杂、可扩展的去中心化应用提供了坚实的基础。
+2. Flexibility and efficiency
 
-## 堆栈机
+- The cell model provides significant flexibility, enabling the TVM to handle various data structures more naturally and efficiently than the EVM.
+- For example, creating linked structures through cell references allows for dynamic and potentially infinite data structures, which is crucial for specific applications like decentralized social networks or complex decentralized finance (DeFi) protocols.
 
-### 以太坊虚拟机 (EVM)
+3. Complex data handling
 
-- EVM 以传统的堆栈式机器方式运行，使用后进先出（LIFO）堆栈管理计算。
-- 它通过推入和弹出 256 位整数来处理操作，这是堆栈中所有元素的标准大小。
+- The ability to manage complex data types inherently within the VM architecture reduces the need for workaround implementations in smart contracts, potentially lowering the execution cost and increasing execution speed.
+    TVM's design is particularly advantageous for applications requiring complex state management or interlinked data structures. It provides a robust foundation for developers to build sophisticated and scalable decentralized applications.
 
-### TON 虚拟机（TVM）
+### Stack machine
 
-- TVM 也能像基于堆栈的机器一样运行，但有一个关键区别：它同时支持 257 位整数和 cell 引用。
-- 这样，TVM 就能将这两种不同类型的数据推入/推出堆栈，提高直接数据操作的灵活性。
+#### EVM
 
-### 堆栈操作示例
+- The EVM operates as a traditional stack-based machine, using a last-in, first-out (LIFO) stack to manage computation.
+- It processes operations by pushing and popping 256-bit integers, the standard size for all elements in the stack.
 
-假设我们想在 EVM 中将两个数字（2 和 2）相加。这个过程包括将数字推入堆栈，然后调用 "ADD "指令。结果（4）将留在堆栈顶部。
+#### TVM
 
-我们可以在 TVM 中以同样的方式进行这种操作。不过，让我们看看另一个例子，其中的数据结构更为复杂，例如哈希表和 cell 引用。假设我们有一个存储键值对的哈希表，其中键是整数，值是整数或 cell 引用。假设我们的哈希表包含以下条目：
+- TVM also functions as a stack-based machine but with a key distinction: it supports both 257-bit integers and references to cells.
+- This allows TVM to push and pop these two distinct types of data onto/from the stack, providing enhanced flexibility in direct data manipulation.
+
+#### Example of stack operations
+
+Suppose we want to add two numbers, `2` and `2`, in EVM. The process would involve pushing the numbers onto the stack and calling the `ADD` instruction. The result, `4`, would be left on top of the stack.
+
+We can do this operation in the same way in TVM. But let’s look at another example with more complex data structures, such as hashmaps and cell references. Suppose we have a hashmap that stores key-value pairs, where keys are integers and values are either integers or cell references. Let’s say our hashmap contains the following entries:
 
 ```js
 {
@@ -63,16 +69,16 @@
 }
 ```
 
-我们希望将键 1 和键 2 的相关值相加，然后将结果存储在键 3 中。让我们来看看堆栈操作：
+We want to add the values associated with keys `1` and `2` and store the result with key `3`. Let’s look at stack operations:
 
-1. 将键 1 推入堆栈： `stack` = (1)
-2. 为键 1 调用 `DICTGET`（检索与堆栈顶部键相关的值）：检索值 10。`stack` = (10)
-3. 将键 2 推入堆栈： `stack` = (10, 2)
-4. 为键 2 调用 `DICTGET`: 读取 Cell_A 的引用。`stack` = (10, Cell_A)
-5. 从 cell _A 中载入数值：执行一条指令，从 cell 引用中载入数值。`stack` = (10, 10)
-6. 调用 `ADD` 指令：执行 `ADD` 指令时，TVM 将从堆栈中取出前两个元素相加，并将结果推回堆栈。在本例中，前两个元素分别是 10 和 10。相加后，堆栈将包含结果： `stack` = (20)
-7. 将键 3 推入堆栈： `stack` = (20, 3)
-8. 调用 `DICTSET`：存储 20，键值为 3。更新哈希表：
+1. Push key `1` onto the stack: `stack = (1)`
+2. Call `DICTGET` for key `1` (retrieves the value associated with the key at the top of the stack): Retrieves value 10. `stack = (10)`
+3. Push key `2` onto the stack: `stack = (10, 2)`
+4. Call `DICTGET` for key `2`: Retrieves reference to Cell_A. `stack = (10, Cell_A)`
+5. Load value from `Cell_A`: TVM executes an instruction to load the value from the cell reference. `stack = (10, 10)`
+6. Call the `ADD` instruction: When the `ADD` instruction is executed, the TVM will pop the top two elements from the stack, add them together, and push the result back onto the stack. In this case, the top two elements are `10` and `10`. After the addition, the stack will contain the result: `stack = (20)`
+7. Push key `3` onto the stack: `stack = (20, 3)`
+8. Call `DICTSET`: Stores `20` with key `3`. Updated hashmap:
 
 ```js
 {
@@ -82,51 +88,59 @@
 }
 ```
 
-要在 EVM 中实现同样的功能，我们需要定义一个存储键值对的映射，以及一个直接处理映射中存储的 256 位整数的函数。
-必须指出的是，EVM 利用 Solidity 支持复杂的数据结构，但这些结构是建立在 EVM 较简单的数据模型之上的，与 TVM 更富表现力的数据模型有着本质区别
+To do the same in EVM, we need to define a mapping that stores key-value pairs and the function where we work directly with 256-bit integers stored in the mapping.
+It’s essential to note that the EVM supports complex data structures by leveraging Solidity, but these structures are built on top of the EVM’s simpler data model, which is fundamentally different from the TVM's more expressive data model.
 
-## 算术运算
+### Arithmetic operations
 
-### 以太坊虚拟机 (EVM)
+#### EVM
 
-- 以太坊虚拟机（EVM）使用 256 位整数处理算术运算，这意味着加法、减法、乘法和除法等运算都是根据这种数据大小定制的。
+- The **Ethereum Virtual Machine (EVM)** uses 256-bit integers to handle arithmetic operations such as addition, subtraction, multiplication, and division, tailoring them to this data size.
 
-### TON 虚拟机（TVM）
+#### TVM
 
-- TON 虚拟机（TVM）支持更多样化的算术运算，包括 64 位、128 位和 256 位整数（无符号和有符号）以及模运算。TVM 进一步增强了其算术功能，如乘法-移位和移位-除法等操作，这些操作对实现定点算术特别有用。这种多样性允许开发人员根据其智能合约的具体要求选择最有效的算术运算，并根据数据大小和类型提供潜在的优化。
+- The **TON Virtual Machine (TVM)** supports more diverse arithmetic operations, including 64-bit, 128-bit, and 256-bit integers, both unsigned and signed and modulo operations. TVM further enhances its arithmetic capabilities with multiplication-then-shift and shift-then-divide, which are particularly useful for implementing fixed-point arithmetic. This variety allows developers to select the most efficient arithmetic operations based on the specific requirements of their smart contracts, offering potential optimizations based on data size and type.
 
-## 溢出检查
+### Overflow checks
 
-### 以太坊虚拟机 (EVM)
+#### EVM
 
-- 在 EVM 中，虚拟机本身并不执行溢出检查。随着 Solidity 0.8.0 的推出，自动溢出和下溢检查被集成到语言中，以增强安全性。这些检查有助于防止与算术运算相关的常见漏洞，但需要较新版本的 Solidity，因为早期版本需要手动执行这些保护措施。
+- In the EVM, the virtual machine does not perform overflow checks inherently. With the introduction of Solidity 0.8.0, automatic overflow and underflow checks were integrated into the language to enhance security. These checks help prevent common vulnerabilities related to arithmetic operations but require newer versions of Solidity, as earlier versions necessitate manual implementation of these safeguards.
 
-### TON 虚拟机（TVM）
+#### TVM
 
-- 相比之下，TVM 会自动对所有算术运算执行溢出检查，这一功能直接内置在虚拟机中。这种设计选择从本质上降低了错误风险，提高了代码的整体可靠性和安全性，从而简化了智能合约的开发。
+- In contrast, TVM automatically performs overflow checks on all arithmetic operations, a feature built directly into the virtual machine. This design choice simplifies the development of smart contracts by inherently reducing the risk of errors and enhancing the overall reliability and security of the code.
 
-## 密码学和散列函数
+### Cryptography and hash functions
 
-### 以太坊虚拟机 (EVM)
+#### EVM
 
-- EVM 支持以太坊特定的加密方案，如 secp256k1 椭圆曲线和 keccak256 哈希函数。 另外，EVM 没有内置的 Merkle 证明支持，这些证明是用于验证某个元素在集合中的成员身份的加密证明。
+EVM supports Ethereum-specific cryptography schemes, such as the secp256k1 elliptic curve and the keccak256 hash function. However, it does not have built-in support for Merkle proofs, which are cryptographic proofs used to verify the membership of an element in a set.
 
-### TON 虚拟机（TVM）
+#### TVM
 
-- TVM 为预定义曲线（如 Curve25519）提供 256 位椭圆曲线加密（ECC）支持。它还支持某些椭圆曲线的 Weil 配对，这对快速实现 zk-SNARK（零知识证明）非常有用。它还支持 sha256 等常用哈希函数，为加密操作提供了更多选择。此外，TVM 还能与 Merkle 证明一起使用，提供额外的加密功能，这对某些用例（如验证区块中是否包含交易）很有帮助。
+- TVM supports 256-bit Elliptic Curve Cryptography (ECC) for predefined curves, like Curve25519. It also supports Weil pairings on some elliptic curves, which are helpful for the fast implementation of zk-SNARKs (zero-knowledge proofs). Popular hash functions like sha256 are also supported, providing more cryptographic operation options. In addition, TVM can work with Merkle proofs, providing additional cryptographic features that can be beneficial for specific use cases, such as verifying the inclusion of a transaction in a block.
 
-## 高级语言
+### High-level languages
 
-### 以太坊虚拟机 (EVM)
+#### EVM
 
-- EVM 主要使用 Solidity 作为其高级语言，这是一种面向对象的静态类型语言，类似于 JavaScript 和 C++。此外，还有其他用于编写以太坊智能合约的语言，如 Vyper、Yul 等。
+EVM primarily uses Solidity as its high-level language, an object-oriented, statically typed language similar to JavaScript. Other languages, such as Vyper and Yul, are also used for writing Ethereum smart contracts.
 
-### TON 虚拟机（TVM）
+#### TVM
 
-- TVM 使用 FunC 作为高级语言，用于编写 TON 智能合约。它是一种程序语言，具有静态类型并支持代数数据类型。FunC 可编译为 Fift，而 Fift 又可编译为 TVM 字节码。
+- TVM uses FunC as a high-level language for writing TON smart contracts. It is a procedural language with static types and support for algebraic data types. FunC compiles to Fift, which in turn compiles to TVM bytecode.
 
-## 结语
+## Conclusion
 
-总之，虽然 EVM 和 TVM 都是基于堆栈的机器，旨在执行智能合约，但 TVM 提供了更大的灵活性，支持更广泛的数据类型和结构，内置溢出检查和高级加密功能。
+In summary, while EVM and TVM are stack-based machines designed to execute smart contracts, TVM offers more flexibility, support for a broader range of data types and structures, built-in overflow checks, and advanced cryptographic features.
 
-TVM 支持分片感知智能合约，其独特的数据表示方法使其更适合某些用例和可扩展的区块链网络。
+TVM’s support for sharding-aware smart contracts and its unique data representation approach make it better suited for specific use cases and scalable blockchain networks.
+
+## See also
+
+- [Solidity vs FunC](/v3/concepts/dive-into-ton/go-from-ethereum/solidity-vs-func/)
+- [TVM overview](/v3/documentation/tvm/tvm-overview/)
+
+<Feedback />
+
