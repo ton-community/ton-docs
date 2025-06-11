@@ -1,11 +1,16 @@
-# TON Connect 的安全性
+import Feedback from '@site/src/components/Feedback';
 
-TON Connect 确保用户对他们分享的数据有明确的控制权，这意味着在应用程序和钱包传输期间数据不会泄露。为了加强这一设计，钱包和应用采用了强大的加密身份验证系统，这些系统相互协作。
+# TON Connect for security
+
+On TON Connect, user data is end-to-end encrypted when transmitted to wallets via bridges. This allows apps and wallets to employ third-party bridge servers that decrease the possibility of data theft and manipulation, dramatically increasing data integrity and safety.
 
 ## 用户数据和资金的安全性
 
-- 在 TON Connect 上，当用户数据通过bridge被传输到钱包时，是端到端加密的。这允许应用和钱包使用第三方bridge服务器，减少数据被盗和被篡改的可能性，在此过程中显著提高数据的完整性和安全性。
-- 通过 TON Connect，安全参数被设置以允许用户数据直接与他们的钱包地址进行认证。这允许用户使用多个钱包，并选择在特定应用内使用哪一个。
-- TON Connect 协议允许分享个人数据项（如联系方式和 KYC 信息等），这意味着用户明确确认了这些数据的分享。
+- On TON Connect, user data is end-to-end encrypted when transmitted to wallets via bridges. This allows apps and wallets to employ third-party bridge servers that decrease the possibility of data theft and manipulation, dramatically increasing data integrity and safety.
+- Through TON Connect, security parameters are implemented to allow users' data to be directly authenticated with their wallet address. This will enable users to use multiple wallets and choose which one is used within a particular app.
+- The TON Connect protocol allows for sharing personal data items (such as contact details and KYC info, etc.), meaning the user explicitly confirms sharing such data.
 
-有关 TON Connect 及其以安全为重点的设计的具体细节和相关代码示例，可以通过 [TON Connect Github](https://github.com/ton-connect/) 找到。
+Specific details and related code examples about TON Connect and its underlying security-focused design can be found via [TON Connect GitHub](https://github.com/ton-connect/).
+
+<Feedback />
+
