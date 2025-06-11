@@ -1,55 +1,48 @@
-# Управление сайтом и доменом
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Site & domain management
 
 ## Как открыть домен для редактирования
 
-1. Откройте браузер Google Chrome на своем компьютере.
+1. Open Google Chrome on your computer.
+2. Install the [TON Chrome extension](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd).
+3. Open the extension, click "Import wallet", and import the wallet that holds the domain.
 
-2. Установите расширение Google Chrome TON по этой [ссылке](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd).
-
-3. Откройте расширение, нажмите "Импортировать кошелек" и импортируйте кошелек, в котором хранится домен.
-
-> Фразы восстановления
+> **Recovery phrases**
 >
-> Ваша фраза восстановления состоит из 24 слов, которые вы записали, когда создавали свой кошелек.
+> Your recovery phrase consists of 24 words written down when the wallet was created.
 >
-> Если вы потеряли свою фразу восстановления, вы можете восстановить ее с помощью любого кошелька TON.
-> В Tonkeeper: перейдите в Настройки > Защита кошелька > Ваш приватный ключ.
+> You can restore this phrase using any TON wallet if you lose it.
+> In Tonkeeper: go to Settings → Wallet protection → Your private key.
 >
-> Обязательно запишите эти 24 слова и храните их в надежном месте. В случае чрезвычайной ситуации вы сможете восстановить доступ к кошельку, используя только вашу фразу восстановления.
-> Храните фразы восстановления строго конфиденциально. Любой, кто получит доступ к вашим фразам восстановления, будет иметь полный доступ к вашим средствам.
+> Store your 24 words securely. In case of an emergency, you will be able to restore access to the wallet using only your recovery phrase.
+> Please do not share them. Anyone with access to your phrase can access your funds.
 
-4. Теперь откройте ваш домен на сайте https://dns.ton.org и нажмите кнопку "Редактировать".
+4. Go to [dns.ton.org](https://dns.ton.org), open your domain, and click "Edit".
 
 ## Как привязать кошелек к домену
 
-Вы можете привязать кошелек к домену, что позволит пользователям отправлять монеты на этот кошелек, указывая домен в качестве адреса получателя вместо адреса кошелька.
+You can link a wallet address to a domain, allowing users to send coins directly to that domain name instead of a wallet address.
 
-1. Откройте домен для редактирования, как описано выше.
-
-2. Скопируйте адрес вашего кошелька в поле "Адрес кошелька" и нажмите "Сохранить".
-
-3. Подтвердите отправку транзакции в расширении.
+1. Open your domain for editing. See steps above.
+2. Paste your wallet address into the "Wallet address" field and click "Save".
+3. Confirm the transaction in the extension.
 
 ## Как привязать TON Site к домену
 
-1. Откройте домен для редактирования, как описано выше.
-
-2. Скопируйте ADNL-адрес вашего TON Site в формате HEX в поле "Site" и нажмите "Сохранить".
-
-3. Подтвердите отправку транзакции в расширении.
+1. Open your domain for editing. See steps above.
+2. Copy the ADNL address of your TON Site in HEX format, paste it into the "Site" field, and click "Save".
+3. Confirm the transaction in the extension.
 
 ## Как настроить поддомены
 
-1. Создайте в сети смарт-контракт для управления поддоменами вашего веб-сайта или сервиса. Вы можете использовать готовые смарт-контракты [manual-dns](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/dns-manual-code.fc) или [auto-dns](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/dns-auto-code.fc), или любой другой смарт-контракт, реализующий интерфейс TON DNS.
+1. Create a smart contract on the network to manage the subdomains of your website or service.
+2. You can use one of the following ready-made smart contracts:
+   - [manual-dns](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/dns-manual-code.fc)
+   - [auto-dns](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/dns-auto-code.fc)
+3. Open your domain for editing. See steps above.
+4. Paste the smart contract address of the subdomain manager into the "Subdomains" field and click "Save".
+5. Confirm the transaction in the extension.
 
-2. Откройте домен для редактирования, как описано выше.
-
-3. Скопируйте адрес смарт-контракта в поле "Поддомены" и нажмите "Сохранить".
-
-4. Подтвердите отправку транзакции в расширении.
-
+<Feedback />
 
