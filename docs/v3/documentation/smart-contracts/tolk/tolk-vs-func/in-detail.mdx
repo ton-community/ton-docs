@@ -1846,6 +1846,24 @@ var p = Point.fromCell(c);
 Continue reading on a separate page: [Auto-packing to/from cells](/v3/documentation/smart-contracts/tolk/tolk-vs-func/pack-to-from-cells).
 
 
+<h3 className="cmp-func-tolk-header">
+  ✅ Universal createMessage: avoid manual cells composition
+</h3>
+
+No more manual beginCell().storeUint(...).storeRef(...) boilerplate. Just describe the message in a literal, and let the compiler do the rest.
+```tolk
+val reply = createMessage({
+    bounce: false,
+    value: ton("0.05"),
+    dest: senderAddress,
+    body: RequestedInfo { ... }
+});
+reply.send(SEND_MODE_REGULAR);
+```
+
+Continue reading on a separate page: [Universal createMessage](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message).
+
+
 <hr />
 
 <h3>Tolk vs FunC gas consumption</h3>

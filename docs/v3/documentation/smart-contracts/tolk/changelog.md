@@ -2,7 +2,14 @@ import Feedback from '@site/src/components/Feedback';
 
 # History of Tolk
 
-When new versions of Tolk are released, they will be mentioned here.
+Once new versions of Tolk are released, they are mentioned here.
+
+
+## v0.99
+
+1. Universal `createMessage`
+2. Universal `createExternalLogMessage`
+3. Sharding — calculate addresses "close to another contract"
 
 
 ## v0.13

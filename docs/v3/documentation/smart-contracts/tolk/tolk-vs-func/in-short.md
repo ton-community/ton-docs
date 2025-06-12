@@ -60,6 +60,7 @@ get currentCounter(): int { ... }
 20. Semicolon after the last statement in a block is optional
 21. Fift output contains original .tolk lines as comments
 22. [Auto-packing](/v3/documentation/smart-contracts/tolk/tolk-vs-func/pack-to-from-cells) to/from cells — for any types
+23. [Universal createMessage](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message) to avoid manual cells composition
 
 #### Tooling around
 - JetBrains plugin exists
