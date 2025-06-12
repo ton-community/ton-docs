@@ -1222,3 +1222,329 @@ todo: Здесь про то, что нужно учитывать атаку с
 
 todo: разбор func кода, на основе jetton_transfer определить успешность операции и немного примеров на ts коде
 
+## Build an internal message and wrap this in external message 
+
+Смарт-контракты взаимодействуют друг с другом, отправляя так называемые Internal сообщения. Когда Internal сообщение достигает своего адресата, создается обычная транзакция от имени акккаунта получателя, а Internal сообщение обрабатывается в соответствии с кодом и постоянными данными этого аккаунта (смарт-контракт).
+
+External же сообщения отправляются извне в смарт-контракты, находящиеся в блокчейне TON, чтобы заставить их выполнить определенные действия.
+
+Например, смарт-контракт кошелька ожидает получения External сообщений, содержащих заявки (например, Internal сообщения, которые должны быть отправлены из смарт-контракта кошелька), подписанных владельцем кошелька. Когда такое External сообщение получено смарт-контрактом кошелька, он сначала проверяет подпись, затем принимает сообщение (запуская примитив TVM ACCEPT), а затем выполняет все необходимые действия.
+
+## Serializators for messages
+
+Прежде чем погрузиться в создание сообщений, давайте познакомимся с концепцией ячеек, из которых состоят тела сообщений.
+
+### Что такое ячейка?
+
+Ячейка — это базовая структура данных в блокчейне TON. Она может хранить до 1023 бит и содержать до 4 ссылок на другие ячейки, что позволяет хранить более сложные структуры данных. Такие библиотеки, как @ton/core и @ton-community/assets-sdk, предоставляют эффективные способы обработки ячеек.
+
+### Создание ячейки
+
+Чтобы создать ячейку, используйте функцию beginCell(). Пока ячейка "открыта", вы можете хранить различные типы данных с помощью функций store...(). Когда работа закончена, закройте ячейку с помощью функции endCell().
+
+```
+import { Address, beginCell } from "@ton/ton";
+
+const cell = beginCell()
+  .storeUint(99, 64) // Stores uint 99 in 64 bits
+  .storeAddress(Address.parse('[SOME_ADDR]')) // Stores an address
+  .storeCoins(123) // Stores 123 as coins
+  .endCell() // Closes the cell
+```
+
+### Анализ ячейки
+
+Чтобы прочитать или проанализировать данные из ячейки, вызывается функция beginParse(). Вы считываете данные в том же порядке, в котором они были сохранены, используя аналогичные функции load...():
+
+```
+const slice = cell.beginParse();
+const uint = slice.loadUint(64);
+const address = slice.loadAddress();
+const coins = slice.loadCoins();
+```
+
+### Большие объемы данных
+
+Каждая ячейка имеет ограничение в 1023 бита. Если вы превысите его, возникнет ошибка:
+
+```
+// This will fail due to overflow
+const cell = beginCell()
+  .storeUint(1, 256)
+  .storeUint(2, 256)
+  .storeUint(3, 256)
+  .storeUint(4, 256) // Exceeds 1023-bit limit (256 + 256 + 256 + 256 = 1024)
+  .endCell()
+```
+Чтобы сохранить больше данных, ячейки могут ссылаться на другие ячейки. Вы можете использовать функцию storeRef() для создания вложенных ячеек:
+
+```
+const cell = beginCell()
+  .storeUint(1, 256)
+  .storeUint(2, 256)
+  .storeRef(beginCell()
+    .storeUint(3, 256)
+    .storeUint(4, 256)
+    .endCell())
+  .endCell()
+```
+
+Чтобы загрузить ячейку, на которую есть ссылка (вложенную), используйте loadRef():
+
+```
+const slice = cell.beginParse();
+const uint1 = slice.loadUint(256);
+const uint2 = slice.loadUint(256);
+const innerSlice = slice.loadRef().beginParse(); // Load and parse nested cell
+const uint3 = innerSlice.loadUint(256);
+const uint4 = innerSlice.loadUint(256);
+```
+
+### Необязательные ссылки и значения
+
+Ячейки могут хранить необязательные значения (которые могут быть нулевыми). Они сохраняются с помощью функций storeMaybe...():
+
+```
+const cell = beginCell()
+  .storeMaybeInt(null, 64) // Optionally stores an int
+  .storeMaybeInt(1, 64)
+  .storeMaybeRef(null) // Optionally stores a reference
+  .storeMaybeRef(beginCell()
+    .storeCoins(123)
+    .endCell());
+```
+
+Вы можете анализировать необязательные значения с помощью соответствующих функций loadMaybe...(). Возвращаемые значения могут быть нулевыми, поэтому не забудьте проверить их на нулевое значение!
+
+```
+const slice = cell.beginParse();
+const maybeInt = slice.loadMaybeUint(64);
+const maybeInt1 = slice.loadMaybeUint(64);
+const maybeRef = slice.loadMaybeRef();
+const maybeRef1 = slice.loadMaybeRef();
+if (maybeRef1) {
+  const coins = maybeRef1.beginParse().loadCoins();
+}
+```
+
+### Пример полноценного построения internal сообщения
+
+```
+import {Address, beginCell} from "@ton/core";
+
+// serialization
+const cell = beginCell()
+  .storeUint(260734629, 32)
+  .storeUint(42, 64)
+  .storeCoins(100)
+  .storeAddress(Address.parse('[DESTINATION]'))
+  .storeAddress(Address.parse('[RESPONSE_DESTINATION]'))
+  .storeMaybeRef(null)
+  .storeCoins(1)
+  .storeMaybeRef(null)
+  .endCell();
+
+// deserialization
+const slice = cell.beginParse();
+const op = slice.loadUint(32);
+const queryId = slice.loadUint(64);
+const amount = slice.loadCoins();
+const destination = slice.loadAddress();
+const responseDestination = slice.loadAddress();
+const customPayload = slice.loadMaybeRef();
+const fwdAmount = slice.loadCoins();
+const fwdPayload = slice.loadMaybeRef();
+
+const transferMessage = { op, queryId, amount, destination, responseDestination, customPayload, fwdAmount, fwdPayload };
+```
+
+# Types of message descriptors
+
+## Анализ TL-B схемы
+
+Теперь после базового погружения в термины, мы можем приступить к практическому применению наших знаний на постройке скрипта на отправку сообщения, пользуясь tl-b.
+
+### TL-B Схема
+
+Если вы не знакомы с тем, что такое tl-b, то ознакомиться можно здесь: https://docs.ton.org/v3/documentation/data-formats/tlb/tl-b-language. 
+
+Представим, что мы имеем tl-b схему, сообщение из которой нам нужно упаковать в скрипт и отправить. В этом примере я взял tl-b с https://github.com/evaafi/contracts/blob/maiоn/schema/schema.tlb#L132.
+
+
+```
+tlb
+
+revert_call#0000000f query_id:uint64 owner_address:MsgAddressInt revert_body:^Cell = InternalMsgBody
+```
+
+Прежде чем писать скрипт, давайте сначала разберём полученную нам tl-b схему.
+#### Разбор структуры:
+
+- `#0000000f` - оп-код, который ставится первым по порядку при формировании сообщения (всегда занимает 32 бита (uint32)). 
+- `query_id:uint64` - Идентификатор запроса, который всегда ставится вторым по порядку при формировании сообщения (всегда занимает 64 бита (uint64))
+- `owner_address:MsgAddressInt` - Адрес владельца (как правило, передаётся в смарт-контракте в виде slice)
+- `revert_body:^Cell` - Ссылка на дополнительную ячейку (ссылка на ячейку, в которой лежит вся дополнительная информация для данной операции (cell)).
+
+## Анализ FunC контракта
+
+### FunC код:
+
+Если вы не знакомы с языком FunC, то изучить его можно здесь: https://docs.ton.org/v3/documentation/smart-contracts/func/overview/. 
+
+Теперь представим, что мы имеем FunC код, который демонстрирует как с помощью предыдущей tl-b схемы получилось удобно упаковать сообщение, которое нам нужно передать в скрипт и отправить. В этом примере я взял FunC код с https://github.com/evaafi/contracts/blob/main/contracts/logic/user-revert-call.fc. 
+
+```
+func 
+
+() revert_call(
+    slice sender_address, slice owner_address,
+    slice in_msg_body
+) impure method_id(0x770) {
+    
+    send_message(
+        sender_address, 0,
+        begin_cell()
+        .store_uint(0x0000000f, 32)
+        .store_uint(0, 64) ;; query_id
+        .store_slice(owner_address) ;; 3+8+256
+        ;; Part above is totalling: 32 + 64 + 3+8+256 = 363 bits,
+        ;; which is significant -> Let's keep in_msg_body in a separate cell
+        .store_ref(
+            begin_cell().store_slice(in_msg_body).end_cell()
+        ) ;; revert_body
+        .end_cell(),
+        64 ;; is used for messages that carry all the remaining value of the inbound message in addition to the value initially indicated in the new message.
+    );
+    commit(); 
+    throw(error::user_code_version_mismatch);
+}
+
+```
+
+Разберём важные моменты. В этом примере мы просто будем отправлять сообщение на нужный нам адрес, т. е. у нас нет recv_internal(), который бы скомпилировал контракт с этим оп-кодом и сообщением с ним, а только после этого мы бы на имеющийся контракт отправили нужное нам сообщение. 
+Прежде чем идти писать скрипт, давайте проверим все ли аргументы нам подходят и все ли совпадает с tl-b схемой:
+`.store_uint(0x0000000f, 32)` - этот оп-код нам подходит, так как его мы видели в tl-b схеме, также он стоит первым по списку.
+`.store_uint(0, 64)` - query_id всегда передаётся в формате 64 битов, в данном случае у него номер 0.
+`.store_slice(owner_address)` - третьим по списку передаётся адрес, как и в tl-b всё соответствует. 
+`.store_ref(begin_cell().store_slice(in_msg_body).end_cell())` - четвёртым по списку передаётся cell, как и в tl-b всё соответствует.
+
+Теперь когда мы уверены в том, что вся информация передана правильно, можно составлять сообщение благодаря Blueprint SDK.
+
+## Assembler
+
+Код FunC по сути является списком объявлений/определений функций и объявлений глобальных переменных. Определять op-code можно не только по tl-b, но и напрямую через asm консрукции:
+
+```
+int op::transfer() asm "0x5fcc3d14 PUSHINT";
+int op::ownership_assigned() asm "0x05138d91 PUSHINT";
+int op::excesses() asm "0xd53276db PUSHINT";
+int op::get_static_data() asm "0x2fcb26a2 PUSHINT";
+int op::report_static_data() asm "0x8b771735 PUSHINT";
+int op::get_royalty_params() asm "0x693d3950 PUSHINT";
+int op::report_royalty_params() asm "0xa8cb00ad PUSHINT";
+```
+
+Стоит отметить, что есть op-code, которые являются core логикой TVM и если вы будете использовать для своих op-codes такие же числовые переменные, то будет выбрасываться ошибка Exit Code 6 (Compute Phase). 
+
+## 3. Typescript реализация
+
+### Настройка окружения
+
+Устанавливаем нужные нам модули: 
+
+Команда npm create ton@latest установит окружение Blueprint SDK.
+
+```
+cd revert-call-msg
+npm create ton@latest
+или если вы хотите поставить только нужные вам модули, то сделайте так:
+npm install @ton/core @ton/blueprint 
+```
+
+## Сборка скрипта на отправку сообщения
+
+Когда вы установили все нужные модули создаём папку /scripts (в окружении Blueprint SDK) она есть сразу. Больше изучить работу в Blueprint SDK можно здесь: https://docs.ton.org/v3/documentation/smart-contracts/getting-started/javascript/. Весь следующий код будет разделён на шаги для простоты повестования, используйте его в одном файле.
+Для простоты использования начнём с интерфейсами и передадим туда необходимые нам модули, такие как адрес смарт-контракта куда отправится наше сообщение, адрес владельца, query_id и revert_body. Для Cell и Address используем импортым из библиотеки @ton/core. После определения модулей в интерфейсе можно переходить к основной функции.  
+
+```
+typescript
+
+import { 
+  Address, 
+  beginCell, 
+  Cell, 
+  toNano 
+} from '@ton/core';
+import { 
+  NetworkProvider 
+} from '@ton/blueprint';
+
+interface RevertCallParams {
+  contractAddress: Address;  // recipient msg address
+  ownerAddress: Address;      
+  queryId?: bigint;           
+  revertBody?: Cell;         
+}
+```
+
+В данной функции мы будем реализовывать основную логику отправки сообщения при помощи ранее созданного интерфейса. В contractAddress подставляется нужный адрес смарт-контракт для отправки сообщения. В ownerAddress подставляется адрес владельца контрактом, иначе при проверке смарт-контракта сообщение упадёт, ведь такого владельца не существует, а отправитель не имеет прав на отправку этого сообщения. revertBody упаковывается при помощи дополнительный функции, которая передаёт необходимый нам Cell in_msg_body. После этого сообщение отправляется с нужными нам аргументами. Теперь нам осталось лишь отправить это сообщение.
+
+```
+export async function run(provider: NetworkProvider) {
+  const contractAddress = Address.parse(
+    "EXISTING_CONTRACT_ADDRESS_HERE"
+  );
+  const ownerAddress = Address.parse(
+    "OWNER_ADDRESS_HERE"
+  );
+
+  const revertBody = prepareRevertBody();
+
+  await sendRevertCall(provider, {
+    contractAddress,
+    ownerAddress,
+    queryId: 0n,
+    revertBody
+  });
+}
+```
+
+В этой функции мы отправим нужное нам сообщение на нужный контракт. Создаём тело сообщения как это было в tl-b, а позднее и в смарт-контракте. Библиотека @ton/core сама даст нам нужные модули для составления сообщения, подобно как в смарт-контракте на FunC. Ставим обработку сообщения через try catch и отправляем сообщения на нужный адрес, учитывая fees на газ (обычно это около 0.05-0.1 тона) и вставляем наше тело. В конце добавляем ошибки, которые могут возникнуть при отправке сообщения (несовпадение адресов отправителей и админа смарт-контракта, нехватка тонов или неправильно построенное сообщение). 
+
+```
+
+async function sendRevertCall(
+  provider: NetworkProvider, 
+  params: RevertCallParams
+) {
+  // Создание тела сообщения
+  const messageBody = beginCell()
+    .storeUint(0x0000000f, 32)  // Op-код Revert Call
+    .storeUint(params.queryId || 0n, 64)  // Query ID
+    .storeAddress(params.ownerAddress)  // Адрес владельца
+    .storeRef(params.revertBody)
+    .endCell();
+
+  try {
+    await provider.sender().send({
+      to: params.contractAddress,
+      value: toNano('0.1'),  // Газ
+      body: messageBody
+    });
+
+    console.log(`Сообщение revert-call отправлено на адрес: ${params.contractAddress}`);
+  } catch (error) {
+    console.error('Ошибка при отправке revert-call:', error);
+  }
+}
+
+function prepareRevertBody(): Cell {
+  return beginCell()
+    .storeUint(0x01, 8)  
+    .storeBuffer(
+      Buffer.from('Данные для revert-call', 'utf-8')
+    )
+    .endCell();
+}
+```
+
