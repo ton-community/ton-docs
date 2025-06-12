@@ -893,9 +893,55 @@ trans_ord$0000 credit_first:Bool
 API сервис десериализует всю структуру с точностью до строковых и числовых типов данных. В связи с этим, тело транзакции возращаемое в json
 
 ```curl
-apiv3 request body <-
+curl -X 'GET' \
+  'https://toncenter.com/api/v3/transactions?limit=10&offset=0&sort=desc' \
+  -H 'accept: application/json'
 ```
-Возвращает очень большую структуру:
+Возвращает очень большую структуру (пример для API/v3):
+
+
+```json
+ {
+  "account": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF",
+  "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=", 
+  "lt": "15371766000003", 
+  "now": 1696238450,
+  "mc_block_seqno": 13353447, 
+  "trace_id": "13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=", 
+  "prev_trans_hash": "6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=", 
+  "prev_trans_lt": "15371704000004", 
+  "orig_status": "active",
+  "end_status": "active", 
+  "total_fees": "12446659", 
+  "description": {
+  ...
+  },
+  "compute_ph": {
+   ....
+  },
+  "action": {
+    ...
+  },
+  "block_ref": {
+    ...
+  },
+  "in_msg": {
+  ...
+  },
+  "out_msgs": [
+   ...
+  ],
+
+  "account_state_before": {
+    ...
+  },
+
+  "account_state_after": {
+  ...
+  }
+}
+
+```
 
 <details>
 ```json
@@ -1034,17 +1080,28 @@ apiv3 request body <-
 </details>
 
 В зависимости от задачи интересные к проверке поля могут меняться. Сейчас обозначим наиболее интересные
-Native - содержится в блокчейне.
+Native - содержится в блокчейне. В описание указано наименвоание поля определенное в TL-B схемах block.tlb.
 Postprocessing - досчитано на стороне API
+Native object extended inside - Такой объект есть в блокчейне, но данные дополнены на строне API, подробно в отдельной таблице
 
+| Поле           | Происхождение                 | Описание                                                                                                                             | Пример                                           |
+|----------------|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+| `trace_id`       | Postprocessing                | tx_hash of the root transaction of the trace                                                                                         | 13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=     | 
+| `prev_trans_hash` | Native                        | tx_hash of the root transaction of the trace                                                                                         | 6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=     | 
+| `account`        | Native                        | Адрес аккаунта, на котором произошла транзакция. Происхождение нативное, важно учесть что здесь получается RAW формат адреса.        | `0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF` |
+| `hash`           | Postprocessing                | Хеш текущей транзакции                                                                                                               | `/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=`        |
+| `lt`             | Native                        | Логическое время транзакции; уникально для каждой транзакции на одном аккаунте. Исходное поле транзакции в блокчейне `lt`.           | `15371766000003`                                      |
+| `now`            | Native                        | Временная метка транзакции в формате UNIX timestamp. Исходное поле транзакции в блокчейне `now`.                                     | `1696238450`                                          |
+| `mc_block_seqno` | Postprocessing                | Порядковый номер блока мастерчейна, в который включена транзакция. В транзакции этой информации нет, HTTP сервис добавляет по памяти | `13353447`                                            |
+| `trace_id`       | Postprocessing               | Хеш корневой транзакции в цепочке вызовов (trace). Trace - сущность создаваемая в TON Center API/v3                                  | `13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=`        |
+| `prev_trans_hash`| Native               | Хеш предыдущей транзакции на этом аккаунте. Исходное поле транзакции в блокчейне `prev_trans_hash`                                   | `6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=`        |
+| `prev_trans_lt`  | Native               | Логическое время предыдущей транзакции на этом аккаунте. Исходное поле транзакции в блокчейне `prev_trans_lt`.                       | `15371704000004`                                      |
+| `orig_status`    | Native               | Статус аккаунта до выполнения транзакции. Исходное поле транзакции в блокчейне `orig_status`.                                      | `active`                                              |
+| `end_status`     | Native               | Статус аккаунта после выполнения транзакции. Исходное поле транзакции в блокчейне `end_status`.                                   | `active`                                              |
+| `total_fees`     | Native      | Сумма всех комиссий, связанных с транзакцией. Исходное поле транзакции в блокчейне `total_fees`.                                                                                       | `12446659`                                            |
+| `in_msg`         | Native object extended inside | In message body object                                                                                                               | `"in_msg": {...}`                                |
 
-| Поле            | Происхождение                 | Описание                                     | Пример                                         |
-|-----------------|-------------------------------|----------------------------------------------|------------------------------------------------|
-| trace_id        | Postprocessing                | tx_hash of the root transaction of the trace | 13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=   | 
-| prev_trans_hash | Native                        | tx_hash of the root transaction of the trace | 6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=   | 
-| in_msg          | Native object extended inside | In message body object                       | `"in_msg": {...}`                                |
-
-TODO определеить набор полей которые здесь полезно рассмотреть.
+TODO определить набор полей которые здесь полезно рассмотреть.
 
 
 ## Транзакция
