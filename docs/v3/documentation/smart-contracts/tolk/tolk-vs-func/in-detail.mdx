@@ -1850,7 +1850,7 @@ Continue reading on a separate page: [Auto-packing to/from cells](/v3/documentat
   ✅ Universal createMessage: avoid manual cells composition
 </h3>
 
-No more manual beginCell().storeUint(...).storeRef(...) boilerplate. Just describe the message in a literal, and let the compiler do the rest.
+No more manual `beginCell().storeUint(...).storeRef(...)` boilerplate. Just describe the message in a literal, and let the compiler do the rest.
 ```tolk
 val reply = createMessage({
     bounce: false,
