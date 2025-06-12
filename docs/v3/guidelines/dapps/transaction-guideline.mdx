@@ -1,3 +1,6 @@
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
+
 # Interact with transactions
 
 ## Как мне выяснить что моя транзакция выполнилась успешно с помощью метода API?
@@ -36,11 +39,11 @@ TON реализует акторную модель как основу сво�
 **Асинхронность** — это свойство взаимодействия, при котором отправка сообщения не требует немедленной готовности получателя.
 Отправитель может инициировать передачу, не ожидая, что получатель в этот момент доступен или обработает сообщение сразу.
 
+В отличие от большинства синхронных моделей, в TON контракты не вызывают друг друга напрямую. Вместо этого акторы отправляют сообщения друг другу, и каждый актор обрабатывает сообщение внутри себя независимо от других акторов. Это значит, что один контракт не может получить прямой доступ к результату исполнения другого. Он узнает результат только через отдельное входящее сообщение, если оно будет.
 
-В отличие, от большинства сихнронных моделей, в TON контракты не вызывают друг друга напрямую. Вместо этого акторы отправляют сообщения друг другу, и каждый актор обрабатывает сообщение внутри себя без связи с другими акторами. Это значит, что один контракт не может узнать обновления состояния контракта по ходу обработки сообщения. Единственный способ узнать о результате, это получить в дальнейшем сообщение, в котором будет указана нужная информация.
+> В отличие от синхронных блокчейнов, где можно "сделать вызов → получить ответ → принять решение", в TON каждая обработка сообщения — это изолированный внутри актора процесс. Результат этого процесса, в зависимости от наличия отправленного сообщения, может прийти позже или не прийти вовсе, если контракт не отправит ответное сообщение.
 
 
-> В отличие от синхронных блокчейнов, где можно "сделать вызов → получить ответ → принять решение", в TON каждая обработка сообщения — это изолированный внутри актора процесс. Результат этого процесса, в зависимости от наличия отправленного сообщения, может прийти позже (или не прийти вовсе - проверить и уточнить).
 
 
 ### Структура и взаимодействия акторов в TON
@@ -50,7 +53,7 @@ TON реализует акторную модель как основу сво�
 
 * адрес `MsgAddressInt`,
 * баланс `CurrencyCollection`,
-* logical time последней транзакции `last_trans_lt`,
+* время последней применённой транзакции у аккаунта (logical time) `last_trans_lt`,
 * статистику хранилища `StorageInfo`,
 * состояние `AccountState`, определяющее его поведение.
 
@@ -58,35 +61,41 @@ TON реализует акторную модель как основу сво�
 
 TON определяет 3 состояния аккаунта (`AccountState`):
 
-| Состояние         | Описание                                                                                                                    |
-|--------------|-----------------------------------------------------------------------------------------------------------------------------|
-| Uninitialized | Аккаунт не содержит кода, данных и баланса. Его состояние в блокчейне отсутствует до первого взаимодействия.  !!!!                       |
-| Active       | Аккаунт содержит `StateInit`, в котором задан код `code`. Это смарт-контракт, способный выполнять код по входящим сообщениям.   |
-| Frozen       | Аккаунт был удалён или заморожен, но оставлен контрольный хэш состояния. Он не может выполнять код или принимать сообщения. |
+| Состояние  | TL-B код | Описание                                                                                                     |
+| ---------- | -------- |--------------------------------------------------------------------------------------------------------------|
+| `uninit`   | `00`     | Аккаунт существует, но не содержит кода и данных. Может иметь баланс, но ещё не активирован.                 |
+| `frozen`   | `01`     | Аккаунт удалён, но сохранён хэш его состояния. Он не может использоваться.                                   |
+| `active`   | `10`     | Аккаунт содержит `StateInit` с кодом и данными. Это активный смарт-контракт, готовый обрабатывать сообщения. |
+
+
+
 
 
 #### Статус аккаунта
 
-Статус аккаунта - это ярлык, отражающий текущий этап жизненного цикла аккаунта в блокчейне. Он описывает, доступен ли аккаунт, содержит ли код, может ли быть активирован или больше не существует.
+Статус аккаунта - это статус, который описывает состояние аккаунта с точки зрения выполнения транзакции, но не является частью его хранимых данных. Существует 4 возможных значения `AccountStatus`, каждое из которых закодировано двумя битами в TL-B:
 
-* Uninitialized
-* active
-* frozen
-* non exist
+
+| Статус     | TL-B код | Описание                                                                                                     |
+| ---------- | -------- |--------------------------------------------------------------------------------------------------------------|
+| `nonexist` | `11`     | Аккаунт отсутствует в блокчейне — у него нет ни состояния, ни баланса.                                       |
+| `uninit`   | `00`     | Аккаунт существует, но не содержит кода и данных. Может иметь баланс, но ещё не активирован.                 |
+| `frozen`   | `01`     | Аккаунт удалён, но сохранён хэш его состояния. Он не может использоваться.                                   |
+| `active`   | `10`     | Аккаунт содержит `StateInit` с кодом и данными. Это активный смарт-контракт, готовый обрабатывать сообщения. |
+
+Наличие `code` в `StateInit` делает аккаунт исполняемым и определяет его как смарт-контракт.
+
 
 :::important
-Статус аккаунта — это абстрактная классификация, а не сериализуемая структура. Не путать с `AccountState`, который содержит полное бинарное состояние аккаунта (код, данные, хэш) на момент времени.
+Статус аккаунта используется только внутри транзакций (`orig_status` и `end_status`) и не сохраняется в самом аккаунте. Для хранения фактического состояния используется структура `AccountState`.
 :::
 
 #### Смарт контракт
 
-
-Смарт-контракт в TON — это аккаунт, находящийся в активном состоянии `AccountState = active`, у которого:
+Смарт-контракт в TON — это аккаунт, находящийся в активном состоянии `active`, у которого:
 
 * задана структура `StateInit`,
 * внутри `StateInit` присутствует поле `code`.
-
-Наличие `code` в `StateInit` делает аккаунт исполняемым и определяет его как смарт-контракт.
 
 
 Наличие `code` в `StateInit` делает аккаунт исполняемым и определяет его как смарт-контракт.
@@ -94,33 +103,25 @@ TON определяет 3 состояния аккаунта (`AccountState`):
 
 #### Адрес
 
-Адрес в блокчейне TON — это уникальный идентификатор любого аккаунта или смарт-контракта. Он используется для взаимодействия между (акторами, аккаунтами, контрактами). Адрес формируется на основе следующих компонентов:
+Адрес в TON — это уникальный идентификатор аккаунта или смарт контракта, необходимый для взаимодействия между участниками сети. Он состоит из следующих компонентов:
 
-**Структура адреса**
+* WorkChain ID — 32-битное знаковое целое число, определяющее WorkChain, к которой принадлежит аккаунт (например, -1 для MasterChain, 0 для BaseChain).
+* Account ID — 256-битный хэш структуры `StateInit`, которая содержит начальное состояние контракта: `code`, `data` и (опционально) `library`.
 
-* Workchain ID — знаковое 32-битное целое число, определяющее workchain, к которой принадлежит аккаунт (например, -1 для MasterChain, 0 для BaseChain).
-* Account ID — 256-битный хеш от `state_init`, уникально определяющий содержимое аккаунта.
+Адрес определяется:
 
-**Что такое state_init?**
+<BlockMath math="{Address} := ({workchain\_id},{account\_id})" />, где <BlockMath math= "{account\_id}:= {SHA256(BoC(StateInit))}" />, где BoC (bag of cells) или сумка с ячейками это формат сериализации, который кодирует ячейки в массивы байтов, как определено схемой TL-B.
 
-`state_init` — это набор данных, необходимый для деплоя контракта на аккаунте. Он включает:
-
-* код смарт-контракта
-* начальные данные
-
-Так как адрес определяется как хеш этого `state_init`, даже небольшое изменение кода или данных приведёт к совершенно новому адресу.
-(TODO не забыть уточнить - валидаторы перепроверяет отправителя, и перезаписывают адрес отправителя в сообщении)
-
+Такой адрес соответствует определённому начальному состоянию контракта и может быть вычислен до его развёртывания. Это позволяет использовать его до фактической инициализации — например, для приёма токенов или подготовки взаимодействий.
 
 
 :::important
-`state_init` — это не полное состояние аккаунта, а только начальное состояние. Полное состояние включает текущее значение баланса, данные, очередь сообщений и другие параметры, которые могут меняться со временем. Однако эти изменения не влияют на адрес, поскольку адрес зависит только от начальной конфигурации `state_init`.
+Адрес зависит только от `StateInit`. Даже незначительное изменение кода, данных или библиотеки приводит к полностью новому `account_id`. При этом `StateInit` описывает *только начальную конфигурацию* контракта — не включая баланс, текущие данные, очередь сообщений и другие параметры, которые могут изменяться во времени. Эти изменения **не влияют** на адрес.
 :::
 
 
-#### Отношение TON-сущностей и парадигма в сообществе TON разработчиков
+(TODO не забыть уточнить - валидаторы перепроверяет отправителя, и перезаписывают адрес отправителя в сообщении)
 
-В разговоре разработчики могут называть вот этими терминами актор, аккаунт, смарт-контракт и адрес - смарт-контракт. Для единообразия терминологии и во избежание неоднозначностей в данном документе используется термин **аккаунт** как общее обозначение всех подобных сущностей. (лучше убрать)
 
 #### Message feature
 
@@ -128,14 +129,15 @@ TON определяет 3 состояния аккаунта (`AccountState`):
 
 #### Transaction feature
 
-Транзакция это изолированное на аккаунте обновление его состояние, с опциональным исходящим сообщением. *** (рассказать что именно делает транзакция, какую функцию выполняет)
+Транзакция — это обновление состояния аккаунта в блокчейне, инициированное входящим сообщением и, при необходимости, завершающееся отправкой одного или нескольких исходящих сообщений.
+
+Транзакция в TON нужна для того, чтобы изменить состояние аккаунта в ответ на входящее сообщение и, при необходимости, продолжить взаимодействие с другими аккаунтами через исходящие сообщения.
 
 #### Асинхронная природа транзакций
 
 В TON все аккаунты взаимодействуют исключительно посредством **сообщений** — это основа коммуникации между акторными сущностями. Каждое сообщение является частью транзакции, которая содержит информацию о состоянии и действиях, инициируемых этим сообщением.
 
 Транзакции в сети обрабатываются **асинхронно**, что означает, что вызовы и изменения состояния аккаунтов происходят независимо друг от друга во времени.
-
 
 #### AccountChain
 
@@ -198,7 +200,7 @@ Testnet нужен, чтобы безопасно разрабатывать и 
 
 ### Сообщение
 
-В блокчейне TON сообщение — это фундаментальная единица взаимодействия между аккаунтами (смарт-контрактами). Все действия, изменения состояния и выполнение логики в системе происходят через отправку и получение сообщений. Сообщения можно сравнить с запросами, отправляемыми на сервер.
+В блокчейне TON сообщение — это фундаментальная единица взаимодействия между аккаунтами (смарт контрактами). Все действия, изменения состояния и выполнение логики в системе происходят через отправку и получение сообщений. Сообщения можно сравнить с запросами, отправляемыми на сервер.
 
 * Transaction and message real life examples
 ### Tl-B structure
@@ -269,7 +271,7 @@ External message is an initiation of Action
 Define that we need build internal message and wrap this in external message.
 * Serializators for messages. (Message builders)
 * Types of message descriptors
-  * Дополнительные стандарты с TL-B (https://github.com/ton-blockchain/TEPs/blob/master/text/0089-jetton-wallet-discovery.md)
+* Дополнительные стандарты с TL-B (https://github.com/ton-blockchain/TEPs/blob/master/text/0089-jetton-wallet-discovery.md)
 
 #### Создание сообщение по TL-B
 
@@ -300,10 +302,10 @@ const body = beginCell()
     return body;
 }
 ```
-* Build message serializer according to TL-B
-* Ресиверы в коде  (https://github.com/ton-blockchain/highload-wallet-contract-v3)
-* Build message serializer according to source code
-* Assembler (blockchain explorer preview/ https://tonviewer.com/EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1?section=code )
+  * Build message serializer according to TL-B
+  * Ресиверы в коде  (https://github.com/ton-blockchain/highload-wallet-contract-v3)
+  * Build message serializer according to source code
+  * Assembler (blockchain explorer preview/ https://tonviewer.com/EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1?section=code )
 
 ## Хэши в TON Blockchain
 
@@ -333,7 +335,7 @@ const messageBody = beginCell()
         .storeUint(0, 32) // op code
         .storeStringTail("Hello TON!")
         .endCell();
-    
+
 console.log("Message Body Hash:", messageBody.hash().toString("hex"));
 ```
 
@@ -390,14 +392,14 @@ const client = new TonClient({
 });
 
 const transactions = await client.getTransactions(
-  Address.parse('EQB...'), 
+  Address.parse('EQB...'),
   { limit: 10 }
 );
 
 for (const tx of transactions) {
   const txHash = tx.hash();
   console.log('Transaction Hash:', txHash.toString('hex'));
-  
+
   // Также можем получить хэш входящего сообщения
   if (tx.inMessage) {
     const inMsgCell = beginCell()
@@ -525,7 +527,7 @@ async function sendAndVerifyMessage() {
   const client = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC'
   });
-  
+
   const mnemonic = 'your mnemonic words here';
   const keyPair = await mnemonicToPrivateKey(mnemonic.split(' '));
   const wallet = client.open(WalletContractV4.create({
@@ -553,18 +555,18 @@ async function sendAndVerifyMessage() {
 
   // 4. Проверяем факт отправки через некоторое время
   await new Promise(resolve => setTimeout(resolve, 10000)); // ждем 10 секунд
-  
+
   const newSeqno = await wallet.getSeqno();
   if (newSeqno > seqno) {
     console.log('Транзакция успешно обработана!');
-    
+
     // 5. Находим нашу транзакцию и получаем её хэш
     const transactions = await client.getTransactions(wallet.address, { limit: 5 });
-    const ourTx = transactions.find(tx => 
-      tx.inMessage?.info.type === 'external-in' && 
+    const ourTx = transactions.find(tx =>
+      tx.inMessage?.info.type === 'external-in' &&
       tx.description.type === 'generic'
     );
-    
+
     if (ourTx) {
       const txHash = ourTx.hash();
       console.log('Transaction Hash:', txHash.toString('hex'));
@@ -585,7 +587,7 @@ async function sendAndVerifyMessage() {
 import { Cell, Address, beginCell, storeMessage, TonClient } from '@ton/ton';
 
 async function findTransactionByBOC(
-  externalBOC: string, 
+  externalBOC: string,
   walletAddress: string
 ): Promise<string | null> {
   const client = new TonClient({
@@ -596,13 +598,13 @@ async function findTransactionByBOC(
   try {
     // Получаем хэш внешнего BOC
     const extHash = Cell.fromBase64(externalBOC).hash().toString('hex');
-    
+
     // Получаем последние транзакции кошелька
     const transactions = await client.getTransactions(
-      Address.parse(walletAddress), 
+      Address.parse(walletAddress),
       { limit: 10 }
     );
-    
+
     for (const tx of transactions) {
       const inMsg = tx.inMessage;
       if (inMsg?.info.type === 'external-in') {
@@ -612,10 +614,10 @@ async function findTransactionByBOC(
           .endCell()
           .hash()
           .toString('hex');
-        
+
         console.log('External BOC hash:', extHash);
         console.log('Transaction message hash:', inHash);
-        
+
         // Если хэши совпадают, мы нашли нашу транзакцию
         if (extHash === inHash) {
           const txHash = tx.hash().toString('hex');
@@ -624,7 +626,7 @@ async function findTransactionByBOC(
         }
       }
     }
-    
+
     throw new Error('Транзакция не найдена');
   } catch (error) {
     console.error('Ошибка поиска транзакции:', error);
@@ -634,7 +636,7 @@ async function findTransactionByBOC(
 
 // Пример использования
 const txHash = await findTransactionByBOC(
-  'te6cckEBAgEAqQAB4YgA+yKcnwQCs1xAwIEKKB4DvkIdXNjL6B...', 
+  'te6cckEBAgEAqQAB4YgA+yKcnwQCs1xAwIEKKB4DvkIdXNjL6B...',
   'EQB...'
 );
 ```
@@ -652,7 +654,7 @@ async function checkTransactionStatus(txHash: string, walletAddress: string) {
       `address=${walletAddress}&hash=${txHash}`
     );
     const data = await response.json();
-    
+
     if (data.result.length > 0) {
       console.log('Транзакция найдена в блокчейне');
       return data.result[0];
@@ -690,19 +692,19 @@ if (!address.equals(wantedAddress)) {
 // Пример функции для мониторинга входящих транзакций
 async function monitorIncomingTransactions(walletAddress: Address, client: TonClient) {
   let lastLt = '0';
-  
+
   setInterval(async () => {
     try {
-      const transactions = await client.getTransactions(walletAddress, { 
+      const transactions = await client.getTransactions(walletAddress, {
         limit: 10,
         lt: lastLt
       });
-      
+
       for (const tx of transactions) {
         if (tx.lt > lastLt) {
           const txHash = tx.hash();
           console.log('Новая транзакция:', txHash.toString('hex'));
-          
+
           // Обрабатываем входящие сообщения
           if (tx.inMessage) {
             const msgCell = beginCell()
@@ -711,7 +713,7 @@ async function monitorIncomingTransactions(walletAddress: Address, client: TonCl
             const msgHash = msgCell.hash();
             console.log('Хэш сообщения:', msgHash.toString('hex'));
           }
-          
+
           lastLt = tx.lt;
         }
       }
@@ -891,158 +893,215 @@ trans_ord$0000 credit_first:Bool
 API сервис десериализует всю структуру с точностью до строковых и числовых типов данных. В связи с этим, тело транзакции возращаемое в json
 
 ```curl
-apiv3 request body <-
+curl -X 'GET' \
+  'https://toncenter.com/api/v3/transactions?limit=10&offset=0&sort=desc' \
+  -H 'accept: application/json'
 ```
-Возвращает очень большую структуру:
+Возвращает очень большую структуру (пример для API/v3):
 
-<details>
+
 ```json
  {
-          "account": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account of transcation
-          "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=", 
-          "lt": "15371766000003", # logical time, may have same values for txs on different accounts but every transaction on a given account will have unique lt
-          "now": 1696238450, # unix timestamp
-          "mc_block_seqno": 13353447, # seqno of masterchain block
-          "trace_id": "13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=", # tx_hash of the root transaction of the trace
-          "prev_trans_hash": "6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=", # hash of previous transaction on this account
-          "prev_trans_lt": "15371704000004", # lt of prev. transaction
-          "orig_status": "active", # account status before transaction
-          "end_status": "active", # ... after transaction
-          "total_fees": "12446659", # ... sum of fees from description
-          "description": {
-            "type": "ord",
-            "aborted": false,
-            "destroyed": false,
-            "credit_first": false,
-            "storage_ph": {
-              "storage_fees_collected": "48",
-              "status_change": "unchanged"
-            },
-            "compute_ph": {
-              "skipped": false,
-              "success": true,
-              "msg_state_used": false,
-              "account_activated": false,
-              "gas_fees": "8823000",
-              "gas_used": "8823",
-              "gas_limit": "400000",
-              "mode": 0,
-              "exit_code": 0,
-              "vm_steps": 178,
-              "vm_init_state_hash": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
-              "vm_final_state_hash": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
-            },
-            "action": {
-              "success": true,
-              "valid": true,
-              "no_funds": false,
-              "status_change": "unchanged",
-              "total_fwd_fees": "10871000",
-              "total_action_fees": "3623611",
-              "result_code": 0,
-              "tot_actions": 1,
-              "spec_actions": 0,
-              "skipped_actions": 0,
-              "msgs_created": 1,
-              "action_list_hash": "9XTNK6e1Fmmhd3cdzI0XcNDYRAoP5f5L4bWPUD3KNIE=",
-              "tot_msg_size": {
-                "cells": "23",
-                "bits": "8377"
-              }
-            }
-          },
-          # reference for the block of the transaction
-          "block_ref": {
-            "workchain": 0,
-            "shard": "8000000000000000",
-            "seqno": 14627985
-          },
-          # in message
-          "in_msg": {
-            "hash": "O9XCuICyXBWOs4hHMOYA0k6o4GPBsWbAkjFi2qbttQE=", # hash of whole message
-            "source": "0:F0C9C78F021AC65839B4006321A68BBB32DE5025F84C853CB9D75EB4894D0848", # account who has sended this message
-            "destination": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account who received this message (for in_msg should be same as account of transaction)
-            "value": "400000000", # attached TONS
-            "fwd_fee": "1494679", # fee for forwarding the message using Hypercube Routing
-            "ihr_fee": "0", # fee for forwarding the message throught Instant Hypercube Routing (now IHR is not implemented so this should be added to value)
-            "created_lt": "15371766000002", # logical time of creation (usually slightly differs from transaction lt, where this message appears as an out_msg)
-            "created_at": "1696238450", # unix timestamp
-            "opcode": "0x0f8a7ea5", # opcode
-            "ihr_disabled": true,
-            "bounce": true, # if bounce should be perfomed on failure
-            "bounced": false, # if bounce has happened
-            "import_fee": null, 
-            "message_content": { # message body
-              "hash": "tWjTyEL/sabOLNt97uyCj5na740lW54GUcVa0UrSDao=", # hash of the message body
-              # message body in base64 format
-              "body": "te6cckEBAgEAiAABbQ+KfqUAAAAAdJizmkC/A/doAc9ztfOy5YIoBWjnofpWHchoFtAb/s4FvzXctxUu0Cf0ED8uUQMBAJclk4VhgB3j1vChEcRNFz9a4PfQWGcds91PdwGR6Jm4o4muESRZKAJfTMEAPDJx48CGsZYObQAYyGmi7sy3lAl+EyFPLnXXrSJTQhIQIjm5Xw==",
-              "decoded": null # text comment if it could be decoded
-            },
-            "init_state": null
-          },
-          "out_msgs": [
-            {
-              "hash": "FuV4JPR/uZZOCzZxWQ473bASToqChvKDLmnf5BiCspI=",
-              "source": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # should coinside with transaction account for out_msg
-              "destination": "0:794760D36E657A27CDB8D3D65F243D6B468CAD2C34AF413E7709390E4DBE9907",
-              "value": "380306000",
-              "fwd_fee": "7247389",
-              "ihr_fee": "0",
-              "created_lt": "15371766000004",
-              "created_at": "1696238450",
-              "opcode": "0x178d4519",
-              "ihr_disabled": true,
-              "bounce": true,
-              "bounced": false,
-              "import_fee": null,
-              "message_content": {
-                "hash": "o+VOluS6wdyl44k2AIFTcRBvdxZD/98275dunIWcVIA=",
-                "body": "te6cckEBAgEAiAABbReNRRkAAAAAdJizmkC/A/doAeGTjx4ENYywc2gAxkNNF3ZlvKBL8JkKeXOuvWkSmhCQIH5cogYBAJclk4VhgB3j1vChEcRNFz9a4PfQWGcds91PdwGR6Jm4o4muESRZKAJfTMEAPDJx48CGsZYObQAYyGmi7sy3lAl+EyFPLnXXrSJTQhIQPzgXtA==",
-                "decoded": null
-              },
-              # init state in same format as message body
-              # needed to deploy a new contract
-              "init_state": {
-                "hash": "eUdg025leifNuNPWXyQ9a0aMrSw0r0E+dwk5Dk2+mQc=",
-                "body": "te6cckECFAEAA4AAAgE0AgEBhwgBz3O187LlgigFaOeh+lYdyGgW0Bv+zgW/Ndy3FS7QJ/UAN1wXvOOOdJfwh7sHnzxnFjjhTeJ04Bmd10caY4RPyrggAgEU/wD0pBP0vPLICwMCAWIEBQICywYHABug9gXaiaH0AfSB9IGoYQIBIAgJAIPSAINch7UTQ+gD6QPpA1DAE0x+CEBeNRRlSILqCEHvdl94TuhKx8uLF0z8x+gAwE6BQI8hQBPoCWM8WAc8WzMntVICAUgKCwIBWAwNAMNCDHAJJfBOAB0NMDAXGwlRNfA/AQ4PpA+kAx+gAxcdch+gAx+gAwc6m0AALTH4IQD4p+pVIgupUxNFnwDeCCEBeNRRlSILqWMUREA/AO4DWCEFlfB7y6k1nwD+BfBIQX8vCAART6RDBwuvLhTYAfFQPTP/oA+kAh8ALtRND6APpA+kDUMFE2oVIqxwXy4sEowv/y4sJUNEJwVCATVBQDyFAE+gJYzxYBzxbMySLIywES9AD0AMsAySD5AHB0yMsCygfL/8nQBPpA9AQx+gAg10nCAPLixHeAGMjLBVAIzxZw+gIXy2sTzIDgIBIA8QAK6CEBeNRRnIyx8Zyz9QB/oCIs8WUAbPFiX6AlADzxbJUAXMI5FykXHiUAioE6CCCOThwKoAggiYloCgoBS88uLFBMmAQPsAECPIUAT6AljPFgHPFszJ7VQD9ztRND6APpA+kDUMAjTP/oAUVGgBfpA+kBTW8cFVHNtcFQgE1QUA8hQBPoCWM8WAc8WzMkiyMsBEvQA9ADLAMn5AHB0yMsCygfL/8nQUA3HBRyx8uLDCvoAUaihggiYloCCCJiWgBK2CKGCCOThwKAYoSfjDyXXCwHDACOAREhMA2ztRND6APpA+kDUMAfTP/oA+kAwUVGhUknHBfLiwSfC//LiwoII5OHAqgAWoBa88uLDghB73ZfeyMsfFcs/UAP6AiLPFgHPFslxgBjIywUkzxZw+gLLaszJgED7AEATyFAE+gJYzxYBzxbMye1UgAHBSeaAYoYIQc2LQnMjLH1Iwyz9Y+gJQB88WUAfPFslxgBDIywUkzxZQBvoCFctqFMzJcfsAECQQIwAOEEkQODdfBAB2wgCwjiGCENUydttwgBDIywVQCM8WUAT6AhbLahLLHxLLP8ly+wCTNWwh4gPIUAT6AljPFgHPFszJ7VTOKoYI",
-                "decoded": null
-              }
-            }
-          ],
-          # account state before the transaction
-          "account_state_before": {
-            "hash": "ICpM+dm0PYhxtwS/EnIwMAvOQbtDhVWMnPtMAlw5Dog=", # hash of whole account state
-            "balance": "37821399", # balance
-            "account_status": "active", # status of account (active, nonexist = deleted, frozen, uninitialized)
-            "frozen_hash": null, # hash of state when it became frozen
-            "data_hash": "XeSmBiLWvwn00CWu5oq/q9Q6d4luPKxnOWC4NgEeugU=", # hash of data
-            "code_hash": "ITmGtOPGMSaMQ8fGUTxczC5zEmkqfhV7VEQchrqjpGc=" # hash of code
-          },
-          # account state after the transaction
-          "account_state_after": {
-            "hash": "7vvsHBjy5KoM/rIs6U8nHZt0pYOW5I3oTbBirxVK+Go=",
-            "balance": "37821351",
-            "account_status": "active",
-            "frozen_hash": null,
-            "data_hash": "aD0LD2LpPQYYR81n5b/EBHCPYmhBo4soNdvPoTL+xIk=",
-            "code_hash": "ITmGtOPGMSaMQ8fGUTxczC5zEmkqfhV7VEQchrqjpGc="
-          }
-        }
+  "account": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF",
+  "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=",
+  "lt": "15371766000003",
+  "now": 1696238450,
+  "mc_block_seqno": 13353447,
+  "trace_id": "13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=",
+  "prev_trans_hash": "6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=",
+  "prev_trans_lt": "15371704000004",
+  "orig_status": "active",
+  "end_status": "active",
+  "total_fees": "12446659",
+  "description": {
+  ...
+  },
+  "compute_ph": {
+   ....
+  },
+  "action": {
+    ...
+  },
+  "block_ref": {
+    ...
+  },
+  "in_msg": {
+  ...
+  },
+  "out_msgs": [
+   ...
+  ],
+
+  "account_state_before": {
+    ...
+  },
+
+  "account_state_after": {
+  ...
+  }
+}
+
 ```
+
+<details>
+  ```json
+  {
+    "account": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account of transcation
+    "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=",
+    "lt": "15371766000003", # logical time, may have same values for txs on different accounts but every transaction on a given account will have unique lt
+    "now": 1696238450, # unix timestamp
+    "mc_block_seqno": 13353447, # seqno of masterchain block
+    "trace_id": "13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=", # tx_hash of the root transaction of the trace
+    "prev_trans_hash": "6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=", # hash of previous transaction on this account
+    "prev_trans_lt": "15371704000004", # lt of prev. transaction
+    "orig_status": "active", # account status before transaction
+    "end_status": "active", # ... after transaction
+    "total_fees": "12446659", # ... sum of fees from description
+    "description": {
+    "type": "ord",
+    "aborted": false,
+    "destroyed": false,
+    "credit_first": false,
+    "storage_ph": {
+    "storage_fees_collected": "48",
+    "status_change": "unchanged"
+  },
+    "compute_ph": {
+    "skipped": false,
+    "success": true,
+    "msg_state_used": false,
+    "account_activated": false,
+    "gas_fees": "8823000",
+    "gas_used": "8823",
+    "gas_limit": "400000",
+    "mode": 0,
+    "exit_code": 0,
+    "vm_steps": 178,
+    "vm_init_state_hash": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+    "vm_final_state_hash": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+  },
+    "action": {
+    "success": true,
+    "valid": true,
+    "no_funds": false,
+    "status_change": "unchanged",
+    "total_fwd_fees": "10871000",
+    "total_action_fees": "3623611",
+    "result_code": 0,
+    "tot_actions": 1,
+    "spec_actions": 0,
+    "skipped_actions": 0,
+    "msgs_created": 1,
+    "action_list_hash": "9XTNK6e1Fmmhd3cdzI0XcNDYRAoP5f5L4bWPUD3KNIE=",
+    "tot_msg_size": {
+    "cells": "23",
+    "bits": "8377"
+  }
+  }
+  },
+    # reference for the block of the transaction
+    "block_ref": {
+    "workchain": 0,
+    "shard": "8000000000000000",
+    "seqno": 14627985
+  },
+    # in message
+    "in_msg": {
+    "hash": "O9XCuICyXBWOs4hHMOYA0k6o4GPBsWbAkjFi2qbttQE=", # hash of whole message
+    "source": "0:F0C9C78F021AC65839B4006321A68BBB32DE5025F84C853CB9D75EB4894D0848", # account who has sended this message
+    "destination": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account who received this message (for in_msg should be same as account of transaction)
+    "value": "400000000", # attached TONS
+    "fwd_fee": "1494679", # fee for forwarding the message using Hypercube Routing
+    "ihr_fee": "0", # fee for forwarding the message throught Instant Hypercube Routing (now IHR is not implemented so this should be added to value)
+    "created_lt": "15371766000002", # logical time of creation (usually slightly differs from transaction lt, where this message appears as an out_msg)
+    "created_at": "1696238450", # unix timestamp
+    "opcode": "0x0f8a7ea5", # opcode
+    "ihr_disabled": true,
+    "bounce": true, # if bounce should be perfomed on failure
+    "bounced": false, # if bounce has happened
+    "import_fee": null,
+    "message_content": { # message body
+    "hash": "tWjTyEL/sabOLNt97uyCj5na740lW54GUcVa0UrSDao=", # hash of the message body
+    # message body in base64 format
+    "body": "te6cckEBAgEAiAABbQ+KfqUAAAAAdJizmkC/A/doAc9ztfOy5YIoBWjnofpWHchoFtAb/s4FvzXctxUu0Cf0ED8uUQMBAJclk4VhgB3j1vChEcRNFz9a4PfQWGcds91PdwGR6Jm4o4muESRZKAJfTMEAPDJx48CGsZYObQAYyGmi7sy3lAl+EyFPLnXXrSJTQhIQIjm5Xw==",
+    "decoded": null # text comment if it could be decoded
+  },
+    "init_state": null
+  },
+    "out_msgs": [
+  {
+    "hash": "FuV4JPR/uZZOCzZxWQ473bASToqChvKDLmnf5BiCspI=",
+    "source": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # should coinside with transaction account for out_msg
+    "destination": "0:794760D36E657A27CDB8D3D65F243D6B468CAD2C34AF413E7709390E4DBE9907",
+    "value": "380306000",
+    "fwd_fee": "7247389",
+    "ihr_fee": "0",
+    "created_lt": "15371766000004",
+    "created_at": "1696238450",
+    "opcode": "0x178d4519",
+    "ihr_disabled": true,
+    "bounce": true,
+    "bounced": false,
+    "import_fee": null,
+    "message_content": {
+    "hash": "o+VOluS6wdyl44k2AIFTcRBvdxZD/98275dunIWcVIA=",
+    "body": "te6cckEBAgEAiAABbReNRRkAAAAAdJizmkC/A/doAeGTjx4ENYywc2gAxkNNF3ZlvKBL8JkKeXOuvWkSmhCQIH5cogYBAJclk4VhgB3j1vChEcRNFz9a4PfQWGcds91PdwGR6Jm4o4muESRZKAJfTMEAPDJx48CGsZYObQAYyGmi7sy3lAl+EyFPLnXXrSJTQhIQPzgXtA==",
+    "decoded": null
+  },
+    # init state in same format as message body
+    # needed to deploy a new contract
+    "init_state": {
+    "hash": "eUdg025leifNuNPWXyQ9a0aMrSw0r0E+dwk5Dk2+mQc=",
+    "body": "te6cckECFAEAA4AAAgE0AgEBhwgBz3O187LlgigFaOeh+lYdyGgW0Bv+zgW/Ndy3FS7QJ/UAN1wXvOOOdJfwh7sHnzxnFjjhTeJ04Bmd10caY4RPyrggAgEU/wD0pBP0vPLICwMCAWIEBQICywYHABug9gXaiaH0AfSB9IGoYQIBIAgJAIPSAINch7UTQ+gD6QPpA1DAE0x+CEBeNRRlSILqCEHvdl94TuhKx8uLF0z8x+gAwE6BQI8hQBPoCWM8WAc8WzMntVICAUgKCwIBWAwNAMNCDHAJJfBOAB0NMDAXGwlRNfA/AQ4PpA+kAx+gAxcdch+gAx+gAwc6m0AALTH4IQD4p+pVIgupUxNFnwDeCCEBeNRRlSILqWMUREA/AO4DWCEFlfB7y6k1nwD+BfBIQX8vCAART6RDBwuvLhTYAfFQPTP/oA+kAh8ALtRND6APpA+kDUMFE2oVIqxwXy4sEowv/y4sJUNEJwVCATVBQDyFAE+gJYzxYBzxbMySLIywES9AD0AMsAySD5AHB0yMsCygfL/8nQBPpA9AQx+gAg10nCAPLixHeAGMjLBVAIzxZw+gIXy2sTzIDgIBIA8QAK6CEBeNRRnIyx8Zyz9QB/oCIs8WUAbPFiX6AlADzxbJUAXMI5FykXHiUAioE6CCCOThwKoAggiYloCgoBS88uLFBMmAQPsAECPIUAT6AljPFgHPFszJ7VQD9ztRND6APpA+kDUMAjTP/oAUVGgBfpA+kBTW8cFVHNtcFQgE1QUA8hQBPoCWM8WAc8WzMkiyMsBEvQA9ADLAMn5AHB0yMsCygfL/8nQUA3HBRyx8uLDCvoAUaihggiYloCCCJiWgBK2CKGCCOThwKAYoSfjDyXXCwHDACOAREhMA2ztRND6APpA+kDUMAfTP/oA+kAwUVGhUknHBfLiwSfC//LiwoII5OHAqgAWoBa88uLDghB73ZfeyMsfFcs/UAP6AiLPFgHPFslxgBjIywUkzxZw+gLLaszJgED7AEATyFAE+gJYzxYBzxbMye1UgAHBSeaAYoYIQc2LQnMjLH1Iwyz9Y+gJQB88WUAfPFslxgBDIywUkzxZQBvoCFctqFMzJcfsAECQQIwAOEEkQODdfBAB2wgCwjiGCENUydttwgBDIywVQCM8WUAT6AhbLahLLHxLLP8ly+wCTNWwh4gPIUAT6AljPFgHPFszJ7VTOKoYI",
+    "decoded": null
+  }
+  }
+    ],
+    # account state before the transaction
+    "account_state_before": {
+    "hash": "ICpM+dm0PYhxtwS/EnIwMAvOQbtDhVWMnPtMAlw5Dog=", # hash of whole account state
+    "balance": "37821399", # balance
+    "account_status": "active", # status of account (active, nonexist = deleted, frozen, uninitialized)
+    "frozen_hash": null, # hash of state when it became frozen
+    "data_hash": "XeSmBiLWvwn00CWu5oq/q9Q6d4luPKxnOWC4NgEeugU=", # hash of data
+    "code_hash": "ITmGtOPGMSaMQ8fGUTxczC5zEmkqfhV7VEQchrqjpGc=" # hash of code
+  },
+    # account state after the transaction
+    "account_state_after": {
+    "hash": "7vvsHBjy5KoM/rIs6U8nHZt0pYOW5I3oTbBirxVK+Go=",
+    "balance": "37821351",
+    "account_status": "active",
+    "frozen_hash": null,
+    "data_hash": "aD0LD2LpPQYYR81n5b/EBHCPYmhBo4soNdvPoTL+xIk=",
+    "code_hash": "ITmGtOPGMSaMQ8fGUTxczC5zEmkqfhV7VEQchrqjpGc="
+  }
+  }
+  ```
 </details>
 
 В зависимости от задачи интересные к проверке поля могут меняться. Сейчас обозначим наиболее интересные
-Native - содержится в блокчейне.
+Native - содержится в блокчейне. В описание указано наименвоание поля определенное в TL-B схемах block.tlb.
 Postprocessing - досчитано на стороне API
+Native object extended inside - Такой объект есть в блокчейне, но данные дополнены на строне API, подробно в отдельной таблице
 
+| Поле           | Происхождение                 | Описание                                                                                                                             | Пример                                           |
+|----------------|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+| `trace_id`       | Postprocessing                | tx_hash of the root transaction of the trace                                                                                         | 13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=     |
+| `prev_trans_hash` | Native                        | tx_hash of the root transaction of the trace                                                                                         | 6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=     |
+| `account`        | Native                        | Адрес аккаунта, на котором произошла транзакция. Происхождение нативное, важно учесть что здесь получается RAW формат адреса.        | `0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF` |
+| `hash`           | Postprocessing                | Хеш текущей транзакции                                                                                                               | `/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=`        |
+| `lt`             | Native                        | Логическое время транзакции; уникально для каждой транзакции на одном аккаунте. Исходное поле транзакции в блокчейне `lt`.           | `15371766000003`                                      |
+| `now`            | Native                        | Временная метка транзакции в формате UNIX timestamp. Исходное поле транзакции в блокчейне `now`.                                     | `1696238450`                                          |
+| `mc_block_seqno` | Postprocessing                | Порядковый номер блока мастерчейна, в который включена транзакция. В транзакции этой информации нет, HTTP сервис добавляет по памяти | `13353447`                                            |
+| `trace_id`       | Postprocessing               | Хеш корневой транзакции в цепочке вызовов (trace). Trace - сущность создаваемая в TON Center API/v3                                  | `13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=`        |
+| `prev_trans_hash`| Native               | Хеш предыдущей транзакции на этом аккаунте. Исходное поле транзакции в блокчейне `prev_trans_hash`                                   | `6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=`        |
+| `prev_trans_lt`  | Native               | Логическое время предыдущей транзакции на этом аккаунте. Исходное поле транзакции в блокчейне `prev_trans_lt`.                       | `15371704000004`                                      |
+| `orig_status`    | Native               | Статус аккаунта до выполнения транзакции. Исходное поле транзакции в блокчейне `orig_status`.                                      | `active`                                              |
+| `end_status`     | Native               | Статус аккаунта после выполнения транзакции. Исходное поле транзакции в блокчейне `end_status`.                                   | `active`                                              |
+| `total_fees`     | Native      | Сумма всех комиссий, связанных с транзакцией. Исходное поле транзакции в блокчейне `total_fees`.                                                                                       | `12446659`                                            |
+| `in_msg`         | Native object extended inside | In message body object                                                                                                               | `"in_msg": {...}`                                |
 
-| Поле            | Происхождение                 | Описание                                     | Пример                                         |
-|-----------------|-------------------------------|----------------------------------------------|------------------------------------------------|
-| trace_id        | Postprocessing                | tx_hash of the root transaction of the trace | 13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=   | 
-| prev_trans_hash | Native                        | tx_hash of the root transaction of the trace | 6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=   | 
-| in_msg          | Native object extended inside | In message body object                       | `"in_msg": {...}`                                |
-
-TODO определеить набор полей которые здесь полезно рассмотреть.
+TODO определить набор полей которые здесь полезно рассмотреть.
 
 
 ## Транзакция
