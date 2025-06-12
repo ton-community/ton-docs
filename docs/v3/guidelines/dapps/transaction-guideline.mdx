@@ -978,8 +978,8 @@ curl -X 'GET' \
   'https://toncenter.com/api/v3/transactions?limit=10&offset=0&sort=desc' \
   -H 'accept: application/json'
 ```
-Возвращает очень большую структуру (пример для API/v3):
 
+Возвращает очень большую структуру (пример для API/v3):
 
 ```json
  {
@@ -1167,6 +1167,7 @@ Native object extended inside - Такой объект есть в блокче
 
 | Поле           | Происхождение                 | Описание                                                                                                                             | Пример                                           |
 |----------------|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+
 | `trace_id`       | Postprocessing                | tx_hash of the root transaction of the trace                                                                                         | 13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=     |
 | `prev_trans_hash` | Native                        | tx_hash of the root transaction of the trace                                                                                         | 6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=     |
 | `account`        | Native                        | Адрес аккаунта, на котором произошла транзакция. Происхождение нативное, важно учесть что здесь получается RAW формат адреса.        | `0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF` |
