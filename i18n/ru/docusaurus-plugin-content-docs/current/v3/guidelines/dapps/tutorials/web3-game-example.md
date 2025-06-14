@@ -1,26 +1,24 @@
-# Блокчейн TON для игр
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# TON Blockchain for games
 
-## Содержание
+## What’s in the tutorial
 
-В этом уроке мы рассмотрим, как добавить блокчейн TON в игру. Для нашего примера мы будем использовать клон Flappy Bird, написанный на Phaser, и шаг за шагом добавлять функции GameFi. В учебнике мы будем использовать короткие фрагменты кода и псевдокод, чтобы было понятнее. Кроме того, мы будем давать ссылки на реальные блоки кода, чтобы помочь Вам лучше понять. Всю реализацию можно найти в [демо-репо](https://github.com/ton-community/flappy-bird).
+In this tutorial, we will explore how to integrate TON Blockchain into a game. As an example, we will use a Flappy Bird clone built with Phaser and gradually add GameFi features. To improve readability, we will use short code snippets and pseudocode. Additionally, we will provide links to real code blocks for better understanding. The complete implementation can be found in the [demo repo](https://github.com/ton-community/flappy-bird).
 
 ![Игра Flappy Bird без функций GameFi](/img/tutorials/gamefi-flappy/no-gamefi-yet.png)
 
-Мы собираемся реализовать следующее:
+We will implement the following:
 
-- Достижения. Давайте наградим наших пользователей [SBT](/v3/concepts/glossary#sbt). Система достижений - это отличный инструмент для повышения вовлеченности пользователей.
-- Игровая валюта. В блокчейне TON легко запустить свой собственный токен (жетон). Этот токен можно использовать для создания внутриигровой экономики. Наши пользователи смогут зарабатывать игровые монеты, чтобы потом тратить их.
-- Игровой магазин. Мы предоставим пользователям возможность приобретать внутриигровые предметы, используя либо внутриигровую валюту, либо сами монеты TON.
+- Achievements. Let’s reward our users with [SBTs](/v3/concepts/glossary#sbt). The achievement system is a great tool for increasing user engagement.
+- Game currency. On the TON blockchain, it’s easy to launch your own token (jetton). The token can be used to create an in-game economy. Our users will be able to earn game coins and spend them later.
+- Game shop. We will allow users to purchase in-game items using either in-game currency or TON coins.
 
 ## Подготовка
 
 ### Установите GameFi SDK
 
-Сначала мы настроим игровое окружение. Для этого нам нужно установить `assets-sdk`. Этот пакет предназначен для подготовки всего, что нужно разработчикам для интеграции блокчейна в игры. lib можно использовать из CLI или из скриптов Node.js. В этом уроке мы будем придерживаться подхода CLI.
+First, we need to set up the game environment by installing `assets-sdk`. This package is designed to provide developers with everything required to integrate blockchain into games. The library can be used either from the CLI or within Node.js scripts. In this tutorial, we will use the CLI approach.
 
 ```sh
 npm install -g @ton-community/assets-sdk@beta
@@ -28,40 +26,39 @@ npm install -g @ton-community/assets-sdk@beta
 
 ### Создайте главный кошелек
 
-Далее нам нужно создать главный кошелек. Главный кошелек - это кошелек, который мы будем использовать для чеканки жетона, коллекций, NFT, SBT и получения платежей.
+Next, we need to create a master wallet. This wallet will be used to mint jettons, collections, NFTs, and SBTs, as well as to receive payments.
 
 ```sh
 assets-cli setup-env
 ```
 
-Вам будет задано несколько вопросов:
+You will be asked a few questions during the setup.
 
-| Поле      | Подсказка                                                                                                                                                                                                                                                                                                                                                 |
-| :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Сеть      | Выберите `testnet`, пока это тестовая игра.                                                                                                                                                                                                                                                                                               |
-| Тип       | Выберите кошелек типа `highload-v2`, поскольку это самый лучший и производительный вариант для использования в качестве главного кошелька.                                                                                                                                                                                                |
-| Хранение  | Хранилище будет использоваться для хранения файлов `NFT`/`SBT`. `Amazon S3` (централизованное) или `Pinata` (децентрализованное).  В данном руководстве мы будем использовать `Pinata`, поскольку децентрализованное хранилище будет более наглядным для Web3 игры. |
-| Шлюз IPFS | Сервис откуда будут загружаться метаданные активов: `pinata`, `ipfs.io` или введите URL другого сервиса.                                                                                                                                                                                                                  |
+| Поле      | Подсказка                                                                                                                                                                                                                                                                                                             |
+| :-------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Network   | Select `testnet` since this is a test game.                                                                                                                                                                                                                                                           |
+| Тип       | Select `highload-v2`wallet type, as it offers the best performance for use as a master wallet.                                                                                                                                                                                                        |
+| Хранение  | Storage is used to hold `NFT`/`SB`T files. You can choose between `Amazon S3` (centralized) or `Pinata` (decentralized).  For this tutorial, we'll use Pinata since decentralized storage is more illustrative for a Web3 game. |
+| Шлюз IPFS | This service loads asset metadata from  `pinata`, \\`ipfs.io,  or a custom service URL.                                                                                                                                                                                              |
 
-Скрипт выводит ссылку, которую Вы можете открыть, чтобы посмотреть состояние созданного кошелька.
+The script will output a link where you can view the created wallet's state.
 
 ![Новый кошелек в статусе Nonexist](/img/tutorials/gamefi-flappy/wallet-nonexist-status.png)
 
-Как Вы можете заметить, кошелек еще не создан. Чтобы кошелек был действительно создан, нам нужно внести в него средства. В реальном сценарии Вы можете пополнить кошелек любым удобным для Вас способом, используя адрес кошелька. В нашем случае мы будем использовать [Testgiver TON Bot](https://t.me/testgiver_ton_bot). Пожалуйста, откройте его, чтобы получить 5 тестовых монет TON.
+As you can see, the wallet has not actually been created yet. To finalize the creation, we need to deposit funds into it. In a real-world scenario, you can fund the wallet however you prefer using its address. In our case, we will use the [Testgiver TON Bot](https://t.me/testgiver_ton_bot). Open it to claim 5 test TON coins.
 
-Немного позже Вы сможете увидеть 5 TON на кошельке, а его статус станет `Uninit`. Кошелек готов. После первого использования он изменит статус на `Active`.
-
-![Состояние кошелька после пополнения](/img/tutorials/gamefi-flappy/wallet-nonexist-status.png)
+A little later, you should see 5 TON in the wallet, and its status will change to Uninit. The wallet is now ready. After the first transaction, its status will change to Active.
+![Wallet status after top-up](/img/tutorials/gamefi-flappy/wallet-nonexist-status.png)
 
 ### Чеканьте внутриигровую валюту
 
-Мы собираемся создать внутриигровую валюту, чтобы вознаграждать ею пользователей:
+We are going to create an in-game currency to reward users.
 
 ```sh
 assets-cli deploy-jetton
 ```
 
-Вам будет задано несколько вопросов:
+You will be asked a few questions during the setup:
 
 | Поле             | Подсказка                                                                                                                                                                                                                                                                                |
 | :--------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -71,13 +68,13 @@ assets-cli deploy-jetton
 | Символ           | `FLAP` или введите любую аббревиатуру, которую Вы хотите использовать.                                                                                                                                                                                                   |
 | Десятичные числа | Сколько нулей после точки будет у Вашей валюты. Пусть в нашем случае это будет `0`.                                                                                                                                                                      |
 
-Скрипт выводит ссылку, которую Вы можете открыть, чтобы увидеть состояние созданного жетона. Он будет иметь статус `Active`. Состояние кошелька изменит статус с `Uninit` на `Active`.
+The script will output a link where you can view the created jetton's state. It will have an **Active** status. The wallet’s status will change from **Uninit** to **Active**.
 
 ![Внутриигровая валюта / жетон](/img/tutorials/gamefi-flappy/jetton-active-status.png)
 
 ### Создание коллекций для SBT
 
-Для примера, в демо-игре мы будем награждать пользователей за первую и пятую игру. Таким образом, мы создадим две коллекции, чтобы помещать в них SBT, когда пользователи достигнут соответствующих условий - сыграют первый и пятый раз:
+For our demo game, we will reward users after their first and fifth games. To do this, we will mint two collections, where SBTs will be assigned when users meet the required conditions—playing for the first and fifth time:
 
 ```sh
 assets-cli deploy-nft-collection
@@ -90,17 +87,19 @@ assets-cli deploy-nft-collection
 | Описание    | Отпразднуйте свое первое путешествие в игре Flappy Bird!                                                                                          | Отметьте свою упорную игру с Flappy High Fiver NFT!                                                                                               |
 | Изображение | Вы можете скачать [изображение](https://raw.githubusercontent.com/ton-community/flappy-bird/article-v1/scripts/tokens/first-time/image.png) здесь | Вы можете скачать [изображение](https://raw.githubusercontent.com/ton-community/flappy-bird/article-v1/scripts/tokens/five-times/image.png) здесь |
 
-Мы полностью готовы. Итак, давайте перейдем к реализации логики.
+Now that we are fully prepared, let's proceed to implementing the game logic.
 
 ## Подключение кошелька
 
-Процесс начинается с того, что пользователь подключает свой кошелек. Итак, давайте добавим интеграцию подключения кошелька. Для работы с блокчейном со стороны клиента нам необходимо установить GameFi SDK для Phaser:
+The process begins with the user connecting their wallet. Let's integrate wallet connectivity.
+
+To interact with the blockchain from the client side, we need to install the GameFi SDK for Phaser:
 
 ```sh
 npm install --save @ton/phaser-sdk@beta
 ```
 
-Теперь давайте настроим GameFi SDK и создадим его экземпляр:
+Now, let's set up GameFi SDK and create an instance of it:
 
 ```typescript
 import { GameFi } from '@ton/phaser-sdk'
@@ -139,7 +138,7 @@ const gameFi = await GameFi.create({
 
 > Чтобы узнать, что такое `tonconnect-manifest.json`, пожалуйста, проверьте ton-connect [описание манифеста](/v3/guidelines/ton-connect/guidelines/creating-manifest).
 
-Теперь мы готовы создать кнопку подключения кошелька. Давайте создадим сцену пользовательского интерфейса в Phaser, которая будет содержать кнопку подключения:
+Next, we are ready to create a **Wallet Connect** button. Let’s create a UI scene in Phaser that will contain the **Connect** button:
 
 ```typescript
 class UiScene extends Phaser.Scene {
@@ -165,7 +164,7 @@ class UiScene extends Phaser.Scene {
 
 > Прочитайте, как создать [кнопку подключения](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/connect-wallet-ui.ts#L82) и [сцену пользовательского интерфейса](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/connect-wallet-ui.ts#L45).
 
-Чтобы следить за тем, когда пользователь подключает или отключает свой кошелек, давайте воспользуемся следующим фрагментом кода:
+To monitor when a user connects or disconnects their wallet, use the following code snippet:
 
 ```typescript
 function onWalletChange(wallet: Wallet | null) {
@@ -180,9 +179,9 @@ const unsubscribe = gameFi.onWalletChange(onWalletChange)
 
 > Чтобы узнать о более сложных сценариях, ознакомьтесь с полной реализацией [процесса подключения кошелька](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/index.ts#L16).
 
-Прочитайте, как может быть реализовано [управление игровым пользовательским интерфейсом](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/index.ts#L50).
+Read how [game UI managing](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/index.ts#L50) can be implemented.
 
-Теперь у нас подключен кошелек пользователя, и мы можем двигаться дальше.
+Now that we have the user's wallet connected, we can move forward.
 
 ![Кнопка подключения кошелька](/img/tutorials/gamefi-flappy/wallet-connect-button.png)
 ![Подтверждение подключения кошелька](/img/tutorials/gamefi-flappy/wallet-connect-confirmation.png)
@@ -190,22 +189,22 @@ const unsubscribe = gameFi.onWalletChange(onWalletChange)
 
 ## Реализация достижений и наград
 
-Для реализации системы достижений и вознаграждений нам необходимо подготовить конечную точку, которая будет запрашиваться при каждой попытке пользователя.
+To implement the achievements and reward system, we need to set up an endpoint that will be triggered each time a user plays.
 
 ### Конечная точка `/played`
 
-Нам нужно создать конечную точку `/played`, которая должна выполнять следующие действия:
+We need to create an endpoint `/played ` which does the following:
 
-- получите тело запроса с адресом кошелька пользователя и начальными данными Telegram, переданными Mini App во время запуска приложения. Начальные данные необходимо разобрать, чтобы извлечь данные аутентификации и убедиться, что пользователь отправляет запрос только от своего имени.
-- конечная точка должна подсчитать и сохранить количество игр, в которые сыграл пользователь.
-- конечная точка должна проверить, если это первая или пятая игра для пользователя, и, если да, вознаградить пользователя соответствующим SBT.
-- конечная точка должна вознаграждать пользователя 1 FLAP за каждую игру.
+- receives a request body containing the user’s wallet address and Telegram initial data, which is passed to the Mini App during launch. The initial data must be parsed to extract authentication details and verify that the user is sending the request on their own behalf.
+- tracks and stores the number of games a user has played.
+- checks whether this is the user’s first or fifth game. If so, it rewards the user with the corresponding SBT.
+- rewards the user with 1 FLAP for each game played.
 
 > Прочитайте код [конечной точки /played](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/server/src/index.ts#L197).
 
 ### Запрос конечной точки `/played`
 
-Каждый раз, когда птица ударяется о трубу или падает вниз, клиентский код должен вызывать конечную точку `/played`, передавая правильное тело:
+Every time the bird hits a pipe or falls, the client code must call the `/played` endpoint, passing the correct request body:
 
 ```typescript
 async function submitPlayed(endpoint: string, walletAddress: string) {
@@ -226,42 +225,41 @@ const playedInfo = await submitPlayed('http://localhost:3001', wallet.account.ad
 
 > Прочитайте код [submitPlayer function](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/game-scene.ts#L10).
 
-Давайте сыграем в первый раз и убедимся, что будем вознаграждены жетоном FLAP и SBT. Нажмите кнопку Play, пролетите через пару труб, а затем врежьтесь. Отлично, все работает!
+Let’s play for the first time and ensure we receive a FLAP token and an SBT. Click the Play button, fly through a pipe or two, then crash into a pipe. Everything works!
 
 ![Награжден жетоном и SBT](/img/tutorials/gamefi-flappy/sbt-rewarded.png)
 
-Сыграйте еще 4 раза, чтобы получить второй SBT, а затем откройте свой Кошелек, TON Space. Здесь находятся Ваши коллекционные предметы:
+Play four more times to earn the second SBT, then open your TON Space Wallet. Here are your collectibles:
+![Achievements as SBT in Wallet](/img/tutorials/gamefi-flappy/sbts-in-wallet.png)
 
-![Достижения как SBT в кошельке](/img/tutorials/gamefi-flappy/sbts-in-wallet.png)
+## Implementing the game shop
 
-## Реализация игрового магазина
-
-Чтобы иметь внутриигровой магазин, нам необходимо иметь два компонента. Первый - это конечная точка, которая предоставляет информацию о покупках пользователей. Второй - глобальный цикл, который следит за пользовательскими транзакциями и назначает игровые свойства их владельцам.
+To set up an in-game shop, we need two components. The first is an endpoint that provides information about users' purchases. The second is a global loop that monitors user transactions and assigns game properties to item owners.
 
 ### Конечная точка `/purchases`
 
 Конечная точка делает следующее:
 
-- получает параметр `auth` с начальными данными Telegram Mini Apps.
-- получает товары, которые купил пользователь, и отвечает списком товаров.
+- receive `auth` query parameter containing Telegram Mini App initial data.
+- retrieves the items a user has purchased and responds with a list of those items.
 
 > Прочитайте код конечной точки [/purchases](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/server/src/index.ts#L303).
 
 ### Цикл для покупок
 
-Чтобы узнать, когда пользователи совершают платежи, нам нужно следить за транзакциями главного кошелька. Каждая транзакция должна содержать сообщение `userId`:`itemId`. Мы будем запоминать последнюю обработанную транзакцию, получать только новые, присваивать пользователям свойства, которые они купили, используя `userId` и `itemId`, переписывать хэш последней транзакции. Это будет работать в бесконечном цикле.
+o track user payments, we need to monitor transactions in the master wallet. Each transaction must include a message in the format `userId`:`itemId`. We will store the last processed transaction, retrieve only new ones, assign purchased properties to users based on `userId` and `itemId`, and update the last transaction hash. This process will run in an infinite loop.
 
-> Прочитайте код [цикла покупки](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/server/src/index.ts#L110).
+> Read the [purchase loop](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/server/src/index.ts#L110) code.
 
 ### Клиентская часть магазина
 
-На стороне клиента у нас есть кнопка "Shop".
+On the client side, we have a **Shop** button.
 
 ![Кнопка входа в магазин](/img/tutorials/gamefi-flappy/shop-enter-button.png)
 
-Когда пользователь нажимает на кнопку, открывается сцена магазина. Сцена магазина содержит список товаров, которые пользователь может купить. У каждого товара есть цена и кнопка "Buy". Когда пользователь нажимает на кнопку "Buy", совершается покупка.
+When a user clicks this button, the **Shop Scene** opens. The shop contains a list of items available for purchase. Each item has a price and a Buy button. When a user clicks the Buy button, the purchase is processed.
 
-Открытие магазина вызовет загрузку купленных предметов и будет обновлять его каждые 10 секунд:
+Opening the **Shop Scene** will trigger the loading of purchased items and refresh the list every 10 seconds.
 
 ```typescript
 // inside of fetchPurchases function
@@ -272,7 +270,7 @@ setTimeout(() => { fetchPurchases() }, 10000)
 
 > Прочитайте код [функции showShop](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/ui.ts#L191).
 
-Теперь нам нужно реализовать саму покупку. Для этого мы сначала создадим экземпляр GameFi SDK, а затем воспользуемся методом `buyWithJetton`:
+Now, we need to implement the purchase process. To do this, we will first create a GameFi SDK instance and then use the `buyWithJetton` method:
 
 ```typescript
 gameFi.buyWithJetton({
@@ -286,7 +284,7 @@ gameFi.buyWithJetton({
 ![Подтверждение покупки](/img/tutorials/gamefi-flappy/purchase-confirmation.png)
 ![Товар готов к использованию](/img/tutorials/gamefi-flappy/purchase-done.png)
 
-Также можно расплатиться монетой TON:
+It is also possible to pay with TON coins:
 
 ```typescript
 import { toNano } from '@ton/phaser-sdk'
@@ -299,10 +297,13 @@ gameFi.buyWithTon({
 
 ## Послесловие
 
-На этом все! Мы рассмотрели основные возможности GameFi, но SDK предоставляет больше функций, таких как трансферы между игроками, утилиты для работы с NFT и коллекциями и т.д. В будущем мы предоставим еще больше возможностей.
+That’s it for this tutorial! We explored the basic GameFi features, but the SDK offers additional functionality, such as player-to-player transfers and utilities for working with NFTs and collections. More features will be introduced in the future.
 
-Чтобы узнать обо всех возможностях GameFi, которые Вы можете использовать, прочитайте документацию [ton-org/game-engines-sdk](https://github.com/ton-org/game-engines-sdk) и [@ton-community/assets-sdk](https://github.com/ton-community/assets-sdk).
+To learn about all available GameFi features, read the documentation for [ton-org/game-engines-sdk](https://github.com/ton-org/game-engines-sdk) and [@ton-community/assets-sdk](https://github.com/ton-community/assets-sdk).
 
-Поделитесь мнением в [Обсуждениях](https://github.com/ton-org/game-engines-sdk/discussions)!
+Let us know your thoughts in [Discussions](https://github.com/ton-org/game-engines-sdk/discussions)!
 
-Полная реализация доступна в репозитории [flappy-bird](https://github.com/ton-community/flappy-bird).
+The complete implementation is available in the [flappy-bird](https://github.com/ton-community/flappy-bird) repository.
+
+<Feedback />
+

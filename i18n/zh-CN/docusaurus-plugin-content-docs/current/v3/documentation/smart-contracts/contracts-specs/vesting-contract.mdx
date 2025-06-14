@@ -1,28 +1,30 @@
-# 归属合约
+import Feedback from '@site/src/components/Feedback';
 
-该合约允许您锁定一定数量的Toncoin，并在指定时间内逐渐解锁。
+# Vesting contract
 
-## 归属参数
+The vesting contract is a smart contract implementation on the TON blockchain, enabling secure, scheduled distribution of Toncoin assets. This contract provides a robust framework for token management, ensuring the controlled release of funds based on predetermined schedules and conditions.
 
-归属参数在部署期间设置且不变。
+## Core functionality
 
-`vesting_total_amount` - 以 nanoton 为单位，锁定的Toncoin总量。
+The contract is a secure escrow service that locks a specified amount of Toncoin for a defined period and gradually releases it according to configurable parameters. This mechanism ensures predictable token distribution while maintaining strict control over asset release schedules.
 
-`vesting_start_time` - unix时间，归属周期的开始点，直到这一刻`vesting_total_amount`被锁定，之后根据其他参数开始解锁。
+## Contract parameters
 
-`vesting_total_duration` - 总归属持续时间，以秒为单位（例如，`31104000`表示一年）。
+During deployment, the system establishes the following parameters, which cannot be changed and remain fixed throughout the entire duration of the contract:
 
-`unlock_period` - 解锁周期，以秒为单位（例如，`2592000`表示每月一次）。
+| Parameter                | Description                                     | Example values       |
+| ------------------------ | ----------------------------------------------- | -------------------- |
+| `vesting_total_amount`   | Total locked Toncoins (in nanotons)             | 500 TON              |
+| `vesting_start_time`     | Unix timestamp marking vesting period beginning | Current time + delay |
+| `vesting_total_duration` | Total vesting period duration (seconds)         | 31104000 (one year)  |
+| `unlock_period`          | Time interval between releases (seconds)        | 2592000 (monthly)    |
+| `cliff_duration`         | Initial lock period before first release        | 5184000 (two months) |
+| `vesting_sender_address` | Authorized address for locked funds management  | Configurable         |
+| `owner_address`          | Beneficiary address for Toncoin distribution    | Configurable         |
 
-`cliff_duration` - 初始悬崖期，以秒为单位（例如，`5184000`表示2个月）。
+You can acquire these specific parameters using the `get_vesting_data()` method.
 
-`vesting_sender_address` - 您可以随时将Toncoin退回到此地址（即使它们被锁定）；此地址还可以添加到白名单中。
-
-`owner_address` - 归属发行给其的人，从此地址，他可以发起从归属合约发送Toncoin的请求。
-
-您可以通过`get_vesting_data()` get方法获取这些参数。
-
-参数必须满足以下条件：
+The parameters must satisfy these conditions:
 
 ```
 vesting_total_duration > 0
@@ -35,122 +37,116 @@ vesting_total_duration mod unlock_period == 0
 cliff_duration mod unlock_period == 0
 ```
 
-尽管智能合约不检查这些条件的符合性，但在合约部署后且在发送Toncoin之前，用户可以通过get方法验证所有参数是否OK。
+Before sending Toncoins to the deployed smart contract, users can verify parameter compliance using the get method, even though the contract itself does not perform these checks.
 
-## 锁定
+## Lock mechanism
 
-在`vesting_start_time`之前，所有`vesting_total_amount`都被锁定。
+Before `vesting_start_time`, the contract locks the entire `vesting_total_amount`.
 
-从`vesting_start_time`开始，金额开始按比例解锁。
+Starting at `vesting_start_time`, it unlocks the amount proportionately. For example, if the `vesting_total_duration` is 10 months, the `unlock_period` is 1 month, and the `vesting_total_amount` is 500 TON, then the contract unlocks 50 TON (500 \* 10/100) each month, fully releasing all 500 TON in 10 months.
 
-例如，如果`vesting_total_duration`为10个月，`unlock_period`为1个月，且`vesting_total_amount`为500 TON，则每月将解锁500\*(10/100)=50 TON，10个月后将解锁全部500 TON。
+If a cliff period exists, no amount unlocks during that time. Once the cliff period ends, the contract unlocking according to the same formula. For instance, with a `cliff_period` of 3 months, the contract unlocks nothing in the first 3 months, then unlocks 150 TON at once, followed by 50 TON each month thereafter.
 
-如果有悬崖期，在此悬崖期内不解锁任何金额，过了悬崖期后，按上述公式解锁。
+You can use the `get_locked_amount(int at_time)` method to calculate how much will be locked at a specific time. The contract allows you to transfer locked Toncoins only to whitelisted addresses or the `vesting_sender_address`. Once unlocked, you can freely send the Toncoins wherever you like.
 
-例如，如果`cliff_period`为3个月，其他参数与前例相同，则前3个月不会解锁任何金额，3个月后一次性解锁150 TON（然后每个月解锁50 TON）。
+## Whitelist
 
-Get方法`get_locked_amount(int at_time)`允许您计算在某个时间点将锁定多少金额。
+A whitelist contains addresses to which you can send Toncoins, even if the coins remain locked.
 
-您只能将锁定的Toncoin发送到白名单地址或`vesting_sender_address`。
+The `get_whitelist()` method retrieves all whitelist addresses as a list of (wc, hash_part) tuples. You can use the `is_whitelisted(slice address)` method to check if a specific address is on the whitelist.
 
-您可以随时随地发送已解锁的Toncoin。
+The `vesting_sender_address` can add new addresses to the whitelist at any time using the `op::add_whitelist` message, but no addresses can be removed from the whitelist. You can always send locked coins to the `vesting_sender_address` without adding it to the whitelist.
 
-## 白名单
+## Top-up
 
-白名单是一系列地址，即使还有Toncoin被锁定，也可以向其发送Toncoin。
+You can send Toncoins to the vesting contract from any address.
 
-Get方法`get_whitelist()`以(wc, hash_part)元组列表形式返回所有白名单地址。
+## Wallet smart contract
 
-Get方法`is_whitelisted(slice address)`检查此地址是否在白名单上。
+This [contract](https://github.com/ton-blockchain/vesting-contract/blob/2a63cb96942332abf92ed8425b37645fe4f41f86/contracts/vesting_wallet.fc#L366) is similar to the [standard wallet V3 smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc).
 
-`vesting_sender_address`可以随时通过`op::add_whitelist`消息向白名单添加新地址。
+The contract maintains `seqno`, `subwallet_id`, and `public_key`, accepts external messages in the same format, and offers get-methods `seqno()`, `get_subwallet_id()`, and `get_public_key()`. Unlike standard wallets, this vesting contract restricts sending to one message at a time.
 
-无法从白名单中移除地址。
+## Send
 
-此外，始终可以将锁定的代币发送到`vesting_sender_address`（无需单独添加到白名单）。
+The public key owner can initiate the sending of Toncoins from the vesting contract by an external message, just like in standard wallets.
 
-## 充值
+The owner initiates Toncoin transfers by sending an `op::send` internal message from their owner address. In typical usage, the same user owns both the public key and the `owner address`.
 
-您可以从任何地址向归属合约发送Toncoin。
+## Whitelist restrictions
 
-## 钱包智能合约
+The contract restricts messages sent to the `vesting_sender_address` by allowing only `send_mode == 3`.
 
-该合约设计类似于[标准钱包V3智能合约](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)。
+Users typically add addresses to the whitelist to enable validation using locked coins or staking locked coins in pools.
 
-在其数据中，它保留`seqno`、`subwallet_id`、`public_key`，并接受相同格式的外部消息。
+Whitelisted addresses must adhere to these restrictions to prevent Toncoin theft:
 
-Get方法`seqno()`、`get_subwallet_id()`和`get_public_key()`可用。
+- Only `send_mode == 3` is permitted
+- Messages must be bounceable
+- No `state_init` attachments are allowed
 
-与标准钱包不同，归属合约一次只允许发送一条消息。
+System elector addresses accept only these operations:
 
-## 发送
+- `op::elector_new_stake`
+- `op::elector_recover_stake`
+- `op::vote_for_complaint`
+- `op::vote_for_proposal`
 
-公钥的所有者可以通过外部消息发起从归属合约发送Toncoin的请求，就像在标准钱包中一样。
+System config addresses accept only:
 
-也可以通过从`owner_address`发送的`op::send`内部消息发起Toncoin的发送。
+- `op::vote_for_proposal`
 
-实际上，公钥和`owner_address`通常由同一用户拥有。
+Other whitelisted destinations permit:
 
-## 白名单限制
+- Empty messages and empty text messages
+- Text messages starting with "d," "w," "D," or "W"
+- Specific operations:
+  - `op::single_nominator_pool_withdraw`
+  - `op::single_nominator_pool_change_validator`
+  - `op::ton_stakers_deposit`
+  - `op::jetton_burn`
+  - `op::ton_stakers_vote`
+  - `op::vote_for_proposal`
+  - `op::vote_for_complaint`
 
-可以发送到`vesting_sender_address`的消息有以下限制：
+Addresses outside the whitelist operate without restrictions. Unlocked Toncoins remain unrestricted regardless of destination, including whitelisted addresses and `vesting_sender_address`.
 
-- 仅允许`send_mode == 3`；
+## Project structure
 
-在大多数情况下，地址被添加到白名单中，以允许用户使用被锁定的硬币进行验证或将被锁定的硬币质押到池中。
+- `contracts` - source code of all the smart contracts of the project and their dependencies.
+- `wrappers` - wrapper classes (implementing `Contract` from ton-core) for the contracts, including any [de]serialization primitives and compilation functions.
+- `tests` - tests for the contracts.
+- `scripts` - scripts used by the project, mainly the deployment scripts.
 
-为了避免Toncoin被盗，发送到白名单的消息有以下限制：
+## How to use
 
-- 仅允许`send_mode == 3`；
+### Build
 
-- 仅允许可弹回的消息；
+```bash
+npx blueprint build` or `yarn blueprint build`
+```
 
-- 不允许附加`state_init`；
+### Test
 
-如果目的地是系统选举人地址：
+```bash
+npx blueprint test` or `yarn blueprint test`
+```
 
-- 仅允许`op::elector_new_stake`、`op::elector_recover_stake`、`op::vote_for_complaint`、`op::vote_for_proposal`操作；
+### Deploy or run another script
 
-如果目的地是系统配置地址：
+```bash
+npx blueprint run` or `yarn blueprint run`
+```
 
-- 仅允许`op::vote_for_proposal`操作；
+### Add a new contract
 
-对于其他目的地：
+```bash
+npx blueprint create ContractName` or `yarn blueprint create ContractName`
+```
 
-- 允许空消息和空文本消息；
-- 允许以"d"、"w"、"D"、"W"开头的文本消息；
-- 允许`op::single_nominator_pool_withdraw`、`op::single_nominator_pool_change_validator`、`op::ton_stakers_deposit`、`op::jetton_burn`、`op::ton_stakers_vote`、`op::vote_for_proposal`、`op::vote_for_complaint`操作；
+## See also
 
-对不在白名单上的地址没有限制。
+- [Single nominator](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool)
+- [vesting-contract](https://github.com/ton-blockchain/vesting-contract)
 
-发送未锁定的 Toncoin 时不适用任何限制，即使我们发送到白名单`vesting_sender_address`。
-
-## 项目结构
-
-- `contracts` - 项目所有智能合约及其依赖的源代码。
-- `wrappers` - 合约的封装类（实现ton-core的`Contract`），包括任何[解]序列化原语和编译函数。
-- `tests` - 合约的测试。
-- `scripts` - 项目使用的脚本，主要是部署脚本。
-
-## 如何使用
-
-### 构建
-
-`npx blueprint build` 或 `yarn blueprint build`
-
-### 测试
-
-`npx blueprint test` 或 `yarn blueprint test`
-
-### 部署或运行其他脚本
-
-`npx blueprint run` 或 `yarn blueprint run`
-
-### 添加新合约
-
-`npx blueprint create ContractName` 或 `yarn blueprint create ContractName`
-
-## 参阅
-
-- [单一提名者](/participate/network-maintenance/single-nominator)
-- [归属合约](https://github.com/ton-blockchain/vesting-contract)
+<Feedback />

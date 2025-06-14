@@ -1,13 +1,11 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ConceptImage from '@site/src/components/conceptImage';
 import ThemedImage from '@theme/ThemedImage';
 
-# Типы контрактов кошелька
+# Wallet contracts
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-Возможно, вы слышали о различных версиях кошельков на блокчейне TON. Но что на самом деле означают эти версии и чем отличаются?
+You may have heard about different versions of wallets on TON Blockchain. But what do these versions actually mean, and how do they differ?
 
 В этой статье мы рассмотрим различные версии и модификации кошельков TON.
 
@@ -22,14 +20,39 @@ Before we start, there are some terms and concepts that you should be familiar w
 
 Чтобы разрушить напряжение, для начала мы должны понять, что кошельки не являются особой сущностью в экосистеме TON. Они по-прежнему являются всего лишь смарт-контрактами, состоящими из кода и данных, и в этом смысле равны любому другому субъекту (т.е. смарт-контракту) в TON.
 
-Как и ваш собственный или любой другой смарт-контракт, кошельки могут принимать внешние и внутренние сообщения, отправлять внутренние сообщения и логи, а также использовать GET-методы.
-Поэтому возникает вопрос: какую функциональность предоставляют кошельки и чем она отличается в разных версиях?
+Like your own custom smart contract, or any other one, wallets can receive external and internal messages, send internal messages and logs, and provide `get methods`.
+So the question is: what functionality do they provide and how it differs between versions?
 
 Вы можете рассматривать каждую версию кошелька как реализацию смарт-контракта, предоставляющую стандартный внешний интерфейс, позволяющий различным внешним клиентам взаимодействовать с кошельками одинаковым образом. Вы можете найти эти реализации на языках FunC и Fift в основном репозитарии TON:
 
 - [ton/crypto/smartcont/](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/)
 
 ## Базовые кошельки
+
+### Wallet contracts hashes
+
+Here, you can find the current hashes of the wallet contract code versions.\
+For detailed specifications of each wallet contract, please refer to the page.
+For detailed specifications of each wallet contract, please refer further down the page or check the [ContractSources.md](https://github.com/toncenter/tonweb/blob/update_contracts/src/contract/ContractSources.md).
+
+<details><summary> Show wallet contracts hashes table </summary>
+
+| Contract version         | Hash                                           |
+| ------------------------ | ---------------------------------------------- |
+| GET-методы               | `oM/CxIruFqJx8s/AtzgtgXVs7LEBfQd/qqs7tgL2how=` |
+| [walletv1r2](#wallet-v1) | `1JAvzJ+tdGmPqONTIgpo2g3PcuMryy657gQhfBfTBiw=` |
+| GET-методы               | `WHzHie/xyE9G7DeX5F/ICaFP9a4k8eDHpqmcydyQYf8=` |
+| GET-методы               | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
+| Пользовательский путь    | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
+| [walletv3r1](#wallet-v3) | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
+| Известные оп-коды        | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
+| [walletv4r1](#wallet-v4) | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
+| [walletv4r2](#wallet-v4) | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
+| [walletv5r1](#wallet-v5) | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
+
+</details>
+
+**Note:** These hashes can also be found in the explorers.
 
 ### Кошелек V1
 
@@ -44,16 +67,24 @@ Before we start, there are some terms and concepts that you should be familiar w
 - Нет простого способа получить seqno и публичный ключ из контракта.
 - Нет проверки `valid_until`, поэтому вы не можете быть уверены, что транзакция не будет подтверждена слишком поздно.
 
-Первая проблема была исправлена в `V1R2` и `V1R3`. Символ `R` означает "ревизия". Обычно ревизии – это небольшие обновления, которые добавляют только GET-методы (вы можете найти историю изменений в файле `new-wallet.fif`). Здесь и далее мы будем рассматривать только последние ревизии.
+The first issue was fixed in `V1R2` and `V1R3`. The `R` stands for **revision**. Usually, revisions are just small updates that only add get methods; you can find all of those in the changes history of `new-wallet.fif`. Hereinafter, we will consider only the latest revisions.
 
 Тем не менее, поскольку каждая последующая версия наследует функциональность предыдущей, нам все равно следует придерживаться ее, поскольку это поможет нам в последующих версиях.
+
+#### Official code hashes
+
+| Contract version | Hash                                           |
+| ---------------- | ---------------------------------------------- |
+| walletv1r1       | `oM/CxIruFqJx8s/AtzgtgXVs7LEBfQd/qqs7tgL2how=` |
+| walletv1r2       | `1JAvzJ+tdGmPqONTIgpo2g3PcuMryy657gQhfBfTBiw=` |
+| walletv1r3       | `WHzHie/xyE9G7DeX5F/ICaFP9a4k8eDHpqmcydyQYf8=` |
 
 #### Расположение постоянной памяти
 
 - <b>seqno</b>: 32-битный порядковый номер.
 - <b>public-key</b>: 256-битный публичный ключ.
 
-#### Оформление тела внешнего сообщения
+#### Содержимое тела внешнего сообщения
 
 1. Данные:
   - <b>подпись</b>: 512-битная подпись ed25519.
@@ -79,7 +110,7 @@ Before we start, there are some terms and concepts that you should be familiar w
 Обратите внимание, что у [TVM](/v3/documentation/tvm/tvm-overview) есть [стандартные коды завершения](/v3/documentation/tvm/tvm-exit-codes) (`0x0` – один из них), поэтому вы также можете получить один из них, например, если у вас закончился [газ](https://docs.ton.org/develop/smart-contracts/fees), то вы получите код `0xD`.
 :::
 
-#### GET-методы
+#### Get methods
 
 1. int `seqno()` – возвращает текущий сохраненный seqno.
 2. int `get_public_key` – возвращает текущий сохраненный публичный ключ.
@@ -94,10 +125,17 @@ Before we start, there are some terms and concepts that you should be familiar w
 
 Все отличия по сравнению с предыдущей версией являются следствием добавления функциональности `valid_until`. Был добавлен новый код завершения: `0x23`, отмечающий неудачу при проверке `valid_until`. Кроме того, в макет тела внешнего сообщения было добавлено новое поле `Unix-time`, задающее временной лимит транзакции. Все GET-методы остаются прежними.
 
+#### Official code hashes
+
+| Contract version | Hash                                           |
+| ---------------- | ---------------------------------------------- |
+| walletv2r1       | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
+| walletv2r2       | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
+
 #### Содержимое тела внешнего сообщения
 
 1. Данные:
-  - <b>signature</b>: 512-битная подпись ed25519.
+  - <b>подпись</b>: 512-битная подпись ed25519.
   - <b>msg-seqno</b>: 32-битный порядковый номер.
   - <b>valid-until</b>: 32-битное целое число Unix-time.
   - <b>(0-4)mode</b>: до четырех 8-битных целых чисел, определяющих режим отправки для каждого сообщения.
@@ -113,6 +151,13 @@ Before we start, there are some terms and concepts that you should be familiar w
 
 По сути, `subwallet_id` – это просто число, добавляемое к состоянию контракта при его развертывании. Поскольку адрес контракта в TON представляет собой хэш его состояния и код, адрес кошелька изменится на другой `subwallet_id`. Эта версия наиболее широко используется в настоящее время. Она охватывает большинство случаев использования и остается универсальной, простой и в основном такой же, как и предыдущие версии. Все GET-методы остаются прежними.
 
+#### Official code hashes
+
+| Contract version | Hash                                           |
+| ---------------- | ---------------------------------------------- |
+| walletv3r1       | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
+| walletv3r2       | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
+
 #### Содержимое постоянной памяти
 
 - <b>seqno</b>: 32-битный порядковый номер.
@@ -122,7 +167,7 @@ Before we start, there are some terms and concepts that you should be familiar w
 #### Содержимое внешнего сообщения
 
 1. Данные:
-  - <b>подпись</b>: 512-битная подпись ed25519.
+  - <b>signature</b>: 512-битная подпись ed25519.
   - <b>subwallet-id</b>: 32-битный идентификатор subwallet.
   - <b>msg-seqno</b>: 32-битный порядковый номер.
   - <b>valid-until</b>: 32-битное целое число Unix-time.
@@ -141,13 +186,21 @@ Before we start, there are some terms and concepts that you should be familiar w
 
 ### Кошелек V4
 
-Эта версия сохраняет всю функциональность предыдущих версий, но также вводит нечто очень мощное: *плагины (plugins)*.
+Эта версия сохраняет всю функциональность предыдущих версий, но также вводит нечто очень мощное: _плагины (plugins)_.
 
 Исходный код кошелька:
 
 - [ton-blockchain/wallet-contract](https://github.com/ton-blockchain/wallet-contract)
 
 Эта функция позволяет разработчикам реализовать сложную логику, которая работает в тандеме с кошельком пользователя. Например, DApp может потребовать от пользователя платить небольшое количество монет каждый день, чтобы пользоваться определенными функциями. В этом случае пользователю нужно будет установить плагин на свой кошелек, подписав транзакцию. Затем плагин будет ежедневно отправлять монеты на адрес назначения по запросу из внешнего сообщения.
+
+#### Official code hashes
+
+| Contract version | Hash                                           |
+| ---------------- | ---------------------------------------------- |
+| walletv4r1       | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
+| walletv4r2       | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
+| walletv5r1       | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
 
 #### Плагины
 
@@ -164,7 +217,7 @@ Before we start, there are some terms and concepts that you should be familiar w
 
 Все предыдущие версии кошельков имели простую реализацию получения внутренних сообщений. Они просто принимали поступающие средства от любого отправителя, игнорируя тело внутреннего сообщения, если оно присутствовало, или, другими словами, у них был пустой метод `recv_internal`. Однако, как уже упоминалось ранее, в четвертой версии кошелька появились две дополнительные доступные операции. Давайте посмотрим на структуру тела внутреннего сообщения:
 
-- <b>op-code</b>: 32-битный код операции. Это необязательное поле: любое сообщение, содержащее менее 32 бит в теле сообщения, либо неправильный oпкод или адрес отправителя, не зарегистрированный в качестве плагина, будет рассматриваться как простая отправка, аналогично предыдущим версиям кошелька.
+- <b>op-code?</b><b>op-code</b>: 32-битный код операции. Это необязательное поле: любое сообщение, содержащее менее 32 бит в теле сообщения, либо неправильный oпкод или адрес отправителя, не зарегистрированный в качестве плагина, будет рассматриваться как простая отправка, аналогично предыдущим версиям кошелька.
 - <b>query-id</b>: 64-битное целое число. Это поле не влияет на поведение смарт-контракта, оно используется для отслеживания цепочек сообщений между контрактами.
 
 1. op-code = 0x706c7567, код операции запроса средств:
@@ -172,7 +225,7 @@ Before we start, there are some terms and concepts that you should be familiar w
   - <b>extra_currencies</b>: словарь, содержащий количество запрашиваемых дополнительных валют (может быть пустым).
 2. op-code = 0x64737472, запрос на удаление плагина-отправителя из "разрешенного списка".
 
-#### Содержимое тела внешнего сообщения
+#### Оформление тела внешнего сообщения
 
 - <b>signature</b>: 512-битная подпись ed25519.
 - <b>subwallet-id</b>: 32-битный идентификатор subwallet.
@@ -185,15 +238,15 @@ Before we start, there are some terms and concepts that you should be familiar w
   - <b>(0-4)сообщения</b>:До четырех ссылок на ячейки, содержащие сообщения.
 2. op-code = 0x1, развертывание и установка плагина:
   - <b>workchain</b>: 8-битное целое число.
-  - <b>balance</b>: VARUINT16 количество toncoin начального баланса.
+  - <b>balance</b>: VARUINT16 сумма toncoin начального баланса.
   - <b>state-init</b>: ссылка на ячейку, содержащую начальное состояние плагина.
   - <b>body</b>: ссылка на ячейку, содержащую тело.
 3. op-code = 0x2/0x3, установка плагина/удаление плагина:
   - <b>wc_n_address</b>: 8-битный workchain_id + 256-битный адрес плагина.
-  - <b>balance</b>: VARUINT16 сумма toncoin начального баланса.
+  - <b>balance</b>: VARUINT16 количество toncoin начального баланса.
   - <b>query-id</b>: 64-битное целое число.
 
-Как вы можете видеть, четвертая версия по-прежнему предоставляет стандартную функциональность через оп-код `0x0`, как и предыдущие версии. Оп-коды `0x2` и `0x3` позволяют производить манипуляции со словарем плагинов. Обратите внимание, что в случае с `0x2` вам необходимо самостоятельно развернуть плагин с этим адресом, в отличие от оп-кода `0x1`, который также управляет процессом развертывания, но с помощью поля `state_init`.
+Как вы можете видеть, четвертая версия по-прежнему предоставляет стандартную функциональность через оп-код `0x0`, как и предыдущие версии. Оп-коды `0x2` и `0x3` позволяют производить манипуляции со словарем плагинов. Обратите внимание, что в случае с `0x2` вам необходимо самостоятельно развернуть плагин с этим адресом, в отличие от оп-кода `0x1`, который также управляет процессом развертывания, но с помощью поля `state_init`. In contrast, the `0x1` op-code also handles the deployment process with the state_init field.
 
 :::tip
 If `state_init` doesn't make much sense from its name, take a look at the following references:
@@ -215,7 +268,7 @@ If `state_init` doesn't make much sense from its name, take a look at the follow
 | 0x50           | Недостаточно средств для запроса средств                                                                                       |
 | 0x0            | Стандартный код завершения при успешном выполнении                                                                             |
 
-#### GET-методы
+#### Get methods
 
 1. int `seqno()` – возвращает текущий сохраненный seqno.
 2. int `get_public_key()` – возвращает текущий сохраненный публичный ключ.
@@ -246,6 +299,12 @@ dark: '/img/docs/wallet-contracts/wallet-contract-V5_dark.png?raw=true',
 :::caution
 В отличие от предыдущих спецификаций версий кошельков, мы будем использовать схему [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) из-за относительной сложности реализации интерфейса этой версии кошелька. Мы дадим некоторое описание каждого из них. Тем не менее, базовое понимание все равно необходимо, в сочетании с исходным кодом кошелька этого должно быть достаточно.
 :::
+
+#### Official code hash
+
+| Contract version | Hash                                           |
+| ---------------- | ---------------------------------------------- |
+| walletv5r1       | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
 
 #### Содержимое постоянной памяти
 
@@ -309,7 +368,7 @@ action_set_signature_auth_allowed#04 allowed:(## 1) = ExtendedAction;
 actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other_actions:(ActionList n m) = InnerRequest;
 ```
 
-Мы можем рассматривать `InnerRequest` как два списка действий:`OutList` – представляет собой необязательную цепочку ссылок на ячейки, каждая из которых содержит запрос на отправку сообщения, инициируемый режимом сообщения.`ActionList` – инициируется однобитным флагом, `has_other_actions`, который отмечает наличие расширенных действий, начиная с первой ячейки и далее в виде цепочки ссылок на ячейки. Мы уже знакомы с первыми двумя расширенными действиями, `action_add_ext` и `action_delete_ext`, за которыми следует внутренний адрес, который мы хотим добавить или удалить из словаря расширений. Третье действие, `action_set_signature_auth_allowed`, ограничивает или разрешает аутентификацию через публичный ключ, оставляя единственный способ взаимодействия с кошельком через расширения. Эта функциональность может оказаться чрезвычайно важной в случае потери или компрометации приватного ключа.
+Мы можем рассматривать `InnerRequest` как два списка действий:`OutList` – представляет собой необязательную цепочку ссылок на ячейки, каждая из которых содержит запрос на отправку сообщения, инициируемый режимом сообщения.`ActionList` – инициируется однобитным флагом, `has_other_actions`, который отмечает наличие расширенных действий, начиная с первой ячейки и далее в виде цепочки ссылок на ячейки. The second, `ActionList,` is led by a one-bit flag, `has_other_actions`, which marks the presence of extended actions, starting from the first cell and continuing as a chain of cell references. Мы уже знакомы с первыми двумя расширенными действиями, `action_add_ext` и `action_delete_ext`, за которыми следует внутренний адрес, который мы хотим добавить или удалить из словаря расширений. Третье действие, `action_set_signature_auth_allowed`, ограничивает или разрешает аутентификацию через публичный ключ, оставляя единственный способ взаимодействия с кошельком через расширения. Эта функциональность может оказаться чрезвычайно важной в случае потери или компрометации приватного ключа.
 
 :::info
 Обратите внимание, что максимальное количество действий равно 255 – это следствие реализации через [c5 TVM-регистр](/v3/documentation/tvm/tvm-overview#result-of-tvm-execution). Технически, вы можете сделать запрос с пустыми `OutAction` и `ExtendedAction`, но в таком случае это будет похоже на простое получение средств.
@@ -341,7 +400,7 @@ actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other
 Обратите внимание, что коды завершения `0x8E`, `0x90` и `0x92` кошелька предназначены для того, чтобы вы не потеряли доступ к функциям кошелька. Тем не менее, вам следует помнить, что кошелек не проверяет, существуют ли сохраненные адреса расширений в TON на самом деле. Вы также можете развернуть кошелек с начальными данными, состоящими из пустого словаря расширений и ограниченного режима подписи. В этом случае вы сможете получить доступ к кошельку через публичный ключ до тех пор, пока не добавите свое первое расширение. Поэтому будьте осторожны с такими сценариями.
 :::
 
-#### GET-методы
+#### Get methods
 
 1. int `is_signature_allowed()` – возвращает сохраненный `is_signature_allowed` флаг.
 2. int `seqno()` – возвращает текущий сохраненный seqno.
@@ -349,9 +408,9 @@ actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other
 4. int `get_public_key()` – возвращает текущий сохраненный публичный ключ.
 5. cell `get_extensions()` – возвращает словарь расширений.
 
-#### Подготовка к безгазовым транзакциям
+#### Preparing for gasless transactions
 
-Как было сказано ранее, смарт-контракт кошелька v5 позволяет обрабатывать внутренние сообщения, подписанные владельцем. Это также позволяет совершать безгазовые транзакции, например, оплачивать сетевые комиссии при переводе USDt в сам USDt. Общая схема выглядит следующим образом:
+As was said, before v5, the wallet smart contract allowed the processing of internal messages signed by the owner. This also allows you to make gasless transactions, e.g., payment of network fees when transferring USDt in USDt itself. The common scheme looks like this:
 
 ![image](/img/gasless.jpg)
 
@@ -359,7 +418,7 @@ actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other
 В следствие этого, будут существовать сервисы (такие как [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)), предоставляющие данную функциональность: они выплачивают комиссию за транзакцию в TON от имени пользователя, но взимают данную комиссию в токенах.
 :::
 
-#### Пользовательский путь
+#### Flow
 
 1. При отправке USDt пользователь подписывает одно сообщение, содержащее два исходящих перевода USDt:
   1. Перевод USDt на адрес получателя.
@@ -378,7 +437,7 @@ actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other
 
 Давайте посмотрим на них.
 
-### Highload-кошельки
+### Highload wallets
 
 При работе с большим количеством сообщений за короткий промежуток времени возникает необходимость в специальном кошельке, называемом Highload Wallet. Прочитайте [статью](/v3/documentation/smart-contracts/contracts-specs/highload-wallet) для получения дополнительной информации.
 
@@ -402,11 +461,11 @@ actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other
 
 - [EmelyanenkoK/nomination-contract/restricted-wallet](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
 
-## Известные оп-коды
+## Conclusion
 
 Как видите, в TON существует множество различных версий кошельков. Но в большинстве случаев вам нужны только `V3R2` или `V4R2`. Вы также можете использовать один из специальных кошельков, если вам нужна какая-то дополнительная функциональность, например, периодическая разблокировка средств.
 
-## См. также
+## See also
 
 - [Работа со смарт-контрактами кошелька](/v3/guidelines/smart-contracts/howto/wallet)
 - [Источники базовых кошельков](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
@@ -415,3 +474,6 @@ actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other
 - [Источники блокировки кошелька и подробное описание](https://github.com/ton-blockchain/lockup-wallet-contract)
 - [Источники с ограниченным кошельком](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
 - [Безгазовые операции на TON](https://medium.com/@buidlingmachine/gasless-transactions-on-ton-75469259eff2)
+
+<Feedback />
+

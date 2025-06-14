@@ -1,31 +1,27 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Подготовка сообщений
+# Preparing messages
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+While using TON Connect, you should construct the message body for the payload used in various operations. On this page, you can find the most relevant payload examples for use with the TON Connect SDKs.
 
-При использовании TON Connect вам следует создать тело сообщения для полезной нагрузки, используемой в различных транзакциях. На этой странице вы найдете наиболее подходящие примеры полезной нагрузки для использования с TON Connect SDK.
-
-:::info
-Ожидается, что вы изучите основы создания соединения TON Connect. Узнайте больше в [руководстве по интеграции](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk).
-:::
-
-## Ячейки и сериализация сообщений
+## Cells and message serialization
 
 Прежде чем погрузиться в создание сообщений, давайте познакомимся с концепцией ячеек, из которых состоят тела сообщений.
 
-### Что такое ячейка?
+### What is a cell?
 
-Ячейка — это базовая структура данных в блокчейне TON. Она может хранить до `1023` бит и содержать до `4` ссылок на другие ячейки, что позволяет хранить более сложные структуры данных. Такие библиотеки, как `@ton/core` и `@ton-community/assets-sdk`, предоставляют эффективные способы обработки ячеек.
+A cell is a basic data structure in the TON Blockchain. It can store up to `1023` bits and hold up to `4` references to other cells, which allows you to store more complex data structures.
+Libraries like `@ton/core` and `@ton-community/assets-sdk` provide efficient cell handling.
 
-Подробнее о ячейках можно прочитать [здесь](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage).
+You can read more about cells [here](/v3/documentation/data-formats/tlb/cell-boc).
 
-### Создание ячейки
+### Creating a cell
 
-Чтобы создать ячейку, используйте функцию `beginCell()`. Пока ячейка "открыта", вы можете хранить различные типы данных с помощью функций `store...()`. Когда работа закончена, закройте ячейку с помощью функции `endCell()`.
+To build a cell, you use the `beginCell()` function. While the cell is _open_, you can store various data types with `store...()` functions.
+When you're done, you close the cell with the `endCell()` function.
 
 ```ts
 import { Address, beginCell } from "@ton/ton";
@@ -37,9 +33,13 @@ const cell = beginCell()
   .endCell() // Closes the cell
 ```
 
-### Анализ ячейки
+:::info
+Examples were provided only for @ton/ton library. However, every version of [SDKs](/v3/guidelines/dapps/apis-sdks/sdk) implementation has similar functions.
+:::
 
-Чтобы прочитать или проанализировать данные из ячейки, вызывается функция `beginParse()`. Вы считываете данные в том же порядке, в котором они были сохранены, используя аналогичные функции `load...()`:
+### Parsing a cell
+
+The `beginParse()` function is called to read or parse data from a cell. You read data in the same order it was stored using similar `load...()` functions:
 
 ```ts
 const slice = cell.beginParse();
@@ -62,7 +62,7 @@ const cell = beginCell()
   .endCell()
 ```
 
-Чтобы сохранить больше данных, ячейки могут ссылаться на другие ячейки. Вы можете использовать функцию storeRef() для создания вложенных ячеек:
+To store more data, cells can reference up to four other cells. You can use the `storeRef()` function to create nested cells:
 
 ```ts
 const cell = beginCell()
@@ -86,9 +86,9 @@ const uint3 = innerSlice.loadUint(256);
 const uint4 = innerSlice.loadUint(256);
 ```
 
-### Необязательные ссылки и значения
+### Optional references and values
 
-Ячейки могут хранить необязательные значения (которые могут быть нулевыми). Они сохраняются с помощью функций `storeMaybe...()`:
+Cells can store optional values, which may be null. These are stored using the `storeMaybe...()` functions:
 
 ```ts
 const cell = beginCell()
@@ -100,7 +100,7 @@ const cell = beginCell()
     .endCell());
 ```
 
-Вы можете анализировать необязательные значения с помощью соответствующих функций loadMaybe...(). Возвращаемые значения могут быть нулевыми, поэтому не забудьте проверить их на нулевое значение!
+You can parse optional values using the corresponding `loadMaybe...()` functions. Returned values are nullable so do not forget to check them for null!
 
 ```ts
 const slice = cell.beginParse();
@@ -113,7 +113,7 @@ if (maybeRef1) {
 }
 ```
 
-### Использование assets sdk для упрощения сериализации и десериализации
+### Using assets sdk for more straightforward serialization and deserialization
 
 Ручная обработка ячеек может быть утомительной, поэтому `@ton-community/assets-sdk` предоставляет удобные методы сериализации и десериализации сообщений.
 
@@ -180,11 +180,12 @@ const transferMessage = { op, queryId, amount, destination, responseDestination,
 </TabItem>
 </Tabs>
 
-## Примеры TON Connect JS SDK
+## TON Connect JS SDK examples
 
-### Шаблон транзакции
+### Transaction template
 
-Независимо от того, какой уровень задачи решает разработчик, обычно необходимо использовать сущность коннектора из `@tonconnect/sdk` или `@tonconnect/ui`. Примеры, созданные на основе `@tonconnect/sdk` и `@tonconnect/ui`:
+Независимо от того, какой уровень задачи решает разработчик, обычно необходимо использовать сущность коннектора из `@tonconnect/sdk` или `@tonconnect/ui`.
+Примеры, созданные на основе `@tonconnect/sdk` и `@tonconnect/ui`:
 
 <Tabs groupId="Шаблон TON Connect">
 
@@ -246,9 +247,11 @@ await connector.sendTransaction({
 
 </Tabs>
 
-### Обычный перевод TON
+### Regular TON transfer
 
 TON Connect SDK включают оболочки для отправки сообщений, что упрощает подготовку обычных переводов Toncoins между двумя кошельками в качестве транзакции по умолчанию без полезной нагрузки.
+
+The `address` must be in a [user-friendly format](/v3/documentation/smart-contracts/addresses#user-friendly-address), not a raw. If the message is being sent to a smart contract, it must be bounceable; if the message is being sent to a wallet, it must be non-bounceable.
 
 Обычный перевод TON с использованием TON Connect JS SDK может быть выполнен следующим образом:
 
@@ -262,7 +265,7 @@ const [tonConnectUI] = useTonConnectUI();
 const transaction = {
     messages: [
         {
-            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA", // destination address
             amount: "20000000" //Toncoin in nanotons
         }
     ]
@@ -297,7 +300,7 @@ const tonConnectUI = new TonConnectUI({ //connect application
 const transaction = {
     messages: [
         {
-            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA", // destination address
             amount: "20000000" //Toncoin in nanotons
         }
     ]
@@ -317,7 +320,7 @@ const connector = new TonConnect();
 await connector.sendTransaction({
     messages: [
         {
-            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA", // destination address
             amount: "20000000" //Toncoin in nanotons
         }
     ]
@@ -329,15 +332,15 @@ await connector.sendTransaction({
 </Tabs>
 
 :::tip
-Узнайте больше об [адресах смарт-контрактов TON](/v3/documentation/smart-contracts/addresses).
+Learn more about [TON smart contract addresses](/v3/documentation/smart-contracts/addresses).
 :::
 
-Для конкретной пользовательской транзакции необходимо определить определенную полезную нагрузку.
+For specific custom transactions, a particular payload must be defined.
 
-### Передача с комментарием
+### Transfer with a comment
 
-Самый простой пример включает добавление полезной нагрузки с комментарием. Подробнее см. [этой странице](/v3/documentation/smart-contracts/message-management/internal-messages#simple-message-with-comment).
-Перед транзакцией необходимо подготовить ячейку `body` [cell](/v3/documentation/data-formats/tlb/cell-boc) с помощью библиотеки JavaScript [@ton/ton](https://github.com/ton-org/ton).
+The simplest example involves adding a payload with a comment. See more details on [this page](/v3/documentation/smart-contracts/message-management/internal-messages#simple-message-with-comment).
+Before the transaction, it is necessary to prepare a `body` [cell](/v3/documentation/data-formats/tlb/cell-boc) via the [@ton/ton](https://github.com/ton-org/ton) JavaScript library.
 
 ```js
 import { beginCell } from '@ton/ton'
@@ -429,15 +432,15 @@ await connector.sendTransaction({
 </TabItem>
 </Tabs>
 
-### Отправка жетонов
+### Jetton transfer
 
-`body` для отправки жетона основано на стандарте ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)). Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
+The `body` for jetton transfers is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while typically jettons and Toncoin uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 :::info
 Вы можете использовать библиотеку `assets-sdk` с методами из коробки (даже с `ton-connect`)
 :::
 
-<Tabs groupId="Отправка жетонов">
+<Tabs groupId="Jetton transfer">
 <TabItem value="@ton/ton" label="@ton/ton">
 
 ```js
@@ -459,9 +462,9 @@ await connector.sendTransaction({
         .endCell();
 ```
 
-Далее выполняется отправка транзакции с этим телом в jettonWalletContract отправителя:
+Next, sending the transaction with this body to sender's `jettonWalletContract` executed:
 
-<Tabs groupId="Jetton Transfer">
+<Tabs groupId="Jetton transfer">
 <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
 ```js
@@ -541,11 +544,11 @@ await connector.sendTransaction({
 
 - `validUntil` - UNIX-время до сообщения valid
 - `jettonWalletAddress` - Адрес JettonWallet, который определен на основе контрактов JettonMaser и Wallet
-- `balance` - Целое число, количество Toncoin для оплаты газа в nanotons.
-- `body` - полезная нагрузка для jettonContract
+- `balance` - Integer, the amount of Toncoin used for gas payments in nanotons.
+- `body` - payload for the `jettonContract`
 
 <details>
-    <summary>Пример инициализации и подготовки адреса состояния кошелька жетона</summary>
+    <summary>Jetton wallet state init and address preparation example</summary>
 
 ```js
 import { Address, TonClient, beginCell, StateInit, storeStateInit } from '@ton/ton'
@@ -587,7 +590,7 @@ async function main() {
 <TabItem value="assets/sdk" label="assets/sdk">
 
 :::tip
-Примечание: Для браузера вам необходимо установить полифилл для `Buffer`.
+Note: For the browser, you must set a polyfill for `Buffer`.
 :::
 
 ```js
@@ -615,7 +618,7 @@ const RECEIVER_ADDRESS = Address.parse("RECIEVER_ADDRESS");
 jetton.send(sender, RECEIVER_ADDRESS, toNano(10));
 ```
 
-Или вы можете использовать контракт жетона со встроенными методами:
+OR you can use Jetton Contract with built-in methods:
 
 ```ts
 const provider = tonConnectUi;
@@ -653,12 +656,15 @@ await jetton.send(
 </TabItem>
 </Tabs>
 
-### Отправка жетона с комментарием
+### Jetton transfer with comment
 
-<Tabs groupId="Отправка жетона с комментарием">
+<Tabs groupId="Jetton transfer with Comment">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-`messageBody` для отправки жетона ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) с комментарием. Мы должны дополнительно к обычному `body` перевода сериализовать комментарий и упаковать его в `forwardPayload`. Обратите внимание, что количество десятичных знаков может различаться в разных токенах: например, USDT использует 6 десятичных знаков (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 десятичных знаков (1 TON = 1 \* 10 \*\* 9).
+The `messageBody` for jetton transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`.  Please note that the number of decimals can vary between different tokens:
+
+- 9 decimals: 1 TON = 1 × 10<sup>9</sup> typically for various jettons and always for Toncoin
+- 6 decimals: 1 USDT = 1 × 10<sup>6</sup> specific jettons, like USDT
 
 ```js
     import { beginCell, toNano, Address } from '@ton/ton'
@@ -688,9 +694,9 @@ await jetton.send(
 
 ```
 
-Далее выполняется отправка транзакции с этим телом в jettonWalletContract отправителя:
+Next, send the transaction with this body to the sender's `jettonWalletContract` executed:
 
-<Tabs groupId="Отправка жетонов">
+<Tabs groupId="Jetton transfer">
   <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
 ```js
@@ -773,11 +779,11 @@ await jetton.send(
 
 - `validUntil` - UNIX-время до получения сообщения valid
 - `jettonWalletAddress` - Адрес JettonWallet, определенный на основе контрактов JettonMaser и кошелька
-- `balance` - целое число, сумма в тоннах монет для оплаты газа в nanotons.
-- `body` - полезная нагрузка для jettonContract
+- `balance` - Integer, the amount of Toncoin used for gas payments in nanotons.
+- `body` - payload for the `jettonContract`
 
 <details>
-  <summary>Пример инициализации и подготовки адреса Jetton Wallet</summary>
+  <summary>Jetton wallet state init and address preparation example</summary>
 
 ```js
   import { Address, TonClient, beginCell, StateInit, storeStateInit } from '@ton/ton'
@@ -819,7 +825,7 @@ await jetton.send(
 <TabItem value="assets/sdk" label="assets/sdk">
 
 :::tip
-Примечание: для браузера необходимо установить полифил для `Buffer`.
+Note: For the browser, you must set a polyfill for `Buffer`.
 :::
 
 ```js
@@ -854,12 +860,15 @@ jetton.send(sender, RECEIVER_ADDRESS, toNano(10), { notify: { payload: forwardPa
 </TabItem>
 </Tabs>
 
-### Сжигание жетонов
+### Jetton burn
 
 <Tabs groupId="Сжигание жетонов">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-`body` для сжигатие жетона основано на стандарте ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)). Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
+The `body` for jetton burn is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens:
+
+- 9 decimals: 1 TON = 1 × 10<sup>9</sup> typically for various jettons and always for Toncoin
+- 6 decimals: 1 USDT = 1 × 10<sup>6</sup> specific jettons, like USDT
 
 ```js
     import { beginCell, Address } from '@ton/ton'
@@ -959,7 +968,7 @@ await connector.sendTransaction({
 <TabItem value="assets/sdk" label="assets/sdk">
 
 :::tip
-Примечание: для браузера необходимо установить полифил для `Buffer`.
+Note: For the browser, you must set a polyfill for `Buffer`.
 :::
 
 ```js
@@ -986,7 +995,7 @@ const jetton = sdk.openJettonWallet(Address.parse("JETTON_ADDRESS"));
 jetton.sendBurn(sender, toNano(10));
 ```
 
-Или вы можете использовать контракт жетона со встроенными методами:
+OR you can use Jetton Contract with built-in methods:
 
 ```ts
 const provider = tonConnectUi;
@@ -1023,7 +1032,7 @@ await jetton.sendBurn(
 </TabItem>
 </Tabs>
 
-### Передача NFT
+### NFT transfer
 
 <Tabs groupId="NFT Transfer">
 <TabItem value="@ton/ton" label="@ton/ton">
@@ -1121,8 +1130,8 @@ await connector.sendTransaction({
 </TabItem>
 </Tabs>
 
-- `NFTitem` - Address - Адрес смарт-контракта элемента NFT, который мы хотим передать новому владельцу `NEW_OWNER_WALLET`.
-- `balance` - Целое число, количество Toncoin для оплаты газа в nanotons.
+- `NFTitem` - Address - The address of the NFT item smart contract which we want to transfer to a new owner `NEW_OWNER_WALLET`.
+- `balance` - Integer, the amount of Toncoin used for gas payments in nanotons.
 - `body` - полезная нагрузка для контракта NFT
 
 </TabItem>
@@ -1130,7 +1139,7 @@ await connector.sendTransaction({
 <TabItem value="assets/sdk" label="assets/sdk">
 
 :::tip
-Примечание: для браузера необходимо установить полифил для `Buffer`.
+Note: For the browser, you must set a polyfill for `Buffer`.
 :::
 
 ```js
@@ -1158,7 +1167,7 @@ const RECEIVER_ADDRESS = Address.parse("RECIEVER_ADDRESS");
 nft.send(sender, RECEIVER_ADDRESS);
 ```
 
-Или вы можете использовать контракт жетона со встроенными методами:
+OR you can use an NFT Contract with built-in methods:
 
 ```ts
 const client = new TonClient({
@@ -1183,11 +1192,11 @@ const royaltyPercent =
 </TabItem>
 </Tabs>
 
-### Продажа NFT (GetGems)
+### NFT sale (GetGems)
 
 Вот пример подготовки сообщения и транзакции для продажи на торговой площадке GetGems, согласно контракту [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
 
-Чтобы разместить NFT в контракте продажи GetGems, мы должны подготовить специальное тело сообщения `transferNftBody`, которое будет передавать NFT в специальный контракт продажи NFT.
+To place NFT on the GetGems Sale Contract, we should prepare a special message body, `transferNftBody`, to transfer NFT to the special NFT Sale contract.
 
 ```js
     const transferNftBody = beginCell()
@@ -1204,7 +1213,7 @@ const royaltyPercent =
         .endCell();
 ```
 
-Поскольку сообщение требует много шагов, весь алгоритм огромен и его можно найти здесь:
+Because the message requires a lot of steps, the entire algorithm is huge and can be found here:
 
 <details> 
 <summary>Показать весь алгоритм для создания тела сообщения о продаже NFT</summary>
@@ -1281,7 +1290,7 @@ async function main() {
 
 </details>
 
-Подготовленный `transferNftBody` должен быть отправлен в контракт NFT Item с не менее чем 1,08 TON, для успешной обработки. Излишки будут возвращены в кошелек отправителя.
+The prepared `transferNftBody` should be sent to the NFT Item contract with at least `1.08` TON, which is expected for successful processing. Excess will be returned to a sender's wallet.
 
 <Tabs groupId="Проджажа NFT по фиксированной цене">
 <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
@@ -1356,12 +1365,13 @@ await connector.sendTransaction({
 </TabItem>
 </Tabs>
 
-### Покупка NFT (GetGems)
+### NFT buy (GetGems)
 
 <Tabs groupId="NFT Buy tabs">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-Процесс покупки NFT для контракта продажи [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) может быть выполнен с помощью обычного перевода без полезной нагрузки, единственное, что важно — это точная сумма TON, которая рассчитывается следующим образом: `buyAmount = Nftprice TON + 1.0 TON`.
+The process of buying NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carried out with a regular transfer without payload. The only important thing is the accurate TON amount, which is calculated as follows:
+`buyAmount = Nftprice TON + 1.0 TON`.
 
 <Tabs groupId="Покупка NFT">
 <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
@@ -1436,7 +1446,7 @@ messages: [
 <TabItem value="assets/sdk" label="assets/sdk">
 
 :::tip
-Примечание: для браузера необходимо установить полифил для `Buffer`.
+Note: For the browser, you must set a polyfill for `Buffer`.
 :::
 
 ```js
@@ -1460,7 +1470,7 @@ nft.sendBuy(sdk.sender!, { queryId: BigInt(1) })
 Прочитать примеры [исходного кода](https://github.com/yungwine/ton-connect-examples/blob/master/main.py).
 :::
 
-### Обычный перевод TON
+### Regular TON transfer
 
 ```python
 connector = TonConnect(
@@ -1478,7 +1488,7 @@ transaction = {
 }
 ```
 
-### Перевод с комментарием
+### Transfer with comment
 
 В первую очередь реализуйте сообщение с комментарием с помощью следующей функции:
 
@@ -1517,12 +1527,12 @@ transaction = {
 ```
 
 :::tip
-Узнайте больше об [адресах смарт-контрактов TON](/v3/documentation/smart-contracts/addresses).
+Learn more about [TON smart contract addresses](/v3/documentation/smart-contracts/addresses).
 :::
 
-### Перевод жетонов
+### Jetton transfer
 
-Пример функции для построения транзакции перевода жетонов. Обратите внимание, что количество знаков после запятой может различаться в разных токенах: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
+Example of function for building jetton transfer transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 ```python
 from pytoniq_core import begin_cell
@@ -1551,7 +1561,7 @@ def get_jetton_transfer_message(jetton_wallet_address: str, recipient_address: s
     return data
 ```
 
-Окончательное тело транзакции:
+Final transaction body:
 
 ```python
 transaction = {
@@ -1569,9 +1579,9 @@ transaction = {
 
 ```
 
-### Сжигание жетонов
+### Jetton burn
 
-Пример функции для построения транзакции сжигания жетонов. Обратите внимание, что количество знаков после запятой может различаться в разных токенах: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
+Example of function for building jetton burn transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 ```python
 from pytoniq_core import begin_cell
@@ -1595,7 +1605,7 @@ def get_jetton_burn_message(jetton_wallet_address: str, transfer_fee: int, jetto
     return data
 ```
 
-Окончательное тело транзакции:
+The final transaction body:
 
 ```python
 transaction = {
@@ -1611,7 +1621,7 @@ transaction = {
 }
 ```
 
-### Передача NFT
+### NFT transfer
 
 Пример функции для транзакции перевода NFT:
 
@@ -1642,7 +1652,7 @@ def get_nft_transfer_message(nft_address: str, recipient_address: str, transfer_
 
 ```
 
-Окончательное тело транзакции:
+The final transaction body:
 
 ```python
 transaction = {
@@ -1658,11 +1668,11 @@ transaction = {
 }
 ```
 
-### Продажа NFT (GetGems)
+### NFT sale (GetGems)
 
 Вот пример подготовки сообщения и транзакции для продажи на торговой площадке GetGems в соответствии с контрактом [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
 
-Чтобы разместить NFT на контракте продажи GetGems, мы должны подготовить специальное тело сообщения `transferNftBody`, которое будет переводить NFT на специальный контракт продажи NFT.
+To place NFT on GetGems Sale contract, we should prepare special message body `transferNftBody` that will be transfer NFT to special NFT Sale contract.
 
 <details> 
 <summary>Пример создания тела продажи NFT</summary>
@@ -1745,7 +1755,7 @@ def get_sale_body(wallet_address: str, royalty_address: str, nft_address: str, p
 
 </details>
 
-Окончательное тело транзакции:
+The final transaction body:
 
 ```python
 transaction = {
@@ -1762,9 +1772,9 @@ transaction = {
 }
 ```
 
-### Покупка NFT (GetGems)
+### NFT buy (GetGems)
 
-Процесс покупки NFT для контракта продажи [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) может быть выполнен с помощью обычного перевода без полезной нагрузки, важна только точная сумма TON, которая рассчитывается следующим образом: `buyAmount = Nftprice TON + 1.0 TON`.
+Процесс покупки NFT для контракта продажи [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) может быть выполнен с помощью обычного перевода без полезной нагрузки, единственное, что важно — это точная сумма TON, которая рассчитывается следующим образом: `buyAmount = Nftprice TON + 1.0 TON`.
 
 ```python
 transaction = {
@@ -1791,7 +1801,7 @@ import "github.com/xssnick/tonutils-go/address"
 Прочитайте примеры [tonconnect](https://github.com/cameo-engineering/tonconnect/blob/master/examples/basic/main.go) и [tonutils-go](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#how-to-use).
 :::
 
-Там вы можете узнать, как создать сеанс tonconnect и отправить транзакцию, созданную с помощью сообщений.
+There you can find how to create a tonconnect session and send a transaction constructed with messages.
 
 ```go
 s, _ := tonconnect.NewSession()
@@ -1801,9 +1811,9 @@ s, _ := tonconnect.NewSession()
 boc, _ := s.SendTransaction(ctx, *tx)
 ```
 
-В дальнейших примерах будут созданы только сообщения и транзакции.
+In further examples, only messages and transactions will be created.
 
-### Обычный перевод TON
+### Regular TON transfer
 
 Пример функции для создания обычного сообщения о переводе TON:
 
@@ -1823,7 +1833,7 @@ func Transfer(dest string, amount uint64) (*tonconnect.Message, error) {
 }
 ```
 
-Окончательное тело транзакции:
+Final transaction body:
 
 ```go
 msg, err := Transfer("0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbLZ", uint64(math.Pow(10, 9)))
@@ -1840,7 +1850,7 @@ if err != nil {
 }
 ```
 
-### Перевод с комментарием
+### Transfer with comment
 
 Пример функции для создания сообщения о переводе с комментарием:
 
@@ -1865,7 +1875,7 @@ func TransferWithComment(dest string, amount uint64, comment string) (*tonconnec
 }
 ```
 
-Окончательное тело транзакции:
+Final transaction body:
 
 ```go
 msg, err := TransferWithComment("0QBZ_35Wy144n2GBM93YpcV4KOKcIjDJk8DdX4kyXEEHcbLZ", uint64(math.Pow(10, 9)), "new comment")
@@ -1882,9 +1892,9 @@ if err != nil {
 }
 ```
 
-### Перевод жетонов
+### Jetton transfer
 
-Пример функции для сообщения о переводе жетонов. Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
+Example of function for jetton transfer message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 ```go
 import (
@@ -1922,7 +1932,7 @@ func JettonTransferMessage(jetton_wallet_address string, amount uint64,
 }
 ```
 
-Окончательное тело транзакции:
+Final transaction body:
 
 ```go
 msg, err := JettonTransferMessage("kQA8Q7m_pSNPr6FcqRYxllpAZv-0ieXy_KYER2iP195hBXiX",
@@ -1944,9 +1954,9 @@ if err != nil {
 }
 ```
 
-### Сжигание жетонов
+### Jetton burn
 
-Пример функции для сообщения о сжигани жетона. Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
+Example of function for jetton burn message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 ```go
 import (
@@ -1980,7 +1990,7 @@ func JettonBurnMessage(jetton_wallet_address string, amount uint64,
 }
 ```
 
-Окончательное тело транзакции:
+Final transaction body:
 
 ```go
 msg, err := JettonBurnMessage("kQA8Q7m_pSNPr6FcqRYxllpAZv-0ieXy_KYER2iP195hBXiX",
@@ -2000,7 +2010,7 @@ if err != nil {
 }
 ```
 
-### Передача NFT
+### NFT transfer
 
 Пример функции для сообщения о передаче NFT:
 
@@ -2039,7 +2049,7 @@ func NftTransferMessage(nft_address string, amount uint64, recipient_address, re
 }
 ```
 
-Окончательное тело транзакции:
+Final transaction body:
 
 ```go
 msg, err := NftTransferMessage("EQDrA-3zsJXTfGo_Vdzg8d07Da4vSdHZllc6W9qvoNoMstF-",
@@ -2060,11 +2070,11 @@ if err != nil {
 }
 ```
 
-### Продажа NFT (GetGems)
+### NFT sale (GetGems)
 
-Вот пример подготовки сообщения и транзакции для продажи на торговой площадке GetGems в соответствии с контрактом [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
+Here is an example of preparing a message and transaction for sale on the GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
 
-Чтобы разместить NFT на контракте продажи GetGems, мы должны подготовить специальное тело сообщения `transferNftBody`, которое будет переводить NFT на специальный контракт продажи NFT.
+To place NFT on the GetGems Sale contract, we should prepare a special message body, `transferNftBody` that will transfer NFT to the special NFT Sale contract.
 
 ```go
 transferNftBody := cell.BeginCell().
@@ -2081,7 +2091,7 @@ transferNftBody := cell.BeginCell().
     EndCell()
 ```
 
-Поскольку сообщение требует много шагов, весь алгоритм огромен и его можно найти здесь:
+Because the message requires a lot of steps, the entire algorithm is huge and can be found here:
 
 <details> 
 <summary>Показать весь алгоритм для создания тела сообщения о продаже NFT</summary>
@@ -2181,7 +2191,7 @@ func NftSaleMessage(wallet, royalty, nft string, amount, price uint64) (*tonconn
 }
 ```
 
-Окончательное тело транзакции:
+The final transaction body:
 
 ```go
 msg, err := NftSaleMessage("EQArLGBnGPvkxaJE57Y6oS4rwzDWuOE8l8_sghntXLkIt162",
@@ -2203,9 +2213,10 @@ if err != nil {
 
 </details>
 
-### Покупка NFT (GetGems)
+### NFT buy (GetGems)
 
-Процесс покупки NFT для контракта продажи [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) может быть выполнен с помощью обычного перевода без полезной нагрузки, важна только точная сумма TON, которая рассчитывается следующим образом: `buyAmount = Nftprice TON + 1.0 TON`.
+The process of buying NFT for [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) sale contract could be carried out with a regular transfer without payload; the only important thing is an accurate TON amount, which is calculated as follows:
+`buyAmount = Nftprice TON + 1.0 TON`.
 
 ```go
 msg, err := tonconnect.NewMessage(nftAddress, buyAmount)
@@ -2224,14 +2235,16 @@ if err != nil {
 
 ## Авторы
 
-- Примеры JavaScript, предоставленные [@aSpite](https://t.me/aspite)
-- Примеры на Python предоставлены [@yunwine](https://t.me/yungwine)
-- Примеры Go предоставлены [@gleb498](https://t.me/gleb498)
+- JavaScript examples — _[@aSpite](https://t.me/aspite)_
+- Python examples — _[@yunwine](https://t.me/yungwine)_
+- Go examples — _[@gleb498](https://t.me/gleb498)_
 
-## См. также
+## See also
 
 - [TON Connect SDK](/v3/guidelines/ton-connect/guidelines/developers)
-- [TON Connect - Отправка сообщений](/v3/guidelines/ton-connect/guidelines/sending-messages)
-- [Разработка смарт-контрактов — отправка сообщений (низкий уровень)](/v3/documentation/smart-contracts/message-management/sending-messages)
-- [Обработка жетонов TON](/v3/guidelines/dapps/asset-processing/jettons)
+- [TON Connect - sending messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
+- [Smart contract development - sending messages](/v3/documentation/smart-contracts/message-management/sending-messages)
+- [TON jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
 - [Обработка NFT на TON](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
+
+<Feedback />

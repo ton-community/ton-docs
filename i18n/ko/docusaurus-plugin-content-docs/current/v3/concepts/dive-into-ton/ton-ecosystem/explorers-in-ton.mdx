@@ -1,0 +1,170 @@
+import Feedback from "@site/src/components/Feedback";
+import Player from "@site/src/components/player";
+
+# TON의 익스플로러
+
+This article will consider TON explorers and their capabilities and features from the user's perspective.
+
+## 익스플로러란 무엇인가?
+
+An explorer is a website that allows you to view information in a blockchain, such as the account balance, transaction history, and blocks.
+
+<Player url="https://www.youtube.com/watch?v=i5en19kzX6M" />
+
+## Which explorers exist?
+
+TON 익스플로러들 중에서 몇 가지 카테고리를 구분할 수 있습니다:
+
+- 일상적 사용을 위한 것
+- 개발자를 위한 확장된 정보를 제공하는 것
+- 전문화된 것
+
+This division into categories is mainly conditional, and one explorer can belong to several categories simultaneously. So let's not pay too much attention to this.
+
+## 일반 기능
+
+Blockchain explorers allow you to view and search the blockchain, similarly to how you might use a banking app to check transaction history and account balances. They provide a user-friendly interface to access real-time data about blockchain transactions, blocks, and addresses.
+
+Just as you use a banking app to track where your money goes, who sends you payments, and when transactions occur, blockchain explorers let you see this information for digital assets on the blockchain. They are essential for transparency, allowing anyone to verify transactions independently, see the flow of cryptocurrency, and analyze the activity on the blockchain.
+
+Typically, an explorer allows you to find a transaction or an account by its identifier. Some explorers also support DNS extensions or their own [address book](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton#address-alias-in-explorers), which adds a human-readable label to a specific account. Example: [TON Foundation](https://tonviewer.com/UQAFmjUoZUqKFEBGYFEMbv-m61sFStgAfUR8J6hJDwUU04VW).
+
+## Native explorers
+
+### Tonscan
+
+It is a good explorer for everyday use. It provides a comprehensive view of the TON Blockchain, allowing users to search for transactions, addresses, blocks, and more.
+
+- Mainnet: [tonscan.org](https://tonscan.org/)
+- Testnet: [testnet.tonscan.org](https://testnet.tonscan.org/)
+
+#### Features
+
+- Convenient for everyday use and developers
+- Advanced jetton and nominator pools pages for users
+- Contract types and disassembler
+- User-friendly search uses DNS and [address book](https://github.com/catchain/address-book) labels.
+
+### Tonviewer
+
+It is a good explorer for everyday use with a balanced UI for users and developers.
+
+- Mainnet: [tonviewer.com](https://tonviewer.com/)
+- Testnet: [testnet.tonviewer.com](https://testnet.tonviewer.com/)
+
+#### Features
+
+- Convenient for everyday use and developers
+- Advanced information for developers with traces
+- Contract types and disassembler
+- User-friendly search uses DNS and [tonkeeper/ton-assets](https://github.com/tonkeeper/ton-assets) labels.
+
+### Tonscan by Bastion
+
+- Mainnet: [tonscan.com](https://tonscan.com/)
+
+#### Features
+
+- 트랜잭션 집계 분석
+- Transaction traces
+
+### DTON
+
+DTON은 개발자를 위한 또 다른 익스플로러입니다. 편리한 형태로 트랜잭션에 대한 많은 정보를 제공합니다.
+
+It also has a feature that allows you to see the computation phase of the transaction step by step.
+
+- Mainnet: [dton.io](https://dton.io/)
+
+#### Features
+
+- 개발자에게 편리
+- 계산 단계에 대한 확장된 정보
+- Contract types and disassembler
+
+### Ton Whales explorer
+
+Explorer for developers.
+
+- Mainnet: [tonwhales.com/explorer](https://tonwhales.com/explorer)
+
+#### Features
+
+- 개발자에게 편리
+- Contract types and disassembler
+- Simple and convenient validator details
+
+### TON NFT EXPLORER
+
+This explorer specializes in NFTs but is also suitable as a regular explorer.
+
+- Mainnet: [explorer.tonnft.tools](https://explorer.tonnft.tools/)
+- Testnet: [testnet.explorer.tonnft.tools](https://testnet.explorer.tonnft.tools/)
+
+When viewing the wallet address, you can find out which NFT it stores, and when viewing the NFT, you can find the metadata, collection address, owner, and transaction history.
+
+#### Features
+
+- 개발자에게 편리
+- Specialized in NFT
+- 컨트랙트 타입
+
+## Crosschain explorers
+
+### OKX TON explorer
+
+This explorer is designed to provide comprehensive and detailed data insights into TON. Whether you're tracking wallet addresses, exploring Jetton tokens, or delving into NFT collections, it offers a user-friendly experience tailored for both beginners and developers.
+
+- Mainnet: [web3.okx.com/explorer/ton](https://web3.okx.com/explorer/ton)
+
+#### Features
+
+- 일상적 사용에 편리
+- TON DNS 지원
+- Jetton and NFT data
+
+### TON NFTscan
+
+This explorer is designed explicitly for Non-Fungible Tokens (NFTs) on the TON Blockchain. It allows users to explore, track, and verify NFT transactions, contracts, and metadata.
+
+- Mainnet: [ton.nftscan.com](https://ton.nftscan.com/)
+
+#### Features
+
+- 일반 사용자에게 편리
+- NFT 컬렉션 순위
+- 일일 거래량과 같은 트레이더를 위한 유용한 정보
+
+## Analytics explorers
+
+### TonStat
+
+- Mainnet: [tonstat.com](https://www.tonstat.com/)
+
+It displays various statistics, such as the number of registered network addresses and wallets, the volume of Toncoin burned, the volume of Toncoin staked, the volume of NFTs issued, the number of validators, and other metrics.
+
+#### Features
+
+- 일반 사용자에게 편리
+- DeFi 정보
+- 일일 거래량과 같은 트레이더를 위한 유용한 정보
+
+## Address alias in explorers
+
+주소 별칭을 사용하여 서비스 주소를 더 사용자 친화적으로 만드세요. 제공된 가이드라인에 따라 Pull Request(PR)를 생성하세요:
+
+- [tonkeeper/ton-assets](https://github.com/tonkeeper/ton-assets) - Tonviewer.com 별칭
+- [catchain/address-book](https://github.com/catchain/address-book) - Tonscan.org 별칭
+- [ton-labels](https://github.com/ton-studio/ton-labels) - Public dataset of labeled TON blockchain addresses
+
+## Want to be on this list?
+
+Please write to one of the [maintainers](/v3/contribute/maintainers).
+
+## See also
+
+- [TON wallet apps](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps/)
+- [ton.app/explorers](https://ton.app/explorers)
+- [Awesome TON repository](https://github.com/ton-community/awesome-ton)
+
+<Feedback />

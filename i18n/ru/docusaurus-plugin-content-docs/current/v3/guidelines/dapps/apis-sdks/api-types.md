@@ -1,33 +1,31 @@
-# Типы API
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# API types
 
-**Высокодоступные API для блокчейна - это основной элемент безопасной, удобной и быстрой разработки полезных приложений на TON.**
+**High availability blockchain APIs are essential for developing secure, efficient, and scalable applications on TON.**
 
-- [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis) - API, позволяющий работать с *индексированной информацией блокчейна*.
-- [TON ADNL API](/v3/guidelines/dapps/apis-sdks/ton-adnl-apis) - безопасный API для взаимодействия с TON, основанный на протоколе ADNL.
+- [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis) — An API that allows working with the _indexed blockchain information_.
+- [TON ADNL API](/v3/guidelines/dapps/apis-sdks/ton-adnl-apis) — A secure API for communicating with TON using the ADNL protocol.
 
 :::tip Состояние инфраструктуры TON
 
-- [status.toncenter](https://status.toncenter.com/) - различная статистика активности узлов за последний час.
-- [Tonstat.us](https://tonstat.us/) - Графана в реальном времени, обновляется каждые 5 минут.
+- [status.toncenter](https://status.toncenter.com/) - Displays various node activity statistics from the last hour.
+- [Tonstat.us](https://tonstat.us/) - A real-time Grafana dashboard, updated every 5 minutes.
   :::
 
-## API-интерфейсы Toncenter
+## TON Center APIs
 
-- [TON Index](https://toncenter.com/api/v3/) - TON Index собирает данные с полного узла в базу данных PostgreSQL и предоставляет удобный API к индексированному блокчейну.
-- [toncenter/v2](https://toncenter.com/) - Этот API обеспечивает HTTP-доступ к блокчейну TON - получение информации об учетных записях и кошельках, поиск блоков и транзакций, отправка сообщений в блокчейн, вызов get методов умных контрактов и многое другое.
+- [TON Index](https://toncenter.com/api/v3/) - Collects data from a full node into a PostgreSQL database and provides a convenient API for accessing indexed blockchain data.
+- [toncenter/v2](https://toncenter.com/) - Enables HTTP access to TON Blockchain, allowing developers to retrieve account and wallet information, look up blocks and transactions, send messages to the blockchain, call smart contract methods, and more.
 
-## Сторонние API
+## Third-party APIs
 
-- [tonapi.io](https://docs.tonconsole.com/tonapi) - быстрый индексированный API, предоставляющий базовую информацию об аккаунтах, транзакциях, блоках, данные для конкретных приложений о NFT, аукционах, Jetton, TON DNS и подписках. Он также предоставляет аннотированные данные о цепочках транзакций.
-- [TONX API](https://docs.tonxapi.com/) - API, специально разработанный для бесперебойной разработки DApps, обеспечивая легкий доступ к различным инструментам и данным.
-- [dton.io](https://dton.io/graphql/) - GraphQL API, который может предоставлять данные об аккаунтах, транзакциях и блоках, а также специфические для приложения данные о NFT, аукционах, Jetton и TON DNS.
-- [ton-api-v4](https://mainnet-v4.tonhubapi.com) - еще один lite-api, сосредоточенный на скорости через агрессивное кэширование в CDN.
-- [docs.nftscan.com](https://docs.nftscan.com/reference/ton/model/asset-model) - API для работы с NFT на блокчейне TON.
-- [everspace.center](https://everspace.center/toncoin) - Простой RPC API для доступа к блокчейну TON.
+- [tonapi.io](https://docs.tonconsole.com/tonapi) - A fast indexed API that provides basic data about accounts, transactions, blocks, application-specific data about NFT, auctions, jettons, TON DNS, and subscriptions. It also offers annotated transaction chain data.
+- [TONX API](https://docs.tonxapi.com/) - Designed for seamless dApp development, this API provides easy access to various tools and data.
+- [dton.io](https://dton.io/graphql/) - A GraphQL API that delivers data on accounts, transactions, and blocks, as well as application-specific data about NFT, auctions, jettons, and TON DNS.
+- [ton-api-v4](https://mainnet-v4.tonhubapi.com) - A lightweight API optimized for speed through aggressive CDN caching
+- [docs.nftscan.com](https://docs.nftscan.com/reference/ton/model/asset-model) - NFT APIs for TON Blockchain.
+- [everspace.center](https://everspace.center/toncoin) - A simple RPC API for accessing TON Blockchain.
 
 ## Дополнительные API
 
@@ -37,13 +35,13 @@
 - https://coinmarketcap.com/api/documentation/v1/
 - https://apiguide.coingecko.com/getting-started
 
-### API для преобразования адресов
+### Address convert APIs
 
 :::info
-Предпочтительнее преобразовывать адрес с помощью локального алгоритма, дополнительную информацию ознакомьтесь в разделе документации [Адреса](/v3/documentation/smart-contracts/addresses).
+It is preferable to convert addresses using a local algorithm. See [Addresses](/v3/documentation/smart-contracts/addresses) section of documentation for details.
 :::
 
-#### От удобной к Raw формату
+#### From friendly to raw form
 
 /api/v2/unpackAddress
 
@@ -64,7 +62,7 @@ Response body
 }
 ```
 
-#### От удобной к Raw формату
+#### From friendly to raw form
 
 /api/v2/packAddress
 
@@ -85,8 +83,11 @@ Response body
 }
 ```
 
-## См. также
+## See also
 
 - [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis)
 - [Список SDK](/v3/guidelines/dapps/apis-sdks/sdk)
-- [TON Cookbook](/v3/guidelines/dapps/cookbook)
+- [TON cookbook](/v3/guidelines/dapps/cookbook)
+
+<Feedback />
+

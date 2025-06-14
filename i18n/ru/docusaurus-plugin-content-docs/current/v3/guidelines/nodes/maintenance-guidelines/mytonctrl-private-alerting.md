@@ -1,77 +1,105 @@
-# Частный бот уведомлений MyTonCtrl
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# MyTonCtrl private alerting bot
 
-## Общие сведения
+## Overview
 
-Частный бот уведомлений MyTonCtrl — это инструмент, который позволяет вам получать уведомления о состоянии вашего узла через бота Telegram.
-Он является частью набора инструментов MyTonCtrl и доступен как для валидаторов, так и для liteserver. Для этого требуется создать отдельный частный бот в Telegram и настроить его в MyTonCtrl. Один бот может использоваться для мониторинга нескольких узлов.
+**MyTonCtrl Private Alerting Bot** is a tool for receiving notifications about your node's status via Telegram Bot.
+
+The bot is designed to send notification messages to Telegram only. It **does not** manage the validator or process any commands.
+
+This bot is part of the MyTonCtrl toolset and is compatible with both validators and liteservers. To utilize it, you must create a separate private bot in Telegram and configure it within MyTonCtrl.
+
+You can use one bot to monitor multiple nodes.
 
 ## Настройка
 
 Чтобы настроить бота оповещений MyTonCtrl, выполните следующие действия:
 
-### Подготовка бота
+### 1. Prepare your bot
 
-1. Перейдите на https://t.me/BotFather и создайте бота с помощью команды `/newbot`. После этого вы получите `BotToken`.
-2. Перейдите к своему боту и нажмите кнопку `Start`. Это позволит вам получать сообщения от бота.
-3. Если вы хотите получать сообщения от бота в группе (чате), добавьте бота в группу и дайте ему необходимые права (сделайте администратором группы).
-4. Перейдите по адресу https://t.me/getmyid_bot и нажмите кнопку `Start`. Он ответит вам с вашим `ChatId`, используйте его, если хотите получать сообщения напрямую на свой аккаунт Telegram.
-   Если вы хотите получать сообщения в группе, добавьте бота в группу, и он ответит с `ChatId` группы.
+1. Visit [@BotFather](https://t.me/BotFather) and create a bot by using the command `/newbot`. After completing this step, you will receive a `BotToken`.
 
-### Включить бота оповещений
+2. Go to your bot and press the `Start` button. This action will enable you to receive messages from the bot.
 
-1. Включите `alert-bot` с помощью команды
+3. The bot can send messages to either private messages or groups. If you want to receive messages from the bot in a group chat, make sure to add the bot to that group.
 
-   ```bash
-   MyTonCtrl> enable_mode alert-bot
-   ```
+4. Visit [@getmyid_bot](\\[https://t.me/getmyid_bot]\\(https://t.me/getmyid_bot\\)) and press the **Start** button. The bot will reply with your `ChatId`; you can use this ID if you wish to receive messages directly to your Telegram account.
 
-2. Включите команду
+If you want to receive messages in a group, add the bot to the group, and it will provide you with the group's `ChatId`.
 
-   ```bash
-   MyTonCtrl> set BotToken <BotToken>
-   ```
+### Activating the alert bot on MyTonCtrl
 
-3. Включите команду
+1. Enable the `alert-bot` using the following command:
 
-   ```bash
-   MyTonCtrl> set ChatId <ChatId>
-   ```
+    ```bash
+    MyTonCtrl> enable_mode alert-bot
+    ```
 
-4. Проверьте, может ли бот отправлять сообщения, выполнив команду
+2. Execute the command:
 
-   ```bash
-   MyTonCtrl> test_alert
-   ```
+    ```bash
+    MyTonCtrl> setup_alert_bot <bot_token> <chat_id>
+    ```
 
-   Вы должны получить сообщение от бота в своем аккаунте Telegram или чате.
+If you configure everything correctly, you will receive a welcome message listing all available alerts.
 
-## Поддерживаемые оповещения
+## Supported Alerts
 
 Бот оповещений MyTonCtrl поддерживает следующие оповещения:
 
-- Баланс кошелька валидатора низкий
-- Использование базы данных узла превышает 80%
-- Использование базы данных узла превышает 95%
-- Валидатор показал низкую эффективность в раунде
-- Узел не синхронизирован
-- Узел не запущен (служба не работает)
-- Узел не отвечает на ADNL-соединение
-- За последние 6 часов валидатор не создал ни одного блока
-- Во время предыдущего раунда проверки валидатор был заблокирован
-- Стейк валидатора не принят
-- Стейк валидатора принят (информационное оповещение без звука)
-- Стейк валидатора не возвращен
-- Стейк валидатора возвращен (информационное оповещение без звука)
-- Существует активное предложение в сети, которое набрало много голосов, но не было одобрено валидатором
+- The validator's wallet balance is less than 10 Toncoins.
 
-## Включение(отключение) оповещений
+- The node's database usage exceeds 80%.
+
+- The node's database usage exceeds 95%.
+
+- The validator's efficiency is less than 90% in the validation round.
+
+- The node is out of sync by more than 20 seconds.
+
+- The node is not running (service is down).
+
+- The node is unresponsive to ADNL connections.
+
+- The validator has not created any blocks in the past 6 hours.
+
+- The validator has been slashed in the previous validation round.
+
+- The validator's stake has not been accepted.
+
+- The validator's stake has been accepted (info alert with no sound).
+
+- The validator's stake has been returned (info alert with no sound).
+
+- The validator's stake has not been returned.
+
+- There is an active network proposal that has received more than 50% of the required votes, but the validator has not voted on it.
+
+## Enabling and disabling alerts
 
 Чтобы включить или отключить оповещения, используйте следующие команды:
 
-- Чтобы включить оповещение, используйте команду `enable_alert <alert-name>`.
-- Чтобы отключить оповещение, используйте команду `disable_alert <alert-name>`.
-- Чтобы проверить статус оповещений, используйте команду `list_alerts`.
+- To enable an alert, use the command
+    ```bash
+    MyTonCtrl> enable_alert <alert-name>
+    ```
+- To disable an alert, use the command :
+    ```bash
+    MyTonCtrl> disable_alert <alert-name>
+    ```
+- To check the status of alerts, use the command:
+    ```bash
+    MyTonCtrl> list_alerts
+    ```
+- To send a test message, use the command:
+    ```bash
+    MyTonCtrl> test_alert
+    ```
+- To disable the Alert Bot, use the command:
+    ```bash
+    MyTonCtrl> disable_mode  alert-bot
+    ```
+
+<Feedback />
+

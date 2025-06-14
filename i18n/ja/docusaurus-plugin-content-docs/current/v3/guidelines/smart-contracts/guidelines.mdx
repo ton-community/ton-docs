@@ -1,0 +1,75 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Button from '@site/src/components/button'
+
+# 概要
+
+This page navigates within the TON smart contracts guidelines. 
+
+## Guides overview
+
+### Smart contract development
+
+| Guide                                                                                                 | Stack                            | Description                                                       |
+| ----------------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------------------------- |
+| [TON Hello world](https://helloworld.tonstudio.io/01-wallet/)                                         | FunC; TS, @ton/ton               | Write and deploy your first contract.                             |
+| [Working with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet/)                   | FunC; TS, @ton/ton               | Learn in detail interaction with various wallets smart contracts. |
+| [Speedrun TON](https://tonspeedrun.tapps.ninja/)                                                      | FunC; TS, @ton/ton               | Learn contract development with series of guidelines.             |
+| [Writing tests with Blueprint](/v3/guidelines/smart-contracts/testing/overview/)                      | TS, @ton/ton                     | Learn how to write and invoke local tests for contract.           |
+| [Shard optimizations on TON](/v3/guidelines/smart-contracts/howto/shard-optimization/)                | TS, @ton/ton                     | Learn best practice for contract shard optimization.              |
+| [Writing tests examples](/v3/guidelines/smart-contracts/testing/writing-test-examples/)               | TS, @ton/ton                     | Learn how to write various test suites for edge cases.            |
+| [Interact with multisig wallets using TypeScript](/v3/guidelines/smart-contracts/howto/multisig-js)   | TS, @ton/ton                     | Learn how to interact to multisig wallet in TON.                  |
+
+### Scalability and security
+
+| Guide                                                                                                                                                  | Stack                   | Description                                                                      |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- | -------------------------------------------------------------------------------- |
+| [How to shard your TON smart contract and why](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons) | Design and architecture | Learn concept of contract system with jetton standard                            |
+| [Airdrop claiming guidelines](/v3/guidelines/smart-contracts/howto/airdrop-claim-best-practice/)                                                       | Design and architecture | Learn concepts on contract interactions and their impact on overall performance. |
+| [Things to focus on while working with TON blockchain](/v3/guidelines/smart-contracts/security/things-to-focus/)                                       | FunC                    | Best practices for DApps development in TON.                                     |
+| [Secure smart contract programming](/v3/guidelines/smart-contracts/security/secure-programming/)                                                       | FunC                    | Best practices for secure development of smart contracts on FunC.                |
+| [Drawing conclusions from TON hack challenge](/v3/guidelines/smart-contracts/security/ton-hack-challenge-1/)                                           | FunC                    | Best practices for secure development                                            |
+| [Random number generation](/v3/guidelines/smart-contracts/security/random-number-generation/)                                                          | FunC                    | Generating random numbers in TON for various projects.                           |
+
+### Advanced
+
+| Guide                                                                                                                                                  | Stack                    | Description                                                                              |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ | ---------------------------------------------------------------------------------------- |
+| [Generation of block random seed](/v3/guidelines/smart-contracts/security/random/)                                                                     | C++, Core                | Explanation on random in TON.                                                            |
+| [Compilation instructions](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions/)                                                     | C++, cmake, Core         | Compile executables from source for deep native integration.                             |
+| [Instructions for low-memory machines](/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory/)                                          | С++                      | Extension for compilation on low-memory machines.                                        |
+| [Make a simple multisig contract with fift](/v3/guidelines/smart-contracts/howto/multisig/)                                                            | Fift, Lite Client        | This tutorial will help you learn how to deploy your multisig contract with Lite Client. |
+
+## TON course: contract development
+
+The [TON blockchain course](https://stepik.org/course/176754/) is a comprehensive guide to blockchain development.
+
+- モジュール2は**TVM、トランザクション、スケーラビリティ、ビジネスケース**専用です。
+- モジュール3は**スマートコントラクトの開発ライフサイクル**に特化しています。
+
+<Button href="https://stepik.org/course/176754/promo"
+        colorType={'primary'} sizeType={'sm'}>
+
+Check the TON blockchain course
+
+</Button>
+
+<Button href="https://stepik.org/course/201638/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+CHN
+
+</Button>
+
+<Button href="https://stepik.org/course/201855/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+RU
+
+</Button>
+
+## See also
+
+- [Smart contract documentation](/v3/documentation/smart-contracts/overview/)
+
+<Feedback />

@@ -1,8 +1,6 @@
-# Компиляция из исходного кода
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Compile from sources
 
 Вы можете скачать предварительно скомпилированные двоичные файлы [здесь](/v3/documentation/archive/precompiled-binaries#1-download).
 
@@ -112,60 +110,58 @@ cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. \
 -DLZ4_INCLUDE_DIRS=$lz4Path/lib
 ```
 
-:::
-
 :::tip
-Если вы компилируете на компьютере с небольшим объемом памяти (например, 1 Гб), не забудьте [создать раздел подкачки] (/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory).
+If you are compiling on a computer with low memory (e.g., 1 Gb), don't forget to [create a swap partitions](/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory).
 :::
 
-## Загрузка Global Config
+## Download global config
 
-Для таких инструментов, как Lite Client, вам необходимо загрузить сетевой Global Config.
+For tools like lite client you need to download the global network config.
 
-Загрузите актуальный файл конфигурации https://ton-blockchain.github.io/global.config.json для mainnet:
+Download the newest configuration file from https://ton-blockchain.github.io/global.config.json for mainnet:
 
 ```bash
 wget https://ton-blockchain.github.io/global.config.json
 ```
 
-или https://ton-blockchain.github.io/testnet-global.config.json для testnet:
+or from https://ton-blockchain.github.io/testnet-global.config.json for testnet:
 
 ```bash
 wget https://ton-blockchain.github.io/testnet-global.config.json
 ```
 
-## Lite Client
+## Lite client
 
-Чтобы собрать Lite Client, выполните шаги выше: [общее](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [загрузка config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config), а затем запустите сборку:
+To build a lite client, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [download the config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config), and then do:
 
 ```bash
 cmake --build . --target lite-client
 ```
 
-Запустите Lite Client с Global Config:
+Run the Lite Client with config:
 
 ```bash
 ./lite-client/lite-client -C global.config.json
 ```
 
-Если все установлено успешно, Lite Client подключится к специальному серверу (полноценному узлу сети TON Blockchain) и отправит на него несколько запросов.
-Если вы укажете в качестве дополнительного аргумента доступный для записи каталог "database", Lite Client загрузит и сохранит блок и состояние, соответствующие самому новому мастерчейн-блоку:
+If everything was installed successfully, the Lite Client will connect to a special server (a full node for the TON Blockchain Network) and will send some queries to the server.
+If you indicate a writeable "database" directory as an extra argument to the client, it will download and save the block and the state corresponding to the newest masterchain block:
 
 ```bash
 ./lite-client/lite-client -C global.config.json -D ~/ton-db-dir
 ```
 
-Основную справочную информацию можно получить, набрав `help` в Lite Client. Для выхода введите `quit` или нажмите `Ctrl-C`.
+Basic help info can be obtained by typing `help` into the Lite Client. Type `quit` or press `Ctrl-C` to exit.
 
 ## FunC
 
-Чтобы собрать компилятор FunC из исходного кода, выполните [общее](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common) выше, и запустите сборку:
+To build FunC compiler from source code, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common) described above and then:
 
 ```bash
 cmake --build . --target func
 ```
 
-Скомпилируйте смарт-контракт FunC:
+To compile FunC smart contract:
 
 ```bash
 ./crypto/func -o output.fif -SPA source0.fc source1.fc ...
@@ -173,13 +169,13 @@ cmake --build . --target func
 
 ## Fift
 
-Чтобы собрать компилятор Fift из исходного кода, выполните [общее](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common) выше, и запустите сборку:
+To build Fift compiler from source code, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common) described above and then:
 
 ```bash
 cmake --build . --target fift
 ```
 
-Запустите скрипт Fift:
+To run Fift script:
 
 ```bash
 ./crypto/fift -s script.fif script_param0 script_param1 ..
@@ -187,72 +183,72 @@ cmake --build . --target fift
 
 ## Tonlib-cli
 
-Чтобы собрать tonlib-cli, выполните [общее](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [загрузка config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config), а затем запустите сборку:
+To build tonlib-cli, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [download the config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config) and then do:
 
 ```bash
 cmake --build . --target tonlib-cli
 ```
 
-Запустите tonlib-cli с Global Config:
+Run the tonlib-cli with config:
 
 ```bash
 ./tonlib/tonlib-cli -C global.config.json
 ```
 
-Основную справочную информацию можно получить, набрав `help` в tonlib-cli. Для выхода введите `quit` или нажмите `Ctrl-C`.
+Basic help info can be obtained by typing `help` into the tonlib-cli. Type `quit` or press `Ctrl-C` to exit.
 
 ## RLDP-HTTP-Proxy
 
-Чтобы собрать rldp-http-proxy, выполните [общее](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [загрузка config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config), а затем запустите сборку:
+To build rldp-http-proxy, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [download the config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config) and then do:
 
 ```bash
 cmake --build . --target rldp-http-proxy
 ```
 
-Двоичный файл rldp-http-proxy будет иметь расположение:
+The Proxy binary will be located as:
 
 ```bash
 ./rldp-http-proxy/rldp-http-proxy
 ```
 
-## generate-random-id
+## Generate-random-id
 
-Чтобы собрать generate-random-id, выполните [общее](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common) и запустите сборку:
+To build generate-random-id, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common) and then do:
 
 ```bash
 cmake --build . --target generate-random-id
 ```
 
-Двоичный файл generate-random-id будет иметь расположение:
+The binary will be located as:
 
 ```bash
 ./utils/generate-random-id
 ```
 
-## storage-daemon
+## Storage-daemon
 
-Чтобы собрать storage-daemon и storage-daemon-cli, выполните [общее](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common) и запустите сборку:
+To build storage-daemon and storage-daemon-cli, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common) and then do:
 
 ```bash
 cmake --build . --target storage-daemon storage-daemon-cli
 ```
 
-Двоичные файлы будут иметь расположение:
+The binary will be located at:
 
 ```bash
 ./storage/storage-daemon/
 ```
 
-# Компиляция старых версий TON
+# Compile old TON versions
 
-Выпуски TON: https://github.com/ton-blockchain/ton/tags
+TON releases: https://github.com/ton-blockchain/ton/tags
 
 ```bash
 git clone https://github.com/ton-blockchain/ton.git
 cd ton
 # git checkout <TAG> for example checkout func-0.2.0
 git checkout func-0.2.0
-git submodule update --init --recursive 
+git submodule update --init --recursive
 cd ..
 mkdir ton-build
 cd ton-build
@@ -261,16 +257,20 @@ cmake ../ton
 cmake --build . --target func
 ```
 
-## Компиляция старых версий на Apple M1:
+## Compile old versions on Apple M1
 
-TON поддерживает Apple M1 с 11 июня 2022 года ([Добавить поддержку Apple M1 (#401)](https://github.com/ton-blockchain/ton/commit/c00302ced4bc4bf1ee0efd672e7c91e457652430)).
+TON supports Apple M1 from 11 Jun 2022 ([Add apple m1 support (#401)](https://github.com/ton-blockchain/ton/commit/c00302ced4bc4bf1ee0efd672e7c91e457652430) commit).
 
-Для компиляции старых ревизий TON на Apple M1:
+To compile older TON revisions on Apple M1:
 
-1. Обновите субмодуль RocksDb до версии 6.27.3
-  ```bash
-  cd ton/third-party/rocksdb/
-  git checkout fcf3d75f3f022a6a55ff1222d6b06f8518d38c7c
-  ```
+1. Update RocksDb submodule to 6.27.3
 
-2. Замените `CMakeLists.txt` в корневом каталоге на https://github.com/ton-blockchain/ton/blob/c00302ced4bc4bf1ee0efd672e7c91e457652430/CMakeLists.txt
+   ```bash
+   cd ton/third-party/rocksdb/
+   git checkout fcf3d75f3f022a6a55ff1222d6b06f8518d38c7c
+   ```
+
+2. Replace root `CMakeLists.txt` by https://github.com/ton-blockchain/ton/blob/c00302ced4bc4bf1ee0efd672e7c91e457652430/CMakeLists.txt
+
+<Feedback />
+

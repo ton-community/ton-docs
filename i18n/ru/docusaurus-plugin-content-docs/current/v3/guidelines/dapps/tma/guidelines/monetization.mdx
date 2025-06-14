@@ -1,25 +1,28 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 import ThemedImage from '@theme/ThemedImage';
 
 # Монетизация
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
 
 ## Wallet Pay
 
 <br></br>
 <img src="https://storage.googleapis.com/ton-strapi/reason_Card5_19eeac1401/reason_Card5_19eeac1401.png" alt="Wallet Pay illustration"/>
 <br></br>
-Wallet Pay - это основная платежная система для мини-приложений Telegram (TMA), поддерживающая как криптовалютные, так и фиатные транзакции. Отслеживайте статистику своих заказов и легко выводите средства.
-Встроенный в экосистему Кошелька, Wallet Pay обеспечивает беспрепятственный финансовый обмен между продавцами и их клиентами.
+Wallet Pay is the primary payment system for Telegram Mini Apps, supporting both crypto and fiat transactions. Monitor your order statistics and withdraw funds easily.
+Embedded within the Wallet ecosystem, Wallet Pay facilitates seamless financial exchanges between merchants and their customers.
 
 Полезные ссылки:
 
-- [Wallet Pay Business Support](https://t.me/WalletPay_supportbot) - это Telegram-бот для связи со службой поддержки Wallet Pay.
-- [Демо-магазин](https://t.me/PineAppleDemoWPStoreBot) - это Telegram-бот для демонстрации функционала Wallet Pay. (Внимание: все платежи осуществляются в реальных активах)
-- [Сообщество продавцов](https://t.me/+6TReWBEyZxI5Njli) - это группа в Telegram для обмена опытом и решениями проблем.
+- [Wallet Pay Business Support](https://t.me/WalletPay_supportbot) is a Telegram bot for contacting the Wallet Pay support team.
+- [Demo Store Bot](https://t.me/PineAppleDemoWPStoreBot) is a Telegram bot for demonstrating Wallet Pay functionality.
+
+:::note
+All payments are processed using real assets
+:::
+
+- [Merchant Community](https://t.me/+6TReWBEyZxI5Njli) is a Telegram group for members to share experiences and solutions.
 
 ## TON Connect
 
@@ -33,38 +36,40 @@ Wallet Pay - это основная платежная система для м
 />
 <br></br>
 
-TON Connect - это протокол связи между **кошельками** и **приложениями** в TON.
+TON Connect is a communication protocol that links **wallets** and **apps** in TON.
 
-**Приложения**, созданные на TON, обладают богатой функциональностью и высокой производительностью и предназначены для защиты средств пользователей с помощью смарт-контрактов. Поскольку приложения создаются с использованием децентрализованных технологий, таких как блокчейн, их обычно называют децентрализованными приложениями (dApps).
+**Apps** built on TON provide rich functionality and high performance and are designed to protect user funds via smart contracts. Because these apps use decentralized technologies like blockchain, they are commonly referred to as decentralized applications (DApps).
 
-**Кошельки** представляют пользовательский интерфейс для подтверждения транзакций и надежно хранят криптографические ключи пользователей на их персональных устройствах. Такое разделение задач обеспечивает быстрое внедрение инновации и обеспечивать высокий уровень безопасности для пользователей: кошелькам не нужно самим создавать экосистемы, а приложениям не нужно брать на себя риск хранения учетных записей конечных пользователей.
+**Wallets** provide the interface to approving transactions securely store users’ cryptographic keys on their personal devices. This separation of responsibilities enables rapid innovation and ensures a high level of security for users. Wallets do not need to create closed ecosystems, while apps do not need to bear the risk of storing users' accounts.
 
-Цель TON Connect - обеспечить беспрепятственный доступ пользователей к кошелькам и приложениям.
+TON Connect enhances the user experience by enabling seamless interaction between wallets and apps.
 
 <Button href="/v3/guidelines/ton-connect/overview" colorType={'primary'} sizeType={'sm'}>
 
-Откройте для себя TON Connect
+Discover TON Connect
 
 </Button>
 
-## Интегрируйте токены
+## Integrate tokens
 
-Вы можете создать свой собственный токен на блокчейне TON и интегрировать его в свое приложение. Вы также можете интегрировать существующие токены в свое приложение.
+You can create your own token on TON Blockchain and integrate it into your app. You can also integrate existing tokens into your app.
 
 <Button href="/v3/documentation/dapps/defi/tokens" colorType={'primary'} sizeType={'sm'}>
 
-Разберитесь в DeFi
+Understand DeFi
 
 </Button>
 
-## Подписки на TON
+## Subscriptions on TON
 
-Благодаря тому, что транзакции в блокчейне TON проходят быстро, а сетевые комиссии низкие, вы можете обрабатывать повторяющиеся on-chain платежи с помощью смарт-контрактов.
+Because transactions on the TON blockchain are fast and network fees are low, you can process recurring payments on-chain via smart contracts.
 
-Например, пользователи могут подписаться на цифровой контент (или что-либо еще), и с них будет взиматься ежемесячная плата в размере 1 TON.
+For example, users can subscribe to digital content or other services and pay a monthly fee of 1 TON.
 
 <Button href="/v3/documentation/dapps/defi/subscriptions" colorType={'primary'} sizeType={'sm'}>
 
-Читать далее
+Read more
 
 </Button>
+
+<Feedback />

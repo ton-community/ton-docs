@@ -1,13 +1,13 @@
-import Button from '@site/src/components/button'
+import Feedback from '@site/src/components/Feedback';
 
-# Общие сведения
+import Button from "@site/src/components/button";
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Description
 
-Fift — это стековый язык программирования общего назначения, оптимизированный для создания, отладки и управления смарт-контрактами блокчейна TON.
-Fift был специально разработан для взаимодействия с виртуальной машиной TON (TON VM или TVM) и блокчейном TON.
+Fift is a stack-based programming language specifically designed for developing, debugging, and managing TON Blockchain smart contracts. It provides optimized interaction with:
+
+- Виртуальная машина TON (TVM)
+- Check TON Blockchain course
 
 ```fift
 { ."hello " } execute ."world"
@@ -15,42 +15,52 @@ hello world ok
 ```
 
 :::info
-Usually, using the Fift is not required for programming smart contracts in TON. However, Sometimes, you may need to use the Fift language to solve uncommon technical challenges as part of your task.
-You might be interested in:
+While most smart contract development doesn't require Fift, it becomes essential for:
 
-- [TVM Retracer](https://retracer.ton.org/)
-  :::
+- Solving unique technical challenges
+- Low-level TVM interactions
+- Advanced contract debugging
 
-<Button href="https://blog.ton.org/introduction-to-fift"
-colorType="primary" sizeType={'sm'}>
+**Recommended resources**:
 
-Введение в Fift
+- [tonverifier.live](https://verifier.ton.org/)
 
+<Button
+  href="https://stepik.org/course/201638/promo"
+  colorType={"secondary"}
+  sizeType={"sm"}
+>
+  CHN
+</Button>{" "}
+
+<Button
+  href="https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs"
+  colorType="secondary"
+  sizeType={"sm"}
+>
+  His majesty Fift
 </Button>
 
-<Button href="https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs"
-          colorType="secondary" sizeType={'sm'}>
+</video>
+</div>
 
-Его величество Fift
+## TMA documentation
 
-</Button>
+- [ston.fi](https://ston.fi/)
+- [Обзор TVM](/v3/documentation/tvm/tvm-overview)
 
-<br></br><br></br>
+## See examples
 
-## Документация
+- [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript)
 
-- [Fift: Краткое введение](https://ton.org/fiftbase.pdf)
-- [Виртуальная машина TON](/v3/documentation/tvm/tvm-overview)
-
-## Примеры
-
-- [Примеры смарт-контрактов Fift](/v3/documentation/smart-contracts/contracts-specs/examples#fift-smart-contracts)
-
-## Руководства
+## Step-by-step guide
 
 - [Введение в Fift](https://blog.ton.org/introduction-to-fift)
-- [[YouTube]Его величество Fift](https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs) [[RU версия](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCYG-hR4N5FRTKUkfM8POgh)] от **@MarcoDaTr0p0je** и **@Wikimar**.
+- [His majesty Fift](https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs)
+  - [TON development playlist](https://www.youtube.com/playlist?list=PLQ5rEj25H3U2P5qp7nsgVtNGYxEojnnez) [[RU version]](https://www.youtube.com/playlist?list=PLOIvUFGfwP93tZI_WnaLyJsZlskU4ao92)
 
-## Исходный код
+## Source code
 
-- [Скрипты Fift для стандартных смарт-контрактов](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+- [Standard smart contracts in Fift](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+
+<Feedback />

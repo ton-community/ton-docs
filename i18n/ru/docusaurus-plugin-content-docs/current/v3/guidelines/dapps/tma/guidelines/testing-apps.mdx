@@ -1,104 +1,104 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ConceptImage from '@site/src/components/conceptImage'
 
 # Тестирование мини-приложений
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
 ## Использование ботов в тестовой среде разработки
 
-Чтобы войти в тестовую среду, воспользуйтесь одним из следующих способов:
+To log in to the test environment, use one of the following methods:
 
-- **iOS:** нажмите 10 раз на значок Настройки > Учетные записи > Вход в другую учетную запись > Тест.
-- **Telegram Desktop:** откройте ☰ Настройки > Shift + Alt + щелкните правой кнопкой мыши на 'Add Account' и выберите 'Test Server'.
-- **macOS:** нажмите 10 раз на значок "Настройки", чтобы открыть меню отладки, ⌘ + нажмите "Добавить учетную запись" и войдите в систему по номеру телефона.
+- **iOS:** Tap 10 times on the Settings icon. Navigate to > Accounts > Login to another account > Test.
+- **Telegram Desktop:** Open ☰ Settings > Shift + Alt + Right click **Add Account** and select **Test Server**.
+- **macOS:** Click the Settings icon 10 times to open the Debug Menu. `⌘` + Click **Add Account** and log in using your phone number.
 
-Тестовая среда полностью отделена от основной. Вам нужно будет создать **новый аккаунт пользователя** и **нового бота**, используя `@BotFather`.
+The test environment is completely separate from the main environment. You must create a **new user account** and a **new bot** using [@BotFather](https://t.me/BotFather).
 
-После получения токена бота, отправляйте запросы в Bot API в следующем формате:
+Once you have received your bot token, send requests to the Bot API using this format:
 
 `https://api.telegram.org/bot<token>/test/METHOD_NAME`
 
-**Примечание:** При работе с тестовой средой вы можете использовать HTTP-ссылки без TLS для тестирования Вашего мини-приложения.
+**Note:** When using the test environment, you may use HTTP links without TLS to test your Mini App.
 
-## Режим отладки для мини-приложений
+## Debug mode for Mini Apps
 
-Используйте следующие инструменты для выявления проблем, связанных с вашими мини-приложениями:
+Use the following tools to identify app-specific issues in your Mini App.
 
 ### Android
 
 - [Включить USB-отладку](https://developer.chrome.com/docs/devtools/remote-debugging/) на Вашем устройстве.
-- В настройках Telegram прокрутите страницу до конца вниз, нажмите  **номер версии** два раза и удерживайте.
-- Выберите _Включить отладку WebView_ в настройках отладки.
-- Подключите телефон к компьютеру и откройте chrome://inspect/#devices в Chrome - вы увидите там ваше мини-приложение, когда запустите его на телефоне.
+- In Telegram Settings, scroll to the bottom, press and hold the **version number** two times.
+- Choose _Enable WebView Debug_ in Debug Settings.
+- Connect your phone to your computer and open chrome://inspect/#devices in Chrome.
+- Launch your Mini App on your phone, and it will appear in Chrome’s Inspect Devices tab.
 
 ### iOS
 
-Для отладки iOS webview требуется десктопный браузер Safari и macOS.
+iOS WebView debugging requires the Safari desktop browser on macOS.
 
 **На устройстве iOS:**
 
 - Перейдите в раздел _Настройки_.
-- Найдите значок Safari и нажмите на него.
-- Прокрутите вниз и нажмите _Дополнительно_.
-- Включите опцию _Веб-инспектор_.
+- Scroll down and tap Safari.
+- Scroll to the bottom and press _Advanced_.
+- Enable _Web Inspector_.
 
 **На macOS:**
 
-- Откройте браузер Safari.
-- Откройте _Настройки_ (⌘ + ,).
-- Выберите вкладку _Дополнительно_.
-- Отметьте внизу опцию _Показать возможности для веб-разработчиков_.
+- Open Safari.
+- Open _Settings_ (`⌘` + `,`).
+- Select the _Advanced_ tab.
+- Check _Show features for web developers_.
 
 **Следующие шаги:**
 
-- Подключите iOS-устройство к Mac с помощью кабеля.
+- Connect your iOS device to the Mac via USB cable.
 - Откройте мини-приложение в клиенте Telegram для iOS.
-- Откройте вкладку _Разработка_ в строке меню в Safari на macOS.
-- Выберите подключенный iPhone.
-- Опционально: выберите _Подключение по сети_ и отсоедините кабель.
-- Выберите открытый URL-адрес webview в блоке _Telegram_.
+- In Safari on macOS, go to _Develop_ in the menu bar.
+- Select the connected iPhone.
+- (Optional) select _Connect via network_ and disconnect the cable.
+- Under the _Telegram_ block, select the opened WebView URL.
 
-### Telegram Desktop в Windows, Linux и macOS
+### Telegram Desktop on Windows, Linux, and macOS
 
-- Загрузите и запустите последнюю версию Telegram Desktop на **Windows**, **Linux** или **macOS** (на момент написания этой статьи доступна версия 5.0.1).
+- Download and launch the latest version of Telegram Desktop on **Windows**, **Linux** or **macOS** (5.0.1 at the time of writing)
 - Перейдите в _Настройки > Дополнительно > Экспериментальные настройки > Включить проверку webview_.
 - В Windows и Linux щелкните правой кнопкой мыши на WebView и выберите _Проверить (Inspect)_.
-- На macOS Вам необходимо получить доступ к Inspect через [Меню Разработчика Safari](https://support.apple.com/en-gb/guide/safari/sfri20948/mac)
-  , а функция Inspect недоступна через контекстное меню, вызываемое правой кнопки мыши.
+- On macOS, you need to access the Inspect through [Safari Developer menu](https://support.apple.com/en-gb/guide/safari/sfri20948/mac) as Inspect is not available via right-click.
 
 ### Telegram macOS
 
-- Скачайте и запустите [Бета-версию](https://telegram.org/dl/macos/beta) Telegram macOS.
-- Быстро нажмите 5 раз на значок "Настройки", чтобы открыть меню отладки и включить "Отладку мини-приложений".
+- Download and launch the [beta version](https://telegram.org/dl/macos/beta) of Telegram macOS.
+- Quickly click the Settings icon five times to open the debug menu and enable **Debug Mini Apps**.
 
-Щелкните правой кнопкой мыши в мини-приложении и выберите _Inspect Element_.
+Right-click inside the Mini App and choose _Inspect Element_.
 
 ## Тестирование с Eruda
 
-[Eruda](https://github.com/liriliri/eruda) - это инструмент, предоставляющий веб-консоль для отладки и проверки веб-страниц на мобильных устройствах и в десктопных браузерах. Вот пошаговое руководство по использованию Eruda в проектах мини-приложений Telegram.
+[Eruda](https://github.com/liriliri/eruda) is a tool that provides a web-based console for debugging and inspecting web pages on mobile devices and desktop browsers.
 
 ![1](/img/docs/telegram-apps/eruda-1.png)
 
-### Шаг 1: Включите библиотеку Eruda
+### Step 1: include Eruda library
 
-Для начала добавьте библиотеку Eruda в свой HTML-файл. Вы можете загрузить ее из CDN:
+To begin, add the Eruda library to your HTML file:
+
+**Option 1:** use a CDN (recommended).
 
 ```html
 <!-- Include Eruda from CDN (Recommended) -->
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 ```
 
-Или Вы можете получить его на npm.
+**Option 2:** install via npm.
 
 ```bash npm2yarn
 npm install eruda --save
 ```
 
-### Шаг 2: Инициализируйте Eruda
+### Step 2: initialise Eruda
 
-Затем инициализируйте Eruda при загрузке веб-страницы. Если Вы используете Eruda с CDN, сделайте следующее:
+If using the CDN, initialize Eruda when the page loads:
 
 ```html
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
@@ -109,7 +109,7 @@ npm install eruda --save
 
 ```
 
-Если Вы предпочитаете последние версии инструментов и пакетов, добавьте этот скрипт в свой проект:
+If you prefer modern tooling and packages, add this script to your project:
 
 ```jsx
 import eruda from 'eruda'
@@ -117,9 +117,14 @@ import eruda from 'eruda'
 eruda.init()
 ```
 
-### Шаг 3: Запустите Eruda
+### Step 3: launch Eruda
 
-После развертывания вашего мини-приложения запустите его и просто нажмите на значок Eruda, чтобы начать отладку!
+After deploying your Mini App:
+
+- Open it in Telegram.
+- Press the Eruda icon to start debugging.
 
 <ConceptImage style={{maxWidth:'200pt', margin: '10pt 20pt 0 0', display: 'flex-box'}} src="/img/docs/telegram-apps/eruda-2.png" />
 <ConceptImage style={{maxWidth:'200pt', margin: '10pt 20pt', display: 'flex-box'}}  src="/img/docs/telegram-apps/eruda-3.png" />
+
+<Feedback />

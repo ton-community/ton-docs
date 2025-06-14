@@ -1,89 +1,132 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Директивы компилятора
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+Compiler directives are keywords that begin with `#`, instructing the compiler to perform specific actions, enforce checks, or modify parameters.
 
-Это ключевые слова, которые начинаются с `#` и предписывают компилятору выполнить некоторые действия, проверки или изменить параметры.
-
-Эти директивы можно использовать только на самом внешнем уровне (не внутри определения какой-либо функции).
+These directives can only be used at the outermost level of a source file and cannot be placed inside function definitions.
 
 ## #include
 
-Директива `#include` позволяет включить другой файл исходного кода FunC, который будет проанализирован вместо include.
+The `#include` directive enables the inclusion of another FunC source file parsed in place of the directive.
 
-Синтаксис: `#include "filename.fc";`. Файлы автоматически проверяются на повторное включение, и попытки включить
-файл более одного раза будут игнорироваться по умолчанию с предупреждением, если уровень детализации не ниже 2.
+**Syntax:**
 
-Если во время анализа включенного файла происходит ошибка, дополнительно выводится стек включений с расположением
-каждого включенного файла в цепочке.
+```func
+#include "filename.fc";
+```
+
+Files are automatically checked for multiple inclusions. By default, the compiler will ignore redundant inclusions if the same file is included more than once. A warning will be issued if the verbosity level is 2 or higher.
+
+If an error occurs while parsing an included file, the compiler displays an inclusion stack, showing the locations of each file in the inclusion chain.
 
 ## #pragma
 
-Директива `#pragma` используется для предоставления компилятору дополнительной информации, выходящей за рамки того, что передает сам язык.
+The `#pragma` directive provides additional information to the compiler beyond what the language conveys.
 
 ### #pragma version
 
-Pragma Version используется для принудительного применения определенной версии компилятора FunC при компиляции файла.
+The `#pragma` version directive enforces using a specific FunC compiler version when compiling the file.
 
-Версия указывается в формате semver, то есть *a.b.c*, где *a* — основная версия, *b* — дополнительная, а *c* — патч.
+The version is specified in **semantic versioning (semver)** format: _a.b.c_, where:
 
-Разработчику доступно несколько операторов сравнения:
+- _a_ is the major version;
+- _b_ is the minor version;
+- _c_ is the patch version.
 
-- *a.b.c* или *=a.b.c* — требует именно *a.b.c* версию компилятора
-- *>a.b.c* — требует, чтобы версия компилятора была выше *a.b.c*,
-  - *>=a.b.c* — требует, чтобы версия компилятора была выше или равна *a.b.c*
-- *\<a.b.c* — требует, чтобы версия компилятора была ниже *a.b.c*,
-  - *\<=a.b.c* — требует, чтобы версия компилятора была ниже или равна *a.b.c*
-- *^a.b.c* — требует, чтобы основная версия компилятора была равна части `a`, а второстепенная — не ниже части `b`,
-  - *^a.b* — требует, чтобы основная версия компилятора была равна части *a*, а второстепенная — не ниже части *b*
-  - *^a* — требует, чтобы основная версия компилятора была не ниже части *a*
+**Supported comparison operators**
 
-Для других операторов сравнения (*=*, *>*, *>=*, *\<*, *\<=*) короткий формат предполагает нули в пропущенных частях, то есть:
+Developers can specify version constraints using the following operators:
 
-- *>a.b* совпадает с *>a.b.0* (и поэтому НЕ соответствует версии *a.b.0*)
-- *\<=a* совпадает с *\<=a.0.0* (и поэтому НЕ соответствует версии *a.0.1*)
-- *^a.b.0* **НЕ** совпадает с *^a.b*
+- _a.b.c_ or _=a.b.c_—Requires **exactly** version _a.b.c_ of the compiler;
+- _>a.b.c_—Requires the compiler version to be **greater** than _a.b.c._;
+  - _>=a.b.c_—Requires the compiler version to be **greater** than or **equal** to _a.b.c_;
+- _\<a.b.c_— Requires the compiler version to be **less** than _a.b.c_;
+  - _\<=a.b.c_—Requires the compiler version to be **less** than or **equal** to _a.b.c_;
+- _^a.b.c_—Requires the major compiler version to be **equal** to the _a_ part and the minor to be **no lower** than the _b_ part;
+  - _^a.b_—Requires the major compiler version to be \*_equal_ to _a_ part and minor be **no lower** than _b_ part;
+  - _^a_—Requires the major compiler version to be **no lower** than _a_ part.
 
-Например, *^a.1.2* совпадает с *a.1.3* но не *a.2.3* или *a.1.0*, однако *^a.1* соответствует им всем.
+For comparison operators (_=_, _>_, _>=_, _\<_, _\<=_) , omitted parts default to zero.
+For example:
 
-Эту директиву можно использовать несколько раз; версия компилятора должна удовлетворять всем предоставленным условиям.
+- _>a.b_ is equivalent to _>a.b.0_ and **does not** match version _a.b.0._;
+- _\<=a_ is equivalent to _\<=a.0.0_ and **does not** match version _a.0.1_ version;
+- _^a.b.0_ is **not the same** as _^a.b_
+
+**Examples:**
+
+- _^a.1.2_ matches _a.1.3_ but not _a.2.3_ or _a.1.0_;
+- _^a.1_ matches all of them.
+
+The `#pragma` version directive can be used multiple times, and the compiler must satisfy all specified conditions.
 
 ### #pragma not-version
 
-Синтаксис этой директивы такой же, как и у директивы version, но она завершается неудачей, если условие выполняется.
+The syntax of `#pragma not-version` is identical to `#pragma version`, but it fails if the specified condition is met.
 
-Например, ее можно использовать для внесения в черный список определенной версии, известной своими проблемами.
+This directive is applicable for blocking specific compiler versions known to have issues.
 
 ### #pragma allow-post-modification
 
-*funC v0.4.1*
+_Introduced in FunC v0.4.1_
 
-По умолчанию запрещено использовать переменную до ее изменения в том же выражении. Другими словами, выражение `(x, y) = (ds, ds~load_uint(8))` не будет скомпилировано, в то время как `(x, y) = (ds~load_uint(8), ds)` допустимо.
+Using a variable before it is modified within the same expression is prohibited by default.
 
-Это правило может быть заменено `#pragma allow-post-modification`, которое позволяет изменять переменную после использования в массовых назначениях и вызовах функций; как обычно, вложенные выражения будут вычисляться слева направо: `(x, y) = (ds, ds~load_bits(8))` приведет к `x`, содержащему начальную `ds`; `f(ds, ds~load_bits(8))` первый аргумент `f` будет содержать начальную `ds`, а второй - 8 бит `ds`.
+For example, the following code **will not compile**:
+
+```func
+(x, y) = (ds, ds~load_uint(8))
+```
+
+However, this version is **valid**:
+
+```func
+(x, y) = (ds~load_uint(8), ds)
+```
+
+To override this restriction, use `#pragma allow-post-modification`. This allows variables to be modified after usage in mass assignments and function calls while sub-expressions are still computed **left to right**.
+
+In the following example, `x` will contain the initial value of `ds`:
+
+```func
+#pragma allow-post-modification
+(x, y) = (ds, ds~load_bits(8)); 
+```
+
+Here, in `f(ds, ds~load_bits(8));`:
+
+- The first argument of `f` will contain the initial value of `ds`.
+- The second argument will contain the 8-bit-modified value of `ds`.
 
 `#pragma allow-post-modification` работает только для кода после директивы.
 
 ### #pragma compute-asm-ltr
 
-*funC v0.4.1*
+_Introduced in FunC v0.4.1_
 
-Объявления Asm могут перезаписывать порядок аргументов, например, в следующем выражении
+`asm` declarations can override the order of argument evaluation. For example, in the following expression:
 
 ```func
 idict_set_ref(ds~load_dict(), ds~load_uint(8), ds~load_uint(256), ds~load_ref())
 ```
 
-порядок разбора будет: `load_ref()`, `load_uint(256)`, `load_dict()` и `load_uint(8)` из-за следующего объявления asm (обратите внимание `asm(value index dict key_len)`):
+The execution order is:
+
+1. `load_ref()`
+2. `load_uint(256)`
+3. `load_dict()`
+4. `load_uint(8)`
+
+This happens due to the corresponding `asm` declaration:
 
 ```func
 cell idict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTISETREF";
 ```
 
-Это поведение можно изменить на строгий порядок вычислений слева направо с помощью `#pragma compute-asm-ltr`
+Here, the `asm(value index dict key_len)` notation dictates a reordering of arguments.
 
-В результате в
+To ensure strict left-to-right computation order, use `#pragma compute-asm-ltr`. With this directive enabled, the same function call:
 
 ```func
 #pragma compute-asm-ltr
@@ -91,6 +134,16 @@ cell idict_set_ref(cell dict, int key_len, int index, cell value) asm(value inde
 idict_set_ref(ds~load_dict(), ds~load_uint(8), ds~load_uint(256), ds~load_ref());
 ```
 
-порядок разбора будет `load_dict()`, `load_uint(8)`, `load_uint(256)`, `load_ref()` и все перестановки asm будут происходить после вычислений.
+will be evaluated in the following order:
+
+1. `load_dict()`
+2. `load_uint(8)`
+3. `load_uint(256)`
+4. `load_ref()`
+
+All `asm` reordering will occur only after computation.
 
 `#pragma compute-asm-ltr` работает только для кода после директивы.
+
+**Note:** `#pragma compute-asm-ltr` applies only to the code after the directive in the file. <Feedback />
+

@@ -1,16 +1,15 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # TON Connect для Telegram ботов
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
 :::warning устаревшее
-В этом руководстве описан устаревший метод интеграции TON Connect с ботами Telegram. Для более безопасного и актуального способа рекомендуется использовать [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview для более современной и безопасной интеграции.
+This guide explains an outdated method of integrating TON Connect with Telegram bots. For a more secure and modern approach, consider using [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview) for a more modern and secure integration.
 :::
 
-В этом руководстве мы создадим пример Telegram-бота с использованием JavaScript TON Connect SDK, поддерживающего аутентификацию TON Connect 2.0. Мы рассмотрим подключение кошельков, отправку транзакций, получение информации о кошельках и отключение кошельков.
+В этом руководстве мы создадим пример Telegram-бота с использованием JavaScript TON Connect SDK, поддерживающего аутентификацию TON Connect 2.0.
+Мы рассмотрим подключение кошельков, отправку транзакций, получение информации о кошельках и отключение кошельков.
 
 <Button href="https://t.me/ton_connect_example_bot" colorType={'primary'} sizeType={'sm'}>
 
@@ -28,7 +27,7 @@ import Button from '@site/src/components/button'
 
 - [Документация TON Connect SDK] (https://www.npmjs.com/package/@tonconnect/sdk)
 
-## Необходимые компоненты
+## Prerequisites
 
 - Вам нужно создать Telegram-бота с помощью [@BotFather](https://t.me/BotFather) и сохранить его токен.
 - Необходимо установить Node JS (в этом руководстве используется версия 18.1.0).
@@ -480,7 +479,7 @@ export const walletMenuCallbacks = { // Define buttons callbacks
     chose_wallet: onChooseWalletClick
 };
 
-bot.on('callback_query', query => { // Parse callback data and execute corresponing function
+bot.on('callback_query', query => { // Parse callback data and execute corresponding function
     if (!query.data) {
         return;
     }
@@ -696,7 +695,7 @@ export const walletMenuCallbacks = {
     universal_qr: onOpenUniversalQRClick
 };
 
-bot.on('callback_query', query => { // Parse callback data and execute corresponing function
+bot.on('callback_query', query => { // Parse callback data and execute corresponding function
     if (!query.data) {
         return;
     }
@@ -1310,7 +1309,8 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 ### Оптимизация процесса подключения кошелька
 
 В данный момент мы создаем новый коннектор на каждом шаге навигации через меню подключения кошелька.
-Это неэффективно, так как мы не закрываем соединение предыдущих коннекторов при создании новых. Давайте улучшим это поведение и создадим кэш-карту для коннекторов пользователей.
+Это неэффективно, так как мы не закрываем соединение предыдущих коннекторов при создании новых.
+Давайте улучшим это поведение и создадим кэш-карту для коннекторов пользователей.
 
 <details>
 <summary>Код src/ton-connect/connector.ts</summary>
@@ -2063,3 +2063,5 @@ main();
 
 - [Отправка сообщений](/v3/guidelines/ton-connect/guidelines/sending-messages)
 - [Руководство по интеграции](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)
+
+<Feedback />

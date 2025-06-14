@@ -1,0 +1,220 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Full node
+
+## نیازمندی‌های سیستم عامل
+
+ما اکیداً توصیه می‌کنیم که MyTonCtrl را با استفاده از سیستم‌عامل‌های پشتیبانی شده نصب کنید:
+
+- اوبونتو 20.04
+- اوبونتو 22.04
+- دبیان 11
+
+## نیازمندی‌های سخت‌افزاری
+
+:::caution استفاده از نود روی ماشین محلی شخصی
+You shouldn't run any type of node on your personal local machine for extended periods, even if it meets the requirements. Nodes actively use disks, which can lead to rapid wear and potential damage.
+:::
+
+### با ولیدیتور
+
+- 16 هسته CPU
+- 128 گیگابایت RAM
+- 1 ترابایت NVME SSD _یا_ ذخیره‌سازی Provisioned 64+k IOPS
+- اتصال شبکه 1 گیگابیت بر ثانیه
+- آدرس IP عمومی (_آدرس IP ثابت_)
+- 64 ترابایت/ماه ترافیک (100 ترابایت/ماه در بار اوج)
+
+:::info آماده شدن برای بار اوج
+To reliably handle peak loads, a connection of at least 1 Gbit/s is typically required, while the average load is expected to be around 100 Mbit/s.
+:::
+
+### Port forwarding
+
+All types of nodes require a static external IP address, one UDP port forwarded for incoming connections, and all outgoing connections to be open—the node uses random ports for new outgoing connections. The node must also be visible to the outside world over the NAT.
+
+You can accomplish this by contacting your network provider or [renting a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
+
+:::info
+شما می‌توانید با استفاده از دستور `netstat -tulpn` متوجه شوید کدام پورت UDP باز است.
+:::
+
+### Recommended providers
+
+بنیاد TON پیشنهاد می‌کند که از ارائه‌دهندگان زیر برای اجرای یک ولیدیتور استفاده کنید:
+
+| Cloud Provider | Instance Type                   | CPU                     | RAM     | Storage                           | Network         | Public IP                               | ترافیک        |
+| -------------- | ------------------------------- | ----------------------- | ------- | --------------------------------- | --------------- | --------------------------------------- | ------------- |
+| GCP            | `n2-standard-16`                | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `16 Gbps`       | Reserve a static external IP            | `64 TB/month` |
+| Alibaba Cloud  | `ecs.g6.4xlarge`                | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `تا 10 Gbps`    | Bind an Elastic IP                      | `64 TB/month` |
+| Tencent Cloud  | `M5.4XLARGE`                    | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `تا 10 Gbps`    | Associate an Elastic IP                 | `64 TB/month` |
+| Vultr          | `bare metal Intel E-2388G`      | `16 هسته / 32 رشته`     | `128GB` | `1.92TB NVMe SSD`                 | `10 Gbps`       | آدرس IP ثابت با نمونه شامل شده          | `64 TB/month` |
+| DigitalOcean   | `general purpose premium Intel` | `32 vCPUs`              | `128GB` | `1TB NVMe SSD`                    | `10 Gbps`       | آدرس IP ثابت با نمونه شامل شده          | `64 TB/month` |
+| Latitude       | `c3.medium.x86`                 | `16 هسته / 32 رشته`     | `128GB` | `1.9TB NVMe SSD`                  | `10 Gbps`       | آدرس IP ثابت با نمونه شامل شده          | `64 TB/month` |
+| AWS            | `i4i.8xlarge`                   | `32 vCPUs`              | `256GB` | `2 x 3,750 AWS Nitro SSD (fixed)` | `Up to 25 Gbps` | Bind an Elastic IP                      | `64 TB/month` |
+
+:::info
+**Note:** Prices, configurations, and availability can change. It is recommended to always refer to the official documentation and pricing pages of the respective cloud provider before making any decisions.
+:::
+
+## اجرای یک نود (ویدیو)
+
+[//]: # "<ReactPlayer controls={true} style={{borderRadius:'10pt', margin:'15pt auto', maxWidth: '100%'}} url='/docs/files/TON_nodes.mp4' />"
+
+لطفاً این آموزش ویدیویی گام به گام را برای شروع به موقع بررسی کنید:
+
+<video
+  style={{
+    borderRadius: "10pt",
+    margin: "auto",
+    width: "100%",
+    maxWidth: "100%",
+  }}
+  controls={true}
+>
+  <source src="/files/TON_nodes.mp4" type="video/mp4" />
+</video>
+
+## Run a node (text)
+
+### تغییر به کاربر غیر-root
+
+:::warning
+This step is required to successfully install and use MyTonCtrl—don't ignore non-root user creation. Without this step, there will be no errors during installation, but MyTonCtrl will not work properly.
+:::
+
+If you don't have a non-root user, you can create one with the following steps (otherwise, skip the first two steps and go to the third).
+
+1. ورود به سیستم به عنوان root و ایجاد کاربر جدید:
+
+```bash
+sudo adduser <username>
+```
+
+2. کاربر خود را به گروه sudo اضافه کنید:
+
+```bash
+sudo usermod -aG sudo <username>
+```
+
+3. وارد حساب کاربری جدید شوید (اگر از ssh استفاده می‌کنید، **باید جلسه جاری را متوقف کنید و با کاربر مناسب دوباره وصل شوید**)
+
+```bash
+ssh <username>@<server-ip-address>
+```
+
+### نصب MyTonCtrl
+
+دانلود و اجرای اسکریپت نصب از حساب کاربری **غیر-root** با دسترسی **sudo**:
+
+<Tabs groupId="operating-systems">
+  <TabItem value="ubuntu" label="Ubuntu">
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+sudo bash install.sh
+```
+
+</TabItem>
+  <TabItem value={'debian'} label={'Debian'}>
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+su root -c 'bash install.sh'
+```
+
+</TabItem>
+</Tabs>
+
+- `-d` - **mytonctrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state.
+  This will reduce synchronization time by several times.
+- `-c <path>` - If you want to use not public liteservers for synchronization. _(not required)_
+- `-i` - حداقل نیازمندی‌ها را نادیده بگیرید، این گزینه را تنها در صورتی استفاده کنید که قصد دارید فرایند کامپایل را بدون استفاده واقعی از نود بررسی کنید.
+- `-m` - حالت، می‌تواند `validator` یا `liteserver` باشد.
+- `-t` - غیرفعال کردن تله‌متری.
+
+**برای استفاده از testnet**، باید به flag `-c` مقدار `https://ton.org/testnet-global.config.json` داده شود.
+
+مقدار پیش‌فرض flag `-c` برابر است با `https://ton-blockchain.github.io/global.config.json`، که تنظیم پیش‌فرض mainnet است.
+
+### Running the MyTonCtrl
+
+1. کنسول `MyTonCtrl` را **از حساب کاربری محلی مورد استفاده برای نصب** اجرا کنید:
+
+```sh
+mytonctrl
+```
+
+2. وضعیت `MyTonCtrl` را با استفاده از دستور `status` بررسی کنید:
+
+```sh
+status
+```
+
+**در تست‌نت** باید به جای `status` از دستور `status fast` استفاده شود.
+
+باید وضعیت‌های زیر نمایش داده شوند:
+
+- **mytoncore status**: should display in green.
+- **local validator status**: should also display in green.
+- **local validator out of sync**: initially, a `n/a` string is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20, the validator is synchronized.
+
+نمونه خروجی دستور **status**:
+
+![status](/img/docs/nodes-validator/mytonctrl-status.png)
+
+:::caution Make sure you have same output for status
+For all nodes type **Local Validator status** section should appear.
+Otherwise, [check troubleshooting section](/v3/guidelines/nodes/nodes-troubleshooting#status-command-displays-without-local-node-section) and [check node logs](/v3/guidelines/nodes/running-nodes/full-node#check-the-node-logs).
+:::
+
+Please wait until the `Local validator out of sync` status is less than 20 seconds.
+
+When a new node is started, even from a dump, it is important to wait up to 3 hours before the _out of sync_ number begins to decrease. This delay occurs because the node must establish its place in the network and propagate its addresses through the DHT tables, among other processes.
+
+### Uninstall mytonctrl
+
+Download script and run it:
+
+```bash
+sudo bash /usr/src/mytonctrl/scripts/uninstall.sh
+```
+
+### Check mytonctrl owner
+
+Run:
+
+```bash
+ls -lh /var/ton-work/keys/
+```
+
+## Tips & tricks
+
+### List of available commands
+
+- You can use `help` to get a list of available commands:
+
+![Help command](/img/docs/full-node/help.jpg)
+
+### Check the MyTonCtrl logs
+
+- To check **MyTonCtrl** logs, open `~/.local/share/mytoncore/mytoncore.log` for a local user or `/usr/local/bin/mytoncore/mytoncore.log` for root.
+
+![logs](/img/docs/nodes-validator/manual-ubuntu_mytoncore-log.png)
+
+### بررسی لاگ‌های نود
+
+در صورت وقوع خطا، لاگ‌های نود را بررسی کنید:
+
+```bash
+tail -f /var/ton-work/log.thread*
+```
+
+## پشتیبانی
+
+Contact technical support with [@ton_node_help](https://t.me/ton_node_help).
+
+<Feedback />

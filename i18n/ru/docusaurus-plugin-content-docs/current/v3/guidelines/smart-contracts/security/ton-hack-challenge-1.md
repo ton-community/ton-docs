@@ -1,8 +1,6 @@
-# Подведение итогов TON Hack Challenge
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Подведение итогов TON Hack Challenge
 
 TON Hack Challenge был проведен 23 октября.
 В TON mainnet было развернуто несколько смарт-контрактов с искусственно созданными уязвимостями. Каждый контракт имел баланс 3000 или 5000 TON, что позволяло участникам взломать его и немедленно получить вознаграждение.
@@ -159,7 +157,8 @@ slice safe_execute(int image, (int -> slice) dehasher) inline {
 
 ## Ссылки
 
-Автор оригинальной статьи: Dan Volkov
+- [dvlkv on GitHub](https://github.com/dvlkv) - _Dan Volkov_
+- [Original article](https://dev.to/dvlkv/drawing-conclusions-from-ton-hack-challenge-1aep) - _Dan Volkov_
 
-- [dvlkv на GitHub](https://github.com/dvlkv)
-- [Оригинальная статья](https://dev.to/dvlkv/drawing-conclusions-from-ton-hack-challenge-1aep)
+<Feedback />
+

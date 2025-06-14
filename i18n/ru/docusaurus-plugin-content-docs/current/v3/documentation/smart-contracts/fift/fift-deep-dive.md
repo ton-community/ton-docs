@@ -1,24 +1,32 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Глубокое погружение в Fift
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-Высокоуровневый стековый язык Fift используется для локальной манипуляции ячейками и другими примитивами TVM, в основном для преобразования ассемблерного кода TVM в код контракта bag-of-cells.
+Fift is a high-level stack-based language used for local manipulation of cells and other TVM primitives. Its primary purpose is to compile TVM assembly code into contract code as a bag-of-cells (BoC).
 
 :::caution
-В этом разделе описывается взаимодействие с специфичными для TON функциями на **очень** низком уровне.
-Требуется серьезное понимание основ стековых языков.
-:::
+**Advanced topic notice**
+This section covers low-level interactions with TON's implementation details. Before proceeding, ensure you have:
+
+- Solid experience with stack-based programming paradigms
+- Understanding of virtual machine architectures
+- Familiarity with low-level data structures
+  :::
 
 ## Простая арифметика
 
-Вы можете использовать интерпретатор Fift как калькулятор, записывая выражения в [обратной польской нотации](https://en.wikipedia.org/wiki/Reverse_Polish_notation).
+Use the Fift interpreter as a calculator with reverse Polish notation:
 
 ```
 6 17 17 * * 289 + .
 2023 ok
 ```
+
+This example calculates:
+
+1. `17 * 17 = 289`
+2. `6 * 289 = 1734`
+3. `1734 + 289 = 2023`
 
 ## Стандартный выход
 
@@ -27,35 +35,47 @@
 grey text ok
 ```
 
-`emit` берет число с вершины стека и выводит символ Unicode с указанным кодом в stdout.
-`."..."` выводит строку-константу.
+- `emit` prints the Unicode character corresponding to the number on top of the stack
+- `."..."` outputs a constant string
 
 ## Определение функций (Fift-слов)
 
-Основной способ определения слова - заключить его значения в фигурные скобки, затем написать ":" и название слова.
+To define a word, follow these steps:
+
+1. **Enclose the word's effects** in curly braces `{}`.
+2. **Add a colon `:`** after the closing brace.
+3. **Specify the word's name** after the colon.
+
+First line defines a word `increment` that increases `x` by `1`.
+
+**Examples:**
 
 ```
+{ x 1 + } : increment
 { minmax drop } : min
 { minmax nip } : max
 ```
 
 > Fift.fif
 
-Хотя есть несколько "определяющих слов", а не только ":". Они отличаются в смысле слов, определяемых некоторыми из них, **активные** (работают внутри фигурных скобок), а некоторые **префиксные** (не требуют пробела после них):
+In TON, multiple **defining words** exist, not just `:`. They differ in behavior:
+
+- **Active words** – Operate inside curly braces `{}`.
+- **Prefix words** – Do not require a trailing space .
 
 ```
-{ bl word 1 2 ' (create) } "::" 1 (create)
-{ bl word 0 2 ' (create) } :: :
-{ bl word 2 2 ' (create) } :: :_
-{ bl word 3 2 ' (create) } :: ::_
-{ bl word 0 (create) } : create
+{ bl word 1 2 ' (create) } "::" 1 (create)  
+{ bl word 0 2 ' (create) } :: :  
+{ bl word 2 2 ' (create) } :: :_  
+{ bl word 3 2 ' (create) } :: ::_  
+{ bl word 0 (create) } : create  
 ```
 
 > Fift.fif
 
 ## Условное выполнение
 
-Блоки кода (разделенные фигурными скобками) могут выполняться как условно, так и безоговорочно.
+Execute code blocks conditionally using `cond`:
 
 ```
 { { ."true " } { ."false " } cond } : ?.   4 5 = ?.  4 5 < ?.
@@ -66,19 +86,25 @@ hello world ok
 
 ## Циклы
 
+Use loop primitives for repetitive operations:
+
 ```
-// ( l c -- l')  deletes first c elements from list l
+// ( l c -- l') Removes first c elements from list l
 { ' safe-cdr swap times } : list-delete-first
 ```
 
 > GetOpt.fif
 
-Слово цикла `times` принимает два аргумента — назовем их `cont` и `n` — и выполняет `cont` `n` раз.
-Здесь `list-delete-first` берет продолжение `safe-cdr` (команда удаления заголовка из списка в стиле Lisp), помещает его под `c`, а затем `c` times удаляет заголовок из списка, присутствующего в стеке.
-
-Есть также слова `while` и `until`.
+Loop word `times` takes two arguments - let's call them `cont` and `n` - and executes `cont` `n` times.
+Here `list-delete-first` takes continuation of `safe-cdr` (command deleting head from Lisp-style list), places it under `c` and then `c` times removes head from list present on stack.
+`while`/`until` provide conditional looping.
 
 ## Комментарии
+
+Comments in Fift are defined in `Fift.fif` and come in two forms:
+
+1. **Single-line comments**: Start with `//` and continue to the end of the line
+2. **Multiline comments**: Start with `/*` and end with `*/`
 
 ```
 { 0 word drop 0 'nop } :: //
@@ -88,21 +114,21 @@ hello world ok
 
 > Fift.fif
 
-Комментарии определены в `Fift.fif`. Однострочный комментарий начинается с `//` и продолжается до конца строки; многострочный комментарий начинается с `/*` и заканчивается `*/`.
+#### How comments work
 
-Давайте разберемся, почему они так работают.
-Программа Fift по сути является последовательностью слов, каждое из которых каким-либо образом преобразует стек или определяет новые слова. Первая строка `Fift.fif` (код показан выше) является объявлением нового слова `//`.
-Комментарии должны работать даже при определении новых слов, поэтому они должны работать во вложенной среде. Вот почему они определены как **активные** слова с помощью `::`. Действия создаваемого слова перечислены в фигурных скобках:
+Fift programs are sequences of words that transform the stack or define new words. Comments must work even during word definitions, requiring them to be **active words** (defined with `::`).
 
-1. `0`: ноль помещается в стек
-2. `word`: эта команда считывает символы до тех пор, пока не будет достигнут один, равный вершине стека, и помещает считанные данные в стек как строку. Ноль — это особый случай: здесь `word` пропускает начальные пробелы и затем читает до конца текущей входной строки.
-3. `drop`: верхний элемент (данные комментария) удаляется из стека.
-4. `0`: ноль снова помещается в стек — число результатов, использованное потому, что слово определено как `::`.
-5. `nop` помещает токен выполнения, ничего не делая при вызове. Это практически эквивалентно `{ nop }`.
+Breaking down the `//` definition:
+
+1. `0` - Pushes zero onto the stack
+2. `word` - Reads characters until reaching one matching the top stack value (zero is special - skips leading spaces then reads to end of line)
+3. `drop` - Removes the comment text from the stack
+4. `0` - Pushes zero again (number of results for `::` definition)
+5. `'nop` - Pushes an execution token that does nothing (equivalent to `{ nop }`)
 
 ## Использование Fift для определения кодов сборки TVM
 
-```
+```fift
 x{00} @Defop NOP
 { 1 ' @addop does create } : @Defop
 { tuck sbitrefs @ensurebitrefs swap s, } : @addop
@@ -114,28 +140,51 @@ x{00} @Defop NOP
 
 > Asm.fif (порядок строк обратный)
 
-`@Defop` проверяет, достаточно ли места для кода операции (`@havebitrefs`), и если его нет, он продолжает запись в другой сборщик (`@|`; также известно как неявный переход). Вот почему вы обычно не хотите писать `x{A988} s` в качестве кода операции: для размещения этого кода операции может быть недостаточно места, поэтому компиляция завершится неудачей; вместо этого вам следует написать `x{A988} @addop`.
+### How @Defop works
 
-Вы можете использовать Fift для включения большого bag-of-cells в контракт:
+`@Defop` checks available space for the opcode using `@havebitrefs`. If space is insufficient, it writes to another builder via `@|` (implicit jump).
 
-```
+**Important:** Always use `x{A988} @addop` instead of `x{A988} s,` to avoid compilation failures when space is limited.
+
+### Including cells in contracts
+
+You can embed large bag-of-cells into contracts:
+
+```fift
 <b 8 4 u, 8 4 u, "fift/blob.boc" file>B B>boc ref, b> <s @Defop LDBLOB
 ```
 
-Эта команда определяет код операции, который при включении в программу записывает `x{88}` (`PUSHREF`) и ссылку на предоставленный bag-of-cells. Поэтому, когда запускается инструкция `LDBLOB`, она помещает ячейку в стек TVM.
+This defines an opcode that:
+
+1. Writes `x{88}` (`PUSHREF`) when included in the program
+2. Adds a reference to the specified bag-of-cells
+3. Pushes the cell to TVM stack when executing `LDBLOB`
 
 ## Специальные возможности
 
-- Шифрование Ed25519
- - newkeypair - генерирует пару закрытый-открытый ключ
- - priv>pub - генерирует открытый ключ из закрытого
- - ed25519_sign[_uint] - генерирует подпись по заданным данным и закрытому ключу
- - ed25519_chksign - проверяет подпись Ed25519
-- Взаимодействие с TVM
- - runvmcode и подобное - вызывает TVM с фрагментом кода, взятым из стека
-- Запись BOC в файлы:
- `boc>B ".../contract.boc" B>file`
+### Шифрование Ed25519
+
+Fift provides built-in support for Ed25519 cryptographic operations:
+
+- **`newkeypair`** - Generates a private-public key pair
+- **`priv>pub`** - Derives a public key from a private key
+- **`ed25519_sign[_uint]`** - Creates a signature for given data using a private key
+- **`ed25519_chksign`** - Verifies an Ed25519 signature
+
+### TVM interaction
+
+- **`runvmcode` and similar commands** - Executes TVM with a code slice taken from the stack
+
+### File operations
+
+- **Save BoC to file**:
+  ```fift
+  boc>B ".../contract.boc" B>file
+  ```
 
 ## Продолжаем изучение
 
-- [Fift: Краткое введение](https://docs.ton.org/fiftbase.pdf) Николая Дурова
+- [Fift: A Brief Introduction](https://docs.ton.org/fiftbase.pdf) - _Nikolai Durov_
+
+<Feedback />
+

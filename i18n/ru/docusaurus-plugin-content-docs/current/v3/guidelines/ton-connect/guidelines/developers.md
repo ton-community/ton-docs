@@ -1,13 +1,11 @@
-# TON Connect SDK
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# TON Connect SDKs
 
 ## Список SDK
 
 :::info
-Если возможно, рекомендуется использовать набор [@tonconnect/ui-react](https://github.com/ton-connect/sdk/tree/main/packages/ui-react) для ваших dApps. Перейдите на более низкие уровни SDK или реализуйте свою версию протокола только в том случае, если это действительно необходимо для вашего продукта.
+We recommend using the [@tonconnect/ui-react](https://github.com/ton-connect/sdk/tree/main/packages/ui-react) kit for your DApps. Only switch to lower levels of the SDK or reimplement your protocol version if your product requires it.
 :::
 
 Эта страница содержит список полезных библиотек для TON Connect.
@@ -25,7 +23,7 @@
 
 - [@tonconnect/ui-react](https://github.com/ton-connect/sdk/tree/main/packages/ui-react) - Пользовательский интерфейс (UI) TON Connect для React приложений
 
-TonConnect UI React - это набор React UI для TonConnect SDK. Используйте его для подключения вашего приложения к кошелькам TON через протокол TonConnect в приложениях React.
+`@tonconnect/ui-react` is a React UI kit for the TON Connect SDK. Use it to connect your app to TON wallets via the TON Connect protocol in React apps.
 
 - Пример DApp с использованием `@tonconnect/ui-react`: [GitHub](https://github.com/ton-connect/demo-dapp-with-react-ui)
 - Пример развернутого `demo-dapp-with-react-ui`: [GitHub](https://ton-connect.github.io/demo-dapp-with-react-ui/)
@@ -40,7 +38,7 @@ npm i @tonconnect/ui-react
 
 ## TON Connect JS SDK
 
-Репозиторий TON Connect содержит следующие основные пакеты:
+The TON Connect repository contains the following main packages:
 
 - [@tonconnect/ui](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-ui) - Пользовательский интерфейс (UI) TON Connect
 - [@tonconnect/sdk](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-sdk) - TON Connect SDK
@@ -48,7 +46,7 @@ npm i @tonconnect/ui-react
 
 ### TON Connect UI
 
-TonConnect UI - это набор пользовательского интерфейса для TonConnect SDK. Используйте его для подключения вашего приложения к кошелькам TON через протокол TonConnect. Он позволяет вам проще интегрировать TonConnect в ваше приложение с помощью наших элементов пользовательского интерфейса, таких как "кнопка подключения кошелька", "диалоговое окно выбора кошелька" и модальные окна подтверждения.
+TON Connect UI is a UI kit for TON Connect SDK. Use it to connect your app to TON wallets via the TON Connect protocol. It allows you to integrate TON Connect into your app more efficiently using our UI elements, such as the **connect wallet** button, **select wallet** dialog, and **confirmation** modals.
 
 ```bash
 npm i @tonconnect/ui
@@ -58,33 +56,33 @@ npm i @tonconnect/ui
 - [NPM](https://www.npmjs.com/package/@tonconnect/ui)
 - [Документация API](https://ton-connect.github.io/sdk/modules/_tonconnect_ui.html)
 
-Пользовательский интерфейс (UI) TON Connect является фреймворком, который позволяет разработчикам улучшить пользовательский опыт (UX) для пользователей приложений.
+The TON Connect **User Interface (UI)** is a framework that allows developers to improve and unify the user **experience (UX)** for TON application users.
 
-TON Connect можно легко интегрировать с приложениями с помощью простых элементов пользовательского интерфейса, таких как «кнопка подключения кошелька», «диалоговое окно выбора кошелька» и модальные окна подтверждения. Вот три основных примера того, как TON Connect улучшает UX в приложениях:
+Developers can easily integrate TON Connect with apps using simple UI elements such as the connect wallet button, select wallet dialog, and confirmation modals. Here are three primary examples of how TON Connect improves UX in apps:
 
 - Пример функциональности приложения в браузере DApp: [GitHub](https://ton-connect.github.io/demo-dapp/)
-- Пример backend раздела DAppabove: [GitHub](https://github.com/ton-connect/demo-dapp-backend)
+- Example of a backend partition of the DApp above: [GitHub](https://github.com/ton-connect/demo-dapp-backend)
 - Сервер Bridge с использованием Go: [GitHub](https://github.com/ton-connect/bridge)
 
-Этот набор инструментов упрощает реализацию TonConnect в приложениях, созданных для блокчейна TON. Поддерживаются стандартные фреймворки frontend, а также приложения, не использующие предопределенные фреймворки.
+This kit simplifies the implementation of TON Connect in apps built for the TON Blockchain. Standard frontend frameworks are supported, as are applications that don’t use predetermined frameworks.
 
 ### TON Connect SDK
 
-Самым низкоуровневым из трех фреймворков, помогающих разработчикам интегрировать TON Connect в свои приложения, является TON Connect SDK. Он в основном используется для подключения приложений к кошелькам TON через протокол TON Connect.
+The TON Connect SDK is the lowest level of the three frameworks that help developers integrate TON Connect into their applications. It primarily connects apps to TON wallet apps via the TON Connect protocol.
 
 - [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
 - [NPM](https://www.npmjs.com/package/@tonconnect/sdk)
 
 ### Модели протокола TON Connect
 
-Этот пакет содержит запросы протокола, ответы протокола, модели событий и функции кодирования и декодирования. Его можно использовать для интеграции TON Connect с приложениями кошельков, написанными на TypeScript. Чтобы интегрировать TON Connect в DApp, следует использовать [@tonconnect/sdk](https://www.npmjs.com/package/@tonconnect/sdk).
+This package contains protocol requests, protocol responses, event models, and encoding and decoding functions. Developers may use this to integrate TON Connect to wallet apps written in TypeScript. In order to integrate TON Connect into a DApp, use the [@tonconnect/sdk](https://www.npmjs.com/package/@tonconnect/sdk).
 
 - [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/protocol)
 - [NPM](https://www.npmjs.com/package/@tonconnect/protocol)
 
 ## TON Connect Vue
 
-TonConnect UI Vue — это набор Vue UI для TonConnect SDK. Используйте его для подключения вашего приложения к кошелькам TON через протокол TonConnect в приложениях Vue.
+TON Connect UI Vue is a Vue UI kit for the TON Connect SDK. Use it to connect your app to TON wallets via the TON Connect protocol in Vue apps.
 
 - Пример DApp с использованием `@townsquarelabs/ui-vue`: [GitHub](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui)
 - Пример развернутого `demo-dapp-with-vue-ui`: [GitHub](https://townsquarexyz.github.io/demo-dapp-with-vue-ui/)
@@ -100,9 +98,9 @@ npm i @townsquarelabs/ui-vue
 
 ### pytonconnect
 
-Python SDK для TON Connect 2.0. Аналог библиотеки `@tonconnect/sdk`.
+Python SDK for TON Connect 2.0. An analog of the `@tonconnect/sdk` library.
 
-Используйте его для подключения вашего приложения к кошелькам TON по протоколу TonConnect.
+Use it to connect your app to TON wallets via the TON Connect protocol.
 
 ```bash
 pip3 install pytonconnect
@@ -123,9 +121,9 @@ pip install -e tonconnect
 
 ## TON Connect Dart
 
-Dart SDK для TON Connect 2.0. Аналог библиотеки `@tonconnect/sdk`.
+Dart SDK for TON Connect 2.0. analog of the `@tonconnect/sdk` library.
 
-Используйте его для подключения вашего приложения к кошелькам TON через протокол TonConnect.
+Use it to connect your app to TON wallets via the TON Connect protocol.
 
 ```bash
  $ dart pub add darttonconnect
@@ -133,11 +131,11 @@ Dart SDK для TON Connect 2.0. Аналог библиотеки `@tonconnect/
 
 - [GitHub](https://github.com/romanovichim/dartTonconnect)
 
-## TON Connect C\\#
+## TON Connect C\\\#
 
-C# SDK для TON Connect 2.0. Аналог библиотеки `@tonconnect/sdk`.
+C# SDK for TON Connect 2.0. An analog of the `@tonconnect/sdk` library.
 
-Используйте его для подключения вашего приложения к кошелькам TON через протокол TonConnect.
+Use it to connect your app to TON wallets via the TON Connect protocol.
 
 ```bash
  $ dotnet add package TonSdk.Connect
@@ -145,11 +143,20 @@ C# SDK для TON Connect 2.0. Аналог библиотеки `@tonconnect/sd
 
 - [GitHub](https://github.com/continuation-team/TonSdk.NET/tree/main/TonSDK.Connect)
 
+## TON Connect Unity
+
+Ресурс Unity для TON Connect 2.0. Использует `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`.
+
+Use it to integrate the TON Connect protocol with your game.
+
+- [GitHub](https://github.com/continuation-team/unity-ton-connect)
+- [Документация](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
+
 ## TON Connect Go
 
 Go SDK для TON Connect 2.0.
 
-Используйте его для подключения вашего приложения к кошелькам TON через протокол TonConnect.
+Use it to connect your app to TON wallets via the TON Connect protocol.
 
 ```bash
  go get github.com/cameo-engineering/tonconnect
@@ -157,25 +164,17 @@ Go SDK для TON Connect 2.0.
 
 - [GitHub](https://github.com/cameo-engineering/tonconnect)
 
-## Общие вопросы и проблемы
+## General questions and concerns
 
-Если у кого-либо из наших разработчиков или членов сообщества возникнут дополнительные проблемы во время внедрения TON Connect 2.0, свяжитесь с [каналом разработчиков Tonkeeper](https://t.me/tonkeeperdev).
+If you encounter any additional issues during the implementation of TON Connect, contact developers with [GitHub issues](https://github.com/ton-blockchain/ton-connect/issues).
 
-Если у вас возникли дополнительные проблемы или вы хотите представить предложение по улучшению TON Connect 2.0, свяжитесь с нами напрямую через соответствующий [репозиторий GitHub](https://github.com/ton-connect/).
+## See also
 
-## TON Connect Unity
-
-Ресурс Unity для TON Connect 2.0. Использует `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`.
-
-Используйте его для интеграции протокола TonConnect с вашей игрой.
-
-- [GitHub](https://github.com/continuation-team/unity-ton-connect)
-- [Документация](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
-
-## См. также
-
-- [Пошаговое руководство по созданию вашего первого веб-клиента](https://helloworld.tonstudio.io/03-client/)
-- [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU\\&t=254s\\&ab_channel=AlefmanVladimir%5BEN%5D)
+- [Step-by-step guide for building your first web client](https://helloworld.tonstudio.io/03-client/)
+- [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU\\\&t=254s\\\&ab_channel=AlefmanVladimir%5BEN%5D)
 - [Начало работы Ton Connect](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
-- [Руководство по интеграции](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)
+- [Integration manual](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)
 - [[YouTube] TON Dev Study TON Connect Protocol [RU]] (https://www.youtube.com/playlist?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_)
+
+<Feedback />
+

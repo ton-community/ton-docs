@@ -1,171 +1,166 @@
-# Узел валидатора
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Validator node
 
-## Минимальные требования к оборудованию
+Network validators confirm all user transactions. If all validators agree that a transaction is valid, it gets added to the blockchain. Invalid transactions are rejected. See more information [here](https://ton.org/validators).
 
-- 16-ядерный процессор
+## Minimal hardware requirements
+
+- 16-core CPU
 - 128 ГБ оперативной памяти
-- Твердотельный накопитель объемом 1 ТБ *или* Оборудованное хранилище с более 64 000 операций ввода/вывода в секунду (IOPS)
+- 1TB NVMe SSD or provisioned 64+k IOPS storage
 - Подключение к сети со скоростью 1 Гбит/с
-- общедоступный IP-адрес (*фиксированный IP-адрес*)
-- 100 ТБ/месяц трафика при пиковой нагрузке
+- Public IP address (fixed IP address)
+- 100 TB/month traffic at peak load
 
 > Как правило, для обеспечения надежной работы с пиковыми нагрузками вам потребуется подключение со скоростью не менее 1 Гбит/с (средняя нагрузка, как ожидается, составит около 100 Мбит/с).
 
 > Мы обращаем особое внимание валидаторов на требования к IOPS диска, это критически важно для бесперебойной работы сети.
 
-## Переадресация портов
+## Port forwarding
 
-Для всех типов узлов требуется статический внешний IP-адрес, один UDP-порт, который должен быть перенаправлен для входящих подключений и все исходящие подключения должны быть открыты - узел использует случайные порты для новых исходящих подключений. Это необходимо, чтобы узел был виден извне через NAT.
+All types of nodes require a static external IP address, one UDP port forwarded for incoming connections, and all outgoing connections to be open—the node uses random ports for new outgoing connections. The node must also be visible to the outside world over the NAT.
 
-Это можно сделать через вашего провайдера услуг связи или [аренду сервера](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers).
+You can work with your network provider or [rent a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
 
 :::info
-Используйте команду `netstat -tulpn`, чтобы определить, какой UDP-порт открыт.
+To determine which UDP ports are open, use the `netstat -tulpn` command.
 :::
 
-## Обязательное условие
+## Prerequisites
 
-### Изучите политику штрафов
+### Learn slashing policy
 
-Если валидатор обработал менее 90% ожидаемого количества блоков во время раунда валидации, этот валидатор будет оштрафован на 101 TON.
-Узнайте больше о [политике штрафов](/v3/documentation/infra/nodes/validation/staking-incentives#decentralized-system-of-penalties).
+If a validator processes less than 90% of the expected blocks during a validation round, they will be fined by 101 TON.
 
-### Запустите полный узел
+Learn more about the [slashing policy](/v3/documentation/infra/nodes/validation/staking-incentives#decentralized-system-of-penalties).
 
-Запустите [полный узел](/v3/guidelines/nodes/running-nodes/full-node) перед выполнением этого руководства.
+### Running a fullnode
 
-Проверьте, что режим валидатора включен с помощью команды `status_modes`. Если это не так, выполните команду [mytonctrl enable_mode](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#enable_mode).
+Launch the [Full Node](/v3/guidelines/nodes/running-nodes/full-node) before follow this article.
+
+Ensure that validator mode is enabled by using the `status_modes` command. If it is not enabled, refer to the [MyTonCtrl enable_mode command](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#enable_mode).
 
 ## Архитектура
 
 ![image](/img/nominator-pool/hot-wallet.png)
 
-## Просмотрите список кошельков
+## View the list of wallets
 
-Список доступных кошельков можно посмотреть в консоли **MyTonCtrl** с помощью команды `wl`:
+Check out the list of available wallets in the `MyTonCtrl` console using the `wl` command:
 
 ```sh
 wl
 ```
 
-Во время установки **mytonctrl** создается кошелек **validator_wallet_001**:
+During the installation of `MyTonCtrl`, the installer creates a wallet named `validator_wallet_001`.
 
 ![список кошельков](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-wl_ru.png)
 
-## Активация кошельков
+## Activate the wallets
 
-1. Отправьте необходимое количество монет в кошелек и активируйте его.
+1. Send the necessary number of coins to the wallet and activate it. The minimum stake is approximately **300K TON**, and the maximum is about **1M** TON. To understand the required amount of coins, please check the current stakes at [tonscan.com](https://tonscan.com/validation). For  more information, see [how maximum and minimum stakes calculated](/v3/documentation/infra/nodes/validation/staking-incentives#values-of-stakes-max-effective-stake).
 
-   В последнее время (*на конец 2023 года*) приблизительные цифры были такими: минимальный стейк составлял около **340 тыс. TON** и максимальный - около **1 млн. TON**.
-
-   Для понимания нужного количества монет проверьте текущий стейк на [tonscan.com](https://tonscan.com/validation).
-
-   Узнайте больше о том, [как рассчитываются максимальный и минимальный стейки] (/v3/documentation/infra/nodes/validation/staking-incentives#values-of-stakes-max-effective-stake).
-
-2. Используйте команду `vas` для отображения истории переводов:
-
-   ```sh
-   vas [wallet name]
-   ```
-
-3. Активируйте кошелек с помощью команды `aw` (имя кошелька необязательно, если аргументы не указаны, то будут активированы все доступные)
-
-   ```sh
-   aw [wallet name]
-   ```
-
-![История аккаунта](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-vas-aw_ru.png)
-
-## Теперь ваш валидатор готов
-
-**mytoncore** автоматически участвует в выборах. Он делит баланс кошелька на две части и использует их как стейк для участия в выборах. Вы также можете вручную установить размер стейка:
+2. Use the `vas` command to view the history of transfers:
 
 ```sh
-set stake 50000
+vas [wallet name]
 ```
 
-`set stake 50000` - это устанавливает размер стейка в 50 тысяч монет. Если ставка принята и наш узел становится валидатором, ставку можно вывести только во вторых выборах (в соответствии с правилами избирательного комитета).
+3. Use the `aw` command to activate the wallet. The `wallet name` parameter is optional; if no arguments are provided, all available wallets will be activated.
 
-![установка стейка](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-set_ru.png)
+```sh
+aw [wallet name]
+```
 
-## Следуйте рекомендациям
+![account history](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-vas-aw_ru.png)
 
-:::caution Штрафы для некачественных валидаторов
+## Your validator is ready to use
 
-Узнайте подробнее о [политике штрафов](/v3/documentation/infra/nodes/validation/staking-incentives#decentralized-system-of-penalties).
+**mytoncore** automatically participates in elections by dividing the wallet balance into two parts. These parts are then used as a stake for participation. Additionally, you can manually adjust the stake size:
+
+```sh
+set  stake  50000
+```
+
+The command above sets the stake size to 50k Toncoins. If the bet is accepted and your node becomes a validator, the stake can only be withdrawn in the second election as per the electorate's rules.
+
+![setting stake](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-set_ru.png)
+
+## Adhere to rules
+
+:::caution Slashing policy for underperforming validators
+If a validator processes less than 90% of the expected number of blocks during a validation round, that validator will incur a fine of 101 TON. For more information, read about the [slashing policy](/v3/documentation/infra/nodes/validation/staking-incentives#decentralized-system-of-penalties).
 :::
 
-Как валидаторы TON, убедитесь, что вы следуете этим ключевым шагам для обеспечения стабильности сети и избежания штрафов в будущем.
+As a TON validator, make sure you follow these crucial steps to ensure network stability and avoid slashing penalties in the future.
 
-Ключевые действия:
+### Important measures:
 
-1. Следуйте уведомлениям [@tonstatus](https://t.me/tonstatus), и готовьтесь к немедленным обновлениям при необходимости.
-2. Убедитесь, что ваше оборудование соответствует или превышает [минимальные системные требования] (/v3/guidelines/nodes/running-nodes/validator-node#minimal-hardware-requirements).
-3. Мы настоятельно просим вас использовать [mytonctrl](https://github.com/ton-blockchain/mytonctrl).
-   - Обновляйте `mytonctrl` в соответствии с уведомлениями и включите телеметрию: `set sendTelemetry true`
-4. Настройте панели мониторинга использования оперативной памяти, дисков, сети и процессора. Для технической помощи свяжитесь с @mytonctrl_help_bot.
-5. Отслеживайте эффективность вашего валидатора с помощью панелей мониторинга.
-   - Проверьте эффективность `mytonctrl` с помощью команды `check_ef`.
-   - [Создайте панель мониторинга с помощью API](/v3/guidelines/nodes/running-nodes/validator-node#validation-and-effectiveness-apis).
+1. Follow [@tonstatus](https://t.me/tonstatus), turn on notifications, and be prepared for urgent updates if needed.
+
+2. Make sure that your hardware meets or exceeds the [minimum system requirements](/v3/guidelines/nodes/running-nodes/validator-node#minimal-hardware-requirements).
+
+3. We strongly urge you to utilize [MyTonCtrl](https://github.com/ton-blockchain/mytonctrl).
+
+    - In `MyTonCtrl`, ensure that updates are synchronized with notifications and enable telemetry by setting the option: `set sendTelemetry true`.
+
+4. Set up monitoring dashboards for RAM, disk, network, and CPU usage. For technical assistance, please contact [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot).
+
+5. Monitor the efficiency of your validator with dashboards.
+
+    - Please verify with `MyTonCtrl` using the `check_ef` command.
+
+    - Check [Build dashboard with APIs](/v3/guidelines/nodes/running-nodes/validator-node#validation-and-effectiveness-apis).
 
 :::info
-`mytonctrl` позволяет проверить эффективность валидаторов с помощью команды `check_ef`, которая выводит данные о вашей эффективности валидатора за последний и текущий период.
-Эта команда получает данные, вызывая утилиту `checkloadall`.
-Убедитесь, что ваша эффективность превышает 90% (за весь период полного цикла).
+`MyTonCtrl` enables you to evaluate the performance of validators using the command `check_ef`. This command provides efficiency data for both the last round and the current round. The data is retrieved by calling the `checkloadall` utility. Make sure that your efficiency is above 90% for the entire round period.
 :::
 
 :::info
-В случае низкой эффективности - принимайте меры для решения проблемы. Если это необходимо, свяжитесь с технической поддержкой [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot).
+If you encounter low efficiency, take action to resolve the issue. If necessary, contact technical support at [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot).
 :::
 
-## API-интерфейсы валидации и эффективности
+## Validation effectiveness APIs
 
 :::info
-Пожалуйста, настройте информационные панели для мониторинга ваших валидаторов с помощью этих API.
+Please set up dashboards to monitor your validators using the APIs provided below.
 :::
 
-#### Отслеживание валидаторов, подвергшихся штрафам
+### Penalized validators tracker
 
-Вы можете отслеживать валидаторов, подвергшихся штрафам, в каждом раунде с помощью [@tonstatus_notifications](https://t.me/tonstatus_notifications).
+You can track penalized validators on each round with [@tonstatus_notifications](https://t.me/tonstatus_notifications).
 
-#### API для валидации
+#### Validation API
 
-https://elections.toncenter.com/docs - используйте этот API для получения информации о текущих и прошлых раундах (циклах) валидации - время раундов, какие валидаторы участвовали в них, их ставки и т.д.
-
-Также доступна информация о текущих и прошедших выборах (для раунда валидации).
+You can use this [API](https://elections.toncenter.com/docs) to obtain information about current and past validation rounds (cycles) - including the timing of rounds, which validators participated, their stakes, and more. Information regarding current and past elections for each validation round is also available.
 
 #### API для эффективности
 
-https://toncenter.com/api/qos/index.html#/ - используйте этот API для получения информации об эффективности валидаторов с течением времени.
+You can use this [API](https://toncenter.com/api/qos/index.html#/) to obtain information about the efficiency of validators over time.
 
-Этот API анализирует информацию, полученную из catchain, и строит оценку эффективности валидатора. Этот API не использует утилиту checkloadall, но является ее альтернативой.
-В отличие от `checkloadall`, который работает только в циклах валидации, в этом API вы можете установить любой временной интервал для анализа эффективности валидатора.
+This API analyzes data from the catchain to provide an estimate of a validator's efficiency. It serves as an alternative to the `checkloadall` utility.
 
-Рабочий процесс:
+Unlike `checkloadall`, which only works on validation rounds, this API allows you to set any time interval to analyze a validator's efficiency.
 
-1. Передайте ADNL адрес вашего валидатора и временной интервал (`from_ts`, `to_ts`) в API. Для точного результата полезно выбирать достаточно большой интервал, например, с 18 часов назад до текущего момента.
+##### Workflow:
 
-2. Извлеките результат. Если в вашем поле процент эффективности меньше 80%, ваш валидатор работает неправильно.
+1. To the API, provide the ADNL address of your validator along with a time interval (`from_ts`, `to_ts`). For accurate results, choose a sufficient interval, such as 18 hours ago to the present moment.
 
-3. Важно, чтобы ваш валидатор участвовал в валидации и имел один и тот же ADNL адрес на весь указанный период времени.
+2. Retrieve the result. If your efficiency percentage is below 80%, your validator is malfunctioning.
 
-Например, если валидатор участвует в валидации каждый второй раунд - тогда вам нужно указывать только те интервалы, когда он участвовал в валидации. В противном случае вы получите неверное значение.
-
-Это работает не только для валидаторов Masterchain (с индексом < 100), но и для других валидаторов (с индексом > 100).
+3. Your validator must actively participate in validation and use the same ADNL address throughout the specified time period. For example, if a validator contributes to validation every second round, you should only indicate the intervals during which they participated. Failing to do so may result in an inaccurate underestimate. This requirement applies not only to MasterChain validators (with an index < 100) but also to other validators (with an index > 100).
 
 ## Поддержка
 
-Свяжитесь с технической поддержкой [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot). Этот бот предназначен только для валидаторов и не будет помогать с вопросами для обычных узлов.
+Contact technical support [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot). This bot is for validators only and will not assist with questions for regular nodes.
 
-Если у вас обычный узел, обратитесь в группу: [@mytonctrl_help](https://t.me/mytonctrl_help).
+If you run a regular node, then contact the group: [@mytonctrl_help](https://t.me/mytonctrl_help).
 
-## См. также
+## See also
 
-- [Запуск полного узла](/v3/guidelines/nodes/running-nodes/full-node)
+- [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
 - [Устранение неполадок](/v3/guidelines/nodes/nodes-troubleshooting)
-- [Мотивация для стейкинга](/v3/documentation/infra/nodes/validation/staking-incentives)
+- [Staking incentives](/v3/documentation/infra/nodes/validation/staking-incentives) <Feedback />
+    <Feedback />
 

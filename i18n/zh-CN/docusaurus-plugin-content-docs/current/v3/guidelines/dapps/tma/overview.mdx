@@ -1,10 +1,11 @@
 ---
-description: Telegram 小程序（或 TMA）是在 Telegram 信使中运行的网络应用程序。它们使用网页技术（HTML、CSS 和 JavaScript）构建。
+description: Telegram Mini Apps (or TMAs) are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript.
 ---
 
-import Button from '@site/src/components/button'
+import Feedback from "@site/src/components/Feedback";
+import Button from "@site/src/components/button";
 
-# 什么是小程序？
+# What are Mini Apps?
 
 <div style={{width: '100%', textAlign:'center', margin: '10pt auto'}}>
   <video style={{width: '100%',maxWidth: '600px', borderRadius: '10pt'}} muted={true} autoPlay={true} loop={true}>
@@ -17,75 +18,77 @@ Your browser does not support the video tag.
 </video>
 </div>
 
-Telegram 小程序（或 TMA）是在 Telegram 信使中运行的 Web 应用。它们使用 Web 技术构建 —— HTML、CSS 和 JavaScript。
+Telegram Mini Apps (or TMAs) are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript.
 
 :::tip
-由于 TMA 是网页并使用 JavaScript，因此需要选择 [JS/TS-based SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript)。
+Since TMAs are web pages and use JavaScript, you need to choose [JS/TS-based SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript).
 :::
 
-打开通向**9 亿 Telegram 用户的大门**。想象一下，只需轻轻一点，就能向这一庞大的用户群提供您的应用程序或服务。
+Unlock access to **Telegram’s 900 million users**. With just one click, you can offer your app or service to a massive audience.
 
 <Button href="/v3/guidelines/dapps/tma/tutorials/step-by-step-guide" colorType={'primary'} sizeType={'sm'}>
 
-分步指南
+Step-by-step guide
 
 </Button>
 
 <Button href="/v3/guidelines/dapps/tma/tutorials/app-examples" colorType={'secondary'} sizeType={'sm'}>
 
-参见示例
+See examples
 
 </Button>
 
-## 概述
+## Overview
 
-Telegram 机器人可以完全取代任何网站。它们支持无缝授权、通过 20 个支付提供商进行集成支付（包括谷歌支付和苹果支付）、向用户提供定制的推送通知等。 
+Telegram bots can fully replace traditional websites, offering seamless user authorization, Integrated payments with 20+ payment providers (including Google Pay & Apple Pay), tailored push notifications for engaging users, and much more.
 
-有了 Mini Apps，机器人有了全新的维度。机器人开发人员可以使用世界上使用最广泛的编程语言 JavaScript 创建无限灵活的界面。
+With Mini Apps, bots gain an entirely new dimension. Developers can create highly flexible interfaces using JavaScript, the world's most widely used programming language.
 
-以下是有关 Telegram 小程序的一些关键点：
+Here are some key features of Telegram Mini Apps:
 
-- **整合到 Telegram 中**：Telegram 小程序旨在无缝集成到 Telegram 应用程序中，为用户提供连贯的体验。您可以在 Telegram 聊天或群组对话中访问它们。
-- **增强功能**：Telegram 小程序可提供多种功能。它们可用于各种用途，如游戏、内容共享、生产力工具等。这些应用程序将 Telegram 平台的功能扩展到了基本信息之外。
-- **跨平台兼容性**：由于 Telegram 小程序基于网络，因此可在 Android、iOS、PC、Mac 和 Linux Telegram 应用程序上使用。用户无需额外安装，只需一键点击即可访问。
-- **机器人互动**：Telegram 小程序通常使用 Telegram 机器人来提供互动和自动化体验。机器人可以响应用户输入、执行任务并促进小程序内的互动。
-- **开发框架**：开发人员可以使用 HTML、CSS 和 JavaScript 等网络开发技术构建 Telegram 小程序。此外，Telegram 还提供开发工具和应用程序接口，用于创建这些应用程序并将其与 Telegram 平台集成。
-- **货币化机会**：Telegram 小程序可以通过各种方式盈利，如应用内购买、订阅模式或广告，因此对开发人员和企业具有吸引力。
-- **Web3就绪**：TON SDK；TON Connect 是一种通信协议，可促进钱包与 TON 区块链上的应用程序之间的通信；代币
-- **社区开发**：Telegram 拥有一个蓬勃发展的开发者社区，许多第三方开发者创建并与用户分享他们的 Telegram 小程序。这种社区驱动的方式促进了可用应用程序的创新和多样性。
+- **Integration within Telegram**: Telegram Mini Apps are designed to blend smoothly into Telegram, providing a native-like user experience. Users can access them from chats, groups, or inline bot interactions.
+- **Enhanced Functionality**: TMAs go beyond messaging—they can power games, content-sharing apps, productivity tools, financial services, and more.
+- **Cross-Platform Compatibility**: Since TMAs are web-based, they work seamlessly across Android, iOS, Windows, Mac, and Linux—no extra installations required.
+- **Bot Interaction**: Many TMAs use Telegram bots for interactive, automated experiences, allowing users to receive real-time responses and dynamic content.
+- **Development Frameworks**: Developers can build TMAs with HTML, CSS, and JavaScript, leveraging Telegram’s APIs to create feature-rich applications.
+- **Monetization Opportunities**: TMAs can be monetized through in-app purchases, subscriptions, and ads, making them an attractive option for developers and businesses.
+- **Web3 Ready**: TMAs support TON SDK, TON Connect, and token-based transactions, allowing seamless integration with blockchain-powered applications.
+- **Community Development**: Telegram has a strong developer ecosystem, where third-party developers actively create and share TMAs, fostering innovation and diversity.
 
-总之，Telegram 小程序通过提供额外的功能和服务来增强 Telegram 体验，同时也为开发者提供了在 Telegram 生态系统中创建和发布应用程序的机会。
+Telegram Mini Apps enhance the Telegram experience by bringing powerful new functionalities, while giving developers an opportunity to create, distribute, and monetize their apps within the Telegram ecosystem.
 
-## 入门
+## Getting started
 
-### TMA 文档
+### TMA documentation
 
-- [Telegram 小程序文档](https://docs.telegram-mini-apps.com) - 由社区驱动的 TWA 文档。
-- [Telegram 提供的 TMA 文档](https://core.telegram.org/bots/webapps) - Telegram 网站上的完整说明。
+- [Telegram Mini Apps documentation](https://docs.telegram-mini-apps.com) — a community-driven documentation for TWA.
+- [TMA documentation by Telegram](https://core.telegram.org/bots/webapps) — a full description on the Telegram website.
 
-### Telegram 开发人员社区
+### Telegram developers community
 
-加入 Telegram 开发者特别聊天室，讨论小程序的开发并获得支持：
+Join a special Telegram developers chat to discuss Mini Apps development and get support:
 
 <Button href="https://t.me/+1mQMqTopB1FkNjIy" colorType={'primary'} sizeType={'sm'}>
 
-加入聊天
+Join chat
 
 </Button>
 
-### 小程序 SDK
+### Mini Apps SDKs
 
-- [twa-dev/sdk](https://github.com/twa-dev/sdk) - TMA SDK 的 NPM 软件包
-- [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) - 新 TWA 的另一个模板。
-- [twa-dev/Mark42](https://github.com/twa-dev/Mark42) - Mark42 是一个用于 TWA 的简单轻量级树形可抖用户界面库。
-- [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) - 新 TWA 与 TON 交互作用的模板。
+- [twa-dev/sdk](https://github.com/twa-dev/sdk) — NPM package for TMA SDK.
+- [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) — Another boilerplate for a new TWA.
+- [twa-dev/Mark42](https://github.com/twa-dev/Mark42) — Mark42 is a simple lightweight tree-shakable UI library for TWA.
+- [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) — Template for new TWA interaction with TON.
 
-## 与 TON Connect 集成
+## Integrate with TON Connect
 
-借助 TON Connect 协议连接用户钱包。点击此处了解更多信息：
+Connect with users wallets with the help of the TON Connect protocol. Read more about it here:
 
 <Button href="/v3/guidelines/ton-connect/overview" colorType={'primary'} sizeType={'sm'}>
 
-了解 TON Connect
+Discover TON Connect
 
 </Button>
+
+<Feedback />

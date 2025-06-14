@@ -1,15 +1,13 @@
-# Метрики MyTonCtrl Prometheus
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# MyTonCtrl prometheus metrics
 
-MyTonCtrl можно настроить для предоставления метрик Prometheus для мониторинга и оповещений.
+MyTonCtrl можно настроить для предоставления метрик Prometheus для мониторинга и оповещений. 
 Это руководство проведет вас через процесс включения метрик Prometheus в MyTonCtrl.
 
 ### Метод доставки метрик
 
-В настоящее время MyTonCtrl может отправлять метрики только в Prometheus из соображений безопасности.
+В настоящее время MyTonCtrl может отправлять метрики только в Prometheus из соображений безопасности. 
 Поэтому его следует использовать с сервисом [Prometheus Pushgateway](https://github.com/prometheus/pushgateway).
 
 ## Настройка
@@ -88,3 +86,5 @@ MyTonCtrl можно настроить для предоставления ме
    ```bash
    http://<host>:9090/targets
    ```
+
+<Feedback />

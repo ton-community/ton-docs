@@ -1,38 +1,36 @@
+import Feedback from '@site/src/components/Feedback';
+
 # DHT
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+DHT stands for Distributed Hash Table, which is a type of distributed key-value database. In this system, each member of the network can store information, such as details about themselves.
 
-Распределенная хеш-таблица (DHT - Distributed Hash Table) по сути является распределенной базой данных "ключ-значение",
-где каждый участник сети может хранить что-то, например, информацию о себе.
+The implementation of DHT in TON is similar to the [Kademlia](https://codethechange.stanford.edu/guides/guide_kademlia.html) protocol, which is also used in IPFS.
 
-Реализация DHT в TON по своей сути похожа на реализацию [Kademlia](https://codethechange.stanford.edu/guides/guide_kademlia.html), которая используется в IPFS.
-Любой участник сети может запустить узел DHT, сгенерировать ключи и хранить данные.
-Для этого ему нужно сгенерировать случайный идентификатор и сообщить другим узлам о себе.
+Any network participant can operate a DHT node, generate keys, and store data. To do this, they need to create a random ID and inform other nodes about their presence.
 
-Чтобы определить, на каком узле хранить данные, используется алгоритм, определяющий "расстояние" между узлом и ключом.
-Алгоритм прост: берем идентификатор узла и идентификатор ключа, выполняем операцию XOR. Чем меньше значение, тем ближе узел.
-Задача — хранить ключ на узлах, максимально приближенных к ключу, чтобы другие участники сети могли, используя тот же алгоритм, найти узел, который может предоставить данные по этому ключу.
+An algorithm determines the "distance" between the node and the key, which helps identify which node should store the data. The algorithm is straightforward: it takes the node's ID and the key's ID and performs the `XOR` operation. A smaller resulting value indicates a closer proximity between the node and the key.
+
+The goal is to store the key on nodes that are as close as possible to the key so that other network participants can, using the same algorithm, easily locate a node that can provide data associated with that key.
 
 ## Поиск значения по ключу
 
-Рассмотрим пример с поиском ключа, [подключаемся к любому узлу DHT и устанавливаем соединение по ADNL UDP](/v3/documentation/network/protocols/adnl/adnl-udp#packet-structure-and-communication).
+Let's examine an example involving a search for a key: [connect to any DHT node and establish a connection via ADNL UDP](/v3/documentation/network/protocols/adnl/adnl-udp#packet-structure-and-communication).
 
-Например, мы хотим найти адрес и открытый ключ для подключения к узлу, на котором размещен сайт foundation.ton.
-Допустим, мы уже получили адрес ADNL этого сайта, выполнив Get метод контракта DNS.
-Адрес ADNL в шестнадцатеричном представлении - `516618cf6cbe9004f6883e742c9a2e3ca53ed02e3e36f4cef62a98ee1e449174`.
-Теперь наша цель - найти ip, порт и открытый ключ узла, имеющего этот адрес.
+Suppose we want to find the address and public key needed to connect to the node hosting the `foundation.ton` site.
 
-Для этого нам нужно получить идентификатор ключа DHT, для начала заполним схему ключа DHT:
+Assuming we have already obtained this site's ADNL address by executing the "get method" of the DNS contract, the ADNL address in hexadecimal format is `516618cf6cbe9004f6883e742c9a2e3ca53ed02e3e36f4cef62a98ee1e449174`.
+
+Our objective is to determine the IP address, port number, and public key of the node associated with this address.
+
+To achieve this, we first need to get the ID of the DHT key. We will begin by populating the DHT key schema:
 
 ```tlb
 dht.key id:int256 name:bytes idx:int = dht.Key
 ```
 
-`name` - это тип ключа, для адресов ADNL используется слово `address`, а, например, для поиска узлов шардчейна - `nodes`. Но типом ключа может быть любой массив байт, в зависимости от значения, которое вы ищете.
+The term `name` refers to the type of key. For ADNL addresses, the term `address` is used. For instance, when searching for ShardChain nodes, the term `nodes` is used. However, the key type can vary and may consist of any array of bytes, depending on the specific value you are seeking.
 
-Заполнив эту схему, получаем:
+By applying this schema, we get:
 
 ```
 8fde67f6                                                           -- TL ID dht.key
@@ -41,29 +39,30 @@ dht.key id:int256 name:bytes idx:int = dht.Key
 00000000                                                           -- index 0 because there is only 1 key
 ```
 
-Далее - получаем идентификатор ключа, хэш sha256 из байтов, сериализованных выше. Это будет `b30af0538916421b46df4ce580bf3a29316831e0c3323a7f156df0236c5b2f75`
+Next, retrieve the key ID and the SHA256 hash from the bytes serialized above. It will be `b30af0538916421b46df4ce580bf3a29316831e0c3323a7f156df0236c5b2f75`.
 
-Теперь мы можем начать поиск. Для этого нам нужно выполнить запрос, который имеет [схему](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L197):
+Now we can begin our search. To do this, we need to execute a query that has [schema](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L197):
 
 ```tlb
 dht.findValue key:int256 k:int = dht.ValueResult
 ```
 
-`key` — это идентификатор нашего ключа DHT, а `k` — это "ширина" поиска, чем он меньше, тем точнее, но меньше потенциальных узлов для запроса. Максимальное k для узлов в TON — 10, обычно используется 6.
+The `key` represents the ID of our DHT key, while `k` indicates the "width" of the search. A smaller value for `k` results in a more accurate search but limits the number of potential nodes to query. In a TON, the maximum value for `k` is 10, although 6 is typically used.
 
-Давайте заполним эту структуру, сериализуем и отправим запрос с помощью схемы `adnl.message.query`. [Подробнее об этом можно прочитать в другой статье](/v3/documentation/network/protocols/adnl/adnl-udp#packet-structure-and-communication).
+Now, let's populate this structure, serialize it, and send the request using the `adnl.message.query` schema. For more details, please refer to the documentation [here](/v3/documentation/network/protocols/adnl/adnl-udp#packet-structure-and-communication).
 
 В ответ мы можем получить:
 
 - `dht.valueNotFound` - если значение не найдено.
 - `dht.valueFound` - если значение найдено на этом узле.
 
-##### dht.valueNotFound
+### dht.valueNotFound
 
-Если мы получим `dht.valueNotFound`, то ответ будет содержать список узлов, которые известны запрошенному нами узлу и максимально приближены к запрошенному нами ключу из списка известных ему узлов. В этом случае нам нужно подключиться и добавить полученные узлы в список известных нам.
-После этого из списка всех известных нам узлов выбираем ближайший, доступный и еще не запрошенный и делаем к нему такой же запрос. И так до тех пор, пока не перепробуем все узлы в выбранном нами диапазоне или пока не перестанем получать новые узлы.
+If we receive `dht.valueNotFound`, the response will include a list of nodes that are known to the node we queried and as close as possible to the key we requested. In this situation, we need to connect to these received nodes and add them to our list of known nodes.
 
-Давайте подробнее разберем поля ответа, используемые схемы:
+Afterwards, we will select the closest, accessible nodes that have not yet been queried from our entire list of known nodes and send the same request to one of them. We will continue this process until we have tried all the nodes within our chosen range or until we stop receiving new nodes.
+
+Now, let's take a closer look at the fields in the response and the schemas that are used:
 
 ```tlb
 adnl.address.udp ip:int port:int = adnl.Address;
@@ -77,21 +76,21 @@ dht.valueNotFound nodes:dht.nodes = dht.ValueResult;
 
 `dht.nodes -> nodes` - список узлов DHT (массив).
 
-У каждого узла есть `id`, который является его открытым ключом, обычно [pub.ed25519](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L47), используемым как ключ сервера для подключения к узлу через ADNL. Также у каждого узла есть список адресов `addr_list:adnl.addressList`, версия и подпись.
+Each node has an `id`, which serves as its public key, typically represented as [pub.ed25519](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L47). This key is used to connect to the node via ADNL. Additionally, each node contains a list of addresses, `addr_list:adnl.addressList`, along with its version and signature.
 
-Нам нужно проверить подпись каждого узла, для этого мы считываем значение `signature` и устанавливаем поле в ноль (делаем его пустым массивом байтов). После - сериализуем структуру TL `dht.node` с пустой подписью и проверяем поле `signature`, которое было до опустошения.
-Проверяем полученные сериализованные байты, используя открытый ключ из поля `id`. [Пример реализации](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/dht/client.go#L91)
+We need to verify the signature of each node. To do this, we first read the value of the `signature` field and then set it to zero, effectively making it an empty byte array. Next, we serialize the TL structure `dht.node` using this empty signature and check the `signature` field that we emptied earlier.
 
-Из списка `addrs:(vector adnl.Address)` берем адрес и пытаемся установить соединение ADNL UDP, в качестве ключа сервера используем `id`, который является открытым ключом.
+We validate the serialized bytes using the public key from the `id` field. [[Please see implementation example]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/dht/client.go#L91).
 
-Чтобы узнать "расстояние" до этого узла - нам нужно взять [идентификатор ключа](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-key-id) из ключа из поля `id` и проверить расстояние операцией XOR из идентификатора ключа узла и нужного ключа.
-Если расстояние достаточно мало, мы можем сделать тот же запрос к этому узлу. И так далее, пока не найдем значение или не останется новых узлов.
+From the list `addrs:(vector adnl.Address)`, we select an address and attempt to establish an ADNL UDP connection, using `id` (the public key) as the server key.
 
-##### dht.valueFound
+To determine the "distance" to this node, we retrieve the [key ID](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-key-id) from the `id` field and calculate the distance using the `XOR` operation between the node's key ID and the desired key. If the distance is small enough, we can make the same request to this node. This process continues until we find a value or run out of new nodes.
 
-Ответ будет содержать само значение, полную информацию о ключе и, возможно, подпись (зависит от типа значения).
+### dht.valueFound
 
-Давайте подробнее проанализируем поля ответа, используемые схемы:
+The response will include the value itself, complete key information, and optionally a signature, depending on the value type.
+
+Давайте подробнее разберем поля ответа, используемые схемы:
 
 ```tlb
 adnl.address.udp ip:int port:int = adnl.Address;
@@ -110,26 +109,28 @@ dht.value key:dht.keyDescription value:bytes ttl:int signature:bytes = dht.Value
 dht.valueFound value:dht.Value = dht.ValueResult;
 ```
 
-Сначала проанализируем `key:dht.keyDescription`, это полное описание ключа, сам ключ и информация о том, кто и как может обновить значение.
+Let's determine `key:dht.keyDescription`. This provides a complete description of the key, including the key itself and information about who can update its value and how.
 
 - `key:dht.key` - ключ должен совпадать с тем, из которого мы взяли идентификатор ключа для поиска.
 - `id:PublicKey` - открытый ключ владельца записи.
 - `update_rule:dht.UpdateRule` - правило обновления записи.
-- - `dht.updateRule.signature` - только владелец закрытого ключа может обновить запись, `signature` как ключа, так и значения должны быть действительными
-- - `dht.updateRule.anybody` - все могут обновить запись, `signature` пустое и не проверяется
-- - `dht.updateRule.overlayNodes` - узлы из одного и того же оверлея могут обновить ключ, используется для поиска узлов того же оверлея и добавления себя
+  - `dht.updateRule.signature` - только владелец закрытого ключа может обновить запись, `signature` как ключа, так и значения должны быть действительными
+  - `dht.updateRule.anybody` - все могут обновить запись, `signature` пустое и не проверяется
+  - `dht.updateRule.overlayNodes` - узлы из одного и того же оверлея могут обновить ключ, используется для поиска узлов того же оверлея и добавления себя
 
-###### dht.updateRule.signature
+### dht.updateRule.signature
 
-После прочтения описания ключа действуем в зависимости от `updateRule`, для случая поиска адреса ADNL тип всегда `dht.updateRule.signature`.
-Проверяем подпись ключа так же, как и в прошлый раз, делаем подпись пустым массивом байтов, сериализуем и проверяем. После - повторяем то же самое для значения, т.е. для всего объекта `dht.value` (при этом возвращая ключевую подпись на место).
+After reviewing the key's description, we proceed based on the `updateRule`. In the ADNL address lookup, the type is always `dht.updateRule.signature`.
 
-[Пример реализации](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/dht/client.go#L331)
+We verify the key signature in the same manner as before. First, we set the signature to an empty byte array, serialize it, and perform the necessary checks. Next, we repeat this process for the entire `dht.value` object while ensuring that the key signature is restored to its original state.
 
-###### dht.updateRule.overlayNodes
+[[Please see implementation example]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/dht/client.go#L331).
 
-Используется для ключей, содержащих информацию о других узлах-шардах воркчейна в сети, значение всегда имеет структуру TL `overlay.nodes`.
-Поле value должно быть пустым.
+### dht.updateRule.overlayNodes
+
+Used for keys that contain information about other nodes, shards of the WorkChain in the network, the value always follows the TL structure `overlay.nodes`.
+
+The value field must be empty.
 
 ```tlb
 overlay.node id:PublicKey overlay:int256 version:int signature:bytes = overlay.Node;
@@ -142,33 +143,35 @@ overlay.nodes nodes:(vector overlay.node) = overlay.Nodes;
 overlay.node.toSign id:adnl.id.short overlay:int256 version:int = overlay.node.ToSign;
 ```
 
-Как видим, id следует заменить на adnl.id.short, что является идентификатором ключа (хешем) поля `id` из исходной структуры. После сериализации - сверяем подпись с данными.
+We should replace the `id` with `adnl.id.short`, which is the key identifier (hash) from the original structure's `id` field. After serialization, we will verify the signature against the data.
 
-В результате получаем валидный список узлов, которые могут предоставить нам информацию о нужном нам шарде воркчейна.
+As a result, we obtain a valid list of nodes that can provide information about the required WorkChain shard.
 
-###### dht.updateRule.anybody
+### dht.updateRule.anybody
 
-Подписей нет, обновлять может кто угодно.
+There are no signatures required; anyone can make updates.
 
-#### Использование значения
+### Использование значения
 
-Когда все проверено и значение `ttl:int` не истекло, мы можем начать работать с самим значением, т. е. `value:bytes`. Для адреса ADNL внутри должна быть структура `adnl.addressList`.
-В ней будут находиться ip-адреса и порты серверов, соответствующие запрашиваемому адресу ADNL. В нашем случае, скорее всего, будет 1 адрес RLDP-HTTP сервиса `foundation.ton`.
-В качестве ключа сервера мы будем использовать открытый ключ `id:PublicKey` из информации о ключе DHT.
+Once everything has been verified and the `ttl:int` value has not expired, we can begin working with the value itself, specifically `value:bytes`. For an ADNL address, this will include an `adnl.addressList` structure.
 
-После установки соединения мы можем запрашивать страницы сайта по протоколу RLDP. Задача со стороны DHT на этом этапе выполнена.
+This structure will contain the IP addresses and ports of the servers corresponding to the requested ADNL address. In our case, we will most likely have one RLDP-HTTP address associated with the `foundation.ton` service.
+
+We will use the public key, `id:PublicKey`, from the DHT key information as the server key.
+
+After establishing the connection, we can request the site's pages using the RLDP protocol. At this stage, the task from the DHT perspective is complete.
 
 ### Поиск узлов, хранящих состояние блокчейна
 
-DHT также используется для поиска информации об узлах, хранящих данные воркчейнов и их шардов. Процесс такой же, как и при поиске любого ключа, разница только в сериализации самого ключа и валидации ответа, эти моменты мы разберем в этом разделе.
+DHT is also used to locate information about the nodes storing the data of WorkChains and their shards. The process for retrieving this information is similar to searching for any key; however, the key serialization and response validation differ. We will examine these aspects in this section.
 
-Чтобы получить данные, например, мастерчейна и его шардов, нам нужно заполнить структуру TL:
+To retrieve data, such as that of the MasterChain and its shards, we need to complete the TL structure:
 
 ```
 tonNode.shardPublicOverlayId workchain:int shard:long zero_state_file_hash:int256 = tonNode.ShardPublicOverlayId;
 ```
 
-Где `workchain` в случае мастерчейна будет равен -1, его шард будет равен -922337203685477580 (0xFFFFFFFFFFFFFFFF), а `zero_state_file_hash` - это хэш нулевого состояния цепочки (file_hash), как и другие данные, его можно взять из глобальной конфигурации сети, в поле `"validator"`
+In the context of a MasterChain, the `workchain` value will be set to `-1`. The corresponding shard will be represented as `-922337203685477580 (0xFFFFFFFFFFFFFFFF)`. Additionally, the `zero_state_file_hash` refers to the hash of the chain’s zero state (file_hash). Like other data, this can be obtained from the global network configuration in the `validator` field.
 
 ```json
 "zero_state": {
@@ -180,23 +183,25 @@ tonNode.shardPublicOverlayId workchain:int shard:long zero_state_file_hash:int25
 }
 ```
 
-После того, как мы заполнили `tonNode.shardPublicOverlayId`, мы сериализуем его и получаем из него идентификатор ключа путем хэширования (как всегда).
+Once we fill in `tonNode.shardPublicOverlayId`, we will serialize it and obtain the key ID by hashing, as we normally do.
 
-Нам нужно использовать полученный идентификатор ключа как `name` для заполнения структуры `pub.overlay name:bytes = PublicKey`, обернув ее в массив байтов TL. Затем мы сериализуем его и получаем из него идентификатор ключа.
+Next, we use this key ID as the `name` to populate the `pub.overlay name:bytes = PublicKey` structure, wrapping it in a TL bytes array. After serialization, we will retrieve the key ID again from this structure.
 
-Полученный идентификатор будет ключом для использования в
+This resulting ID will serve as the key for the command:
 
 ```bash
 dht.findValue
 ```
 
-, а значение поля `name` будет словом `nodes`. Мы повторяем процесс из предыдущего раздела, все то же самое, что и в прошлый раз, но `updateRule` будет [dht.updateRule.overlayNodes](#dhtupdateruleoverlaynodes).
+In this command, the `name` field will have the value `nodes`. We will repeat the process from the previous section; everything remains the same as before, but this time the `updateRule` will be set to [dht.updateRule.overlayNodes](#dhtupdateruleoverlaynodes).
 
-После проверки мы получим открытые ключи (`id`) узлов, которые содержат информацию о нашем воркчейне и шарде. Чтобы получить адреса ADNL узлов, нам нужно создать идентификаторы из ключей (используя метод хеширования) и повторить процедуру, описанную выше, для каждого из адресов ADNL, как и для адреса ADNL домена `foundation.ton`.
+After the validation process, we will obtain the public keys (IDs) of the nodes that have information about our workchain and shard. To access the ADNL addresses of these nodes, we will hash the keys to create IDs and repeat the same procedure for each ADNL address, similar to how we did for the `foundation.ton` domain.
 
-В результате мы получим адреса узлов, из которых, при желании, можно узнать адреса других узлов этой цепочки с помощью [overlay.getRandomPeers](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L237).
-Также мы сможем получать всю информацию о блоках с этих узлов.
+As a result, we will have the addresses of the nodes. If desired, we can use these addresses to discover additional nodes within the same chain using [overlay.getRandomPeers](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L237).
+
+These nodes will also provide us with all the information regarding the blocks.
 
 ## Ссылки
 
-*Вот [ссылка на оригинальную статью](https://github.com/xssnick/ton-deep-doc/blob/master/DHT.md) [Олега Баранова](https://github.com/xssnick).*
+Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/DHT.md) - _[Oleg Baranov](https://github.com/xssnick)._ <Feedback />
+

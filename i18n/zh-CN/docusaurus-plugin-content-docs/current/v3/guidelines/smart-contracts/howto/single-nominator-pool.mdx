@@ -1,45 +1,47 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# 使用 mytonctrl
+# How to use a single nominator pool
 
 :::tip
-建议在阅读本教程之前先熟悉一下 [单一提名池](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool)。
+Before proceeding with this tutorial, we recommend familiarizing yourself with the [single nominator pool specification](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool).
 :::
 
-### 准备验证者
+### Set up single nominator mode
 
 :::caution
-开始前，请确保已充值并 [激活](/v3/guidelines/nodes/running-nodes/validator-node#activate-the-wallets) 验证器的钱包。
+Before starting, ensure you have topped up and [activated](/v3/guidelines/nodes/running-nodes/validator-node#activate-the-wallets) the validator's wallet.
 :::
 
-1. 下载安装脚本：
+1. Enable single nominator mode:
 
 ```bash
 MyTonCtrl> enable_mode single-nominator
 ```
 
-2. 运行安装脚本：
+2. Verify if single nominator mode is enabled:
 
 ```bash
 MyTonCtrl> status_modes
-Name              Status             Description
-single-nominator  enabled   Orbs's single nominator pools.
+Name              Status   Description
+single-nominator  enabled  Orbs's single nominator pools.
 ```
 
-3. 创建池
+3. Create a pool:
 
 ```bash
 MyTonCtrl> new_single_pool <pool-name> <owner_address>
 ```
 
-如果您已经创建了池，可以导入它：
+If you have already created a pool, you can import it:
 
 ```bash
 MyTonCtrl> import_pool <pool-name> <pool-addr>
 ```
 
-4. 创建池
+4. Display pool addresses using `pools_list`:
 
 ```bash
 MyTonCtrl> pools_list
@@ -47,13 +49,13 @@ Name       Status  Balance  Version   Address
 test-pool  empty   0.0      spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
 ```
 
-5. 输入 `pools_list` 以显示池地址
+5. Activate the pool:
 
 ```bash
 MyTonCtrl> activate_single_pool <pool-name>
 ```
 
-现在，你可以通过 mytonctrl 像使用标准提名池一样使用这个提名池。
+After successfully activating the pool:
 
 ```bash
 MyTonCtrl> pools_list
@@ -61,148 +63,145 @@ Name       Status  Balance  Version   Address
 test-pool  active  0.99389  spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
 ```
 
-现在，你可以通过 mytonctrl 像使用标准提名池一样使用这个提名池。
+You can manage this pool via MyTonCtrl like a standard nominator pool.
 
 :::info
-如果资金池的余额足以参加两轮投票 (`balance > min_stake_amount * 2`) ，那么 MyTonCtrl 将使用 `stake = balance / 2` 自动参加两轮投票，除非用户使用命令`set stake`手动设置质押。这种行为与使用提名池不同，但与使用验证器钱包设置质押类似。
+If the pool's balance is sufficient to participate in both rounds (`balance > min_stake_amount * 2`), MyTonCtrl will automatically participate in both rounds using `stake = balance / 2`, unless you manually set the stake using the `set stake` command. This behavior differs from using a nominator pool but resembles staking with a validator wallet.
 :::
 
-## 不使用 mytonctrl 启动
+## Start without MyTonCtrl
 
-#### 从一开始就做好准备
+#### Prepare a launched validator
 
-  如果之前没有验证器，请执行以下操作：
+If you have MyTonCtrl installed and a validator running:
 
-1. [运行验证器](/participate/run-nodes/full-node)并确保同步。
+1. Stop validation and withdraw all funds.
 
-#### 准备single_nominator
+#### Prepare from scratch
 
-  如果之前没有验证器，请执行以下操作：
+If you have no prior validator setup, follow these steps:
 
-1. [运行验证器](/v3/guidelines/nodes/running-nodes/full-node) 并确保同步。
+1. [Run a validator](/v3/guidelines/nodes/running-nodes/full-node) and ensure it is synced.
 2. 停止验证并提取所有资金。
 
-### 准备单一提名人
+### Prepare single nominator
 
-1. 安装 [nodejs](https://nodejs.org/en) v.16 及更高版本和 npm ( [详细说明](https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions) )
-
-2. 安装 `ts-node` 和 `arg` 模块
+1. Install [Node.js](https://nodejs.org/en) v.16 or later and npm ([detailed instructions](https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions)).
+2. Install `ts-node` and the `arg` module:
 
 ```bash
 $ sudo apt install ts-node
 $ sudo npm i arg -g
 ```
 
-4. 为编译器创建符号链接：
+3. 为编译器创建符号链接：
 
 ```bash
 $ sudo ln -s /usr/bin/ton/crypto/fift /usr/local/bin/fift
 $ sudo ln -s /usr/bin/ton/crypto/func /usr/local/bin/func
 ```
 
-5. 运行测试，确保一切设置正确：
+4. Run a test to verify the setup:
 
 ```bash
 $ npm run test
 ```
 
-6. 替换 mytonctrl 提名池脚本： https://raw.githubusercontent.com/orbs-network/single-nominator/main/mytonctrl-scripts/install-pool-scripts.sh
+5. Replace MyTonCtrl nominator-pool scripts: [Install pool scripts](https://raw.githubusercontent.com/orbs-network/single-nominator/main/mytonctrl-scripts/install-pool-scripts.sh).
 
-### 创建单一提名库
+### Create a single nominator pool
 
-1. 从 Telegram [@tonapibot](https://t.me/tonapibot) 获取 Toncenter API 密钥
-2. 设置环境变量：
+1. Obtain a TON Center API key from [@tonapibot](https://t.me/tonapibot) on Telegram.
+2. Set environment variables:
 
 ```bash
 export OWNER_ADDRESS=<owner_address>
 export VALIDATOR_ADDRESS=<validator_wallet_address>
 export TON_ENDPOINT=https://toncenter.com/api/v2/jsonRPC
-export TON_API_KEY=<toncenter api key>
+export TON_API_KEY=<toncenter_api_key>
 ```
 
-2. 创建部署者地址：
+3. Create a deployer address:
 
 ```bash
 $ npm run init-deploy-wallet
 Insufficient Deployer [EQAo5U...yGgbvR] funds 0
 ```
 
-3. 为部署者地址充值 2.1 TON
-4. 部署池合约，您将获得池地址：`Ef-kC0..._WLqgs`：
+4. Top up the deployer address with 2.1 TON.
+5. Deploy the pool contract to get the pool address (`Ef-kC0..._WLqgs`):
 
-```
+```bash
 $ npm run deploy
 ```
 
-5. 备份部署器私钥"./build/deploy.config.json "和 "single-nominator.addr "文件
+6. Convert the address to `.addr`:
 
-```
+```bash
 $ fift -s ./scripts/fift/str-to-addr.fif Ef-kC0..._WLqgs
 ```
 
-使用钱包从single_nominator提取
-Fift:
+(Saving address to file single-nominator.addr)
 
-6. 创建包含金额的 "withdraw.boc "申请：
-7. 将 "single-nominator.addr "复制到 "mytoncore/spool/single-nominator-1.addr"。
-8. 将质押从所有者地址发送至单一提名人地址
+7. Back up the deployer private key (`./build/deploy.config.json`) and `single-nominator.addr` files.
+8. Copy `single-nominator.addr` to `mytoncore/pools/single-nominator-1.addr`.
+9. Send a stake from the owner's address to the single nominator's address.
 
-### 单一提名人的提款
+### Withdrawals from the single nominator
 
-使用钱包从单一提名人
-Fift 提取资金：
+#### Using wallets to withdraw
 
-1. 创建包含金额的 "withdraw.boc" 申请：
+**Fift:**
+
+1. Create a `withdraw.boc` request with the desired amount:
 
 ```bash
 $ fift -s ./scripts/fift/withdraw.fif <withdraw_amount>
 ```
 
-2. 从所有者的钱包创建和签署请求：
+2. Create and sign the request from the owner's wallet:
 
 ```bash
 $ fift -s wallet-v3.fif <my-wallet> <single_nominator_address> <sub_wallet_id> <seqno> <amount=1> -B withdraw.boc
 ```
 
-3. 广播查询：
+3. Broadcast the query:
 
 ```bash
 $ lite-client -C global.config.json -c 'sendfile wallet-query.boc'
-tons
 ```
 
-1. 创建包含金额的 "withdraw.boc" 申请：
+**Tonkeeper:**
+
+1. Create a `withdraw.boc` request with the desired amount:
 
 ```bash
 $ fift -s ./scripts/fift/withdraw.fif <withdraw_amount>
 ```
 
-2. 将申请发送至单一提名人地址：
-
-a.
+2. Send the request to the single nominator address:
 
 ```bash
 $ tons wallet transfer <my-wallet> <single_nominator_address> <amount=1> --body withdraw.boc
-tonkeeper
 ```
 
-b.
+3. Link TypeScript:
 
-```
+```bash
 npm link typescript
 ```
 
-c.
+4. Generate a deeplink:
 
-```
+```bash
 npx ts-node scripts/ts/withdraw-deeplink.ts <single-nominator-addr> <withdraw-amount>
 ```
 
-d. 打开机主手机上的 deeplink
+5. Open the deeplink on the owner's phone.
 
-## 存款池
+## Deposit to pool
 
-您可以使用 **MyTonCtrl**，使用以下命令存款：
+You can deposit using **MyTonCtrl** with the following commands:
 
 ```sh
 MyTonCtrl> mg <from-wallet-name> <pool-account-addr> <amount>
@@ -214,53 +213,54 @@ MyTonCtrl> mg <from-wallet-name> <pool-account-addr> <amount>
 MyTonCtrl> deposit_to_pool <pool-addr> <amount>
 ```
 
-从验证器钱包中存入资金池。
+Alternatively, follow these steps:
 
-或者使用以下步骤：
+1. Navigate to the pool’s page: `https://tonscan.org/nominator/{pool_address}`.
+2. Ensure the pool information is displayed correctly. If the pool has an incorrect smart contract, no information will appear.
+3. Click the `ADD STAKE` button or scan the QR code using Tonkeeper or another TON wallet.
+4. Enter the TON amount and send the transaction. The TON coins will then be added to staking.
 
-1. 请访问池的网页 https://tonscan.org/nominator/{pool_address}。
-
-2. 确保完全显示池的相关信息，如果池中的智能合约不对，就不会有任何信息。
-
-3. 按 `ADD STAKE` 按钮，或使用 Tonkeeper 或任何其他 TON 钱包扫描 QR 码。
-
-4. 转入钱包后，请输入 TON 的金额，然后发送交易。之后，TON 币将被添加到质押中。
-
-如果钱包没有自动打开，您可以通过复制池地址手动发送交易。通过任何 TON 钱包发送。从发送的交易中，将扣除 1 TON 作为处理存款的佣金。
+If the wallet does not open automatically, manually send the transaction by copying the pool address and using any TON wallet. Note that 1 TON will be deducted as a commission for processing the deposit.
 
 ## 提取资金
 
-您还可以使用以下命令提取资金：
+You can withdraw funds using the following command:
 
 ```sh
 MyTonCtrl> withdraw_from_pool <pool-addr> <amount>
 ```
 
-您也可以手动创建和发送交易：
+Alternatively, create and send the transaction manually:
 
 <Tabs groupId="code-examples">
 <TabItem value="toncore" label="JS (@ton)">
 
 ```js
-import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
+import {
+  Address,
+  beginCell,
+  internal,
+  storeMessageRelaxed,
+  toNano,
+} from "@ton/core";
 
 async function main() {
-    const single_nominator_address = Address.parse('single nominator address');
-    const WITHDRAW_OP = 0x1000
-    const amount = 50000
+  const single_nominator_address = Address.parse("single nominator address");
+  const WITHDRAW_OP = 0x1000;
+  const amount = 50000;
 
-    const messageBody = beginCell()
-        .storeUint(WITHDRAW_OP, 32) // op code for withdrawal
-        .storeUint(0, 64)           // query_id
-        .storeCoins(amount)         // amount to withdraw
-        .endCell();
+  const messageBody = beginCell()
+    .storeUint(WITHDRAW_OP, 32) // op code for withdrawal
+    .storeUint(0, 64) // query_id
+    .storeCoins(amount) // amount to withdraw
+    .endCell();
 
-    const internalMessage = internal({
-        to: single_nominator_address,
-        value: toNano('1'),
-        bounce: true,
-        body: messageBody
-    });
+  const internalMessage = internal({
+    to: single_nominator_address,
+    value: toNano("1"),
+    bounce: true,
+    body: messageBody,
+  });
 }
 ```
 
@@ -271,72 +271,71 @@ async function main() {
 ```go
 func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, amount uint64) (*tonconnect.Message, error) {
 
-	const WITHDRAW_OP = 0x1000
+    const WITHDRAW_OP = 0x1000;
 
-	payload, _ := cell.BeginCell().
-		MustStoreUInt(WITHDRAW_OP, 32). // op code for withdrawal
-		MustStoreUInt(query_id, 64).    // query_id
-		MustStoreCoins(amount).         // amount to withdraw
-		EndCell().MarshalJSON()
+    payload, _ := cell.BeginCell().
+        MustStoreUInt(WITHDRAW_OP, 32). // op code for withdrawal
+        MustStoreUInt(query_id, 64).    // query_id
+        MustStoreCoins(amount).        // amount to withdraw
+        EndCell().MarshalJSON();
 
-	msg, err := tonconnect.NewMessage(
-		single_nominator_address,
-		tlb.MustFromTON("1").Nano().String(), // nanocoins to transfer/compute message
-		tonconnect.WithPayload(payload))
+    msg, err := tonconnect.NewMessage(
+        single_nominator_address,
+        tlb.MustFromTON("1").Nano().String(), // nanocoins to transfer/compute message
+        tonconnect.WithPayload(payload));
 
-	if err != nil {
-		return nil, err
-	}
+    if err != nil {
+        return nil, err;
+ }
 
-	return msg, nil
+    return msg, nil;
 }
 ```
 
 </TabItem>
-
 </Tabs>
 
 ## 选举过程
 
-### 建立单一提名库
+### Set up a single nominator pool
 
-使用 [如下](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator) 说明配置单一提名人资料库合约。
+Configure the single nominator pool contract using the [following instructions](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator).
 
 ### 参加选举
 
-[存款](/v3/guidelines/smart-contracts/howto/single-nominator-pool#deposit-pool) 向单一提名人奖池注入的最低投注额。
+[Deposit](/v3/guidelines/smart-contracts/howto/single-nominator-pool#deposit-pool) the minimum stake amount into the single nominator pool.
 
-**MyTonCtrl** 将自动加入选举。您可以设置 mytonctrl 发送给 [Elector 合约](/v3/documentation/smart-contracts/contracts-specs/governance#elector) 的质押金额 ~ 在 Mainnet 上每 18 小时发送一次，在 Testnet 上每 2 小时发送一次。
+**MyTonCtrl** will automatically join the elections. You can set the stake amount that MyTonCtrl sends to the [elector contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector) approximately every 18 hours on Mainnet and 2 hours on Testnet.
 
 ```sh
 MyTonCtrl> set stake 90000
 ```
 
-使用 `status` 命令可以找到**最低质押**金额。
+Find the **minimum stake** amount using the `status` command.
 
 ![](/img/docs/single-nominator/tetsnet-conf.png)
 
-您可以将 `stake` 设置为 `null`，它将根据 `stakePercent` 值计算（可以用 `status_settings` 命令检查）。
+You can set `stake` to `null`, which will calculate based on the `stakePercent` value (check with `status_settings`).
 
-可以查看选举是否已经开始：
+Verify if the election has started:
 
 ```bash
 MyTonCtrl> status
 ```
 
-和 Testnet：
+For Testnet:
 
 ```bash
 MyTonCtrl> status fast
 ```
 
-例如
+Example:
 
 ![](/img/docs/single-nominator/election-status.png)
 
-如果选举已经开始，且单提名池已激活，验证器应在下一轮选举开始时**自动**向选举人合约发送**选举人新投票**信息。
+If the election has started and the single nominator pool is activated, the validator will **automatically** send an **ElectorNewStake** message to the elector contract at the beginning of the next round.
 
-检查验证器钱包：
+Check the validator wallet:
 
 ```sh
 MyTonCtrl> wl
@@ -344,7 +343,7 @@ Name                  Status  Balance           Ver  Wch  Address
 validator_wallet_001  active  995.828585374     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
 ```
 
-然后查看交易记录：
+Check the transaction history:
 
 ```sh
 MyTonCtrl> vas kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
@@ -355,39 +354,39 @@ Code hash
 c3b9bb03936742cfbb9dcdd3a5e1f3204837f613ef141f273952aa41235d289e
 
 Time                 Coins   From/To
-39 minutes ago  >>>  1.3     kf_hz3BIXrn5npis1cPX5gE9msp1nMTYKZ3l4obzc8phrBfF
+39 minutes ago >>>  1.3     kf_hz3BIXrn5npis1cPX5gE9msp1nMTYKZ3l4obzc8phrBfF
 ```
 
-在 Tonviewer 的单一提名人合约历史记录中，该 **ElectorNewStake** 交易：
+This **ElectorNewStake** transaction appears in the single nominator contract history on Tonviewer:
 
 ![](/img/docs/single-nominator/new-stake.png)
 
-在上述示例中，**MyTonCtrl** 会自动在 Elector 合约上投入 90000 个 Toncoin 。
+In this example, **MyTonCtrl** automatically staked `90000` Toncoins on the elector contract.
 
-### 检查校验器状态
+### Check validator status
 
-在下一轮开始时，使用 `status` 命令（Testnet 上的 `status fast` 命令）检查 **MyTonCtrl** 验证器的状态。
+At the beginning of the next round, check the validator status with the `status` command (`status fast` on Testnet).
 
 ![](/img/docs/single-nominator/status-validator.png)
 
-您可以通过检查以下条件来确认您的节点是否已成为完全验证器：
+Confirm if your node has become a full validator by checking:
 
-1. ** 验证器效率** - 本地验证器的效率应为绿色，而不是 "n/a"。
-2. ** 验证器索引** - 验证器索引应大于-1。
+1. **Validator efficiency** – The local validator's efficiency should be green and not `n/a`.
+2. **Validator index** – The validator index should be greater than -1.
 
-### 检查利润
+### Check profit
 
-在回合结束时，**MyTonCtrl** 向选举人合约发送 **ElectorRecoverStakeRequest** 消息。它将向您的单个提名人池回复 `stake + profit` 数额的 Toncoin 。
+At the end of the round, **MyTonCtrl** sends an **ElectorRecoverStakeRequest** message to the elector contract. It returns `stake + profit` to your single nominator pool.
 
 ![](/img/docs/single-nominator/validator-profit.png)
 
-您还可以使用 `vas` 命令查看池的事务历史记录：
+You can also check the pool's transaction history with the `vas` command:
 
 ![](/img/docs/single-nominator/validator-profit-vas.png)
 
 ### 停止参与
 
-如果用户不想再参与验证：
+If you no longer wish to participate in validation:
 
 1. 禁用验证模式：
 
@@ -395,69 +394,69 @@ Time                 Coins   From/To
 MyTonCtrl> disable_mode validator
 ```
 
-2. [提取](/v3/guidelines/smart-contracts/howto/single-nominator-pool#withdraw-funds) 单一提名人合约中的所有资金到所有者钱包。
+2. [Withdraw](/v3/guidelines/smart-contracts/howto/single-nominator-pool#withdraw-funds) all funds from the single nominator contract to the owner wallet.
 
-## 将常规校验器过渡到提名器池模式
+## Transitioning a regular validator to nominator pool mode
 
-1. 禁用 "验证器 "模式，停止参与选举。
-2. 等待选举人归还你们的质押。
-3. 执行以下 [步骤](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator) 。
+1. Disable the `validator` mode to stop participating in elections.
+2. Wait for both stakes to return from the elector.
+3. Follow the [steps](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator) to set up a single nominator pool.
 
-## 单一提名池客户端
+## Single nominator pool client
 
-- 有一个简单的开源客户端可用于部署合约并与之交互 - https://github.com/orbs-network/single-nominator-client
-- 如果遇到困难，可以通过 [Telegram](https://t.me/single_nominator) 向团队寻求支持。
+- Use the open-source client [Single nominator client](https://github.com/orbs-network/single-nominator-client) to deploy and interact with the contract.
+- For support, contact the team on [Telegram](https://t.me/single_nominator).
 
-## 使用 Vesting 合约运行单个提名池。
+## Run a single nominator pool with a vesting contract
 
-从一开始，归属合约的所有者就可以用自己的钱包合约来管理它。
-在此方案中，我们将管理多个合约的交互。
+Initially, the owner of the vesting contract manages it with their wallet contract. This scheme involves managing interactions between multiple contracts.
 
-| 合约                      | 管理界面                                        |
+| Contracts               | Interface for managing                      |
 | ----------------------- | ------------------------------------------- |
-| `validator_wallet`      | Mytonctrl                                   |
+| `validator_wallet`      | MyTonCtrl                                   |
 | `vesting`               | [vesting.ton.org](https://vesting.ton.org/) |
-| `owner_wallet`          | 应用程序，例如：Tonkeeper、MyTonWallet               |
-| `single_nominator_pool` | MyTonctrl                                   |
+| `owner_wallet`          | Apps like Tonkeeper or MyTonWallet          |
+| `single_nominator_pool` | MyTonCtrl                                   |
 
-- `owners_wallet` - 拥有 `vesting` 的TON Wallet
+- `owner_wallet` – The TON wallet that owns the `vesting`.
 
 :::caution
-请确保您已完全备份了 Vesting `owner_wallet` 的恢复解析。一旦 `owner_wallet` 的访问权限丢失，管理 `vesting` 资金的访问权限也会丢失，并且无法恢复。
+Ensure you have backed up the vesting `owner_wallet` recovery phrase. If you lose access to the `owner_wallet`, you will also lose access to managing the `vesting` funds, and recovery will be impossible.
 :::
 
-1. 运行全节点，等待同步节点。
-2. 启用验证器模式，获取安装时创建的 wallet_v1 地址 - 通过 `Mytonctrl wl` 获取。
-3. 向 `validator_wallet` 发送 200  TON （每月支出）。
-4. 创建 `single_nominator_pool`：
+1. Run a full node and wait for it to sync.
+2. Enable validator mode and retrieve the `wallet_v1` address created during installation using `MyTonCtrl wl`.
+3. Send 200 TON (for monthly expenses) to the `validator_wallet`.
+4. Create a `single_nominator_pool`:
 
 ```bash
 MyTonCtrl> new_single_pool <pool-name> <vesting>
 ```
 
-例如
+Example:
 
-```
+```bash
 MyTonCtrl> new_single_pool my_s_pool EQD...lme-D
 ```
 
-5. 激活 `single_nominator_pool`：
+5. Activate the `single_nominator_pool`:
 
 ```bash
 MyTonCtrl> activate_single_pool <pool-name>
 ```
 
-例如
+Example:
 
-```
+```bash
 MyTonCtrl> activate_single_pool my_s_pool
 ```
 
-6. 收到链上的 `single_nominator_pool` 地址后，请求将向您发送 Vesting 合约的 `single_nominator_pool` 人员列入白名单。
-7. 一旦您的 `single_nominator_pool` 列入白名单，您就可以通过 [vesting.ton.org](https://vesting.ton.org/) 从 `vesting` 合约向 `single_nominator_pool` 发送锁定的代币。
-   - a.在 [vesting.ton.org](https://vesting.ton.org/) 连接 `owner_wallet` 
-   - b.从 `vesting` 中进行测试存款 向 `single_nominator_pool` 发送 10  TON 。
-   - c.从[vesting.ton.org](https://vesting.ton.org/)接口将剩余(~8 TON)资金返还给 "vesting"，并发送信息 [金额为 0，注释为`w`]。
-   - d.确保您已收到 `vesting` 中的剩余资金。
-8. 将两个周期所需的 TON 数从 `vesting` 合约转入 `single_nominator_pool`。
+6. After the `single_nominator_pool` address appears on-chain, request whitelisting from the person who provided the vesting contract.
+7. Once whitelisted, you can send locked tokens from the `vesting` contract to the `single_nominator_pool` using [vesting.ton.org](https://vesting.ton.org/):
+   - a. Connect the `owner_wallet` on [vesting.ton.org](https://vesting.ton.org/).
+   - b. Test by sending 10 TON from `vesting` to the `single_nominator_pool`.
+   - c. Return the remaining funds (~8 TON) to `vesting` with a message [amount 0, comment `w`] via the [vesting.ton.org](https://vesting.ton.org/) interface.
+   - d. Confirm the remaining funds are received in `vesting`.
+8. Transfer the required TON amount from `vesting` to `single_nominator_pool` for both cycles.
 9. 等待验证者投票。
+   <Feedback />

@@ -1,130 +1,129 @@
-# Инициализация TVM
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# TVM initialization
 
 :::info
-To maximize your comprehension of this page, familiarizing yourself with the [TL-B language](/v3/documentation/data-formats/tlb/cell-boc) is highly recommended.
+To maximize your comprehension of this page,
+it is highly recommended to familiarize yourself with the [TL-B language](/v3/documentation/data-formats/tlb/cell-boc).
 
-- [TVM Retracer](https://retracer.ton.org/)
+- [TVM retracer](https://retracer.ton.org/)
   :::
 
-TVM вызывается во время фазы вычислений обычных и/или других транзакций.
+TVM is invoked during the computing phase of ordinary and other transactions.
 
 ## Начальное состояние
 
-Новый экземпляр TVM инициализируется до выполнения смарт-контракта следующим образом:
+A new instance of TVM is initialized before executing a smart contract as follows:
 
-- Оригинальный **cc** (текущая продолжительность) инициализируется с помощью ячейки среза, созданного из раздела `code` смарт-контракта. В случае замороженного или неинициализированного состояния аккаунта, код должен быть указан в поле `init` входящего сообщения.
+- The original **cc**, current continuation, is initialized using the cell slice created from the `code` section of the smart contract. If the account is frozen or uninitialized, the code must be provided in the `init` field of the incoming message.
 
-- **cp** (текущая кодовая страница TVM) устанавливается на значение по умолчанию, которое равно 0. Если смарт-контракт хочет использовать другую кодовую страницу TVM *x*, то он должен переключиться на нее, используя `SETCODEPAGE` *x* в качестве первой инструкции своего кода.
+- The **cp**, current TVM codepage, is set to the default value of 0. If the smart contract needs to use another TVM codepage _x_, it must switch to it by using `SETCODEPAGE` _x_ as the first instruction in its code.
 
-- Значения **газа** (*лимиты газа*) инициализируются в соответствии с результатами фазы кредитования.
+- The **gas limits** values are initialized based on the results of the credit phase.
 
-- Вычисление **библиотек** (*контекст библиотеки*) [описано ниже](#library-context).
+- The **library context** computation is [described below](#library-context).
 
-- Процесс инициализации **стека** зависит от события, которое вызвало транзакцию, и его содержимое [описано ниже](#stack).
+- The **stack** initialization process depends on the event that triggered the transaction, and its contents are [described below](#stack).
 
-- Контрольный регистр **c0** (возвращаемая продолжительность) инициализируется экстраординарной продолжительностью `ec_quit` с параметром 0. При выполнении это продолжительность ведет к завершению TVM с кодом выхода 0.
+- Control register **c0** is initialized with the extraordinary continuation `ec_quit` with parameter 0. When executed, this continuation terminates TVM with exit code 0.
 
-- Контрольный регистр **c1** (альтернативная возвращаемая продолжительность) инициализируется экстраординарной продолжительностью `ec_quit` с параметром 1. При вызове она приводит к завершению TVM с кодом выхода 1. Обратите внимание, что оба кода выхода 0 и 1 считаются успешным завершением TVM.
+- Control register **c1** is initialized with the extraordinary continuation `ec_quit` with parameter 1. When invoked, it terminates TVM with exit code 1. Both exit codes 0 and 1 are considered successful terminations of TVM.
 
-- Контрольный регистр **c2** (обработчик исключений) инициализируется экстраординарной продолжительностью `ec_quit_exc`. При вызове она извлекает верхнее целое число из стека (равное номеру исключения) и завершает TVM с кодом выхода, равным этому целому числу. Таким образом, по умолчанию все исключения приводят к завершению выполнения смарт-контракта с кодом выхода, равным номеру исключения.
+- Control register **c2** is initialized with the extraordinary continuation `ec_quit_exc`. When invoked, it takes the top integer from the stack equal to the exception number and terminates TVM with that exit code. By default, all exceptions terminate the smart contract execution with the exception number as the exit code.
 
-- Контрольный регистр **c3** (словарь кода) инициализируется ячейкой с кодом смарт-контракта, например **cc** (текущая продолжительность), описанным выше.
+- Control register **c3** is initialized with the cell containing the smart contract code, similar to **cc** described above.
 
-- Контрольный регистр **c4** (корень постоянных данных) инициализируется постоянными данными смарт-контракта, хранящимися в его разделе `data`. В случае замороженного или неинициализированного состояния аккаунта, данные должны быть предоставлены в поле `init` входящего сообщения. Обратите внимание, что постоянные данные смарт-контракта не обязательно должны быть загружены полностью, чтобы это произошло. Вместо этого загружается корень, и TVM может загружать другие ячейки по их ссылкам из корня только при доступе к ним, тем самым предоставляя форму виртуальной памяти.
+- Control register **c4** is initialized with the smart contract's persistent data from its `data` section. If the account is frozen or uninitialized, this data must be provided in the `init` field of the incoming message. Only the root of the data is loaded initially; TVM loads additional cells by their references when accessed, enabling a virtual memory mechanism.
 
-- Контрольный регистр **c5** (корень действий) инициализируется пустой ячейкой. Примитивы "выходных действий" TVM, такие как `SENDMSG`, накапливают *выходные действия* (например, исходящие сообщения) в этом регистре, которые должны быть выполнены после успешного завершения смарт-контракта. Схема TL-B для ее сериализации [описана ниже](#control-register-c5)
+- Control register **c5** is initialized with an empty cell. The "output action" primitives of TVM, such as `SENDMSG`, accumulate output actions (for example, outbound messages) in this register, which are performed upon successful termination of the smart contract. The TL-B scheme for its serialization is [described below](#control-register-c5).
 
-- Контрольный регистр **c7** (корень временных данных) инициализируется как кортеж, а его структура [описана ниже](#control-register-c7)
+- Control register **c7** (root of temporary data) is initialized as a tuple, and its structure is [described below](#control-register-c7).
 
 ## Контекст библиотеки
 
-Контекст библиотеки_ (среда библиотеки) смарт-контракта — это хэш-карта, отображающая 256-битные хэши ячеек (представлений) в соответствующие ячейки. Когда во время выполнения смарт-контракта осуществляется доступ к ссылке на внешнюю ячейку, в библиотечной среде выполняется поиск ячейки, на которую ссылаются, и ссылка на внешнюю ячейку прозрачно заменяется найденной ячейкой.
+A smart contract's library context/environment is a hashmap that maps 256-bit cell hashes to the corresponding cells. When an external cell reference is accessed during the smart contract's execution, the cell is looked up in the library environment, and the external cell reference is transparently replaced by the found cell.
 
-Среда библиотеки для вызова смарт-контракта вычисляется следующим образом:
+The library environment for a smart contract invocation is computed as follows:
 
-1. Глобальная среда библиотеки для текущего воркчейна берется из текущего состояния мастерчейна.
-2. Затем она дополняется локальной средой библиотеки смарт-контракта, хранящейся в поле `library` состояния смарт-контракта. Учитываются только 256-битные ключи, равные хэшам соответствующих значений ячеек. Если ключ присутствует как в глобальной, так и в локальной среде библиотеки, локальная среда имеет приоритет при слиянии.
-3. Наконец, она дополняется полем `library` поля `init` входящего сообщения (если таковое имеется). Обратите внимание, что если аккаунт заморожен или не инициализирован, поле `library` сообщения будет использоваться вместо локальной среды библиотеки из предыдущего шага. Библиотека сообщений имеет более низкий приоритет, чем локальная и глобальная библиотечные среды.
+1. The global library environment for the current workchain is taken from the current state of the MasterChain.
+2. It's augmented by the local library environment of the smart contract, stored in the `library` field of the smart contract's state. Only 256-bit keys equal to the hashes of the corresponding value cells are considered. The local environment takes precedence if a key is present in both the global and local library environments.
+3. Finally, it's augmented by the `library` field of the `init` field of the incoming message. If the account is frozen or uninitialized, the `library` field of the message is used instead of the local library environment. The message library has lower precedence than local and global library environments.
 
-Наиболее распространенный способ создания общих библиотек для TVM — это публикация ссылки на корневую ячейку библиотеки в мастерчейне.
+The most common way to create shared libraries for TVM is to publish a reference to the library's root cell in the MasterChain.
 
 ## Стек
 
-Инициализация стека TVM происходит после формирования начального состояния TVM и зависит от события, вызвавшего транзакцию:
+The TVM stack is initialized after the initial state of the TVM is set up. The contents of the stack depend on the event that triggered the transaction:
 
-- внутреннее сообщение
-- внешнее сообщение
-- тик-так
-- подготовка к разделению
-- установка слияния
+- Internal message
+- External message
+- Tick-tock
+- Split prepare
+- Merge install
 
-Последний элемент, помещенный в стек, всегда является *селектором функции*, который является *целым числом*, идентифицирующим событие, вызвавшее транзакцию.
+The last item pushed to the stack is always the _function selector_, an _integer_ that identifies the event that caused the transaction.
 
-### Внутреннее сообщение
+### Internal message
 
-В случае внутреннего сообщения стек инициализируется путем помещения аргументов в функцию `main()` смарт-контракта следующим образом:
+In the case of an internal message, the stack is initialized by pushing the arguments to the `main()` function of the smart contract as follows:
 
-- Баланс *b* смарт-контракта (после зачисления значения входящего сообщения) передается как *целое* количество nanoton.
-- Баланс *b*<sub>m</sub> входящего сообщения *m* передается как *целое* количество nanoton.
-- Входящее сообщение *m* передается как ячейка, которая содержит сериализованное значение типа *Message X*, где *X* - тип тела сообщения.
-- Тело *m*<sub>b</sub> входящего сообщения, равное значению поля body *m* и переданное как срез ячейки.
-- Селектор функции *s*, обычно равный 0.
+- The balance _b_ of the smart contract is passed as an _integer_ amount of nanotons after crediting the value of the inbound message.
+- The balance _b_<sub>m</sub> of the inbound message _m_ is passed as an _integer_ amount of nanotons.
+- The inbound message _m_ is passed as a cell, which contains a serialized value of type _Message X_, where _X_ is the message body type.
+- The body _m_<sub>b</sub> of the inbound message, equal to the value of the `body` field of _m_, is passed as a cell slice.
+- Селектор функции _s_, обычно равный 0.
 
-После этого выполняется код смарт-контракта, равный его начальному значению **c3**. Он выбирает правильную функцию в соответствии с *s*, которая, как ожидается, обработает оставшиеся аргументы функции и затем завершается.
+After that, the smart contract's code, equal to its initial value of **c3**, is executed. It selects the correct function based on _s_, which is expected to process the remaining arguments and terminate.
 
-### Внешнее сообщение
+### External message
 
 Входящее внешнее сообщение обрабатывается аналогично [внутреннему сообщению, описанному выше](#internal-message), со следующими изменениями:
 
-- Селектор функции *s* устанавливается в -1.
-- Баланс *b*<sub>m</sub> входящего сообщения всегда равен 0.
-- Начальный текущий лимит газа *g*<sub>l</sub> всегда равен 0. Однако начальный кредит газа *g*<sub>c</sub> > 0.
+- Селектор функции _s_ устанавливается в -1.
+- The balance _b_<sub>m</sub> of the inbound message is always 0.
+- Начальный текущий лимит газа _g_<sub>l</sub> всегда равен 0. Однако начальный кредит газа _g_<sub>c</sub> > 0.
 
-Смарт-контракт должен завершиться при *g*<sub>c</sub> = 0 или *g*<sub>r</sub> ≥ *g*<sub>c</sub>; в противном случае транзакция и содержащий ее блок недействительны. Валидаторы или коллаторы, предлагающие кандидата на блок, никогда не должны включать транзакции, обрабатывающие входящие внешние сообщения, которые являются недействительными.
+The smart contract must terminate with either _g_<sub>c</sub> = 0 or _g_<sub>r</sub> ≥ _g_<sub>c</sub>. If this condition isn't met, the transaction and the block containing it are considered invalid. Validators or collators proposing a block candidate must ensure that transactions processing inbound external messages are valid and exclude invalid ones.
 
-### Тик-так
+### Tick and tock
 
-В случае транзакций тик-так стек инициализируется путем передачи аргументов в функцию `main()` смарт-контракта следующим образом:
+In the case of tick and tock transactions, the stack is initialized by pushing the arguments to the `main()` function of the smart contract as follows:
 
-- Баланс *b* текущего аккаунта передается как *целое* количество nanoton.
-- 256-битный адрес текущего аккаунта внутри мастерчейна как беззнаковое *целое* число.
+- The balance _b_ of the current account is passed as an _integer_ amount of nanotons.
+- The 256-bit address of the current account inside the MasterChain as an unsigned _integer_.
 - Целое число, равное 0 для тик-транзакций и -1 для ток-транзакций.
-- Селектор функции *s*, равный -2.
+- Селектор функции _s_, равный -2.
 
-### Подготовка разделения
+### Split prepare
 
-В случае транзакции подготовки разделения стек инициализируется путем передачи аргументов в функцию `main()` смарт-контракта следующим образом:
+In the case of a split prepare transaction, the stack is initialized by pushing the arguments to the `main()` function of the smart contract as follows:
 
-- Баланс *b* текущего аккаунта передается как *целое* количество nanoton.
-- *Срез*, содержащий *SplitMergeInfo*.
+- The balance _b_ of the current account is passed as an _integer_ amount of nanotons.
+- A _slice_ containing _SplitMergeInfo_.
 - 256-битный адрес текущего аккаунта.
 - 256-битный адрес дочернего аккаунта.
-- Целое число 0 ≤ *d* ≤ 63, равное положению единственного бита, в котором адреса текущего и дочернего аккаунтов различаются.
-- Селектор функции *s*, равный -3.
+- An integer 0 ≤ _d_ ≤ 63, equal to the position of the only bit in which the addresses of the current and sibling accounts differ.
+- Селектор функции _s_, равный -3.
 
-### Установка слияния
+### Merge install
 
-В случае транзакции установки слияния стек инициализируется путем передачи аргументов в функцию `main()` смарт-контракта следующим образом:
+In the case of a merge install transaction, the stack is initialized by pushing the arguments to the `main()` function of the smart contract as follows:
 
-- Баланс *b* текущего аккаунта (уже объединенный с балансом nanoton дочернего аккаунта) передается как *целое* число nanoton.
-- Баланс *b'* дочернего аккаунта, взятый из входящего сообщения *m*, передается как *целое* число nanoton.
-- Сообщение *m* из дочернего аккаунта, автоматически сгенерированное транзакцией подготовки слияния. Его поле `init` содержит конечное состояние дочернего аккаунта. Сообщение передается как ячейка, которая содержит сериализованное значение типа *Message X*, где *X* — тип тела сообщения.
-- Состояние дочернего аккаунта, представленное параметром *StateInit*.
-- *Срез*, содержащий *SplitMergeInfo*.
+- The balance _b_ of the current account (already combined with the nanoton balance of the sibling account) is passed as an _integer_ amount of nanotons.
+- The balance _b'_ of the sibling account, taken from the inbound message _m_, is passed as an _integer_ amount of nanotons.
+- A merge prepare transaction automatically generates the message _m_ from the sibling account. Its `init` field contains the final state of the sibling account. The message is passed as a cell, which contains a serialized value of type _Message X_, where _X_ is the message body type.
+- A _StateInit _ represents the state of the sibling account.
+- A _slice_ containing _SplitMergeInfo_.
 - 256-битный адрес текущего аккаунта.
 - 256-битный адрес дочернего аккаунта.
-- Целое число 0 ≤ *d* ≤ 63, равное положению единственного бита, в котором адреса текущего и дочернего аккаунтов различаются.
-- Селектор функций *s*, равный -4.
+- An integer 0 ≤ _d_ ≤ 63, equal to the position of the only bit in which the addresses of the current and sibling accounts differ.
+- Селектор функций _s_, равный -4.
 
 ## Контрольный регистр c5
 
-*Выходные действия* смарт-контракта накапливаются в ячейке, хранящейся в контрольном регистре **c5**: сама ячейка содержит последнее действие в списке и ссылку на предыдущее, таким образом образуя связанный список.
+The output actions of a smart contract are accumulated in the cell stored in the control register **c5**: the cell contains the last action in the list and a reference to the previous one, forming a linked list.
 
-Список также может быть сериализован как значение типа *OutList n*, где *n* — длина списка:
+Список также может быть сериализован как значение типа _OutList n_, где _n_ — длина списка:
 
 ```tlb
 out_list_empty$_ = OutList 0;
@@ -139,7 +138,7 @@ out_list_node$_
   action:OutAction = OutListNode;
 ```
 
-Список возможных действий при этом состоит из:
+The list of possible actions includes:
 
 - `action_send_msg` — для отправки исходящего сообщения
 - `action_set_code` — для установки кода операции
@@ -171,7 +170,7 @@ action_change_library#26fa1dd4
 
 ## Контрольный регистр c7
 
-Контрольный регистр **c7** содержит корень временных данных в виде кортежа, сформированного типом *SmartContractInfo*, содержащим некоторые базовые данные контекста блокчейна, такие как время, глобальная конфигурация и т. д. Он описывается следующей схемой TL-B:
+Control register **c7** contains the root of temporary data as a tuple, formed by a _SmartContractInfo_ type, which includes basic blockchain context data such as time, global config, etc. The following TL-B scheme describes it:
 
 ```tlb
 smc_info#076ef1ea
@@ -181,22 +180,24 @@ smc_info#076ef1ea
   myself:MsgAddressInt global_config:(Maybe Cell) = SmartContractInfo;
 ```
 
-Первым компонентом этого кортежа является значение *Integer*, которое всегда равно 0x076ef1ea, после чего следуют 9 именованных полей:
+The first component of this tuple is an _integer_ value, always equal to 0x076ef1ea, followed by nine named fields:
 
-| Поле                | Тип                                                                                 | Описание                                                                                                                                                                                                                  |
-| ------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `actions`           | uint16                                                                              | Изначально инициализируется 0, но увеличивается на единицу всякий раз, когда выходное действие устанавливается примитивом выходного действия не-RAW                                                                       |
-| `msgs_sent`         | uint16                                                                              | Количество отправленных сообщений                                                                                                                                                                                         |
-| `unixtime`          | uint32                                                                              | Временная метка Unix в секундах                                                                                                                                                                                           |
-| `block_lt`          | uint64                                                                              | Представляет *логическое время* предыдущего блока этого аккаунта. [Подробнее о логическом времени](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-logical-time) |
-| `trans_lt`          | uint64                                                                              | Представляет *логическое время* предыдущей транзакции этого аккаунта                                                                                                                                                      |
-| `rand_seed`         | bits256                                                                             | Инициализируется детерминированно, начиная с `rand_seed` блока, адреса аккаунта, хеша входящего обрабатываемого сообщения (если есть) и логического времени транзакции `trans_lt`                      |
-| `balance_remaining` | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Оставшийся баланс смарт-контракта                                                                                                                                                                                         |
-| `myself`            | [MsgAddressInt](/v3/documentation/data-formats/tlb/msg-tlb#msgaddressint-tl-b)      | Адрес этого смарт-контракта                                                                                                                                                                                               |
-| `global_config`     | (Возможно, ячейка)                                               | Содержит информацию о глобальной конфигурации                                                                                                                                                                             |
+| Поле                | Тип                                                                                 | Описание                                                                                                                                                                                                            |
+| ------------------- | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `actions`           | uint16                                                                              | Initially set to 0, but incremented by one whenever a non-RAW output action primitive is executed                                                                                                                   |
+| `msgs_sent`         | uint16                                                                              | Количество отправленных сообщений                                                                                                                                                                                   |
+| `unixtime`          | uint32                                                                              | Временная метка Unix в секундах                                                                                                                                                                                     |
+| `block_lt`          | uint64                                                                              | Represents the logical time of the previous block of this account. [More about logical time](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-logical-time) |
+| `trans_lt`          | uint64                                                                              | Represents the logical time of the previous transaction of this account                                                                                                                                             |
+| `rand_seed`         | bits256                                                                             | Инициализируется детерминированно, начиная с `rand_seed` блока, адреса аккаунта, хеша входящего обрабатываемого сообщения (если есть) и логического времени транзакции `trans_lt`                |
+| `balance_remaining` | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Оставшийся баланс смарт-контракта                                                                                                                                                                                   |
+| `myself`            | [MsgAddressInt](/v3/documentation/data-formats/tlb/msg-tlb#msgaddressint-tl-b)      | Адрес этого смарт-контракта                                                                                                                                                                                         |
+| `global_config`     | (Возможно, ячейка)                                               | Содержит информацию о глобальной конфигурации                                                                                                                                                                       |
 
-Обратите внимание, что в предстоящем обновлении TVM кортеж **c7** был расширен с 10 до 14 элементов. Подробнее об этом читайте [здесь](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07).
+Note that in the upcoming upgrade to the TVM, the **c7** tuple was extended from 10 to 14 elements. Read more about it [here](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07).
 
 ## См. также
 
-- Оригинальное описание инициализации TVM из технического документа
+- Original description of TVM initialization from the whitepaper <Feedback />
+  <Feedback />
+

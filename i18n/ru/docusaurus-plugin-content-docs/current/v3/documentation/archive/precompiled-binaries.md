@@ -1,12 +1,10 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Button from '@site/src/components/button'
 
 # Предварительно скомпилированные бинарные файлы
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
 
 :::caution важно
 С Blueprint SDK вам больше не нужно вручную устанавливать бинарные файлы.
@@ -25,9 +23,9 @@ colorType="primary" sizeType={'sm'}>
 
 Если вы не используете Blueprint SDK для разработки смарт-контрактов, вы можете использовать предварительно скомпилированные бинарные файлы, соответствующие вашей операционной системе и выбранным инструментам.
 
-### Необходимые компоненты
+### Prerequisites
 
-Для локальной разработки смарт-контрактов TON *без Javascript*, необходимо подготовить бинарные файлы `func`, `fift` и `lite client` на вашем устройстве.
+Для локальной разработки смарт-контрактов TON _без Javascript_, необходимо подготовить бинарные файлы `func`, `fift` и `lite client` на вашем устройстве.
 
 Вы можете скачать и настроить их ниже или изучить эту статью от TON Society:
 
@@ -35,7 +33,7 @@ colorType="primary" sizeType={'sm'}>
 
 ### 1. Загрузка
 
-Скачайте бинарные файлы из таблицы ниже. Убедитесь, что выбрали правильную версию для вашей операционной системы и установили все дополнительные зависимости:
+Скачайте бинарные файлы из таблицы ниже.  Убедитесь, что выбрали правильную версию для вашей операционной системы и установили все дополнительные зависимости:
 
 | ОС                                 | Бинарные файлы TON                                                                             | fift                                                                                        | func                                                                                        | lite-client                                                                                        | Дополнительные зависимости                                                                                      |
 | ---------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
@@ -65,32 +63,49 @@ padding: '0.2rem',
 
 2. Чтобы открыть переменные среды Windows, нажмите клавиши <Highlight color="#1877F2">Win + R</Highlight> на клавиатуре, введите `sysdm.cpl` и нажмите Enter.
 
-3. На вкладке "*Advanced*" нажмите кнопку <Highlight color="#1877F2">"Environment Variables..."</Highlight>.
+3. На вкладке "_Advanced_" нажмите кнопку <Highlight color="#1877F2">"Environment Variables..."</Highlight>.
 
-4. В разделе *"User variables"* выберите переменную "*Path*" и нажмите <Highlight color="#1877F2">"Edit"</Highlight> (это обычно необходимо).
+4. В разделе _"User variables"_ выберите переменную "_Path_" и нажмите <Highlight color="#1877F2">"Edit"</Highlight> (это обычно необходимо).
 
 5. Чтобы добавить новое значение `(path)` к системной переменной в следующем окне, нажмите кнопку <Highlight color="#1877F2">"New"</Highlight>.
   В новом поле необходимо указать путь к папке, где хранятся ранее установленные файлы:
 
-```
-C:\Users\%USERNAME%\ton\bin\
-```
+  ```
+  C:\Users\%USERNAME%\ton\bin\
+  ```
 
-6. Чтобы проверить, все ли было установлено правильно, запустите в терминале (*cmd.exe*):
+6. Чтобы проверить, все ли было установлено правильно, запустите в терминале (_cmd.exe_):
 
-```bash
-fift -V -and func -V -and lite-client -V
-```
+  ```bash
+  fift -V -and func -V -and lite-client -V
+  ```
 
 7. Если вы планируете использовать fift, вам понадобиться переменная среды `FIFTPATH` с необходимыми импортами:
 
   1. Скачайте [fiftlib.zip](/ton-binaries/windows/fiftlib.zip)
   2. Распакуйте архив в какую-либо директорию на вашем компьютере (например, **`C:/Users/%USERNAME%/ton/lib/fiftlib`**)
-  3. Создайте новую (нажмите кнопку <Highlight color="#1877F2">"New"</Highlight>) переменную среды `FIFTPATH` в разделе "*User variables*".
-  4. В поле "*Variable value*" укажите путь к файлам: **`/%USERNAME%/ton/lib/fiftlib`** и нажмите <Highlight color="#1877F2">OK</Highlight>. Готово.
+  3. Создайте новую (нажмите кнопку <Highlight color="#1877F2">"New"</Highlight>) переменную среды `FIFTPATH` в разделе "_User variables_".
+  4. В поле "_Variable value_" укажите путь к файлам: **`/%USERNAME%/ton/lib/fiftlib`** и нажмите <Highlight color="#1877F2">OK</Highlight>. Готово.
 
 :::caution важно
-Вместо `%USERNAME%` вам нужно вставить свой `username`.\
+Instead of the `%USERNAME%` keyword, you must insert your own `username`.\
+:::</TabItem>
+<TabItem value="mac" label="Linux / MacOS">1. After downloading, make sure the downloaded binaries are executable by changing their permissions.```bash
+chmod +x func
+chmod +x fift
+chmod +x lite-client
+```2. It's also useful to add these binaries to your path (or copy them to `/usr/local/bin`) so you can access them from anywhere.```bash
+cp ./func /usr/local/bin/func
+cp ./fift /usr/local/bin/fift
+cp ./lite-client /usr/local/bin/lite-client
+```3. To check that everything was installed correctly, run in terminal.```bash
+fift -V && func -V && lite-client -V
+```4. If you plan to `use fift`, also download [fiftlib.zip](/ton-binaries/windows/fiftlib.zip), open the zip in some directory on your device (like `/usr/local/lib/fiftlib`), and set the environment variable `FIFTPATH` to point to this directory.```
+unzip fiftlib.zip
+mkdir -p /usr/local/lib/fiftlib
+cp fiftlib/* /usr/local/lib/fiftlib
+```:::info Hey, you're almost finished :)
+Remember to set the [environment variable](https://stackoverflow.com/questions/14637979/how-to-permanently-set-path-on-linux-unix) `FIFTPATH` to point to this directory.
 :::
 
 </TabItem>
@@ -98,35 +113,34 @@ fift -V -and func -V -and lite-client -V
 
 1. После загрузки убедитесь, что загруженные бинарные файлы могут быть выполнены, изменив их разрешения.
 
-```bash
-chmod +x func
-chmod +x fift
-chmod +x lite-client
-```
+   ```bash
+   chmod +x func
+   chmod +x fift
+   chmod +x lite-client
+   ```
 
 2. Также полезно добавить эти бинарные файлы в путь (или скопировать их в `/usr/local/bin`), чтобы вы могли запускать их из любой директории.
 
-```bash
-cp ./func /usr/local/bin/func
-cp ./fift /usr/local/bin/fift
-cp ./lite-client /usr/local/bin/lite-client
-```
+   ```bash
+   cp ./func /usr/local/bin/func
+   cp ./fift /usr/local/bin/fift
+   cp ./lite-client /usr/local/bin/lite-client
+   ```
 
 3. Чтобы убедиться, что всё установлено правильно, выполните следующую команду в терминале.
 
-```bash
-fift -V && func -V && lite-client -V
-```
+   ```bash
+   fift -V && func -V && lite-client -V
+   ```
 
 4. Если вы планируете `использовать fift`, скачайте также [fiftlib.zip](/ton-binaries/windows/fiftlib.zip), распакуйте архив в директорию на вашем устройстве (например, `/usr/local/lib/fiftlib`) и задайте переменную среды `FIFTPATH`, указывающую на эту директорию.
 
-```
-unzip fiftlib.zip
-mkdir -p /usr/local/lib/fiftlib
-cp fiftlib/* /usr/local/lib/fiftlib
-```
+   ```
+   unzip fiftlib.zip
+   mkdir -p /usr/local/lib/fiftlib
+   cp fiftlib/* /usr/local/lib/fiftlib
+   ```
 
-:::info Вы почти закончили :)
 Не забудьте задать [переменную среды](https://stackoverflow.com/questions/14637979/how-to-permanently-set-path-on-linux-unix) `FIFTPATH`, указывающую на эту директорию.
 :::
 
@@ -154,3 +168,6 @@ mkdir ~/ton/build && cd ~/ton/build && cmake .. -DCMAKE_BUILD_TYPE=Release && ma
 Основная команда предоставляет автоматические сборки для нескольких операционных систем через [GitHub Actions](https://github.com/ton-blockchain/ton/releases/latest).
 
 Перейдите по указанной выше ссылке, выберите слева рабочий процесс, соответствующий вашей операционной системе, нажмите на последнее успешное выполнение (зелёная отметка), и скачайте `ton-binaries` в разделе "Artifacts".
+
+<Feedback />
+

@@ -1,0 +1,319 @@
+---
+title: "Tolk vs FunC: mutability"
+---
+
+import Feedback from '@site/src/components/Feedback';
+
+# Tolk vs FunC: 가변성
+
+:::tip TLDR
+
+- `~` 틸다 메서드 없음
+- `cs.loadInt(32)`는 slice를 수정하고 정수를 반환
+- `b.storeInt(x, 32)`는 builder를 수정
+- `b = b.storeInt()` also works since it not only modifies but returns
+- chained methods work identically to JS; they return `self`
+- 모든 것이 JS와 유사하게 예상대로 정확히 작동
+- no runtime overhead, the same Fift instructions
+- 커스텀 메서드 쉽게 생성
+- 틸다 `~`는 Tolk에 전혀 존재하지 않음
+  :::
+
+This is a drastic change. If FunC has `.methods()` and `~methods()`, Tolk has only a dot, and the only way to call a method is `.method()`. The method may or may not _mutate_ an object. Also, there is a behavioral and semantic difference between FunC and the list.
+
+목표는 JS와 다른 언어들과 동일한 호출을 갖는 것입니다:
+
+<table className="cmp-func-tolk-table">
+  <thead>
+  <tr>
+    <th>FunC</th>
+    <th>Tolk</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>{'int flags = cs~load_uint(32);'}</code></td>
+    <td><code>{'var flags = cs.loadUint(32);'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'(cs, int flags) = cs.load_uint(32);'}</code></td>
+    <td><code>{'var flags = cs.loadUint(32);'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'(slice cs2, int flags) = cs.load_uint(32);'}</code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'var cs2 = cs;<br>var flags = cs2.loadUint(32);'}}></code></td>
+  </tr>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: 'slice data = get_data()<br>             .begin_parse();<br>int flag = data~load_uint(32);'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'val flag = contract.getData()<br>           .beginParse()<br>           .loadUint(32);'}}></code></td>
+  </tr>
+  <tr>
+    <td><code>{'dict~udict_set(...);'}</code></td>
+    <td><code>{'dict.uDictSet(...);'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'b~store_uint(x, 32);'}</code></td>
+    <td><code>{'b.storeInt(x, 32);'}</code></td>
+  </tr>
+  <tr>
+    <td><code>{'b = b.store_int(x, 32);'}</code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'b.storeInt(x, 32);<br><br>// also works<br>b = b.storeUint(32);'}}></code></td>
+  </tr>
+  <tr>
+    <td><code dangerouslySetInnerHTML={{__html: 'b = b.store_int(x, 32)<br>     .store_int(y, 32);'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'b.storeInt(x, 32)<br> .storeInt(y, 32);<br><br>// b = ...; also works'}}></code></td>
+  </tr>
+  </tbody>
+</table>
+
+Tolk offers a mutability conception to make this available, a generalization of what a `~` tilda means in FunC.
+
+<h3 className="cmp-func-tolk-header">
+  기본적으로 모든 인수는 값으로 복사됩니다(FunC와 동일)
+</h3>
+
+```tolk
+fun someFn(x: int) {
+    x += 1;
+}
+
+var origX = 0;
+someFn(origX);  // origX remains 0
+someFn(10);     // ok, just int
+origX.someFn(); // still allowed (but not recommended), origX remains 0
+```
+
+The same goes for cells, slices, whatever:
+
+```tolk
+fun readFlags(cs: slice) {
+    return cs.loadInt(32);
+}
+
+var flags = readFlags(msgBody);  // msgBody is not modified
+// msgBody.loadInt(32) will read the same flags
+```
+
+This means that when you call a function, you are sure that the original data has not been modified.
+
+<h3 className="cmp-func-tolk-header">
+  `mutate` 키워드와 변형 함수
+</h3>
+
+But if you add the `mutate` keyword to a parameter, it will make a passed argument mutable. To avoid unexpected mutations, you must specify `mutate` when calling it, also:
+
+```tolk
+fun increment(mutate x: int) {
+    x += 1;
+}
+
+// it's correct, simple and straightforward
+var origX = 0;
+increment(mutate origX);  // origX becomes 1
+
+// these are compiler errors
+increment(origX);         // error, unexpected mutation
+increment(10);            // error, not lvalue
+origX.increment();        // error, not a method, unexpected mutation
+val constX = getSome();
+increment(mutate constX); // error, it's immutable since `val`
+```
+
+slice와 다른 모든 타입에도 동일:
+
+```tolk
+fun readFlags(mutate cs: slice) {
+    return cs.loadInt(32);
+}
+
+val flags = readFlags(mutate msgBody);
+// msgBody.loadInt(32) will read the next integer
+```
+
+이는 일반화입니다. 함수는 여러 mutate 매개변수를 가질 수 있습니다:
+
+```tolk
+fun incrementXY(mutate x: int, mutate y: int, byValue: int) {
+    x += byValue;
+    y += byValue;
+}
+
+incrementXY(mutate origX, mutate origY, 10);   // both += 10
+```
+
+_You may ask — is it just passing by reference? It effectively is, but since "ref" is an overloaded term in TON (cells and slices have refs), the keyword `mutate` was chosen._
+
+<h3 className="cmp-func-tolk-header">
+  By default, `self` in methods is immutable
+</h3>
+
+Methods — unlike global functions `fun f()` — are declared as `fun receiver_type.f()`.
+If a method accepts `self`, it's an instance method (if not, it's a static one).
+
+```tolk
+fun int.assertNotEq(self, throwIfEq: int) {
+    if (self == throwIfEq) {
+        throw 100;
+    }
+}
+
+someN.assertNotEq(10);
+10.assertNotEq(10);      // also ok, since self is not mutating
+```
+
+`self` by default is immutable. Think of it like a **read-only method**.
+
+```tolk
+fun slice.readFlags(self) {
+    return self.loadInt(32);  // error, modifying immutable variable
+}
+
+fun slice.preloadInt32(self) {
+    return self.preloadInt(32);  // ok, it's a read-only method
+}
+```
+
+`mutate`와 `self`를 결합하면 변형 메서드를 얻습니다.
+
+<h3 className="cmp-func-tolk-header">
+  `mutate self`는 점으로 호출되며 객체를 변형하는 메서드
+</h3>
+
+다음과 같이:
+
+```tolk
+fun slice.readFlags(mutate self) {
+    return self.loadInt(32);
+}
+
+val flags = msgBody.readFlags(); // pretty obvious
+
+fun int.increment(mutate self) {
+    self += 1;
+}
+
+var origX = 10;
+origX.increment();    // 11
+10.increment();       // error, not lvalue
+
+// even this is possible
+fun int.incrementWithY(mutate self, mutate y: int, byValue: int) {
+    self += byValue;
+    y += byValue;
+}
+
+origX.incrementWithY(mutate origY, 10);   // both += 10
+```
+
+If you look into stdlib, you'll notice that many functions actually **mutate self**, meaning they are methods of modifying an object. Tuples, dictionaries, and so on. In FunC, they were usually called via tilda.
+
+```tolk
+@pure
+fun tuple.push<X>(mutate self, value: X): void
+    asm "TPUSH";
+
+t.push(1);
+```
+
+<h3 className="cmp-func-tolk-header">
+  `return self`는 메서드를 연결 가능하게 만듦
+</h3>
+
+It is precisely like `return self` in Python or `return this` in JavaScript. That makes methods like `storeInt()` and others chainable.
+
+```tolk
+fun builder.storeInt32(mutate self, x: int): self {
+    self.storeInt(x, 32);
+    return self;
+
+    // this would also work as expected (the same Fift code)
+    // return self.storeInt(x, 32);
+}
+
+var b = beginCell().storeInt(1, 32).storeInt32(2).storeInt(3, 32);
+b.storeInt32(4);     // works without assignment, since mutates b
+b = b.storeInt32(5); // and works with assignment, since also returns
+```
+
+Pay attention to the return type, it's `self`. You should specify it; otherwise, the compilation will fail if left empty. Probably, in the future, it will be correct.
+
+<h3 className="cmp-func-tolk-header">
+  `mutate self`와 asm 함수
+</h3>
+
+While it's evident for user-defined functions, one could be interested in how to make an `asm` function with such behavior. To answer this question, we should look under the hood at how mutation works inside the compiler.
+
+함수가 `mutate` 매개변수를 가질 때, 실제로는 암묵적으로 이들을 반환하고 인수에 암묵적으로 할당합니다. 예시로 더 잘 이해할 수 있습니다:
+
+```tolk
+// actually returns (int, void)
+fun increment(mutate x: int): void { ... }
+
+// actually does: (x', _) = increment(x); x = x'
+increment(mutate x);
+
+// actually returns (int, int, (slice, cell))
+fun f2(mutate x: int, mutate y: int): (slice, cell) { ... }
+
+// actually does: (x', y', r) = f2(x, y); x = x'; y = y'; someF(r)
+someF(f2(mutate x, mutate y));
+
+// when `self`, it's the same
+// actually does: (cs', r) = loadInt(cs, 32); cs = cs'; flags = r
+flags = cs.loadInt(32);
+```
+
+따라서 `asm` 함수는 반환 값 전에 스택에 `self'`를 놓아야 합니다:
+
+```tolk
+// "TPUSH" pops (tuple) and pushes (tuple')
+// so, self' = tuple', and return an empty tensor
+// `void` is a synonym for an empty tensor
+fun tuple.push<X>(mutate self, value: X): void
+    asm "TPUSH";
+
+// "LDU" pops (slice) and pushes (int, slice')
+// with asm(-> 1 0), we make it (slice', int)
+// so, self' = slice', and return int
+fun slice.loadMessageFlags(mutate self): int
+    asm(-> 1 0) "4 LDU";
+```
+
+Note, that to return self, you don't have to do anything special, just specify a return type. The compiler will do the rest.
+
+```tolk
+// "STU" pops (int, builder) and pushes (builder')
+// with asm(op self), we put arguments to correct order
+// so, self' = builder', and return an empty tensor
+// but to make it chainable, `self` instead of `void`
+fun builder.storeMessageOp(mutate self, op: int): self
+    asm(op self) "32 STU";
+```
+
+It's doubtful you'll have to do such tricks. Most likely, you'll write wrappers around existing functions:
+
+```tolk
+// just do it like this, without asm; it's the same effective
+
+@inline
+fun slice.myLoadMessageFlags(mutate self): int {
+    return self.loadUint(4);
+}
+
+@inline
+fun builder.myStoreMessageOp(mutate self, flags: int): self {
+    return self.storeUint(32, flags);
+}
+```
+
+<h3 className="cmp-func-tolk-header">
+  단순한 함수/메서드에 `@inline`이 필요한가요?
+</h3>
+
+For now, better do it, yes. In most examples above, `@inline` was omitted for clarity. Without `@inline`, it will be a separate TVM continuation with jumps in/out. With `@inline`, a function will be generated, but inlined by Fift, like the `inline` specifier in FunC.
+
+In the future, Tolk will automatically detect simple functions and perform true inlining on the AST level. Such functions won't be even generated to Fift. The compiler would decide, better than a human, whether to inline, to make a ref, etc. But it will take some time for Tolk to become so smart :)
+
+For now, please specify the `@inline` attribute.
+
+<Feedback />

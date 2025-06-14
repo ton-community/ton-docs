@@ -1,0 +1,159 @@
+import Feedback from '@site/src/components/Feedback';
+
+# MyTonCtrl 상태
+
+This document serves as a comprehensive guide to help you understand the output of **MyTonCtrl**'s `status` command.
+
+![status](/img/docs/mytonctrl/status.png)
+
+## TON 네트워크 상태
+
+### 네트워크 이름
+
+Possible values are: `mainnet`, `testnet`, and `unknown`. However, the value `unknown` should never be displayed.
+
+### 검증자 수
+
+There are two key values: one represented in green and the other in yellow. The green value indicates the number of online validators, while the yellow value represents the total number of validators.
+
+Both values must be integers greater than 0. You can obtain the green value using the command `getconfig 34` with MyTonCtrl. For more information, please check the [relevant section here](/v3/documentation/network/configs/blockchain-configs#param-32-34-and-36) regarding parameters 32, 34, and 36.
+
+### 샤드체인 수
+
+This value must be an integer greater than 0 and is displayed in green.
+
+### 제안 수
+
+- There are two values to note:
+  - **Green**: Represents the number of `new offers`.
+  - **Yellow**: Represents the total number of `all offers`.
+
+### 불만사항 수
+
+- Similarly, there are two values to consider:
+  - **Green**: Indicates the number of `new complaints`.
+  - **Yellow**: Indicates the total number of `all complaints`.
+
+### 선거 상태
+
+The election status can be indicated with green text for `open` or yellow text for `closed`.
+
+## 로컬 검증자 상태
+
+### Validator index
+
+The validator index should be greater than or equal to 0 (which is the case if the validator mode is active). If it meets this requirement, it should be displayed in green; otherwise, it should be red.
+
+### 로컬 검증자의 ADNL 주소
+
+This section contains only the ADNL address.
+
+### 로컬 검증자 지갑 주소
+
+The wallet address used for staking must be a valid TON address.
+
+### 로컬 검증자 지갑 잔액
+
+This section shows the current balance of the wallet.
+
+### 로드 평균
+
+The `load average` format is `[int]: int, int, int`. The first integer represents the number of CPUs, while the subsequent integers indicate the system load average for the last 1, 5, and 15 minutes.
+
+### 네트워크 로드 평균
+
+This section also displays three integers, following the same logic as the `load average`: it presents the system load average for the last 1, 5, and 15 minutes.
+
+### 메모리 로드
+
+**Absolute and Relative Memory Usage:** This refers to the usage of RAM and swap memory in two pairs of integers.
+
+### Disk load average
+
+This is similar to the `memory load`. However, it relates to the usage of all disk space instead.
+
+### Mytoncore 상태
+
+The status indicator should be green, showing how long Mytoncore has been operational.
+
+### 로컬 검증자 상태
+
+This indicator should also be green, displaying the uptime of the local validator.
+
+### 로컬 검증자 동기화 해제
+
+This integer value should be less than 20, indicating that it is functioning properly (it will appear green).
+
+### 로컬 검증자 마지막 상태 직렬화
+
+This entry displays the number of MasterChain blocks that are currently out of service.
+
+### Local Validator database size
+
+The absolute load size should be less than 1000 GB, and the relative load should be under 80%.
+
+### Version of MyTonCtrl
+
+This indicates the hash of the commit and the name of the branch.
+
+### Version of validator
+
+This shows the hash of the commit and the name of the branch.
+
+## TON 네트워크 설정
+
+### 설정자 주소
+
+The address of the configurator. Refer to [this parameter-0](/v3/documentation/network/configs/blockchain-configs#param-0) for more information.
+
+### 선거인 주소
+
+The address of the elector. Refer to [this parameter-1](/v3/documentation/network/configs/blockchain-configs#param-1) for additional details.
+
+### 검증 기간
+
+The duration of the validation period in seconds. Check [this parameter-15](/v3/documentation/network/configs/blockchain-configs#param-15).
+
+### 선거 기간
+
+This refers to the duration of elections in seconds. To know more, refer to [this parameter-15](/v3/documentation/network/configs/blockchain-configs#param-15).
+
+### 보류 기간
+
+The hold period in seconds, with details available at [this parameter-15](/v3/documentation/network/configs/blockchain-configs#param-15).
+
+### Minimum stake
+
+The minimum stake required in TONs. Check [this parameter-17](/v3/documentation/network/configs/blockchain-configs#param-17).
+
+### Maximum stake
+
+The maximum stake allowed in TONs. Check [this parameter-17](/v3/documentation/network/configs/blockchain-configs#param-17).
+
+## TON 타임스탬프
+
+### TON network launch
+
+This indicates the launch time of the current network, whether it is the Mainnet or Testnet.
+
+### Start of the validation cycle
+
+The timestamp indicates the beginning of the validation cycle. If it represents a future event, it will be displayed in green.
+
+### End of the validation cycle
+
+This is the timestamp for the end of the validation cycle; it will also appear green if it indicates a future date.
+
+### Start of elections
+
+The timestamp for when elections begin. This will be green if it represents a future date.
+
+### End of elections
+
+The timestamp indicating the end of elections is displayed in green if it predicts a future date.
+
+### Beginning of the next elections
+
+The timestamp for the start of the next elections will appear green if it signifies a future event.
+
+<Feedback />

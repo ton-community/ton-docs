@@ -1,106 +1,100 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 随机数生成
 
-生成随机数是许多不同项目中常见的任务。你可能已经在FunC文档中看到过`random()`函数，但请注意，除非你采用一些额外的技巧，否则其结果很容易被预测。
+Generating random numbers is a common task in many projects. While you may have seen the `random()` function in FunC documentation, note that its result can be easily predicted unless you use additional techniques.
 
 ## 如何预测随机数？
 
-计算机在生成随机信息方面非常糟糕，因为它们只是遵循用户的指令。然而，由于人们经常需要随机数，他们设计了各种方法来生成_伪随机_数。
+Computers struggle to generate truly random information because they strictly follow user instructions. To address this, developers have created methods for generating pseudo-random numbers.
 
-这些算法通常要求你提供一个_seed_值，该值将被用来生成一系列_伪随机_数。因此，如果你多次运行相同的程序并使用相同的_seed_，你将始终得到相同的结果。在TON中，每个区块的_seed_是不同的。
+These algorithms typically require a _seed_ value to produce a sequence of _pseudo-random_ numbers. You will always get the same result if you run the same program with the same _seed_ multiple times. In TON, the _seed_ varies for each block.
 
 - [区块随机seed的生成](/develop/smart-contracts/security/random)
 
-因此，要预测智能合约中`random()`函数的结果，你只需要知道当前区块的`seed`，如果你不是验证者，这是不可能的。
+To predict the result of the `random()` function in a smart contract, one would need to know the current `seed` of the block, which is impossible unless you are a validator.
 
-## 只需使用`randomize_lt()`
+There are multiple approaches to generate random values, each offering different trade-offs between speed, security, and decentralization guarantees.
 
-为了使随机数生成不可预测，你可以将当前的[逻辑时间](/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-logical-time)添加到seed中，这样不同的交易将具有不同的seed和结果。
+Below we outline three fundamental approaches:
 
-只需在生成随机数之前调用`randomize_lt()`，你的随机数就会变得不可预测：
+---
 
-```func
-randomize_lt();
-int x = random(); ;; users can't predict this number
-```
+## Approach 1: randomize_lt {#randomize_lt}
 
-然而，你应该注意验证者或协作者仍然可能影响随机数的结果，因为他们决定了当前区块的seed。
+**Mechanism**: Generates [randomness using block logical time](https://docs.ton.org/v3/guidelines/smart-contracts/security/ton-hack-challenge-1/#4-lottery) (`lt`) and blockchain entropy.\
+**Security model**:\
+**Security model**:
 
-## 有没有办法防止验证者操纵？
+- ✅ Safe against user manipulation
+- ❌ Vulnerable to colluding validators (could theoretically predict/influence values)
 
-为了防止（或至少复杂化）验证者替换seed，你可以使用更复杂的方案。例如，你可以在生成随机数之前跳过一个区块。如果我们跳过一个区块，seed将以不太可预测的方式改变。
+**Speed**: Fast (single-block operation)\
+**Use cases**:
 
-跳过区块并不是一个复杂的任务。你可以通过简单地将消息发送到主链，然后再发送回你合约的工作链来完成。让我们来看一个简单的例子！
+- Non-critical applications, for example gaming & NFTs
+- Scenarios where validator trust is assumed
+
+---
+
+## Approach 2: block skipping {#block-skip}
+
+**Mechanism**: Uses [entropy from skipped blocks](https://github.com/puppycats/ton-random?tab=readme-ov-file#ton-random) in blockchain history.\
+**Security model**:\
+**Security model**:
+
+- ✅ Resistant to user manipulation
+- ⚠️ Not fully secure against determined validators (may influence block inclusion timing)
+
+**Speed**: Slow (requires multiple blocks to finalize)\
+**Use cases**:
+
+- Medium-stakes applications, for example lottery systems
+- Scenarios with partial trust in validator set
+
+---
+
+## Approach 3: commit-reveal scheme {#commit-reveal}
+
+**Mechanism**:
+
+1. **Commit phase**: Participants submit hashed secrets
+2. **Reveal phase**: Secrets are disclosed and combined to generate final randomness
+
+**Security model**:
+
+- ✅ Cryptographically secure when properly implemented
+- ✅ Resilient to both users and validators
+- ⚠️ Requires protocol-level verification of commitments
+
+**Speed**: Very slow (multi-phase, multi-block process)\
+**Use cases**:
+
+- High-value applications, for example decentralized auctions
+- Systems requiring Byzantine fault tolerance
+
+---
+
+## Key considerations
+
+| Factor                    | `randomize_lt` | Block skipping | Commit-reveal |
+| ------------------------- | -------------- | -------------- | ------------- |
+| Speed                     | Fast           | Moderate       | Slow          |
+| User resistance           | High           | High           | Highest       |
+| Validator resistance      | Low            | Medium         | Highest       |
+| Implementation complexity | Low            | Medium         | High          |
+
+---
 
 :::caution
-不要在真实项目中使用此示例合约，请自己编写。
+No method is universally perfect – choose based on:
+
+- Value-at-risk in your application
+- Required time-to-finality
+- Trust assumptions about validators
+
 :::
 
-### 任何工作链中的主合约
+Always audit implementations through formal verification where possible.
 
-让我们以一个简单的彩票合约为例。用户将向它发送1 TON，有50%的机会会得到2 TON回报。
-
-```func
-;; set the echo-contract address
-const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
-
-() recv_internal (int msg_value, cell in_msg_full, slice in_msg_body) impure {
-    var cs = in_msg_full.begin_parse();
-    var flags = cs~load_uint(4);
-    if (flags & 1) { ;; ignore bounced messages
-        return ();
-    }
-    slice sender = cs~load_msg_addr();
-
-    int op = in_msg_body~load_uint(32);
-    if ((op == 0) & equal_slice_bits(in_msg_body, "bet")) { ;; bet from user
-        throw_unless(501, msg_value == 1000000000); ;; 1 TON
-
-        send_raw_message(
-            begin_cell()
-                .store_uint(0x18, 6)
-                .store_slice(echo_address)
-                .store_coins(0)
-                .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
-                .store_uint(1, 32) ;; let 1 be echo opcode in our contract
-                .store_slice(sender) ;; forward user address
-            .end_cell(),
-            64 ;; send the remaining value of an incoming msg
-        );
-    }
-    elseif (op == 1) { ;; echo
-        throw_unless(502, equal_slice_bits(sender, echo_address)); ;; only accept echoes from our echo-contract
-
-        slice user = in_msg_body~load_msg_addr();
-
-        {-
-            at this point we have skipped 1+ blocks
-            so let's just generate the random number
-        -}
-        randomize_lt();
-        int x = rand(2); ;; generate a random number (either 0 or 1)
-        if (x == 1) { ;; user won
-            send_raw_message(
-                begin_cell()
-                    .store_uint(0x18, 6)
-                    .store_slice(user)
-                    .store_coins(2000000000) ;; 2 TON
-                    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
-                .end_cell(),
-                3 ;; ignore errors & pay fees separately
-            );
-        }
-    }
-}
-```
-
-在你需要的任何工作链（可能是基本链）部署这个合约，就完成了！
-
-## 这种方法100%安全吗？
-
-虽然它确实有所帮助，但如果入侵者同时控制了几个验证者，仍然有可能被操纵。在这种情况下，他们可能会以某种概率[影响](/develop/smart-contracts/security/random#conclusion)依赖的_seed_。即使这种可能性极小，仍然值得考虑。
-
-随着最新的TVM升级，向`c7`寄存器中引入新值可以进一步提高随机数生成的安全性。具体来说，升级在`c7`寄存器中添加了关于最近16个主链区块的信息。
-
-由于主链区块信息的不断变化性质，它可以作为随机数生成的额外熵源。通过将这些数据纳入你的随机算法中，你可以创建出更难以被潜在对手预测的数字。
-
-有关此TVM升级的更多详细信息，请参考[TVM升级](/learn/tvm-instructions/tvm-upgrade-2023-07)。
+<Feedback />

@@ -1,42 +1,42 @@
-# 使用提名者池进行质押
+import Feedback from '@site/src/components/Feedback';
+
+# Staking with nominator pools
 
 ## 概述
 
 使用TON智能合约，您可以实现任何您想要的质押和存款机制。
 
-然而，在TON区块链中存在“原生质押”——您可以将Toncoin借给验证者进行质押，并分享验证的奖励。
+However, there is native staking in TON Blockchain - you can lend Toncoin to validators for staking and share the reward for validation.
 
-将Toncoin借给验证者的人称为**提名者**。
+The one who lends to validator is called the **nominator**.
 
-一个称为**提名者池**的智能合约，为一个或多个提名者提供了将Toncoin贷给验证者质押的能力，并确保验证者只能用该Toncoin进行验证。此外，智能合约保证了奖励的分配。
+A smart contract, called a [**nominator pool**](/v3/documentation/smart-contracts/contracts-specs/nominator-pool), provides the ability for one or more nominators to lend Toncoin in a validator stake, and ensures that the validator can use that Toncoin only for validation. This smart contract guarantees the distribution of the reward.
 
-## 验证者与提名者
+If you are familiar with cryptocurrencies, you must have heard about **validators** and **nominators**. Now, the time has come to find out what they are — the two major actors ruling the blockchain.
 
-如果您熟悉加密货币，您一定听说过**验证者**和**提名者**。这些词经常出现在加密货币相关渠道中（我们的频道也不例外）。现在，是时候了解一下它们是什么了——区块链的两个主要参与者。
+## Validator
 
-### 验证者
+A validator is a network node that helps keep the blockchain running by verifying (or validating) suggested blocks and recording them on the blockchain.
 
-首先，让我们谈谈验证者。验证者是网络节点，通过验证（或确认）建议的区块并将其记录在区块链上来帮助维持区块链的运行。
+To become a validator, you must meet two requirements: have a high-performance server and obtain at least 300,000 Toncoins, in order to make a stake. At the time of writing, there are up to 400 validators per round on TON.
 
-要成为验证者，您必须满足两个要求：拥有高性能服务器并获得大量的TON（600,000）以进行质押。在撰写本文时，TON上有227个验证者。
-
-### 提名者
+## Nominator
 
 :::info
-提名者池的新版本已发布，更多信息请阅读单一提名者和归属合约页面。
+New version of [nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool/) available, read more in the [Single nominator pool](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool/) and [Vesting contract](/v3/documentation/smart-contracts/contracts-specs/vesting-contract/) pages.
 :::
 
-很明显，并不是每个人都能负担得起在余额上拥有100,000s的Toncoin——这就是提名者发挥作用的地方。简单来说，提名者是将其TON借给验证者的用户。每次验证者通过验证区块获得奖励时，奖励就会在参与者之间分配。
+很明显，并不是每个人都能负担得起在余额上拥有100,000s的Toncoin——这就是提名者发挥作用的地方。简单来说，提名者是将其TON借给验证者的用户。每次验证者通过验证区块获得奖励时，奖励就会在参与者之间分配。 Simply put, the nominator is a user who lends his TON to validators. Every time the validator earns a reward by validating blocks, it is distributed between the involved participants.
 
-不久前，Ton Whales在TON上运行了第一个质押池，最低存款为50 TON。后来，TON基金会推出了第一个开放的提名者池。现在，用户可以以**10,000 TON**开始，以完全去中心化的方式质押Toncoin。
+TON Whales pool allows a minimum deposit of 50 TON. TON Foundation open nominator pool allows users to stake Toncoin in a fully decentralized way, starting with **10,000 TON**.
 
-*来自[TON社区帖子](https://t.me/toncoin/543)。*
+_来自[TON社区帖子](https://t.me/toncoin/543)。_
 
 余额池应始终为 \*\*10  TON \*\* - 这是网络存储费的最低余额。
 
 ## 每月费用
 
-由于验证轮次持续约 **18 小时**，每轮验证需要大约 **5 TON**，且一个提名池会参与奇数和偶数轮次的验证，因此运行该提名池每月大约需要 **105 TON**。
+Since validation round lasts ~18 hours, takes about 5 TON per validation round and 1 nominator pool takes part in even and odd validation rounds it will take **~105 TON per month** to operate the pool.
 
 ## 如何参与？
 
@@ -44,8 +44,16 @@
 
 ## 源代码
 
-- [提名者池智能合约源代码](https://github.com/ton-blockchain/nominator-pool)
+- [Nominator pool smart contract source code](https://github.com/ton-blockchain/nominator-pool)
 
 :::info
 提名者的理论在[TON白皮书](https://docs.ton.org/ton.pdf)中有描述，章节2.6.3, 2.6.25。
 :::
+
+## See also
+
+- [Running validator node](/v3/guidelines/nodes/running-nodes/validator-node)
+- [Nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool/)
+- [Single nominator pool](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool/) <Feedback />
+  <Feedback />
+

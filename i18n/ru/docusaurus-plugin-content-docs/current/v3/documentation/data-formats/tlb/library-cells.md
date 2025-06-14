@@ -1,74 +1,90 @@
-# Библиотечные ячейки
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Library cells
 
 ## Введение
 
-Одной из характерных особенностей того, как TON хранит данные в ячейках, является дедупликация: в хранилище сообщения, блоки, транзакции и т. д. дублирующиеся ячейки сохраняются только один раз. Это значительно уменьшает размер сериализованных данных и позволяет эффективно хранить поэтапно обновляемые данные.
+One of the native features of how TON stores data in cells is **deduplication:** duplicate cells are stored only once in storage, messages, blocks, transactions, and other elements. This significantly reduces the size of serialized data and enables efficient storage of incrementally updated data.
 
-По той же причине многие структуры в TON одновременно являются богатыми, удобными и эффективными: структура блока содержит одинаковые копии каждого сообщения в различных местах: в очереди сообщений, списке транзакций, обновлениях дерева Меркла и так далее: поскольку дублирование не имеет накладных расходов, мы можем хранить данные несколько раз там, где они нам нужны, не беспокоясь об эффективности.
+As a result, many data structures in TON are rich in information and optimized for performance. For example, the block structure may contain the same message in multiple places—such as in the message queue, the list of transactions, and Merkle updates. Since duplication carries no overhead, data can be stored redundantly wherever it is needed without impacting efficiency.
 
-Библиотечные ячейки используют механизм дедупликации в цепочке, что позволяет интегрировать эту технологию в пользовательские смарт-контракты.
+Library cells extend this deduplication mechanism on-chain, enabling the incorporation of the same efficiency into custom smart contracts.
+
 :::info
-Если вы храните код jetton-wallet в виде библиотечной ячейки (1 ячейка и 256+8 бит вместо ~20 ячеек и 6000 бит), например, то сборы за пересылку сообщения, содержащего `init_code`, будут снижены с 0,011 до 0,003 TON.
+For instance, If you store the `jetton-wallet` code as a library cell (1 cell with 256 + 8 bits, instead of ~20 cells and ~6000 bits), the forwarding fees for a message that includes `init_code` can be reduced from 0.011 TON to 0.003 TON.
 :::
 
-## Основная информация
+## General info
 
-Рассмотрим шаг бейсчейна от блока 1'000'000 до блока 1'000'001. Хотя каждый блок содержит небольшой объем данных (обычно менее 1000 транзакций), все состояние бейсчейна содержит миллионы учетных записей, и поскольку блокчейн должен поддерживать целостность данных (в частности, для фиксации хэша корня Меркла всего состояния в блоке), все дерево состояния должно быть обновлено.
+Let's consider a BaseChain step from block 1'000'000 to block 1'000'001. While each block contains small data (typically fewer than 1,000 transactions), the entire BaseChain state includes millions of accounts. Since the blockchain must maintain data integrity—particularly by committing the Merkle root hash of the entire state into the block—the entire state tree must be updated.
 
-Для блокчейнов предыдущих поколений это означает, что обычно вы отслеживаете только последние состояния, поскольку хранение отдельных состояний цепи для каждого блока потребует слишком много места. Но в блокчейне TON из-за дедупликации для каждого блока вы добавляете в хранилище только новые ячейки. Это не только ускоряет обработку, но и позволяет эффективно работать с историей: проверять балансы, состояния и даже запускать методы get для любой точки истории без особых накладных расходов!
+In earlier-generation blockchains, this typically means tracking only the most recent states, as storing separate full states for each block would consume excessive space. However, thanks to deduplication, only new cells are added to storage for each block in the TON blockchain. This accelerates processing and enables efficient historical queries—such as checking balances, inspecting contract states, or running `get` methods at any point in the blockchain's history—with minimal overhead.
 
-В случае, когда у нас есть семейство похожих контрактов (например, jetton-wallets), узел сохраняет дублирующие данные (одинаковый код каждого jetton-wallet) только один раз. Библиотечные ячейки позволяют использовать механизм дедупликации для таких контрактов, чтобы уменьшить плату за хранение и пересылку.
+In scenarios involving families of similar contracts, e.g., `jetton-wallets`, the node stores duplicated data—such as identical contract codes—only once. Library cells leverage this deduplication mechanism, reducing storage costs and forwarding fees for such contracts.
 
 :::info Высокоуровневая аналогия
-Вы можете рассматривать библиотечную ячейку как указатель C++: одна маленькая ячейка, которая указывает на большую ячейку с (возможно) большим количеством ссылок. Ссылочная ячейка (ячейка, на которую указывает библиотечная ячейка) должна существовать и быть зарегистрирована в публичном контексте (*"published"*).
+You can think of a library cell as a C++ pointer: a small cell that references a larger one, which may include many references. The referenced cell must exist and be registered publicly, i.e., _"published"_.
 :::
 
-## Структура библиотечных ячеек
+## Library cells structure
 
-Библиотечная ячейка - это [экзотическая ячейка](/v3/documentation/data-formats/tlb/exotic-cells), которая содержит ссылку на некоторую другую статическую ячейку. В частности, она содержит 256 бит хеша указанной ячейки.
+A library cell is an [exotic cell](/v3/documentation/data-formats/tlb/exotic-cells) that references another static cell by storing its 256-bit hash.
 
-Для TVM библиотечные ячейки работают следующим образом: всякий раз, когда TVM получает команду открыть ячейку для фрагмента (инструкция TVM: `CTOS`, функциональный метод: `.begin_parse()`), он выполняет поиск ячейки с соответствующим хэшем из библиотечной ячейки в контексте библиотеки мастерчейна. Если она найдена, она открывает указанную ячейку и возвращает ее срез.
+**Behavior in TVM**
+In the TON Virtual Machine (TVM), library cells operate as follows:
 
-Открытие библиотечной ячейки стоит столько же, сколько открытие обычной ячейки, поэтому ее можно использовать в качестве прозрачной замены для статических ячеек, которые, однако, занимают гораздо меньше места (и, следовательно, требуют меньших затрат на хранение и отправку).
+When the TVM is instructed to convert a cell into a slice via the `CTOS` instruction or the FunC method `.begin_parse()`, it checks whether the cell is a library cell. If so, the TVM searches for a cell that matches the stored hash in the MasterChain library context. If the referenced cell is found, the TVM opens it and returns its slice.
 
-Обратите внимание, что можно создать библиотечную ячейку, которая ссылается на другую библиотечную ячейк, которая, в свою очередь, ссылается на другую, и так далее. В таком случае `.begin_parse()` вызовет исключение. Однако такая библиотека может быть развернута пошагово с помощью opcode `XLOAD`.
+Opening a library cell incurs the exact computational cost of opening an ordinary cell. Therefore, library cells serve as a transparent, space-efficient substitute for static cells, reducing storage and forwarding fees.
 
-Еще одной важной особенностью библиотечной ячейки является то, что, поскольку она содержит хэш указанной ячейки, она в конечном итоге ссылается на некоторые статические данные. Вы не можете изменить данные, на которые ссылается эта библиотечная ячейка.
+**Nested library cells**
 
-Чтобы быть найденной в контексте библиотеки мастерчейна и, следовательно, на которую ссылается библиотечная ячейка, исходная ячейка должна быть опубликована в мастерчейне. Это означает, что смарт-контракт, существующий в мастерчейне, должен добавить эту ячейку в свое состояние с флагом `public=true`. Это можно сделать с opcode `SETLIBCODE`.
+It is possible to create a library cell that references another library cell, which in turn references another, and so on. However, attempting to parse such nested structures directly using `.begin_parse()` will raise an exception. Instead, nested library references can be unwrapped step-by-step using the `XLOAD` opcode.
 
-## Использование в смарт-контрактах
+**Immutability**
 
-Поскольку библиотечная ячейка ведет себя так же, как и обычная ячейка, на которую она ссылается, во всех контекстах, за исключением расчета платы, вы можете просто использовать ее вместо любой ячейки со статическими данными. Например, вы можете хранить код jetton-wallet в виде библиотечной ячейки (то есть 1 ячейка и 256+8 бит вместо обычных ~20 ячеек и 6000 бит), что приведет к уменьшению на порядок комиссий за хранение и пересылку. В частности, комиссии за пересылку сообщения `internal_transfer`, содержащего `init_code`, будут снижены с 0,011 до 0,003 TON.
+Another key characteristic of library cells is immutability. Since the cell stores only the hash of the referenced cell, it refers to static, unchangeable data. Once a library cell is created, it cannot be updated to point to a different Cell.
 
-### Хранение данных в библиотечной ячейке
+**Publishing a library cell**
 
-Давайте рассмотрим пример хранения кода jetton-wallet в виде библиотечной ячейки для уменьшения комиссий. Сначала нам нужно скомпилировать jetton-wallet в обычную ячейку, содержащую его код.
+To be usable within the MasterChain library context—i.e., to be found and loaded by a library cell—a source cell must be published. This is done by storing the cell within a MasterChain smart contract using the `public=true` flag. The opcode used for this is `SETLIBCODE`.
 
-Затем вам нужно создать библиотечную ячейку со ссылкой на обычную ячейку. Библиотечная ячейка содержит 8-битный тег библиотеки `0x02`, за которым следует 256-битный хэш указанной ячейки.
+## Using library cells in smart contracts
+
+Since a library cell behaves identically to an ordinary cell, it is referenced in all contexts except fee calculation; it can seamlessly replace any static cell in your smart contracts.
+
+**Example**
+
+For instance, you can store the code of a `jetton-wallet` as a library cell. Usually, the code occupies around 20 Cells (~6000 bits). However, when stored as a library cell, it fits into a single cell with 256 + 8 bits, significantly reducing storage usage and forwarding fees.
+In particular, the forwarding fee for an `internal_transfer` message containing `init_code` drops from 0.011 TON to 0.003 TON—an order-of-magnitude reduction.
+
+### Store data in a library cell
+
+Let's walk through the process using the `jetton-wallet` code as an example.
+
+1. First, compile the contract, e.g., jetton-wallet, into a standard cell that contains its code.
+2. Next, create a library cell referencing the code by inserting:
+  - an 8-bit tag `0x02` indicating it's a library cell,
+  - the 256-bit hash of the compiled code cell.
 
 ### Использование в Fift
 
-По сути, вам нужно поместить тег и хэш в конструктор, а затем "закрыть конструктор как экзотическую ячейку".
+You can manually create a library cell in Fift by writing its tag and hash to a builder and closing it as an exotic cell.
 
 Это можно сделать в конструкции Fift-asm, как [эта](https://github.com/ton-blockchain/multisig-contract-v2/blob/master/contracts/auto/order_code.func), пример компиляции некоторого контракта непосредственно в библиотечную ячейку [здесь](https://github.com/ton-blockchain/multisig-contract-v2/blob/master/wrappers/Order.compile.ts).
 
 ```fift
 ;; https://docs.ton.org/tvm.pdf, page 30
-;; Library reference cell — Always has level 0, and contains 8+256 data bits, including its 8-bit type integer 2 
-;; and the representation hash Hash(c) of the library cell being referred to. When loaded, a library
-;; reference cell may be transparently replaced by the cell it refers to, if found in the current library context.
+;; Library reference cell — always has level 0 and contains 8+256 data bits, including its 8-bit type integer 2.  
+;; The representation hash Hash(c) of the library cell being referred to. When loaded, a library.
+;; If found in the current library context, the reference cell may be transparently replaced by the cell it refers to.
 
 cell order_code() asm "<b 2 8 u, 0x6305a8061c856c2ccf05dcb0df5815c71475870567cab5f049e340bcf59251f3 256 u, b>spec PUSHREF";
 ```
 
 ### Использование в @тонн/тонн
 
-В качестве альтернативы вы можете создать библиотечную ячейку полностью на уровне ts в Blueprint с помощью библиотеки `@ton/ton`:
+You can construct a library cell entirely in TypeScript using the `@ton/ton` library without Fift. Here’s how to do it in a Blueprint project:
 
 ```ts
 import { Cell, beginCell } from '@ton/core';
@@ -77,53 +93,54 @@ let lib_prep = beginCell().storeUint(2,8).storeBuffer(jwallet_code_raw.hash()).e
 jwallet_code = new Cell({ exotic:true, bits: lib_prep.bits, refs:lib_prep.refs});
 ```
 
-- Изучите исходный код [здесь](https://github.com/ton-blockchain/stablecoin-contract/blob/de08b905214eb253d27009db6a124fd1feadbf72/sandbox_tests/JettonWallet.spec.ts#L104C1-L105C90).
+- [View source](https://github.com/ton-blockchain/stablecoin-contract/blob/de08b905214eb253d27009db6a124fd1feadbf72/sandbox_tests/JettonWallet.spec.ts#L104C1-L105C90)
 
 ### Публикация обычной ячейки в контексте библиотеки мастерчейна
 
-Практический пример доступен [здесь](https://github.com/ton-blockchain/multisig-contract-v2/blob/master/contracts/helper/librarian.func). Ядром этого контракта является `set_lib_code(lib_to_publish, 2);` - он принимает в качестве входных данных обычную ячейку, которую нужно опубликовать, и flag=2 (означает, что все могут ее использовать).
+A practical example is available [here](https://github.com/ton-blockchain/multisig-contract-v2/blob/master/contracts/helper/librarian.func).
 
-Обратите внимание, что этот контракт, который публикует ячейку, платит за свое хранение и хранение в мастерчейне в 1000 раз больше, чем в бейсчейне. Таким образом, использование библиотечной ячейки эффективно только для контрактов, используемых тысячами пользователей.
+The core of this contract is the line: `set_lib_code(lib_to_publish, 2);`. This function call publishes an ordinary cell with the flag set to `2`, which indicates that the library is public and can be used by anyone.
+
+**Note:** the contract that publishes the cell is responsible for paying its and MasterChain's storage fees. Storage costs in the MasterChain are approximately 1000 times higher than in the BaseChain. Therefore, using a library cell is only cost-effective for contracts that thousands of users utilize.
 
 ### Тестирование в Blueprint
 
-Чтобы проверить, как контракт, который использует библиотечные ячейки, работает в blueprint, вам нужно вручную добавить ссылочные ячейки в контекст библиотеки эмулятора blueprint. Это можно сделать следующим образом:
+To test how contracts that use library cells work in Blueprint, manually add the referenced cells to the emulator’s library context. This can be done as follows:
 
-1. вам нужно создать словарь контекста библиотеки (Hashmap) `uint256->Cell`, где `uint256` - это хэш соответствующей ячейки.
-2. установите контекст библиотеки в настройках эмулятора.
+1. Create a library context dictionary (a Hashmap) of type `uint256 -> Cell`, where `uint256` is the hash of the corresponding cell.
+2. Set this library context in the emulator’s settings.
 
-Пример того, как это можно сделать, показан [здесь](https://github.com/ton-blockchain/stablecoin-contract/blob/de08b905214eb253d27009db6a124fd1feadbf72/sandbox_tests/JettonWallet.spec.ts#L100C9-L103C32).
+An example implementation can be found [here](https://github.com/ton-blockchain/stablecoin-contract/blob/de08b905214eb253d27009db6a124fd1feadbf72/sandbox_tests/JettonWallet.spec.ts#L100C9-L103C32).
 
 :::info
-Обратите внимание, что текущая версия blueprint (`@ton/blueprint:0.19.0`) не обновляет автоматически контекст библиотеки, если какой-либо контракт во время эмуляции публикует новую библиотеку, вам нужно сделать это вручную.
+As of version `@ton/blueprint:0.19.0`, Blueprint does not automatically update the library context if a contract publishes a new library during emulation. You must update it manually.
+This behavior is current as of April 2024 and is expected to be improved in a future release.
 :::
 
-### Get Методы для контрактов на основе библиотечных ячеек
+### Get methods for library cell-based contracts
 
-У вас есть jetton-кошелек, код которого хранится в библиотечной ячейке, и вы хотите проверить баланс.
+When working with a jetton wallet, where the code is stored in a library cell, you may need to check its balance. To do so, you must execute a get method in the code. This involves the following steps:
 
-Чтобы проверить его баланс, вам нужно выполнить get метод получения в коде. Это включает в себя:
+- Accessing the library cell
+- Retrieving the hash of the referenced cell
+- Finding the cell with that hash in the MasterChain's library collection
+- Executing the code from there
 
-- доступ к библиотечной ячейке
-- извлечение хеша указанной ячейки
-- поиск ячейки с этим хешем в коллекции библиотеки мастерчейна
-- выполнение кода оттуда.
+In Layered Solutions (LS), all these processes happen automatically behind the scenes, and users needn’t be concerned with the specific method of code storage.
 
-В многоуровневых решениях (LS) все эти процессы происходят за кулисами, и пользователю не нужно знать о конкретном методе хранения кода.
+However, the process differs when working locally. For example, when using an explorer or wallet, you might examine the account state to determine its type, such as whether it's an NFT, wallet, token, or auction.
 
-Однако при локальной работе все по-другому. Например, если вы используете проводник или кошелек, вы можете взять состояние учетной записи и попытаться определить ее тип — будь то NFT, кошелек, токен или аукцион.
+You can review regular contracts' available get methods, the contract interface, to understand how they work. Alternatively, you may "steal" the account state to your local pseudonet and execute methods there.
 
-Для обычных контрактов вы можете посмотреть доступные get методы, т. е. интерфейс, чтобы понять его. Или вы можете "забрать" состояние учетной записи в локальной псевдосети и выполнить методы там.
-
-Для библиотечной ячейки это невозможно, поскольку она сама по себе не содержит данных. Вы должны вручную обнаружить и извлечь необходимые ячейки из контекста. Это можно сделать через LS (хотя привязки пока не поддерживают это) или через DTon.
+This approach is not feasible for a library cell because it does not store data on its own. Instead, you must manually detect and retrieve the necessary cells from the context. This can be done using LS, though bindings do not yet support this, or via DTon.
 
 #### Получение библиотечной ячейки с помощью Liteserver
 
-Liteserver при запуске get методов автоматически устанавливает правильный контекст библиотеки. Если вы хотите определить тип контракта с помощью get методов или запустить get методы локально, вам нужно загрузить соответствующие ячейки с помощью метода LS [liteServer.getLibraries](https://github.com/ton-blockchain/ton/blob/4cfe1d1a96acf956e28e2bbc696a143489e23631/tl/generate/scheme/lite_api.tl#L96).
+When running get methods with liteserver, the correct library context is automatically set. If you need to detect the contract type using get methods or run them locally, download the corresponding cells via the LS method [liteServer.getLibraries](https://github.com/ton-blockchain/ton/blob/4cfe1d1a96acf956e28e2bbc696a143489e23631/tl/generate/scheme/lite_api.tl#L96).
 
 #### Получение библиотечной ячейки с помощью DTon
 
-Вы также можете получить библиотеку с [dton.io/graphql](https://dton.io/graphql):
+You can also get the library from [dton.io/graphql](https://dton.io/graphql):
 
 ```
 {
@@ -133,7 +150,7 @@ Liteserver при запуске get методов автоматически �
 }
 ```
 
-а также список библиотек для определенного блока мастерчейна:
+as well as a list of libraries for specific MasterChain block:
 
 ```
 {
@@ -144,9 +161,10 @@ Liteserver при запуске get методов автоматически �
 }
 ```
 
-## См. также
+## See also
 
-- [Экзотические ячейки](/v3/documentation/data-formats/tlb/exotic-cells)
-- [Инструкции TVM](/v3/documentation/tvm/instructions)
+- [Exotic cells](/v3/documentation/data-formats/tlb/exotic-cells)
+- [TVM instructions](/v3/documentation/tvm/instructions)
 
+<Feedback />
 

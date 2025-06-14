@@ -1,0 +1,64 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Button from '@site/src/components/button'
+
+# Blueprint
+
+![Blueprint](/img/blueprint/logo.svg)
+
+TON용 스마트 컨트랙트 작성, 테스트, 배포를 위한 개발 환경입니다.
+
+## Quick start
+
+터미널에서 다음을 실행하여 새 프로젝트를 만들고 화면의 지침을 따르세요:
+
+```bash
+npm create ton@latest
+```
+
+<Button href="https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa" colorType={'secondary'} sizeType={'sm'}>
+
+Watch video tutorials
+
+</Button>
+
+### 핵심 기능
+
+- 스마트 컨트랙트 빌드, 테스트, 배포를 위한 간소화된 워크플로우
+- 선호하는 지갑(예: Tonkeeper)을 사용하여 메인넷/테스트넷에 쉽게 배포
+- 프로세스 내에서 실행되는 격리된 블록체인에서 여러 스마트 컨트랙트를 매우 빠르게 테스트
+
+### 기술 스택
+
+- https://github.com/ton-community/func-js로 FunC 컴파일 (CLI 없음)
+- Compiling Tact with https://github.com/tact-lang/tact
+- https://github.com/ton-org/sandbox로 스마트 컨트랙트 테스트
+- TON Connect 2.0 호환 지갑 또는 `ton://` 딥링크로 스마트 컨트랙트 배포
+
+### 요구 사항
+
+- v18과 같은 최신 버전의 [Node.js](https://nodejs.org/), `node -v`로 버전 확인
+- IDE with TypeScript and TON support:
+  - [Visual Studio Code](https://code.visualstudio.com/) with the [FunC plugin](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode) or [Tact plugin](https://marketplace.visualstudio.com/items?itemName=tonstudio.vscode-tact)
+  - [IntelliJ IDEA](https://www.jetbrains.com/idea/) with the [TON Development plugin](https://plugins.jetbrains.com/plugin/23382-ton)
+
+## 참조
+
+### GitHub
+
+- https://github.com/ton-org/blueprint
+
+### 자료
+
+- [DoraHacks 스트림에서 Blueprint 사용](https://www.youtube.com/watch?v=5ROXVM-Fojo)
+- [새 프로젝트 만들기](https://github.com/ton-org/blueprint#create-a-new-project)
+- [새 스마트 컨트랙트 개발하기](https://github.com/ton-org/blueprint#develop-a-new-contract)
+- [[YouTube] Blueprint를 사용한 Func EN](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa) ([RU 버전](https://youtube.com/playlist?list=PLyDBPwv9EPsA5vcUM2vzjQOomf264IdUZ))
+
+## See also
+
+- [스마트 컨트랙트 개발 소개](/v3/documentation/smart-contracts/overview)
+- [지갑 스마트 컨트랙트 작업 방법](/v3/guidelines/smart-contracts/howto/wallet)
+- [SDK](/v3/guidelines/dapps/apis-sdks/sdk)
+
+<Feedback />

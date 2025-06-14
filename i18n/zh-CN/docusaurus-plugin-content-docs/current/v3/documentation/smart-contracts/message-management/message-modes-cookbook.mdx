@@ -1,139 +1,468 @@
-# 消息模式 Cookbook
+import Feedback from '@site/src/components/Feedback';
 
-了解发送消息的不同模式和标记对于确保智能合约的正确运行非常重要。 
-[消息模式](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes)部分对这些模式和标记进行了详细描述，而在本节中，我们将通过具体示例来说明它们的实际应用。
+import ConceptImage from "@site/src/components/conceptImage";
+import ThemedImage from "@theme/ThemedImage";
 
-:::info 重要事项
+# Message modes cookbook
 
-**Note**：这些示例中使用的交易费用（如 3 Toncoin）是假设的，仅供参考。实际交易费用会因网络条件和其他因素而有所不同。
+Understanding the modes and flags for sending messages ensures your smart contracts behave as intended. This section illustrates their practical application through specific examples.
+
+:::info IMPORTANT
+You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726e4fe994b7fd6dbf953a2ac24ecd77753858abeda9d6755c664a537a) as a real-world validation.
 :::
 
-## 1. 发送常规信息
+#### Message value and account balance
 
-我们的智能合约余额中目前有 100  Toncoin 。在收到一条含有 50  Toncoin 的内部信息后，我们发送一条含有 20  Toncoin 的普通信息，交易费为 3  Toncoin ，将从信息中扣除。
+The contract reflects all TON tokens it holds in its `balance`. Some of these tokens are also assigned to the currently processed incoming `message`. This mechanism is effective because any TON transaction involving a [non-system contract](/v3/documentation/smart-contracts/contracts-specs/governance) processes exactly one incoming message at a time.
 
-![](/img/docs/message-modes-cookbook/send_regular_message_1.png)
+> To better understand the `balance` inside the TVM, refer to how the [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) function operates.
 
-| Mode and Flags        | Code                       |
-| :-------------------- | :------------------------- |
-| `mode` = 0, no `flag` | `send_raw_message(msg, 0)` |
+Therefore, any blockchain payment may come either:
 
-## 2. 发送普通信息，错误时不跳转信息并忽略它
+- From the incoming message's `value`.
+  Contracts pay computation fees this way unless they call [accept_message](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects), which prevents malicious actors from spending the contract's balance to process their data
+- From the contract's `balance`, which leaves the incoming TON amount untouched during the transaction
+  This approach currently applies to storage fees in workchains 0 and -1 and for the most common actions
 
-我们的智能合约余额中目前有 100  Toncoin 。在收到 50  Toncoin 的内部信息后，我们发送一条 20  Toncoin 的普通信息，交易费为 3  Toncoin ，将从信息中扣除。
-如果在交易处理过程中出现错误，消息将不会跳转并被忽略。
+#### Fees
 
-![](/img/docs/message-modes-cookbook/send_regular_message_2.png)
+Actual transaction fees will vary depending on the blockchain configuration, the smart contract code, and other factors. When a message is received, storage and gas fees will consume part of the contract `balance` if the message `value` [is above a certain amount](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped).
 
-| Mode and Flags         | Code                       |
-| :--------------------- | :------------------------- |
-| `mode` = 0, `flag` = 2 | `send_raw_message(msg, 2)` |
+According to the [transaction flow](/v3/documentation/tvm/tvm-overview#transactions-and-phases), each transaction consists of five distinct phases:
 
-## 3. 发送常规信息并在出错时跳转信息
+- **Storage phase**\
+   Handles storage fee and `in_msg` import fee.
 
-我们的智能合约余额中目前有 100  Toncoin 。在收到 50  Toncoin 的内部信息后，我们发送一条 20  Toncoin 的普通信息，交易费为 3  Toncoin ，将从信息中扣除， 
-，如果在操作处理过程中出现错误--除了回滚交易外，还将退订信息。
+- **Credit phase**\
+   The `in_msg` value [is credited](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L959-L981) to the account balance.
 
-![](/img/docs/message-modes-cookbook/send_regular_message_3_error.png)
+- **Compute phase**\
+   Executes the smart contract code via TVM.
 
-| Mode and Flags          | Code                        |
-| :---------------------- | :-------------------------- |
-| `mode` = 0, `flag` = 16 | `send_raw_message(msg, 16)` |
+- **Action phase**\
+   Processes transaction outputs including `SENDRAWMSG` operations.
 
-## 4. 发送普通邮件，单独收费
+- **Bounce phase**\
+   Manages message bounce handling when applicable.
 
-我们的智能合约余额为 100  Toncoin ，我们收到一条内部信息，金额为 50  Toncoin ，发送一条普通信息，金额为 20  Toncoin ，总费用为 3  Toncoin ，我们单独支付转账费用（从合约余额中扣除）。
+#### Execution order notes:
 
-![](/img/docs/message-modes-cookbook/send_regular_message_4.png)
+For non-bounceable messages:
+Credit → Storage → Compute → Action → Bounce
 
-| Mode and Flags         | Code                       |
-| :--------------------- | :------------------------- |
-| `mode` = 0, `flag` = 1 | `send_raw_message(msg, 1)` |
+For bounceable messages:
+Storage → Credit → Compute → Action → Bounce
 
-## 5. 发送包含单独费用的普通邮件，并在出错时跳转邮件
+> Compute, Action and Bounce phases may be skipped
 
-我们的智能合约余额为 100  Toncoin ，我们收到一条内部信息，金额为 50  Toncoin ，并发送一条普通信息，金额为 20  Toncoin ，总费用为 3  Toncoin ，我们单独支付转账费用（从合约余额中支付）， 
-，如果在操作处理过程中出现错误--除了回滚交易外，还将信息退回。
+#### Fee deduction sequence
 
-![](/img/docs/message-modes-cookbook/send_regular_message_5_error.png)
+1. Storage fees
+2. Message import fees
+3. Computation gas fees
+4. Action processing fees + forward fees
 
-| Mode and Flags                   | Code                        |
-| :------------------------------- | :-------------------------- |
-| `mode` = 0, `flag` = 1 + 16 = 17 | `send_raw_message(msg, 17)` |
+#### Example of calculation
 
-## 6. 随新信息携带余值
+| Fee in explorer                                                                                       | Value       | How it's obtained               |
+| :---------------------------------------------------------------------------------------------------- | :---------- | :------------------------------ |
+| Total fee                                                                                             | 0.001982134 | gas + storage + action + import |
+| Fwd. fee                                                                                              | 0.001       | fwd_fee + action_fee + ihr_fee  |
+| Gas fee                                                                                               | 0.0011976   | compute phase, gas used         |
+| Storage fee                                                                                           | 0.000000003 | storage phase, account only     |
+| Action fee                                                                                            | 0.000133331 | action phase, cost per action   |
+| Import fee (hidden)                                                                                   | 0.0006512   | cost of import of in_ext_msg    |
+| [Forward fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#formula-1) (each msg) | 0.000266669 | cost of fwd of in_msg           |
+| [IHR fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#ihr) (each msg)           | 0.0006      | cost of ihr fwd of in_msg       |
 
-我们的智能合约余额中目前有 100  Toncoin 。在收到一条含有 50  Toncoin 的内部信息后，除了新信息中最初显示的价值外，我们还将携带入站信息的所有剩余价值，
-，交易费为 3  Toncoin ，将从信息中扣除。
+:::info IMPORTANT
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_6.png)
+For live calculations, refer to the [**fee calculator**](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula).
+:::
 
-| Mode and Flags         | Code                        |
-| :--------------------- | :-------------------------- |
-| `mode` = 64, no `flag` | `send_raw_message(msg, 64)` |
+The transaction fees used in these examples are hypothetical and for illustrative purposes only. Any fees other than message forwarding are outside the scope of this article.
+Funds included with an ignored message will still be [credited to the receiving address](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557).
 
-## 7. 将剩余价值转入新信息，单独收费
+## 1. (Mode 0, flag 0) basic message {#mode0}
 
-我们的智能合约余额中目前有 100  Toncoin 。在收到 50  Toncoin 的内部信息后，除了新信息中最初显示的价值外，我们还将携带所有入站信息的剩余价值，
-，交易费为 3  Toncoin ，将单独支付（从智能合约余额中支付）。
+State before transaction: Account A has 1 TON, Account B has 1 TON
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_7.png)
+**A** sent 0.1 TON to **B**, [msg_fwd_fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) are 0.004 TON, actual received value will be 0.096 TON, `fwd_fee` and `action_fee` are deducted from `value`.
 
-| Mode and Flags          | Code                        |
-| :---------------------- | :-------------------------- |
-| `mode` = 64, `flag` = 1 | `send_raw_message(msg, 65)` |
+State after the transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
-## 8. 结转剩余值并跳转错误信息
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/send_regular_message_1.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/send_regular_message_1_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
 
-我们的智能合约余额中目前有 100  Toncoin 。
-交易费为 3  Toncoin ，将从信息中扣除，如果在行动处理过程中出现错误--除了回滚交易外，还要退回信息。
+## 2. (Mode 0, flag 2) error‐silent message {#mode2}
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_8_error.png)
+:::info
+Please note that omitting the `+2` flag may be unsafe. For more information, refer to [this section](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
 
-| Mode and Flags           | Code                        |
-| :----------------------- | :-------------------------- |
-| `mode` = 64, `flag` = 16 | `send_raw_message(msg, 80)` |
+State before transaction: Account A has 1 TON, Account B has 1 TON
 
-## 9. 将剩余价值与新信息一起单独收费，并在出错时跳转信息
+**A** sent 0.1 TON to **B**. The `msg_fwd_fees` are 0.004 TON, and the actual received value will be 0.096 TON. The `fwd_fee` and `action_fee` are deducted from `value`.
+In case of an error during [action phase](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes), the message will be skipped instead of throwing an [exit code](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes).
 
-我们的智能合约余额中目前有 100  Toncoin 。在收到 50  Toncoin 的内部消息后，我们会发送一条消息，除了收到的原始金额外，我们会转移整个合约余额，交易费为 3  Toncoin ，将单独支付（从智能合约余额中支付），
-，如果在行动处理过程中发生错误--除了回滚交易外，还会退还消息。
+State after the transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_9_error.png)
+:::info tip
+If no errors occur, the result is the same as [mode = 0](#mode0).
+:::
 
-| Mode and Flags               | Code                        |
-| :--------------------------- | :-------------------------- |
-| `mode` = 64, `flag` = 16 + 1 | `send_raw_message(msg, 81)` |
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/send_regular_message_2.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/send_regular_message_2_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
 
-## 10. 发送所有收到的代币和合约余额
+## 3. (Mode 0, flag 16) bounce on action error {#mode16}
 
-目前，我们的智能合约余额为 100  Toncoin 。在收到 50  Toncoin 的内部信息后，我们发送了一条信息，除了收到的原始金额外，我们还转移了整个合约余额， 
-，交易费为 3  Toncoin ，将从信息中扣除。
+State before transaction: Account A has 1 TON, Account B has 1 TON
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_10.png)
+**A** sent 0.1 TON to **B**. The `msg_fwd_fees` are 0.004 TON, and the actual received value will be 0.096 TON. The `fwd_fee` and `action_fee` are deducted from `value`.
+In case of an error during [action phase](https://retracer.ton.org/?tx=e9dccba82badc0d742f14eff41c203280f380e87180b5314fcfd742856e598f7&testnet=true), the message will bounce and `total_fee` + `fwd_fee` will be deducted from `value`.
 
-| Mode and Flags          | Code                         |
-| :---------------------- | :--------------------------- |
-| `mode` = 128, no `flag` | `send_raw_message(msg, 128)` |
+State after the transaction with error: Account A has 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, Account B has 1 TON
 
-## 11. 发送所有收到的代币和合约余额，并跳出错误信息
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/send_regular_message_3_error.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/send_regular_message_3_error_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
 
-目前我们的智能合约余额为 100  Toncoin 。在收到 50  Toncoin 的内部信息后，我们会发送一条信息，除了收到的原始金额外，我们会转移整个合约余额，交易费为 3  Toncoin ，并将从信息中扣除， 
-，如果在处理操作过程中出现错误--除了回滚交易外，还会退订信息。
+:::info tip
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_11_error.png)
+The key difference is that `flag 16` creates bounces for [action phase errors](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes). In contrast, the message's [built‐in bounce flag](/v3/guidelines/smart-contracts/howto/wallet#internal-message-creation) handles protocol‐level failures like:
 
-| Mode and Flags            | Code                         |
-| :------------------------ | :--------------------------- |
-| `mode` = 128, `flag` = 16 | `send_raw_message(msg, 144)` |
+- The destination contract does not exist.
+- The destination contract throws an unhandled exception.
+  :::
 
-## 12. 发送所有收到的代币和合约余额，并销毁智能合约
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/send_regular_message_3_noerror.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/send_regular_message_3_noerror_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
 
-我们的智能合约余额中目前有 100  Toncoin 。在收到一条含有 50  Toncoin 的内部信息后，我们发送了一条信息，除了收到的原始金额外，还转走了整个合约余额，并销毁了合约，
-，交易费为 3  Toncoin ，将从信息中扣除。
+## 4. (Mode 0, flag 1) separate fees {#mode1}
 
-![](/img/docs/message-modes-cookbook/carry_remaining_value_12.png)
+:::info
+Please note that using only this flag is unsafe, for more information refer to [this section](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
 
-| Mode and Flags            | Code                         |
-| :------------------------ | :--------------------------- |
-| `mode` = 128, `flag` = 32 | `send_raw_message(msg, 160)` |
+State before the transaction: Account A has 1 TON, Account B has 1 TON
+
+**A** sent 0.1 TON to **B**. The `msg_fwd_fees` are 0.004 TON, and the actual received value will be 0.1 TON. The `fwd_fee` and `action_fee` are deducted from the `balance`.
+
+State after the transaction: Account A has 0.896 TON, Account B has 1.1 TON
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/send_regular_message_4.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/send_regular_message_4_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+## 5. (Mode 0, flag 17) separate fees and bounce on action error {#mode17}
+
+State before the transaction: Account A has 1 TON, Account B has 1 TON
+
+**A** sent 0.1 TON to **B**. The `msg_fwd_fees` are 0.004 TON, and the actual received value will be 0.1 TON. The `fwd_fee` and `action_fee` are deducted from the `balance`.
+In case of an error [during the action phase](https://retracer.ton.org/?tx=e9dccba82badc0d742f14eff41c203280f380e87180b5314fcfd742856e598f7&testnet=true), the message will bounce and `total_fee` + `fwd_fee` will be deducted from `value`.
+
+State after the transaction with an error: Account A has 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, Account B has 1 TON
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/send_regular_message_5_error.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/send_regular_message_5_error_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+:::info tip
+If no errors occur, the result is the same as [mode = 0, flag = 1](#mode1).
+:::
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/send_regular_message_5_noerror.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/send_regular_message_5_noerror_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+## 6. (Mode 64, flag 0) carry forward the remaining value {#mode64}
+
+State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 64, `msg_fwd_fees` are 0.004 TON, actual received `value` will be 0.6 TON, total_fee + `fwd_fee` are deducted from `value`.
+
+State after the transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account C has 1.6 - (total_fee + `fwd_fee`) TON
+
+:::info
+You might check [this example](https://testnet.tonviewer.com/transaction/f63ab35f34e342cdd249f13018d5034ce3d80c488628d5a4db0a43163fa50adb).
+Please note that `storage_fee` is included in `total_fee` but is always paid from the contract `balance`.
+:::
+
+:::warning
+Please note that `SENDRAWMSG` doesn't update the balance.
+
+If you try to send multiple messages (e.g., mode 0 **and** mode 64), you'll get exit code 37.
+:::
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/carry_remaining_value_6.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_6_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+## 7. (Mode 64, flag 1) carry forward with separate fees {#mode65}
+
+State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 65, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, total_fee + `fwd_fee` are deducted from `balance`.
+
+State after the transaction: Account A has 0.896 TON, Account B has 0.5 - (total_fee + `fwd_fee`) TON, Account C has 1.6 TON
+
+:::info
+You might check [this example](https://testnet.tonviewer.com/transaction/ad93e784453b573d737d9d928b4377ff3779177753e05629e54f6629556568ad).
+Please note that `storage_fee` is included in `total_fee` but is always paid from the contract `balance`.
+:::
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/carry_remaining_value_7.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_7_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+## 8. (Mode 64, flag 16) bounce‐protected carry forward {#mode80}
+
+State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, total_fee + `fwd_fee` are deducted from `value`.
+If an error occurs during the action phase, the message will bounce, and `total_fee` + `fwd_fee` will be deducted from the `value`.
+
+State after the transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/carry_remaining_value_8_error.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_8_error_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+:::info tip
+If no errors occur, the result is the same as [mode = 64, flag 0](#mode64). This mode is widely used in TON for jetton transfers. You can [check it in the C5 action list](https://retracer.ton.org/?tx=6489d60d9197c0be7ee64b0812139d82221e8f94c6e378c356acc10f9067310c) of the jetton wallet.
+:::
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/carry_remaining_value_8_noerror.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_8_noerror_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+## 9. (Mode 64, flag 17) bounce‐protected carry forward with separate fees {#mode81}
+
+State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 81, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, total_fee + `fwd_fee` are deducted from `balance`.
+If an error occurs during the action phase, the message will bounce, and `total_fee` + `fwd_fee` will be deducted from the `value`.
+
+State after the transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/carry_remaining_value_9_error.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_9_error_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+:::info tip
+If no errors occur, the result is the same as [mode = 65](#mode65).
+:::
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/carry_remaining_value_9_noerror.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_9_noerror_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+## 10. (Mode 128, flag 0) send whole balance {#mode128}
+
+State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 128, `msg_fwd_fees` are 0.004 TON, the actual received value will be 1.1 - total_fee TON, total_fee is deducted from `value`.
+
+State after the transaction: Account A has 0.896 TON, Account B has 0 TON, Account C has 2.1 - (total_fee + `fwd_fee`) TON
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/carry_remaining_value_10.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_10_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+## 11. (Mode 128, flag 16) send the whole balance bounce‐protected {#mode144}
+
+State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 144, `msg_fwd_fees` are 0.004 TON, the actual received value will be 1.1 - total_fee TON, total_fee is deducted from `value`.
+
+State after the transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/carry_remaining_value_11_error.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_11_error_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+:::info tip
+If no errors occur, the result is the same as [mode = 128](#mode128). This mode is widely used in TON for jetton transfers. You can [check it in the C5 action list](https://retracer.ton.org/?tx=e4f31e37eec74a8cfcecdad9246a6bbf3da20c4edb3635150cb0fa54b9def558) of the jetton wallet.
+:::
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/carry_remaining_value_11_noerror.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_11_noerror_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+## 12. (Mode 128, flag 32) send the whole balance and destroy the contract {#mode160}
+
+State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
+
+**A** sent 0.1 TON to **B**, and after that, **B** sent 0.5 TON to **C** with `mode` = 160. The `msg_fwd_fees` are 0.004 TON. The actual received value will be 1.1 - total_fee TON, with total_fee deducted from `value`.
+
+State after the transaction: Account A has 0.896 TON, Account B has 0 TON and `nonexist`, Account C has 2.1 - (total_fee + `fwd_fee`) TON
+
+When the balance reaches 0 TON, destroy the contract.
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light:
+        "/img/docs/message-modes-cookbook/carry_remaining_value_12.png?raw=true",
+      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_12_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+[cb]: https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/block.tlb#L263C1-L265C20
+[msg]: /v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo
+[storage_fee]: /v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee
+[account_storage]: https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L651-L675
+[in_msg_import]: https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L783-L816
+
+<Feedback />

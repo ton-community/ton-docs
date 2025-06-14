@@ -1,68 +1,73 @@
-# 高负载钱包
+import Feedback from '@site/src/components/Feedback';
 
-在短时间内处理大量信息时，需要使用名为 "Highload Wallet "的特殊钱包。在很长一段时间里，Highload Wallet V2 是 TON 的主要钱包，但使用时必须非常小心。否则，您可能会[锁定所有资金](https://t.me/tonstatus/88)。
+# Highload wallet contracts
 
-[随着 Highload Wallet V3](https://github.com/ton-blockchain/Highload-wallet-contract-v3)的问世，这一问题已在合约架构层面得到解决，而且耗 gas 量更少。本章将介绍 Highload Wallet V3 的基础知识和需要记住的重要细微差别。
+When working with many messages in a short period, there is a need for special wallet called Highload wallet. Highload wallet v2 was the main wallet on TON for a long time, but you had to be very careful with it. Otherwise, you could [lock all funds](https://t.me/tonstatus/88).
 
-## 高负载钱包 v3
+[With the advent of Highload Wallet V3](https://github.com/ton-blockchain/Highload-wallet-contract-v3), this problem has been solved at the contract architecture level and consumes less gas. This chapter will cover the basics of Highload Wallet V3 and important nuances to remember.
 
-该钱包专为需要以极高的速度发送交易的用户设计。例如，加密货币交易所。
+## Highload wallet v3
 
-- [源代码](https://github.com/ton-blockchain/Highload-wallet-contract-v3)
+This wallet is made for who need to send transactions at very high rates. For example, crypto exchanges.
 
-向 Highload v3 发送的任何给定外部报文（传输请求）都包含：
+- [Source code](https://github.com/ton-blockchain/Highload-wallet-contract-v3)
 
-- 顶层 cell 中的签名（512 位）--其他参数位于该 cell 的 ref 中
-- 子钱包 ID（32 位）
-- 作为 ref 发送的消息（将被发送的序列化内部消息）
-- 报文的发送模式（8 位）
-- 复合查询 ID - 13 位 "位移 "和 10 位 "位数"，但 10 位位数只能到 1022，而不是 1023，而且最后一个可用的查询 ID（8388605）是为紧急情况保留的，通常不应使用
-- 创建于, 或消息时间戳
-- 超时
+Any given external message (transfer request) to a Highload v3 contains:
 
-超时作为参数存储在 Highload 中，并与所有请求中的超时进行核对，因此所有请求的超时都是相同的。信息到达 Highload 钱包时的时间不应早于超时时间，或在代码中要求 `created_at > now() - timeout`。出于重放保护的目的，查询 ID 的存储时间至少为超时时间，最长可能为 2 \* 超时时间，但不应期望其存储时间超过超时时间。子钱包 ID 会与钱包中存储的 ID 进行核对。内部 ref 的哈希值与签名一起与钱包的公钥进行核对。
+- a signature (512 bits) in the top level cell - the other parameters are in the ref of that cell
+- subwallet ID (32 bits)
+- message to send as a ref (the serialized internal message that will be sent)
+- send mode for the message (8 bits)
+- composite query ID - 13 bits of "shift" and 10 bits of "bit number", however the 10 bits of bit number can only go up to 1022, not 1023, and also the last such usable query ID (8388605) is reserved for emergencies and should not be normally used
+- created at, or message timestamp
+- timeout
 
-Highload v3 只能从任何给定的外部信息中发送 1 条信息，但它可以通过一个特殊的操作码将信息发送给自己，这样就可以在调用内部信息时设置任何操作 cell ，从而有效地使 1 条外部信息可以发送多达 254 条信息（如果在这 254 条信息中还有另一条信息发送到 Highload 钱包，那么发送的信息数量可能会更多）。
+Timeout is stored in Highload as a parameter and is checked against the timeout in all requests - so the timeout for all requests is equal. The message should be not older than timeout at the time of arrival to the Highload wallet, or in code it is required that `created_at > now() - timeout`. Query IDs are stored for the purposes of replay protection for at least timeout and possibly up to 2 \* timeout, however one should not expect them to be stored for longer than timeout. Subwallet ID is checked against the one stored in the wallet. Inner ref's hash is checked along with the signature against the public key of the wallet.
 
-一旦所有检查都通过，Highload v3 将始终存储查询 ID（重放保护），但由于某些情况，包括但不限于以下情况，可能无法发送信息：
+Highload v3 can only send 1 message from any given external message, however it can send that message to itself with a special op code, allowing one to set any action cell on that internal message invocation, effectively making it possible to send up to 254 messages per 1 external message (possibly more if another message is sent to Highload wallet again among these 254).
 
-- **包含状态初始**（如有需要，可使用特殊操作码发送此类信息，以便在高负载钱包向自身发送内部信息后设置操作 cell ）
-- 余额不足
-- 无效的报文结构（包括外部输出报文--只有内部报文可以直接从外部报文发送）
+Highload v3 will always store the query ID (replay protection) once all the checks pass, however a message may not be sent due to some conditions, including but not limited to:
 
-Highload v3 绝不会执行包含相同 `query_id` **和** `created_at` 的多个外部请求--当它忘记任何给定的 `query_id` 时，`created_at` 条件将阻止此类信息的执行。这实际上使 `query_id` **和** `created_at` 成为 Highload v3 传输请求的 "主键"。
+- **containing state init** (such messages, if required, may be sent using the special op code to set the action cell after an internal message from Highload wallet to itself)
+- not enough balance
+- invalid message structure (that includes external out messages - only internal messages may be sent straight from the external message)
 
-在迭代（递增）查询 ID 时，像递增普通数字一样，先迭代位数，然后再迭代位移，这样会更省钱（从花费的 TON 数来看）。到达最后一个查询 ID 后（请记住紧急查询 ID - 见上文），您可以将查询 ID 重置为 0，但如果 Highload 的超时时间尚未过去，则重放保护字典将满，您必须等待超时时间过去。
+Highload v3 will never execute multiple externals containing the same `query_id` **and** `created_at` - by the time it forgets any given `query_id`, the `created_at` condition will prevent such a message from executing. This effectively makes `query_id` **and** `created_at` together the "primary key" of a transfer request for Highload v3.
 
-## 高负载钱包 V2
+When iterating (incrementing) query ID, it is cheaper (in terms of TON spent on fees) to iterate through bit number first, and then the shift, like when incrementing a regular number. After you've reached the last query ID (remember about the emergency query ID - see above), you can reset query ID to 0, but if Highload's timeout period has not passed yet, then the replay protection dictionary will be full and you will have to wait for the timeout period to pass.
+
+## Highload wallet v2
 
 :::danger
-建议使用 Highload wallet v3。
+Legacy contract, it is suggest to use Highload wallet v3.
 :::
 
-该钱包专为需要在短时间内发送数百笔交易的用户设计。例如，加密货币交易所。
+This wallet is made for those who need to send hundreds of transactions in a short period of time. For example, crypto exchanges.
 
-它允许你在一次智能合约调用中发送多达 254 个交易。它还使用了一种略有不同的方法来解决重放攻击，而不是 seqno，所以你可以同时多次调用这个钱包，甚至在一秒钟内发送数千个交易。
+It allows you to send up to `254` transactions in one smart contract call. It also uses a slightly different approach to solve replay attacks instead of seqno, so you can call this wallet several times at once to send even thousands of transactions in a second.
 
-:::caution 局限性
-注意，在处理高负载钱包时，需要检查并考虑以下限制。
+:::caution Limitations
+Note, when dealing with Highload wallet the following limits need to be checked and taken into account.
 :::
 
-1. **存储容量限制。** 目前，合约存储容量应小于 65535 个 cell 。如果
-   old_queries 的大小超过此限制，将在 ActionPhase 中抛出异常，事务将失败。
-   失败的事务可以重放。
-2. **gas 限制。** 目前， gas 限制为 1'000'000 GAS 单位，这意味着一个 tx 中可清理的
-   旧查询次数是有限制的。如果过期查询次数较多，合约就会卡住。
+1. **Storage size limit.** Currently, size of contract storage should be less than 65535 cells. If size of
+  old_queries will grow above this limit, exception in ActionPhase will be thrown and transaction will fail.
+  Failed transaction may be replayed.
+2. **Gas limit.** Currently, gas limit is 1'000'000 GAS units, that means that there is a limit of how much
+  old queries may be cleaned in one tx. If number of expired queries will be higher, contract will stuck.
 
-这意味着不建议设置过高的过期日期：
-，过期时间跨度内的查询次数不应超过 1000 次。
+That means that it is not recommended to set too high expiration date:
+the number of queries during expiration time span should not exceed 1000.
 
-此外，一次交易中清理的过期查询次数应低于 100 次。
+Also, the number of expired queries cleaned in one transaction should be below 100.
 
-## 如何
+## How to
 
-您还可以阅读 [Highload Wallet Tutorials](/v3/guidelines/smart-contracts/howto/wallet#-high-load-wallet-v3) 一文。
+You can also read [Highload wallet tutorials](/v3/guidelines/smart-contracts/howto/wallet#-high-load-wallet-v3) article.
 
-钱包源代码：
+Wallet source code:
 
 - [ton/crypto/smartcont/Highload-wallet-v2-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif)
+
+<Feedback />
+

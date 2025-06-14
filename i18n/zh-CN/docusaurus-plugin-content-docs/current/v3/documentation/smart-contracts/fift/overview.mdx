@@ -1,9 +1,13 @@
-import Button from '@site/src/components/button'
+import Feedback from '@site/src/components/Feedback';
 
-# 概览
+import Button from "@site/src/components/button";
 
-Fift 是一种基于栈的通用编程语言，专为创建、调试和管理 TON 区块链智能合约而进行了优化。
-Fift 专门设计用于与 TON 虚拟机（TON VM 或 TVM）和 TON 区块链进行交互。
+# Overview
+
+Fift is a stack-based programming language specifically designed for developing, debugging, and managing TON Blockchain smart contracts. It provides optimized interaction with:
+
+- TON Virtual Machine (TVM)
+- TON Blockchain infrastructure
 
 ```fift
 { ."hello " } execute ."world"
@@ -11,42 +15,54 @@ hello world ok
 ```
 
 :::info
-Usually, using the Fift is not required for programming smart contracts in TON. However, Sometimes, you may need to use the Fift language to solve uncommon technical challenges as part of your task.
-You might be interested in:
+While most smart contract development doesn't require Fift, it becomes essential for:
+
+- Solving unique technical challenges
+- Low-level TVM interactions
+- Advanced contract debugging
+
+**Recommended resources**:
 
 - [TVM Retracer](https://retracer.ton.org/)
   :::
 
-<Button href="https://blog.ton.org/introduction-to-fift"
-colorType="primary" sizeType={'sm'}>
-
-Fift 简介
-
+<Button
+  href="https://blog.ton.org/introduction-to-fift"
+  colorType="primary"
+  sizeType={"sm"}
+>
+  Introduction To Fift
 </Button>
 
-<Button href="https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs"
-          colorType="secondary" sizeType={'sm'}>
-
-尊贵的 Fift 陛下
-
+<Button
+  href="https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs"
+  colorType="secondary"
+  sizeType={"sm"}
+>
+  His majesty Fift
 </Button>
 
-<br></br><br></br>
+<br></br>
+<br></br>
 
-## 文档
+## Documentation
 
-- [Fift：简介](https://ton.org/fiftbase.pdf)
-- [TON 虚拟机](/v3/documentation/tvm/tvm-overview)
+- [Fift: A Brief Introduction](https://ton.org/fiftbase.pdf)
+- [TON Virtual Machine](/v3/documentation/tvm/tvm-overview)
 
-## 实例
+## Examples
 
-- [Fift 智能合同示例](/v3/documentation/smart-contracts/contracts-specs/examples#fift-smart-contracts)
+- [Fift smart contract examples](/v3/documentation/smart-contracts/contracts-specs/examples#fift-smart-contracts)
 
-## 教程
+## Tutorials
 
-- [Fift简介](https://blog.ton.org/introduction-to-fift)
-- [[YouTube]His majesty Fift](https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs) [[RU version](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCYG-hR4N5FRTKUkfM8POgh)] by **@MarcoDaTr0p0je**和 **@Wikimar**。
+- [Introduction To Fift](https://blog.ton.org/introduction-to-fift)
+- [His majesty Fift](https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs)
+  - [Russian version](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCYG-hR4N5FRTKUkfM8POgh)
+    created - _@MarcoDaTr0p0je & @Wikimar_
 
-## 资料来源
+## Source code
 
-- [标准智能合约脚本](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+- [Standard smart contracts in Fift](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+
+<Feedback />

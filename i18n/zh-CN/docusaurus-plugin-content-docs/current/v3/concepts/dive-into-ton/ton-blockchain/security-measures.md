@@ -1,48 +1,53 @@
-# 安全审计
+import Feedback from '@site/src/components/Feedback';
 
-TON 区块链生态系统的安全性至关重要。以下是由知名审计公司对 TON 区块链关键部分完成的审计摘要。
+# TON security audits
 
-## TON 区块链
+The security of the TON blockchain ecosystem is of utmost importance. Below is a summary of completed audits conducted by renowned auditing firms for key components of the TON blockchain.
 
-对核心区块链模块进行了审核，以确保其稳健性和安全性。
+## TON Blockchain
 
-**审计公司**：Trail of Bits、SlowMist、CertiK\
-**审计报告**：
+Various security providers audited core blockchain modules to ensure their robustness and security.
 
-- [Trail of Bits：TON 区块链审计报告](https://docs.ton.org/audits/TON_Blockchain_ToB.pdf)
-- [SlowMist：TON 区块链审计报告](https://docs.ton.org/audits/TON_Blockchain_SlowMist.pdf)
-- [CertiK：TON 区块链审计报告](https://docs.ton.org/audits/TON_Blockchain_CertiK.pdf)
-- [CertiK：TON 主链合约形式验证](https://docs.ton.org/audits/TON_Blockchain_Formal_Verification_CertiK.pdf)
+**Audit firms**: Trail of Bits, SlowMist, CertiK\
+**Audit reports**:
 
-## TON 区块链库（tonlib）
+- [Trail of Bits: TON Blockchain Audit Report](https://docs.ton.org/audits/TON_Blockchain_ToB.pdf)
+- [SlowMist: TON Blockchain Audit Report](https://docs.ton.org/audits/TON_Blockchain_SlowMist.pdf)
+- [CertiK: TON Blockchain Audit Report](https://docs.ton.org/audits/TON_Blockchain_CertiK.pdf)
+- [CertiK: TON Masterchain Contracts Formal Verification](https://docs.ton.org/audits/TON_Blockchain_Formal_Verification_CertiK.pdf)
 
-Zellic 于 2023 年 10 月 16 日至 11 月 17 日对 TON 进行了安全评估。在评估过程中，Zellic 对 Tonlib 的代码进行了审查，以发现安全漏洞、设计问题和安全态势中的总体弱点。
+## TON Blockchain library (tonlib)
 
-**审计公司**：Zellic\
-**审计报告**：
+Zellic conducted a security assessment for TON from October 16th to November 17th, 2023. During this engagement, Zellic reviewed Tonlib’s code for security vulnerabilities, design issues, and general weaknesses in security posture.
 
-- [Zellic：审计报告](https://docs.ton.org/audits/TON_Blockchain_tonlib_Zellic.pdf)
+**Audit firm**: Zellic\
+**Audit report**:
 
-## TVM 和 Fift
+- [Zellic: Audit Report](https://docs.ton.org/audits/TON_Blockchain_tonlib_Zellic.pdf)
 
-TON 虚拟机和 Fift 编程语言。
+## TVM and Fift
 
-**审计公司**：Trail of Bits\
-**审计报告**：
+Audit for TON Virtual Machine and the Fift programming language.
+
+**Audit firm**: Trail of Bits\
+**Audit report**:
 
 - [Trail of Bits Audit Report - TVM & Fift](https://docs.ton.org/audits/TVM_and_Fift_ToB.pdf)
 
-## TVM 升级 2023.07
+## TVM Upgrade Jul 2023
 
-对 TVM 升级版 2023.07 进行了安全和潜在漏洞分析。
+Audit for security and potential vulnerabilities in TVM Upgrade 2023.07.
 
-**审计公司**：Trail of Bits\
-**审计报告**：
+**Audit firm**: Trail of Bits\
+**Audit report**:
 
-- [Trail of Bits  审计报告 - TVM 升级](https://docs.ton.org/audits/TVM_Upgrade_ToB_2023.pdf)
+- [Trail of Bits Audit Report - TVM Upgrade](https://docs.ton.org/audits/TVM_Upgrade_ToB_2023.pdf)
 
 ---
 
-## 漏洞悬赏计划
+## Bug bounty program
 
-为了进一步加强TON生态系统的安全性，我们鼓励安全研究人员和开发人员参与[TON区块链错误赏金计划](https://github.com/ton-blockchain/bug-bounty)。
+To further enhance the security of the TON ecosystem, we encourage security researchers and developers to participate in the [TON security bug bounty](https://github.com/ton-blockchain/bug-bounty) program.
+
+<Feedback />
+

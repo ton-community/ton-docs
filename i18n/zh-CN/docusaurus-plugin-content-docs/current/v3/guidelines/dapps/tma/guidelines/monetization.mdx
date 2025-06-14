@@ -1,21 +1,28 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 import ThemedImage from '@theme/ThemedImage';
 
-# 支付
+# Monetization
 
 ## Wallet Pay
 
 <br></br>
 <img src="https://storage.googleapis.com/ton-strapi/reason_Card5_19eeac1401/reason_Card5_19eeac1401.png" alt="Wallet Pay illustration"/>
 <br></br>
-Wallet Pay 是 Telegram 小程序的主要支付系统，支持加密货币和法币交易。监控您的订单统计数据并轻松提款。
-Wallet Pay 嵌入于 Wallet 生态系统内，便于商家和客户之间的无缝金融交易。
+Wallet Pay is the primary payment system for Telegram Mini Apps, supporting both crypto and fiat transactions. Monitor your order statistics and withdraw funds easily.
+Embedded within the Wallet ecosystem, Wallet Pay facilitates seamless financial exchanges between merchants and their customers.
 
 相关链接
 
-- [Wallet Pay 商业支持](https://t.me/WalletPay_supportbot) 是一个 Telegram 机器人，用于联系 Wallet Pay 支持团队。
-- [Demo Store Bot](https://t.me/PineAppleDemoWPStoreBot) 是一个 Telegram 机器人，用于介绍 Wallet Pay 功能。（注意：所有支付都是用真实资产进行的）
-- [商户社区](https://t.me/+6TReWBEyZxI5Njli) 是一个 Telegram 群组，用于群组成员之间分享经验和解决方案。
+- [Wallet Pay Business Support](https://t.me/WalletPay_supportbot) is a Telegram bot for contacting the Wallet Pay support team.
+- [Demo Store Bot](https://t.me/PineAppleDemoWPStoreBot) is a Telegram bot for demonstrating Wallet Pay functionality.
+
+:::note
+All payments are processed using real assets
+:::
+
+- [Merchant Community](https://t.me/+6TReWBEyZxI5Njli) is a Telegram group for members to share experiences and solutions.
 
 ## TON Connect
 
@@ -29,38 +36,40 @@ Wallet Pay 嵌入于 Wallet 生态系统内，便于商家和客户之间的无�
 />
 <br></br>
 
-TON Connect 是 **钱包** 与 **应用** 在 TON 上的通信协议。
+TON Connect is a communication protocol that links **wallets** and **apps** in TON.
 
-**应用** 建立在 TON 上的能够提供丰富的功能和高性能，并旨在通过智能合约保护用户资金。因为应用程序采用了区块链等去中心化技术构建，通常被称为去中心化应用（dApps）。
+**Apps** built on TON provide rich functionality and high performance and are designed to protect user funds via smart contracts. Because these apps use decentralized technologies like blockchain, they are commonly referred to as decentralized applications (DApps).
 
-**钱包** 提供批准交易的用户界面，并在用户的个人设备上安全地保存用户的加密密钥。这种关注点的分离使得创新迅速且安全性高：钱包无需自己构建封闭生态系统，而应用程序不需要承担持有终端用户帐户的风险。
+**Wallets** provide the interface to approving transactions securely store users’ cryptographic keys on their personal devices. This separation of responsibilities enables rapid innovation and ensures a high level of security for users. Wallets do not need to create closed ecosystems, while apps do not need to bear the risk of storing users' accounts.
 
-TON Connect 旨在提供钱包与应用程序之间无缝的用户体验。
+TON Connect enhances the user experience by enabling seamless interaction between wallets and apps.
 
-<Button href="/develop/dapps/ton-connect/overview" colorType={'primary'} sizeType={'sm'}>
+<Button href="/v3/guidelines/ton-connect/overview" colorType={'primary'} sizeType={'sm'}>
 
-了解 TON Connect
-
-</Button>
-
-## 集成代币
-
-您可以在 TON 区块链上创建自己的代币并将其集成到您的应用程序中。您也可以将现有的代币集成到您的应用程序中。
-
-<Button href="/develop/dapps/defi/tokens" colorType={'primary'} sizeType={'sm'}>
-
-了解 DeFi
+Discover TON Connect
 
 </Button>
 
-## TON 上的订阅
+## Integrate tokens
 
-由于 TON 区块链上的交易快速且网络费用低廉，您可以通过智能合约处理链上的周期性付款。
+You can create your own token on TON Blockchain and integrate it into your app. You can also integrate existing tokens into your app.
 
-例如，用户可以订阅数字内容（或其他任何东西）并被收取每月 1 TON 的费用。
+<Button href="/v3/documentation/dapps/defi/tokens" colorType={'primary'} sizeType={'sm'}>
 
-<Button href="/develop/dapps/defi/subscriptions" colorType={'primary'} sizeType={'sm'}>
-
-了解更多
+Understand DeFi
 
 </Button>
+
+## Subscriptions on TON
+
+Because transactions on the TON blockchain are fast and network fees are low, you can process recurring payments on-chain via smart contracts.
+
+For example, users can subscribe to digital content or other services and pay a monthly fee of 1 TON.
+
+<Button href="/v3/documentation/dapps/defi/subscriptions" colorType={'primary'} sizeType={'sm'}>
+
+Read more
+
+</Button>
+
+<Feedback />

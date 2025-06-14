@@ -1,10 +1,15 @@
-# 区块链比较
+import Feedback from '@site/src/components/Feedback';
 
-本文件提供了 TON 与以太坊和 Solana 的对比分析。
+# Comparison of blockchains
 
-|               | 以太坊 2.0 (ETH 2.0) | Solana (SOL)        | TON                            |
-| ------------- | -------------------------------------------------------------------- | -------------------------------------- | ------------------------------ |
-| **Consensus** | Proof of Stake                                                       | Proof of History                       | BFT PoS                        |
-| **TPS**       | 100,000 TPS                                                          | 59,400 TPS                             | 104,715 TPS                    |
-| **区块时间**      | 12 秒                                                                 | < 1 秒         | 5 秒                            |
-| **最终确定区块的时间** | 10-15 分钟                                                             | ~6.4 秒 | < 6 秒 |
+This document provides a comparative analysis of TON against Ethereum and Solana.
+
+|                            | Ethereum 2.0 (ETH 2.0) | Solana (SOL)  | TON                              |
+| -------------------------- | ------------------------------------------------------------------------- | -------------------------------- | -------------------------------- |
+| **Consensus**              | Proof of Stake                                                            | Proof of History                 | BFT PoS                          |
+| **TPS**                    | 100,000 TPS                                                               | 59,400 TPS                       | 104,715 TPS                      |
+| **Block Time**             | 12 sec                                                                    | < 1 sec | < 1 sec |
+| **Time to Finalize Block** | 10-15 min                                                                 | ~13 sec          | < 3 sec |
+
+<Feedback />
+

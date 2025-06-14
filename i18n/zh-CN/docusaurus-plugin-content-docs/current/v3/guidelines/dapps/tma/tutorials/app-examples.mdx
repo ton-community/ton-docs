@@ -1,10 +1,12 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
-# TMA 示例
+# TMA examples
 
-查看下面的示例，了解如何创建您自己的 Telegram 小程序。
+Explore the examples below to learn how to create your own Telegram Mini App.
 
-## 基础 TMA 示例
+## Basic TMA example
 
 <p align="center">
   <br />
@@ -12,15 +14,15 @@ import Button from '@site/src/components/button'
       <br />
 </p>
 
-这是一个使用纯 JavaScript、HTML 和 CSS 实现的基础且直接的 Telegram 小程序（TMA）。该项目旨在提供一个创建简单 TMA 并在 Telegram 内启动它的最简化示例，无需依赖复杂的构建工具或前沿库。
+This example demonstrates a simple Telegram Mini App using plain JavaScript, HTML, and CSS. The goal is to provide a minimalistic starting point for creating a TMA without relying on complex build tools or advanced libraries.
 
-- 可通过直接链接访问应用：[t.me/simple_telegram_mini_app_bot/app](https://t.me/simple_telegram_mini_app_bot/app)
-- 或者您可以通过机器人菜单按钮启动应用：[t.me/simple_telegram_mini_app_bot](https://t.me/simple_telegram_mini_app_bot)
-- 部署 URL：https://telegram-mini-apps-dev.github.io/vanilla-js-boilerplate
+- App is available at: [t.me/simple_telegram_mini_app_bot/app](https://t.me/simple_telegram_mini_app_bot/app).
+- Bot menu button: [t.me/simple_telegram_mini_app_bot](https://t.me/simple_telegram_mini_app_bot).
+- Deployment URL: [https://telegram-mini-apps-dev.github.io/vanilla-js-boilerplate/](https://telegram-mini-apps-dev.github.io/vanilla-js-boilerplate/).
 
 <Button href="https://t.me/simple_telegram_mini_app_bot/app" colorType={'primary'} sizeType={'sm'}>
 
-打开演示
+Open demo
 
 </Button>
 
@@ -33,14 +35,14 @@ GitHub
 ### 特点
 
 - 极简用户界面。
-- 未使用外部库或框架。
+- No external libraries or frameworks.
 - 易于理解和修改。
 
-### 入门
+### Getting started
 
 #### 必要条件
 
-要运行此示例，您需要一个支持 JavaScript 的现代 web 浏览器。
+A modern web browser with JavaScript enabled.
 
 #### 安装
 
@@ -56,42 +58,44 @@ git clone https://github.com/Telegram-Mini-Apps-Dev/vanilla-js-boilerplate.git
 cd vanilla-js-boilerplate
 ```
 
-在您偏好的代码编辑器或 IDE 中打开 index.html。
+Open `index.html` in your preferred code editor or IDE.
 
 ### 使用
 
 1. 在您偏好的代码编辑器或 IDE 中打开 index.html。
-2. 做出您的改动
-3. 创建您自己的 GitHub 库，提交并推送您的更新。
-4. 转到您的 GitHub 库页面并打开设置。检查“页面”选项卡和“构建与部署”部分。如果选择了 GitHub Actions 选项，资产应该被部署到页面上，并且会有像 `https://<username>.github.io/vanilla-js-boilerplate/` 这样的 URL。您可以复制此 URL，并使用 [BotFather](https://tg.me/BotFather) 机器人创建您自己的 TWA。
+2. Make any necessary modifications.
+3. Create your own GitHub repository, commit, and push your updates.
+4. In GitHub, navigate to Settings > Pages > Build and Deployment.
+5. If GitHub Actions is enabled, your assets will deploy automatically, and you'll receive a public URL like:`https://<username>.github.io/vanilla-js-boilerplate/`.
+6. Use this URL with [@BotFather](https://t.me/BotFather) to create your own Telegram Web App (TWA).
 
-## 当前 TMA 示例
+## Modern TMA example
 
 ### 介绍
 
-Vite（在法语中意味着“快”）是一个前端构建工具和开发服务器，旨在为现代 web 项目提供更快、更精简的开发体验。我们将利用 Vite 创建 Telegram 小程序示例。
+Vite is a front-end build tool and development server designed to improve development speed and efficiency. This example shows how to use Vite to create a modern Telegram Mini App.
 
-您可以在这里找到示例项目 https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate 或者您可以按照以下说明操作。
+You can find the example project here [https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate](https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate) or you follow the following instructions.
 
 ### 必要条件
 
-我们将从搭建您的 Vite 项目开始。
+To start, we will scaffold a Vite project.
 
-使用 NPM：
+With npm:
 
 ```bash
 $ npm create vite@latest
 ```
 
-使用 Yarn：
+With yarn:
 
 ```bash
 $ yarn create vite
 ```
 
-然后按照提示操作！
+Follow the on-screen prompts.
 
-或者您可以直接运行以下命令创建带有 TypeScript 支持的 React 项目：
+Or you can simply run this command to create a React project with TypeScript Support:
 
 ```bash
 # npm 7+, extra double-dash is needed:
@@ -104,9 +108,9 @@ yarn create vite my-react-telegram-web-app --template react-ts
 cd my-react-telegram-web-app
 ```
 
-### 小程序的开发
+### Development of a Mini App
 
-现在我们需要开始项目的开发模式，请在终端运行以下命令：
+To start the development mode of the project, run the following commands in the terminal:
 
 ```bash
 # npm
@@ -118,15 +122,13 @@ yarn
 yarn dev --host
 ```
 
-`--host` 选项允许获取带有 IP 地址的 URL，您可以在开发过程中用于测试。重要说明：在开发模式下，我们将使用自签名 SSL 证书，这将使我们能够仅在 Telegram 的 web 版本 [https://web.telegram.org](https://web.telegram.org/a/#6549734463)/ 中测试我们的应用，由于其他平台（iOS、Android、MacOS）的政策。
-
-我们需要添加 `@vitejs/plugin-basic-ssl` 插件：
+The `--host` option provides a URL with an IP address, which can be used for testing during development. In development mode, a self-signed SSL certificate is used. This allows testing with hot reload only in the web version of Telegram [https://web.telegram.org](https://web.telegram.org/a/#6549734463)/ due to platform restrictions on iOS, Android, and macOS.
 
 ```bash npm2yarn
 npm install @vitejs/plugin-basic-ssl
 ```
 
-现在我们需要更改 `vite.config.ts`。添加导入：
+Then change `vite.config.ts`. Add import:
 
 ```jsx
 import basicSsl from '@vitejs/plugin-basic-ssl';
@@ -140,14 +142,14 @@ export default defineConfig({
 });
 ```
 
-您可以使用 `ngrok` 将您的本地服务器暴露给互联网并附加 SSL 证书。您将能够在所有 Telegram 平台上使用热模块替换进行开发。打开新的终端窗口并运行：
+You can use `ngrok` to expose your local server to the internet with an SSL certificate. This enables hot module replacement on all Telegram platforms.
 
 ```bash
 # where 5173 is the port number from npm/yarn dev --host
 ngrok http 5173
 ```
 
-此外，我们将准备我们的项目以部署到 GitHub Pages：
+Also, we are going to prepare our project for deployment:
 
 ```jsx
 export default defineConfig({
@@ -159,7 +161,7 @@ export default defineConfig({
 });
 ```
 
-我们将使用 GitHub Actions 部署脚本，该脚本将在针对 master 分支的推送上运行。从您的项目根目录开始：
+We will use the deploy script for GitHub Actions that will run on pushes targeting the master branch. From the root of your project:
 
 ```bash
 # we are going to create GitHub Actions config for deployment
@@ -227,11 +229,10 @@ jobs:
         uses: actions/deploy-pages@v1
 ```
 
-别忘了在您的 GitHub 库的设置→页面中为构建和部署选择 GitHub Actions 选项。现在，每次推送后，您的代码将被部署到页面。
-
+In GitHub repository settings, go to Settings → Pages and choose GitHub Actions for Build and Deployment. After each push to master, GitHub Pages will automatically deploy your code.
 ![Screenshot 2023-09-11 at 22.07.44.png](/img/docs/telegram-apps/modern-1.png)
 
-现在我们将添加 `@twa-dev/sdk`。Telegram 通过[链接](https://core.telegram.org/bots/webapps#initializing-web-apps)分发 SDK。这是一种处理库的旧时方式。`@twa-dev/sdk` 包允许像处理 npm 包一样使用 SDK，并支持 TypeScript。
+Telegram provides an SDK via a direct [link](https://core.telegram.org/bots/webapps#initializing-web-apps), but using `@twa-dev/sdk` offers TypeScript support and better integration.
 
 ```bash npm2yarn
 npm install @twa-dev/sdk
@@ -247,9 +248,9 @@ WebApp.ready();
 ReactDOM.createRoot...
 ```
 
-`WebApp.ready()` - 是一个方法，向 Telegram 应用程序通知小程序已准备好显示。建议尽可能早地调用此方法，一旦加载了所有必要的接口元素。一旦调用此方法，加载的占位符将被隐藏，小程序将被显示。
+`WebApp.ready()`method informs Telegram that the Mini App is ready to display. This method should be called as early as possible to ensure all interface elements load before the app appears.
 
-然后我们将添加与用户的一些交互。进入 `src/App.tsx`，我们将添加带有警告的按钮。
+Then add some interaction with the user. Go to `src/App.tsx` and add a button that triggers an alert.
 
 ```tsx
 import { useState } from 'react'
@@ -293,18 +294,22 @@ export default App
 
 现在我们需要创建 Telegram 机器人，这样我们就可以在Telegram应用程序中启动 Telegram 小程序。
 
-### 为应用设置机器人
+### Setting up a bot for the App
 
-要将您的小程序连接到 Telegram，您需要创建一个机器人并为其设置小程序。按照以下步骤设置新的 Telegram 机器人：
+To launch the Telegram Mini App within the messenger, you need to create a bot and configure it. Follow these steps:
 
 <Button href="/develop/dapps/telegram-apps/step-by-step-guide#setting-up-a-bot-for-the-app" colorType={'primary'} sizeType={'sm'}>
 
-设置机器人
+Setup a bot
 
 </Button>
 
 ### 提示
 
-使用自签名 SSL 证书，您可以遇到此类警告的问题。点击“Advanced”按钮，然后点击 `Proceed <local dev server address here>`。未采取这些步骤，您将无法在 Telegram 的 web 版本中进行调试
+When using a self-signed SSL certificate, you may see security warnings.
+
+**Fix:** Click **Advanced** and then **Proceed to `<local dev server address>`** to continue debugging in the web version of Telegram.
 
 ![Screenshot 2023-09-11 at 18.58.24.png](/img/docs/telegram-apps/modern-2.png)
+
+<Feedback />

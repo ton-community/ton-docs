@@ -1,22 +1,20 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Подключение с TON Proxy
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-TON Proxy совместим с обычным HTTP-прокси, поэтому вы можете использовать его непосредственно в настройках вашего браузера или операционной системы.
+TON Proxy is fully compatible with standard HTTP proxy settings so that you can configure it directly through your browser or operating system.
 
 ## Google Chrome
 
-Следуйте инструкциям для Windows, macOS, Linux, iOS или Android, в зависимости от вашей операционной системы.
+Follow the instructions specific to your device’s operating system: Windows, macOS, Linux, iOS, or Android.
 
 ## Firefox
 
-Настройки -> Основные -> Настройки сети -> Настроить -> Ручная настройка прокси -> HTTP прокси
-
-В поле «HTTP прокси» введите адрес одного из публичных прокси-серверов, в поле «Порт» введите «8080» без кавычек.
-
-Нажмите «OK».
+1. Go to **Settings → General → Network Settings → Configure**.
+2. Choose a "Manual proxy settings".
+3. In the "HTTP Proxy" field, enter the address of a public entry proxy.
+4. In the "Port" field, enter "8080" without quotes.
+5. Нажмите «OK».
 
 ## Safari
 
@@ -24,44 +22,42 @@ TON Proxy совместим с обычным HTTP-прокси, поэтому
 
 ## iOS
 
-Настройки -> Wi-Fi -> Щёлкните на текущей подключенной сети -> Настройка прокси -> Вручную
-
-В поле «Сервер» введите адрес одного из публичных прокси-серверов, в поле «Порт» введите «8080» без кавычек.
-
-Нажмите «Сохранить».
+1. Go to **Settings → Wi-Fi**.
+2. Tap your currently connected network.
+3. Scroll to "HTTP Proxy" and choose "Manual".
+4. In the "Server" field, enter the address of a public entry proxy.
+5. In the "Port" field, enter "8080" without quotes.
+6. Tap "Save".
 
 ## Android
 
-Настройки -> Wi-Fi -> Нажмите и удерживайте название сети Wi-Fi -> Изменить сеть -> Дополнительные параметры -> Вручную
-
-В поле «Сервер» введите адрес одного из публичных прокси-серверов, в поле «Порт» введите «8080» без кавычек.
-
-Нажмите «Сохранить».
+1. Go to **Settings → Wi-Fi**.
+2. Tap and hold the Wi-Fi network name.
+3. Select **Modify Network → Advanced Options → Manual**.
+4. In the "Server" field, enter the address of a public entry proxy.
+5. In the "Port" field, enter "8080" without quotes.
+6. Tap "Save".
 
 ## Windows
 
-"Пуск", затем выберите Параметры > Сеть и Интернет > Прокси-сервер.
-
-В разделе «Настройка прокси вручную», рядом с «Использовать прокси-сервер», выберите «Настройка».
-
-В окне «Изменить прокси-сервер» сделайте следующее:
-
-Включите «Использовать прокси-сервер».
-
-Введите адрес одного из публичных прокси-серверов, в поле «Порт» введите «8080» без кавычек.
-
-Нажмите «Сохранить».
+1. Click the "Start" button and select **Settings → Network & Internet → Proxy**.
+2. В разделе «Настройка прокси вручную», рядом с «Использовать прокси-сервер», выберите «Настройка».
+3. Включите «Использовать прокси-сервер».
+4. Enter the address of one of the public entry proxies, in the "Port" field, and enter "8080" without quotes.
+5. Нажмите «Сохранить».
 
 ## macOS
 
-Настройки -> Сеть -> Дополнительно -> Прокси -> Веб-прокси (HTTP).
-
-В поле «Сервер веб-прокси» введите адрес одного из публичных прокси-серверов, после двоеточия введите «8080» без кавычек.
-
-Нажмите «OK».
+1. Go to **Settings → Network → Advanced → Web proxy (HTTP)**.
+2. In the "Web proxy server" field, enter the address of one of the public entry proxies; after the colon, enter "8080" without quotes.
+3. Нажмите «OK».
 
 ## Ubuntu
 
-Настройки -> Сеть -> Кнопка сетевого прокси -> Вручную
+1. Go to **Settings → Network**.
+2. Click **Network Proxy → Manual**.
+3. In the "HTTP Proxy" field, enter the address of one of the public entry proxies.
+4. For the port, enter "8080" without quotes.
 
-В поле «HTTP Proxy» введите адрес одного из публичных прокси-серверов, в поле порта введите «8080» без кавычек.
+<Feedback />
+

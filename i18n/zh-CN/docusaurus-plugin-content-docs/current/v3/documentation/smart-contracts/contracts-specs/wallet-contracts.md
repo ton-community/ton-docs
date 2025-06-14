@@ -1,253 +1,325 @@
-# 钱包合约类型
+import Feedback from '@site/src/components/Feedback';
 
-您可能听说过 TON 区块链上不同版本的钱包。但这些版本究竟是什么意思，它们之间有什么区别？
+import ConceptImage from '@site/src/components/conceptImage';
+import ThemedImage from '@theme/ThemedImage';
 
-在本文中，我们将探讨 TON 钱包的各种版本和修改。
+# Wallet contracts
+
+You may have heard about different versions of wallets on TON Blockchain. But what do these versions actually mean, and how do they differ?
+
+In this article, we’ll explore the various versions and modifications of TON wallets.
 
 :::info
 Before we start, there are some terms and concepts that you should be familiar with to fully understand the article:
 
-- [消息管理](/v3/documentation/smart-contracts/message-management/messages-and-transactions)，因为这是钱包的主要功能。
-- [FunC语言](/v3/documentation/smart-contracts/func/overview)，因为我们将在很大程度上依赖使用它的实现。
+- [Message management](/v3/documentation/smart-contracts/message-management/messages-and-transactions), because this is the main functionality of the wallets.
+- [FunC language](/v3/documentation/smart-contracts/func/overview), because we will heavily rely on implementations made using it.
   :::
 
-## 共同概念
+## Common concept
 
-要打破这种紧张关系，我们首先应该明白，钱包并不是 TON 生态系统中的一个特定实体。它们仍然只是由代码和数据组成的智能合约，从这个意义上说，它们与 TON 中的任何其他角色（即智能合约）都是平等的。
+To break the tension, we should first understand that wallets are not a specific entity in the TON ecosystem. They are still just smart contracts consisting of code and data, and, in that sense, are equal to any other actor (i.e., smart contract) in TON.
 
-与您自己的定制智能合约或其他任何合约一样，钱包可以接收外部和内部信息，发送内部信息和日志，并提供 "获取 "方法。
-那么问题来了：它们提供哪些功能，不同版本之间有何不同？
+Like your own custom smart contract, or any other one, wallets can receive external and internal messages, send internal messages and logs, and provide `get methods`.
+So the question is: what functionality do they provide and how it differs between versions?
 
-您可以将每个钱包版本视为提供标准外部接口的智能合约实现，允许不同的外部客户端以相同的方式与钱包进行交互。您可以在主 TON monorepo 中找到这些 FunC 和 Fift 语言的实现：
+You can consider each wallet version as a smart-contract implementation providing a standard external interface, allowing different external clients to interact with the wallets in the same way. You can find these implementations in FunC and Fift languages in the main TON monorepo:
 
 - [ton/crypto/smartcont/](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/)
 
-## 基本钱包
+## Basic wallets
 
-### 钱包 V1
+### Wallet contracts hashes
 
-这是最简单的一种。它只允许您一次发送四笔交易，而且除了您的签名和序列号外不检查任何东西。
+Here, you can find the current hashes of the wallet contract code versions.\
+For detailed specifications of each wallet contract, please refer to the page.
+For detailed specifications of each wallet contract, please refer further down the page or check the [ContractSources.md](https://github.com/toncenter/tonweb/blob/update_contracts/src/contract/ContractSources.md).
 
-钱包源代码：
+<details><summary> Show wallet contracts hashes table </summary>
+
+| Contract version         | Hash                                           |
+| ------------------------ | ---------------------------------------------- |
+| [walletv1r1](#wallet-v1) | `oM/CxIruFqJx8s/AtzgtgXVs7LEBfQd/qqs7tgL2how=` |
+| [walletv1r2](#wallet-v1) | `1JAvzJ+tdGmPqONTIgpo2g3PcuMryy657gQhfBfTBiw=` |
+| [walletv1r3](#wallet-v1) | `WHzHie/xyE9G7DeX5F/ICaFP9a4k8eDHpqmcydyQYf8=` |
+| [walletv2r1](#wallet-v2) | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
+| [walletv2r2](#wallet-v2) | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
+| [walletv3r1](#wallet-v3) | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
+| [walletv3r2](#wallet-v3) | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
+| [walletv4r1](#wallet-v4) | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
+| [walletv4r2](#wallet-v4) | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
+| [walletv5r1](#wallet-v5) | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
+
+</details>
+
+**Note:** These hashes can also be found in the explorers.
+
+### Wallet V1 {#wallet-v1}
+
+This is the simplest one. It only allows you to send four transactions at a time and doesn't check anything besides your signature and seqno.
+
+Wallet source code:
 
 - [ton/crypto/smartcont/wallet-code.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet.fif)
 
-这个版本甚至没有在常规应用程序中使用，因为它存在一些重大问题：
+This version isn’t even used in regular apps because it has some major issues:
 
-- 没有从合约中获取序列号和公钥的简单方法。
-- 没有 `valid_until` 检查，因此无法确保交易不会太晚确认。
+- No easy way to retrieve the seqno and public key from the contract.
+- No `valid_until` check, so you can't be sure that the transaction won't be confirmed too late.
 
-第一个问题已在 `V1R2` 和 `V1R3` 中解决。`R` 代表 `修订`。通常情况下，修订版只是增加获取方法的小更新；你可以在 `new-wallet.fif` 的更改历史中找到所有这些更新。在下文中，我们将只考虑最新的修订版本。
+The first issue was fixed in `V1R2` and `V1R3`. The `R` stands for **revision**. Usually, revisions are just small updates that only add get methods; you can find all of those in the changes history of `new-wallet.fif`. Hereinafter, we will consider only the latest revisions.
 
-尽管如此，由于每个后续版本都继承了前一个版本的功能，我们仍应坚持使用它，因为这将有助于我们以后版本的开发。
+Nevertheless, because each subsequent version inherits the functionality of the previous one, we should still stick to it, as this will help us with later versions.
 
-#### 持久内存布局
+#### Official code hashes
 
-- <b>seqno</b>：32 位长序列号。
-- <b>public-key</b>： 256 位长公开密钥。
+| Contract version | Hash                                           |
+| ---------------- | ---------------------------------------------- |
+| walletv1r1       | `oM/CxIruFqJx8s/AtzgtgXVs7LEBfQd/qqs7tgL2how=` |
+| walletv1r2       | `1JAvzJ+tdGmPqONTIgpo2g3PcuMryy657gQhfBfTBiw=` |
+| walletv1r3       | `WHzHie/xyE9G7DeX5F/ICaFP9a4k8eDHpqmcydyQYf8=` |
 
-#### 外部信息正文布局
+#### Persistent memory layout
 
-1. 数据
-   - <b>签名</b>：512 位长 ed25519 签名。
-   - <b>msg-seqno</b>：32 位长序列号。
-   - <b>(0-4)模式</b>：最多四个 8 位长整数，定义每条报文的发送模式。
-2. 最多 4 次引用包含信息的 cell 。
+- <b>seqno</b>: 32-bit long sequence number.
+- <b>public-key</b>: 256-bit long public key.
 
-如您所见，钱包的主要功能是提供一种从外部世界与 TON 区块链进行通信的安全方式。`seqno` 机制可以防止重放攻击，而 `Ed25519 签名` 则提供了对钱包功能的授权访问。我们将不再详细介绍这些机制，因为它们在[外部消息](/v3/documentation/smart-contracts/message-management/external-messages)文档页面中有详细描述，并且在接收外部消息的智能合约中非常常见。有效载荷数据由最多 4 个 cell 引用和相应数量的模式组成，它们将直接传输到 [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) 方法。
+#### External message body layout
+
+1. Data:
+  - <b>signature</b>: 512-bit long ed25519 signature.
+  - <b>msg-seqno</b>: 32-bit long sequence number.
+  - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
+2. Up to 4 references to cells containing messages.
+
+As you can see, the main functionality of the wallet is to provide a safe way to communicate with the TON blockchain from the outside world. The `seqno` mechanism protects against replay attacks, and the `Ed25519 signature` provides authorized access to wallet functionality. We will not dwell in detail on each of these mechanisms, as they are described in detail in the [external message](/v3/documentation/smart-contracts/message-management/external-messages) documentation page and are quite common among smart contracts receiving external messages. The payload data consists of up to 4 references to cells and the corresponding number of modes, which will be directly transferred to the [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
 
 :::caution
-请注意，钱包不对通过它发送的内部信息进行任何验证。程序员（即外部客户端）有责任根据 [内部信息布局](http://localhost:3000/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) 对数据进行序列化。
+Note that the wallet doesn't provide any validation for internal messages you send through it. It is the programmer's (i.e., the external client’s) responsibility to serialize the data according to the [internal message layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
 :::
 
-#### 退出代码
+#### Exit codes
 
-| 退出代码 | 说明                 |
-| ---- | ------------------ |
-| 0x21 | `序列号` 检查失败，已获得回复保护 |
-| 0x22 | `Ed25519签名` 检查失败   |
-| 0x0  | 标准成功执行退出代码。        |
+| Exit code | Description                                              |
+| --------- | -------------------------------------------------------- |
+| 0x21      | `seqno` check failed, reply protection accured           |
+| 0x22      | `Ed25519 signature` check failed                         |
+| 0x0       | Standard successful execution exit code. |
 
 :::info
-请注意，[TVM](/v3/documentation/tvm/tvm-overview) 有[标准退出代码](/v3/documentation/tvm/tvm-exit-codes) (`0x0`-是其中之一)，因此您也可以得到其中之一，例如，如果您用完了[gas](https://docs.ton.org/develop/smart-contracts/fees)，您将得到`0xD`代码。
+Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standart exit codes](/v3/documentation/tvm/tvm-exit-codes) (`0x0` - is one of them), so you can get one of them too, if you run out of [gas](/v3/documentation/smart-contracts/transaction-fees/fees), for example, you will get `0xD` code.
 :::
 
-#### Get 方法
+#### Get methods
 
-1. int seqno() 返回当前存储的序列号。
-2. int get_public_key 返回当前存储的公钥。
+1. int seqno() returns current stored seqno.
+2. int get_public_key returns current stored public key.
 
-### 钱包 V2
+### Wallet V2 {#wallet-v2}
 
-钱包源代码：
+Wallet source code:
 
 - [ton/crypto/smartcont/wallet-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-code.fc)
 
-该版本引入了 `valid_until` 参数，用于设置交易的时间限制，以防过迟确认。该版本也没有在 `V2R2` 中添加的获取公钥的方法。
+This version introduces the `valid_until` parameter, which is used to set a time limit for a transaction in case you don't want it to be confirmed too late. This version also does not have the get-method for the public key, which was added in `V2R2`.
 
-与前一版本相比，所有不同之处都是由于添加了 `valid_until` 功能。增加了一个新的退出代码：`0x23`，表示 valid_until 检查失败。此外，外部消息体布局中还新增了一个 UNIX-time 字段，用于设置事务的时间限制。所有获取方法保持不变。
+All differences compared to the previous version are a consequence of adding the `valid_until` functionality. A new exit code was added: `0x23`, marking the failure of the valid_until check. Additionally, a new UNIX-time field has been added to the external message body layout, setting the time limit for the transaction. All get methods remain the same.
 
-#### 外部信息正文布局
+#### Official code hashes
 
-1. 数据
-   - <b> signature </b>：512 位长 ed25519 签名。
-   - <b>msg-seqno</b>：32 位长序列号。
-   - <b>valid-until</b>：32 位长 Unix 时间整数。
-   - <b>(0-4)mode</b>：最多四个 8 位长整数，定义每条报文的发送模式。
-2. 最多 4 次引用包含信息的 cell 。
+| Contract version | Hash                                           |
+| ---------------- | ---------------------------------------------- |
+| walletv2r1       | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
+| walletv2r2       | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
 
-### 钱包 V3
+#### External message body layout
 
-该版本引入了 `subwallet_id` 参数，允许使用同一公钥创建多个钱包（因此可以只有一个种子短语和多个钱包）。和以前一样，`V3R2` 只增加了获取公钥的方法。
+1. Data:
+  - <b>signature</b>: 512-bit long ed25519 signature.
+  - <b>msg-seqno</b>: 32-bit long sequence number.
+  - <b>valid-until</b>: 32-bit long Unix-time integer.
+  - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
+2. Up to 4 references to cells containing messages.
 
-钱包源代码：
+### Wallet V3 {#wallet-v3}
+
+This version introduces the `subwallet_id` parameter, which allows you to create multiple wallets using the same public key (so you can have only one seed phrase and multiple wallets). As before, `V3R2` only adds the get-method for the public key.
+
+Wallet source code:
 
 - [ton/crypto/smartcont/wallet3-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet3-code.fc)
 
-本质上，`subwallet_id` 只是在部署时添加到合约状态的一个数字。由于 TON 中的合约地址是其状态和代码的哈希值，因此钱包地址会随着不同的 `subwallet_id` 而改变。该版本是目前使用最广泛的版本。它涵盖了大多数使用情况，并且仍然干净、简单，与之前的版本基本相同。所有获取方法保持不变。
+Essentially, `subwallet_id` is just a number added to the contract state when it’s deployed. Since the contract address in TON is a hash of its state and code, the wallet address will change with a different `subwallet_id`. This version is the most widely used right now. It covers most use cases and remains clean, simple, and mostly the same as previous versions. All get methods remain the same.
 
-#### 持久内存布局
+#### Official code hashes
 
-- <b>seqno</b>：32 位序列号。
-- <b> subwallet </b>：32 位子钱包 ID。
-- <b>public-key</b>: 256 位公开密钥。
+| Contract version | Hash                                           |
+| ---------------- | ---------------------------------------------- |
+| walletv3r1       | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
+| walletv3r2       | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
 
-#### 外部信息布局
+#### Persistent memory layout
 
-1. 数据
-   - <b> signature </b>：512 位 ed25519 签名。
-   - <b>subwallet-id</b>：32 位子钱包 ID。
-   - <b>msg-seqno</b>：32 位序列号。
-   - <b>valid-until</b>：32 位 UNIX 时间整数。
-   - <b>(0-4)mode</b>：最多 4 个 8 位整数，定义每个报文的发送模式。
-2. 最多 4 次引用包含信息的 cell 。
+- <b>seqno</b>: 32-bit sequence number.
+- <b>subwallet</b>: 32-bit subwallet ID.
+- <b>public-key</b>: 256-bit public key.
 
-#### 退出代码
+#### External message layout
 
-| 退出代码 | 说明                          |
-| ---- | --------------------------- |
-| 0x23 | `valid_until` 检查失败；交易确认尝试太晚 |
-| 0x23 | `Ed25519签名` 检查失败            |
-| 0x21 | `seqno` 检查失败；已触发回复保护        |
-| 0x22 | subwallet-id\` 与存储的标识不匹配    |
-| 0x0  | 标准成功执行退出代码。                 |
+1. Data:
+  - <b>signature</b>: 512-bit ed25519 signature.
+  - <b>subwallet-id</b>: 32-bit subwallet ID.
+  - <b>msg-seqno</b>: 32-bit sequence number.
+  - <b>valid-until</b>: 32-bit UNIX time integer.
+  - <b>(0-4)mode</b>: Up to four 8-bit integers defining the sending mode for each message.
+2. Up to 4 references to cells containing messages.
 
-### 钱包 V4
+#### Exit codes
 
-该版本保留了之前版本的所有功能，但也引入了一些非常强大的功能："插件"。
+| Exit code | Description                                                             |
+| --------- | ----------------------------------------------------------------------- |
+| 0x23      | `valid_until` check failed; transaction confirmation attempted too late |
+| 0x23      | `Ed25519 signature` check failed                                        |
+| 0x21      | `seqno` check failed; reply protection triggered                        |
+| 0x22      | `subwallet-id` does not match the stored one                            |
+| 0x0       | Standard successful execution exit code.                |
 
-钱包源代码：
+### Wallet V4 {#wallet-v4}
+
+This version retains all the functionality of the previous versions but also introduces something very powerful: `plugins`.
+
+Wallet source code:
 
 - [ton-blockchain/wallet-contract](https://github.com/ton-blockchain/wallet-contract)
 
-这一功能允许开发人员实现与用户钱包协同工作的复杂逻辑。例如，一个 DApp 可能会要求用户每天支付少量的硬币来使用某些功能。在这种情况下，用户需要通过签署交易在钱包上安装插件。然后，当外部信息要求时，插件将每天向目标地址发送硬币。
+This feature allows developers to implement complex logic that works in tandem with a user's wallet. For example, a DApp may require a user to pay a small amount of coins every day to use certain features. In this case, the user would need to install the plugin on their wallet by signing a transaction. The plugin would then send coins to the destination address daily when requested by an external message.
 
-#### 插件
+#### Official code hashes
 
-插件本质上是 TON 上的其他智能合约，开发者可以根据自己的意愿自由实现。就钱包而言，它们只是存储在钱包持久内存 [dictionary](/v3/documentation/smart-contracts/func/docs/dictionaries) 中的智能合约地址。这些插件可以申请资金，并通过向钱包发送内部信息将自己从 "允许列表 "中删除。
+| Contract version | Hash                                           |
+| ---------------- | ---------------------------------------------- |
+| walletv4r1       | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
+| walletv4r2       | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
+| walletv5r1       | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
 
-#### 持久内存布局
+#### Plugins
 
-- <b>seqno</b>：32 位长序列号。
-- <b>subwallet-id</b>：32 位长 subwallet-id。
-- <b>public-key</b>： 256 位长公开密钥。
-- <b>plugins</b>：包含插件的字典（可能为空）
+Plugins are essentially other smart contracts on TON that developers are free to implement as they wish. In relation to the wallet, they are simply addresses of smart contracts stored in a [dictionary](/v3/documentation/smart-contracts/func/docs/dictionaries) in the wallet's persistent memory. These plugins are allowed to request funds and remove themselves from the "allowed list" by sending internal messages to the wallet.
 
-#### 接收内部信息
+#### Persistent memory layout
 
-以前所有版本的钱包都是直接接收内部信息。它们只是简单地接受来自任何发件人的资金，而忽略内部信息正文（如果存在），或者换句话说，它们只有一个空的 recv_internal 方法。不过，如前所述，第四版钱包引入了两个额外的可用操作。让我们来看看内部信息体的布局：
+- <b>seqno</b>: 32-bit long sequence number.
+- <b>subwallet-id</b>: 32-bit long subwallet-id.
+- <b>public-key</b>: 256-bit long public key.
+- <b>plugins</b>: dictionary containing plugins(may be empty)
 
-- <b>op-code?</b>: 32 位长操作码。这是一个可选字段；任何信息正文中包含少于 32 位的操作码、错误的操作码或未注册为插件的发件人地址，都将被视为简单转账，与之前的钱包版本类似。
-- <b>query-id</b>：64 位长整数。该字段对智能合约的行为没有影响；它用于跟踪合约之间的信息链。
+#### Receiving internal messages
 
-1. op-code = 0x706c7567，申请资金操作代码。
-   - <b> TON 币</b>：VARUINT16 申请的 TON 币数量。
-   - <b>extra_currencies</b>：包含所请求的额外货币数量的字典（可能为空）。
-2. op-code = 0x64737472，请求从 "允许列表" 中删除插件发送方。
+All previous versions of wallets had a straightforward implementation for receiving internal messages. They simply accepted incoming funds from any sender, ignoring the internal message body if present, or in other words, they had an empty recv_internal method. However, as mentioned earlier, the fourth version of the wallet introduces two additional available operations. Let's take a look at the internal message body layout:
 
-#### 外部信息正文布局
+- <b>op-code?</b>: 32-bit long operation code. This is an optional field; any message containing less than 32 bits in the message body, an incorrect op-code, or a sender address that isn't registered as a plugin will be considered as simple transfer, similar to previous wallet versions.
+- <b>query-id</b>: 64-bit long integer. This field has no effect on the smart contract's behavior; it is used to track chains of messages between contracts.
 
-- <b> signature </b>：512 位长 ed25519 签名。
-- <b>subwallet-id</b>：32 位长的子钱包 ID。
-- <b>valid-until</b>：32 位长 Unix 时间整数。
-- <b>msg-seqno</b>：32 位长序列整数。
-- <b>op-code</b>：32 位长操作码。
+1. op-code = 0x706c7567, request funds operation code.
+  - <b>toncoins</b>: VARUINT16 amount of requested toncoins.
+  - <b>extra_currencies</b>: Dictionary containing the amount of requested extra currencies (may be empty).
+2. op-code = 0x64737472, request removal of plugin-sender from the "allowed list".
 
-1. op-code = 0x0，简单发送。
-   - <b>(0-4)mode</b>：最多四个 8 位长整数，定义每条报文的发送模式。
-   - <b>(0-4)messages</b>：包含信息的 cell 的最多四个引用。
-2. op-code = 0x1，部署并安装插件。
-   - <b>workchain</b>：8 位长整数。
-   - <b> balance </b>：VARUINT16  Toncoin  初始余额。
-   - <b>state-init</b>：包含插件初始状态的 cell 引用。
-   - <b>body</b>：包含正文的 cell 引用。
-3. op-code = 0x2/0x3，安装插件/删除插件。
-   - <b>wc_n_address</b>：8 位长工作链 ID + 256 位长插件地址。
-   - <b>balance</b>：VARUINT16  Toncoin  初始余额的金额。
-   - <b>query-id</b>：64 位长整数。
+#### External message body layout
 
-如您所见，第四个版本仍通过 `0x0` 操作码提供标准功能，与之前的版本类似。`0x2` 和 `0x3` 操作允许对插件字典进行操作。请注意，在使用 `0x2` 的情况下，您需要自行部署具有该地址的插件。相比之下，`0x1` 操作码还可通过 state_init 字段处理部署过程。
+- <b>signature</b>: 512-bit long ed25519 signature.
+- <b>subwallet-id</b>: 32-bit long subwallet ID.
+- <b>valid-until</b>: 32-bit long Unix-time integer.
+- <b>msg-seqno</b>: 32-bit long sequence integer.
+- <b>op-code</b>: 32-bit long operation code.
+
+1. op-code = 0x0, simple send.
+  - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
+  - <b>(0-4)messages</b>:Up to four references to cells containing messages.
+2. op-code = 0x1, deploy and install plugin.
+  - <b>workchain</b>: 8-bit long integer.
+  - <b>balance</b>: VARUINT16 toncoins amount of initial balance.
+  - <b>state-init</b>: Cell reference containing plugin initial state.
+  - <b>body</b>: Cell reference containing body.
+3. op-code = 0x2/0x3, install plugin/remove plugin.
+  - <b>wc_n_address</b>: 8-bit long workchain_id + 256-bit long plugin address.
+  - <b>balance</b>: VARUINT16 toncoins amount of initial balance.
+  - <b>query-id</b>: 64-bit long integer.
+
+As you can see, the fourth version still provides standard functionality through the `0x0` op-code, similar to previous versions. The `0x2` and `0x3` operations allow manipulation of the plugins dictionary. Note that in the case of `0x2`, you need to deploy the plugin with that address yourself. In contrast, the `0x1` op-code also handles the deployment process with the state_init field.
 
 :::tip
 If `state_init` doesn't make much sense from its name, take a look at the following references:
 
-- [地址- TON -区块链](/v3/documentation/smart-contracts/addresses#workchain-id-and-account-id)
-- [发送部署信息](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-deploy-message-with-stateinit-only-with-stateinit-and-body)
+- [addresses-in-ton-blockchain](/v3/documentation/smart-contracts/addresses#workchain-id-and-account-id)
+- [send-a-deploy-message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-deploy-message-with-stateinit-only-with-stateinit-and-body)
 - [internal-message-layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout)
   :::
 
-#### 退出代码
+#### Exit codes
 
-| 退出代码 | 说明                                                       |
-| ---- | -------------------------------------------------------- |
-| 0x24 | `valid_until` 检查失败，交易确认尝试太晚                              |
-| 0x23 | `Ed25519签名` 检查失败                                         |
-| 0x21 | `seqno` 检查失败，已触发回复保护                                     |
-| 0x22 | `subwallet-id` 与存储的标识不匹配                                 |
-| 0x27 | 插件字典操作失败（0x1-0x3 recv_external 操作码） |
-| 0x50 | 申请资金不足                                                   |
-| 0x0  | 标准成功执行退出代码。                                              |
+| Exit code | Description                                                                                                     |
+| --------- | --------------------------------------------------------------------------------------------------------------- |
+| 0x24      | `valid_until` check failed, transaction confirmation attempted too late                                         |
+| 0x23      | `Ed25519 signature` check failed                                                                                |
+| 0x21      | `seqno` check failed, reply protection triggered                                                                |
+| 0x22      | `subwallet-id` does not match the stored one                                                                    |
+| 0x27      | Plugins dictionary manipulation failed (0x1-0x3 recv_external op-codes) |
+| 0x50      | Not enough funds for the funds request                                                                          |
+| 0x0       | Standard successful execution exit code.                                                        |
 
-#### Get 方法
+#### Get methods
 
-1. int seqno() 返回当前存储的序列号。
-2. int get_public_key() 返回当前存储的公钥。
-3. int get_subwallet_id() 返回当前子钱包 ID。
-4. int is_plugin_installed(int wc, int addr_hash) 检查是否已安装定义了工作链 ID 和地址散列的插件。
-5. tuple get_plugin_list() 返回插件列表。
+1. int seqno() returns current stored seqno.
+2. int get_public_key() returns current stored public key.
+3. int get_subwallet_id() returns current subwallet ID.
+4. int is_plugin_installed(int wc, int addr_hash) checks if plugin with defined workchain ID and address hash is installed.
+5. tuple get_plugin_list() returns list of plugins.
 
-### 钱包 V5
+### Wallet V5 {#wallet-v5}
 
-它是目前最先进的钱包版本，由 Tonkeeper 团队开发，旨在取代 V4 并允许任意扩展。
+It is the most modern wallet version at the moment, developed by the Tonkeeper team, aimed at replacing V4 and allowing arbitrary extensions. <br></br>
+<ThemedImage
+alt=""
+sources={{
+light: '/img/docs/wallet-contracts/wallet-contract-V5.png?raw=true',
+dark: '/img/docs/wallet-contracts/wallet-contract-V5_dark.png?raw=true',
+}}
+/> <br></br><br></br><br></br>
+The V5 wallet standard offers many benefits that improve the experience for both users and merchants. V5 supports gas-free transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers. In addition to retaining the previous functionality (V4), the new contract allows you to send up to 255 messages at a time.
 
-V5 钱包标准提供了许多优势，改善了用户和商家的体验。V5 支持无 gas 交易、账户授权和恢复、使用代币和 Toncoin 进行订阅支付以及低成本的多笔转账。除了保留以前的功能（V4）外，新合约允许您一次发送多达 255 条信息。
-
-钱包源代码：
+Wallet source code:
 
 - [ton-blockchain/wallet-contract-v5](https://github.com/ton-blockchain/wallet-contract-v5)
 
-TL-B 方案：
+TL-B scheme:
 
 - [ton-blockchain/wallet-contract-v5/types.tlb](https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb)
 
 :::caution
-与之前的钱包版本规范不同，由于本钱包版本的接口实现相对复杂，我们将依赖 [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) 方案。我们将逐一进行说明。尽管如此，我们仍然需要对其有一个基本的了解，结合钱包源代码就足够了。
+In contrast to previous wallet version specifications, we will rely on [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) scheme, due to the relative complexity of this wallet version's interface implementation. We will provide some description for each of those. Nevertheless, a basic understanding is still required, in combination with the wallet source code, it should be enough.
 :::
 
-#### 持久内存布局
+#### Official code hash
+
+| Contract version | Hash                                           |
+| ---------------- | ---------------------------------------------- |
+| walletv5r1       | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
+
+#### Persistent memory layout
 
 ```
-contract_state$_ 
-    is_signature_allowed:(## 1) 
-    seqno:# 
-    wallet_id:(## 32) 
-    public_key:(## 256) 
+contract_state$_
+    is_signature_allowed:(## 1)
+    seqno:#
+    wallet_id:(## 32)
+    public_key:(## 256)
     extensions_dict:(HashmapE 256 int1) = ContractState;
 ```
 
-正如你所看到的，"ContractState"（合约状态）与之前的版本相比，并没有发生重大变化。主要区别在于新增了 `is_signature_allowed` 1 位标志，用于限制或允许通过签名和存储的公钥进行访问。我们将在后面的主题中介绍这一变化的重要性。
+As you can see, the `ContractState`, compared to previous versions, hasn't undergone major changes. The main difference is the new `is_signature_allowed` 1-bit flag, which restricts or allows access through the signature and stored public key. We will describe the importance of this change in later topics.
 
-#### 认证程序
+#### Authentification process
 
 ```
 signed_request$_             // 32 (opcode from outer)
@@ -260,27 +332,27 @@ signed_request$_             // 32 (opcode from outer)
 
 internal_signed#73696e74 signed:SignedRequest = InternalMsgBody;
 
-internal_extension#6578746e 
-    query_id:(## 64) 
+internal_extension#6578746e
+    query_id:(## 64)
     inner:InnerRequest = InternalMsgBody;
 
 external_signed#7369676e signed:SignedRequest = ExternalMsgBody;
 ```
 
-在了解信息的实际有效载荷 `InnerRequest` 之前，我们先来看看第 5 版在身份验证过程中与之前版本有什么不同。InternalMsgBody "组合器描述了通过内部信息访问钱包操作的两种方法。第一种方法是我们在第 4 版中已经熟悉的：作为先前注册的扩展进行身份验证，其地址存储在 `extensions_dict` 中。第二种方法是通过存储的公钥和签名进行验证，类似于外部请求。
+Before we get to the actual payload of our messages — `InnerRequest` — let's first look at how version 5 differs from previous versions in the authentication process. The `InternalMsgBody` combinator describes two ways to access wallet actions through internal messages. The first method is one we are already familiar with from version 4: authentication as a previously registered extension, the address of which is stored in `extensions_dict`. The second method is authentication through the stored public key and signature, similar to external requests.
 
-起初，这似乎是一个不必要的功能，但实际上它可以通过外部服务（智能合约）来处理请求，而这些外部服务并不是钱包扩展基础设施的一部分--这正是 V5 的关键功能。Gas-free交易就是依靠这一功能实现的。
+At first, this might seem like an unnecessary feature, but it actually enables requests to be processed through external services (smart contracts) that are not part of your wallet's extension infrastructure—a key feature of V5. Gas-free transactions rely on this functionality.
 
-请注意，只接收资金仍然是一种选择。实际上，任何未通过验证程序的内部信息都将被视为转账。
+Note that simply receiving funds is still an option. Practically, any received internal message that doesn't pass the authentication process will be considered as transfer.
 
-#### 行为
+#### Actions
 
-我们首先要注意的是 "InnerRequest"，我们已经在身份验证过程中看到过它。与前一版本不同的是，除了更改签名模式（即 "is_signature_allowed "标志）外，外部和内部消息都可以访问相同的功能。
+The first thing that we should notice is `InnerRequest`, which we have already seen in the authentication process. In contrast to the previous version, both external and internal messages have access to the same functionality, except for changing the signature mode (i.e., the `is_signature_allowed` flag).
 
 ```
 out_list_empty$_ = OutList 0;
-out_list$_ {n:#} 
-    prev:^(OutList n) 
+out_list$_ {n:#}
+    prev:^(OutList n)
     action:OutAction = OutList (n + 1);
 
 action_send_msg#0ec3c86d mode:(## 8) out_msg:^(MessageRelaxed Any) = OutAction;
@@ -296,170 +368,112 @@ action_set_signature_auth_allowed#04 allowed:(## 1) = ExtendedAction;
 actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other_actions:(ActionList n m) = InnerRequest;
 ```
 
-我们可以将 `InnerRequest` 视为两个操作列表：第一个，`OutList`，是一个可选的 cell 引用链，每个 cell 都包含一个由消息模式引导的发送消息请求。第二个列表 "ActionList "由一个单比特标志 "has_other_actions "引导，它标志着扩展操作的存在，从第一个 cell 开始，以 cell 引用链的形式继续。我们已经熟悉了前两个扩展操作：`action_add_ext` 和 `action_delete_ext`，后面是我们要从扩展字典中添加或删除的内部地址。第三个扩展动作 `action_set_signature_auth_allowed`会限制或允许通过公钥进行身份验证，从而只剩下通过扩展与钱包进行交互的方式。在私钥丢失或泄露的情况下，这一功能可能极为重要。
+We can consider `InnerRequest` as two lists of actions: the first, `OutList`, is an optional chain of cell references, each containing a send message request led by the message mode. The second, `ActionList,` is led by a one-bit flag, `has_other_actions`, which marks the presence of extended actions, starting from the first cell and continuing as a chain of cell references. We are already familiar with the first two extended actions, `action_add_ext` and `action_delete_ext`, followed by the internal address that we want to add or delete from the extensions dictionary. The third, `action_set_signature_auth_allowed`, restricts or allows authentication through the public key, leaving the only way to interact with the wallet through extensions. This functionality might be extremely important in the case of a lost or compromised private key.
 
 :::info
-请注意，操作的最大数目是 255；这是通过 [c5](/v3/documentation/tvm/tvm-overview#result-of-tvm-execution) TVM 寄存器实现的结果。从技术上讲，您可以使用空的 `OutAction` 和 `ExtendedAction` 提出申请，但在这种情况下，它将类似于只是接收资金。
+Note that the maximum number of actions is 255; this is a consequence of the realization through the [c5](/v3/documentation/tvm/tvm-overview#results-of-tvm-execution) TVM register. Technically, you can make a request with empty `OutAction` and `ExtendedAction`, but in that case, it will be similar to just receiving funds.
 :::
 
-#### 退出代码
+#### Exit codes
 
-| 退出代码 | 说明                                  |
-| ---- | ----------------------------------- |
-| 0x84 | 在签名禁用时尝试通过签名进行身份验证                  |
-| 0x85 | `seqno` 检查失败，出现回复保护                 |
-| 0x86 | `wallet-id` 与存储的不一致                 |
-| 0x87 | `Ed25519签名` 检查失败                    |
-| 0x88 | `valid-until` 检查失败                  |
-| 0x89 | 确保 `send_mode` 为外部信息设置了 +2 位（忽略错误）。 |
-| 0x8A | `external-signed` 前缀与收到的前缀不一致       |
-| 0x8B | 添加扩展名操作不成功                          |
-| 0x8C | 删除扩展名操作不成功                          |
-| 0x8D | 不支持扩展报文前缀                           |
-| 0x8E | 尝试在扩展词典为空的情况下禁用签名验证                 |
-| 0x8F | 尝试将签名设置为已设置的状态                      |
-| 0x90 | 尝试在禁用签名时移除最后一个扩展名                   |
-| 0x91 | 扩展程序有错误的工作链                         |
-| 0x92 | 尝试通过外部信息更改签名模式                      |
-| 0x93 | `c5` 无效，`action_send_msg` 验证失败      |
-| 0x0  | 标准成功执行退出代码。                         |
+| Exit code | Description                                                                                                          |
+| --------- | -------------------------------------------------------------------------------------------------------------------- |
+| 0x84      | Authentication attempt through signature while it's disabled                                                         |
+| 0x85      | `seqno` check failed, reply protection occurred                                                                      |
+| 0x86      | `wallet-id` does not correspond to the stored one                                                                    |
+| 0x87      | `Ed25519 signature` check failed                                                                                     |
+| 0x88      | `valid-until` check failed                                                                                           |
+| 0x89      | Enforce that `send_mode` has the +2 bit (ignore errors) set for external message. |
+| 0x8A      | `external-signed` prefix doesn't correspond to the received one                                                      |
+| 0x8B      | Add extension operation was not successful                                                                           |
+| 0x8C      | Remove extension operation was not successful                                                                        |
+| 0x8D      | Unsupported extended message prefix                                                                                  |
+| 0x8E      | Tried to disable auth by signature while the extension dictionary is empty                                           |
+| 0x8F      | Attempt to set signature to an already set state                                                                     |
+| 0x90      | Tried to remove the last extension when signature is disabled                                                        |
+| 0x91      | Extension has the wrong workchain                                                                                    |
+| 0x92      | Tried to change signature mode through external message                                                              |
+| 0x93      | Invalid `c5`, `action_send_msg` verification failed                                                                  |
+| 0x0       | Standard successful execution exit code.                                                             |
 
 :::danger
-请注意，`0x8E`、`0x90` 和 `0x92` 钱包退出代码是为了防止您无法使用钱包功能而设计的。尽管如此，您仍要记住，钱包不会检查所存储的扩展地址是否确实存在于 TON 中。您也可以部署一个初始数据为空扩展字典和受限签名模式的钱包。在这种情况下，您仍然可以通过公钥访问钱包，直到添加第一个扩展。因此，请小心处理这些情况。
+Note that the `0x8E`, `0x90`, and `0x92` wallet exit codes are designed to prevent you from losing access to wallet functionality. Nevertheless, you should still remember that the wallet doesn't check whether the stored extension addresses actually exist in TON. You can also deploy a wallet with initial data consisting of an empty extensions dictionary and restricted signature mode. In that case, you will still be able to access the wallet through the public key until you add your first extension. So, be careful with these scenarios.
 :::
 
-#### 获取方法
+#### Get methods
 
-1. int is_signature_allowed() 返回存储的 `is_signature_allowed` 标志。
-2. int seqno() 返回当前存储的序列号。
-3. int get_subwallet_id() 返回当前子钱包 ID。
-4. int get_public_key() 返回当前存储的公钥。
-5. cell  get_extensions() 返回扩展字典。
+1. int is_signature_allowed() returns stored `is_signature_allowed` flag.
+2. int seqno() returns current stored seqno.
+3. int get_subwallet_id() returns current subwallet ID.
+4. int get_public_key() returns current stored public key.
+5. cell get_extensions() returns extensions dictionary.
 
-#### 为无 gas 交易做准备
+#### Preparing for gasless transactions
 
-v5 钱包智能合约允许处理由所有者签署的内部信息。这也允许您进行无 gas 交易，例如，在以 USDt 本身转移 USDt 时支付网络费用。常见的方案是这样的
+As was said, before v5, the wallet smart contract allowed the processing of internal messages signed by the owner. This also allows you to make gasless transactions, e.g., payment of network fees when transferring USDt in USDt itself. The common scheme looks like this:
 
 ![image](/img/gasless.jpg)
 
 :::tip
-因此，会有一些服务（如 [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)）提供这种功能：它们代表用户以 TON 支付交易费用，但收取代币费用。
+Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens.
 :::
 
-#### 流量
+#### Flow
 
-1. 在发送美元转账时，用户签署一条包含两笔美元转账的信息：
-   1. 美元转账至收件人地址。
-   2. 向该处转入少量美元。
-2. 签名后的信息通过 HTTPS 发送到服务后台。服务后台将其发送到 TON 区块链，并支付网络费用 Toncoins。
+1. When sending USDt, the user signs one message containing two outgoing USDt transfers:
+  1. USDt transfer to the recipient's address.
+  2. Transfer of a small amount of USDt in favor of the Service.
+2. This signed message is sent off-chain by HTTPS to the Service backend. The Service backend sends it to the TON blockchain, paying Toncoins for network fees.
 
-测试版无气后台 API 可在 [tonapi.io/api-v2](https://tonapi.io/api-v2) 上获取。如果您正在开发任何钱包应用程序，并对这些方法有反馈意见，请通过 [@tonapitech](https://t.me/tonapitech) 聊天工具与我们分享。
+Beta version of the gasless backend API is available on [tonapi.io/api-v2](https://tonapi.io/api-v2). If you are developing any wallet app and have feedback about these methods please share it ton [@tonapitech](https://t.me/tonapitech) chat.
 
-钱包源代码：
+Wallet source code:
 
 - [ton-blockchain/wallet-contract-v5](https://github.com/ton-blockchain/wallet-contract-v5)
 
-## 特殊钱包
+## Special wallets
 
-有时，基本钱包的功能并不足够。这就是为什么有几种类型的专用钱包："高负载"、"锁定 "和 "受限"。
+Sometimes the functionality of basic wallets isn't enough. That's why there are several types of specialized wallet: `high-load`, `lockup` and `restricted`.
 
-让我们一起来看看。
+Let's have a look at them.
 
-### 高负载钱包
+### Highload wallets
 
-在短时间内处理大量信息时，需要使用名为 "高负载钱包 "的特殊钱包。请阅读 [文章](/v3/documentation/smart-contracts/contracts-specs/highload-wallet) 了解更多信息。
+When working with many messages in a short period, there is a need for special wallet called Highload Wallet. Read [the article](/v3/documentation/smart-contracts/contracts-specs/highload-wallet) for more information.
 
-### 锁定钱包
+### Lockup wallet
 
-如果您出于某种原因，需要在一段时间内将钱币锁定在钱包中，而在这段时间过去之前无法提取钱币，那么就来看看锁定钱包吧。
+If you, for some reason, need to lock coins in a wallet for some time without the possibility to withdraw them before that time passes, have a look at the lockup wallet.
 
-它允许您设置不能从钱包中提取任何东西的时间。您还可以自定义设置解锁时间段，这样您就可以在这些时间段内花费一些金币。
+It allows you to set the time until which you won't be able to withdraw anything from the wallet. You can also customize it by setting unlock periods so that you will be able to spend some coins during these set periods.
 
-例如：您可以创建一个钱包，该钱包将容纳 100 万金币，总归属时间为 10 年。将悬崖期限设置为一年，因此资金将在钱包创建后的第一年被锁定。然后，您可以将解锁期设置为一个月，这样每月就可以解锁 `1'000'000  TON  / 120 个月 = ~8333  TON `。
+For example: you can create a wallet which will hold 1 million coins with total vesting time of 10 years. Set the cliff duration to one year, so the funds will be locked for the first year after the wallet is created. Then, you can set the unlock period to one month, so `1'000'000 TON / 120 months = ~8333 TON` will unlock every month.
 
-钱包源代码：
+Wallet source code:
 
 - [ton-blockchain/lockup-wallet-contract](https://github.com/ton-blockchain/lockup-wallet-contract)
 
-### 受限钱包
+### Restricted wallet
 
-该钱包的功能与普通钱包类似，但只能向一个预定义的目标地址转账。您可以在创建此钱包时设置目标地址，然后就只能将资金转入该地址。但请注意，您仍然可以向验证合约转账，因此您可以使用此钱包运行验证器。
+This wallet's function is to act like a regular wallet, but restrict transfers to only one pre-defined destination address. You can set the destination when you create this wallet and then you'll be only able to transfer funds from it to that address. But note that you can still transfer funds to validation contracts so you can run a validator with this wallet.
 
-钱包源代码：
+Wallet source code:
 
 - [EmelyanenkoK/nomination-contract/restricted-wallet](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
 
-## 已知操作码
+## Conclusion
 
-:::info
-也是操作码、操作::码和操作码
-:::
+As you see, there are many different versions of wallets in TON. But in most cases, you only need `V3R2` or `V4R2`. You can also use one of the special wallets if you want to have some additional functionality like a periodic unlocking of funds.
 
-| 合约类型          | 十六进制代码     | OP::Code                                                                                               |
-| ------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Global        | 0x00000000 | Text Comment                                                                                                                           |
-| Global        | 0xffffffff | Bounce                                                                                                                                 |
-| Global        | 0x2167da4b | [Encrypted Comment](/v3/documentation/smart-contracts/message-management/internal-messages#messages-with-encrypted-comments)           |
-| Global        | 0xd53276db | Excesses                                                                                                                               |
-| Elector       | 0x4e73744b | New Stake                                                                                                                              |
-| Elector       | 0xf374484c | New Stake Confirmation                                                                                                                 |
-| Elector       | 0x47657424 | Recover Stake Request                                                                                                                  |
-| Elector       | 0x47657424 | Recover Stake Response                                                                                                                 |
-| Wallet        | 0x0f8a7ea5 | Jetton Transfer                                                                                                                        |
-| Wallet        | 0x235caf52 | [Jetton Call To](https://testnet.tonviewer.com/transaction/1567b14ad43be6416e37de56af198ced5b1201bb652f02bc302911174e826ef7)           |
-| Jetton        | 0x178d4519 | Jetton Internal Transfer                                                                                                               |
-| Jetton        | 0x7362d09c | Jetton Notify                                                                                                                          |
-| Jetton        | 0x595f07bc | Jetton Burn                                                                                                                            |
-| Jetton        | 0x7bdd97de | Jetton Burn Notification                                                                                                               |
-| Jetton        | 0xeed236d3 | Jetton Set Status                                                                                                                      |
-| Jetton-Minter | 0x642b7d07 | Jetton Mint                                                                                                                            |
-| Jetton-Minter | 0x6501f354 | Jetton Change Admin                                                                                                                    |
-| Jetton-Minter | 0xfb88e119 | Jetton Claim Admin                                                                                                                     |
-| Jetton-Minter | 0x7431f221 | Jetton Drop Admin                                                                                                                      |
-| Jetton-Minter | 0xcb862902 | Jetton Change Metadata                                                                                                                 |
-| Jetton-Minter | 0x2508d66a | Jetton Upgrade                                                                                                                         |
-| Vesting       | 0xd372158c | [Top Up](https://github.com/ton-blockchain/liquid-staking-contract/blob/be2ee6d1e746bd2bb0f13f7b21537fb30ef0bc3b/PoolConstants.ts#L28) |
-| Vesting       | 0x7258a69b | Add Whitelist                                                                                                                          |
-| Vesting       | 0xf258a69b | Add Whitelist Response                                                                                                                 |
-| Vesting       | 0xa7733acd | Send                                                                                                                                   |
-| Vesting       | 0xf7733acd | Send Response                                                                                                                          |
-| Dedust        | 0x9c610de3 | Dedust Swap ExtOut                                                                                                                     |
-| Dedust        | 0xe3a0d482 | Dedust Swap Jetton                                                                                                                     |
-| Dedust        | 0xea06185d | Dedust Swap Internal                                                                                                                   |
-| Dedust        | 0x61ee542d | Swap External                                                                                                                          |
-| Dedust        | 0x72aca8aa | Swap Peer                                                                                                                              |
-| Dedust        | 0xd55e4686 | Deposit Liquidity Internal                                                                                                             |
-| Dedust        | 0x40e108d6 | Deposit Liquidity Jetton                                                                                                               |
-| Dedust        | 0xb56b9598 | Deposit Liquidity all                                                                                                                  |
-| Dedust        | 0xad4eb6f5 | Pay Out From Pool                                                                                                                      |
-| Dedust        | 0x474а86са | Payout                                                                                                                                 |
-| Dedust        | 0xb544f4a4 | Deposit                                                                                                                                |
-| Dedust        | 0x3aa870a6 | Withdrawal                                                                                                                             |
-| Dedust        | 0x21cfe02b | Create Vault                                                                                                                           |
-| Dedust        | 0x97d51f2f | Create Volatile Pool                                                                                                                   |
-| Dedust        | 0x166cedee | Cancel Deposit                                                                                                                         |
-| StonFi        | 0x25938561 | Swap Internal                                                                                                                          |
-| StonFi        | 0xf93bb43f | Payment Request                                                                                                                        |
-| StonFi        | 0xfcf9e58f | Provide Liquidity                                                                                                                      |
-| StonFi        | 0xc64370e5 | Swap Success                                                                                                                           |
-| StonFi        | 0x45078540 | Swap Success ref                                                                                                                       |
+## See also
 
-:::info
-[DeDust docs](https://docs.dedust.io/docs/swaps)
+- [Working with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet)
+- [Sources of basic wallets](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+- [More technical description of versions](https://github.com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources.md)
+- [Wallet V4 sources and detailed description](https://github.com/ton-blockchain/wallet-contract)
+- [Lockup wallet sources and detailed description](https://github.com/ton-blockchain/lockup-wallet-contract)
+- [Restricted wallet sources](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
+- [Gasless transactions on TON](https://medium.com/@buidlingmachine/gasless-transactions-on-ton-75469259eff2)
 
-[StonFi docs](https://docs.ston.fi/docs/developer-section/architecture#calls-descriptions)
-:::
+<Feedback />
 
-## 结论
-
-如您所见，TON 中有许多不同版本的钱包。但在大多数情况下，您只需要 `V3R2` 或 `V4R2`。如果你想获得一些附加功能，如定期解锁资金，也可以使用其中一种特殊钱包。
-
-## 另请参见
-
-- [使用钱包智能合约](/v3/guidelines/smart-contracts/howto/wallet)
-- [基本钱包的来源](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
-- [更多版本技术说明](https://github.com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources.md)
-- [钱包 V4 来源和详细说明](https://github.com/ton-blockchain/wallet-contract)
-- [锁定钱包来源和详细说明](https://github.com/ton-blockchain/lockup-wallet-contract)
-- [限制钱包来源](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
-- [ TON 级 免 Gas 交易](https://medium.com/@buidlingmachine/gasless-transactions-on-ton-75469259eff2)

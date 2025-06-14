@@ -1,49 +1,58 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Словари в TON
 
+Smart contracts in TON can utilize dictionaries structured as ordered key-value mappings. Internally, these dictionaries are represented as tree-like structures composed of cells.
+
 :::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+Handling potentially large trees of cells in TON introduces several important considerations:
+
+1. **Gas consumption for updates**
+
+- Every update operation generates many new cells, costing 500 gas, as detailed on the [TVM instructions](/v3/documentation/tvm/instructions#gas-prices) page.
+- Careless updates can lead to excessive gas usage, potentially causing operations to fail due to gas exhaustion.
+- Example: This issue occurred with the **Wallet bot** using the **highload-v2 wallet**. Each iteration's unbounded loop and expensive dictionary updates led to gas depletion. As a result, the bot triggered repeated transactions, eventually draining its balance ([see transaction details](https://tonviewer.com/transaction/fd78228f352f582a544ab7ad7eb716610668b23b88dae48e4f4dbd4404b5d7f6)).
+
+2. **Storage limitation**
+
+- A binary tree containing **N** key-value pairs requires **N-1 forks**, resulting in **at least 2N-1 cells**.
+- Since smart contract storage in TON is capped at 65,536 unique cells, the maximum number of dictionary entries is approximately 32,768. This limit may be slightly higher if some cells are reused within the structure.
+
 :::
-
-Смарт-контракты могут использовать словари — упорядоченные сопоставления ключ-значение. Внутренне они представлены деревьями ячеек.
-
-:::warning
-Working with potentially large trees of cells creates a couple of considerations:
-
-1. Каждая операция обновления создает заметное количество ячеек (и каждая построенная ячейка стоит 500 газа, как можно найти на странице [Инструкции TVM](/v3/documentation/tvm/instructions#gas-prices), что означает, что эти операции могут исчерпать газ, если их использовать без должного внимания.
-    - В частности, Wallet bot однажды столкнулся с такой проблемой при использовании кошелька highload-v2. Неограниченный цикл в сочетании с дорогостоящими обновлениями словаря на каждой итерации привел к исчерпанию газа и в конечном итоге к повторным транзакциям, таким как [fd78228f352f582a544ab7ad7eb716610668b23b88dae48e4f4dbd4404b5d7f6](https://tonviewer.com/transaction/fd78228f352f582a544ab7ad7eb716610668b23b88dae48e4f4dbd4404b5d7f6), опустошающим его баланс.
-2. Двоичное дерево для N пар ключ-значение содержит N-1 разветвлений и, таким образом, в общей сложности не менее 2N-1 ячеек. Хранилище смарт-контрактов ограничено 65536 уникальными ячейками, поэтому максимальное количество записей в словаре составляет 32768 или немного больше, если есть повторяющиеся ячейки.
-    :::
 
 ## Типы словарей
 
-### "Хэш"карта
+### "Hash" map
 
-Очевидно, что наиболее известным и используемым типом словарей в TON является хэш-карта. Он имеет целый раздел, стоящий кодов операций TVM ([Инструкции TVM](/v3/documentation/tvm/instructions#quick-search) - Манипулирование словарем) и обычно используется в смарт-контрактах.
+Hashmaps are the most widely used dictionary type in TON. They have a dedicated set of TVM opcodes for manipulation and are commonly used in smart contracts (see [TVM instructions](/v3/documentation/tvm/instructions#quick-search) - Dictionary manipulation).
 
-Эти словари представляют собой сопоставления ключей одинаковой длины (указанная длина указывается в качестве аргумента для всех функций) с фрагментами значений. В отличие от "хэширования" в названии, записи в них упорядочены и обеспечивают дешевое извлечение элемента по ключу, предыдущей или следующей паре ключ-значение. Значения помещаются в ту же ячейку, что и внутренние теги узлов и, возможно, ключевые части, поэтому они не могут использовать все 1023 бита; в такой ситуации обычно используется `~udict_set_ref`.
+Hashmaps map fixed-length keys, which are defined as an argument to all functions, to value slices. Despite the "hash" in its name, entries are ordered and allow efficient access to elements by key and retrieval of the previous or next key-value pair. Since values share space with internal node tags and possibly key fragments within the same cell, they cannot utilize the full 1023 bits. In such cases, the `~udict_set_ref` function often helps.
 
-Пустая хэш-карта представляется TVM как `null`; таким образом, это не ячейка. Чтобы сохранить словарь в ячейке, сначала сохраняется один бит (0 для пустого, 1 в противном случае), а затем добавляется ссылка, если хэш-карта не пуста. Таким образом, `store_maybe_ref` и `store_dict` взаимозаменяемы, и некоторые авторы смарт-контрактов используют `load_dict` для загрузки `Maybe ^Cell` из входящего сообщения или хранилища.
+An empty hashmap is represented as `null` in TVM, meaning it is not stored as a cell. A single bit is first saved to store a dictionary in a cell (0 for empty, 1 otherwise),
+followed by a reference if the hashmap is not empty. This makes `store_maybe_ref` and `store_dict` interchangeable. Some smart contract developers use `load_dict` to load a `Maybe ^Cell` from an incoming message or storage.
 
-Возможные операции для хэш-карт:
+**Available hashmap operations:**
 
-- загрузка из среза, сохранение в конструкторе
-- получение/установка/удаление значения по ключу
-- замена значения (установка нового значения, если ключ уже был) / добавление одного (если ключ отсутствовал)
-- переход к следующей/предыдущей паре ключ-значение в порядке ключей (это можно использовать для [перебора словарей](/v3/documentation/smart-contracts/func/cookbook#how-to-iterate-dictionaries), если ограничение газа не имеет значения)
-- извлечение минимального/максимального ключа с его значением
-- получение функции (продолжение) по ключу и немедленное ее выполнение
+- Load from a slice, store to a builder;
+- Get/Set/Delete a value by key;
+- Replace a value (update an existing key) or add a new value (if the key is absent);
+- Move to the next/previous key-value pair (entries are ordered by keys, enabling [iteration](/v3/documentation/smart-contracts/func/cookbook#how-to-iterate-dictionaries) if gas constraints allow);
+- Retrieve the minimal or maximal key with its value;
+- Fetch and execute a function (continuation) by key.
 
-Чтобы контракт не нарушался из-за превышения ограничения газа, при обработке одной транзакции должно происходить только ограниченное количество обновлений словаря. Если баланс контракта используется для поддержания карты в соответствии с условиями разработчика, контракт может отправить себе сообщение для продолжения очистки.
+To prevent gas exhaustion, smart contracts should limit the number of dictionary updates per transaction. If a contract's balance is used to maintain the hashmap under specific conditions, it can send itself a message to continue processing in another transaction.
 
 :::info
-Существуют инструкции по извлечению подсловаря: подмножества записей в заданном диапазоне ключей. Они не были протестированы, поэтому вы можете проверить их только в форме сборки TVM: `SUBDICTGET` и аналогичной.
+
+TVM provides instructions for retrieving a subdictionary—a subset of entries within a given key range. These operations (`SUBDICTGET` and similar) are currently untested and can only be explored at the TVM assembly level.
+
 :::
 
 #### Примеры хэш-карт
 
-Давайте посмотрим, как выглядят хэш-карты, уделив особое внимание сопоставлению 257-битных целочисленных ключей с пустыми срезами значений (такая карта будет указывать только на наличие или отсутствие элемента).
+To illustrate, let's examine a hashmap that maps 257-bit integer keys to empty value slices. This type of hashmap serves as a presence indicator, storing only the existence of elements.
 
-Способ быстрой проверки — запустить следующий скрипт на Python (возможно, заменив `pytoniq` на другой SDK по мере необходимости):
+You can quickly check this by running the following Python script. If needed, you can use a different SDK instead of `pytoniq`:
 
 ```python
 import pytoniq
@@ -56,7 +65,7 @@ k.set(6 - 2**256, em)
 print(str(pytoniq.begin_cell().store_maybe_ref(k.serialize()).end_cell()))
 ```
 
-Структура представляет собой двоичное дерево, даже сбалансированное, если мы пропустим корневую ячейку.
+This structure forms a binary tree, which appears balanced except for the root cell:
 
 ```
 1[80] -> {
@@ -73,14 +82,17 @@ print(str(pytoniq.begin_cell().store_maybe_ref(k.serialize()).end_cell()))
 }
 ```
 
-В документации есть [еще примеры по разбору хэш-карт](/v3/documentation/data-formats/tlb/tl-b-types#hashmap-parsing-example).
+For further [examples of hashmap parsing](/v3/documentation/data-formats/tlb/tl-b-types#hashmap-parsing-example), refer to the official documentation.
 
-### Расширенные карты (с дополнительными данными в каждом узле)
+### Augmented maps
 
-Эти карты используются внутри валидаторов TON для расчета общего баланса всех контрактов в шарде (использование карт с общим балансом поддерева с каждым узлом позволяет им очень быстро проверять обновления). Для работы с ними нет примитивов TVM.
+Augmented maps with additional data in each node are used internally by TON validators to calculate the total balance of all contracts in a shard. By storing the total subtree balance in each node, validators can quickly validate updates. There are no TVM primitives for working with these maps.
 
 ### Словарь префиксов
 
 :::info
-Тестирование показывает, что для создания словарей префиксов недостаточно документации. Вам не следует использовать их в продакшен контрактах, если у вас нет полных знаний о том, как работают соответствующие opcode, `PFXDICTSET` и подобные.
+Testing shows that documentation on prefix dictionaries is insufficient. Avoid using them in production contracts unless you fully understand how the relevant opcodes, such as `PFXDICTSET`, work.
 :::
+
+<Feedback />
+

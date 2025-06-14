@@ -2,7 +2,13 @@
 description: 在这篇文章中，我们将引导你完成在 Telegram 机器人中接受付款的过程。
 ---
 
+import Feedback from '@site/src/components/Feedback';
+
 # 使用 TON 的商店机器人
+
+:::caution
+The integration method described in this guide is one of the available approaches. With ongoing developments, Telegram Mini Apps provide additional capabilities that better suit modern security and functionality requirements.
+:::
 
 在这篇文章中，我们将引导你完成在 Telegram 机器人中接受付款的过程。
 
@@ -10,27 +16,26 @@ description: 在这篇文章中，我们将引导你完成在 Telegram 机器人
 
 在这篇文章中，你将学习如何：
 
-- 使用 Python + Aiogram 创建一个 Telegram 机器人
-- 使用公开的 TON API（TON Center）
-- 使用 SQlite 数据库
-
-最后：通过前面步骤的知识，在 Telegram 机器人中接受付款。
+- Create a Telegram bot using Python and Aiogram,
+- Work with the public TON Center API,
+- Work with an SQlite database,
+- How to accept payments in a Telegram bot by applying the knowledge from previous steps.
 
 ## 📚 在我们开始之前
 
-确保你已经安装了最新版本的 Python，并且已经安装了以下包：
+Make sure you have installed the latest version of Python and the following packages:
 
-- aiogram
-- requests
-- sqlite3
+- aiogram,
+- requests.
+- sqlite3.
 
 ## 🚀 我们开始吧！
 
-我们将按照以下顺序操作：
+We'll follow this order:
 
-1. 使用 SQlite 数据库
-2. 使用公开的 TON API（TON Center）
-3. 使用 Python + Aiogram 创建一个 Telegram 机器人
+1. Work with an SQlite database.
+2. Work with the public TON API (TON Center).
+3. Create a Telegram bot using Python and Aiogram.
 4. 盈利！
 
 让我们在项目目录中创建以下四个文件：
@@ -45,7 +50,7 @@ telegram-bot
 
 ## 配置
 
-在 `config.json` 中，我们将存储我们的机器人令牌和我们的公开 TON API 密钥。
+In `config.json`, we store our bot token and public TON API key.
 
 ```json
 {
@@ -58,17 +63,17 @@ telegram-bot
 }
 ```
 
-在 `config.json` 中，我们决定我们将使用哪个网络：`testnet` 或 `mainnet`。
+In `config.json`, define whether you'll use use `Testnet` or `Mainnet`.
 
-## 数据库
+## 创建数据库
 
-### 创建数据库
+### 数据库
 
 这个示例使用本地 Sqlite 数据库。
 
-创建 `db.py`。
+Create a file called `db.py`.
 
-开始使用数据库，我们需要导入 sqlite3 模块和一些用于处理时间的模块。
+To work with the database, import sqlite3 module and some modules for handling time.
 
 ```python
 import sqlite3
@@ -76,11 +81,11 @@ import datetime
 import pytz
 ```
 
-- `sqlite3`—用于操作 sqlite 数据库的模块
-- `datetime`—用于处理时间的模块
-- `pytz`—用于处理时区的模块
+- `sqlite3`—module for working with sqlite database,
+- `datetime`—module for working with time.
+- `pytz`—module for working with timezones.
 
-接下来，我们需要创建一个数据库的连接和一个用于操作它的游标：
+Next, establish a connection to the database and a cursor:
 
 ```python
 locCon = sqlite3.connect('local.db', check_same_thread=False)
@@ -89,7 +94,7 @@ cur = locCon.cursor()
 
 如果数据库不存在，将会自动创建。
 
-现在我们可以创建表格了。我们有两个表格。
+We need two tables:
 
 #### 交易：
 
@@ -103,10 +108,10 @@ CREATE TABLE transactions (
 );
 ```
 
-- `source`—付款人的钱包地址
-- `hash`—交易哈希
-- `value`—交易价值
-- `comment`—交易备注
+- `source`—payer's wallet address,
+- `hash`—transaction hash,
+- `value`—transaction value,
+- `comment`—transaction comment.
 
 #### 用户：
 
@@ -120,16 +125,17 @@ CREATE TABLE users (
 );
 ```
 
-- `id`—Telegram 用户 ID
-- `username`—Telegram 用户名
-- `first_name`—Telegram 用户的名字
-- `wallet`—用户钱包地址
+- `id`—Telegram user ID,
+- `username`—Telegram username,
+- `first_name`—Telegram user's first name,
+- `wallet`—user wallet address.
 
-在 `users` 表中，我们存储用户 :) 他们的 Telegram ID、@username、
-名字和钱包。第一次成功付款时，钱包将被添加到数据库中。
+The `users` table stores Telegram users along with their Telegram ID, @username,
+first name, and wallet. The wallet is added to the database upon the first
+successful payment.
 
-`transactions` 表存储已验证的交易。
-要验证交易，我们需要哈希、来源、值和备注。
+The `transactions` table stores verified transactions.
+To verify a transaction, we need a unique transaction hash, source, value, and comment.
 
 要创建这些表格，我们需要运行以下函数：
 
@@ -155,14 +161,14 @@ locCon.commit()
 
 如果这些表格还没有被创建，这段代码将会创建它们。
 
-### 使用数据库
+### Work with database
 
-让我们分析一种情况：
-用户进行了一笔交易。我们如何验证它？我们如何确保同一笔交易不被二次确认？
+Let's analyze the process:
+A user makes a transaction. How do we verify it? How do we ensure that the same transaction isn't confirmed twice?
 
-交易中有一个 body_hash，通过它我们可以轻松地了解数据库中是否存在该交易。
+Each transaction includes a `body_hash`, which allows us to easily check whether the transaction is already in the database.
 
-我们只添加我们确定的交易到数据库。`check_transaction` 函数检查数据库中是否存在找到的交易。
+We only add transactions that have been verified. The `check_transaction` function determines whether a given transaction is already in the database.
 
 `add_v_transaction` 将交易添加到交易表。
 
@@ -182,7 +188,7 @@ def check_transaction(hash):
     return False
 ```
 
-`check_user` 检查用户是否在数据库中，并且如果不在，则添加他。
+`check_user` verifies if the user exists in the database and adds them if not.
 
 ```python
 def check_user(user_id, username, first_name):
@@ -197,7 +203,7 @@ def check_user(user_id, username, first_name):
     return True
 ```
 
-用户可以在表中存储一个钱包。它是在第一次成功购买时添加的。`v_wallet` 函数检查用户是否有关联的钱包。如果有，则返回它。如果没有，则添加。
+The user can store a wallet in the table. It is added with the first successful purchase. The `v_wallet` function checks if the user has an associated wallet. If not, it adds the wallet upon the user's first successful purchase.
 
 ```python
 def v_wallet(user_id, wallet):
@@ -212,7 +218,7 @@ def v_wallet(user_id, wallet):
         return result[0]
 ```
 
-`get_user_wallet` 简单地返回用户的钱包。
+`get_user_wallet` simply retrieves the user's wallet.
 
 ```python
 def get_user_wallet(user_id):
@@ -221,8 +227,8 @@ def get_user_wallet(user_id):
     return result[0]
 ```
 
-`get_user_payments` 返回用户的支付列表。
-这个函数检查用户是否有钱包。如果有，则返回支付列表。
+`get_user_payments` returns the user's payment history.
+This function checks if the user has a wallet. If they do, it provides the list of their payments.
 
 ```python
 def get_user_payments(user_id):
@@ -250,26 +256,27 @@ def get_user_payments(user_id):
 
 ## API
 
-*我们有能力使用一些网络成员提供的第三方 API 与区块链进行交互。通过这些服务，开发者可以跳过运行自己的节点和自定义 API 的步骤。*
+_We can interact with the blockchain using third-party APIs provided by network members. These services allow developers to bypass the need their own node and customize their API._
 
-### 需要的请求
+### Required requests
 
-实际上，我们需要确认用户已经向我们转账了所需金额吗？
+What do we need to confirm that a user has transferred the required amount?
 
-我们只需要查看我们钱包的最新进账转账，并在其中找到一笔来自正确地址、正确金额的交易（可能还有一个独特的备注）。
-为了所有这一切，TON Center 有一个 `getTransactions` 方法。
+We simply need to check the latest incoming transfers to our wallet and find a transaction from the right address with the right amount (and possibly a unique comment).
+For this, TON Center provides the `getTransactions` method.
 
 ### getTransactions
 
-默认情况下，如果我们使用它，我们将获得最后 10 条交易。然而，我们也可以表示我们需要更多，但这会略微增加响应时间。而且，很有可能，你不需要那么多。
+By default, this method retrieves the last 10 transactions. However, we can request more, though this slightly increases the response time. In most cases, requestin additional transactions is unnecessary.
 
-如果您想要更多，那么每笔交易都有 `lt` 和 `hash`。您可以查看例如 30 条交易，如果没在其中找到正确的一笔，那么取最后一笔的 `lt` 和 `hash` 添加到请求中。
+If more transactions are required, each transaction includes `lt` and `hash`. We can fetch, for example, the last 30 transactions. If the required transaction is not found, we can take `lt` and `hash` of the last transaction in the list and include them in a new request.
 
-这样您就可以得到下一个 30 条交易，以此类推。
+This allows us to retrieve the next 30 transactions, and so on.
 
-例如，测试网络中有一个钱包 `EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5`，它有一些交易：
+For example, consider the wallet in the test network `EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5`.
 
-使用[查询](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5\\&limit=2\\&to_lt=0\\&archival=true) 我们将得到包含两笔交易的响应（现在不需要的一些信息已经被隐藏，完整答案可以在上面的链接中看到）。
+Using a query returns a response containing two transactions.
+Note that some details have been omitted for clarity.
 
 ```json
 {
@@ -311,7 +318,7 @@ def get_user_payments(user_id):
 }
 ```
 
-我们从这个地址收到了最后两笔交易。当添加 `lt` 和 `hash` 到查询中时，我们将再次收到两笔交易。然而，第二笔将成为下一笔连续的交易。也就是说，我们将获得这个地址的第二笔和第三笔交易。
+By adding `lt` and `hash` to the query, we can retrieve the next two two transactions in sequence. That is, instead of getting the first and second transactions, we will receive the second and third.
 
 ```json
 {
@@ -349,13 +356,13 @@ def get_user_payments(user_id):
 }
 ```
 
-请求将看起来像[这样。](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5\\&limit=2\\&lt=1943166000003\\&hash=hxIQqn7lYD%2Fc%2FfNS7W%2FiVsg2kx0p%2FkNIGF6Ld0QEIxk%3D\\&to_lt=0\\&archival=true)
+The request will look like as follows [this.](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5&limit=2&lt=1943166000003&hash=hxIQqn7lYD%2Fc%2FfNS7W%2FiVsg2kx0p%2FkNIGF6Ld0QEIxk%3D&to_lt=0&archival=true)
 
 我们还需要一个方法 `detectAddress`。
 
-这是测试网上的 Tonkeeper 钱包地址的一个例子：`kQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aCTb`。如果我们在浏览器中查找交易，代替上述地址，有：`EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R`。
+Here is an example of a Tonkeeper wallet address on Testnet: `kQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aCTb`. If we look for the transaction in the explorer, the address appears as: `EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R`.
 
-这个方法返回给我们“正确”的地址。
+This method provides us with the correctly formatted address.
 
 ```json
 {
@@ -375,17 +382,15 @@ def get_user_payments(user_id):
 }
 ```
 
-我们需要 `b64url`。
+Additionally, we need `b64url`, which allows us to validate the user's address.
 
-这个方法让我们能够验证用户的地址。
+Basically, that's all we need.
 
-大部分而言，这就是我们所需要的。
+### API requests and what to do with them
 
-### API 请求及其处理方法
+Now, let's move to the IDE andreate the `api.py` file.
 
-让我们回到 IDE。创建文件 `api.py`。
-
-导入所需的库。
+Import the necessary libraries.
 
 ```python
 import requests
@@ -395,11 +400,11 @@ import json
 import db
 ```
 
-- `requests`—用来向 API 发送请求
-- `json`—用来处理 json
-- `db`—用来处理我们的 sqlite 数据库
+- `requests`—to make requests to the API,
+- `json`—to work with JSON,
+- `db`—to work with our sqlite database.
 
-让我们创建两个变量来存储请求的开头。
+Let's create two variables to store the base URLs for our requests.
 
 ```python
 # This is the beginning of our requests
@@ -407,7 +412,7 @@ MAINNET_API_BASE = "https://toncenter.com/api/v2/"
 TESTNET_API_BASE = "https://testnet.toncenter.com/api/v2/"
 ```
 
-从 config.json 文件中获取所有 API 令牌和钱包。
+We get all API tokens and wallets from the config.json file.
 
 ```python
 # Find out which network we are working on
@@ -420,7 +425,7 @@ with open('config.json', 'r') as f:
     WORK_MODE = config_json['WORK_MODE']
 ```
 
-根据网络，我们取所需的数据。
+Depending on the network, we take the necessary data.
 
 ```python
 if WORK_MODE == "mainnet":
@@ -433,7 +438,7 @@ else:
     WALLET = TESTNET_WALLET
 ```
 
-我们的第一个请求函数 `detectAddress`。
+Our first request function `detectAddress`.
 
 ```python
 def detect_address(address):
@@ -446,11 +451,11 @@ def detect_address(address):
         return False
 ```
 
-在输入中，我们有预计的地址，输出要么是我们需要的“正确”地址，以便进行进一步的工作，要么是 False。
+At the input, we have the estimated address, and at the output, we have either the "correct" address necessary for us to do further work or False.
 
-你可能会注意到请求末尾出现了 API 密钥。它是为了移除对 API 请求数量的限制。没有它，我们被限制为每秒一个请求。
+You may notice that an API key has appeared at the end of the request. It is needed to remove the limit on the number of requests to the API. Without it, we are limited to one request per second.
 
-这里是 `getTransactions` 的下一个函数：
+Here is next function for `getTransactions`:
 
 ```python
 def get_address_transactions():
@@ -460,13 +465,12 @@ def get_address_transactions():
     return response['result']
 ```
 
-此函数返回最后 30 次对我们 `WALLET` 的交易。
+This function returns the last 30 transactions for our `WALLET`.
 
-这里可以看到 `archival=true`。这是因为我们只需要从具有完整区块链历史记录的节点获取交易。
+The `archival=true` parameter ensures that transactions are retrieved from a node with a complete blockchain history.
 
-在输出中，我们获得一个交易列表—[{0},{1},…,{29}]。简而言之，是字典列表。
-
-最后一个函数：
+At the output, we get a list of transactions, such as `[{0},{1},...,{29}]` which are represented as a list of dictionaries.
+And finally the last function:
 
 ```python
 def find_transaction(user_wallet, value, comment):
@@ -497,15 +501,15 @@ def find_transaction(user_wallet, value, comment):
     return False
 ```
 
-输入是“正确”的钱包地址、金额和评论。如果找到预期的进账交易，输出为 True；否则为 False。
+At the input, we get the correct wallet address, amount and comment. If the expected incoming transaction is found, the output is True; otherwise, it is False.
 
 ## Telegram 机器人
 
-首先，让我们为机器人创建基础。
+First, let's establish the bot's foundation.
 
 ### 导入
 
-在这部分，我们将导入所需的库。
+In this part, we will import the required libraries.
 
 来自 `aiogram`，我们需要 `Bot`、`Dispatcher`、`types` 和 `executor`。
 
@@ -523,7 +527,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 ```
 
-`json` 用来处理 json 文件。`logging` 用来记录错误。
+`json` 用来处理 json 文件。`logging` 用来记录错误。 `logging` is needed to log errors.
 
 ```python
 import json
@@ -539,7 +543,7 @@ import api
 
 ### 配置设置
 
-建议您将如 `BOT_TOKEN` 和接收付款的钱包等数据存储在一个名为 `config.json` 的单独文件中，以便于使用。
+It is recommended to store data such as `BOT_TOKEN` and wallet addresses for receiving payments in a separate file called `config.json` for convenience.
 
 ```json
 {
@@ -552,26 +556,24 @@ import api
 }
 ```
 
-#### 机器人令牌
+#### Bot token
 
-`BOT_TOKEN` 是你的 Telegram 机器人令牌，来自 [@BotFather](https://t.me/BotFather)
+`BOT_TOKEN` is the Telegram bot token obtained from [@BotFather](https://t.me/BotFather)
 
 #### 工作模式
 
-在 `WORK_MODE` 键中，我们将定义机器人的工作模式—在测试网或主网；分别为 `testnet` 或 `mainnet`。
+The `WORK_MODE` key defines whether the bot operates in the test or main network; `testnet` or `mainnet` respectively.
 
 #### API 令牌
 
-`*_API_TOKEN` 的 API 令牌可以在 [TON Center](https://toncenter.com/) 机器人处获取：
+API tokens for `*_API_TOKEN` can be obtained from the [TON Center](https://toncenter.com/) bots:
 
-- 对于主网 — [@tonapibot](https://t.me/tonapibot)
-- 对于测试网 — [@tontestnetapibot](https://t.me/tontestnetapibot)
+- Mainnet — [@tonapibot](https://t.me/tonapibot)
+- Testnet — [@tontestnetapibot](https://t.me/tontestnetapibot)
 
-#### 将配置连接到我们的机器人
+#### Connecting the config to our bot
 
-接下来，我们完成机器人设置。
-
-从 `config.json` 获取机器人工作所需的令牌：
+Next, we complete the bot setup by retrieving the bot token from `config.json` :
 
 ```python
 with open('config.json', 'r') as f:
@@ -600,7 +602,7 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 
 ### 状态
 
-我们需要使用状态将机器人工作流程划分为阶段。我们可以将每个阶段专门用于特定任务。
+States allow us to devide the bot workflow into stages, each designated for a specific task.
 
 ```python
 class DataInput (StatesGroup):
@@ -610,7 +612,7 @@ class DataInput (StatesGroup):
     PayState = State()
 ```
 
-详情和示例请参见 [Aiogram 文档](https://docs.aiogram.dev/en/latest/)。
+For details and examples, refer to the [Aiogram documentation](https://docs.aiogram.dev/en/latest/).
 
 ### 消息处理器(Message handlers)
 
@@ -618,18 +620,18 @@ class DataInput (StatesGroup):
 
 我们将使用两种类型的处理器：
 
-- `message_handler` 用于处理用户消息。
+- `message_handler` is used to handle messages from users,
 - `callback_query_handler` 用于处理来自内联键盘的回调。
 
-如果我们想处理用户的消息，我们将使用 `message_handler` 并在函数上方放置 `@dp.message_handler` 装饰器。在这种情况下，当用户向机器人发送消息时，将调用该函数。
+如果我们想处理用户的消息，我们将使用 `message_handler` 并在函数上方放置 `@dp.message_handler` 装饰器。在这种情况下，当用户向机器人发送消息时，将调用该函数。 In this case, the function will be called when the user sends a message to the bot.
 
-在装饰器中，我们可以指定将在何种条件下调用该函数。例如，如果我们想要在用户发送文本 `/start` 的消息时调用函数，那么我们将编写以下内容：
+In the decorator, we can specify the conditions under which the function will be called. 在装饰器中，我们可以指定将在何种条件下调用该函数。例如，如果我们想要在用户发送文本 `/start` 的消息时调用函数，那么我们将编写以下内容：
 
 ```
 @dp.message_handler(commands=['start'])
 ```
 
-处理器需要分配给一个异步函数。在这种情况下，我们将使用 `async def` 语法。`async def` 语法用于定义将异步调用的函数。
+Handlers need to be assigned to an async function. In this case, we will use  `async def` syntax. 处理器需要分配给一个异步函数。在这种情况下，我们将使用 `async def` 语法。`async def` 语法用于定义将异步调用的函数。
 
 #### /start
 
@@ -652,13 +654,13 @@ async def cmd_start(message: types.Message):
     await DataInput.firstState.set()
 ```
 
-在此处理器的装饰器中，我们看到 `state='*'`。这意味着无论机器人的状态如何，该处理器都将被调用。如果我们希望处理器仅在机器人处于特定状态时调用，我们将编写 `state=DataInput.firstState`。在这种情况下，处理器仅在机器人处于 `firstState` 状态时被调用。
+In the decorator of a handler, you may see `state='*'`, meaning the handler will be triggered regardless of the bot's state. If we want the handler to activate only in a specific state, we specify it, such as `state=DataInput.firstState`, ensuring the handler runs only when the bot is in `firstState`.
 
-用户发送 `/start` 命令后，机器人将使用 `db.check_user` 函数检查用户是否在数据库中。如果不是，它将添加他。此函数还将返回布尔值，我们可以使用它以不同的方式对待用户。之后，机器人将设置状态为 `firstState`。
+用户发送 `/start` 命令后，机器人将使用 `db.check_user` 函数检查用户是否在数据库中。如果不是，它将添加他。此函数还将返回布尔值，我们可以使用它以不同的方式对待用户。之后，机器人将设置状态为 `firstState`。 If not, it will add him. This function will also return the bool value and we can use it to address the user differently. After that, the bot will set the state to `firstState`.
 
 #### /cancel
 
-接下来是 /cancel 命令处理器。它需要返回到 `firstState` 状态。
+The /cancel command returns the bot to `firstState`.
 
 ```python
 @dp.message_handler(commands=['cancel'], state="*")
@@ -670,7 +672,7 @@ async def cmd_cancel(message: types.Message):
 
 #### /buy
 
-当然还有 `/buy` 命令处理器。在这个示例中我们将出售不同类型的空气。我们将使用reply keyboard来选择air types。
+And, of course, there is a `/buy` command handler. In this example, we sell different types of air and use the reply keyboard to choose the type.
 
 ```python
 # /buy command handler
@@ -687,11 +689,11 @@ async def cmd_buy(message: types.Message):
     await DataInput.secondState.set()
 ```
 
-所以，当用户发送 `/buy` 命令时，机器人发送一个reply keyboard给他，上面有air type。用户选择air type后，机器人将设置状态为 `secondState`。
+所以，当用户发送 `/buy` 命令时，机器人发送一个reply keyboard给他，上面有air type。用户选择air type后，机器人将设置状态为 `secondState`。 After the user chooses the type of air, the bot will set the state to `secondState`.
 
-此处理器将仅在 `secondState` 被设置时工作，并将等待用户发送air type的消息。在这种情况下，我们需要存储用户选择的air type，因此我们将 FSMContext 作为参数传递给函数。
+This handler will work only when `secondState` is set and will be waiting for a message from the user with the air type.  此处理器将仅在 `secondState` 被设置时工作，并将等待用户发送air type的消息。在这种情况下，我们需要存储用户选择的air type，因此我们将 FSMContext 作为参数传递给函数。
 
-FSMContext 用于在机器人的内存中存储数据。我们可以在其中存储任何数据，但这个内存不是持久的，所以如果机器人重启，数据将会丢失。但它很适合存储临时数据。
+FSMContext 用于在机器人的内存中存储数据。我们可以在其中存储任何数据，但这个内存不是持久的，所以如果机器人重启，数据将会丢失。但它很适合存储临时数据。 We can store any data in it but this memory is not persistent, so if the bot is restarted, the data will be lost. But it's good to store temporary data in it.
 
 ```python
 # handle air type
@@ -719,27 +721,27 @@ async def air_type(message: types.Message, state: FSMContext):
 await state.update_data(air_type="Just pure 🌫")
 ```
 
-...在 FSMContext 中存储air type之后，我们设置状态为 `WalletState` 并要求用户发送他的钱包地址。
+...to store the air type in FSMContext. After that, we set the state to `WalletState` and ask the user to send their wallet address.
 
-此处理器将仅在 `WalletState` 被设置时工作，并将等待用户发送钱包地址的消息。
+This handler activates only in WalletState, expecting a valid wallet address.
 
-下一个处理器看起来可能非常复杂，但实际上并不难。首先，我们使用 `len(message.text) == 48` 检查消息是否是有效的钱包地址，因为钱包地址长 48 个字符。之后，我们使用 `api.detect_address` 函数检查地址是否有效。如你从 API 部分记得的那样，这个函数还返回 "正确" 地址，它将被存储在数据库中。
+Consider the next handler. It may seem complex, but it isn’t. First, we verify whether the message contains a wallet address of the correct length using `len(message.text) == 48`. Then, we call the `api.detect_address` function to validate the address. This function also returns the standardized _correct_ address, which is stored in the database.
 
 之后，我们使用 `await state.get_data()` 从 FSMContext 获取air type并将其存储在 `user_data` 变量中。
 
-现在我们有了付款过程所需的所有数据。我们只需要生成一个付款链接并发送给用户。让我们使用inline keyboard。
+Now we have all the data required for the payment process. We just need to generate a payment link and send it to the user. Let's use the inline keyboard.
 
-在此示例中，将为付款创建三个按钮：
+The bot provides three payment buttons:
 
-- 官方 TON Wallet
-- Tonhub
-- Tonkeeper
+- TON wallet,
+- Tonhub,
+- Tonkeeper.
 
-对于钱包的特殊按钮的优点是，如果用户尚未拥有钱包，则网站将提示他安装一个。
+These buttons are advantageous of special buttons because they guide users to install a wallet if they don't have one
 
-你可以随意使用你想要的内容。
+You are free to use whatever you want.
 
-我们还需要一个用户付款后按下的按钮，这样我们就可以检查支付是否成功。
+And we need a button that the user will press after tmaking a transaction, allowing the bot to verify the payment.
 
 ```python
 @dp.message_handler(state=DataInput.WalletState)
@@ -777,7 +779,7 @@ async def user_wallet(message: types.Message, state: FSMContext):
 
 #### /me
 
-我们需要的最后一个消息处理器是 `/me` 命令。它显示用户的支付信息。
+One last message handler is `/me`. It shows the user's payments.
 
 ```python
 # /me command handler
@@ -796,9 +798,11 @@ async def cmd_me(message: types.Message):
 
 ### 回调处理器(Callback handlers)
 
-我们可以在按钮中设置回调数据，当用户按下按钮时，这些数据将被发送给机器人。在用户交易后按下的按钮中，我们设置回调数据为 "check"。因此，我们需要处理这个回调。
+Callback data is embedded in buttons, allowing the bot to recognize user actions.
 
-回调处理器与消息处理器非常相似，但它们有 `types.CallbackQuery` 作为参数，而不是 `message`。函数装饰器也有所不同。
+For example, the “Payment Confirmed” button sends the callback "check", which the bot must process.
+
+回调处理器与消息处理器非常相似，但它们有 `types.CallbackQuery` 作为参数，而不是 `message`。函数装饰器也有所不同。 Function decorator is also different.
 
 ```python
 @dp.callback_query_handler(lambda call: call.data == "check", state=DataInput.PayState)
@@ -818,9 +822,9 @@ async def check_transaction(call: types.CallbackQuery, state: FSMContext):
         await DataInput.firstState.set()
 ```
 
-在此处理器中，我们从 FSMContext 获取用户数据并使用 `api.find_transaction` 函数检查交易是否成功。如果成功，我们将钱包地址存储在数据库中，并向用户发送通知。此后，用户可以使用 `/me` 命令查找他的交易。
+In this handler we get user data from FSMContext and use `api.find_transaction` to check if the transaction was successful. If so, the wallet address is stored in the database, and the bot notifies the user. After that, the user can check their transaction anytime using `/me`.
 
-### main.py 的最后一部分
+### Finalizing main.py
 
 最后，别忘了：
 
@@ -829,8 +833,9 @@ if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
 ```
 
+This part is needed to start the bot.
 这部分需要启动机器人。
-在 `skip_updates=True` 中，我们指定我们不想处理旧消息。但如果您想处理所有消息，可以将其设置为 `False`。
+在 `skip_updates=True` 中，我们指定我们不想处理旧消息。但如果您想处理所有消息，可以将其设置为 `False`。 But if you want to process all messages, you can set it to `False`.
 
 :::info
 
@@ -838,22 +843,22 @@ if __name__ == '__main__':
 
 :::
 
-## 机器人动起来
+## Bot in action
 
-我们终于做到了！现在你应该有一个工作中的机器人。你可以测试它！
+Congratulations! The bot is ready. You can test it!
 
 运行机器人的步骤：
 
 1. 填写 `config.json` 文件。
 2. 运行 `main.py`。
 
-所有文件必须在同一个文件夹中。要启动机器人，您需要运行 `main.py` 文件。您可以在 IDE 或终端中这样做：
+All files must be in the same folder. To start the bot, you need to run the `main.py` file. You can do it in your IDE or in the terminal like this:
 
 ```
 python main.py
 ```
 
-如果您遇到任何错误，可以在终端中检查。也许您在代码中漏掉了一些东西。
+If errors occur, check them in the terminal. Maybe you have missed something in the code.
 
 工作中的机器人示例[@AirDealerBot](https://t.me/AirDealerBot)
 
@@ -862,4 +867,7 @@ python main.py
 ## 参考资料
 
 - 作为 [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8) 的一部分
-- 由 Lev 制作（[Telegram @Revuza](https://t.me/revuza), [LevZed on GitHub](https://github.com/LevZed)）
+- [Telegram @Revuza](https://t.me/revuza), [LevZed on GitHub](https://github.com/LevZed) - _Lev_
+
+<Feedback />
+

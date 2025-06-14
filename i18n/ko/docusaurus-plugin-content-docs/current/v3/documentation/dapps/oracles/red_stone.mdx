@@ -1,0 +1,326 @@
+import Feedback from '@site/src/components/Feedback';
+
+import ThemedImage from '@theme/ThemedImage';
+
+# RedStone oracles
+
+## TON에서 RedStone 오라클의 작동 방식
+
+RedStone 오라클은 스마트 컨트랙트에 오라클 데이터를 제공하는 대체 설계를 사용합니다. 데이터 제공자가 계약 스토리지에 지속적으로 데이터를 유지하는 대신, 정보는 필요할 때만 최종 사용자에 의해 온체인으로 가져옵니다. 그때까지 데이터는 RedStone 경량 캐시 게이트웨이와 스트림 데이터 브로드캐스팅 프로토콜로 구동되는 분산 캐시 레이어에 남아 있습니다. 데이터는 함수 호출에 서명된 데이터 패키지를 첨부해야 하는 최종 사용자에 의해 컨트랙트로 전송됩니다. 정보의 무결성은 서명 확인을 통해 온체인에서 검증됩니다.
+
+RedStone 오라클 설계에 대해 자세히 알아보려면 [RedStone 문서](https://docs.redstone.finance/docs/introduction)를 참조하세요.
+
+## 문서 링크
+
+- [Redstone TON 커넥터](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector)
+
+## Smart contracts
+
+### price_manager.fc
+
+- RedStone 오라클 데이터를 사용하는 샘플 오라클 컨트랙트 [price_manager.fc](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/contracts/price_manager.fc)는 FunC로 작성되었습니다. [TVM 업그레이드 2023.07](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07)이 필요합니다.
+
+#### 초기 데이터
+
+위에서 언급했듯이, 컨트랙트로 전송된 데이터 패키지는 서명 확인을 통해 검증됩니다.
+`signer_count_threshold`를 달성하기 위해 계산되려면, 전달된 데이터에 서명하는 서명자는 초기 데이터에 전달된 `signers` 중 하나여야 합니다. 또한 `signer_count_threshold`도 전달되어야 합니다.
+
+TON 컨트랙트의 아키텍처로 인해 초기 데이터는 아래와 같이 구성된 컨트랙트의 스토리지 구조와 일치해야 합니다:
+
+```ts
+  begin_cell()
+    .store_uint(signer_count_threshold, 8)  /// number as passed below
+    .store_uint(timestamp, TIMESTAMP_BITS)  /// initially 0 representing the epoch 0
+    .store_ref(signers)                     /// serialized tuple of values passed below
+  .end_cell();
+```
+
+`signers`의 값은 `int`의 직렬화된 `tuple`로 전달되어야 합니다.
+[tuple](https://github.com/ton-core/ton-core/blob/main/src/tuple/tuple.ts)을 참조하세요.
+
+<!-- To define the initial (storage) data for the Prices contract, use the predefined
+class [PriceManagerInitData.ts](../src/price-manager/PriceManagerInitData.ts). -->
+
+아래의 함수 매개변수에서 각 `feed_id`는 문자열이 `int`로 인코딩된 것을 의미합니다. 예를 들어:
+`'ETH'`는 `int`로 16진수로 `0x455448` 또는 10진수로 `4543560`입니다(`256*256*ord('E')+256*ord('T')+ord('H')`).
+
+특정 값을 변환하려면 `feed_id=hexlify(toUtf8Bytes(feed_string))`를 사용하거나 [endpoint](https://cairo-utils-web.vercel.app/)를 사용할 수 있습니다.
+
+`feed_ids`의 값은 `int`의 직렬화된 `tuple`로 전달되어야 합니다.
+
+`payload` 값은 직렬화된 RedStone 페이로드를 나타내는 바이트 배열에서 패킹됩니다.
+아래의 [TON RedStone 페이로드 패킹](#ton-redstone-payload-packing) 섹션과 모든 필요한 `int` 길이 상수가 포함된 [constants.fc](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/contracts/redstone/constants.fc) 파일을 참조하세요.
+
+#### get_prices
+
+```func
+(cell) get_prices_v2(cell data_feed_ids, cell payload) method_id;
+```
+
+이 함수는 인자로 전달된 `payload`를 온체인에서 처리하고 `feed_ids` 내부에 식별자로 전달된 각 피드의 집계된 값의 `cell`을 반환합니다.
+
+TON API v4의 HTTP GET 메소드 길이 제한으로 인해 함수는 TON API v2용으로 작성되었습니다.
+
+이것들은 단지 `method_id` 함수입니다 - 컨트랙트의 스토리지를 수정하지 않으며 TON을 소비하지 않습니다.
+
+#### OP_REDSTONE_WRITE_PRICES
+
+온더플라이 처리와 관계없이, `payload`를 온체인에서 처리하지만 집계된 값을 컨트랙트의 스토리지에 저장/쓰는 메소드도 있습니다. 값은 컨트랙트의 스토리지에 유지되며 `read_prices` 함수를 사용하여 읽을 수 있습니다. 컨트랙트에 마지막으로 저장/작성된 데이터의 타임스탬프는 `read_timestamp` 함수를 사용하여 읽을 수 있습니다.
+
+이 메소드는 TON 내부 메시지로 호출되어야 합니다. 메시지의 인자는:
+
+- [constants.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)에 정의된 대로 keccak256으로 해시된 RedStone_Write_Prices 이름을 나타내는 `int`
+- `int`들의 직렬화된 `tuple`로서 `data_feed_ids`를 나타내는 `cell` - ref
+- 패킹된 RedStone 페이로드를 나타내는 `cell` - ref
+
+```func
+    int op = in_msg_body~load_uint(OP_NUMBER_BITS);
+
+    if (op == OP_REDSTONE_WRITE_PRICES) {
+        cell data_feeds_cell = in_msg_body~load_ref();
+        cell payload_cell = in_msg_body~load_ref();
+
+    // ...
+    }
+```
+
+이것은 내부 메시지입니다 - GAS를 소비하고 컨트랙트의 스토리지를 수정하므로 TON으로 지불해야 합니다.
+
+https://ton-showroom.redstone.finance/ 에서 작동 방식을 확인하세요.
+
+#### read_prices
+
+```func
+(tuple) read_prices(tuple data_feed_ids) method_id;
+```
+
+이 함수는 컨트랙트의 스토리지에 유지되는 값을 읽고 전달된 `feed_ids`에 해당하는 튜플을 반환합니다.
+이 함수는 스토리지를 수정하지 않으며 `write_prices` 함수를 사용하여 저장된 `feed_ids`의 집계된 값만 읽을 수 있습니다.
+
+이것은 단지 `method_id` 함수입니다 - 컨트랙트의 스토리지를 수정하지 않으며 TON을 소비하지 않습니다.
+
+#### read_timestamp
+
+```func
+(int) read_timestamp() method_id;
+```
+
+`OP_REDSTONE_WRITE_PRICES` 메시지를 사용하여 컨트랙트의 스토리지에 마지막으로 저장/작성된 데이터의 타임스탬프를 반환합니다.
+
+이것은 단지 `method_id` 함수입니다 - 컨트랙트의 스토리지를 수정하지 않으며 TON을 소비하지 않습니다.
+
+### price_feed.fc
+
+TON 컨트랙트의 아키텍처로 인해 초기 데이터는 아래와 같이 구성된 컨트랙트의 스토리지 구조와 일치해야 합니다:
+
+```ts
+beginCell()
+  .storeUint(BigInt(hexlify(toUtf8Bytes(this.feedId))), consts.DATA_FEED_ID_BS * 8)
+  .storeAddress(Address.parse(this.managerAddress))
+  .storeUint(0, consts.DEFAULT_NUM_VALUE_BS * 8)  /// initially 0 representing the epoch 0
+  .storeUint(0, consts.TIMESTAMP_BS * 8)
+  .endCell();
+```
+
+Price feed 컨트랙트의 초기 (스토리지) 데이터를 정의하려면 미리 정의된 클래스 [PriceFeedInitData.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/price-feed/PriceFeedInitData.ts)를 사용하세요.
+
+#### OP_REDSTONE_FETCH_DATA
+
+네트워크 외부에서 컨트랙트의 값을 읽는 것과는 별개로, 
+`feed_id`에 대해 컨트랙트에 저장된 값을 온체인에서 직접 가져올 수 있습니다.
+이를 위해서는 내부 메시지 `OP_REDSTONE_FETCH_DATA`가 호출되어야 합니다. 메시지의 인자는 다음과 같습니다:
+
+- [constants.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)에 정의된 대로 keccak256으로 해시된 `RedStone_Fetch_Data` 이름을 나타내는 `int`
+- `feed_id` 값을 나타내는 `int`
+- 리턴 트랜잭션이 발생할 때 남은 트랜잭션 잔액을 전달할 수 있도록 메시지의 `initial_sender`를 나타내는 `slice`
+
+```func
+    int op = in_msg_body~load_uint(OP_NUMBER_BITS);
+
+    if (op == OP_REDSTONE_FETCH_DATA) {
+        int feed_id = in_msg_body~load_uint(DATA_FEED_ID_BITS);
+        cell initial_payload = in_msg_body~load_ref();
+
+        // ...
+    }
+```
+
+반환 메시지 `OP_REDSTONE_DATA_FETCHED`는 저장된 값의 `value`와 `timestamp`를 포함하여 발신자에게 전송됩니다. 메시지는 발신자에서 가져와 처리하거나 발신자의 스토리지에 저장될 수 있습니다.
+초기 페이로드의 `ref`(`initial_payload`)는 ref로 추가됩니다 - 예를 들어 첫 번째 메시지의 발신자를 포함하여 남은 트랜잭션 잔액을 전달할 수 있도록 합니다.
+
+```ts
+begin_cell()
+  .store_uint(value, MAX_VALUE_SIZE_BITS)
+  .store_uint(timestamp, TIMESTAMP_BITS)
+  .store_ref(initial_payload)
+  .end_cell()
+```
+
+이것은 내부 메시지입니다 - GAS를 소비하고 컨트랙트의 스토리지를 수정하므로 TON으로 지불해야 합니다.
+
+#### get_price_and_timestamp
+
+```func
+(int, int) get_price_and_timestamp() method_id;
+```
+
+`OP_REDSTONE_FETCH_DATA` 메시지를 보내고 `OP_REDSTONE_DATA_FETCHED` 메시지의 반환 값을 가져와서 어댑터의 스토리지에 마지막으로 저장/작성된 데이터의 값과 타임스탬프를 반환합니다.
+
+이것은 단지 `method_id` 함수입니다 - 컨트랙트의 스토리지를 수정하지 않으며 TON을 소비하지 않습니다.
+
+### single_feed_man.fc
+
+#### 초기 데이터
+
+`prices`와 `price_feed` 초기 데이터와 유사합니다. TON 컨트랙트의 아키텍처로 인해 초기 데이터는 아래와 같이 구성된 컨트랙트의 스토리지 구조와 일치해야 합니다:
+
+```ts
+beginCell()
+  .storeUint(BigInt(hexlify(toUtf8Bytes(this.feedId))), consts.DATA_FEED_ID_BS * 8)
+  .storeUint(this.signerCountThreshold, SIGNER_COUNT_THRESHOLD_BITS)
+  .storeUint(0, consts.DEFAULT_NUM_VALUE_BS * 8)
+  .storeUint(0, consts.TIMESTAMP_BS * 8)
+  .storeRef(serializeTuple(createTupleItems(this.signers)))
+  .endCell();
+```
+
+Prices 컨트랙트의 초기 (스토리지) 데이터를 정의하려면 미리 정의된 클래스 [SingleFeedManInitData.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/single-feed-man/SingleFeedManInitData.ts)를 사용하세요.
+
+피드와 관리자 컨트랙트 간의 통신 필요성을 피하기 위해 단일 피드만 지원하는 `price_manager`와 같은 컨트랙트입니다.
+
+#### get_price
+
+```func
+(int, int) get_price(cell payload) method_id;
+```
+
+`get_prices`와 유사하지만 초기화 중에 구성되어 있으므로 첫 번째 인자(`data_feed_ids`)를 생략합니다. 전달된 데이터 패키지의 최소 타임스탬프도 반환합니다.
+
+#### read_price_and_timestamp
+
+```func
+(int, int) read_price_and_timestamp() method_id;
+```
+
+`get_price_and_timestamp` 함수처럼 작동합니다.
+
+#### OP_REDSTONE_WRITE_PRICE
+
+초기화 중에 구성되어 있으므로 첫 번째 (`data_feed_ids`) `cell`-ref를 생략하는 것을 제외하고는 `OP_REDSTONE_WRITE_PRICES`와 유사합니다.
+
+```func
+    int op = in_msg_body~load_uint(OP_NUMBER_BITS);
+
+    if (op == OP_REDSTONE_WRITE_PRICE) {
+        cell payload_cell = in_msg_body~load_ref();
+
+        // ...
+    }
+```
+
+### sample_consumer.fc
+
+`price_feed`에 저장된 데이터의 샘플 소비자입니다. `single_feed_man`과도 함께 작동합니다.
+호출할 `price_feed`를 전달해야 합니다.
+
+#### 초기 데이터
+
+`price_feed` 초기 데이터와 유사합니다. TON 컨트랙트의 아키텍처로 인해 초기 데이터는 아래와 같이 구성된 컨트랙트의 스토리지 구조와 일치해야 합니다:
+
+```ts
+beginCell()
+  .storeAddress(Address.parse(this.feedAddress))
+  .endCell();
+```
+
+Prices 컨트랙트의 초기 (스토리지) 데이터를 정의하려면 미리 정의된 클래스 [SampleConsumerInitData.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/sample-consumer/SampleConsumerInitData.ts)를 사용하세요.
+
+이 컨트랙트는 단일 피드를 호출합니다.
+
+#### OP_REDSTONE_READ_DATA
+
+`feed_id`에 대해 컨트랙트에 저장된 값을 온체인에서 직접 가져올 수 있습니다.
+이를 위해서는 내부 메시지 `OP_REDSTONE_READ_DATA`가 호출되어야 합니다. 메시지의 인자는 다음과 같습니다:
+
+- 리턴 트랜잭션이 발생할 때 남은 트랜잭션 잔액을 전달할 수 있도록 메시지의 `initial_sender`를 나타내는 `slice`
+
+```func
+    int op = in_msg_body~load_uint(OP_NUMBER_BITS);
+
+    if (op == OP_REDSTONE_READ_DATA) {
+        cell initial_payload = in_msg_body~load_ref();
+
+        // ...
+    }
+```
+
+반환 메시지 `OP_REDSTONE_DATA_READ`는 발신자에게 전송되며, 
+`feed_id`, `value`, 그리고 저장된 값의 `timestamp`를 포함합니다. 이 메시지는 발신자에서 가져와서 처리하거나 발신자의 스토리지에 저장될 수 있습니다.
+초기 페이로드의 `ref`(`initial_payload`)는 ref로 추가됩니다 - 예를 들어 첫 번째 메시지의 발신자를 포함하여
+남은 트랜잭션 잔액을 전달할 수 있도록 합니다.
+
+```ts
+begin_cell()
+  .store_uint(value, MAX_VALUE_SIZE_BITS)
+  .store_uint(timestamp, TIMESTAMP_BITS)
+  .store_ref(initial_payload)
+  .end_cell()
+```
+
+이는 내부 메시지입니다 - GAS를 소비하고 컨트랙트의 스토리지를 수정하므로 TON으로 지불이 필요합니다.
+
+## TON RedStone payload packing
+
+TON의 Bag-size 제한으로 인해([참조](/v3/documentation/data-formats/tlb/cell-boc)), 16진수 문자열로 표현되는 RedStone 페이로드 데이터는 더 복잡한 방식으로 컨트랙트에 전달되어야 합니다.
+
+[여기](https://docs.redstone.finance/img/payload.png)에 정의된 RedStone 페이로드를 가지고 있을 때, 데이터는 다음과 같이 구성된 Cell로 전달되어야 합니다:
+
+1. 메인 _페이로드_ `cell`의 구성:
+
+   1. 이미지에 표시된 부분들로 구성된 **data-level bits**의 메타데이터:
+      ![payload-metadata.png](/img/docs/oracles/red-stone/payload-metadata.png)
+
+     ![페이로드-메타데이터.png](/img/docs/oracles/red-stone/payload-metadata.png)
+
+   1. 데이터_패키지** `셀` 목록을 포함하는 연속된 자연수(0부터 시작)로 인덱싱된 `udict`를 포함하는 **ref\*\*입니다.
+2. 각 _데이터-패키지_ `cell`의 구성:
+
+   1. **data-level bits**의 데이터 패키지 서명:
+      ![payload-metadata.png](/img/docs/oracles/red-stone/payload-metadata.png)
+
+     ![페이로드-메타데이터.png](/img/docs/oracles/red-stone/payload-metadata.png)
+
+   1. 데이터 레벨**에 있는 나머지 데이터 패키지의 데이터를 포함하는 '셀'에 하나의 **참조\*\*를 추가합니다:
+
+     ![페이로드-메타데이터.png](/img/docs/oracles/red-stone/data-package-data.png)
+
+#### 현재 구현의 제한사항
+
+- RedStone 페이로드는 데이터 피드를 명시적으로 정의하여 가져와야 합니다. 이는 **하나의 데이터 포인트**가 **하나의 데이터 패키지**에 속하게 됩니다.
+- 서명되지 않은 메타데이터 크기는 `127 - (2 + 3 + 9) = 113` 바이트를 초과해서는 안 됩니다.
+
+#### Helper
+
+[create-payload-cell.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/create-payload-cell.ts) 파일의 `createPayloadCell` 메소드는 제한사항을 확인하고 위에서 설명한 대로 컨트랙트로 보낼 데이터를 준비합니다.
+
+#### 샘플 직렬화
+
+아래 이미지는 `2`개의 피드와 `2`개의 고유 서명자에 대한 데이터를 포함합니다:
+![payload-metadata.png](/img/docs/oracles/red-stone/sample-serialization.png)
+
+## 가능한 트랜잭션 실패
+
+- 서명에서 복구된 서명자 수는 초기화 프로그램에서 전달된 `addresses`와 일치해야 하며, 각 피드에 대해 생성자의 `signer_count_threshold` 이상이어야 합니다.
+  - 그렇지 않으면 검증에 실패한 첫 번째 전달된 피드의 인덱스만큼 증가된 `300` 오류와 함께 중단됩니다.
+- 데이터 패키지의 타임스탬프는 `block_timestamp`와 관련하여 15분보다 오래되지 않아야 합니다.
+  - 그렇지 않으면 검증에 실패한 첫 번째 페이로드 데이터 패키지의 인덱스만큼 증가된 `200` 오류와 함께 중단됩니다. 패키지의 타임스탬프가 너무 미래인 경우 추가로 `50`이 증가됩니다.
+- 내부 메시지는 가스를 소비하므로 TON으로 지불해야 합니다. 데이터는 트랜잭션이 성공한 후에만 컨트랙트에서 사용할 수 있습니다.
+- 다른 오류 코드는 [여기](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)에 정의되어 있습니다.
+
+## See also
+
+- [내부 메시지 문서](/v3/documentation/smart-contracts/message-management/internal-messages)
+- [RedStone 데이터 패킹](https://docs.redstone.finance/docs/smart-contract-devs/how-it-works)
+- [RedStone 오라클 스마트 컨트랙트](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector/contracts)
+
+<Feedback />

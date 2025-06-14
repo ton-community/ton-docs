@@ -1,17 +1,15 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Сборка Fift и TVM
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+Fift is a stack-based programming language with TON-specific features that can work with cells. TVM assembly is another stack-based language designed for TON that also handles cells. What's the difference between them?
 
-Fift — это язык программирования на основе стека, который имеет специфичные для TON функции и, следовательно, может работать с ячейками. Сборка TVM — это также язык программирования на основе стека, также специфичный для TON, и он также может работать с ячейками. Так в чем же разница между ними?
+## Key differences
 
-## В чем разница
-
-Fift выполняется **во время компиляции** — когда ваш компилятор создает код смарт-контракта BOC, после обработки кода FunC. Fift может выглядеть по-разному:
+Fift executes at **compile-time** - when your compiler builds the smart contract code BOC after processing FunC code. Fift can appear in different forms:
 
 ```
-// tuple primitives
+// Tuple primitives
 x{6F0} @Defop(4u) TUPLE
 x{6F00} @Defop NIL
 x{6F01} @Defop SINGLE
@@ -22,49 +20,50 @@ x{6F02} dup @Defop PAIR @Defop CONS
 
 ```
 "Asm.fif" include
-<{ SETCP0 DUP IFNOTRET // return if recv_internal
+<{ SETCP0 DUP IFNOTRET // Return if recv_internal
    DUP 85143 INT EQUAL OVER 78748 INT EQUAL OR IFJMP:<{ // "seqno" and "get_public_key" get-methods
      1 INT AND c4 PUSHCTR CTOS 32 LDU 32 LDU NIP 256 PLDU CONDSEL  // cnt or pubk
    }>
-   INC 32 THROWIF	// fail unless recv_external
-   9 PUSHPOW2 LDSLICEX DUP 32 LDU 32 LDU 32 LDU 	//  signature in_msg subwallet_id valid_until msg_seqno cs
-   NOW s1 s3 XCHG LEQ 35 THROWIF	//  signature in_msg subwallet_id cs msg_seqno
-   c4 PUSH CTOS 32 LDU 32 LDU 256 LDU ENDS	//  signature in_msg subwallet_id cs msg_seqno stored_seqno stored_subwallet public_key
-   s3 s2 XCPU EQUAL 33 THROWIFNOT	//  signature in_msg subwallet_id cs public_key stored_seqno stored_subwallet
-   s4 s4 XCPU EQUAL 34 THROWIFNOT	//  signature in_msg stored_subwallet cs public_key stored_seqno
-   s0 s4 XCHG HASHSU	//  signature stored_seqno stored_subwallet cs public_key msg_hash
-   s0 s5 s5 XC2PU	//  public_key stored_seqno stored_subwallet cs msg_hash signature public_key
-   CHKSIGNU 35 THROWIFNOT	//  public_key stored_seqno stored_subwallet cs
+   INC 32 THROWIF    // Fail unless recv_external
+   9 PUSHPOW2 LDSLICEX DUP 32 LDU 32 LDU 32 LDU     // signature in_msg subwallet_id valid_until msg_seqno cs
+   NOW s1 s3 XCHG LEQ 35 THROWIF    // signature in_msg subwallet_id cs msg_seqno
+   c4 PUSH CTOS 32 LDU 32 LDU 256 LDU ENDS    // signature in_msg subwallet_id cs msg_seqno stored_seqno stored_subwallet public_key
+   s3 s2 XCPU EQUAL 33 THROWIFNOT    // signature in_msg subwallet_id cs public_key stored_seqno stored_subwallet
+   s4 s4 XCPU EQUAL 34 THROWIFNOT    // signature in_msg stored_subwallet cs public_key stored_seqno
+   s0 s4 XCHG HASHSU    // signature stored_seqno stored_subwallet cs public_key msg_hash
+   s0 s5 s5 XC2PU    // public_key stored_seqno stored_subwallet cs msg_hash signature public_key
+   CHKSIGNU 35 THROWIFNOT    // public_key stored_seqno stored_subwallet cs
    ACCEPT
    WHILE:<{
-     DUP SREFS	//  public_key stored_seqno stored_subwallet cs _51
-   }>DO<{	//  public_key stored_seqno stored_subwallet cs
-     8 LDU LDREF s0 s2 XCHG	//  public_key stored_seqno stored_subwallet cs _56 mode
+     DUP SREFS    // public_key stored_seqno stored_subwallet cs _51
+   }>DO<{    // public_key stored_seqno stored_subwallet cs
+     8 LDU LDREF s0 s2 XCHG    // public_key stored_seqno stored_subwallet cs _56 mode
      SENDRAWMSG
-   }>	//  public_key stored_seqno stored_subwallet cs
-   ENDS SWAP INC	//  public_key stored_subwallet seqno'
+   }>    // public_key stored_seqno stored_subwallet cs
+   ENDS SWAP INC    // public_key stored_subwallet seqno'
    NEWC 32 STU 32 STU 256 STU ENDC c4 POP
 }>c
 ```
 
 > wallet_v3_r2.fif
 
-Последний фрагмент кода выглядит как сборка TVM, и большая его часть на самом деле таковой и является Как это может произойти?
+The last code fragment resembles TVM assembly because most of it actually is TVM assembly. Here's why:
 
-Представьте, что вы разговариваете с программистом-стажером и говорите ему: "А теперь добавьте команды, выполняющие это, это и то, в конец функции". Ваши команды оказываются в программе стажера. Они обрабатываются дважды — как и здесь, коды операций написанные заглавными буквами (SETCP0, DUP и т. д.) обрабатываются как Fift, так и TVM.
+Imagine explaining programming concepts to a trainee. Your instructions become part of their program, processed twice - similar to how opcodes in capital letters (SETCP0, DUP, etc.) are processed by both Fift and TVM.
 
-Вы можете объяснить высокоуровневые абстракции своему стажеру, в конечном итоге он поймет и сможет их использовать. Fift также расширяем — вы можете определять свои собственные команды. Фактически, Asm[Tests].fif полностью посвящен определению кодов операций TVM.
+Think of Fift as a teaching language where you can introduce high-level concepts to a learner. Just as a trainee programmer gradually absorbs and applies new concepts, Fift allows you to define custom commands and abstractions. The Asm[Tests].fif file demonstrates this perfectly - it's essentially a collection of TVM opcode definitions.
 
-Коды операций TVM, с другой стороны, выполняются **во время выполнения** — это код смарт-контрактов. Их можно рассматривать как программу вашего стажера — сборка TVM может делать меньше вещей (например, у нее нет встроенных примитивов для подписи данных — потому что все, что TVM делает в блокчейне, является публичным), но она действительно может взаимодействовать со своей средой.
+TVM assembly, in contrast, is like the trainee's final working program. While it operates with fewer built-in features (it can't perform cryptographic signing, for instance), it has direct access to the blockchain environment during contract execution. Where Fift works at compile-time to shape the contract's code, TVM assembly runs that code on the actual blockchain.
 
-## Использование в смарт-контрактах
+## Smart contract usage
 
-### [Fift] — Помещение большого BOC в контракт
+### [Fift] including large BoCs in contracts
 
-Это возможно, если вы используете `toncli`. Если вы используете другие компиляторы для сборки контракта, возможно, есть другие способы включить большой BOC.
-Отредактируйте `project.yaml` так, чтобы `fift/blob.fif` был включен при сборке кода смарт-контракта:
+When using `toncli`, you can include large BoCs by:
 
-```
+1. Editing `project.yaml` to include `fift/blob.fif`:
+
+```yaml
 contract:
   fift:
     - fift/blob.fif
@@ -72,13 +71,15 @@ contract:
     - func/code.fc
 ```
 
-Поместите BOC в `fift/blob.boc`, затем добавьте следующий код в `fift/blob.fif`:
+2. Adding the BoC to `fift/blob.boc`
+
+3. Including this code in `fift/blob.fif`:
 
 ```
 <b 8 4 u, 8 4 u, "fift/blob.boc" file>B B>boc ref, b> <s @Defop LDBLOB
 ```
 
-Теперь вы можете извлечь этот blob из смарт-контракта:
+Now you can access the blob in your contract:
 
 ```
 cell load_blob() asm "LDBLOB";
@@ -88,15 +89,9 @@ cell load_blob() asm "LDBLOB";
 }
 ```
 
-### [Сборка TVM] - Преобразование целого числа в строку
+### [TVM assembly] converting integers to strings
 
-К сожалению, попытка преобразования int в строку с использованием примитивов Fift завершилась неудачей.
-
-```
-slice int_to_string(int x) asm "(.) $>s PUSHSLICE";
-```
-
-Причина очевидна: Fift выполняет вычисления во время компиляции, где еще нет `x`, доступного для преобразования. Чтобы преобразовать непостоянное целое число в фрагмент строки, вам нужна сборка TVM. Например, это код одного из участников TON Smart Challenge 3:
+Fift primitives can't convert integers to strings at runtime because Fift operates at compile-time. For runtime conversion, use TVM assembly like this solution from TON Smart Challenge 3:
 
 ```
 tuple digitize_number(int value)
@@ -107,7 +102,7 @@ builder store_number(builder msg, tuple t)
 
 builder store_signed(builder msg, int v) inline_ref {
   if (v < 0) {
-    return msg.store_uint(45, 8).store_number(digitize_number(- v));
+    return msg.store_uint(45, 8).store_number(digitize_number(-v));
   } elseif (v == 0) {
     return msg.store_uint(48, 8);
   } else {
@@ -116,7 +111,9 @@ builder store_signed(builder msg, int v) inline_ref {
 }
 ```
 
-### [Сборка TVM] - Дешевое умножение по модулю
+### [TVM assembly] efficient modulo multiplication
+
+Compare these implementations:
 
 ```
 int mul_mod(int a, int b, int m) inline_ref {               ;; 1232 gas units
@@ -130,4 +127,5 @@ int mul_mod_better(int a, int b, int m) inline_ref {        ;; 1110 gas units
 int mul_mod_best(int a, int b, int m) asm "x{A988} s,";     ;; 65 gas units
 ```
 
-`x{A988}` - это код операции, отформатированный в соответствии с [5.2 Деление](/v3/documentation/tvm/instructions#A988): деление с предварительным умножением, где единственным возвращаемым результатом является остаток по модулю третьего аргумента. Но код операции должен попасть в код смарт-контракта - именно это и делает `s,`: он сохраняет фрагмент поверх стека в сборщике немного ниже.
+The `x{A988}` opcode implements an optimized division operation with built-in multiplication (as specified in [section 5.2 Division](/v3/documentation/tvm/instructions#A988)). This specialized instruction directly computes just the modulo remainder of the operation, skipping unnecessary computation steps. The `s,` suffix then handles the result storage - it takes the resulting slice from the stack's top and efficiently writes it into the target builder. Together, this combination delivers substantial gas savings compared to conventional approaches. <Feedback />
+

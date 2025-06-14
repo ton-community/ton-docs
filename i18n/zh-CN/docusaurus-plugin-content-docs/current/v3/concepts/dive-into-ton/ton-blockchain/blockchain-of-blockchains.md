@@ -1,72 +1,88 @@
-# 区块链之链
+import Feedback from '@site/src/components/Feedback';
+
+# Blockchain of blockchains
 
 :::tip
-本文档中，“**智能合约**”、“**账户**”和“**Actor**”这几个术语可互换使用，用以描述区块链实体。
+Terms '**smart contract**', '**account**', and '**actor**' are used interchangeably in this document to describe a blockchain entity.
 :::
 
-## 单一Actor
+## Single actor
 
-让我们考虑一个智能合约。
+Let's consider one smart contract.
 
-在TON中，它是一个拥有`地址`、`代码`、`数据`、`余额`等属性的_事物_。换句话说，它是一个拥有一定_存储_和_行为_的对象。
-行为会遵循以下模式：
+In TON, it is a _thing_ with properties like `address`, `code`, `data`, `balance` and others. In other words, it is an object with some _storage_ and _behavior_.
+That behavior has the following pattern:
 
-- 发生某事（最常见的情况是合约收到一条消息）
-- 合约根据自身属性通过在TON虚拟机中执行其`代码`来处理该事件。
-- 合约修改自身属性（`代码`、`数据`等）
-- 合约可选地生成传出消息
-- 合约进入待机模式，直到下一个事件发生
+- contract receives a message
+- contract handles that event according to its properties by executing its `code` in TON Virtual Machine
+- contract modifies its properties consisting of `code`, `data`, and others
+- contract optionally generates outgoing messages
+- contract goes into standby mode until the next event occurs
 
-这些步骤的组合被称为一次**交易**。重要的是，事件是依次处理的，因此_交易_是严格有序的，不能相互打断。
+A combination of these steps is called a **transaction**. Since it is essential to handle events one by one, transactions follow a strict order and cannot interrupt each other.
 
-这种行为模式众所周知，被称为“Actor”。
+This behavior pattern is well known and called **actor**.
 
-### 最低层级：账户链
+### The lowest level: AccountChain
 
-一系列的_交易_ `Tx1 -> Tx2 -> Tx3 -> ....` 可以被称为一条**链**。在这个例子下，它被称为**账户链 (AccountChain)**，以强调这是单个账户的_交易链_。
+A **chain** can be viewed as a sequence of transactions, such as `Tx1 → Tx2 → Tx3 → …`. When this transaction sequence pertains to a single account, it is specifically termed an **AccountChain**.
 
-现在，由于处理交易的节点时不时需要协调智能合约的状态（达成关于状态的_共识_），这些_交易_被批量处理：
-`[Tx1 -> Tx2] -> [Tx3 -> Tx4 -> Tx5] -> [] -> [Tx6]`。
-批处理不干预排序，每个交易仍然只有一个“前一交易”和至多一个“下一交易”，但现在这个序列被切割成了**区块**。
+Since nodes processing these transactions periodically need to synchronize the smart contract state to achieve consensus, transactions are grouped into batches called **blocks**. For instance:
 
-将传入和传出消息的队列也包含在_区块_中是有益的。在这样的情况下，一个_区块_将包含决定和描述智能合约在该区块期间所发生的全部信息。
+```
+[Tx1 → Tx2] → [Tx3 → Tx4 → Tx5] → [] → [Tx6]
+```
 
-## 账户链的集合：分片链
+Batching does not alter the underlying sequence. Each transaction still references exactly one preceding transaction (`prev tx`) and at most one succeeding transaction (`next tx`). Batching simply organizes this sequence into manageable blocks for consensus purposes.
 
-现在让我们考虑有许多账户的情况。我们得到一些_账户链_并将它们存储在一起，这样的一组_账户链_被称为**分片链 (ShardChain)**。同样地，我们可以将**分片链**切割成**分片区块**，这些区块是个别_账户区块_的聚合。
+Additionally, each block can contain queues of incoming and outgoing messages. Incorporating these queues ensures that a block fully encapsulates all events and state changes relevant to the smart contract within the block period.
 
-### 分片链的动态拆分与合并
+## Many AccountChains: Shards
 
-请注意，由于_分片链_由容易区分的_账户链_组成，我们可以轻松地将其分割。这样，如果我们有1个_分片链_，描述了100万个账户的事件，且每秒交易量过多，无法由一个节点处理和存储，那么我们就将该链分割（或**拆分**）为两个较小的_分片链_，每条链处理50万个账户，每条链在一组独立的节点上处理。
+Now let's consider many accounts. We can get a few AccountChains and store them together; such a set of AccountChains is called a **ShardChain**. In the same way, we can cut ShardChain into **ShardBlocks**, which are an aggregation of individual AccountBlocks.
 
-同样地，如果某些分片变得过于空闲，它们可以被**合并**为一个更大的分片。
+### Dynamic splitting and merging of ShardChains
 
-显然有两个极限情况：分片只包含一个账户（因此无法进一步分割）以及当分片包含所有账户。
+Note that since a ShardChain consists of easily distinguished AccountChains, we can easily split it. That way, if we have one ShardChain that describes events that happen with one million accounts and there are too many transactions per second to be processed and stored in one node, so we just **split** that chain into two smaller ShardChains with each chain accounting for half a million accounts and each chain processed on a separate subset of nodes.
 
-账户可以通过发送消息相互交互。这里会有一种特殊的路由机制，将消息从传出队列移动到相应的传入队列，并确保1) 所有消息都将被送达 2) 消息将连续送达（较早发送的消息将更早到达目的地）。
+Analogously, if some shards become too unoccupied, they can be **merged** into one more enormous shard.
 
-:::info 旁注
-为了使分割和合并具有确定性，将账户链聚合成分片是基于账户地址的位表示。例如，地址会看起来像`(分片前缀, 地址)`这种形式。这样，分片链中的所有账户将具有完全相同的二进制前缀（例如所有地址都以`0b00101`开头）。
+There are two limiting cases: when the shard contains only one account (and thus cannot be split further) and when the shard contains all accounts.
+
+Accounts can interact with each other by sending messages.  A unique routing mechanism moves messages from outgoing queues to corresponding incoming queues and ensures:
+
+1. The delivery of all messages
+2. Consecutive delivery of messages — a message sent earlier will reach the destination earlier
+
+:::info SIDE NOTE
+An aggregation of AccountChains into shards is based on the bit-representation of account addresses to make splitting and merging deterministic. For example, an address looks like `(shard prefix, address)`. That way, all accounts in the ShardChain will have the same binary prefix (for instance, all addresses will start with `0b00101`).
 :::
 
-## 区块链
+## Blockchain
 
-包含所有账户并按照一套规则运行的所有分片的集合被称为**区块链**。
+An aggregation of all shards, which contains all accounts behaving according to one set of rules, is called a Blockchain.
 
-在TON中，可以有许多套规则，因此允许多个区块链同时运行，并通过发送跨链消息相互交互，就像同链的账户之间的交互一样。
+In TON, there can be many sets of rules, and thus, many blockchains operate simultaneously and can interact with each other by sending messages cross-chain in the same way that accounts of one chain can interact with each other.
 
-### 工作链：有自己规则的区块链
+### WorkChain: a blockchain with your own rules
 
-如果你想自定义一组分片链的规则，你可以创建一个**工作链 (Workchain)**。一个很好的例子是创建一个基于EVM的工作链，在其上运行Solidity智能合约。
+If you want to customize the rules of the ShardChains group, you could create a **WorkChain**. A good example is to make a workchain that works on the base of EVM to run Solidity smart contracts on it.
 
-理论上，社区中的每个人都可以创建自己的工作链。事实上，构建它是一个相当复杂的任务，在此之前还要支付创建它的（昂贵）费用，并获得验证者的2/3的票数来批准创建你的工作链。
+Theoretically, everyone in the community can create their own WorkChain. Building it isn't very easy, and then you have to pay a high price and receive 2/3 of votes from validators to approve it.
 
-TON允许创建多达`2^32`个工作链，每个工作链则可以细分为多达`2^60`个分片。
+TON allows creating up to `2^32` workchains, subdivided into `2^60` shards.
 
-如今，在TON中只有2个工作链：主链和基本链。
+Nowadays, there are only two workchains in TON: MasterChain and BaseChain.
 
-基本链用于日常交易，因为它相对便宜，而主链对于TON具有至关重要的功能，所以让我们来了解它的作用！
+BaseChain is used for everyday transactions between actors because it's cheap, while MasterChain has a crucial function for TON.
 
-### 主链：区块链之链
+### MasterChain: blockchain of blockchains
 
-网络需要对消息路由和交易执行进行同步。换句话说，网络中的节点需要一种方式来固定多链状态的某个“点”，并就该状态达成共识。在TON中，一个称为\*\*主链 (Masterchain)\*\*的特殊链被用于此目的。_主链_的区块包含有关系统中所有其他链的额外信息（最新的区块哈希），因此任何观察者都可以非常明确地确定单个主链区块时所有多链系统的状态。
+There is a necessity for the synchronization of message routing and transaction execution. In other words, nodes in the network need a way to fix some 'point' in a multichain state and reach a consensus about that state. In TON, a special chain called **MasterChain** is used for that purpose. Blocks of MasterChain contain additional information, like the latest block hashes, about all other chains in the system, thus any observer unambiguously determines the state of all multichain systems at a single MasterChain block.
+
+## See also
+
+- [Smart contract addresses](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses)
+
+<Feedback />
+

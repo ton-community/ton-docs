@@ -1,60 +1,52 @@
-import ThemedImage from '@theme/ThemedImage';
+import Feedback from '@site/src/components/Feedback';
 
-# Программирование безопасных смарт-контрактов
+import ThemedImage from "@theme/ThemedImage";
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Secure smart contract programming
 
-В этом разделе мы рассмотрим несколько наиболее интересных особенностей блокчейна TON, а затем пройдемся по списку лучших практик для разработчиков, программирующих смарт-контракты на FunC.
+In this section, we’ll explore some of the most interesting features of the TON blockchain and walk through a list of best practices for developers programming smart contracts in FunC.
 
-## Разделение контрактов
+## Contract sharding
 
-При разработке контрактов для EVM вы обычно разбиваете проект на несколько контрактов для удобства. В некоторых случаях можно реализовать всю функциональность в одном контракте, и даже там, где разделение контрактов было необходимо (например, пары ликвидности в Automated Market Maker), это не привело к каким-либо особым трудностям. Транзакции выполняются в полном объеме: либо всё работает, либо всё возвращается.
+When developing contracts for the EVM, you typically split the project into multiple contracts for convenience. In some cases, it’s possible to implement all functionality in a single contract, and even when splitting is necessary, such as with Liquidity Pairs in an Automated Market Maker, it doesn’t introduce significant complexity. Transactions are executed entirely: either everything succeeds, or everything reverts.
 
-В TON настоятельно рекомендуется избегать "неограниченных структур данных" и [разделять один логический контракт на небольшие части](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons), каждая из которых управляет небольшим объёмом данных. Основным примером является реализация TON Jettons. Это версия TON стандарта токенов ERC-20 от Ethereum. Вкратце, у нас есть:
+In TON, it’s strongly recommended to avoid “unbounded data structures” and [split a single logical contract into smaller pieces](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons), each managing a small amount of data. A basic example is the implementation of TON Jettons, TON’s version of Ethereum’s ERC-20 token standard. In short:
 
-1. Один `jetton-minter`, который хранит `total_supply`, `minter_address` и пару ссылок: описание токена (метаданные) и `jetton_wallet_code`.
-2. И множество jetton-кошельков, по одному на каждого владельца этих жетонов. В каждом таком кошельке хранится только адрес владельца, его баланс, адрес jetton-minter и ссылка на jetton_wallet_code.
+1. One `jetton-minter` stores `total_supply`, `minter_address`, and references to token metadata and `jetton_wallet_code`.
+2. Multiple `jetton-wallet` contracts, one for each token owner, store the owner’s address, their balance, the `jetton-minter` address, and a reference to `jetton_wallet_code`.
 
-Это необходимо для того, чтобы передача жетонов происходила напрямую между кошельками и не затрагивала высоконагруженные адреса, что является основой для параллельной обработки транзакций.
+This design ensures that Jetton transfers occur directly between wallets without affecting high-load addresses, enabling parallel transaction processing. As a result, your contract will likely become a “group of contracts” that actively interact with each other.
 
-То есть, приготовьтесь к тому, что ваш контракт станет "группой контрактов", и они будут активно взаимодействовать друг с другом.
-
-## Возможно частичное выполнение транзакций
-
-В логике вашего контракта появляется новое уникальное свойство: частичное выполнение транзакций.
-
-Например, рассмотрим поток сообщений стандартного TON Jetton:
+## Partial execution of transactions is possible
 
 ![smart1.png](/img/docs/security-measures/secure-programming/smart1.png)
 
-Как следует из диаграммы:
+A unique property of TON smart contracts is the possibility of partial transaction execution. For example, consider the message flow of a standard TON Jetton:
 
-1. отправитель посылает сообщение `op::transfer` на свой кошелек (`sender_wallet`);
-2. `sender_wallet` уменьшает баланс токенов;
-3. `sender_wallet` отправляет сообщение `op::internal_transfer` на кошелек получателя (`destination_wallet`);
-4. `destination_wallet` увеличивает свой баланс токенов;
-5. `destination_wallet` отправляет `op::transfer_notification` своему владельцу (`destination`);
-6. `destination_wallet` возвращает избыточный газ с сообщением `op::excesses` на `response_destination` (обычно `sender`).
+1. The sender sends an `op::transfer` message to its wallet (`sender_wallet`).
+2. `sender_wallet` reduces the token balance.
+3. `sender_wallet` sends an `op::internal_transfer` message to the recipient’s wallet (`destination_wallet`).
+4. `destination_wallet` increases its token balance.
+5. `destination_wallet` sends an `op::transfer_notification` to its owner (`destination`).
+6. `destination_wallet` returns excess gas with an `op::excesses` message to the `response_destination`, usually the sender.
 
-Обратите внимание, если `destination_wallet` не смог обработать сообщение `op::internal_transfer` (произошло исключение или закончился газ), то этот этап и все последующие не будут выполнены. Однако первый шаг (уменьшение баланса в `sender_wallet`) будет выполнен. Результатом будет частичное выполнение транзакции, что приводит к некорректному состоянию `Jetton` и, в данном случае, потеря средств.
+If `destination_wallet` fails to process the `op::internal_transfer` message, such as due to an exception or insufficient gas, this step and subsequent ones won’t execute. However, the first step, reducing the balance in `sender_wallet`, will still complete. This results in partial transaction execution, an inconsistent state of the `Jetton`, and potential loss of funds.
 
-В худшем случае все токены могут быть украдены таким образом. Представьте, что вы сначала начисляете бонусы пользователю, а затем отправляете сообщение `op::burn` на его кошелёк Jetton, но не можете гарантировать, что сообщение `op::burn` будет успешно обработано.
+In the worst-case scenario, all tokens could be stolen this way. For example, if you first credit bonuses to a user and then send an `op::burn` message to their Jetton wallet, you cannot guarantee that the `op::burn` will succeed.
 
-## Разработчик смарт-контрактов TON должен контролировать газ
+## TON smart contract developers must control gas
 
-В Solidity газ не представляет особой проблемы для разработчиков контрактов. Если пользователь предоставит слишком мало газа, все будет отменено, как будто ничего не произошло (но газ не будет возвращён). Если же пользователь предоставит достаточно, то фактические расходы будут автоматически рассчитаны и вычтены из его баланса.
+In Solidity, gas management is less of a concern for contract developers. If a user provides insufficient gas, the transaction reverts, though the gas is not refunded. If they provide enough gas, the actual costs are automatically calculated and deducted from their balance.
 
 В TON ситуация иная:
 
-1. Если газа недостаточно, транзакция будет выполнена частично;
-2. Если газа слишком много, его излишки должны быть возвращены. Это входит в обязанности разработчика;
-3. Если "группа контрактов" обменивается сообщениями, то контроль и расчёты должны производиться в каждом сообщении.
+1. If there’s insufficient gas, the transaction may partially execute.
+2. If there’s excess gas, the developer must return it.
+3. If a “group of contracts” exchanges messages, gas control and calculation must occur in each message.
 
-TON не может автоматически рассчитать газ. Полное выполнение транзакции со всеми последствиями может занять много времени, и к моменту завершения у пользователя может не оказаться достаточного количества тонкоинов на кошельке. Здесь снова используется принцип переноса значения (carry-value principle).
+TON cannot automatically calculate gas costs. Since transaction execution can take a long time, the user might run out of TON coins by the end. This is where the carry-value principle comes into play.
 
-## Разработчик смарт-контрактов TON должен управлять хранилищем
+## TON smart contract developers must manage storage
 
 Типичный обработчик сообщений в TON следует этому подходу:
 
@@ -66,7 +58,7 @@ TON не может автоматически рассчитать газ. По
 }
 ```
 
-К сожалению, мы замечаем тенденцию: `<a lot of vars>` - это настоящее перечисление всех полей данных контракта. Например:
+Unfortunately, `<a lot of vars>` often involves enumerating all contract data fields. For example:
 
 ```func
 (
@@ -79,49 +71,47 @@ TON не может автоматически рассчитать газ. По
 ) = load_data();
 ```
 
-Этот подход имеет ряд недостатков.
+This approach has several drawbacks:
 
-Во-первых, если вы решите добавить ещё одно поле, скажем, `is_paused`, вам нужно обновить все выражения `load_data()/save_data()` в контракте. Это не только трудоёмко, но и приводит к трудноуловимым ошибкам.
+1. Adding a new field requires updating `load_data()/save_data()` statements throughout the contract, which is labor-intensive and error-prone.
+2. Namespace pollution can lead to bugs, such as shadowing a storage field with a local variable, which can overwrite the contract state.
+3. Parsing and repacking the entire storage on every function call increases gas costs.
 
-Во время недавнего аудита CertiK мы заметили, что разработчик перепутал два аргумента местами и написал:
-
-```func
-save_data(total_supply, min_amount, swap_fee, ...)
-```
-
-Без внешнего аудита, проведённого командой экспертов, обнаружить такую ошибку очень сложно. Функция использовалась редко, и оба перепутанных параметра обычно имели нулевое значение. Чтобы заметить подобную ошибку, нужно знать, что искать.
-
-Во-вторых, существует проблема "загрязнения пространства имён". Давайте разберёмся, в чем она заключается, на другом примере из аудита. В середине функции входной параметр читается:
-
-```func
-int min_amount = in_msg_body~load_coins();
-```
-
-То есть произошло затенение поля хранения локальной переменной, и в конце функции это измененнёное значение было записано в хранилище. У злоумышленника была возможность перезаписать состояние контракта. Ситуация усугубляется тем, что FunC допускает [переобъявление переменных](/v3/documentation/smart-contracts/func/docs/statements#variable-declaration): "Это не объявление, а просто проверка во время компиляции, что min_amount имеет тип int".
-
-И, наконец, разбор всего хранилища и его повторная упаковка при каждом вызове любой функции увеличивает стоимость газа.
+> In a recent CertiK audit, we discovered that the developer mixed up two arguments in the `save_data()` function:  
+>
+> ```func
+> save_data(total_supply, min_amount, swap_fee, ...)  
+> ```
+>
+> Without an external audit by a team of experts, detecting such a bug is challenging. The function was rarely used, and the confused parameters often had a value of zero. Identifying this type of error requires knowing exactly what to look for.\
+> Identifying this type of error requires knowing exactly what to look for.\
+> Secondly, "namespace pollution" is a common issue. For example, in another audit, we found the following code in the middle of a function:  
+>
+> ```func
+> int min_amount = in_msg_body~load_coins();  
+> ```
+>
+> Here, a local variable shadowed a storage field, and at the end of the function, the overwritten value was stored in the contract state. This allowed an attacker to manipulate the contract’s state. The problem is exacerbated by FunC’s allowance of [variable redeclaration](https://docs.ton.org/develop/func/statements#variable-declaration): “This is not a declaration, but just a compile-time insurance that `min_amount` has type `int`.”
 
 ## Советы
 
-### 1. Всегда рисуйте диаграммы потока сообщений
+### 1. Always draw message flow diagrams
 
-Даже в таком простом контракте, как TON Jetton, уже есть довольно много сообщений, отправителей, получателей и фрагментов данных, содержащихся в сообщениях. А теперь представьте, как это выглядит, когда Вы разрабатываете что-то более сложное, например, децентрализованную биржу (DEX), где количество сообщений в одном рабочем процессе может превышать десять.
+Even in a simple contract like a TON Jetton, there are numerous messages, senders, receivers, and data pieces. For more complex contracts like decentralized exchanges (DEXs), the number of messages in a single workflow can exceed ten.
 
 ![smart2.png](/img/docs/security-measures/secure-programming/smart2.png)
 
-В CertiK мы используем язык [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language)) для описания и обновления таких диаграмм в ходе аудита. Наши аудиторы считают, что это помогает им визуализировать и понимать сложные взаимодействия внутри и между контрактами.
+At CertiK, we use the [DOT](https://en.wikipedia.org/wiki/DOT_(graph_description_language)) language to describe and update such diagrams during audits. This helps auditors visualize and understand complex interactions within and between contracts.
 
-### 2. Избегайте сбоев и обрабатывайте отскочившие сообщения
+### 2. Avoid failures and handle bounced messages
 
-Используя поток сообщений, сначала определите точку входа. Это сообщение, которое начинает каскад сообщений в вашей группе контрактов ("последствия"). Именно здесь необходимо проверить все (полезную нагрузку, запас газа и т. д.), чтобы свести к минимуму вероятность сбоя на последующих этапах.
+Define the entry point in your message flow—the message that initiates the cascade of messages in your contract group. Perform all necessary checks (payload, gas supply, etc.) here to minimize the chance of failure in subsequent stages.
 
-Если вы не уверены, что сможете выполнить все свои планы (например, достаточно ли у пользователя токенов для завершения сделки), значит, поток сообщений, скорее всего, построен неправильно.
+If you’re unsure whether all conditions will be met, such as whether the user has enough tokens, the message flow is likely designed incorrectly.
 
-В последующих сообщениях (последствия) все `throw_if()/throw_unless()` будут выполнять роль утверждений, а не фактической проверки чего-либо.
+In subsequent messages, use `throw_if()/throw_unless()` as assertions rather than checks. Many contracts also handle bounced messages as a precaution.
 
-Многие контракты также обрабатывают отскочившие сообщения на всякий случай.
-
-Например, в TON Jetton, если кошелёк получателя не может принять токены (это зависит от логики получения), то кошелёк отправителя обработает отскочившее сообщение и вернёт токены на свой баланс.
+For example, in TON Jetton, if the recipient’s wallet cannot accept tokens, the sender’s wallet processes the bounced message and returns the tokens to its balance.
 
 ```func
 () on_bounce (slice in_msg_body) impure {
@@ -141,109 +131,52 @@ int min_amount = in_msg_body~load_coins();
 }
 ```
 
-В основном, мы рекомендуем обрабатывать отскочившие сообщения, однако их нельзя использовать в качестве средства полной защиты от неудачной обработки сообщений и неполного выполнения.
+While handling bounced messages is recommended, it’s not a complete solution. Bounced messages require gas, and if the sender doesn’t provide enough, the bounce won’t occur. Additionally, TON doesn’t support chain bounces, so a bounced message cannot be re-bounced.
 
-Для отправки отскочившего сообщения и его обработки требуется газ, и если отправитель не предоставил достаточного количества газа, то отскока не будет.
+### 3. Expect a man-in-the-middle attack
 
-Во-вторых, в TON не предусмотрена цепочка переходов. Это означает, что отскочившее сообщение не может быть отправлено повторно. Например, если второе сообщение отправляется после входного сообщения, а второе инициирует третье, то входной контракт не будет знать о сбое обработки третьего сообщения. Аналогично, если обработка первого сообщения вызывает второе и третье, то сбой второго не повлияет на обработку третьего.
+A message cascade can span multiple blocks. Assume that while one message flow is running, an attacker can initiate a parallel flow. If a property, such as the user’s token balance, is checked at the start, don’t assume it will remain valid at later stages.
 
-### 3. Ожидайте "человека посередине" в потоке сообщений
+### 4. Use the carry-value pattern
 
-Каскад сообщений может обрабатываться в нескольких блоках. Предположим, что пока выполняется один поток сообщений, злоумышленник может параллельно инициировать второй. То есть, если какое-то условие было проверено в начале (например, достаточно ли у пользователя токенов), не следует предполагать, что на третьем этапе в том же контракте это условие все еще будет выполняться.
+Messages between contracts must carry valuables. In TON Jetton, `sender_wallet` subtracts the balance and sends it with an `op::internal_transfer` message to `destination_wallet`, which then adds the balance to its own or bounces it back.
 
-### 4. Используйте шаблон переноса значения
+An incorrect implementation would be querying the Jetton balance on-chain. By the time the response to `op::get_balance` arrives, the balance might have already been spent.
 
-Из предыдущего параграфа следует, что сообщения между контрактами должны переносить ценности.
+Instead, implement an alternative flow:
 
-В том же TON Jetton это демонстрируется: `sender_wallet` вычитает баланс и отправляет его с сообщением `op::internal_transfer` на `destination_wallet`, а тот, в свою очередь, получает баланс вместе с сообщением и добавляет его к своему балансу (или возвращает обратно).
+1. The master sends an `op::provide_balance` message to the wallet.
+2. The wallet zeroes its balance and sends back `op::take_balance`.
+3. The master receives the funds, decides if they’re sufficient, and either uses them or returns them to the wallet.
 
-А вот пример неправильной реализации. Почему вы не можете узнать свой баланс Jetton on-chain? Потому что такой запрос не соответствует шаблону. К тому времени, когда ответ на сообщение `op::get_balance` дойдет до запрашивающего, этот баланс уже может быть потрачен кем-то другим.
+### 5. Return value instead of rejecting
 
-В этом случае вы можете реализовать альтернативу:
-![smart3.png](/img/docs/security-measures/secure-programming/smart3.png)
+Contracts often receive requests with values. Instead of rejecting invalid requests via `throw_unless()`, return the value to the sender.
 
-1. master отправляет сообщение `op::provide_balance` на кошелёк;
-2. кошелёк обнуляет свой баланс и отправляет обратно `op::take_balance`;
-3. master получает средства, решает, достаточно ли их, и либо использует (списывает что-то в ответ), либо отправляет обратно на кошелёк.
+For example, in TON Jetton:
 
-### 5. Возвращайте значение вместо отклонения
+1. The sender sends an `op::transfer` message via `sender_wallet` to `your_contract_wallet`, specifying `forward_ton_amount` and `forward_payload`.
+2. `sender_wallet` sends an `op::internal_transfer` message to `your_contract_wallet`.
+3. `your_contract_wallet` sends an `op::transfer_notification` message to `your_contract`, delivering `forward_ton_amount`, `forward_payload`, `sender_address`, and `jetton_amount`.
+4. Your contract processes the request in `handle_transfer_notification()`.
 
-Из предыдущего наблюдения следует, что ваша группа контрактов часто будет получать не просто запрос, а запрос вместе со значением. Поэтому нельзя просто отказать в выполнении запроса (с помощью `throw_unless()`), нужно отправить жетоны обратно отправителю.
+At this stage, avoid `throw_if()/throw_unless()`, as it could result in lost Jettons. Use try-catch statements, available in FunC v0.4.0+, to handle errors and return Jettons if necessary.
 
-Например, обычное начало потока (см. поток сообщений TON Jetton):
+### 6. Calculate gas and check msg_value
 
-1. `sender` отправляет сообщение `op::transfer` через `sender_wallet` на `your_contract_wallet`, указывая `forward_ton_amount` и `forward_payload` для вашего контракта;
-2. `sender_wallet` отправляет сообщение `op::internal_transfer` на `your_contract_wallet`;
-3. `your_contract_wallet` отправляет сообщение `op::transfer_notification` на `your_contract`, передавая `forward_ton_amount`, `forward_payload`, а также `sender_address` и `jetton_amount`;
-4. И вот в вашем контракте в `handle_transfer_notification()` начинается поток.
+Estimate the gas cost of each handler in your message flow and check the sufficiency of `msg_value`. Avoid demanding excessive gas, as it must be divided among subsequent messages. Recalculate gas requirements if your code starts sending more messages.
 
-Здесь необходимо определить, какой был запрос, достаточно ли газа для его выполнения и все ли корректно в полезной нагрузке. На этом этапе не следует использовать `throw_if()/throw_unless()`, потому что тогда жетоны просто потеряются, а запрос не будет выполнен. Стоит использовать операторы try-catch [доступны начиная с FunC v0.4.0] (/v3/documentation/smart-contracts/func/docs/statements#try-catch-statements).
+### 7. Return gas excesses carefully
 
-Если что-то не соответствует ожиданиям вашего контракта, жетоны должны быть возвращены.
+If excess gas isn’t returned to the sender, funds will accumulate in your contracts. While not catastrophic, this is suboptimal. Popular contracts like TON Jetton return excess gas with an `op::excesses` message.
 
-Мы обнаружили пример такой уязвимой реализации в ходе недавнего аудита.
+TON provides a useful mechanism: `SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE = 64`. This mode forwards remaining gas with the message. However, avoid this mode if:
 
-```func
-() handle_transfer_notification(...) impure {
-...
-    int jetton_amount = in_msg_body~load_coins();
-    slice from_address = in_msg_body~load_msg_addr();
-    slice from_jetton_address = in_msg_body~load_msg_addr();
+1. Your contract has no other non-linear handlers, as storage fees will deplete the contract balance.
+2. Your contract emits events, sending messages to external addresses, as the cost is deducted from the contract balance.
+3. Your contract attaches value to messages or uses `SEND_MODE_PAY_FEES_SEPARATELY = 1`, as these actions deduct from the contract balance.
 
-    if (msg_value < gas_consumption) { ;; not enough gas provided
-        if (equal_slices(from_jetton_address, jettonA_address)) {
-            var msg = begin_cell()
-                .store_uint(0x18, 6)
-                .store_slice(jettonA_wallet_address)
-                .store_coins(0)
-                .store_uint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-            ...
-        }
-    ...
-}
-```
-
-Как видно, здесь "возврат" отправляется на `jettonA_wallet_address`, а не на `sender_address`. Поскольку все решения принимаются на основе анализа `in_msg_body`, злоумышленник может подделать сообщение и вывести деньги. Всегда отправляйте возврат на `sender_address`.
-
-Если ваш контракт принимает жетоны, невозможно узнать, действительно ли пришел ожидаемый жетон или просто `op::transfer_notification` от кого-то.
-
-Если в ваш контракт попали неожиданные или неизвестные жетоны, их также необходимо вернуть.
-
-### 6. Рассчитайте газ и проверьте значение msg_value
-
-Согласно нашей диаграмме потока сообщений, мы можем оценить стоимость каждого обработчика в каждом из сценариев и вставить проверку на достаточность msg_value.
-
-Вы не можете запрашивать газ с запасом, скажем, 1 TON (это gas_limit в mainnet на дату написания статьи), потому что этот газ должен быть разделен между "последствиями". Допустим, ваш контракт отправляет три сообщения, тогда каждому можно выделить только 0,33 TON. Это означает, что они должны "запрашивать" меньше. Важно тщательно рассчитать потребление газа для всего контракта.
-
-Все усложняется, если во время разработки ваш код начинает отправлять больше сообщений. Требования к газу необходимо перепроверять и обновлять.
-
-### 7. Осторожно возвращайте избыточный газ
-
-Если избыточный газ не возвращаются отправителю, средства со временем накапливаются в ваших контрактах. В принципе, это не критично, но это неоптимальная практика. Вы можете добавить функцию для очистки излишков, но такие популярные контракты, как TON Jetton, все равно возвращаются их отправителю с сообщением `op::excesses`.
-
-В TON есть полезный механизм: `SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE = 64`. При использовании этого режима в `send_raw_message()`, остаток газа будет передан дальше вместе с сообщением (или обратно) новому получателю. Это удобно, если поток сообщений линеен: каждый обработчик сообщений отправляет только одно сообщение. Но есть случаи, когда использовать этот механизм не рекомендуется:
-
-1. Если в вашем контракте нет других нелинейных обработчиков. storage_fee вычитается из баланса контракта, а не из входящего газа. Это означает, что со временем storage_fee может полностью "съесть" баланс, так как все входящие средства должны быть отправлены дальше;
-2. Если ваш контракт генерирует события, то есть отправляет сообщение на внешний адрес. Стоимость этого действия вычитается из баланса контракта, а не из msg_value.
-
-```func
-() emit_log_simple (int event_id, int query_id) impure inline {
-    var msg = begin_cell()
-        .store_uint (12, 4)             ;; ext_out_msg_info$11 addr$00
-        .store_uint (1, 2)              ;; addr_extern$01
-        .store_uint (256, 9)            ;; len:(## 9)
-        .store_uint(event_id, 256);     ;; external_address:(bits len)
-        .store_uint(0, 64 + 32 + 1 + 1) ;; lt, at, init, body
-        .store_query_id(query_id)
-        .end_cell();
-
-    send_raw_message(msg, SEND_MODE_REGULAR);
-}
-```
-
-3. Если ваш контракт присваивает значение при отправке сообщений или использует `SEND_MODE_PAY_FEES_SEPARETELY = 1`. Эти действия вычитают из баланса контракта, что означает, что возврат неиспользованного - это "работа в убыток".
-
-В указанных случаях используется ручной приблизительный расчет излишка:
+In these cases, manually calculate and return excess gas:
 
 ```func
 int ton_balance_before_msg = my_ton_balance - msg_value;
@@ -255,21 +188,20 @@ if(forward_ton_amount) {
 ...
 }
 
-if (msg_value > 0) {    ;; there is still something to return
-
-var msg = begin_cell()
-    .store_uint(0x10, 6)
-    .store_slice(response_address)
-    .store_coins(msg_value)
+if (msg_value > 0) {    ;; return excess gas
+    var msg = begin_cell()
+        .store_uint(0x10, 6)
+        .store_slice(response_address)
+        .store_coins(msg_value)
 ...
 }
 ```
 
-Помните, если баланс контракта закончится, транзакция будет выполнена частично, а этого допустить нельзя.
+Ensure the contract balance doesn’t run out, as this could lead to partial transaction execution.
 
-### 8. Используйте вложенное хранилище
+### 8. Use nested storage
 
-Мы рекомендуем следующий подход к организации хранения:
+Organize storage into blocks of related data:
 
 ```func
 () handle_something(...) impure {
@@ -281,54 +213,17 @@ var msg = begin_cell()
 }
 ```
 
-Хранилище состоит из блоков связанных данных. Если параметр используется в каждой функции, например, `is_paused`, то он должен сразу загружаться через функцию `load_data()`. Если группа параметров нужна только в одном сценарии, то ее не нужно распаковывать, она не требует упаковки и не засоряет пространство имен.
+This approach minimizes changes when adding new fields and avoids namespace pollution. If storage contains many fields, group them hierarchically.
 
-Если структура хранилища требует изменений (обычно добавление нового поля), то придётся вносить гораздо меньше правок.
+### 9. Use `end_parse()`
 
-Более того, этот подход можно повторять. Если в контракте 30 полей хранения, то изначально можно разбить их на четыре группы, а затем выделить пару переменных и еще одну подгруппу из первой группы. Главное - не переусердствовать.
+Use `end_parse()` when reading data from storage or message payloads. This ensures you read as much as you write, preventing hard-to-debug issues.
 
-Обратите внимание, поскольку ячейка может хранить до 1023 бит данных и до 4 ссылок, вам все равно придётся разделить данные по разным ячейкам.
+### 10. Use helper functions and avoid magic numbers
 
-Иерархические данные - одна из главных особенностей TON, нужно использовать её по назначению.
+Write wrappers, helper functions, and declare constants to improve code readability. Avoid magic numbers, as they make the code harder to understand and maintain.
 
-Глобальные переменные можно использовать, особенно на этапе создания прототипа, когда не совсем очевидно, что будет храниться в контракте.
-
-```func
-global int var1;
-global cell var2;
-global slice var3;
-
-() load_data() impure {
-    var cs = get_data().begin_parse();
-    var1 = cs~load_coins();
-    var2 = cs~load_ref();
-    var3 = cs~load_bits(512);
-}
-
-() save_data() impure {
-    set_data(
-        begin_cell()
-            .store_coins(var1)
-            .store_ref(var2)
-            .store_bits(var3)
-            .end_cell()
-        );
-}
-```
-
-Таким образом, если обнаружите, что вам нужна еще одна переменная, просто добавьте новую глобальную переменную и измените `load_data()` и `save_data()`. Никаких изменений во всем контракте не потребуется. Однако, поскольку существует ограничение на количество глобальных переменных (не более 31), этот подход можно совместить с "вложенным хранилищем", рекомендованным выше.
-
-Глобальные переменные также часто обходятся дороже, чем хранение всего в стеке. Однако это зависит от количества перестановок стека, поэтому хорошей идеей будет создать прототип с глобальными переменными и, когда структура хранения будет полностью ясна, перейти к переменным на стеке с "вложенным" шаблоном.
-
-### 9. Используйте функцию end_parse()
-
-Используйте `end_parse()` везде, где это возможно, при чтении данных из хранилища и из полезной нагрузки сообщения. Поскольку TON использует битовые потоки с переменным форматом данных, важно убедиться, что вы читаете столько же, сколько и записываете. Это может сэкономить вам часы отладки.
-
-### 10. Используйте больше вспомогательных функций и избегайте магических чисел
-
-Этот совет не является уникальным для FunC, но здесь он особенно уместен. Пишите больше обёрток, вспомогательных функций и объявляйте больше констант.
-
-В FunC изначально заложено невероятное количество магических чисел. Если разработчик не приложит никаких усилий, чтобы ограничить их использование, результат будет примерно таким:
+For example, instead of:
 
 ```func
 var msg = begin_cell()
@@ -343,13 +238,11 @@ var msg = begin_cell()
 send_raw_message(msg.end_cell(), 1);
 ```
 
-Это код из реального проекта, и он пугает новичков.
-
-К счастью, в последних версиях FunC пара стандартных деклараций может сделать код более понятным и выразительным. Например:
+Use:
 
 ```func
 const int SEND_MODE_REGULAR = 0;
-const int SEND_MODE_PAY_FEES_SEPARETELY = 1;
+const int SEND_MODE_PAY_FEES_SEPARATELY = 1;
 const int SEND_MODE_IGNORE_ERRORS = 2;
 const int SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE = 64;
 
@@ -379,6 +272,6 @@ builder store_body_header(builder b, int op, int query_id) inline {
 
 ## Ссылки
 
-Автор оригинальной статьи: CertiK
+- [Original article](https://blog.ton.org/secure-smart-contract-programming-in-func) - _CertiK_
 
-- [Оригинальная статья](https://blog.ton.org/secure-smart-contract-programming-in-func)
+<Feedback />

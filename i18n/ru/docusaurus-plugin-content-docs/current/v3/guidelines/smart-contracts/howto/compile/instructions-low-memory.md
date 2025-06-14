@@ -1,54 +1,61 @@
-# Компиляция TON на компьютерах с ограниченной памятью
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Compile TON on low-memory machines
 
 :::caution
-В этом разделе описываются инструкции и руководства по взаимодействию с TON на низком уровне.
+This section provides low-level instructions for working with TON.
 :::
 
-Создайте раздел подкачки для компиляции TON на компьютере с малым объемом памяти (менее 1 ГБ).
+To compile TON on systems with limited memory (< 1 GB), you need to create swap partitions.
 
 ## Требования
 
-Во время компиляции C++ в системе Linux возникают следующие ошибки, приводящие к прерыванию компиляции:
+When compiling C++ components on Linux, you may encounter memory-related failures:
 
 ```
-C++: fatal error: Killed signal terminated program cc1plus compilation terminated.
+C++: fatal error: Killed signal terminated program cc1plus
+compilation terminated.
 ```
 
 ## Решение
 
-Это происходит из-за нехватки памяти и решается путем создания разделов подкачки.
+Follow these steps to create a 4GB swap partition:
 
 ```bash
-# Create the partition path
+# Create swap partition
 sudo mkdir -p /var/cache/swap/
-# Set the size of the partition
-# bs=64M is the block size, count=64 is the number of blocks, so the swap space size is bs*count=4096MB=4GB
+
+# Allocate 4GB swap space (64MB blocks × 64)
 sudo dd if=/dev/zero of=/var/cache/swap/swap0 bs=64M count=64
-# Set permissions for this directory
+
+# Set secure permissions
 sudo chmod 0600 /var/cache/swap/swap0
-# Create the SWAP file
+
+# Initialize swap
 sudo mkswap /var/cache/swap/swap0
-# Activate the SWAP file
+
+# Activate swap
 sudo swapon /var/cache/swap/swap0
-# Check if SWAP information is correct
+
+# Verify activation
 sudo swapon -s
 ```
 
-Команда для удаления раздела подкачки:
+### Swap management commands
+
+**Remove swap partition:**
 
 ```bash
 sudo swapoff /var/cache/swap/swap0
 sudo rm /var/cache/swap/swap0
 ```
 
-Команда освобождения места:
+**Free all swap space:**
 
 ```bash
 sudo swapoff -a
-#Detailed usage: swapoff --help
-#View current memory usage: --swapoff: free -m
+# Check memory: free -m
 ```
+
+<Feedback />
+

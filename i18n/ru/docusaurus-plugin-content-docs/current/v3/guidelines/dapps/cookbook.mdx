@@ -1,29 +1,27 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
 
-# TON Cookbook
+# TON cookbook
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-В процессе разработки продукта часто возникают различные вопросы, касающиеся взаимодействия с различными контрактами на TON.
-
-Этот документ был создан для того, чтобы собрать лучшие практики всех разработчиков и поделиться ими со всеми.
+During product development, various questions often arise regarding interactions with different contracts on TON. This document aims to gather the best practices from developers and share them with the community.
 
 ## Работа с адресами контрактов
 
 ### Как конвертировать (user friendly \<-\> raw), собирать и извлекать адреса из строк?
 
-Адрес TON однозначно идентифицирует контракт в блокчейне, указывая его workchain и хеш исходного состояния. [Используются два основных формата](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses): **raw** (workchain и хеш в HEX-формате, разделенные символом ":") и **user-friendly** (base64-кодировка с определенными флагами).
+TON addresses uniquely identify contracts on the blockchain, indicating their workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses) are: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
 
 ```
 User-friendly: EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
 Raw: 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 ```
 
-Чтобы получить объект адреса из строки в вашем SDK, вы можете использовать следующий код:
+To obtain a TON address object from a string in your SDK, you can use the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -112,22 +110,22 @@ print(address2.to_str(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca2492e
 </TabItem>
 </Tabs>
 
-### Какие флаги существуют в user-friendly адресах?
+### Flags in user-friendly addresses
 
-Определены два флага: **bounceable**/**non-bounceable** and **testnet**/**any-net**. Их можно легко определить, взглянув на первую букву адреса, поскольку она обозначает первые 6 бит в кодировке адреса, а флаги расположены там в соответствии с [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
+There are two flags in user-friendly addresses: **bounceable**/**non-bounceable** and **testnet**/**any-net**. These flags are represented in the first character of the address, which corresponds to the first 6 bits of the address encoding. These flags can be detected by looking at the first character, according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
 
 | Начало адреса | Бинарная форма | Bounceable | Testnet-only |
 | :-----------: | :------------: | :--------: | :----------: |
-|  E...         |  000100.01     |  да        |  нет         |
-|  U...         |  010100.01     |  нет       |  нет         |
-|  k...         |  100100.01     |  да        |  да          |
-|  0...         |  110100.01     |  нет       |  да          |
+|   E...        |   000100.01    |   да       |  нет         |
+|   U...        |   010100.01    |   нет      |  нет         |
+|   k...        |   100100.01    |   да       |   да         |
+|   0...        |   110100.01    |   нет      |   да         |
 
 :::tip
-Флаг Testnet-only вообще не отображается в блокчейне. Флаг Non-bounceable имеет значение только при использовании в качестве адреса назначения для перевода: в этом случае он [не допускает возврата](/v3/documentation/smart-contracts/message-management/non-bounceable-messages)  отправленного сообщения; адрес в блокчейне, опять же, не содержит этого флага.
+The testnet-only flag does not appear in the blockchain. The non-bounceable flag only affects message transfers: when used as a destination, it prevents the message from being bounced.
 :::
 
-Кроме того, в некоторых библиотеках вы можете встретить параметр сериализации `urlSafe`. Формат base64 не является безопасным для URL-адресов, а это значит, что некоторые символы (а именно, `+` и `/`) могут вызвать проблемы при передаче адреса в ссылке. Когда `urlSafe = true`, все символы `+` заменяются на `-`, а все символы `/` заменяются на `_`. Вы можете получить эти форматы адресов, используя следующий код:
+Also, in some libraries, you may notice a serialization parameter called `urlSafe`. Тhe base64 format is not URL safe, which means that some characters (namely, `+` and `/`) can cause issues when transmitting an address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -209,7 +207,7 @@ print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=Tru
 </TabItem>
 </Tabs>
 
-### Как проверить корректность адреса TON?
+### How to check the validity of a TON address?
 
 <Tabs groupId="address-examples">
 
@@ -271,9 +269,9 @@ try {
 </TabItem>
 </Tabs>
 
-## Стандартные кошельки в экосистеме TON
+## Standard wallets in TON Ecosystem
 
-### Как перевести TON? Как отправить текстовое сообщение на другой кошелек?
+### How to transfer TON and send a text message to another wallet
 
 #### Отправка сообщений
 
@@ -303,12 +301,12 @@ try {
 </div>
 <br></br>
 
-Большинство SDK обеспечивают следующий процесс отправки сообщений из вашего кошелька:
+Most SDKs follow a similar process for sending messages from your wallet:
 
-- Вы создаете обёртку кошелька (объект в вашей программе) правильной версии (в большинстве случаев v3r2; см. также [версии кошельков](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)), используя секретный ключ и workchain (обычно 0, что обозначает [basechain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules)).
-- Вы также создаете блокчейн-обёртку, или "клиент" - объект, который будет направлять запросы к API или к лайтсерверам, в зависимости от того, что вы выберете.
-- Затем вы _открываете_ контракт в блокчейн-обёртке. Это означает, что объект контракта больше не является абстрактным и представляет собой реальную учётную запись в основной или тестовой сети TON.
-- После этого вы можете формировать необходимые вам сообщения и отправлять их. Вы также можете отправлять до 4 сообщений за один запрос, как описано в [расширенном руководстве](/v3/guidelines/smart-contracts/howto/wallet#sending-multiple-messages-simultaneously).
+- Create a wallet wrapper (object) of the correct version, typically v3r2 (see also [wallet versions](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)), your secret key and workchain (usually 0 for the [BaseChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules)).
+- Create a blockchain wrapper (or "client")—an object that routes requests to the API or lite servers, depending on your setup.
+- **Open** the contract in the blockchain wrapper. This ensures that the contract object is linked to an actual account on either the TON Mainnet or Testnet.
+- Form messages you want to send and initiate the transaction. You can send up to 4 messages per request, as detailed in the [advanced manual](/v3/guidelines/smart-contracts/howto/wallet#sending-multiple-messages-simultaneously).
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton-v4" label="JS (@ton) for Wallet V4">
@@ -454,7 +452,7 @@ asyncio.run(main())
 
 ### Написание комментариев: длинные строки в формате snake
 
-Иногда необходимо хранить длинные строки (или другую объемную информацию), в то время как ячейки могут вместить **максимум 1023 бита**. В этом случае можно использовать snake cells. Snake cells - это ячейки, содержащие ссылку на другую ячейку, которая, в свою очередь, содержит ссылку на другую ячейку, и так далее.
+Sometimes, it's necessary to store large strings in cells, but the maximum size for a cell is 1023 bits. In these cases, you can use snake cells, which reference other cells recursively.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-tonweb" label="JS (tonweb)">
@@ -494,18 +492,18 @@ console.log(text);
 </TabItem>
 </Tabs>
 
-Во многих SDK уже есть функции для разбора и хранения длинных строк. В других случаях можно работать с такими ячейками с помощью рекурсии или оптимизировать их (метод, известный как "хвостовые вызовы" или "tail calls").
+Many SDKs already offer functions to parse and store long strings in this format. Alternatively, you can use recursion to handle these strings or optimize with "tail calls."
 
-Не забывайте, что сообщение-комментарий имеет 32 нулевых бита (можно сказать, что его опкод равен 0)!
+Don't forget that the comment message in a snake cell has 32 zero bits (i.e., its opcode is 0).
 
-## TEP-74 (Стандарт Jetton)
+## TEP-74 (jettons standard)
 
-### Как вычислить адрес кошелька пользователя Jetton (offchain)?
+### How to calculate the user's jetton wallet address (offchain)?
 
-Чтобы вычислить адрес кошелька пользователя jetton, нам нужно вызвать метод "get_wallet_address" из мастер-контракта jetton с адресом пользователя. Для этой задачи можно легко использовать метод getWalletAddress из JettonMaster или вызвать мастер-контракт вручную.
+To calculate a user’s jetton wallet address, use the `get_wallet_address` method from the jetton master contract with the user's address. You can also call the master contract directly, or use the getWalletAddress method provided in the JettonMaster SDK.
 
 :::info
-В `JettonMaster` из `@ton/ton` отсутствует множество функций, но _эта_, к счастью, реализована.
+The `JettonMaster` in `@ton/ton` provides this functionality, although it lacks other features.
 :::
 
 <Tabs groupId="code-examples">
@@ -619,46 +617,98 @@ asyncio.run(main())
 
 </Tabs>
 
-### Как вычислить адрес кошелька пользователя Jetton (offline)?
+### How to calculate a user's jetton wallet address (offline)?
 
-Постоянный вызов GET-метода для получения адреса кошелька может занимать много времени и ресурсов. Если вам заранее известен код Jetton Wallet и структура его хранилища, можно определить адрес кошелька без сетевых запросов.
-
-Код можно получить код с помощью Tonviewer. Например, адрес мастер-контракта для `jUSDT` - `EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA`. Если [перейти по этому адресу](https://tonviewer.com/EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA?section=method) и открыть вкладку Methods, то мы увидим, что там уже есть метод `get_jetton_data`. Вызвав его можно получить hex-форму ячейки с кодом Jetton Wallet:
-
-```
-b5ee9c7201021301000385000114ff00f4a413f4bcf2c80b0102016202030202cb0405001ba0f605da89a1f401f481f481a9a30201ce06070201580a0b02f70831c02497c138007434c0c05c6c2544d7c0fc07783e903e900c7e800c5c75c87e800c7e800c1cea6d0000b4c7c076cf16cc8d0d0d09208403e29fa96ea68c1b088d978c4408fc06b809208405e351466ea6cc1b08978c840910c03c06f80dd6cda0841657c1ef2ea7c09c6c3cb4b01408eebcb8b1807c073817c160080900113e910c30003cb85360005c804ff833206e953080b1f833de206ef2d29ad0d30731d3ffd3fff404d307d430d0fa00fa00fa00fa00fa00fa00300008840ff2f00201580c0d020148111201f70174cfc0407e803e90087c007b51343e803e903e903534544da8548b31c17cb8b04ab0bffcb8b0950d109c150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c032481c007e401d3232c084b281f2fff274013e903d010c7e800835d270803cb8b13220060072c15401f3c59c3e809dc072dae00e02f33b51343e803e903e90353442b4cfc0407e80145468017e903e9014d771c1551cdbdc150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c0325c007e401d3232c084b281f2fff2741403f1c147ac7cb8b0c33e801472a84a6d8206685401e8062849a49b1578c34975c2c070c00870802c200f1000aa13ccc88210178d4519580a02cb1fcb3f5007fa0222cf165006cf1625fa025003cf16c95005cc2391729171e25007a813a008aa005004a017a014bcf2e2c501c98040fb004300c85004fa0258cf1601cf16ccc9ed5400725269a018a1c882107362d09c2902cb1fcb3f5007fa025004cf165007cf16c9c8801001cb0527cf165004fa027101cb6a13ccc971fb0050421300748e23c8801001cb055006cf165005fa027001cb6a8210d53276db580502cb1fcb3fc972fb00925b33e24003c85004fa0258cf1601cf16ccc9ed5400eb3b51343e803e903e9035344174cfc0407e800870803cb8b0be903d01007434e7f440745458a8549631c17cb8b049b0bffcb8b0b220841ef765f7960100b2c7f2cfc07e8088f3c58073c584f2e7f27220060072c148f3c59c3e809c4072dab33260103ec01004f214013e809633c58073c5b3327b55200087200835c87b51343e803e903e9035344134c7c06103c8608405e351466e80a0841ef765f7ae84ac7cbd34cfc04c3e800c04e81408f214013e809633c58073c5b3327b5520
-```
-
-Теперь, зная код Jetton Wallet, адрес мастер-контракта Jetton и структуру хранилища, мы можем вручную вычислить адрес кошелька:
+Calling the GET method every time to retrieve the wallet address can be slow and resource-intensive. 
+If you know the jetton wallet code and storage structure, you can calculate the wallet address without making network requests.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton/ton)">
 
-```js
-import { Address, Cell, beginCell, storeStateInit } from '@ton/core';
+```ts
+import { Cell, contractAddress, toNano, TupleBuilder } from "@ton/core";
+import { ContractProvider, Address, Contract, Sender, StateInit } from "@ton/core";
+import { Blockchain, createShardAccount } from "@ton/sandbox";
 
-const JETTON_WALLET_CODE = Cell.fromBoc(Buffer.from('b5ee9c7201021301000385000114ff00f4a413f4bcf2c80b0102016202030202cb0405001ba0f605da89a1f401f481f481a9a30201ce06070201580a0b02f70831c02497c138007434c0c05c6c2544d7c0fc07783e903e900c7e800c5c75c87e800c7e800c1cea6d0000b4c7c076cf16cc8d0d0d09208403e29fa96ea68c1b088d978c4408fc06b809208405e351466ea6cc1b08978c840910c03c06f80dd6cda0841657c1ef2ea7c09c6c3cb4b01408eebcb8b1807c073817c160080900113e910c30003cb85360005c804ff833206e953080b1f833de206ef2d29ad0d30731d3ffd3fff404d307d430d0fa00fa00fa00fa00fa00fa00300008840ff2f00201580c0d020148111201f70174cfc0407e803e90087c007b51343e803e903e903534544da8548b31c17cb8b04ab0bffcb8b0950d109c150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c032481c007e401d3232c084b281f2fff274013e903d010c7e800835d270803cb8b13220060072c15401f3c59c3e809dc072dae00e02f33b51343e803e903e90353442b4cfc0407e80145468017e903e9014d771c1551cdbdc150804d50500f214013e809633c58073c5b33248b232c044bd003d0032c0325c007e401d3232c084b281f2fff2741403f1c147ac7cb8b0c33e801472a84a6d8206685401e8062849a49b1578c34975c2c070c00870802c200f1000aa13ccc88210178d4519580a02cb1fcb3f5007fa0222cf165006cf1625fa025003cf16c95005cc2391729171e25007a813a008aa005004a017a014bcf2e2c501c98040fb004300c85004fa0258cf1601cf16ccc9ed5400725269a018a1c882107362d09c2902cb1fcb3f5007fa025004cf165007cf16c9c8801001cb0527cf165004fa027101cb6a13ccc971fb0050421300748e23c8801001cb055006cf165005fa027001cb6a8210d53276db580502cb1fcb3fc972fb00925b33e24003c85004fa0258cf1601cf16ccc9ed5400eb3b51343e803e903e9035344174cfc0407e800870803cb8b0be903d01007434e7f440745458a8549631c17cb8b049b0bffcb8b0b220841ef765f7960100b2c7f2cfc07e8088f3c58073c584f2e7f27220060072c148f3c59c3e809c4072dab33260103ec01004f214013e809633c58073c5b3327b55200087200835c87b51343e803e903e9035344134c7c06103c8608405e351466e80a0841ef765f7ae84ac7cbd34cfc04c3e800c04e81408f214013e809633c58073c5b3327b5520', 'hex'))[0];
-const JETTON_MASTER_ADDRESS = Address.parse('EQBynBO23ywHy_CgarY9NK9FTz0yDsG82PtcbSTQgGoXwiuA');
-const USER_ADDRESS = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+//const USDTMasterAddress = Address.parse('EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs')  // EQC7aZ-_G_tWeSn0GZ0HclwZvGIBp-CRrSsbMibTHN6l4kr7
+//const NOTMasterAddress = Address.parse('EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT')   // EQA9idRBK7TY1AF0L2CpuxrwdjPr7qzKSQjbgakURWGQRdOW
+//const HMSTRMasterAddress = Address.parse('EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo') // EQDXT5HaCnuwzBff8tjwAmGvs9N9MEbqOXDIY_KepS9yYyMo
+//const DOGSMasterAddress = Address.parse('EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS')  // EQCRgs1d1M91dm2hHeF8luXBH-aIF9PT-T2jlocQXiYBvAGY
+//const STONMasterAddress = Address.parse('EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO')  // EQCx5ruSqFmw5LYxJ6iksuCuRLsNpgTjWcCuW6jm8BhaLOTK
+// ------------------------------------------------------------------------------------------------------------------------------------------------
 
-const jettonWalletStateInit = beginCell().store(storeStateInit({
-    code: JETTON_WALLET_CODE,
-    data: beginCell()
-        .storeCoins(0)
-        .storeAddress(USER_ADDRESS)
-        .storeAddress(JETTON_MASTER_ADDRESS)
-        .storeRef(JETTON_WALLET_CODE)
-        .endCell()
-}))
-.endCell();
-const userJettonWalletAddress = new Address(0, jettonWalletStateInit.hash());
 
-console.log('User Jetton Wallet address:', userJettonWalletAddress.toString());
+export class MyContract implements Contract {
+    readonly address: Address
+    readonly init?: StateInit
+
+    static fromInit(code: Cell, data: Cell) {
+        return new MyContract(contractAddress(0, {code: code, data: data}), {code: code, data: data})
+    }
+
+    constructor(address: Address, init?: StateInit) {
+        this.address = address
+        this.init = init
+    }
+
+    async send(
+        provider: ContractProvider,
+        via: Sender,
+        args: {value: bigint; bounce?: boolean | null | undefined},
+        body: Cell,
+    ) {
+        await provider.internal(via, {...args, body: body})
+    }
+
+    async getRunMethod(provider: ContractProvider, id: number | string, stack: TupleBuilder = new TupleBuilder()) {
+        return (await provider.get(id, stack.build())).stack
+    }
+}
+
+async function main() {
+    const blockchain = await Blockchain.create();
+    // blockchain.verbosity.vmLogs = "vm_logs_verbose"
+
+    // First we need to gather state of the contract from the blockchain:
+    const contractCode = Cell.fromHex("b5ee9c7201021a0100050e000114ff00f4a413f4bcf2c80b0102016202030202cb0405020120101101d7d0cb434c0c05c6c23910c200835c874c7c0608405e351466ea44c38601035c87e800c3b51343e803e903e90353534ffc07e1874541168504d3e10721401be80940133c59633c5b33332fff27b55383e903e900c7e800c7d007e800c7e80004c5c3e0e80b4c7c04074cfc044a06001da23864658380e78b64814183fa0bc004fced44d0fa00fa40fa40d4d4d3ff01f861d1268210642b7d07ba8ecb35355161c705f2e04904fa4021fa4430c000f2e14dfa00d4d120d0d31f018210178d4519baf2e0488040d721fa00fa4031fa4031fa0020d70b009ad74bc00101c001b0f2b19130e254431be0392582107bdd97debae3022582102c76b973bae30234240708090a018e2191729171e2f839206e9381782e9120e2216e9431817ee09101e25023a813a0738104ad70f83ca00270f83612a00170f836a07381051382100966018070f837a0bcf2b025597f0b01e63505fa00fa40f828f84128103401db3c6f2230f9007074c8cb02ca07cbffc9d05008c705f2e04a12a144145036f841c85006fa025004cf1658cf16cccccbffc9ed54fa40d120d70b01c000b38e22c8801001cb0501cf1670fa027001cb6a8210d53276db01cb1f0101cb3fc98042fb00915be21801d2355f033401fa40d2000101d195c821cf16c9916de2c8801001cb055004cf1670fa027001cb6a8210d173540001cb1f500401cb3f23fa4430c0008e9df828f84110354150db3c6f2230f9007074c8cb02ca07cbffc9d012cf1697316c127001cb01e2f400c98050fb001804fe82106501f354ba8e2530335142c705f2e04902fa40d1400304f841c85006fa025004cf1658cf16cccccbffc9ed54e0248210fb88e119ba8e24313303d15131c705f2e0498b024034f841c85006fa025004cf1658cf16cccccbffc9ed54e0248210cb862902bae302302382102508d66abae3022382107431f221bae30210360c0d0e0f01c082103b9aca0070fb02f828f84110364150db3c6f223020f9007074c8cb02ca07cbffc8801801cb0501cf1758fa02029858775003cb6bcccc9730017158cb6acce2c98011fb005005a04314f841c85006fa025004cf1658cf16cccccbffc9ed5418004e34365145c705f2e049c85003cf16c9103412f841c85006fa025004cf1658cf16cccccbffc9ed540022365f0302c705f2e049d4d4d101ed54fb04004a335042c705f2e04901d18b028b024034f841c85006fa025004cf1658cf16cccccbffc9ed54001c5f068210d372158cbadc840ff2f002014812130202711617013fb5d15da89a1f401f481f481a9a9a7fe03f0c3a228be09f051f08225b678de4501802016a1415002eab5bed44d0fa00fa40fa40d4d4d3ff01f861d110245f04002eaa67ed44d0fa00fa40fa40d4d4d3ff01f861d15f05f841015badbcf6a2687d007d207d206a6a69ff80fc30e88a2f827c147c20896d9e3791187c80383a6465816503e5ffe4e84018008baf16f6a2687d007d207d206a6a69ff80fc30e8bf99e836c1783872ebdb514d9c97c283b7f0ae5179029e2b6119c39462719e4f46ed8f7413e62c780a38646583fa0064a1804001f6840f7f7026fa4431abfb531149461804c8cb035003fa0201cf1601cf16cbff208100cac8cb0f01cf1724f90025d7652582020134c8cb1712cb0fcb0fcbff8e2906a45c01cb0971f90400527001cbff71f90400abfb28b25304b9933434239130e220c02024c000b117e610235f033333227003cb09c922c8cb0112190014f400f400cb00c9016f02");
+    const contractData = Cell.fromHex("b5ee9c720101040100af0002979056bc75ddfc673410080177e274e049215c770a7fbc709371cfb836bea9100f522b0ea608c92d495da648211a56b90a6f27e9f2c5241dd6b2c716d530d50027787d2a0e4223997141d188c001020842020f1ad3d8a46bd283321dde639195fb72602e9b31b1727fecc25e2edc10966df4010003006e68747470733a2f2f6170692e68616d737465726b6f6d6261742e696f2f7075626c69632f746f6b656e2f6d657461646174612e6a736f6e");
+    // Use mainnet address of the Jetton Master contract
+    const JettonMasterAddress = Address.parse("EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo");
+    // Open the contract, so sandbox can send messages to it
+    const openedContract = blockchain.openContract(
+        new MyContract(JettonMasterAddress)
+            // {code: contractCode, data: contractData})
+    );
+
+    // Instead of deploying the contract, we can set shard account directly
+    await blockchain.setShardAccount(JettonMasterAddress, createShardAccount({
+        address: JettonMasterAddress,
+        code: contractCode,
+        data: contractData,
+        balance: toNano("0.05"),
+        workchain: 0
+    }));
+
+    // If some arguments are needed, we can pass them as second argument like this:
+    const stack = new TupleBuilder();
+    stack.writeAddress(Address.parse("UQDKHZ7e70CzqdvZCC83Z4WVR8POC_ZB0J1Y4zo88G-zCSRH"));
+
+    const result = await openedContract.getRunMethod('get_wallet_address', stack);
+    console.log("Jetton Wallet Address: ", result.readAddress());
+}
+
+void main();
 ```
 
 </TabItem>
 
 <TabItem value="Python" label="Python">
+
+Unfortunately, there is currently no tool like Sandbox for Python to emulate the blockchain. 
+However, you can still implement something similar with [pytvm](https://github.com/yungwine/pytvm).
+This example helps to understand how to correctly construct the data needed to obtain the address.
+Essentially you need to build the same thing as `get_wallet_address(slice owner_address) method_id` in the master contract:
 
 ```python
 
@@ -701,13 +751,13 @@ def calculate_jetton_address(
 </TabItem>
 </Tabs>
 
-Большинство основных токенов используют [стандартную реализацию стандарта TEP-74](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc), поэтому их структура хранилища не отличается. Исключением являются новые [контракты Jetton-with-governance](https://github.com/ton-blockchain/stablecoin-contract) для централизованных стейблкоинов. В них разница заключается [в наличии поля статуса кошелька и отсутствии кодовой ячейки в хранилище](https://github.com/ton-blockchain/stablecoin-contract/blob/7a22416d4de61336616960473af391713e100d7b/contracts/jetton-utils.fc#L3-L12).
+Major tokens typically use a standard implementation of the [ TEP-74 standard](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc), except the new [Jetton-with-governance contracts](https://github.com/ton-blockchain/stablecoin-contract) for centralized stablecoins. 
 
 ### Как создать сообщение для передачи jetton с комментарием?
 
-Чтобы понять, как создать сообщение для передачи токена, мы используем [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), в котором описан стандарт токена.
+When constructing a message for a jetton transfer, refer to [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which defines the token standard.
 
-#### Перевод джеттонов
+#### Transfer jettons
 
 <br></br>
 <div class="text--center">
@@ -722,7 +772,7 @@ def calculate_jetton_address(
 <br></br>
 
 :::warning
-When displayed, token doesn't usually show count of indivisible units user has; rather, amount is divided by `10 ^ decimals`. This value is commonly set to `9`, and this allows us to use `toNano` function. If decimals were different, we would **need to multiply by a different value** (for instance, if decimals are 6, then we would end up transferring thousand times the amount we wanted).
+When displaying token amounts, they are usually divided by `10^decimals` (often `9 decimals`). This allows for the use of the `toNano` function. If the number of decimals is different (e.g., 6), you will need to adjust accordingly.
 
 Конечно, всегда можно производить расчеты в неделимых единицах.
 :::
@@ -878,27 +928,26 @@ asyncio.run(main())
 
 </Tabs>
 
-Если `forward_amount` ненулевое, на контракт назначения отправляется уведомление о получении джеттона, как показано в схеме в начале этого раздела. Если адрес `response_destination` не равен null, оставшиеся toncoin (они называются "излишки") отправляются на этот адрес.
+If the `forward_amount` is nonzero, a notification about the Jetton reception will be sent to the destination contract. Additionally, if the `response_destination` address is non-null, excess Toncoins (called "excesses") will be sent to that address.
 
 :::tip
-Эксплореры поддерживают комментарии в уведомлениях jetton, а также в обычных переводах TON. Их формат - 32 нулевых бита и затем текст, предпочтительно в кодировке UTF-8.
+Explorers support comments in Jetton notifications, similar to regular TON transfers. Comments are formatted as 32 zero bits followed by UTF-8 text.
 :::
 
 :::tip
-При переводах Jetton нужно внимательно учитывать комиссии и суммы, указанные в исходящих сообщениях. Например, если вы "вызываете" перевод с суммой 0.2 TON, вы не сможете переслать 0.1 TON и получить ответное сообщение с превышением 0.1 TON.
+Be careful when calculating fees and amounts for jetton transfer messages. For instance, transferring 0.2 TON with no excess may prevent you from receiving 0.1 TON in a response.
 :::
 
-## TEP-62 (стандарт NFT)
+## TEP-62 (NFT standard)
 
-Коллекции NFT сильно отличаются друг от друга. На самом деле, контракт NFT на TON можно определить как "контракт, который имеет соответствующий get-метод и возвращает корректные метаданные". Операция перевода стандартизирована и аналогична [переводу Jetton](/v3/guidelines/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment), поэтому мы не будем углубляться в нее, а рассмотрим дополнительные возможности, предоставляемые большинством коллекций, которые вы можете встретить!
-
+NFT collections on TON are highly customizable. The NFT contract can be defined as any contract that provides a valid get-method to return metadata. The transfer operation is standardized similarly to [Jettons](/v3/guidelines/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment).
 :::warning
-Напоминаем, что все описанные ниже методы работы с NFT не привязаны к TEP-62. Прежде чем использовать их, пожалуйста, проверьте, будут ли ваши NFT или коллекция обрабатывать эти сообщения ожидаемым образом. В этом случае может пригодиться эмуляция приложения кошелька.
+Reminder: all methods about NFT below are not bound by TEP-62 to work. Before trying them, check if your NFT or collection process those messages in an expected way. The wallet app emulation may be useful in this case.
 :::
 
-### Как использовать пакетный деплой NFT?
+### How to use NFT batch deployment?
 
-Смарт-контракты для коллекций позволяют разместить до 250 NFT в рамках одной транзакции. Однако необходимо учитывать, что на практике этот максимум составляет около 100-130 NFT из-за ограничения стоимости вычислений в 1 ton. Чтобы это реализовать, нам нужно хранить информацию о новых NFT в словаре.
+NFT collection smart contracts allow batch deployment of up to 250 NFTs in a single transaction. However, due to the 1 TON computation fee limit, this number is practically reduced to 100-130 NFTs.
 
 #### Пакетный минт NFT
 
@@ -949,7 +998,7 @@ async function main() {
 </TabItem>
 </Tabs>
 
-Для начала предположим, что минимальное количество TON для платы за хранение составляет `0,05`. Это означает, что после деплоя NFT смарт-контракт коллекции отправит эту сумму TON на свой баланс. Затем мы получим массивы с владельцами новых NFT и их содержимым. После этого, используя GET-метод `get_collection_data`, получаем `next_item_index`.
+To deploy a batch, the contract stores information about new NFTs in a dictionary. The process involves: setting up storage fees (e.g., `0.05`), obtaining arrays with the new NFT owners and content, retrieving the `next_item_index` using the `get_collection_data` method.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -1014,7 +1063,7 @@ main().finally(() => console.log("Exiting..."));
 
 ### Как изменить владельца смарт-контракта коллекции?
 
-Изменить владельца коллекции очень просто. Для этого нужно указать **opcode = 3**, любой query_id и адрес нового владельца:
+Changing the owner of a collection is simple. Specify the `opcode = 3`, any `query_id`, and the new owner’s address.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -1093,9 +1142,14 @@ main().finally(() => console.log("Exiting..."));
 
 ### Как изменить содержимое смарт-контракта коллекции?
 
-Чтобы изменить содержимое смарт-контракта коллекции, нужно понять, как оно хранится. Коллекция хранит всё содержимое в одной ячейке, внутри которой находятся две ячейки: **содержимое коллекции (collection content)** и **общее содержимое NFT (NFT common content)**. Первая ячейка содержит метаданные коллекции, а вторая - базовый URL для метаданных NFT.
+The content of an NFT collection contract is stored in a single cell, which includes two parts:
 
-Часто метаданные коллекции хранятся в формате, похожем на `0.json`, с последующим увеличением номера, при этом адрес перед этим файлом остается неизменным. Именно этот адрес должен храниться в NFT common content.
+- сollection metadata
+- NFT common content (base URL for metadata)
+
+The first cell contains the collection's metadata, while the second one contains the base URL for the NFT metadata.
+
+Often, the collection's metadata is stored in a format similar to `0.json` and continues incrementing, while the address before this file remains the same. This address should be stored in the NFT common content.
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
@@ -1215,17 +1269,17 @@ main().finally(() => console.log("Exiting..."));
 </TabItem>
 </Tabs>
 
-Кроме того, нам нужно включить в сообщение информацию о роялти, так как они также изменяются с использованием этого опкода. Важно отметить, что не обязательно указывать новые значения везде. Например, если нужно изменить только общее содержимое NFT (NFT common content), то все остальные значения можно оставить прежними.
+When updating NFT metadata or content, royalty information must also be included, especially when using the appropriate opcode to modify this data. It’s important to remember that you don’t need to update all values if only certain elements are changing. For instance, if the only change is to the NFT common content, the other data remains the same and can be reused without modification.
 
-## Сторонние организации: Децентрализованные биржи (DEX)
+## Third-party: decentralized exchanges (DEX)
 
 ### Как отправить сообщение о свопе на DEX (DeDust)?
 
-DEX используют разные протоколы для своей работы. В этом примере мы будем взаимодействовать с **DeDust**.
+DEXs (Decentralized Exchanges) operate using various protocols. In this section, we will focus on **DeDust**, a decentralized exchange built on TON.
 
 - [Документация DeDust](https://docs.dedust.io/).
 
-DeDust предлагает два пути обмена: jetton \<-> jetton или TON \<-> jetton. У каждого из них своя схема. Для свопа вам необходимо отправить жетоны (или toncoin) в определенное **хранилище (vault)** и предоставить специальный payload. Вот схема обмена жетона на жетон или жетона на toncoin:
+DeDust provides two primary paths for exchanging assets: jetton \<-> jetton or TON \<-> jetton. Each has a different scheme. The process involves sending either jettons or Toncoins to specific vaults and including a special payload. Below is the process for both types of swaps:
 
 ```tlb
 swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
@@ -1235,9 +1289,8 @@ swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
                     fulfill_payload:(Maybe ^Cell) reject_payload:(Maybe ^Cell) = SwapParams;
 ```
 
-Эта схема показывает, что должно быть в `forward_payload` вашего сообщения о передаче жетонов (`transfer#0f8a7ea5`).
-
-И схема обмена toncoin на жетон:
+Similarly, when swapping from TON to jetton, a transfer message to the TON vault must be sent, and the swap information will be contained in the forward_payload.
+And the scheme of toncoin to jetton swap:
 
 ```tlb
 swap#ea06185d query_id:uint64 amount:Coins _:SwapStep swap_params:^SwapParams = InMsgBody;
@@ -1258,34 +1311,36 @@ jetton$0001 workchain_id:int8 address:uint256 = Asset; // for jetton
 
 Также для обмена необходим адрес **пула**, который можно получить с помощью get-метода `get_pool_address`. В качестве аргументов используются срезы активов по схеме, описанной выше. В ответ оба метода возвращают срез с адресом запрашиваемого **хранилища (vault)** / **пула**.
 
-Этого достаточно для формирования сообщения.
+This information is sufficient to construct the swap message.
 
 <Tabs groupId="code-examples">
 
 <TabItem value="js-ton" label="JS (@ton)">
-DEX используют разные протоколы для своей работы, поэтому нам необходимо ознакомиться с ключевыми понятиями и некоторыми важными компонентами, а также знать схему TL-B, чтобы правильно выполнить процесс свопа. В этом руководстве мы рассмотрим DeDust, одну из популярных DEX, полностью реализованных на TON.
-В DeDust у нас есть абстрактная концепция актива, которая включает в себя все типы активов, доступных для обмена. Абстракция типов активов упрощает процесс свопа, поскольку тип актива не имеет значения, а дополнительные валюты или даже активы из других сетей при таком подходе будут легко приниматься.
+DEXs use different protocols for their work, we need to familiarize ourselves with key concepts and some vital components and also know the TL-B schema involved in doing our swap process correctly. In this tutorial, we deal with DeDust, one of the famous DEX implemented entirely in TON.
+ DeDust introduced an abstract Asset concept, which includes any swappable asset type, simplifying the process because the type of asset doesn’t matter in the swap. This simplifies the process because the type of asset doesn't matter in the swap. This abstraction allows the exchange of extra currency or even assets from other chains in a straightforward manner.
 
-Ниже приведена схема TL-B, которую DeDust представил для концепции активов.
+   Ниже приведена схема TL-B, которую DeDust представил для концепции активов.
 
 ```tlb
 native$0000 = Asset; // for ton
 
-jetton$0001 workchain_id:int8 address:uint256 = Asset; // for any jetton,address refer to jetton master address
+// for any jetton,address refer to jetton master address
+jetton$0001 workchain_id:int8 address:uint256 = Asset;
 
 // Upcoming, not implemented yet.
 extra_currency$0010 currency_id:int32 = Asset;
 ```
 
-Далее DeDust представил три компонента: хранилище (Vault), пул (Pool) и фабрику (Factory). Эти компоненты представляют собой контракты или группы контрактов и отвечают за различные части процесса свопа. Фабрика (Factory) выполняет поиск адресов других компонентов (например, хранилища и пула), а также создает другие компоненты.
-Хранилище (Vault) отвечает за получение сообщений о переводе, хранение активов и информирование соответствующего пула о том, что "пользователь A хочет обменять 100 X на Y".
+DeDust utilizes three key components for asset swaps:
 
-Пул (Pool), в свою очередь, отвечает за рассчет суммы свопа на основе заданной формулы, информируя другое хранилище, отвечающее за актив Y, указывает ему выплатить рассчитанную сумму пользователю.
-Расчеты суммы свопа основаны на математической формуле, что означает, что на данный момент у нас есть два разных пула: один, известный как Volatile, работает по широко известной формуле "Constant Product": x _ y = k. А другой, известный как Stable-Swap, - оптимизирован для активов примерно одинаковой стоимости (например, USDT / USDC, TON / stTON). Он использует формулу: x3 _ y + y3 \* x = k.
-Таким образом, для каждого свопа нам нужен соответствующий Vault, и он должен имплементировать специальный API, предназначенный для взаимодействия с определенным типом активов. В DeDust есть три реализации Vault: Native Vault - для работы с нативной монетой (Toncoin). Jetton Vault - для работы с жетонами и Extra-Currency Vault (в разработке) - для работы с дополнительными валютами TON.
+- Factory: This component locates and constructs the vaults and pools required for the swap.
+- Vault: The vault is responsible for holding assets and receiving transfer messages. When a swap is requested, the vault informs the corresponding pool.
+- Pool: The pool calculates the swap amount based on predefined formulas and informs the vault, which in turn releases the swapped asset to the user.
 
-DeDust предоставляет специальный SDk для работы с контрактами, компонентами и API, написанный на typescript.
-Хватит теории, давайте настроим нашу среду, чтобы обменять один жетон на TON.
+Calculations of swap amount are based on a mathematical formula, which means so far we have two different pools, one known as Volatile, that operates based on the commonly used "Constant Product" formula: <InlineMath math="x \cdot y = k" />, And the other known as Stable-Swap - Optimized for assets of near-equal value (e.g. USDT / USDC, TON / stTON). It uses the formula: <InlineMath math="x^3 \cdot y + y^3 \cdot x = k" />.
+So for every swap we need the corresponding Vault and it needs just implement a specific API tailored for interacting with a distinct asset type. DeDust has three implementations of Vault, Native Vault - Handles the native coin (Toncoin). Jetton Vault - Manages jettons and Extra-Currency Vault (upcoming) - Designed for TON extra-currencies.
+
+DeDust provides an SDK, written in TypeScript, to interact with the contracts, components, and APIs needed for the swap. Before swapping any assets, the environment must be set up and the necessary objects initialized.
 
 ```bash
 npm install --save @ton/core @ton/ton @ton/crypto
@@ -1311,7 +1366,7 @@ const factory = tonClient.open(Factory.createFromAddress(MAINNET_FACTORY_ADDR));
 //The Factory contract  is used to  locate other contracts.
 ```
 
-Процесс обмена состоит из нескольких этапов. Например, чтобы обменять  TON на Jetton, нам сначала нужно найти соответствующие Vault и Pool и убедиться, что они развернуты. Для нашего примера TON и SCALE код выглядит следующим образом:
+The swap process involves finding the corresponding vault and pool for the assets to be swapped. For instance, swapping TON for SCALE (a jetton token) involves:
 
 ```typescript
 import { Asset, VaultNative } from "@dedust/sdk";
@@ -1321,7 +1376,7 @@ const tonVault = tonClient.open(await factory.getNativeVault());
 //We use the factory to find our native coin (Toncoin) Vault.
 ```
 
-Следующий шаг - найти соответствующий Pool, здесь (TON и SCALE)
+Finding the Vault and Pool for both TON and SCALE.
 
 ```typescript
 import { PoolType } from "@dedust/sdk";
@@ -1338,7 +1393,7 @@ const pool = tonClient.open(
 );
 ```
 
-Теперь нам нужно убедиться, что эти контракты существуют, поскольку отправка средств на неактивный контракт может привести к безвозвратной потере средств.
+Ensure that the contracts are deployed: Always check that the contracts for the vault and pool are active, as sending funds to inactive contracts may result in permanent loss.
 
 ```typescript
 import { ReadinessStatus } from "@dedust/sdk";
@@ -1354,7 +1409,7 @@ if ((await tonVault.getReadinessStatus()) !== ReadinessStatus.READY) {
 }
 ```
 
-После этого мы можем отправлять сообщения о переводе с указанием суммы в TON.
+Sending transfer messages: Once the vault and pool are confirmed, send the transfer message with the amount of TON to be swapped for SCALE.
 
 ```typescript
 import { toNano } from "@ton/core";
@@ -1386,7 +1441,7 @@ await tonVault.sendSwap(sender, {
 ```
 
 Чтобы обменять токен X на Y, процесс будет таким же. Например, мы отправляем определенное количество токенов X в хранилище X, хранилище X
-получает наш актив, удерживает его и сообщает пулу (X, Y), что этот адрес запрашивает обмен. После рассчета пул информирует другое хранилище, в данном случае хранилище Y, которое выпускает эквивалентное количество Y для пользователя, который запрашивает обмен.
+получает наш актив, удерживает его и сообщает пулу (X, Y), что этот адрес запрашивает обмен.
 
 Разница между активами заключается только в методе передачи. Например, для жетонов мы передаем их в хранилище с помощью сообщения о переводе и прикрепляем определенный forward_payload, а для нативной монеты мы отправляем в хранилище сообщение о свопе, прикрепляя соответствующее количество TON.
 
@@ -1443,7 +1498,7 @@ val assetASlice = buildCell {
 }.beginParse()
 ```
 
-Запуск get-методов:
+Run get methods:
 
 ```kotlin
 val responsePool = runBlocking {
@@ -1504,7 +1559,7 @@ runBlocking {
 
 <TabItem value="py" label="Python">
 
-В этом примере показано, как обменять Toncoins на Jettons.
+This example shows how to swap Toncoins to jettons.
 
 ```py
 from pytoniq import Address, begin_cell, LiteBalancer, WalletV4R2
@@ -1576,7 +1631,7 @@ asyncio.run(main())
 
 ## Основы обработки сообщений
 
-### Как анализировать транзакции аккаунта (переводы, жетоны, NFT)?
+### How to parse transactions of an account (transfers, jettons, NFTs)?
 
 Список транзакций по счету можно получить с помощью метода API `getTransactions`. Он возвращает массив объектов `Transaction`, каждый из которых содержит множество атрибутов. Однако чаще всего используются следующие поля:
 
@@ -1846,19 +1901,18 @@ asyncio.run(main())
 
 </Tabs>
 
-Обратите внимание, что данный пример охватывает только самый простой случай со входящими сообщениями, когда достаточно получить транзакции по одному аккаунту. Если вы хотите углубиться в тему и работать с более сложными цепочками транзакций и сообщений, вам следует учитывать поле `tx.outMessages`. Оно содержит список исходящих сообщений, отправленных смарт-контрактом в результате данной транзакции. Для лучшего понимания всей логики, вы можете ознакомиться с этими статьями:
+Note that this example covers only the simplest case with incoming messages, where it is enough to fetch the transactions on a single account. If you want to go deeper and handle more complex chains of transactions and messages, you should take `tx.outMessages` field into account. It contains the list of the output messages sent by smart-contract in the result of this transaction. To understand the whole logic better, you can read these articles:
 
-- [Обзор сообщений](/v3/documentation/smart-contracts/message-management/messages-and-transactions)
+- [Message overview](/v3/documentation/smart-contracts/message-management/messages-and-transactions)
 - [Внутренние сообщения](/v3/documentation/smart-contracts/message-management/internal-messages)
 
-Более подробно эта тема рассматривается в статье ["Обработка платежей"](/v3/guidelines/dapps/asset-processing/payments-processing).
+This topic is explored in depth in the [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing) article.
 
 ### Как найти транзакцию для конкретного результата TON Connect?
 
-TON Connect 2 возвращает только ячейку, которая была отправлена в блокчейн, а не сгенерированный хеш транзакции (поскольку транзакция может не состояться, если внешнее сообщение потеряется или истечет время ожидания). Однако BOC позволяет нам искать именно это конкретное сообщение в истории аккаунта.
-
+TON Connect 2 only returns the cell sent to the blockchain, not the transaction hash itself, as the transaction may not be confirmed. To track a transaction from TON Connect, you can search for it in your account history using an indexer.
 :::tip
-Вы можете использовать индексатор для упрощения поиска. Предлагаемая реализация предназначена для `TonClient`, подключенного к RPC.
+You can use an indexer to make the search easier. The provided implementation is for `TonClient` connected to a RPC.
 :::
 
 Подготовьте функцию `retry` для попыток прослушивания блокчейна:
@@ -1882,7 +1936,7 @@ export async function retry<T>(fn: () => Promise<T>, options: { retries: number,
 
 ```
 
-Создайте функцию-слушатель, которая будет проверять определенную транзакцию на конкретном аккаунте с определенным входящим внешним сообщением, равным телу сообщения в boc:
+Create a listener function that will assert specific transaction on certain account with specific incoming external message, equal to body message in boc:
 
 <Tabs>
 <TabItem value="ts" label="@ton/ton">
@@ -1949,10 +2003,11 @@ export async function getTxByBOC(exBoc: string): Promise<string> {
 ### Как узнать хеш транзакции или сообщения?
 
 :::info
-Будьте внимательны с определением хеша. Это может быть либо хеш транзакции, либо хеш сообщения. Это разные вещи.
+Be careful with the hash definition. It can be either a transaction hash or a message hash.
 :::
 
-Чтобы получить хеш транзакции, нужно использовать метод `hash` транзакции. Чтобы получить хеш внешнего сообщения, нужно создать ячейку сообщения с помощью метода `storeMessage`, а затем использовать метод `hash` этой ячейки.
+To get transaction hash you need to use a `hash` method of a transaction. To get external message hash you need
+to build a message cell using a `storeMessage` method and then use a `hash` method of this cell.
 
 <Tabs>
   <TabItem value="ts" label="@ton/ton">
@@ -1987,7 +2042,7 @@ for (const transaction of transactions) {
 
 </Tabs>
 
-Также вы можете получить хеш сообщения при его создании. Обратите внимание, что это тот же хеш, что и хеш сообщения, отправленного для инициирования транзакции, как в предыдущем примере.
+Also you can get a hash of message when building it. Note that this is the same hash as the hash of the message sent to initiate the transaction, as in the previous example.
 
 <Tabs>
   <TabItem value="ts" label="@ton/ton">
@@ -2018,3 +2073,5 @@ const inMessageHash = transfer.hash();
 </TabItem>
 
 </Tabs>
+
+<Feedback />

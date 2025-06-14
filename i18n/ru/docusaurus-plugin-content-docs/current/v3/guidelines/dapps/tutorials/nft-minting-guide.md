@@ -1,12 +1,12 @@
-# Пошаговое создание коллекции NFT
+import Feedback from '@site/src/components/Feedback';
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Пошаговое создание коллекции NFT
 
 ## 👋 Введение
 
-Невзаимозаменяемые токены (NFT) стали одной из самых обсуждаемых тем в мире цифрового искусства и коллекционирования. NFT - это уникальные цифровые активы, использующие технологию блокчейн для подтверждения права собственности и подлинности. Они открыли перед создателями и коллекционерами новые возможности для монетизации и торговли цифровым искусством, музыкой, видео и другими цифровым контентом. За последние годы рынок NFT стремительно вырос, а некоторые сделки достигли миллионов долларов. В этой статье мы пошагово создадим коллекцию NFT на TON.
+Non-fungible tokens (NFTs) have become one of the hottest topics in the world of digital art and collectibles. NFTs are unique digital assets that use blockchain technology to verify ownership and authenticity. They have opened new possibilities for creators and collectors to monetize and trade digital art, music, videos, and other forms of digital content. In recent years, the NFT market has exploded, with some high-profile sales reaching millions of dollars. In this article, we will build an NFT collection on TON step by step.
 
 **Вот такая прекрасная коллекция уток будет создана вами к концу этого урока:**
 
@@ -14,59 +14,59 @@
 
 ## 🦄 Чему Вы научитесь
 
-1. Вы создадите коллекцию NFT на TON.
-2. Вы поймете, как работают NFT на TON.
-3. Вы выставите NFT на продажу.
+1. You will mint an NFT collection on TON.
+2. You will understand how NFTs on TON work.
+3. You will put an NFT on sale.
 4. Вы загрузите метаданные на [pinata.cloud](https://pinata.cloud).
 
 ## 💡 Необходимые компоненты
 
-У вас уже должен быть testnet кошелек, в котором находится не менее 2 TON. Вы можете получить testnet коины от [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
+You must already have a testnet wallet with at least 2 TON. You can get testnet coins from [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
 
-:::info Как открыть testnet-версию моего кошелька Tonkeeper?
+:::info How to open the testnet version of my Tonkeeper wallet?
 
-1. Откройте настройки и нажмите 5 раз на логотип Tonkeeper внизу экрана.
-2. Активируйте Dev mode.
-3. Вернитесь в главное меню и создайте новый testnet-кошелек - Добавить кошелек/Добавить аккаунт Testnet.
- :::
+1. Open Wallets list.
+2. Return to the main menu and create a new Testnet wallet: Add wallet → Add Testnet Account.
+  :::
 
-Мы будем использовать Pinata как систему хранения IPFS, поэтому вам также нужно создать аккаунт на [pinata.cloud](https://pinata.cloud) и получить api_key & api_secreat. Официальная обучающая [документация](https://docs.pinata.cloud/account-management/api-keys) Pinata может помочь в этом. Как только вы получите эти API-токены, возвращайтесь сюда!
+We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key and api_secret. The official Pinata [documentation](https://docs.pinata.cloud/account-management/api-keys) can help with that. Once you have these API tokens, I’ll be waiting for you here!
 
-## 💎 Что такое NFT на TON?
+## 💎 What is an NFT on TON?
 
-Прежде чем перейти к основной части нашего руководства, необходимо понять, как NFT работают на TON в общих чертах. Неожиданно, но мы начнем с объяснения того, как NFT работают на Ethereum (ETH), чтобы понять чем реализация NFT на TON уникальна по сравнению с другими блокчейнами в этой отрасли.
+Before starting the main part of our tutorial, we need to understand how NFTs work on TON. Unexpectedly, we will first explain of how NFTs work on Ethereum (ETH), to highlight the uniqueness of NFT implementation on TON compared to other blockchains.
 
 ### Реализация NFT на ETH
 
-Реализация NFT на ETH крайне проста - существует 1 основной контракт коллекции, который хранит простую хэш-таблицу, содержащую данные NFT из этой коллекции. Все запросы, связанные с этой коллекцией (если какой-либо пользователь хочет передать NFT, выставить его на продажу и т.д.), отправляются именно в этот единый контракт коллекции.
+The implementation of the NFT in ETH is extremely simple. There is 1 main contract for the collection, which stores a simple hashmap containing the NFT data for that collection. All requests related to this collection (such as transferring an NFT, putting it up for sale, etc.) are sent directly to the single contract.
 
 ![](/img/tutorials/nft/eth-collection.png)
 
-### Проблемы такой реализации в TON
+### Problems with such implementation on TON
 
-Проблемы такой реализации в контексте TON подробно описаны в [стандарте NFT](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) в TON:
+The [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) in TON describes the issues of using this model:
 
-- Непредсказуемоееее потребление газа. В TON расход газа на операции со словарем зависит от точного набора ключей. Кроме того, TON - это асинхронный блокчейн. Это означает, что если Вы отправляете сообщение смарт-контракту, то вы не знаете, сколько сообщений от других пользователей дойдет до смарт-контракта раньше вашего сообщения. Таким образом, вы не знаете, каким будет размер словаря в тот момент, когда ваше сообщение достигнет смарт-контракта. Это нормально для простого взаимодействия кошелек -> смарт-контракт NFT, но неприемлемо для цепочек смарт-контрактов, например, кошелек -> смарт-контракт NFT -> аукцион -> смарт-контракт NFT. Если мы не можем предсказать расход газа, то может возникнуть ситуация, когда владелец сменился в смарт-контракте NFT, но для операции аукциона не хватило Тонкоинов. Использование смарт-контрактов без словарей дает детерминированный расход газа.
+- Unpredictable gas consumption. In TON, gas consumption for dictionary operations depends on exact set of keys. TON is an asynchronous blockchain, meaning you cannot predict how many messages from other users will reach a smart contract before yours. This uncertainty makes it difficult to determine gas costs, especially in smart contract chains like wallet → NFT smart contract → auction → NFT smart contract. If gas costs cannot be predicted, issues may arise where ownership of the NFT smart contract changes, but there are not enough Toncoins for the auction operation. Using smart contracts without dictionaries allows for deterministic gas consumption.
 
-- Не масштабируется (становится узким местом). Масштабирование в TON основано на концепции шардинга, то есть автоматическом разделении сети на шардинги при высокой нагрузке. Один большой смарт-контракт популярного NFT противоречит этой концепции. В этом случае многие транзакции будут ссылаться на один смарт-контракт. Архитектура TON предусматривает использование шардинговых смарт-контрактов (см. whitepaper), но на данный момент они не реализованы.
+- Scalability issues (becomes a bottleneck). TON scales through sharding, which partitions the network into shardchains under load. A single, large smart contract for a popular NFT contradicts this concept because many transactions would refer to one contract, creating a bottleneck. Although TON supports sharded smart contracts (see the whitepaper), they are not yet implemented.
 
-*TL;DR Решение ETH не масштабируемо и не подходит для асинхронных блокчейнов, таких, как TON.*
+**TL;DR**
+The ETH solution is not scalable and is unsuitable for an asynchronous blockchain like TON.
 
 ### Реализация TON NFT
 
-В TON у нас есть мастер-контракт — смарт-контракт нашей коллекции, который хранит метаданные и адрес владельца коллекции. Главное, что если мы хотим создать (минтить) новый NFT-элемент, нам нужно просто отправить сообщение этому контракту коллекции. Этот контракт коллекции затем развернет новый контракт NFT-элемента, используя данные, которые мы предоставим.
+On TON, there is one master contract—the collection’s smart contract—which stores its metadata, the owner's address, and, most importantly, the logic for minting new NFTs. To create ("mint") a new NFT, you simply send a message to the collection contract. This contract then deploys a new NFT item contract using the data you provide.
 
 ![](/img/tutorials/nft/ton-collection.png)
 
 :::info
-Вы можете ознакомиться со статьей [Обработка NFT в TON](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) или прочитать [стандарт NFT](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md), если хотите более подробно изучить эту тему
+You can check out the article on [NFT processing on TON](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) or read the [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) for a deeper understanding.
 :::
 
 ## ⚙ Настройка среды разработки
 
 Давайте начнем с создания пустого проекта:
 
-1. Создайте новую папку
+1. Create a new folder
 
 ```bash
 mkdir MintyTON
@@ -78,25 +78,25 @@ mkdir MintyTON
 cd MintyTON
 ```
 
-3. Инициализируем наш проект
+3. Initialize the project
 
 ```bash
 yarn init -y
 ```
 
-4. Установите typescript
+4. Install TypeScript
 
 ```bash
 yarn add typescript @types/node -D
 ```
 
-5. Запуск проекта TypeScript
+5. Initialize the TypeScript project
 
 ```bash
 tsc --init
 ```
 
-6. Скопируйте эту конфигурацию в файл tsconfig.json
+6. Copy this configuration into tsconfig.json
 
 ```json
 {
@@ -118,7 +118,7 @@ tsc --init
 }
 ```
 
-7. Добавьте скрипт для сборки и запуска нашего приложения в `package.json`.
+7. Add a script to build & start the app in `package.json`
 
 ```json
 "scripts": {
@@ -132,7 +132,7 @@ tsc --init
 yarn add @pinata/sdk dotenv @ton/ton @ton/crypto @ton/core buffer
 ```
 
-9. Создайте файл `.env` и добавьте свои собственные данные на основе этого шаблона
+9. Create a `.env` file and add your own data based on this template
 
 ```
 PINATA_API_KEY=your_api_key
@@ -141,15 +141,15 @@ MNEMONIC=word1 word2 word3 word4
 TONCENTER_API_KEY=aslfjaskdfjasasfas
 ```
 
-Вы можете получить API-ключ для toncenter у [@tonapibot](https://t.me/tonapibot) и выбрать mainnet или testnet. В переменной `MNEMONIC` храните 24 слова сид-фразы кошелька владельца коллекции.
+You can get a TON Center API key from [@tonapibot](https://t.me/tonapibot) and choose mainnet or testnet. Store the 24-word seed phrase of the collection owner’s wallet in the MNEMONIC variable.
 
 Отлично! Теперь мы готовы начать писать код для нашего проекта.
 
 ### Напишите вспомогательные функции
 
-Сначала давайте создадим функцию `openWallet` в файле `src/utils.ts`, которая будет открывать наш кошелек по мнемонической фразе и возвращать его publicKey и secretKey.
+First, let's create the `openWallet` function in `src/utils.ts`. This function will open our wallet using a mnemonic and return its  publicKey/secretKey.
 
-Мы получаем пару ключей на основе 24 слов (seed-фразы):
+We get a pair of keys based on 24 words (a seed phrase):
 
 ```ts
 import { KeyPair, mnemonicToPrivateKey } from "@ton/crypto";
@@ -178,7 +178,7 @@ export async function openWallet(mnemonic: string[], testnet: boolean) {
   });
 ```
 
-И, наконец, откройте наш кошелек:
+Finally, open our wallet:
 
 ```ts
   const wallet = WalletContractV4.create({
@@ -191,7 +191,9 @@ export async function openWallet(mnemonic: string[], testnet: boolean) {
 }
 ```
 
-Отлично, после этого создадим основную точку входа для нашего проекта — `src/app.ts`. Здесь мы будем использовать только что созданную функцию `openWallet` и вызывать нашу основную функцию `init`. Пока этого будет достаточно.
+Nice! After that, we'll create the main entry point for our project—`src/app.ts`.
+Here, we will use the newly created `openWallet` function and call our main function, `init`.
+Thats enough for now.
 
 ```ts
 import * as dotenv from "dotenv";
@@ -208,7 +210,7 @@ async function init() {
 void init();
 ```
 
-В завершение давайте создадим файл `delay.ts` в директории `src`, в котором мы создадим функцию, которая будет ждать, пока `seqno` увеличится.
+Next, let's create a `delay.ts` file in the `src` directory, which will contain a function that waits until `seqno` increases.
 
 ```ts
 import { OpenedWallet } from "./utils";
@@ -227,31 +229,30 @@ export function sleep(ms: number): Promise<void> {
 ```
 
 :::info Что это такое - seqno?
-Проще говоря, seqno — это просто счётчик исходящих транзакций, отправленных кошельком.
-Seqno используется для предотвращения повторных атак (Replay Attacks). Когда транзакция отправляется в смарт-контракт кошелька, он сравнивает поле seqno транзакции с тем, что хранится в его памяти. Если значения совпадают, транзакция принимается, и хранимое значение seqno увеличивается на единицу. Если значения не совпадают, транзакция отклоняется. Поэтому после каждой исходящей транзакции нам нужно будет немного подождать.
+Simply put, seqno is a counter that tracks outgoing transactions from a wallet. It helps prevent Replay Attacks. hen a transaction is sent to a wallet smart contract, it compares the seqno field in the transaction with the one stored in the wallet. If they match, the transaction is accepted, and the stored seqno increments by one. If they don't match, the transaction is discarded. This is why we need to wait a bit after every outgoing transaction.
 :::
 
 ## 🖼 Подготовьте метаданные
 
-Метаданные — это просто информация, которая описывает наш NFT или коллекцию. Например, это может быть имя, описание и другие атрибуты.
+Metadata is simple information that describes an NFT or an NFT collection (e.g., name, description, etc.).
 
-Во-первых, нам нужно хранить изображения наших NFT в папке `/data/images` с именами `0.png`, `1.png` и так далее для фото предметов, а также `logo.png` для аватара нашей коллекции. Вы можете легко [скачать пакет](/img/tutorials/nft/ducks.zip) с изображениями уток или добавить свои изображения в эту папку. Также мы будем хранить все наши файлы метаданных в папке `/data/metadata/`.
+First, we need to store NFT images in /data/images/ and name them `0.png`, `1.png`, ... for photos, and `logo.png` for avatars of our collection. You can either [download pack](/img/tutorials/nft/ducks.zip) of ducks images or use your own images. Store metadata files in `/data/metadata/`.
 
 ### Технические характеристики NFT
 
-Большинство продуктов на TON поддерживают такие спецификации метаданных для хранения информации о коллекции NFT:
+Most projects on TON follow these metadata specifications for NFT collections:
 
-| Наименование                      | Пояснение                                                                                                                                                              |
-| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| name                              | Наименование коллекции                                                                                                                                                 |
-| description                       | Описание коллекции                                                                                                                                                     |
-| image                             | Ссылка на изображение, которое будет отображаться как аватар. Поддерживаемые форматы ссылок: https, ipfs, TON Storage. |
-| cover_image  | Ссылка на изображение, которое будет отображаться в качестве изображения обложки коллекции.                                                            |
-| social_links | Список ссылок на профили проекта в социальных сетях. Используйте не более 10 ссылок.                                                   |
+| Name                              | Explanation                                                                                                            |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| name                              | Наименование коллекции                                                                                                 |
+| description                       | Описание коллекции                                                                                                     |
+| image                             | Link to the avatar image. Supported formats: https, ipfs, TON Storage. |
+| cover_image  | Link to the collection cover image.                                                                    |
+| social_links | List of up to 10 links to the project's social media profiles.                                         |
 
 ![image](/img/tutorials/nft/collection-metadata.png)
 
-Основываясь на этой информации, давайте создадим собственный файл метаданных `collection.json`, который будет описывать метаданные нашей коллекции!
+Based on this, let's create our own metadata file, `collection.json`, to describe the NFT collection!
 
 ```json
 {
@@ -261,21 +262,21 @@ Seqno используется для предотвращения повтор�
 }
 ```
 
-Обратите внимание, что мы не написали параметр "image", Вы узнаете почему чуть позже, просто подождите!
+Note: We’re not adding the "image" parameter just yet—you’ll see why later!
 
-После создания метаданных коллекции, нам нужно создать метаданные для наших NFT
+Once done, you can create as many NFT metadata files as you like.
 
-Спецификации метаданных NFT предмета:
+Each NFT item follows these metadata specifications:
 
-| Наименование                      | Пояснение                                                                                                                                                                                                    |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| name                              | Название NFT. Рекомендуемая длина: Не более 15-30 символов                                                                                                                   |
-| description                       | Описание NFT. Рекомендуемая длина: До 500 символов                                                                                                                           |
-| image                             | Ссылка на изображение NFT.                                                                                                                                                                   |
-| attributes                        | Атрибуты NFT. Список атрибутов, в котором указан тип_черты (имя атрибута) и значение (краткое описание атрибута). |
-| lottie                            | Ссылка на JSON-файл с анимацией Lottie. Если указана, анимация Lottie с этой ссылки будет воспроизводиться на странице с NFT.                                                |
-| content_url  | Ссылка на дополнительный контент.                                                                                                                                                            |
-| content_type | Тип контента, добавленного через ссылку content_url. Например, файл video/mp4.                                                                          |
+| Name                              | Explanation                                                                                                                                                                           |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| name                              | NFT name. Recommended length: 15-30 characters                                                                                                        |
+| description                       | Описание NFT. Рекомендуемая длина: До 500 символов                                                                                                    |
+| image                             | Link to the NFT image.                                                                                                                                                |
+| attributes                        | List of NFT attributes, where a trait_type (attribute name) and value (a short description) are specified. |
+| lottie                            | Link to a JSON file with Lottie animation (if specified, the animation will play on the NFT’s page).                                               |
+| content_url  | Ссылка на дополнительный контент.                                                                                                                                     |
+| content_type | Type of content from the content_url link (e.g., video/mp4).                                  |
 
 ![image](/img/tutorials/nft/item-metadata.png)
 
@@ -287,11 +288,11 @@ Seqno используется для предотвращения повтор�
 }
 ```
 
-После этого вы можете создать любое количество файлов NFT-элементов с их метаданными.
+After that, you can create as many files of an NFT item with their metadata as you want.
 
 ### Загрузите метаданные
 
-Теперь давайте напишем код, который загрузит наши метаданные на IPFS. Создайте файл `metadata.ts` в каталоге `src` и добавьте все необходимые импорты:
+Now let's write some code, that will upload our metadata files to IPFS. Create a `metadata.ts` file in `src` directory and add all needed imports:
 
 ```ts
 import pinataSDK from "@pinata/sdk";
@@ -300,7 +301,7 @@ import { writeFile, readFile } from "fs/promises";
 import path from "path";
 ```
 
-После этого нам нужно создать функцию, которая на самом деле загрузит все файлы из нашей папки в IPFS:
+After that, we need to create a function that will actually upload all files from our folder to IPFS:
 
 ```ts
 export async function uploadFolderToIPFS(folderPath: string): Promise<string> {
@@ -314,8 +315,7 @@ export async function uploadFolderToIPFS(folderPath: string): Promise<string> {
 }
 ```
 
-Отлично! Давайте вернемся к главному вопросу: почему мы оставили поле "изображение" в файлах метаданных пустым? Представьте себе ситуацию, когда Вы хотите создать 1000 NFT в своей коллекции и, соответственно, должны вручную пройтись по каждому элементу и вручную вставить ссылку на свою картинку.
-Это очень неудобно и неправильно, поэтому давайте напишем функцию, которая будет делать это автоматически!
+Great! Back to the question at hand: why did we leave the "image" field in the metadata files empty? Imagine a situation where you want to create 1000 NFTs in your collection and, accordingly, you have to manually go through each item and manually insert a link to your image. This is really inconvenient and wrong, so let's write a function that will do this automatically!
 
 ```ts
 export async function updateMetadataFiles(metadataFolderPath: string, imagesIpfsHash: string): Promise<void> {
@@ -336,7 +336,7 @@ export async function updateMetadataFiles(metadataFolderPath: string, imagesIpfs
 }
 ```
 
-Здесь мы сначала считываем все файлы в указанной папке:
+Here we first read all of the files in the specified folder:
 
 ```ts
 const files = readdirSync(metadataFolderPath);
@@ -351,7 +351,7 @@ const file = await readFile(filePath);
 const metadata = JSON.parse(file.toString());
 ```
 
-После этого мы присваиваем значению поля image ссылку вида `ipfs://{IpfsHash}/{index}.jpg`, если это не последний файл в папке. В противном случае присваиваем ссылку `ipfs://{imagesIpfsHash}/logo.jpg` и перезаписываем файл с новыми данными.
+After that, we assign the value `ipfs://{IpfsHash}/{index}.jpg` to the image field. If this file is mnot the last one in the folder, assign `ipfs://{imagesIpfsHash}/logo.jpg` and rewrite the file with new data.
 
 Полный код файла metadata.ts:
 
@@ -389,14 +389,14 @@ export async function updateMetadataFiles(metadataFolderPath: string, imagesIpfs
 }
 ```
 
-Отлично, давайте вызовем эти методы в нашем файле app.ts.
-Добавьте импорты наших функций:
+Great, let's call these methods in our app.ts file.
+Add the imports of our functions:
 
 ```ts
 import { updateMetadataFiles, uploadFolderToIPFS } from "./src/metadata";
 ```
 
-Сохраните переменные с путями к папкам с метаданными или изображениями, а затем вызовите наши функции для загрузки метаданных.
+Save the variables with the path to the metadata/images folder and call our functions to load the metadata.
 
 ```ts
 async function init() {
@@ -420,14 +420,14 @@ async function init() {
 }
 ```
 
-После этого Вы можете запустить `yarn start` и увидеть ссылку на Ваши развернутые метаданные!
+After that you can run `yarn start` and see the link to your deployed metadata!
 
 ### Кодирование контента вне цепочки
 
-Как будет храниться ссылка на наши метаданные в смарт-контракте? Этот вопрос можно полностью ответить с помощью [Стандарта токен-данных](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
-В некоторых случаях будет недостаточно просто указать нужный флаг и предоставить ссылку в виде ASCII-символов, поэтому давайте рассмотрим вариант, при котором потребуется разделить нашу ссылку на несколько частей, используя формат с подчеркиваниями (snake format).
+How will our metadata files stored in the smart contract be referenced? This question can be fully answered by the [Token Data Standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
+In some cases, it is not enough to simply provide the desired flag and the link as ASCII characters. That is why let's consider splitting our link into several parts using the snake format.
 
-Сначала создайте функцию в файле `./src/utils.ts`, которая будет разбивать наш буфер на части:
+First, create the function in `./src/utils.ts`. The function that will convert our buffer into chunks:
 
 ```ts
 function bufferToChunks(buff: Buffer, chunkSize: number) {
@@ -440,7 +440,7 @@ function bufferToChunks(buff: Buffer, chunkSize: number) {
 }
 ```
 
-И создайте функцию, которая свяжет все части в одну змеиную ячейку:
+And create a function that will bind all the chunks into 1 snake-cell:
 
 ```ts
 function makeSnakeCell(data: Buffer): Cell {
@@ -472,7 +472,7 @@ function makeSnakeCell(data: Buffer): Cell {
 }
 ```
 
-Наконец, нам нужно создать функцию, которая будет кодировать содержимое ячейки с помощью этой функции:
+Finally, we need to create a function that will encode the offchain content into cells using this functions:
 
 ```ts
 export function encodeOffChainContent(content: string) {
@@ -483,11 +483,11 @@ export function encodeOffChainContent(content: string) {
 }
 ```
 
-## 🚢 Разверните коллекцию NFT
+## 🚢 Deploy NFT collection
 
-Когда наши метаданные будут готовы и уже загружены в IPFS, мы можем приступить к развертыванию нашей коллекции!
+Once our metadata is ready and uploaded to IPFS, we can proceed with deploying our collection!
 
-Мы создадим файл, который будет содержать всю логику, связанную с нашей коллекцией, в файле `/contracts/NftCollection.ts`. Как всегда, начнем с импорта:
+We will create a file to store all logic related to our collection in `/contracts/NftCollection.ts`. As always, we start with imports:
 
 ```ts
 import {
@@ -502,7 +502,7 @@ import {
 import { encodeOffChainContent, OpenedWallet } from "../utils";
 ```
 
-И объявим тип, который будет описывать данные инициализации, необходимые для нашей коллекции:
+Next, we declare a type that describes the initial data required for our collection:
 
 ```ts
 export type collectionData = {
@@ -515,16 +515,16 @@ export type collectionData = {
 }
 ```
 
-| Наименование         | Пояснение                                                                                                                                         |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ownerAddress         | Адрес, который будет установлен в качестве владельца нашей коллекции. Только владелец будет иметь возможность создавать новые NFT |
-| royaltyPercent       | Процент от каждой суммы продажи, который будет поступать на указанный адрес                                                                       |
-| royaltyAddress       | Адрес кошелька, который будет получать роялти с продаж этой коллекции NFT                                                                         |
-| nextItemIndex        | Индекс, который должен быть присвоен следующему элементу NFT                                                                                      |
-| collectionContentUrl | URL-адрес к метаданным коллекции                                                                                                                  |
-| commonContentUrl     | Базовый URL для метаданных элементов NFT                                                                                                          |
+| Name                 | Explanation                                                                               |
+| -------------------- | ----------------------------------------------------------------------------------------- |
+| ownerAddress         | The address set as the collection owner. Only the owner can mint new NFTs |
+| royaltyPercent       | The percentage of each sale that goes to the specified address                            |
+| royaltyAddress       | The wallet address that receives royalties from sales of this NFT collection              |
+| nextItemIndex        | The index assigned to the next NFT item                                                   |
+| collectionContentUrl | The URL of the collection metadata                                                        |
+| commonContentUrl     | he base URL for NFT item metadata                                                         |
 
-Сначала давайте напишем приватный метод, который будет возвращать ячейку с кодом нашей коллекции.
+First, let's write a private method that returns a cell containing our collection's code.
 
 ```ts
 export class NftCollection {
@@ -542,9 +542,9 @@ export class NftCollection {
 }
 ```
 
-В этом коде мы просто читаем ячейку из base64-представления смарт-контракта коллекции.
+In this method, we simply read the cell from the base64 representation of the collection smart contract.
 
-Хорошо, осталась только ячейка с данными инициализации нашей коллекции. По сути, нам нужно просто правильно сохранить данные из `collectionData`. Сначала нам нужно создать пустую ячейку и сохранить в ней адрес владельца коллекции и индекс следующего элемента, который будет создан. Давайте напишем следующий приватный метод:
+Now, we need to create the cell containing our collection’s initial data. Essentially, we must store collectionData correctly. First, we create an empty cell and store the collection owner's address and the index of the next item to be minted. Let’s define the next private method:
 
 ```ts
 private createDataCell(): Cell {
@@ -555,7 +555,7 @@ private createDataCell(): Cell {
   dataCell.storeUint(data.nextItemIndex, 64);
 ```
 
-Затем, после этого, мы создаем пустую ячейку, которая будет хранить контент нашей коллекции, и после этого сохраняем ссылку на ячейку с закодированным контентом нашей коллекции. И сразу после этого сохраняем ссылку на `contentCell` в основной ячейке данных нашей коллекции.
+Next, we create an empty cell to store the collection’s content. We then store a reference to the encoded content cell within our main data cell.
 
 ```ts
 const contentCell = beginCell();
@@ -570,7 +570,7 @@ contentCell.storeRef(commonContent.asCell());
 dataCell.storeRef(contentCell);
 ```
 
-После этого мы просто создаем ячейку с кодом NFT-элементов, которые будут созданы в нашей коллекции, и сохраняем ссылку на эту ячейку в `dataCell`
+After that, we create a cell containing the NFT item code and store a reference to this cell in dataCell.
 
 ```ts
 const NftItemCodeCell = Cell.fromBase64(
@@ -579,14 +579,15 @@ const NftItemCodeCell = Cell.fromBase64(
 dataCell.storeRef(NftItemCodeCell);
 ```
 
-Параметры роялти хранятся в смарт-контракте через `royaltyFactor`, `royaltyBase` и `royaltyAddress`. Процент роялти можно вычислить по формуле `(royaltyFactor / royaltyBase) * 100%`. Таким образом, если мы знаем процент роялти (`royaltyPercent`), то не составит труда вычислить `royaltyFactor`.
+The smart contract stores royalty parameters using royaltyFactor, royaltyBase, and royaltyAddress. The royalty percentage is calculated using the formula: <InlineMath math="\left( \frac{\text{royaltyFactor}}{\text{royaltyBase}} \right) \times 100\%" />
+. If we know royaltyPercent, calculating royaltyFactor is straightforward.
 
 ```ts
 const royaltyBase = 1000;
 const royaltyFactor = Math.floor(data.royaltyPercent * royaltyBase);
 ```
 
-После вычислений, нам нужно сохранить данные о роялти в отдельной ячейке и предоставить ссылку на эту ячейку в `dataCell`.
+After performing these calculations, we store the royalty data in a separate cell and reference it in dataCell.
 
 ```ts
 const royaltyCell = beginCell();
@@ -599,7 +600,7 @@ return dataCell.endCell();
 }
 ```
 
-Теперь давайте напишем геттер, который будет возвращать `StateInit` нашей коллекции. Этот метод создаст ячейки для всех данных коллекции (включая данные роялти, владельца и другие параметры), а затем соберет и вернет ссылку на начальные данные (`StateInit`):
+Now, let's write a getter that returns the `StateInit` of our collection.
 
 ```ts
 public get stateInit(): StateInit {
@@ -610,7 +611,7 @@ public get stateInit(): StateInit {
 }
 ```
 
-И геттер, который будет вычислять адрес нашей коллекции (адрес смарт-контракта в TON — это просто хэш его `StateInit`)
+We also need a getter that calculates the collection’s address. In TON, a smart contract’s address is simply the hash of its `StateInit`.
 
 ```ts
 public get address(): Address {
@@ -618,7 +619,7 @@ public get address(): Address {
   }
 ```
 
-Осталось только написать метод, который развернет смарт-контракт в блокчейне!
+The final step is writing a method to deploy the smart contract to the blockchain!
 
 ```ts
 public async deploy(wallet: OpenedWallet) {
@@ -639,9 +640,8 @@ public async deploy(wallet: OpenedWallet) {
   }
 ```
 
-Развертывание нового смарт-контракта в нашем случае — это просто отправка сообщения с нашего кошелька на адрес коллекции (который мы можем вычислить, если у нас есть `StateInit`), с его `StateInit`!
-
-Когда владелец минтит новый NFT, коллекция принимает сообщение от владельца и отправляет новое сообщение в созданный смарт-контракт NFT (что требует оплаты комиссии), поэтому давайте напишем метод, который будет пополнять баланс коллекции в зависимости от количества NFT для минта:
+Deploying a new smart contract in our case means sending a message from our wallet to the collection address, which we can calculate if we have `StateInit`, along with its `StateInit`.
+When the owner mints a new NFT, the collection accepts the owner's message and sends a new message to the created NFT smart contract, which requires a fee. Let’s write a method to replenish the collection’s balance based on the number of NFTs to be minted:
 
 ```ts
 public async topUpBalance(
@@ -669,14 +669,14 @@ public async topUpBalance(
   }
 ```
 
-Отлично, давайте теперь добавим несколько include в наш `app.ts`:
+Now, let’s add a few include statements to `app.ts`:
 
 ```ts
 import { waitSeqno } from "./delay";
 import { NftCollection } from "./contracts/NftCollection";
 ```
 
-И добавьте несколько строк в конец функции `init()`, чтобы развернуть новую коллекцию:
+Finally, we add a few lines to the end of the `init()` function to deploy the new collection:
 
 ```ts
 console.log("Start deploy of nft collection...");
@@ -694,11 +694,11 @@ console.log(`Collection deployed: ${collection.address}`);
 await waitSeqno(seqno, wallet);
 ```
 
-## 🚢 Развертывание элементов NFT
+## 🚢 Deploy NFT items
 
-Когда наша коллекция будет готова, мы сможем начать минтить наши NFT! Мы будем хранить код в `src/contracts/NftItem.ts`
+Once our collection is ready, we can start minting our NFTs! We will store the code in `src/contracts/NftItem.ts`
 
-Неожиданно, но теперь нам нужно вернуться в `NftCollection.ts` и добавить этот тип рядом с `collectionData` в верхней части файла.
+Unexpectedly, we need to return to `NftCollection.ts `and add the following type near `collectionData` at the top of the file.
 
 ```ts
 export type mintParams = {
@@ -710,14 +710,14 @@ export type mintParams = {
 }
 ```
 
-| Наименование     | Пояснение                                                                                                        |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------- |
-| itemOwnerAddress | Адрес, который будет установлен в качестве владельца предмета                                                    |
-| itemIndex        | Индекс предмета NFT                                                                                              |
-| amount           | Количество TON, которое будет отправлено в NFT с развертыванием                                                  |
-| commonContentUrl | Полная ссылка на URL элемента может быть сформирована как "commonContentUrl" коллекции + этот `commonContentUrl` |
+| Name             | Explanation                                                                                          |
+| ---------------- | ---------------------------------------------------------------------------------------------------- |
+| itemOwnerAddress | The address set as the item's owner                                                                  |
+| itemIndex        | The index of the NFT item                                                                            |
+| amount           | The amount of TON sent to the NFT upon deployment                                                    |
+| commonContentUrl | The full link to the item URL, which is "commonContentUrl" of the collection + this commonContentUrl |
 
-И создайте метод в классе NftCollection, который будет строить тело для развертывания нашего NFT-элемента. Сначала сохраните бит, который будет указывать смарт-контракту коллекции, что мы хотим создать новый NFT. После этого просто сохраните `queryId` и индекс этого NFT-элемента.
+Next, we create a method in the NftCollection class to construct the body for deploying an NFT item. First, we store a bit to indicate to the collection smart contract that we want to create a new NFT. Then, we store the queryId and the index of the NFT item.
 
 ```ts
 public createMintBody(params: mintParams): Cell {
@@ -728,14 +728,14 @@ public createMintBody(params: mintParams): Cell {
     body.storeCoins(params.amount);
 ```
 
-Позже создайте пустую ячейку и сохраните в ней адрес владельца этого NFT:
+After that, we create an empty cell and store the owner's address:
 
 ```ts
     const nftItemContent = beginCell();
     nftItemContent.storeAddress(params.itemOwnerAddress);
 ```
 
-И сохраните в этой ячейке (с содержимым NFT Item) ссылку на метаданные этого элемента:
+We store a reference in this cell (containing the NFT item content) to the item's metadata.
 
 ```ts
     const uriContent = beginCell();
@@ -743,7 +743,7 @@ public createMintBody(params: mintParams): Cell {
     nftItemContent.storeRef(uriContent.endCell());
 ```
 
-Сохраните ссылку на ячейку с содержимым элемента в ячейке нашего тела:
+We store a reference to the cell with the item content in our body cell.
 
 ```ts
     body.storeRef(nftItemContent.endCell());
@@ -751,7 +751,7 @@ public createMintBody(params: mintParams): Cell {
 }
 ```
 
-Отлично! Теперь мы можем вернуться к `NftItem.ts`. Все, что нам нужно сделать, это отправить сообщение в наш смарт-контракт коллекции с телом нашего NFT.
+Now, we return to `NftItem.ts`. The only step left is to send a message to our collection contract with the body of our NFT.
 
 ```ts
 import { internal, SendMode, Address, beginCell, Cell, toNano } from "@ton/core";
@@ -788,9 +788,9 @@ export class NftItem {
 }
 ```
 
-В конце мы напишем короткий метод, который будет получать адрес NFT по его индексу.
+At the end, we write a short method to retrieve an NFT’s address by its index:
 
-Начнем с создания переменной `client`, которая поможет нам вызвать метод `get` смарт-контракта коллекции.
+Create a client variable to call the collection’s get-method.
 
 ```ts
 static async getAddressByIndex(
@@ -803,7 +803,7 @@ static async getAddressByIndex(
   });
 ```
 
-Затем мы вызовем метод `get` смарт-контракта коллекции, который вернет адрес NFT в этой коллекции с заданным индексом
+Call the get-method to return the NFT address based on its index.
 
 ```ts
   const response = await client.runMethod(
@@ -813,21 +813,21 @@ static async getAddressByIndex(
   );
 ```
 
-... и разобрать этот адрес!
+Parse the returned address.
 
 ```ts
     return response.stack.readAddress();
 }
 ```
 
-Теперь давайте добавим немного кода в `app.ts`, чтобы автоматизировать процесс минтинга каждого NFT:
+Now, let's add some code to `app.ts` to automate the NFT minting process:
 
 ```ts
   import { NftItem } from "./contracts/NftItem";
   import { toNano } from '@ton/core';
 ```
 
-Сначала прочитайте все файлы в папке с нашими метаданными:
+First, read all files in the metadata folder.
 
 ```ts
 const files = await readdir(metadataFolderPath);
@@ -835,7 +835,7 @@ files.pop();
 let index = 0;
 ```
 
-Во-вторых, необходимо пополнить баланс нашей коллекции:
+Next, top up the collection’s balance.
 
 ```ts
 seqno = await collection.topUpBalance(wallet, files.length);
@@ -843,7 +843,7 @@ await waitSeqno(seqno, wallet);
 console.log(`Balance top-upped`);
 ```
 
-В конечном итоге нужно пройти по каждому файлу с метаданными, создать экземпляр `NftItem` и вызвать метод развертывания (deploy). После этого необходимо немного подождать, чтобы значение seqno увеличилось:
+Finally, iterate through each metadata file, create an `NftItem` instance, and call the deploy method. After that, wait until the seqno increases.
 
 ```ts
 for (const file of files) {
@@ -864,16 +864,16 @@ for (const file of files) {
   }
 ```
 
-## 🏷 Поставьте NFT на продажу
+## 🏷 Put the NFT on sale
 
-Чтобы выставить NFT на продажу, нам нужно два смарт-контракта.
+To list an NFT for sale, we need two smart contracts:
 
-- Маркетплейс, который отвечает только за логику создания новых продаж
-- Контракт продажи, который отвечает за логику покупки/отмены продажи
+- **Marketplace** - Handles the logic for creating new sales.
+- **Sale contract** - Manages the logic for buying and canceling sales.
 
-### Разверните торговую площадку
+### Deploy the marketplace
 
-Создайте новый файл в директории `/contracts/NftMarketplace.ts`. Как обычно, создайте базовый класс, который будет принимать адрес владельца маркетплейса и создавать ячейку с кодом (мы будем использовать [базовую версию контракта NFT-маркетплейса](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-marketplace.fc)) этого смарт-контракта и начальные данные.
+Create a new file: `/contracts/NftMarketplace.ts`. Create a basic class that accepts the marketplace owner’s address and generates a cell with the smart contract code and initial data (we will use [basic version of NFT-Marketplace smart contract](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-marketplace.fc)).
 
 ```ts
 import {
@@ -917,7 +917,7 @@ export class NftMarketplace {
 }
 ```
 
-Давайте создадим метод, который будет вычислять адрес нашего смарт-контракта на основе StateInit:
+Implement a method to calculate the smart contract address based on `StateInit`.
 
 ```ts
 public get address(): Address {
@@ -925,7 +925,7 @@ public get address(): Address {
   }
 ```
 
-После этого нам нужно создать метод, который будет разворачивать нашу торговую площадку:
+Write a method to deploy the marketplace.
 
 ```ts
 public async deploy(wallet: OpenedWallet): Promise<number> {
@@ -946,15 +946,15 @@ public async deploy(wallet: OpenedWallet): Promise<number> {
   }
 ```
 
-Как видите, этот код не отличается от развертывания других смарт-контрактов (смарт-контракта nft-item, развертывания новой коллекции). Единственное отличие — вы можете заметить, что мы изначально пополняем наш маркетплейс не на 0,05 TON, а на 0,5. Почему так? Когда развертывается новый смарт-контракт продажи, маркетплейс принимает запрос, обрабатывает его и отправляет сообщение новому контракту (да, ситуация аналогична ситуации с NFT-коллекцией). Именно поэтому нам нужно немного больше TON для оплаты комиссий.
+The deployment process is similar to other smart contracts (such as NftItem or a new collection). However, we initially fund the marketplace with 0.5 TON instead of 0.05 TON. Why? When deploying a new sales contract, the marketplace processes the request and sends a message to the new contract. Since this process involves additional transaction fees, we need extra TON.
 
-В конце давайте добавим несколько строк кода в наш файл `app.ts`, чтобы развернуть нашу торговую площадку:
+Finally, add a few lines of code to `app.ts` to deploy the marketplace.
 
 ```ts
 import { NftMarketplace } from "./contracts/NftMarketplace";
 ```
 
-А затем
+Then:
 
 ```ts
 console.log("Start deploy of new marketplace  ");
@@ -964,11 +964,11 @@ await waitSeqno(seqno, wallet);
 console.log("Successfully deployed new marketplace");
 ```
 
-### Разверните контракт на продажу
+### Deploying the sale contract
 
-Отлично! Сейчас мы уже можем развернуть смарт-контракт для продажи наших NFT. Как это будет работать? Нам нужно развернуть новый контракт, а затем "перевести" наш NFT в контракт продажи (другими словами, нам нужно просто изменить владельца нашего NFT на контракт продажи в данных предмета). В этом уроке мы будем использовать смарт-контракт продажи [nft-fixprice-sale-v2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v2.fc).
+Now, we can deploy the NFT sale smart contract. How does it work?Transfer the NFT to the sale contract by changing its owner in the item data. In this tutorial, we will use [nft-fixprice-sale-v2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v2.fc) smart contract.
 
-Создайте новый файл в `/contracts/NftSale.ts`. Прежде всего, давайте объявим новый тип, который будет описывать данные нашего смарт-контракта продажи:
+Create a new file: `/contracts/NftSale.ts`. Declare a type that describes the sale contract data.
 
 ```ts
 import {
@@ -998,7 +998,7 @@ export type GetGemsSaleData = {
 };
 ```
 
-А теперь давайте создадим класс и основной метод, который будет создавать ячейку начальных данных для нашего смарт-контракта.
+Create a class and a method to generate the initial data cell for the smart contract.
 
 ```ts
 export class NftSale {
@@ -1010,7 +1010,12 @@ export class NftSale {
 }
 ```
 
-Мы начнем с создания ячейки с информацией о сборах. Нам нужно будет сохранить адрес, который будет получать сборы за маркетплейс, сумму TON, которую нужно отправить торговой площадке в качестве сбора, а также адрес, который будет получать роялти от продажи, и размер роялти.
+We will begin with creating a cell with fee details:
+
+- The address receiving the marketplace fee.
+- The TON amount sent as a marketplace fee.
+- The address receiving the royalty from the sale.
+- The royalty amount.
 
 ```ts
 private createDataCell(): Cell {
@@ -1024,7 +1029,7 @@ private createDataCell(): Cell {
   feesCell.storeCoins(saleData.royaltyAmount);
 ```
 
-После этого мы можем создать пустую ячейку и просто сохранить в нее информацию из `saleData` в правильном порядке, а сразу после этого сохранить ссылку на ячейку с информацией о сборах:
+Following that we can create an empty cell and just store information from saleData in the correct order. Right after that, store the reference to the cell with the fees information:
 
 ```ts
   const dataCell = beginCell();
@@ -1041,7 +1046,7 @@ private createDataCell(): Cell {
 }
 ```
 
-Как обычно, добавим методы для получения `stateInit`, ячейки с кодом и адреса нашего смарт-контракта.
+And as always, add methods to get stateInit, the initial code cell, and the smart contract address.
 
 ```ts
 public get address(): Address {
@@ -1063,9 +1068,9 @@ private createCodeCell(): Cell {
 }
 ```
 
-Осталось только сформировать сообщение, которое мы отправим нашей торговой площадке для развертывания контракта на продажу, и фактически отправить это сообщение
+To deploy the sale contract, we must form a message and send it to the marketplace:
 
-Прежде всего, мы создадим ячейку, которая будет хранить StateInit нашего нового контракта на продажу
+First, create a cell storing the StateInit of the new sale contract
 
 ```ts
 public async deploy(wallet: OpenedWallet): Promise<number> {
@@ -1074,7 +1079,12 @@ public async deploy(wallet: OpenedWallet): Promise<number> {
       .endCell();
 ```
 
-Создайте ячейку с телом для нашего сообщения. Во-первых, нужно установить оп-код в 1 (чтобы указать торговой площадке, что мы хотим развернуть новый смарт-контракт для продажи). Затем нужно сохранить количество монет, которые будут отправлены в наш новый смарт-контракт продажи. И в конце нужно сохранить две ссылки: на `StateInit` нового смарт-контракта и тело, которое будет отправлено в этот новый смарт-контракт.
+Create a cell with the message body.
+
+- Set op-code = 1 to indicate a new sale contract deployment.
+- Store the coins sent to the new sale contract.
+- Store two references: StateInit of the new contract; the body sent to the new contract.
+- Send the message to deploy the contract.
 
 ```ts
   const payload = beginCell();
@@ -1084,7 +1094,7 @@ public async deploy(wallet: OpenedWallet): Promise<number> {
   payload.storeRef(new Cell());
 ```
 
-И в конце давайте отправим наше послание:
+Finally, let's send our message:
 
 ```ts
   const seqno = await wallet.contract.getSeqno();
@@ -1104,15 +1114,15 @@ public async deploy(wallet: OpenedWallet): Promise<number> {
 }
 ```
 
-Отлично! Когда смарт-контракт продажи будет развернут, все, что останется, — это изменить владельца нашего NFT на адрес этого контракта продажи.
+Once the sale contract is deployed, the only step left is to transfer ownership of the NFT item to the sale contract’s address.
 
-### Передача предмета
+### Transferring the item
 
-Что значит передать предмет? Просто отправить сообщение из кошелька владельца в смарт-контракт с информацией о том, кто является новым владельцем предмета.
+Transferring an item means sending a message from the owner’s wallet to the smart contract with the new owner's information.
 
-Перейдите в файл `NftItem.ts` и создайте новый статический метод в классе `NftItem`, который будет создавать тело для такого сообщения:
+Go to `NftItem.ts` and create a new static method in NftItem class to construct the transfer message body:
 
-Просто создайте пустую ячейку и заполните ее данными.
+Create an empty cell and populate it with data.
 
 ```ts
 static createTransferBody(params: {
@@ -1126,7 +1136,13 @@ static createTransferBody(params: {
     msgBody.storeAddress(params.newOwner);
 ```
 
-В дополнение к оп-коду, query-id и адресу нового владельца, мы также должны хранить адрес, на который нужно отправить ответ с подтверждением успешного перевода, а также оставшуюся часть входящих монет в сообщении. Необходимо указать, сколько TON перейдет новому владельцу и будет ли он получать текстовую полезную нагрузку.
+Include the following details:
+
+- Op-code, query-id, and the new owner's address.
+- The address where a confirmation response will be sent.
+- The remaining incoming message coins.
+- The amount of TON sent to the new owner.
+- Whether the recipient will receive a text payload.
 
 ```ts
   msgBody.storeAddress(params.responseTo || null);
@@ -1138,7 +1154,7 @@ static createTransferBody(params: {
 }
 ```
 
-И создайте функцию перевода для передачи NFT.
+Create a transfer function to execute the NFT transfer.
 
 ```ts
 static async transfer(
@@ -1168,21 +1184,21 @@ static async transfer(
   }
 ```
 
-Отлично, теперь мы уже очень близки к завершению. Вернемся к `app.ts` и давайте получим адрес нашего Nft, который мы хотим выставить на продажу:
+Nice, we are almost done! Go back to `app.ts`  and retrieve the address of the NFT we want to sell:
 
 ```ts
 const nftToSaleAddress = await NftItem.getAddressByIndex(collection.address, 0);
 ```
 
-Создайте переменную, которая будет хранить информацию о нашей продаже.
+Create a variable to store sale information.
 
-Добавьте в начало `app.ts`:
+At beggining of the `app.ts`, add:
 
 ```ts
 import { GetGemsSaleData, NftSale } from "./contracts/NftSale";
 ```
 
-А потом:
+And then:
 
 ```ts
 const saleData: GetGemsSaleData = {
@@ -1199,9 +1215,9 @@ const saleData: GetGemsSaleData = {
 };
 ```
 
-Обратите внимание, что мы установили `nftOwnerAddress` в null, потому что если бы мы это сделали, наш контракт на продажу просто принял бы наши монеты при развертывании.
+Note, that you set `nftOwnerAddress` to null. This ensures that the sale contract accepts coins upon deployment.
 
-Разверните нашу продажу:
+Deploy our sale:
 
 ```ts
 const nftSaleContract = new NftSale(saleData);
@@ -1209,33 +1225,36 @@ seqno = await nftSaleContract.deploy(wallet);
 await waitSeqno(seqno, wallet);
 ```
 
-... и перенесите его!
+... and transfer it!
 
 ```ts
 await NftItem.transfer(wallet, nftToSaleAddress, nftSaleContract.address);
 ```
 
-Теперь мы можем запустить наш проект и наслаждаться процессом!
+Finally, we can launch our project and enjoy the process!
 
 ```
 yarn start
 ```
 
-Зайдите на https://testnet.getgems.io/collection/{YOUR_COLLECTION_ADDRESS_HERE} и посмотрите на эту идеальную утку!
+Go to https://testnet.getgems.io/collection/{YOUR_COLLECTION_ADDRESS_HERE} and look to this perfect ducks!
 
-## Заключение
+## Conclusion
 
-Сегодня ты узнал много нового о TON и даже создал свою собственную красивую NFT коллекцию в тестовой сети! Если у тебя остались вопросы или ты заметил ошибку — не стесняйся написать автору — [@coalus](https://t.me/coalus)
+Today, you learned a lot about TON and successfully created your own NFT collection on the testnet! If you have any questions or spot an error, feel free to contact the author: [@coalus](https://t.me/coalus)
 
-## Ссылки
+## References
 
-- [GetGems NFT-контракты](https://github.com/getgems-io/nft-contracts)
-- [NFT Standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
+- [GetGems NFT-contracts](https://github.com/getgems-io/nft-contracts)
+- [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
 
-## Об авторе
+## About the author
 
-- Coalus в [Telegram](https://t.me/coalus) или [GitHub](https://github.com/coalus)
+- _Coalus_ on [Telegram](https://t.me/coalus) or [GitHub](https://github.com/coalus)
 
-## См. также
+## See also
 
-- [Примеры использования NFT](/v3/documentation/dapps/defi/nft)
+- [NFT use cases](/v3/documentation/dapps/defi/nft)
+
+<Feedback />
+

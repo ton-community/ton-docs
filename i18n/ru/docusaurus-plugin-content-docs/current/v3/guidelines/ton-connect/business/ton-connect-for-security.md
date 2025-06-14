@@ -1,16 +1,16 @@
-# TON Connect для обеспечения безопасности
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# TON Connect for security
 
 TON Connect обеспечивает пользователям полный контроль над данными, которыми они делятся, что исключает утечку данных при передаче между приложением и кошельком. Для усиления этой системы кошельки и приложения используют надежные криптографические системы аутентификации, которые работают совместно.
 
 ## Безопасность пользовательских данных и средств
 
-- В TON Connect данные пользователей шифруются от конца до конца при передаче в кошельки через мосты. Это позволяет приложениям и кошелькам использовать сторонние серверы-мосты, которые снижают вероятность кражи и манипуляции данными, значительно повышая их целостность и безопасность.
-- В TON Connect предусмотрены параметры безопасности, позволяющие напрямую аутентифицировать данные пользователей с адресом их кошелька. Это позволяет пользователям использовать несколько кошельков и выбирать, какой из них будет использоваться в конкретном приложении.
-- Протокол TON Connect позволяет передавать персональные данные (например, контактные данные, информацию о KYC и т.д.) при условии, что пользователь явно подтверждает передачу таких данных.
+- On TON Connect, user data is end-to-end encrypted when transmitted to wallets via bridges. This allows apps and wallets to employ third-party bridge servers that decrease the possibility of data theft and manipulation, dramatically increasing data integrity and safety.
+- Through TON Connect, security parameters are implemented to allow users' data to be directly authenticated with their wallet address. This will enable users to use multiple wallets and choose which one is used within a particular app.
+- The TON Connect protocol allows for sharing personal data items (such as contact details and KYC info, etc.), meaning the user explicitly confirms sharing such data.
 
-Конкретные детали и примеры кода, связанные с TON Connect и его ориентированным на безопасность дизайном, можно найти на [TON Connect GitHub] (https://github.com/ton-connect/).
+Specific details and related code examples about TON Connect and its underlying security-focused design can be found via [TON Connect GitHub](https://github.com/ton-connect/).
+
+<Feedback />
 

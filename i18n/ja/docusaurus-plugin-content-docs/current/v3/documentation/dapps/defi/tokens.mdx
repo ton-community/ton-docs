@@ -1,0 +1,119 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Button from '@site/src/components/button'
+
+# トークン（FT、NFT）
+
+[分散型TONトークンの概要](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
+
+> TONを動力とするトークンとNFTは分散化されており、単一障害点とボトルネックを回避しています。
+>
+> コレクション内の各NFTは個別のスマートコントラクトです。各ユーザーのトークン残高は個別のユーザーウォレットに保管されます。 The token balance for each user is stored in a separate user wallet.
+>
+> スマートコントラクトは互いに直接やりとりし、ネットワーク全体に負荷を分散します。
+>
+> ユーザー数やトランザクション数が増加しても、ネットワークは均一な負荷を維持し、シームレスなスケーラビリティを実現します。
+
+## TON Course: jettons & NFTs
+
+:::tip
+Before starting the course, make sure you have a good understanding of the basics of blockchain technology. コースを開始する前に、ブロックチェーン技術の基礎を十分に理解していることを確認してください。知識に不足がある場合は、[Blockchain Basics with TON](https://stepik.org/course/201294/promo) ([RU版](https://stepik.org/course/202221/), [CHN版](https://stepik.org/course/200976/))コースの受講をお勧めします。
+モジュール4では、NFTとJettonの基本的な知識を学ぶことができます。
+Module 4 covers the basic knowledge of NFT & Jettons.
+:::
+
+[TONブロックチェーンコース](https://stepik.org/course/176754/)は、TONブロックチェーン開発の包括的なガイドです。
+
+モジュール7では、**NFT & Jettons**の開発を完全にカバーしています。
+
+<Button href="https://stepik.org/course/176754/promo"
+        colorType={'primary'} sizeType={'sm'}>
+
+TONブロックチェーンコースを確認
+
+</Button>
+
+<Button href="https://stepik.org/course/201638/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+CHN
+
+</Button>
+
+<Button href="https://stepik.org/course/201855/promo"
+        colorType={'secondary'} sizeType={'sm'}>
+
+RU
+
+</Button>
+
+## チュートリアル
+
+- [Web3 Game チュートリアル](/v3/guidelines/dapps/tutorials/web3-game-example) - TON Blockchainを使ってWeb3ゲームを構築する方法を学びます。
+- [Jettonを初めてミントする](/v3/guidelines/dapps/tutorials/mint-your-first-token/) — 最初のジェットトンの配置とカスタマイズ方法を学ぶ
+- [YouTube](https://www.youtube.com/watch?v=oEO29KmOpv4) TONキーパー創設者のオレグ・アンドレエフとオレグ・イラリオノフがTON Jettonを語ります。
+
+### TON speed run
+
+- [🚩 Challenge 1: 簡単な NFT デプロイ](https://github.com/romanovichim/TONQuest1)
+- [🚩 Challenge 2: チャットボットコントラクト](https://github.com/romanovichim/TONQuest2)
+- [🚩 Challenge 3: Jetton 自販機](https://github.com/romanovichim/TONQuest3)
+- [🚩 Challenge 4: 抽選/ラッフル](https://github.com/romanovichim/TONQuest4)
+- [🚩 Challenge 5: 5分でコントラクトとやりとりするUIを作成](https://github.com/romanovichim/TONQuest5)
+- [🚩 Challenge 6: GetgemsマーケットプレイスでNFT売上を分析](https://github.com/romanovichim/TONQuest6)
+
+## Jettons (fungible tokens)
+
+### ガイド
+
+- [TON Jetton 処理](/develop/dapps/asset-processing/jettons)
+- [TON Metadata Parsing](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing)
+
+### 規格
+
+- [Jetton 規格](https://github.com/ton-blockchain/TEPs/blob/master/0074-jettons-standard.md)
+
+### Smart contracts
+
+- [スマートコントラクトの実装（Func）](https://github.com/ton-blockchain/token-contract/)
+
+### Jetton deployer
+
+Jettons are custom fungible tokens on TON Blockchain. JettonsはTON ブロックチェーン上のカスタムファンジブルトークンです。以下のJetton デプロイヤーの例を使って、TON ブロックチェーン上に独自のトークンを作成することができます：
+
+- **[TON Minter](https://minter.ton.org/)** — オープンソースの Jetton デプロイヤー dApp
+- [Jetton デプロイヤー — contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
+- [Jetton デプロイヤー - WebClient](https://github.com/ton-defi-org/jetton-deployer-webclient) (React, TypeScript)
+
+### Tools to work with jettons
+
+- [NFT Jetton セールコントラクト](https://github.com/dvlkv/nft-jetton-sale-smc) - Jettonサポート付きNFTセールコントラクト
+- [Scaleton](http://scaleton.io) — カスタムトークン残高を参照
+- [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example)-ジェトンの情報を照会するSDK
+
+## NFT
+
+### 規格
+
+- [NFT 規格](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
+- [SBT（ソウルバウンドNFT）規格](https://github.com/ton-blockchain/TEPs/blob/master/text/0085-sbt-standard.md)
+- [NFT Royalty 規格拡張](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
+
+### Smart contracts
+
+- [スマートコントラクトの実装（Func）](https://github.com/ton-blockchain/token-contract/)
+- [Getgems NFT、売却、オークションのスマートコントラクト（FunC）](https://github.com/getgems-io/nft-contracts)
+
+### NFTミント
+
+- TON Diamonds による [NFT デプロイヤー](https://github.com/tondiamonds/ton-nft-deployer) (TypeScript, コメントなし)
+- [NFTミンターの例](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript、コメント付き)
+- [Reactを使ったNFTミンター](https://github.com/tonbuilders/tonbuilders-minter) (React、コメントなし)
+- [NFT デプロイヤー](https://github.com/anomaly-guard/nft-deployer) (Python、コメント付き)
+- [Golang を使用した NFT Minter](https://github.com/xssnick/tonutils-go#nft) (Golang ライブラリ、コメントと全例付き)
+
+### NFTを扱うツール
+
+- [LiberMall/tnt](https://github.com/LiberMall/tnt)-TNTは、The Open Network上の新しいNon-Fungible Tokensを照会、編集、鋳造するためのオールインワンのコマンドラインツールです。
+
+<Feedback />

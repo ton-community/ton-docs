@@ -2,38 +2,41 @@
 description: По окончании обучения вы развернете контракт с мультиподписью в блокчейне TON.
 ---
 
+import Feedback from '@site/src/components/Feedback';
+
 # Создание простого контракта с мультиподписью с помощью fift
 
 :::caution продвинутый уровень
-Эта информация **очень низкого уровня**. Может быть сложной для понимания новичками и предназначена для продвинутых пользователей, которые хотят понять работу [fift](/v3/documentation/smart-contracts/fift/overview). Использование fift не требуется в повседневных задачах.
+This information is **very low-level**. It could be hard for newcomers and designed for advanced people who want to understand [fift](/v3/documentation/smart-contracts/fift/overview). The use of fift is not required in everyday tasks.
 :::
 
 ## 💡 Общие сведения
 
-Это руководство поможет вам узнать, как использовать ваш контракт с мультиподписью.
-Напомним, что (n, k)-контракт с мультиподписью – это мультиподписной кошелек с n держателями закрытых ключей, который принимает запросы на отправку сообщений, если запрос, заявка, собирает не менее k подписей держателей.
+This tutorial helps you learn how to deploy your multisig contract.\
+This tutorial helps you learn how to deploy your multisig contract.\
+Recall that an (n, k)-multisig contract is a multisignature wallet with n private key holders, which accepts requests to send messages if the request (aka order, query) collects at least k holders' signatures.
 
-На основе оригинального кода контракта мультиподписи и обновлений от akifoq:
+Based on the original multisig contract code and updates by akifoq:
 
-- [оригинальный multisig-code.fc блокчейна TON](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/multisig-code.fc)
+- [Original TON Blockchain multisig-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/multisig-code.fc)
 - [akifoq/multisig](https://github.com/akifoq/multisig) с fift библиотекой для работы с мультиподписью.
 
-:::tip совет для начинающих
-Для тех, кто впервые работает с мультиподписью: [Что такое технология мультиподписи? (видео)](https://www.youtube.com/watch?v=yeLqe_gg2u0)
+:::tip starter tip
+For anyone new to multisig: [What is Multisig Technology? (video)](https://www.youtube.com/watch?v=yeLqe_gg2u0)
 :::
 
 ## 📖 Чему вы научитесь
 
 - Как создать и настроить простой кошелек с мультиподписью.
-- Как развернуть кошелек с мультиподписью с помощью lite-client.
-- Как подписать запрос и отправить его в сообщении в блокчейн.
+- How to deploy a multisig wallet using lite-client.
+- How to sign a request and send it in a message to the blockchain.
 
 ## ⚙ Настройте свое окружение
 
 Прежде чем мы начнем наше путешествие, проверьте и подготовьте ваше окружение.
 
-- Установите двоичные файлы `func`, `fift`, `lite-client` и `fiftlib` из раздела [установки](/v3/documentation/archive/precompiled-binaries).
-- Клонируйте [репозиторий](https://github.com/akifoq/multisig) и откройте каталог в CLI.
+- Install `func`, `fift`, `lite-client` binaries, and `fiftlib` from the [Installation](/v3/documentation/archive/precompiled-binaries) section.
+- Clone the [repository](https://github.com/akifoq/multisig) and open its directory in CLI.
 
 ```bash
 git clone https://github.com/akifoq/multisig.git
@@ -43,9 +46,9 @@ cd ~/multisig
 ## 🚀 Давайте начнем!
 
 1. Скомпилируйте код в fift.
-2. Подготовьте ключи для владельцев мультиподписи.
+2. Prepare multisig owners' keys.
 3. Разверните контракт.
-4. Взаимодействуйте с развернутым кошельком с мультиподписью в блокчейне.
+4. Interact with the deployed multisig wallet in the blockchain.
 
 ### Скомпилируйте контракт
 
@@ -55,17 +58,17 @@ cd ~/multisig
 func -o multisig-code.fif -SPA stdlib.fc multisig-code.fc
 ```
 
-### Подготовьте ключи владельцев мультиподписи
+### Prepare multisig owners' keys
 
-#### Создайте ключи участников
+#### Create participants' keys
 
-Чтобы создать ключ, вам нужно запустить:
+To create a key, you need to run:
 
 ```cpp
 fift -s new-key.fif $KEY_NAME$
 ```
 
-- Где `KEY_NAME` - это имя файла, в который будет записан закрытый ключ.
+- Where `KEY_NAME` is the file name where the private key will be written.
 
 Например:
 
@@ -73,7 +76,7 @@ fift -s new-key.fif $KEY_NAME$
 fift -s new-key.fif multisig_key
 ```
 
-Мы получим файл `multisig_key.pk` с закрытым ключом внутри.
+We'll receive a `multisig_key.pk` file with the private key inside.
 
 #### Соберите открытые ключи
 
@@ -85,13 +88,13 @@ Public key = Pub5XqPLwPgP8rtryoUDg2sadfuGjkT4DLRaVeIr08lb8CB5HW
 
 Все, что после `"Public key = "`, нужно где-то сохранить!
 
-Давайте сохраним в файле `keys.txt`. Важно, чтобы каждый открытый ключ был указан с новой строки.
+Let's store it in a file called `keys.txt`. It's important to have one public key per line.
 
 ### Разверните контракт
 
 #### Разверните через lite-client
 
-После создания всех ключей вам необходимо собрать открытые ключи в текстовый файл `keys.txt`.
+After creating all the keys, you need to collect the public keys into a text file, `keys.txt`.
 
 Например:
 
@@ -106,11 +109,11 @@ PubH821csswh8R1uO9rLYyP1laCpYWxhNkx+epOkqwdWXgzY4
 fift -s new-multisig.fif 0 $WALLET_ID$ wallet $KEYS_COUNT$ ./keys.txt
 ```
 
-- `$WALLET_ID$` - номер кошелька, назначенный для текущего ключа. Рекомендуется использовать уникальный `$WALLET_ID$` для каждого нового кошелька с тем же ключом.
-- `$KEYS_COUNT$` - количество ключей, необходимых для подтверждения. Обычно оно равно количеству открытых ключей
+- `$WALLET_ID$` - the wallet number assigned for the current key. It is recommended that each new wallet with the same key use a unique `$WALLET_ID$`.
+- `$KEYS_COUNT$` - the number of keys needed for confirmation, usually equal to the number of public keys.
 
 :::info Объяснение wallet_id
-Можно создать много кошельков с одинаковыми ключами (ключ Алисы, ключ Боба). Что же делать, если у Алисы и Боба уже есть сокровища? Именно в таком случае `$WALLET_ID$` и выполняет свою роль.
+It is possible to create many wallets with the same keys (Alice key, Bob key). What should we do if Alice and Bob already have a treasure? That's why `$WALLET_ID$` is crucial here.
 :::
 
 Скрипт выведет что-то вроде:
@@ -128,16 +131,16 @@ Bounceable address (for later access): kQBLuyZgCX21xy3V6QhhFQEPD4yFAeC4_vH-MY2d5
 ```
 
 :::info
-Если у вас ошибка "public key must be 48 character long", убедитесь, что в вашем файле `keys.txt` имеет тип переноса слов в unix - LF. Например, перенос слов можно изменить с помощью редактора Sublime text.
+If you have a "public key must be 48 characters long" error, please make sure your `keys.txt` has a Unix-type word wrap - LF. For example, word wrap can be changed via the Sublime text editor.
 :::
 
 :::tip
-Адрес возврата лучше сохранить — это адрес кошелька.
+A bounceable address is better to keep - this is the wallet's address.
 :::
 
 #### Активируйте свой контракт
 
-Вам нужно отправить немного TON в нашу недавно сгенерированную *сокровищницу*. Например, 0,5 TON. Вы можете отправить тестовые монеты через [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
+You need to send some TON to our newly generated _treasure_. For example, 0.5 TON. You can send testnet coins via [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
 
 После этого необходимо запустить lite-client:
 
@@ -145,19 +148,19 @@ Bounceable address (for later access): kQBLuyZgCX21xy3V6QhhFQEPD4yFAeC4_vH-MY2d5
 lite-client -C global.config.json
 ```
 
-:::info Где взять `global.config.json`?
-Вы можете получить новый файл конфигурации `global.config.json` для [основной сети](https://ton.org/global-config.json) или [тестовой сети](https://ton.org/testnet-global.config.json).
+:::info Where to get `global.config.json`?
+You can get a fresh config file `global.config.json` for [mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json).
 :::
 
-После запуска lite-client лучше всего запустить команду `time` в консоли lite-client, чтобы убедиться в успешном подключении:
+After starting lite-client, it's best to run the `time` command in the lite-client console to make sure the connection was successful:
 
 ```bash
 time
 ```
 
-Итак, lite-клиент работает!
+Okay, lite-client works!
 
-Далее вам необходимо развернуть кошелек. Для этого выполните команду:
+After that, you need to deploy the wallet. Run the command:
 
 ```
 sendfile ./wallet-create.boc
@@ -165,19 +168,19 @@ sendfile ./wallet-create.boc
 
 После этого кошелек будет готов к работе в течение минуты.
 
-### Взаимодействие с кошельком с мультиподписью
+### Interact with a multisig wallet
 
 #### Создание запроса
 
-Для начала вам необходимо создать запрос сообщения:
+First, you need to create a message request:
 
 ```cpp
 fift -s create-msg.fif $ADDRESS$ $AMOUNT$ $MESSAGE$
 ```
 
-- `$ADDRESS$` - адрес, куда отправлять монеты
-- `$AMOUNT$` - количество монет
-- `$MESSAGE$` - имя файла для скомпилированного сообщения.
+- `$ADDRESS$` - address where to send coins.
+- `$AMOUNT$` - number of coins.
+- `$MESSAGE$` - the file name for the compiled message.
 
 Например:
 
@@ -186,12 +189,12 @@ fift -s create-msg.fif EQApAj3rEnJJSxEjEHVKrH3QZgto_MQMOmk8l72azaXlY1zB 0.1 mess
 ```
 
 :::tip
-Чтобы добавить комментарий к вашей транзакции, используйте атрибут `-C comment`. Для получения дополнительной информации запустите файл *create-msg.fif* без параметров.
+Use the `-C comment` attribute to add a comment for your transaction. To get more information, run the _create-msg.fif_ file without parameters.
 :::
 
 #### Выберите кошелек
 
-Далее вам необходимо выбрать кошелек, с которого вы будете отправлять монеты:
+Next, you need to choose a wallet to send coins from:
 
 ```
 fift -s create-order.fif $WALLET_ID$ $MESSAGE$ -t $AWAIT_TIME$
@@ -199,12 +202,12 @@ fift -s create-order.fif $WALLET_ID$ $MESSAGE$ -t $AWAIT_TIME$
 
 Где
 
-- `$WALLET_ID$` - это идентификатор кошелька, поддерживаемый этим контрактом с мультиподписью.
-- `$AWAIT_TIME$` — Время в секундах, в течение которого смарт-контракт будет ожидать подписи от владельцев кошелька с мультиподписью для запроса.
-- `$MESSAGE$` — здесь указано имя boc-файла сообщения, созданного на предыдущем шаге.
+- `$WALLET_ID$` — is an ID of the wallet backed by this multisig contract.
+- `$AWAIT_TIME$` — Time in seconds that the smart contract will await signs from multisig wallet's owners for the request.
+- `$MESSAGE$` — here is the name of the message boc-file created in the previous step.
 
 :::info
-Если за время `$AWAIT_TIME$` запрос не был подписан, то валидность запроса истекает. Стандартное время ожидания составляет 2 часа (7200 секунд).
+The request expires if the time equals `$AWAIT_TIME$` passed before the request signs. As usual, `$AWAIT_TIME$` equals a couple of hours (7200 seconds).
 :::
 
 Например:
@@ -213,22 +216,22 @@ fift -s create-order.fif $WALLET_ID$ $MESSAGE$ -t $AWAIT_TIME$
 fift -s create-order.fif 0 message -t 7200
 ```
 
-Готовый файл будет сохранен в `order.boc`
+The ready file will be saved in `order.boc`.
 
 :::info
-`order.boc` необходимо предоставить держателям ключей, они должны его подписать.
+`order.boc` must be shared with key holders; they must sign it.
 :::
 
 #### Подпишите свою часть
 
-Для совершения этой операции, вам необходимо выполнить:
+To sign, you need to do:
 
 ```bash
 fift -s add-signature.fif $KEY$ $KEY_INDEX$
 ```
 
-- `$KEY$` - имя файла, содержащего закрытый ключ для подписи, без расширения.
-- `$KEY_INDEX$` - индекс указанного ключа в `keys.txt` (с нулевым индексом)
+- `$KEY$` - file name containing the private key to sign, without extension.
+- `$KEY_INDEX$` - index of the given key in `keys.txt` (zero-based).
 
 Например, для нашего файла `multisig_key.pk`:
 
@@ -244,7 +247,7 @@ fift -s add-signature.fif multisig_key 0
 fift -s create-external-message.fif wallet $KEY$ $KEY_INDEX$
 ```
 
-В этом случае будет достаточно только одной подписи владельца кошелька. Идея заключается в том, что контракт не может быть атакован имея недействительные подписи.
+In this case, only one sign of the wallet's owner will be enough. The idea is that you can't attack a contract with invalid signatures.
 
 Например:
 
@@ -252,7 +255,7 @@ fift -s create-external-message.fif wallet $KEY$ $KEY_INDEX$
 fift -s create-external-message.fif wallet multisig_key 0
 ```
 
-#### Отправьте подпись в блокчейн TON
+#### Send sign to TON blockchain
 
 После этого вам нужно снова запустить light client:
 
@@ -260,7 +263,7 @@ fift -s create-external-message.fif wallet multisig_key 0
 lite-client -C global.config.json
 ```
 
-Далее нам нужно только отправить нашу подпись! Для этого запустите:
+And finally, we want to send our sign! Just run:
 
 ```bash
 sendfile wallet-query.boc
@@ -272,5 +275,7 @@ sendfile wallet-query.boc
 
 ## См. также
 
-- [Подробнее о кошельках с мультиподписью в TON](https://github.com/akifoq/multisig) от *[@akifoq](https://t.me/aqifoq)*
+- [Подробнее о кошельках с мультиподписью в TON](https://github.com/akifoq/multisig) от _[@akifoq](https://t.me/aqifoq)_
 - [Кошелек с мультиподписью v2](https://github.com/ton-blockchain/multisig-contract-v2)
+
+<Feedback />

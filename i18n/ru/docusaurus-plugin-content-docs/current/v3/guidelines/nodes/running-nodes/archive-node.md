@@ -1,60 +1,58 @@
-# Архивный узел
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Archive node
 
 :::info
-Прочитайте о [Полном узле](/v3/guidelines/nodes/running-nodes/full-node) перед этой статьей
+Before this article, read about [Full node](/v3/guidelines/nodes/running-nodes/full-node).
 :::
 
 ## Обзор
 
-Архивный узел - это тип полного узла, который хранит расширенные исторические данные блокчейна. Если вы создаете обозреватель блокчейна или аналогичное приложение, которому требуется доступ к историческим данным, рекомендуется использовать архивный узел в качестве индексатора.
+An archive node is a type of full node that stores extended historical data from a blockchain. If you are creating a blockchain explorer or a similar application that requires access to historical data, it is recommended that you use an archive node as an indexer.
 
 ## Требования к ОС
 
-Мы настоятельно рекомендуем установить mytonctrl с использованием поддерживаемых операционных систем:
+We highly recommend installing mytonctrl using the supported operating systems:
 
 - Ubuntu 20.04
 - Ubuntu 22.04
 - Debian 11
 
-## Требования к аппаратному обеспечению
+## Minimal hardware requirements
 
-- 16 x ядерный процессор
-- 128ГБ ОЗУ с исправлением ошибок (ECC)
-- Твердотельный накопитель объемом 9 ТБ *или* Оборудованное хранилище с более 64 000 операций ввода/вывода в секунду (IOPS)
-- Возможность подключения к сети 1 Гбит/с
+- 16-core CPU
+- 128 GB ECC Memory
+- 12 TB SSD _OR_ Provisioned 64+k IOPS storage
+- 1 Gbit/s network connectivity, both inbound and outbound
 - 16 ТБ/месяц трафика при пиковой нагрузке
-- публичный IP-адрес (фиксированный IP-адрес)
+- Linux OS with open files limit above 400k
+- A public IP address (fixed IP address)
 
-:::info Сжатие данных
-Для несжатых данных требуется 9 ТБ. 6 ТБ - это при использовании тома ZFS с включенным сжатием.
-Объем данных увеличивается примерно на 0,5 ТБ и 0,25 ТБ каждый месяц, с последним обновлением в ноябре 2024 года.
+:::info Data compression
+Uncompressed data requires 12 TB of storage. A ZFS volume with compression reduces this to 11 TB. As of February 2025, the data volume is growing by approximately 0.1 to 1 TB per month, depending on the load.
 :::
 
 ## Установка
 
-### Установите ZFS и подготовьте том
+### Install ZFS and prepare volume
 
-Дампы поставляются в виде снимков ZFS, сжатых с помощью plzip, вам необходимо установить ZFS на вашем хосте и восстановить дамп, см. в [Документацию Oracle](https://docs.oracle.com/cd/E23824_01/html/821-1448/gavvx.html#scrolltoc).
+Dumps come in the form of ZFS snapshots compressed using plzip. You need to install ZFS on your host and restore the dump. See [Oracle Documentation](https://docs.oracle.com/cd/E23824_01/html/821-1448/gavvx.html#scrolltoc) for more details.
 
-Обычно рекомендуется создать отдельный пул ZFS для вашего узла на выделенном SSD-диске, это позволит вам легко управлять дисковым пространством и создавать резервные копии вашего узла.
+Usually, it's a good idea to create a separate ZFS pool for your node on a _dedicated SSD drive_. This will allow you to manage storage space and back up your node easily.
 
-1. Установите [zfs](https://ubuntu.com/tutorials/setup-zfs-storage-pool#1-overview)
+1. Install [ZFS](https://ubuntu.com/tutorials/setup-zfs-storage-pool#1-overview):
 
 ```shell
 sudo apt install zfsutils-linux
 ```
 
-2. [Создайте пул](https://ubuntu.com/tutorials/setup-zfs-storage-pool#3-creating-a-zfs-pool) на вашем выделенном диске объемом 4 ТБ `<disk>` и назовите его `data`
+2. [Create a pool](https://ubuntu.com/tutorials/setup-zfs-storage-pool#3-creating-a-zfs-pool) on your dedicated 4 TB `<disk>` and name it `data`:
 
 ```shell
 sudo zpool create data <disk>
 ```
 
-3. Перед восстановлением настоятельно рекомендуем включить сжатие на родительском файловой системе ZFS, что позволит вам освободить [много места](https://www.servethehome.com/the-case-for-using-zfs-compression/). Чтобы включить сжатие для тома `data`, войдите под учетной записью root и выполните следующую команду:
+3. We recommend enabling compression on the parent ZFS filesystem before restoring. This will save you a [significant amount of space](https://www.servethehome.com/the-case-for-using-zfs-compression/). To enable compression for the `data` volume, use the root account to enter the following:
 
 ```shell
 sudo zfs set compression=lz4 data
@@ -62,20 +60,20 @@ sudo zfs set compression=lz4 data
 
 ### Установите MyTonCtrl
 
-Пожалуйста, используйте [Запуск Полного узла](/v3/guidelines/nodes/running-nodes/full-node) чтобы **установить** и **запустить** mytonctrl.
+Please use the [Running Full Node](/v3/guidelines/nodes/running-nodes/full-node) guide to **install** and **run** mytonctrl.
 
-### Запустите архивный узел
+### Run an archive node
 
 #### Подготовьте узел
 
-1. Перед выполнением восстановления вы должны остановить validator под учетной записью root:
+1. Before performing a restore, you must stop the validator using the root account:
 
 ```shell
 sudo -s
 systemctl stop validator.service
 ```
 
-2. Сделайте резервную копию файлов конфигурации `ton-work` (нам потребуются файлы `/var/ton-work/db/config.json`, `/var/ton-work/keys` и `/var/ton-work/db/keyring`).
+2. Make a backup of `ton-work` config files (we will need `/var/ton-work/db/config.json`, `/var/ton-work/keys`, and `/var/ton-work/db/keyring`):
 
 ```shell
 mv /var/ton-work /var/ton-work.bak
@@ -83,36 +81,34 @@ mv /var/ton-work /var/ton-work.bak
 
 #### Скачайте дамп
 
-1. Запросите учетные данные `user` и `password`для получения доступа к скачиванию дампов в чате [@TONBaseChatEn](https://t.me/TONBaseChatEn) в Telegram.
-2. Вот пример команды для скачивания и восстановления дампа **mainnet** с сервера ton.org:
+Here is an example command to download & restore the **mainnet** dump from the ton.org server:
 
 ```shell
-wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
+curl -L -s https://archival-dump.ton.org/dumps/mainnet_full_44888096.zfs.zstd | pv | zstd -d -T16 | zfs recv mypool/ton-db
 ```
 
-Чтобы установить дамп **testnet**, используйте следующую команду:
+To install the **testnet** dump, use:
 
 ```shell
-wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest_testnet.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
+wget -c https://dump.ton.org/dumps/latest_testnet_archival.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
 ```
 
-Размер дампа составляет примерно **4 Тб**, поэтому скачивание и восстановление могут занять несколько дней (до 4 дней). Размер дампа может увеличиваться с ростом сети.
+The mainnet dump size is approximately 9 TB, so it may take several days to download and restore. The dump size will increase as the network grows.
 
 Подготовьте и выполните команду:
 
-1. При необходимости установите инструменты (`pv`, `plzip`)
-2. Замените `<usr>` и `<pwd>` вашими учетными данными
-3. Сообщите `plzip` использовать столько ядер, сколько позволяет ваша машина для ускорения извлечения (`-n`)
+1. Install the necessary tools (`pv`, `plzip`, `zstd`).
+2. Tell `plzip` to use as many cores as your machine allows to speed up extraction (`-n`).
 
 #### Установите дамп
 
-1. Смонтируйте zfs:
+1. Mount ZFS:
 
 ```shell
 zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work
 ```
 
-2. Восстановите `db/config.json`, `keys` и `db/keyring` из резервной копии в `/var/ton-work`.
+2. Restore `db/config.json`, `keys`, and `db/keyring` from the backup to `/var/ton-work`:
 
 ```shell
 cp /var/ton-work.bak/db/config.json /var/ton-work/db/config.json
@@ -120,25 +116,25 @@ cp -r /var/ton-work.bak/keys /var/ton-work/keys
 cp -r /var/ton-work.bak/db/keyring /var/ton-work/db/keyring
 ```
 
-3. Убедитесь, что разрешения для каталогов `/var/ton-work` и `/var/ton-work/keys` предоставлены правильно:
+3. Set the permissions for the `/var/ton-work` and `/var/ton-work/keys` directories correctly:
 
-- Владельцем каталога `/var/ton-work/db` должен быть пользователь `validator`:
+- The owner of the `/var/ton-work/db` directory should be the `validator` user:
 
 ```shell
 chown -R validator:validator /var/ton-work/db
 ```
 
-- Владельцем каталога `/var/ton-work/keys` должен быть пользователь `ubuntu`:
+- The owner of the `/var/ton-work/keys` directory should be the `ubuntu` user:
 
 ```shell
 chown -R ubuntu:ubuntu /var/ton-work/keys
 ```
 
-#### Обновите конфигурацию
+#### Update configuration
 
-Обновите конфигурацию узла для архивного узла.
+Update the node configuration for the archive node.
 
-1. Откройте файл конфигурации узла `/etc/systemd/system/validator.service`.
+1. Open the node config file `/etc/systemd/system/validator.service`:
 
 ```shell
 nano /etc/systemd/system/validator.service
@@ -147,15 +143,16 @@ nano /etc/systemd/system/validator.service
 2. Добавьте настройки хранилища для узла в строке `ExecStart`:
 
 ```shell
---state-ttl 315360000 --archive-ttl 315360000 --block-ttl 315360000
+--state-ttl 3153600000 --archive-ttl 3153600000
 ```
 
 :::info
-Пожалуйста, будьте терпеливы после запуска узла и следите за логами.
-Дампы не содержат кэшей DHT, поэтому вашему узлу потребуется время для поиска других узлов и синхронизации с ними.
-В зависимости от возраста снимка и скорости вашего интернет-соединения, процесс восстановления может занять у вас **от нескольких часов до нескольких дней**.
-**На минимальной конфигурации этот процесс может занять до 5 дней.**
-Это нормально.
+Please remain patient after starting the node and monitor the logs closely.
+The dump files lack DHT caches, requiring your node to discover other nodes and synchronize with them.
+Depending on the snapshot's age and your network bandwidth,
+your node might need **anywhere from several hours to multiple days** to synchronize with the network.
+**The synchronization process typically takes up to 5 days when using minimum hardware specifications.**
+This is expected behavior.
 :::
 
 :::caution
@@ -170,32 +167,32 @@ nano /etc/systemd/system/validator.service
 systemctl start validator.service
 ```
 
-2. Откройте `mytonctrl` из *local user* и проверьте состояние узла с помощью команды `status`.
+2. Open `mytonctrl` from the _local user_ and check the node status using the `status` command.
 
 ## Обслуживание узла
 
-База данных узла требует периодической очистки (мы рекомендуем проводить ее раз в неделю), для этого, пожалуйста, выполните следующие шаги под учетной записью root:
+The node database requires cleansing from time to time (we advise doing this once a week). To do so, please perform the following steps as root:
 
-1. Остановите процесс validator (Никогда не пропускайте этот момент!)
+1. Stop the validator process (Never skip this!):
 
 ```shell
 sudo -s
 systemctl stop validator.service
 ```
 
-2. Удалите старые логи
+2. Remove old logs:
 
 ```shell
 find /var/ton-work -name 'LOG.old*' -exec rm {} +
 ```
 
-4. Удалите временные файлы
+3. Remove temporary files:
 
 ```shell
 rm -r /var/ton-work/db/files/packages/temp.archive.*
 ```
 
-5. Запустите процесс validator
+4. Start the validator process:
 
 ```shell
 systemctl start validator.service
@@ -203,38 +200,56 @@ systemctl start validator.service
 
 ## Устранение неполадок и резервное копирование
 
-Если по какой-то причине что-то не работает или ломается, вы всегда можете [откатиться](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk) к снимку @archstate в вашей файловой системе ZFS, это исходное состояние, полученное из дампа.
+If, for some reason, something does not work or breaks, you can always [roll back](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk) to the `@archstate` snapshot on your ZFS filesystem. This is the original state from the dump.
 
-1. Остановите процесс валидатора (\*\*Никогда не пропускайте это! \*\*).
+1. Stop the validator process (**Never skip this!**):
 
 ```shell
 sudo -s
 systemctl stop validator.service
 ```
 
-2. Проверьте имя моментального снимка
+2. Check the snapshot name:
 
 ```shell
 zfs list -t snapshot
 ```
 
-3. Откатить к состоянию моментального снимка
+3. Roll back to the snapshot:
 
 ```shell
 zfs rollback data/ton-work@dumpstate
 ```
 
-Если ваш узел работает нормально, вы можете удалить моментальный снимок, чтобы сэкономить место на диске, но мы рекомендуем регулярно делать снимки вашей файловой системы для целей отката, поскольку известно, что узел валидатора может повреждать данные и config.json. [zfsnap](https://www.zfsnap.org/docs.html) - это отличный инструмент для автоматизации циклической обработки снимков.
+If your node operates properly, you may remove this snapshot to reclaim storage space. However, we recommend creating regular filesystem snapshots for rollback capability since the validator node may occasionally corrupt data and `config.json`. For automated snapshot management, [zfsnap](https://www.zfsnap.org/docs.html) handles rotation effectively.
 
 :::tip Нужна помощь?
-У вас есть вопросы или вам нужна помощь? Пожалуйста, задавайте вопросы в [TON Dev Chat (РУ)](https://t.me/tondev), чтобы получить помощь сообщества. Разработчики MyTonCtrl также присутствуют там.
+Have a question or need help? Please ask in the [TON dev chat](https://t.me/tondev_eng) to get help from the community. MyTonCtrl developers also hang out there.
 :::
 
-## Советы и рекомендации
+## Tips & tricks
 
-### Заставьте архивный узел не хранить блоки
+:::info
+Основная информация об архивных дампах представлена ​​на https://archival-dump.ton.org/
+:::
 
-Чтобы заставить узел не хранить архивные блоки, используйте значение 86400. Подробнее смотрите в разделе [set_node_argument](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#set_node_argument).
+### Удалить снимок дампа
+
+1. Find the correct snapshot
+
+```bash
+zfs list -t snapshot
+```
+
+2. Delete it
+
+```bash
+zfs destroy <snapshot>
+```
+
+### Force the archive node not to store blocks
+
+To force the node not to store archive blocks, use the value `86400`. Check the [set_node_argument section](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#set_node_argument) for more details.
 
 ```bash
 installer set_node_argument --archive-ttl 86400
@@ -242,9 +257,12 @@ installer set_node_argument --archive-ttl 86400
 
 ## Поддержка
 
-Обратитесь в службу технической поддержки по ссылке [@mytonctrl_help](https://t.me/mytonctrl_help).
+Contact technical support at [@ton_node_help](https://t.me/ton_node_help).
 
-## См. также
+## See also
 
-- [Типы узлов TON](/v3/documentation/infra/nodes/node-types)
-- [Запуск полного узла](/v3/guidelines/nodes/running-nodes/full-node)
+- [TON node types](/v3/documentation/infra/nodes/node-types)
+- [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
+
+<Feedback />
+

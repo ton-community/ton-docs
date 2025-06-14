@@ -1,0 +1,2076 @@
+import Feedback from '@site/src/components/Feedback';
+
+import ThemedImage from '@theme/ThemedImage';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
+
+# TON cookbook
+
+During product development, various questions often arise regarding interactions with different contracts on TON. This document aims to gather the best practices from developers and share them with the community.
+
+## 컨트랙트 주소 작업하기
+
+### 주소를 변환하고(사용자 친화적 <-> raw), 조립하고, 문자열에서 추출하는 방법은?
+
+TON addresses uniquely identify contracts on the blockchain, indicating their workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses) are: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
+
+```
+User-friendly: EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+Raw: 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+```
+
+To obtain a TON address object from a string in your SDK, you can use the following code:
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+import { Address } from "@ton/core";
+
+
+const address1 = Address.parse('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF');
+const address2 = Address.parse('0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e');
+
+// toStrings arguments: urlSafe, bounceable, testOnly
+// defaults values: true, true, false
+
+console.log(address1.toString()); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+console.log(address1.toRawString()); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+
+console.log(address2.toString()); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+console.log(address2.toRawString()); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+```
+
+</TabItem>
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require('tonweb');
+
+const address1 = new TonWeb.utils.Address('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF');
+const address2 = new TonWeb.utils.Address('0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e');
+
+// toString arguments: isUserFriendly, isUrlSafe, isBounceable, isTestOnly
+
+console.log(address1.toString(true, true, true)); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+console.log(address1.toString(isUserFriendly = false)); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+
+console.log(address1.toString(true, true, true)); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+console.log(address2.toString(isUserFriendly = false)); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+```
+
+</TabItem>
+<TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/xssnick/tonutils-go/address"
+)
+
+func main() {
+	address1 := address.MustParseAddr("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF")
+	address2 := address.MustParseRawAddr("0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e")
+
+	fmt.Println(address1.String()) // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+	fmt.Println(rawAddr(address1)) // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+
+	fmt.Println(address2.String()) // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+	fmt.Println(rawAddr(address2)) // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+}
+
+func rawAddr(addr *address.Address) string {
+	return fmt.Sprintf("%v:%x", addr.Workchain(), addr.Data())
+}
+```
+
+</TabItem>
+<TabItem value="py" label="Python">
+
+```py
+from pytoniq_core import Address
+
+address1 = Address('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF')
+address2 = Address('0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e')
+
+# to_str() arguments: is_user_friendly, is_url_safe, is_bounceable, is_test_only
+
+print(address1.to_str(is_user_friendly=True, is_bounceable=True, is_url_safe=True))  # EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+print(address1.to_str(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+
+print(address2.to_str(is_user_friendly=True, is_bounceable=True, is_url_safe=True))  # EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+print(address2.to_str(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+```
+
+</TabItem>
+</Tabs>
+
+### Flags in user-friendly addresses
+
+There are two flags in user-friendly addresses: **bounceable**/**non-bounceable** and **testnet**/**any-net**. These flags are represented in the first character of the address, which corresponds to the first 6 bits of the address encoding. These flags can be detected by looking at the first character, according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
+
+|    주소 시작   |    이진 형식   |  바운스 가능 |   테스트넷 전용   |
+| :--------: | :--------: | :-----: | :---------: |
+| E...       | 000100.01  |  예      | 아니오         |
+| U...       | 010100.01  | 아니오     | 아니오         |
+| k...       | 100100.01  |  예      |   예         |
+| 0...       | 110100.01  | 아니오     |   예         |
+
+:::tip
+The testnet-only flag does not appear in the blockchain. The non-bounceable flag only affects message transfers: when used as a destination, it prevents the message from being bounced.
+:::
+
+Also, in some libraries, you may notice a serialization parameter called `urlSafe`. Тhe base64 format is not URL safe, which means that some characters (namely, `+` and `/`) can cause issues when transmitting an address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+import { Address } from "@ton/core";
+
+const address = Address.parse('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF');
+
+// toStrings arguments: urlSafe, bounceable, testOnly
+// defaults values: true, true, false
+
+console.log(address.toString()); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHFэ
+console.log(address.toString({urlSafe: false})) // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff+W72r5gqPrHF
+console.log(address.toString({bounceable: false})) // UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA
+console.log(address.toString({testOnly: true})) // kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP
+console.log(address.toString({bounceable: false, testOnly: true})) // 0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK
+```
+
+</TabItem>
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require('tonweb');
+
+const address = new TonWeb.utils.Address('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF');
+
+// toString arguments: isUserFriendly, isUrlSafe, isBounceable, isTestOnly
+
+console.log(address.toString(true, true, true, false)); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+console.log(address.toString(true, false, true, false)); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff+W72r5gqPrHF
+console.log(address.toString(true, true, false, false)); // UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA
+console.log(address.toString(true, true, true, true)); // kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP
+console.log(address.toString(true, true, false, true)); // 0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK
+```
+
+</TabItem>
+<TabItem value="go" label="Go">
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/xssnick/tonutils-go/address"
+)
+
+func main() {
+	address := address.MustParseAddr("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF")
+
+	fmt.Println(address.String()) // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+	address.SetBounce(false)
+	fmt.Println(address.String()) // UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA
+	address.SetBounce(true)
+	address.SetTestnetOnly(true) // kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP
+	fmt.Println(address.String())
+	address.SetBounce(false) // 0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK
+	fmt.Println(address.String())
+}
+```
+
+</TabItem>
+<TabItem value="py" label="Python">
+
+```py
+from pytoniq_core import Address
+
+address = Address('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF')
+
+# to_str() arguments: is_user_friendly, is_url_safe, is_bounceable, is_test_only
+
+print(address.to_str(is_user_friendly=True, is_bounceable=True, is_url_safe=True, is_test_only=False))  # EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+print(address.to_str(is_user_friendly=True, is_bounceable=True, is_url_safe=False, is_test_only=False))  # EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff+W72r5gqPrHF
+print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=True, is_test_only=False))  # UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA
+print(address.to_str(is_user_friendly=True, is_bounceable=True, is_url_safe=True, is_test_only=True))  # kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP
+print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=True, is_test_only=True))  # 0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK
+```
+
+</TabItem>
+</Tabs>
+
+### How to check the validity of a TON address?
+
+<Tabs groupId="address-examples">
+
+<TabItem value="Tonweb" label="JS (Tonweb)">
+
+```js
+
+const TonWeb = require("tonweb")
+
+TonWeb.utils.Address.isValid('...')
+```
+
+</TabItem>
+<TabItem value="GO" label="tonutils-go">
+
+```python
+package main
+
+import (
+    "fmt"
+    "github.com/xssnick/tonutils-go/address"
+)
+
+if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
+ return errors.New("invalid address")
+}
+```
+
+</TabItem>
+<TabItem value="Java" label="ton4j">
+
+```javascript
+  /* Maven
+  <dependency>
+    <groupId>io.github.neodix42</groupId>
+    <artifactId>address</artifactId>
+    <version>0.3.2</version>
+  </dependency>
+  */
+
+  try {
+  Address.of("...");
+  } catch (Exception e) {
+  // not valid address
+  }
+```
+
+</TabItem>
+<TabItem value="Kotlin" label="ton-kotlin">
+
+```javascript
+try {
+    AddrStd("...")
+} catch(e: IllegalArgumentException) {
+   // not valid address
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Standard wallets in TON Ecosystem
+
+### How to transfer TON and send a text message to another wallet
+
+#### 메시지 보내기
+
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1.svg?raw=true',
+    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
+#### Deploying a contract
+
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_2.svg?raw=true',
+    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_2_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
+Most SDKs follow a similar process for sending messages from your wallet:
+
+- Create a wallet wrapper (object) of the correct version, typically v3r2 (see also [wallet versions](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)), your secret key and workchain (usually 0 for the [BaseChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules)).
+- Create a blockchain wrapper (or "client")—an object that routes requests to the API or lite servers, depending on your setup.
+- **Open** the contract in the blockchain wrapper. This ensures that the contract object is linked to an actual account on either the TON Mainnet or Testnet.
+- Form messages you want to send and initiate the transaction. You can send up to 4 messages per request, as detailed in the [advanced manual](/v3/guidelines/smart-contracts/howto/wallet#sending-multiple-messages-simultaneously).
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton-v4" label="JS (@ton) for Wallet V4">
+
+```js
+import { TonClient, WalletContractV4, internal } from "@ton/ton";
+import { mnemonicNew, mnemonicToPrivateKey } from "@ton/crypto";
+
+const client = new TonClient({
+  endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  apiKey: 'your-api-key', // Optional, but note that without api-key you need to send requests once per second, and with 0.25 seconds
+});
+
+// Convert mnemonics to private key
+let mnemonics = "word1 word2 ...".split(" ");
+let keyPair = await mnemonicToPrivateKey(mnemonics);
+
+// Create wallet contract
+let workchain = 0; // Usually you need a workchain 0
+let wallet = WalletContractV4.create({ workchain, publicKey: keyPair.publicKey });
+let contract = client.open(wallet);
+
+// Create a transfer
+let seqno: number = await contract.getSeqno();
+await contract.sendTransfer({
+  seqno,
+  secretKey: keyPair.secretKey,
+  messages: [internal({
+    value: '1',
+    to: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N',
+    body: 'Example transfer body',
+  })]
+});
+```
+
+</TabItem>
+
+<TabItem value="js-ton-v5" label="JS (@ton) for Wallet V5">
+
+```js
+import { TonClient, WalletContractV5R1, internal, SendMode } from "@ton/ton";
+import { mnemonicToPrivateKey } from "@ton/crypto";
+
+const client = new TonClient({
+  endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  apiKey: 'your-api-key', // Optional, but note that without api-key you need to send requests once per second, and with 0.25 seconds
+});
+
+// Convert mnemonics to private key
+let mnemonics = "word1 word2 ...".split(" ");
+let keyPair = await mnemonicToPrivateKey(mnemonics);
+
+// Create wallet contract
+let wallet = WalletContractV5R1.create({
+  publicKey: keyPair.publicKey,
+  workChain: 0, // Usually you need a workchain 0
+});
+let contract = client.open(wallet);
+
+// Create a transfer
+let seqno: number = await contract.getSeqno();
+await contract.sendTransfer({
+  secretKey: keyPair.secretKey,
+  seqno,
+  sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS,
+  messages: [
+    internal({
+      to: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N',
+      value: '0.05',
+      body: 'Example transfer body',
+    }),
+  ],
+});
+```
+
+</TabItem>
+
+<TabItem value="ton-kotlin" label="ton-kotlin">
+
+```kotlin
+// Setup liteClient
+val context: CoroutineContext = Dispatchers.Default
+val json = Json { ignoreUnknownKeys = true }
+val config = json.decodeFromString<LiteClientConfigGlobal>(
+    URI("https://ton.org/global-config.json").toURL().readText()
+)
+val liteClient = LiteClient(context, config)
+
+val WALLET_MNEMONIC = "word1 word2 ...".split(" ")
+
+val pk = PrivateKeyEd25519(Mnemonic.toSeed(WALLET_MNEMONIC))
+val walletAddress = WalletV3R2Contract.address(pk, 0)
+println(walletAddress.toString(userFriendly = true, bounceable = false))
+
+val wallet = WalletV3R2Contract(liteClient, walletAddress)
+runBlocking {
+    wallet.transfer(pk, WalletTransfer {
+        destination = AddrStd("EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N")
+        bounceable = true
+        coins = Coins(100000000) // 1 ton in nanotons
+        messageData = org.ton.contract.wallet.MessageData.raw(
+            body = buildCell {
+                storeUInt(0, 32)
+                storeBytes("Comment".toByteArray())
+            }
+        )
+        sendMode = 0
+    })
+}
+```
+
+</TabItem>
+
+<TabItem value="py" label="Python">
+
+```py
+from pytoniq import LiteBalancer, WalletV4R2
+import asyncio
+
+mnemonics = ["your", "mnemonics", "here"]
+
+async def main():
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
+
+    wallet = await WalletV4R2.from_mnemonic(provider=provider, mnemonics=mnemonics)
+
+    transfer = {
+        "destination": "DESTINATION ADDRESS HERE",    # please remember about bounceable flags
+        "amount":      int(10**9 * 0.05),             # amount sent, in nanoTON
+        "body":        "Example transfer body",       # may contain a cell; see next examples
+    }
+
+    await wallet.transfer(**transfer)
+    await provider.close_all()
+
+asyncio.run(main())
+```
+
+</TabItem>
+
+</Tabs>
+
+### 코멘트 작성하기: 스네이크 형식의 긴 문자열
+
+Sometimes, it's necessary to store large strings in cells, but the maximum size for a cell is 1023 bits. In these cases, you can use snake cells, which reference other cells recursively.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require("tonweb");
+
+function writeStringTail(str, cell) {
+    const bytes = Math.floor(cell.bits.getFreeBits() / 8); // 1 symbol = 8 bits
+    if(bytes < str.length) { // if we can't write all string
+        cell.bits.writeString(str.substring(0, bytes)); // write part of string
+        const newCell = writeStringTail(str.substring(bytes), new TonWeb.boc.Cell()); // create new cell
+        cell.refs.push(newCell); // add new cell to current cell's refs
+    } else {
+        cell.bits.writeString(str); // write all string
+    }
+
+    return cell;
+}
+
+function readStringTail(slice) {
+    const str = new TextDecoder('ascii').decode(slice.array); // decode uint8array to string
+    if (cell.refs.length > 0) {
+        return str + readStringTail(cell.refs[0].beginParse()); // read next cell
+    } else {
+        return str;
+    }
+}
+
+let cell = new TonWeb.boc.Cell();
+const str = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In euismod, ligula vel lobortis hendrerit, lectus sem efficitur enim, vel efficitur nibh dui a elit. Quisque augue nisi, vulputate vitae mauris sit amet, iaculis lobortis nisi. Aenean molestie ultrices massa eu fermentum. Cras rhoncus ipsum mauris, et egestas nibh interdum in. Maecenas ante ipsum, sodales eget suscipit at, placerat ut turpis. Nunc ac finibus dui. Donec sit amet leo id augue tempus aliquet. Vestibulum eu aliquam ex, sit amet suscipit odio. Vestibulum et arcu dui.";
+cell = writeStringTail(str, cell);
+const text = readStringTail(cell.beginParse());
+console.log(text);
+```
+
+</TabItem>
+</Tabs>
+
+Many SDKs already offer functions to parse and store long strings in this format. Alternatively, you can use recursion to handle these strings or optimize with "tail calls."
+
+Don't forget that the comment message in a snake cell has 32 zero bits (i.e., its opcode is 0).
+
+## TEP-74 (jettons standard)
+
+### How to calculate the user's jetton wallet address (offchain)?
+
+To calculate a user’s jetton wallet address, use the `get_wallet_address` method from the jetton master contract with the user's address. You can also call the master contract directly, or use the getWalletAddress method provided in the JettonMaster SDK.
+
+:::info
+The `JettonMaster` in `@ton/ton` provides this functionality, although it lacks other features.
+:::
+
+<Tabs groupId="code-examples">
+<TabItem value="user-jetton-wallet-method-js" label="@ton/ton">
+
+```js
+const { Address, beginCell } = require("@ton/core")
+const { TonClient, JettonMaster } = require("@ton/ton")
+
+const client = new TonClient({
+    endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+});
+
+const jettonMasterAddress = Address.parse('...') // for example EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE
+const userAddress = Address.parse('...')
+
+const jettonMaster = client.open(JettonMaster.create(jettonMasterAddress))
+console.log(await jettonMaster.getWalletAddress(userAddress))
+```
+
+</TabItem>
+
+<TabItem value="user-jetton-wallet-get-method-js" label="Manually call get-method">
+
+```js
+const { Address, beginCell } = require("@ton/core")
+const { TonClient } = require("@ton/ton")
+
+async function getUserWalletAddress(userAddress, jettonMasterAddress) {
+    const client = new TonClient({
+        endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+    });
+    const userAddressCell = beginCell().storeAddress(userAddress).endCell()
+    const response = await client.runMethod(jettonMasterAddress, "get_wallet_address", [
+        {type: "slice", cell: userAddressCell}
+    ])
+    return response.stack.readAddress()
+}
+const jettonMasterAddress = Address.parse('...') // for example EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE
+const userAddress = Address.parse('...')
+
+getUserWalletAddress(userAddress, jettonMasterAddress)
+    .then((jettonWalletAddress) => {console.log(jettonWalletAddress)})
+```
+
+</TabItem>
+
+<TabItem value="ton-kotlin" label="ton-kotlin">
+
+```kotlin
+// Setup liteClient
+val context: CoroutineContext = Dispatchers.Default
+val json = Json { ignoreUnknownKeys = true }
+val config = json.decodeFromString<LiteClientConfigGlobal>(
+    URI("https://ton.org/global-config.json").toURL().readText()
+)
+val liteClient = LiteClient(context, config)
+
+val USER_ADDR = AddrStd("Wallet address")
+val JETTON_MASTER = AddrStd("Jetton Master contract address") // for example EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE
+
+// we need to send regular wallet address as a slice
+val userAddressSlice = CellBuilder.beginCell()
+    .storeUInt(4, 3)
+    .storeInt(USER_ADDR.workchainId, 8)
+    .storeBits(USER_ADDR.address)
+    .endCell()
+    .beginParse()
+
+val response = runBlocking {
+    liteClient.runSmcMethod(
+        LiteServerAccountId(JETTON_MASTER.workchainId, JETTON_MASTER.address),
+        "get_wallet_address",
+        VmStackValue.of(userAddressSlice)
+    )
+}
+
+val stack = response.toMutableVmStack()
+val jettonWalletAddress = stack.popSlice().loadTlb(MsgAddressInt) as AddrStd
+println("Calculated Jetton wallet:")
+println(jettonWalletAddress.toString(userFriendly = true))
+
+```
+
+</TabItem>
+
+<TabItem value="py" label="Python">
+
+```py
+from pytoniq import LiteBalancer, begin_cell
+import asyncio
+
+async def main():
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
+
+    JETTON_MASTER_ADDRESS = "EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE"
+    USER_ADDRESS = "EQAsl59qOy9C2XL5452lGbHU9bI3l4lhRaopeNZ82NRK8nlA"
+
+
+    result_stack = await provider.run_get_method(address=JETTON_MASTER_ADDRESS, method="get_wallet_address",
+                                                   stack=[begin_cell().store_address(USER_ADDRESS).end_cell().begin_parse()])
+    jetton_wallet = result_stack[0].load_address()
+    print(f"Jetton wallet address for {USER_ADDRESS}: {jetton_wallet.to_str(1, 1, 1)}")
+    await provider.close_all()
+
+asyncio.run(main())
+```
+
+</TabItem>
+
+</Tabs>
+
+### How to calculate a user's jetton wallet address (offline)?
+
+Calling the GET method every time to retrieve the wallet address can be slow and resource-intensive. 
+If you know the jetton wallet code and storage structure, you can calculate the wallet address without making network requests.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton/ton)">
+
+```ts
+import { Cell, contractAddress, toNano, TupleBuilder } from "@ton/core";
+import { ContractProvider, Address, Contract, Sender, StateInit } from "@ton/core";
+import { Blockchain, createShardAccount } from "@ton/sandbox";
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+//const USDTMasterAddress = Address.parse('EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs')  // EQC7aZ-_G_tWeSn0GZ0HclwZvGIBp-CRrSsbMibTHN6l4kr7
+//const NOTMasterAddress = Address.parse('EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT')   // EQA9idRBK7TY1AF0L2CpuxrwdjPr7qzKSQjbgakURWGQRdOW
+//const HMSTRMasterAddress = Address.parse('EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo') // EQDXT5HaCnuwzBff8tjwAmGvs9N9MEbqOXDIY_KepS9yYyMo
+//const DOGSMasterAddress = Address.parse('EQCvxJy4eG8hyHBFsZ7eePxrRsUQSFE_jpptRAYBmcG_DOGS')  // EQCRgs1d1M91dm2hHeF8luXBH-aIF9PT-T2jlocQXiYBvAGY
+//const STONMasterAddress = Address.parse('EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO')  // EQCx5ruSqFmw5LYxJ6iksuCuRLsNpgTjWcCuW6jm8BhaLOTK
+// ------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+export class MyContract implements Contract {
+    readonly address: Address
+    readonly init?: StateInit
+
+    static fromInit(code: Cell, data: Cell) {
+        return new MyContract(contractAddress(0, {code: code, data: data}), {code: code, data: data})
+    }
+
+    constructor(address: Address, init?: StateInit) {
+        this.address = address
+        this.init = init
+    }
+
+    async send(
+        provider: ContractProvider,
+        via: Sender,
+        args: {value: bigint; bounce?: boolean | null | undefined},
+        body: Cell,
+    ) {
+        await provider.internal(via, {...args, body: body})
+    }
+
+    async getRunMethod(provider: ContractProvider, id: number | string, stack: TupleBuilder = new TupleBuilder()) {
+        return (await provider.get(id, stack.build())).stack
+    }
+}
+
+async function main() {
+    const blockchain = await Blockchain.create();
+    // blockchain.verbosity.vmLogs = "vm_logs_verbose"
+
+    // First we need to gather state of the contract from the blockchain:
+    const contractCode = Cell.fromHex("b5ee9c7201021a0100050e000114ff00f4a413f4bcf2c80b0102016202030202cb0405020120101101d7d0cb434c0c05c6c23910c200835c874c7c0608405e351466ea44c38601035c87e800c3b51343e803e903e90353534ffc07e1874541168504d3e10721401be80940133c59633c5b33332fff27b55383e903e900c7e800c7d007e800c7e80004c5c3e0e80b4c7c04074cfc044a06001da23864658380e78b64814183fa0bc004fced44d0fa00fa40fa40d4d4d3ff01f861d1268210642b7d07ba8ecb35355161c705f2e04904fa4021fa4430c000f2e14dfa00d4d120d0d31f018210178d4519baf2e0488040d721fa00fa4031fa4031fa0020d70b009ad74bc00101c001b0f2b19130e254431be0392582107bdd97debae3022582102c76b973bae30234240708090a018e2191729171e2f839206e9381782e9120e2216e9431817ee09101e25023a813a0738104ad70f83ca00270f83612a00170f836a07381051382100966018070f837a0bcf2b025597f0b01e63505fa00fa40f828f84128103401db3c6f2230f9007074c8cb02ca07cbffc9d05008c705f2e04a12a144145036f841c85006fa025004cf1658cf16cccccbffc9ed54fa40d120d70b01c000b38e22c8801001cb0501cf1670fa027001cb6a8210d53276db01cb1f0101cb3fc98042fb00915be21801d2355f033401fa40d2000101d195c821cf16c9916de2c8801001cb055004cf1670fa027001cb6a8210d173540001cb1f500401cb3f23fa4430c0008e9df828f84110354150db3c6f2230f9007074c8cb02ca07cbffc9d012cf1697316c127001cb01e2f400c98050fb001804fe82106501f354ba8e2530335142c705f2e04902fa40d1400304f841c85006fa025004cf1658cf16cccccbffc9ed54e0248210fb88e119ba8e24313303d15131c705f2e0498b024034f841c85006fa025004cf1658cf16cccccbffc9ed54e0248210cb862902bae302302382102508d66abae3022382107431f221bae30210360c0d0e0f01c082103b9aca0070fb02f828f84110364150db3c6f223020f9007074c8cb02ca07cbffc8801801cb0501cf1758fa02029858775003cb6bcccc9730017158cb6acce2c98011fb005005a04314f841c85006fa025004cf1658cf16cccccbffc9ed5418004e34365145c705f2e049c85003cf16c9103412f841c85006fa025004cf1658cf16cccccbffc9ed540022365f0302c705f2e049d4d4d101ed54fb04004a335042c705f2e04901d18b028b024034f841c85006fa025004cf1658cf16cccccbffc9ed54001c5f068210d372158cbadc840ff2f002014812130202711617013fb5d15da89a1f401f481f481a9a9a7fe03f0c3a228be09f051f08225b678de4501802016a1415002eab5bed44d0fa00fa40fa40d4d4d3ff01f861d110245f04002eaa67ed44d0fa00fa40fa40d4d4d3ff01f861d15f05f841015badbcf6a2687d007d207d206a6a69ff80fc30e88a2f827c147c20896d9e3791187c80383a6465816503e5ffe4e84018008baf16f6a2687d007d207d206a6a69ff80fc30e8bf99e836c1783872ebdb514d9c97c283b7f0ae5179029e2b6119c39462719e4f46ed8f7413e62c780a38646583fa0064a1804001f6840f7f7026fa4431abfb531149461804c8cb035003fa0201cf1601cf16cbff208100cac8cb0f01cf1724f90025d7652582020134c8cb1712cb0fcb0fcbff8e2906a45c01cb0971f90400527001cbff71f90400abfb28b25304b9933434239130e220c02024c000b117e610235f033333227003cb09c922c8cb0112190014f400f400cb00c9016f02");
+    const contractData = Cell.fromHex("b5ee9c720101040100af0002979056bc75ddfc673410080177e274e049215c770a7fbc709371cfb836bea9100f522b0ea608c92d495da648211a56b90a6f27e9f2c5241dd6b2c716d530d50027787d2a0e4223997141d188c001020842020f1ad3d8a46bd283321dde639195fb72602e9b31b1727fecc25e2edc10966df4010003006e68747470733a2f2f6170692e68616d737465726b6f6d6261742e696f2f7075626c69632f746f6b656e2f6d657461646174612e6a736f6e");
+    // Use mainnet address of the Jetton Master contract
+    const JettonMasterAddress = Address.parse("EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo");
+    // Open the contract, so sandbox can send messages to it
+    const openedContract = blockchain.openContract(
+        new MyContract(JettonMasterAddress)
+            // {code: contractCode, data: contractData})
+    );
+
+    // Instead of deploying the contract, we can set shard account directly
+    await blockchain.setShardAccount(JettonMasterAddress, createShardAccount({
+        address: JettonMasterAddress,
+        code: contractCode,
+        data: contractData,
+        balance: toNano("0.05"),
+        workchain: 0
+    }));
+
+    // If some arguments are needed, we can pass them as second argument like this:
+    const stack = new TupleBuilder();
+    stack.writeAddress(Address.parse("UQDKHZ7e70CzqdvZCC83Z4WVR8POC_ZB0J1Y4zo88G-zCSRH"));
+
+    const result = await openedContract.getRunMethod('get_wallet_address', stack);
+    console.log("Jetton Wallet Address: ", result.readAddress());
+}
+
+void main();
+```
+
+</TabItem>
+
+<TabItem value="Python" label="Python">
+
+Unfortunately, there is currently no tool like Sandbox for Python to emulate the blockchain. 
+However, you can still implement something similar with [pytvm](https://github.com/yungwine/pytvm).
+This example helps to understand how to correctly construct the data needed to obtain the address.
+Essentially you need to build the same thing as `get_wallet_address(slice owner_address) method_id` in the master contract:
+
+```python
+
+from pytoniq_core import Address, Cell, begin_cell
+
+def calculate_jetton_address(
+    owner_address: Address, jetton_master_address: Address, jetton_wallet_code: str
+):
+    # Recreate from jetton-utils.fc calculate_jetton_wallet_address()
+    # https://tonscan.org/jetton/EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs#source
+
+    data_cell = (
+        begin_cell()
+        .store_uint(0, 4)
+        .store_coins(0)
+        .store_address(owner_address)
+        .store_address(jetton_master_address)
+        .end_cell()
+    )
+
+    code_cell = Cell.one_from_boc(jetton_wallet_code)
+
+    state_init = (
+        begin_cell()
+        .store_uint(0, 2)
+        .store_maybe_ref(code_cell)
+        .store_maybe_ref(data_cell)
+        .store_uint(0, 1)
+        .end_cell()
+    )
+    state_init_hex = state_init.hash.hex()
+    jetton_address = Address(f'0:{state_init_hex}')
+
+    return jetton_address
+
+```
+
+전체 예제는 [여기](/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py)에서 확인할 수 있습니다.
+
+</TabItem>
+</Tabs>
+
+Major tokens typically use a standard implementation of the [ TEP-74 standard](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc), except the new [Jetton-with-governance contracts](https://github.com/ton-blockchain/stablecoin-contract) for centralized stablecoins. 
+
+### 코멘트가 있는 jetton 전송을 위한 메시지를 어떻게 구성하나요?
+
+When constructing a message for a jetton transfer, refer to [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), which defines the token standard.
+
+#### Jettons 전송하기
+
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5.svg?raw=true',
+    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
+:::warning
+When displaying token amounts, they are usually divided by `10^decimals` (often `9 decimals`). This allows for the use of the `toNano` function. If the number of decimals is different (e.g., 6), you will need to adjust accordingly.
+
+물론 항상 불가분 단위로 계산할 수도 있습니다.
+:::
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
+
+async function main() {
+    const jettonWalletAddress = Address.parse('put your jetton wallet address');
+    const destinationAddress = Address.parse('put destination wallet address');
+
+    const forwardPayload = beginCell()
+        .storeUint(0, 32) // 0 opcode means we have a comment
+        .storeStringTail('Hello, TON!')
+        .endCell();
+
+    const messageBody = beginCell()
+        .storeUint(0x0f8a7ea5, 32) // opcode for jetton transfer
+        .storeUint(0, 64) // query id
+        .storeCoins(toNano(5)) // jetton amount, amount * 10^9
+        .storeAddress(destinationAddress)
+        .storeAddress(destinationAddress) // response destination
+        .storeBit(0) // no custom payload
+        .storeCoins(toNano('0.02')) // forward amount - if >0, will send notification message
+        .storeBit(1) // we store forwardPayload as a reference
+        .storeRef(forwardPayload)
+        .endCell();
+
+    const internalMessage = internal({
+        to: jettonWalletAddress,
+        value: toNano('0.1'),
+        bounce: true,
+        body: messageBody
+    });
+    const internalMessageCell = beginCell()
+        .store(storeMessageRelaxed(internalMessage))
+        .endCell();
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require("tonweb");
+const {mnemonicToKeyPair} = require("tonweb-mnemonic");
+
+async function main() {
+    const tonweb = new TonWeb(new TonWeb.HttpProvider(
+        'https://toncenter.com/api/v2/jsonRPC', {
+            apiKey: 'put your api key'
+        })
+    );
+    const destinationAddress = new TonWeb.Address('put destination wallet address');
+
+    const forwardPayload = new TonWeb.boc.Cell();
+    forwardPayload.bits.writeUint(0, 32); // 0 opcode means we have a comment
+    forwardPayload.bits.writeString('Hello, TON!');
+
+    /*
+        Tonweb has a built-in class for interacting with jettons, which has
+        a method for creating a transfer. However, it has disadvantages, so
+        we manually create the message body. Additionally, this way we have a
+        better understanding of what is stored and how it functions.
+     */
+
+    const jettonTransferBody = new TonWeb.boc.Cell();
+    jettonTransferBody.bits.writeUint(0xf8a7ea5, 32); // opcode for jetton transfer
+    jettonTransferBody.bits.writeUint(0, 64); // query id
+    jettonTransferBody.bits.writeCoins(new TonWeb.utils.BN('5')); // jetton amount, amount * 10^9
+    jettonTransferBody.bits.writeAddress(destinationAddress);
+    jettonTransferBody.bits.writeAddress(destinationAddress); // response destination
+    jettonTransferBody.bits.writeBit(false); // no custom payload
+    jettonTransferBody.bits.writeCoins(TonWeb.utils.toNano('0.02')); // forward amount
+    jettonTransferBody.bits.writeBit(true); // we store forwardPayload as a reference
+    jettonTransferBody.refs.push(forwardPayload);
+
+    const keyPair = await mnemonicToKeyPair('put your mnemonic'.split(' '));
+    const jettonWallet = new TonWeb.token.ft.JettonWallet(tonweb.provider, {
+        address: 'put your jetton wallet address'
+    });
+
+    // available wallet types: simpleR1, simpleR2, simpleR3,
+    // v2R1, v2R2, v3R1, v3R2, v4R1, v4R2
+    const wallet = new tonweb.wallet.all['v4R2'](tonweb.provider, {
+        publicKey: keyPair.publicKey,
+        wc: 0 // workchain
+    });
+
+    await wallet.methods.transfer({
+        secretKey: keyPair.secretKey,
+        toAddress: jettonWallet.address,
+        amount: tonweb.utils.toNano('0.1'),
+        seqno: await wallet.methods.seqno().call(),
+        payload: jettonTransferBody,
+        sendMode: 3
+    }).send(); // create transfer and send it
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+
+<TabItem value="py" label="Python">
+
+```py
+from pytoniq import LiteBalancer, WalletV4R2, begin_cell
+import asyncio
+
+mnemonics = ["your", "mnemonics", "here"]
+
+async def main():
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
+
+    wallet = await WalletV4R2.from_mnemonic(provider=provider, mnemonics=mnemonics)
+    USER_ADDRESS = wallet.address
+    JETTON_MASTER_ADDRESS = "EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE"
+    DESTINATION_ADDRESS = "EQAsl59qOy9C2XL5452lGbHU9bI3l4lhRaopeNZ82NRK8nlA"
+
+    USER_JETTON_WALLET = (await provider.run_get_method(address=JETTON_MASTER_ADDRESS,
+                                                        method="get_wallet_address",
+                                                        stack=[begin_cell().store_address(USER_ADDRESS).end_cell().begin_parse()]))[0].load_address()
+    forward_payload = (begin_cell()
+                      .store_uint(0, 32) # TextComment op-code
+                      .store_snake_string("Comment")
+                      .end_cell())
+    transfer_cell = (begin_cell()
+                    .store_uint(0xf8a7ea5, 32)          # Jetton Transfer op-code
+                    .store_uint(0, 64)                  # query_id
+                    .store_coins(1 * 10**9)             # Jetton amount to transfer in nanojetton
+                    .store_address(DESTINATION_ADDRESS) # Destination address
+                    .store_address(USER_ADDRESS)        # Response address
+                    .store_bit(0)                       # Custom payload is None
+                    .store_coins(1)                     # Ton forward amount in nanoton
+                    .store_bit(1)                       # Store forward_payload as a reference
+                    .store_ref(forward_payload)         # Forward payload
+                    .end_cell())
+
+    await wallet.transfer(destination=USER_JETTON_WALLET, amount=int(0.05*1e9), body=transfer_cell)
+    await provider.close_all()
+
+asyncio.run(main())
+```
+
+</TabItem>
+
+</Tabs>
+
+If the `forward_amount` is nonzero, a notification about the Jetton reception will be sent to the destination contract. Additionally, if the `response_destination` address is non-null, excess Toncoins (called "excesses") will be sent to that address.
+
+:::tip
+Explorers support comments in Jetton notifications, similar to regular TON transfers. Comments are formatted as 32 zero bits followed by UTF-8 text.
+:::
+
+:::tip
+Be careful when calculating fees and amounts for jetton transfer messages. For instance, transferring 0.2 TON with no excess may prevent you from receiving 0.1 TON in a response.
+:::
+
+## TEP-62 (NFT standard)
+
+NFT collections on TON are highly customizable. The NFT contract can be defined as any contract that provides a valid get-method to return metadata. The transfer operation is standardized similarly to [Jettons](/v3/guidelines/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment).
+:::warning
+Reminder: all methods about NFT below are not bound by TEP-62 to work. Before trying them, check if your NFT or collection process those messages in an expected way. The wallet app emulation may be useful in this case.
+:::
+
+### How to use NFT batch deployment?
+
+NFT collection smart contracts allow batch deployment of up to 250 NFTs in a single transaction. However, due to the 1 TON computation fee limit, this number is practically reduced to 100-130 NFTs.
+
+#### Batch mint NFT
+
+:::info
+NFT 표준 /ton-blockchain /token-contract에서 지정되지 않음
+:::
+
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_10.svg?raw=true',
+    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_10_dark.svg?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+import { Address, Cell, Dictionary, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
+import { TonClient } from "@ton/ton";
+
+async function main() {
+    const collectionAddress = Address.parse('put your collection address');
+   	const nftMinStorage = '0.05';
+    const client = new TonClient({
+        endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC' // for Testnet
+    });
+    const ownersAddress = [
+        Address.parse('EQBbQljOpEM4Z6Hvv8Dbothp9xp2yM-TFYVr01bSqDQskHbx'),
+        Address.parse('EQAUTbQiM522Y_XJ_T98QPhPhTmb4nV--VSPiha8kC6kRfPO'),
+        Address.parse('EQDWTH7VxFyk_34J1CM6wwEcjVeqRQceNwzPwGr30SsK43yo')
+    ];
+    const nftsMeta = [
+        '0/meta.json',
+        '1/meta.json',
+        '2/meta.json'
+    ];
+
+    const getMethodResult = await client.runMethod(collectionAddress, 'get_collection_data');
+    let nextItemIndex = getMethodResult.stack.readNumber();
+```
+
+</TabItem>
+</Tabs>
+
+To deploy a batch, the contract stores information about new NFTs in a dictionary. The process involves: setting up storage fees (e.g., `0.05`), obtaining arrays with the new NFT owners and content, retrieving the `next_item_index` using the `get_collection_data` method.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+	let counter = 0;
+    const nftDict = Dictionary.empty<number, Cell>();
+    for (let index = 0; index < 3; index++) {
+        const metaCell = beginCell()
+            .storeStringTail(nftsMeta[index])
+            .endCell();
+        const nftContent = beginCell()
+            .storeAddress(ownersAddress[index])
+            .storeRef(metaCell)
+            .endCell();
+        nftDict.set(nextItemIndex, nftContent);
+        nextItemIndex++;
+        counter++;
+    }
+
+	/*
+		We need to write our custom serialization and deserialization
+		functions to store data correctly in the dictionary since the
+		built-in functions in the library are not suitable for our case.
+	*/
+    const messageBody = beginCell()
+        .storeUint(2, 32)
+        .storeUint(0, 64)
+        .storeDict(nftDict, Dictionary.Keys.Uint(64), {
+            serialize: (src, builder) => {
+                builder.storeCoins(toNano(nftMinStorage));
+                builder.storeRef(src);
+            },
+            parse: (src) => {
+                return beginCell()
+                    .storeCoins(src.loadCoins())
+                    .storeRef(src.loadRef())
+                    .endCell();
+            }
+        })
+        .endCell();
+
+    const totalValue = String(
+        (counter * parseFloat(nftMinStorage) + 0.015 * counter).toFixed(6)
+    );
+
+    const internalMessage = internal({
+        to: collectionAddress,
+        value: totalValue,
+        bounce: true,
+        body: messageBody
+    });
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+</Tabs>
+
+다음으로는 총 트랜잭션 비용을 정확하게 계산해야 합니다. `0.015` 값은 테스트를 통해 얻었지만, 각 시나리오마다 다를 수 있습니다. 이는 주로 NFT의 콘텐츠에 따라 달라지며, 콘텐츠 크기가 증가하면 **전달 수수료**(배송 수수료)가 더 높아집니다.
+
+### 컬렉션 스마트 컨트랙트의 소유자를 어떻게 변경하나요?
+
+Changing the owner of a collection is simple. Specify the `opcode = 3`, any `query_id`, and the new owner’s address.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
+
+async function main() {
+    const collectionAddress = Address.parse('put your collection address');
+    const newOwnerAddress = Address.parse('put new owner wallet address');
+
+    const messageBody = beginCell()
+        .storeUint(3, 32) // opcode for changing owner
+        .storeUint(0, 64) // query id
+        .storeAddress(newOwnerAddress)
+        .endCell();
+
+    const internalMessage = internal({
+        to: collectionAddress,
+        value: toNano('0.05'),
+        bounce: true,
+        body: messageBody
+    });
+    const internalMessageCell = beginCell()
+        .store(storeMessageRelaxed(internalMessage))
+        .endCell();
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require("tonweb");
+const {mnemonicToKeyPair} = require("tonweb-mnemonic");
+
+async function main() {
+    const tonweb = new TonWeb(new TonWeb.HttpProvider(
+        'https://toncenter.com/api/v2/jsonRPC', {
+            apiKey: 'put your api key'
+        })
+    );
+    const collectionAddress  = new TonWeb.Address('put your collection address');
+    const newOwnerAddress = new TonWeb.Address('put new owner wallet address');
+
+    const messageBody  = new TonWeb.boc.Cell();
+    messageBody.bits.writeUint(3, 32); // opcode for changing owner
+    messageBody.bits.writeUint(0, 64); // query id
+    messageBody.bits.writeAddress(newOwnerAddress);
+
+    // available wallet types: simpleR1, simpleR2, simpleR3,
+    // v2R1, v2R2, v3R1, v3R2, v4R1, v4R2
+    const keyPair = await mnemonicToKeyPair('put your mnemonic'.split(' '));
+    const wallet = new tonweb.wallet.all['v4R2'](tonweb.provider, {
+        publicKey: keyPair.publicKey,
+        wc: 0 // workchain
+    });
+
+    await wallet.methods.transfer({
+        secretKey: keyPair.secretKey,
+        toAddress: collectionAddress,
+        amount: tonweb.utils.toNano('0.05'),
+        seqno: await wallet.methods.seqno().call(),
+        payload: messageBody,
+        sendMode: 3
+    }).send(); // create transfer and send it
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+</Tabs>
+
+### 컬렉션 스마트 컨트랙트의 콘텐츠를 어떻게 변경하나요?
+
+The content of an NFT collection contract is stored in a single cell, which includes two parts:
+
+- сollection metadata
+- NFT common content (base URL for metadata)
+
+The first cell contains the collection's metadata, while the second one contains the base URL for the NFT metadata.
+
+Often, the collection's metadata is stored in a format similar to `0.json` and continues incrementing, while the address before this file remains the same. This address should be stored in the NFT common content.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
+
+async function main() {
+    const collectionAddress = Address.parse('put your collection address');
+    const newCollectionMeta = 'put url fol collection meta';
+    const newNftCommonMeta = 'put common url for nft meta';
+    const royaltyAddress = Address.parse('put royalty address');
+
+    const collectionMetaCell = beginCell()
+        .storeUint(1, 8) // we have offchain metadata
+        .storeStringTail(newCollectionMeta)
+        .endCell();
+    const nftCommonMetaCell = beginCell()
+        .storeUint(1, 8) // we have offchain metadata
+        .storeStringTail(newNftCommonMeta)
+        .endCell();
+
+    const contentCell = beginCell()
+        .storeRef(collectionMetaCell)
+        .storeRef(nftCommonMetaCell)
+        .endCell();
+
+    const royaltyCell = beginCell()
+        .storeUint(5, 16) // factor
+        .storeUint(100, 16) // base
+        .storeAddress(royaltyAddress) // this address will receive 5% of each sale
+        .endCell();
+
+    const messageBody = beginCell()
+        .storeUint(4, 32) // opcode for changing content
+        .storeUint(0, 64) // query id
+        .storeRef(contentCell)
+        .storeRef(royaltyCell)
+        .endCell();
+
+    const internalMessage = internal({
+        to: collectionAddress,
+        value: toNano('0.05'),
+        bounce: true,
+        body: messageBody
+    });
+
+    const internalMessageCell = beginCell()
+        .store(storeMessageRelaxed(internalMessage))
+        .endCell();
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+<TabItem value="js-tonweb" label="JS (tonweb)">
+
+```js
+const TonWeb = require("tonweb");
+const {mnemonicToKeyPair} = require("tonweb-mnemonic");
+
+async function main() {
+    const tonweb = new TonWeb(new TonWeb.HttpProvider(
+        'https://testnet.toncenter.com/api/v2/jsonRPC', {
+            apiKey: 'put your api key'
+        })
+    );
+    const collectionAddress  = new TonWeb.Address('put your collection address');
+    const newCollectionMeta = 'put url fol collection meta';
+    const newNftCommonMeta = 'put common url for nft meta';
+    const royaltyAddress = new TonWeb.Address('put royalty address');
+
+    const collectionMetaCell = new TonWeb.boc.Cell();
+    collectionMetaCell.bits.writeUint(1, 8); // we have offchain metadata
+    collectionMetaCell.bits.writeString(newCollectionMeta);
+    const nftCommonMetaCell = new TonWeb.boc.Cell();
+    nftCommonMetaCell.bits.writeUint(1, 8); // we have offchain metadata
+    nftCommonMetaCell.bits.writeString(newNftCommonMeta);
+
+    const contentCell = new TonWeb.boc.Cell();
+    contentCell.refs.push(collectionMetaCell);
+    contentCell.refs.push(nftCommonMetaCell);
+
+    const royaltyCell = new TonWeb.boc.Cell();
+    royaltyCell.bits.writeUint(5, 16); // factor
+    royaltyCell.bits.writeUint(100, 16); // base
+    royaltyCell.bits.writeAddress(royaltyAddress); // this address will receive 5% of each sale
+
+    const messageBody = new TonWeb.boc.Cell();
+    messageBody.bits.writeUint(4, 32);
+    messageBody.bits.writeUint(0, 64);
+    messageBody.refs.push(contentCell);
+    messageBody.refs.push(royaltyCell);
+
+    // available wallet types: simpleR1, simpleR2, simpleR3,
+    // v2R1, v2R2, v3R1, v3R2, v4R1, v4R2
+    const keyPair = await mnemonicToKeyPair('put your mnemonic'.split(' '));
+    const wallet = new tonweb.wallet.all['v4R2'](tonweb.provider, {
+        publicKey: keyPair.publicKey,
+        wc: 0 // workchain
+    });
+
+    await wallet.methods.transfer({
+        secretKey: keyPair.secretKey,
+        toAddress: collectionAddress,
+        amount: tonweb.utils.toNano('0.05'),
+        seqno: await wallet.methods.seqno().call(),
+        payload: messageBody,
+        sendMode: 3
+    }).send(); // create transfer and send it
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+</Tabs>
+
+When updating NFT metadata or content, royalty information must also be included, especially when using the appropriate opcode to modify this data. It’s important to remember that you don’t need to update all values if only certain elements are changing. For instance, if the only change is to the NFT common content, the other data remains the same and can be reused without modification.
+
+## Third-party: decentralized exchanges (DEX)
+
+### DEX(DeDust)에 스왑 메시지를 어떻게 보내나요?
+
+DEXs (Decentralized Exchanges) operate using various protocols. In this section, we will focus on **DeDust**, a decentralized exchange built on TON.
+
+- [DeDust 문서](https://docs.dedust.io/).
+
+DeDust provides two primary paths for exchanging assets: jetton \<-> jetton or TON \<-> jetton. Each has a different scheme. The process involves sending either jettons or Toncoins to specific vaults and including a special payload. Below is the process for both types of swaps:
+
+```tlb
+swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
+              step#_ pool_addr:MsgAddressInt params:SwapStepParams = SwapStep;
+              step_params#_ kind:SwapKind limit:Coins next:(Maybe ^SwapStep) = SwapStepParams;
+              swap_params#_ deadline:Timestamp recipient_addr:MsgAddressInt referral_addr:MsgAddress
+                    fulfill_payload:(Maybe ^Cell) reject_payload:(Maybe ^Cell) = SwapParams;
+```
+
+Similarly, when swapping from TON to jetton, a transfer message to the TON vault must be sent, and the swap information will be contained in the forward_payload.
+And the scheme of toncoin to jetton swap:
+
+```tlb
+swap#ea06185d query_id:uint64 amount:Coins _:SwapStep swap_params:^SwapParams = InMsgBody;
+              step#_ pool_addr:MsgAddressInt params:SwapStepParams = SwapStep;
+              step_params#_ kind:SwapKind limit:Coins next:(Maybe ^SwapStep) = SwapStepParams;
+              swap_params#_ deadline:Timestamp recipient_addr:MsgAddressInt referral_addr:MsgAddress
+                    fulfill_payload:(Maybe ^Cell) reject_payload:(Maybe ^Cell) = SwapParams;
+```
+
+이는 toncoin **vault**로의 전송 본문을 위한 구조입니다.
+
+먼저 스왑할 jettons의 **vault** 주소나 toncoin **vault** 주소를 알아야 합니다. 이는 [**Factory**](https://docs.dedust.io/reference/factory) 컨트랙트의 `get_vault_address` get 메소드를 사용하여 할 수 있습니다. 인수로는 다음 구조에 따른 슬라이스를 전달해야 합니다:
+
+```tlb
+native$0000 = Asset; // for ton
+jetton$0001 workchain_id:int8 address:uint256 = Asset; // for jetton
+```
+
+또한 교환 자체를 위해서는 **pool** 주소가 필요합니다 - get 메소드 `get_pool_address`에서 얻습니다. 인수로는 위 구조에 따른 자산 슬라이스를 사용합니다. 응답으로 두 메소드 모두 요청된 **vault** / **pool**의 주소 슬라이스를 반환합니다.
+
+This information is sufficient to construct the swap message.
+
+<Tabs groupId="code-examples">
+
+<TabItem value="js-ton" label="JS (@ton)">
+DEXs use different protocols for their work, we need to familiarize ourselves with key concepts and some vital components and also know the TL-B schema involved in doing our swap process correctly. In this tutorial, we deal with DeDust, one of the famous DEX implemented entirely in TON.
+ DeDust introduced an abstract Asset concept, which includes any swappable asset type, simplifying the process because the type of asset doesn’t matter in the swap. This simplifies the process because the type of asset doesn't matter in the swap. This abstraction allows the exchange of extra currency or even assets from other chains in a straightforward manner.
+
+   다음은 DeDust가 Asset 개념을 위해 도입한 TL-B 스키마입니다.
+
+```tlb
+native$0000 = Asset; // for ton
+
+// for any jetton,address refer to jetton master address
+jetton$0001 workchain_id:int8 address:uint256 = Asset;
+
+// Upcoming, not implemented yet.
+extra_currency$0010 currency_id:int32 = Asset;
+```
+
+DeDust utilizes three key components for asset swaps:
+
+- Factory: This component locates and constructs the vaults and pools required for the swap.
+- Vault: The vault is responsible for holding assets and receiving transfer messages. When a swap is requested, the vault informs the corresponding pool.
+- Pool: The pool calculates the swap amount based on predefined formulas and informs the vault, which in turn releases the swapped asset to the user.
+
+Calculations of swap amount are based on a mathematical formula, which means so far we have two different pools, one known as Volatile, that operates based on the commonly used "Constant Product" formula: <InlineMath math="x \cdot y = k" />, And the other known as Stable-Swap - Optimized for assets of near-equal value (e.g. USDT / USDC, TON / stTON). It uses the formula: <InlineMath math="x^3 \cdot y + y^3 \cdot x = k" />.
+So for every swap we need the corresponding Vault and it needs just implement a specific API tailored for interacting with a distinct asset type. DeDust has three implementations of Vault, Native Vault - Handles the native coin (Toncoin). Jetton Vault - Manages jettons and Extra-Currency Vault (upcoming) - Designed for TON extra-currencies.
+
+DeDust provides an SDK, written in TypeScript, to interact with the contracts, components, and APIs needed for the swap. Before swapping any assets, the environment must be set up and the necessary objects initialized.
+
+```bash
+npm install --save @ton/core @ton/ton @ton/crypto
+
+```
+
+DeDust SDK도 가져와야 합니다.
+
+```bash
+npm install --save @dedust/sdk
+```
+
+이제 몇 가지 객체를 초기화해야 합니다.
+
+```typescript
+import { Factory, MAINNET_FACTORY_ADDR } from "@dedust/sdk";
+import { Address, TonClient4 } from "@ton/ton";
+
+const tonClient = new TonClient4({
+  endpoint: "https://mainnet-v4.tonhubapi.com",
+});
+const factory = tonClient.open(Factory.createFromAddress(MAINNET_FACTORY_ADDR));
+//The Factory contract  is used to  locate other contracts.
+```
+
+The swap process involves finding the corresponding vault and pool for the assets to be swapped. For instance, swapping TON for SCALE (a jetton token) involves:
+
+```typescript
+import { Asset, VaultNative } from "@dedust/sdk";
+
+//Native vault is for TON
+const tonVault = tonClient.open(await factory.getNativeVault());
+//We use the factory to find our native coin (Toncoin) Vault.
+```
+
+Finding the Vault and Pool for both TON and SCALE.
+
+```typescript
+import { PoolType } from "@dedust/sdk";
+
+const SCALE_ADDRESS = Address.parse(
+  "EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE",
+);
+// master address of SCALE jetton
+const TON = Asset.native();
+const SCALE = Asset.jetton(SCALE_ADDRESS);
+
+const pool = tonClient.open(
+  await factory.getPool(PoolType.VOLATILE, [TON, SCALE]),
+);
+```
+
+Ensure that the contracts are deployed: Always check that the contracts for the vault and pool are active, as sending funds to inactive contracts may result in permanent loss.
+
+```typescript
+import { ReadinessStatus } from "@dedust/sdk";
+
+// Check if the pool exists:
+if ((await pool.getReadinessStatus()) !== ReadinessStatus.READY) {
+  throw new Error("Pool (TON, SCALE) does not exist.");
+}
+
+// Check if the vault exits:
+if ((await tonVault.getReadinessStatus()) !== ReadinessStatus.READY) {
+  throw new Error("Vault (TON) does not exist.");
+}
+```
+
+Sending transfer messages: Once the vault and pool are confirmed, send the transfer message with the amount of TON to be swapped for SCALE.
+
+```typescript
+import { toNano } from "@ton/core";
+import { mnemonicToPrivateKey } from "@ton/crypto";
+
+  if (!process.env.MNEMONIC) {
+    throw new Error("Environment variable MNEMONIC is required.");
+  }
+
+  const mnemonic = process.env.MNEMONIC.split(" ");
+
+  const keys = await mnemonicToPrivateKey(mnemonic);
+  const wallet = tonClient.open(
+    WalletContractV3R2.create({
+      workchain: 0,
+      publicKey: keys.publicKey,
+    }),
+  );
+
+const sender = wallet.sender(keys.secretKey);
+
+const amountIn = toNano("5"); // 5 TON
+
+await tonVault.sendSwap(sender, {
+  poolAddress: pool.address,
+  amount: amountIn,
+  gasAmount: toNano("0.25"),
+});
+```
+
+예를 들어, 우리는 X 토큰 금액을 vault X에 보내고, vault X는 우리의 자산을 받아서 보유하고, (X, Y)의 Pool에게 이 주소가 스왑을 요청한다고 알립니다. 이제 Pool은 계산을 기반으로 다른 Vault, 여기서는 Vault Y에게 알려서 스왑을 요청한 사용자에게 상응하는 Y를 전달합니다.
+
+자산 간의 차이는 전송 방법에만 있습니다. 예를 들어, jettons의 경우 특정 forward_payload를 첨부하여 Vault로 전송 메시지를 보내지만, 네이티브 코인의 경우에는 해당 TON 금액을 첨부하여 Vault에 스왑 메시지를 보냅니다.
+
+다음은 TON과 jetton의 스키마입니다:
+
+```tlb
+swap#ea06185d query_id:uint64 amount:Coins _:SwapStep swap_params:^SwapParams = InMsgBody;
+```
+
+따라서 각 vault와 해당하는 Pool은 특정 스왑을 위해 설계되었으며 특정 자산에 맞춤화된 특별한 API를 가지고 있습니다.
+
+이것이 TON을 jetton SCALE로 스왑하는 과정이었습니다. jetton을 jetton으로 스왑하는 과정도 동일하며, 유일한 차이점은 TL-B 스키마에 설명된 페이로드를 제공해야 한다는 것입니다.
+
+```TL-B
+swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
+```
+
+```typescript
+//find Vault
+const scaleVault = tonClient.open(await factory.getJettonVault(SCALE_ADDRESS));
+```
+
+```typescript
+//find jetton address
+import { JettonRoot, JettonWallet } from '@dedust/sdk';
+
+const scaleRoot = tonClient.open(JettonRoot.createFromAddress(SCALE_ADDRESS));
+const scaleWallet = tonClient.open(await scaleRoot.getWallet(sender.address);
+
+// Transfer jettons to the Vault (SCALE) with corresponding payload
+
+const amountIn = toNano('50'); // 50 SCALE
+
+await scaleWallet.sendTransfer(sender, toNano("0.3"), {
+  amount: amountIn,
+  destination: scaleVault.address,
+  responseAddress: sender.address, // return gas to user
+  forwardAmount: toNano("0.25"),
+  forwardPayload: VaultJetton.createSwapPayload({ poolAddress }),
+});
+```
+
+</TabItem>
+
+<TabItem value="ton-kotlin" label="ton-kotlin">
+
+Asset 슬라이스 빌드:
+
+```kotlin
+val assetASlice = buildCell {
+    storeUInt(1,4)
+    storeInt(JETTON_MASTER_A.workchainId, 8)
+    storeBits(JETTON_MASTER_A.address)
+}.beginParse()
+```
+
+get 메소드 실행:
+
+```kotlin
+val responsePool = runBlocking {
+    liteClient.runSmcMethod(
+        LiteServerAccountId(DEDUST_FACTORY.workchainId, DEDUST_FACTORY.address),
+        "get_pool_address",
+        VmStackValue.of(0),
+        VmStackValue.of(assetASlice),
+        VmStackValue.of(assetBSlice)
+    )
+}
+stack = responsePool.toMutableVmStack()
+val poolAddress = stack.popSlice().loadTlb(MsgAddressInt) as AddrStd
+```
+
+메시지 빌드 및 전송:
+
+```kotlin
+runBlocking {
+    wallet.transfer(pk, WalletTransfer {
+        destination = JETTON_WALLET_A // yours existing jetton wallet
+        bounceable = true
+        coins = Coins(300000000) // 0.3 ton in nanotons
+        messageData = MessageData.raw(
+            body = buildCell {
+                storeUInt(0xf8a7ea5, 32) // op Transfer
+                storeUInt(0, 64) // query_id
+                storeTlb(Coins, Coins(100000000)) // amount of jettons
+                storeSlice(addrToSlice(jettonAVaultAddress)) // destination address
+                storeSlice(addrToSlice(walletAddress))  // response address
+                storeUInt(0, 1)  // custom payload
+                storeTlb(Coins, Coins(250000000)) // forward_ton_amount // 0.25 ton in nanotons
+                storeUInt(1, 1)
+                // forward_payload
+                storeRef {
+                    storeUInt(0xe3a0d482, 32) // op swap
+                    storeSlice(addrToSlice(poolAddress)) // pool_addr
+                    storeUInt(0, 1) // kind
+                    storeTlb(Coins, Coins(0)) // limit
+                    storeUInt(0, 1) // next (for multihop)
+                    storeRef {
+                        storeUInt(System.currentTimeMillis() / 1000 + 60 * 5, 32) // deadline
+                        storeSlice(addrToSlice(walletAddress)) // recipient address
+                        storeSlice(buildCell { storeUInt(0, 2) }.beginParse()) // referral (null address)
+                        storeUInt(0, 1)
+                        storeUInt(0, 1)
+                        endCell()
+                    }
+                }
+            }
+        )
+        sendMode = 3
+    })
+}
+```
+
+</TabItem>
+
+<TabItem value="py" label="Python">
+
+This example shows how to swap Toncoins to jettons.
+
+```py
+from pytoniq import Address, begin_cell, LiteBalancer, WalletV4R2
+import time
+import asyncio
+
+DEDUST_FACTORY = "EQBfBWT7X2BHg9tXAxzhz2aKiNTU1tpt5NsiK0uSDW_YAJ67"
+DEDUST_NATIVE_VAULT = "EQDa4VOnTYlLvDJ0gZjNYm5PXfSmmtL6Vs6A_CZEtXCNICq_"
+
+mnemonics = ["your", "mnemonics", "here"]
+
+async def main():
+    provider = LiteBalancer.from_mainnet_config(1)
+    await provider.start_up()
+
+    wallet = await WalletV4R2.from_mnemonic(provider=provider, mnemonics=mnemonics)
+
+    JETTON_MASTER = Address("EQBlqsm144Dq6SjbPI4jjZvA1hqTIP3CvHovbIfW_t-SCALE")  # jetton address swap to
+    TON_AMOUNT = 10**9  # 1 ton - swap amount
+    GAS_AMOUNT = 10**9 // 4  # 0.25 ton for gas
+
+    pool_type = 0 # Volatile pool type
+
+    asset_native = (begin_cell()
+                   .store_uint(0, 4) # Asset type is native
+                   .end_cell().begin_parse())
+    asset_jetton = (begin_cell()
+                   .store_uint(1, 4) # Asset type is jetton
+                   .store_uint(JETTON_MASTER.wc, 8)
+                   .store_bytes(JETTON_MASTER.hash_part)
+                   .end_cell().begin_parse())
+
+    stack = await provider.run_get_method(
+        address=DEDUST_FACTORY, method="get_pool_address",
+        stack=[pool_type, asset_native, asset_jetton]
+    )
+    pool_address = stack[0].load_address()
+
+    swap_params = (begin_cell()
+                  .store_uint(int(time.time() + 60 * 5), 32) # Deadline
+                  .store_address(wallet.address) # Recipient address
+                  .store_address(None) # Referall address
+                  .store_maybe_ref(None) # Fulfill payload
+                  .store_maybe_ref(None) # Reject payload
+                  .end_cell())
+    swap_body = (begin_cell()
+                .store_uint(0xea06185d, 32) # Swap op-code
+                .store_uint(0, 64) # Query id
+                .store_coins(int(1*1e9)) # Swap amount
+                .store_address(pool_address)
+                .store_uint(0, 1) # Swap kind
+                .store_coins(0) # Swap limit
+                .store_maybe_ref(None) # Next step for multi-hop swaps
+                .store_ref(swap_params)
+                .end_cell())
+
+    await wallet.transfer(destination=DEDUST_NATIVE_VAULT,
+                          amount=TON_AMOUNT + GAS_AMOUNT, # swap amount + gas
+                          body=swap_body)
+
+    await provider.close_all()
+
+asyncio.run(main())
+
+```
+
+</TabItem>
+</Tabs>
+
+## 메시지 처리 기본사항
+
+### How to parse transactions of an account (transfers, jettons, NFTs)?
+
+계정의 트랜잭션 목록은 `getTransactions` API 메소드를 통해 가져올 수 있습니다. 이는 `Transaction` 객체의 배열을 반환하며, 각 항목은 많은 속성을 가지고 있습니다. 하지만 가장 일반적으로 사용되는 필드는 다음과 같습니다:
+
+- 이 트랜잭션을 시작한 메시지의 발신자, 본문, 값
+- 트랜잭션의 해시와 논리적 시간(LT)
+
+_발신자_와 _본문_ 필드는 메시지의 유형(일반 전송, jetton 전송, nft 전송 등)을 결정하는 데 사용될 수 있습니다.
+
+다음은 블록체인 계정의 최근 5개 트랜잭션을 가져와서 유형에 따라 파싱하고 루프에서 출력하는 방법의 예시입니다.
+
+<Tabs groupId="code-examples">
+<TabItem value="js-ton" label="JS (@ton)">
+
+```js
+import { Address, TonClient, beginCell, fromNano } from '@ton/ton';
+
+async function main() {
+    const client = new TonClient({
+        endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+        apiKey: '1b312c91c3b691255130350a49ac5a0742454725f910756aff94dfe44858388e',
+    });
+
+    const myAddress = Address.parse('EQBKgXCNLPexWhs2L79kiARR1phGH1LwXxRbNsCFF9doc2lN'); // address that you want to fetch transactions from
+
+    const transactions = await client.getTransactions(myAddress, {
+        limit: 5,
+    });
+
+    for (const tx of transactions) {
+        const inMsg = tx.inMessage;
+
+        if (inMsg?.info.type == 'internal') {
+            // we only process internal messages here because they are used the most
+            // for external messages some of the fields are empty, but the main structure is similar
+            const sender = inMsg?.info.src;
+            const value = inMsg?.info.value.coins;
+
+            const originalBody = inMsg?.body.beginParse();
+            let body = originalBody.clone();
+            if (body.remainingBits < 32) {
+                // if body doesn't have opcode: it's a simple message without comment
+                console.log(`Simple transfer from ${sender} with value ${fromNano(value)} TON`);
+            } else {
+                const op = body.loadUint(32);
+                if (op == 0) {
+                    // if opcode is 0: it's a simple message with comment
+                    const comment = body.loadStringTail();
+                    console.log(
+                        `Simple transfer from ${sender} with value ${fromNano(value)} TON and comment: "${comment}"`
+                    );
+                } else if (op == 0x7362d09c) {
+                    // if opcode is 0x7362d09c: it's a Jetton transfer notification
+
+                    body.skip(64); // skip query_id
+                    const jettonAmount = body.loadCoins();
+                    const jettonSender = body.loadAddressAny();
+                    const originalForwardPayload = body.loadBit() ? body.loadRef().beginParse() : body;
+                    let forwardPayload = originalForwardPayload.clone();
+
+                    // IMPORTANT: we have to verify the source of this message because it can be faked
+                    const runStack = (await client.runMethod(sender, 'get_wallet_data')).stack;
+                    runStack.skip(2);
+                    const jettonMaster = runStack.readAddress();
+                    const jettonWallet = (
+                        await client.runMethod(jettonMaster, 'get_wallet_address', [
+                            { type: 'slice', cell: beginCell().storeAddress(myAddress).endCell() },
+                        ])
+                    ).stack.readAddress();
+                    if (!jettonWallet.equals(sender)) {
+                        // if sender is not our real JettonWallet: this message was faked
+                        console.log(`FAKE Jetton transfer`);
+                        continue;
+                    }
+
+                    if (forwardPayload.remainingBits < 32) {
+                        // if forward payload doesn't have opcode: it's a simple Jetton transfer
+                        console.log(`Jetton transfer from ${jettonSender} with value ${fromNano(jettonAmount)} Jetton`);
+                    } else {
+                        const forwardOp = forwardPayload.loadUint(32);
+                        if (forwardOp == 0) {
+                            // if forward payload opcode is 0: it's a simple Jetton transfer with comment
+                            const comment = forwardPayload.loadStringTail();
+                            console.log(
+                                `Jetton transfer from ${jettonSender} with value ${fromNano(
+                                    jettonAmount
+                                )} Jetton and comment: "${comment}"`
+                            );
+                        } else {
+                            // if forward payload opcode is something else: it's some message with arbitrary structure
+                            // you may parse it manually if you know other opcodes or just print it as hex
+                            console.log(
+                                `Jetton transfer with unknown payload structure from ${jettonSender} with value ${fromNano(
+                                    jettonAmount
+                                )} Jetton and payload: ${originalForwardPayload}`
+                            );
+                        }
+
+                        console.log(`Jetton Master: ${jettonMaster}`);
+                    }
+                } else if (op == 0x05138d91) {
+                    // if opcode is 0x05138d91: it's a NFT transfer notification
+
+                    body.skip(64); // skip query_id
+                    const prevOwner = body.loadAddress();
+                    const originalForwardPayload = body.loadBit() ? body.loadRef().beginParse() : body;
+                    let forwardPayload = originalForwardPayload.clone();
+
+                    // IMPORTANT: we have to verify the source of this message because it can be faked
+                    const runStack = (await client.runMethod(sender, 'get_nft_data')).stack;
+                    runStack.skip(1);
+                    const index = runStack.readBigNumber();
+                    const collection = runStack.readAddress();
+                    const itemAddress = (
+                        await client.runMethod(collection, 'get_nft_address_by_index', [{ type: 'int', value: index }])
+                    ).stack.readAddress();
+
+                    if (!itemAddress.equals(sender)) {
+                        console.log(`FAKE NFT Transfer`);
+                        continue;
+                    }
+
+                    if (forwardPayload.remainingBits < 32) {
+                        // if forward payload doesn't have opcode: it's a simple NFT transfer
+                        console.log(`NFT transfer from ${prevOwner}`);
+                    } else {
+                        const forwardOp = forwardPayload.loadUint(32);
+                        if (forwardOp == 0) {
+                            // if forward payload opcode is 0: it's a simple NFT transfer with comment
+                            const comment = forwardPayload.loadStringTail();
+                            console.log(`NFT transfer from ${prevOwner} with comment: "${comment}"`);
+                        } else {
+                            // if forward payload opcode is something else: it's some message with arbitrary structure
+                            // you may parse it manually if you know other opcodes or just print it as hex
+                            console.log(
+                                `NFT transfer with unknown payload structure from ${prevOwner} and payload: ${originalForwardPayload}`
+                            );
+                        }
+                    }
+
+                    console.log(`NFT Item: ${itemAddress}`);
+                    console.log(`NFT Collection: ${collection}`);
+                } else {
+                    // if opcode is something else: it's some message with arbitrary structure
+                    // you may parse it manually if you know other opcodes or just print it as hex
+                    console.log(
+                        `Message with unknown structure from ${sender} with value ${fromNano(
+                            value
+                        )} TON and body: ${originalBody}`
+                    );
+                }
+            }
+        }
+        console.log(`Transaction Hash: ${tx.hash().toString('hex')}`);
+        console.log(`Transaction LT: ${tx.lt}`);
+        console.log();
+    }
+}
+
+main().finally(() => console.log('Exiting...'));
+```
+
+</TabItem>
+
+<TabItem value="py" label="Python">
+
+```py
+from pytoniq import LiteBalancer, begin_cell
+import asyncio
+
+async def parse_transactions(transactions):
+    for transaction in transactions:
+        if not transaction.in_msg.is_internal:
+            continue
+        if transaction.in_msg.info.dest.to_str(1, 1, 1) != MY_WALLET_ADDRESS:
+            continue
+
+        sender = transaction.in_msg.info.src.to_str(1, 1, 1)
+        value = transaction.in_msg.info.value_coins
+        if value != 0:
+            value = value / 1e9
+
+        if len(transaction.in_msg.body.bits) < 32:
+            print(f"TON transfer from {sender} with value {value} TON")
+        else:
+            body_slice = transaction.in_msg.body.begin_parse()
+            op_code = body_slice.load_uint(32)
+
+            # TextComment
+            if op_code == 0:
+                print(f"TON transfer from {sender} with value {value} TON and comment: {body_slice.load_snake_string()}")
+
+            # Jetton Transfer Notification
+            elif op_code == 0x7362d09c:
+                body_slice.load_bits(64) # skip query_id
+                jetton_amount = body_slice.load_coins() / 1e9
+                jetton_sender = body_slice.load_address().to_str(1, 1, 1)
+                if body_slice.load_bit():
+                    forward_payload = body_slice.load_ref().begin_parse()
+                else:
+                    forward_payload = body_slice
+
+                jetton_master = (await provider.run_get_method(address=sender, method="get_wallet_data", stack=[]))[2].load_address()
+                jetton_wallet = (await provider.run_get_method(address=jetton_master, method="get_wallet_address",
+                                                               stack=[
+                                                                        begin_cell().store_address(MY_WALLET_ADDRESS).end_cell().begin_parse()
+                                                                     ]))[0].load_address().to_str(1, 1, 1)
+
+                if jetton_wallet != sender:
+                    print("FAKE Jetton Transfer")
+                    continue
+
+                if len(forward_payload.bits) < 32:
+                    print(f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton")
+                else:
+                    forward_payload_op_code = forward_payload.load_uint(32)
+                    if forward_payload_op_code == 0:
+                        print(f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton and comment: {forward_payload.load_snake_string()}")
+                    else:
+                        print(f"Jetton transfer from {jetton_sender} with value {jetton_amount} Jetton and unknown payload: {forward_payload} ")
+
+            # NFT Transfer Notification
+            elif op_code == 0x05138d91:
+                body_slice.load_bits(64) # skip query_id
+                prev_owner = body_slice.load_address().to_str(1, 1, 1)
+                if body_slice.load_bit():
+                    forward_payload = body_slice.load_ref().begin_parse()
+                else:
+                    forward_payload = body_slice
+
+                stack = await provider.run_get_method(address=sender, method="get_nft_data", stack=[])
+                index = stack[1]
+                collection = stack[2].load_address()
+                item_address = (await provider.run_get_method(address=collection, method="get_nft_address_by_index",
+                                                              stack=[index]))[0].load_address().to_str(1, 1, 1)
+
+                if item_address != sender:
+                    print("FAKE NFT Transfer")
+                    continue
+
+                if len(forward_payload.bits) < 32:
+                    print(f"NFT transfer from {prev_owner}")
+                else:
+                    forward_payload_op_code = forward_payload.load_uint(32)
+                    if forward_payload_op_code == 0:
+                        print(f"NFT transfer from {prev_owner} with comment: {forward_payload.load_snake_string()}")
+                    else:
+                        print(f"NFT transfer from {prev_owner} with unknown payload: {forward_payload}")
+
+                print(f"NFT Item: {item_address}")
+                print(f"NFT Collection: {collection}")
+        print(f"Transaction hash: {transaction.cell.hash.hex()}")
+        print(f"Transaction lt: {transaction.lt}")
+
+MY_WALLET_ADDRESS = "EQAsl59qOy9C2XL5452lGbHU9bI3l4lhRaopeNZ82NRK8nlA"
+provider = LiteBalancer.from_mainnet_config(1)
+
+async def main():
+    await provider.start_up()
+    transactions = await provider.get_transactions(address=MY_WALLET_ADDRESS, count=5)
+    await parse_transactions(transactions)
+    await provider.close_all()
+
+asyncio.run(main())
+```
+
+</TabItem>
+
+</Tabs>
+
+Note that this example covers only the simplest case with incoming messages, where it is enough to fetch the transactions on a single account. If you want to go deeper and handle more complex chains of transactions and messages, you should take `tx.outMessages` field into account. It contains the list of the output messages sent by smart-contract in the result of this transaction. To understand the whole logic better, you can read these articles:
+
+- [Message overview](/v3/documentation/smart-contracts/message-management/messages-and-transactions)
+- [내부 메시지](/v3/documentation/smart-contracts/message-management/internal-messages)
+
+This topic is explored in depth in the [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing) article.
+
+### 특정 TON Connect 결과에 대한 트랜잭션을 어떻게 찾나요?
+
+TON Connect 2 only returns the cell sent to the blockchain, not the transaction hash itself, as the transaction may not be confirmed. To track a transaction from TON Connect, you can search for it in your account history using an indexer.
+:::tip
+You can use an indexer to make the search easier. The provided implementation is for `TonClient` connected to a RPC.
+:::
+
+블록체인 청취를 위한 시도에 `retry` 함수 준비:
+
+```typescript
+
+export async function retry<T>(fn: () => Promise<T>, options: { retries: number, delay: number }): Promise<T> {
+  let lastError: Error | undefined;
+  for (let i = 0; i < options.retries; i++) {
+    try {
+      return await fn();
+    } catch (e) {
+      if (e instanceof Error) {
+        lastError = e;
+      }
+      await new Promise(resolve => setTimeout(resolve, options.delay));
+    }
+  }
+  throw lastError;
+}
+
+```
+
+Create a listener function that will assert specific transaction on certain account with specific incoming external message, equal to body message in boc:
+
+<Tabs>
+<TabItem value="ts" label="@ton/ton">
+
+```typescript
+
+import {Cell, Address, beginCell, storeMessage, TonClient} from "@ton/ton";
+
+const res = tonConnectUI.send(msg); // exBoc in the result of sending message
+const exBoc = res.boc;
+const client = new TonClient({
+        endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+        apiKey: 'INSERT YOUR API-KEY', // https://t.me/tonapibot
+    });
+
+export async function getTxByBOC(exBoc: string): Promise<string> {
+
+    const myAddress = Address.parse('INSERT TON WALLET ADDRESS'); // Address to fetch transactions from
+
+    return retry(async () => {
+        const transactions = await client.getTransactions(myAddress, {
+            limit: 5,
+        });
+        for (const tx of transactions) {
+            const inMsg = tx.inMessage;
+            if (inMsg?.info.type === 'external-in') {
+
+                const inBOC = inMsg?.body;
+                if (typeof inBOC === 'undefined') {
+
+                    reject(new Error('Invalid external'));
+                    continue;
+                }
+                const extHash = Cell.fromBase64(exBoc).hash().toString('hex')
+                const inHash = beginCell().store(storeMessage(inMsg)).endCell().hash().toString('hex')
+
+                console.log(' hash BOC', extHash);
+                console.log('inMsg hash', inHash);
+                console.log('checking the tx', tx, tx.hash().toString('hex'));
+
+
+                // Assuming `inBOC.hash()` is synchronous and returns a hash object with a `toString` method
+                if (extHash === inHash) {
+                    console.log('Tx match');
+                    const txHash = tx.hash().toString('hex');
+                    console.log(`Transaction Hash: ${txHash}`);
+                    console.log(`Transaction LT: ${tx.lt}`);
+                    return (txHash);
+                }
+            }
+        }
+        throw new Error('Transaction not found');
+    }, {retries: 30, delay: 1000});
+}
+
+ txRes = getTxByBOC(exBOC);
+ console.log(txRes);
+```
+
+</TabItem>
+
+</Tabs>
+
+### 트랜잭션 또는 메시지 해시를 찾는 방법
+
+:::info
+Be careful with the hash definition. It can be either a transaction hash or a message hash.
+:::
+
+To get transaction hash you need to use a `hash` method of a transaction. To get external message hash you need
+to build a message cell using a `storeMessage` method and then use a `hash` method of this cell.
+
+<Tabs>
+  <TabItem value="ts" label="@ton/ton">
+
+```typescript
+import { storeMessage, TonClient } from '@ton/ton';
+import { Address, beginCell } from '@ton/core';
+
+const tonClient = new TonClient({ endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC' });
+
+const transactions = await tonClient.getTransactions(Address.parse('[ADDRESS]'), { limit: 10 });
+for (const transaction of transactions) {
+  // ful transaction hash
+  const transactionHash = transaction.hash();
+
+  const inMessage = transaction.inMessage;
+  if (inMessage?.info.type === 'external-in') {
+    const inMessageCell = beginCell().store(storeMessage(inMessage)).endCell();
+    // external-in message hash
+    const inMessageHash = inMessageCell.hash();
+  }
+
+  // also you can get hash of out messages if needed
+  for (const outMessage of transaction.outMessages.values()) {
+    const outMessageCell = beginCell().store(storeMessage(outMessage)).endCell();
+    const outMessageHash = outMessageCell.hash();
+  }
+}
+```
+
+</TabItem>
+
+</Tabs>
+
+Also you can get a hash of message when building it. Note that this is the same hash as the hash of the message sent to initiate the transaction, as in the previous example.
+
+<Tabs>
+  <TabItem value="ts" label="@ton/ton">
+
+```typescript
+import { mnemonicNew, mnemonicToPrivateKey } from '@ton/crypto';
+import { internal, TonClient, WalletContractV4 } from '@ton/ton';
+import { toNano } from '@ton/core';
+
+const tonClient = new TonClient({ endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC' });
+
+const mnemonic = await mnemonicNew();
+const keyPair = await mnemonicToPrivateKey(mnemonic);
+const wallet = tonClient.open(WalletContractV4.create({ publicKey: keyPair.publicKey, workchain: 0 }));
+const transfer = await wallet.createTransfer({
+  secretKey: keyPair.secretKey,
+  seqno: 0,
+  messages: [
+    internal({
+      to: wallet.address,
+      value: toNano(1)
+    })
+  ]
+});
+const inMessageHash = transfer.hash();
+```
+
+</TabItem>
+
+</Tabs>
+
+<Feedback />

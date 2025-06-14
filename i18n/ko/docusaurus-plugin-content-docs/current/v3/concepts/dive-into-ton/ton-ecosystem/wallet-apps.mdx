@@ -1,0 +1,251 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Player from '@site/src/components/player'
+
+# Wallet apps
+
+## 개요
+
+이 문서는 개발자 관점에서 지갑에 대해 설명합니다. 최종 목표는 TON의 대중 채택을 지원하는 지갑 애플리케이션을 만드는 것입니다.
+
+<br></br>
+<Player url="https://www.youtube.com/watch?v=OfW96enpD4Q" />
+<br></br>
+
+Learn a [ton.org/wallets](https://ton.org/wallets) catalog for more wallet apps.
+
+## Non-custodial software wallets (hot)
+
+Non-custodial wallets provide users with complete control over their assets. The private keys are stored exclusively by the wallet owner, and access is secured through a seed phrase—a unique set of 12 or 24 words.
+
+A software wallet, often known as a hot wallet, operates as software on a host device and stores your private keys in a device storage, such as a smartphone or laptop.
+
+Here are some non-custodial wallets for TON Blockchain.
+
+#### For users:
+
+- [Tonkeeper](https://tonkeeper.com/) — an open-source multiplatform wallet with a great user base. Platforms: iOS, Android, Firefox, Chrome.
+- [MyTonWallet](https://mytonwallet.io/) — an open-source multiplatform wallet for TON. Platforms: iOS, Android, Firefox, Chrome.
+- [Tonhub](https://tonhub.com/) — an open-source alternative mobile phone wallet with advanced banking features. Platforms: iOS, Android.
+
+#### For developers:
+
+- [TONDevWallet](https://github.com/TonDevWallet/TonDevWallet) - an open-source wallet for developers.
+
+:::warning
+[TONDevWallet](https://github.com/TonDevWallet/TonDevWallet) is for development and testing only. Do **NOT** use it to store real funds — it is **insecure** and does **NOT** provide adequate protection.
+:::
+
+- [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) — Classic wallet of TON Ecosystem developed by TON Foundation. Platforms: iOS, Android, macOS, Linux, Windows.
+- [OpenMask](https://www.openmask.app/) — an open-source Chrome extension wallet.
+
+### Tonkeeper
+
+[Tonkeeper](https://tonkeeper.com/) is a central wallet in TON Ecosystem. The Tonkeeper team developed it and has active support from both users and developers.
+
+<img src="/img/docs/wallet-apps/Tonkeeper.png?raw=true" alt="Tonkeeper" width="240" height="480" style={{ display: 'block', margin: 'auto' }}/>
+
+#### Highlights
+
+- This app is the most widely used.
+- Supports all up-to-date features, including NFT and token transfer between user wallets.
+- It supports all major platforms, such as iOS and Android, but it also works on popular browsers like Firefox or Chrome.
+
+#### Tonkeeper 테스트 환경
+
+##### Tonkeeper mobile app
+
+1. Create a new regular wallet to claim Recovery Phrase, the 24 keywords.
+2. Tonkeeper 메인 화면으로 돌아갑니다.
+3. 화면 상단의 지갑 이름을 클릭합니다.
+4. Push the Add Wallet button at the bottom of the screen.
+5. 테스트넷 계정 옵션을 선택합니다.
+6. Enter the Recovery Phrase from step 1.
+
+Now, your Testnet wallet is created and connected to your Mainnet wallet.
+
+#### Links
+
+- [GitHub](https://github.com/tonkeeper/wallet)
+- [Tonkeeper Wallet API](https://github.com/tonkeeper/wallet-api)
+
+### MyTonWallet
+
+[MyTonWallet](https://mytonwallet.io/) is a feature-rich web wallet and browser extension for TON that supports tokens, NFT, TON DNS, TON Sites, TON Proxy, and TON Magic.
+
+<img src="/img/docs/wallet-apps/MyTonWallet.png?raw=true" alt="Tonkeeper" width="520" height="300" style={{ display: 'block', margin: 'auto' }}/>
+
+#### Highlights
+
+- Has all basic features implemented.
+- Focus on the best UI for users.
+- Multichain wallet that supports TRON Blockchain.
+- Supports all major platforms and runs in Chrome as an extension.
+
+#### MyTonWallet 테스트 환경 (브라우저, 데스크톱, 모바일 애플리케이션)
+
+1. 설정 섹션으로 이동합니다.
+2. 아래로 스크롤하여 MyTonWallet 애플리케이션 버전을 클릭합니다.
+3. 팝업 창에서 환경을 선택합니다.
+
+#### Links
+
+- [GitHub](https://github.com/mytonwalletorg/mytonwallet)
+- [MyTonWallet Telegram](https://t.me/MyTonWalletRu)
+
+### Tonhub
+
+[Tonhub](https://tonhub.com/) is another fully-fledged TON wallet with basic, up-to-date features and banking.
+
+<img src="/img/docs/wallet-apps/Tonhub.png?raw=true" alt="Tonkeeper" width="240" height="480" style={{ display: 'block', margin: 'auto' }}/>
+
+#### Highlights
+
+- Has own custom [Ton Nominator](https://github.com/tonwhales/ton-nominators) contract supported with Tonhub UI.
+- Open-source wallet from the beginning of the existing app.
+- [Bug bounty program](https://tonwhales.com/bounty).
+
+#### Tonhub 테스트 환경
+
+You must download a separate Sandbox application to connect to the Testnet.
+
+#### Links
+
+- [GitHub](https://github.com/tonwhales/wallet)
+- [Sandbox iOS](https://apps.apple.com/app/ton-development-wallet/id1607857373)
+- [Sandbox Android](https://play.google.com/store/apps/details?id=com.tonhub.wallet)
+
+### TONDevWallet
+
+TonDevWallet is a wallet designed to simplify the development process for the TON Blockchain. It provides extensive tools and features to streamline your TON development experience.
+
+#### Highlights
+
+TON Connect integration: TonDevWallet seamlessly integrates with TON Connect, allowing you to connect your wallet to TON-compatible websites easily.
+
+- Store and manage multiple private keys within TonDevWallet, giving you the flexibility to access and control various accounts.
+- Create multiple wallets to organize and manage different accounts for your TON development projects.
+- Local transaction emulation lets you preview transaction results before executing them on TON Blockchain. This feature helps you ensure the correctness of your transactions before submitting them to the blockchain.
+
+#### Links
+
+- [GitHub](https://github.com/TonDevWallet/TonDevWallet)
+
+### TON Wallet
+
+TON Wallet was the first step in massively adopting blockchain technology, and it's now available to ordinary users. It demonstrates for developers how a wallet should work on the TON Blockchain.
+
+<img src="/img/docs/wallet-apps/TonWallet.png?raw=true" alt="TON wallet" width="240" height="480" style={{ display: 'block', margin: 'auto' }}/>
+
+#### Highlights
+
+TON Wallet is the original wallet developed by the TON Core team. It demonstrates a development approach that corresponds to the TON Blockchain architecture.
+
+- ADNL connection implemented.
+- Multiplatform architecture support. It works in Linux, Windows, macOS, iOS, Android, and a Chrome plugin.
+- [Bug bounty program](https://github.com/ton-blockchain/bug-bounty)
+
+#### TON Wallet 테스트 환경
+
+To switch TON Wallet to the Testnet environment, you should open in the browser with the Testnet parameter:
+
+#### Links
+
+- [GitHub](https://github.com/ton-blockchain/wallet-ios)
+
+:::info
+TON Wallet clients for every supported OS placed in nearby repositories.
+:::
+
+### OpenMask
+
+[OpenMask](https://www.openmask.app/) is a trailblazing tool that enables user interactions and experiences in Web3 as a browser extension.
+
+<img src="/img/docs/wallet-apps/OpenMask.png?raw=true" alt="Tonkeeper" width="520" height="300" style={{ display: 'block', margin: 'auto' }}/>
+
+#### Highlights
+
+- Convenient for developers to learn and create dApps via desktop without mobile devices.
+- Unique functions, such as multiple wallets, with detailed descriptions and examples in its documentation.
+
+#### OpenMask 테스트 환경
+
+To switch OpenMask between Mainnet and Testnet, click the **mainnet/testnet** button at the top of the main screen and choose the network you need.
+
+#### Links
+
+- [GitHub](https://github.com/OpenProduct/openmask-extension)
+- [문서](https://www.openmask.app/docs/introduction)
+
+## Non-custodial hardware wallets (cold)
+
+Non-custodial wallets provide users with complete control over their assets. The private keys are stored exclusively by the wallet owner, and access is secured through a seed phrase—a unique set of 12 or 24 words.
+
+하드웨어 지갑은 암호화폐 자금에 대한 개인 키를 인터넷으로부터 격리된 물리적 기기에 저장합니다. 거래를 할 때도 지갑은 오프라인 환경에서 거래를 확인합니다. 이 과정을 통해 개인 키를 항상 인터넷의 위험으로부터 보호할 수 있습니다.
+
+### Ledger
+
+[Ledger](https://www.ledger.com/) is a hardware wallet with a Ledger Live app.
+
+#### Links
+
+- [Ledger TON 블로그 포스트](https://blog.ton.org/ton-is-coming-to-ledger-hardware-wallets) Ledger 지갑의 TON 사용자 매뉴얼.
+- [Ledger](https://www.ledger.com/) 공식 사이트.
+
+### SafePal
+
+[SafePal](https://www.safepal.com/en/)은 빠르게 확장되는 탈중앙화 애플리케이션 세계로의 관문입니다.
+
+#### Links
+
+- [SafePal](https://www.safepal.com/en/) 공식 사이트
+
+## 수탁형 지갑
+
+In custodial wallets, private keys are managed by a third party, such as a cryptocurrency exchange. This means that users delegate the storage and management of their assets to a trusted entity.
+
+### @wallet
+
+[@wallet](https://t.me/wallet) — Telegram에서 P2P를 사용하여 TON을 보내고 받거나 실제 돈으로 거래할 수 있는 봇입니다. Telegram 미니 앱 UI를 지원합니다.
+
+<img src="/img/docs/wallet-apps/Wallet.png?raw=true" alt="Tonkeeper" width="240" height="480" style={{ display: 'block', margin: 'auto' }}/>
+
+### @cryptobot
+
+[@cryptobot](https://t.me/cryptobot) — TON을 저장, 전송 및 교환할 수 있는 Telegram 봇 지갑입니다.
+
+<img src="/img/docs/wallet-apps/send-bot.png?raw=true" alt="Tonkeeper" width="240" height="480" style={{ display: 'block', margin: 'auto' }}/>
+
+#### Links for 3d-party integrations
+
+- [Crypto Pay API](https://help.crypt.bot/crypto-pay-api)
+
+### @tonRocketBot
+
+[@tonRocketBot](https://t.me/tonRocketBot) - A Telegram bot wallet for storing, sending, and trading TON assets.
+
+<img src="/img/docs/wallet-apps/tonrocketbot.png?raw=true" alt="Tonkeeper" width="240" height="480" style={{ display: 'block', margin: 'auto' }}/>
+
+#### Links for 3d-party integrations
+
+- [Rocket exchange](https://trade.ton-rocket.com/api/)
+- [Rocket pay docs](https://pay.ton-rocket.com/api/)
+
+## Multi-signature wallets
+
+### Tonkey
+
+Tonkey는 TON 블록체인에 다중 서명 기능을 도입하는 고급 프로젝트입니다.
+
+### Links
+
+- https://tonkey.app/
+- [GitHub](https://github.com/tonkey-app)
+
+## See also
+
+- [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton/)
+- [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
+- [Wallet contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts/)
+
+<Feedback />

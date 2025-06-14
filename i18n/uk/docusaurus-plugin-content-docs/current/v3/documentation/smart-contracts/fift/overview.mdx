@@ -1,0 +1,61 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Button from "@site/src/components/button";
+
+# Getting started
+
+Fift is a stack-based programming language specifically designed for developing, debugging, and managing TON Blockchain smart contracts. It provides optimized interaction with:
+
+- TON Virtual Machine (TVM)
+- [FunC](/v3/documentation/smart-contracts/overview#-func)
+
+```fift
+() send_money(slice address, int amount) impure inline {
+    var msg = begin_cell()
+        .store_uint(0x10, 6) ;; nobounce
+        .store_slice(address)
+        .store_coins(amount)
+        .end_cell();
+
+    send_raw_message(msg, 64);
+}
+```
+
+:::info
+While most smart contract development doesn't require Fift, it becomes essential for:
+
+- Solving unique technical challenges
+- Low-level TVM interactions
+- Advanced contract debugging
+
+**Recommended resources**:
+
+- [TVM Retracer](https://retracer.ton.org/)
+  :::
+
+</Button>
+
+</Button>
+
+<Button href="/v3/guidelines/dapps/tma/tutorials/app-examples" colorType={'secondary'} sizeType={'sm'}>
+
+## Documentation
+
+- [Fift: A Brief Introduction](https://ton.org/fiftbase.pdf)
+- [TON Virtual Machine](/v3/documentation/tvm/tvm-overview)
+
+## Getting started
+
+- Read [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short).
+
+## How to try Tolk if you don't know FunC
+
+- [TON Hello World: Step-by-step guide for writing your first smart contract](https://helloworld.tonstudio.io/02-contract/)
+- TON tutorials
+  - [🚩 Challenge 1: Simple NFT Deploy](https://github.com/romanovichim/TONQuest1)
+
+## TON course
+
+- [Environment setup page](/v3/documentation/archive/precompiled-binaries/)
+
+<Feedback />

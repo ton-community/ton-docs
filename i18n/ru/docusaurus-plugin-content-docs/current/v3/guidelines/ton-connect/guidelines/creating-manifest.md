@@ -1,10 +1,12 @@
-# Создание manifest.json
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Creating the TON Connect manifest for DApp
 
-Каждому приложению нужен манифест для передачи метаданных в кошелек. Манифест — это файл JSON с именем `tonconnect-manifest.json` следующего формата:
+## Manifest definition
+
+Every app needs a manifest to pass meta information to the wallet.
+
+The manifest is a JSON file named `tonconnect-manifest.json` and has the following format:
 
 ```json
 {
@@ -16,9 +18,19 @@
 }
 ```
 
-## Пример
+| Поле               | Требование | Описание                                                                                                                                                                                                                                                                                                                                                                      |
+| ------------------ | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `url`              | required   | `url` defines the app URL.  It will be used to open the DApp after clicking its icon in the wallet. It is recommended to pass the URL without closing the slash, e.g., 'https://mydapp.com' instead of 'https://mydapp.com/'. |
+| `name`             | required   | `name` defines the app name. Typically simple word. Shouldn't be used as identifier.                                                                                                                                                                                                                                          |
+| `iconUrl`          | required   | `iconUrl` defines the URL to the app icon. It must be in `PNG` or `ICO` format. `SVG` icons are not supported. Perfectly pass the URL to a 180x180px PNG icon.                                                                                                                                                |
+| `termsOfUseUrl`    | optional   | Optional for usual apps, but required for the apps placed in the Tonkeeper recommended apps list.                                                                                                                                                                                                                                                             |
+| `privacyPolicyUrl` | optional   | Optional for usual apps, but required for the apps placed in the Tonkeeper recommended apps list.                                                                                                                                                                                                                                                             |
 
-Ниже вы можете найти пример манифеста:
+:::info
+The original definition is [here](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#app-manifest).
+:::
+
+### Пример
 
 ```json
 {
@@ -28,17 +40,16 @@
 }
 ```
 
-## Рекомендации
+## Best practices
 
-- Лучшей практикой является разместить манифест в корне приложения и репозитория, например. `https://myapp.com/tonconnect-manifest.json`. Это позволяет кошельку лучше обрабатывать ваше приложение и улучшать пользовательский опыт, связанный с вашим приложением.
+- Place the manifest in the root of your app and repository, for example: `https://myapp.com/tonconnect-manifest.json`. It allows the wallet to handle your app better and improve the UX connected to your app.
+- The fields `url`, `iconUrl`, `termsOfUseUrl`, `privacyPolicyUrl`: must be publicly accessible from the internet and should be requestable from any origin without CORS restrictions.
+- The manifest must be publicly accessible from the internet and should be requestable from any origin without CORS restrictions.
 - Убедитесь, что файл `manifest.json` доступен через GET-запрос по его URL
 
-## Описание полей
+## See also
 
-| Поле               | Требование    | Описание                                                                                                                                                                                                                                                                                                                           |
-| ------------------ | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `url`              | обязательно   | URL приложения. Будет использоваться как идентификатор DApp. Будет использоваться для открытия DApp после нажатия на его значок в кошельке. Рекомендуется передавать URL без закрывающей косой черты, например, `https://mydapp.com` вместо `https://mydapp.com/`. |
-| `name`             | обязательно   | Имя приложения. Может быть простым, не будет использоваться как идентификатор.                                                                                                                                                                                                                     |
-| `iconUrl`          | обязательно   | URL значка приложения. Должен быть в формате PNG, ICO, .... Иконки SVG не поддерживаются. Идеально передавать URL иконку PNG размером 180x180 пикселей.                                                            |
-| `termsOfUseUrl`    | необязательно | URL-адрес документа Условия использования. Необязательно для обычных приложений, но обязательно для приложений, которые размещены в списке рекомендованных приложений Tonkeeper.                                                                                                                   |
-| `privacyPolicyUrl` | необязательно | URL-адрес документа Политика конфиденциальности. Необязательно для обычных приложений, но обязательно для приложений, которые размещены в списке рекомендованных приложений Tonkeeper.                                                                                                             |
+- [TON Connect GitHub - App manifest](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#app-manifest)
+
+<Feedback />
+

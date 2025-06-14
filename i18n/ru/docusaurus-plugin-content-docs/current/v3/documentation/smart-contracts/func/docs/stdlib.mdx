@@ -3,31 +3,37 @@ toc_min_heading_level: 2
 toc_max_heading_level: 6
 ---
 
+import Feedback from "@site/src/components/Feedback";
+
 # Стандартная библиотека FunC
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
 :::info
-В этом разделе обсуждается библиотека [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) со стандартными функциями, используемыми в FunC.
+This section covers the [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) library,
+which provides standard functions for FunC.
 :::
 
-В настоящее время библиотека является просто оберткой для наиболее распространенного ассемблера команд TVM, которые не являются встроенными. Описание каждой команды TVM, используемой в библиотеке, можно найти в разделе [документация TVM](/v3/documentation/tvm/tvm-overview). Некоторые описания были взяты для этого документа.
+The FunC standard library serves as a wrapper around the most commonly used TVM assembly commands that aren’t built-in.
+For detailed descriptions of these commands, refer to the [TVM documentation](/v3/documentation/tvm/tvm-overview).
+Some explanations in this document adapted from there.
 
-Некоторые функции в файле закомментированы. Это означает, что они уже стали встроенными в целях оптимизации. Однако сигнатура типа и семантика остаются прежними.
+Some functions in the library are commented out, meaning they have already been optimized and integrated as built-in operations.
+However, their type signatures and behaviors remain unchanged.
 
-Обратите внимание, что некоторые менее распространенные команды не представлены в stdlib. Они также будут добавлены в будущем.
+Additionally, some less frequently used TVM commands are not yet included in the standard library. These may be added in future updates.
 
 ## Примитивы для манипулирования кортежами
 
-Имена и типы в основном говорят сами за себя. См. [полиморфизм с forall](/v3/documentation/smart-contracts/func/docs/functions#polymorphism-with-forall) для получения дополнительной информации о полиморфных функциях.
+Most function names and types in this section are self-explanatory.
+For more details on polymorphic functions, refer to the [Polymorphism with forall](/v3/documentation/smart-contracts/func/docs/functions#polymorphism-with-forall) section.
 
-Обратите внимание, что в настоящее время значения атомарного типа `tuple` не могут быть преобразованы в составные типы кортежей (например, `[int, cell]`) и наоборот.
+**Note:** Currently, values of atomic type `tuple` cannot be converted into composite tuple types (e.g.,`[int, cell]`) and vice versa.
 
 ### Списки в стиле Lisp
 
 Списки могут быть представлены как вложенные кортежи из 2 элементов. Пустой список традиционно представляется как значение TVM `null` (его можно получить, вызвав `null()`). Например, кортеж `(1, (2, (3, null)))` представляет список `[1, 2, 3]`. Элементы списка могут быть разных типов.
+
+Lists in FunC are represented as nested two-element tuples. An empty list is conventionally represented by the TVM `null` value, which can be obtained using `null()`.
+For example, the tuple `(1, (2, (3, null)))` corresponds to the list `[1, 2, 3]`. Lists in FunC can contain elements of different types.
 
 #### cons
 
@@ -43,7 +49,7 @@ forall X -> tuple cons(X head, tuple tail) asm "CONS";
 forall X -> (X, tuple) uncons(tuple list) asm "UNCONS";
 ```
 
-Извлекает начало и конец списка в стиле lisp.
+Extracts the head and tail of a lisp-style list.
 
 #### list_next
 
@@ -51,7 +57,9 @@ forall X -> (X, tuple) uncons(tuple list) asm "UNCONS";
 forall X -> (tuple, X) list_next(tuple list) asm( -> 1 0) "UNCONS";
 ```
 
-Извлекает начало и конец списка в стиле lisp. Может использоваться как [(не)модифицирующий метод](/v3/documentation/smart-contracts/func/docs/statements#methods-calls).
+Extracts the head and tail of a lisp-style list. It can be used as a [(non-)modifying method](/v3/documentation/smart-contracts/func/docs/statements#methods-calls).
+
+**Example**
 
 ```func
 () foo(tuple xs) {
@@ -85,7 +93,7 @@ tuple cdr(tuple list) asm "CDR";
 tuple empty_tuple() asm "NIL";
 ```
 
-Создает кортеж из 0 элементов.
+Creates an empty tuple (0 elements).
 
 #### tpush
 
@@ -94,7 +102,8 @@ forall X -> tuple tpush(tuple t, X value) asm "TPUSH";
 forall X -> (tuple, ()) ~tpush(tuple t, X value) asm "TPUSH";
 ```
 
-Добавляет значение `x` к `Tuple t = (x1, ..., xn)`, но только если полученный `Tuple t' = (x1, ..., xn, x)` не длиннее 255 символов. В противном случае выдается исключение проверки типа.
+Appends a value to the tuple `(x1, ..., xn)`, forming `(x1, ..., xn, x)`. The resulting tuple must not exceed 255 elements,
+or a type check exception is thrown.
 
 #### single
 
@@ -102,7 +111,7 @@ forall X -> (tuple, ()) ~tpush(tuple t, X value) asm "TPUSH";
 forall X -> [X] single(X x) asm "SINGLE";
 ```
 
-Создает одиночку, т. е. кортеж длиной один.
+Creates a tuple with a single element—singleton
 
 #### unsingle
 
@@ -118,7 +127,7 @@ forall X -> X unsingle([X] t) asm "UNSINGLE";
 forall X, Y -> [X, Y] pair(X x, Y y) asm "PAIR";
 ```
 
-Создает пару.
+Creates a two-element tuple (pair).
 
 #### unpair
 
@@ -126,7 +135,7 @@ forall X, Y -> [X, Y] pair(X x, Y y) asm "PAIR";
 forall X, Y -> (X, Y) unpair([X, Y] t) asm "UNPAIR";
 ```
 
-Распаковывает пару.
+Unpacks a pair into two separate values.
 
 #### triple
 
@@ -134,7 +143,7 @@ forall X, Y -> (X, Y) unpair([X, Y] t) asm "UNPAIR";
 forall X, Y, Z -> [X, Y, Z] triple(X x, Y y, Z z) asm "TRIPLE";
 ```
 
-Создает тройку.
+Creates a three-element tuple (triple).
 
 #### untriple
 
@@ -142,7 +151,7 @@ forall X, Y, Z -> [X, Y, Z] triple(X x, Y y, Z z) asm "TRIPLE";
 forall X, Y, Z -> (X, Y, Z) untriple([X, Y, Z] t) asm "UNTRIPLE";
 ```
 
-Распаковывает тройку.
+Unpacks a triple into three separate values.
 
 #### tuple4
 
@@ -150,7 +159,7 @@ forall X, Y, Z -> (X, Y, Z) untriple([X, Y, Z] t) asm "UNTRIPLE";
 forall X, Y, Z, W -> [X, Y, Z, W] tuple4(X x, Y y, Z z, W w) asm "4 TUPLE";
 ```
 
-Создает кортеж из 4 элементов.
+Creates a four-element tuple.
 
 #### untuple4
 
@@ -158,7 +167,9 @@ forall X, Y, Z, W -> [X, Y, Z, W] tuple4(X x, Y y, Z z, W w) asm "4 TUPLE";
 forall X, Y, Z, W -> (X, Y, Z, W) untuple4([X, Y, Z, W] t) asm "4 UNTUPLE";
 ```
 
-Распаковывает кортеж из 4 элементов.
+Unpacks a four-element tuple into four separate values.
+
+_Tuple element access_
 
 #### first
 
@@ -191,6 +202,8 @@ forall X -> X fourth(tuple t) asm "3 INDEX";
 ```
 
 Возвращает четвертый элемент кортежа.
+
+_Pair and triple element access_
 
 #### pair_first
 
@@ -236,7 +249,8 @@ forall X, Y, Z -> Z triple_third([X, Y, Z] p) asm "THIRD";
 
 ### Извлечение информации из c7
 
-Некоторые полезные сведения о вызове смарт-контракта можно найти в [специальном регистре c7](/v3/documentation/tvm/tvm-overview#control-registers). Эти примитивы служат для удобного извлечения данных.
+The [c7 special register](/v3/documentation/tvm/tvm-overview#control-registers) holds useful data about smart contract execution.
+The following primitives facilitate easy retrieval of this information:
 
 #### now
 
@@ -244,7 +258,7 @@ forall X, Y, Z -> Z triple_third([X, Y, Z] p) asm "THIRD";
 int now() asm "NOW";
 ```
 
-Возвращает текущее время Unix как целое число
+Returns the current Unix timestamp as an integer.
 
 #### my_address
 
@@ -252,7 +266,7 @@ int now() asm "NOW";
 slice my_address() asm "MYADDR";
 ```
 
-Возвращает внутренний адрес текущего смарт-контракта как срез с `MsgAddressInt`. При необходимости его можно проанализировать далее с помощью примитивов, таких как `parse_std_addr`.
+Retrieves the smart contract’s internal address as a Slice containing `MsgAddressInt`. If needed, it can be further processed using functions like `parse_std_addr`.
 
 #### get_balance
 
@@ -260,10 +274,15 @@ slice my_address() asm "MYADDR";
 [int, cell] get_balance() asm "BALANCE";
 ```
 
-Возвращает оставшийся баланс смарт-контракта в виде `tuple`, состоящего из `int` (оставшийся баланс в nanotoncoin) и `cell` (словарь с 32-битными ключами, представляющими баланс "дополнительных валют"). Поскольку это произойдет в фазе вычислений, баланс контракта будет включать входящее сообщение `value`, вычитать `storage_fee` и `import_fee`.
+Returns the smart contract's balance as a `tuple`:
+
+- `int`: The remaining balance in nanotoncoins.
+- `cell`: A dictionary (with 32-bit keys) containing balances of extra currencies.
+
+Since this is retrieved during the compute phase, the balance reflects the incoming message `value`, with `storage_fee` and `import_fee` already subtracted.
 
 :::warning
-Необработанные примитивы, такие как `send_raw_message`, не обновляют это поле.
+Raw primitives such as `send_raw_message` do not update this field.
 :::
 
 #### cur_lt
@@ -280,8 +299,7 @@ int cur_lt() asm "LTIME";
 int block_lt() asm "BLOCKLT";
 ```
 
-Возвращает начальное логическое время текущего
-блока.
+Returns the logical time at the beginning of the current block.
 
 #### config_param
 
@@ -291,6 +309,19 @@ cell config_param(int x) asm "CONFIGOPTPARAM";
 
 Возвращает значение глобального параметра конфигурации с целочисленным индексом `i` как `cell` или `null` значение.
 
+#### my_code
+
+```func
+cell my_code() asm "MYCODE";
+```
+
+Retrieves the smart contract's code from `c7`.
+
+:::warning
+This function is not included in the standard library, but is often sought by developers.
+You need to manually add initialization it to your contract system, with the `asm` word specified as shown in the snippet above.
+:::
+
 ### Хэши
 
 #### cell_hash
@@ -299,7 +330,8 @@ cell config_param(int x) asm "CONFIGOPTPARAM";
 int cell_hash(cell c) asm "HASHCU";
 ```
 
-Вычисляет хэш представления `cell c` и возвращает его как 256-битное беззнаковое целое число `x`. Полезно для подписи и проверки подписей произвольных сущностей, представленных деревом ячеек.
+Calculates the representation hash of the given `cell c` and returns it as a 256-bit unsigned integer `x`.
+This function is handy for signing and verifying signatures of arbitrary entities structured as a tree of cells.
 
 #### slice_hash
 
@@ -307,7 +339,9 @@ int cell_hash(cell c) asm "HASHCU";
 int slice_hash(slice s) asm "HASHSU";
 ```
 
-Вычисляет хэш `slice s` и возвращает его как 256-битное целое число без знака `x`. Результат такой же, как если бы была создана обычная ячейка, содержащая только данные и ссылки из `s`, и ее хэш был вычислен `cell_hash`.
+Computes the hash of the given `slice s` and returns it as a 256-bit unsigned integer `x`.
+The result is equivalent to creating a standard cell containing only the data and references
+from `s` and then computing its hash using `cell_hash`.
 
 #### string_hash
 
@@ -315,7 +349,9 @@ int slice_hash(slice s) asm "HASHSU";
 int string_hash(slice s) asm "SHA256U";
 ```
 
-Вычисляет sha256 бит данных `slice s`. Если длина бит `s` не делится на восемь, выдается исключение потери значимости ячейки. Значение хэша возвращается как 256-битное целое число без знака `x`.
+Calculates the SHA-256 hash of the data bits in the given `slice s`.
+A cell underflow exception is thrown if the bit length of `s` is not a multiple of eight.
+The hash is returned as a 256-bit unsigned integer `x`.
 
 ### Проверка подписи
 
@@ -325,7 +361,13 @@ int string_hash(slice s) asm "SHA256U";
 int check_signature(int hash, slice signature, int public_key) asm "CHKSIGNU";
 ```
 
-Проверяет `signature` Ed25519 для `hash` (256-битное беззнаковое целое число, обычно вычисляемое как хэш некоторых данных) с помощью `public_key` (также представленного 256-битным беззнаковым целым числом). Подпись должна содержать не менее 512 бит данных; используются только первые 512 бит. Если подпись действительна, результат равен `-1`; в противном случае это `0`. Обратите внимание, что `CHKSIGNU` создает 256-битный срез с хешем и вызывает `CHKSIGNS`. То есть, если `hash` вычисляется как хеш некоторых данных, эти данные хешируются _дважды_, второе хеширование происходит внутри `CHKSIGNS`.
+Checks whether the given `signature` is a valid Ed25519 signature of the provided
+`hash` using the specified `public key`. The `hash` and `public key` are both 256-bit unsigned integers. The `signature` must be at least 512 bits long, and only the first 512 bits are used.
+If the signature is valid, the function returns `-1`; otherwise, it returns `0`.
+
+Remember that `CHKSIGNU` converts the hash into a 256-bit slice and then calls `CHKSIGNS`.
+This means that if the `hash` was initially generated from some data,
+that data gets hashed _twice_—the first time when creating the hash and the second time within `CHKSIGNS`.
 
 #### check_data_signature
 
@@ -333,11 +375,15 @@ int check_signature(int hash, slice signature, int public_key) asm "CHKSIGNU";
 int check_data_signature(slice data, slice signature, int public_key) asm "CHKSIGNS";
 ```
 
-Проверяет, является ли `signature` допустимой подписью Ed25519 части данных `slice data`, используя `public_key`, аналогично `check_signature`. Если длина бит `data` не делится на восемь, выдается исключение переполнения ячейки. Проверка подписей Ed25519 является стандартной, с использованием sha256 для сокращения `data` до 256-битного числа, которое фактически подписано.
+Verifies whether the given `signature` is a valid Ed25519 signature for the data contained in the `slice data`,
+using the specified `public key`, just like `check_signature`.
+A cell underflow exception is thrown if the data's bit length is not a multiple of eight.
+The verification follows the standard Ed25519 process,
+where SHA-256 is used to derive a 256-bit number from `data`, which is then signed.
 
-### Вычисление размера boc
+### Computation of BoC size
 
-Приведенные ниже примитивы могут быть полезны для расчета платы за хранение предоставленных пользователем данных.
+The following functions help calculate storage fees for user-provided data.
 
 #### compute_data_size?
 
@@ -345,7 +391,10 @@ int check_data_signature(slice data, slice signature, int public_key) asm "CHKSI
 (int, int, int, int) compute_data_size?(cell c, int max_cells) asm "CDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
 ```
 
-Возвращает `(x, y, z, -1)` или `(null, null, null, 0)`. Рекурсивно вычисляет количество отдельных ячеек `x`, битов данных `y` и ссылок на ячейки `z` в DAG с корнем `cell c`, фактически возвращая общее хранилище, используемое этим DAG, с учетом идентификации равных ячеек. Значения `x`, `y` и `z` вычисляются путем обхода в глубину этого DAG с хэш-таблицей хэшей посещенных ячеек, используемых для предотвращения посещений уже посещенных ячеек. Общее количество посещенных ячеек `x` не может превышать неотрицательного `max_cells`; в противном случае вычисление прерывается до посещения `(max_cells + 1)`-й ячейки и возвращается нулевой флаг, указывающий на ошибку. Если `c` равно `null`, возвращается `x = y = z = 0`.
+Returns `(x, y, z, -1)` or `(null, null, null, 0)`. It recursively calculates the number of unique cells `x`, data bits `y`, and cell references `z` in the **directed acyclic graph (DAG)** at `cell c`. This provides the total storage used by the DAG while recognizing identical cells.
+
+The computation uses a depth-first traversal with a hash table to track visited cells, preventing redundant visits.
+If the total amount of visited cells `x` exceeds `max_cells`, the process stops before visiting the `(max_cells + 1)` -th cell, and the function returns `0` to indicate failure. If `c` is `null`, the function returns `x = y = z = 0`.
 
 #### slice_compute_data_size?
 
@@ -353,7 +402,7 @@ int check_data_signature(slice data, slice signature, int public_key) asm "CHKSI
 (int, int, int, int) slice_compute_data_size?(slice s, int max_cells) asm "SDATASIZEQ NULLSWAPIFNOT2 NULLSWAPIFNOT";
 ```
 
-Аналогично `compute_data_size?`, но принимает `slice s` вместо `cell`. Возвращаемое значение `x` не учитывает ячейку, содержащую сам срез `s`; однако биты данных и ссылки на ячейки `s` учитываются в `y` и `z`.
+It works similarly to `compute_data_size?` but takes a `slice s` instead of a `cell`. The result `x` does not include the cell that contains the slice `s`, but `y` and `z` account for the data bits and cell references inside `s`.
 
 #### compute_data_size
 
@@ -361,7 +410,7 @@ int check_data_signature(slice data, slice signature, int public_key) asm "CHKSI
 (int, int, int) compute_data_size(cell c, int max_cells) impure asm "CDATASIZE";
 ```
 
-Не тихая версия `compute_data_size?`, которая выдает исключение переполнения ячейки (8) при сбое.
+A strict version of `compute_data_size?` that throws a cell overflow exception (8) if the computation fails.
 
 #### slice_compute_data_size
 
@@ -369,7 +418,7 @@ int check_data_signature(slice data, slice signature, int public_key) asm "CHKSI
 (int, int, int) slice_compute_data_size(slice s, int max_cells) impure asm "SDATASIZE";
 ```
 
-Не тихая версия `slice_compute_data_size?`, которая выдает исключение переполнения ячейки (8) при сбое.
+A strict version of `slice_compute_data_size?` that throws a cell overflow exception (8) if the computation fails.
 
 ### Сохранение и загрузка постоянного хранилища
 
@@ -379,7 +428,7 @@ int check_data_signature(slice data, slice signature, int public_key) asm "CHKSI
 cell get_data() asm "c4 PUSH";
 ```
 
-Возвращает ячейку постоянного хранилища контракта. Позже ее можно проанализировать или изменить с помощью примитивов среза и конструктора.
+Returns the persistent contract storage cell, which can be later parsed or modified using slice and builder functions.
 
 #### set_data
 
@@ -397,7 +446,9 @@ cell get_data() asm "c4 PUSH";
 cont get_c3() impure asm "c3 PUSH";
 ```
 
-Обычно `c3` имеет продолжение, инициализированное всем кодом контракта. Оно используется для вызовов функций. Примитив возвращает текущее значение `c3`.
+The `c3` register typically holds a continuation set up by the contract code.
+It is used for function calls.
+The primitive returns the current value of `c3`.
 
 #### set_c3
 
@@ -405,7 +456,7 @@ cont get_c3() impure asm "c3 PUSH";
 () set_c3(cont c) impure asm "c3 POP";
 ```
 
-Обновляет текущее значение `c3`. Обычно используется для обновления кода смарт-контракта во время выполнения. Обратите внимание, что после выполнения этого примитива текущий код (и стек рекурсивных вызовов функций) не изменится, но любой другой вызов функции будет использовать функцию из нового кода.
+Updates the `c3` value to modify the contract’s execution code at runtime. The current code and function call stack remain unchanged, but future function calls use the updated code.
 
 #### bless
 
@@ -413,7 +464,7 @@ cont get_c3() impure asm "c3 PUSH";
 cont bless(slice s) impure asm "BLESS";
 ```
 
-Преобразует `slice s` в простое обычное продолжение `c` с `c.code = s`, пустым стеком и списком сохранения.
+Converts a `slice s` into a basic continuation `c`, where `c.code = s`, an empty stack and a savelist.
 
 ### Примитивы, связанные с газом
 
@@ -423,9 +474,13 @@ cont bless(slice s) impure asm "BLESS";
 () accept_message() impure asm "ACCEPT";
 ```
 
-Устанавливает текущий лимит газа `gl` на максимально допустимое значение `gm` и сбрасывает газовый кредит `gc` на ноль, уменьшая значение `gr` на `gc` в процессе. Другими словами, текущий смарт-контракт соглашается купить немного газа, чтобы завершить текущую транзакцию. Это действие требуется для обработки внешних сообщений, которые не несут никакой ценности (следовательно, нет газа).
+This function sets the current gas limit `gl` to its maximum possible value `gm` and resets the gas credit `gc` to zero.
+At the same time, it deducts the previous gas credit `gc` from the remaining gas reserve `gr`.
+Simply put, the smart contract agrees to purchase gas to complete the transaction.
+This function is required when processing external messages that do not carry any value and do not provide gas.
 
-Для получения более подробной информации проверьте [accept_message effects](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects)
+For more details,
+follow the [Accept message effects](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects) section.
 
 #### set_gas_limit
 
@@ -433,9 +488,13 @@ cont bless(slice s) impure asm "BLESS";
 () set_gas_limit(int limit) impure asm "SETGASLIMIT";
 ```
 
-Устанавливает текущий лимит газа `gl` на минимальное значение `limit` и `gm` и сбрасывает газовый кредит `gc` на ноль. В этот момент, если количество потребленного газа (включая текущую инструкцию) превышает результирующее значение `gl`, перед установкой новых лимитов газа выдается (необработанное) исключение отсутствия газа. Обратите внимание, что `set_gas_limit` с аргументом `limit ≥ 2^63 − 1` эквивалентно `accept_message`.
+This function sets the gas limit `gl` to the smaller of two values: the provided `limit` or the maximum allowed gas `gm`.
+It also resets the gas credit `gc` to zero. If the contract already uses more gas than this new limit `gl`, including the current instruction, an out-of-gas exception is triggered before the new limit is applied.
 
-Для получения более подробной информации см. [accept_message effects](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects)
+Remember that if the `limit` is `2^63 − 1` or higher, calling `set_gas_limit` works the same as calling `accept_message`.
+
+For more details,
+follow the [Accept message effects](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects) section.
 
 #### commit
 
@@ -443,7 +502,8 @@ cont bless(slice s) impure asm "BLESS";
 () commit() impure asm "COMMIT";
 ```
 
-Фиксирует текущее состояние регистров `c4` ("постоянные данные") и `c5` ("действия"), так что текущее выполнение считается "успешным" с сохраненными значениями, даже если позже выдается исключение.
+Saves the current state of persistent storage `c4` and action registers `c5`, ensuring execution succeeds with these stored values,
+even if an exception occurs later.
 
 #### buy_gas
 
@@ -452,10 +512,11 @@ cont bless(slice s) impure asm "BLESS";
 ```
 
 :::caution
-Код операции `BUYGAS` в настоящее время не реализован
+The `BUYGAS` opcode is currently not implemented.
 :::
 
-Вычисляет количество газа, которое можно купить за `gram` nanotoncoin, и устанавливает `gl` соответственно так же, как `set_gas_limit`.
+This function calculates how much gas can be purchased for the `gram` nanotoncoins and updates the gas limit `gl` accordingly,
+similar to `set_gas_limit`.
 
 ### Примитивы действий
 
@@ -465,7 +526,28 @@ cont bless(slice s) impure asm "BLESS";
 () raw_reserve(int amount, int mode) impure asm "RAWRESERVE";
 ```
 
-Создает выходное действие, которое зарезервирует ровно `amount` nanotoncoin (если `mode = 0`), максимум `amount` nanotoncoin (если `mode = 2`) или все, кроме `amount` nanotoncoin (если `mode = 1` или `mode = 3`) из оставшегося баланса на аккаунте. Это примерно эквивалентно созданию исходящего сообщения, переносящего `amount` nanotoncoin (или `b − amount` nanotoncoin, где `b` — оставшийся баланс) самому себе, так что последующие выходные действия не смогут потратить больше денег, чем остаток. Бит +2 в `mode` означает, что внешнее действие не терпит неудачу, если указанная сумма не может быть зарезервирована; вместо этого весь оставшийся баланс резервируется. Бит +8 в `mode` означает `amount <- -amount` перед выполнением любых дальнейших действий. Бит +4 в `mode` означает, что `amount` увеличивается на исходный баланс текущего аккаунта (до фазы вычислений), включая все дополнительные валюты перед выполнением любых других проверок и действий. В настоящее время `amount` должно быть неотрицательным целым числом, а `mode` должно быть в диапазоне `0..15`.
+The `raw_reserve` function creates an output action
+that reserves a specific amount of nanotoncoins from the account’s remaining balance.
+The behavior depends on the `mode` parameter:
+
+- If `mode = 0`, exactly the `amount` of nanotoncoins is reserved.
+- If `mode = 2`, up to the `amount` of nanotoncoins is reserved.
+- If `mode = 1` or `mode = 3`, all but the `amount` of nanotoncoins is reserved.
+
+This process is equivalent to generating an outbound message that transfers the `amount` of nanotoncoins or `b − amount` nanotoncoins,
+where `b` represents the remaining balance, to the sender. This ensures that subsequent output actions cannot exceed the remaining funds.
+
+**Mode Flags**
+
+- **Bit +2** in `mode`: prevents failure if the specified `amount` cannot be reserved. Instead, the entire remaining balance is reserved.
+- **Bit +8** in `mode`: negates `amount` (`amount <- -amount`) before executing further actions.
+- **Bit +4** in `mode`: increases `amount` by the original balance of the current account before the compute phase,
+  including all extra currencies, before performing any other checks and actions.
+
+**Constraints**
+
+- The `amount` must be a non-negative integer.
+- `mode` must be within the range `0..15`.
 
 #### raw_reserve_extra
 
@@ -473,7 +555,8 @@ cont bless(slice s) impure asm "BLESS";
 () raw_reserve_extra(int amount, cell extra_amount, int mode) impure asm "RAWRESERVEX";
 ```
 
-Похоже на `raw_reserve`, но также принимает словарь `extra_amount` (представленный `cell` или `null`) с дополнительными валютами. Таким образом, можно зарезервировать валюты, отличные от Toncoin.
+Similar to `raw_reserve`, but it also supports an `extra_amount` dictionary.
+This dictionary, given as a `cell` or `null`, allows reserving currencies other than Toncoin.
 
 #### send_raw_message
 
@@ -481,49 +564,52 @@ cont bless(slice s) impure asm "BLESS";
 () send_raw_message(cell msg, int mode) impure asm "SENDRAWMSG";
 ```
 
-Отправляет необработанное сообщение, содержащееся в `msg`, которое должно содержать правильно сериализованный объект Message X, с единственным исключением, что исходный адрес может иметь фиктивное значение `addr_none` (которое будет автоматически заменено текущим адресом смарт-контракта), а поля `ihr_fee`, `fwd_fee`, `created_lt` и `created_at` могут иметь произвольные значения (которые будут перезаписаны правильными значениями во время фазы действия текущей транзакции). Целочисленный параметр `mode` содержит флаги.
+This function sends a raw message stored in `msg`. This message must contain a properly serialized `Message X` object, with a few exceptions.
+The source address can have a dummy value `addr_none`, which the current smart contract address will automatically replace. The fields `ihr_fee`, `fwd_fee`, `created_lt`, and `created_at` can hold arbitrary values, as they will be updated with the correct ones during the action phase of the transaction. The integer parameter `mode` specifies the flags.
 
-В настоящее время существует 3 режима и 4 флага для сообщений. Вы можете объединить один режим с несколькими (возможно, ни одним) флагами, чтобы получить требуемый `mode`. Комбинация просто означает получение суммы их значений. Таблица с описаниями режимов и флагов приведена ниже.
+Currently, there are **3 modes** and **4 flags** available for messages.
+A single mode can be combined with multiple flags or none to form the desired `mode`.
+The combination is achieved by **summing** their values. The table below provides descriptions of the available modes and flags.
 
-| Режим  | Описание                                                                                                                                                                                                                       |
-| :----- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `0`    | Обычное сообщение                                                                                                                                                                                                              |
-| `64`   | Перенести всю оставшуюся стоимость входящего сообщения в дополнение к стоимости, изначально указанной в новом сообщении                                                                                                        |
-| `128`  | Перенести весь оставшийся баланс текущего смарт-контракта вместо стоимости, изначально указанной в сообщении                                                                                                                   |
+| Режим  | Description                                                                                                     |
+| :----- | :-------------------------------------------------------------------------------------------------------------- |
+| `0`    | Sends an ordinary message.                                                                                      |
+| `64`   | Transfers the full remaining value of the inbound message and the initially specified amount.                   |
+| `128`  | Transfers the entire remaining balance of the current smart contract instead of the initially specified amount. |
 
-| Флаг  | Описание                                                                                                                                                                                                             |
-| :---- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `+1`  | Оплатить комиссию за перевод отдельно от стоимости сообщения                                                                                                                                                         |
-| `+2`  | Игнорировать некоторые ошибки, возникающие при обработке этого сообщения на этапе действия (см. примечание ниже)                                                                                                     |
-| `+16` | В случае сбоя действия — возврат транзакции. Никакого эффекта, если используется `+2`.                                                                                                                               |
-| `+32` | Текущий аккаунт должен быть уничтожен, если его результирующий баланс равен нулю (часто используется с режимом 128)                                                                                                  |
+| Флаг  | Description                                                                                              |
+| :---- | :------------------------------------------------------------------------------------------------------- |
+| `+1`  | Pays transfer fees separately from the message value.                                                    |
+| `+2`  | Ignores certain errors that occur while processing the message during the action phase (see note below). |
+| `+16` | Bounces the transaction if the action fails. Has no effect if `+2` is used.                              |
+| `+32` | Destroys the current account if its resulting balance is zero (commonly used with `mode = 128`).         |
 
 :::info +2 флага
 
-1. Недостаточно Toncoin:
-   - Недостаточно стоимости для перевода с сообщением (вся стоимость входящего сообщения была израсходована).
-   - Недостаточно средств для обработки сообщения.
-   - Недостаточно стоимости, прикрепленной к сообщению, для оплаты комиссий за пересылку.
-   - Недостаточно дополнительной валюты для отправки с сообщением.
+1. Insufficient Toncoins:
+   - Not enough value to transfer with the message (the entire inbound message value has been used).
+   - Insufficient funds to process the message.
+   - Not enough attached value to cover forwarding fees.
+   - Insufficient extra currency to send with the message.
    - Недостаточно средств для оплаты исходящего внешнего сообщения.
-2. Сообщение слишком большое (проверьте [размер сообщения](/v3/documentation/smart-contracts/message-management/sending-messages#message-size) для получения дополнительной информации).
-3. Сообщение имеет слишком большую глубину Меркла.
+2. Message exceeds size limits (see the [Message size](/v3/documentation/smart-contracts/message-management/sending-messages#message-size) section for details).
+3. Excessive Merkle depth in the message.
 
-Однако он не игнорирует ошибки в следующих сценариях:
+However, the `+2` flag does not ignore errors in the following cases:
 
-1. Сообщение имеет недопустимый формат.
-2. Режим сообщения включает как 64, так и 128 модификаций.
-3. Исходящее сообщение имеет недопустимые библиотеки в StateInit.
-4. Внешнее сообщение не является обычным или включает флаг +16 или +32 или оба
+1. The message format is invalid.
+2. Both `64` and `128` modes are used simultaneously.
+3. The outbound message contains invalid libraries in `StateInit`.
+4. The external message is not ordinary or includes the `+16` or `+32` flag.
    :::
 
 :::warning
 
-1. **Флаг +16** - не использовать во внешних сообщениях (например, на кошельках), так как нет отправителя, который мог бы получить отклоненное сообщение.
-2. **Флаг +2** - важно во внешних сообщениях (например, на кошельках).
+1. **+16 flag** should not be used in external messages (e.g., to wallets), as there is no sender to receive the bounced message.
+2. **+2 flag** is important in external messages (e.g., to wallets).
    :::
 
-Вы можете увидеть подробный пример [здесь](/v3/documentation/smart-contracts/message-management/sending-messages#example-with-use-cases).
+You can view a detailed example [here](/v3/documentation/smart-contracts/message-management/sending-messages#example-with-use-cases).
 
 #### set_code
 
@@ -531,14 +617,17 @@ cont bless(slice s) impure asm "BLESS";
 () set_code(cell new_code) impure asm "SETCODE";
 ```
 
-Создает выходное действие, которое изменит этот код смарт-контракта на тот, который задан ячейкой `new_code`. Обратите внимание, что это изменение вступит в силу только после успешного завершения текущего выполнения смарт-контракта. (Ср. [set_c3](/v3/documentation/smart-contracts/func/docs/stdlib#set_c3))
+Generates an output action to update the smart contract's code to the one provided in the `new_code` cell.
+This change occurs only after the smart contract completes its current execution.
+See also [set_c3](/v3/documentation/smart-contracts/func/docs/stdlib#set_c3).
 
 ### Примитивы генератора случайных чисел
 
-Генератор псевдослучайных чисел использует случайное начальное число, беззнаковое 256-битное целое число и (иногда) другие данные, хранящиеся в [c7](/v3/documentation/tvm/tvm-overview#control-registers). Начальное значение случайного начального числа перед выполнением смарт-контракта в блокчейне TON представляет собой хэш адреса смарт-контракта и глобального случайного начального числа блока. Если внутри блока есть несколько запусков одного и того же смарт-контракта, то все эти запуски будут иметь одинаковое случайное начальное число. Это можно исправить, например, запустив `randomize_lt` перед первым использованием генератора псевдослучайных чисел.
+The pseudo-random number generator relies on a random seed, a 256-bit unsigned integer, and sometimes additional data stored in [c7](/v3/documentation/tvm/tvm-overview#control-registers).
+Before a smart contract executes in the TON Blockchain, its initial random seed is derived from a hash of the smart contract address and the global block random seed. If the same smart contract runs multiple times within a block, each run will use the same random seed. This can be adjusted by calling `randomize_ltbefore` using the pseudo-random number generator for the first time.
 
 :::caution
-Keep in mind that random numbers generated by the functions below can be predicted if you do not use additional tricks.
+Remember that the random numbers generated by the functions below can be predicted unless additional techniques are used.
 
 - [Генерация случайных чисел](/v3/guidelines/smart-contracts/security/random-number-generation)
 
@@ -550,7 +639,12 @@ Keep in mind that random numbers generated by the functions below can be predict
 int random() impure asm "RANDU256";
 ```
 
-Генерирует новое псевдослучайное целое число без знака длиной 256 бит `x`. Алгоритм следующий: если `r` — это старое значение случайного начального числа, рассматриваемого как 32-байтовый массив (путем построения представления с обратным порядком байтов без знака длиной 256 бит), то вычисляется его `sha512(r)`; первые 32 байта этого хэша сохраняются как новое значение `r'` случайного начального числа, а оставшиеся 32 байта возвращаются как следующее случайное значение `x`.
+Generates a new pseudo-random 256-bit unsigned integer `x`. The process works as follows:
+
+- Let `r` be the previous random seed, a 32-byte array constructed from the big-endian representation of a 256-bit unsigned integer.
+- Compute `sha512(r)`.
+- The first 32 bytes of the hash become the new seed `r'`.
+- The remaining 32 bytes are returned as the new random value `x`.
 
 #### rand
 
@@ -560,13 +654,18 @@ int rand(int range) impure asm "RAND";
 
 Генерирует новое псевдослучайное целое число `z` в диапазоне `0..range−1` (или `range..−1`, если `range < 0`). Точнее, генерируется случайное значение `x` без знака, как в `random`; затем `z := x * range / 2^256` вычисляется.
 
+Produces a pseudo-random integer `z` within the range `0..range−1` (or `range..−1` if `range < 0`).
+
+- First, an unsigned random value `x` is generated using `random()`.
+- Then, `z := x * range / 2^256` is calculated.
+
 #### get_seed
 
 ```func
 int get_seed() impure asm "RANDSEED";
 ```
 
-Возвращает текущее случайное начальное число как беззнаковое 256-битное целое число.
+Returns the current random seed as a 256-bit unsigned integer.
 
 #### set_seed
 
@@ -574,7 +673,7 @@ int get_seed() impure asm "RANDSEED";
 int set_seed(int seed) impure asm "SETRAND";
 ```
 
-Устанавливает случайное начальное число как беззнаковое 256-битное `seed`.
+Sets the random seed to a specified 256-bit unsigned integer `seed`.
 
 #### randomize
 
@@ -584,17 +683,23 @@ int set_seed(int seed) impure asm "SETRAND";
 
 Смешивает беззнаковое 256-битное целое число `x` со случайным начальным числом `r`, устанавливая для случайного начального значения значение sha256 для объединения двух 32-байтовых строк: первая с представлением старого начального значения числа `r`, а вторая с представлением значения в порядке возрастания `x`.
 
+Mixes a 256-bit unsigned integer `x` into the random seed `r` by updating`r` to `sha256(r || x)`, where:
+
+- `r` is the previous seed, represented as a 32-byte big-endian array.
+- `x` is also converted into a 32-byte big-endian array.
+  T- he new seed is the SHA-256 hash of their concatenation.
+
 #### randomize_lt
 
 ```func
 () randomize_lt() impure asm "LTIME" "ADDRAND";
 ```
 
-Эквивалентно `randomize(cur_lt());`.
+Equivalent to calling `randomize(cur_lt());`.
 
 ### Примитивы манипуляции адресами
 
-Примитивы манипуляции адресами, перечисленные ниже, сериализуют и десериализуют значения в соответствии со следующей схемой TL-B.
+The functions below handle the serialization and deserialization of values based on the following TL-B scheme.
 
 ```func
 addr_none$00 = MsgAddressExt;
@@ -622,13 +727,21 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
   created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
 ```
 
-Десериализованный `MsgAddress` представлен кортежем `t` следующим образом:
-
 - `addr_none` представлен как `t = (0)`, т. е. кортеж, содержащий ровно одно целое число, равное нулю
 - `addr_extern` представлен как `t = (1, s)`, где срез `s` содержит
   поле `external_address`. Другими словами, `t` - это пара (кортеж, состоящий из двух записей), содержащая целое число, равное единице, и срез `s`
 - `addr_std` представлен как `t = (2, u, x, s)`, где `u` - это либо `null` (если `anycast` отсутствует), либо срез `s'`, содержащий `rewrite_pfx` (если `anycast` присутствует). Далее, целое число `x` является `workchain_id`, а срез `s` содержит адрес
 - `addr_var` представлено как `t = (3, u, x, s)`, где `u`, `x` и `s` имеют то же значение, что и для `addr_std`
+
+A deserialized `MsgAddress`cis represented as a tuple `t` with the following structure:
+
+- `addr_none` is represented as `t = (0)`, a single-element tuple where the integer is zero.
+- `addr_extern` is represented as `t = (1, s)`, where `s` is a slice containing `external_address`. In other words, `t` is a pair with the first element being `1` and the second being `s`.
+- `addr_std` is represented as `t = (2, u, x, s)`, where:
+  - `u` is `null` if `anycast` is absent or a slice `s'` containing `rewrite_pfx` if `anycast` is present.
+  - `x` is the `workchain_id`.
+  - `s` is a slice containing the address.
+- addr_var is represented as `t = (3, u, x, s)`, where `u`, `x,` and `s` follow the same structure as `addr_std`.
 
 #### load_msg_addr
 
@@ -636,7 +749,7 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
 (slice, slice) load_msg_addr(slice s) asm( -> 1 0) "LDMSGADDR";
 ```
 
-Загружает из `slice s` единственный префикс, который является допустимым `MsgAddress`, и возвращает как этот префикс `s'`, так и остаток `s''` от `s` в виде срезов.
+Extracts a valid `MsgAddress` prefix from `slice s` and returns the extracted prefix `s'` and the remaining part `s''`.
 
 #### parse_addr
 
@@ -644,7 +757,7 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
 tuple parse_addr(slice s) asm "PARSEMSGADDR";
 ```
 
-Раскладывает `slice s`, содержащий допустимый `MsgAddress`, на `tuple t` с отдельными полями этого `MsgAddress`. Если `s` не является допустимым `MsgAddress`, выдается исключение десериализации ячейки.
+Splits `slice s`, which holds a valid `MsgAddress`, into tuple `t`, separating its fields. If `s` is invalid, a cell deserialization exception is raised.
 
 #### parse_std_addr
 
@@ -652,7 +765,8 @@ tuple parse_addr(slice s) asm "PARSEMSGADDR";
 (int, int) parse_std_addr(slice s) asm "REWRITESTDADDR";
 ```
 
-Анализирует срез `s`, содержащий допустимый `MsgAddressInt` (обычно `msg_addr_std`), применяет перезапись из `anycast` (если присутствует) к префиксу адреса той же длины и возвращает как воркчейн, так и 256-битный адрес в виде целых чисел. Если адрес не 256-битный или если `s` не является допустимой сериализацией `MsgAddressInt`, выдает исключение `deserialization` ячейки.
+Extracts a valid `MsgAddressInt`, typically `msg_addr_std`, from `slice s`, modifies the address prefix if `anycast` is present, and returns the workchain and 256-bit address as integers. A cell `deserialization` exception is triggered if the address isn't 256-bit
+or `s` isn't a valid `MsgAddressInt` serialization.
 
 #### parse_var_addr
 
@@ -660,11 +774,12 @@ tuple parse_addr(slice s) asm "PARSEMSGADDR";
 (int, slice) parse_var_addr(slice s) asm "REWRITEVARADDR";
 ```
 
-Вариант `parse_std_addr`, который возвращает (переписанный) адрес как срез `s`, даже если его длина не точно 256 бит (представлено `msg_addr_var`).
+A modified version of `parse_std_addr` that returns the modified address as `slice s`,
+even if its length is not exactly 256 bits, as in `msg_addr_var`.
 
 ## Примитивы отладки
 
-Примитивы отладки можно использовать для проверки состояния различных переменных во время выполнения тестов или консольных скриптов.
+Debug primitives help inspect the state of various variables while running tests or executing console scripts.
 
 #### ~dump
 
@@ -672,7 +787,7 @@ tuple parse_addr(slice s) asm "PARSEMSGADDR";
 forall X -> () ~dump(X value) impure asm "s0 DUMP";
 ```
 
-Выводит значение. Несколько значений можно вывести как кортеж, например `~dump([v1, v2, v3])`.
+Prints the given value. Multiple values can be output as a tuple, e.g.,`~dump([v1, v2, v3])`.
 
 #### ~strdump
 
@@ -680,7 +795,7 @@ forall X -> () ~dump(X value) impure asm "s0 DUMP";
 () ~strdump(slice str) impure asm "STRDUMP";
 ```
 
-Выводит строку. Длина бит параметра среза должна делиться на 8.
+Prints a string. The bit length of the slice parameter must be a multiple of 8.
 
 #### dump_stack
 
@@ -688,15 +803,14 @@ forall X -> () ~dump(X value) impure asm "s0 DUMP";
 () dump_stack() impure asm "DUMPSTK";
 ```
 
-Выводит стек (максимум 255 верхних значений) и показывает общую глубину стека.
+Prints the current stack up to the top 255 values and displays the total stack depth.
 
 ## Примитивы среза
 
-Говорят, что примитив _загружает_ некоторые данные, если он возвращает данные и остаток среза (поэтому его также можно использовать как [модифицирующий метод](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)).
-
-Говорят, что примитив загружает некоторые данные, если он возвращает только данные (его можно использовать как [немодифицирующий метод](/v3/documentation/smart-contracts/func/docs/statements#non-modifying-methods)).
-
-Если не указано иное, примитивы загрузки и предзагрузки считывают данные из префикса фрагмента.
+A primitive _loads_ data when it returns both the extracted data and the remainder of the slice.
+It can be used as a [modifying method](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods).
+A primitive _preloads_ data when it returns only the extracted data, leaving the original slice unchanged. It can be used as a [non-modifying method](/v3/documentation/smart-contracts/func/docs/statements#non-modifying-methods).
+Unless specified otherwise, loading and preloading primitives read data from the beginning of the slice.
 
 #### begin_parse
 
@@ -704,7 +818,9 @@ forall X -> () ~dump(X value) impure asm "s0 DUMP";
 slice begin_parse(cell c) asm "CTOS";
 ```
 
-Преобразует `cell` в `slice`. Обратите внимание, что `c` должна быть либо обычной ячейкой, либо экзотической ячейкой (см. [TVM.pdf](https://ton.org/tvm.pdf), 3.1.2), которая автоматически загружается для получения обычной ячейки `c'`, преобразованной впоследствии в `slice`.
+Converts a `cell` into a `slice`. The input `c` must be either an ordinary or exotic cell.
+See [TVM.pdf](https://ton.org/tvm.pdf), 3.1.2. If `c` is exotic, it is automatically converted into an ordinary cell `c'`
+before being transformed into a `slice`.
 
 #### end_parse
 
@@ -712,7 +828,7 @@ slice begin_parse(cell c) asm "CTOS";
 () end_parse(slice s) impure asm "ENDS";
 ```
 
-Проверяет, является ли `s` пустым. Если нет, выдает исключение.
+Checks if the `slice s` is empty. It throws an exception if it is not.
 
 #### load_ref
 
@@ -768,7 +884,7 @@ cell preload_ref(slice s) asm "PLDREF";
 ;; (slice, slice) load_bits(slice s, int len) asm(s len -> 1 0) "LDSLICEX";
 ```
 
-Загружает первые `0 ≤ len ≤ 1023` бит из среза `s` в отдельный срез `s''`.
+Loads the first `0 ≤ len ≤ 1023` bits from `slice s` into a new slice `s''`.
 
 #### preload_bits
 
@@ -776,7 +892,7 @@ cell preload_ref(slice s) asm "PLDREF";
 ;; slice preload_bits(slice s, int len) asm "PLDSLICEX";
 ```
 
-Предварительно загружает первые `0 ≤ len ≤ 1023` бит из slice `s` в отдельный slice `s''`.
+Preloads the first `0 ≤ len ≤ 1023` bits from `slice s` into a new slice `s''`.
 
 #### load_coins
 
@@ -784,7 +900,7 @@ cell preload_ref(slice s) asm "PLDREF";
 (slice, int) load_coins(slice s) asm( -> 1 0) "LDGRAMS";
 ```
 
-Загружает сериализованное количество Toncoin (любое беззнаковое целое число до `2^120 - 1`).
+Loads serialized amount of Toncoins, which is an unsigned integer up to `2^120 - 1`.
 
 #### skip_bits
 
@@ -793,7 +909,7 @@ slice skip_bits(slice s, int len) asm "SDSKIPFIRST";
 (slice, ()) ~skip_bits(slice s, int len) asm "SDSKIPFIRST";
 ```
 
-Возвращает все, кроме первых `0 ≤ len ≤ 1023` бит `s`.
+Returns all bits of `s` except for the first `len` bits, where `0 ≤ len ≤ 1023`.
 
 #### first_bits
 
@@ -801,7 +917,7 @@ slice skip_bits(slice s, int len) asm "SDSKIPFIRST";
 slice first_bits(slice s, int len) asm "SDCUTFIRST";
 ```
 
-Возвращает первые `0 ≤ len ≤ 1023` бит `s`.
+Returns the first `len` bits of `s`, where `0 ≤ len ≤ 1023`.
 
 #### skip_last_bits
 
@@ -810,7 +926,7 @@ slice skip_last_bits(slice s, int len) asm "SDSKIPLAST";
 (slice, ()) ~skip_last_bits(slice s, int len) asm "SDSKIPLAST";
 ```
 
-Возвращает все, кроме последних `0 ≤ len ≤ 1023` бит `s`.
+Returns all bits of `s` except for the last `len` bits, where `0 ≤ len ≤ 1023`.
 
 #### slice_last
 
@@ -818,7 +934,7 @@ slice skip_last_bits(slice s, int len) asm "SDSKIPLAST";
 slice slice_last(slice s, int len) asm "SDCUTLAST";
 ```
 
-Возвращает последние `0 ≤ len ≤ 1023` бит `s`.
+Returns the last `len` bits of `s`, where `0 ≤ len ≤ 1023`.
 
 #### load_dict
 
@@ -826,7 +942,7 @@ slice slice_last(slice s, int len) asm "SDCUTLAST";
 (slice, cell) load_dict(slice s) asm( -> 1 0) "LDDICT";
 ```
 
-Загружает словарь `D` из среза `s`. Может применяться к словарям или к значениям произвольных типов `Maybe ^Y` (возвращает `null`, если используется конструктор `nothing`).
+Loads a dictionary `D` from slice `s`. It can be used for dictionaries or to values of arbitrary `Maybe ^Y` types (returns `null` if the `nothing` constructor is used).
 
 #### preload_dict
 
@@ -900,13 +1016,14 @@ int slice_refs_empty?(slice s) asm "SREMPTY";
 int slice_depth(slice s) asm "SDEPTH";
 ```
 
-Возвращает глубину среза `s`. Если в `s` нет ссылок, то возвращается `0`; в противном случае возвращаемое значение равно единице плюс максимальная глубина ячеек, на которые ссылается `s`.
+Returns the depth of slice `s`.
+If `s` has no references, it returns `0`;
+otherwise, the returned value is one plus the maximum depths of cells referred to from `s`.
 
-## Примитивы конструктора
+## Builder primitives
 
-Говорят, что примитив _сохраняет_ значение `x` в конструкторе `b`, если он возвращает измененную версию конструктора `b'` со значением `x`, сохраненным в конце. Его можно использовать как [немодифицирующий метод](/v3/documentation/smart-contracts/func/docs/statements#non-modifying-methods).
-
-Все перечисленные ниже примитивы сначала проверяют, достаточно ли места в `builder`, а затем диапазон сериализуемого значения.
+A primitive _stores_ a value `x` in a builder `b` by returning a modified version `b'` with `x` added at the end. It can also be used as a [non-modifying method](/v3/documentation/smart-contracts/func/docs/statements#non-modifying-methods).
+Each of the following primitives first checks for enough space in the `builder` and then verifies the range of the serialized value.
 
 #### begin_cell
 
@@ -922,7 +1039,7 @@ builder begin_cell() asm "NEWC";
 cell end_cell(builder b) asm "ENDC";
 ```
 
-Преобразует `builder` в обычную `cell`.
+Converts a `builder` into a standard `cell`.
 
 #### store_ref
 
@@ -930,7 +1047,7 @@ cell end_cell(builder b) asm "ENDC";
 builder store_ref(builder b, cell c) asm(c b) "STREF";
 ```
 
-Сохраняет ссылку на ячейку `c` в builder `b`.
+Stores a reference to cell `c` in builder `b`.
 
 #### store_uint
 
@@ -938,7 +1055,7 @@ builder store_ref(builder b, cell c) asm(c b) "STREF";
 builder store_uint(builder b, int x, int len) asm(x b len) "STUX";
 ```
 
-Сохраняет беззнаковое `len`-битное целое `x` в `b` для `0 ≤ len ≤ 256`.
+Stores an unsigned `len`-bit integer `x` in `b`, where `0 ≤ len ≤ 256`.
 
 #### store_int
 
@@ -946,7 +1063,7 @@ builder store_uint(builder b, int x, int len) asm(x b len) "STUX";
 builder store_int(builder b, int x, int len) asm(x b len) "STIX";
 ```
 
-Сохраняет знаковое `len`-битное целое `x` в `b` для `0 ≤ len ≤ 257`.
+Stores a signed `len`-bit integer `x` in `b`, where `0 ≤ len ≤ 257`.
 
 #### store_slice
 
@@ -954,7 +1071,7 @@ builder store_int(builder b, int x, int len) asm(x b len) "STIX";
 builder store_slice(builder b, slice s) asm "STSLICER";
 ```
 
-Сохраняет срез `s` в builder `b`.
+Stores slice `s` in builder `b`.
 
 #### store_grams
 
@@ -968,9 +1085,14 @@ builder store_grams(builder b, int x) asm "STGRAMS";
 builder store_coins(builder b, int x) asm "STGRAMS";
 ```
 
-Сохраняет (сериализует) целое `x` в диапазоне `0..2^120 − 1` в builder `b`. Сериализация `x` состоит из 4-битного беззнакового целого числа с обратным порядком байтов `l`, которое является наименьшим целым числом `l ≥ 0`, таким образом, что `x < 2^8l`, за которым следует `8l`-битное беззнаковое представление `x` с обратным порядком байтов. Если `x` не принадлежит поддерживаемому диапазону, выдается исключение проверки диапазона.
+Serializes an integer `x` in the range `0..2^120 − 1` into builder `b`. The serialization consists of:
 
-Это наиболее распространенный способ хранения Toncoin.
+- A 4-bit unsigned big-endian integer `l`, the smallest `l ≥ 0` such that `x < 2^8l`.
+- An `8l`-bit unsigned big-endian representation of `x`.
+
+A range check exception is thrown if `x` is outside the supported range.
+
+This is the standard way of storing Toncoins.
 
 #### store_dict
 
@@ -978,7 +1100,7 @@ builder store_coins(builder b, int x) asm "STGRAMS";
 builder store_dict(builder b, cell c) asm(c b) "STDICT";
 ```
 
-Сохраняет словарь `D`, представленный ячейкой `c` или `null`, в builder `b`. Другими словами, сохраняет `1`-бит и ссылку на `c`, если `c` не является `null`, и `0`-бит в противном случае.
+Stores a dictionary `D` represented by cell `c` or `null` into builder `b`. Stores a 1-bit and a reference to `c` if `c` is not `null`; otherwise, stores a 0-bit.
 
 #### store_maybe_ref
 
@@ -986,7 +1108,7 @@ builder store_dict(builder b, cell c) asm(c b) "STDICT";
 builder store_maybe_ref(builder b, cell c) asm(c b) "STOPTREF";
 ```
 
-Эквивалентно `store_dict`.
+The same as `store_dict`.
 
 ### Примитивы размера конструктора
 
@@ -996,7 +1118,7 @@ builder store_maybe_ref(builder b, cell c) asm(c b) "STOPTREF";
 int builder_refs(builder b) asm "BREFS";
 ```
 
-Возвращает количество ссылок на ячейки, уже сохраненных в Builder `b`.
+Returns the number of cell references currently stored in builder `b`.
 
 #### builder_bits
 
@@ -1004,7 +1126,7 @@ int builder_refs(builder b) asm "BREFS";
 int builder_bits(builder b) asm "BBITS";
 ```
 
-Возвращает количество битов данных, уже сохраненных в Builder `b`.
+Returns the number of data bits currently stored in builder `b`.
 
 #### builder_depth
 
@@ -1012,9 +1134,9 @@ int builder_bits(builder b) asm "BBITS";
 int builder_depth(builder b) asm "BDEPTH";
 ```
 
-Возвращает глубину builder `b`. Если в `b` не сохранено ссылок на ячейки, то возвращает `0`; в противном случае возвращаемое значение равно единице плюс максимальная глубина ячеек, на которые ссылается `b`.
+Returns the depth of builder `b`. If `b` contains no cell references, it returns `0`. Otherwise, it returns `1` plus the maximum depth among the referenced cells.
 
-## Примитивы ячеек
+## Cell primitives
 
 #### cell_depth
 
@@ -1022,7 +1144,7 @@ int builder_depth(builder b) asm "BDEPTH";
 int cell_depth(cell c) asm "CDEPTH";
 ```
 
-Возвращает глубину ячейки `c`. Если у `c` нет ссылок, то возвращает `0`; в противном случае возвращаемое значение равно единице плюс максимальная глубина ячеек, на которые ссылается `c`. Если `c` является `null` вместо ячейки, возвращается ноль.
+Returns the depth of the given `cell c`. If `c` has no references, the function returns `0`. Otherwise, it returns `1` plus the maximum depth among all cells referenced by `c`. If `c` is `null` instead of a cell, the function returns `0`.
 
 #### cell_null?
 
@@ -1030,38 +1152,59 @@ int cell_depth(cell c) asm "CDEPTH";
 int cell_null?(cell c) asm "ISNULL";
 ```
 
-Проверяет, является ли `c` `null`. Обычно `null`-ячейка представляет собой пустой словарь. FunC также имеет встроенный полиморфный `null?`. (См. [built-ins](/v3/documentation/smart-contracts/func/docs/builtins#other-primitives).)
+Checks whether the given `cell c` is `null`. In most cases, a `null` cell represents an empty dictionary. FunC also includes a polymorphic `null?` built-in function. See [built-in](/v3/documentation/smart-contracts/func/docs/builtins#other-primitives) for more details.
 
 ## Примитивы словарей
 
 :::caution
-Приведенные ниже примитивы словарей являются низкоуровневыми и не проверяют, что структура ячейки, к которой они применяются, соответствует сигнатуре операции. Применение операции словаря к "не словарю" или применение операции, соответствующей одной длине/знаку ключа, к словарю с другим типом ключей, например, одновременная запись в один словарь значений ключей с 8-битным подписанным ключом и 7-битным неподписанным ключом, является **Неопределенным поведением**. Часто в таких случаях выдается исключение, но в редких случаях может быть записано/считано неправильное значение. Разработчикам настоятельно рекомендуется избегать такого кода.
+The dictionary primitives below are low-level and do not verify whether the cell structure matches the expected operation.
+Using a dictionary operation on a "non-dictionary" cell results in **undefined behavior**. The same applies when using keys of different lengths or types, such as writing to a dictionary using an 8-bit signed key and a 7-bit unsigned key.
+
+In most cases, this will cause an exception. However, in rare cases, it may lead to incorrect values being written or read. Developers should avoid such code.
 :::
 
-Как сказано в [TVM.pdf](https://ton.org/tvm.pdf):
+As stated in [TVM.pdf](https://ton.org/tvm.pdf):
 
-> Словари допускают два различных представления в качестве значений стека TVM:
+> Dictionaries can be represented in two different ways as TVM stack values:
 >
-> - Срез `s` с сериализацией значения TL-B типа `HashmapE(n, X)`. Другими словами, `s` состоит либо из одного бита, равного нулю (если словарь пуст), либо из одного бита, равного единице, и ссылки на ячейку, содержащую корень двоичного дерева, т. е. сериализованное значение типа `Hashmap(n, X)`.
-> - "Ячейка Maybe" `c^?`, т. е. значение, которое является либо ячейкой (содержащей сериализованное значение типа `Hashmap(n, X)`, как и раньше), либо `null` (соответствующее пустому словарю, см. [нулевые значения](/v3/documentation/smart-contracts/func/docs/types#null-values)). Когда ячейка Maybe `c^?` используется для представления словаря, мы обычно обозначаем ее `D`.
+> 1. **As a slice `s`** containing the serialized TL-B value of type `HashmapE(n, X)`. In simpler terms, `s` consists either of a single `0` bit if the dictionary is empty or a `1` bit followed by a reference to a cell containing the binary tree's root—essentially, a serialized value of type `Hashmap(n, X)`.
 >
-> Большинство примитивов словаря, перечисленных ниже, принимают и возвращают словари во второй форме, что более удобно для работы со стеком. Однако сериализованные словари внутри более крупных объектов TL-B используют первое представление.
+> 2. **As a `Maybe cell (c^?)`**, which is either a cell that contains a serialized `Hashmap(n, X)` same as above or `null`, indicating an empty dictionary. See [null values](/v3/documentation/smart-contracts/func/docs/types#null-values) for details. When using this format, the dictionary is typically referred to as `D`.
+>
+> Most dictionary-related operations use the second format because it is easier to manipulate on the stack. However, when dictionaries are serialized within larger TL-B objects, they follow the first representation.
 
-В FunC словари также представлены типом `cell` с неявным предположением, что это может быть значение `null`. Для словарей с разной длиной ключа или типом значения нет отдельных типов (в конце концов, это FunC, а не FunC++).
+In FunC, dictionaries are also represented as `cells` with the implicit assumption that they can be `null`. There are no separate types for dictionaries with different key lengths or value types—after all, this is FunC, not FunC++.
 
 ### Примечание по таксономии
 
-Примитив словаря может интерпретировать ключи словаря либо как беззнаковые `l`-битные целые числа, либо как знаковые `l`-битные целые числа, либо как `l`-битные срезы. Примитивы, перечисленные ниже, отличаются префиксом перед словом `dict` в их именах. `i` обозначает знаковые целые ключи, `u` обозначает беззнаковые целые ключи, а пустой префикс обозначает ключи среза.
+A dictionary primitive interprets dictionary keys in one of three ways:
 
-Например, `udict_set` — это функция установки по ключу для словарей с беззнаковыми целочисленными ключами; `idict_set` — это соответствующая функция для словарей с целочисленными ключами со знаком; `dict_set` — это функция для словарей с ключами срезов.
+1. Unsigned `l`-bit integers (denoted by **u**);
+2. Signed `l`-bit integers (denoted by **i**);
+3. `l`-bit slices (**no prefix**).
 
-В заголовках используется пустой префикс.
+The naming convention of dictionary primitives reflects these distinctions. For example:
 
-Кроме того, некоторые примитивы имеют свои аналоги с префиксом `~`. Это позволяет использовать их как [модифицирующие методы](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods).
+- `udict_set` is a set-by-key function for dictionaries with unsigned integer keys.
+- `idict_set` is the equivalent function for signed integer keys.
+- `dict_set` applies to dictionaries with slice keys.
 
-### Значения в словарях
+In function titles, an **empty prefix** indicates slice keys.
+Additionally, some primitives have counterparts prefixed with `~`, enabling them to be used as [modifying methods](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods).
 
-Значения в словаре могут храниться либо как подсрез во внутренней ячейке словаря, либо через ссылку на отдельную ячейку. В первом случае нет гарантии, что значение, достаточно малое для размещения в ячейке, также поместится в словаре, поскольку часть пространства внутренней ячейки может быть уже занята частью соответствующего ключа. Напротив, последний метод хранения менее эффективен с точки зрения использования газа. Сохранение значения с использованием второго метода равносильно вставке среза без битов данных и единственной ссылкой на значение в первом методе.
+### Dictionary values
+
+Values in a dictionary can be stored in two ways:
+
+1. As a **subslice** within an inner dictionary cell.
+2. As a **reference** to a separate cell.
+
+In the first case, even if a value is small enough to fit within a cell, it may not fit within the dictionary.
+This is because a segment of the corresponding key may already occupy part of the inner cell’s space.
+
+The second method, while ensuring storage, is less efficient regarding gas consumption.
+Storing a value this way is functionally equivalent to inserting a slice with no data bits and a single reference to the value,
+as in the first method.
 
 #### dict_set
 
@@ -1074,7 +1217,7 @@ cell dict_set(cell dict, int key_len, slice index, slice value) asm(value index 
 (cell, ()) ~dict_set(cell dict, int key_len, slice index, slice value) asm(value index dict key_len) "DICTSET";
 ```
 
-Устанавливает значение, связанное с `key_len`-bit key `index` в словаре `dict`, в `value` (ячейки) и возвращает результирующий словарь.
+This function updates the dictionary `dict` by setting the value corresponding to the `key_len`-bit key `index` to `value`, a slice, and returns the updated dictionary.
 
 #### dict_set_ref
 
@@ -1085,7 +1228,7 @@ cell udict_set_ref(cell dict, int key_len, int index, cell value) asm(value inde
 (cell, ()) ~udict_set_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTUSETREF";
 ```
 
-Аналогично `dict_set`, но со значением, заданным как ссылка на `value` ячейки.
+This is similar to `dict_set`, but it sets the value to a reference of cell `value`.
 
 #### dict_get?
 
@@ -1094,7 +1237,7 @@ cell udict_set_ref(cell dict, int key_len, int index, cell value) asm(value inde
 (slice, int) udict_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUGET" "NULLSWAPIFNOT";
 ```
 
-Ищет ключ `index` в словаре `dict`, который использует ключи бит `key_len`. В случае успеха он извлекает связанное значение как `slice` и возвращает значение флага `-1`, чтобы указать на **успех**. Если поиск не удался, он возвращает `(null, 0)​​`.
+Searches for the key `index` in the `dict` dictionary with `key_len`-bit keys. It retrieves the associated value as a `slice` and returns a success flag of `-1` if found. If not found, it returns `(null, 0)`.
 
 #### dict_get_ref?
 
@@ -1103,7 +1246,7 @@ cell udict_set_ref(cell dict, int key_len, int index, cell value) asm(value inde
 (cell, int) udict_get_ref?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUGETREF";
 ```
 
-Аналогично `dict_get?`, но возвращает первую ссылку найденного значения.
+Similar to`dict_get?`, but it returns the first reference of the found value.
 
 #### dict_get_ref
 
@@ -1111,7 +1254,7 @@ cell udict_set_ref(cell dict, int key_len, int index, cell value) asm(value inde
 cell idict_get_ref(cell dict, int key_len, int index) asm(index dict key_len) "DICTIGETOPTREF";
 ```
 
-Вариант `dict_get_ref?`, который возвращает `null` вместо значения, если ключ `index` отсутствует в словаре `dict`.
+This variant of `dict_get_ref?` returns `null` if the key `index` is absent in the dictionary `dict`.
 
 #### dict_set_get_ref
 
@@ -1120,7 +1263,8 @@ cell idict_get_ref(cell dict, int key_len, int index) asm(index dict key_len) "D
 (cell, cell) udict_set_get_ref(cell dict, int key_len, int index, cell value) asm(value index dict key_len) "DICTUSETGETOPTREF";
 ```
 
-Устанавливает значение, связанное с `index`, в `value` (если `value` равно `null`, то вместо этого удаляется ключ) и возвращает старое значение (или `null`, если значение отсутствовало).
+This function sets the value associated with the `index` to `value`. If the `value` is `null`, the key is deleted.
+It then returns the old value or `null` if it wasn't present.
 
 #### dict_delete?
 
@@ -1129,7 +1273,8 @@ cell idict_get_ref(cell dict, int key_len, int index) asm(index dict key_len) "D
 (cell, int) udict_delete?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUDEL";
 ```
 
-Удаляет `key_len`-битный ключ `index` из словаря `dict`. Если ключ присутствует, возвращает измененный словарь `dict'` и флаг успеха `−1`. В противном случае возвращает исходный словарь `dict` и `0`.
+This function deletes the `key_len`-bit key `index` from the dictionary `dict`. It returns the modified dictionary and a success flag of `-1` if successful.
+If the key is not found, it returns the original dictionary and `0`.
 
 #### dict_delete_get?
 
@@ -1140,7 +1285,7 @@ cell idict_get_ref(cell dict, int key_len, int index) asm(index dict key_len) "D
 (cell, (slice, int)) ~udict_delete_get?(cell dict, int key_len, int index) asm(index dict key_len) "DICTUDELGET" "NULLSWAPIFNOT";
 ```
 
-Удаляет `key_len`-битный ключ `index` из словаря `dict`. Если ключ присутствует, возвращает измененный словарь `dict'`, исходное значение `x`, связанное с ключом k (представленное срезом), и флаг успеха `−1`. В противном случае возвращает `(dict, null, 0)`.
+Deletes the `key_len`-bit key `index` from the dictionary `dict`. If the key is found, it returns the modified dictionary, the original value associated with the key as a Slice, and the success flag `-1`. If the key is not found, it returns `(dict, null, 0)`.
 
 #### dict_add?
 
@@ -1149,7 +1294,7 @@ cell idict_get_ref(cell dict, int key_len, int index) asm(index dict key_len) "D
 (cell, int) idict_add?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTIADD";
 ```
 
-Аналог `dict_set` с `add` устанавливает значение, связанное с ключом `index` в словаре `dict`, в `value`, но только если оно еще не присутствует в `D`. Возвращает либо измененную версию словаря и флаг `-1`, либо `(dict, 0)`.
+This `add` operation is similar to `dict_set` but only sets the value if the key `index` does not already exist in the dictionary `dict`. It returns the modified dictionary and a success flag of `-1` or `(dict, 0)`.
 
 #### dict_replace?
 
@@ -1158,11 +1303,11 @@ cell idict_get_ref(cell dict, int key_len, int index) asm(index dict key_len) "D
 (cell, int) idict_replace?(cell dict, int key_len, int index, slice value) asm(value index dict key_len) "DICTIREPLACE";
 ```
 
-Операция `replace`, похожая на `dict_set`, но которая устанавливает значение ключа `index` в словаре `dict` в `value`, только если ключ уже присутствовал в `dict`. Возвращает либо измененную версию словаря и флаг `-1`, либо `(dict, 0)`.
+This `replace` operation works like `dict_set`, but it only updates the value for the `index` if the key is already present in the dictionary `dict`. It returns the modified dictionary and a success flag of `-1` or `(dict, 0)`.
 
 ### Аналоги конструктора
 
-Следующие примитивы принимают новое значение в качестве компоновщика вместо среза, что часто удобнее, если значение необходимо сериализовать из нескольких компонентов, вычисленных в стеке. Чистый эффект примерно эквивалентен преобразованию b в срез и выполнению соответствующего примитива, перечисленного выше.
+The following primitives accept a builder as the new value instead of a slice, making them more convenient when the value needs to be serialized from multiple components computed on the stack. Functionally, this is equivalent to converting the builder into a slice and executing the corresponding primitive listed above.
 
 #### dict_set_builder
 
@@ -1175,7 +1320,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (cell, ()) ~dict_set_builder(cell dict, int key_len, slice index, builder value) asm(value index dict key_len) "DICTSETB";
 ```
 
-Похоже на `dict_set`, но принимает конструктор.
+It works similarly to `dict_set` but takes a builder as input.
 
 #### dict_add_builder?
 
@@ -1184,7 +1329,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (cell, int) idict_add_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTIADDB";
 ```
 
-Похоже на `dict_add?`, но принимает конструктор.
+Similar to `dict_add?`, but uses a builder.
 
 #### dict_replace_builder?
 
@@ -1193,7 +1338,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (cell, int) idict_replace_builder?(cell dict, int key_len, int index, builder value) asm(value index dict key_len) "DICTIREPLACEB";
 ```
 
-Аналогично `dict_replace?`, но принимает конструктор.
+Similar to`dict_replace?`, but uses a builder.
 
 #### dict_delete_get_min
 
@@ -1206,9 +1351,9 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (cell, (slice, slice, int)) ~dict::delete_get_min(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMIN" "NULLSWAPIFNOT2";
 ```
 
-Вычисляет минимальный ключ `k` в словаре `dict`, удаляет его и возвращает `(dict', k, x, -1)`, где `dict'` — это измененная версия `dict`, а `x` — это значение, связанное с `k`. Если словарь пуст, возвращает `(dict, null, null, 0)`.
+Finds the smallest key `k` in the dictionary `dict`, removes it, and returns `(dict', k, x, -1)`, where `dict'` is the updated dictionary and `x` is the value associated with `k`. If the dictionary is empty, it returns `(dict, null, null, 0)`.
 
-Обратите внимание, что ключ, возвращаемый `idict_delete_get_min`, может отличаться от ключа, возвращаемого `dict_delete_get_min` и `udict_delete_get_min`.
+Note: The key returned by `idict_delete_get_min` may differ from that returned by `dict_delete_get_min` and `udict_delete_get_min`.
 
 #### dict_delete_get_max
 
@@ -1221,7 +1366,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (cell, (slice, slice, int)) ~dict::delete_get_max(cell dict, int key_len) asm(-> 0 2 1 3) "DICTREMMAX" "NULLSWAPIFNOT2";
 ```
 
-Вычисляет максимальный ключ `k` в словаре `dict`, удаляет его и возвращает `(dict', k, x, -1)`, где `dict'` — это измененная версия `dict`, а `x` — это значение, связанное с `k`. Если словарь пуст, возвращает `(dict, null, null, 0)`.
+Finds the largest key `k` in the dictionary `dict`, removes it, and returns `(dict', k, x, -1)`, where `dict'` is the updated dictionary and `x` is the value associated with `k`. If the dictionary is empty, it returns `(dict, null, null, 0)`.
 
 #### dict_get_min?
 
@@ -1230,7 +1375,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (int, slice, int) idict_get_min?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMIN" "NULLSWAPIFNOT2";
 ```
 
-Вычисляет минимальный ключ `k` в словаре `dict`, связанное значение `x` и возвращает `(k, x, -1)`. Если словарь пуст, возвращает `(null, null, 0)`.
+Finds the smallest key `k` in the dictionary `dict` and returns `(k, x, -1)`, where `x` is the value associated with `k`. If the dictionary is empty, it returns `(null, null, 0)`.
 
 #### dict_get_max?
 
@@ -1239,7 +1384,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (int, slice, int) idict_get_max?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMAX" "NULLSWAPIFNOT2";
 ```
 
-Вычисляет максимальный ключ `k` в словаре `dict`, связанное значение `x` и возвращает `(k, x, -1)`. Если словарь пуст, возвращает `(null, null, 0)`.
+Finds the largest key `k` in the dictionary `dict` and returns `(k, x, -1)`, where `x` is the value associated with `k`. If the dictionary is empty, it returns `(null, null, 0)`.
 
 #### dict_get_min_ref?
 
@@ -1248,7 +1393,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (int, cell, int) idict_get_min_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMINREF" "NULLSWAPIFNOT2";
 ```
 
-Аналогично `dict_get_min?` но возвращает единственную ссылку в значении в качестве ссылки.
+Same as `dict_get_min?` but it returns a reference.
 
 #### dict_get_max_ref?
 
@@ -1257,7 +1402,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (int, cell, int) idict_get_max_ref?(cell dict, int key_len) asm (-> 1 0 2) "DICTIMAXREF" "NULLSWAPIFNOT2";
 ```
 
-Аналогично `dict_get_max?`, но возвращает единственную ссылку в значении в качестве ссылки.
+Same as `dict_get_max?` but it returns a reference.
 
 #### dict_get_next?
 
@@ -1266,7 +1411,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (int, slice, int) idict_get_next?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXT" "NULLSWAPIFNOT2";
 ```
 
-Вычисляет минимальное значение ключа `k` в словаре `dict`, которое больше, чем `pivot`; возвращает `k`, соответствующее значение и флаг, указывающий на успех. Если словарь пуст, возвращает `(null, null, 0)`.
+Finds the smallest key `k` in `dict` that is greater than the `pivot`. Returns `k`, associated value, and a success flag. If the dictionary is empty, it returns `(null, null, 0)`.
 
 #### dict_get_nexteq?
 
@@ -1275,7 +1420,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (int, slice, int) idict_get_nexteq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETNEXTEQ" "NULLSWAPIFNOT2";
 ```
 
-Аналогично `dict_get_next?`, но вычисляет минимальный ключ `k`, который больше или равен `pivot`.
+Similar to `dict_get_next?`, but instead finds the smallest key `k` that is greater than or equal to the `pivot`.
 
 #### dict_get_prev?
 
@@ -1284,7 +1429,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (int, slice, int) idict_get_prev?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETPREV" "NULLSWAPIFNOT2";
 ```
 
-Аналогично `dict_get_next?`, но вычисляет максимальный ключ `k`, меньший, чем `pivot`.
+Similar to `dict_get_next?`, but instead finds the largest key `k` that is less than the `pivot`.
 
 #### dict_get_preveq?
 
@@ -1293,7 +1438,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 (int, slice, int) idict_get_preveq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTIGETPREVEQ" "NULLSWAPIFNOT2";
 ```
 
-Аналогично `dict_get_prev?`, но вычисляет максимальный ключ `k`, меньший или равный `pivot`.
+Similar to `dict_get_prev?`, but instead finds the largest key `k` that is less than or equal to the `pivot`.
 
 #### new_dict
 
@@ -1301,7 +1446,7 @@ cell dict_set_builder(cell dict, int key_len, slice index, builder value) asm(va
 cell new_dict() asm "NEWDICT";
 ```
 
-Создает пустой словарь, который на самом деле является значением `null`. Особый случай `null()`.
+Creates an empty dictionary, which is represented as a `null` value—a special case of `null()`.
 
 #### dict_empty?
 
@@ -1313,7 +1458,8 @@ int dict_empty?(cell c) asm "DICTEMPTY";
 
 ## Примитивы префиксных словарей
 
-TVM также поддерживает словари с ключами нефиксированной длины, которые формируют префиксный код (т. е. нет ключа, который является префиксом другого ключа). Узнайте больше о них в разделе [Инструкции TVM](/v3/documentation/tvm/tvm-overview).
+TVM supports dictionaries with non-fixed length keys that follow a prefix code structure, meaning no key is a prefix of another key.
+Learn more in the [TVM instruction](/v3/documentation/tvm/tvm-overview) section.
 
 #### pfxdict_get?
 
@@ -1321,8 +1467,14 @@ TVM также поддерживает словари с ключами неф�
 (slice, slice, slice, int) pfxdict_get?(cell dict, int key_len, slice key) asm(key dict key_len) "PFXDICTGETQ" "NULLSWAPIFNOT2";
 ```
 
-Возвращает `(s', x, s'', -1)` или `(null, null, s, 0)`.
-Ищет уникальный префикс среза `key`, присутствующий в словаре префиксного кода `dict`. Если он найден, префикс `s` возвращается как `s'`, а соответствующее значение (также срез) как `x`. Остаток `s` возвращается как срез `s''`. Если ни один префикс `s` не является ключом в словаре префиксного кода `dict`, он возвращает неизмененный `s` и нулевой флаг.
+Searches for the unique prefix of a slice `key` in the prefix code dictionary `dict`. If found, returns `(s', x, s'', -1)`, where:
+
+- `s'` is the matching prefix of `s`,
+- `x` is the corresponding value (a slice),
+- `s''` is the remaining part of `s`,
+- `-1` indicates success.
+
+If no matching prefix is found, returns `(null, null, s, 0)`, where `s` remains unchanged and `0` indicates failure.
 
 #### pfxdict_set?
 
@@ -1330,7 +1482,7 @@ TVM также поддерживает словари с ключами неф�
 (cell, int) pfxdict_set?(cell dict, int key_len, slice key, slice value) asm(value key dict key_len) "PFXDICTSET";
 ```
 
-Аналогично `dict_set`, но может завершиться ошибкой, если ключ является префиксом другого ключа, представленного в словаре. При успешном завершении возвращает флаг.
+Works like `dict_set` but fails if the given key is a prefix of an existing key in dict. Returns a flag indicating success.
 
 #### pfxdict_delete?
 
@@ -1348,7 +1500,7 @@ TVM также поддерживает словари с ключами неф�
 forall X -> X null() asm "PUSHNULL";
 ```
 
-По типу TVM `Null`, FunC представляет отсутствие значения некоторого атомарного типа. Поэтому `null` может фактически иметь любой атомарный тип.
+In TVM, the `Null` type in FunC represents the absence of a value for any atomic type, meaning `null` can take on any atomic type.
 
 #### ~impure_touch
 
@@ -1356,7 +1508,7 @@ forall X -> X null() asm "PUSHNULL";
 forall X -> (X, ()) ~impure_touch(X x) impure asm "NOP";
 ```
 
-Помечает переменную как используемую, чтобы код, который ее создал, не был удален, даже если он не является нечистым. (например, [нечистый спецификатор](/v3/documentation/smart-contracts/func/docs/functions#impure-specifier))
+Marks a variable as used, ensuring the code generated isn't removed during optimization, even if it's not impure. See [Impure specifier](/v3/documentation/smart-contracts/func/docs/functions#impure-specifier) section.
 
 ## Другие примитивы
 
@@ -1382,7 +1534,7 @@ int max(int x, int y) asm "MAX";
 (int, int) minmax(int x, int y) asm "MINMAX";
 ```
 
-Сортирует два целых числа.
+Returns `(min(x, y), max(x, y))`, sorting two integers.
 
 #### abs
 
@@ -1390,4 +1542,6 @@ int max(int x, int y) asm "MAX";
 int abs(int x) asm "ABS";
 ```
 
-Вычисляет абсолютное значение целого числа `x`.
+Computes the absolute value of `x`.
+
+<Feedback />

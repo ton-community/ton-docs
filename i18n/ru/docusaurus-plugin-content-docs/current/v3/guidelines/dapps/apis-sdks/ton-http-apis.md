@@ -1,78 +1,79 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON API на основе HTTP
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+There are different ways to connect to TON Blockchain:
 
-Существует несколько способов подключения к блокчейну:
-
-1. **Поставщик данных RPC или другой API**: в большинстве случаев вам придется *положиться* на его стабильность и безопасность.
-2. Подключение ADNL: вы подключаетесь к [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). Он может быть недоступен, но при определенном уровне проверки (реализованном в библиотеке) он не может лгать.
-3. Двоичный файл Tonlib: вы также подключаетесь к liteserver, поэтому остаются все преимущества и недостатки, но ваше приложение включает динамически загружаемую библиотеку, скомпилированную извне.
-4. Только для Offchain. Такие SDK позволяют создавать и сериализовать ячейки, которые затем можно отправить в API.
+1. **RPC data provider or another API** - You must rely on its stability and security.
+2. ADNL connection - Connect to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). While it may be inaccessible at times, it cannot provide false data due to library-implemented validation.
+3. Tonlib binary - Also connects to a liteserver, so it shares the same advantages and limitations. However, your application includes a dynamically loaded library compiled externally.
+4. Offchain-only - These SDKs allow you to create and serialize cells, which you can then send to APIs.
 
 ## Плюсы и минусы
 
-- ✅ Привычный и подходящий для быстрого старта, он идеально подходит для каждого новичка, который хочет поиграть с TON.
+- ✅ Easy-to-use - Ideal for newcomers exploring TON.
 
-- ✅ Веб-ориентированный. Идеально подходит для загрузки данных из смарт-контрактов TON через Интернет, а также позволяет отправлять сообщения.
+- ✅ Web-oriented - Suitable for loading data from TON smart contracts via the web and sending messages.
 
-- ❌ Упрощенный. Невозможно получить информацию, когда вам нужен индексированный API TON.
+- ❌ Simplified - Does not provide indexed TON API data.
 
-- ❌ HTTP-промежуточное программное обеспечение.  Вы не сможете полностью доверять ответам сервера, если сервер не дополнит данные блокчейна [доказательствами Меркла](/v3/documentation/data-formats/tlb/proofs) для проверки их подлинности.
+- ❌ HTTP-middleware dependency - Server responses cannot be fully trusted unless augmented with [merkle proofs](/v3/documentation/data-formats/tlb/proofs) to verify authenticity.
 
-## Узлы RPC
+## RPC nodes
 
-:::tip Состояние инфраструктуры TON
+:::tip TON infrastructure status
 
-- [status.toncenter](https://status.toncenter.com/) - различная статистика активности узлов за последний час.
+- [status.toncenter](https://status.toncenter.com/) - Displays various node activity statistics from the last hour.
 
-- [Tonstat.us](https://tonstat.us/) - Графана в реальном времени, обновляется каждые 5 минут
+- [Tonstat.us](https://tonstat.us/) - A real-time Grafana dashboard, updated every 5 minutes.
   :::
 
-- [QuickNode](https://www.quicknode.com/chains/ton?utm_source=ton-docs) — ведущий поставщик узлов блокчейна, предлагающий самый быстрый доступ с интеллектуальной маршрутизацией DNS для оптимизированного глобального охвата и масштабируемости с балансировкой нагрузки.
+- [QuickNode](https://www.quicknode.com/chains/ton?utm_source=ton-docs) - A top-tier blockchain node provider, offering fast access, smart DNS routing, and load-balanced scalability.
 
-- [Chainstack](https://chainstack.com/build-better-with-ton/) - узлы RPC и индексатор в нескольких регионах с географическим распределением и балансировкой нагрузки.
+- [Chainstack](https://chainstack.com/build-better-with-ton/) — Provides RPC nodes and indexers in multiple regions with geo and load balancing.
 
-- [Tatum](https://docs.tatum.io/reference/rpc-ton) - доступ к RPC узлам TON и мощным инструментам разработчика в одной простой для использования платформе.
+- [Tatum](https://docs.tatum.io/reference/rpc-ton) — Offers TON RPC node access and developer tools in a simple interface.
 
-- [GetBlock Nodes](https://getblock.io/nodes/ton/) - подключитесь и протестируйте свои dApps с использованием узлов GetBlock
+- [GetBlock nodes](https://getblock.io/nodes/ton/) — Enables developers to connect and test DApps using GetBlock’s nodes.
 
-- [TON Access](https://www.orbs.com/ton-access/) - HTTP API для The Open Network (TON).
+- [TON access](https://www.orbs.com/ton-access/) - A public HTTP API for The Open Network (TON).
 
-- [Toncenter](https://toncenter.com/api/v2/) — проект сообщества для быстрого старта с API. (Получите ключ API [@tonapibot](https://t.me/tonapibot))
+- [TON Center](https://toncenter.com/api/v2/) — A community-hosted project for quick API access. (Get an API key [@tonapibot](https://t.me/tonapibot))
 
-- [ton-node-docker](https://github.com/fmira21/ton-node-docker) - Полный узел Docker и API Toncenter.
+- [ton-node-docker](https://github.com/fmira21/ton-node-docker) - A Docker Full Node and TON Center API.
 
-- [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) — запустите свой собственный RPC-узел.
+- [toncenter/ton-http-api](https://github.com/toncenter/ton-http-api) — Allows you to run your own RPC node.
 
-- [nownodes.io](https://nownodes.io/nodes) — полноценные узлы NOWNodes и обозреватели блокчейнов через API.
+- [nownodes.io](https://nownodes.io/nodes) — Provides full nodes and blockbook explorers via API.
 
-- [Chainbase](https://chainbase.com/chainNetwork/TON) — API узлов и инфраструктура данных для The Open Network.
+- [Chainbase](https://chainbase.com/chainNetwork/TON) — A node API and data infrastructure for TON.
 
 ## Индексатор
 
-### Индексатор Toncenter TON
+### TON Center TON index
 
-Индексаторы позволяют составлять список кошельков жетонов, NFT, транзакций по определенным фильтрам, а не только извлекать конкретные из них.
+Indexers allow you to list jetton wallets, NFTs, and transactions using filters, rather than retrieving only specific ones.
 
-- Можно использовать публичный индекс TON: тестирование и разработка бесплатны, [премиум](https://t.me/tonapibot) для рабочей среды - [toncenter.com/api/v3/](https://toncenter.com/api/v3/).
-- Запустите свой собственный индексатор TON с помощью [Worker](https://github.com/toncenter/ton-index-worker/tree/36134e7376986c5517ee65e6a1ddd54b1c76cdba) и [оболочки API индексатора TON](https://github.com/toncenter/ton-indexer).
+- Public TON index can be used for free tests and development; [premium](https://t.me/tonapibot) plans are available for production at [toncenter.com/api/v3/](https://toncenter.com/api/v3/).
+- Run your own TON index with [Worker](https://github.com/toncenter/ton-index-worker/tree/36134e7376986c5517ee65e6a1ddd54b1c76cdba) and [TON index API wrapper](https://github.com/toncenter/ton-indexer).
 
 ### Anton
 
-Написанный на Go, Anton — это индексатор блокчейна The Open Network с открытым исходным кодом, доступный по лицензии Apache License 2.0. Anton разработан для предоставления разработчикам масштабируемого, гибкого решения для доступа и анализа данных блокчейна. Наша цель — помочь разработчикам и пользователям понять, как используется блокчейн, и дать разработчикам возможность добавлять собственные контракты с пользовательскими схемами сообщений в наш проводник.
+Anton is an open-source TON Blockchain indexer written in Go and licensed under Apache 2.0. It offers a scalable, flexible way for developers to access and analyze blockchain data. Developers can also add custom smart contracts with custom message schemas.
 
-- [Проект GitHub](https://github.com/tonindexer/anton) - для запуска собственного индексатора
-- [Документация по API Swagger](https://github.com/tonindexer/anton), [Примеры запросов к API](https://github.com/tonindexer/anton/blob/main/docs/API.md) - чтобы использовать, изучите документацию и примеры
-- [Apache Superset](https://github.com/tonindexer/anton) - для просмотра данных
+- [Project GitHub](https://github.com/tonindexer/anton) - Run your own indexer.
+- [Swagger API documentation](https://github.com/tonindexer/anton), [API query examples](https://github.com/tonindexer/anton/blob/main/docs/API.md) - Learn how to use Anton.
+- [Apache superset](https://github.com/tonindexer/anton) - Visualize blockchain data.
 
-### Узлы GraphQL
+### GraphQL nodes
 
-Узлы GraphQL также действуют как индексаторы.
+GraphQL nodes also function as indexers.
 
-- dton.io](https://dton.io/graphql) - а также предоставление данных контрактов, дополненных проанализированными флагами "is jetton", "is NFT", позволяет эмулировать транзакции и получать трассировки выполнения.
+- [dton.io](https://dton.io/graphql) - Provides contract data according to contract type. It also supports transaction emulation and execution trace retrieval.
 
 ## Другие API
 
-- [TonAPI](https://docs.tonconsole.com/tonapi) — API, разработанный для того, чтобы предоставить пользователям упрощенный интерфейс, не беспокоясь о низкоуровневых деталях смарт-контрактов.
+- [TonAPI](https://docs.tonconsole.com/tonapi) - A user-friendly API that abstracts low-level smart contract details for a streamlined experience.
+
+<Feedback />
+

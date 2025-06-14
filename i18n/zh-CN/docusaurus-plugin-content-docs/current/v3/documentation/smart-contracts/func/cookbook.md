@@ -1,14 +1,18 @@
-# FunC 开发手册
+import Feedback from '@site/src/components/Feedback';
 
-创建 FunC 开发手册的核心原因是将所有 FunC 开发者的经验汇集在一个地方，以便未来的开发者们使用！
+# FunC cookbook
 
-与 FunC 文档相比，本文更侧重于 FunC 开发者在智能合约开发过程中每天都要解决的任务。
+The FunC cookbook was created to consolidate all the knowledge and best practices from experienced FunC developers in one place. The goal is to make it easier for future developers to build smart contracts efficiently.
 
-## 基础知识
+Unlike the official [FunC documentation](/v3/documentation/smart-contracts/func/docs/types), this guide focuses on solving everyday challenges that FunC developers encounter during smart contract development.
 
-### 如何编写 if 语句
+## Basics
 
-假设我们想检查某个事件是否相关。为此，我们使用标志变量。记住在 FunC 中 `true` 是 `-1` 而 `false` 是 `0`。
+### How to write an if statement
+
+Let's say we want to check if any event is relevant. To do this, we use the flag variable. Remember that in FunC `true` is `-1` and `false` is `0`.
+
+To check whether an event is relevant, use a flag variable. In FunC, `true` is represented by `-1`, and `false` is `0`.
 
 ```func
 int flag = 0; ;; false
@@ -21,17 +25,13 @@ else {
 }
 ```
 
-> 💡 注意
->
-> 我们不需要使用 `==` 操作符，因为 `0` 的值是 `false`，所以任何其他值都将是 `true`。
+**Note:** The `==` operator is unnecessary, as `0` already evaluates to `false`, and any nonzero value is considered `true`.
 
-> 💡 有用的链接
->
-> [文档中的“If statement”](/develop/func/statements#if-statements)
+**Reference:** [`If statement` in docs](/v3/documentation/smart-contracts/func/docs/statements#if-statements)
 
-### 如何编写 repeat 循环
+### How to write a repeat loop
 
-以指数运算为例
+A repeat loop helps execute an action a fixed number of times. The example below demonstrates exponentiation:
 
 ```func
 int number = 2;
@@ -44,50 +44,42 @@ repeat(degree - 1) {
 }
 ```
 
-> 💡 有用的链接
->
-> [文档中的“Repeat loop”](/develop/func/statements#repeat-loop)
+**Reference:** [`Repeat loop` in docs](/v3/documentation/smart-contracts/func/docs/statements#repeat-loop)
 
-### 如何编写 while 循环
+### How to write a while loop
 
-当我们不知道要执行特定操作多少次时，while 循环很有用。例如，取一个 `cell`，我们知道它可以存储最多四个对其他 cell 的引用。
+A while loop is useful when the number of iterations is unknown. The following example processes a `cell` which can store up to four references to other cells:
 
 ```func
-cell inner_cell = begin_cell() ;; create a new empty builder
-        .store_uint(123, 16) ;; store uint with value 123 and length 16 bits
-        .end_cell(); ;; convert builder to a cell
+cell inner_cell = begin_cell() ;; Create a new empty builder
+        .store_uint(123, 16) ;; Store uint with value 123 and length 16 bits
+        .end_cell(); ;; Convert builder to a cell
 
 cell message = begin_cell()
-        .store_ref(inner_cell) ;; store cell as reference
+        .store_ref(inner_cell) ;; Store cell as reference
         .store_ref(inner_cell)
         .end_cell();
 
-slice msg = message.begin_parse(); ;; convert cell to slice
-while (msg.slice_refs_empty?() != -1) { ;; we should remind that -1 is true
-    cell inner_cell = msg~load_ref(); ;; load cell from slice msg
+slice msg = message.begin_parse(); ;; Convert cell to slice
+while (msg.slice_refs_empty?() != -1) { ;; We should remind that -1 is true
+    cell inner_cell = msg~load_ref(); ;; Load cell from slice msg
     ;; do something
 }
 ```
 
-> 💡 有用的链接
->
-> [文档中的“While loop”](/develop/func/statements#while-loop)
->
-> [文档中的“Cell”](/learn/overviews/cells)
->
-> [文档中的“slice_refs_empty?()”](/develop/func/stdlib#slice_refs_empty)
->
-> [文档中的“store_ref()”](/develop/func/stdlib#store_ref)
->
-> [文档中的“begin_cell()”](/develop/func/stdlib#begin_cell)
->
-> [文档中的“end_cell()”](/develop/func/stdlib#end_cell)
->
-> [文档中的“begin_parse()”](/develop/func/stdlib#begin_parse)
+**References:**
 
-### 如何编写 do until 循环
+- [`While loop` in docs](/v3/documentation/smart-contracts/func/docs/statements#while-loop)
+- [`Cell` in docs](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage)
+- [`slice_refs_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_refs_empty)
+- [`store_ref()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
-当我们需要循环至少运行一次时，我们使用 `do until`。
+### How to write a do until loop
+
+Use a `do-until` loop when the loop must execute at least once.
 
 ```func
 int flag = 0;
@@ -97,154 +89,143 @@ do {
 } until (flag == -1); ;; -1 is true
 ```
 
-> 💡 有用的链接
->
-> [文档中的“Until loop”](/develop/func/statements#until-loop)
+**Reference:** [`Until loop` in docs](/v3/documentation/smart-contracts/func/docs/statements#until-loop)
 
-### 如何确定 slice 是否为空
+### How to determine if slice is empty
 
-在处理 `slice` 之前，需要检查它是否有数据以便正确处理。我们可以使用 `slice_empty?()` 来做到这一点，但我们必须考虑到，如果有至少一个 `bit` 的数据或一个 `ref`，它将返回 `-1`（`true`）。
+Before working with a `slice`, checking whether it contains any data is essential to ensure proper processing. The `slice_empty?()` method can be used for this purpose. However, it returns `0` (`false`) if the slice contains at least one `bit` of data or one `ref`.
 
 ```func
-;; creating empty slice
+;; Creating empty slice
 slice empty_slice = "";
-;; `slice_empty?()` returns `true`, because slice doesn't have any `bits` and `refs`
+;; `slice_empty?()` returns `true` because the slice doesn't have any `bits` and `refs`.
 empty_slice.slice_empty?();
 
-;; creating slice which contains bits only
+;; Creating slice which contains bits only
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_empty?()` returns `false`, because slice have any `bits`
+;; `slice_empty?()` returns `false` because the slice has `bits`.
 slice_with_bits_only.slice_empty?();
 
-;; creating slice which contains refs only
+;; Creating slice which contains refs only
 slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_empty?()` returns `false`, because slice have any `refs`
+;; `slice_empty?()` returns `false` because the slice has `refs`.
 slice_with_refs_only.slice_empty?();
 
-;; creating slice which contains bits and refs
+;; Creating slice which contains bits and refs
 slice slice_with_bits_and_refs = begin_cell()
     .store_slice("Hello, world!")
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_empty?()` returns `false`, because slice have any `bits` and `refs`
+;; `slice_empty?()` returns `false` because the slice has `bits` and `refs`.
 slice_with_bits_and_refs.slice_empty?();
 ```
 
-> 💡 有用的链接
->
-> [文档中的“slice_empty?()”](/develop/func/stdlib#slice_empty)
->
-> [文档中的“store_slice()”](/develop/func/stdlib#store_slice)
->
-> [文档中的“store_ref()”](/develop/func/stdlib#store_ref)
->
-> [文档中的“begin_cell()”](/develop/func/stdlib#begin_cell)
->
-> [文档中的“end_cell()”](/develop/func/stdlib#end_cell)
->
-> [文档中的“begin_parse()”](/develop/func/stdlib#begin_parse)
+**References:**
 
-### 如何确定 slice 是否为空（不含任何 bits，但可能包含 refs）
+- [`slice_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_empty)
+- [`store_slice()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- [`store_ref()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
-如果我们只需要检查 `bits`，不关心 `slice` 中是否有任何 `refs`，那么我们应该使用 `slice_data_empty?()`。
+### How to determine if slice is empty (no bits, but may have refs)
+
+If only the presence of `bits` matters and `refs` in `slice` can be ignored, use the `slice_data_empty?()`.
 
 ```func
-;; creating empty slice
+;; Creating empty slice
 slice empty_slice = "";
-;; `slice_data_empty?()` returns `true`, because slice doesn't have any `bits`
+;; `slice_data_empty?()` returns `true` because the slice doesn't have any `bits`.
 empty_slice.slice_data_empty?();
 
-;; creating slice which contains bits only
+;; Creating slice which contains bits only
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_data_empty?()` returns `false`, because slice have any `bits`
+;; `slice_data_empty?()` returns `false` because the slice has  `bits`.
 slice_with_bits_only.slice_data_empty?();
 
-;; creating slice which contains refs only
+;; Creating slice which contains refs only
 slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_data_empty?()` returns `true`, because slice doesn't have any `bits`
+;; `slice_data_empty?()` returns `true` because the slice doesn't have any `bits`
 slice_with_refs_only.slice_data_empty?();
 
-;; creating slice which contains bits and refs
+;; Creating slice which contains bits and refs
 slice slice_with_bits_and_refs = begin_cell()
     .store_slice("Hello, world!")
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_data_empty?()` returns `false`, because slice have any `bits`
+;; `slice_data_empty?()` returns `false` because the slice has `bits`.
 slice_with_bits_and_refs.slice_data_empty?();
 ```
 
-> 💡 有用的链接
->
-> [文档中的“slice_data_empty?()”](/develop/func/stdlib#slice_data_empty)
->
-> [文档中的“store_slice()”](/develop/func/stdlib#store_slice)
->
-> [文档中的“store_ref()”](/develop/func/stdlib#store_ref)
->
-> [文档中的“begin_cell()”](/develop/func/stdlib#begin_cell)
->
-> [文档中的“end_cell()”](/develop/func/stdlib#end_cell)
->
-> [文档中的“begin_parse()”](/develop/func/stdlib#begin_parse)
+**References:**
 
-### 如何确定 slice 是否为空（没有任何 refs，但可能有 bits）
+- [`slice_data_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_data_empty)
+- [`store_slice()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- [`store_ref()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
-如果我们只对 `refs` 感兴趣，我们应该使用 `slice_refs_empty?()` 来检查它们的存在。
+### How to determine if slice is empty (no refs, but may have bits)
+
+In case we are only interested in `refs`, we should check their presence using `slice_refs_empty?()`.
+
+If only `refs` are of interest, their presence can be checked using the `slice_refs_empty?()`.
 
 ```func
-;; creating empty slice
+;; Creating empty slice
 slice empty_slice = "";
-;; `slice_refs_empty?()` returns `true`, because slice doesn't have any `refs`
+;; `slice_refs_empty?()` returns `true` because the slice doesn't have any `refs`.
 empty_slice.slice_refs_empty?();
 
-;; creating slice which contains bits only
+;; Creating slice which contains bits only
 slice slice_with_bits_only = "Hello, world!";
-;; `slice_refs_empty?()` returns `true`, because slice doesn't have any `refs`
+;; `slice_refs_empty?()` returns `true` because the slice doesn't have any `refs`.
 slice_with_bits_only.slice_refs_empty?();
 
-;; creating slice which contains refs only
+;; Creating slice which contains refs only
 slice slice_with_refs_only = begin_cell()
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_refs_empty?()` returns `false`, because slice have any `refs`
+;; `slice_refs_empty?()` returns `false` because the slice has `refs`.
 slice_with_refs_only.slice_refs_empty?();
 
-;; creating slice which contains bits and refs
+;; Creating slice which contains bits and refs
 slice slice_with_bits_and_refs = begin_cell()
     .store_slice("Hello, world!")
     .store_ref(null())
     .end_cell()
     .begin_parse();
-;; `slice_refs_empty?()` returns `false`, because slice have any `refs`
+;; `slice_refs_empty?()` returns `false` because the slice has `refs`.
 slice_with_bits_and_refs.slice_refs_empty?();
 ```
 
-> 💡 有用的链接
->
-> [文档中的“slice_refs_empty?()”](/develop/func/stdlib#slice_refs_empty)
->
-> [文档中的“store_slice()”](/develop/func/stdlib#store_slice)
->
-> [文档中的“store_ref()”](/develop/func/stdlib#store_ref)
->
-> [文档中的“begin_cell()”](/develop/func/stdlib#begin_cell)
->
-> [文档中的“end_cell()”](/develop/func/stdlib#end_cell)
->
-> [文档中的“begin_parse()”](/develop/func/stdlib#begin_parse)
+**References:**
 
-### 如何确定 cell 是否为空
+- [`slice_refs_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_refs_empty)
+- [`store_slice()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- [`store_ref()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
-要检查 `cell` 中是否有任何数据，我们应首先将其转换为 `slice`。如果我们只对 `bits` 感兴趣，应使用 `slice_data_empty?()`；如果只对 `refs` 感兴趣，则使用 `slice_refs_empty?()`。如果我们想检查是否有任何数据，无论是 `bit` 还是 `ref`，我们需要使用 `slice_empty?()`。
+### How to determine if a cell is empty
+
+To check whether a `cell` contains any data, it must first be converted into a `slice`.
+
+- If only `bits` matter, use `slice_data_empty?()`.
+- If only `refs` matter, use `slice_refs_empty?()`.
+- If the presence of any data (`bits` or `refs`) needs to be checked, use `slice_empty?()`.
 
 ```func
 cell cell_with_bits_and_refs = begin_cell()
@@ -252,40 +233,36 @@ cell cell_with_bits_and_refs = begin_cell()
     .store_ref(null())
     .end_cell();
 
-;; Change `cell` type to slice with `begin_parse()`
+;; Change the `cell` type to slice with `begin_parse()`.
 slice cs = cell_with_bits_and_refs.begin_parse();
 
-;; determine if slice is empty
+;; Determine if the slice is empty.
 if (cs.slice_empty?()) {
-    ;; cell is empty
+    ;; Cell is empty
 }
 else {
-    ;; cell is not empty
+    ;; Cell is not empty
 }
 ```
 
-> 💡 有用的链接
->
-> [文档中的“slice_empty?()”](/develop/func/stdlib#slice_empty)
->
-> [文档中的“begin_cell()”](/develop/func/stdlib#begin_cell)
->
-> [文档中的“store_uint()”](/develop/func/stdlib#store_uint)
->
-> [文档中的“end_cell()”](/develop/func/stdlib#end_cell)
->
-> [文档中的“begin_parse()”](/develop/func/stdlib#begin_parse)
+**References:**
 
-### 如何确定 dict 是否为空
+- [`slice_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_empty)
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`store_uint()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
-有一个 `dict_empty?()` 方法可以检查 dict 中是否有数据。这个方法相当于 `cell_null?()`，因为通常一个空的 cell 就是一个空字典。
+### How to determine if a dict is empty
+
+The `dict_empty?()` checks whether a dictionary contains any data. This method is functionally equivalent to `cell_null?()`, as a `null` cell typically represents an empty dictionary.
 
 ```func
 cell d = new_dict();
 d~udict_set(256, 0, "hello");
 d~udict_set(256, 1, "world");
 
-if (d.dict_empty?()) { ;; Determine if dict is empty
+if (d.dict_empty?()) { ;; Determine if the dict is empty
     ;; dict is empty
 }
 else {
@@ -293,17 +270,16 @@ else {
 }
 ```
 
-> 💡 有用的链接
->
-> [文档中的“dict_empty?()”](/develop/func/stdlib#dict_empty)
->
-> [文档中的“new_dict()”](/develop/func/stdlib/#new_dict) 创建空字典
->
-> [文档中的“dict_set()”](/develop/
+**References:**
 
-### 如何确定 tuple 是否为空
+- [`dict_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#dict_empty)
+- [`new_dict()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#new_dict), creating an empty dict
+- [`dict_set()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_set), adding some elements in dict `d` with function, so it is not empty
 
-在处理 `tuple` 时，重要的是始终知道里面是否有任何值可供提取。如果我们试图从一个空的 "元组 "中提取值，就会出现错误：不是有效大小的元组"，并显示 "退出代码 7"。
+### How to determine if a tuple is empty
+
+When working with `tuples`, checking for existing values before extracting them is crucial. Extracting a value from an empty tuple will result in an error:
+["not a tuple of valid size" - `exit code 7`](/v3/documentation/tvm/tvm-exit-codes#7)
 
 ```func
 ;; Declare tlen function because it's not presented in stdlib
@@ -323,19 +299,18 @@ else {
 }
 ```
 
-> 💡 Noted
->
-> 我们正在声明 tlen 汇编函数。你可以在 [此处](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) 和 [list of all assembler commands](/v3/documentation/tvm/instructions) 阅读更多内容。
+**Note:**
+We are defining the `tlen` assembly function. You can find more details [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) and a see a [list of assembler commands](/v3/documentation/tvm/instructions).
 
-> 💡 注意
->
-> 我们声明了 tlen 汇编函数。你可以在[这里](/develop/func/functions#assembler-function-body-definition)阅读更多，并查看[所有汇编指令列表](/learn/tvm-instructions/instructions)。
->
-> 文档中的["tpush()"](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
->
-> [文档中的 "退出代码"](/v3/documentation/tvm/tvm-exit-codes)
+**References:**
 
-### 如何判断 lisp 风格列表是否为空
+- [`empty_tuple?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#empty_tuple)
+- [`tpush()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
+- [`Exit codes` in docs](/v3/documentation/tvm/tvm-exit-codes)
+
+### How to determine if a lisp-style list is empty
+
+We can use the [cons](/v3/documentation/smart-contracts/func/docs/stdlib/#cons) function to add an element to determine if a lisp-style list is empty. For example, adding 100 to the list ensures it is not empty.
 
 ```func
 tuple numbers = null();
@@ -348,11 +323,10 @@ if (numbers.null?()) {
 }
 ```
 
-我们使用 [cons](/v3/documentation/smart-contracts/func/docs/stdlib/#cons)函数将数字 100 添加到列表样式的列表中，因此它不是空的。
+### How to determine a state of the contract is empty
 
-### 如何确定合约状态为空
-
-假设我们有一个存储交易数量的 `counter`。在智能合约状态下的第一笔交易中，这个变量是不可用的，因为状态是空的，所以有必要处理这种情况。如果状态为空，我们就创建一个变量 `counter` 并保存它。
+Consider a smart contract with a `counter` that tracks the number of transactions. This variable does not exist in the contract state during the first transaction because it is empty.
+It is important to handle this scenario by checking if the state is empty and initializing the `counter` accordingly.
 
 ```func
 ;; `get_data()` will return the data cell from contract state
@@ -360,36 +334,32 @@ cell contract_data = get_data();
 slice cs = contract_data.begin_parse();
 
 if (cs.slice_empty?()) {
-    ;; contract data is empty, so we create counter and save it
+    ;; Contract data is empty, so we create counter and save it
     int counter = 1;
-    ;; create cell, add counter and save in contract state
+    ;; Create cell, add counter and save in contract state
     set_data(begin_cell().store_uint(counter, 32).end_cell());
 }
 else {
-    ;; contract data is not empty, so we get our counter, increase it and save
+    ;; Contract data is not empty, so we get our counter, increase it and save
     ;; we should specify correct length of our counter in bits
     int counter = cs~load_uint(32) + 1;
     set_data(begin_cell().store_uint(counter, 32).end_cell());
 }
 ```
 
-> 💡 Noted
->
-> 我们可以通过判断 [cell is empty](/v3/documentation/smart-contracts/func/cookbook#how-to-determine-if-cell-is-empty) 来确定合约状态为空。
+**Note:**
+The contract state can be determined as empty by verifying whether the [cell is empty](/v3/documentation/smart-contracts/func/cookbook#how-to-determine-if-a-cell-is-empty).
 
-> 💡 注意
->
-> 我们可以通过确定 [cell 是否为空](/develop/func/cookbook#how-to-determine-if-cell-is-empty) 来确定合约的状态是否为空。
->
-> 文档中的["begin_parse()"](/v3/documentation/smart-contracts/func/docs/stdlib/#begin_parse)
->
-> 文档中的 ["slice_empty?()"](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
->
-> 文档中的 ["set_data?()"](/v3/documentation/smart-contracts/func/docs/stdlib#set_data)
+**References:**
 
-### 如何建立内部信息 cell
+- [`get_data()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#get_data)
+- [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#begin_parse)
+- [`slice_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
+- [`set_data?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#set_data)
 
-如果我们想让合约发送内部邮件，首先应将其创建为 cell ，并指定技术标志、收件人地址和其他数据。
+### How to build an internal message cell
+
+When a smart contract needs to send an internal message, it must first construct the message as a `cell`. This includes specifying technical flags, the recipient's address, and additional data.
 
 ```func
 ;; We use literal `a` to get valid address inside slice from string containing address 
@@ -409,33 +379,25 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
 
-> 💡 Noted
->
-> 在本例中，我们使用字面量 `a` 来获取地址。有关字符串字面量的更多信息，请参阅 [docs](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals)
+**Note:**
 
-> 💡 注意
->
-> 在这个例子中，我们使用字面量 `a` 获取地址。你可以在[文档](/develop/func/literals_identifiers#string-literals)中找到更多关于字符串字面量的信息。
+- In this example, we use the literal `a` to obtain an address. More details on string literals can be found in the [documentation](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals).
+- You can find more details in the [documentation](/v3/documentation/smart-contracts/message-management/sending-messages). A direct link to the [layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) is also available.
 
-> 💡 注意
->
-> 你可以在[文档](/develop/smart-contracts/messages)中找到更多信息。也可以通过这个链接跳转到[布局](/develop/smart-contracts/messages#message-layout)。
->
-> [文档中的 "store_uint() "](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
->
-> [文档中的 "store_slice() "](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
->
-> [文档中的 "store_coins()"](/v3/documentation/smart-contracts/func/docs/stdlib#store_coins)
->
-> [文档中的 "end_cell()"](/v3/documentation/smart-contracts/func/docs/stdlib/#end_cell)
->
-> [文档中的 "send_raw_message() "](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
+**References:**
 
-### 如何将正文作为内部报文 cell 的 ref 来包含
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`store_uint()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
+- [`store_slice()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- [`store_coins()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_coins)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#end_cell)
+- [`send_raw_message()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
 
-在标志和其他技术数据之后的报文正文中，我们可以发送 `int`, `slice` 和 `cell`。对于后者，有必要在 `store_ref()` 之前将位设置为 `1`，以表示 `cell` 将继续。
+### How to contain a body as a ref in an internal message cell
 
-在跟着标志位和其他技术数据的消息体中，我们可以发送 `int`、`slice` 和 `cell`。在后者的情况下，在 `store_ref()` 之前必须将位设置为 `1`，以表明 `cell` 将继续传输。
+The message body can contain `int`, `slices`, or `cells` following flags and other technical data. If a `cell` is used, a bit must be set to `1` before calling `store_ref()`, indicating that the `cell` will be included.
+
+Alternatively, if there is sufficient space, the message body can be stored in the same `cell` as the header. In this case, the bit should be set to `0`.
 
 ```func
 ;; We use literal `a` to get valid address inside slice from string containing address 
@@ -459,35 +421,26 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
 
-> 💡 Noted
->
-> 在本例中，我们使用字面量 `a` 来获取地址。有关字符串字面量的更多信息，请参阅 [docs](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals)
+**Note:**
 
-> 💡 注意
->
-> 在这个例子中，我们使用字面量 `a` 获取地址。你可以在[文档](/develop/func/literals_identifiers#string-literals)中找到更多关于字符串字面量的信息。
+- In this example, we use the literal `a` to obtain an address. More details on string literals can be found in the [documentation](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals).
+- The example uses [`mode 3`](/v3/documentation/smart-contracts/message-management/sending-messages#mode3), which ensures the contract deducts the specified amount while covering the transaction fee from the contract balance and ignoring errors.
+  - `mode 64` returns all received tokens, subtracting the commission.
+  - `mode 128` transfers the entire balance.
+- The [message](/v3/documentation/smart-contracts/func/cookbook#how-to-build-an-internal-message-cell) is constructed with the body added separately.
 
-> 💡 注意
->
-> 在这个例子中，我们使用node 3 接收进来的 tons 并发送确切的指定金额（amount），同时从合约余额中支付佣金并忽略错误。mode 64 用于返回所有接收到的 tons，扣除佣金，mode 128 将发送整个余额。
+**References:**
 
-> 💡 注意
->
-> 我们正在[构建消息](/develop/func/cookbook#how-to-build-an-internal-message-cell)，但单独添加消息体。
->
-> [文档中的 "store_uint() "](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
->
-> [文档中的 "store_slice() "](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
->
-> [文档中的 "store_coins()"](/v3/documentation/smart-contracts/func/docs/stdlib#store_coins)
->
-> [文档中的 "end_cell()"](/v3/documentation/smart-contracts/func/docs/stdlib/#end_cell)
->
-> [文档中的 "send_raw_message() "](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
+- [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- [`store_uint()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
+- [`store_slice()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- [`store_coins()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#store_coins)
+- [`end_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#end_cell)
+- [`send_raw_message()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
 
-### 如何将正文作为片段包含在内部报文 cell 中
+### How to contain a body as a slice in an internal message cell
 
-发送信息时，信息正文可以作为 `cell` 或 `slice` 发送。在本例中，我们在 `slice` 内发送正文信息。
+A message body can be sent as either a `cell` or a `slice`. In this example, the body is sent inside a `slice`.
 
 ```func
 ;; We use literal `a` to get valid address inside slice from string containing address 
@@ -508,21 +461,15 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
 
-> 💡 Noted
->
-> 在本例中，我们使用字面量 `a` 来获取地址。有关字符串字面量的更多信息，请参阅 [docs](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals)
+**Note:**
 
-> 💡 注意
->
-> 在这个例子中，我们使用字面量 `a` 获取地址。你可以在[文档](/develop/func/literals_identifiers#string-literals)中找到更多关于字符串字面量的信息。
+- The literal `a` is used to obtain an address. See the [documentation](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals) for details on string literals.
+- The example uses `mode 3`, `mode 64`, and `mode 128`, as described above.
+- The [message](/v3/documentation/smart-contracts/func/cookbook#how-to-build-an-internal-message-cell) is constructed with the body included as a slice.
 
-> 💡 注意
->
-> 在这个例子中，我们使用 mode 3 接收进来的 tons 并发送确切的指定金额（amount），同时从合约余额中支付佣金并忽略错误。mode 64 用于返回所有接收到的 tons，扣除佣金，mode 128 将发送整个余额。
+### How to iterate tuples (both directions)
 
-### 如何迭代 tuples（双向）
-
-如果我们想在 FunC 中处理数组或堆栈，那么 tuple 就是必要的。首先，我们需要能够遍历值来处理它们。
+When working with arrays or stacks in FunC, tuples are essential. The first step is learning how to iterate through tuple values for processing.
 
 ```func
 (int) tlen (tuple t) asm "TLEN";
@@ -548,30 +495,29 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 }
 ```
 
-> 💡 Noted
->
-> 我们正在声明 `tlen` 汇编函数。您可以 [在此](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) 阅读更多内容，也可以查看 [所有汇编命令列表](/v3/documentation/tvm/instructions)。
->
-> 我们还声明了 `to_tuple` 函数。它只是将任何输入的数据类型更改为元组，因此使用时要小心。
+**Note:**
 
-### 如何使用 `asm` 关键字编写自己的函数
+- The `tlen` assembly function is declared [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition). You can read more about it and explore a [list of all assembler commands](/v3/documentation/tvm/instructions).
+- The `to_tuple` function is also declared. This function converts any input into a tuple, so use it carefully.
 
-在使用任何功能时，我们实际上使用的是 `stdlib.fc` 内为我们预先准备好的方法。但事实上，我们还有更多的机会，我们需要学会自己编写。
+### How to write custom functions using asm keyword
 
-当使用任何功能时，实际上我们使用的是为我们预先准备好的 `stdlib.fc` 中的方法。但事实上，我们有更多的机会可以使用，我们需要学会自己编写它们。
+Many features we use in FunC come from pre-prepared methods inside `stdlib.fc`. However, we have many more capabilities, and learning to write custom functions unlocks new possibilities.
+
+For example, while `tpush`, which adds an element to a `tuple`, exists, there is no built-in `tpop` function. In such cases, we must implement it ourselves.
 
 ```func
 ;; ~ means it is modifying method
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP"; 
 ```
 
-如果我们想知道用于迭代的 "元组 "的长度，则应使用 `TLEN` asm 指令编写一个新函数：
+We must determine its length if we want to iterate over a `tuple`. We can achieve this by writing a new function using the `TLEN` asm instruction.
 
 ```func
 int tuple_length (tuple t) asm "TLEN";
 ```
 
-一些我们已经从 stdlib.fc 中了解到的函数示例：
+Examples of functions from `stdlib.fc`:
 
 ```func
 slice begin_parse(cell c) asm "CTOS";
@@ -579,17 +525,15 @@ builder begin_cell() asm "NEWC";
 cell end_cell(builder b) asm "ENDC";
 ```
 
-> 💡 Useful links:
->
-> [文档中的 "修改方法"](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)
->
-> [文档中的 "stdlib"](/v3/documentation/smart-contracts/func/docs/stdlib)
->
-> [文档中的 "TVM 说明"](/v3/documentation/tvm/instructions)
+**References:**
 
-### 迭代嵌套的 n 个 tuples
+- [`modifying method` in docs](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)
+- [`stdlib` in docs](/v3/documentation/smart-contracts/func/docs/stdlib)
+- [`TVM instructions` in docs](/v3/documentation/tvm/instructions)
 
-有时我们想迭代嵌套的 tuples。以下示例将从头开始迭代并打印格式为 `[[2,6],[1,[3,[3,5]]], 3]` 的 tuple 中的所有项目
+### Iterating n-nested tuples
+
+Sometimes, we need to iterate through nested tuples. The following example iterates through a tuple formatted as: `[[2,6],[1,[3,[3,5]]], 3]` starting from the head.
 
 ```func
 int tuple_length (tuple t) asm "TLEN";
@@ -599,7 +543,7 @@ forall X -> tuple cast_to_tuple (X x) asm "NOP";
 forall X -> int cast_to_int (X x) asm "NOP";
 forall X -> (tuple) to_tuple (X x) asm "NOP";
 
-;; define global variable
+;; Define a global variable
 global int max_value;
 
 () iterate_tuple (tuple t) impure {
@@ -620,21 +564,19 @@ global int max_value;
 () main () {
     tuple t = to_tuple([[2,6], [1, [3, [3, 5]]], 3]);
     int len = t.tuple_length();
-    max_value = 0; ;; reset max_value;
-    iterate_tuple(t); ;; iterate tuple and find max value
+    max_value = 0; ;; Reset max_value;
+    iterate_tuple(t); ;; Iterate tuple and find max value
     ~dump(max_value); ;; 6
 }
 ```
 
-> 💡 Useful links
->
-> [文档中的 "全局变量"](/v3/documentation/smart-contracts/func/docs/global_variables)
->
-> [文档中的"~dump"](/v3/documentation/smart-contracts/func/docs/builtins#dump-variable)
->
-> [文档中的 "TVM 说明"](/v3/documentation/tvm/instructions)
+**References:**
 
-### 基本的 tuple 操作
+- [`global variables` in docs](/v3/documentation/smart-contracts/func/docs/global_variables)
+- [`~dump` in docs](/v3/documentation/smart-contracts/func/docs/builtins#dump-variable)
+- [`TVM instructions` in docs](/v3/documentation/tvm/instructions)
+
+### Basic operations with tuples
 
 ```func
 (int) tlen (tuple t) asm "TLEN";
@@ -664,9 +606,9 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 }
 ```
 
-### 解决 X 类问题
+### Resolving type X
 
-下面的示例检查元组中是否包含某些值，但元组包含值 X（ cell 、slice、int、tuple、int）。我们需要检查值并进行相应的转换。
+If a tuple contains various data types X (cell, slice, int, tuple, etc.), we may need to check the value and cast it accordingly before processing.
 
 ```func
 forall X -> int is_null (X x) asm "ISNULL";
@@ -681,7 +623,7 @@ forall X -> tuple cast_to_tuple (X x) asm "NOP";
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
 forall X -> () resolve_type (X value) impure {
-    ;; value here is of type X, since we dont know what is the exact value - we would need to check what is the value and then cast it
+    ;; Value here is of type X, since we dont know what is the exact value - we would need to check what is the value and then cast it
     
     if (is_null(value)) {
         ;; do something with the null
@@ -716,11 +658,9 @@ forall X -> () resolve_type (X value) impure {
 }
 ```
 
-> 💡 Useful links
->
-> [文档中的 "TVM 说明"](/v3/documentation/tvm/instructions)
+**Reference:** [`TVM instructions` in docs](/v3/documentation/tvm/instructions)
 
-### 如何获取当前时间
+### How to get current time
 
 ```func
 int current_time = now();
@@ -730,11 +670,12 @@ if (current_time > 1672080143) {
 }
 ```
 
-### 如何生成随机数
+### How to generate a random number
 
-:::caution 草案
+:::caution draft
 
-更多信息请查阅 [随机数生成](/v3/guidelines/smart-contracts/security/random-number-generation)。
+This method is not cryptographically secure.
+For more details, see [Random number generation](/v3/guidelines/smart-contracts/security/random-number-generation) section.
 :::
 
 ```func
@@ -745,10 +686,16 @@ int b = rand(1000000);
 int c = random();
 ```
 
-### 模数运算
+### Modulo operations
 
-例如，我们要对所有 256 个数字进行如下计算：`(xp + zp)*(xp-zp)` 。由于这些运算大多用于密码学，因此在下面的示例中，我们将使用蒙托哥马利曲线的模运算符。
-请注意，xp+zp 是一个有效的变量名（中间没有空格）。
+As an example, let’s say we need to perform the following calculation for all 256 numbers:
+
+`(xp + zp) * (xp - zp)`.
+
+Since these operations are commonly used in cryptography, we utilize the modulo operator for montgomery curves.
+
+**Note:**
+Variable names like `xp+zp` are valid as long as there are no spaces between the operators.
 
 ```func
 (int) modulo_operations (int xp, int zp) {  
@@ -763,11 +710,9 @@ int c = random();
 }
 ```
 
-> 💡 Useful links
->
-> [文档中的 "muldivmod"](/v3/documentation/tvm/instructions#A98C)
+**Reference:** [`muldivmod` in docs](/v3/documentation/tvm/instructions#A98C)
 
-### 如何抛出错误
+### How to throw errors
 
 ```func
 int number = 198;
@@ -779,11 +724,11 @@ throw_unless(39, number == 198); ;; the error will be triggered only if the numb
 throw(36); ;; the error will be triggered anyway
 ```
 
-[标准 tvm 异常代码](/v3/documentation/tvm/tvm-exit-codes)
+[Standard TVM exception codes](/v3/documentation/tvm/tvm-exit-codes)
 
-### 反转 tuples
+### Reversing tuples
 
-由于 tuple 以堆栈的形式存储数据，有时我们必须反转 tuple 才能从另一端读取数据。
+Since tuples behave as stacks in FunC, sometimes we need to **reverse** them to access data from the opposite end.
 
 ```func
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
@@ -806,11 +751,9 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 }
 ```
 
-> 💡 Useful links
->
-> 文档中的["tpush()"](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
+**Reference:** [`tpush()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
 
-### 如何从列表中删除具有特定索引的项目
+### How to remove an item with a certain index from the list
 
 ```func
 int tlen (tuple t) asm "TLEN";
@@ -844,9 +787,12 @@ int tlen (tuple t) asm "TLEN";
 }
 ```
 
-### 确定 slice 是否相等
+### Determine if the slices are equal
 
-我们有两种不同的方法来确定相等性。一种是基于 slice 散列，另一种是使用 SDEQ asm 指令。
+There are two main ways to check if two slices are equal:
+
+- Comparing their hashes.
+- Using the SDEQ asm instruction.
 
 ```func
 int are_slices_equal_1? (slice a, slice b) {
@@ -867,14 +813,14 @@ int are_slices_equal_2? (slice a, slice b) asm "SDEQ";
 }
 ```
 
-#### 判断cell是否相等
+**References:**
 
-- 文档中的["slice_hash()"](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_hash)
-- [文档中的 "SDEQ"](/v3/documentation/tvm/instructions#C705)
+- [`slice_hash()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_hash)
+- [`SDEQ` in docs](/v3/documentation/tvm/instructions#C705)
 
-### 确定 cell 是否相等
+### Determine if the cells are equal
 
-我们可以根据哈希值轻松确定 cell 是否相等。
+We can determine if two cells are equal by comparing their hashes.
 
 ```func
 int are_cells_equal? (cell a, cell b) {
@@ -894,13 +840,11 @@ int are_cells_equal? (cell a, cell b) {
 }
 ```
 
-> 💡 Useful links
->
-> docs 中的["cell_hash()"](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
+**Reference:** [`cell_hash()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
 
-### 确定 tuples 是否相等
+### Determine if the tuples are equal
 
-更高级的示例是遍历和比较每个 tuple 值。由于它们都是 X，因此我们需要检查并转换为相应的类型，如果是tuple，则进行递归遍历。
+A more advanced approach involves iterating through tuples and comparing each value recursively. Since tuples can contain different data types, we must check and cast values dynamically.
 
 ```func
 int tuple_length (tuple t) asm "TLEN";
@@ -976,17 +920,16 @@ int are_cells_equal? (cell a, cell b) {
 }
 ```
 
-> 💡 Useful links
->
-> docs 中的["cell_hash()"](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
->
-> [文档中的 "TVM 说明"](/v3/documentation/tvm/instructions)
+**References:**
 
-### 生成内部地址
+- [`cell_hash()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
+- [`TVM instructions` in docs](/v3/documentation/tvm/instructions)
 
-当我们的合约需要部署一个新合约，但不知道他的地址时，我们需要生成一个内部地址。假设我们已经有了 `state_init` - 新合约的代码和数据。
+### Generate an internal address
 
-为相应的 MsgAddressInt TLB 创建内部地址。
+When deploying a new contract, we need to generate its internal address because it is initially unknown. Suppose we already have `state_init`, which contains the code and data of the new contract.
+
+This function creates an internal address corresponding to the `MsgAddressInt` TLB.
 
 ```func
 (slice) generate_internal_address (int workchain_id, cell state_init) {
@@ -1006,17 +949,13 @@ int are_cells_equal? (cell a, cell b) {
 }
 ```
 
-> 💡 Noted
->
-> 在本例中，我们使用 `workchain()` 获取工作链的 ID。有关工作链 ID 的更多信息，请参阅 [docs](/v3/documentation/smart-contracts/addresses#workchain-id) 。
+**Note:** In this example, we use `workchain()` to retrieve the WorkChain ID. You can learn more about the WorkChain ID in [docs](/v3/documentation/smart-contracts/addresses#workchain-id).
 
-> 💡 Useful links
->
-> docs 中的["cell_hash()"](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
+**Reference:** [`cell_hash()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
 
-### 生成外部地址
+### Generate an external address
 
-由于我们需要确定地址占用的位数，因此还需要[声明一个使用 `UBITSIZE` 操作码的 asm 函数](#how-to-write-own-functions-using-asm-keyword)，该函数将返回存储数字所需的最小位数。
+We use the TL-B scheme from [block.tlb](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L101C1-L101C12) to determine the address format to generate an external address.
 
 ```func
 (int) ubitsize (int a) asm "UBITSIZE";
@@ -1034,15 +973,13 @@ slice generate_external_address (int address) {
 }
 ```
 
-由于我们需要确定地址所占的位数，因此还需要 [声明一个 asm 函数](#how-to-write-own-functions-using-asm-keyword)，并使用操作码 `UBITSIZE` 返回存储数字所需的最小位数。
+Since we need to find the exact number of bits occupied by the address, we must [declare an asm function](#how-to-write-custom-functions-using-asm-keyword) with the `UBITSIZE` opcode. This function will return the minimum number of bits required to store a given number.
 
-> 💡 Useful links
->
-> [文档中的 "TVM 说明"](/v3/documentation/tvm/instructions#B603)
+**Reference:** [TVM instructions in docs](/v3/documentation/tvm/instructions#B603)
 
-### 如何在本地存储中存储和加载字典
+### How to store and load dictionary in a local storage
 
-而存储字典的逻辑如下所示：
+The logic for loading a dictionary from local storage is as follows:
 
 ```func
 slice local_storage = get_data().begin_parse();
@@ -1052,27 +989,23 @@ if (~ slice_empty?(local_storage)) {
 }
 ```
 
-而存储字典的逻辑就像下面的例子一样：
+Storing the dictionary follows a similar approach, ensuring data persistence.
 
 ```func
 set_data(begin_cell().store_dict(dictionary_cell).end_cell());
 ```
 
-> 💡 Useful links
->
-> [文档中的 "get_data()"](/v3/documentation/smart-contracts/func/docs/stdlib/#get_data)
->
-> 文档中的["new_dict()"](/v3/documentation/smart-contracts/func/docs/stdlib/#new_dict)
->
-> 文档中的 ["slice_empty?()"](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
->
-> 文档中的["load_dict()"](/v3/documentation/smart-contracts/func/docs/stdlib/#load_dict)
->
-> [文档中的 "~"](/v3/documentation/smart-contracts/func/docs/statements#unary-operators)
+**References:**
 
-### 如何发送简单信息
+- [`get_data()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#get_data)
+- [`new_dict()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#new_dict)
+- [`slice_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
+- [`load_dict()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_dict)
+- [`~` in docs](/v3/documentation/smart-contracts/func/docs/statements#unary-operators)
 
-我们发送带有注释的 TON 的通常方式实际上是发送一条简单的消息。要指定信息正文为 "注释"，我们应将信息文本前的 "32 位 "设置为 0。
+### How to send a simple message
+
+To send a simple message with a comment, prepend the message body with `32 bits` set to `0`, indicating that it is a `comment`.
 
 ```func
 cell msg = begin_cell()
@@ -1086,13 +1019,11 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 ```
 
-> 💡 Useful links
->
-> [文档中的 "消息布局"](/v3/documentation/smart-contracts/message-management/sending-messages)
+**Reference:** [`Message layout` in docs](/v3/documentation/smart-contracts/message-management/sending-messages)
 
-### 如何用接收帐户发送信息
+### How to send a message with an incoming account
 
-如果我们需要在用户和主合约之间执行任何操作，即我们需要一个代理合约，那么下面的合约示例对我们很有用。
+A proxy contract can facilitate secure message exchange if interaction between a user and the main contract is needed.
 
 ```func
 () recv_internal (slice in_msg_body) {
@@ -1116,15 +1047,14 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 }
 ```
 
-> 💡 Useful links
->
-> [文档中的 "消息布局"](/v3/documentation/smart-contracts/message-management/sending-messages)
->
-> [文档中的"load_msg_addr() "](/v3/documentation/smart-contracts/func/docs/stdlib/#load_msg_addr)
+**References:**
 
-### 如何发送包含全部余额的信息
+- [`Message layout` in docs](/v3/documentation/smart-contracts/message-management/sending-messages)
+- [`load_msg_addr()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#load_msg_addr)
 
-如果我们需要发送智能合约的全部余额，那么在这种情况下，我们需要使用发送 "mode 128"。这种情况的一个例子是代理合约，它接受付款并转发给主合约。
+### How to send a message with the entire balance
+
+To transfer the entire balance of a smart contract, use send `mode 128`. This is particularly useful for proxy contracts that receive payments and forward them to the main contract.
 
 ```func
 cell msg = begin_cell()
@@ -1138,15 +1068,15 @@ cell msg = begin_cell()
 send_raw_message(msg, 128); ;; mode = 128 is used for messages that are to carry all the remaining balance of the current smart contract
 ```
 
-> 💡 Useful links
->
-> [文档中的 "消息布局"](/v3/documentation/smart-contracts/message-management/sending-messages)
->
-> [文档中的 "消息模式"](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
+**References:**
 
-### 如何发送带有长文本注释的信息
+- [`Message layout` in docs](/v3/documentation/smart-contracts/message-management/sending-messages)
+- [`Message modes` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
 
-我们知道，一个 " cell "（< 1023 位）只能容纳 127 个字符。如果我们需要更多，就需要组织 snake cells 。
+### How to send a message with a long text comment
+
+A `cell` can store up to 127 characters (`<1023 bits`).
+A sequence of linked cells ("snake cells") must be used if more space is required.
 
 ```func
 {-
@@ -1178,13 +1108,11 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 ```
 
-> 💡 Useful links
->
-> [文档中的 "内部信息"](/v3/documentation/smart-contracts/message-management/internal-messages)
+**Reference:** [`Internal messages` in docs](/v3/documentation/smart-contracts/message-management/internal-messages)
 
-### 如何从片段中只获取数据位（无参考文献）
+### How to get only data bits from a slice (without refs)
 
-如果我们对 "片断 "中的 "引用 "不感兴趣，那么我们可以获取一个单独的日期并使用它。
+If `refs` within a `slice` are unnecessary, only the raw data bits can be extracted for further processing.
 
 ```func
 slice s = begin_cell()
@@ -1196,17 +1124,15 @@ slice s = begin_cell()
 slice s_only_data = s.preload_bits(s.slice_bits());
 ```
 
-> 💡 Useful links
->
-> [文档中的 " slice 原语"](/v3/documentation/smart-contracts/func/docs/stdlib/#slice-primitives)
->
-> 文档中的["preload_bits()"](/v3/documentation/smart-contracts/func/docs/stdlib/#preload_bits)
->
-> 文档中的["slice_bits()"](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_bits)
+**References:**
 
-### 如何定义自己的修改方法
+- [`Slice primitives` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice-primitives)
+- [`preload_bits()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#preload_bits)
+- [`slice_bits()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_bits)
 
-修改方法允许在同一变量内修改数据。这可以与其他编程语言中的引用相比较。
+### How to define a custom modifying method
+
+Modifying methods allow data to be updated within the same variable, similar to references in other programming languages.
 
 ```func
 (slice, (int)) load_digit (slice s) {
@@ -1224,11 +1150,9 @@ slice s_only_data = s.preload_bits(s.slice_bits());
 }
 ```
 
-> 💡 Useful links
->
-> [文档中的 "修改方法"](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)
+**Reference:** [`Modifying methods` in docs](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)
 
-### 如何将字符串转换为 int
+### How to raise number to the power of n
 
 ```func
 ;; Unoptimized variant
@@ -1264,7 +1188,7 @@ int pow (int a, int n) {
 }
 ```
 
-### 如何将 int 转换为 string
+### How to convert string to int
 
 ```func
 slice string_number = "26052021";
@@ -1278,7 +1202,7 @@ while (~ string_number.slice_empty?()) {
 ~dump(number);
 ```
 
-### 如何遍历字典
+### How to convert int to string
 
 ```func
 int n = 261119911;
@@ -1297,9 +1221,9 @@ slice result = string.end_cell().begin_parse();
 ~dump(result);
 ```
 
-### 如何迭代字典
+### How to iterate dictionaries
 
-字典在处理大量数据时非常有用。我们可以使用内置方法 `dict_get_min?` 和 `dict_get_max?` 分别获取键值的最小值和最大值。此外，我们还可以使用 `dict_get_next?` 遍历字典。
+Dictionaries are useful for managing large datasets. The built-in methods `dict_get_min?` and `dict_get_max` retrieve the minimum and maximum key values, while `dict_get_next?` allows dictionary iteration.
 
 ```func
 cell d = new_dict();
@@ -1316,19 +1240,15 @@ while (flag) {
 }
 ```
 
-> 💡 Useful links
->
-> [文档中的 "字典原语"](/v3/documentation/smart-contracts/func/docs/stdlib/#dictionaries-primitives)
->
-> [文档中的 "dict_get_max?() "](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_max)
->
-> [文档中的 "dict_get_min?() "](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_min)
->
-> [文档中的"dict_get_next?() "](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_next)
->
-> [文档中的 "dict_set() "](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_set)
+**References:**
 
-### 如何递归遍历cell树
+- [`Dictonaries primitives` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dictionaries-primitives)
+- [`dict_get_max?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_max)
+- [`dict_get_min?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_min)
+- [`dict_get_next?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_next)
+- [`dict_set()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_set)
+
+### How to delete value from dictionaries
 
 ```func
 cell names = new_dict();
@@ -1341,9 +1261,9 @@ names~udict_delete?(256, 27);
 ~dump(val); ;; null() -> means that key was not found in a dictionary
 ```
 
-### 如何递归遍历 cell 树
+### How to iterate a cell tree recursively
 
-我们知道，一个 " cell  "最多可以存储 1023 位数据和 4 个引用。为了绕过这一限制，我们可以使用 cell 树，但要做到这一点，我们需要能够遍历 cell 树，以便进行适当的数据处理。
+Each `cell` can store up to `1023 bits` of data and `4 refs`. A tree of cells can be used to handle more complex data structures, requiring recursive iteration.
 
 ```func
 forall X -> int is_null (X x) asm "ISNULL";
@@ -1387,17 +1307,15 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 }
 ```
 
-> [文档中的“null()”](/develop/func/stdlib/#null)
->
-> [文档中的“slice_refs()”](/develop/func/stdlib/#slice_refs)
->
-> [文档中的 "null() "](/v3/documentation/smart-contracts/func/docs/stdlib/#null)
->
-> [文档中的 "slice_refs()"](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_refs)
+**References:**
 
-### 如何遍历 Lisp 类型列表
+- [`Lisp-style lists` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#lisp-style-lists)
+- [`null()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#null)
+- [`slice_refs()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_refs)
 
-数据类型 tuple 最多可以容纳 255 个值。如果这还不够，我们应该使用 Lisp 类型的列表。我们可以将一个 tuple 放入另一个 tuple 中，从而绕过限制。
+### How to iterate through lisp-style list
+
+A tuple can hold up to 255 values. If more space is needed, a lisp-style list can be used by nesting tuples within tuples, effectively bypassing the limit.
 
 ```func
 forall X -> int is_null (X x) asm "ISNULL";
@@ -1421,13 +1339,12 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 }
 ```
 
-> 💡 有用的链接
->
-> [文档中的“Lisp风格列表”](/develop/func/stdlib/#lisp-style-lists)
->
-> [文档中的“null()”](/develop/func/stdlib/#null)
+**References:**
 
-### 如何发送部署消息（仅使用 stateInit 或使用 stateInit 和 body）
+- [`Lisp-style lists` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#lisp-style-lists)
+- [`null()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#null)
+
+### How to send a deploy message (with stateInit only, with stateInit and body)
 
 ```func
 () deploy_with_stateinit(cell message_header, cell state_init) impure {
@@ -1456,7 +1373,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 }
 ```
 
-### 如何构建 stateInit cell
+### How to build a stateInit cell
 
 ```func
 () build_stateinit(cell init_code, cell init_data) {
@@ -1472,7 +1389,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 }
 ```
 
-### 如何计算合约地址（使用 stateInit）
+### How to calculate a contract address (using stateInit)
 
 ```func
 () calc_address(cell state_init) {
@@ -1485,9 +1402,9 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 }
 ```
 
-### 如何更新智能合约逻辑
+### How to update the smart contract logic
 
-下面是一个简单的 `СounterV1` 智能合约，它具有递增计数器和更新智能合约逻辑的功能。
+Below is an example of a simple `CounterV1` smart contract that allows the counter to be incremented and includes logic for updating the contract.
 
 ```func
 () recv_internal (slice in_msg_body) {
@@ -1508,7 +1425,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 }
 ```
 
-在操作智能合约后，您发现缺少了减表功能。您必须复制智能合约 "CounterV1 "的代码，并在 "增加 "函数旁边添加一个新的 "减少 "函数。现在您的代码如下
+After interacting with the contract, you may realize that the functionality for decrementing the counter is missing. To fix this, copy the code from `CounterV1` and add a new `decrease` function next to the existing `increase` function. Your updated code will look like this:
 
 ```func
 () recv_internal (slice in_msg_body) {
@@ -1536,7 +1453,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 }
 ```
 
-一旦智能合约 "CounterV2 "准备就绪，你必须将其编译到链外的 "cell "中，并向 "CounterV1 "智能合约发送升级消息。
+Once the `CounterV2` smart contract is ready, you need to compile it off-chain into a `cell` and send an upgrade message to the `CounterV1` contract:
 
 ```javascript
 await contractV1.sendUpgrade(provider.sender(), {
@@ -1545,8 +1462,10 @@ await contractV1.sendUpgrade(provider.sender(), {
 });
 ```
 
-> 💡 Useful links
->
-> [是否可以将代码重新部署到现有地址，还是必须将其作为新合约部署？](/v3/documentation/faq#is-it-possible-to-re-deploy-code-to-an-existing-address-or-does-it-have-to-be-deployed-as-a-new-contract)
->
-> [文档中的 "set_code()"](/v3/documentation/smart-contracts/func/docs/stdlib#set_code)
+**References:**
+
+- [Is it possible to redeploy code to an existing address, or does it have to be deployed as a new contract?](/v3/documentation/faq#is-it-possible-to-redeploy-code-to-an-existing-address-or-must-it-be-deployed-as-a-new-contract)
+- [`set_code()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#set_code)
+
+<Feedback />
+

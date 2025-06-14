@@ -1,245 +1,348 @@
-# 发送消息
+import Feedback from '@site/src/components/Feedback';
 
-消息的组成、解析和发送位于[TL-B schemas](/develop/data-formats/tl-b-language)、[交易阶段和TVM](/learn/tvm-instructions/tvm-overview)的交汇处。
+# Sending messages
 
-事实上，FunC有[send_raw_message](/develop/func/stdlib#send_raw_message)函数，该函数期望一个序列化消息作为参数。
+Composition, parsing, and sending messages lie at the intersection of [TL-B schemas](/v3/documentation/data-formats/tlb/tl-b-language), [transaction phases, and TVM](/v3/documentation/tvm/tvm-overview).
 
-由于TON是一个功能广泛的系统，支持所有这些功能的消息可能看起来相当复杂。尽管如此，大多数情况下并不使用那么多功能，消息序列化在大多数情况下可以简化为：
+Indeed, FunC exposes the [send_raw_message](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) function which expects a serialized message as an argument.
+
+Since TON is a comprehensive system with wide functionality, messages that need to support all of this functionality may appear quite complicated. However, most of that functionality is not used in common scenarios, and message serialization, in most cases, can be simplified to:
 
 ```func
-  cell msg = begin_cell()
-    .store_uint(0x18, 6)
-    .store_slice(addr)
-    .store_coins(amount)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-    .store_slice(message_body)
-  .end_cell();
+ cell msg = begin_cell()
+ .store_uint(0x18, 6)
+ .store_slice(addr)
+ .store_coins(amount)
+ .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+ .store_slice(message_body)
+ .end_cell();
 ```
 
-因此，开发者不用担忧，如果这份文档中的某些内容在第一次阅读时看起来难以理解，没有关系。只需把握总体思路即可。
+Therefore, the developer should not worry; if something in this document seems incomprehensible on first reading, that's okay. Just grasp the general idea.
 
-有时文档中可能会提到\*\*'gram'**这个词，但大多是在代码示例中，它只是**toncoin\*\*的一个过时名称。
+Sometimes, the word **`gram`** appears in the documentation, primarily in code examples; it is simply an outdated name for **Toncoin**.
 
-让我们深入了解！
+Let's dive in!
 
-## 消息类型
+## Types of messages
 
-有三种类型的消息：
+There are three types of messages:
 
-- 外部消息 — 从区块链外部发送到区块链内部智能合约的消息。这类消息应该在所谓的`credit_gas`阶段被智能合约明确接受。如果消息未被接受，节点不应该将其纳入进区块或转发给其他节点。
-- 内部消息 — 从一个区块链实体发送到另一个区块链实体的消息。与外部消息不同，这类消息可以携带一些TON并为自己支付费用。接收此类消息的智能合约可能没有接受它，在这种情况下，消息价值中的gas将被扣除。
-- 日志 — 从区块链实体发送到外部世界的消息。一般来说，没有将这类消息发送出区块链的机制。实际上，尽管网络中的所有节点对是否创建了消息达成共识，但没有关于如何处理它们的规则。日志可能被直接发送到`/dev/null`，记录到磁盘，保存到索引数据库，甚至通过非区块链手段（电子邮件/Telegram/短信）发送，所有这些都取决于给定节点的自行决定。
+- **External** - messages sent from outside the blockchain to a smart contract inside the blockchain. Smart contracts should explicitly accept such messages during the so-called `credit_gas`. The node should not accept the message into a block or relay it to other nodes if it is not accepted.
+- **Internal** - messages sent from one blockchain entity to another. In contrast to external messages, such messages may carry some TON and pay for themselves. Thus, smart contracts that receive such messages may not accept them. In this case, gas will be deducted from the message value.
+- **Logs** - messages sent from a blockchain entity to the outer world. Generally, there is no mechanism for sending such messages out of the blockchain. While all nodes in the network have a consensus on whether a message was created, there are no rules for processing them. Logs may be directly sent to `/dev/null`, logged to disk, saved in an indexed database, or even sent by non-blockchain means (email/telegram/sms); these are at the sole discretion of the given node.
 
-## 消息布局
+## Message layout
 
-我们将从内部消息布局开始。
+We will start with the internal message layout.
 
-描述智能合约可以发送的消息的TL-B方案如下：
+TL-B scheme, which describes messages that smart contracts can send, is as follows:
 
 ```tlb
-message$_ {X:Type} info:CommonMsgInfoRelaxed 
-  init:(Maybe (Either StateInit ^StateInit))
-  body:(Either X ^X) = MessageRelaxed X;
+message$_ {X:Type} info:CommonMsgInfoRelaxed
+ init:(Maybe (Either StateInit ^StateInit))
+ body:(Either X ^X) = MessageRelaxed X;
 ```
 
-让我们用语言来描述。任何消息的序列化都包括三个字段：info（某种标题，描述来源、目的地和其他元数据）、init（仅在消息初始化时需要的字段）和body（消息有效载荷）。
+Let's put it into words: The serialization of any message consists of three fields:
 
-`Maybe`、`Either`和其他类型的表达式意味着以下内容：
+- `info`, a header that describes the source, destination, and other metadata.
+- `init`, a field that is only required for initializing messages.
+- `body`, the message payload.
 
-- 当我们有字段`info:CommonMsgInfoRelaxed`时，意味着`CommonMsgInfoRelaxed`的序列化直接注入到序列化cell中。
-- 当我们有字段`body:(Either X ^X)`时，意味着当我们(反)序列化某种类型`X`时，我们首先放置一个`either`位，如果`X`被序列化到同一cell，则为`0`，如果它被序列化到单独的cell，则为`1`。
-- 当我们有字段`init:(Maybe (Either StateInit ^StateInit))`时，意味着我们首先放置`0`或`1`，要取决于这个字段是否为空；如果不为空，我们序列化`Either StateInit ^StateInit`（再次，放置一个`either`位，如果`StateInit`被序列化到同一cell则为`0`，如果被序列化到单独的cell则为`1`）。
+`Maybe` and `Either` and other types of expressions mean the following:
 
-`CommonMsgInfoRelaxed`的布局如下：
+- When we have the field `info:CommonMsgInfoRelaxed`, it means that the serialization of `CommonMsgInfoRelaxed` is injected directly into the serialization cell.
+- When we have the field `body:(Either X ^X)`, it means that when we (de)serialize some type `X`, we first put one `either` bit, which is `0` if `X` is serialized to the same cell, or `1` if it is serialized to the separate cell.
+- When we have the field `init:(Maybe (Either StateInit ^StateInit))`, we first put `0` or `1` depending on whether this field is empty. If it is not empty, we serialize `Either StateInit ^StateInit` (again, put one `either` bit, which is `0` if `StateInit` is serialized to the same cell or `1` if it is serialized to a separate cell).
+
+Let's focus on one particular `CommonMsgInforRelaxed` type, the internal message definition declared with the `int_msg_info$0` constructor.
 
 ```tlb
 int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
-  src:MsgAddress dest:MsgAddressInt 
-  value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
-  created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
-
-ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
-  created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
+ src:MsgAddress dest:MsgAddressInt
+ value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
+ created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
 ```
 
-让我们现在专注于`int_msg_info`。
-它以1位的前缀`0`开始，然后有三个1位的标志位，分别表示是否禁用即时超立方路由（目前始终为真）、是否在处理过程中出错时弹回消息，以及消息本身是否是弹回的结果。然后序列化来源和目的地址，接着是消息值和四个与消息转发费用和时间有关的整数。
+It starts with the 1-bit prefix `0`.
 
-如果消息是从智能合约发送的，其中一些字段将被重写为正确的值。特别是，验证者将重写`bounced`、`src`、`ihr_fee`、`fwd_fee`、`created_lt`和`created_at`。这意味着两件事：首先，另一个智能合约在处理消息时可以信任这些字段（发送者无法伪造来源地址、`bounced`标志位等）；其次，在序列化时我们可以将任何有效值放入这些字段中（无论如何这些值都将被重写）。
+Then, there are three 1-bit flags:
 
-消息的直接序列化如下所示：
+- Whether Instant Hypercube Routing is disabled (currently always true)
+- Whether a message should be bounced if there are errors during its processing
+- Whether the message itself is the result of a bounce.
+
+Then, source and destination addresses are serialized, followed by the message value and four integers related to message forwarding fees and time.
+
+If a message is sent from the smart contract, some fields will be rewritten to the correct values. In particular, the validator will rewrite `bounced`, `src`, `ihr_fee`, `fwd_fee`, `created_lt`, and `created_at`. That means two things: first, another smart contract while handling the message may trust those fields (sender may not forge source address, `bounced` flag, etc.), and second, during serialization, we may put to those fields any valid values because those values will be overwritten anyway.
+
+Straight-forward serialization of the message would be as follows:
 
 ```func
-  var msg = begin_cell()
-    .store_uint(0, 1) ;; tag
-    .store_uint(1, 1) ;; ihr_disabled
-    .store_uint(1, 1) ;; allow bounces
-    .store_uint(0, 1) ;; not bounced itself
-    .store_slice(source)
-    .store_slice(destination)
-    ;; serialize CurrencyCollection (see below)
-    .store_coins(amount)
-    .store_dict(extra_currencies)
-    .store_coins(0) ;; ihr_fee
-    .store_coins(fwd_value) ;; fwd_fee 
-    .store_uint(cur_lt(), 64) ;; lt of transaction
-    .store_uint(now(), 32) ;; unixtime of transaction
-    .store_uint(0,  1) ;; no init-field flag (Maybe)
-    .store_uint(0,  1) ;; inplace message body flag (Either)
-    .store_slice(msg_body)
-  .end_cell();
+ var msg = begin_cell()
+ .store_uint(0, 1) ;; tag
+ .store_uint(1, 1) ;; ihr_disabled
+ .store_uint(1, 1) ;; allow bounces
+ .store_uint(0, 1) ;; not bounced itself
+ .store_slice(source)
+ .store_slice(destination)
+ ;; serialize CurrencyCollection (see below)
+ .store_coins(amount)
+ .store_dict(extra_currencies)
+ .store_coins(0) ;; ihr_fee
+ .store_coins(fwd_value) ;; fwd_fee
+ .store_uint(cur_lt(), 64) ;; lt of transaction
+ .store_uint(now(), 32) ;; unixtime of transaction
+ .store_uint(0,  1) ;; no init-field flag (Maybe)
+ .store_uint(0,  1) ;; inplace message body flag (Either)
+ .store_slice(msg_body)
+ .end_cell();
 ```
 
-然而，开发者通常使用快捷方式而不是逐步序列化所有字段。因此，让我们考虑如何使用[elector-code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/elector-code.fc#L153)中的示例从智能合约发送消息。
+However, instead of serializing all fields step-by-step, developers usually use shortcuts. Thus, let's consider how messages can be sent from the smart contract using an example from [elector-code](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/elector-code.fc#L153).
 
 ```func
 () send_message_back(addr, ans_tag, query_id, body, grams, mode) impure inline_ref {
-  ;; int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 011000
-  var msg = begin_cell()
-    .store_uint(0x18, 6)
-    .store_slice(addr)
-    .store_coins(grams)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-    .store_uint(ans_tag, 32)
-    .store_uint(query_id, 64);
-  if (body >= 0) {
-    msg~store_uint(body, 32);
-  }
-  send_raw_message(msg.end_cell(), mode);
+ ;; int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 011000
+ var msg = begin_cell()
+ .store_uint(0x18, 6)
+ .store_slice(addr)
+ .store_coins(grams)
+ .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+ .store_uint(ans_tag, 32)
+ .store_uint(query_id, 64);
+ if (body >= 0) {
+ msg~store_uint(body, 32);
+ }
+ send_raw_message(msg.end_cell(), mode);
 }
 ```
 
-首先，它将`0x18`值放入6位，即放入`0b011000`。这是什么？
+First, it combined `0b011000` into the `0x18` value. What is this?
 
-- 第一位是`0` — 1位前缀，表示它是`int_msg_info`。
+- The first bit is a `0` - 1-bit prefix, which indicates that it is `int_msg_info`.
 
-- 然后有3位`1`、`1`和`0`，表示即时超立方路由被禁用，消息可以在处理过程中出错时回弹，消息本身不是回弹的结果。
+- Then there are 3 bits `1`, `1`, and `0`, meaning Instant Hypercube Routing is disabled, messages can be bounced, and that message is not the result of bouncing itself.
 
-- 然后应该是发送者地址，但由于它无论如何都会被重写，因此可以存储任何有效地址。最短的有效地址序列化是`addr_none`的序列化，它序列化为两位字符串`00`。
+- Then, there should be a sender address; however, since it will be rewritten with the same effect, any valid address may be stored there. The shortest valid address serialization is that of `addr_none`, which serializes as a two-bit string `00`.
 
-因此，`.store_uint(0x18, 6)`是序列化标签和前4个字段的优化后的方式。
+Thus, `.store_uint(0x18, 6)` is the optimized serialization method for the tag and the first four fields.
 
-下一行序列化目的地址。
+The following line serializes the destination address.
 
-然后我们应该序列化值。一般来说，消息值是一个`CurrencyCollection`对象，其方案如下：
+Then, we should serialize values. Generally, the message value is a `CurrencyCollection` object with the following scheme:
 
 ```tlb
 nanograms$_ amount:(VarUInteger 16) = Grams;
 
-extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) 
-                 = ExtraCurrencyCollection;
+extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32))
+ = ExtraCurrencyCollection;
 
-currencies$_ grams:Grams other:ExtraCurrencyCollection 
-           = CurrencyCollection;
+currencies$_ grams:Grams other:ExtraCurrencyCollection
+ = CurrencyCollection;
 ```
 
-这个方案意味着除了TON值之外，消息可能还携带了extra-currencies的字典。然而，目前我们可以忽略它，只假设消息值被序列化为“作为变量整数的nanotons数量”和“`0` - 空字典位”。
+This scheme means the message may carry the dictionary of additional _extra-currencies_ with the TON value. However, we may neglect it and assume that the message value is serialized as number of nanotons as variable integer and "`0` - empty dictionary bit".
 
-事实上，在上面的选举人代码中，我们通过`.store_coins(toncoins)`序列化代币数量，但接着只放置了长度等于`1 + 4 + 4 + 64 + 32 + 1 + 1`的零字符串。这代表着什么？
+Indeed, in the elector code above, we serialize coins amounts via `.store_coins(toncoins)` but then just put a string of zeros with a length equal to `1 + 4 + 4 + 64 + 32 + 1 + 1`. What is it?
 
-- 第一个位表示空的extra-currencies字典。
-- 然后我们有两个长度为4位的字段。它们以`VarUInteger 16`编码为0。事实上，由于`ihr_fee`和`fwd_fee`将被重写，我们同样可以在那里放置零。
-- 然后我们将零放入`created_lt`和`created_at`字段。这些字段也将被重写；然而，与费用不同，这些字段有固定长度，因此被编码为64位和32位长的字符串。
-- *（我们已经序列化了消息头并传递到init/body）*
-- 接下来的零位表示没有`init`字段。
-- 最后一个零位表示消息体将就地序列化。
-- 之后，消息体（具有任意布局）就完成了编码。
+- The first bit stands for empty extra-currencies dictionary.
+- Then we have two 4-bit long fields. They encode 0 as `VarUInteger 16`. Since `ihr_fee` and `fwd_fee` will be overwritten, we may as well put them as zeroes.
+- Then we put zero to the `created_lt` and `created_at` fields. Those fields will also be overwritten; however, in contrast to fees, these fields have a fixed length and are thus encoded as 64- and 32-bit long strings.
+  > _We had already serialized the message header and passed to init/body at that moment_
+- Next zero-bit means that there is no `init` field.
+- The last zero-bit means that msg_body will be serialized in-place.
+- After that, the message body (with an arbitrary layout) is encoded.
 
-这样，我们执行了4个序列化原语，而不是单独序列化了14个参数。
+Instead of individual serialization of 14 parameters, we execute 4 serialization primitives.
 
-## 完整方案
+## Full scheme
 
-消息布局和所有构成字段的完整方案（以及TON中所有对象的方案）在[block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb)中呈现。
+The entire scheme of the message layout and the layout of all constituting fields, as well as the scheme of ALL objects in TON, are presented in [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb).
 
-## 消息大小
+## Message size
 
-:::info cell大小
-请注意，任何[Cell](/learn/overviews/cells)最多可包含`1023`位。如果您需要存储更多数据，您应该将其分割成块并存储在引用cell中。
+:::info cell size
+Note that any [Cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) may contain up to `1023` bits. If you need to store more data, you should split it into chunks and store it in reference cells.
 :::
 
-例如，如果您的消息体大小为900位长，您无法将其存储在与消息头相同的cell中。
-实际上，除了消息头字段外，cell的总大小将超过1023位，在序列化过程中将出现`cell溢出`异常。在这种情况下，原本代表“就地消息体标志位（Either）”的`0`应该变成`1`，消息体应该存储在引用cell中。
+For example, if your message body is 900 bits long, you can't store it in the same cell as the message header. Including the message header fields would make the total cell size exceed 1023 bits, triggering a `cell overflow` exception during serialization.
 
-由于某些字段具有可变大小，因此应小心处理这些事项。
+In this case, use `1` instead of `0` for the in-place message body flag (Either), which will store the message body in a separate reference cell.
 
-例如，`MsgAddress`可以由四个构造器表示：`addr_none`、`addr_std`、`addr_extern`、`addr_var`，长度从2位（对于`addr_none`）到586位（对于最大形式的`addr_var`）。nanotons的数量也是如此，它被序列化为`VarUInteger 16`。这意味着，4位指示整数的字节长度，然后指示整数本身的较前面的字节。这样，0 nanotons将被序列化为`0b0000`（4位编码着零字节长度字符串，然后是零字节），而100,000,000 TON（或100000000000000000 nanotons）将被序列化为`0b10000000000101100011010001010111100001011101100010100000000000000000`（`0b1000`表示8个字节长度，然后是8个字节其本身）。
+Those things should be handled carefully because some fields have variable sizes.
 
-:::info 消息大小
+For instance, `MsgAddress` may be represented by four constructors:
 
-更多配置参数及其值可在 [这里](/develop/howto/blockchain-configs#param-43) 找到。
+- `addr_none`
+- `addr_std`
+- `addr_extern`
+- `addr_var`
+
+With length from 2 bits for `addr_none` to 586 bits for `addr_var` in the largest form.
+
+The same stands for nanotons' amounts, which is serialized as `VarUInteger 16`.
+That means 4 bits indicating the byte length of the integer and then bytes for the integer itself.
+
+That way:
+
+- `0` nanotons serialized as `0b0000` (4 bits indicating zero-length byte string + no bytes)
+- `100000000000000000` nanotons (100,000,000 TON) serializes as:
+  `0b10000000000101100011010001010111100001011101100010100000000000000000`
+  (where `0b1000` specifies 8 bytes length followed by the 8-byte value)
+
+:::info message size
+Note that the message has general size limits and cell count limits, too,
+e.g., the maximum message size must not exceed `max_msg_bits`, and the number of cells per message must not exceed `max_msg_cells`.
+
+More configuration parameters and their values can be found [here](/v3/documentation/network/configs/blockchain-configs#param-43).
 :::
 
-## 消息模式
+## Message modes
 
-如您可能已经注意到，我们使用`send_raw_message`发送消息，除了消耗消息本身外，还接受mode（模式）。要了解最适合您需求的模式，请查看以下表格：
+:::info
+For the latest information, refer to the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook).
+:::
 
-- mode：定义发送报文时的基本行为，如是否携带余额、是否等待报文处理结果等。不同的模式值代表不同的发送特性，不同的值可以组合使用，以满足特定的发送要求。
-- flag：作为模式的附加功能，用于配置特定的报文行为，如单独支付转账费用或忽略处理错误。将标记添加到模式中可创建最终的报文发送模式。
+As you may have noticed, we send messages using `send_raw_message`, which also accepts a mode parameter and consumes the message. This mode determines how the message is sent, including whether to pay for gas separately and how to handle errors. The TON Virtual Machine (TVM) processes messages differently depending on the mode value. It’s important to note that the mode parameter consists of two components, **mode** and **flag**, which serve different purposes:
 
-使用`send_raw_message`函数时，根据需要选择合适的模式和标记组合非常重要。要找出最适合您需要的模式，请参阅下表：
+- **Mode**: Defines the basic behavior when sending a message, such as whether to carry a balance or wait for message processing results. Different mode values represent different sending characteristics, which can be combined to meet specific requirements.
+- **Flag**: Acts as an addition to the mode, configuring specific message behaviors, such as paying transfer fees separately or ignoring processing errors. The flag is added to the mode to create the final message-sending configuration.
 
-| Mode  | 描述                            |
-| :---- | :---------------------------- |
-| `0`   | 普通消息                          |
-| `64`  | 除了新消息中最初指示的值之外，携带来自入站消息的所有剩余值 |
-| `128` | 携带当前智能合约的所有余额，而不是消息中最初指示的值    |
+When using the `send_raw_message` function, choosing the appropriate combination of mode and flag for your needs is crucial. Refer to the following table to determine the best mode for your use case:
 
-| Flag  | 描述                                       |
-| :---- | :--------------------------------------- |
-| `+1`  | 单独支付转账费用                                 |
-| `+2`  | 忽略在 Action Phase 处理该信息时出现的一些错误（请查看下面的注释） |
-| `+16` | 在action失败的情况下 - 弹回交易。如果使用了`+2`则无效。       |
-| `+32` | 如果当前账户的结果余额为零，则必须销毁该账户（通常与Mode 128一起使用）  |
+| Mode  | Description                                                                                                            |
+| :---- | :--------------------------------------------------------------------------------------------------------------------- |
+| `0`   | Ordinary message                                                                                                       |
+| `64`  | Carry all the remaining value of the inbound message in addition to the value initially indicated in the new message   |
+| `128` | Carry all the remaining balance of the current smart contract instead of the value originally indicated in the message |
 
-:::info +2 flag
+| Flag  | Description                                                                                                       |
+| :---- | :---------------------------------------------------------------------------------------------------------------- |
+| `+1`  | Pay transfer fees separately from the message value                                                               |
+| `+2`  | Ignore some errors arising while processing this message during the action phase                                  |
+| `+16` | In the case of action failure, bounce the transaction. No effect if `+2` is used. |
+| `+32` | Destroy the current account if its resulting balance is zero (often used with Mode 128)        |
 
-1. 消息的格式无效。
-   - 没有足够的值与消息一起传送(所有入站消息值都已消耗)。
-   - 没有足够的资金来处理消息。
-   - 没有足够的信息附加值来支付转发费用。
-   - 没有足够的额外货币与消息一起发送。
-   - 没有足够的资金支付出站外部消息。
-2. 消息模式包括 64 和128 modes。
-3. 出站消息在 StateInit 中有无效的库。
+:::info +16 Flag
+If a contract receives a bounceable message, it processes the `storage` phase **before** the `credit` phase. Otherwise, it processes the `credit` phase **before** the `storage` phase.
 
-要为`send_raw_message`构建一个模式，您只需通过将Mode和Flag结合来组合它们。例如，如果您想发送常规消息并单独支付转账费用，请使用Mode`0`和Flag`+1`得到`mode = 1`。如果您想发送整个合约余额并立即销毁它，请使用Mode`128`和Flag`+32`得到`mode = 160`。
-
-1. 消息的格式无效。
-2. 消息模式包括 64 和128 modes。
-3. 出站消息在 StateInit 中有无效的库。
-4. 外部消息不是普通消息，或包含 +16 或 +32 标志，或两者兼有。
-   :::
-
-:::info +16 flag
-
-否则，它将在 `storage` 阶段 **之前** 处理`credit` 阶段。
-
-[检查`bounce-enable` flag的源代码](https://github.com/ton-blockchain/ton/blob/master/validator/impl/collator.cpp#L2810)。
+For more details, check the [source code with checks for the `bounce-enable` flag](https://github.com/ton-blockchain/ton/blob/master/validator/impl/collator.cpp#L2810).
 :::
 
 :::warning
 
-1. **+16 flag** - 不要在外部报文（如发给钱包的报文）中使用，因为没有发件人接收被退回的报文。
-2. **+2 flag** - 这在外部消息（例如，发送到钱包）中非常重要。
-   :::
+1. **+16 flag** - do not use it in external messages (e.g., to wallets) because there is no sender to receive the bounced message.
 
-### 用例示例
+2. **+2 flag** - important in external messages (e.g. to wallets).
 
-让我们看一个例子来更清楚地说明这一点。假设我们的智能合约余额为 100  Toncoin ，我们收到一条 50  Toncoin 的内部信息，并发送一条 20  Toncoin 的信息，总费用为 3  Toncoin 。
+:::
 
-`重要`：说明错误发生时的错误结果。
+## Recommended approach: mode=3 {#mode3}
 
-| Case                                                                            | Mode and Flags                 | Code                         | Result                                                                                                   |
-| :------------------------------------------------------------------------------ | :----------------------------- | :--------------------------- | :------------------------------------------------------------------------------------------------------- |
-| 发送常规信息                                                                          | `mode` = 0, no `flag`          | `send_raw_message(msg, 0)`   | `balance` - 100 + 50 - 20 = 130, `send` - 20 - 3 = 17                                                    |
-| 如果在处理操作过程中出现错误，则发送常规信息，不要回滚事务而忽略它                                               | `mode` = 0, `flag` = 2         | `send_raw_message(msg, 2)`   | `balance` - 100 + 50, `send` - 0                                                                         |
-| 如果在处理操作过程中出现错误，则发送常规信息 - 除了回滚事务外，还弹出信息                                          | `mode` = 0, `flag` = 16        | `send_raw_message(msg, 16)`  | `balance` - 100 + 50 = 167 + 17 (bounced), `send` - 20 - 3 = `bounce` message with 17 |
-| 发送普通信息并单独支付转账费用                                                                 | `mode` = 0, `flag` = 1         | `send_raw_message(msg, 1)`   | `balance` - 100 + 50 - 20 - 3 = 127, `send` - 20                                                         |
-| 如果在处理操作过程中出现错误，则发送常规信息并单独支付转账费用 - 除退回交易外，还退回信息                                  | `mode` = 0, `flags` = 1 + 16   | `send_raw_message(msg, 17)`  | `balance` - 100 + 50 - 20 - 3 = 127 + `20 (bounced)`, `send` - 20 = `bounce` message with 20             |
-| 除了新信息中最初显示的值外，还携带所有入站信息的剩余值                                                     | `mode` = 64, `flag` = 0        | `send_raw_message(msg, 64)`  | `balance` - 100 - 20 = 80, `send` - 20 + 50 - 3 = 67                                                     |
-| 除了新电文中最初标明的价值外，携带入站电文的所有剩余价值，并单独支付转账费用                                          | `mode` = 64, `flag` = 1        | `send_raw_message(msg, 65)`  | `balance` - 100 - 20 - 3 = 77, `send` - 20 + 50 = 70                                                     |
-| 如果在处理操作过程中出现错误，则除新信息中最初显示的价值外，携带入站信息的所有剩余价值，并单独支付转账费用 - 除退回交易外，还退回信息            | `mode` = 64, `flags` = 1 + 16  | `send_raw_message(msg, 81)`  | `balance` - 100 - 20 - 3 = 77 + `70 (bounced)`, `send` - 20 + 50 = `bounce` message with 70              |
-| 发送所有收到的代币和合约余额                                                                  | `mode` = 128, `flag` = 0       | `send_raw_message(msg, 128)` | `balance` - 0, `send` - 100 + 50 - 3 = 147                                                               |
-| 如果在处理操作过程中出现错误，则发送所有收到的代币和合约余额 - 除了回滚交易外，还弹出消息                                  | `mode` = 128, `flag` = 16      | `send_raw_message(msg, 144)` | `balance` - 0 + `147 (bounced)`, `send` - 100 + 50 - 3 = `bounce` message with 147                       |
-| 发送所有收到的代币和合约余额，并销毁智能合约                                                          | `mode` = 128, `flag` = 32      | `send_raw_message(msg, 160)` | `balance` - 0, `send` - 100 + 50 - 3 = 147                                                               |
-| 发送所有收到的代币和合约余额，并销毁智能合约，如果在处理操作过程中出现错误--除了回滚交易外，还弹出消息。重要提示：避免这种行为，因为退款将转入已删除的合约。 | `mode` = 128, `flag` = 32 + 16 | `send_raw_message(msg, 176)` | `balance` - 0 + `147 (bounced)`, `send` - 100 + 50 - 3 = `bounce` message with 147                       |
+```func
+send_raw_message(msg, SEND_MODE_PAY_FEES_SEPARATELY | SEND_MODE_IGNORE_ERRORS); ;; stdlib.fc L833
+```
+
+The `mode=3` combines the `0` mode and two flags:
+
+- `+1` : Pay transfer fees separately from the message value
+- `+2` : Suppresses specific errors during message processing
+
+This combination is the standard method for sending messages in TON.
+
+---
+
+### Behavior without +2 flag
+
+If the `IGNORE_ERRORS` flag is omitted and a message fails to process (e.g., due to insufficient balance), the transaction reverts. For wallet contracts, this prevents updates to critical data like the `seqno`.
+
+```func
+throw_unless(33, msg_seqno == stored_seqno);
+throw_unless(34, subwallet_id == stored_subwallet);
+throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
+accept_message();
+set_data(begin_cell()
+ .store_uint(stored_seqno + 1, 32)
+ .store_uint(stored_subwallet, 32)
+ .store_uint(public_key, 256)
+ .store_dict(plugins)
+ .end_cell());
+commit(); ;; This will be reverted on action error.
+```
+
+As a result, unprocessed external messages can be replayed until they expire or drain the contract's balance.
+
+---
+
+### Error handling with +2 flag
+
+The `IGNORE ERRORS` flag (`+2`) suppresses these specific errors during the Action Phase:
+
+#### Suppressed errors
+
+1. **Insufficient funds**
+
+  - Message transfer value exhaustion
+  - Insufficient balance for message processing
+  - Inadequate attached value for forwarding fees
+  - Missing extra currency for message transfer
+  - Insufficient funds for external message delivery
+
+2. **[Oversized message](#message-size)**
+
+3. **Excessive Merkle depth**
+
+  Message exceeds allowed Merkle tree complexity.
+
+#### Non-suppressed errors
+
+1. Malformed message structure
+2. Conflicting mode flags (`+64` and `+128` used together)
+3. Invalid libraries in `StateInit` of the outbound message
+4. Non-ordinary external messages (e.g., using `+16` or `+32` flags)
+
+---
+
+### Security considerations
+
+#### Current mitigations
+
+- Most wallet apps auto-include `IGNORE_ERRORS` in transactions
+- Wallet UIs often display transaction simulation results
+- V5 wallets enforce `IGNORE_ERRORS` usage
+- Validators limit message replays per block
+
+#### Potential risks
+
+- **Race conditions** causing stale backend balance checks
+- **Legacy wallets** (V3/V4) without enforced checks
+- **Incomplete validations** by wallet applications
+
+---
+
+### Example: jetton transfer pitfall
+
+Consider this simplified Jetton wallet code:
+
+```func
+() send_jettons(slice in_msg_body, slice sender_address, int msg_value, int fwd_fee) impure inline_ref {
+int jetton_amount = in_msg_body~load_coins();
+balance -= jetton_amount;
+send_raw_message(msg, SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE | SEND_MODE_BOUNCE_ON_ACTION_FAIL);
+save_data(status, balance, owner_address, jetton_master_address); }
+```
+
+If a transfer using `mode=3` fails due to a suppressed error:
+
+1. Transfer action is not executed
+2. Contract state updates persist (no rollback)
+3. **Result:** permanent loss of `jetton_amount` from the balance
+
+**Best practice**
+
+Always pair `IGNORE_ERRORS` with robust client-side validations and real-time balance checks to prevent unintended state changes.
+
+<Feedback />
+

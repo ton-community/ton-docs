@@ -1,0 +1,130 @@
+import Feedback from '@site/src/components/Feedback';
+
+import ConceptImage from '@site/src/components/conceptImage'
+
+# 미니 앱 테스트
+
+## 테스트 환경에서 봇 사용
+
+To log in to the test environment, use one of the following methods:
+
+- **iOS:** Tap 10 times on the Settings icon. Navigate to > Accounts > Login to another account > Test.
+- **Telegram Desktop:** Open ☰ Settings > Shift + Alt + Right click **Add Account** and select **Test Server**.
+- **macOS:** Click the Settings icon 10 times to open the Debug Menu. `⌘` + Click **Add Account** and log in using your phone number.
+
+The test environment is completely separate from the main environment. You must create a **new user account** and a **new bot** using [@BotFather](https://t.me/BotFather).
+
+Once you have received your bot token, send requests to the Bot API using this format:
+
+`https://api.telegram.org/bot<token>/test/METHOD_NAME`
+
+**Note:** When using the test environment, you may use HTTP links without TLS to test your Mini App.
+
+## Debug mode for Mini Apps
+
+Use the following tools to identify app-specific issues in your Mini App.
+
+### Android
+
+- 장치에서 [USB 디버깅 활성화](https://developer.chrome.com/docs/devtools/remote-debugging/)를 클릭합니다.
+- In Telegram Settings, scroll to the bottom, press and hold the **version number** two times.
+- Choose _Enable WebView Debug_ in Debug Settings.
+- Connect your phone to your computer and open chrome://inspect/#devices in Chrome.
+- Launch your Mini App on your phone, and it will appear in Chrome’s Inspect Devices tab.
+
+### iOS
+
+iOS WebView debugging requires the Safari desktop browser on macOS.
+
+**iOS 기기에서:**
+
+- 설정\*으로 이동합니다.
+- Scroll down and tap Safari.
+- Scroll to the bottom and press _Advanced_.
+- Enable _Web Inspector_.
+
+**MacOS에서:**
+
+- Open Safari.
+- Open _Settings_ (`⌘` + `,`).
+- Select the _Advanced_ tab.
+- Check _Show features for web developers_.
+
+**다음 단계:**
+
+- Connect your iOS device to the Mac via USB cable.
+- iOS 텔레그램 클라이언트에서 미니앱을 엽니다.
+- In Safari on macOS, go to _Develop_ in the menu bar.
+- Select the connected iPhone.
+- (Optional) select _Connect via network_ and disconnect the cable.
+- Under the _Telegram_ block, select the opened WebView URL.
+
+### Telegram Desktop on Windows, Linux, and macOS
+
+- Download and launch the latest version of Telegram Desktop on **Windows**, **Linux** or **macOS** (5.0.1 at the time of writing)
+- 설정 > 고급 > 실험 설정 > 웹뷰 검사 활성화\*로 이동합니다.
+- Windows 및 Linux에서는 웹뷰를 마우스 오른쪽 버튼으로 클릭하고 _검사_를 선택합니다.
+- On macOS, you need to access the Inspect through [Safari Developer menu](https://support.apple.com/en-gb/guide/safari/sfri20948/mac) as Inspect is not available via right-click.
+
+### 텔레그램 macOS
+
+- Download and launch the [beta version](https://telegram.org/dl/macos/beta) of Telegram macOS.
+- Quickly click the Settings icon five times to open the debug menu and enable **Debug Mini Apps**.
+
+Right-click inside the Mini App and choose _Inspect Element_.
+
+## 에루다로 테스트하기
+
+[Eruda](https://github.com/liriliri/eruda) is a tool that provides a web-based console for debugging and inspecting web pages on mobile devices and desktop browsers.
+
+![1](/img/docs/telegram-apps/eruda-1.png)
+
+### Step 1: include Eruda library
+
+To begin, add the Eruda library to your HTML file:
+
+**Option 1:** use a CDN (recommended).
+
+```html
+<!-- Include Eruda from CDN (Recommended) -->
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+```
+
+**Option 2:** install via npm.
+
+```bash npm2yarn
+npm install eruda --save
+```
+
+### Step 2: initialise Eruda
+
+If using the CDN, initialize Eruda when the page loads:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+<script>
+  // Initialize Eruda
+  eruda.init();
+</script>
+
+```
+
+If you prefer modern tooling and packages, add this script to your project:
+
+```jsx
+import eruda from 'eruda'
+
+eruda.init()
+```
+
+### Step 3: launch Eruda
+
+After deploying your Mini App:
+
+- Open it in Telegram.
+- Press the Eruda icon to start debugging.
+
+<ConceptImage style={{maxWidth:'200pt', margin: '10pt 20pt 0 0', display: 'flex-box'}} src="/img/docs/telegram-apps/eruda-2.png" />
+<ConceptImage style={{maxWidth:'200pt', margin: '10pt 20pt', display: 'flex-box'}}  src="/img/docs/telegram-apps/eruda-3.png" />
+
+<Feedback />

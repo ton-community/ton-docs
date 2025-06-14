@@ -1,0 +1,97 @@
+import Feedback from '@site/src/components/Feedback';
+
+import ConceptImage from '@site/src/components/conceptImage';
+import ThemedImage from '@theme/ThemedImage';
+
+# راهنمای توضیحات گرافیکی
+
+:::danger
+This page is outdated and will be deleted soon.
+See the [How to contribute](/v3/contribute/).
+:::
+
+حفظ ثبات در مستندات حیاتی است و برای دستیابی به این هدف، یک استاندارد خاص برای نمایش فرآیندها در قراردادهای هوشمند توسعه داده شده است.
+
+## نماد توضیح گرافیکی
+
+### نمودار پردازش پیام
+
+برای نمایش پردازش پیام، توصیه می‌شود از یک نمایش گرافیکی شبیه به نمودار قرارداد هوشمند، همراه با برچسب‌هایی برای تراکنش‌ها و پیام‌ها استفاده کنید.
+
+If the order of transactions doesn't matter, you can omit their labels. This simplifies the diagram, making it easier to read and understand the details related to messages and contracts.
+
+#### ابتداییات حاشیه نویسی
+
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1.png?raw=true',
+    dark: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1_dark.png?raw=true',
+  }}
+/>
+<br></br>
+
+- از استفاده زیادی از رنگ‌های مختلف و روشن خودداری کنید.
+- از تغییرات اشکال استفاده کنید، مانند استفاده از خط مرزی نقطه‌چین.
+- برای درک بهتر، تراکنش‌های مختلف می‌توانند با سبک‌های خطی متمایز (پیوسته و خط‌چین) نمایش داده شوند.
+
+#### مثال پردازش پیام
+
+<br></br>
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
+  }}
+/>
+<br></br>
+
+مراجع را مستقیما از Visio [message-processing.vsdx](/schemes-visio/message_processing.vsdx) بیاموزید.
+
+### قالب‌ها و رنگ‌ها
+
+#### فونت‌ها
+
+- خانواده فونت‌های **Inter** برای تمام متن داخل نمودارها.
+
+#### رنگ‌ها - حالت روشن
+
+- با مداد کشیده شده (قالب پیش‌فرض)
+
+#### رنگ‌ها - حالت تاریک
+
+- فونت `#e3e3e3`
+- پس‌زمینه `#232328`
+- هایلایت روشن (فلش‌ها و حاشیه‌های الگو) `#058dd2`
+- هایلایت تیره (فلش‌ها و حاشیه‌های الگو) `#0088cc`
+- پس‌زمینه داخلی (برای بلوک‌های تودرتو) `#333337`
+
+#### سیاست کنترل نسخه
+
+- در مستندات، نمودارها را با فرمت SVG برای الگوها تنظیم کنید تا خوانایی در دستگاه‌های مختلف حفظ شود.
+- فایل‌های اصلی را در مخزن Git پروژه تحت دایرکتوری "/static/visio" ذخیره کنید تا ویرایش آنها در آینده آسان‌تر باشد.
+
+### نمودار توالی
+
+In the case of complex and repetitive communication schemes between 2-3 actors, it is advisable to use a sequence diagram. For messages, use the notation of a common synchronous message arrow.
+
+#### مثال
+
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_7_dark.png?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
+### منابع الگو
+
+- [message-processing.vsdx](/schemes-visio/message_processing.vsdx)
+
+<Feedback />

@@ -1,41 +1,37 @@
-# Обзор низкоуровневых комиссий
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Обзор низкоуровневых комиссий
 
 :::caution
 This section describes instructions and manuals for interacting with TON at a low level.
-
-Здесь вы найдете **сырые формулы** для расчета комиссий и сборов в TON.
-
-Однако большинство из них **уже реализованы через коды операций**! Поэтому вы **используете их вместо ручных вычислений**
+Here you will find the **raw formulas** for calculating commissions and fees on TON.
+However, most of them are **already implemented through opcodes**!
+So, you **use them instead of manual calculations**.
 :::
 
-В этом документе дается общее представление о комиссиях за транзакции в TON и, в частности, о комиссиях за вычисления для кода FunC. Также есть [подробная спецификация в техническом документе TVM](https://ton.org/tvm.pdf).
+This document provides a general idea of transaction fees on TON and particularly computation fees for the FunC code. There is also a [detailed specification in the TVM whitepaper](https://ton.org/tvm.pdf).
 
-## Транзакции и фазы
+## Transactions and phases
 
-Как было описано в [обзоре TVM](/v3/documentation/tvm/tvm-overview), выполнение транзакции состоит из нескольких фаз. Во время этих фаз могут вычитаться соответствующие комиссии. Существует [обзор высокоуровневых комиссий](/v3/documentation/smart-contracts/transaction-fees/fees).
+As was described in the [TVM overview](/v3/documentation/tvm/tvm-overview), transaction execution consists of a few phases. During those phases, the corresponding fees may be deducted. There is a [high-level fees overview](/v3/documentation/smart-contracts/transaction-fees/fees).
 
-## Плата за хранение
+## Storage fee
 
-Валидаторы TON взимают плату за хранение со смарт-контрактов.
+TON validators collect storage fees from smart contracts.
 
-Плата за хранение взимается с `balance` смарт-контракта на **фазе хранения** **любой** транзакции в связи с оплатой за хранение в зависимости от состояния аккаунта
-(включая код и данные смарт-контракта, если они есть) до настоящего времени. Даже если [контракт получил 1 nanoton](https://retracer.ton.org/?tx=1805820dccd7ffd70d6cee6cb581e60ee2f91f7f3eeb20ed00c08dc9fcd6a08b), он погасит всю задолженность с момента последней оплаты. В результате смарт-контракт может быть заморожен. **Только уникальные ячейки хеша учитываются для комиссий за хранение и пересылку, т. е. 3 одинаковые ячейки хеша считаются как одна**. В частности, это [дедуплицирует](/v3/documentation/data-formats/tlb/library-cells) данные: если в разных ветвях есть несколько эквивалентных подячеек, их содержимое сохраняется только один раз.
+Storage fees are collected from the smart contract `balance` at the **Storage phase** of **any** transaction due to storage payments for the account state (including smart-contract code and data, if present) up to the present time. Even if a contract receives 1 nanoton, it will pay all the debt since the last payment. The smart contract may be frozen as a result. **Only unique hash cells are counted for storage and forward fees i.e. 3 identical hash cells are counted as one**. In particular, it [deduplicates](/v3/documentation/data-formats/tlb/library-cells) data: if there are several equivalent sub-cells referenced in different branches, their content is only stored once.
 
-Важно помнить, что в TON вы платите как за выполнение смарт-контракта, так и за **используемое хранилище** (см. [статью @thedailyton](https://telegra.ph/Commissions-on-TON-07-22)), `storage_fee` зависит от размера вашего контракта: количества ячеек и суммы битов из этих ячеек. Это означает, что вам придется платить комиссию за хранение за наличие кошелька TON (даже если он очень-очень маленький).
+It's important to keep in mind that on TON you pay for both the execution of a smart contract and for the **used storage** (check [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22)), `storage_fee` depends on your contract size: number of cells and sum of bits from that cells. It means you have to pay a storage fee for having TON Wallet (even if it's very-very small).
 
-Если вы не использовали свой кошелек TON в течение значительного периода времени (1 год), *вам придется заплатить значительно большую комиссию, чем обычно, поскольку кошелек платит комиссию за отправку и получение транзакций*.
+If you have not used your TON Wallet for a significant period of time (1 year), _you will have to pay a significantly larger commission than usual because the wallet pays commission on sending and receiving transactions_.
 
-:::info **Примечание**:
-Когда сообщение возвращается из контракта, контракт выплачивает свою текущую `storage_fee`
+:::info **Note**:
+When a message is bounced from the contract, the contract will pay its current `storage_fee`
 :::
 
-### Формула
+### Formula
 
-Вы можете приблизительно рассчитать плату за хранение для смарт-контрактов, используя эту формулу:
+You can approximately calculate storage fees for smart contracts using this formula:
 
 ```cpp
 storage_fee = ceil(
@@ -45,32 +41,32 @@ storage_fee = ceil(
 
 ```
 
-Давайте рассмотрим каждое значение более подробно:
+Let's examine each value more closely:
 
-- `storage_fee` — цена за хранение для `time_delta` секунд
-- `account.cells` — количество ячеек, используемых смарт-контрактом
-- `account.bits` — количество бит, используемых смарт-контрактом
-- `cell_price` — цена одной ячейки
-- `bit_price` — цена одного бита
+- `storage_fee` — price for storage for `time_delta` seconds
+- `account.cells` — count of cells used by smart contract
+- `account.bits` — count of bits used by smart contract
+- `cell_price` — price of single cell
+- `bit_price` — price of single bit
 
-И `cell_price`, и `bit_price` можно получить из конфигурации сети [параметр 18](/v3/documentation/network/configs/blockchain-configs#param-18).
+Both `cell_price` and `bit_price` could be obtained from Network Config [param 18](/v3/documentation/network/configs/blockchain-configs#param-18).
 
-Текущие значения:
+Current values are:
 
-- Воркчейн.
+- Workchain.
   ```cpp
   bit_price_ps:1
   cell_price_ps:500
   ```
-- Мастерчейн.
+- Masterchain.
   ```cpp
   mc_bit_price_ps:1000
   mc_cell_price_ps:500000
   ```
 
-### Пример калькулятора
+### Calculator example
 
-Вы можете использовать этот скрипт JS для расчета стоимости хранения 1 МБ в воркчейне на 1 год
+You can use this JS script to calculate storage price for 1 MB in the workchain for 1 year
 
 ```js live
 // Welcome to LIVE editor!
@@ -97,46 +93,47 @@ function storageFeeCalculator() {
 }
 ```
 
-## Плата за вычисления
+## Computation fees
 
-### Газ
+### Gas
 
-Все затраты на вычисления номинированы в единицах газа. Цена единиц газа определяется этой [конфигурацией цепи](/v3/documentation/network/configs/blockchain-configs#param-20-and-21) (Конфигурация 20 для мастерчейна и Конфигурация 21 для бейсчейна) и может быть изменена только по консенсусу валидаторов. Обратите внимание, что в отличие от других систем, пользователь не может устанавливать собственную цену на газ, и нет рынка комиссий.
+All computation costs are nominated in gas units. The price of gas units is determined by this [chain config](/v3/documentation/network/configs/blockchain-configs#param-20-and-21) (Config 20 for masterchain and Config 21 for basechain) and may be changed only by consensus of validators. Note that unlike in other systems, the user cannot set his own gas price, and there is no fee market.
 
-Текущие настройки в бейсчейне следующие: 1 единица газа стоит 400 nanoton.
+Current settings in basechain are as follows: 1 unit of gas costs 400 nanotons.
 
-### Стоимость инструкций TVM
+### TVM instructions cost
 
-На самом низком уровне (выполнение инструкций TVM) стоимость газа для большинства примитивов
-равна *базовой цене газа*, вычисляемой как `P_b := 10 + b + 5r`,
-где `b` — длина инструкции в битах, а `r` — количество ссылок на ячейки, включенных в инструкцию.
+On the lowest level (TVM instruction execution) the gas price for most primitives
+equals the _basic gas price_, computed as `P_b := 10 + b + 5r`,
+where `b` is the instruction length in bits and `r` is the
+number of cell references included in the instruction.
 
-Помимо этих основных сборов, появляются следующие сборы:
+Apart from those basic fees, the following fees appear:
 
-| Инструкция                  | Цена газа | Описание                                                                                                                                                                                                                |
-| --------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Создание ячейки             | **500**   | Операция преобразования строителя в ячейку.                                                                                                                                                             |
-| Анализ ячейки в первый раз  | **100**   | Операция преобразования ячеек в срезы первый раз в ходе текущей транзакции.                                                                                                                             |
-| Повторный анализ ячейки     | **25**    | Операция преобразования ячеек в срезы, которая уже была проанализирована в ходе той же транзакции.                                                                                                      |
-| Вызов исключения            | **50**    |                                                                                                                                                                                                                         |
-| Операция с кортежем         | **1**     | Эта цена будет умножена на количество элементов кортежа.                                                                                                                                                |
-| Неявный переход             | **10**    | Оплачивается, когда выполняются все инструкции в текущей ячейке продолжения. Однако в этой ячейке продолжения есть ссылки, и поток выполнения переходит к первой ссылке.                |
-| Неявный обратный переход    | **5**     | Он оплачивается, когда все инструкции в текущем продолжении выполнены, и поток выполнения возвращается к продолжению, из которого было вызвано только что завершенное продолжение.                      |
-| Перемещение элементов стека | **1**     | Цена за перемещение элементов стека между продолжениями. Будет взиматься соответствующая цена газа за каждый элемент. Однако перемещение первых 32 элементов бесплатно. |
+| Instruction             | GAS price | Description                                                                                                                                                                                                                   |
+| ----------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Creation of cell        | **500**   | Operation of transforming builder to cell.                                                                                                                                                                    |
+| Parsing cell firstly    | **100**   | Operation of transforming cells into slices first time during current transaction.                                                                                                                            |
+| Parsing cell repeatedly | **25**    | Operation of transforming cells into slices, which already has parsed during same transaction.                                                                                                                |
+| Throwing exception      | **50**    |                                                                                                                                                                                                                               |
+| Operation with tuple    | **1**     | This price will multiply by the quantity of tuple's elements.                                                                                                                                                 |
+| Implicit Jump           | **10**    | It is paid when all instructions in the current continuation cell are executed. However, there are references in that continuation cell, and the execution flow jumps to the first reference. |
+| Implicit Back Jump      | **5**     | It is paid when all instructions in the current continuation are executed and execution flow jumps back to the continuation from which the just finished continuation was called.                             |
+| Moving stack elements   | **1**     | Price for moving stack elements between continuations. It will charge correspond gas price for every element. However, the first 32 elements moving is free.                  |
 
-### Плата за газ для FunC конструкций
+### FunC constructions gas fees
 
-Почти все функции FunC, используемые в этой статье, определены в [контракте stdlib.fc стейблкоина](https://github.com/ton-blockchain/stablecoin-contract) (на самом деле stdlib.fc с новыми кодами операций в настоящее время **находится в стадии разработки** и **еще не представлен в репозиториях основной сети**, но вы можете использовать `stdlib.fc` из исходного кода [стейблкоина](https://github.com/ton-blockchain/ton) в качестве ссылки), который сопоставляет функции FunC с инструкциями ассемблера Fift. В свою очередь, инструкции ассемблера Fift сопоставляются с инструкциями битовой последовательности в [asm.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif). Поэтому, если вы хотите понять, сколько именно будет стоить вызов инструкции, вам нужно найти представление `asm` в `stdlib.fc`, затем найти битовую последовательность в `asm.fif` и вычислить длину инструкции в битах.
+Almost all FunC functions used in this article are defined in [stablecoin stdlib.fc contract](https://github.com/ton-blockchain/stablecoin-contract) (actually, stdlib.fc with new opcodes is currently **under development** and **not yet presented on the mainnet repos**, but you can use `stdlib.fc` from [stablecoin](https://github.com/ton-blockchain/ton) source code as reference) which maps FunC functions to Fift assembler instructions. In turn, Fift assembler instructions are mapped to bit-sequence instructions in [asm.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif). So if you want to understand how much exactly the instruction call will cost you, you need to find `asm` representation in `stdlib.fc`, then find bit-sequence in `asm.fif` and calculate instruction length in bits.
 
-Однако, как правило, сборы, связанные с длиной бит, незначительны по сравнению с сборами, связанными с анализом и созданием ячеек, а также переходами и просто количеством выполненных инструкций.
+However, generally, fees related to bit-lengths are minor in comparison with fees related to cell parsing and creation, as well as jumps and just number of executed instructions.
 
-Поэтому, если вы пытаетесь оптимизировать свой код, начните с оптимизации архитектуры, уменьшения количества операций анализа/создания ячеек, а затем с уменьшения количества переходов.
+So, if you try to optimize your code start with architecture optimization, the decreasing number of cell parsing/creation operations, and then with the decreasing number of jumps.
 
-### Операции с ячейками
+### Operations with cells
 
-Просто пример того, как правильная работа ячеек может существенно снизить затраты на газ.
+Just an example of how proper cell work may substantially decrease gas costs.
 
-Давайте представим, что вы хотите добавить некоторую закодированную полезную нагрузку к исходящему сообщению. Простая реализация будет следующей:
+Let's imagine that you want to add some encoded payload to the outgoing message. Straightforward implementation will be as follows:
 
 ```cpp
 slice payload_encoding(int a, int b, int c) {
@@ -162,7 +159,7 @@ slice payload_encoding(int a, int b, int c) {
 }
 ```
 
-В чем проблема с этим кодом? `payload_encoding` для генерации битовой строки среза, сначала создайте ячейку с помощью `end_cell()` (+500 единиц газа). Затем проанализируйте ее `begin_parse()` (+100 единиц газа). Тот же код можно написать без этих ненужных операций, изменив некоторые часто используемые типы:
+What is the problem with this code? `payload_encoding` to generate a slice bit-string, first create a cell via `end_cell()` (+500 gas units). Then parse it `begin_parse()` (+100 gas units). The same code can be written without those unnecessary operations by changing some commonly used types:
 
 ```cpp
 ;; we add asm for function which stores one builder to the another, which is absent from stdlib
@@ -190,44 +187,52 @@ builder payload_encoding(int a, int b, int c) {
 }
 ```
 
-Передавая битовую строку в другой форме (строитель вместо среза), мы существенно снижаем стоимость вычислений за счет очень небольшого изменения кода.
+By passing bit-string in the another form (builder instead of slice) we substantially decrease computation cost by very slight change in code.
 
-### Inline и inline_refs
+### Inline and inline_refs
 
-По умолчанию, когда у вас есть функция FunC, она получает свой собственный `id`, хранящийся в отдельном листе словаря id->function, и когда вы вызываете ее где-то в программе, происходит поиск функции в словаре и последующий переход. Такое поведение оправдано, если ваша функция вызывается из многих мест в коде, и, таким образом, переходы позволяют уменьшить размер кода (сохраняя тело функции один раз). Однако, если функция используется только один или два раза, часто гораздо дешевле объявить эту функцию как `inline` или `inline_ref`. Модификатор `inline` помещает тело функции прямо в код родительской функции, в то время как `inline_ref` помещает код функции в ссылку (переход к ссылке все еще намного дешевле, чем поиск и переход к записи словаря).
+By default, when you have a FunC function, it gets its own `id`, stored in a separate leaf of id->function dictionary, and when you call it somewhere in the program, a search of the function in dictionary and subsequent jump occur. Such behavior is justified if your function is called from many places in the code and thus jumps allow to decrease the code size (by storing a function body once). However, if the function is only used once or twice, it is often much cheaper to declare this function as `inline` or `inline_ref`. `inline` modificator places the body of the function right into the code of the parent function, while `inline_ref` places the function code into the reference (jumping to the reference is still much cheaper than searching and jumping to the dictionary entry).
 
-### Словари
+### Dictionaries
 
-Словари в TON представлены как деревья (точнее, DAG) ячеек. Это означает, что если вы ищете, читаете или пишете в словарь, вам нужно разобрать все ячейки соответствующей ветви дерева. Это означает, что
+Dictionaries on TON are introduced as trees (DAGs to be precise) of cells. That means that if you search, read, or write to the dictionary, you need to parse all cells of the corresponding branch of the tree. That means that
 
-- а) операции со словарями не фиксированы в стоимости газа (так как размер и количество узлов в ветви зависят от данного словаря и ключа)
-- б) целесообразно оптимизировать использование словаря, используя специальные инструкции, такие как `replace` вместо `delete` и `add`
-- в) разработчик должен знать об операциях итерации (таких как next и prev), а также об операциях `min_key`/`max_key`, чтобы избежать ненужной итерации по всему словарю
+- a) dicts operations are not fixed in gas costs (since the size and number of nodes in the branch depend on the given dictionary and key)
+- b) it is expedient to optimize dict usage by using special instructions like `replace` instead of `delete` and `add`
+- c) developer should be aware of iteration operations (like next and prev) as well `min_key`/`max_key` operations to avoid unnecessary iteration through the whole dict
 
-### Операции со стеком
+### Stack operations
 
-Обратите внимание, что FunC манипулирует записями стека под капотом. Это означает, что код:
+Note that FunC manipulates stack entries under the hood. That means that the code:
 
 ```cpp
 (int a, int b, int c) = some_f();
 return (c, b, a);
 ```
 
-будет транслироваться в несколько инструкций, которые изменяют порядок элементов в стеке.
+will be translated into a few instructions which changes the order of elements on the stack.
 
-Когда количество записей стека значительно (10+), и они активно используются в разных порядках, расходы на операции со стеком могут стать существенными.
+When the number of stack entries is substantial (10+), and they are actively used in different orders, stack operations fees may become non-negligible.
 
-## Плата за пересылку
+## Forward fees
 
-Внутренние сообщения определяют `ihr_fee` в Toncoin, которая вычитается из стоимости, прикрепленной к сообщению, и присуждается валидаторам целевого шардчейна, если они включают сообщение через механизм IHR. `fwd_fee` — это исходная общая плата за пересылку, уплачиваемая с использованием механизма HR; она автоматически вычисляется из [24 и 25 параметров конфигурации](/v3/documentation/network/configs/blockchain-configs#param-24-and-25) и размера сообщения на момент его генерации. Обратите внимание, что общая стоимость, переносимая вновь созданным внутренним исходящим сообщением, равна сумме стоимости, `ihr_fee` и `fwd_fee`. Эта сумма вычитается из баланса исходного аккаунта. Из этих компонентов только значение `ihr_fee` зачисляется на целевой аккаунт при доставке сообщения. `fwd_fee` собирается валидаторами на пути HR от источника до пункта назначения, а `ihr_fee` либо собирается валидаторами целевого шардчейна (если сообщение доставляется через IHR), либо зачисляется на конечный аккаунт.
+Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the value attached to the message and awarded to the validators of the destination shardchain if they include the message through the IHR mechanism. The `fwd_fee` is the original total forwarding fee paid for using the HR mechanism; it is automatically computed from the [24 and 25 configuration parameters](/v3/documentation/network/configs/blockchain-configs#param-24-and-25) and the size of the message at the time the message is generated. Note that the total value carried by a newly created internal outbound message equals the sum of the value, `ihr_fee`, and `fwd_fee`. This sum is deducted from the balance of the source account. Of these components, only the `ihr_fee` value is credited to the destination account upon message delivery. The `fwd_fee` is collected by the validators on the HR path from the source to the destination, and the `ihr_fee` is either collected by the validators of the destination shardchain (if the message is delivered via IHR) or credited to the destination account.
 
 ### IHR
 
-:::tip
-На данный момент (ноябрь 2024 г.) [IHR](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) не реализован, и если вы установите `ihr_fee` на ненулевое значение, оно всегда будет добавлено к значению сообщения при получении. На данный момент нет практических причин делать это.
+:::info What is IHR?
+At this moment (November 2024), [IHR](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) is not implemented, and if you set the `ihr_fee` to a non-zero value, it will always be added to the message value upon receipt. For now, there are no practical reasons to do this.
+
+- **IHR is not implemented** and is not yet fully specified
+- **IHR would only be relevant** when the network has more than 16 shards and not all shards are neighbors to each other
+- **Current network settings forbid splitting deeper than 16 shards**, which means IHR is not relevant in any practical sense
+
+In the current TON network configuration, all message routing uses standard **Hypercube Routing (HR)**, which can handle message delivery efficiently with the current shard topology. The `ihr_fee` field exists in the message structure for future compatibility, but serves no functional purpose today.
+
+If you set the `ihr_fee` to a non-zero value, it will always be added to the message value upon receipt. For now, there are no practical reasons to do this.
 :::
 
-### Формула
+### Formula
 
 ```cpp
 // In_msg and Ext_msg are using the same method of calculation
@@ -245,14 +250,15 @@ ihr_fwd_fees = ceil((msg_fwd_fees * ihr_price_factor) / 2^16);
 total_fwd_fees = msg_fwd_fees + ihr_fwd_fees; // ihr_fwd_fees - is 0 for external messages
 ```
 
-:::info ВАЖНО
+:::info IMPORTANT
+Please note that `msg_fwd_fees` above includes `action_fee` below. For a basic message this fee = lump_price = 400000 nanotons, action_fee = (400000 \* 21845) / 65536 = 133331. Or approximately a third of the `msg_fwd_fees`.
 
-`fwd_fee` = `msg_fwd_fees` - `action_fee` = 266669 nanoton = 0,000266669 TON
+`fwd_fee` = `msg_fwd_fees` - `action_fee` = 266669 nanotons = 0,000266669 TON
 :::
 
-## Плата за действие
+## Action fee
 
-Плата за действие вычитается из баланса исходного аккаунта во время обработки списка действий, которая происходит после фазы вычислений. Фактически, единственное действие, за которое вы платите плату за действие, это `SENDRAWMSG`. Другие действия, такие как `RAWRESERVE` или `SETCODE`, не влекут за собой никаких комиссий во время фазы действия.
+The action fee is deducted from the balance of the source account during the processing of the action list, which occurs after the Computing phase. Practically, the only action for which you pay an action fee is `SENDRAWMSG`. Other actions, such as `RAWRESERVE` or `SETCODE`, do not incur any fee during the action phase.
 
 ```cpp
 action_fee = floor((msg_fwd_fees * first_frac)/ 2^16);  //internal
@@ -260,7 +266,7 @@ action_fee = floor((msg_fwd_fees * first_frac)/ 2^16);  //internal
 action_fee = msg_fwd_fees;  //external
 ```
 
-[`first_frac`](/v3/documentation/network/configs/blockchain-configs#param-24-and-25) является частью параметров 24 и 25 (для мастерчейна и воркчейна) блокчейна TON. В настоящее время оба установлены на значение 21845, что означает, что `action_fee` составляет примерно треть от `msg_fwd_fees`. В случае внешнего действия сообщения `SENDRAWMSG`, `action_fee` равен `msg_fwd_fees`.
+[`first_frac`](/v3/documentation/network/configs/blockchain-configs#param-24-and-25) is part of the 24 and 25 parameters (for master chain and work chain) of the TON Blockchain. Currently, both are set to a value of 21845, which means that the `action_fee` is approximately a third of the `msg_fwd_fees`. In the case of an external message action, `SENDRAWMSG`, the `action_fee` is equal to the `msg_fwd_fees`.
 
 :::tip
 Remember that an action register can contain up to 255 actions, which means that all formulas related to `fwd_fee` and `action_fee` will be computed for each `SENDRAWMSG` action, resulting in the following sum:
@@ -271,7 +277,7 @@ total_fees = sum(action_fee) + sum(total_fwd_fees);
 
 :::
 
-Начиная с четвертой [глобальной версии](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md) TON, если действие "отправить сообщение" не выполняется, аккаунт должен оплатить обработку ячеек сообщения, называемую `action_fine`.
+Starting from the fourth [global version](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md) of TON, if a "send message" action fails, the account is required to pay for processing the cells of the message, referred to as the `action_fine`.
 
 ```cpp
 fine_per_cell = floor((cell_price >> 16) / 4)
@@ -281,9 +287,9 @@ max_cells = floor(remaining_balance / fine_per_cell)
 action_fine = fine_per_cell * min(max_cells, cells_in_msg);
 ```
 
-## Файл конфигурации платы
+## Fee's config file
 
-Все платы указаны в nanoton или nanoton, умноженных на 2^16, чтобы [сохранить точность при использовании целого числа](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) и могут быть изменены. Файл конфигурации отображает текущую стоимость платы.
+All fees are nominated in nanotons or nanotons multiplied by 2^16 to [maintain accuracy while using integer](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) and may be changed. The config file represents the current fee cost.
 
 - storage_fees = [p18](https://tonviewer.com/config#18)
 - in_fwd_fees = [p24](https://tonviewer.com/config#24), [p25](https://tonviewer.com/config#25)
@@ -294,15 +300,18 @@ action_fine = fine_per_cell * min(max_cells, cells_in_msg);
 :::info
 [A direct link to the mainnet live config file](https://tonviewer.com/config)
 
-В образовательных целях пример старого
+For educational purposes example of the old one.
 :::
 
-## Ссылки
+## References
 
-- На основе @thedailyton [статья](https://telegra.ph/Fees-calculation-on-the-TON-Blockchain-07-24) от 24.07\*
+- Based on @thedailyton [article](https://telegra.ph/Fees-calculation-on-the-TON-Blockchain-07-24) from July 24th
 
-## См. также
+## See also
 
-- [Обзор комиссий TON](/v3/documentation/smart-contracts/transaction-fees/fees)
-- [Транзакции и фазы](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
-- [Расчет комиссий](/v3/guidelines/smart-contracts/fee-calculation)
+- [TON fees overview](/v3/documentation/smart-contracts/transaction-fees/fees)
+- [Transactions and phases](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
+- [Fees calculation](/v3/guidelines/smart-contracts/fee-calculation)
+
+<Feedback />
+

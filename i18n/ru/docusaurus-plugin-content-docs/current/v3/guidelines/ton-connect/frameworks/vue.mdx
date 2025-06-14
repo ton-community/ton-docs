@@ -1,58 +1,66 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Feedback from '@site/src/components/Feedback';
+
 # TON Connect для Vue
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+The recommended SDK for Vue Apps is a [UI Vue SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-vue). A Vue component provides a high-level way to interact with TON Connect.
 
-Рекомендуемый SDK для приложений Vue — это [UI Vue SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-vue). Это компонент Vue, который обеспечивает высокоуровневый способ взаимодействия с TON Connect.
-
-## Внедрение
+## Implementation
 
 ### Установка
 
-Чтобы начать интеграцию TON Connect в ваше DApp, вам необходимо установить пакет `@townsquarelabs/ui-vue`. Для этой цели вы можете использовать npm или yarn:
+To start integrating TON Connect into your dApp, install the `@townsquarelabs/ui-vue` package. You can use npm or yarn for this purpose:
 
 ```bash npm2yarn
 npm i @townsquarelabs/ui-vue
 ```
 
-### Инициализация TON Connect
+### Use TonConnectUIPlugin
 
-Добавьте TonConnectUIProvider в корень приложения. Вы можете указать параметры пользовательского интерфейса с помощью props.
+Use TonConnectUIPlugin before mounting the app. You can specify UI options using plugin options.
+:::tip
+[See all available options](https://github.com/TownSquareXYZ/tonconnect-ui-vue/blob/ff8cbb66aa30b7c29ac1a1f76c96ebef91700ff3/src/utils/UIProvider.ts#L9).
+:::
 
-<!-- [Просмотреть все доступные параметры](https://github.com/TownSquareXYZ/tonconnect-ui-vue/blob/aa7439073dae5f7ccda3ab10291fc4658f5d3588/src/utils/UIProvider.ts#L11) -->
+<Tabs groupId="TonConnectUIPlugin">
+  <TabItem value="For Vue@3" label="For Vue@3">
+  ```html
+  import { createApp } from 'vue'
+  import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
 
-Все вызовы хуков пользовательского интерфейса TonConnect и компонент `<TonConnectButton />` должны быть размещены внутри `<TonConnectUIProvider>`.
+  import App from './App.vue'
 
+  const app = createApp(App)
+  app
+    .use(TonConnectUIPlugin,{ manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json" })
+    .mount('#app')
+
+````
+</TabItem>
+<TabItem value="For Vue@2.7" label="For Vue@2.7">
 ```html
-<template>
-  <TonConnectUIProvider :options="options">
-    <!-- Your app -->
-  </TonConnectUIProvider>
-</template>
+import Vue from 'vue'
+import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
 
-<script>
-import { TonConnectUIProvider } from '@townsquarelabs/ui-vue';
+import App from './App.vue'
 
-export default {
-  components: {
-    TonConnectUIProvider
-  },
-  setup(){
-    const options = {
-      manifestUrl:"https://<YOUR_APP_URL>/tonconnect-manifest.json",
-    };
-    return {
-      options
-    }
-  }
-}
-</script>
-```
+Vue.use(TonConnectUIPlugin, {
+  manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json"
+});
 
-### Подключение кошелка
+new Vue({
+  render: (h) => h(App)
+}).$mount('#app')
+````
 
-Кнопка TonConnect — это универсальный компонент пользовательского интерфейса для инициализации соединения. После подключения кошелька она преобразуется в меню кошелька. Рекомендуется разместить его в правом верхнем углу вашего приложения.
+</TabItem>
+</Tabs>
+
+### Connect to the wallet
+
+`TonConnectButton` is a universal UI component for initializing connection. After the wallet is connected, it transforms into a wallet menu.
+You should place it in the top right corner of your app.
 
 ```html
 <template>
@@ -73,12 +81,21 @@ export default {
 </script>
 ```
 
-Вы также можете добавить `class` и `:style` props к кнопке. Обратите внимание, что вы не можете передать child в TonConnectButton.
-`<TonConnectButton class="my-button-class" :style="{ float: 'right' } "/>`
+You can add `buttonRootId` props to the button as well. 
+
+```ts
+<TonConnectButton button-root-id="button-root-id" />
+```
+
+You can also add `class` and `style` props to the button. Note that you cannot pass a child to the `TonConnectButton`.
+
+```ts
+<TonConnectButton class="my-button-class" :style="{ float: 'right' }"/>
+```
 
 ### Перенаправления
 
-Если вы хотите перенаправить пользователя на определенную страницу после подключения кошелька, вы можете использовать хук `useTonConnectUI` и [настроить стратегию возврата](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
+If you want to redirect the user to a specific page after wallet connection, you can use the `useTonConnectUI` hook and [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
 
 #### Мини-приложения Telegram
 
@@ -86,26 +103,18 @@ export default {
 
 ```html
 <template>
-  <TonConnectUIProvider :options="options">
-    <!-- Your app -->
-  </TonConnectUIProvider>
+  <!-- Your app -->
 </template>
 
 <script>
-import { TonConnectUIProvider } from '@townsquarelabs/ui-vue';
+import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
 export default {
-  components: {
-    TonConnectUIProvider,
-  },
+  name: 'SetRedirect',
   setup() {
-    const options = {
-      actionsConfiguration: { twaReturnUrl: 'https://t.me/<YOUR_APP_NAME>' },
-    };
-    return {
-      options,
-    };
-  },
+    const {tonConnectUI, setOptions} = useTonConnectUI();
+    setOptions({ actionsConfiguration: { twaReturnUrl: 'https://t.me/<YOUR_APP_NAME>' } });
+  }
 };
 </script>
 ```
@@ -114,13 +123,13 @@ export default {
 
 ### Настройка пользовательского интерфейса
 
-Чтобы [настроить пользовательский интерфейс](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) модального окна, вы можете использовать хук `useTonConnectUI` и функцию `setOptions`. Подробнее о хуке useTonConnectUI см. в разделе [Хуки](#usetonconnectui).
+To [customize UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) of the modal, you can use the `useTonConnectUI` hook and the `setOptions` function. See more about the `useTonConnectUI` hook in the [Hooks](#usetonconnectui) section.
 
 ## Хуки
 
 ### useTonAddress
 
-Используйте его для получения текущего адреса кошелька пользователя. Передайте логический параметр isUserFriendly для выбора формата адреса. Если кошелек не подключен, хук вернет пустую строку.
+Use it to get the user's current ton wallet address. Pass the boolean parameter `isUserFriendly` to choose the address format. The hook will return an empty string if the wallet is not connected.
 
 ```html
 <template>
@@ -149,14 +158,7 @@ export default {
 
 ### useTonWallet
 
-Используйте его для получения текущего кошелька пользователя Ton. Если кошелек не подключен, хук вернет null.
-
-Посмотреть все свойства кошелька
-// todo
-
-<!-- [Интерфейс кошелька](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html) -->
-
-<!-- [Интерфейс WalletInfo](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html) -->
+Use it to get the user's current ton wallet. If the wallet is not connected, the hook will return null.
 
 ```html
 <template>
@@ -211,10 +213,8 @@ export default {
 
 Используйте его для получения доступа к экземпляру `TonConnectUI` и функции обновления параметров пользовательского интерфейса.
 
-[Подробнее о методах экземпляра TonConnectUI](https://github.com/ton-connect/sdk/tree/main/packages/ui#send-transaction)
-
-[Подробнее о функции setOptions](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
-
+<details>
+  <summary><b>Show the example</b></summary>
 ```html
 <template>
   <div>
@@ -236,7 +236,7 @@ import { Locales, useTonConnectUI } from '@townsquarelabs/ui-vue';
 export default {
   name: 'Settings',
   setup() {
-    const [tonConnectUI, setOptions] = useTonConnectUI();
+    const {tonConnectUI, setOptions} = useTonConnectUI();
 
     const onLanguageChange = (lang) => {
       setOptions({ language: lang as Locales });
@@ -266,11 +266,29 @@ export default {
   }
 };
 </script>
-```
+
+````
+
+
+</details>
+
+or
+
+```ts 
+<script lang="ts">
+import { TonConnectUI, useTonWallet, tonConnectUIKey } from "@townsquarexyz/ui-vue";
+const tonConnectUI = inject<TonConnectUI | null>(tonConnectUIKey, null);
+</script>
+````
+
+[Подробнее о методах экземпляра TonConnectUI](https://github.com/ton-connect/sdk/tree/main/packages/ui#send-transaction)
+
+[See more about the `setOptions` function](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
 
 ### useIsConnectionRestored
 
-Указывает текущее состояние процесса восстановления соединения. Вы можете использовать его для обнаружения, когда процесс восстановления соединения завершен.
+`useIsConnectionRestored` indicates the current status of the connection restoring process.
+You can use it to detect when the connection restoring process is finished.
 
 ```html
 <template>
@@ -295,11 +313,11 @@ export default {
 
 ## Использование
 
-Давайте рассмотрим, как использовать Vue UI SDK на практике.
+Let's take a look at how to use the Vue UI SDK in practice.
 
 ### Отправка транзакций
 
-Отправка монет TON (в nanotons) на определенный адрес:
+Send Toncoins to a specific address:
 
 ```html
 <template>
@@ -314,8 +332,7 @@ import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 export default {
   name: 'Settings',
   setup() {
-    const [tonConnectUI, setOptions] = useTonConnectUI();
-
+    const { tonConnectUI } = useTonConnectUI();
 
     const myTransaction = {
       validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
@@ -343,42 +360,44 @@ export default {
 </script>
 ```
 
-### Понимание статуса транзакции по хэшу
+### Understanding transaction status by hash
 
-Основная идея находится в обработке платежей (используется tonweb). [Подробнее](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions)
+Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions) using the tonweb library.
 
-### Добавьте параметры запроса подключения (ton_proof)
+### Add connect request parameters: ton_proof
 
 :::tip
 Узнайте, как подписывать и проверять сообщения: [Подписание и проверка](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
 :::
 
-Используйте функцию `tonConnectUI.setConnectRequestParameters` для передачи параметров запроса на подключение.
+Use the `tonConnectUI.setConnectRequestParameters` function to pass your connect request parameters.
 
 Эта функция принимает один параметр:
 
-Установите состояние на 'loading\\`, пока вы ждете ответа от вашего backend. Если пользователь открывает модальное окно для подключения кошелька в этот момент, он увидит загрузчик.
+#### loading
+
+Set state to `'loading'` while waiting for your backend's response. If a user opens the connect wallet modal, he will see a loader.
 
 ```ts
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 tonConnectUI.setConnectRequestParameters({
     state: 'loading'
 });
 ```
 
-или
+#### ready
 
-Установите состояние на 'ready' и определите значение `tonProof`. Переданный параметр будет применен к запросу на подключение (QR и универсальная ссылка).
+Set the state to `'ready'` and define the `tonProof` value. Apply the parameters passed to the connect request using QR and a universal link.
 
 ```ts
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 tonConnectUI.setConnectRequestParameters({
     state: 'ready',
@@ -388,26 +407,28 @@ tonConnectUI.setConnectRequestParameters({
 });
 ```
 
-или
+#### remove loading
 
-Удалите загрузчик, если он был включен через \\`state: 'loading' (например, вы получили ошибку вместо ответа от вашего backend). Запрос на подключение будет создан без дополнительных параметров.
+Remove the loader if enabled via `state: 'loading'`. For example, if you received an error instead of a response from your backend. 
+
+Connect requests will be created without any additional parameters.
 
 ```ts
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 tonConnectUI.setConnectRequestParameters(null);
 ```
 
-Вы можете вызвать `tonConnectUI.setConnectRequestParameters` несколько раз, если ваш payload tonProof имеет ограниченное время жизни (например, вы можете обновлять параметры запроса на подключение каждые 10 минут).
+You can call `tonConnectUI.setConnectRequestParameters` multiple times if your tonProof payload has a bounded lifetime. For instance, you can refresh connect request parameters every 10 minutes.
 
 ```ts
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 // enable ui loader
 tonConnectUI.setConnectRequestParameters({ state: 'loading' });
@@ -428,13 +449,13 @@ if (!tonProofPayload) {
 
 ```
 
-Вы можете найти результат `ton_proof` в объекте `wallet`, когда кошелек будет подключен:
+You can find the `ton_proof` result in the `wallet` object when the wallet is connected:
 
 ```ts
 import { ref, onMounted } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 onMounted(() =>
     tonConnectUI.onStatusChange(wallet => {
@@ -444,14 +465,14 @@ onMounted(() =>
 }));
 ```
 
-### Отключение кошелька
+### Wallet disconnection
 
 Вызов для отключения кошелька:
 
 ```js
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const [tonConnectUI] = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 await tonConnectUI.disconnect();
 ```
@@ -470,7 +491,7 @@ await tonConnectUI.disconnect();
 npm install web-animations-js
 ```
 
-Затем импортируйте полифилл в свой проект:
+Then, import the polyfill into your project:
 
 ```typescript
 import 'web-animations-js';
@@ -484,8 +505,15 @@ import 'web-animations-js';
 <script src="https://www.unpkg.com/web-animations-js@latest/web-animations.min.js"></script>
 ```
 
-Оба метода обеспечат обратную реализацию Web Animations API и должны решить проблемы с анимацией, с которыми вы сталкиваетесь.
+Both methods will provide a fallback implementation of the Web Animations API and should resolve your animation issues.
 
 ## Примеры
 
-- [Demo dApp](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui) - Пример DApp с `@townsquarelabs/ui-vue`.
+- [Demo dApp](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui) - Example of a dApp with `@townsquarelabs/ui-vue`.
+
+## See also
+
+- [TON Connect for React apps](/v3/guidelines/ton-connect/frameworks/react/)
+- [TON Connect for HTML/JS apps](/v3/guidelines/ton-connect/frameworks/web/)
+
+<Feedback />

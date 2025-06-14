@@ -1,14 +1,12 @@
-# Низкоуровневый ADNL
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Low-level ADNL
 
-Сетевой уровень абстрактных датаграмм (Abstract Datagram Network Layer - ADNL) — это основной протокол TON, который помогает сетевым одноранговым узлам взаимодействовать друг с другом.
+Abstract Datagram Network Layer (ADNL) is the core protocol of TON, which helps network peers communicate.
 
-## Идентификация одноранговых узлов
+## Peer identity
 
-Каждый одноранговый узел должен иметь по крайней мере один идентификатор, возможно, но необязательно использовать несколько. Каждая идентификация — это пара ключей, которая используется для выполнения алгоритма Диффи-Хеллмана между одноранговыми узлами. Абстрактный сетевой адрес выводится из открытого ключа следующим образом: `address = SHA-256(type_id || public_key)`. Обратите внимание, что type_id должен быть сериализован как little-endian uint32.
+Each peer must have at least one identity; while it's possible to use multiple identities, it is not required. Each identity consists of a keypair used for performing the Diffie-Hellman exchange between peers. An abstract network address is derived from the public key in the following way: `address = SHA-256(type_id || public_key)`. Note that the `type_id` must be serialized as a little-endian uint32.
 
 ## Список криптосистем с открытым ключом
 
@@ -16,13 +14,13 @@
 | ---------------------------- | ------------------- |
 | 0x4813b4c6                   | ed25519<sup>1</sup> |
 
-*1. Для выполнения x25519 пара ключей должна быть сгенерирована в формате x25519. Однако открытый ключ передается по сети в формате ed25519, поэтому вам придется преобразовать открытый ключ из x25519 в ed25519, примеры таких преобразований можно найти [здесь](https://github.com/andreypfau/curve25519-kotlin/blob/f008dbc2c0ebc3ed6ca5d3251ffb7cf48edc91e2/src/commonMain/kotlin/curve25519/MontgomeryPoint.kt#L39) для Kotlin.*
+- **To perform x25519, the keypair must be generated in "x25519" format. However, the public key is transmitted over the network in ed25519 format, so you have to convert the public key from x25519 to ed25519, examples of such conversions can be found [here](https://github.com/andreypfau/curve25519-kotlin/blob/f008dbc2c0ebc3ed6ca5d3251ffb7cf48edc91e2/src/commonMain/kotlin/curve25519/MontgomeryPoint.kt#L39) for Kotlin.**
 
 ## Клиент-серверный протокол (ADNL через TCP)
 
-Клиент подключается к серверу по протоколу TCP и отправляет пакет подтверждения ADNL, содержащий абстрактный адрес сервера, открытый ключ клиента и зашифрованные параметры сеанса AES-CTR, которые определяются клиентом.
+The client connects to the server using TCP and sends an ADNL handshake packet. This packet contains a server abstract address, a client public key, and encrypted AES-CTR session parameters, which the client determines.
 
-### Подтверждение
+### Handshake
 
 Сначала клиент должен выполнить протокол согласования ключей (например, x25519), используя свой закрытый ключ и открытый ключ сервера, принимая во внимание `type_id` ключа сервера. В результате клиент получит `secret`, который используется для шифрования ключей сеанса на последующих этапах.
 
@@ -36,9 +34,9 @@
 | tx_nonce | 16 байт  |
 | padding                       | 64 байта |
 
-Цель padding неизвестна, он не используется реализациями сервера. Рекомендуется заполнять весь 160-байтовый буфер случайными байтами, в противном случае злоумышленник может провести активную MitM-атаку, используя скомпрометированные параметры сеанса AES-CTR.
+The purpose of padding is unknown; it is not used by server implementations. It is recommended that the whole 160-byte buffer be filled with random bytes. Otherwise, an attacker may perform an active MitM attack using compromised AES-CTR session parameters.
 
-Следующий шаг — зашифровать параметры сеанса с помощью `secret` через протокол согласования ключей выше. Для этого AES-256 должен быть инициализирован в режиме CTR с 128-битным счетчиком big-endian с использованием пары (key, nonce), которая вычисляется следующим образом (`aes_params` — это 160-байтовый буфер, который был построен выше):
+The next step is to encrypt the session parameters using the `secret` through the key agreement protocol outlined above. To achieve this, AES-256 needs to be initialized in CTR mode with a 128-bit big-endian counter. This will utilize a (key, nonce) pair that is computed as follows (note that `aes_params` is a 160-byte buffer that was created earlier):
 
 ```cpp
 hash = SHA-256(aes_params)
@@ -46,9 +44,7 @@ key = secret[0..16] || hash[16..32]
 nonce = hash[0..4] || secret[20..32]
 ```
 
-После шифрования `aes_params`, которое отмечено как `E(aes_params)`, AES следует удалить, поскольку он больше не нужен.
-
-Теперь мы готовы преобразовать всю эту информацию в 256-байтный пакет подтверждения связи и отправить его на сервер:
+After encrypting `aes_params`, noted as `E(aes_params)`, remove AES as it is no longer needed. We are now ready to serialize all this information into the 256-byte handshake packet and send it to the server.
 
 | Параметр                                                    | Размер   | Примечания                                                                 |
 | ----------------------------------------------------------- | -------- | -------------------------------------------------------------------------- |
@@ -57,41 +53,42 @@ nonce = hash[0..4] || secret[20..32]
 | SHA-256(aes_params) | 32 байта | Подтверждение целостности параметров сеанса                                |
 | E(aes_params)       | 160 байт | Зашифрованные параметры сеанса                                             |
 
-Сервер должен расшифровать параметры сеанса с помощью секрета, полученного из протокола согласования ключей, тем же способом, что и клиент. Затем сервер должен выполнить следующие проверки для подтверждения свойств безопасности протокола:
+The server must decrypt session parameters using a secret derived from the key agreement protocol, just as the client does. After decryption, the server must perform the following checks to ensure the security properties of the protocol:
 
-1. Сервер должен иметь соответствующий закрытый ключ для `receiver_address`, в противном случае невозможно выполнить протокол согласования ключей.
-2. `SHA-256(aes_params) == SHA-256(D(E(aes_params)))`, в противном случае протокол согласования ключей не выполнен, и `secret` не одинаков на обеих сторонах.
+- The server must possess the corresponding private key for `receiver_address`. Without this key, it cannot execute the key agreement protocol.
 
-Если любая из этих проверок не пройдена, сервер немедленно разорвет соединение, не отвечая клиенту. Если все проверки пройдены, сервер должен выдать пустую датаграмму (см. раздел Датаграммы) клиенту, чтобы доказать, что он владеет закрытым ключом для указанного `receiver_address`.
+- The condition `SHA-256(aes_params) == SHA-256(D(E(aes_params)))` must hold true. If this condition is not met, it indicates that the key agreement protocol has failed and the `secret` values on both sides are not equal.
+
+If any of these checks fail, the server will immediately drop the connection without responding to the client. If all checks pass, the server must issue an empty datagram (see the [Datagram](#datagram) section) to the client in order to prove that it owns the private key for the specified `receiver_address`.
 
 ### Датаграмма
 
-Как клиент, так и сервер должны инициализировать по два экземпляра AES-CTR для обоих направлений: TX и RX. AES-256 должен использоваться в режиме CTR с 128-битным счетчиком big-endian. Каждый экземпляр AES инициализируется с использованием пары (key, nonce), принадлежащей ему, которую можно взять из `aes_params` при обмене данными.
+Both the client and server must initialize two AES-CTR instances each for both transmission (TX) and reception (RX) directions. The AES-256 must be used in CTR mode with a 128-bit big-endian counter. Each AES instance is initialized using a (key, nonce) pair, which can be taken from the `aes_params` during the handshake.
 
-Чтобы отправить датаграмму, одноранговый узел (клиент или сервер) должен построить следующую структуру, зашифровать ее и отправить другому одноранговому узлу:
+To send a datagram, either the client or the server must construct the following structure, encrypt it, and send it to the other peer:
 
 | Параметр | Размер                          | Примечания                                        |
 | -------- | ------------------------------- | ------------------------------------------------- |
 | length   | 4 байта (LE) | Длина всей датаграммы, исключая поле `length`     |
 | nonce    | 32 байта                        | Случайное значение                                |
 | buffer   | `length - 64` байта             | Фактические данные для отправки на другую сторону |
-| hash     | 32 байта                        | \`SHA-256(nonce \\           |
+| hash     | 32 байта                        | \\`SHA-256(nonce \\         |
 
 Вся структура должна быть зашифрована с использованием соответствующего экземпляра AES (TX для клиента -> сервера, RX для сервера -> клиента).
 
-Принимающий узел должен извлечь первые 4 байта, расшифровать их в поле `length` и прочитать ровно `length` байтов, чтобы получить полную датаграмму. Принимающий узел может начать расшифровку и обработку `buffer` раньше, но он должен учитывать, что он может быть поврежден, намеренно или случайно. `Hash` датаграммы должен быть проверен, чтобы гарантировать целостность `buffer`. В случае сбоя новые датаграммы не могут быть выданы, и соединение должно быть разорвано.
+The receiving peer must fetch the first 4 bytes, decrypt it into the `length` field, and read exactly the `length` bytes to get the full datagram. The receiving peer may start to decrypt and process `buffer` earlier, but it must take into account that it may be corrupted, intentionally or occasionally. Datagram `hash` must be checked to ensure the integrity of the `buffer`. In case of failure, no new datagrams can be issued and the connection must be dropped.
 
-Первая датаграмма в сеансе всегда отправляется от сервера клиенту после того, как сервер успешно принял пакет подтверждения связи, и его фактический буфер пуст. Клиент должен расшифровать ее и отключиться от сервера в случае сбоя, поскольку это означает, что сервер не следовал протоколу должным образом, и фактические ключи сеанса различаются на стороне сервера и клиента.
+The first datagram in the session always goes from the server to the client after a handshake packet is successfully accepted by the server and its actual buffer is empty. The client should decrypt it and disconnect from the server in case of failure because it means that the server has not followed the protocol properly and the actual session keys differ on the server and client side.
 
 ### Подробности связи
 
-Если вы хотите углубиться в подробности связи, вы можете ознакомиться со статьей [ADNL TCP - Liteserver](/v3/documentation/network/protocols/adnl/adnl-tcp), чтобы увидеть несколько примеров.
+If you want to dive into communication details, you could check the article [ADNL TCP - liteserver](/v3/documentation/network/protocols/adnl/adnl-tcp) to see some examples.
 
 ### Вопросы безопасности
 
-#### Дополнение к подключению
+#### Handshake padding
 
-Неизвестно, почему первоначальная команда TON решила включить это поле в подключение. Целостность `aes_params` защищена хэшем SHA-256, а конфиденциальность защищена ключом, полученным из параметра `secret`. Вероятно, в какой-то момент планировалось перейти от AES-CTR. Для этого спецификация может быть расширена за счет включения специального магического значения в `aes_params`, которое будет сигнализировать о том, что одноранговый узел готов использовать обновленные примитивы. Ответ на такое подключение может быть расшифрован дважды, с новой и старой схемами, чтобы уточнить, какую схему фактически использует другой одноранговый узел.
+It is unknown why the initial TON team decided to include this field in the handshake. `aes_params` integrity is protected by a SHA-256 hash, and confidentiality is protected by the key derived from the `secret` parameter. Probably, it was intended to migrate from AES-CTR at some point. To do this, the specification may be extended to include a special magic value in `aes_params`, which will signal that the peer is ready to use the updated primitives. The response to such a handshake may be decrypted twice, with new and old schemes, to clarify which scheme the other peer is actually using.
 
 #### Процесс получения ключа шифрования параметров сеанса
 
@@ -99,16 +96,22 @@ nonce = hash[0..4] || secret[20..32]
 
 #### Nonce датаграммы
 
-Неочевидно, почему поле `nonce` присутствует в датаграмме, потому что даже без него любые два шифротекста будут отличаться из-за сеансовых ключей для AES и шифрования в режиме CTR. Однако в случае отсутствующего или предсказуемого nonce можно выполнить следующую атаку. Режим шифрования CTR превращает блочные шифры, такие как AES, в потоковые шифры, что позволяет выполнять атаку с инвертированием битов. Если злоумышленник знает открытый текст, который принадлежит зашифрованной датаграмме, он может получить чистый поток ключей, выполнить XOR его со своим собственным открытым текстом и эффективно заменить сообщение, которое было отправлено одноранговым узлом. Целостность буфера защищена хешем SHA-256, но злоумышленник может подменить и его, поскольку знание полного открытого текста означает знание его хеша. Поле nonce присутствует для предотвращения такой атаки, поэтому ни один злоумышленник не может подменить SHA-256, не зная nonce.
+The purpose of the `nonce` field in the datagram may not be immediately clear. Even without it, any two ciphertexts will differ due to the session-bounded keys used in AES and the encryption method in CTR mode. However, if a nonce is absent or predictable, a potential attack can occur.
+
+In CTR encryption mode, block ciphers like AES function as stream ciphers, allowing for bit-flipping attacks. If an attacker knows the plaintext corresponding to an encrypted datagram, they can create an exact key stream and XOR it with their own plaintext, effectively replacing the original message sent by a peer. Although buffer integrity is protected by a hash (referred to here as SHA-256), an attacker can still manipulate it because if they know the entire plaintext, they can also compute its hash.
+
+The nonce field is crucial for preventing such attacks, as it ensures that an attacker cannot replace the SHA-256 without also having access to the nonce.
 
 ## Протокол P2P (ADNL через UDP)
 
-Подробное описание можно найти в статье [ADNL UDP - Internode](/v3/documentation/network/protocols/adnl/adnl-udp).
+A detailed description can be found in the article [ADNL UDP - internode](/v3/documentation/network/protocols/adnl/adnl-udp).
 
 ## Ссылки
 
-- [The Open Network, стр. 80](https://ton.org/ton.pdf)
+- [The Open Network, p. 80](https://ton.org/whitepaper.pdf#80)
+
 - [Реализация ADNL в TON](https://github.com/ton-blockchain/ton/tree/master/adnl)
 
-*Спасибо [hacker-volodya](https://github.com/hacker-volodya) за вклад в сообщество!*
-*Вот [ссылка на оригинальную статью](https://github.com/tonstack/ton-docs/tree/main/ADNL) на GitHub.*
+_Thanks to the [hacker-volodya](https://github.com/hacker-volodya) for contributing to the community!_
+_Here a [link to the original article](https://github.com/tonstack/ton-docs/tree/main/ADNL) on GitHub._ <Feedback />
+

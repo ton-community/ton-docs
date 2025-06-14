@@ -1,0 +1,156 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Airdrop claiming guidelines
+
+In this article, we'll explore an imaginary claim solution, identify its performance issues, and propose solutions. The focus will be on contract interactions and their impact on overall performance. Code, security aspects, and other nuances are beyond the scope of this discussion.
+
+## Claim machine
+
+:::info
+How does a typical claim solution work? Let's break it down.
+:::
+
+The user submits some form of proof to demonstrate eligibility for the claim. The solution verifies the proof and sends jettons to the user. In this case, `proof` refers to a [merkle proof](/v3/documentation/data-formats/tlb/exotic-cells#merkle-proof), but it could also be signed data or any other authorization method. To send jettons, we'll need a jetton wallet and minter. Additionally, we must prevent users from claiming twice—this requires a double-spend protection contract. And, of course, we'd like to monetize this, right? So, we'll need at least one claim wallet. Let's summarize:
+
+### 販売代理店
+
+Takes the proof from the user, checks it, and releases the jettons.
+State init: `(merkle_root, admin, fee_wallet_address)`.
+
+### 倍精算額
+
+既に使用されている場合はメッセージを受信します。それ以外の場合はさらにメッセージを受信します。
+
+### ジェットトン
+
+Jetton wallet, where the tokens will be sent from by the _distributor_.
+Jetton minter is out of the scope of this article.
+
+### 手数料ウォレット
+
+どんなウォレット契約
+
+## 建築
+
+### V1
+
+The initial design that comes to mind is as follows:
+
+1. The user sends proof to the distributor.
+2. The distributor verifies the proof and deploys a `double spend` contract.
+3. The distributor sends a message to the double spend contract.
+4. If the double spend contract has not been deployed previously, it sends a `claim_ok` message to the distributor.
+5. The distributor sends the claim fee to the fee wallet.
+6. The distributor releases the jettons to the user.
+
+**純粋な芸術！**
+
+What's wrong with that?
+ループが冗長になっているようです。
+
+### V2
+
+A linear design is more effective:
+
+1. The user deploys the `double spend` contract, which proxies the proof to the distributor.
+2. The distributor verifies the `double spend` contract's address using the state init `(distributor_address, user_address?)`.
+3. The distributor checks the proof (with the user index included as part of the proof) and releases the jettons.
+4. The distributor sends the fee to the fee wallet.
+
+**More naive art**
+
+## シャード最適化
+
+Ok, we got something going, but what about shard optimizations?
+
+### これらは何ですか?
+
+To build a fundamental understanding, refer to [wallet creation for different shards](/v3/guidelines/dapps/asset-processing/payments-processing/#wallet-creation-for-different-shards). In short, a shard is a 4-bit address prefix, similar to networking. When contracts are in the same network segment, messages are processed without routing, making them significantly faster.
+
+### Identifying addresses we can control
+
+#### 販売代理店アドレス
+
+We have full control over the distributor's data and can place it in any shard. How? Remember, the contract address is [defined by its state](/v3/documentation/smart-contracts/addresses#account-id). We can use one of the contract's data fields as a nonce and keep trying until we achieve the desired result. A good example of a nonce in actual contracts is the `subwalletId` or `publicKey` for a wallet contract. Any field that can be modified after deployment or doesn't impact the contract logic (like `subwalletId`) will work. You could even create an unused field explicitly for this purpose, as demonstrated by [vanity-contract](https://github.com/ton-community/vanity-contract).
+
+#### 販売代理店ジェットトンウォレット
+
+We can't directly control the resulting jetton wallet address. However, if we control the distributor address, we can choose it so that the resulting jetton wallet ends up in the same shard. How? There's a [library](https://github.com/Trinketer22/turbo-wallet) for that! While it currently supports only wallets, extending it to arbitrary contracts is relatively easy. Please take a look at how it's implemented for [HighloadV3](https://github.com/Trinketer22/turbo-wallet/blob/44fe7ee4300e37e052871275be8dd41035d45c3a/src/lib/contracts/HighloadWalletV3.ts#L20).
+
+### 二重支出契約
+
+The double-spend contract should be unique per proof, so can we shard-tune it? Let's think about it. If you consider the proof structure, it depends on how the data is organized. The first idea that comes to mind is a structure similar to [mintless jettons](https://github.com/tonkeeper/TEPs2/blob/mintles/text/0177-mintless-jetton-standard.md#handlers):
+
+```
+_ amount:Coins start_from:uint48 expired_at:uint48 = AirdropItem;
+
+_ _(HashMap 267 AirdropItem) = Airdrop;
+```
+
+In this case, the address distribution is random, and all data fields are meaningful, making it untunable. However, nothing stops us from modifying it like this:
+
+```
+_ amount:Coins start_from:uint48 expired_at:uint48 nonce:uint64 = AirdropItem;
+
+_ _(HashMap 267 AirdropItem) = Airdrop;
+```
+
+Or even:
+
+```
+_ amount:Coins start_from:uint48 expired_at:uint48 addr_hash: uint256 = AirdropItem;
+
+_ _(HashMap 64 AirdropItem) = Airdrop;
+```
+
+Here, a 64-bit index can act as a nonce, and the address becomes part of the data payload for verification. If the double-spend data is constructed from `(distributor_address, index)`, where the index is part of the data, we maintain reliability while making the address shard tunable via the index parameter.
+
+#### ユーザーアドレス
+
+We don't control user addresses, right? Yes, **BUT** we can group them so that the user address shard matches the distributor shard. In this case, each distributor processes a `merkle root` consisting entirely of users from its shard.
+
+Here's the improved and more polished version of your text:
+
+#### Summary
+
+We can place the `double_spend -> dist -> dist_jetton` chain in the same shard. What remains for other shards is the `dist_jetton -> user_jetton -> user_wallet` path.
+
+### How to deploy such a setup
+
+Let's break it down step by step. One key requirement is that the _distributor_ contract must have an updatable _merkle root_.
+
+1. Deploy a distributor in each shard (0-15), using the initial `merkle_root` as a nonce to ensure it resides in the same shard as its Jetton wallet.
+2. Group users by their distributor shard.
+3. For each user, find an index such that the _double spend_ contract `(distributor, index)` ends up in the same shard as the user's address.
+4. Generate _merkle roots_ using the indexes from the previous step.
+5. Update the _distributors_ with the corresponding _merkle roots_.
+
+Now, everything should be ready to go!
+
+### v3
+
+1. Index tuning enables users to deploy the _double spend_ contract in the same shard.
+2. The distributor in the user's shard verifies the sending `double spend` address by checking the state init `(distributor_address, index)`.
+3. The distributor sends the fee to the fee wallet.
+4. The distributor checks the proof (with the user index included) and releases jettons via the jetton wallet in the same shard.
+
+**More naive art**
+
+Is there anything wrong with this approach? Let's take a closer look.\
+...\
+Yes, there is! There's only one fee wallet, and fees queue up to a single shard. This could have been a disaster! (Has this ever happened in real life?).
+
+### V4
+
+1. It's the same as V3, but now there are 16 fee wallets, each in the same shard as its _distributor_.
+2. Make the _fee wallet_ address updatable.
+
+**A bit more art**
+
+今はどうですか? LGTM。
+
+## 今後について
+
+We can always push further. For example, consider a custom [jetton wallet](https://github.com/ton-community/mintless-jetton/blob/main/contracts/jetton-utils.fc#L142) with built-in shard optimization. This ensures the user's jetton wallet ends up in the same shard as the user with an 87% probability. However, this is relatively uncharted territory, so you'll need to explore it on your own. Good luck with your TGE!
+
+<Feedback />
