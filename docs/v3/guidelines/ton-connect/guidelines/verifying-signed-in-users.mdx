@@ -32,7 +32,7 @@ It is helpful if you want to verify a user by providing them with their personal
 
 We will use the  `ton_proof`, implemented inside the connector.
 
-```js
+```typescript
 type TonProofItemReply = TonProofItemReplySuccess | TonProofItemReplyError;
 
 type TonProofItemReplySuccess = {
@@ -47,7 +47,6 @@ type TonProofItemReplySuccess = {
     payload: string; // payload from the request
   }
 }
-
 ```
 
 ## Checking ton_proof on server side
