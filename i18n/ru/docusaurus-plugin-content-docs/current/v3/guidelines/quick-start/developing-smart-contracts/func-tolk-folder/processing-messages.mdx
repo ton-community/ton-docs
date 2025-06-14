@@ -36,7 +36,7 @@ import Button from '@site/src/components/button'
  - `my_balance` - смарт-контрактный баланс при начале транзакции.
  - `msg_value` - средства, полученные с сообщением.
  - `in_msg_full` - `ячейка`, включающая "заголовочные" поля сообщения.
- - `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) содержит тело сообщения.
+ - `in_msg_body` - [slice](/ru/v3/documentation/smart-contracts/func/docs/types#atomic-types) содержит тело сообщения.
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk
@@ -125,7 +125,7 @@ const int op::decrement = 2;
     ; Шаг 1: Проверим, является ли сообщение пустым
     if (in_msg_body. lice_empty?()) {
         return; ;; Ничего не делаем с пустыми сообщениями
-}
+    }
 
 ;; Step 2: Extract the operation code
 int op = in_msg_body~load_uint(32);
@@ -182,9 +182,9 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 
 ## Внешние сообщения
 
-`Внешние сообщения` — это единственный способ обращения к логике смарт-контракта извне блокчейна. Обычно нет необходимости реализовывать его в смарт-контрактах, потому что в большинстве случаев вы не хотите, чтобы внешние точки входа были доступны кому-либо, кроме вас. Если от внешних обращений вам требуется только это, то стандартным способом будет делегировать эту ответственность отдельному актору — [кошельку](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets/), для которого они в основном и были спроектированы.
+`Внешние сообщения` — это единственный способ обращения к логике смарт-контракта извне блокчейна. Обычно нет необходимости реализовывать его в смарт-контрактах, потому что в большинстве случаев не требуется, чтобы внешние точки входа были доступны кому-либо, кроме вас. Если вам этого достаточно, то стандартным способом будет делегировать эту ответственность отдельному актору — [кошельку](v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets/), для которого они в основном и были спроектированы.
 
-В разработке внешних endpoints есть несколько стандартных [подходов](/v3/documentation/smart-contracts/message-management/external-messages/) и [мер безопасности] (/v3/guidelines/smart-contracts/security/overview/), которые сейчас для вас могут быть излишне сложными. Поэтому в этом руководстве мы реализуем увеличение раннее добавленного числа `ctx_counter_ext`.
+В разработке внешних endpoints есть несколько стандартных [подходов](/v3/documentation/smart-contracts/message-management/external-messages/) и [мер безопасности](/ru/v3/guidelines/smart-contracts/security/overview/), которые сейчас для вас могут быть излишне сложными. Поэтому в этом руководстве мы реализуем увеличение раннее добавленного числа `ctx_counter_ext`.
 
 :::danger
 Эта реализация **небезопасна** и может привести к потере средств на вашем контракте. Не разворачивайте такой контракт в `мейннете`, особенно с крупной суммой средств на балансе.
@@ -192,7 +192,7 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 
 ## Реализация
 
-Давайте изменим наш смарт-контракт, чтобы он мог получать внешние сообщения, в соответствии со стандартными шагами, описанными в разделе [Обзор Blueprint SDK](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview/).
+Давайте изменим наш смарт-контракт по стандартным шагам из раздела [Обзор Blueprint](/ru/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/blueprint-sdk-overview/), чтобы он мог получать внешние сообщения.
 
 ### Шаг 1: редактирование кода смарт-контракта
 
@@ -390,7 +390,7 @@ describe('HelloWorld', () => {
 
 <div style={{marginBottom: '30px'}} align="center">
   <img src="/img/tutorials/quick-start/multi-contract.png" alt="Multi-contract scheme"/>
-</div> */}
+</div>*/}
 
 Проверьте, что все примеры верны, запустив тестовый скрипт:
 

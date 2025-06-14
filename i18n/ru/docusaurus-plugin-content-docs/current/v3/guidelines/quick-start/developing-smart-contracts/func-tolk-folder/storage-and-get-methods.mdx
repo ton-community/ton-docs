@@ -5,7 +5,7 @@ import Button from '@site/src/components/button'
 
 # Хранение данных и get-методы
 
-> **Резюме:** На предыдущих этапах мы узнали, как использовать `Blueprint SDK` и его структуру проекта.
+> **Резюме:** На предыдущих этапах мы узнали, как использовать `Blueprint` и его структуру проекта.
 
 :::tip
 Если вы застрянете на любом из примеров, вы можете найти исходный шаблон проекта со всеми изменениями, сделанными в этом руководстве, [здесь](https://github.com/ton-community/onboarding-sandbox/tree/main/quick-start/smart-contracts/Example/contracts).
@@ -53,7 +53,7 @@ interface Cell {
 
 ## Реализация
 
-Давайте изменим наш смарт-контракт, следуя стандартным шагам, описанным в предыдущем разделе [обзор Blueprint SDK](/v3/guidelines/quick-start/developing-smart-contracts/blueprint-sdk-overview/).
+Давайте изменим наш смарт-контракт в соответствии со стандартными шагами, описанными в разделе [Обзор Blueprint](/ru/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/blueprint-sdk-overview/).
 
 ### Шаг 1: редактирование кода смарт-контракта
 
@@ -83,7 +83,7 @@ global int ctx_counter;
     );
 }
 
-````
+```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk title="/contracts/hello_world.tolk"
@@ -108,9 +108,10 @@ fun saveData() {
         .storeUint(ctxCounter, 32)
         .endCell());
 }
-````
+```
 
-</TabItem></Tabs>
+</TabItem>
+</Tabs>
 
 #### Управление хранилищем
 
@@ -148,7 +149,7 @@ fun saveData() {
     );
 }
 
-````
+```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk title="/contracts/hello_world.tolk"
@@ -263,7 +264,6 @@ get get_counters(): (int, int) {
     ```
   </TabItem>
 </Tabs>
-
 
 И это все! На практике все **get-методы** следуют этому прямолинейному паттерну и не требуют дополнительной сложности. Помните, что вы можете проигнорировать возвращаемые значения, используя синтаксис заглушки `_`.
 
