@@ -1586,11 +1586,6 @@ acc_state_active$10 = AccountStatus;
 acc_state_nonexist$11 = AccountStatus;
 ```
 
-### Action: User Context (a.k.a. Event)
-
-
-Здесь в конце мы привём к выводу, что в дальнейшем будем использовать термин Event.
-
 ### Как получить транзакцию, используя api/v2
 
 Из доступных и подддерживаемых OpenSource API, мы можем использовать [APIv2](https://toncenter.com/api/v2/) и [APIv3](https://toncenter.com/api/v3/index.html#/) от Toncenter. APIv2 является более сырой версией и позволяет получать лишь очень базовую информацию о блокчейне. Для получения транзакции у нас есть 2 способа:
@@ -1607,6 +1602,9 @@ async function main() {
     const client = axios.create({
         baseURL: 'https://toncenter.com/api/v2',
         'timeout': 5000,
+        headers: {
+            'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+        }
     });
     
     const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
@@ -1680,6 +1678,9 @@ async function main() {
     const client = axios.create({
         baseURL: 'https://toncenter.com/api/v3',
         'timeout': 5000,
+        headers: {
+            'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+        }
     });
     
     const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
@@ -1762,24 +1763,290 @@ main().finally(() => console.log("Exiting..."));
 </TabItem>
 </Tabs>
 
+### Action: User Context (a.k.a. Event)
+
+Перед тем, как рассмотреть пользовательские операции и их обработку, резюмируем, что мы узнали о транзакциях:
+
+- Транзакция - это запись, которая фиксирует все изменения, произошедшие с одним конкретным аккаунтом.
+- Транзакция состоит из нескольких фаз, которые обрабатывают входящие сообщения, выполняют код смарт-контракта и обрабатывают созданные actions.
+- Каждая фаза транзакции имеет своё описание, которое содержит информацию о том, что произошло в процессе выполнения транзакции.
+- Транзакция может быть успешно выполнена или завершиться с ошибкой, в зависимости от того, были ли выполнены все фазы и были ли созданы корректные actions.
+- Обычные транзакции всегда содержат входящее сообщение, но могут не содержать исходящих сообщений.
+- Транзакция может быть получена с помощью APIv2 или APIv3, которые предоставляют информацию о транзакции в удобном формате.
+- В APIv3 транзакция индексируется, что позволяет получать уже обработанную информацию в то время как APIv2 - это лишь обёртка для общения с LiteServer.
+- В SDK могут появляться дополнительные поля для удобства работы с транзакциями, такие как `hash` и `raw`, которые позволяют получить хеш транзакции и BOC транзакции соответственно.
+
+Ранее мы говорили об actions с технической точки зрения. Однако часто в различных API сервисах этот термин используется для обозначения пользовательских операций. Например, один перевод Jetton с одного кошелька на другой осуществляется минимум за 3 разных транзакции. Цепочка этих транзакций будет называться `Jetton Transfer action`. Во избежание путаницы, мы будем использовать термин `Event`, который также можно встретить в различных API сервисах.
+
 ### Успешность Event в экосистеме: Ordinary TON Transfer
 
 Как мы ранее уже обсуждали, в TON всё происходит асинхронно, поэтому успешность одной транзакции не означает, что вся цепочка успешно завершилась или завершится в будущем. Поэтому мы должны опираться на более абстрактные понятия успешности.
 
 Например, если мы хотим отправить TON с одного кошелька на другой, то успешность этой операции будет означать, что средства были успешно зачислены на целевой кошелек. Для этого нам необходимо получать последние транзакции на целевом аккаунте, время создания которых больше или равно, чем время создания транзакции, в которой возникло сообщение, отправляющее TON.
 
-todo: здесь хорошо бы иметь пример кода, который это делает
+Допустим, мы хотим проверять депозиты, поступающие на наш кошелёк `UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL`. Для удобства мы будем использовать APIv3 и запрашивать последние 10 транзакций на аккаунте:
+
+<Tabs groupId="code-examples">
+<TabItem value="js" label="JavaScript">
+
+```js
+import { fromNano } from '@ton/core';
+import axios from 'axios';
+
+async function main() {
+    const client = axios.create({
+        baseURL: 'https://toncenter.com/api/v3',
+        'timeout': 5000,
+        headers: {
+            'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+        }
+    });
+    
+    const address = 'UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL';
+    const response = await client.get('/transactions', {
+        params: {
+            account: address,
+            limit: 10,
+            to_lt: 0,
+            archival: false
+        }
+    });
+
+    for (const transaction of response.data.transactions) {
+        const description = transaction.description;
+        if (description.type !== 'ord') {
+            continue;
+        }
+
+        const inMsg = transaction.in_msg;
+        if (inMsg.created_lt === null) {
+            continue; // Skip external messages
+        }
+        const bouncePhase = description.bounce;
+        
+        if (bouncePhase && bouncePhase.type === 'ok') {
+            console.log(`Fake deposit detected: ${transaction.hash}`);
+            continue;
+        }
+
+        console.log(`Deposit detected: ${transaction.hash}. Value: ${fromNano(inMsg.value)} TON.`);
+    }
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+</Tabs>
+
+После получения транзакций мы должны проверить следующее:
+
+1. Транзакция должна быть обычной, то есть `description.type` должно быть равно `ord`.
+2. Входящее сообщение должно быть internal. Это означает, что поле`created_lt` должно быть заполнено.
+3. Если в описании транзакции присутствует поле `bounce` (это относится только к отвечу `transactions` endpoint для APIv3), то это означает, что была запущена bounce phase. В таком случае, мы проверяем, завершилась ли она успешно, что будет означать, что средства были возвращены отправителю.
+4. Если все проверки пройдены, то мы можем считать, что депозит был успешно зачислен на кошелёк.
 
 :::danger
-todo: Здесь про то, что нужно учитывать атаку с баунсом, когда средства возвращаются обратно
+Необходимо учитывать, что предложенный код является лишь примером и не является полноценным решением для отслеживания депозитов. В реальных приложениях необходимо обрабатывать не строго последние 10 транзакций, а все транзакции, которые были после последней проверки.
+
+Также необходимо учитывать, что то, какие значения должны быть у полей в случае фейкового депозита, может отличаться от API сервиса. В данном примере показывается лишь ответ APIv3 от Toncenter для `transactions` endpoint.
+:::
+
+Если мы запустим этот код, то получим следующий вывод:
+
+```
+Fake deposit detected: 4vXGhdvtfgFx8tkkaL17POhOwrUZq3sQDVSdNpW+Duk=
+```
+
+Посмотрев на эту транзакцию в [эксплорере](https://tonviewer.com/transaction/e2f5c685dbed7e0171f2d92468bd7b3ce84ec2b519ab7b100d549d3695be0ee9), мы увидим, что средства действительно вернулись отправителю.
+
+:::note
+Если мы запросим транзакции для этого аккаунта с помощью APIv2, то не получим никаких транзакций. Дело в том, что информация об этой транзакции была записана лишь в блок и индексатор в APIv3 смог её проиндексировать.
+
+Однако так как данный аккаунт не имеет никакого стейта (даже ни одного пополнения баланса), то к этому аккаунту не относятся никакие транзакции. Если бы был хотя бы один депозит, то состояние из `nonexist` изменилось бы на `uninit` и тогда APIv2 смог бы вернуть эту транзакцию.
+:::
+
+### Успешность Event в экосистеме: Jetton Transfer
+
+Теперь мы можем рассмотреть более сложный пример, связанный с переводом Jetton. Для начала рассмотрим, как выглядит Jetton Transfer:
+
+1. external_in -> User_A - > internal (op::jetton_transfer)
+2. internal (op::jetton_transfer) -> User_A_Jetton_Wallet -> internal (op::internal_transfer)
+3. internal (op::internal_transfer) -> User_B_Jetton_Wallet
+
+Как мы видим, в этом случае у нас есть 3 транзакции и по-настоящему перевод жетонов заканчивается только тогда, когда третья транзакция завершилась удачно. После 3-й транзакции дополнительно могут быть отправлены 2 сообщения:
+
+1. internal (op::jetton_transfer_notification) -> User_B | If `forward_amount` is set
+2. internal (op::excesses) -> response_destination | If `response_destination` is set
+
+Однако для того, чтобы проверить перевод, нам нужна лишь третья транзакция. Для облегчения примера, допустим, что мы хотим проверять поступающие жетоны на конкретном кошельке `EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX` для жетона USDT:
+
+<Tabs groupId="code-examples">
+<TabItem value="js" label="JavaScript">
+
+<details>
+<summary>
+Source code
+</summary>
+
+```js
+import { Address, TonClient } from '@ton/ton';
+
+// Changed version of
+// https://github.com/ton-org/ton-core/blob/b2e781f67b41958e4fde0440752a27c168602717/src/utils/convert.ts#L69C1-L96C2
+export function fromMicro(src: bigint | number | string) {
+    let v = BigInt(src);
+    let neg = false;
+    if (v < 0) {
+        neg = true;
+        v = -v;
+    }
+
+    // Convert fraction
+    let frac = v % 1000000n;
+    let facStr = frac.toString();
+    while (facStr.length < 6) {
+        facStr = '0' + facStr;
+    }
+    facStr = facStr.match(/^([0-9]*[1-9]|0)(0*)/)![1];
+
+    // Convert whole
+    let whole = v / 1000000n;
+    let wholeStr = whole.toString();
+
+    // Value
+    let value = `${wholeStr}${facStr === '0' ? '' : `.${facStr}`}`;
+    if (neg) {
+        value = '-' + value;
+    }
+
+    return value;
+}
+
+async function main() {
+    const client = new TonClient({
+        endpoint: "https://toncenter.com/api/v2/jsonRPC",
+        apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
+    });
+
+    const address = Address.parse('EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX');
+    const response = await client.getTransactions(address, {
+        limit: 10,
+        archival: true,
+    });
+    
+    for (const transaction of response) {
+        if (transaction.description.type !== 'generic') {
+            continue;
+        }
+        
+        // Check if the compute phase is present and successful
+        if (transaction.description.computePhase.type !== 'vm') {
+            continue;
+        }
+        if (transaction.description.computePhase.exitCode !== 0) {
+            continue;
+        }
+
+        // Check if the action phase is present and successful
+        if (transaction.description.actionPhase && transaction.description.actionPhase.resultCode !== 0) {
+            continue;
+        }
+
+        if (transaction.description.aborted === true) {
+            continue;
+        }
+
+        if (transaction.inMessage.info.type !== 'internal') {
+            continue;
+        }
+
+        const body = transaction.inMessage.body.beginParse();
+        try {
+            /*
+            internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
+                     response_address:MsgAddress
+                     forward_ton_amount:(VarUInteger 16)
+                     forward_payload:(Either Cell ^Cell)
+                     = InternalMsgBody;
+            */
+
+            const op = body.loadUint(32);
+            if (op !== 0x178d4519) { // op::internal_transfer
+                continue;
+            }
+            const queryId = body.loadUintBig(64);
+            const amount = body.loadCoins();
+            const from = body.loadAddress();
+            const responseAddress = body.loadMaybeAddress();
+            const forwardTonAmount = body.loadCoins();
+            const eitherForwardPayload = body.loadBoolean();
+            const forwardPayload = eitherForwardPayload ? body.loadRef() : body.asCell();
+
+            console.log(`Deposit detected:
+    Transaction hash: ${transaction.hash().toString('hex')}
+    Query ID: ${queryId}
+    Amount: ${fromMicro(amount)} USDT
+    From: ${from.toString({ testOnly: true })}
+    Response Address: ${responseAddress ? responseAddress.toString({ testOnly: true }) : 'None'}
+    Forward TON Amount: ${forwardTonAmount.toString()} TON
+    Forward Payload: ${forwardPayload.toBoc().toString('hex')}`);
+        } catch (e) {
+            console.error(`Error processing transaction ${transaction.hash().toString('hex')}:`, e);
+        }
+    }
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</details>
+
+</TabItem>
+</Tabs>
+
+Для начала мы получаем последние 10 транзакций на смарт контракте USDT Jetton Wallet. После этого нам необходимо проверить:
+
+1. Транзакция должна быть обычной, то есть `description.type` должно быть равно `generic`.
+2. Фаза compute должна быть успешной, то есть `description.computePhase.type` должно быть равно `vm` и `description.computePhase.exitCode` должно быть равно 0.
+3. Если фаза action присутствует, то она должна быть успешной, то есть `description.actionPhase.resultCode` должно быть равно 0.
+4. Входящее сообщение должно быть internal, то есть `inMessage.info.type` должно быть равно `internal`.
+5. В теле входящего сообщения должно быть `internal_transfer` операция, то есть `body.loadUint(32)` должно вернуть `0x178d4519`.
+6. Если все проверки пройдены, то мы можем считать, что депозит был успешно зачислен на кошелёк.
+
+Для разбора тела входящего сообещения мы используем TL-B схему из [TEP-0074](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md):
+
+```tlb
+internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
+                     response_address:MsgAddress
+                     forward_ton_amount:(VarUInteger 16)
+                     forward_payload:(Either Cell ^Cell)
+                     = InternalMsgBody;
+```
+
+:::note
+Важно понимать, что это был очень упрощённый пример. В реальных приложениях может быть другая логика обработки депозитов. Для более подробной информации о том, как обрабатывать такие события, вы можете ознакомиться с [отдельной статьёй](/v3/guidelines/dapps/asset-processing/jettons).
 :::
 
 ### Успешность Event в экосистеме: NFT Transfer
 
+TL-B: https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema
 
+todo: В нфт проще, тут лишь нужно заменить поле `owner_address`. Схема для этого следующая:
 
-### Успешность Event в экосистеме: Jetton Transfer
+```tlb
+transfer query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell)  forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)  = InternalMsgBody;
+```
 
+Если был указан `forward_amount`, то:
+
+```tlb
+ownership_assigned query_id:uint64 prev_owner:MsgAddress forward_payload:(Either Cell ^Cell) = InternalMsgBody;
+```
+
+:::note
+advanced: http://localhost:3000/v3/guidelines/dapps/asset-processing/nft-processing/nfts
+:::
 
 ### Как исследовать контракт и его схему в TL-B, чтобы построить логику для анализа успешной операции
 
@@ -1787,3 +2054,173 @@ todo: Здесь про то, что нужно учитывать атаку с
 
 todo: разбор func кода, на основе jetton_transfer определить успешность операции и немного примеров на ts коде
 
+Мы будем юзать следующий код: https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc,
+И эти схемы из спефицикации: https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#tl-b-schema
+
+Рассмотрим опкоды входящие:
+
+```func
+  if (op == op::transfer()) { ;; outgoing transfer
+    send_tokens(in_msg_body, sender_address, msg_value, fwd_fee);
+    return ();
+  }
+
+  if (op == op::internal_transfer()) { ;; incoming transfer
+    receive_tokens(in_msg_body, sender_address, my_balance, fwd_fee, msg_value);
+    return ();
+  }
+```
+
+Разберём отправку. Для начала посмотрим, что представляет с собою входящее сообщение:
+
+```tlb
+transfer query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
+           response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+           forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
+           = InternalMsgBody;
+
+```
+
+Теперь разберём код:
+
+<details>
+<summary>
+
+`send_tokens` function
+
+</summary>
+
+```func
+() send_tokens (slice in_msg_body, slice sender_address, int msg_value, int fwd_fee) impure {
+  int query_id = in_msg_body~load_uint(64);
+  int jetton_amount = in_msg_body~load_coins();
+  slice to_owner_address = in_msg_body~load_msg_addr();
+  force_chain(to_owner_address);
+  (int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();
+  balance -= jetton_amount;
+
+  throw_unless(705, equal_slices(owner_address, sender_address));
+  throw_unless(706, balance >= 0);
+
+  cell state_init = calculate_jetton_wallet_state_init(to_owner_address, jetton_master_address, jetton_wallet_code);
+  slice to_wallet_address = calculate_jetton_wallet_address(state_init);
+  slice response_address = in_msg_body~load_msg_addr();
+  cell custom_payload = in_msg_body~load_dict();
+  int forward_ton_amount = in_msg_body~load_coins();
+  throw_unless(708, slice_bits(in_msg_body) >= 1);
+  slice either_forward_payload = in_msg_body;
+  var msg = begin_cell()
+    .store_uint(0x18, 6)
+    .store_slice(to_wallet_address)
+    .store_coins(0)
+    .store_uint(4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1)
+    .store_ref(state_init);
+  var msg_body = begin_cell()
+    .store_uint(op::internal_transfer(), 32)
+    .store_uint(query_id, 64)
+    .store_coins(jetton_amount)
+    .store_slice(owner_address)
+    .store_slice(response_address)
+    .store_coins(forward_ton_amount)
+    .store_slice(either_forward_payload)
+    .end_cell();
+
+  msg = msg.store_ref(msg_body);
+  int fwd_count = forward_ton_amount ? 2 : 1;
+  throw_unless(709, msg_value >
+                     forward_ton_amount +
+                     ;; 3 messages: wal1->wal2,  wal2->owner, wal2->response
+                     ;; but last one is optional (it is ok if it fails)
+                     fwd_count * fwd_fee +
+                     (2 * gas_consumption() + min_tons_for_storage()));
+                     ;; universal message send fee calculation may be activated here
+                     ;; by using this instead of fwd_fee
+                     ;; msg_fwd_fee(to_wallet, msg_body, state_init, 15)
+
+  send_raw_message(msg.end_cell(), 64); ;; revert on errors
+  save_data(balance, owner_address, jetton_master_address, jetton_wallet_code);
+}
+
+```
+
+</details>
+
+Здесь мы разберём, какое сообщение и в каком виде отправляется получателю и будем отталкиваться от этого. И так же видим, что отправка соответствует схеме TL-B:
+
+```tlb
+transfer_notification query_id:uint64 amount:(VarUInteger 16)
+           sender:MsgAddress forward_payload:(Either Cell ^Cell)
+           = InternalMsgBody;
+```
+
+Теперь разберём получение:
+
+<details>
+<summary>
+
+`receive_tokens` function
+
+</summary>
+
+```func
+
+() receive_tokens (slice in_msg_body, slice sender_address, int my_ton_balance, int fwd_fee, int msg_value) impure {
+  ;; NOTE we can not allow fails in action phase since in that case there will be
+  ;; no bounce. Thus check and throw in computation phase.
+  (int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();
+  int query_id = in_msg_body~load_uint(64);
+  int jetton_amount = in_msg_body~load_coins();
+  balance += jetton_amount;
+  slice from_address = in_msg_body~load_msg_addr();
+  slice response_address = in_msg_body~load_msg_addr();
+  throw_unless(707,
+      equal_slices(jetton_master_address, sender_address)
+      |
+      equal_slices(calculate_user_jetton_wallet_address(from_address, jetton_master_address, jetton_wallet_code), sender_address)
+  );
+  int forward_ton_amount = in_msg_body~load_coins();
+
+  int ton_balance_before_msg = my_ton_balance - msg_value;
+  int storage_fee = min_tons_for_storage() - min(ton_balance_before_msg, min_tons_for_storage());
+  msg_value -= (storage_fee + gas_consumption());
+  if(forward_ton_amount) {
+    msg_value -= (forward_ton_amount + fwd_fee);
+    slice either_forward_payload = in_msg_body;
+
+    var msg_body = begin_cell()
+        .store_uint(op::transfer_notification(), 32)
+        .store_uint(query_id, 64)
+        .store_coins(jetton_amount)
+        .store_slice(from_address)
+        .store_slice(either_forward_payload)
+        .end_cell();
+
+    var msg = begin_cell()
+      .store_uint(0x10, 6) ;; we should not bounce here cause receiver can have uninitialized contract
+      .store_slice(owner_address)
+      .store_coins(forward_ton_amount)
+      .store_uint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+      .store_ref(msg_body);
+
+    send_raw_message(msg.end_cell(), 1);
+  }
+
+  if ((response_address.preload_uint(2) != 0) & (msg_value > 0)) {
+    var msg = begin_cell()
+      .store_uint(0x10, 6) ;; nobounce - int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 010000
+      .store_slice(response_address)
+      .store_coins(msg_value)
+      .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+      .store_uint(op::excesses(), 32)
+      .store_uint(query_id, 64);
+    send_raw_message(msg.end_cell(), 2);
+  }
+
+  save_data(balance, owner_address, jetton_master_address, jetton_wallet_code);
+}
+
+```
+
+</details>
+
+Тут увидем, что происходит во время принятия жетонов. Отсюда будем отталкиваться при проверке успешности операции.
