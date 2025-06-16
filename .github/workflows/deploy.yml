@@ -1,0 +1,51 @@
+name: Deploy to Kubernetes (Caller)
+
+on:
+  push:
+    branches:
+      - staging-ru
+
+  workflow_dispatch:
+    inputs:
+      COMPONENT:
+        description: "Which component to deploy"
+        required: false
+        type: choice
+        options:
+          - default
+        default: default
+
+jobs:
+
+  deploy:
+    permissions:
+      packages: write
+      contents: read
+    uses: ton-studio/backend-deploy-template/.github/workflows/deploy.yml@main
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      TELEGRAM_DEPLOY_TOKEN: ${{ secrets.TELEGRAM_DEPLOY_TOKEN }}
+      TELEGRAM_DEPLOY_CHAT_ID: ${{ secrets.TELEGRAM_DEPLOY_CHAT_ID }}
+      TELEGRAM_DEPLOY_THREAD_ID: ${{ secrets.TELEGRAM_DEPLOY_THREAD_ID }}
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      GHCR_SECRET: ${{ secrets.GHCR_SECRET }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+      SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+      DEPLOY_REPO_ACCESS_TOKEN: ${{ secrets.DEPLOY_REPO_ACCESS_TOKEN }}
+    with:
+      ENVIRONMENT: "${{ github.ref == 'refs/heads/staging' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
+      COMPONENTS: '["default"]'
+      DOCKERFILE: "./Dockerfile"
+      AWS_REGION: ${{ vars.AWS_REGION }}
+      AWS_CLUSTER: "${{ github.ref == 'refs/heads/staging' && 'staging' || vars.AWS_CLUSTER }}"
+      APP_DOMAIN_TESTING: ${{ vars.APP_DOMAIN_TESTING }}
+      APP_NAME: ${{ vars.APP_NAME }}
+      RUNNER: ""
+      ENABLE_DEPLOY_BOT: "1"
+      SENTRY_URL: ${{ vars.SENTRY_URL }}
+      JOB_ENV: "${{ github.ref == 'refs/heads/staging-ru' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
+      APP_ENV: "${{ github.ref == 'refs/heads/staging-ru' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && format('testing-{0}', github.ref_name) || 'unknown' }}"
+      APP_DOMAIN: "${{ startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', github.ref_name, vars.APP_DOMAIN_TESTING) || github.ref == 'refs/heads/staging' && vars.APP_DOMAIN_STAGING || vars.APP_DOMAIN }}"
+
