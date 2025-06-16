@@ -1,51 +1,101 @@
-name: Deploy to Kubernetes (Caller)
+name: Deploy to Kubernetes
 
 on:
   push:
     branches:
-      - staging-ru
-
-  workflow_dispatch:
-    inputs:
-      COMPONENT:
-        description: "Which component to deploy"
-        required: false
-        type: choice
-        options:
-          - default
-        default: default
+      - release-candidate-main
+      - release-candidate-ru
+      - release-candidate-en
+      - release-candidate-ja
+      - release-candidate-ko
+      - release-candidate-zh-cn
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
+    env:
+      JOB_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
+      APP_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', 'testing-', github.ref_name) || 'unknown' }}"
+      APP_DOMAIN: "${{ format('{0}-{1}', github.ref_name, vars.APP_DOMAIN) }}"
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: false
 
-  deploy:
     permissions:
       packages: write
       contents: read
-    uses: ton-studio/backend-deploy-template/.github/workflows/deploy.yml@main
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      TELEGRAM_DEPLOY_TOKEN: ${{ secrets.TELEGRAM_DEPLOY_TOKEN }}
-      TELEGRAM_DEPLOY_CHAT_ID: ${{ secrets.TELEGRAM_DEPLOY_CHAT_ID }}
-      TELEGRAM_DEPLOY_THREAD_ID: ${{ secrets.TELEGRAM_DEPLOY_THREAD_ID }}
-      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      GHCR_SECRET: ${{ secrets.GHCR_SECRET }}
-      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-      SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-      SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-      DEPLOY_REPO_ACCESS_TOKEN: ${{ secrets.DEPLOY_REPO_ACCESS_TOKEN }}
-    with:
-      ENVIRONMENT: "${{ github.ref == 'refs/heads/staging' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
-      COMPONENTS: '["default"]'
-      DOCKERFILE: "./Dockerfile"
-      AWS_REGION: ${{ vars.AWS_REGION }}
-      AWS_CLUSTER: "${{ github.ref == 'refs/heads/staging' && 'staging' || vars.AWS_CLUSTER }}"
-      APP_DOMAIN_TESTING: ${{ vars.APP_DOMAIN_TESTING }}
-      APP_NAME: ${{ vars.APP_NAME }}
-      RUNNER: ""
-      ENABLE_DEPLOY_BOT: "1"
-      SENTRY_URL: ${{ vars.SENTRY_URL }}
-      JOB_ENV: "${{ github.ref == 'refs/heads/staging-ru' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
-      APP_ENV: "${{ github.ref == 'refs/heads/staging-ru' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && format('testing-{0}', github.ref_name) || 'unknown' }}"
-      APP_DOMAIN: "${{ startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', github.ref_name, vars.APP_DOMAIN_TESTING) || github.ref == 'refs/heads/staging' && vars.APP_DOMAIN_STAGING || vars.APP_DOMAIN }}"
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set sha-short
+        run: echo "GITHUB_SHA_SHORT=$(echo $GITHUB_SHA | cut -c 1-7)" >> $GITHUB_ENV
+
+      - id: lower-repo
+        name: Repository to lowercase
+        run: |
+          echo "repository=${GITHUB_REPOSITORY@L}" >> $GITHUB_OUTPUT
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ steps.lower-repo.outputs.repository }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          tags: |
+            type=sha
+            type=sha,format=long
+            type=ref,event=branch
+
+      - name: Build and push Docker image ${{ steps.lower-repo.outputs.repository }}:${{ env.APP_ENV }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: "deployment/Docker/Dockerfile"
+          push: true
+          tags: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ env.APP_ENV }}
+          build-args: |
+            sha=${{ github.sha }}
+            sha_short=${{ env.GITHUB_SHA_SHORT }}
+            app_env=${{ vars.APP_ENV }}
+            REACT_APP_PROXY_KEY=${{ secrets.REACT_APP_PROXY_KEY }}
+            REACT_APP_MIXPANEL_TOKEN=${{ secrets.REACT_APP_MIXPANEL_TOKEN }}
+            REACT_APP_ANALYTICS_ENABLED=${{ secrets.REACT_APP_ANALYTICS_ENABLED }}
+
+      - name: Apply AWS k8s config
+        run: aws eks update-kubeconfig --name ${{ vars.AWS_CLUSTER }} --region ${{ vars.AWS_REGION }}
+
+      - name: Create namespace
+        run: |
+          kubectl create ns ${{ vars.APP_NAME }}-${{ github.ref_name }} || echo "Namespace already exists"
+
+      - name: Deploy ${{ vars.APP_NAME }} to Kubernetes
+        run: |
+          helm upgrade --install ${{ vars.APP_NAME }} ./helm/app \
+          --namespace ${{ vars.APP_NAME }}-${{ github.ref_name }} \
+          --values ./helm/app/values.yaml \
+          --values ./helm/app/values-${{ env.JOB_ENV }}.yaml \
+          --set imageRepo="ghcr.io/${{ steps.lower-repo.outputs.repository }}" \
+          --set imageTag="${{ env.GITHUB_SHA_SHORT }}" \
+          --set host=${{ env.APP_DOMAIN }} \
+          --set appName=${{ vars.APP_NAME }} \
+          --set ghcrSecret=${{ secrets.GHCR_SECRET }}
