@@ -1,0 +1,74 @@
+{
+  "logo.alt": {
+    "message": "TON",
+    "description": "The alt text of navbar logo"
+  },
+  "item.label.Concepts": {
+    "message": "Concepts",
+    "description": "Navbar item with label Concepts"
+  },
+  "item.label.Guidelines": {
+    "message": "Guidelines",
+    "description": "Navbar item with label Guidelines"
+  },
+  "item.label.Documentation": {
+    "message": "Documentation",
+    "description": "Navbar item with label Documentation"
+  },
+  "item.label.Introduction": {
+    "message": "Introduction",
+    "description": "Navbar item with label Introduction"
+  },
+  "item.label.Wallets": {
+    "message": "Wallets",
+    "description": "Navbar item with label Wallets"
+  },
+  "item.label.Explorers": {
+    "message": "Explorers",
+    "description": "Navbar item with label Explorers"
+  },
+  "item.label.Blockchain": {
+    "message": "Blockchain",
+    "description": "Navbar item with label Blockchain"
+  },
+  "item.label.Quick Start": {
+    "message": "Quick Start",
+    "description": "Navbar item with label Quick Start"
+  },
+  "item.label.Smart Contracts": {
+    "message": "Smart Contracts",
+    "description": "Navbar item with label Smart Contracts"
+  },
+  "item.label.DApps": {
+    "message": "DApps",
+    "description": "Navbar item with label DApps"
+  },
+  "item.label.Nodes": {
+    "message": "Nodes",
+    "description": "Navbar item with label Nodes"
+  },
+  "item.label.Integrate with TON": {
+    "message": "Integrate with TON",
+    "description": "Navbar item with label Integrate with TON"
+  },
+  "item.label.Web3": {
+    "message": "Web3",
+    "description": "Navbar item with label Web3"
+  },
+  "item.label.TON Virtual Machine (TVM)": {
+    "message": "TON Virtual Machine (TVM)",
+    "description": "Navbar item with label TON Virtual Machine (TVM)"
+  },
+  "item.label.Data Formats": {
+    "message": "Data Formats",
+    "description": "Navbar item with label Data Formats"
+  },
+  "item.label.Networking": {
+    "message": "Networking",
+    "description": "Navbar item with label Networking"
+  },
+  "item.label.Whitepapers": {
+    "message": "Whitepapers",
+    "description": "Navbar item with label Whitepapers"
+  }
+}

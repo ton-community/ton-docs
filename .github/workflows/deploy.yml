@@ -4,15 +4,19 @@ on:
   push:
     branches:
       - release-candidate-ru
+      - release-candidate-en
+      - release-candidate-ja
+      - release-candidate-ko
+      - release-candidate-zh-cn
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: "${{ github.ref == 'refs/heads/release-candidate-ru' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
+    environment: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
     env:
-      JOB_ENV: "${{ github.ref == 'refs/heads/release-candidate-ru' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
-      APP_ENV: "${{ github.ref == 'refs/heads/release-candidate-ru' && 'staging' || startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', 'testing-', github.ref_name) || 'unknown' }}"
-      APP_DOMAIN: "${{ startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', github.ref_name, vars.APP_DOMAIN_TESTING) || github.ref == 'refs/heads/staging' && vars.APP_DOMAIN_STAGING || vars.APP_DOMAIN }}"
+      JOB_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
+      APP_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', 'testing-', github.ref_name) || 'unknown' }}"
+      APP_DOMAIN: "${{ format('{0}-{1}', github.ref_name, vars.APP_DOMAIN) }}"
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: false
@@ -81,12 +85,12 @@ jobs:
 
       - name: Create namespace
         run: |
-          kubectl create ns ${{ vars.APP_NAME }}-${{ env.APP_ENV }} || echo "Namespace already exists"
+          kubectl create ns ${{ vars.APP_NAME }}-${{ github.ref_name }} || echo "Namespace already exists"
 
       - name: Deploy ${{ vars.APP_NAME }} to Kubernetes
         run: |
           helm upgrade --install ${{ vars.APP_NAME }} ./helm/app \
-          --namespace ${{ vars.APP_NAME }}-${{ env.APP_ENV }} \
+          --namespace ${{ vars.APP_NAME }}-${{ github.ref_name }} \
           --values ./helm/app/values.yaml \
           --values ./helm/app/values-${{ env.JOB_ENV }}.yaml \
           --set imageRepo="ghcr.io/${{ steps.lower-repo.outputs.repository }}" \

@@ -1,0 +1,510 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.learn.category.TON Ecosystem": {
+    "message": "TON Ecosystem",
+    "description": "The label for category TON Ecosystem in sidebar learn"
+  },
+  "sidebar.learn.category.TON Blockchain": {
+    "message": "TON Blockchain",
+    "description": "The label for category TON Blockchain in sidebar learn"
+  },
+  "sidebar.learn.category.Newcomers from Ethereum": {
+    "message": "Newcomers from Ethereum",
+    "description": "The label for category Newcomers from Ethereum in sidebar learn"
+  },
+  "sidebar.develop.category.Smart contracts": {
+    "message": "Smart contracts",
+    "description": "The label for category Smart contracts in sidebar develop"
+  },
+  "sidebar.develop.category.Getting started": {
+    "message": "Getting started",
+    "description": "The label for category Getting started in sidebar develop"
+  },
+  "sidebar.develop.category.Contracts specification": {
+    "message": "Contracts specification",
+    "description": "The label for category Contracts specification in sidebar develop"
+  },
+  "sidebar.develop.category.Message management": {
+    "message": "Message management",
+    "description": "The label for category Message management in sidebar develop"
+  },
+  "sidebar.develop.category.Transaction fees": {
+    "message": "Transaction fees",
+    "description": "The label for category Transaction fees in sidebar develop"
+  },
+  "sidebar.develop.category.Sharding": {
+    "message": "Sharding",
+    "description": "The label for category Sharding in sidebar develop"
+  },
+  "sidebar.develop.category.Tolk language": {
+    "message": "Tolk language",
+    "description": "The label for category Tolk language in sidebar develop"
+  },
+  "sidebar.develop.category.FunC language": {
+    "message": "FunC language",
+    "description": "The label for category FunC language in sidebar develop"
+  },
+  "sidebar.develop.category.Documentation": {
+    "message": "Documentation",
+    "description": "The label for category Documentation in sidebar develop"
+  },
+  "sidebar.develop.category.Fift language": {
+    "message": "Fift language",
+    "description": "The label for category Fift language in sidebar develop"
+  },
+  "sidebar.develop.category.DApps": {
+    "message": "DApps",
+    "description": "The label for category DApps in sidebar develop"
+  },
+  "sidebar.develop.category.DeFi principles": {
+    "message": "DeFi principles",
+    "description": "The label for category DeFi principles in sidebar develop"
+  },
+  "sidebar.develop.category.Assets": {
+    "message": "Assets",
+    "description": "The label for category Assets in sidebar develop"
+  },
+  "sidebar.develop.category.Oracles": {
+    "message": "Oracles",
+    "description": "The label for category Oracles in sidebar develop"
+  },
+  "sidebar.develop.category.Oracles in TON": {
+    "message": "Oracles in TON",
+    "description": "The label for category Oracles in TON in sidebar develop"
+  },
+  "sidebar.develop.category.Infrastructure": {
+    "message": "Infrastructure",
+    "description": "The label for category Infrastructure in sidebar develop"
+  },
+  "sidebar.develop.category.Blockchain nodes": {
+    "message": "Blockchain nodes",
+    "description": "The label for category Blockchain nodes in sidebar develop"
+  },
+  "sidebar.develop.category.MyTonCtrl": {
+    "message": "MyTonCtrl",
+    "description": "The label for category MyTonCtrl in sidebar develop"
+  },
+  "sidebar.develop.category.Validation": {
+    "message": "Validation",
+    "description": "The label for category Validation in sidebar develop"
+  },
+  "sidebar.develop.category.Cross-chain bridges": {
+    "message": "Cross-chain bridges",
+    "description": "The label for category Cross-chain bridges in sidebar develop"
+  },
+  "sidebar.develop.category.Network protocols": {
+    "message": "Network protocols",
+    "description": "The label for category Network protocols in sidebar develop"
+  },
+  "sidebar.develop.category.Network configurations": {
+    "message": "Network configurations",
+    "description": "The label for category Network configurations in sidebar develop"
+  },
+  "sidebar.develop.category.ADNL": {
+    "message": "ADNL",
+    "description": "The label for category ADNL in sidebar develop"
+  },
+  "sidebar.develop.category.DHT": {
+    "message": "DHT",
+    "description": "The label for category DHT in sidebar develop"
+  },
+  "sidebar.develop.category.Data formats": {
+    "message": "Data formats",
+    "description": "The label for category Data formats in sidebar develop"
+  },
+  "sidebar.develop.category.TL-B": {
+    "message": "TL-B",
+    "description": "The label for category TL-B in sidebar develop"
+  },
+  "sidebar.develop.category.TON Virtual Machine (TVM)": {
+    "message": "TON Virtual Machine (TVM)",
+    "description": "The label for category TON Virtual Machine (TVM) in sidebar develop"
+  },
+  "sidebar.develop.category.TVM specification": {
+    "message": "TVM specification",
+    "description": "The label for category TVM specification in sidebar develop"
+  },
+  "sidebar.develop.category.TVM changelog": {
+    "message": "TVM changelog",
+    "description": "The label for category TVM changelog in sidebar develop"
+  },
+  "sidebar.develop.category.TON whitepapers": {
+    "message": "TON whitepapers",
+    "description": "The label for category TON whitepapers in sidebar develop"
+  },
+  "sidebar.develop.link.TON enhancement proposals (TEPs)": {
+    "message": "TON enhancement proposals (TEPs)",
+    "description": "The label for link TON enhancement proposals (TEPs) in sidebar develop, linking to https://github.com/ton-blockchain/TEPs/tree/master"
+  },
+  "sidebar.develop.link.TVM instructions": {
+    "message": "TVM instructions",
+    "description": "The label for link TVM instructions in sidebar develop, linking to /v3/documentation/tvm/instructions"
+  },
+  "sidebar.develop.link.TON": {
+    "message": "TON",
+    "description": "The label for link TON in sidebar develop, linking to https://docs.ton.org/ton.pdf"
+  },
+  "sidebar.develop.link.TON Virtual Machine": {
+    "message": "TON Virtual Machine",
+    "description": "The label for link TON Virtual Machine in sidebar develop, linking to https://docs.ton.org/tvm.pdf"
+  },
+  "sidebar.develop.link.TON Blockchain": {
+    "message": "TON Blockchain",
+    "description": "The label for link TON Blockchain in sidebar develop, linking to https://docs.ton.org/tblkch.pdf"
+  },
+  "sidebar.develop.link.Catchain consensus protocol": {
+    "message": "Catchain consensus protocol",
+    "description": "The label for link Catchain consensus protocol in sidebar develop, linking to https://docs.ton.org/catchain.pdf"
+  },
+  "sidebar.develop.doc.NFT use cases in TON": {
+    "message": "NFT use cases in TON",
+    "description": "The label for the doc item NFT use cases in TON in sidebar develop, linking to the doc v3/documentation/dapps/defi/nft"
+  },
+  "sidebar.develop.doc.Proof-of-stake": {
+    "message": "Proof-of-stake",
+    "description": "The label for the doc item Proof-of-stake in sidebar develop, linking to the doc v3/documentation/infra/nodes/validation/staking-incentives"
+  },
+  "sidebar.develop.doc.Overview": {
+    "message": "Overview",
+    "description": "The label for the doc item Overview in sidebar develop, linking to the doc v3/documentation/whitepapers/overview"
+  },
+  "sidebar.develop.doc.Bridges addresses": {
+    "message": "Bridges addresses",
+    "description": "The label for the doc item Bridges addresses in sidebar develop, linking to the doc v3/documentation/infra/crosschain/bridge-addresses"
+  },
+  "sidebar.guidelines.category.Quick start": {
+    "message": "Quick start",
+    "description": "The label for category Quick start in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Blockchain interaction": {
+    "message": "Blockchain interaction",
+    "description": "The label for category Blockchain interaction in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Developing smart contracts": {
+    "message": "Developing smart contracts",
+    "description": "The label for category Developing smart contracts in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.FunC & Tolk implementation": {
+    "message": "FunC & Tolk implementation",
+    "description": "The label for category FunC & Tolk implementation in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Tact implementation": {
+    "message": "Tact implementation",
+    "description": "The label for category Tact implementation in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.TON Hello World series": {
+    "message": "TON Hello World series",
+    "description": "The label for category TON Hello World series in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.TON Hello World series.link.generated-index.title": {
+    "message": "TON Hello World series",
+    "description": "The generated-index page title for category TON Hello World series in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Smart contracts guidelines": {
+    "message": "Smart contracts guidelines",
+    "description": "The label for category Smart contracts guidelines in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Smart contracts guidelines.link.generated-index.title": {
+    "message": "Smart contracts guidelines",
+    "description": "The generated-index page title for category Smart contracts guidelines in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Testing": {
+    "message": "Testing",
+    "description": "The label for category Testing in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Testing.link.generated-index.title": {
+    "message": "Testing",
+    "description": "The generated-index page title for category Testing in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Security measures": {
+    "message": "Security measures",
+    "description": "The label for category Security measures in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Security measures.link.generated-index.title": {
+    "message": "Security measures",
+    "description": "The generated-index page title for category Security measures in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.How to": {
+    "message": "How to",
+    "description": "The label for category How to in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.How to.link.generated-index.title": {
+    "message": "How to",
+    "description": "The generated-index page title for category How to in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Compile from sources": {
+    "message": "Compile from sources",
+    "description": "The label for category Compile from sources in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Compile from sources.link.generated-index.title": {
+    "message": "Compile from sources",
+    "description": "The generated-index page title for category Compile from sources in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.DApps guidelines": {
+    "message": "DApps guidelines",
+    "description": "The label for category DApps guidelines in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.DApps guidelines.link.generated-index.title": {
+    "message": "DApps guidelines",
+    "description": "The generated-index page title for category DApps guidelines in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.APIs and SDKs": {
+    "message": "APIs and SDKs",
+    "description": "The label for category APIs and SDKs in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.APIs and SDKs.link.generated-index.title": {
+    "message": "APIs and SDKs",
+    "description": "The generated-index page title for category APIs and SDKs in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Tutorials & examples": {
+    "message": "Tutorials & examples",
+    "description": "The label for category Tutorials & examples in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Tutorials & examples.link.generated-index.title": {
+    "message": "TMA tutorials & examples",
+    "description": "The generated-index page title for category Tutorials & examples in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Telegram bot examples": {
+    "message": "Telegram bot examples",
+    "description": "The label for category Telegram bot examples in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Telegram bot examples.link.generated-index.title": {
+    "message": "Telegram bot examples",
+    "description": "The generated-index page title for category Telegram bot examples in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Telegram Mini Apps": {
+    "message": "Telegram Mini Apps",
+    "description": "The label for category Telegram Mini Apps in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Telegram Mini Apps.link.generated-index.title": {
+    "message": "Telegram Mini Apps",
+    "description": "The generated-index page title for category Telegram Mini Apps in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Guidelines": {
+    "message": "Guidelines",
+    "description": "The label for category Guidelines in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Guidelines.link.generated-index.title": {
+    "message": "TMA guidelines",
+    "description": "The generated-index page title for category Guidelines in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Advanced asset processing": {
+    "message": "Advanced asset processing",
+    "description": "The label for category Advanced asset processing in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Advanced asset processing.link.generated-index.title": {
+    "message": "Advanced asset processing",
+    "description": "The generated-index page title for category Advanced asset processing in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.NFT processing": {
+    "message": "NFT processing",
+    "description": "The label for category NFT processing in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.NFT processing.link.generated-index.title": {
+    "message": "NFT processing",
+    "description": "The generated-index page title for category NFT processing in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Blockchain nodes guidelines": {
+    "message": "Blockchain nodes guidelines",
+    "description": "The label for category Blockchain nodes guidelines in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Blockchain nodes guidelines.link.generated-index.title": {
+    "message": "Blockchain nodes guidelines",
+    "description": "The generated-index page title for category Blockchain nodes guidelines in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Running nodes": {
+    "message": "Running nodes",
+    "description": "The label for category Running nodes in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Running nodes.link.generated-index.title": {
+    "message": "Running nodes",
+    "description": "The generated-index page title for category Running nodes in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Maintenance guidelines": {
+    "message": "Maintenance guidelines",
+    "description": "The label for category Maintenance guidelines in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Maintenance guidelines.link.generated-index.title": {
+    "message": "Maintenance guidelines",
+    "description": "The generated-index page title for category Maintenance guidelines in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Integrate with TON": {
+    "message": "Integrate with TON",
+    "description": "The label for category Integrate with TON in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Integrate with TON.link.generated-index.title": {
+    "message": "Integrate with TON",
+    "description": "The generated-index page title for category Integrate with TON in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Integrate a dApp": {
+    "message": "Integrate a dApp",
+    "description": "The label for category Integrate a dApp in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Integrate a dApp.link.generated-index.title": {
+    "message": "Integrate a dApp",
+    "description": "The generated-index page title for category Integrate a dApp in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Install TON Connect": {
+    "message": "Install TON Connect",
+    "description": "The label for category Install TON Connect in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Install TON Connect.link.generated-index.title": {
+    "message": "Install TON Connect",
+    "description": "The generated-index page title for category Install TON Connect in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Advanced": {
+    "message": "Advanced",
+    "description": "The label for category Advanced in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Advanced.link.generated-index.title": {
+    "message": "Advanced",
+    "description": "The generated-index page title for category Advanced in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Business": {
+    "message": "Business",
+    "description": "The label for category Business in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Business.link.generated-index.title": {
+    "message": "Business",
+    "description": "The generated-index page title for category Business in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Web3 guidelines": {
+    "message": "Web3 guidelines",
+    "description": "The label for category Web3 guidelines in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Web3 guidelines.link.generated-index.title": {
+    "message": "Web3 guidelines",
+    "description": "The generated-index page title for category Web3 guidelines in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.TON DNS": {
+    "message": "TON DNS",
+    "description": "The label for category TON DNS in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.TON DNS.link.generated-index.title": {
+    "message": "TON DNS",
+    "description": "The generated-index page title for category TON DNS in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Proxy & sites": {
+    "message": "Proxy & sites",
+    "description": "The label for category Proxy & sites in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.Proxy & sites.link.generated-index.title": {
+    "message": "Proxy & sites",
+    "description": "The generated-index page title for category Proxy & sites in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.TON Storage": {
+    "message": "TON Storage",
+    "description": "The label for category TON Storage in sidebar guidelines"
+  },
+  "sidebar.guidelines.category.TON Storage.link.generated-index.title": {
+    "message": "TON Storage",
+    "description": "The generated-index page title for category TON Storage in sidebar guidelines"
+  },
+  "sidebar.guidelines.link.Working with your wallet": {
+    "message": "Working with your wallet",
+    "description": "The label for link Working with your wallet in sidebar guidelines, linking to https://helloworld.tonstudio.io/01-wallet"
+  },
+  "sidebar.guidelines.link.Writing first smart contract": {
+    "message": "Writing first smart contract",
+    "description": "The label for link Writing first smart contract in sidebar guidelines, linking to https://helloworld.tonstudio.io/02-contract"
+  },
+  "sidebar.guidelines.link.Building first web client": {
+    "message": "Building first web client",
+    "description": "The label for link Building first web client in sidebar guidelines, linking to https://helloworld.tonstudio.io/03-client"
+  },
+  "sidebar.guidelines.link.Testing your smart contract": {
+    "message": "Testing your smart contract",
+    "description": "The label for link Testing your smart contract in sidebar guidelines, linking to https://helloworld.tonstudio.io/04-testing"
+  },
+  "sidebar.guidelines.link.How to shard your TON smart contract and why": {
+    "message": "How to shard your TON smart contract and why",
+    "description": "The label for link How to shard your TON smart contract and why in sidebar guidelines, linking to https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons"
+  },
+  "sidebar.guidelines.link.TMA USD₮ payments demo": {
+    "message": "TMA USD₮ payments demo",
+    "description": "The label for link TMA USD₮ payments demo in sidebar guidelines, linking to https://github.com/ton-community/tma-usdt-payments-demo"
+  },
+  "sidebar.guidelines.link.Protocol specification": {
+    "message": "Protocol specification",
+    "description": "The label for link Protocol specification in sidebar guidelines, linking to https://github.com/ton-blockchain/ton-connect"
+  },
+  "sidebar.guidelines.link.Wallets list": {
+    "message": "Wallets list",
+    "description": "The label for link Wallets list in sidebar guidelines, linking to https://github.com/ton-blockchain/wallets-list"
+  },
+  "sidebar.guidelines.doc.Transaction fees calculation": {
+    "message": "Transaction fees calculation",
+    "description": "The label for the doc item Transaction fees calculation in sidebar guidelines, linking to the doc v3/guidelines/smart-contracts/fee-calculation"
+  },
+  "sidebar.guidelines.doc.Compilation instructions": {
+    "message": "Compilation instructions",
+    "description": "The label for the doc item Compilation instructions in sidebar guidelines, linking to the doc v3/guidelines/smart-contracts/howto/compile/compilation-instructions"
+  },
+  "sidebar.guidelines.doc.Instructions for low-memory machines": {
+    "message": "Instructions for low-memory machines",
+    "description": "The label for the doc item Instructions for low-memory machines in sidebar guidelines, linking to the doc v3/guidelines/smart-contracts/howto/compile/instructions-low-memory"
+  },
+  "sidebar.guidelines.doc.How to launch a jetton airdrop": {
+    "message": "How to launch a jetton airdrop",
+    "description": "The label for the doc item How to launch a jetton airdrop in sidebar guidelines, linking to the doc v3/guidelines/dapps/tutorials/jetton-airdrop"
+  },
+  "sidebar.guidelines.doc.NFT minting guide": {
+    "message": "NFT minting guide",
+    "description": "The label for the doc item NFT minting guide in sidebar guidelines, linking to the doc v3/guidelines/dapps/tutorials/nft-minting-guide"
+  },
+  "sidebar.guidelines.doc.Mint your first token": {
+    "message": "Mint your first token",
+    "description": "The label for the doc item Mint your first token in sidebar guidelines, linking to the doc v3/guidelines/dapps/tutorials/mint-your-first-token"
+  },
+  "sidebar.guidelines.doc.Zero-Knowledge proofs": {
+    "message": "Zero-Knowledge proofs",
+    "description": "The label for the doc item Zero-Knowledge proofs in sidebar guidelines, linking to the doc v3/guidelines/dapps/tutorials/zero-knowledge-proofs"
+  },
+  "sidebar.guidelines.doc.Web3 game example": {
+    "message": "Web3 game example",
+    "description": "The label for the doc item Web3 game example in sidebar guidelines, linking to the doc v3/guidelines/dapps/tutorials/web3-game-example"
+  },
+  "sidebar.guidelines.doc.React apps": {
+    "message": "React apps",
+    "description": "The label for the doc item React apps in sidebar guidelines, linking to the doc v3/guidelines/ton-connect/frameworks/react"
+  },
+  "sidebar.guidelines.doc.Vue apps": {
+    "message": "Vue apps",
+    "description": "The label for the doc item Vue apps in sidebar guidelines, linking to the doc v3/guidelines/ton-connect/frameworks/vue"
+  },
+  "sidebar.guidelines.doc.HTML/JS apps": {
+    "message": "HTML/JS apps",
+    "description": "The label for the doc item HTML/JS apps in sidebar guidelines, linking to the doc v3/guidelines/ton-connect/frameworks/web"
+  },
+  "sidebar.guidelines.doc.Integrate a wallet": {
+    "message": "Integrate a wallet",
+    "description": "The label for the doc item Integrate a wallet in sidebar guidelines, linking to the doc v3/guidelines/ton-connect/wallet"
+  },
+  "sidebar.contribute.category.Contribute guidelines": {
+    "message": "Contribute guidelines",
+    "description": "The label for category Contribute guidelines in sidebar contribute"
+  },
+  "sidebar.contribute.category.Localization program": {
+    "message": "Localization program",
+    "description": "The label for category Localization program in sidebar contribute"
+  },
+  "sidebar.contribute.doc.Overview": {
+    "message": "Overview",
+    "description": "The label for the doc item Overview in sidebar contribute, linking to the doc v3/contribute/localization-program/overview"
+  },
+  "sidebar.contribute.doc.How it works": {
+    "message": "How it works",
+    "description": "The label for the doc item How it works in sidebar contribute, linking to the doc v3/contribute/localization-program/how-it-works"
+  },
+  "sidebar.contribute.doc.How to contribute": {
+    "message": "How to contribute",
+    "description": "The label for the doc item How to contribute in sidebar contribute, linking to the doc v3/contribute/localization-program/how-to-contribute"
+  },
+  "sidebar.contribute.doc.Translation style guide": {
+    "message": "Translation style guide",
+    "description": "The label for the doc item Translation style guide in sidebar contribute, linking to the doc v3/contribute/localization-program/translation-style-guide"
+  }
+}
