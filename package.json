@@ -33,6 +33,7 @@
     "@saucelabs/theme-github-codeblock": "^0.1.1",
     "axios": "^1.7.7",
     "clsx": "^2.1.1",
+    "docusaurus": "^1.14.7",
     "docusaurus-plugin-sass": "^0.2.5",
     "dotenv": "^16.4.5",
     "katex": "^0.16.22",
