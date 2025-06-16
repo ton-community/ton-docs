@@ -1,5 +1,7 @@
 import { BlockMath, InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
 # Interact with transactions
 
@@ -20,6 +22,12 @@ import 'katex/dist/katex.min.css';
 
 ![](/img/docs/blockchain-fundamentals/actor.svg)
 
+Каждый актор может:
+
+* Изменять свое состояние.
+* Отправлять сообщения другим акторам.
+* Порождать новых акторов.
+
 
 **Акторная модель** — это модель параллельных вычислений, в которой система описывается как совокупность акторов, взаимодействующих через передачу сообщений.
 
@@ -33,7 +41,9 @@ import 'katex/dist/katex.min.css';
 * электронная почта может быть смоделирована как система акторов: пользователи представлены как акторы, адреса электронной почты — как адреса акторов;
 * веб-сервисы с конечными точками (например, SOAP) можно интерпретировать как акторов, обрабатывающих сообщения по своему адресу.
 
-В TON все активные сущности — это акторы.
+
+В TON все активные сущности — это акторы. 
+
 Аккаунт - это актор который опредялется следующими свойствами.
 
 - Общее состояние аккаунта (ID, balance, status)
@@ -41,6 +51,7 @@ import 'katex/dist/katex.min.css';
 - Поведение (code)
 
 Любой аккаунт в блокчейне определен по-крайней мере (адресом, балансом и статусом).
+
 * (ID1, 0, unexist)
 * (ID2, 10, uninit)
 * (ID3, -0.5, frozen)
@@ -49,15 +60,15 @@ import 'katex/dist/katex.min.css';
 
 Аккаунт у которого помимо общего состояния аккаунта определено его состояние и поведение называют смарт-контрактом.
 
+![](/img/docs/blockchain-fundamentals/smart_contract.svg)
+
 Разница между аккаунтом и смарт-контрактом
 * Аккаунт — актор содержащий общее состояние (т.е., баланс, адресс, состояние) и опционально код и состояние.
-* (ID1, 0, unexist)
-* (ID2, 2, inited, data, code)
+  * (ID1, 0, unexist)
+  * (ID2, 2, inited, data, code)
 
 * Смарт-контракт — актор с обязательно заполненным кодом и состоянием, определяющим его уникальное поведение.
-* (ID2, 2, inited, data, code)
-
-![](/img/docs/blockchain-fundamentals/smart_contract.svg)
+  * (ID2, 2, inited, data, code)
 
 
 #### Структура сущностей в TON Блокчейне
@@ -75,9 +86,21 @@ import 'katex/dist/katex.min.css';
 * Получатель может обработать сообщение позже, когда дойдет очередь.
 * Если результат важен, получатель должен явно отправить новое сообщение в ответ — иначе отправитель ничего не узнает.
 
+
+#### Асинхронность
+
+В TON контракты (акторы) не вызывают друг друга напрямую. Вместо этого они отправляют сообщения, каждое из которых обрабатывается отдельно и независимо. Вся коммуникация происходит через сообщения, и она асинхронна.
+
+**Асинхронность** — это свойство взаимодействия, при котором отправка сообщения не требует немедленной готовности получателя.
+
+* Отправитель не ожидает ответа немедленно — он просто отправляет сообщение.
+* Получатель может обработать сообщение позже, когда дойдет очередь.
+* Если результат важен, получатель должен явно отправить новое сообщение в ответ — иначе отправитель ничего не узнает.
+
 Это отличие от синхронных моделей, где можно вызвать → получить ответ → продолжить логику. В TON результат может прийти только в виде нового сообщения, и только если его отправили явно.
 
 ![](/img/docs/blockchain-fundamentals/actors_msging.svg)
+
 
 ### Структура и взаимодействия акторов в TON
 #### Аккаунт
@@ -87,9 +110,11 @@ import 'katex/dist/katex.min.css';
 - Состояние (data)
 - Поведение (code)
 
+
 В действительности данные расположены несколько сложнее, однако логически различие аккаунта и смарт контракта останется таким же.
 Для описания структуры данных в TON используется TL-B схемы, которые определяют маску расположения данных побитово.
 Рассмотрим как описан аккаунт
+
 
 Структура аккаунт определена несколькоими вложенными объектами:
 
@@ -106,41 +131,42 @@ account$1 addr:MsgAddressInt storage_stat:StorageInfo
 
 <details>
 
-  ```tlb
+```tlb
 
-  account_none$0 = Account;
-  account$1 addr:MsgAddressInt storage_stat:StorageInfo
-  storage:AccountStorage = Account;
+account_none$0 = Account;
+account$1 addr:MsgAddressInt storage_stat:StorageInfo
+storage:AccountStorage = Account;
 
-  account_storage$_ last_trans_lt:uint64
-  balance:CurrencyCollection state:AccountState
+account_storage$_ last_trans_lt:uint64
+    balance:CurrencyCollection state:AccountState 
   = AccountStorage;
 
-  account_uninit$00 = AccountState;
-  account_active$1 _:StateInit = AccountState;
-  account_frozen$01 state_hash:bits256 = AccountState;
+account_uninit$00 = AccountState;
+account_active$1 _:StateInit = AccountState;
+account_frozen$01 state_hash:bits256 = AccountState;
 
-  acc_state_uninit$00 = AccountStatus;
-  acc_state_frozen$01 = AccountStatus;
-  acc_state_active$10 = AccountStatus;
-  acc_state_nonexist$11 = AccountStatus;
+acc_state_uninit$00 = AccountStatus;
+acc_state_frozen$01 = AccountStatus;
+acc_state_active$10 = AccountStatus;
+acc_state_nonexist$11 = AccountStatus;
 
 
-  _ fixed_prefix_length:(Maybe (## 5)) special:(Maybe TickTock)
+_ fixed_prefix_length:(Maybe (## 5)) special:(Maybe TickTock)
   code:(Maybe ^Cell) data:(Maybe ^Cell)
   library:(Maybe ^Cell) = StateInit;
 
-  ```
+```
 
 </details>
 
-Уточним согласно TL-B схеме, какие свойства относятся к общему состоянию аккаунта:
+Уточним согласно TL-B схеме, какие свойства относятся к общему состоянию аккаунта: 
 
-- Общее состояние аккаунта
-- ID -> `MsgAddressInt`
-- balance -> `CurrencyCollection`
-- status -> `AccountState`
-- `last_trans_lt` - тоже часть общего состояния
+- Общее состояние аккаунта 
+  - ID -> `MsgAddressInt`
+  - balance -> `CurrencyCollection`
+  - status -> `AccountState`
+  - `last_trans_lt` - тоже часть общего состояния
+
 
 В то время, как  cостояние (data) и поведение (code) определяется в поле `state:AccountState`.
 
@@ -156,12 +182,12 @@ account$1 addr:MsgAddressInt storage_stat:StorageInfo
 | `frozen`   | `01`     | Аккаунт заморожен, состояние(код и данные) удалены, но сохранён хэш его состояния. Он не может использоваться, но может быть восстановлен. |
 | `active`   | `10`     | Аккаунт содержит `StateInit` с кодом и данными. Это активный смарт-контракт, готовый обрабатывать сообщения.                               |
 
+
 ```tlb
 account_uninit$00 = AccountState;
 account_active$1 _:StateInit = AccountState;
 account_frozen$01 state_hash:bits256 = AccountState;
 ```
-
 
 
 #### Смарт контракт
@@ -177,12 +203,15 @@ account_frozen$01 state_hash:bits256 = AccountState;
 
 #### Адрес
 
+
 Адрес в TON — это уникальный идентификатор аккаунта или смарт контракта, необходимый для взаимодействия между участниками сети. Он состоит из следующих компонентов:
 
 * WorkChain ID — 32-битное знаковое целое число, определяющее WorkChain, к которой принадлежит аккаунт (например, -1 для MasterChain, 0 для BaseChain).
 * Account ID — 256-битный хэш структуры `StateInit`, которая содержит начальное состояние контракта: `code`, `data` и (опционально) `library`.
 
+
 Адрес определяется:
+
 
 <BlockMath math="{Address} := ({workchain\_id},{account\_id})" />, где <BlockMath math= "{account\_id}:= {SHA256(BoC(StateInit))}" />, где BoC (bag of cells) это специальный формат сериализации данных в TON.
 
@@ -216,9 +245,11 @@ account_frozen$01 state_hash:bits256 = AccountState;
 
 **AccountChain** — это цепочка транзакций, выполненных на одном аккаунте в TON-блокчейне. Она представляет собой линейную последовательность: `Tx1 → Tx2 → Tx3 → …`, где каждая транзакция ссылается на предыдущую. Для удобства обработки и достижения консенсуса транзакции группируются в блоки — например, `[Tx1 → Tx2] → [Tx3 → Tx4 → Tx5] → [] → [Tx6]`. В блоках также содержатся очереди входящих и исходящих сообщений, фиксирующие все события и изменения состояния аккаунта за данный период.
 
-Другими словами, AccountChain представляет собой «микро-блокчейн» одного аккаунта. Он хранит и упорядочивает всю историю операций и взаимодействий аккаунта, обеспечивая прозрачность и прослеживаемость.
 
-В масштабе всей сети множество таких цепочек объединяются в ShardChain (или просто «шард»), который отвечает за обработку группы аккаунтов. Эта абстракция введена для удобства группировки логических элементов (AccounChain) на физических носителях (ShardChain ←→  Validator).
+Другими словами, AccountChain представляет собой «микро-блокчейн» одного аккаунта. Он хранит и упорядочивает всю историю операций и взаимодействий аккаунта, обеспечивая прозрачность и прослеживаемость. 
+
+В масштабе всей сети множество таких цепочек объединяются в ShardChain (или просто «шард»), который отвечает за обработку группы аккаунтов. Эта абстракция введена для удобства группировки логических элементов (AccounChain) на физических носителях (ShardChain \<\-\> Validator).
+
 
 #### ShardChain
 
@@ -252,6 +283,8 @@ BaseChain — основная рабочая цепочка, предназна
 
 ![](/img/docs/blockchain-fundamentals/chains_of_chains.svg)
 
+Таким образом, из-за наличия ShardChain-ов, WorkChain-ов мы можем сказать, что TON блокчейн это блокчейн блокчейнов, то есть, епочка связанных блоков, где каждый следующий блок ссылается на предыдущий через хэш.
+
 #### Testnet and Mainnet
 
 #### Mainnet (основная сеть)
@@ -280,10 +313,12 @@ Testnet нужен, чтобы безопасно разрабатывать и 
 
 ## Transaction and message real life examples
 
-Представьте город в котором функционирует городская почта и люди-акторы не покидают своих домов. Для общения люди могут принимать сообщение с запросом на какую-либо работу, делать работу внутри дома, и прикладывать отчет о проделанной работе, отправлять другому жителю.
-Каждый человек будет выходить к почтовому ящику забирать ровно одно входящее письмо и затем запираться наглухо дома, пока не выполнят работу о которой их попросили.
+
+Представьте город в котором функционирует городска почта и люди-акторы не покидают своих домов. Для общения люди могут принимать сообщение с запросом на какую-либо работу, делать работу внутри дома, и прикладывать отчет о проделанной работе, отправлять другому жителю.
+Каждый человек будет выходить к почтовому ющику забирать ровно одно входящее письмо и затем запираться наглухо дома, пока не выполнят работу о которой их попросили.
 В процессе их работы могут приходить новый письма но их это не отвелчет. Также, если внутри дома, в процессе работы они поймут что им не хватает какой-то информации, они не могут прерваться для уточнения. В таком случае, человеку, потребуется признать что работа невыполнима, и в лучшем случае он отправит обратно обрывки исходных инструкций и остатки незатраченных средств.
 Если же работа прошла успешно человек, согласно изначальному запросу может отчитаться отправив новые сообщения от себя или просто уложить на хранения у себя в доме изготовленные по запросу изделия. После этого человек выходит проверять входящую почту, и берет очередное входящее сообщение.
+
 
 Теперь представим, что на каждый эпизод работы человек ведет подробный журнал. Чтобы разделять свой труд и удобно хранить историю, он каждую выполненную работу он опишет как транзакцию. В его случае транзакция будет содержать в себе основание для работы - полная опись входящего сообещния, запись о том что за изделие он изготовил и куда его уложил, и опционально информацию о проделанной работе отправленная другому человеку.
 
@@ -386,6 +421,7 @@ Message value
 
 #### Bounce of messages
 
+
 Bounce message — это сообщение, которое автоматически отправляется обратно отправителю при неудачной транзакции. Например, если смарт-контракт получателя не существует или завершил выполнение с ошибкой.
 Оно позволяет не просто зафиксировать ошибку, но и обработать её: отправитель может получить уведомление о проблеме и выполнить нужные действия, например, вернуть токены или показать пользователю сообщение об ошибке.
 
@@ -405,6 +441,7 @@ Cодержимое bounce-сообщения нельзя исполнять к
 :::
 
 Address with flags as field of a message
+
 
 
 External message is an initiation of Action
@@ -457,17 +494,20 @@ const body = beginCell()
 В контексте TON хэш — это уникальный криптографический отпечаток данных, вычисленный с помощью алгоритма SHA-256. Каждая ячейка (Cell), сообщение или транзакция имеют свой уникальный хэш, который служит их цифровой подписью.
 
 ### Представление данных в TON
-Все данные в TON хранятся в ячечейках. Концпетуально это структура содержащая 1023 бита и 4 ссылки на другие ячейки. Серилизованные деревья ячеек запаковываются по единому стандарту ячеек
+
+Все данные в TON хранятся в ячечейках. Концпетуально это структура содержащая 1023 бита и 4 ссылки на другие ячейки. Серилизованные деревья ячеек запаковываются по единому стандарту ячеек 
+
 
 В Tl-B это структура Bag of cells (BoC):
 
 ```tlb
 
-serialized_boc#b5ee9c72 has_idx:(## 1) has_crc32c:(## 1)
+
+serialized_boc#b5ee9c72 has_idx:(## 1) has_crc32c:(## 1) 
   has_cache_bits:(## 1) flags:(## 2) { flags = 0 }
   size:(## 3) { size <= 4 }
-  off_bytes:(## 8) { off_bytes <= 8 }
-  cells:(##(size * 8))
+  off_bytes:(## 8) { off_bytes <= 8 } 
+  cells:(##(size * 8)) 
   roots:(##(size * 8)) { roots >= 1 }
   absent:(##(size * 8)) { roots + absent <= cells }
   tot_cells_size:(##(off_bytes * 8))
@@ -525,15 +565,16 @@ console.log("Message Body Hash:", messageBody.hash().toString("hex"));
 Полное сообщение включает не только тело, но и заголовки с метаданными (отправитель, получатель, сумма, комиссии).
 Его хэш — это уникальный идентификатор всего сообщения.
 
-Например, для Internal message, это структура `Message X` определенная следующим TL-B
+Например, для Internal message, это структура `Message X` определенная следующим TL-B:
 
 ```tlb
 message$_ {X:Type} info:CommonMsgInfo
   init:(Maybe (Either StateInit ^StateInit))
   body:(Either X ^X) = Message X;
 
+  
 int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
-  src:MsgAddressInt dest:MsgAddressInt
+  src:MsgAddressInt dest:MsgAddressInt 
   value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
   created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ```
@@ -762,11 +803,13 @@ async function sendAndVerifyMessage() {
 Когда пользователь подтверждает отправку external сообщения через TON Connect, вы получаете BOC (Bag of Cells). Вы можете использовать этот BOC для поиска соответствующей транзакции в блокчейне.
 
 **Практический пример:**
-<details>
-  ```typescript
-  import { Cell, Address, beginCell, storeMessage, TonClient } from '@ton/ton';
 
-  async function findTransactionByBOC(
+<details>
+
+```typescript
+import { Cell, Address, beginCell, storeMessage, TonClient } from '@ton/ton';
+
+async function findTransactionByBOC(
   externalBOC: string,
   walletAddress: string
   ): Promise<string | null> {
@@ -776,51 +819,52 @@ async function sendAndVerifyMessage() {
 });
 
   try {
-  // Получаем хэш внешнего BOC
-  const extHash = Cell.fromBase64(externalBOC).hash().toString('hex');
+    // Получаем хэш внешнего BOC
+    const extHash = Cell.fromBase64(externalBOC).hash().toString('hex');
 
-  // Получаем последние транзакции кошелька
-  const transactions = await client.getTransactions(
-  Address.parse(walletAddress),
-{ limit: 10 }
-  );
+    // Получаем последние транзакции кошелька
+    const transactions = await client.getTransactions(
+      Address.parse(walletAddress),
+      { limit: 10 }
+    );
 
-  for (const tx of transactions) {
-  const inMsg = tx.inMessage;
-  if (inMsg?.info.type === 'external-in') {
-  // Создаем хэш входящего сообщения
-  const inHash = beginCell()
-  .store(storeMessage(inMsg))
-  .endCell()
-  .hash()
-  .toString('hex');
+    for (const tx of transactions) {
+      const inMsg = tx.inMessage;
+      if (inMsg?.info.type === 'external-in') {
+        // Создаем хэш входящего сообщения
+        const inHash = beginCell()
+          .store(storeMessage(inMsg))
+          .endCell()
+          .hash()
+          .toString('hex');
 
-  console.log('External BOC hash:', extHash);
-  console.log('Transaction message hash:', inHash);
+        console.log('External BOC hash:', extHash);
+        console.log('Transaction message hash:', inHash);
 
-  // Если хэши совпадают, мы нашли нашу транзакцию
-  if (extHash === inHash) {
-  const txHash = tx.hash().toString('hex');
-  console.log('Найдена транзакция:', txHash);
-  return txHash;
+        // Если хэши совпадают, мы нашли нашу транзакцию
+        if (extHash === inHash) {
+          const txHash = tx.hash().toString('hex');
+          console.log('Найдена транзакция:', txHash);
+          return txHash;
+        }
+      }
+    }
+
+    throw new Error('Транзакция не найдена');
+  } catch (error) {
+    console.error('Ошибка поиска транзакции:', error);
+    return null;
+  }
 }
-}
-}
 
-  throw new Error('Транзакция не найдена');
-} catch (error) {
-  console.error('Ошибка поиска транзакции:', error);
-  return null;
-}
-}
-
-  // Пример использования
-  const txHash = await findTransactionByBOC(
+// Пример использования
+const txHash = await findTransactionByBOC(
   'te6cckEBAgEAqQAB4YgA+yKcnwQCs1xAwIEKKB4DvkIdXNjL6B...',
   'EQB...'
   );
   ```
 </details>
+
 
 ### Практические советы
 
@@ -1357,27 +1401,169 @@ trans_ord$0000 credit_first:Bool
   }
 ```
 
+Сериализиуется эта фаза в TL-B следующим образом:
+
+```tlb
+tr_phase_credit$_ due_fees_collected:(Maybe Grams)
+  credit:CurrencyCollection = TrCreditPhase;
+```
+
+Здесь мы видим, что фаза состоит из двух полей:
+
+| Поле | Тип | Описание |
+| --- | --- | --- |
+| `due_fees_collected` | `Maybe Grams` | Сумма комиссий, которые были за хранилище. Это происходит в том случае, если на аккаунте не было баланса и накопился долг. |
+| `credit` | `CurrencyCollection` | Сумма, которая была зачислена на аккаунт в процессе получения сообщения. |
+
 ### Storage phase
 
-todo: расписать таким же образом, как и credit phase
+На этой фазе происходит обработка комиссий, связанных с хранилищем аккаунта. Для начала ознакомимся с TL-B схемой:
+
+```tlb
+tr_phase_storage$_ storage_fees_collected:Grams 
+  storage_fees_due:(Maybe Grams)
+  status_change:AccStatusChange
+  = TrStoragePhase;
+```
+
+Здесь мы видим, что фаза состоит из следующих полей:
+
+| Поле | Тип | Описание |
+| --- | --- | --- |
+| `storage_fees_collected` | `Grams` | Сумма комиссий, которые были собраны за хранилище аккаунта. |
+| `storage_fees_due` | `Maybe Grams` | Сумма комиссий, которые были начислены за хранилище аккаунта, но не были собраны. Это происходит в том случае, если на аккаунте не было баланса и накопился долг. |
+| `status_change` | `AccStatusChange` | Изменение статуса аккаунта после выполнения транзакции. |
+
+`storage_fees_due` имеет тип `Maybe`, потому что в случае, когда у контракта есть баланс, это значение не будет присутствовать. Оно необходимо только для отображения долга. В свою очередь, `AccStatusChange` позволяет понять, изменился ли статус аккаунта после этой фазы. Например, если долг превысил 0.1 TON, то состояние аккаунта [заморозится](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L949C11-L953C12), а после 1 TON - [удалится](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L936C11-L946C12).
 
 ### Compute phase
 
+Одной из самых комплексных фаз транзакции является compute phase. Именно на этой фазе выполняется код смарт-контракта, который хранится в хранилище. В этот раз TL-B у нас содержит несколько схем:
 
-todo: расписать таким же образом, как и credit phase. При этом дополнительно добавить детали про опкоды, выполнение кода, exit код и так далее
+```tlb
+tr_phase_compute_skipped$0 reason:ComputeSkipReason
+  = TrComputePhase;
+tr_phase_compute_vm$1 success:Bool msg_state_used:Bool 
+  account_activated:Bool gas_fees:Grams
+  ^[ gas_used:(VarUInteger 7)
+  gas_limit:(VarUInteger 7) gas_credit:(Maybe (VarUInteger 3))
+  mode:int8 exit_code:int32 exit_arg:(Maybe int32)
+  vm_steps:uint32
+  vm_init_state_hash:bits256 vm_final_state_hash:bits256 ]
+  = TrComputePhase;
+cskip_no_state$00 = ComputeSkipReason;
+cskip_bad_state$01 = ComputeSkipReason;
+cskip_no_gas$10 = ComputeSkipReason;
+cskip_suspended$110 = ComputeSkipReason;
+```
 
+Для начала заметим, что compute phase может быть пропущена и в качестве причины могут быть указаны следующие:
+
+| Причина пропуска | Описание |
+| --- | --- |
+| `cskip_no_state` | Смарт-контракт не имеет состояния (а значит и кода), поэтому его код не может быть выполнен. |
+| `cskip_bad_state` | Данная ошибка выбрасывается в двух случаях: [неправильное значение поля `fixed_prefix_length`](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1721) или же StateInit, который был передан в сообщении, [не соответствует адресу аккаунта](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1726). |
+| `cskip_no_gas` | В поступающем сообщении не было достаточного количества TON для выполнения кода смарт-контракта. |
+| `cskip_suspended` | Аккаунт был заморожен, поэтому код не может быть выполнен. Это использовалось для заморозки аккаунтов ранних майнеров в рамках стабилизации токеномики TON. |
+
+:::tip
+Поле `fixed_prefix_length` позволяет установить фиксированные начальные биты адреса аккаунта, чтобы он находился в конкретном шарде. Это не входит в рамки данного туториала, однако об этом можно почитать [здесь](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md#anycast-addresses-and-address-rewrite).
+:::
+
+После того, как мы разобрались с причинами пропуска compute phase, мы можем разобрать, что происходит после того, как код смарт-контракта был выполнен:
+
+| Поле | Тип | Описание |
+| --- | --- | --- |
+| `success` | `Bool` | Указывает, была ли успешно выполнена compute phase. Если это значение равно `false`, то все изменения, которые произошли на этой фазе, не были применены. |
+| `msg_state_used`, `account_activated`, `mode`, `vm_init_state_hash`, `vm_final_state_hash` | - | Эти поля никак не используются в текущей версии блокчейна и лишь записываются нулевыми значениями. |
+| `gas_fees` | `Grams` | Сумма комиссий, которые были уплачены за выполнение кода смарт-контракта. |
+| `gas_used`, `gas_limit` | `VarUInteger` | Количество газа, которое было использовано и лимит газа, который был установлен для выполнения кода смарт-контракта. |
+| `gas_credit` | `Maybe (VarUInteger 3)` | Используется в external сообщениях. Поскольку они не могут нести при себе TON, то в этом случае выделяется немного газа для того, чтобы код смарт контракта мог запуститься и решить, готов ли 
+| `exit_code` | `int32` | Код выхода виртуальной машины. Если код равен 0 или 1 (alternative success), то код смарт-контракта был успешно выполнен. Если код не равен 0, то это означает, что код смарт-контракта завершился с ошибкой (исключением является применение `commit`). |
+| `exit_arg` | `Maybe int32` | Аргумент, который был выброшен виртуальной машиной в случае ошибки. Это может быть полезно для отладки кода смарт-контракта. |
+| `vm_steps` | `uint32` | Количество шагов, которые были выполнены виртуальной машиной. |
+
+:::tip
+Инструкция `commit` используется для того, чтобы зафиксировать изменения, которые были сделаны до этой инструкции и применить их вне зависимости от того, будет ли далее ошибка в этой фазе. Может быть отменена только в случае, если Action Phase завершиться неудачно.
+:::
 
 ### Action phase
 
+После того, как код смарт-контракта был выполнен, начинается action phase. Если в процессе выполнения кода были созданы какие-либо actions, то они будут обработаны на этой фазе. Всего существует 4 типа actions:
 
-todo: расписать таким же образом, как и credit phase. Не забыть про exit code и нюансы с send_ignore_errors
+```tlb
+action_send_msg#0ec3c86d mode:(## 8) 
+  out_msg:^(MessageRelaxed Any) = OutAction;
+action_set_code#ad4de08e new_code:^Cell = OutAction;
+action_reserve_currency#36e6b809 mode:(## 8)
+  currency:CurrencyCollection = OutAction;
+libref_hash$0 lib_hash:bits256 = LibRef;
+libref_ref$1 library:^Cell = LibRef;
+action_change_library#26fa1dd4 mode:(## 7)
+  libref:LibRef = OutAction;
+```
 
+| Тип | Описание |
+| --- | --- |
+| `action_send_msg` | Отправка сообщения. |
+| `action_set_code` | Установка нового кода смарт-контракта. |
+| `action_reserve_currency` | Резервирование средств на аккаунте. Очень полезно при газ мененджменте. |
+| `action_change_library` | Изменение библиотеки, которая используется в смарт-контракте. |
+
+Теперь мы можем посмотреть TL-B схему, которая описывает action phase:
+
+```tlb
+tr_phase_action$_ success:Bool valid:Bool no_funds:Bool
+  status_change:AccStatusChange
+  total_fwd_fees:(Maybe Grams) total_action_fees:(Maybe Grams)
+  result_code:int32 result_arg:(Maybe int32) tot_actions:uint16
+  spec_actions:uint16 skipped_actions:uint16 msgs_created:uint16 
+  action_list_hash:bits256 tot_msg_size:StorageUsed
+  = TrActionPhase;
+```
+Здесь мы видим, что фаза состоит из следующих полей:
+
+| Поле | Тип | Описание |
+| --- | --- | --- |
+| `success` | `Bool` | Указывает, была ли успешно выполнена action phase. Если это значение равно `false`, то все изменения, которые произошли на этой фазе, не были применены. Также отменяются изменения, которые были сделаны на compute phase. |
+| `valid` | `Bool` | Указывает, была ли action phase валидной. Если это значение равно `false`, то это означает, что в процессе выполнения кода смарт-контракта были созданы некорректные actions. Для каждого action имеется свой набор критериев. |
+| `no_funds` | `Bool` | Указывает, были ли средства на аккаунте для выполнения actions. `false` означает, что Action Phase была прервана из-за недостатка средств. |
+| `status_change` | `AccStatusChange` | Изменение статуса аккаунта после выполнения action phase. Так как удаление аккаунта происходит именно через actions (через мод 32), то это поле может содержать информацию о том, был ли аккаунт удалён. |
+| `total_fwd_fees` | `Maybe Grams` | Сумма комиссий, которые были уплачены за пересылку сообщений, созданных в процессе выполнения actions. |
+| `total_action_fees` | `Maybe Grams` | Сумма комиссий, которые были уплачены за выполнение actions. |
+| `result_code` | `int32` | Код результата выполнения actions. Если код равен 0, то это означает, что все actions были успешно выполнены. |
+| `result_arg` | `Maybe int32` | Аргумент, который был выброшен в случае ошибки. Это может быть полезно для отладки кода смарт-контракта. |
+| `tot_actions` | `uint16` | Общее количество actions, которые были созданы в процессе выполнения кода смарт-контракта. |
+| `spec_actions` | `uint16` | Количество специальных actions (все, кроме `action_send_msg`). |
+| `skipped_actions` | `uint16` | Количество actions, которые были пропущены в процессе выполнения кода смарт-контракта. Относится к отправке сообщений, с которыми были проблемы, однако был установлен флаг `ignore_errors` (2). |
+| `msgs_created` | `uint16` | Количество сообщений, которые были созданы в процессе выполнения actions. |
+| `action_list_hash` | `bits256` | Хеш списка actions. |
+| `tot_msg_size` | `StorageUsed` | Общий размер сообщений. |
 
 ### Bounce phase
 
+Если фаза compute phase или action phase завершилась с ошибкой и при этом у входящего сообщения был установлен флаг `bounce`, то будет выполнена bounce phase:
 
-todo: расписать таким же образом, как и credit phase
+:::note
+Для того, чтобы началась bounce phase из-за ошибки в action phase, то должен зафейлиться action, который был создан с флагом 16, означающий баунс в случае ошибки.
+:::
 
+```tlb
+tr_phase_bounce_negfunds$00 = TrBouncePhase;
+tr_phase_bounce_nofunds$01 msg_size:StorageUsed
+  req_fwd_fees:Grams = TrBouncePhase;
+tr_phase_bounce_ok$1 msg_size:StorageUsed
+  msg_fees:Grams fwd_fees:Grams = TrBouncePhase;
+```
+
+`tr_phase_bounce_negfunds` не используется в текущей версии блокчейна, поэтому мы рассмотрим оставшиеся две:
+
+| Тип | Описание |
+| --- | --- |
+| `tr_phase_bounce_nofunds` | Означает, что на обработку сообщения, которое должно было быть возвращено отправителю, недостаточно средств. |
+| `tr_phase_bounce_ok` | Означает, что сообщение было успешно обработано и отправлено обратно отправителю. |
+
+Здесь `msg_fees` и `fwd_fees` вычисляются на основе общей комиссии `fwd_fees` за обработанное сообщение. 1/3 часть этой комиссии уплачивается на месте и записывается в `msg_fees`, а остальная часть записывается в `fwd_fees`. 
 
 ### Полное тело транзакции
 
@@ -1420,39 +1606,197 @@ acc_state_active$10 = AccountStatus;
 acc_state_nonexist$11 = AccountStatus;
 ```
 
-### Как правильно считать хеш транзакции
+### Как получить транзакцию, используя api/v2
 
-todo: здесь в основном js код
+Из доступных и подддерживаемых OpenSource API, мы можем использовать [APIv2](https://toncenter.com/api/v2/) и [APIv3](https://toncenter.com/api/v3/index.html#/) от Toncenter. APIv2 является более сырой версией и позволяет получать лишь очень базовую информацию о блокчейне. Для получения транзакции у нас есть 2 способа:
 
-### Action: Tech Context
+- Использовать `/api/v2/getTransactions` endpoint:
 
-Расписать actions согласно tl-b:
+<Tabs groupId="code-examples">
+<TabItem value="js" label="JavaScript">
 
-```tlb
-action_send_msg#0ec3c86d mode:(## 8)
-  out_msg:^(MessageRelaxed Any) = OutAction;
-action_set_code#ad4de08e new_code:^Cell = OutAction;
-action_reserve_currency#36e6b809 mode:(## 8)
-  currency:CurrencyCollection = OutAction;
-libref_hash$0 lib_hash:bits256 = LibRef;
-libref_ref$1 library:^Cell = LibRef;
-action_change_library#26fa1dd4 mode:(## 7)
-  libref:LibRef = OutAction;
+```js
+import axios from 'axios';
+
+async function main() {
+    const client = axios.create({
+        baseURL: 'https://toncenter.com/api/v2',
+        'timeout': 5000,
+        headers: {
+            'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+        }
+    });
+    
+    const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
+    const response = await client.get('/getTransactions', {
+        params: {
+            address: address,
+            limit: 1,
+            to_lt: 0,
+            archival: false
+        },
+        headers: {
+            'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+        }
+    });
+    console.log(response.data)
+}
+
+main().finally(() => console.log("Exiting..."));
 ```
 
-### Action: User Context (a.k.a. Event)
+</TabItem>
+</Tabs> 
 
-Здесь в конце мы привём к выводу, что в дальнейшем будем использовать термин Event.
 
-### Как получить транзакцию, используя api/v2
+- Использовать `JSON-RPC` протокол:
+
+<Tabs groupId="code-examples">
+<TabItem value="js" label="JavaScript">
+
+```js
+import { Address, TonClient } from '@ton/ton';
+
+async function main() {
+    const client = new TonClient({
+        endpoint: "https://toncenter.com/api/v2/jsonRPC",
+        apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
+    });
+
+    const address = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
+    const response = await client.getTransactions(address, {
+        limit: 1,
+    });
+    console.log(response[0]);
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+</Tabs> 
+
+Рекомендованным способом является использование `JSON-RPC` протокола, поскольку для этого можно использовать готовый SDK, в котором уже все поля заранее расписаны и имеют нужный тип. Таким образом вам не придётся изучать то, что означает каждое поле.
+
+:::note
+Во время получения транзакций вы можете столкнуться с ошибкой `LITE_SERVER_UNKNOWN: cannot compute block with specified transaction: cannot find block (0,ca6e321c7cce9ece) lt=57674065000003: lt not in db`. 
+
+Это означает, что на этом аккаунте транзакции были довольно давно и блоки, в которых они были созданы, уже не хранятся на LiteServer. В таком случае вы можете использовать `archival: true`, который будет запрашивать информацию из архивной ноды.
+:::
 
 ### Как получить транзакцию, используя api/v3
 
+`APIv3` является более продвинутым и удобным для получения информации о разных событиях в блокчейне. Например, в нём можно запрашивать получать информацию о переводе NFT, жетонов и даже транзакциях, которые находятся в статусе `pending`. Мы рассмотрим только `transactions` endpoint, который возвращат уже свершившиеся транзакции:
 
-### Поля транзакции в API
+<Tabs groupId="code-examples">
+<TabItem value="js" label="JavaScript">
+
+```js
+import axios from 'axios';
+
+async function main() {
+    const client = axios.create({
+        baseURL: 'https://toncenter.com/api/v3',
+        'timeout': 5000,
+        headers: {
+            'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+        }
+    });
+    
+    const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
+    const response = await client.get('/transactions', {
+        params: {
+            account: address,
+            limit: 1,
+            to_lt: 0,
+            archival: false
+        }
+    });
+    console.log(response.data.transactions[0])
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+</Tabs> 
+
+Если мы посмотрим на ответ, то увидим, что он сильно отличается от ответа `APIv2`. Основная разница заключается в том, что эта версия **индексирует** транзакции в то время, как прошлая версия лишь являлась некой оболочкой для общения с LiteServer. Это означает, что информация запрашивается из базы данных самого сервера. 
+
+Это позволяет нам получать уже обработанную информацию. Например, если мы углубимся в ответ, то увидим, что в полях `account_state_before` и `account_state_after` не только хеш состояния, но и полную информацию, такую как код, дата, баланс TON и даже баланс ExtraCurrency:
+
+```json
+[
+  account_state_before: {
+    hash: 'Rljfqi3l3198Fok7x1lyf9OlT5jcVRae7muNhaOyqNQ=',
+    balance: '235884286762',
+    extra_currencies: {},
+    account_status: 'active',
+    frozen_hash: null,
+    data_hash: 'uUe+xBA4prK3EyIJ8iBk8unWktT4Grj+abz4LF2opX0=',
+    code_hash: '/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA='
+  },
+  account_state_after: {
+    hash: 'asmytWJakUpuVVYtuSMgwjmlZefj5tV5AgnWgGYP+Qo=',
+    balance: '225825734714',
+    extra_currencies: {},
+    account_status: 'active',
+    frozen_hash: null,
+    data_hash: '6L0wUi1S55GRvdizozJj2GkCqjKSx8iK7dEHlTOe8d0=',
+    code_hash: '/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA='
+  }
+]
+```
+
+Дополнительно мы в ответе получаем `address_book`, который содержит массив адресов, с которыми было взаимодействие в процессе выполнения транзакций.
+
 ### Поля транзакции в SDK
-* ton/ton'
-* ton4j
+
+При изучении ответа, полученного с помощью `JSON-RPC` протокола в `@ton/ton@`, мы можем заметить, что помимо полей, рассмотренных выше, в ответе есть ещё `hash` и `raw`. Эти поля не содержатся в самих транзакциях в рамках блокчейна, но добавляются со стороны SDK для удобства.
+
+С помощью поля `hash`, который содержит функцию, мы можем посчитать хеш транзакции, а поле `raw` содержит в себе BOC транзакции, с помощью которой мы можем сами распарсить транзакцию, используя либо готовый метод из SDK, либо вручную:
+
+<Tabs groupId="code-examples">
+<TabItem value="js" label="JavaScript">
+
+```js
+import { Address, loadTransaction, TonClient } from '@ton/ton';
+
+async function main() {
+    const client = new TonClient({
+        endpoint: "https://toncenter.com/api/v2/jsonRPC",
+        apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
+    });
+
+    const address = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
+    const response = await client.getTransactions(address, {
+        limit: 1,
+    });
+
+    const transaction = response[0];
+    console.log(loadTransaction(transaction.raw.beginParse()));
+    console.log(`Transaction hash: ${transaction.hash().toString('hex')}`);
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+</TabItem>
+</Tabs>
+
+### Action: User Context (a.k.a. Event)
+
+Перед тем, как рассмотреть пользовательские операции и их обработку, резюмируем, что мы узнали о транзакциях:
+
+- Транзакция - это запись, которая фиксирует все изменения, произошедшие с одним конкретным аккаунтом.
+- Транзакция состоит из нескольких фаз, которые обрабатывают входящие сообщения, выполняют код смарт-контракта и обрабатывают созданные actions.
+- Каждая фаза транзакции имеет своё описание, которое содержит информацию о том, что произошло в процессе выполнения транзакции.
+- Транзакция может быть успешно выполнена или завершиться с ошибкой, в зависимости от того, были ли выполнены все фазы и были ли созданы корректные actions.
+- Обычные транзакции всегда содержат входящее сообщение, но могут не содержать исходящих сообщений.
+- Транзакция может быть получена с помощью APIv2 или APIv3, которые предоставляют информацию о транзакции в удобном формате.
+- В APIv3 транзакция индексируется, что позволяет получать уже обработанную информацию в то время как APIv2 - это лишь обёртка для общения с LiteServer.
+- В SDK могут появляться дополнительные поля для удобства работы с транзакциями, такие как `hash` и `raw`, которые позволяют получить хеш транзакции и BOC транзакции соответственно.
+
+Ранее мы говорили об actions с технической точки зрения. Однако часто в различных API сервисах этот термин используется для обозначения пользовательских операций. Например, один перевод Jetton с одного кошелька на другой осуществляется минимум за 3 разных транзакции. Цепочка этих транзакций будет называться `Jetton Transfer action`. Во избежание путаницы, мы будем использовать термин `Event`, который также можно встретить в различных API сервисах.
 
 ### Успешность Event в экосистеме: Ordinary TON Transfer
 
@@ -1460,18 +1804,269 @@ action_change_library#26fa1dd4 mode:(## 7)
 
 Например, если мы хотим отправить TON с одного кошелька на другой, то успешность этой операции будет означать, что средства были успешно зачислены на целевой кошелек. Для этого нам необходимо получать последние транзакции на целевом аккаунте, время создания которых больше или равно, чем время создания транзакции, в которой возникло сообщение, отправляющее TON.
 
-todo: здесь хорошо бы иметь пример кода, который это делает
+Допустим, мы хотим проверять депозиты, поступающие на наш кошелёк `UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL`. Для удобства мы будем использовать APIv3 и запрашивать последние 10 транзакций на аккаунте:
+
+<Tabs groupId="code-examples">
+<TabItem value="js" label="JavaScript">
+
+```js
+import { fromNano } from '@ton/core';
+import axios from 'axios';
+
+async function main() {
+    const client = axios.create({
+        baseURL: 'https://toncenter.com/api/v3',
+        'timeout': 5000,
+        headers: {
+            'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+        }
+    });
+    
+    const address = 'UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL';
+    const response = await client.get('/transactions', {
+        params: {
+            account: address,
+            limit: 10,
+            to_lt: 0,
+            archival: false
+        }
+    });
+
+    for (const transaction of response.data.transactions) {
+        const description = transaction.description;
+        if (description.type !== 'ord') {
+            continue;
+        }
+
+        const inMsg = transaction.in_msg;
+        if (inMsg.created_lt === null) {
+            continue; // Skip external messages
+        }
+        const bouncePhase = description.bounce;
+        
+        if (bouncePhase && bouncePhase.type === 'ok') {
+            console.log(`Fake deposit detected: ${transaction.hash}`);
+            continue;
+        }
+
+        console.log(`Deposit detected: ${transaction.hash}. Value: ${fromNano(inMsg.value)} TON.`);
+    }
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</TabItem>
+</Tabs>
+
+После получения транзакций мы должны проверить следующее:
+
+1. Транзакция должна быть обычной, то есть `description.type` должно быть равно `ord`.
+2. Входящее сообщение должно быть internal. Это означает, что поле`created_lt` должно быть заполнено.
+3. Если в описании транзакции присутствует поле `bounce` (это относится только к отвечу `transactions` endpoint для APIv3), то это означает, что была запущена bounce phase. В таком случае, мы проверяем, завершилась ли она успешно, что будет означать, что средства были возвращены отправителю.
+4. Если все проверки пройдены, то мы можем считать, что депозит был успешно зачислен на кошелёк.
 
 :::danger
-todo: Здесь про то, что нужно учитывать атаку с баунсом, когда средства возвращаются обратно
+Необходимо учитывать, что предложенный код является лишь примером и не является полноценным решением для отслеживания депозитов. В реальных приложениях необходимо обрабатывать не строго последние 10 транзакций, а все транзакции, которые были после последней проверки.
+
+Также необходимо учитывать, что то, какие значения должны быть у полей в случае фейкового депозита, может отличаться от API сервиса. В данном примере показывается лишь ответ APIv3 от Toncenter для `transactions` endpoint.
+:::
+
+Если мы запустим этот код, то получим следующий вывод:
+
+```
+Fake deposit detected: 4vXGhdvtfgFx8tkkaL17POhOwrUZq3sQDVSdNpW+Duk=
+```
+
+Посмотрев на эту транзакцию в [эксплорере](https://tonviewer.com/transaction/e2f5c685dbed7e0171f2d92468bd7b3ce84ec2b519ab7b100d549d3695be0ee9), мы увидим, что средства действительно вернулись отправителю.
+
+:::note
+Если мы запросим транзакции для этого аккаунта с помощью APIv2, то не получим никаких транзакций. Дело в том, что информация об этой транзакции была записана лишь в блок и индексатор в APIv3 смог её проиндексировать.
+
+Однако так как данный аккаунт не имеет никакого стейта (даже ни одного пополнения баланса), то к этому аккаунту не относятся никакие транзакции. Если бы был хотя бы один депозит, то состояние из `nonexist` изменилось бы на `uninit` и тогда APIv2 смог бы вернуть эту транзакцию.
+:::
+
+### Успешность Event в экосистеме: Jetton Transfer
+
+Теперь мы можем рассмотреть более сложный пример, связанный с переводом Jetton. Для начала рассмотрим, как выглядит Jetton Transfer:
+
+1. external_in -> User_A - > internal (op::jetton_transfer)
+2. internal (op::jetton_transfer) -> User_A_Jetton_Wallet -> internal (op::internal_transfer)
+3. internal (op::internal_transfer) -> User_B_Jetton_Wallet
+
+Как мы видим, в этом случае у нас есть 3 транзакции и по-настоящему перевод жетонов заканчивается только тогда, когда третья транзакция завершилась удачно. После 3-й транзакции дополнительно могут быть отправлены 2 сообщения:
+
+1. internal (op::jetton_transfer_notification) -> User_B | If `forward_amount` is set
+2. internal (op::excesses) -> response_destination | If `response_destination` is set
+
+Однако для того, чтобы проверить перевод, нам нужна лишь третья транзакция. Для облегчения примера, допустим, что мы хотим проверять поступающие жетоны на конкретном кошельке `EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX` для жетона USDT:
+
+<Tabs groupId="code-examples">
+<TabItem value="js" label="JavaScript">
+
+<details>
+<summary>
+Source code
+</summary>
+
+```js
+import { Address, TonClient } from '@ton/ton';
+
+// Changed version of
+// https://github.com/ton-org/ton-core/blob/b2e781f67b41958e4fde0440752a27c168602717/src/utils/convert.ts#L69C1-L96C2
+export function fromMicro(src: bigint | number | string) {
+    let v = BigInt(src);
+    let neg = false;
+    if (v < 0) {
+        neg = true;
+        v = -v;
+    }
+
+    // Convert fraction
+    let frac = v % 1000000n;
+    let facStr = frac.toString();
+    while (facStr.length < 6) {
+        facStr = '0' + facStr;
+    }
+    facStr = facStr.match(/^([0-9]*[1-9]|0)(0*)/)![1];
+
+    // Convert whole
+    let whole = v / 1000000n;
+    let wholeStr = whole.toString();
+
+    // Value
+    let value = `${wholeStr}${facStr === '0' ? '' : `.${facStr}`}`;
+    if (neg) {
+        value = '-' + value;
+    }
+
+    return value;
+}
+
+async function main() {
+    const client = new TonClient({
+        endpoint: "https://toncenter.com/api/v2/jsonRPC",
+        apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
+    });
+
+    const address = Address.parse('EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX');
+    const response = await client.getTransactions(address, {
+        limit: 10,
+        archival: true,
+    });
+    
+    for (const transaction of response) {
+        if (transaction.description.type !== 'generic') {
+            continue;
+        }
+        
+        // Check if the compute phase is present and successful
+        if (transaction.description.computePhase.type !== 'vm') {
+            continue;
+        }
+        if (transaction.description.computePhase.exitCode !== 0) {
+            continue;
+        }
+
+        // Check if the action phase is present and successful
+        if (transaction.description.actionPhase && transaction.description.actionPhase.resultCode !== 0) {
+            continue;
+        }
+
+        if (transaction.description.aborted === true) {
+            continue;
+        }
+
+        if (transaction.inMessage.info.type !== 'internal') {
+            continue;
+        }
+
+        const body = transaction.inMessage.body.beginParse();
+        try {
+            /*
+            internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
+                     response_address:MsgAddress
+                     forward_ton_amount:(VarUInteger 16)
+                     forward_payload:(Either Cell ^Cell)
+                     = InternalMsgBody;
+            */
+
+            const op = body.loadUint(32);
+            if (op !== 0x178d4519) { // op::internal_transfer
+                continue;
+            }
+            const queryId = body.loadUintBig(64);
+            const amount = body.loadCoins();
+            const from = body.loadAddress();
+            const responseAddress = body.loadMaybeAddress();
+            const forwardTonAmount = body.loadCoins();
+            const eitherForwardPayload = body.loadBoolean();
+            const forwardPayload = eitherForwardPayload ? body.loadRef() : body.asCell();
+
+            console.log(`Deposit detected:
+    Transaction hash: ${transaction.hash().toString('hex')}
+    Query ID: ${queryId}
+    Amount: ${fromMicro(amount)} USDT
+    From: ${from.toString({ testOnly: true })}
+    Response Address: ${responseAddress ? responseAddress.toString({ testOnly: true }) : 'None'}
+    Forward TON Amount: ${forwardTonAmount.toString()} TON
+    Forward Payload: ${forwardPayload.toBoc().toString('hex')}`);
+        } catch (e) {
+            console.error(`Error processing transaction ${transaction.hash().toString('hex')}:`, e);
+        }
+    }
+}
+
+main().finally(() => console.log("Exiting..."));
+```
+
+</details>
+
+</TabItem>
+</Tabs>
+
+Для начала мы получаем последние 10 транзакций на смарт контракте USDT Jetton Wallet. После этого нам необходимо проверить:
+
+1. Транзакция должна быть обычной, то есть `description.type` должно быть равно `generic`.
+2. Фаза compute должна быть успешной, то есть `description.computePhase.type` должно быть равно `vm` и `description.computePhase.exitCode` должно быть равно 0.
+3. Если фаза action присутствует, то она должна быть успешной, то есть `description.actionPhase.resultCode` должно быть равно 0.
+4. Входящее сообщение должно быть internal, то есть `inMessage.info.type` должно быть равно `internal`.
+5. В теле входящего сообщения должно быть `internal_transfer` операция, то есть `body.loadUint(32)` должно вернуть `0x178d4519`.
+6. Если все проверки пройдены, то мы можем считать, что депозит был успешно зачислен на кошелёк.
+
+Для разбора тела входящего сообещения мы используем TL-B схему из [TEP-0074](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md):
+
+```tlb
+internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
+                     response_address:MsgAddress
+                     forward_ton_amount:(VarUInteger 16)
+                     forward_payload:(Either Cell ^Cell)
+                     = InternalMsgBody;
+```
+
+:::note
+Важно понимать, что это был очень упрощённый пример. В реальных приложениях может быть другая логика обработки депозитов. Для более подробной информации о том, как обрабатывать такие события, вы можете ознакомиться с [отдельной статьёй](/v3/guidelines/dapps/asset-processing/jettons).
 :::
 
 ### Успешность Event в экосистеме: NFT Transfer
 
+TL-B: https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema
 
+todo: В нфт проще, тут лишь нужно заменить поле `owner_address`. Схема для этого следующая:
 
-### Успешность Event в экосистеме: Jetton Transfer
+```tlb
+transfer query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell)  forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)  = InternalMsgBody;
+```
 
+Если был указан `forward_amount`, то:
+
+```tlb
+ownership_assigned query_id:uint64 prev_owner:MsgAddress forward_payload:(Either Cell ^Cell) = InternalMsgBody;
+```
+
+:::note
+advanced: http://localhost:3000/v3/guidelines/dapps/asset-processing/nft-processing/nfts
+:::
 
 ### Как исследовать контракт и его схему в TL-B, чтобы построить логику для анализа успешной операции
 
@@ -1479,3 +2074,173 @@ todo: Здесь про то, что нужно учитывать атаку с
 
 todo: разбор func кода, на основе jetton_transfer определить успешность операции и немного примеров на ts коде
 
+Мы будем юзать следующий код: https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc,
+И эти схемы из спефицикации: https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#tl-b-schema
+
+Рассмотрим опкоды входящие:
+
+```func
+  if (op == op::transfer()) { ;; outgoing transfer
+    send_tokens(in_msg_body, sender_address, msg_value, fwd_fee);
+    return ();
+  }
+
+  if (op == op::internal_transfer()) { ;; incoming transfer
+    receive_tokens(in_msg_body, sender_address, my_balance, fwd_fee, msg_value);
+    return ();
+  }
+```
+
+Разберём отправку. Для начала посмотрим, что представляет с собою входящее сообщение:
+
+```tlb
+transfer query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
+           response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+           forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
+           = InternalMsgBody;
+
+```
+
+Теперь разберём код:
+
+<details>
+<summary>
+
+`send_tokens` function
+
+</summary>
+
+```func
+() send_tokens (slice in_msg_body, slice sender_address, int msg_value, int fwd_fee) impure {
+  int query_id = in_msg_body~load_uint(64);
+  int jetton_amount = in_msg_body~load_coins();
+  slice to_owner_address = in_msg_body~load_msg_addr();
+  force_chain(to_owner_address);
+  (int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();
+  balance -= jetton_amount;
+
+  throw_unless(705, equal_slices(owner_address, sender_address));
+  throw_unless(706, balance >= 0);
+
+  cell state_init = calculate_jetton_wallet_state_init(to_owner_address, jetton_master_address, jetton_wallet_code);
+  slice to_wallet_address = calculate_jetton_wallet_address(state_init);
+  slice response_address = in_msg_body~load_msg_addr();
+  cell custom_payload = in_msg_body~load_dict();
+  int forward_ton_amount = in_msg_body~load_coins();
+  throw_unless(708, slice_bits(in_msg_body) >= 1);
+  slice either_forward_payload = in_msg_body;
+  var msg = begin_cell()
+    .store_uint(0x18, 6)
+    .store_slice(to_wallet_address)
+    .store_coins(0)
+    .store_uint(4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1)
+    .store_ref(state_init);
+  var msg_body = begin_cell()
+    .store_uint(op::internal_transfer(), 32)
+    .store_uint(query_id, 64)
+    .store_coins(jetton_amount)
+    .store_slice(owner_address)
+    .store_slice(response_address)
+    .store_coins(forward_ton_amount)
+    .store_slice(either_forward_payload)
+    .end_cell();
+
+  msg = msg.store_ref(msg_body);
+  int fwd_count = forward_ton_amount ? 2 : 1;
+  throw_unless(709, msg_value >
+                     forward_ton_amount +
+                     ;; 3 messages: wal1->wal2,  wal2->owner, wal2->response
+                     ;; but last one is optional (it is ok if it fails)
+                     fwd_count * fwd_fee +
+                     (2 * gas_consumption() + min_tons_for_storage()));
+                     ;; universal message send fee calculation may be activated here
+                     ;; by using this instead of fwd_fee
+                     ;; msg_fwd_fee(to_wallet, msg_body, state_init, 15)
+
+  send_raw_message(msg.end_cell(), 64); ;; revert on errors
+  save_data(balance, owner_address, jetton_master_address, jetton_wallet_code);
+}
+
+```
+
+</details>
+
+Здесь мы разберём, какое сообщение и в каком виде отправляется получателю и будем отталкиваться от этого. И так же видим, что отправка соответствует схеме TL-B:
+
+```tlb
+transfer_notification query_id:uint64 amount:(VarUInteger 16)
+           sender:MsgAddress forward_payload:(Either Cell ^Cell)
+           = InternalMsgBody;
+```
+
+Теперь разберём получение:
+
+<details>
+<summary>
+
+`receive_tokens` function
+
+</summary>
+
+```func
+
+() receive_tokens (slice in_msg_body, slice sender_address, int my_ton_balance, int fwd_fee, int msg_value) impure {
+  ;; NOTE we can not allow fails in action phase since in that case there will be
+  ;; no bounce. Thus check and throw in computation phase.
+  (int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();
+  int query_id = in_msg_body~load_uint(64);
+  int jetton_amount = in_msg_body~load_coins();
+  balance += jetton_amount;
+  slice from_address = in_msg_body~load_msg_addr();
+  slice response_address = in_msg_body~load_msg_addr();
+  throw_unless(707,
+      equal_slices(jetton_master_address, sender_address)
+      |
+      equal_slices(calculate_user_jetton_wallet_address(from_address, jetton_master_address, jetton_wallet_code), sender_address)
+  );
+  int forward_ton_amount = in_msg_body~load_coins();
+
+  int ton_balance_before_msg = my_ton_balance - msg_value;
+  int storage_fee = min_tons_for_storage() - min(ton_balance_before_msg, min_tons_for_storage());
+  msg_value -= (storage_fee + gas_consumption());
+  if(forward_ton_amount) {
+    msg_value -= (forward_ton_amount + fwd_fee);
+    slice either_forward_payload = in_msg_body;
+
+    var msg_body = begin_cell()
+        .store_uint(op::transfer_notification(), 32)
+        .store_uint(query_id, 64)
+        .store_coins(jetton_amount)
+        .store_slice(from_address)
+        .store_slice(either_forward_payload)
+        .end_cell();
+
+    var msg = begin_cell()
+      .store_uint(0x10, 6) ;; we should not bounce here cause receiver can have uninitialized contract
+      .store_slice(owner_address)
+      .store_coins(forward_ton_amount)
+      .store_uint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+      .store_ref(msg_body);
+
+    send_raw_message(msg.end_cell(), 1);
+  }
+
+  if ((response_address.preload_uint(2) != 0) & (msg_value > 0)) {
+    var msg = begin_cell()
+      .store_uint(0x10, 6) ;; nobounce - int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 010000
+      .store_slice(response_address)
+      .store_coins(msg_value)
+      .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+      .store_uint(op::excesses(), 32)
+      .store_uint(query_id, 64);
+    send_raw_message(msg.end_cell(), 2);
+  }
+
+  save_data(balance, owner_address, jetton_master_address, jetton_wallet_code);
+}
+
+```
+
+</details>
+
+Тут увидем, что происходит во время принятия жетонов. Отсюда будем отталкиваться при проверке успешности операции.
