@@ -1,8 +1,6 @@
-# Составляйте и создавайте смарт-контракты на TON
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Составляйте и создавайте смарт-контракты на TON
 
 Вот список библиотек и репозиториев для создания Вашего смарт-контракта.
 
@@ -115,7 +113,7 @@ if (result.ok) {
 
 ### Обзор
 
-*Кроссплатформенные* привязки для компилятора TON FunC.
+_Кроссплатформенные_ привязки для компилятора TON FunC.
 
 Он более низкоуровневый, чем ton-compiler, поэтому используйте его только в том случае, если ton-compiler Вам не подходит.
 
@@ -193,7 +191,7 @@ async function main() {
 - [ton-community/ton-compiler](https://github.com/ton-community/ton-compiler) - готовый к использованию компилятор FunC для смарт-контрактов TON.
 - [ton-community/func-js](https://github.com/ton-community/func-js) - кроссплатформенные привязки для компилятора TON FunC.
 
-### Сторонние контрибьюторы
+### Third-party contributors
 
 - [grozzzny/ton-compiler-groz](https://github.com/grozzzny/ton-compiler-groz) - компилятор смарт-контрактов TON FunC.
 - [Termina1/tonc](https://github.com/Termina1/tonc) - TONC (компилятор TON). Использует WASM, поэтому идеально подходит для Linux.
@@ -201,5 +199,8 @@ async function main() {
 ## Другие
 
 - [disintar/toncli](https://github.com/disintar/toncli) - один из самых популярных подходов. Вы даже можете использовать его с Docker.
-- [tonthemoon/ton](https://github.com/tonthemoon/ton) - *(закрытая бета)* однострочный установщик бинарных файлов TON.
+- [tonthemoon/ton](https://github.com/tonthemoon/ton) - _(закрытая бета)_ однострочный установщик бинарных файлов TON.
 - [delab-team/tlbcrc](https://github.com/delab-team/tlbcrc) - Пакет и CLI для генерации опкодов по схеме TL-B
+
+<Feedback />
+
