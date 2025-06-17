@@ -1,23 +1,44 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # Обзор
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+На этой странице собраны некоторые рекомендации и лучшие практики, которым можно следовать при разработке новых смарт-контрактов на блокчейне TON. 
 
-На этой странице собраны некоторые рекомендации и лучшие практики, которым можно следовать при разработке новых смарт-контрактов на блокчейне TON.
+## Guides overview
 
-- [Внутренние сообщения](/v3/documentation/smart-contracts/message-management/internal-messages)
-- [Внешние сообщения](/v3/documentation/smart-contracts/message-management/external-messages)
-- [Использование non-bounceable сообщений](/v3/documentation/smart-contracts/message-management/non-bounceable-messages)
-- [Get методы](/v3/guidelines/smart-contracts/get-methods)
-- ["accept_message" effects](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects)
-- [Оплата обработки запросов и отправки ответов] (/v3/documentation/smart-contracts/transaction-fees/forward-fees)
-- [Как и зачем шардировать ваш смарт-контракт TON. Изучение анатомии жетонов TON](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)
-- [Основатели TON Keeper, Олег Андреев и Олег Илларионов, о жетонах TON](https://www.youtube.com/watch?v=oEO29KmOpv4)
+### Smart contract development
 
-Также есть полезная [документация по смарт-контрактам](/v3/documentation/smart-contracts/overview).
+| Guide                                                                                                                        | Stack                            | Description                                                       |
+| ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------------------------- |
+| [TON Hello world](https://helloworld.tonstudio.io/01-wallet/)                                                                | FunC; TS, @ton/ton               | Write and deploy your first contract.                             |
+| [Оплата обработки запросов и отправки ответов] (/v3/documentation/smart-contracts/transaction-fees/forward-fees)             | FunC; TS, @ton/ton               | Learn in detail interaction with various wallets smart contracts. |
+| [Speedrun TON](https://tonspeedrun.tapps.ninja/)                                                                             | FunC; TS, @ton/ton               | Learn contract development with series of guidelines.             |
+| [Внешние сообщения](/v3/documentation/smart-contracts/message-management/external-messages)                                  | TS, @ton/ton                     | Learn how to write and invoke local tests for contract.           |
+| [Shard optimizations on TON](/v3/guidelines/smart-contracts/howto/shard-optimization/)                                       | TS, @ton/ton                     | Learn best practice for contract shard optimization.              |
+| ["accept_message" effects](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects)                        | TS, @ton/ton                     | Learn how to write various test suites for edge cases.            |
+| [Interact with multisig wallets using TypeScript](/v3/guidelines/smart-contracts/howto/multisig-js)                          | TS, @ton/ton                     | Learn how to interact to multisig wallet in TON.                  |
+
+### Scalability and security
+
+| Guide                                                                                                                                                     | Stack                   | Description                                                                      |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------- |
+| Изучение анатомии жетонов TON](https://blog.ton.org/how-to-shard-your-ton-smart-contract-and-why-studying-the-anatomy-of-tons-jettons)                    | Design and architecture | Learn concept of contract system with jetton standard                            |
+| [Airdrop claiming guidelines](/v3/guidelines/smart-contracts/howto/airdrop-claim-best-practice/)                                                          | Design and architecture | Learn concepts on contract interactions and their impact on overall performance. |
+| [Основатели TON Keeper, Олег Андреев и Олег Илларионов, о жетонах TON](https://www.youtube.com/watch?v=oEO29KmOpv4)                                       | FunC                    | Best practices for DApps development in TON.                                     |
+| [Внутренние сообщения](/v3/documentation/smart-contracts/message-management/internal-messages)                                                            | FunC                    | Best practices for secure development of smart contracts on FunC.                |
+| [Drawing conclusions from TON hack challenge](/v3/guidelines/smart-contracts/security/ton-hack-challenge-1/)                                              | FunC                    | Best practices for secure development                                            |
+| [Random number generation](/v3/guidelines/smart-contracts/security/random-number-generation/)                                                             | FunC                    | Generating random numbers in TON for various projects.                           |
+
+### Advanced
+
+| Guide                                                                                                                                                                             | Stack                    | Description                                                                              |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ | ---------------------------------------------------------------------------------------- |
+| [Generation of block random seed](/v3/guidelines/smart-contracts/security/random/)                                                                                                | C++, Core                | Explanation on random in TON.                                                            |
+| [Get методы](/v3/guidelines/smart-contracts/get-methods)                                                                                                                          | C++, cmake, Core         | Compile executables from source for deep native integration.                             |
+| [Instructions for low-memory machines](/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory/)                                                                     | С++                      | Extension for compilation on low-memory machines.                                        |
+| [Использование non-bounceable сообщений](/v3/documentation/smart-contracts/message-management/non-bounceable-messages)                                                            | Fift, Lite Client        | This tutorial will help you learn how to deploy your multisig contract with Lite Client. |
 
 ## Курс TON: Разработка контрактов
 
@@ -46,3 +67,9 @@ CHN
 RU
 
 </Button>
+
+## See also
+
+- Также есть полезная [документация по смарт-контрактам](/v3/documentation/smart-contracts/overview).
+
+<Feedback />
