@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 免铸造 jetton 处理
 
 ## 简介
@@ -22,38 +24,41 @@ TON区块链生态系统推出了对Jetton标准的创新扩展，名为 [Mintle
 - **效率**：通过利用默克尔树，免铸造 jetton 只存储代表所有空投数量的单一哈希值，从而降低了存储需求。
 - **方便用户的空投**：用户无需任何准备步骤（如提款或索赔），即可立即使用他们的空投--发送、交换等。它就是这么好用！
 
-## 在链上协议中支持 免铸造 jetton 
+## 在链上协议中支持 免铸造 jetton
 
 由于免铸造 jetton是标准套币的延伸，因此不需要额外的步骤。只需像使用 USDT、NOT、Scale 或 STON 一样与它们互动即可。
 
-## 在钱包应用中支持无 免铸造 jetton 
+## 在钱包应用中支持无 免铸造 jetton
 
 钱包应用程序在增强用户对免铸造 jetton的体验方面发挥着重要作用：
 
 - **显示未领取的Jettons**: 钱包应该向用户展示他们根据Merkle树数据有资格领取的jettons。
 - **自动领取过程**：在发起向外转账时，钱包应自动在 `transfer` 信息的自定义有效载荷中包含必要的 Merkle 证明。
 
-这可以通过以下两种方式实现
+Wallets can achieve this by:
 
-- 与 **[自定义有效载荷 API](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain)** 中指定的链外 API 集成：
-  - 检查每个 jetton 是否是免铸造的。
-  - 如果是免铸造的，请检查钱包的主人是否已经认领。
-  - 如果还未认领，则从自定义负载 API 获取数据，并将链下余额添加到链上余额中。
-  - 在向外转账时，如果用户尚未领取空投，则从自定义有效载荷 API 获取自定义有效载荷和初始状态，并将其包含在发送至 jetton 钱包的 `transfer` 信息中。
+与 **[自定义有效载荷 API](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain)** 中指定的链外 API 集成：
 
-- 自定义 API：
-  - 从 jetton 元数据中的 `mintless_merkle_dump_uri` 下载空投的树。
-  - 对其进行解析（见下文第 6 节），并通过应用程序接口提供解析结果。
+- 检查每个 jetton 是否是免铸造的。
+- Verify whether the wallet owner has claimed it.
+- 如果还未认领，则从自定义负载 API 获取数据，并将链下余额添加到链上余额中。
+- 在向外转账时，如果用户尚未领取空投，则从自定义有效载荷 API 获取自定义有效载荷和初始状态，并将其包含在发送至 jetton 钱包的 `transfer` 信息中。
+
+自定义 API：
+
+- 从 jetton 元数据中的 `mintless_merkle_dump_uri` 下载空投的树。
+- Parse the data as explained in section 6 below.
+- Make the parsed result available via API.
 
 :::info
-支持免铸造领取（特别是空投树索引）并非钱包的强制性要求。预计钱包应用程序可能会向 jetton 发行商收取此项服务费用。
+Wallets are not required to support mintless claims, including indexing airdrop trees. Wallet applications may charge the jetton issuer for this service.
 :::
 
-## 支持 dApp（DEX/借贷平台）中的免铸造 jetton 
+## 支持 dApp（DEX/借贷平台）中的免铸造 jetton
 
-由于认领是在钱包应用程序中自动进行的，因此 dApp 不需要任何特定的逻辑。它们可以使用应用程序接口（如 Tonapi 或 Toncenter）显示还未领取的余额。
+由于认领是在钱包应用程序中自动进行的，因此 dApp 不需要任何特定的逻辑。它们可以使用应用程序接口（如 Tonapi 或 Toncenter）显示还未领取的余额。 dApps can use APIs (such as TonAPI or Ton Center API) to display unclaimed balances.
 
-为提升用户体验，dApp 可检查用户用于连接 dApp 的钱包应用程序是否支持特定的免铸造 jetton。如果不支持，dApp 可从 jetton 应用程序接口获取空投证明和初始化数据，并将其添加到 dApp 端的 `transfer` 消息中。
+为提升用户体验，dApp 可检查用户用于连接 dApp 的钱包应用程序是否支持特定的免铸造 jetton。如果不支持，dApp 可从 jetton 应用程序接口获取空投证明和初始化数据，并将其添加到 dApp 端的 `transfer` 消息中。 If unsupported, retrieve the airdrop proof and initialization data from the jetton API and include it in the transfer message.
 
 ## 部署 免铸造 jetton
 
@@ -82,19 +87,19 @@ TON区块链生态系统推出了对Jetton标准的创新扩展，名为 [Mintle
 
 - 要求所需的钱包应用程序支持（索引）您的免铸造 Jetton。
 
-按照这些步骤，您就可以部署一个用户可以在日常操作中无缝领取的免铸造 Jetton。
+By following these steps, you can deploy a mintless jetton that users can seamlessly claim during regular transactions.
 
 ## 检索空投信息
 
 审核空投和核实总供应量包括几个步骤。
 
-### 访问默克尔数据集
+### Accessing the merkle dump
 
-- 首先从元数据中提供的 `mintless_merkle_dump_uri` 下载 Merkle 树数据。它可以存储在 TON 存储器、IPFS、Web 2.0 资源或其他方式中。该文件包含作为 BoC 文件的 `HashMap{address -> airdrop_data}`。空投数据 "包括领取金额、可领取开始时间的 Unix 时间戳（`start_from`）和领取关闭的 Unix 时间戳（`expired_at`）。
+- Download the merkle tree data from the `mintless_merkle_dump_uri` in the metadata. It can be stored in TON Storage, IPFS, a web 2.0 resource, or other formats. This file contains `HashMap{address -> airdrop_data}` as a BoC file. The `airdrop_data` includes the amount, Unix timestamp from which the claim is available (`start_from`), and Unix timestamp when the claim expires (`expired_at`).
 
 ### 检查完整性
 
-- 这可以通过比较免铸造默克尔转储 cell 哈希值和存储在 jetton minter中的哈希值来实现（后者可以通过 minter 合约的 `get_mintless_airdrop_hashmap_root` 获取方法在链上检索）。
+- Compare the mintless merkle dump cell hash with the hash stored in the jetton minter. 这可以通过比较免铸造默克尔转储 cell 哈希值和存储在 jetton minter中的哈希值来实现（后者可以通过 minter 合约的 `get_mintless_airdrop_hashmap_root` 获取方法在链上检索）。
 
 ### 核实余额
 
@@ -147,7 +152,7 @@ build/crypto/mintless-proof-generator parse <input-boc> <output-file>
 
 ### mintless-toolbox (from Tonkeeper)
 
-1. **编译程序**：
+1. **运行检查**：
 
 ```bash
 git clone https://github.com/tonkeeper/mintless-toolbox.git
@@ -161,7 +166,7 @@ cd mintless-toolbox
 make
 ```
 
-2. **运行检查**：
+2. **编译程序**：
 
 ```bash
 ./bin/mintless-cli dump <airdrop-filename>
@@ -173,7 +178,9 @@ make
 
 ## 结论
 
-免铸造 jetton 为 TON 区块链上的大规模代币空投提供了一种高效、可扩展的解决方案。通过扩展标准 Jetton 实现，它们降低了成本和区块链负载，同时保持了安全性和去中心化。在智能合约、钱包应用和 dApp 中支持 免铸造 Jettons 可确保用户获得无缝体验，并促进更广泛的应用。部署和审核免铸造 Jettons 需要仔细实施Merkle树并遵守扩展标准，从而为建立一个强大而透明的代币生态系统做出贡献。
+Mintless jettons provide an efficient and scalable solution for large-scale token airdrops on TON Blockchain. By extending the standard jetton implementation, they reduce costs and blockchain load while maintaining security and decentralization.
+
+Supporting mintless jettons across smart contracts, wallet applications, and dApps ensures a seamless user experience and drives adoption. Deploying and auditing mintless jettons requires careful implementation of merkle trees and compliance with extended standards, contributing to a transparent and robust token ecosystem.
 
 ## 另请参见
 
@@ -181,3 +188,5 @@ make
 - [免铸造 jetton 标准实施](https://github.com/ton-community/mintless-jetton)
 - [Jetton 链下有效载荷TEP](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain)
 - [Jetton元数据标准](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md)
+
+<Feedback />
