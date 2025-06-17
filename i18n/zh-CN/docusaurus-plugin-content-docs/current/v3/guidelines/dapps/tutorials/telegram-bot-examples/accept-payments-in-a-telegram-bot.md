@@ -2,7 +2,13 @@
 description: 在这篇文章中，我们将引导你完成在 Telegram 机器人中接受付款的过程。
 ---
 
+import Feedback from '@site/src/components/Feedback';
+
 # 使用 TON 的商店机器人
+
+:::caution
+The integration method described in this guide is one of the available approaches. With ongoing developments, Telegram Mini Apps provide additional capabilities that better suit modern security and functionality requirements.
+:::
 
 在这篇文章中，我们将引导你完成在 Telegram 机器人中接受付款的过程。
 
@@ -13,8 +19,7 @@ description: 在这篇文章中，我们将引导你完成在 Telegram 机器人
 - 使用 Python + Aiogram 创建一个 Telegram 机器人
 - 使用公开的 TON API（TON Center）
 - 使用 SQlite 数据库
-
-最后：通过前面步骤的知识，在 Telegram 机器人中接受付款。
+- 最后：通过前面步骤的知识，在 Telegram 机器人中接受付款。
 
 ## 📚 在我们开始之前
 
@@ -60,9 +65,9 @@ telegram-bot
 
 在 `config.json` 中，我们决定我们将使用哪个网络：`testnet` 或 `mainnet`。
 
-## 数据库
+## 创建数据库
 
-### 创建数据库
+### 数据库
 
 这个示例使用本地 Sqlite 数据库。
 
@@ -89,7 +94,7 @@ cur = locCon.cursor()
 
 如果数据库不存在，将会自动创建。
 
-现在我们可以创建表格了。我们有两个表格。
+We need two tables:
 
 #### 交易：
 
@@ -126,10 +131,11 @@ CREATE TABLE users (
 - `wallet`—用户钱包地址
 
 在 `users` 表中，我们存储用户 :) 他们的 Telegram ID、@username、
-名字和钱包。第一次成功付款时，钱包将被添加到数据库中。
+名字和钱包。第一次成功付款时，钱包将被添加到数据库中。 The wallet is added to the database upon the first
+successful payment.
 
-`transactions` 表存储已验证的交易。
-要验证交易，我们需要哈希、来源、值和备注。
+The `transactions` table stores verified transactions.
+To verify a transaction, we need a unique transaction hash, source, value, and comment.
 
 要创建这些表格，我们需要运行以下函数：
 
@@ -157,12 +163,13 @@ locCon.commit()
 
 ### 使用数据库
 
-让我们分析一种情况：
+Let's analyze the process:
+A user makes a transaction. How do we verify it? 让我们分析一种情况：
 用户进行了一笔交易。我们如何验证它？我们如何确保同一笔交易不被二次确认？
 
 交易中有一个 body_hash，通过它我们可以轻松地了解数据库中是否存在该交易。
 
-我们只添加我们确定的交易到数据库。`check_transaction` 函数检查数据库中是否存在找到的交易。
+We only add transactions that have been verified. 我们只添加我们确定的交易到数据库。`check_transaction` 函数检查数据库中是否存在找到的交易。
 
 `add_v_transaction` 将交易添加到交易表。
 
@@ -197,7 +204,7 @@ def check_user(user_id, username, first_name):
     return True
 ```
 
-用户可以在表中存储一个钱包。它是在第一次成功购买时添加的。`v_wallet` 函数检查用户是否有关联的钱包。如果有，则返回它。如果没有，则添加。
+The user can store a wallet in the table. It is added with the first successful purchase. 用户可以在表中存储一个钱包。它是在第一次成功购买时添加的。`v_wallet` 函数检查用户是否有关联的钱包。如果有，则返回它。如果没有，则添加。 If not, it adds the wallet upon the user's first successful purchase.
 
 ```python
 def v_wallet(user_id, wallet):
@@ -223,6 +230,7 @@ def get_user_wallet(user_id):
 
 `get_user_payments` 返回用户的支付列表。
 这个函数检查用户是否有钱包。如果有，则返回支付列表。
+This function checks if the user has a wallet. If they do, it provides the list of their payments.
 
 ```python
 def get_user_payments(user_id):
@@ -250,7 +258,7 @@ def get_user_payments(user_id):
 
 ## API
 
-*我们有能力使用一些网络成员提供的第三方 API 与区块链进行交互。通过这些服务，开发者可以跳过运行自己的节点和自定义 API 的步骤。*
+_我们有能力使用一些网络成员提供的第三方 API 与区块链进行交互。通过这些服务，开发者可以跳过运行自己的节点和自定义 API 的步骤。_ These services allow developers to bypass the need their own node and customize their API._
 
 ### 需要的请求
 
@@ -258,18 +266,20 @@ def get_user_payments(user_id):
 
 我们只需要查看我们钱包的最新进账转账，并在其中找到一笔来自正确地址、正确金额的交易（可能还有一个独特的备注）。
 为了所有这一切，TON Center 有一个 `getTransactions` 方法。
+For this, TON Center provides the `getTransactions` method.
 
 ### getTransactions
 
-默认情况下，如果我们使用它，我们将获得最后 10 条交易。然而，我们也可以表示我们需要更多，但这会略微增加响应时间。而且，很有可能，你不需要那么多。
+By default, this method retrieves the last 10 transactions. However, we can request more, though this slightly increases the response time. In most cases, requestin additional transactions is unnecessary.
 
-如果您想要更多，那么每笔交易都有 `lt` 和 `hash`。您可以查看例如 30 条交易，如果没在其中找到正确的一笔，那么取最后一笔的 `lt` 和 `hash` 添加到请求中。
+If more transactions are required, each transaction includes `lt` and `hash`. We can fetch, for example, the last 30 transactions. If the required transaction is not found, we can take `lt` and `hash` of the last transaction in the list and include them in a new request.
 
 这样您就可以得到下一个 30 条交易，以此类推。
 
 例如，测试网络中有一个钱包 `EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5`，它有一些交易：
 
-使用[查询](https://testnet.toncenter.com/api/v2/getTransactions?address=EQAVKMzqtrvNB2SkcBONOijadqFZ1gMdjmzh1Y3HB1p_zai5\\&limit=2\\&to_lt=0\\&archival=true) 我们将得到包含两笔交易的响应（现在不需要的一些信息已经被隐藏，完整答案可以在上面的链接中看到）。
+使用查询 我们将得到包含两笔交易的响应（现在不需要的一些信息已经被隐藏，完整答案可以在上面的链接中看到）。
+Note that some details have been omitted for clarity.
 
 ```json
 {
@@ -311,7 +321,7 @@ def get_user_payments(user_id):
 }
 ```
 
-我们从这个地址收到了最后两笔交易。当添加 `lt` 和 `hash` 到查询中时，我们将再次收到两笔交易。然而，第二笔将成为下一笔连续的交易。也就是说，我们将获得这个地址的第二笔和第三笔交易。
+By adding `lt` and `hash` to the query, we can retrieve the next two two transactions in sequence. That is, instead of getting the first and second transactions, we will receive the second and third.
 
 ```json
 {
@@ -353,7 +363,7 @@ def get_user_payments(user_id):
 
 我们还需要一个方法 `detectAddress`。
 
-这是测试网上的 Tonkeeper 钱包地址的一个例子：`kQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aCTb`。如果我们在浏览器中查找交易，代替上述地址，有：`EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R`。
+这是测试网上的 Tonkeeper 钱包地址的一个例子：`kQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aCTb`。如果我们在浏览器中查找交易，代替上述地址，有：`EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R`。 If we look for the transaction in the explorer, the address appears as: `EQCzQJJBAQ-FrEFcvxO5sNxhV9CaOdK9CCfq2yCBnwZ4aJ9R`.
 
 这个方法返回给我们“正确”的地址。
 
@@ -376,8 +386,6 @@ def get_user_payments(user_id):
 ```
 
 我们需要 `b64url`。
-
-这个方法让我们能够验证用户的地址。
 
 大部分而言，这就是我们所需要的。
 
@@ -448,7 +456,7 @@ def detect_address(address):
 
 在输入中，我们有预计的地址，输出要么是我们需要的“正确”地址，以便进行进一步的工作，要么是 False。
 
-你可能会注意到请求末尾出现了 API 密钥。它是为了移除对 API 请求数量的限制。没有它，我们被限制为每秒一个请求。
+你可能会注意到请求末尾出现了 API 密钥。它是为了移除对 API 请求数量的限制。没有它，我们被限制为每秒一个请求。 It is needed to remove the limit on the number of requests to the API. Without it, we are limited to one request per second.
 
 这里是 `getTransactions` 的下一个函数：
 
@@ -462,10 +470,9 @@ def get_address_transactions():
 
 此函数返回最后 30 次对我们 `WALLET` 的交易。
 
-这里可以看到 `archival=true`。这是因为我们只需要从具有完整区块链历史记录的节点获取交易。
+The `archival=true` parameter ensures that transactions are retrieved from a node with a complete blockchain history.
 
 在输出中，我们获得一个交易列表—[{0},{1},…,{29}]。简而言之，是字典列表。
-
 最后一个函数：
 
 ```python
@@ -497,7 +504,7 @@ def find_transaction(user_wallet, value, comment):
     return False
 ```
 
-输入是“正确”的钱包地址、金额和评论。如果找到预期的进账交易，输出为 True；否则为 False。
+输入是“正确”的钱包地址、金额和评论。如果找到预期的进账交易，输出为 True；否则为 False。 If the expected incoming transaction is found, the output is True; otherwise, it is False.
 
 ## Telegram 机器人
 
@@ -523,7 +530,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 ```
 
-`json` 用来处理 json 文件。`logging` 用来记录错误。
+`json` 用来处理 json 文件。`logging` 用来记录错误。 `logging` is needed to log errors.
 
 ```python
 import json
@@ -552,7 +559,7 @@ import api
 }
 ```
 
-#### 机器人令牌
+#### Bot token
 
 `BOT_TOKEN` 是你的 Telegram 机器人令牌，来自 [@BotFather](https://t.me/BotFather)
 
@@ -568,8 +575,6 @@ import api
 - 对于测试网 — [@tontestnetapibot](https://t.me/tontestnetapibot)
 
 #### 将配置连接到我们的机器人
-
-接下来，我们完成机器人设置。
 
 从 `config.json` 获取机器人工作所需的令牌：
 
@@ -621,15 +626,15 @@ class DataInput (StatesGroup):
 - `message_handler` 用于处理用户消息。
 - `callback_query_handler` 用于处理来自内联键盘的回调。
 
-如果我们想处理用户的消息，我们将使用 `message_handler` 并在函数上方放置 `@dp.message_handler` 装饰器。在这种情况下，当用户向机器人发送消息时，将调用该函数。
+如果我们想处理用户的消息，我们将使用 `message_handler` 并在函数上方放置 `@dp.message_handler` 装饰器。在这种情况下，当用户向机器人发送消息时，将调用该函数。 In this case, the function will be called when the user sends a message to the bot.
 
-在装饰器中，我们可以指定将在何种条件下调用该函数。例如，如果我们想要在用户发送文本 `/start` 的消息时调用函数，那么我们将编写以下内容：
+In the decorator, we can specify the conditions under which the function will be called. 在装饰器中，我们可以指定将在何种条件下调用该函数。例如，如果我们想要在用户发送文本 `/start` 的消息时调用函数，那么我们将编写以下内容：
 
 ```
 @dp.message_handler(commands=['start'])
 ```
 
-处理器需要分配给一个异步函数。在这种情况下，我们将使用 `async def` 语法。`async def` 语法用于定义将异步调用的函数。
+Handlers need to be assigned to an async function. In this case, we will use  `async def` syntax. 处理器需要分配给一个异步函数。在这种情况下，我们将使用 `async def` 语法。`async def` 语法用于定义将异步调用的函数。
 
 #### /start
 
@@ -652,9 +657,9 @@ async def cmd_start(message: types.Message):
     await DataInput.firstState.set()
 ```
 
-在此处理器的装饰器中，我们看到 `state='*'`。这意味着无论机器人的状态如何，该处理器都将被调用。如果我们希望处理器仅在机器人处于特定状态时调用，我们将编写 `state=DataInput.firstState`。在这种情况下，处理器仅在机器人处于 `firstState` 状态时被调用。
+In the decorator of a handler, you may see `state='*'`, meaning the handler will be triggered regardless of the bot's state. If we want the handler to activate only in a specific state, we specify it, such as `state=DataInput.firstState`, ensuring the handler runs only when the bot is in `firstState`.
 
-用户发送 `/start` 命令后，机器人将使用 `db.check_user` 函数检查用户是否在数据库中。如果不是，它将添加他。此函数还将返回布尔值，我们可以使用它以不同的方式对待用户。之后，机器人将设置状态为 `firstState`。
+用户发送 `/start` 命令后，机器人将使用 `db.check_user` 函数检查用户是否在数据库中。如果不是，它将添加他。此函数还将返回布尔值，我们可以使用它以不同的方式对待用户。之后，机器人将设置状态为 `firstState`。 If not, it will add him. This function will also return the bool value and we can use it to address the user differently. After that, the bot will set the state to `firstState`.
 
 #### /cancel
 
@@ -670,7 +675,7 @@ async def cmd_cancel(message: types.Message):
 
 #### /buy
 
-当然还有 `/buy` 命令处理器。在这个示例中我们将出售不同类型的空气。我们将使用reply keyboard来选择air types。
+And, of course, there is a `/buy` command handler. 当然还有 `/buy` 命令处理器。在这个示例中我们将出售不同类型的空气。我们将使用reply keyboard来选择air types。
 
 ```python
 # /buy command handler
@@ -687,11 +692,11 @@ async def cmd_buy(message: types.Message):
     await DataInput.secondState.set()
 ```
 
-所以，当用户发送 `/buy` 命令时，机器人发送一个reply keyboard给他，上面有air type。用户选择air type后，机器人将设置状态为 `secondState`。
+所以，当用户发送 `/buy` 命令时，机器人发送一个reply keyboard给他，上面有air type。用户选择air type后，机器人将设置状态为 `secondState`。 After the user chooses the type of air, the bot will set the state to `secondState`.
 
-此处理器将仅在 `secondState` 被设置时工作，并将等待用户发送air type的消息。在这种情况下，我们需要存储用户选择的air type，因此我们将 FSMContext 作为参数传递给函数。
+This handler will work only when `secondState` is set and will be waiting for a message from the user with the air type.  此处理器将仅在 `secondState` 被设置时工作，并将等待用户发送air type的消息。在这种情况下，我们需要存储用户选择的air type，因此我们将 FSMContext 作为参数传递给函数。
 
-FSMContext 用于在机器人的内存中存储数据。我们可以在其中存储任何数据，但这个内存不是持久的，所以如果机器人重启，数据将会丢失。但它很适合存储临时数据。
+FSMContext 用于在机器人的内存中存储数据。我们可以在其中存储任何数据，但这个内存不是持久的，所以如果机器人重启，数据将会丢失。但它很适合存储临时数据。 We can store any data in it but this memory is not persistent, so if the bot is restarted, the data will be lost. But it's good to store temporary data in it.
 
 ```python
 # handle air type
@@ -719,15 +724,15 @@ async def air_type(message: types.Message, state: FSMContext):
 await state.update_data(air_type="Just pure 🌫")
 ```
 
-...在 FSMContext 中存储air type之后，我们设置状态为 `WalletState` 并要求用户发送他的钱包地址。
+...to store the air type in FSMContext. After that, we set the state to `WalletState` and ask the user to send their wallet address.
 
 此处理器将仅在 `WalletState` 被设置时工作，并将等待用户发送钱包地址的消息。
 
-下一个处理器看起来可能非常复杂，但实际上并不难。首先，我们使用 `len(message.text) == 48` 检查消息是否是有效的钱包地址，因为钱包地址长 48 个字符。之后，我们使用 `api.detect_address` 函数检查地址是否有效。如你从 API 部分记得的那样，这个函数还返回 "正确" 地址，它将被存储在数据库中。
+Consider the next handler. It may seem complex, but it isn’t. First, we verify whether the message contains a wallet address of the correct length using `len(message.text) == 48`. Then, we call the `api.detect_address` function to validate the address. This function also returns the standardized _correct_ address, which is stored in the database.
 
 之后，我们使用 `await state.get_data()` 从 FSMContext 获取air type并将其存储在 `user_data` 变量中。
 
-现在我们有了付款过程所需的所有数据。我们只需要生成一个付款链接并发送给用户。让我们使用inline keyboard。
+Now we have all the data required for the payment process. We just need to generate a payment link and send it to the user. Let's use the inline keyboard.
 
 在此示例中，将为付款创建三个按钮：
 
@@ -737,7 +742,7 @@ await state.update_data(air_type="Just pure 🌫")
 
 对于钱包的特殊按钮的优点是，如果用户尚未拥有钱包，则网站将提示他安装一个。
 
-你可以随意使用你想要的内容。
+You are free to use whatever you want.
 
 我们还需要一个用户付款后按下的按钮，这样我们就可以检查支付是否成功。
 
@@ -777,7 +782,7 @@ async def user_wallet(message: types.Message, state: FSMContext):
 
 #### /me
 
-我们需要的最后一个消息处理器是 `/me` 命令。它显示用户的支付信息。
+One last message handler is `/me`. It shows the user's payments.
 
 ```python
 # /me command handler
@@ -796,9 +801,11 @@ async def cmd_me(message: types.Message):
 
 ### 回调处理器(Callback handlers)
 
-我们可以在按钮中设置回调数据，当用户按下按钮时，这些数据将被发送给机器人。在用户交易后按下的按钮中，我们设置回调数据为 "check"。因此，我们需要处理这个回调。
+Callback data is embedded in buttons, allowing the bot to recognize user actions.
 
-回调处理器与消息处理器非常相似，但它们有 `types.CallbackQuery` 作为参数，而不是 `message`。函数装饰器也有所不同。
+For example, the “Payment Confirmed” button sends the callback "check", which the bot must process.
+
+回调处理器与消息处理器非常相似，但它们有 `types.CallbackQuery` 作为参数，而不是 `message`。函数装饰器也有所不同。 Function decorator is also different.
 
 ```python
 @dp.callback_query_handler(lambda call: call.data == "check", state=DataInput.PayState)
@@ -818,7 +825,7 @@ async def check_transaction(call: types.CallbackQuery, state: FSMContext):
         await DataInput.firstState.set()
 ```
 
-在此处理器中，我们从 FSMContext 获取用户数据并使用 `api.find_transaction` 函数检查交易是否成功。如果成功，我们将钱包地址存储在数据库中，并向用户发送通知。此后，用户可以使用 `/me` 命令查找他的交易。
+在此处理器中，我们从 FSMContext 获取用户数据并使用 `api.find_transaction` 函数检查交易是否成功。如果成功，我们将钱包地址存储在数据库中，并向用户发送通知。此后，用户可以使用 `/me` 命令查找他的交易。 If so, the wallet address is stored in the database, and the bot notifies the user. After that, the user can check their transaction anytime using `/me`.
 
 ### main.py 的最后一部分
 
@@ -829,8 +836,9 @@ if __name__ == '__main__':
     executor.start_polling(dp, skip_updates=True)
 ```
 
+This part is needed to start the bot.
 这部分需要启动机器人。
-在 `skip_updates=True` 中，我们指定我们不想处理旧消息。但如果您想处理所有消息，可以将其设置为 `False`。
+在 `skip_updates=True` 中，我们指定我们不想处理旧消息。但如果您想处理所有消息，可以将其设置为 `False`。 But if you want to process all messages, you can set it to `False`.
 
 :::info
 
@@ -838,22 +846,22 @@ if __name__ == '__main__':
 
 :::
 
-## 机器人动起来
+## Bot in action
 
-我们终于做到了！现在你应该有一个工作中的机器人。你可以测试它！
+Congratulations! The bot is ready. You can test it!
 
 运行机器人的步骤：
 
 1. 填写 `config.json` 文件。
 2. 运行 `main.py`。
 
-所有文件必须在同一个文件夹中。要启动机器人，您需要运行 `main.py` 文件。您可以在 IDE 或终端中这样做：
+All files must be in the same folder. 所有文件必须在同一个文件夹中。要启动机器人，您需要运行 `main.py` 文件。您可以在 IDE 或终端中这样做： You can do it in your IDE or in the terminal like this:
 
 ```
 python main.py
 ```
 
-如果您遇到任何错误，可以在终端中检查。也许您在代码中漏掉了一些东西。
+如果您遇到任何错误，可以在终端中检查。也许您在代码中漏掉了一些东西。 Maybe you have missed something in the code.
 
 工作中的机器人示例[@AirDealerBot](https://t.me/AirDealerBot)
 
@@ -863,3 +871,6 @@ python main.py
 
 - 作为 [ton-footsteps/8](https://github.com/ton-society/ton-footsteps/issues/8) 的一部分
 - 由 Lev 制作（[Telegram @Revuza](https://t.me/revuza), [LevZed on GitHub](https://github.com/LevZed)）
+
+<Feedback />
+
