@@ -1,63 +1,63 @@
-# 通过 TON 代理连接
+import Feedback from '@site/src/components/Feedback';
 
-TON代理与常规HTTP代理兼容，因此您可以直接在浏览器或操作系统设置中使用它。
+# Connect with TON Proxy
+
+TON Proxy is fully compatible with standard HTTP proxy settings so that you can configure it directly through your browser or operating system.
 
 ## Google Chrome
 
-根据您的操作系统，遵循Windows、macOS、Linux、iOS或Android的说明。
+Follow the instructions specific to your device’s operating system: Windows, macOS, Linux, iOS, or Android.
 
 ## Firefox
 
-设置 -> 常规 -> 网络设置 -> 配置 -> 手动代理设置 -> HTTP代理
-
-根据您的操作系统，遵循Windows、macOS、Linux、iOS或Android的说明。
-
-点击“确定”。
+1. Go to **Settings → General → Network Settings → Configure**.
+2. Choose a "Manual proxy settings".
+3. In the "HTTP Proxy" field, enter the address of a public entry proxy.
+4. In the "Port" field, enter "8080" without quotes.
+5. Click "OK".
 
 ## Safari
 
-在“HTTP代理”字段中，输入其中一个公共入口代理的地址，在“端口”字段中，输入“8080”（不带引号）。
+Follow the instructions for Windows, macOS, Linux, iOS, or Android, depending on your operating system.
 
 ## iOS
 
-设置 -> WiFi -> 点击当前连接的网络 -> 代理设置 -> 手动
-
-根据您的操作系统，遵循Windows、macOS、Linux、iOS或Android的说明。
-
-点击“保存”。
+1. Go to **Settings → Wi-Fi**.
+2. Tap your currently connected network.
+3. Scroll to "HTTP Proxy" and choose "Manual".
+4. In the "Server" field, enter the address of a public entry proxy.
+5. In the "Port" field, enter "8080" without quotes.
+6. Tap "Save".
 
 ## Android
 
-在“服务器”字段中，输入其中一个公共入口代理的地址，在“端口”字段中，输入“8080”（不带引号）。
-
-点击“保存”。
-
-点击“保存”。
+1. Go to **Settings → Wi-Fi**.
+2. Tap and hold the Wi-Fi network name.
+3. Select **Modify Network → Advanced Options → Manual**.
+4. In the "Server" field, enter the address of a public entry proxy.
+5. In the "Port" field, enter "8080" without quotes.
+6. Tap "Save".
 
 ## Windows
 
-在“服务器”字段中，输入其中一个公共入口代理的地址，在“端口”字段中，输入“8080”（不带引号）。
+1. Click the "Start" button and select **Settings → Network & Internet → Proxy**.
+2. Under "Manual proxy setup", next to "Use a proxy server", select "Set up".
+3. Turn on "Use a proxy server".
+4. Enter the address of one of the public entry proxies, in the "Port" field, and enter "8080" without quotes.
+5. Click "Save".
 
-点击“保存”。
+## macOS
 
-在“编辑代理服务器对话框”中，执行以下操作：
-
-点击“开始”按钮，然后选择设置 > 网络和互联网 > 代理。
-
-在“手动代理设置”下，旁边的“使用代理服务器”选择“设置”。
-
-在“编辑代理服务器对话框”中，执行以下操作：
-
-## MacOS
-
-输入其中一个公共入口代理的地址，在“端口”字段中，输入“8080”（不带引号）。
-
-点击“保存”。
-
-点击“确定”。
+1. Go to **Settings → Network → Advanced → Web proxy (HTTP)**.
+2. In the "Web proxy server" field, enter the address of one of the public entry proxies; after the colon, enter "8080" without quotes.
+3. Click "OK".
 
 ## Ubuntu
 
-在“网络代理服务器”字段中，输入其中一个公共入口代理的地址，冒号后面输入“8080”（不带引号）。
+1. Go to **Settings → Network**.
+2. Click **Network Proxy → Manual**.
+3. In the "HTTP Proxy" field, enter the address of one of the public entry proxies.
+4. For the port, enter "8080" without quotes.
 
-点击“确定”。
+<Feedback />
+
