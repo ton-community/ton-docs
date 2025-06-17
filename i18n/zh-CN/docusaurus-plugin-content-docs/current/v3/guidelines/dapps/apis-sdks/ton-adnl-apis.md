@@ -1,47 +1,48 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON ADNL API
 
-:::tip
+There are several ways to connect to blockchain:
 
-有不同的方式连接到区块链：
+1. RPC data provider or another API - In most cases, you must _rely_ on its stability and security.
+2. **ADNL connection** - You connect to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). While it may sometimes be inaccessible, a built-in validation mechanism (implemented in the library) ensures it cannot provide false data.
+3. Tonlib binary - Like ADNL, you connect to a liteserver and face the same benefits and downsides. However, your application also includes a dynamically loaded library compiled externally.
+4. Offchain-only – Some SDKs allow you to create and serialize cells, which you can then send to APIs.
 
-1. RPC 数据提供商或另一个 API: 在大多数情况下，您必须依赖它的稳定性和安全性。
-2. **ADNL连接**：您正在连接一个[liteserver](/participate/run-nodes/liteserver)。它们可能无法访问，但通过一定程度的验证（在库中实现），它们无法作恶。
-3. Tonlib 二进制: 您也在连接到liteserver，因此所有的好处和不足都适用，但您的应用程序还包含了一个在外部编译的动态加载库。
-4. 链下解决。这种SDK允许创建和序列化 cell ，然后您可以发送到 API。
+Clients connect directly to liteservers (nodes) using a binary protocol.
 
-:::
+The client downloads keyblocks, the current state of an account, and their **Merkle proofs**, ensuring the validity of received data.
 
-客户端使用二进制协议直接连接到 Liteservers（节点）。
+For read operations (such as get-method calls), the client launches a local TVM with a downloaded and verified state. There's no need to download the full blockchain state—the client only retrieves what’s required for the operation.
 
-客户端下载密钥块、帐户的当前状态以及他们的 **Merkle 证明**，保证收到数据的有效性。
+You can connect to public liteservers from the global config ([Mainnet](https://ton.org/global-config.json) or [Testnet](https://ton.org/testnet-global.config.json)) or run your own [liteserver](/v3/documentation/infra/nodes/node-types) and manage it with [ADNL SDKs](/v3/guidelines/dapps/apis-sdks/sdk#overview).
 
-读取操作 (如get-methods 调用) 是通过启动本地TVM 并下载和验证状态进行的。 值得注意的是，无需下载区块链的完整状态， 客户端只下载操作所需的内容。
+Read more about [Merkle proofs](/v3/documentation/data-formats/tlb/proofs) at [TON whitepaper](https://ton.org/ton.pdf) 2.3.10, 2.3.11.
 
-您可以从全局配置（[Mainnet](https://ton.org/global-config.json) 或 [Testnet](https://ton.org/testnet-global.config.json) ）连接到公共 Liteservers，也可以运行自己的 [Liteserver](/participate/nodes/node-types) 并使用 [ADNL SDKs](/develop/dapps/apis/sdk#adnl-based-sdks) 进行处理。
+Public liteservers (from the global config) help you quickly get started with TON. You can use them to learn TON programming or for applications and scripts that do not require 100% uptime.
 
-阅读更多关于 [Merkle 证明](/develop/data-formuls/proofs)的信息[TON白皮书](https://ton.org/ton.pdf) 2.3.10, 2.3.11。
+For production infrastructure, consider using a well-prepared setup:
 
-公共 liteservers（来自全局配置）的存在是为了让你快速开始使用 TON。它可用于学习 TON 编程，或用于不需要 100% 正常运行时间的应用程序和脚本。
+- [Run your own liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node),
+- Use Liteserver premium providers via [@liteserver_bot](https://t.me/liteserver_bot)
 
-建设生产基础设施――建议使用准备完善的基础设施：
+## Pros & cons
 
-- [设置自己的 liteserver](https://docs.ton.org/participate/run-nodes/fullnode#enable-liteserver-mode),
-- 使用 Liteserver 高级提供商 [@liteserver_bot](https://t.me/liteserver_bot)
+- ✅ Reliable - Uses an API with Merkle proof hashes to verify incoming binary data.
 
-## 优缺点
+- ✅ Secure - Since it checks Merkle proofs, you can even use untrusted liteservers.
 
-- ✅ 可靠。使用带有Merkle证明哈希的API来验证传入的二进制数据。
+- ✅ Fast - Connects directly to TON Blockchain nodes instead of relying on HTTP middleware.
 
-- ✅ 安全。由于它检查Merkle证明，即使使用不受信任的轻节点也可以。
+- ❌ Complex - Requires time to set up and understand.
 
-- ✅ 快速。直接连接到TON区块链节点，而不是使用HTTP中间件。
+- ❌ Back-end first - Not compatible with web frontends (built for a non-HTTP protocol) unless you use an HTTP-ADNL proxy.
 
-- ❌ 重复。需要更多时间才能找出问题。
+## API reference
 
-- ❌ 后端优先。与 web 前端不兼容（为非 HTTP 协议构建），或需要 HTTP-ADNL 代理。
+Requests and responses follow the [TL](/v3/documentation/data-formats/tl) schema, which allows you to generate a typed interface for a specific programming language.
 
-## API 参考
+[TonLib TL schema](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl)
 
-请求和对服务器的响应在 [TL](/develop/data-forms/tl) schema 中描述，它允许您为某个编程语言生成一个输入的接口。
+<Feedback />
 
-[TonLib TL Schema](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl)
