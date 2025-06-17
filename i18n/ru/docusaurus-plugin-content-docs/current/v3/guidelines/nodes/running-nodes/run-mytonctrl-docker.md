@@ -1,23 +1,27 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Запуск MyTonCtrl в Docker
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+This guide provides a step-by-step process for installing MyTonCtrl using Docker.
 
 ## Требования к аппаратному обеспечению:
 
+To ensure an optimal experience while running MyTonCtrl, here are the recommended hardware specifications:
+
 - 16-ядерный процессор
 - 128 ГБ оперативной памяти
-- Твердотельный накопитель объемом 9 ТБ *или* Оборудованное хранилище с более 64 000 операций ввода/вывода в секунду (IOPS)
+- 1TB NVME SSD or provisioned 64+k IOPS storage
 - Подключение к сети со скоростью 1 Гбит/с
 - Общедоступный IP-адрес (фиксированный IP-адрес)
 - 16 ТБ/месяц трафика при пиковой нагрузке
 
-***Не рекомендуется!*** ***Только для тестирования!***
-
-Переменная **IGNORE_MINIMAL_REQS=true** отключает проверку требований к процессору/оперативной памяти.
+:::warning
+This setup is primarily intended for testing purposes, so it may not be suitable for production environments. If you’d like to bypass hardware checks for any reason, you can easily do this by setting the variable `IGNORE_MINIMAL_REQS=true`.
+:::
 
 ## Требования к программному обеспечению:
+
+To get started, please ensure you have the following software installed:
 
 - docker-ce
 - docker-ce-cli
@@ -25,9 +29,11 @@
 - docker-buildx-plugin
 - docker-compose-plugin
 
-  *Руководство по установке на официальном сайте [Docker](https://docs.docker.com/engine/install/)*
+_Руководство по установке на официальном сайте [Docker](https://docs.docker.com/engine/install/)_
 
 ## Протестированные операционные системы:
+
+We’ve successfully tested MyTonCtrl on these operating systems:
 
 - Ubuntu 20.04
 - Ubuntu 22.04
@@ -37,7 +43,17 @@
 
 ## Запустите MyTonCtrl v2 с помощью официального образа docker:
 
-- Извлеките образ и запустите узел с помощью MyTonCtrl
+Here’s how you can pull the image and set up your MyTonCtrl node:
+
+```bash
+По умолчанию TON и Mytoncore работают и хранятся в каталоге **/var/lib/docker/volumes/**
+```
+
+## Installing and starting MyTonCtrl from source
+
+If you prefer to install from source, just follow these easy steps:
+
+1. Clone the repository with the latest version:
 
 ````bash
 docker run -d --name ton-node -v <YOUR_LOCAL_FOLDER>:/var/ton-work -it ghcr.io/ton-blockchain/ton-docker-ctrl:latest
@@ -50,13 +66,13 @@ docker run -d --name ton-node -v <YOUR_LOCAL_FOLDER>:/var/ton-work -it ghcr.io/t
 git clone https://github.com/ton-blockchain/ton-docker-ctrl.git
 ````
 
-2. Перейдите в каталог
+2. Change into the project directory:
 
 ```bash
 cd ./ton-docker-ctrl
 ```
 
-3. Укажите необходимые значения в файле .env
+3. Open the `.env` file and make any necessary updates:
 
 ```bash
 vi .env
@@ -74,7 +90,7 @@ docker compose build ton-node
 docker compose up -d
 ```
 
-## Перенесите полный узел или валидатор на докеризованную версию MyTonCtrl v2
+## Вы можете изменить его в файле docker-compose.yml, указав требуемый путь в разделе **volumes**
 
 Укажите пути к бинарным файлам и исходному коду TON, а также к рабочему каталогу, но самое главное, к настройкам MyTonCtrl и кошелькам.
 
@@ -89,7 +105,7 @@ ghcr.io/ton-blockchain/ton-docker-ctrl:latest
 
 ## Настройка переменных:
 
-Переменные, указанные в файле .env
+In the `.env` file, you can configure the following variables:
 
 - **GLOBAL_CONFIG_URL** - Сетевые настройки блокчейна TON (по умолчанию: [Testnet](https://ton.org/testnet-global.config.json))
 - **MYTONCTRL_VERSION** - ветка Git, из которой собран MyTonCtrl
@@ -98,6 +114,8 @@ ghcr.io/ton-blockchain/ton-docker-ctrl:latest
 - **IGNORE_MINIMAL_REQS** - Игнорировать требования к оборудованию
 
 ## Остановка и удаление MyTonCtrl:
+
+Перенесите полный узел или валидатор на докеризованную версию MyTonCtrl v2
 
 1. Остановить контейнер
 
@@ -119,6 +137,8 @@ docker compose down --volumes
 
 ## Подключение к MyTonCtrl:
 
+Извлеките образ и запустите узел с помощью MyTonCtrl
+
 ```bash
 docker compose exec -it ton-node bash -c "mytonctrl"
 ```
@@ -131,13 +151,15 @@ MyTonCtrl> status
 
 ![](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
 
-Отражает список доступных команд `help`.
+And if you would like to see a list of commands you can use, simply enter:
 
 ```bash
 MyTonCtrl> help
 ```
 
 ## Просмотр логов MyTonCtrl:
+
+Monitoring the situation is simple, as you can easily view the logs:
 
 ```bash
 docker compose logs
@@ -158,9 +180,7 @@ docker compose build ton-node
 docker compose up -d
 ```
 
-При подключении к MyTonCtrl выполняется автоматическая проверка на наличие обновлений. Если обновления обнаружены, отображается сообщение "*MyTonCtrl update available. Please update it with `update` command.*"
-
-Обновление выполняется с помощью команды update, указав необходимую ветвь
+При подключении к MyTonCtrl выполняется автоматическая проверка на наличие обновлений. Если обновления обнаружены, отображается сообщение "_MyTonCtrl update available. Please update it with `update` command._"  Обновление выполняется с помощью команды update, указав необходимую ветвь
 
 ```bash
 MyTonCtrl> update mytonctrl2
@@ -168,6 +188,5 @@ MyTonCtrl> update mytonctrl2
 
 ## Изменение пути хранения данных:
 
-По умолчанию TON и Mytoncore работают и хранятся в каталоге **/var/lib/docker/volumes/**
+TON and MyTonCore data is stored in `/var/lib/docker/volumes/`by default. If you wish to change this storage path, update the required route in the `volumes` section of your `docker-compose.yml` file to fit your needs. <Feedback />
 
-Вы можете изменить его в файле docker-compose.yml, указав требуемый путь в разделе **volumes**
