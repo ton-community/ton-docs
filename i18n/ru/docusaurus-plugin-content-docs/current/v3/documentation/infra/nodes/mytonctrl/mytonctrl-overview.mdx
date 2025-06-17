@@ -1,8 +1,9 @@
-# MyTonCtrl
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# MyTonCtrl
 
 ## Общие сведения
 
@@ -11,6 +12,41 @@
 [MyTonCtrl](https://github.com/ton-blockchain/mytonctrl) — это консольное приложение, которое является удобной оболочкой для fift, lite-client и validator-engine-console. Оно было специально разработано для оптимизации задач управления кошельком, доменом и валидатором в операционной системе Linux.
 
 Мы активно собираем отзывы о процессе установки. Если у вас есть какие-либо вопросы или предложения, пожалуйста, [свяжитесь с нами](https://t.me/Alexgton).
+
+## Install the MyTonCtrl
+
+Download and execute the installation script from a **non-root** user account with **sudo** permissions:
+
+<Tabs groupId="operating-systems">
+  <TabItem value="ubuntu" label="Ubuntu">
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+sudo bash install.sh
+```
+
+</TabItem>
+  <TabItem value={'debian'} label={'Debian'}>
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+su root -c 'bash install.sh'
+```
+
+</TabItem>
+</Tabs>
+
+**Flags:**
+
+- `-d` - **MyTonCtrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state, significantly reducing synchronization time.
+- `-c <path>` - Specify a non-public liteserver for synchronization (optional).
+- `-i` - Ignore minimum requirements; use this only if you test the compilation process without running a real node.
+- `-m` - Sett the mode either `validator` or `liteserver`.
+- `-t` - Disable telemetry.
+
+**To use testnet**, `-c` flag with the value `https://ton.org/testnet-global.config.json`.
+
+The default value for the `-c` flag is `https://ton-blockchain.github.io/global.config.json`, which is default configuration for the mainnet.
 
 ## Основные команды
 
@@ -26,32 +62,32 @@
 
 Обновление mytonctrl. Комбинации параметров:
 
-| Формат имени                 | Формат                                                                     | Пример                                                                | Описание                                                                    |
-| :--------------------------- | :------------------------------------------------------------------------- | :-------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Без аргументов               | `update`                                                                   | `update`                                                              | Обновление из текущего репозитория                                          |
-| Формат URL                   | `update [https://github.com/author/repo/tree/branch]`                      | `update https://github.com/ton-blockchain/mytonctrl/tree/test`        | Обновление с указанного URL                                                 |
-| Только формат ветви          | `update [BRANCH]`                                                          | `update test`                                                         | Обновление из указанной ветви текущего репозитория                          |
-| Формат переопределения ветви | `update [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `update https://github.com/ton-blockchain/mytonctrl/tree/master test` | Обновление из ветки, указанной вторым аргументом после названия репозитория |
+| Формат имени                 | Формат                                                                     | Пример                                                                | Описание                                                                                  |
+| :--------------------------- | :------------------------------------------------------------------------- | :-------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| No args                      | `update`                                                                   | `update`                                                              | Обновление из текущего репозитория                                                        |
+| Формат URL                   | `update [https://github.com/author/repo/tree/branch]`                      | `update https://github.com/ton-blockchain/mytonctrl/tree/test`        | Обновление с указанного URL                                                               |
+| Только формат ветви          | `update [BRANCH]`                                                          | `update test`                                                         | Обновление из указанной ветви текущего репозитория                                        |
+| Формат переопределения ветви | `update [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `update https://github.com/ton-blockchain/mytonctrl/tree/master test` | Обновление из ветки, указанной вторым аргументом после названия репозитория               |
 
 ### upgrade
 
 Обновление узла. Комбинации параметров:
 
-| Формат имени                 | Формат                                                                      | Пример                                                              | Описание                                                                    |
-| :--------------------------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------ | --------------------------------------------------------------------------- |
-| Без аргументов               | `upgrade`                                                                   | `upgrade`                                                           | Обновление из текущего репозитория                                          |
-| Формат URL                   | `upgrade [https://github.com/author/repo/tree/branch]`                      | `upgrade https://github.com/ton-blockchain/ton/tree/master`         | Обновление с указанного URL                                                 |
-| Только формат ветви          | `upgrade [BRANCH]`                                                          | `upgrade master`                                                    | Обновление из указанной ветки текущего репозитория                          |
-| Формат переопределения ветви | `upgrade [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `upgrade https://github.com/ton-blockchain/ton/tree/master testnet` | Обновление из ветки, указанной вторым аргументом после названия репозитория |
+| Формат имени                 | Формат                                                                      | Пример                                                              | Описание                                                                                       |
+| :--------------------------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| No args                      | `upgrade`                                                                   | `upgrade`                                                           | Обновление из текущего репозитория                                                             |
+| Формат URL                   | `upgrade [https://github.com/author/repo/tree/branch]`                      | `upgrade https://github.com/ton-blockchain/ton/tree/master`         | Обновление с указанного URL                                                                    |
+| Только формат ветви          | `upgrade [BRANCH]`                                                          | `upgrade master`                                                    | Обновление из указанной ветки текущего репозитория                                             |
+| Формат переопределения ветви | `upgrade [https://github.com/authorName/repoName/tree/branchName] [BRANCH]` | `upgrade https://github.com/ton-blockchain/ton/tree/master testnet` | Обновление из ветки, указанной вторым аргументом после названия репозитория                    |
 
 ### status
 
 Получаем текущего состояния mytonctrl и узла. Комбинации параметров:
 
-| Формат имени   | Формат        | Пример        | Описание                                                                                                           |
-| -------------- | ------------- | ------------- | ------------------------------------------------------------------------------------------------------------------ |
-| Без аргументов | `status`      | `status`      | Полный отчет о состоянии, включая эффективность валидатора и онлайн-валидаторы                                     |
-| Быстрота       | `status fast` | `status fast` | Необходимо использовать в TestNet. Отчет о состоянии без эффективности валидатора и количества онлайн-валидаторов. |
+| Формат имени    | Формат        | Пример        | Описание                                                                                                                              |
+| --------------- | ------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| No args         | `status`      | `status`      | Полный отчет о состоянии, включая эффективность валидатора и онлайн-валидаторы                                                        |
+| Быстрота        | `status fast` | `status fast` | Необходимо использовать в TestNet. Отчет о состоянии без эффективности валидатора и количества онлайн-валидаторов.                    |
 
 [Подробнее о выводе состояния](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-status)
 
@@ -189,7 +225,7 @@ add_custom_overlay custom /config.json # check link from above to know what conf
 
 ### list_custom_overlays
 
-Без аргументов, выводит пользовательские оверлеи
+No args, prints custom overlays.
 
 ### delete_custom_overlay
 
@@ -199,7 +235,7 @@ add_custom_overlay custom /config.json # check link from above to know what conf
 MyTonCtrl> delete_custom_overlay <name>
 ```
 
-## Валидатор
+## Validator
 
 ### vo
 
@@ -211,7 +247,7 @@ MyTonCtrl> vo <offer-hash> # use `ol` to get offers
 
 ### ve
 
-Без аргументов, голосует за выборы
+No args, votes for election.
 
 ### vc
 
@@ -235,18 +271,18 @@ MyTonCtrl> vc 0 0
 
 На основе `validator index` (можно получить с помощью команды `status`) возможны три сценария:
 
-- **Validator index is in the range [0, `max_main_validators`)**:
-  `validator efficiency` должен быть выше 90% (число может быть изменено в будущем на основе статистики) для всего раунда; в противном случае может быть наложен штраф.
+1. **Validator index is in the range [0, `max_main_validators`)**:
+   `validator efficiency` должен быть выше 90% (число может быть изменено в будущем на основе статистики) для всего раунда; в противном случае может быть наложен штраф. This percentage may be adjusted in the future based on statistics. If it falls below this threshold, a penalty (fine) may be imposed.
 
-- **Validator index is in the range [`max_main_validators`, `max_validators`)**:
-  `validator efficiency` должен быть выше 90% (число может быть изменено в будущем на основе статистики) для всего раунда. В настоящее время штраф не применяется, но это может измениться в будущих обновлениях.
+2. **Validator index is in the range [`max_main_validators`, `max_validators`)**:
+   `validator efficiency` должен быть выше 90% (число может быть изменено в будущем на основе статистики) для всего раунда. В настоящее время штраф не применяется, но это может измениться в будущих обновлениях.
 
-- **The user is not a validator**:
-  Штрафы не применяются, но пользователь также не имеет права на вознаграждение. Нет `validator efficiency` для проверки. Это может быть вызвано низким стейком или неправильной конфигурацией узла. Кроме того, убедитесь, что `mytonctrl` работает без перебоев.
+3. **The user is not a validator**:
+   Штрафы не применяются, но пользователь также не имеет права на вознаграждение. Нет `validator efficiency` для проверки. Это может быть вызвано низким стейком или неправильной конфигурацией узла. Кроме того, убедитесь, что `mytonctrl` работает без перебоев.
 
 Узнайте больше о `max_validators` и `max_main_validators` [на странице параметров конфигурации](/v3/documentation/network/configs/blockchain-configs#configuration-parameters-for-the-number-of-validators-for-elections). Получите фактические значения [для mainnet](https://tonviewer.com/config#16) и [для testnet](https://testnet.tonviewer.com/config#16).
 
-## Команды пула
+## Pool commands
 
 Получите больше информации [на странице пула номинаторов](/v3/documentation/smart-contracts/contracts-specs/nominator-pool).
 
@@ -503,7 +539,7 @@ MyTonCtrl> mgtp <wallet-name> <account-addr | bookmark-name> <amount>
 MyTonCtrl> mgtp wallet_004 kQBxnZJq4oHVFs4ban3kJ5qllM1IQo57lIx8QP69Ue9A6Psp 1
 ```
 
-## Основные команды для пулов
+## General pools commands
 
 В **MyTonCtrl** есть два типа пулов:
 
@@ -574,12 +610,12 @@ MyTonCtrl> db <bookmark-name> <bookmark-type>
 
 Показать список предложений
 
-| Формат имени        | Формат           | Описание                                                                              |
-| ------------------- | ---------------- | ------------------------------------------------------------------------------------- |
-| Без аргументов      | `ol`             | Выводит таблицу с сокращенными хэшами.                                                |
-| Вывод JSON          | `ol --json`      | Выводит JSON-представление `data`.                                                    |
-| Полный вывод хэша   | `ol hash`        | Выводит таблицу с полными хэшами.                                                     |
-| JSON с полным хэшем | `ol --json hash` | Выводит JSON-представление `data`. Аргумент `"hash"` в этом случае не имеет значения. |
+| Формат имени          | Формат           | Описание                                                                                   |
+| --------------------- | ---------------- | ------------------------------------------------------------------------------------------ |
+| Без аргументов        | `ol`             | Выводит таблицу с сокращенными хэшами.                                                     |
+| Вывод JSON            | `ol --json`      | Выводит JSON-представление `data`.                                                         |
+| Полный вывод хэша     | `ol hash`        | Выводит таблицу с полными хэшами.                                                          |
+| JSON с полным хэшем   | `ol --json hash` | Выводит JSON-представление `data`. Аргумент `"hash"` в этом случае не имеет значения.      |
 
 ### od
 
@@ -603,24 +639,24 @@ MyTonCtrl> od [offer-hash]
 - \--json: Выводит JSON-представление данных.
 - past: Включает записи прошлых выборов.
 - adnl: Выводит полный ADNL.
-- pubkey: Выводит полный Pubkey.
+- pubkey: выводит полный Pubkey.
 - wallet: выводит полный кошелек.
 
 ### vl
 
 Показать активных валидаторов
 
-| Формат имени                           | Формат                                 | Описание                                                                       |
-| -------------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------ |
-| Без аргументов                         | `vl`                                   | Выводит таблицу с сокращенными ADNL, Pubkey и Wallet.                          |
-| Любая комбинация следующих аргументов  | `vl --json adnl pubkey wallet past`    | Полные записи ADNL, Pubkey, Wallet и прошлых валидаторов в JSON представлении. |
+| Формат имени                          | Формат                              | Описание                                                                       |
+| ------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------ |
+| Без аргументов                        | `vl`                                | Выводит таблицу с сокращенными ADNL, Pubkey и Wallet.                          |
+| Любая комбинация следующих аргументов | `vl --json adnl pubkey wallet past` | Полные записи ADNL, Pubkey, Wallet и прошлых валидаторов в JSON представлении. |
 
 Описания для каждого аргумента:
 
-- \--json: выводит JSON-представление данных.
+- \--json: Выводит представление данных в формате JSON.
 - past: включает прошлые записи валидаторов.
 - adnl: выводит полный ADNL.
-- pubkey: выводит полный Pubkey.
+- pubkey: Выводит полный Pubkey.
 - wallet: выводит полный Wallet.
 - offline: исключает онлайн-валидаторы.
 
@@ -628,14 +664,14 @@ MyTonCtrl> od [offer-hash]
 
 Показать список жалоб
 
-| Формат имени                          | Формат                | Описание                                              |
-| ------------------------------------- | --------------------- | ----------------------------------------------------- |
-| Без аргументов                        | `cl`                  | Выводит таблицу с сокращенным ADNL.                   |
-| Любая комбинация следующих аргументов | `cl --json adnl past` | Полный ADNL с прошлыми жалобами в JSON представлении. |
+| Формат имени                          | Формат                | Описание                                               |
+| ------------------------------------- | --------------------- | ------------------------------------------------------ |
+| Без аргументов                        | `cl`                  | Выводит таблицу с сокращенным ADNL.                    |
+| Любая комбинация следующих аргументов | `cl --json adnl past` | Полный ADNL с прошлыми жалобами в JSON представлении.  |
 
 Описания для каждого параметра:
 
-- \--json: Выводит представление данных в формате JSON.
+- \--json: выводит JSON-представление данных.
 - past: Включает прошлые жалобы.
 - adnl: Выводит полный ADNL.
 
@@ -663,7 +699,7 @@ MyTonCtrl> installer [command] [args]
 
 ### clear
 
-очистка терминала
+Clears terminal screen.
 
 ### exit
 
@@ -682,15 +718,15 @@ MyTonCtrl> installer [command] [args]
 
 Возможные аргументы:
 
-| Имя аргумента узла | Описание                                                                                                        | Значение по умолчанию                                                                   |
-| ------------------ | --------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| `threads`          | количество потоков                                                                                              | `cpus count - 1`                                                                        |
-| `daemonize`        |                                                                                                                 | Нет значения                                                                            |
-| `global-config`    | путь к глобальной конфигурации                                                                                  | `/usr/bin/ton/global.config.json`                                                       |
-| `db`               | путь к базе данных                                                                                              | `/var/ton-work/db/`                                                                     |
-| `logname`          | путь к журналам                                                                                                 | `/var/ton-work/log`                                                                     |
-| `state-ttl`        | ttl состояний блокчейна, которые хранит узел                                                                    | 3600                                                                                    |
-| `archive-ttl`      | ttl блоков, которые хранит узел. _Чтобы заставить узел не хранить архивные блоки, используйте значение `86400`_ | 2592000, если режим liteserver был включен во время установки, в противном случае 86400 |
+| Имя аргумента узла | Описание                                                                                                        | Значение по умолчанию                                                                       |
+| ------------------ | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `threads`          | количество потоков                                                                                              | `cpus count - 1`                                                                            |
+| `daemonize`        |                                                                                                                 | Нет значения                                                                                |
+| `global-config`    | путь к глобальной конфигурации                                                                                  | `/usr/bin/ton/global.config.json`                                                           |
+| `db`               | путь к базе данных                                                                                              | `/var/ton-work/db/`                                                                         |
+| `logname`          | путь к журналам                                                                                                 | `/var/ton-work/log`                                                                         |
+| `state-ttl`        | ttl состояний блокчейна, которые хранит узел                                                                    | 3600                                                                                        |
+| `archive-ttl`      | ttl блоков, которые хранит узел. _Чтобы заставить узел не хранить архивные блоки, используйте значение `86400`_ | 2592000, если режим liteserver был включен во время установки, в противном случае 86400     |
 
 Пример:
 
@@ -778,3 +814,5 @@ MyTonInstaller> update FN
 
 - [Часто задаваемые вопросы](/v3/guidelines/nodes/faq)
 - [Устранение неполадок](/v3/guidelines/nodes/nodes-troubleshooting)
+
+<Feedback />
