@@ -1,66 +1,69 @@
-import ConceptImage from '@site/src/components/conceptImage';
-import ThemedImage from '@theme/ThemedImage';
+import Feedback from '@site/src/components/Feedback';
 
-# 消息概览
+import ConceptImage from "@site/src/components/conceptImage";
+import ThemedImage from "@theme/ThemedImage";
 
-TON 是一个异步区块链，其结构与其他区块链非常不同。因此，新开发者经常对 TON 中的低级事物有疑问。在本文中，我们将探讨与消息传递相关的一个问题。
+# Messages and transactions
 
-## 什么是消息？
+TON is an asynchronous blockchain with a complex structure that is very different from other blockchains. Because of this, new developers often have questions about low-level things in TON. In this article, we will examine one such question related to message delivery.
 
-消息是在actor（用户、应用程序、智能合约）之间发送的数据包。它通常包含指导接收方执行某种操作的信息，如更新存储或发送新消息。
+## What is a message?
+
+A message is a packet of data exchanged between actors (users, applications, or smart contracts). It typically contains information instructing the receiver on what action to perform, such as updating storage or sending a new message.
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/message_delivery_1.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_1.png?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt="Message diagram"
+    sources={{
+      light: "/img/docs/message-delivery/message_delivery_1.png?raw=true",
+      dark: "/img/docs/message-delivery/message_delivery_1_dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
 
-这种通信方式让人想起将卫星发射到太空。我们知道我们构成的消息，但在发射后，需要进行单独的观察来找出我们将获得什么结果。
+Working with this type of communication is reminiscent of launching a satellite into space. While we know the message we've created, observation after launch is required to determine the outcome.
 
-## 什么是交易？
+## What is a transaction?
 
-TON 中的一笔交易包括以下内容：
+A transaction in TON consists of the following:
 
-- 最初触发合约的传入消息（存在特殊的触发方式）
-- 由传入消息引起的合约行动，例如更新合约的存储（可选）
-- 发送给其他参与者的所生成的传出消息（可选）
+- The incoming message that initially triggers the contract (special ways to trigger exist)
+- Contract actions caused by the incoming message, such as an update to the contract's storage (optional)
+- Outgoing messages generated and sent to other actors (optional)
 
-> 技术上，合约可以通过特殊功能如 [Tick-Tock](/develop/data-formats/transaction-layout#tick-tock) 触发，但这个功能更多用于 TON 内部的区块链核心合约。
+> Technically, a contract can be triggered through special functions such as [Tick-tock](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock). Still, this function is more used for internal TON Blockchain core contracts.
 >
-> 并非每笔交易都会导致传出消息或对合约存储的更新——这取决于合约代码所定义的操作。
+> Not every transaction results in outgoing messages or updates to the contract's storage - this depends on the actions defined by the contract's code.
 
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Transaction diagram"
   sources={{
-    light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
+    light: "/img/docs/message-delivery/message_delivery_2.png?raw=true",
+    dark: "/img/docs/message-delivery/message_delivery_2_dark.png?raw=true",
   }}
 />
 <br></br>
 
-在异步系统中，您无法在同一笔交易中从目标智能合约获得响应。合约调用可能需要几个区块来处理，具体取决于来源和目的地之间的路由长度。
+If we look at Ethereum or almost any other synchronous blockchain, each transaction can contain several smart contract calls. For example, DEXs perform multiple exchanges in one transaction if there is no liquidity for the selected trading pair.
 
-为了实现无限分片范式，必须确保完全并行化，这意味着每笔交易的执行都独立于其他交易。因此，与其进行影响和改变多个合约状态的交易，不如每笔 TON 交易只在单个智能合约上执行，智能合约通过消息进行通信。这样，智能合约只能通过调用它们的函数与特殊消息相互作用，并稍后通过其他消息获得响应。
+In an asynchronous system, you can't get a response from the destination smart contract in the same transaction. Depending on the length of the route between source and destination, a contract call may take a few blocks to process.
 
-为了实现无限分片范式，必须确保完全并行化，这意味着每笔交易的执行都独立于其他交易。因此，与其进行影响和改变多个合约状态的交易，不如每笔 TON 交易只在单个智能合约上执行，智能合约通过消息进行通信。这样，智能合约只能通过调用它们的函数与特殊消息相互作用，并稍后通过其他消息获得响应。
+Achieving the infinite sharding paradigm requires full parallelization, ensuring that each transaction executes independently of others. Therefore, instead of transactions that affect and change the state of many contracts simultaneously, each transaction in TON is only executed on a single smart contract, and smart contracts communicate through messages. That way, smart contracts can only interact with each other by calling their functions with special messages and getting a response to them via other messages later.
 
 :::info
-[交易布局](/v3/documentation/data-formats/tlb/transaction-layout) 页面上有更详细准确的说明。
+See [transaction layout](/v3/documentation/data-formats/tlb/transaction-layout) for complete transaction details.
 :::
 
-### 交易结果
+### Transaction outcome
 
-严格保证由消息产生的交易将具有大于消息的 _lt_ 的 _lt_。同样，某笔交易中发送的消息的 _lt_ 严格大于引起它的交易的 _lt_。此外，从一个账户发送的消息和在一个账户上发生的交易也是严格有序的。
+There is a [TVM exit code](/v3/documentation/tvm/tvm-exit-codes) for a transaction that had a compute phase. If it is not 0 or 1, then there was an error.
+Also, TVM [compute phase may be skipped](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped) for reasons like lack of funds or state.
 
-:::info 用于 toncenter api v3
-要确定交易是否成功，应使用 tx.description.action.success && tx.description.compute_ph.success：
+:::info for toncenter api v3
+One should use `tx.description.action` to determine a successful `transaction.success  && tx.description.compute_ph.success`:
 :::
 
 ```json
@@ -81,115 +84,176 @@ TON 中的一笔交易包括以下内容：
           "success": true,
 ```
 
-由此，对于每个账户，我们总是知道交易、接收消息和发送消息的顺序。
+The transaction may have one of three results:
 
-- 成功，退出代码为 0 或 1
-- 失败，`aborted: true` 未执行
-- Fail， [exit code](/v3/documentation/tvm/tvm-exit-codes), `aborted: true`.
+- Success, exit code 0 or 1
+- Fail, `aborted: true` without execution
+- Fail, [exit code](/v3/documentation/tvm/tvm-exit-codes), `aborted: true`
 
-:::info 用于 toncenter api v3
-`aborted: true` 是 TON 中心字段，事务中没有此类字段
+:::info for toncenter api v3
+`aborted: true` is a TON Center field. Transaction has no such field.
 :::
 
-## 什么是逻辑时间？
+## What is a logical time?
 
-否则，尝试同步交付将需要在处理一个分片之前知道所有其他的状态，从而破坏了并行并破坏有效的分片。
+In a system with asynchronous and parallel smart contract calls, it can be hard to define the order of actions to process. That's why each message in TON has its _Logical time_ or _Lamport time_ (later just _lt_). This time is used to understand which event caused another and what a validator needs to process first.
 
-对于每个区块，我们可以将 _lt_ 范围定义为从第一笔交易开始，到区块中最后一个事件（消息或交易）的 _lt_ 结束。区块的排序方式与 TON 中的其他事件相同，因此如果一个区块依赖于另一个区块，它具有更高的 _lt_。一个分片中的子区块的 _lt_ 高于其父区块。一个主链区块的 _lt_ 高于它所列出的分片区块的 _lts_，因为主区块依赖于所列分片区块。每个分片区块包含对创建分片区块时最新（创建分片区块时）主区块的有序引用，因此分片区块的 _lt_ 高于引用的主区块的 _lt_。
+It is strictly guaranteed that the transaction resulting from a message will have a _lt_ greater than the _lt_ of the message. Likewise, the _lt_ of a message sent in some transaction is strictly greater than the _lt_ of the transaction that caused it. In addition, messages sent from one account and transactions on one account are strictly ordered.
 
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Logical time sequence"
   sources={{
-    light: '/img/docs/message-delivery/message_delivery_3.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_3.png?raw=true',
+    light: "/img/docs/message-delivery/message_delivery_3.png?raw=true",
+    dark: "/img/docs/message-delivery/message_delivery_3_dark.png?raw=true",
   }}
 />
 <br></br>
 
-幸运的是，TON 的工作方式是任何内部消息都一定会被目标账户接收。消息不会在来源和目的地之间的任何地方丢失。外部消息有点不同，因为它们被接受到区块中是由验证者自行决定的，但是，一旦消息被接受进入传入消息队列，它将被传递。
+For the case in the image, it turns out: `in_msg_lt < tx0_lt < out_msg_lt`
 
-此外，如果账户 _A_ 向账户 _B_ 发送了两条消息，可以保证具有较低 _lt_ 的消息将被更早处理：
+Thanks to this, we always know the order of transactions, received messages and sent messages for every account.
 
-因此，看起来 _lt_ 解决了消息传递顺序的问题，因为我们知道具有较低 _lt_ 的交易将首先被处理。但这并不适用于每个场景。
+Moreover, if account _A_ sends two messages to account _B_, it is guaranteed that the message with a lower _lt_ will be processed earlier:
 
-假设有两个合约 - _A_ 和 _B_。_A_ 收到一个外部消息，触发它向 _B_ 发送两个内部消息，我们称这些消息为 _1_ 和 _2_。在这个简单的情况下，我们可以 100% 确定 _1_ 将在 _2_ 之前被 _B_ 处理，因为它具有较低的 _lt_。
-
-<ConceptImage src="/img/docs/msg-delivery-1.png" />
-
-但这只是一个简单的案例，当我们只有两个合约时。我们的系统在更复杂的情况下是如何工作的？
-
-对于每个区块，我们可以将 _lt_ 范围定义为从第一笔交易开始，到区块中最后一个事件（消息或交易）的 _lt_ 结束。区块的排序方式与 TON 中的其他事件相同，因此如果一个区块依赖于另一个区块，它具有更高的 _lt_。一个分片中的子区块的 _lt_ 高于其父区块。一个主链区块的 _lt_ 高于它所列出的分片区块的 _lts_，因为主区块依赖于所列分片区块。每个分片区块包含对创建分片区块时最新（创建分片区块时）主区块的有序引用，因此分片区块的 _lt_ 高于引用的主区块的 _lt_。
-
-## 消息传递
-
-为了更清晰，假设我们的合约在 `msg1` 和 `msg2` 由 `B` 和 `C` 合约执行后发送回消息 `msg1'` 和 `msg2'`。结果将在合约 `A` 上实现 `tx2'` 和 `tx1'`。我们有两种可能的交易路径，
-
-### 传递顺序
-
-假设有两个合约 - _A_ 和 _B_。_A_ 收到一个外部消息，触发它向 _B_ 发送两个内部消息，我们称这些消息为 _1_ 和 _2_。在这个简单的情况下，我们可以 100% 确定 _1_ 将在 _2_ 之前被 _B_ 处理，因为它具有较低的 _lt_。
-
-假设有两个合约 - _A_ 和 _B_。_A_ 收到一个外部消息，触发它向 _B_ 发送两个内部消息，我们称这些消息为 _1_ 和 _2_。在这个简单的情况下，我们可以 100% 确定 _1_ 将在 _2_ 之前被 _B_ 处理，因为它具有较低的 _lt_。
+If `msg1_lt < msg2_lt` => `tx1_lt < tx2_lt`.
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt="Message order guarantee"
+    sources={{
+      light: "/img/docs/message-delivery/message_delivery_5.png?raw=true",
+      dark: "/img/docs/message-delivery/message_delivery_5_dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
 
-同样，当两个合约 _B_ 和 _C_ 向一个合约 _A_ 发送消息时，情况也是如此。即使 `B -> A` 的消息在 `C -> A` 之前发送，我们也无法知道哪一个将先被送达。`B -> A` 的路由可能需要更多的分片链转运。
+Otherwise, an attempt to synchronize delivery would require knowing the state of all the others before processing one shard, thereby breaking parallelization and destroying efficient sharding.
 
-### 多个智能合约
+For each block, we can define the _lt_ span as starting from the first transaction and ending with the _lt_ of the last event in the block (message or transaction). Blocks are ordered like other events in TON, so if one block depends on the other, it has a higher _lt_. The child block in a shard has a higher _lt_ than its parent. A masterchain block's _lt_ is higher than the _lts_ of shard blocks that it lists since a master block depends on listed shard blocks. Each shard block contains an ordered reference to the latest (at the moment of shard block creation) master block, and thus, the shard block _lt_ is higher than the referenced master block _lt_.
 
-在多个智能合约互动的许多可能的场景中，消息传递顺序可能是任意的。唯一的保证是，来自任何合约 _A_ 到任何合约 _B_ 的消息将按照它们的逻辑时间顺序处理。下面是一些示例。
+## Message delivery
 
-为了更清楚起见，假设在 `B` 和 `C` 合约执行了 `msg1` 和 `msg2` 之后，我们的合约发回了 `msg1'` 和 `msg2'` 消息。因此，它将在 `A` 合约上应用 `tx2'` 和 `tx1'`。
-我们有两种可能的交易跟踪、
+TON guarantees reliable delivery of all internal messages - the destination account will always receive them. The network ensures messages cannot be lost between sender and recipient during transit.
+Validators control external messages' initial acceptance into blocks. However, once an external message enters the incoming message queue, it receives the same delivery guarantee as internal messages.
 
-1. 第一种可能的顺序是 `tx1'_lt < tx2'_lt`：
+### Delivery order
+
+Therefore, it seems like _lt_ solves the issue about message delivery order because we know that a transaction with a lower _lt_ will be processed first. But this doesn't work in every scenario.
+
+Suppose there are two contracts - _A_ and _B_. _A_ receives an external message, which triggers it to send two internal messages to _B_. Let's call these messages _1_ and _2_. In this simple case, we can be 100% sure that _1_ will be processed by _B_ before _2_ because it has a lower _lt_.
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/message_delivery_6.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_6.png?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt="Simple message order"
+    sources={{
+      light: "/img/docs/message-delivery/msg-delivery-1.png?raw=true",
+      dark: "/img/docs/message-delivery/msg-delivery-1-dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
 
-2. 第二种可能的顺序是 `tx2'_lt < tx1'_lt`：
+But this is just a simple case when we have only two contracts. How does our system work in more complex cases?
+
+### Several smart contracts
+
+Consider three contracts - _A_, _B_, and _C_. When contract _A_ sends two internal messages (_1_ to _B_ and _2_ to _C_) in a single transaction, the messages are created in strict order (_1_ first, then _2_). However, their processing order at the destinations isn't guaranteed because:
+
+1. **Network paths may differ**: The routes to _B_ and _C_ might involve different validator sets
+2. **Shard chain effects**: If _B_ and _C_ are in separate shard chains, messages may traverse different numbers of blocks
+3. **Asynchronous processing**: Each shard chain progresses independently, potentially causing delivery timing variations
+
+While the sending order is preserved at the source, TON's decentralized sharded architecture means the receiving order can't be predetermined.
+
+For better clarity, suppose our contracts send back messages `msg1'` and `msg2'` after `msg1` and `msg2` executed by `B` and `C` contracts. As a result, it will apply `tx2'` and `tx1'` to contract `A`.
+We have two possible traces for these transactions,
+
+1. The first possible order is `tx1'_lt < tx2'_lt`:
 
 <br></br>
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt="Complex message order 1"
+    sources={{
+      light: "/img/docs/message-delivery/message_delivery_6.png?raw=true",
+      dark: "/img/docs/message-delivery/message_delivery_6_dark.png?raw=true",
+    }}
+  />
 </div>
 <br></br>
 
-同样，当两个合约 _B_ 和 _C_ 向一个合约 _A_ 发送消息时，情况也是如此。即使 `B -> A` 的消息在 `C -> A` 之前发送，我们也无法知道哪一个将先被送达。`B -> A` 的路由可能需要更多的分片链转运。
+2. The second possible order is `tx2'_lt < tx1'_lt`:
 
-<ConceptImage src="/img/docs/msg-delivery-3.png" />
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt="Complex message order 2"
+    sources={{
+      light: "/img/docs/message-delivery/message_delivery_7.png?raw=true",
+      dark: "/img/docs/message-delivery/message_delivery_7_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
 
-在多个智能合约互动的许多可能的场景中，消息传递顺序可能是任意的。唯一的保证是，来自任何合约 _A_ 到任何合约 _B_ 的消息将按照它们的逻辑时间顺序处理。下面是一些示例。
+The same happens in the reverse case, when two contracts, _B_ and _C_, send a message to one contract, _A_. Even if message `B -> A` was sent before `C -> A`, we can't know which one will be delivered first. The `B -> A` route may require more shard chain hops.
 
-<ConceptImage src="/img/docs/msg-delivery-4.png" />
-<ConceptImage src="/img/docs/msg-delivery-5.png" />
-<ConceptImage src="/img/docs/msg-delivery-6.png" />
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt="Reverse message flow"
+    sources={{
+      light: "/img/docs/message-delivery/msg-delivery-3.png?raw=true",
+      dark: "/img/docs/message-delivery/msg-delivery-3_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
 
-## 结论
+There can be many scenarios of smart contract interactions, and in any scenario with more than 2 contracts, the order of message delivery may be arbitrary. The only guarantee is that messages from contract _A_ to contract _B_ will be processed in order of their logical time. Some examples are below.
 
-TON 区块链的异步结构为消息传递保证带来挑战。逻辑时间有助于确定事件和交易顺序，但由于分片链中的路由不同，它并不能保证多个智能合约之间的消息传递顺序。尽管存在这些复杂性，TON 仍然能够确保内部消息的传递，维护网络的可靠性。开发人员必须适应这些细微差别，以充分利用 TON 的潜力构建创新的去中心化应用程序。
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt="Multi-contract scenario 1"
+    sources={{
+      light: "/img/docs/message-delivery/msg-delivery-4.png?raw=true",
+      dark: "/img/docs/message-delivery/msg-delivery-4_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt="Multi-contract scenario 2"
+    sources={{
+      light: "/img/docs/message-delivery/msg-delivery-5.png?raw=true",
+      dark: "/img/docs/message-delivery/msg-delivery-5_dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+<br></br>
+<div class="text--center">
+  <ThemedImage
+    alt="Multi-contract scenario 3"
+    sources={{
+      light: "/img/docs/message-delivery/msg-delivery-6.png?raw=true",
+      dark: "/img/docs/message-delivery/msg-delivery-6-dark.png?raw=true",
+    }}
+  />
+</div>
+<br></br>
+
+## Conclusion
+
+The TON blockchain's asynchronous structure creates challenges for message delivery guarantees. Logical time helps to establish event and transaction order but doesn't guarantee message delivery order between multiple smart contracts due to varying routes in shard chains. Despite these complexities, TON ensures internal message delivery, maintaining network reliability. Developers must adapt to these nuances to harness TON's full potential in building innovative decentralized applications.
+
+<Feedback />
