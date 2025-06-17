@@ -1,12 +1,14 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
 # TL-B 语言
 
-TL-B（类型语言 - 二进制）用于描述类型系统、构造函数和现有功能。例如，我们可以使用 TL-B 方案构建与 TON 区块链关联的二进制结构。特殊的 TL-B 解析器可以读取方案，将二进制数据反序列化为不同的对象。TL-B 描述了 `Cell` 对象的数据方案。如果您不熟悉 `Cells`，请阅读 [Cell & Bag of Cells(BOC)](https://docs.ton.org/develop/data-formats/cell-boc#cell) 文章。
+TL-B (Type Language - Binary) describes the type system, constructors, and available functions. For example, TL-B schemes can be used to define binary structures associated with the TON blockchain. Special TL-B parsers can read these schemes to deserialize binary data into various objects. TL-B specifically describes data schemes for `cell` objects. If you are unfamiliar with `cells`, please refer to the [Cell & Bag of Cells (BoC)](/v3/documentation/data-formats/tlb/cell-boc#cell) article.
 
 ## 概述
 
-我们将任何一组 TL-B 构造称为 TL-B 文档。一个 TL-B 文档通常包括类型的声明（即它们的构造函数）和功能组合子。每个组合子的声明都以分号 (`;`) 结尾。
+我们将任何一组 TL-B 构造称为 TL-B 文档。一个 TL-B 文档通常包括类型的声明（即它们的构造函数）和功能组合子。每个组合子的声明都以分号 (`;`) 结尾。 A typical TL-B document consists of type declarations, i.e., their constructors, and functional combinators. Each combinator declaration ends with a semicolon `;`.
 
 这是一个可能的组合子声明示例：
 
@@ -22,7 +24,8 @@ TL-B（类型语言 - 二进制）用于描述类型系统、构造函数和现�
 
 ## 构造函数
 
-每个等式的左侧描述了定义或序列化右侧指示类型的值的方式。这样的描述以构造函数的名称开始。
+The left-hand side of each equation defines how to construct or serialize a value of the type specified on the right-hand side.
+Each description begins with the name of a constructor.
 
 <br></br>
 <ThemedImage
@@ -34,7 +37,7 @@ TL-B（类型语言 - 二进制）用于描述类型系统、构造函数和现�
 />
 <br></br>
 
-构造函数用于指定组合器的类型，包括在序列化时的状态。例如，当你想在向 TON 智能合约查询时指定一个 `op`（操作码）的时候，也可以使用构造函数。
+Constructors define a combinator's type, including its state during serialization. 构造函数用于指定组合器的类型，包括在序列化时的状态。例如，当你想在向 TON 智能合约查询时指定一个 `op`（操作码）的时候，也可以使用构造函数。
 
 ```tlb
 // ....
@@ -53,24 +56,25 @@ bool_true$0 = Bool;
 bool_false$1 = Bool;
 ```
 
+每个等式的左侧描述了定义或序列化右侧指示类型的值的方式。这样的描述以构造函数的名称开始。
 每个等式的左侧描述了定义或序列化右侧指示类型的值的方式。这样的描述以构造函数的名称开始，如 `message` 或 `bool_true`，紧接着是一个可选的构造函数标签，例如 `#3f5476ca` 或 `$0`，它描述了用于编码（序列化）所讨论的构造函数的位。
 
-| 构造函数                          | 序列化                                   |
-| ----------------------------- | ------------------------------------- |
-| `some#3f5476ca`               | 从十六进制值序列化为 32 位 uint                  |
-| `some#5fe`                    | 从十六进制值序列化为 12 位 uint                  |
-| `some$0101`                   | 序列化 `0101` 原始位                        |
-| `some` 或 `some#`              | 序列化 `crc32(equation) \| 0x80000000`   |
-| `some#_` 或 `some$_` 或 `_`     | 不进行序列化                                |
+| 构造函数                        | 序列化                                        |
+| --------------------------- | ------------------------------------------ |
+| `some#3f5476ca`             | 从十六进制值序列化为 32 位 uint                       |
+| `some#5fe`                  | 从十六进制值序列化为 12 位 uint                       |
+| `some$0101`                 | 序列化 `0101` 原始位                             |
+| `some` 或 `some#`            | 序列化 `crc32(equation) \| 0x80000000`        |
+| `some#_` 或 `some$_` 或 `_`   | Serialize nothing.                         |
 
-构造函数名称（此示例中的 `some`）在代码生成中用作变量。例如：
+构造函数名称（此示例中的 `some`）在代码生成中用作变量。例如： For example:
 
 ```tlb
 bool_true$1 = Bool;
 bool_false$0 = Bool;
 ```
 
-类型 `Bool` 有两个标签 `0` 和 `1`。代码生成伪代码可能看起来像：
+类型 `Bool` 有两个标签 `0` 和 `1`。代码生成伪代码可能看起来像： The code generation pseudocode might look like this:
 
 ```python3
 
@@ -79,11 +83,11 @@ class Bool:
     tags_names = ['bool_true', 'bool_false']
 ```
 
-如果你不想为当前构造函数定义任何名称，只需传递 `_`，例如 `_ a:(## 32) = 32Int;`
+如果你不想为当前构造函数定义任何名称，只需传递 `_`，例如 `_ a:(## 32) = 32Int;` For example: `_ a:(## 32) = 32Int;`
 
-构造函数标签可以用二进制（在美元符号后）或十六进制表示法（在井号后）给出。如果未明确提供标签，则 TL-B 解析器必须通过用 CRC32 算法散列定义此构造函数的“等式”文本，并带有 `| 0x80000000` 来计算默认的 32 位构造函数标签。因此，必须通过 `#_` 或 `$_` 明确提供空标签。
+Constructor tags can be specified in binary (prefixed with a dollar sign) or hexadecimal (prefixed with a hash sign). 构造函数标签可以用二进制（在美元符号后）或十六进制表示法（在井号后）给出。如果未明确提供标签，则 TL-B 解析器必须通过用 CRC32 算法散列定义此构造函数的“等式”文本，并带有 `| 0x80000000` 来计算默认的 32 位构造函数标签。因此，必须通过 `#_` 或 `$_` 明确提供空标签。 Therefore, if an empty tag is intended, it must be explicitly defined using `#_` or `$_`.
 
-此标签将用于在反序列化过程中猜测当前位串的类型。例如，我们有 1 位位串 `0`，如果我们告诉 TLB 将此位串解析为 `Bool` 类型，它将被解析为 `Bool.bool_false`。
+This tag is used during the deserialization process to determine the type of the bitstring. 此标签将用于在反序列化过程中猜测当前位串的类型。例如，我们有 1 位位串 `0`，如果我们告诉 TLB 将此位串解析为 `Bool` 类型，它将被解析为 `Bool.bool_false`。
 
 假设我们有更复杂的示例：
 
@@ -93,6 +97,10 @@ tag_b$00 val(## 64) = A;
 ```
 
 如果我们在 TLB 类型 `A` 中解析 `1000000000000000000000000000000001`（1 和 32 个零和 1）- 首先我们需要获取前两位来定义标签。在此示例中，前两位 `10` 代表 `tag_a`。所以现在我们知道接下来的 32 位是 `val` 变量，在我们的示例中是 `1`。一些“解析”的伪代码变量可能看起来像：
+In this case, the first two bits are `10`, which correspond to `tag_a`.
+After identifying the tag, the next 32 bits are interpreted as the `val` variable. In this example, the value is `1`.
+
+The parsed pseudocode representation is as follows:
 
 ```python3
 A.tag = 'tag_a'
@@ -100,10 +108,11 @@ A.tag_bits = '10'
 A.val = 1
 ```
 
-所有构造函数名称必须是不同的，并且同一类型的构造函数标签必须构成一个前缀码（否则反序列化将不是唯一的）；即，同一类型中的任何标签都不能是任何其他标签的前缀。
+所有构造函数名称必须是不同的，并且同一类型的构造函数标签必须构成一个前缀码（否则反序列化将不是唯一的）；即，同一类型中的任何标签都不能是任何其他标签的前缀。 In other words, no tag can be a prefix of another tag within the same type.
 
-每种类型的构造函数最大数量：`64`
-标签的最大位数：`63`
+- 每种类型的构造函数最大数量：`64`
+  标签的最大位数：`63`
+- 如果使用 `hex` 标签，请记住，它将以每个十六进制符号 4 位进行序列化。最大值是 63 位无符号整数。这意味着：
 
 <b>二进制示例：</b>
 
@@ -140,7 +149,7 @@ class A:
     tags_names = ['example_a', 'example_b', 'example_c']
 ```
 
-如果使用 `hex` 标签，请记住，它将以每个十六进制符号 4 位进行序列化。最大值是 63 位无符号整数。这意味着：
+If the `hex` tag is used, remember that it is serialized as 4 bits per hexadecimal character. The maximum supported value is a 63-bit unsigned integer. This implies the following:
 
 ```tlb
 a#32 a:(## 32) = AMultiTagInt;
@@ -149,24 +158,26 @@ c#5FE a:(## 32) = AMultiTagInt;
 d#3F5476CA a:(## 32) = AMultiTagInt;
 ```
 
-| 构造函数          | 序列化                                 |
-| ------------- | ----------------------------------- |
-| `a#32`        | 从十六进制值序列化为 8 位 uint                 |
-| `b#1111`      | 从十六进制值序列化为 16 位 uint                |
-| `c#5FE`       | 从十六进制值序列化为 12 位 uint                |
-| `d#3F5476CA`  | 从十六进制值序列化为 32 位 uint                |
+| 构造函数         | 序列化                        |
+| ------------ | -------------------------- |
+| `a#32`       | 从十六进制值序列化为 8 位 uint        |
+| `b#1111`     | 从十六进制值序列化为 16 位 uint       |
+| `c#5FE`      | 从十六进制值序列化为 12 位 uint       |
+| `d#3F5476CA` | 从十六进制值序列化为 32 位 uint       |
 
-十六进制值允许使用大写和小写。
+Hex values are allowed in both uppercase and lowercase formats.
 
 #### 关于十六进制标签的更多信息
 
-除了经典的十六进制标签定义外，十六进制数字后面可以跟一个下划线字符。这意味着标签等于指定的十六进制数字，但没有最低有效位。例如，有一个方案：
+In addition to the standard hex tag definition, a hexadecimal number may be followed by an underscore `_` character.
+This indicates that the tag should be interpreted as the hexadecimal value with the **least significant bit (LSB) removed**.
+For example, consider the following schema:
 
 ```tlb
 vm_stk_int#0201_ value:int257 = VmStackValue;
 ```
 
-实际上，标签并不等于 `0x0201`。为了计算它，我们需要从 `0x0201` 的二进制表示中删除 LSb：
+In this case, the tag is not equal to `0x0201`. 实际上，标签并不等于 `0x0201`。为了计算它，我们需要从 `0x0201` 的二进制表示中删除 LSb：
 
 ```
 0000001000000001 -> 000000100000000
@@ -176,7 +187,12 @@ vm_stk_int#0201_ value:int257 = VmStackValue;
 
 ## 字段定义
 
-构造函数及其可选标签后面跟着字段定义。每个字段定义的形式为 `ident:type-expr`，其中 ident 是字段名称的标识符（匿名字段用下划线替代），type-expr 是字段的类型。这里提供的类型是类型表达式，可能包括简单类型、带有适当参数的参数化类型或复杂表达式。
+Field definitions follow each constructor and its optional tag. A field definition has the format `ident:type-expr`, where:
+
+- `ident` is the field's name (use `_` for anonymous fields).
+- `type-expr` is the field's type.
+
+The `type-expr` can be a simple type, a parameterized type with appropriate arguments, or a more complex expression.
 
 <b>总之，在类型中定义的所有字段总数不得超过 Cell（`1023` 位和 `4` 引用）</b>
 
@@ -197,15 +213,17 @@ vm_stk_int#0201_ value:int257 = VmStackValue;
 _ a:(##32) ^[ b:(##32) c:(## 32) d:(## 32)] = A;
 ```
 
-- 如果出于某种原因我们想将一些字段分离到另一个cell，我们可以使用 `^[ ... ]` 语法。
-  在这个示例中，`A.a` / `A.b` / `A.c` / `A.d` 是 32 位无符号整数，但 `A.a` 存储在第一个cell中，
-  而 `A.b` / `A.c` / `A.d` 存储在下一个cell（1 个引用）中。
+- 如果出于某种原因我们想将一些字段分离到另一个cell，我们可以使用 `^[ ... ]` syntax.
+  For example, in the following structure, `A.a` / `A.b` / `A.c` / `A.d` are all 32-bit unsigned integers.
+  ]` 语法。
+  在这个示例中，`A.a`/`A.b`/`A.c`/`A.d`是 32 位无符号整数，但`A.a`存储在第一个cell中，
+  而`A.b`/`A.c`/`A.d\` 存储在下一个cell（1 个引用）中。
 
 ```tlb
 _ ^[ a:(## 32) ^[ b:(## 32) ^[ c:(## 32) ] ] ] = A;
 ```
 
-- 链式引用也是允许的。在这个示例中，每个变量（`a`、`b`、`c`）都存储在分离的cell中。
+- Chains of references are also allowed. 链式引用也是允许的。在这个示例中，每个变量（`a`、`b`、`c`）都存储在分离的cell中。
 
 ### 参数化类型
 
@@ -223,37 +241,53 @@ _ a:(IntWithObj uint32) = IntWithUint32;
 
 ### 复杂表达式
 
-- 条件字段（仅适用于 `Nat`）（`E?T` 表示如果表达式 `E` 为真，则字段类型为 `T`）
+- **Conditional fields (only for `Nat`)**
+
+  条件字段（仅适用于 `Nat`）（`E?T` 表示如果表达式 `E` 为真，则字段类型为 `T`）
+
+  **Example**
+
   ```tlb
   _ a:(## 1) b:a?(## 32) = Example;
   ```
-  在 `Example` 类型中，变量 `b` 仅在 `a` 为 `1` 时序列化。
 
-- 元组创建的乘法表达式（`x * T` 表示创建类型为 `T` 的长度为 `x` 的元组）：
+    在 `Example` 类型中，变量 `b` 仅在 `a` 为 `1` 时序列化。
 
-  ```tlb
+- **Multiplicative expression for tuple creation**
+
+  元组创建的乘法表达式（`x * T` 表示创建类型为 `T` 的长度为 `x` 的元组）：
+
   a$_ a:(## 32) = A;
-  b$_ b:(2 * A) = B;
-  ```
+  b$_ b:(2 \* A) = B;
 
   ```tlb
   _ (## 1) = Bit;
   _ 2bits:(2 * Bit) = 2Bits;
   ```
 
-- 位选择（仅适用于 `Nat`）（`E . B` 表示获取 `Nat` `E` 的位 `B`）
+- **Bit selection (only for `Nat`)**
+
+  位选择（仅适用于 `Nat`）（`E . B` 表示获取 `Nat` `E` 的位 `B`）
+
+  **Example**
+
   ```tlb
   _ a:(## 2) b:(a . 1)?(## 32) = Example;
   ```
+
   在 `Example` 类型中，变量 `b` 仅在 `a` 的第二个位是 `1` 时序列化。
 
-- 其他 `Nat` 运算符也允许（查看 `允许的约束`）
+- **Other `Nat` operators**
 
-注意：您可以组合几种复杂表达式：
+  其他 `Nat` 运算符也允许（查看 `允许的约束`）
 
-```tlb
-_ a:(## 1) b:(## 1) c:(## 2) d:(a?(b?((c . 1)?(## 64)))) = A;
-```
+  注意：您可以组合几种复杂表达式：
+
+  **Example**
+
+  ```tlb
+  _ a:(## 1) b:(## 1) c:(## 2) d:(a?(b?((c . 1)?(## 64)))) = A;
+  ```
 
 ## 内置类型
 
@@ -276,13 +310,15 @@ _ a:(## 1) b:(## 1) c:(## 2) d:(a?(b?((c . 1)?(## 64)))) = A;
 _ flags:(## 10) { flags <= 100 } = Flag;
 ```
 
-`Nat` 字段允许在约束中使用。在这个示例中，`{ flags <= 100 }` 约束意味着 `flags` 变量小于等于 `100`。
+`Nat` fields are allowed in constraints. `Nat` 字段允许在约束中使用。在这个示例中，`{ flags <= 100 }` 约束意味着 `flags` 变量小于等于 `100`。
 
 允许的约束：`E` | `E = E` | `E <= E` | `E < E` | `E >= E` | `E > E` | `E + E` | `E * E` | `E ? E`
 
 ## 隐式字段
 
-一些字段可能是隐式的。它们的定义被花括号（`{`、`}`）包围，表示该字段实际上并不存在于序列化中，而是必须根据其他数据（通常是正在序列化的类型的参数）推断其值。示例：
+Some fields may be implicit. 一些字段可能是隐式的。它们的定义被花括号（`{`、`}`）包围，表示该字段实际上并不存在于序列化中，而是必须根据其他数据（通常是正在序列化的类型的参数）推断其值。示例： Instead, their values must be deduced from other data, usually the parameters of the type being serialized.
+
+**Example**
 
 ```tlb
 nothing$0 {X:Type} = Maybe X;
@@ -295,7 +331,7 @@ _ {x:#} a:(## 32) { ~x = a + 1 } = Example;
 
 ## 参数化类型
 
-变量 — 即先前定义的字段的（标识符）类型 `#`（自然数）或 `Type`（类型的类型） — 可用作参数化类型的参数。序列化过程递归地根据其类型序列化每个字段，而一个值的序列化最终由表示构造器（即构造器标签）和字段值的位的串联构成。
+Variables — the identifiers of previously defined fields of types `#` (natural numbers) or `Type` (types of types) — may be used as parameters for parametrized types. During serialization, each field is recursively serialized according to its type. The final serialized value is the concatenation of bits representing the constructor, i.e., the constructor tag and the serialized field values.
 
 ### 自然数（`Nat`）
 
@@ -303,13 +339,13 @@ _ {x:#} a:(## 32) { ~x = a + 1 } = Example;
 _ {x:#} my_val:(## x) = A x;
 ```
 
-意味着 `A` 由 `x` `Nat` 参数化。在反序列化过程中，我们将获取 `x` 位无符号整数。例如：
+意味着 `A` 由 `x` `Nat` 参数化。在反序列化过程中，我们将获取 `x` 位无符号整数。例如： During the deserialization process, we will fetch an `x`-bit unsigned integer. For example:
 
 ```tlb
 _ value:(A 32) = My32UintValue;
 ```
 
-意味着在 `My32UintValue` 类型的反序列化过程中，我们将获取 32 位无符号整数（因为 `32` 参数应用于 `A` 类型）。
+意味着 `A` 由 `X` 类型参数化。在反序列化过程中，我们将获取 32 位无符号整数，然后解析类型 `X` 的 bits&refs。
 
 ### 类型
 
@@ -317,7 +353,7 @@ _ value:(A 32) = My32UintValue;
 _ {X:Type} my_val:(## 32) next_val:X = A X;
 ```
 
-意味着 `A` 由 `X` 类型参数化。在反序列化过程中，我们将获取 32 位无符号整数，然后解析类型 `X` 的 bits&refs。
+This means that the `X` type parametrizes `A`. During the deserialization process, we will first fetch a 32-bit unsigned integer and then parse the bits and references of the `X` type.
 
 这种参数化类型的使用示例如下：
 
@@ -362,7 +398,7 @@ _ {X:Type} bits:(A (B X)) = AB X;
 
 ### 在参数化类型中使用 NAT 字段
 
-您可以像参数那样使用先前定义的字段。序列化将在运行时确定。
+您可以像参数那样使用先前定义的字段。序列化将在运行时确定。 The serialization will be determined at runtime.
 
 一个简单的示例：
 
@@ -370,7 +406,7 @@ _ {X:Type} bits:(A (B X)) = AB X;
 _ a:(## 8) b:(## a) = A;
 ```
 
-这意味着我们在 `a` 字段内存储了 `b` 字段的大小。因此，当我们想序列化类型 `A` 时，需要加载 `a` 字段的 8 位无符号整数，然后使用这个数字来确定 `b` 字段的大小。
+This means that the size of the `b` field is stored inside the `a` field. 这意味着我们在 `a` 字段内存储了 `b` 字段的大小。因此，当我们想序列化类型 `A` 时，需要加载 `a` 字段的 8 位无符号整数，然后使用这个数字来确定 `b` 字段的大小。
 
 这种策略也适用于参数化类型：
 
@@ -388,7 +424,7 @@ _ _:(Example 4) = 2BitInteger;
 
 在这个示例中，`Example.value` 类型在运行时确定。
 
-在 `2BitInteger` 定义中，我们设置了 `Example 4` 类型。要确定这个类型，我们使用 `Example (x * 2)` 定义，并根据公式计算 `x`（`y = 2`，`z = 4`）：
+在 `2BitInteger` 定义中，我们设置了 `Example 4` 类型。要确定这个类型，我们使用 `Example (x * 2)` 定义，并根据公式计算 `x`（`y = 2`，`z = 4`）： To determine this type, we use the `Example (x * 2)` definition and calculate `x` using the formula `(y = 2, z = 4)`:
 
 ```c++
 static inline bool mul_r1(int& x, int y, int z) {
@@ -403,7 +439,7 @@ _ {x:#} value:(## x) = ExampleSum (x + 3);
 _ _:(ExampleSum 4) = 1BitInteger;
 ```
 
-在 `1BitInteger` 定义中，我们设置了 `ExampleSum 4` 类型。要确定这个类型，我们使用 `ExampleSum (x + 3)` 定义，并根据公式计算 `x`（`y = 3`，`z = 4`）：
+在 `1BitInteger` 定义中，我们设置了 `ExampleSum 4` 类型。要确定这个类型，我们使用 `ExampleSum (x + 3)` 定义，并根据公式计算 `x`（`y = 3`，`z = 4`）： To determine this type, we use the `ExampleSum (x + 3)` definition and calculate `x` using the formula `(y = 3, z = 4)`:
 
 ```c++
 static inline bool add_r1(int& x, int y, int z) {
@@ -411,9 +447,9 @@ static inline bool add_r1(int& x, int y, int z) {
 }
 ```
 
-## 取反运算符（`~`）
+## Negate operator (`~`)
 
-一些“变量”的出现（即已定义的字段）前面加上波浪号（`~`）。这表明该变量的出现与默认行为相反：在等式的左侧，它意味着该变量将基于此出现推断（计算），而不是替代其先前计算的值；在右侧相反，它意味着该变量不会从正在序列化的类型中推断出来，而是将在反序列化过程中计算。换句话说，波浪号将“输入参数”转换为“输出参数”，反之亦然。
+Some occurrences of "variables", i.e., already-defined fields, are prefixed by a tilde `~`. This indicates that the variable's occurrence is used oppositely from the default behavior. On the left-hand side of the equation, it means that the variable is deduced (computed) based on this occurrence, rather than substituting its previously calculated value. Conversely, on the right-hand side, the variable is not deduced from the serialized type but will instead be computed during the deserialization process. In other words, a tilde transforms an "input argument" into an "output argument" or vice versa.
 
 取反运算符的一个简单示例是基于另一个变量定义新变量：
 
@@ -457,7 +493,7 @@ _ {n_from_define:#} defined_val:(Define ~n_from_define 8) real_value:(## n_from_
 
 假设我们有一个类 `Define ~n m`，它接受 `m` 并从 `m` 位无符号整数中加载 `n`。
 
-在 `Example` 类型中，我们将 `Define` 类型计算出的变量存储到 `n_from_define` 中，我们也知道它是 8 位无符号整数，因为我们应用了 `Define ~n_from_define 8` 类型。现在我们可以在其他类型中使用 `n_from_define` 变量来确定序列化过程。
+在 `Example` 类型中，我们将 `Define` 类型计算出的变量存储到 `n_from_define` 中，我们也知道它是 8 位无符号整数，因为我们应用了 `Define ~n_from_define 8` 类型。现在我们可以在其他类型中使用 `n_from_define` 变量来确定序列化过程。 We also know it's an `8`-bit unsigned integer because we apply the `Define` type with `Define ~n_from_define 8`. Now, we can use the `n_from_define` variable for other kinds to determine the serialization process.
 
 这种技术可以导致更复杂的类型定义（如联合体、哈希映射）。
 
@@ -467,7 +503,7 @@ unary_succ$1 {n:#} x:(Unary ~n) = Unary ~(n + 1);
 _ u:(Unary Any) = UnaryChain;
 ```
 
-这个示例在 [TL-B 类型](https://docs.ton.org/develop/data-formats/tl-b-types#unary) 文章中有很好的解释。主要思想是 `UnaryChain` 将递归反序列化，直到达到 `unary_zero$0`（因为我们通过定义 `unary_zero$0 = Unary ~0;` 和 `X` 在运行时由 `Unary ~(n + 1)` 定义计算得知 `Unary X` 类型的最后一个元素）。
+This example is explained well in the [TL-B types](/v3/documentation/data-formats/tlb/tl-b-types#unary) article. 这个示例在 [TL-B 类型](https://docs.ton.org/develop/data-formats/tl-b-types#unary) 文章中有很好的解释。主要思想是 `UnaryChain` 将递归反序列化，直到达到 `unary_zero$0`（因为我们通过定义 `unary_zero$0 = Unary ~0;` 和 `X` 在运行时由 `Unary ~(n + 1)` 定义计算得知 `Unary X` 类型的最后一个元素）。 The value of `X` is calculated at runtime due to the definition `Unary ~(n + 1)`.
 
 注意：`x:(Unary ~n)` 意味着 `n` 在序列化 `Unary` 类的过程中被定义。
 
@@ -476,16 +512,16 @@ _ u:(Unary Any) = UnaryChain;
 目前，TVM允许以下cell类型：
 
 - 普通（Ordinary）
-- 裁剪分支（Prunned Branch）
+- PrunnedBranch
 - 库引用（Library Reference）
 - Merkle证明（Merkle Proof）
 - Merkle更新（Merkle Update）
 
-默认情况下，所有cell都是`普通`类型。并且在tlb中描述的所有cell都是`普通`类型。
+默认情况下，所有cell都是`普通`类型。并且在tlb中描述的所有cell都是`普通`类型。 This applies to all cells described in the TLB as well.
 
 要在构造函数中允许加载特殊类型，需要在构造函数前添加`!`。
 
-示例：
+**Example**
 
 ```tlb
 !merkle_update#02 {X:Type} old_hash:bits256 new_hash:bits256
@@ -499,8 +535,9 @@ _ u:(Unary Any) = UnaryChain;
 ## 不检查构造函数唯一性标签的同一类型多个实例
 
 允许仅根据类型参数创建同一类型的多个实例。在这种定义方式下，不会应用构造函数标签唯一性检查。
+In this case, the constructor tag uniqueness check will not be applied.
 
-示例：
+**Example**
 
 ```tlb
 _ = A 1;
@@ -573,7 +610,7 @@ b$01 = A 3 3;
 c$11 {X:#} {Y:#} = A X Y;
 ```
 
-## 注释
+## Comments
 
 注释与C++中的相同：
 
@@ -586,7 +623,7 @@ a comment
 // This is one line comment
 ```
 
-## IDE 支持
+## References
 
 - [TL的旧版本描述](https://core.telegram.org/mtproto/TL)
 - [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb)
@@ -598,3 +635,5 @@ a comment
 <hr/>
 
 文档由 [Disintar](https://dton.io/) 团队提供。
+
+<Feedback />
