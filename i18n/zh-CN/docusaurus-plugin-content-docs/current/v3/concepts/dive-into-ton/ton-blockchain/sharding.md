@@ -1,24 +1,31 @@
-# TON 区块链中的分片
+import Feedback from '@site/src/components/Feedback';
 
-[//]: # "TODO，这来自 gpt"
+# Sharding in TON
 
-TON 区块链采用先进的分片机制来提高可扩展性和性能，使其能够高效处理大量交易。
-其核心理念是将区块链分割成较小的、独立的片段，称为**分片**。这些分片可以并行处理交易，即使网络在增长，也能确保高吞吐量。
+Sharding in TON refers to dividing the blockchain into smaller, manageable pieces, or shards, for scalability. An independent set of validators operates and maintains a shard as a smaller piece of the blockchain.
 
-在 TON 中，分片是高度动态的。其他区块链的分片数量是固定的，而 TON 不同，它可以按需创建新的分片。
-当交易负载增加时，分片会分裂，当负载减少时，分片会合并。
-这种灵活性确保系统能够适应不同的工作量，同时保持效率。
+Validators in separate shards can handle transactions in parallel, ensuring high throughput even as the network grows. This approach unlocks the execution of a massive number of transactions.
 
-主链扮演着至关重要的角色，它负责维护网络配置以及所有**工作链**和**分片链**的最终状态。
-主链负责整体协调，而**工作链**则根据各自的特定规则运行，每个工作链都可以进一步拆分为分片链。
-目前，只有一个工作链（**基础链**）在 TON 上运行。
+In TON, sharding is highly dynamic. Unlike other blockchains with a fixed number of shards, TON can create new shards on demand.
+Shards split as the transaction load increases, and as the load decreases, they merge.
+This flexibility ensures the system can adapt to varying workloads while maintaining efficiency.
 
-TON效率的核心是**无限分片范式**，它将每个账户视为其自身 "账户链 "的一部分。
-然后，这些账户链被聚合成分片链区块，从而促进高效的交易处理。
+![](/img/docs/blockchain-fundamentals/scheme.png)
 
-除了动态创建分片外，TON 还使用了**拆分合并**功能，使网络能够有效地应对不断变化的交易负载。该系统增强了区块链网络内的可扩展性和互动性，体现了 TON 以效率和全球一致性为重点解决常见区块链难题的方法。
+The **MasterChain** is crucial in maintaining the network configuration and the final state of all **WorkChains** and **ShardChains**.
+While the MasterChain is responsible for overall coordination, WorkChains operate under their specific rules, each of which can be split further into SharChains.
+Only one WorkChain - the **BaseChain**, currently operates on TON.
 
-## 另请参见
+At the heart of TON's efficiency is the [Infinity sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm/), which treats each account as part of its own AccountChain.
+These AccountChains are then aggregated into ShardChain blocks, facilitating efficient transaction processing.
 
-- [深入分片](/v3/documentation/smart-contracts/shards/shards-intro)
-- [#无限分片范式](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm)
+In addition to dynamically creating shards, TON uses **split merge** functionality, which allows the network to efficiently respond to changing transaction loads. This system enhances scalability and interaction within the blockchain network, exemplifying TON's approach to resolving typical blockchain challenges with a focus on efficiency and global consistency.
+
+## See also
+
+- [Blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/)
+- [Shards dive in](/v3/documentation/smart-contracts/shards/shards-intro/)
+- [Infinity sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm/)
+
+<Feedback />
+
