@@ -1,40 +1,45 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
-# Telegram 机器人的 TON Connect - Python
+# TON Connect for Telegram Bots - Python
 
-:::warning 弃用
-本指南介绍了将 TON Connect 与 Telegram 机器人集成的过时方法。如需更安全、更现代的方法，请考虑使用 [Telegram 小程序](/v3/guidelines/dapps/tma/overview)。
+:::warning deprecated
+This guide explains an outdated method of integrating TON Connect with Telegram bots. For a more secure and modern approach, consider using [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview for a more modern and secure integration.
 :::
 
-<Button href="https://t.me/ton_connect_example_bot" colorType={'primary'} sizeType={'sm'}>
+In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication using Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect).
+We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
 
-打开演示机器人
+<Button href="https://t.me/test_tonconnect_bot" colorType={'primary'} sizeType={'sm'}>
 
-</Button>
-
-<Button href="https://github.com/ton-connect/demo-telegram-bot" colorType={'secondary'} sizeType={'sm'}>
-
-查看 GitHub
+Open Demo Bot
 
 </Button>
 
-## 安装库
+<Button href="https://github.com/yungwine/ton-connect-bot" colorType={'secondary'} sizeType={'sm'}>
 
-### 安装库
+Check out GitHub
 
-要制作机器人，我们将使用 `aiogram` 3.0 Python 库。
-要开始将 TON Connect 集成到 Telegram 机器人中，你需要安装 `pytonconnect` 软件包。
-要使用 TON 基元和解析用户地址，我们需要 `pytoniq-core`。
-为此您可以使用 pip：
+</Button>
+
+## Preparing
+
+### Install libraries
+
+To make bot we are going to use `aiogram` 3.0 Python library.
+To start integrating TON Connect into your Telegram bot, you need to install the `pytonconnect` package.
+And to use TON primitives and parse user address we need `pytoniq-core`.
+You can use pip for this purpose:
 
 ```bash
 pip install aiogram pytoniq-core python-dotenv
 pip install pytonconnect
 ```
 
-### 设置配置
+### Set up config
 
-在 `.env` 文件中指定 [机器人令牌](https://t.me/BotFather) 和 TON Connect [清单文件](https://github.com/ton-connect/sdk/tree/main/packages/sdk#add-the-tonconnect-manifest) 的链接。之后在 `config.py` 中加载它们：
+Specify in `.env` file [bot token](https://t.me/BotFather) and link to the TON Connect [manifest file](https://github.com/ton-connect/sdk/tree/main/packages/sdk#add-the-tonconnect-manifest). After load them in `config.py`:
 
 ```dotenv
 # .env
@@ -55,9 +60,9 @@ TOKEN = env['TOKEN']
 MANIFEST_URL = env['MANIFEST_URL']
 ```
 
-## 创建简单的机器人
+## Create simple bot
 
-创建包含机器人主代码的 `main.py` 文件：
+Create `main.py` file which will contain the main bot code:
 
 ```python
 # main.py
@@ -95,11 +100,11 @@ if __name__ == "__main__":
 
 ```
 
-## TON Connect 存储
+## Wallet connection
 
-### TON 连接存储
+### TON Connect Storage
 
-让我们为 TON Connect 创建一个简单的存储空间
+Let's create simple storage for TON Connect
 
 ```python
 # tc_storage.py
@@ -129,9 +134,9 @@ class TcStorage(IStorage):
 
 ```
 
-### 连接处理程序
+### Connection handler
 
-首先，我们需要为每个用户返回不同实例的函数：
+Firstly, we need function which returns different instances for each user:
 
 ```python
 # connector.py
@@ -147,7 +152,7 @@ def get_connector(chat_id: int):
 
 ```
 
-其次，让我们在 `command_start_handler()` 中添加连接处理程序：
+Secondary, let's add connection handler in `command_start_handler()`:
 
 ```python
 # main.py
@@ -172,8 +177,8 @@ async def command_start_handler(message: Message):
 
 ```
 
-现在，对于尚未连接钱包的用户，机器人会发送一条包含所有可用钱包按钮的消息。
-因此，我们需要编写函数来处理 `connect:{wallet["name"]}` 回调：
+Now, for a user who has not yet connected a wallet, the bot sends a message with buttons for all available wallets.
+So we need to write function to handle `connect:{wallet["name"]}` callbacks:
 
 ```python
 # main.py
@@ -231,11 +236,11 @@ async def main_callback_handler(call: CallbackQuery):
             await connect_wallet(message, data[1])
 ```
 
-机器人会给用户 3 分钟时间连接钱包，之后会报告超时错误。
+Bot gives user 3 minutes to connect a wallet, after which it reports a timeout error.
 
-## 实施事务请求
+## Implement Transaction requesting
 
-让我们以 [Message builders](/v3/guidelines/ton-connect/guidelines/preparing-messages) 一文中的一个例子为例：
+Let's take one of examples from the [Message builders](/v3/guidelines/ton-connect/guidelines/preparing-messages) article:
 
 ```python
 # messages.py
@@ -264,7 +269,7 @@ def get_comment_message(destination_address: str, amount: int, comment: str) -> 
 
 ```
 
-并在 `main.py` 文件中添加 `send_transaction()` 函数：
+And add `send_transaction()` function in the `main.py` file:
 
 ```python
 # main.py
@@ -294,7 +299,7 @@ async def send_transaction(message: Message):
     )
 ```
 
-但我们还应该处理可能出现的错误，因此我们将 `send_transaction` 方法封装到 `try - except` 语句中：
+But we also should handle possible errors, so we wrap the `send_transaction` method into `try - except` statement:
 
 ```python
 @dp.message(Command('transaction'))
@@ -313,9 +318,9 @@ async def send_transaction(message: Message):
         await message.answer(text=f'Unknown error: {e}')
 ```
 
-## 添加断开连接处理程序
+## Add disconnect handler
 
-这个函数的实现非常简单：
+This function implementation is simple enough:
 
 ```python
 async def disconnect_wallet(message: Message):
@@ -325,7 +330,7 @@ async def disconnect_wallet(message: Message):
     await message.answer('You have been successfully disconnected!')
 ```
 
-目前，该项目的结构如下：
+Currently, the project has the following structure:
 
 ```bash
 .
@@ -337,10 +342,9 @@ async def disconnect_wallet(message: Message):
 └── tc_storage.py
 ```
 
-而 `main.py` 看起来是这样的：
+And the `main.py` looks like this:
 
-<details>
-<summary>显示 main.py</summary>
+<details><summary>Show main.py</summary>
 
 ```python
 # main.py
@@ -496,19 +500,20 @@ if __name__ == "__main__":
 
 </details>
 
-## 添加持久存储 - Redis
+## Improving
 
-### 添加永久存储 - Redis
+### Add permanent storage - Redis
 
-在启动 Redis 数据库后安装用于与之交互的 python 库：
+Currently, our TON Connect Storage uses dict which causes to lost sessions after bot restart.
+Let's add permanent database storage with Redis:
 
-启动 Redis 数据库后，安装 python 库与之交互：
+After you launched Redis database install python library to interact with it:
 
 ```bash
 pip install redis
 ```
 
-并更新 `tc_storage.py` 中的 `TcStorage` 类：
+And update `TcStorage` class in `tc_storage.py`:
 
 ```python
 import redis.asyncio as redis
@@ -535,15 +540,15 @@ class TcStorage(IStorage):
         await client.delete(self._get_key(key))
 ```
 
-### 添加 QR 码
+### Add QR Code
 
-安装 python `qrcode` 软件包来生成它们：
+Install python `qrcode` package to generate them:
 
 ```bash
 pip install qrcode
 ```
 
-更改 `connect_wallet()` 函数，使其生成 qrcode 并以照片形式发送给用户：
+Change `connect_wallet()` function so it generates qrcode and sends it as a photo to the user:
 
 ```python
 from io import BytesIO
@@ -564,14 +569,17 @@ async def connect_wallet(message: Message, wallet_name: str):
     ...
 ```
 
-## 摘要
+## Summary
 
-下一步是什么？
+What is next?
 
-- 您可以在机器人中添加更好的错误处理功能。
-- 您可以添加开始文本和类似 `/connect_wallet`命令的内容。
+- You can add better errors handling in the bot.
+- You can add start text and something like `/connect_wallet` command.
 
-## 另请参见
+## See Also
 
-- [完整机器人代码](https://github.com/yungwine/ton-connect-bot)
-- [准备信息](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+- [Full bot code](https://github.com/yungwine/ton-connect-bot)
+- [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+
+<Feedback />
+
