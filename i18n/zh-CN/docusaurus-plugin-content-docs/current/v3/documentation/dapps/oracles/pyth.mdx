@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
 # Pyth Oracles
@@ -7,7 +9,10 @@ import ThemedImage from '@theme/ThemedImage';
 TON 上的 Pyth 价格反馈通过主 TON Pyth 智能
 合约进行管理，实现与链上数据的无缝交互。在 TON，
 Pyth 接收器合约中的特定功能促进了这些交互。该合约充当 Pyth
-价格源的接口，处理价格数据的检索和更新。
+价格源的接口，处理价格数据的检索和更新。 In TON,
+these interactions are facilitated by specific functions within the
+Pyth receiver contract. This contract acts as an interface to Pyth
+price feeds, handling the retrieval and updating of price data.
 
 ## 安装 Pyth SDK
 
@@ -32,9 +37,8 @@ Pyth 接收器合约中的特定功能促进了这些交互。该合约充当 Py
 - TON Mainnet: [EQBU6k8HH6yX4Jf3d18swWbnYr31D3PJI7PgjXT-flsKHqql](https://docs.pyth.network/price-feeds/contract-addresses/ton)
 - TON 测试网：[EQB4ZnrI5qsP_IUJgVJNwEGKLzZWsQOFhiaqDbD7pTt_f9oU](https://docs.pyth.network/price-feeds/contract-addresses/ton)
 
-以下示例使用的是 testnet 合约。要使用主网，请将 `PYTH_CONTRACT_ADDRESS_TESTNET` 相应改为 `PYTH_CONTRACT_ADDRESS_MAINNET` 。 
+The following example uses testnet contract. 以下示例使用的是 testnet 合约。要使用主网，请将 `PYTH_CONTRACT_ADDRESS_TESTNET` 相应改为 `PYTH_CONTRACT_ADDRESS_MAINNET` 。 
 
-```ts
 import { TonClient, Address, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core";
 import { mnemonicToPrivateKey } from "@ton/crypto";
@@ -94,7 +98,6 @@ async function main() {
   console.log("Price feeds updated successfully.");
 }
 main().catch(console.error);
-```
 
 该代码段的功能如下：
 
@@ -113,3 +116,5 @@ main().catch(console.error);
 - [Pyth TON Contract](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/contracts)
 - [Pyth TON SDK](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/sdk)
 - [Pyth TON 示例](https://github.com/pyth-network/pyth-examples/tree/main/price_feeds/ton/sdk_js_usage)
+
+<Feedback />
