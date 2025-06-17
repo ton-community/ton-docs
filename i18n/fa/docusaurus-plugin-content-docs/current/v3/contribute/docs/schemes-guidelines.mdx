@@ -1,0 +1,97 @@
+import Feedback from '@site/src/components/Feedback';
+
+import ConceptImage from '@site/src/components/conceptImage';
+import ThemedImage from '@theme/ThemedImage';
+
+# Graphic Explanations Guidelines
+
+:::danger
+This page is outdated and will be deleted soon.
+See the [How to contribute](/v3/contribute/).
+:::
+
+Maintaining consistency in documentation is crucial, and to achieve this, a specific standard for visualizing processes in smart contracts has been developed.
+
+## Graphic Explanation Notation
+
+### Message Processing Graph
+
+To depict message processing, it's advisable to utilize a graphical representation resembling a smart contract graph, complete with labels for transactions and messages.
+
+If the order of transactions doesn't matter, you can omit their labels. This simplifies the diagram, making it easier to read and understand the details related to messages and contracts.
+
+#### Annotation Primitives
+
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1.png?raw=true',
+    dark: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1_dark.png?raw=true',
+  }}
+/>
+<br></br>
+
+- Avoid using big quantity different and bright colors.
+- Use the modification of figures, such as using a dashed border line.
+- For better comprehension, different transactions could be displayed with distinct line styles (solid and dashed).
+
+#### Message Processing Example
+
+<br></br>
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
+  }}
+/>
+<br></br>
+
+Learn references directly from Visio [message-processing.vsdx](/schemes-visio/message_processing.vsdx).
+
+### Formats and Colors
+
+#### Fonts
+
+- **Inter** fonts family  for all text within diagrams.
+
+#### Colors - Light Mode
+
+- Pencil Hand Drawn(default theme)
+
+#### Colors - Dark Mode
+
+- Font `#e3e3e3`
+- Background `#232328`
+- Light Highlight(arrows and scheme borders) `#058dd2`
+- Dark Highlight(arrows and scheme borders) `#0088cc`
+- InnerBackGround(for nested blocks) `#333337`
+
+#### Version Control Policy
+
+- Set diagrams in the documentation by SVG format for schemes to ensure readability on various devices.
+- Store original files in the project's Git repository under the "/static/visio" directory, making them easier to modify in the future.
+
+### Sequence Diagram
+
+In the case of complex and repetitive communication schemes between 2-3 actors, it is advisable to use a sequence diagram. For messages, use the notation of a common synchronous message arrow.
+
+#### Example
+
+<br></br>
+<div class="text--center">
+<ThemedImage
+  alt=""
+  sources={{
+    light: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
+    dark: '/img/docs/message-delivery/message_delivery_7_dark.png?raw=true',
+  }}
+/>
+</div>
+<br></br>
+
+### Scheme References
+
+- [message-processing.vsdx](/schemes-visio/message_processing.vsdx)
+
+<Feedback />
