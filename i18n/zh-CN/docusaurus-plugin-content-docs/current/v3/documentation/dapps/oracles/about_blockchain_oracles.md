@@ -1,60 +1,65 @@
-# 关于预言机
+import Feedback from '@site/src/components/Feedback';
 
-预言机是将区块链与外部系统连接在一起的实体，允许智能合约根据现实世界的输入和输出执行。
+# About oracles
 
-## 区块链预言机如何工作
+Blockchain oracles are entities that connect the blockchain to external systems, allowing smart contracts to be executed based on real-world inputs.
 
-区块链预言机是一种专门服务，是现实世界与区块链技术之间的桥梁。它们为智能合约提供来自外部世界的相关必要信息，如汇率、支付状态甚至天气状况。这些数据有助于自动执行智能合约，而无需人工直接干预。
+## How blockchain oracles work
 
-预言机背后的基本原则是，他们能够通过连接到各种在线资源来收集数据，从而在区块链之外运作。 虽然预言机并不是区块链本身的一部分， 它们作为可靠地将外部数据输入系统的中间人，在使其运作方面发挥着关键作用。
+Blockchain oracles are specialized services that act as bridges between the real world and blockchain technology. They provide smart contracts with relevant and necessary information from the outside world, such as exchange rates, payment statuses or even weather conditions. This data helps to automate and fulfill the terms of contracts without direct human intervention.
 
-大多数交易工具都倾向于去中心化，以避免依赖单一数据源所带来的风险。这为系统提供了更高的安全性和可靠性，因为数据在用于智能合约之前会通过节点网络进行验证和确认。这种方法最大限度地降低了操纵和错误的风险，确保了所提供信息的准确性和时效性。
+The basic principle behind oracles is their ability to function outside of the blockchain by connecting to various online sources to collect data. Although oracles are not part of the blockchain itself, they play a key role in making it functional by acting as a trusted intermediary that reliably feeds external data into the system.
 
-## 区块链规则的多样性
+Most oracles tend to be decentralized, avoiding the risks associated with dependence on a single source of data. This provides greater security and reliability to the system as data is verified and validated through a network of nodes before it is used in smart contracts. This approach minimizes the risk of manipulation and errors, ensuring that the information provided is accurate and up-to-date.
 
-区块链按不同方面分类：操作机制、数据来源、数据方向和治理结构。 让我们看看最常见的预言机类型。
+## Varieties of blockchain oracles
 
-### 软件和硬件预言机
+Blockchain oracles are categorized according to various aspects: mechanism of operation, data sources, data direction, and governance structure. Let's take a look at the most common types of oracles.
 
-软件与演处理存储在数据库、服务器、云存储等各种数字源中的在线数据。硬件预言机将物理世界与数字世界连接起来，使用传感器和扫描仪将现实世界事件的数据传输到区块链上。
+### Software and hardware oracles
 
-### 传入和传出的预言机
+Software oracles work with online data that is stored in various digital sources such as databases, servers, cloud storage. Hardware oracles connect the physical world to the digital world, using sensors and scanners to transfer data about real-world events to the blockchain.
 
-导入预言机向区块链输入信息，例如用于保险合约的天气数据。而导出预言机则将数据从区块链发送到外部世界，如交易通知。这是提高可靠性和解决单点故障问题所必需的。
+### Incoming and outgoing oracles
 
-### 集中式和去中心化预言机
+Inbound oracles feed information into the blockchain, such as weather data for insurance contracts. Outbound oracles, in turn, send data from the blockchain to the outside world, such as transaction notifications. Using both types of oracles improves the overall reliability of the system by ensuring a continuous and accurate flow of data in both directions. It also reduces the likelihood of a single point of failure problem by diversifying the sources and destinations of critical data, reducing the risk that a failure in one component could jeopardize the entire system.
 
-集中式预言机由单方控制，存在安全和可靠性风险。去中心化型预言机使用多个节点来验证数据，因此更加安全可靠。
+### Centralized and decentralized oracles
 
-### 特定智能合约的预言机
+Centralized oracles are controlled by a single party, which creates security and reliability risks. Decentralized oracles use multiple nodes to verify data, making them more secure and reliable.
 
-这些预言机是为了某些智能合约而单独研制的，由于其特殊性和高昂的开发成本，这些预言机可能不那么受欢迎。
+### Oracles for specific smart-contracts
 
-### 跨链预言机
+These oracles are developed individually for certain smart contracts and may not be as popular due to their specificity and high development costs.
 
-这些用于在不同的区块链之间传输数据。当网络不兼容时使用。 有助于使用跨链交易的分散应用程序，例如将加密资产从一个网络转移到另一个网络。
+### Crosschain oracles
 
-## 区块链预言机的应用
+These oracles are used to transfer data between different blockchains and are a critical component of bridges. They are used for decentralized applications that use cross-chain transactions, such as cross-chain transfer of crypto assets from one network to another.
 
-区块链预言机架起了区块链数字世界与现实生活之间的桥梁，开辟了广泛的应用领域。让我们来看看区块链预言机的一些最常用的用途。
+## Application of blockchain oracles
 
-### DeFi（去中心化金融）
+Blockchain oracles build bridges between the digital world of blockchains and real life, opening up a wide range of applications. Let's take a look at some of the most popular uses of oracles.
 
-通过提供市场价格和加密货币数据，预言机在 DeFi 生态系统中发挥着至关重要的作用。价格指标允许 DeFi 平台将代币价值与实际资产挂钩，这对于控制流动性和确保用户头寸至关重要。这使得交易更加透明和安全，有助于提高金融交易的稳定性和可靠性。
+### DeFi (decentralized finance)
 
-### 保险
+Oracles play a critical role in the DeFi ecosystem by providing market price and cryptocurrency data. Price oracles allow DeFi platforms to link token values to real assets, which is essential for controlling liquidity and securing users' positions. Additionally, oracles are vital for lending platforms, where accurate price data ensures proper collateral valuation and risk management, safeguarding both lenders and borrowers. This makes transactions more transparent and secure, contributing to the stability and reliability of financial transactions.
 
-预言机可以自动读取和分析各种来源的数据，以确定保险事件的发生。 这使保险合约能够自动支付索偿，减少了手工处理每个案件的必要性，并加快了对保险事件的反应时间。
+### Insurance
 
-### 物流
+Oracles can automatically read and analyze data from a variety of sources to determine the occurrence of insurance events. This allows insurance contracts to pay claims automatically, reducing the need to manually process each case and speeding up response times to insurance events.
 
-在物流中使用oracles，可以让智能合约根据从车辆上的条形码扫描仪或传感器接收到的数据自动执行支付和其他操作。这可以最大限度地减少错误和延误，从而提高交付的准确性和效率。
+### Logistics
 
-### 随机号码生成
+The use of oracles in logistics allows smart contracts to automatically perform payments and other actions based on data received from barcode scanners or sensors on vehicles. This improves delivery accuracy and efficiency by minimizing errors and delays.
 
-在智能合约中很难生成随机数，因为所有操作都必须是可复制和可预测的，这与随机性的概念相矛盾。预言机通过将外部世界的数据引入合约来解决这个问题。它们可以为游戏和彩票生成可验证的随机数，确保结果的公平性和透明度。
+### Random number generation
 
-## TON 中的预言机列表
+It is difficult to generate random numbers in smart contracts because all operations must be reproducible and predictable, which contradicts the concept of randomness. Computational oracles solve this problem by bringing data from the outside world into contracts. They can generate verifiable random numbers for games and lotteries, ensuring fairness and transparency of results.
 
-- [RedStone Oracles](/develop/oracles/red_stone)
-- [RedStone Oracles](/v3/documentation/dapps/oracles/red_stone)
+## List of oracles in TON
+
+- [Pyth oracles](/v3/documentation/dapps/oracles/pyth)
+- [RedStone oracles](/v3/documentation/dapps/oracles/red_stone)
+
+<Feedback />
+
