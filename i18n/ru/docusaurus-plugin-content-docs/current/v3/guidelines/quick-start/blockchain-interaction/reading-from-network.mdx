@@ -9,7 +9,7 @@ import Button from '@site/src/components/button'
 Это руководство демонстрирует, как читать данные из блокчейна TON. Вы узнаете, как:
 
 - Получать информацию об аккаунте
-- Вызывать `get-методы`
+- Call `get methods`
 - Получать данные о транзакциях аккаунта
 
 В итоге вы поймёте, как взаимодействовать с [TON  API на основе HTTP](/ru/v3/guidelines/dapps/apis-sdks/ton-http-apis/). В этом руководстве используется [TON Center](https://toncenter.com/) — быстрый и надежный HTTP API для TON.
@@ -64,7 +64,35 @@ npx ts-node script.ts
 
 Состояние аккаунта может быть получено с помощью метода [`getContractState`](https://testnet.toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get/).
 
-#### Реализация
+#### Account's address
+
+To get account information, you need the account's address. In TON, we can use a user-friendly address — a base64url-encoded string that represents a blockchain account in a human-readable and error-resistant format.
+
+User-friendly addresses also include special flags that define how the address should be used. For example, some addresses are valid only on Testnet, while others work on any network. These flags are encoded in the first few bits and influence the first letter of the address:
+
+- Addresses beginning with **E** or **U** are used on **Mainnet**
+- Addresses beginning with **k** or **0** are used for **Testnet**
+
+**Mainnet example:**
+
+- `EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF`
+- `UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA`
+
+**Testnet example:**
+
+- Реализация
+- 0:25f2bf1ce8f83ed0c0fd73ea27aac77093cdcf900c750b071df7fb0288e019b2
+
+#### Your address in the following examples
+
+In the given code snippets, feel free to change the example address to your test wallet address in this line.
+
+```typescript
+ // Replace with any address
+const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-');
+```
+
+#### Implementation
 
 Создайте новый файл `1-get-account-state.ts`:
 
@@ -92,7 +120,7 @@ async function main() {
 main();
 ```
 
-Запустите этот пример, используя следующую команду:
+Выполните этот пример, используя следующую команду:
 
 ```bash
 npx ts-node 1-get-account-state.ts
@@ -107,13 +135,28 @@ Data:  b5ee9c7241010101002...fd1e976824402aa67b98
 Code:  b5ee9c7241021401000...c9ed54696225e5
 ```
 
-## Вызов get-методов
+**Note:** the balance may differ from the example because anyone can send funds to the wallet, so the amount is dynamic and not fixed.
 
-Get-методы — это специальные функции в смарт-контрактах, позволяющие наблюдать текущее состояние смарт-контракта. Их выполнение не требует оплаты комиссий и не может изменить данные смарт-контракта.
+## Calling get methods
+
+Get methods are special functions in smart contracts that allow you to conveniently observe the current state of a smart contract, returning only the **specific data** you need—without having to read the entire account state, as we did in the first example. While reading the whole account provides you with all the information, including balance, code, data, and more, get methods allow you to query **precise pieces of information**, making the process more efficient and developer-friendly.
+
+Their execution:
+
+- Do not charge any fees from contracts.
+- Cannot modify the smart contract’s storage or state.
 
 Результат вызова get-метода через TON HTTP API приходит в _стековом_ формате, и его можно десериализировать один элемент за другим с помощью `readNumber()` или схожей функции.
 
-#### Реализация
+#### Why do we need this?
+
+In TON, tokens or jettons are managed via separate contracts called **Jetton wallets**, which are linked to users' main wallet addresses. To interact with a user's tokens, we first need to know the address of their Jetton wallet contract.
+
+The `get_wallet_address` get method on the Jetton master contract allows us to retrieve the **verified Jetton wallet contract address**  for a given user's main wallet address.
+
+In this example, we demonstrate how to call this method to obtain the user's Jetton wallet address.
+
+#### Implementation
 
 Создайте новый файл `2-call-get-method.ts`:
 
@@ -147,7 +190,7 @@ async function main() {
 main();
 ```
 
-Запустите этот пример с помощью следующей команды:
+Запустите этот пример, используя следующую команду:
 
 ```bash
 npx ts-node 2-call-get-method.ts
@@ -156,8 +199,16 @@ npx ts-node 2-call-get-method.ts
 #### Ожидаемый результат
 
 ```bash
-0:25f2bf1ce8f83ed0c0fd73ea27aac77093cdcf900c750b071df7fb0288e019b2
+Raw address: 0:25f2bf1ce8f83ed0c0fd73ea27aac77093cdcf900c750b071df7fb0288e019b2
+User-friendly address: kQB11H0oDahylXlASZjiDtINlrS0PevVMsvtsbmKmvN5l9np
 ```
+
+As you can see, the get method returns the contract address in two formats:
+
+- The _raw address_ (hexadecimal format) is how TON represents addresses internally. It’s precise but not very human-friendly.
+- The _user-friendly address_  is a readable, safer format designed for sharing and everyday use. It’s easier to work with in wallets and apps.
+
+Both addresses point to the same contract — in this case, the **Jetton wallet contract** associated with the user’s wallet address.
 
 Get-методы можно также вызвать с помощью Tonviewer:
 
@@ -272,14 +323,29 @@ main();
 }
 ```
 
+- `hash`: A cryptographic message identifier which is computed after the message is included in a transaction and assigned a [logical time (lt)](/v3/documentation/smart-contracts/message-management/messages-and-transactions/#what-is-a-logical-time), which determines its processing order. The hash is not part of the original message and uniquely identifies the finalized message for integrity verification.
 - `source`: Адрес отправителя (аккаунт, который инициировал сообщение).
 - `destination`: Адрес получателя (аккаунт, который будет обрабатывать сообщение).
 - `value`: Количество TON (указывается в nanoTON), прикреплённое к сообщению.
 - `msg_data`: Содержит тело сообщения и состояние инициализации.
 
-#### Реализация
+#### Implementation
 
-Создайте новый файл `3-fetch-account-transaction.ts`:
+Let’s now try to fetch transactions for an account we control.
+
+Before running this code:
+
+- Go to [Tonviewer](https://testnet.tonviewer.com) and open your Testnet wallet address, which we created earlier in the [Getting Started](/v3/guidelines/quick-start/getting-started#interacting-with-ton-ecosystem) section.
+- Send some test TON to yourself using [Testgiver Ton Bot](https://t.me/testgiver_ton_bot/).
+- Wait a few seconds and make sure the transaction appears in Tonviewer.
+
+:::important
+Make sure you're working in the Testnet, not the Mainnet.
+
+Also, please note that the Testnet API may update data with some delay, so your transaction might not appear immediately when querying through the API.
+:::
+
+- Создайте новый файл `3-fetch-account-transaction.ts`:
 
 ```typescript title="3-fetch-account-transaction.ts"
 import { Address, TonClient } from "@ton/ton";
@@ -313,7 +379,9 @@ async function main() {
 main();
 ```
 
-Выполните этот пример, используя следующую команду:
+- Replace `Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-')` with your Testnet address.
+
+Запустите этот пример с помощью следующей команды:
 
 ```bash
 npx ts-node 3-fetch-account-transaction.ts
