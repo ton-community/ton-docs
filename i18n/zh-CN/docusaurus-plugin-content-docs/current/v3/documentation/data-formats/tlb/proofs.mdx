@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
 # 证明验证（低层级）
@@ -5,14 +7,19 @@ import ThemedImage from '@theme/ThemedImage';
 ## 概述
 
 :::caution
+This section provides instructions and guidance for interacting with TON at a low level.
 本节描述了与TON进行低层级交互的指令和手册。假设您已经熟悉了[特殊cell](/develop/data-formats/exotic-cells)、[TL-B 语言](/develop/data-formats/tl-b-language)并
 理解了[简单证明验证](/develop/data-formats/exotic-cells#simple-proof-verifying-example)示例。
 :::
 
 本文描述了从Liteservers验证证明的高级示例。
 
-从节点接收任何数据时，核实数据的真实性对于与区块链进行无信任交互非常重要。然而，文章仅涵盖了与Liteserver无信任通信的一部分，因为它假设您已经验证了从Liteserver（或其他任何人）收到的区块哈希。区块哈希验证更为高级，因为您需要同步关键区块和（或）检查区块签名，
-将来会在另一篇文章中描述。但无论如何，即使只使用这些示例，您也降低了Liteserver发送错误数据而您相信的可能性。
+Verifying any data received from a node is essential for trustless interaction with the blockchain.
+However, this article covers only a portion of the trustless communication process with a liteserver.
+It assumes you have verified the block hash received from a liteserver or any other source.
+Block hash verification is a more advanced topic.
+It requires syncing key blocks and/or validating block signatures. This topic will be covered in a future article.
+Nonetheless, even using only the examples provided here can significantly reduce the probability of accepting incorrect data from a liteserver.
 
 ## 区块头
 
@@ -22,6 +29,7 @@ import ThemedImage from '@theme/ThemedImage';
 <TL BlockIdExt [wc=-1, shard=-9223372036854775808, seqno=31220993, root_hash=51ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a52c7b1f46c26406, file_hash=d4fcdc692de1a252deb379cd25774842b733e6a96525adf82b8ffc41da667bf5] >
 ```
 
+We then request the corresponding block header from a liteserver.
 我们向Liteserver请求此区块的头部。Liteserver的[响应](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L35)包含一个`header_proof` boc。
 
 <details>
@@ -89,7 +97,7 @@ b5ee9c72010207010001470009460351ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a5
 }
 ```
 
-现在，我们应该检查反序列化区块中的`seqno`是否与我们所知的区块`seqno`匹配，然后计算唯一的Merkle Proof引用的hash_1，并将其与我们所知的区块哈希进行比较：
+Next, we need to verify that the `seqno` in the deserialized block matches the `seqno` of the block we know. 现在，我们应该检查反序列化区块中的`seqno`是否与我们所知的区块`seqno`匹配，然后计算唯一的Merkle Proof引用的hash_1，并将其与我们所知的区块哈希进行比较：
 
 ```python
 assert h_proof.refs[0].get_hash(0) == block_id.root_hash
@@ -101,11 +109,15 @@ _检查证明示例：_ [Python](https://github.com/yungwine/pytoniq-core/blob/8
 
 ## 完整区块
 
-对于`liteserver.getBlock`方法，证明验证与上述相同，但它包含完整的Cells，而不是裁剪过的分支，用于[值流](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L464)、[状态更新](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413)和[区块额外信息](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L452)的方案。
+In the `liteserver.getBlock` method, proof verification is performed in the same manner as described above. However, it includes full cells instead of pruned branches for the [value flow](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L464), [state update](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413), and [block extra](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L452) schemas.
 
-## 分片区块
+## Shard block
 
-分片证明是指分片引用实际存储在我们提供给Liteserver的主链区块中的证明。当我们调用`liteServer.getShardInfo`、`liteServer.getAccountState`和`liteServer.runSmcMethod`方法时，我们需要检查这些证明。
+Shard proofs verify that a shard reference is stored in the MasterChain block provided to the liteserver. These proofs are necessary when calling the following methods:
+
+- `liteServer.getShardInfo`
+- `liteServer.getAccountState`
+- `liteServer.runSmcMethod`
 
 让我们向Liteserver请求上面提到的主链区块的分片信息：
 
@@ -123,7 +135,8 @@ Liteserver响应包含了分片区块的BlockIdExt：
 
 <details>
 
-<summary><b>显示boc</b></summary>
+当我们从 Liteserver 接收到交易时，我们会得到带有交易量的 boc，我们要求根。每个根都是一个 cell ，我们应根据 [事务](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L263-L269) TLB 方案进行反序列化。
+对于第一个交易 cell ，我们应检查其哈希值是否与我们从账户状态中获得的`last_trans_hash` 匹配。然后记住 `prev_trans_hash` 字段的值，并将其与第二个根 cell 的哈希值进行比较，以此类推。
 
 ```boc
 
@@ -180,7 +193,7 @@ Cell
 }
 ```
 
-是[ShardState](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413) TLB方案的Merkle更新，所以我们需要记住新的哈希。
+是[ShardState](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413) TLB方案的Merkle更新，所以我们需要记住新的哈希。 The resulting new hash should be stored.
 
 在我们确认唯一的Merkle证明Cell引用的Hash_1与我们所知的区块哈希匹配，并记住了新的ShardState哈希后，我们检查第二个`shard proof` Cell：
 
@@ -210,7 +223,7 @@ Cell
 }
 ```
 
-正如我们所见，唯一的Merkle证明引用前缀为`9023AFE2`，这是[ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410)TLB方案的前缀，所以我们需要将这个引用的Hash_1与上一步中记住的进行比较：
+The Merkle proof reference in this cell has the prefix `9023AFE2`, corresponding to the [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410) TLB schema. This reference's `Hash_1` must match the hash stored in the previous step:
 
 ```python
 """
@@ -225,7 +238,7 @@ if mc_state_hash != state_hash:
     raise ProofError('mc state hashes mismatch')
 ```
 
-- _为什么？_ - 因为我们已经检查了区块头证明，这意味着我们可以信任其他Cell数据。所以现在我们信任ShardState Merkle更新的新哈希，要信任第二个Cell数据，我们需要检查哈希是否匹配。
+- _为什么？_ - 因为我们已经检查了区块头证明，这意味着我们可以信任其他Cell数据。所以现在我们信任ShardState Merkle更新的新哈希，要信任第二个Cell数据，我们需要检查哈希是否匹配。 Therefore, the new hash from the ShardState Merkle update is considered trusted. We must confirm the hashes match to validate the second cell’s data.
 
 现在，让我们反序列化第二个Cell：
 
@@ -289,11 +302,12 @@ if mc_state_hash != state_hash:
 
 让我们证明账户`EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG`在文章开头我们开始时使用的同一个主链区块的状态。
 
-让我们证明账户`EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG`在文章开头我们开始时使用的同一个主链区块的状态。
+让我们向Liteserver请求1、4、5、7、8和15号[配置参数](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L83)（对于 [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L82) 方法，您可以获取所有参数，验证证明的方式是相同的）。
+[回应](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L53)包含 `state_proof` 和 `config_proof`。
 
 <details>
 
-<details>
+<summary><b>显示boc</b></summary>
 
 ```boc
 Proof boc:
@@ -304,7 +318,7 @@ State boc:
 
 </details>
 
-当我们检查了`Shard Proof`后，我们需要反序列化`proof`和`state` cells。首先，`proof`证明Cell必须有两个根：
+当我们检查了`Shard Proof`后，我们需要反序列化`proof`和`state` cells。首先，`proof`证明Cell必须有两个根： The `proof` cell must contain exactly 2 root cells:
 
 ```json
 
@@ -333,7 +347,7 @@ State boc:
 
 如同在`Shard Proof`验证中所做的，我们需要使用`check_block_header`函数：检查Block Cell是否有效并记住新的`StateUpdate`哈希。
 
-如同在`Shard Proof`验证中所做的，我们需要使用`check_block_header`函数：检查Block Cell是否有效并记住新的`StateUpdate`哈希。
+Next, deserialize the second root (`state_cell`) and verify that its `Hash_1` matches the previously recorded hash:
 
 ```python
 proof_cells = Cell.from_boc(proof)
@@ -348,11 +362,11 @@ if state_cell[0].get_hash(0) != state_hash:
     raise ProofError('state hashes mismatch')
 ```
 
-现在我们可以信任`state_cell`，它看起来是这样的：
+现在我们可以信任`state_cell`，它看起来是这样的： Its structure is as follows:
 
 <details>
 
-<details>
+对于`liteserver.getBlock`方法，证明验证与上述相同，但它包含完整的Cells，而不是裁剪过的分支，用于[值流](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L464)、[状态更新](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413)和[区块额外信息](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L452)的方案。
 
 ```json
 280[03F93FE5EDA41A6CE9ECB353FD589842BD3F5D5E73B846CB898525293FC742FD690219] -> {
@@ -438,8 +452,8 @@ if state_cell[0].get_hash(0) != state_hash:
 
 </details>
 
-同样，唯一的Merkle证明引用前缀为`9023AFE2`，这是[ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410)
-TLB方案的前缀，所以我们要根据TLB方案进行反序列化：
+正如我们所见，唯一的Merkle证明引用前缀为`9023AFE2`，这是[ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410)TLB方案的前缀，所以我们需要将这个引用的Hash_1与上一步中记住的进行比较：
+Therefore, it must be deserialized accordingly.
 
 ```python
 {
@@ -484,9 +498,13 @@ TLB方案的前缀，所以我们要根据TLB方案进行反序列化：
 
 我们需要`account`字段，它具有[ShardAccounts](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L261)类型。
 `ShardAccounts`是一个HashmapAugE，其中键是地址的hash_part，值具有`ShardAccount`类型，额外数据具有`DeepBalanceInfo`类型。
+`ShardAccounts` is a HashmapAugE, where the key is the address `hash_part`, the value is type `ShardAccount`, and the extra field is type `DeepBalanceInfo`.
 
-我们需要`account`字段，它具有[ShardAccounts](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L261)类型。
-`ShardAccounts`是一个HashmapAugE，其中键是地址的hash_part，值具有`ShardAccount`类型，额外数据具有`DeepBalanceInfo`类型。
+Parsing the address `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG`, we obtain the `hash_part` equal to:
+
+`50368879097771769677871174881221998657607998794347754829932074327482686052226`
+
+We then use this key to retrieve the corresponding value from the Hashmap.
 
 ```python
 {
@@ -499,7 +517,7 @@ TLB方案的前缀，所以我们要根据TLB方案进行反序列化：
 }
 ```
 
-我们需要记住`last_trans_hash`和`last_trans_lt`，因为我们可以使用它们来获取账户交易，并检查这些数据的整个Cell：
+我们需要记住`last_trans_hash`和`last_trans_lt`，因为我们可以使用它们来获取账户交易，并检查这些数据的整个Cell： Let's examine the entire cell containing this data.
 
 ```json
 320[649B46AC72E6E4D4C1293B66D58D9ED7A54902BEEFD97F5BFF7977DD85998B3D000023C564393441] -> {
@@ -507,9 +525,11 @@ TLB方案的前缀，所以我们要根据TLB方案进行反序列化：
 }
 ```
 
-我们看到Cell是一个普通的Cell，级别为1，只有一个引用 - 被剪裁的账户数据，因此我们计算这个剪裁分支的Hash_1 - 我们可以信任的账户状态哈希：`8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`。
+This is a regular cell with level 1, containing a single reference — the pruned account data. We compute the `Hash_1` of this pruned branch, which serves as the trusted account state hash:
 
-我们看到Cell是一个普通的Cell，级别为1，只有一个引用 - 被剪裁的账户数据，因此我们计算这个剪裁分支的Hash_1 - 我们可以信任的账户状态哈希：`8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`。
+`8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`.
+
+The next step is to deserialize the `state` BoC:
 
 ```json
 449[C006F5BC67986E06430961D9DF00433926A4CD92E597DDD8AA6043645AC20BD178222C859043259E0D9000008F1590E4D10D405786BD755300] -> {
@@ -546,9 +566,12 @@ TLB方案的前缀，所以我们要根据TLB方案进行反序列化：
 }
 ```
 
-计算其 representation hash ，并确保它与我们从被剪裁的Cell中得到的匹配：`8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`。
+Compute its representation hash, and verify that it matches the trusted hash obtained from the pruned data:
 
-计算其 representation hash ，并确保它与我们从被剪裁的Cell中得到的匹配：`8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`。
+`8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`.
+
+同样，唯一的Merkle证明引用前缀为`9023AFE2`，这是[ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410)
+TLB方案的前缀，所以我们要根据TLB方案进行反序列化：
 
 ```python
 {
@@ -569,15 +592,18 @@ TLB方案的前缀，所以我们要根据TLB方案进行反序列化：
 
 ## 账户交易
 
-_检查证明示例：_ [Python](https://github.com/yungwine/pytoniq/blob/master/pytoniq/proof/check_proof.py#L87), [Kotlin](https://github.com/andreypfau/ton-kotlin/blob/b1edc4b134e89ccf252149f27c85fd530377cebe/ton-kotlin-liteclient/src/commonMain/kotlin/CheckProofUtils.kt#L37), [C++](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/check-proof.cpp#L161)
+For the [liteServer.getTransactions](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L94) request, we must provide the `lt` and `hash` of the transaction to start from.
+If we want to retrieve an account's latest transactions, we can extract the `lt` and `hash` from the trusted `ShardAccount`, as described above.
 
-当我们从 Liteserver 接收到交易时，我们会得到带有交易量的 boc，我们要求根。每个根都是一个 cell ，我们应根据 [事务](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L263-L269) TLB 方案进行反序列化。
-对于第一个交易 cell ，我们应检查其哈希值是否与我们从账户状态中获得的`last_trans_hash` 匹配。然后记住 `prev_trans_hash` 字段的值，并将其与第二个根 cell 的哈希值进行比较，以此类推。
+When the liteserver returns the transactions, it provides a BoC containing the requested number of transaction roots. Each root is a cell that should be deserialized using the [transaction](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L263-L269) TLB scheme.
+For the first transaction cell, verify that its hash matches the `last_trans_hash` from the account state. Then, store the `prev_trans_hash` field, compare it to the hash of the second transaction root, and continue the verification process in this manner.
 
 ## 大宗交易
 
+Next, we query the liteserver for the list of transactions belonging to the block we started with at the beginning of this article.
 让我们向 Liteserver 询问属于文章开头所述区块的事务。
 LiteServer [response](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L46)包含`ids`字段和`proof` boc。首先，让我们对 `proof` 进行反序列化：
+The first step is to deserialize the `proof`:
 
 ```json
 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
@@ -611,7 +637,7 @@ LiteServer [response](https://github.com/ton-blockchain/ton/blob/master/tl/gener
 }
 ```
 
-现在，我们应该检查 "区块头证明"（以信任 cell 数据），并根据 "区块 TLB 方案 "对其进行反序列化：
+We must verify the **block header proof** to trust the cell's contents. Once verified, we can deserialize it using the block TLB Scheme.
 
 ```python
 {
@@ -655,8 +681,14 @@ LiteServer [response](https://github.com/ton-blockchain/ton/blob/master/tl/gener
 }
 ```
 
-在这种情况下，我们应该记住字段 `block` -> `extra` -> `account_blocks` 类型为 [ShardAccountBlocks](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L282),
-是 HashmapAugE，其中 key 是地址 hash_part，value 是 [AccountBlock](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L277-L280) 类型，extra 是 `CurrencyCollection` 类型：
+After successful deserialization, we should extract and remember the following field: `block` -> `extra` -> `account_blocks`.
+我们需要`account`字段，它具有[ShardAccounts](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L261)类型。
+`ShardAccounts`是一个HashmapAugE，其中键是地址的hash_part，值具有`ShardAccount`类型，额外数据具有`DeepBalanceInfo`类型。
+
+- The key is the address `hash_part`.
+- 在这种情况下，我们应该记住字段 `block` -> `extra` -> `account_blocks` 类型为 [ShardAccountBlocks](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L282),
+  是 HashmapAugE，其中 key 是地址 hash_part，value 是 [AccountBlock](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L277-L280) 类型，extra 是 `CurrencyCollection` 类型：
+- The extra data is a `CurrencyCollection`.
 
 ```python
 {
@@ -684,9 +716,7 @@ LiteServer [response](https://github.com/ton-blockchain/ton/blob/master/tl/gener
 }
 ```
 
-在这个例子中，检查 `ids` 字段是不必要的，我们可以直接从账户块中取交易。
-但是当你请求 [liteServer.listBlockTransactionsExt](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L80) 方法时，
-你需要类似地检查证明，但在那种情况下，你确实需要比较哈希。
+Now, let's check the `ids` field:
 
 ```python
 [
@@ -696,9 +726,7 @@ LiteServer [response](https://github.com/ton-blockchain/ton/blob/master/tl/gener
 ]
 ```
 
-在这个例子中，检查 `ids` 字段是不必要的，我们可以直接从账户块中取交易。
-但是当你请求 [liteServer.listBlockTransactionsExt](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L80) 方法时，
-你需要类似地检查证明，但在那种情况下，你确实需要比较哈希。
+For each transaction, we should find its corresponding entry in the `account_blocks` we remembered and verify that their hashes match:
 
 ```python
 block_trs: dict = acc_block.get(int(tr['account'], 16)).transactions[0]
@@ -707,17 +735,18 @@ assert block_tr.get_hash(0) == tr['hash']
 ```
 
 :::note
-
-让我们向Liteserver请求1、4、5、7、8和15号[配置参数](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L83)（对于 [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L82) 方法，您可以获取所有参数，验证证明的方式是相同的）。
-[回应](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L53)包含 `state_proof` 和 `config_proof`。
-
+In this example, checking the `ids` field was optional — we could have retrieved all transactions directly from the account blocks.
+在这个例子中，检查 `ids` 字段是不必要的，我们可以直接从账户块中取交易。
+但是当你请求 [liteServer.listBlockTransactionsExt](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L80) 方法时，
+你需要类似地检查证明，但在那种情况下，你确实需要比较哈希。
 :::
 
 ## 配置
 
-对于此cell，我们应该检查区块头证明，并记住 `StateUpdate` 的新哈希值。
+Request the following [config params](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L101) from the liteserver: 1, 4, 5, 7, 8, and 15 for [liteServer.getConfigAll](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L100), where all parameters are returned, and the proof verification remains the same.
+The [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L54) includes `state_proof` and `config_proof`.
 
-现在，让我们反序列化 `config_proof` cell：
+First, deserialize the `state_proof` cell:
 
 ```json
 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
@@ -735,11 +764,11 @@ assert block_tr.get_hash(0) == tr['hash']
 }
 ```
 
-为此，我们应该检查区块头证明，并记住 "StateUpdate "新哈希值。
+如同在`Shard Proof`验证中所做的，我们需要使用`check_block_header`函数：检查Block Cell是否有效并记住新的`StateUpdate`哈希。
 
-我们需要将此 Merkle 证明的 Hash_1 仅与我们从上面的 `check_block_header` 函数获得的哈希进行比较，这样我们才能信任此cell：
+现在，让我们反序列化 `config_proof` cell：
 
-</details>
+<details>
 
 <summary><b>显示 cell </b></summary>
 
@@ -832,9 +861,7 @@ assert block_tr.get_hash(0) == tr['hash']
 }
 ```
 
-</details>
-
-对所有参数反序列化后，我们得到：
+我们需要将此 Merkle 证明的 Hash_1 仅与我们从上面的 `check_block_header` 函数获得的哈希进行比较，这样我们才能信任此cell： If they match, the cell can be trusted:
 
 ```python
 state_hash = check_block_header_proof(state_proof[0], block.root_hash, True)
@@ -842,7 +869,7 @@ if config_proof[0].get_hash(0) != state_hash:
     raise LiteClientError('hashes mismach')
 ```
 
-对所有参数反序列化后，我们得到：
+Next, deserialize the cell using the `ShardStateUnsplit` scheme:
 
 ```python
 {
@@ -887,7 +914,7 @@ if config_proof[0].get_hash(0) != state_hash:
 
 以 `ShardStateUnsplit` -> `custom` -> `config` -> `config` 字段为例，这是一个 Hashmap，其中 key 是一个 ConfigParam 编号，value 是一个包含参数值的 Cell。
 
-在对所有参数进行反序列化后，我们得到了
+对所有参数反序列化后，我们得到：
 
 ```python
 {
@@ -921,3 +948,5 @@ if config_proof[0].get_hash(0) != state_hash:
 ## 另请参见
 
 - [Exotic Cells](/v3/documentation/data-formats/tlb/exotic-cells)
+
+<Feedback />
