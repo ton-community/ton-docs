@@ -1,11 +1,17 @@
-# Fift 深入解析
+import Feedback from '@site/src/components/Feedback';
 
-Fift 是一种高级的基于栈的语言，用于本地操作cell和其他 TVM 原语，主要用于将 TVM 汇编代码转换为合约代码的cell包。
+# Fift deep dive
+
+Fift 是一种高级的基于栈的语言，用于本地操作cell和其他 TVM 原语，主要用于将 TVM 汇编代码转换为合约代码的cell包。 Its primary purpose is to compile TVM assembly code into contract code as a bag-of-cells (BoC).
 
 :::caution
-本节描述了与 TON 特有功能在**非常**低层级的交互。
-需要对栈语言基础有深入理解。
-:::
+**Advanced topic notice**
+This section covers low-level interactions with TON's implementation details. Before proceeding, ensure you have:
+
+- Solid experience with stack-based programming paradigms
+- Understanding of virtual machine architectures
+- Familiarity with low-level data structures
+  :::
 
 ## 简单算术
 
@@ -16,6 +22,12 @@ Fift 是一种高级的基于栈的语言，用于本地操作cell和其他 TVM 
 2023 ok
 ```
 
+This example calculates:
+
+1. `17 * 17 = 289`
+2. `6 * 289 = 1734`
+3. `1734 + 289 = 2023`
+
 ## 标准输出
 
 ```
@@ -23,12 +35,21 @@ Fift 是一种高级的基于栈的语言，用于本地操作cell和其他 TVM 
 grey text ok
 ```
 
-`emit` 从栈顶取出数字，并将指定代码的 Unicode 字符打印到 stdout。
-`."..."` 打印常量字符串。
+- `emit` 从栈顶取出数字，并将指定代码的 Unicode 字符打印到 stdout。
+  `."..."` 打印常量字符串。
+- `."..."` outputs a constant string
 
 ## 定义函数（Fift words）
 
-定义word的主要方式是将其效果括在大括号中，然后写 `:` 和word名称。
+To define a word, follow these steps:
+
+1. **Enclose the word's effects** in curly braces `{}`.
+2. **Add a colon `:`** after the closing brace.
+3. **Specify the word's name** after the colon.
+
+First line defines a word `increment` that increases `x` by `1`.
+
+**Examples:**
 
 ```
 { minmax drop } : min
@@ -37,7 +58,10 @@ grey text ok
 
 > Fift.fif
 
-不过，还有几个*定义word*的方法，不仅仅是 `:`。它们的不同之处在于，用其中一些定义的word是**active**（在大括号内工作），而有些是**prefix**（不需要在它们之后有空格字符）：
+In TON, multiple **defining words** exist, not just `:`. They differ in behavior:
+
+- **Active words** – Operate inside curly braces `{}`.
+- **Prefix words** – Do not require a trailing space .
 
 ```
 { bl word 1 2 ' (create) } "::" 1 (create)
@@ -51,7 +75,7 @@ grey text ok
 
 ## 条件执行
 
-代码块（由大括号分隔）可以有条件或无条件地执行。
+Execute code blocks conditionally using `cond`:
 
 ```
 { { ."true " } { ."false " } cond } : ?.   4 5 = ?.  4 5 < ?.
@@ -62,6 +86,8 @@ hello world ok
 
 ## 循环
 
+Use loop primitives for repetitive operations:
+
 ```
 // ( l c -- l')  deletes first c elements from list l
 { ' safe-cdr swap times } : list-delete-first
@@ -69,12 +95,17 @@ hello world ok
 
 > GetOpt.fif
 
+Loop word `times` takes two arguments - let's call them `cont` and `n` - and executes `cont` `n` times.
 循环word `times` 接受两个参数 - 我们称它们为 `cont` 和 `n` - 并执行 `cont` `n` 次。
 这里 `list-delete-first` 继承 `safe-cdr` （从Lisp样式列表中删除head命令），将其放在 `c` 下面，然后 `c` 次从堆栈上的列表中删除head。
-
 还有 `while` 和 `until` 循环word。
 
-## 注释
+## Comments
+
+Comments in Fift are defined in `Fift.fif` and come in two forms:
+
+1. **Single-line comments**: Start with `//` and continue to the end of the line
+2. **Multiline comments**: Start with `/*` and end with `*/`
 
 ```
 { 0 word drop 0 'nop } :: //
@@ -84,20 +115,21 @@ hello world ok
 
 > Fift.fif
 
-注释在 `Fift.fif` 中定义。单行注释以 `//` 开始，一直到行尾；多行注释以 `/*` 开始，以 `*/` 结束。
+#### How comments work
 
-让我们理解它们为什么有效。
-Fift 程序本质上是一系列word的序列，每个单词都以某种方式转换栈或定义新单词。`Fift.fif` 的第一行代码（上面所示）是新word `//` 的声明。注释必须在定义新word时也能工作，所以它们必须在嵌套环境中工作。这就是为什么它们被定义为**active**单词，通过 `::` 实现。正在创建的单词的动作列在大括号中：
+Fift programs are sequences of words that transform the stack or define new words. 不过，还有几个_定义word_的方法，不仅仅是 `:`。它们的不同之处在于，用其中一些定义的word是**active**（在大括号内工作），而有些是**prefix**（不需要在它们之后有空格字符）：
+
+Breaking down the `//` definition:
 
 1. `0`：零被推到栈上
 2. `word`：此命令读取字符，直到达到栈顶的字符，并将读取的数据作为字符串推送。零是特殊情况：这里 `word` 跳过前导空格，然后读取直到当前输入行的末尾。
-3. `drop`：栈顶元素（注释数据）被丢弃。
+3. `drop` - Removes the comment text from the stack
 4. `0`：再次将零推到栈上 - 结果的数量，因为word是用 `::` 定义的。
 5. `'nop` 推送执行令牌在调用时什么也不做。这几乎等同于 `{ nop }`。
 
 ## 使用 Fift 定义 TVM 汇编代码
 
-```
+```fift
 x{00} @Defop NOP
 { 1 ' @addop does create } : @Defop
 { tuck sbitrefs @ensurebitrefs swap s, } : @addop
@@ -109,28 +141,52 @@ x{00} @Defop NOP
 
 > Asm.fif (行顺序颠倒)
 
-`@Defop` 负责检查是否有足够的空间放置操作码（`@havebitrefs`），如果没有，它将继续写入另一个构建器（`@|`；也称为隐式跳转）。这就是为什么你通常不想写 `x{A988} s,` 作为操作码：可能没有足够的空间放置此操作码，因此编译会失败；你应该写 `x{A988} @addop`。
+### How @Defop works
+
+`@Defop` checks available space for the opcode using `@havebitrefs`. If space is insufficient, it writes to another builder via `@|` (implicit jump).
+
+**Important:** Always use `x{A988} @addop` instead of `x{A988} s,` to avoid compilation failures when space is limited.
+
+### Including cells in contracts
 
 您可以使用 Fift 将大型cell包纳入到合约中：
 
-```
+```fift
 <b 8 4 u, 8 4 u, "fift/blob.boc" file>B B>boc ref, b> <s @Defop LDBLOB
 ```
 
-此命令定义了一个操作码，当被包含在程序中时，它写入 `x{88}`（`PUSHREF`）和对提供的cell包的引用。因此，当运行 `LDBLOB` 指令时，它将cell推送到 TVM 栈上。
+This defines an opcode that:
+
+1. Writes `x{88}` (`PUSHREF`) when included in the program
+2. Adds a reference to the specified bag-of-cells
+3. Pushes the cell to TVM stack when executing `LDBLOB`
 
 ## 特殊功能
 
-- Ed25519 密码学
-  - newkeypair - 生成私钥-公钥对
-  - priv>pub   - 从私钥生成公钥
-  - ed25519_sign[_uint] - 给定数据和私钥生成签名
-  - ed25519_chksign     - 检查 Ed25519 签名
-- 与 TVM 的交互
-  - runvmcode 及类似的 - 使用从堆栈中取得的代码 slice 调用 TVM
-- 将 BOC 写入文件：
+### Ed25519 密码学
+
+Fift provides built-in support for Ed25519 cryptographic operations:
+
+- newkeypair - 生成私钥-公钥对
+- priv>pub   - 从私钥生成公钥
+- ed25519_sign[_uint] - 给定数据和私钥生成签名
+- ed25519_chksign     - 检查 Ed25519 签名
+
+### 与 TVM 的交互
+
+- runvmcode 及类似的 - 使用从堆栈中取得的代码 slice 调用 TVM
+
+### File operations
+
+- **Save BoC to file**:
+  ```fift
+  将 BOC 写入文件：
   `boc>B ".../contract.boc" B>file`
+  ```
 
 ## 继续学习
 
 - [Fift 简介](https://docs.ton.org/fiftbase.pdf) by Nikolai Durov
+
+<Feedback />
+
