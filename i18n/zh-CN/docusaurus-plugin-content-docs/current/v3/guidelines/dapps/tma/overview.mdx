@@ -1,8 +1,9 @@
 ---
-description: Telegram 小程序（或 TMA）是在 Telegram 信使中运行的网络应用程序。它们使用网页技术（HTML、CSS 和 JavaScript）构建。
+description: Telegram Mini Apps (or TMAs) are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript.
 ---
 
-import Button from '@site/src/components/button'
+import Feedback from "@site/src/components/Feedback";
+import Button from "@site/src/components/button";
 
 # 什么是小程序？
 
@@ -17,13 +18,13 @@ Your browser does not support the video tag.
 </video>
 </div>
 
-Telegram 小程序（或 TMA）是在 Telegram 信使中运行的 Web 应用。它们使用 Web 技术构建 —— HTML、CSS 和 JavaScript。
+Telegram 小程序（或 TMA）是在 Telegram 信使中运行的网络应用程序。它们使用网页技术（HTML、CSS 和 JavaScript）构建。 They are built using web technologies — HTML, CSS, and JavaScript.
 
 :::tip
 由于 TMA 是网页并使用 JavaScript，因此需要选择 [JS/TS-based SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript)。
 :::
 
-打开通向**9 亿 Telegram 用户的大门**。想象一下，只需轻轻一点，就能向这一庞大的用户群提供您的应用程序或服务。
+Unlock access to **Telegram’s 900 million users**. With just one click, you can offer your app or service to a massive audience.
 
 <Button href="/v3/guidelines/dapps/tma/tutorials/step-by-step-guide" colorType={'primary'} sizeType={'sm'}>
 
@@ -39,18 +40,18 @@ Telegram 小程序（或 TMA）是在 Telegram 信使中运行的 Web 应用。�
 
 ## 概述
 
-Telegram 机器人可以完全取代任何网站。它们支持无缝授权、通过 20 个支付提供商进行集成支付（包括谷歌支付和苹果支付）、向用户提供定制的推送通知等。 
+Telegram 机器人可以完全取代任何网站。它们支持无缝授权、通过 20 个支付提供商进行集成支付（包括谷歌支付和苹果支付）、向用户提供定制的推送通知等。
 
-有了 Mini Apps，机器人有了全新的维度。机器人开发人员可以使用世界上使用最广泛的编程语言 JavaScript 创建无限灵活的界面。
+有了 Mini Apps，机器人有了全新的维度。机器人开发人员可以使用世界上使用最广泛的编程语言 JavaScript 创建无限灵活的界面。 Developers can create highly flexible interfaces using JavaScript, the world's most widely used programming language.
 
 以下是有关 Telegram 小程序的一些关键点：
 
-- **整合到 Telegram 中**：Telegram 小程序旨在无缝集成到 Telegram 应用程序中，为用户提供连贯的体验。您可以在 Telegram 聊天或群组对话中访问它们。
-- **增强功能**：Telegram 小程序可提供多种功能。它们可用于各种用途，如游戏、内容共享、生产力工具等。这些应用程序将 Telegram 平台的功能扩展到了基本信息之外。
-- **跨平台兼容性**：由于 Telegram 小程序基于网络，因此可在 Android、iOS、PC、Mac 和 Linux Telegram 应用程序上使用。用户无需额外安装，只需一键点击即可访问。
-- **机器人互动**：Telegram 小程序通常使用 Telegram 机器人来提供互动和自动化体验。机器人可以响应用户输入、执行任务并促进小程序内的互动。
+- **整合到 Telegram 中**：Telegram 小程序旨在无缝集成到 Telegram 应用程序中，为用户提供连贯的体验。您可以在 Telegram 聊天或群组对话中访问它们。 Users can access them from chats, groups, or inline bot interactions.
+- **Enhanced Functionality**: TMAs go beyond messaging—they can power games, content-sharing apps, productivity tools, financial services, and more.
+- **Cross-Platform Compatibility**: Since TMAs are web-based, they work seamlessly across Android, iOS, Windows, Mac, and Linux—no extra installations required.
+- **Bot Interaction**: Many TMAs use Telegram bots for interactive, automated experiences, allowing users to receive real-time responses and dynamic content.
 - **开发框架**：开发人员可以使用 HTML、CSS 和 JavaScript 等网络开发技术构建 Telegram 小程序。此外，Telegram 还提供开发工具和应用程序接口，用于创建这些应用程序并将其与 Telegram 平台集成。
-- **货币化机会**：Telegram 小程序可以通过各种方式盈利，如应用内购买、订阅模式或广告，因此对开发人员和企业具有吸引力。
+- **Monetization Opportunities**: TMAs can be monetized through in-app purchases, subscriptions, and ads, making them an attractive option for developers and businesses.
 - **Web3就绪**：TON SDK；TON Connect 是一种通信协议，可促进钱包与 TON 区块链上的应用程序之间的通信；代币
 - **社区开发**：Telegram 拥有一个蓬勃发展的开发者社区，许多第三方开发者创建并与用户分享他们的 Telegram 小程序。这种社区驱动的方式促进了可用应用程序的创新和多样性。
 
@@ -82,10 +83,12 @@ Telegram 机器人可以完全取代任何网站。它们支持无缝授权、�
 
 ## 与 TON Connect 集成
 
-借助 TON Connect 协议连接用户钱包。点击此处了解更多信息：
+借助 TON Connect 协议连接用户钱包。点击此处了解更多信息： Read more about it here:
 
 <Button href="/v3/guidelines/ton-connect/overview" colorType={'primary'} sizeType={'sm'}>
 
 了解 TON Connect
 
 </Button>
+
+<Feedback />
