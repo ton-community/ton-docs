@@ -1,114 +1,114 @@
-# 运行归档节点
+import Feedback from '@site/src/components/Feedback';
+
+# Archive node
 
 :::info
-阅读本文之前，请先阅读 [全节点](/v3/guidelines/nodes/running-nodes/full-node)
+Before this article, read about [Full node](/v3/guidelines/nodes/running-nodes/full-node).
 :::
 
-## 概述
+## Overview
 
-存档节点是一种[完整节点](/participate/run-nodes/fullnode)类型，存储区块链的扩展历史数据。 如果您正在创建一个需要访问历史数据的 blockchain 浏览器或类似的应用程序， 建议使用归档节点作为索引器。
+An archive node is a type of full node that stores extended historical data from a blockchain. If you are creating a blockchain explorer or a similar application that requires access to historical data, it is recommended that you use an archive node as an indexer.
 
-## 先决条件
+## OS requirements
 
-我们强烈建议使用支持的操作系统安装 mytonctrl：
+We highly recommend installing mytonctrl using the supported operating systems:
 
 - Ubuntu 20.04
 - Ubuntu 22.04
 - Debian 11
 
-## 硬件要求
+## Minimal hardware requirements
 
-- 16 x 内核 CPU
-- 128GB ECC 内存
-- 9TB SSD *OR* 配置 64+k IOPS 存储器
-- 1 Gbit/s 网络连接
-- 峰值流量为每月 16 TB
-- 公共 IP 地址（固定 IP 地址）
+- 16-core CPU
+- 128 GB ECC Memory
+- 12 TB SSD _OR_ Provisioned 64+k IOPS storage
+- 1 Gbit/s network connectivity, both inbound and outbound
+- 16 TB/month traffic on peak load
+- Linux OS with open files limit above 400k
+- A public IP address (fixed IP address)
 
-:::info 数据压缩
-未压缩数据需要 9 TB。6TB 是基于使用已启用压缩功能的 ZFS 卷。
-数据量每月大约增加 0.5TB 和 0.25TB，最近一次更新是在 2024 年 11 月。
+:::info Data compression
+Uncompressed data requires 12 TB of storage. A ZFS volume with compression reduces this to 11 TB. As of February 2025, the data volume is growing by approximately 0.1 to 1 TB per month, depending on the load.
 :::
 
-## 安装
+## Installation
 
-### 安装
+### Install ZFS and prepare volume
 
-一般来说，运行存档节点需要以下步骤：
+Dumps come in the form of ZFS snapshots compressed using plzip. You need to install ZFS on your host and restore the dump. See [Oracle Documentation](https://docs.oracle.com/cd/E23824_01/html/821-1448/gavvx.html#scrolltoc) for more details.
 
-通常，在专用 SSD 驱动器上为节点创建一个单独的 ZFS 池是个好主意，这样可以方便管理存储空间和备份节点。
+Usually, it's a good idea to create a separate ZFS pool for your node on a _dedicated SSD drive_. This will allow you to manage storage space and back up your node easily.
 
-1. 安装 [zfs](https://ubuntu.com/tutorials/setup-zfs-storage-pool#1-overview)
+1. Install [ZFS](https://ubuntu.com/tutorials/setup-zfs-storage-pool#1-overview):
 
 ```shell
 sudo apt install zfsutils-linux
 ```
 
-2. 在专用的 4TB `<disk>` 上 [创建池](https://ubuntu.com/tutorials/setup-zfs-storage-pool#3-creating-a-zfs-pool)，并将其命名为 `data`
+2. [Create a pool](https://ubuntu.com/tutorials/setup-zfs-storage-pool#3-creating-a-zfs-pool) on your dedicated 4 TB `<disk>` and name it `data`:
 
 ```shell
 sudo zpool create data <disk>
 ```
 
-3. 在还原之前，我们强烈建议在父 ZFS 文件系统上启用压缩功能，这将为您节省 [大量空间](https://www.servethehome.com/the-case-for-using-zfs-compression/)。要启用 "数据 "卷的压缩功能，请使用 root 账户输入：
+3. We recommend enabling compression on the parent ZFS filesystem before restoring. This will save you a [significant amount of space](https://www.servethehome.com/the-case-for-using-zfs-compression/). To enable compression for the `data` volume, use the root account to enter the following:
 
 ```shell
 sudo zfs set compression=lz4 data
 ```
 
-### 安装 MyTonCtrl
+### Install MyTonCtrl
 
-请根据 [运行全节点](/v3/guidelines/nodes/running-nodes/full-node) 来 **安装** 和 **运行** mytonctrl。
+Please use the [Running Full Node](/v3/guidelines/nodes/running-nodes/full-node) guide to **install** and **run** mytonctrl.
 
-### 准备节点
+### Run an archive node
 
-#### 安装 MyTonCtrl
+#### Prepare the node
 
-1. 执行还原之前，必须使用 root 账户停止验证器：
+1. Before performing a restore, you must stop the validator using the root account:
 
 ```shell
 sudo -s
 systemctl stop validator.service
 ```
 
-2. 备份 `ton-work` 配置文件（我们需要 `/var/ton-work/db/config.json`、`/var/ton-work/keys` 和 `/var/ton-work/db/keyring`）。
+2. Make a backup of `ton-work` config files (we will need `/var/ton-work/db/config.json`, `/var/ton-work/keys`, and `/var/ton-work/db/keyring`):
 
 ```shell
 mv /var/ton-work /var/ton-work.bak
 ```
 
-#### 下载转储
+#### Download the dump
 
-1. 备份 `ton-work` 配置文件（我们需要 `/var/ton-work/db/config.json`、`/var/ton-work/keys` 和 `/var/ton-work/db/keyring`）。
-2. 下面是一个从 ton.org 服务器下载和恢复 **mainnet** 转储的命令示例：
-
-```shell
-wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
-```
-
-要安装 **testnet** 转储，请使用
+Here is an example command to download & restore the **mainnet** dump from the ton.org server:
 
 ```shell
-wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest_testnet.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
+curl -L -s https://archival-dump.ton.org/dumps/mainnet_full_44888096.zfs.zstd | pv | zstd -d -T16 | zfs recv mypool/ton-db
 ```
 
-转储的大小约为 **4TB**，因此下载和恢复可能需要几天（最多 4 天）。转储大小会随着网络的增长而增加。
+To install the **testnet** dump, use:
 
-转储大小为__~1.5TB__，因此下载和恢复需要一些时间。
+```shell
+wget -c https://dump.ton.org/dumps/latest_testnet_archival.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
+```
 
-1. 必要时安装工具(`pv`, `plzip`)
-2. 将 `<usr>` 和 `<pwd>` 替换为您的凭据
-3. 告诉 `plzip` 在机器允许的范围内使用尽可能多的内核，以加快提取速度 (`-n`)
+The mainnet dump size is approximately 9 TB, so it may take several days to download and restore. The dump size will increase as the network grows.
 
-#### 安装转储
+Prepare and run the command:
 
-1. 挂载 zfs：
+1. Install the necessary tools (`pv`, `plzip`, `zstd`).
+2. Tell `plzip` to use as many cores as your machine allows to speed up extraction (`-n`).
+
+#### Mount the dump
+
+1. Mount ZFS:
 
 ```shell
 zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work
 ```
 
-2. 将`db/config.json`、`keys`和`db/keyring`从备份恢复到`/var/ton-work`。
+2. Restore `db/config.json`, `keys`, and `db/keyring` from the backup to `/var/ton-work`:
 
 ```shell
 cp /var/ton-work.bak/db/config.json /var/ton-work/db/config.json
@@ -116,131 +116,154 @@ cp -r /var/ton-work.bak/keys /var/ton-work/keys
 cp -r /var/ton-work.bak/db/keyring /var/ton-work/db/keyring
 ```
 
-3. 请确保`/var/ton-work`和`/var/ton-work/keys`目录的权限提升正确：
+3. Set the permissions for the `/var/ton-work` and `/var/ton-work/keys` directories correctly:
 
-- 请确保`/var/ton-work`和`/var/ton-work/keys`目录的权限提升正确：
+- The owner of the `/var/ton-work/db` directory should be the `validator` user:
 
 ```shell
 chown -R validator:validator /var/ton-work/db
 ```
 
-- /var/ton-work/keys "目录的所有者应为 "ubuntu "用户：
+- The owner of the `/var/ton-work/keys` directory should be the `ubuntu` user:
 
 ```shell
 chown -R ubuntu:ubuntu /var/ton-work/keys
 ```
 
-#### 更新配置
+#### Update configuration
 
-更新存档节点的节点配置。
+Update the node configuration for the archive node.
 
-1. 打开节点配置文件 \`/etc/systemd/system/validator.service
+1. Open the node config file `/etc/systemd/system/validator.service`:
 
 ```shell
 nano /etc/systemd/system/validator.service
 ```
 
-2. 在 `ExecStart` 行中添加节点的存储设置：
+2. Add storage settings for the node in the `ExecStart` line:
 
 ```shell
---state-ttl 315360000 --archive-ttl 315360000 --block-ttl 315360000
+--state-ttl 3153600000 --archive-ttl 3153600000
 ```
 
 :::info
-启动节点并观察日志后，请耐心等待。
-快照不带 DHT 缓存，因此您的节点需要一些时间才能找到其他节点并与之同步。
-根据快照的时间和互联网连接速度，您的节点可能需要**几个小时到几天**才能赶上网络。
-**在最低设置条件下，这一过程可能需要 5 天。**
-这是正常现象。
+Please remain patient after starting the node and monitor the logs closely.
+The dump files lack DHT caches, requiring your node to discover other nodes and synchronize with them.
+Depending on the snapshot's age and your network bandwidth,
+your node might need **anywhere from several hours to multiple days** to synchronize with the network.
+**The synchronization process typically takes up to 5 days when using minimum hardware specifications.**
+This is expected behavior.
 :::
 
 :::caution
-启动节点并观察日志后，请耐心等待。转储不带 DHT 缓存，因此您的节点需要一些时间才能找到其他节点，然后与它们同步。根据快照的时间，您的节点可能需要几个小时到几天的时间才能赶上网络。这是正常现象。
+If the node sync process has already taken 5 days, but the node is still out of sync, you should check the
+[troubleshooting section](/v3/guidelines/nodes/nodes-troubleshooting#archive-node-is-out-of-sync-even-after-5-days-of-the-syncing-process).
 :::
 
-#### 启动节点
+#### Start the node
 
-1. 运行命令启动验证器：
+1. Start the validator by running the command:
 
 ```shell
 systemctl start validator.service
 ```
 
-2. 从 *local user* 打开 `mytonctrl` 并使用 `status` 检查节点状态。
+2. Open `mytonctrl` from the _local user_ and check the node status using the `status` command.
 
-## 节点维护
+## Node maintenance
 
-节点数据库需要不时清理（我们建议每周清理一次），为此请以 root 身份执行以下步骤：
+The node database requires cleansing from time to time (we advise doing this once a week). To do so, please perform the following steps as root:
 
-1. 停止验证程序（切勿跳过！）。
+1. Stop the validator process (Never skip this!):
 
 ```shell
 sudo -s
 systemctl stop validator.service
 ```
 
-2. 删除旧日志
+2. Remove old logs:
 
 ```shell
 find /var/ton-work -name 'LOG.old*' -exec rm {} +
 ```
 
-4. 删除临时文件
+3. Remove temporary files:
 
 ```shell
 rm -r /var/ton-work/db/files/packages/temp.archive.*
 ```
 
-5. 启动验证程序
+4. Start the validator process:
 
 ```shell
 systemctl start validator.service
 ```
 
-## 故障排除和备份
+## Troubleshooting and backups
 
-如果由于某种原因，某些程序无法运行或发生故障，你可以随时 [roll back](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk) 到 ZFS 文件系统上的 @archstate 快照，这是转储的原始状态。
+If, for some reason, something does not work or breaks, you can always [roll back](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk) to the `@archstate` snapshot on your ZFS filesystem. This is the original state from the dump.
 
-1. 停止验证程序（切勿跳过！）。
+1. Stop the validator process (**Never skip this!**):
 
 ```shell
 sudo -s
 systemctl stop validator.service
 ```
 
-2. 检查快照名称
+2. Check the snapshot name:
 
 ```shell
 zfs list -t snapshot
 ```
 
-3. 回滚到快照
+3. Roll back to the snapshot:
 
 ```shell
 zfs rollback data/ton-work@dumpstate
 ```
 
-如果您的节点运行良好，您可以删除该快照以节省存储空间，但我们确实建议您定期为文件系统拍摄快照，以便回滚，因为验证器节点在某些情况下会损坏数据和 config.json。[zfsnap](https://www.zfsnap.org/docs.html)是一个自动轮换快照的好工具。
+If your node operates properly, you may remove this snapshot to reclaim storage space. However, we recommend creating regular filesystem snapshots for rollback capability since the validator node may occasionally corrupt data and `config.json`. For automated snapshot management, [zfsnap](https://www.zfsnap.org/docs.html) handles rotation effectively.
 
-:::tip 需要帮助吗？
-有问题或需要帮助？请在 [TON dev 聊天室](https://t.me/tondev_eng) 中提问，以获得社区的帮助。MyTonCtrl 开发人员也会在那里交流。
+:::tip Need help?
+Have a question or need help? Please ask in the [TON dev chat](https://t.me/tondev_eng) to get help from the community. MyTonCtrl developers also hang out there.
 :::
 
-## 参阅
+## Tips & tricks
 
-### 强制归档节点不存储数据块
+:::info
+Basic info about archival dumps is present at https://archival-dump.ton.org/
+:::
 
-要强制节点不存储归档块，请使用 86400。请查看 [set_node_argument 部分](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#set_node_argument) 了解更多信息。
+### Remove dump snapshot
+
+1. Find the correct snapshot
+
+```bash
+zfs list -t snapshot
+```
+
+2. Delete it
+
+```bash
+zfs destroy <snapshot>
+```
+
+### Force the archive node not to store blocks
+
+To force the node not to store archive blocks, use the value `86400`. Check the [set_node_argument section](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#set_node_argument) for more details.
 
 ```bash
 installer set_node_argument --archive-ttl 86400
 ```
 
-## 支持
+## Support
 
-通过 [@mytonctrl_help](https://t.me/mytonctrl_help) 联系技术支持。
+Contact technical support at [@ton_node_help](https://t.me/ton_node_help).
 
-## 参阅
+## See also
 
-- [TON 节点类型](/v3/documentation/infra/nodes/node-types)
-- [运行全节点](/v3/guidelines/nodes/running-nodes/full-node)
+- [TON node types](/v3/documentation/infra/nodes/node-types)
+- [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
+
+<Feedback />
+
