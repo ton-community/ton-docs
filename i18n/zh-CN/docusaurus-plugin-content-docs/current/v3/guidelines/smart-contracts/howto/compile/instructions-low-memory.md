@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 在低内存机器上编译TON
 
 :::caution
@@ -16,7 +18,7 @@ C++: fatal error: Killed signal terminated program cc1plus compilation terminate
 
 ## 解决方案
 
-这是由于内存不足引起的，通过创建交换分片来解决。
+Follow these steps to create a 4GB swap partition:
 
 ```bash
 # Create the partition path
@@ -34,17 +36,22 @@ sudo swapon /var/cache/swap/swap0
 sudo swapon -s
 ```
 
-删除交换分片的命令：
+### Swap management commands
+
+**Remove swap partition:**
 
 ```bash
 sudo swapoff /var/cache/swap/swap0
 sudo rm /var/cache/swap/swap0
 ```
 
-释放空间命令：
+**Free all swap space:**
 
 ```bash
 sudo swapoff -a
 #Detailed usage: swapoff --help
 #View current memory usage: --swapoff: free -m
 ```
+
+<Feedback />
+
