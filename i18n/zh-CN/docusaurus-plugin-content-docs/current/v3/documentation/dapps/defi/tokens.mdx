@@ -1,38 +1,41 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
-# 代币（FT, NFT）
+# Tokens (FT, NFT)
 
-[分布式 TON 代币概述](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
+[Distributed TON tokens overview](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
 
-> 由 TON 驱动的代币和 NFT 没有单一中心，不会造成瓶颈。
+> TON-powered tokens and NFTs are decentralized, avoiding single points of failure and bottlenecks.
 >
-> 特定集合中的每个 NFT 都是一个独立的智能合约。每个用户的代币余额都存储在单独的用户钱包中。
+> Each NFT in a given collection is a separate smart contract. The token balance for each user is stored in a separate user wallet.
 >
-> 智能合约之间直接互动，分散了整个网络的负载。
+> Smart contracts interact directly with one another, distributing the load across the entire network.
 >
-> 随着用户和交易数量的增长，负载仍将保持均衡，从而使网络得以扩展。
+> As the number of users and transactions grows, the network maintains an even load, enabling seamless scalability.
 
-## TON 课程：Jettons 和 NFT
+## TON Course: jettons & NFTs
 
 :::tip
-在开始课程之前，请确保您已充分了解区块链技术的基础知识。如果您的知识有缺口，我们建议您参加[区块链基础知识与 TON](https://stepik.org/course/201294/promo)（[RU 版本](https://stepik.org/course/202221/), [CHN 版本](https://stepik.org/course/200976/)）课程。
-模块 4 涵盖 NFT 和 Jettons 的基本知识。
+Before starting the course, make sure you have a good understanding of the basics of blockchain technology. If you have gaps in your knowledge, we recommend taking the [Blockchain Basics with TON](https://stepik.org/course/201294/promo) ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)) course.
+Module 4 covers the basic knowledge of NFT & Jettons.
 :::
 
+The [TON Blockchain Course](https://stepik.org/course/176754/) is a comprehensive guide to TON Blockchain development.
 
-模块 7 完全涵盖**NFT 和 Jettons**开发。
+Module 7 completely covers **NFT & Jettons** development.
 
 <Button href="https://stepik.org/course/176754/promo"
         colorType={'primary'} sizeType={'sm'}>
 
-查看 TON 区块链课程
+Check TON Blockchain Course
 
 </Button>
 
 <Button href="https://stepik.org/course/201638/promo"
         colorType={'secondary'} sizeType={'sm'}>
 
-中国
+CHN
 
 </Button>
 
@@ -43,71 +46,73 @@ RU
 
 </Button>
 
-## 教程
+## Tutorials
 
-- [Web3 游戏教程](/v3/guidelines/dapps/tutorials/web3-game-example) - 学习如何使用 TON 区块链构建 Web3 游戏。
-- [铸造您的第一个 Jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token/) - 学习如何部署和定制您的第一个 Jetton
-- [[YouTube] TON Keeper 创始人 Oleg Andreev and Oleg Illarionov 谈 TON jettons](https://www.youtube.com/watch?v=oEO29KmOpv4)
+- [Web3 Game Tutorial](/v3/guidelines/dapps/tutorials/web3-game-example) - Learn how to build a Web3 game with TON Blockchain.
+- [Mint your first Jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token/) — Learn how to deploy and customize your first Jetton
+- [[YouTube] TON Keeper founders Oleg Andreev and Oleg Illarionov on TON jettons](https://www.youtube.com/watch?v=oEO29KmOpv4)
 
-### TON 速成
+### TON speed run
 
-- [🚩 挑战 1：简单的 NFT 部署](https://github.com/romanovichim/TONQuest1)
-- [🚩 挑战2：聊天机器人合约](https://github.com/romanovichim/TONQuest2)
-- [🚩 挑战 3：Jetton 自动售卖机](https://github.com/romanovichim/TONQuest3)
-- [🚩 挑战 4：抽奖/彩票](https://github.com/romanovichim/TONQuest4)
-- [🚩 挑战 5：在 5 分钟内创建与合约交互的用户界面](https://github.com/romanovichim/TONQuest5)
-- [🚩 挑战 6：分析 Getgems 市场上的 NFT 销售](https://github.com/romanovichim/TONQuest6)
+- [🚩 Challenge 1: Simple NFT Deploy](https://github.com/romanovichim/TONQuest1)
+- [🚩 Challenge 2: Chatbot Contract](https://github.com/romanovichim/TONQuest2)
+- [🚩 Challenge 3: Jetton Vending Machine](https://github.com/romanovichim/TONQuest3)
+- [🚩 Challenge 4: Lottery/Raffle](https://github.com/romanovichim/TONQuest4)
+- [🚩 Challenge 5: Create UI to interact with the contract in 5 minutes](https://github.com/romanovichim/TONQuest5)
+- [🚩 Challenge 6: Analyzing NFT sales on the Getgems marketplace](https://github.com/romanovichim/TONQuest6)
 
-## 指南
+## Jettons (fungible tokens)
 
-### 指南
+### Guides
 
-- [TON jetton 处理](/v3/guidelines/dapps/asset-processing/jettons)
-- [TON 元数据解析](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing)
+- [TON Jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
+- [TON Metadata Parsing](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing)
 
-### 标准
+### Standards
 
-- [Jettons 标准](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
+- [Jettons standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
 
-### 智能合约
+### Smart contracts
 
-- [智能合约实现（FunC）](https://github.com/ton-blockchain/token-contract/)
+- [Smart contracts implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
 
-### Jetton 部署器
+### Jetton deployer
 
-Jettons 是 TON 区块链上的自定义可替代代币。您可以使用下面的 Jetton Deployer 示例在 TON 区块链上创建自己的代币：
+Jettons are custom fungible tokens on TON Blockchain. You can create your own token on TON Blockchain using the Jetton Deployer example below:
 
-- **[TON Minter](https://minter.ton.org/)** - 开放源码 Jetton Deployer dApp
-- [Jetton Deployer - contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
-- [Jetton Deployer - WebClient](https://github.com/ton-defi-org/jetton-deployer-webclient) (React, TypeScript)
+- **[TON Minter](https://minter.ton.org/)** — open-source Jetton Deployer dApp
+- [Jetton Deployer — contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
+- [Jetton Deployer — WebClient](https://github.com/ton-defi-org/jetton-deployer-webclient) (React, TypeScript)
 
-### 使用 Jettons 的工具
+### Tools to work with jettons
 
-- [NFT Jetton 销售合约](https://github.com/dvlkv/nft-jetton-sale-smc) - 支持 jetton 的 NFT 销售合约
-- [Scaleton](http://scaleton.io)—查看您的自定义代币余额
-- [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example)—查询 Jettons 信息的 SDK
+- [NFT Jetton Sale Contract](https://github.com/dvlkv/nft-jetton-sale-smc) - NFT Sale contract with jetton support
+- [Scaleton](http://scaleton.io)—see your custom token balance
+- [@tegro/ton3-client](https://github.com/TegroTON/ton3-client#jettons-example)—SDK to query information about Jettons
 
-## 标准
+## NFT
 
-### 标准
+### Standards
 
-- [NFT 标准](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
-- [SBT（Soulbound NFT）标准](https://github.com/ton-blockchain/TEPs/blob/master/text/0085-sbt-standard.md)
-- [NFTRoyalty标准扩展](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
+- [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
+- [SBT (Soulbound NFT) standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0085-sbt-standard.md)
+- [NFTRoyalty standard extension](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
 
-### 智能合约
+### Smart contracts
 
-- [智能合约实施（FunC）](https://github.com/ton-blockchain/token-contract/)
-- [Getgems NFT、销售、拍卖智能合约 (FunC)](https://github.com/getgems-io/nft-contracts)
+- [Smart contracts implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
+- [Getgems NFT, sale, auctions smart contracts (FunC)](https://github.com/getgems-io/nft-contracts)
 
-### NFT 铸币器
+### NFT minters
 
-- [由 TON Diamonds 提供的 NFT 部署器](https://github.com/tondiamonds/ton-nft-deployer) (TypeScript，无注释)
-- [NFT 铸币示例](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript，带注释)
-- [使用 React 的 NFT 铸币器](https://github.com/tonbuilders/tonbuilders-minter) (React，无注释)
-- [NFT 部署器](https://github.com/anomaly-guard/nft-deployer) (Python，带注释)
-- [使用 Golang 的 NFT 铸币器](https://github.com/xssnick/tonutils-go#nft) (Golang 库，带注释和完整示例)
+- [NFT Deployer](https://github.com/tondiamonds/ton-nft-deployer) by TON Diamonds (TypeScript, no comments)
+- [NFT Minter example](https://github.com/ton-foundation/token-contract/tree/main/nft/web-example) (JavaScript, with comments)
+- [NFT Minter using React](https://github.com/tonbuilders/tonbuilders-minter) (React, no comments)
+- [NFT Deployer](https://github.com/anomaly-guard/nft-deployer) (Python, with comments)
+- [NFT Minter using Golang](https://github.com/xssnick/tonutils-go#nft) (Golang library, with comments and full examples)
 
-### 使用 NFT 的工具
+### Tools to work with NFTs
 
-- [LiberMall/tnt](https://github.com/LiberMall/tnt)—TNT 是一个一体化命令行工具，用于在 The Open Network 上查询、编辑和铸造新的非同质化代币。
+- [LiberMall/tnt](https://github.com/LiberMall/tnt)—TNT is an all-in-one command-line tool to query, edit, and mint new Non-Fungible Tokens on The Open Network.
+
+<Feedback />
