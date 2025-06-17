@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 在 TON 上编译和构建智能合约
 
 以下是构建智能合约的库和库列表。
@@ -11,7 +13,7 @@
 
 ### 概览
 
-TON区块链的开发环境，用于编写、测试和部署智能合约。在[Blueprint git库](https://github.com/ton-community/blueprint)中了解更多信息。
+TON区块链的开发环境，用于编写、测试和部署智能合约。在[Blueprint git库](https://github.com/ton-community/blueprint)中了解更多信息。 Read more in [Blueprint git repository](https://github.com/ton-community/blueprint).
 
 ### 安装
 
@@ -65,13 +67,13 @@ npm install ton-compiler
 - 多个FunC编译器版本
 - 无需安装和编译TON
 - 程序化和CLI接口
-- 适用于cell测试
+- Ready to use in unit-testing
 
 ### 如何使用
 
 这个包在项目中添加了`ton-compiler`二进制文件。
 
-FunC编译是一个多阶段过程。其中之一是将Func编译为Fift代码，然后将其编译为二进制表示。Fift编译器已经内置了Asm.fif。
+FunC compilation is a multi-stage process. One is compiling Func to Fift code that is then compiled to a binary representation. Fift compiler already has Asm.fif bundled.
 
 FunC标准库已被捆绑，但可以在运行时禁用。
 
@@ -192,10 +194,13 @@ async function main() {
 ### 第三方贡献者
 
 - [grozzzny/ton-compiler-groz](https://github.com/grozzzny/ton-compiler-groz) — TON FunC智能合约编译器。
-- [Termina1/tonc](https://github.com/Termina1/tonc) — TONC（TON编译器）。使用WASM，非常适合Linux。
+- [Termina1/tonc](https://github.com/Termina1/tonc) — TONC（TON编译器）。使用WASM，非常适合Linux。 Uses WASM, so perfect for Linux.
 
 ## 其他
 
-- [disintar/toncli](https://github.com/disintar/toncli) — 最受欢迎的方法之一。您甚至可以在Docker中使用它。
+- [disintar/toncli](https://github.com/disintar/toncli) — 最受欢迎的方法之一。您甚至可以在Docker中使用它。 You even can use it with Docker.
 - [tonthemoon/ton](https://github.com/tonthemoon/ton) — _(封闭测试)_一行TON二进制安装程序。
 - [delab-team/tlbcrc](https://github.com/delab-team/tlbcrc) — 包和CLI，根据TL-B方案生成操作码。
+
+<Feedback />
+
