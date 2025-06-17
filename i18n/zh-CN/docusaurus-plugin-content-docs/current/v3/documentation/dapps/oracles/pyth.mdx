@@ -1,39 +1,43 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
-# Pyth Oracles
+# Pyth oracles
 
-## 如何在 TON 合约中使用实时数据
+## How to use real-time data in TON contracts
 
-TON 上的 Pyth 价格反馈通过主 TON Pyth 智能
-合约进行管理，实现与链上数据的无缝交互。在 TON，
-Pyth 接收器合约中的特定功能促进了这些交互。该合约充当 Pyth
-价格源的接口，处理价格数据的检索和更新。
+Pyth price feeds on TON are managed through the main TON Pyth smart
+contract, enabling seamless interaction with on-chain data. In TON,
+these interactions are facilitated by specific functions within the
+Pyth receiver contract. This contract acts as an interface to Pyth
+price feeds, handling the retrieval and updating of price data.
 
-## 安装 Pyth SDK
+## Install the Pyth SDK
 
-使用 npm 或 yarn 安装 Pyth TON SDK 和其他必要的依赖项：
+Install the Pyth TON SDK and other necessary dependencies using npm or yarn:
 
 ```ts
    npm install @pythnetwork/pyth-ton-js @pythnetwork/hermes-client
    @ton/core @ton/ton @ton/crypto
 ```
 
-   或
+   or
 
 ```ts
    yarn add @pythnetwork/pyth-ton-js @pythnetwork/hermes-client
    @ton/core @ton/ton @ton/crypto
 ```
 
-## 编写客户端代码
+## Write client code
 
-下面的代码片段演示了如何获取价格更新、与 TON 上的 Pyth 合约交互以及更新价格馈送：
+The following code snippet demonstrates how to fetch price updates, interact with the Pyth contract on TON, and update price feeds:
 
 - TON Mainnet: [EQBU6k8HH6yX4Jf3d18swWbnYr31D3PJI7PgjXT-flsKHqql](https://docs.pyth.network/price-feeds/contract-addresses/ton)
-- TON 测试网：[EQB4ZnrI5qsP_IUJgVJNwEGKLzZWsQOFhiaqDbD7pTt_f9oU](https://docs.pyth.network/price-feeds/contract-addresses/ton)
+- TON Testnet: [EQB4ZnrI5qsP_IUJgVJNwEGKLzZWsQOFhiaqDbD7pTt_f9oU](https://docs.pyth.network/price-feeds/contract-addresses/ton)
 
-以下示例使用的是 testnet 合约。要使用主网，请将 `PYTH_CONTRACT_ADDRESS_TESTNET` 相应改为 `PYTH_CONTRACT_ADDRESS_MAINNET` 。 
+The following example uses testnet contract. For mainnet usage, change the `PYTH_CONTRACT_ADDRESS_TESTNET` to `PYTH_CONTRACT_ADDRESS_MAINNET` accordingly. 
 
+<details>
 ```ts
 import { TonClient, Address, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core";
@@ -95,21 +99,24 @@ async function main() {
 }
 main().catch(console.error);
 ```
+</details>
 
-该代码段的功能如下：
+This code snippet does the following:
 
-1. 初始化一个 `TonClient` 并创建一个 `PythContract` 实例。
-2. 从 TON 合约中读取当前的守护套利指数和 BTC 价格。
-3. 从Hermes获取最新价格更新。
-4. 准备更新数据并计算更新费。
-5. 更新 TON 合约的价格信息。
+1. Initializes a `TonClient` and creates a `PythContract` instance.
+2. Retrieves the current guardian set index and BTC price from the TON contract.
+3. Fetches the latest price updates from Hermes.
+4. Prepares the update data and calculates the update fee.
+5. Updates the price feeds on the TON contract.
 
-## 其他资源
+## Additional resources
 
-您可能会发现这些额外的资源对开发您的 TON 申请很有帮助：
+You may find these additional resources helpful for developing your TON application:
 
-- [TON文档](https://ton.org/docs/)
-- [Pyth Price Feed IDs](https://pyth.network/developers/price-feed-ids)
-- [Pyth TON Contract](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/contracts)
+- [TON documentation](https://ton.org/docs/)
+- [Pyth price feed IDs](https://pyth.network/developers/price-feed-ids)
+- [Pyth TON contract](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/contracts)
 - [Pyth TON SDK](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/sdk)
-- [Pyth TON 示例](https://github.com/pyth-network/pyth-examples/tree/main/price_feeds/ton/sdk_js_usage)
+- [Pyth TON example](https://github.com/pyth-network/pyth-examples/tree/main/price_feeds/ton/sdk_js_usage)
+
+<Feedback />
