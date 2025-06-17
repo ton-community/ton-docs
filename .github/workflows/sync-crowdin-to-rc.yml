@@ -1,0 +1,42 @@
+name: Sync Crowdin Translations to Release candidate
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+jobs:
+  download-translations:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lang: [ru] # , en, ja, ko, zh-cn
+
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: release-candidate-${{ matrix.lang }}
+
+      - name: Download translations from Crowdin
+        uses: crowdin/github-action@v2
+        with:
+          config: crowdin-oss.yml
+          download_translations: true
+          download_language: ${{  github.event.inputs.language }}
+          crowdin_branch_name: release-candidate-${{ matrix.lang }}
+          pull_request_title: 'New Crowdin Translations'
+          pull_request_body: 'New Crowdin translations (${{ matrix.lang }})'
+          pull_request_base_branch_name: 'release-candidate-${{ matrix.lang }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+
+      - name: Commit and push updates
+        run: |
+          git config user.name "Crowdin Bot"
+          git config user.email "bot@crowdin.com"
+          git add .
+          git commit -m "Update ${{ matrix.lang }} translations from Crowdin"
+          git push
