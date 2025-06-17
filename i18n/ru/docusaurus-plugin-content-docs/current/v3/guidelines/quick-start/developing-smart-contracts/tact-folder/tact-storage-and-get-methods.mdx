@@ -7,11 +7,11 @@ import Button from '@site/src/components/button'
 
 > **Резюме:** На предыдущих этапах мы узнали, как использовать `Blueprint` и его структуру проекта.
 
-Tact — это высокоуровневый язык программирования для блокчейна TON, ориентированный на эффективность и простоту. Он спроектирован так, чтобы быть простым в изучении и использовании, и в то же время хорошо подходить разработке смарт-контрактов. Tact — это статически типизированный язык с простым синтаксисом и мощной системой типов.
-
 :::info
 Подробнее с ним можно ознакомиться в [документации Tact](https://docs.tact-lang.org/#start/) и на сайте [Tact By Example](https://tact-by-example.org/00-hello-world/).
 :::
+
+Smart contracts often need to store data, like counters or ownership information, and provide a way to read or update it through messages. In this section, you’ll learn how to define and initialize contract storage, receive and handle incoming messages, and create getter functions to read contract states outside the blockchain.
 
 Давайте создадим и модифицируем наш смарт-контракт по стандартным шагам, описанным в предыдущем разделе [обзор Blueprint](/ru/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-blueprint-sdk-overview/).
 
@@ -26,7 +26,12 @@ message Add {
 }
 ```
 
-Сообщение — это базовая структура для коммуникации между контрактами. Tact автоматически сериализирует и десериализирует сообщения в ячейки. Чтобы быть уверенными, что при изменении структуры сообщений опкоды сохранятся теми же, их можно добавлять так, как показано ниже:
+A **message** is a structure that sends data into a contract from another contract or outside the blockchain.
+Tact simplifies working with messages by automatically serializing and deserializing them into [TVM cells](https://docs.ton.org/v3/documentation/data-formats/tlb/msg-tlb). You don’t need to write low-level serialization code or think about bit layout manually — Tact handles that for you.
+
+Every message is assigned a unique 32-bit identifier called an **opcode** (short for operation code). This identifier is stored at the beginning of the serialized message and helps the contract understand what type of message it is _receiving_.
+
+By default, Tact automatically assigns this identifier. However, you can also define it manually, for example, when evolving the structure of your messages over time:
 
 ```tact title="/contracts/hello_world.tact"
 message(0x7e8764ef) Add {
@@ -35,7 +40,10 @@ message(0x7e8764ef) Add {
 }
 ```
 
-Tact сериализует это следующим образом:
+<details>
+  <summary><b>Tact automatically serializes messages into TVM cells.</b></summary>
+
+  Tact автоматически сериализирует и десериализирует сообщения в ячейки. Internally, it would be represented something like this:
 
 ```func
 begin_cell()
@@ -45,7 +53,9 @@ begin_cell()
     .end_cell()
 ```
 
-Используя эту структуру, можно отправить контракту сообщение из FunC.
+  Usually, you don’t need to think about this — Tact takes care of it behind the scenes. However, it can be helpful to understand when debugging or interacting with low-level language like FunC.
+
+</details>
 
 #### Определение контракта
 
@@ -66,19 +76,13 @@ id: Int as uint32;
 counter: Int as uint32;
 ```
 
-Чтобы удостовериться, что только владелец контракта может взаимодействовать с конкретными функциями, добавьте поле `владелец`:
-
-```tact title="/contracts/hello_world.tact"
-id: Int as uint32;
-counter: Int as uint32;
-owner: Address;
-```
-
 Эти поля сериализуются аналогично структурам и хранятся в регистре данных контракта.
+
+Use `self.id` and `self.counter` to access them within contract functions.
 
 #### Инициализация контракта
 
-Если вы попробуете скомпилировать контракт на данном этапе, вы столкнётесь с ошибкой: `Field "owner" is not set` («поле "владелец" не установлено»). Дело в том, что контракт должен инициализировать свои поля при развёртывании. Определите функцию [`init()`](https://docs.tact-lang.org/book/contracts/#init-function/), чтобы делать это:
+Определите функцию [`init()`](https://docs.tact-lang.org/book/contracts/#init-function/), чтобы делать это:
 
 ```tact title="/contracts/hello_world.tact"
 init(id: Int, owner: Address) {
@@ -107,32 +111,6 @@ receive() {
 }
 ```
 
-#### Ограничение доступа
-
-Tact также предоставляет удобные способы поделиться логикой с помощью так называемых [«черт»](https://docs.tact-lang.org/book/types/#traits)  («traits») — повторно используемых блоков кода, похожих на абстрактные классы в других языках программирования. Tact не использует классическое наследование, но черты позволяют определить общую логику без дублирования кода. Они выглядят как контракты, но не могут хранить постоянное состояние.
-Например, вы можете использовать черту `Ownable`, которая предоставляет встроенные проверки собственности, чтобы убедиться, что только владелец контракта может отправлять сообщения.
-
-```tact title="/contracts/hello_world.tact"
-// Import library to use trait
-import "@stdlib/ownable";
-
-// Ownable trait introduced here
-contract HelloWorld with Ownable {
-
-    ...
-
-    receive(msg: Add) {
-        self.requireOwner();
-        self.counter += msg.amount;
-        self.notify("Cashback".asComment());
-    }
-}
-```
-
-:::info
-[Проверка идентичности](https://docs.tact-lang.org/book/security-best-practices/#identity-validation) играет ключевую роль в безопасных взаимодействиях контрактов. Вы можете прочитать больше о такой проверке и её важности в документации по ссылке.
-:::
-
 #### Getter-функции
 
 Tact поддерживает [getter functions](https://docs.tact-lang.org/book/functions/#getter-functions) для извлечения состояния контракта извне блокчейна:
@@ -146,8 +124,6 @@ get fun counter(): Int {
     return self.counter;
 }
 ```
-
-Обратите внимание, что геттер `owner` автоматически определяется при использовании черты `Ownable`.
 
 #### Полный контракт
 
@@ -223,21 +199,29 @@ npx blueprint build
 
 ## Шаг 2: обновить обёртку
 
-[Обёртки](https://docs.tact-lang.org/book/compile/#wrap-ts) облегчают взаимодействие с контрактом из TypeScript. В отличие от FunC или Tolk, они генерируются автоматически во время процесса сборки:
+After building your contract, Tact automatically generates a special wrapper file. [Обёртки](https://docs.tact-lang.org/book/compile/#wrap-ts) облегчают взаимодействие с контрактом из TypeScript.
+
+In the wrapper file, you'll find this line of code:
 
 ```typescript title="/wrappers/HelloWorld.ts"
 export * from '../build/HelloWorld/tact_HelloWorld';
 ```
 
+This code exports everything inside the `tact_HelloWorld.ts` file in the build folder, making it available for use in other files.
+
 ## Шаг 3: обновление тестов
 
-Теперь давайте убедимся, что наш код смарт-контракта не выполнит задание, если мы попытаемся отправить сообщение `add` от адреса не-владельца:
+<details>
+  <summary><b>Updating tests</b></summary>
 
-- Создайте `HelloWorld`, указав владельца.
-- Создайте другой смарт-контракт, который будет иметь другой адрес — "nonOwner".
-- Попробуйте отправить внутреннее сообщение в `HelloWorld` и убедиться, что он выдаст ошибку с ожидаемым значением `exitCode`, а поле счетчика остаётся прежним.
+  Now let's ensure that our smart contract correctly updates the counter:
 
-Реализиация теста должна выглядеть следующим образом:
+- Deploy the `HelloWorld` contract with an initial ID.
+- Check that the initial counter value is `0`.
+- Send an `Add` message to increment the counter.
+- Verify that the counter value increases by the expected amount.
+
+  Реализиация теста должна выглядеть следующим образом:
 
 ```typescript title="/tests/HelloWorld.spec.ts"
 // @version TypeScript 5.8.3
@@ -374,13 +358,13 @@ describe('HelloWorld Basic Tests', () => {
 
 ```
 
-Не забудьте проверить правильность этого примера, запустив тестовый скрипт:
+  Не забудьте проверить правильность этого примера, запустив тестовый скрипт:
 
 ```bash
 npx blueprint test
 ```
 
-Ожидаемый вывод должен выглядеть примерно так:
+  Ожидаемый вывод должен выглядеть примерно так:
 
 ```bash
 
@@ -399,7 +383,7 @@ Ran all test suites.
 
 ```
 
----
+</details>
 
 ## Следующий шаг
 
