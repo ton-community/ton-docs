@@ -1,12 +1,14 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 作为维护者参与
 
 Hacktoberfest 活动是一年中获得社区支持的最佳时机！
 
-如果你的代码库与TON生态系统相关，许多贡献者将会对其感兴趣。让我们帮助他们迅速投入到你的项目中！
+如果你的代码库与TON生态系统相关，许多贡献者将会对其感兴趣。让我们帮助他们迅速投入到你的项目中！ Let's help them dive right into your project!
 
 ## 准备参与派对
 
-为了能正确借助贡献者的力量，你需要拥有一个状况良好的代码库。
+To handle contributors in the right way, you need to have a repository in good standing.
 
 遵循以下最佳实践，为你的项目准备贡献：
 
@@ -24,8 +26,8 @@ Hacktoberfest 活动是一年中获得社区支持的最佳时机！
 
 作为TON生态系统中的代码库维护者，你将能够获得两种类型的奖励：
 
-1. [Hacktoberfest 奖励套件](https://hacktoberfest.com/participation/#maintainers)（*见维护者奖励*）
-2. [限量版Hack-TON-berfest NFT](/contribute/hacktoberfest/#what-the-rewards)（*请在[@toncontests_bot](https://t.me/toncontests_bot)中注册钱包地址*）
+1. [Hacktoberfest 奖励套件](https://hacktoberfest.com/participation/#maintainers)（_见维护者奖励_）
+2. [限量版Hack-TON-berfest NFT](/contribute/hacktoberfest/#what-the-rewards)（_请在[@toncontests_bot](https://t.me/toncontests_bot)中注册钱包地址_）
 
 ## 如何加入并被列入列表？
 
@@ -37,3 +39,6 @@ Hacktoberfest 活动是一年中获得社区支持的最佳时机！
     将代码库添加到列表中
   </a>
 </span>
+
+<Feedback />
+
