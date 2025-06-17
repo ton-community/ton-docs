@@ -1,16 +1,17 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 语句
 
-本节简要讨论构成普通函数体代码的 FunC 语句。
+This section briefly overviews FunC statements, which form the core of function bodies.
 
 ## 表达式语句
 
-最常见的语句类型是表达式语句。它是一个表达式后跟 `;`。表达式的描述相当复杂，因此这里只提供一个概述。通常所有子表达式都是从左到右计算的，唯一的例外是[汇编堆栈重排](functions#rearranging-stack-entries)，它可能手动定义顺序。
+The most common type of statement is the expression statement—an expression followed by `;`. As a rule, all sub-expressions are evaluated from left to right,
+except in cases where [asm stack rearrangement](/v3/documentation/smart-contracts/func/docs/functions#rearranging-stack-entries) explicitly defines the order.
 
 ### 变量声明
 
-不可能声明一个局部变量而不定义其初始值。
-
-以下是一些变量声明的示例：
+Local variables must be initialized at the time of declaration. 以下是一些变量声明的示例：
 
 ```func
 int x = 2;
@@ -26,7 +27,7 @@ var (x, y, z) = (1, 2, 3);
 var [x, y, z] = [1, 2, 3];
 ```
 
-变量可以在同一作用域内“重新声明”。例如，以下是正确的代码：
+变量可以在同一作用域内“重新声明”。例如，以下是正确的代码： For example, the following code is valid:
 
 ```func
 int x = 2;
@@ -34,7 +35,10 @@ int y = x + 1;
 int x = 3;
 ```
 
-事实上，`int x` 的第二次出现不是声明，而只是编译时确认 `x` 的类型为 `int`。因此第三行实际上等同于简单的赋值 `x = 3;`。
+In this case,
+the second occurrence of `int x` is not a new declaration but a compile-time check ensuring that `x` has type `int`. The third line is equivalent to `x = 3;`.
+
+**Variable redeclaration in nested scopes**
 
 在嵌套作用域中，变量可以像在 C 语言中一样真正重新声明。例如，考虑以下代码：
 
@@ -52,16 +56,13 @@ while (i < 10) {
 但如在全局变量[章节](/develop/func/global_variables.md)中提到的，不允许重新声明全局变量。
 
 请注意，变量声明**是**表达式语句，因此像 `int x = 2` 这样的结构实际上是完整的表达式。例如，以下是正确的代码：
-
-```func
-int y = (int x = 3) + 1;
-```
-
 它声明了两个变量 `x` 和 `y`，分别等于 `3` 和 `4`。
 
 #### 下划线
 
-下划线 `_` 用于表示不需要的值。例如，假设函数 `foo` 的类型为 `int -> (int, int, int)`。我们可以获取第一个返回值并忽略第二个和第三个，如下所示：
+The underscore `_` is used when a value is not needed.
+For example, if `foo` is a function of type `int -> (int, int, int)`,
+you can retrieve only the first return value while ignoring the rest:
 
 ```func
 (int fst, _, _) = foo(42);
@@ -76,7 +77,12 @@ int y = (int x = 3) + 1;
 int x = foo(1, 2, 3);
 ```
 
-但请注意，`foo` 实际上是**一个**参数类型为 `(int, int, int)` 的函数。为了看到区别，假设 `bar` 是类型为 `int -> (int, int, int)` 的函数。与常规语言不同，你可以这样组合函数：
+However, unlike many conventional languages, FunC treats functions as taking a single argument.
+In the example above, `foo` is a function that takes one tuple argument of type `(int, int, int)`.
+
+**Function composition**
+
+To illustrate how function arguments work in FunC, consider a function `bar` of type `int -> (int, int, int)`. Since `foo` expects a single tuple argument, you can pass the entire result of `bar(42)` directly into `foo`:
 
 ```func
 int x = foo(bar(42));
@@ -91,6 +97,8 @@ int x = foo(a, b, c);
 
 也可以进行 Haskell 类型的调用，但不总是可行（稍后修复）：
 
+FunC also supports **Haskell-style** function application, but with some limitations:
+
 ```func
 ;; suppose foo has type int -> int -> int -> int
 ;; i.e. it's carried
@@ -98,6 +106,18 @@ int x = foo(a, b, c);
 int x = foo a b c; ;; ok
 ;; int y = foo 1 2 3; wouldn't compile
 int y = foo (1) (2) (3); ;; ok
+```
+
+However, direct application with literals does not compile:
+
+```func
+事实上，`int x` 的第二次出现不是声明，而只是编译时确认 `x` 的类型为 `int`。因此第三行实际上等同于简单的赋值 `x = 3;`。
+```
+
+Instead, parentheses are required:
+
+```func
+int y = (int x = 3) + 1;
 ```
 
 ### Lambda 表达式
@@ -108,7 +128,16 @@ int y = foo (1) (2) (3); ;; ok
 
 #### 非修改方法
 
+In FunC, a function with at least one argument can be called a non-modifying method using the dot `.` syntax.
+
+For example, the function `store_uint` has the type `(builder, int, int)  → builder`, where:
+
+- The first argument is a builder object.
+- The second argument is the value to store.
+- The third argument is the bit length.
+
 如果函数至少有一个参数，它可以作为非修改方法调用。例如，`store_uint` 的类型为 `(builder, int, int) -> builder`（第二个参数是要存储的值，第三个是位长度）。`begin_cell` 是创建新构建器的函数。以下代码是等价的：
+These two ways of calling `store_uint` are equivalent:
 
 ```func
 builder b = begin_cell();
@@ -138,19 +167,21 @@ builder b = begin_cell().store_uint(239, 8)
 
 如果函数的第一个参数的类型为 `A`，并且函数的返回值的形状为 `(A, B)`，其中 `B` 是某种任意类型，那么该函数可以作为修改方法调用。修改方法调用可以接受一些参数并返回一些值，但它们会修改其第一个参数，即将返回值的第一个组件赋值给第一个参数的变量。例如，假设 `cs` 是一个cell slice ，`load_uint` 的类型为 `(slice, int) -> (slice, int)`：它接受一个cell slice 和要加载的位数，并返回 slice 的剩余部分和加载的值。以下代码是等价的：
 
+A modifying method modifies its first argument by assigning the first component of the returned value to the original variable. These methods may take additional arguments and return extra values, but their primary purpose is to update the first argument.
+
+For example, consider a cell slice `cs` and the function `load_uint`, which has the type: `load_uint(slice, int) → (slice, int)`.
+
+This function takes a cell slice and a number of bits to load, returning the remaining slice and the loaded value. The following three calls are equivalent:
+
 ```func
 (cs, int x) = load_uint(cs, 8);
 ```
 
-```func
-(cs, int x) = cs.load_uint(8);
-```
+Without return values
+Sometimes, a function can be used as a modifying method even when it doesn’t return a meaningful value—only modifying its first argument.
+This can be achieved using unit types.
 
-```func
-int x = cs~load_uint(8);
-```
-
-在某些情况下，我们希望将不返回任何值且只修改第一个参数的函数用作修改方法。可以使用cell类型如下操作：假设我们想定义类型为 `int -> int` 的函数 `inc`，它用于递增整数，并将其用作修改方法。然后我们应该将 `inc` 定义为类型为 `int -> (int, ())` 的函数：
+For example, consider an increment function `inc` of type `int -> int`. 在某些情况下，我们希望将不返回任何值且只修改第一个参数的函数用作修改方法。可以使用cell类型如下操作：假设我们想定义类型为 `int -> int` 的函数 `inc`，它用于递增整数，并将其用作修改方法。然后我们应该将 `inc` 定义为类型为 `int -> (int, ())` 的函数：
 
 ```func
 (int, ()) inc(int x) {
@@ -158,7 +189,7 @@ int x = cs~load_uint(8);
 }
 ```
 
-像这样定义时，它可以用作修改方法。以下将递增 `x`。
+Now, the following code increments `x`:
 
 ```func
 x~inc();
@@ -166,7 +197,7 @@ x~inc();
 
 #### 函数名中的 `.` 和 `~`
 
-假设我们也想将 `inc` 用作非修改方法。我们可以写类似以下内容：
+假设我们也想将 `inc` 用作非修改方法。我们可以写类似以下内容： We can write:
 
 ```func
 (int y, _) = inc(x);
@@ -183,7 +214,7 @@ int inc(int x) {
 }
 ```
 
-然后这样调用它：
+Now, we can call it in different ways:
 
 ```func
 x~inc();
@@ -191,24 +222,26 @@ int y = inc(x);
 int z = x.inc();
 ```
 
-第一次调用将修改 x；第二次和第三次调用不会。
+**How FunC resolves function calls**
 
-总结一下，当以非修改或修改方法（即使用 `.foo` 或 `~foo` 语法）调用名为 `foo` 的函数时，如果存在 `.foo` 或 `~foo` 的定义，FunC 编译器将分别使用 `.foo` 或 `~foo` 的定义，如果没有，则使用 `foo` 的定义。
+- 总结一下，当以非修改或修改方法（即使用 `.foo` 或 `~foo` 语法）调用名为 `foo` 的函数时，如果存在 `.foo` 或 `~foo` 的定义，FunC 编译器将分别使用 `.foo` 或 `~foo` 的定义，如果没有，则使用 `foo` 的定义。
+- 像这样定义时，它可以用作修改方法。以下将递增 `x`。
+- 但请注意，`foo` 实际上是**一个**参数类型为 `(int, int, int)` 的函数。为了看到区别，假设 `bar` 是类型为 `int -> (int, int, int)` 的函数。与常规语言不同，你可以这样组合函数：
 
-### 运算符
+### Operators
 
-请注意，目前所有的一元和二元运算符都是整数运算符。逻辑运算符表示为位整数运算符（参见[没有布尔类型](/develop/func/types#absence-of-boolean-type)）。
+Note that all the unary and binary operators are currently integer operators. Logical operators are bitwise integer operators (cf. [absence of boolean type](/v3/documentation/smart-contracts/func/docs/types#no-boolean-type)).
 
-#### 一元运算符
+#### Unary operators
 
-有两个一元运算符：
+FunC supports two unary operators:
 
 - `~` 是按位非（优先级 75）
 - `-` 是整数取反（优先级 20）
 
-它们应该与参数分开：
+它们也应该与参数分开：
 
-- `- x` 是可以的。
+- `- x` - Negates x.
 - `-x` 不可以（它是单个标识符）
 
 #### 二元运算符
@@ -230,7 +263,7 @@ int z = x.inc();
 - `+` 是整数加法
 - `-` 是整数减法
 - `|` 是按位或
-- `^` 是按位异或
+- `^` is bitwise XOR
 
 优先级为 17（左结合性）：
 
@@ -249,14 +282,14 @@ int z = x.inc();
 - `>=` 是整数比较
 - `<=>` 是整数比较（返回 -1、0 或 1）
 
-它们也应该与参数分开：
+它们应该与参数分开：
 
-- `x + y` 是可以的
+- `x + y` -  Proper spacing between operands.
 - `x+y` 不可以（它是单个标识符）
 
 #### 条件运算符
 
-它具有通常的语法。
+FunC supports the standard conditional (ternary) operator with the following syntax:
 
 ```func
 <condition> ? <consequence> : <alternative>
@@ -270,19 +303,21 @@ x > 0 ? x * fac(x - 1) : 1;
 
 优先级为 13。
 
-#### 赋值
+#### Assignments
 
 优先级 10。
 
-简单赋值 `=` 以及二元运算的对应项：`+=`、`-=`、`*=`、`/=`、`~/=`、`^/=`、`%=`、`~%=`、`^%=`、`<<=`、`>>=`、`~>>=`、`^>>=`、`&=`、`|=`、`^=`。
+Supports simple assignment `=` and compound assignment operators: `+=`, `-=`, `*=`, `/=`, `~/=`, `^/=`, `%=`, `~%=`, `^%=`, `<<=`, `>>=`, `~>>=`, `^>>=`, `&=`, `|=`, `^=`.
 
 ## 循环
 
-FunC 支持 `repeat`、`while` 和 `do { ... } until` 循环。不支持 `for` 循环。
+FunC supports `repeat`, `while`, and `do { ... } until` loops. The `for` loop is not supported.
 
 ### Repeat 循环
 
-语法是 `repeat` 关键字后跟一个类型为 `int` 的表达式。指定次数重复代码。示例：
+语法是 `repeat` 关键字后跟一个类型为 `int` 的表达式。指定次数重复代码。示例： It executes the code a specified number of times.
+
+**Examples:**
 
 ```func
 int x = 1;
@@ -300,6 +335,8 @@ repeat(y + 6) {
 ;; x = 65536
 ```
 
+If the repetition count is negative, the loop does not execute:
+
 ```func
 int x = 1;
 repeat(-1) {
@@ -308,11 +345,11 @@ repeat(-1) {
 ;; x = 1
 ```
 
-如果次数小于 `-2^31` 或大于 `2^31 - 1`，将抛出范围检查异常。
+A range check exception is thrown if the repetition count is less than `-2³¹` or greater than `2³¹ - 1`.
 
 ### While 循环
 
-具有通常的语法。示例：
+The `while` loop follows standard syntax:
 
 ```func
 int x = 2;
@@ -326,7 +363,7 @@ while (x < 100) {
 
 ### Until 循环
 
-具有以下语法：
+FunC 支持 `repeat`、`while` 和 `do { ... } until` 循环。不支持 `for` 循环。
 
 ```func
 int x = 0;
@@ -338,7 +375,9 @@ do {
 
 ## If 语句
 
-示例：
+**Examples**
+
+Standard `if` statement:
 
 ```func
 ;; usual if
@@ -347,12 +386,16 @@ if (flag) {
 }
 ```
 
+下划线 `_` 用于表示不需要的值。例如，假设函数 `foo` 的类型为 `int -> (int, int, int)`。我们可以获取第一个返回值并忽略第二个和第三个，如下所示：
+
 ```func
 ;; equivalent to if (~ flag)
 ifnot (flag) {
   do_something();
 }
 ```
+
+`If-else` statement:
 
 ```func
 ;; usual if-else
@@ -373,24 +416,39 @@ if (flag1) {
 }
 ```
 
-花括号是必需的。以下代码将无法编译：
+Curly brackets `{}` are required for `if` statements. 花括号是必需的。以下代码将无法编译：
 
 ```func
 if (flag1)
   do_something();
 ```
 
-## Try-Catch 语句
+## Try-catch statements
 
-*自 func v0.4.0 起可用*
+_自 func v0.4.0 起可用_
 
-执行 `try` 块中的代码。如果失败，完全回滚在 `try` 块中所做的更改，并执行 `catch` 块；`catch` 接收两个参数：任何类型的异常参数（`x`）和错误代码（`n`，整数）。
+The `try` block executes a section of code.
+执行 `try` 块中的代码。如果失败，完全回滚在 `try` 块中所做的更改，并执行 `catch` 块；`catch` 接收两个参数：任何类型的异常参数（`x`）和错误代码（`n`，整数）。 The `catch` block receives two arguments:
 
-与许多其他语言不同，在 FunC 的 try-catch 语句中，try 块中所做的更改，特别是局部和全局变量的修改，所有寄存器的更改（即 `c4` 存储寄存器、`c5` 操作/消息寄存器、`c7` 上下文寄存器等）**被丢弃**，如果 try 块中有错误，因此所有合约存储更新和消息发送将被撤销。需要注意的是，一些 TVM 状态参数，如 *codepage* 和gas计数器不会回滚。这意味着，尤其是，try 块中花费的所有gas将被计入，以及改变gas限制的操作（`accept_message` 和 `set_gas_limit`）的效果将被保留。
+- `x`: the exception parameter, which can be of any type
+- `n`: the error code, an integer
 
-请注意，异常参数可以是任何类型（可能在不同异常情况下不同），因此 funC 无法在编译时预测它。这意味着开发者需要通过将异常参数转换为某种类型来“帮助”编译器（请参见下面的示例 2）：
+Unlike many other languages, in FunC, all changes are **undone** if an error occurs inside the `try` block. These modifications include updates to local and global variables and changes to storage registers (`c4` for storage, `c5`for action/messages, `c7` for context, etc.).
+Any contract storage updates and outgoing messages are also reverted.
 
-示例：
+However, certain TVM state parameters are not rolled back, such as:
+
+- Codepage settings
+- Gas counters
+  As a result, all gas consumed within the `try` block is still accounted for, and any operations that modify gas limits (e.g., `accept_message` or `set_gas_limit`) will remain in effect.
+
+**Exception parameter handling**
+
+请注意，异常参数可以是任何类型（可能在不同异常情况下不同），因此 funC 无法在编译时预测它。这意味着开发者需要通过将异常参数转换为某种类型来“帮助”编译器（请参见下面的示例 2）： This requires the developer to manually cast the exception parameter when necessary, as shown in the type-casting example below.
+
+**Examples**
+
+Basic `try-catch` usage:
 
 ```func
 try {
@@ -399,6 +457,8 @@ try {
   handle_exception();
 }
 ```
+
+Casting the exception parameter:
 
 ```func
 forall X -> int cast_to_int(X x) asm "NOP";
@@ -412,6 +472,8 @@ try {
 }
 ```
 
+Variable reset on exception:
+
 ```func
 int x = 0;
 try {
@@ -421,6 +483,8 @@ try {
 }
 ;; x = 0 (not 1)
 ```
+
+In this last example, although `x` is incremented inside the `try` block, the modification is **rolled back** due to the exception, so `x` remains `0`.
 
 ## 区块语句
 
@@ -435,3 +499,9 @@ builder b = begin_cell();
 }
 x += 1;
 ```
+
+In this example, the inner block introduces a new `builder` variable named `x`, which exists only within that scope.
+The outer `x` remains unchanged and can be used after the block ends.
+
+<Feedback />
+
