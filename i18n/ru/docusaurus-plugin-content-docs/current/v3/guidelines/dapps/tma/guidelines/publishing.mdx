@@ -1,10 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # Публикация мини-приложений (TMA)
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
 
 Как разработчикам, нам важно понимать экосистему, в которой мы работаем. Telegram предоставляет уникальные возможности для разработчиков мини-приложений благодаря своей надежной платформе и обширной пользовательской базе. Эта статья расскажет Вам о доступных способах для публикации Ваших мини-приложений в Telegram.
 
@@ -46,7 +44,7 @@ import Button from '@site/src/components/button'
 
 Вы можете отправить  **web_app** типа [KeyboardButton](https://core.telegram.org/bots/api#keyboardbutton), который открывает мини-приложение с указанного URL.
 
-Чтобы передать данные от пользователя обратно боту, мини-приложение может вызвать метод [Telegram.WebApp.sendData](https://core.telegram.org/bots/webapps#initializing-web-apps). Данные будут переданы боту в виде строки в служебном сообщении. После их получения бот сможет продолжить общение с пользователем.
+Бот может вызвать метод Bot API [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery), чтобы отправить сообщение от пользователя обратно боту и закрыть мини-приложение. Получив сообщение, бот может продолжить общение с пользователем.
 
 **Полезно для:**
 
@@ -61,7 +59,7 @@ import Button from '@site/src/components/button'
 
 По нажатию кнопки откроется мини-приложение с URL, указанным в кнопке. В дополнение к [настройкам темы](https://core.telegram.org/bots/webapps#color-schemes) оно получит основную информацию о пользователе (ID, name, username, language_code) и уникальный идентификатор сессии, **query_id**, который позволяет отправлять сообщения от имени пользователя обратно боту.
 
-Бот может вызвать метод Bot API [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery), чтобы отправить сообщение от пользователя обратно боту и закрыть мини-приложение. Получив сообщение, бот может продолжить общение с пользователем.
+The bot can call the Bot API method [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery) to send an inline message from the user back to the bot and close the Mini App. После их получения бот сможет продолжить общение с пользователем.
 
 **Полезно для:**
 
@@ -114,5 +112,6 @@ import Button from '@site/src/components/button'
 
 - Полноценных веб-сервисов и интеграций, которые любой пользователь может открыть одним касанием.
 - Кооперативных, многопользовательских или ориентированных на командную работу сервисов в контексте чата.
+- Варианты использования практически **не ограничены**.
 
-Варианты использования практически **не ограничены**.
+<Feedback />
