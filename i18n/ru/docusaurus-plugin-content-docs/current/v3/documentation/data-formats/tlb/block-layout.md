@@ -1,8 +1,6 @@
-# Расположение блоков
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Расположение блоков
 
 :::info
 Чтобы максимально полно понять эту страницу, настоятельно рекомендуется ознакомиться с [языком TL-B](/v3/documentation/data-formats/tlb/cell-boc).
@@ -63,11 +61,11 @@ block_info#9bc7a987 version:uint32
 | `after_merge`                   | (## 1)                    | Флаг, указывающий, был ли этот блок создан сразу после слияния двух шардчейнов, поэтому у него два родительских блока                                                 |
 | `before_split`                  | (## 1)                    | Флаг, указывающий, был ли этот блок создан сразу перед разделением его шардчейна                                                                                      |
 | `after_split`                   | (## 1)                    | Флаг, указывающий, был ли этот блок создан сразу после разделения его шардчейна                                                                                       |
-| `want_split`                    | Bool                                         | Флаг, указывающий, требуется ли разделение шардчейна.                                                                                                 |
-| `want_merge`                    | Bool                                         | Флаг, указывающий, требуется ли слияние шардчейна.                                                                                                    |
+| `want_split`                    | Bool                                         | Specifies whether a ShardChain split is desired.                                                                                                      |
+| `want_merge`                    | Bool                                         | Specifies whether a ShardChain merge is desired.                                                                                                      |
 | `key_block`                     | Bool                                         | Флаг, указывающий, является ли этот блок ключевым блоком.                                                                                             |
 | `vert_seqno_incr`               | (## 1)                    | Увеличение вертикального порядкового номера.                                                                                                          |
-| `флаги`                         | (## 8)                    | Дополнительные флаги для блока.                                                                                                                       |
+| `flags`                         | (## 8)                    | Дополнительные флаги для блока.                                                                                                                       |
 | `seq_no`                        | #                                            | Порядковый номер, связанный с блоком.                                                                                                                 |
 | `vert_seq_no`                   | #                                            | Вертикальный порядковый номер, связанный с блоком.                                                                                                    |
 | `shard`                         | ShardIdent                                   | Идентификатор шарда, к которому принадлежит этот блок.                                                                                                |
@@ -79,9 +77,9 @@ block_info#9bc7a987 version:uint32
 | `min_ref_mc_seqno`              | uint32                                       | Минимальный порядковый номер указанного блока мастерчейна.                                                                                            |
 | `prev_key_block_seqno`          | uint32                                       | Порядковый номер предыдущего ключевого блока.                                                                                                         |
 | `gen_software`                  | GlobalVersion                                | Версия программного обеспечения, сгенерировавшего блок. Представлено только в том случае, если первый бит `version` установлен в `1`. |
-| `master_ref`                    | BlkMasterInfo                                | Ссылка на главный блок, если блок не является главным. Сохраняется в ссылочном блоке.                                                 |
-| `prev_ref`                      | BlkPrevInfo after_merge | Ссылка на предыдущий блок. Сохраняется в ссылочном блоке.                                                                             |
-| `prev_vert_ref`                 | BlkPrevInfo 0                                | Ссылка на предыдущий блок в вертикальной последовательности, если он существует. Сохраняется в ссылочном блоке.                       |
+| `master_ref`                    | BlkMasterInfo                                | Ссылка на главный блок, если блок не является главным.                                                                                                |
+| `prev_ref`                      | BlkPrevInfo after_merge | Ссылка на предыдущий блок.                                                                                                                            |
+| `prev_vert_ref`                 | BlkPrevInfo 0                                | Ссылка на предыдущий блок в вертикальной последовательности, если он существует.                                                                      |
 
 ### value_flow:^ValueFlow
 
@@ -115,19 +113,19 @@ value_flow#b8e48dfb ^[ from_prev_blk:CurrencyCollection
 
 ## state_update:^(MERKLE_UPDATE ShardState)
 
-Это поле представляет собой обновление состояния шарда.
+Indicates the updated state of the shard after this block.
 
 ```tlb
 !merkle_update#02 {X:Type} old_hash:bits256 new_hash:bits256
     old:^X new:^X = MERKLE_UPDATE X;
 ```
 
-| Поле       | Тип                       | Описание                                                                    |
-| ---------- | ------------------------- | --------------------------------------------------------------------------- |
-| `old_hash` | bits256                   | Старый хэш состояния шарда.                                 |
-| `new_hash` | bits256                   | Новый хэш состояния шарда.                                  |
-| `old`      | [ShardState](#shardstate) | Старое состояние шарда. Сохранено в ссылке. |
-| `new`      | [ShardState](#shardstate) | Новое состояние шарда. Сохранено в ссылке.  |
+| Поле       | Тип                       | Описание                                                            |
+| ---------- | ------------------------- | ------------------------------------------------------------------- |
+| `old_hash` | bits256                   | The hash of the previous shard state.               |
+| `new_hash` | bits256                   | The hash of the updated shard state.                |
+| `old`      | [ShardState](#shardstate) | The previous shard state was stored as a reference. |
+| `new`      | [ShardState](#shardstate) | The updated shard state is stored as a reference.   |
 
 ### ShardState
 
@@ -158,25 +156,25 @@ shard_state#9023afe2 global_id:int32
     = ShardStateUnsplit;
 ```
 
-| Поле                   | Тип                                                                                 | Обязательное | Описание                                                                                                                                                                                                                      |
-| ---------------------- | ----------------------------------------------------------------------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `global_id`            | int32                                                                               | Да           | Идентификатор сети, к которой принадлежит этот шард. `-239` для mainnet и `-3` для testnet.                                                                                                   |
-| `shard_id`             | ShardIdent                                                                          | Да           | Идентификатор шарда.                                                                                                                                                                                          |
-| `seq_no`               | uint32                                                                              | Да           | Последний порядковый номер, связанный с этим шардом.                                                                                                                                                          |
-| `vert_seq_no`          | #                                                                                   | Да           | Последний вертикальный порядковый номер, связанный с этим шардом.                                                                                                                                             |
-| `gen_utime`            | uint32                                                                              | Да           | Время генерации, связанное с созданием шарда.                                                                                                                                                                 |
-| `gen_lt`               | uint64                                                                              | Да           | Логическое время, связанное с созданием шарда.                                                                                                                                                                |
-| `min_ref_mc_seqno`     | uint32                                                                              | Да           | Порядковый номер последнего упомянутого блока мастерчейна.                                                                                                                                                    |
-| `out_msg_queue_info`   | OutMsgQueueInfo                                                                     | Да           | Информация об очереди исходящих сообщений этого шарда. Хранится в ссылке.                                                                                                                     |
-| `before_split`         | ## 1                                                                                | Да           | Флаг, указывающий, будет ли разделение в следующем блоке этого шарда.                                                                                                                                         |
-| `accounts`             | ShardAccounts                                                                       | Да           | Состояние учетных записей в шарде. Хранится в ссылке.                                                                                                                                         |
-| `overload_history`     | uint64                                                                              | Да           | История событий перегрузки для шарда. Используется для балансировки нагрузки посредством шардинга.                                                                                            |
-| `underload_history`    | uint64                                                                              | Да           | История событий недогрузки для шарда. Используется для балансировки нагрузки посредством шардинга.                                                                                            |
-| `total_balance`        | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Да           | Общий баланс для шарда.                                                                                                                                                                                       |
-| `total_validator_fees` | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Да           | Общая сумма сборов валидатора для шарда.                                                                                                                                                                      |
-| `libraries`            | HashmapE 256 LibDescr                                                               | Да           | Хэш-карта описаний библиотек в этом шарде. В настоящее время непустая только в мастерчейне.                                                                                                   |
-| `master_ref`           | BlkMasterInfo                                                                       | Нет          | Ссылка на информацию о главном блоке.                                                                                                                                                                         |
-| `custom`               | McStateExtra                                                                        | Нет          | Дополнительные пользовательские данные для состояния шарда. Это поле присутствует только в мастерчейне и содержит все данные, специфичные для мастерчейна. Хранится в ссылке. |
+| Поле                   | Тип                                                                                 | Обязательное | Описание                                                                                                                             |
+| ---------------------- | ----------------------------------------------------------------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `global_id`            | int32                                                                               | Да           | Идентификатор сети, к которой принадлежит этот шард. `-239` для mainnet и `-3` для testnet.          |
+| `shard_id`             | ShardIdent                                                                          | Да           | The unique identifier of the shard.                                                                                  |
+| `seq_no`               | uint32                                                                              | Да           | Последний порядковый номер, связанный с этим шардом.                                                                 |
+| `vert_seq_no`          | #                                                                                   | Да           | Последний вертикальный порядковый номер, связанный с этим шардом.                                                    |
+| `gen_utime`            | uint32                                                                              | Да           | Время генерации, связанное с созданием шарда.                                                                        |
+| `gen_lt`               | uint64                                                                              | Да           | Логическое время, связанное с созданием шарда.                                                                       |
+| `min_ref_mc_seqno`     | uint32                                                                              | Да           | Порядковый номер последнего упомянутого блока мастерчейна.                                                           |
+| `out_msg_queue_info`   | OutMsgQueueInfo                                                                     | Да           | Информация об очереди исходящих сообщений этого шарда. Хранится в ссылке.                            |
+| `before_split`         | ## 1                                                                                | Да           | A flag indicating that the next block of this ShardChain. It initiates a split.                      |
+| `accounts`             | ShardAccounts                                                                       | Да           | A reference to the current state of accounts within the shard.                                                       |
+| `overload_history`     | uint64                                                                              | Да           | A counter tracking shard overload events. Used to inform sharding decisions.                         |
+| `underload_history`    | uint64                                                                              | Да           | A counter tracking shard underload events. Used to inform sharding decisions.                        |
+| `total_balance`        | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Да           | The total balance is held across all accounts in the shard.                                                          |
+| `total_validator_fees` | [CurrencyCollection](/v3/documentation/data-formats/tlb/msg-tlb#currencycollection) | Да           | The total amount of validator fees accumulated within the shard.                                                     |
+| `libraries`            | HashmapE 256 LibDescr                                                               | Да           | Хэш-карта описаний библиотек в этом шарде. В настоящее время непустая только в мастерчейне.          |
+| `master_ref`           | BlkMasterInfo                                                                       | Нет          | A reference to the masterchain block info.                                                                           |
+| `custom`               | McStateExtra                                                                        | Нет          | MasterChain-specific extra data. Present only in the MasterChain. Хранится в ссылке. |
 
 ### ShardState Splitted
 
@@ -198,14 +196,14 @@ block_extra in_msg_descr:^InMsgDescr
     custom:(Maybe ^McBlockExtra) = BlockExtra;
 ```
 
-| Поле             | Тип                           | Обязательное | Описание                                                                                                                                                                                                            |
-| ---------------- | ----------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `in_msg_descr`   | InMsgDescr                    | Да           | Дескриптор входящих сообщений в блоке. Хранится в ссылке.                                                                                                                           |
-| `out_msg_descr`  | OutMsgDescr                   | Да           | Дескриптор исходящих сообщений в блоке. Хранится в ссылке.                                                                                                                          |
-| `account_blocks` | ShardAccountBlocks            | Да           | Коллекция всех транзакций, обработанных в блоке, вместе со всеми обновлениями состояний учетных записей, назначенных шарду. Хранится в ссылке.                                      |
-| `rand_seed`      | bits256                       | Да           | Случайное начальное число для блока.                                                                                                                                                                |
-| `created_by`     | bits256                       | Да           | Сущность (обычно открытый ключ валидатора), которая создала блок.                                                                                                                |
-| `custom`         | [McBlockExtra](#mcblockextra) | Нет          | Это поле присутствует только в мастерчейне и содержит все данные, специфичные для мастерчейна. Пользовательские дополнительные данные для блока. Хранится в ссылке. |
+| Поле             | Тип                           | Обязательное | Описание                                                                                                                                                                       |
+| ---------------- | ----------------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `in_msg_descr`   | InMsgDescr                    | Да           | Дескриптор входящих сообщений в блоке. Хранится в ссылке.                                                                                      |
+| `out_msg_descr`  | OutMsgDescr                   | Да           | Дескриптор исходящих сообщений в блоке. Хранится в ссылке.                                                                                     |
+| `account_blocks` | ShardAccountBlocks            | Да           | Коллекция всех транзакций, обработанных в блоке, вместе со всеми обновлениями состояний учетных записей, назначенных шарду. Хранится в ссылке. |
+| `rand_seed`      | bits256                       | Да           | The random seed for the block.                                                                                                                                 |
+| `created_by`     | bits256                       | Да           | Сущность (обычно открытый ключ валидатора), которая создала блок.                                                                           |
+| `custom`         | [McBlockExtra](#mcblockextra) | Нет          | Пользовательские дополнительные данные для блока. Present only in the MasterChain. Хранится в ссылке.                          |
 
 ### McBlockExtra
 
@@ -235,4 +233,7 @@ masterchain_block_extra#cca5
 
 ## См. также
 
-- Оригинальное описание разметки блока из ​​технического документа
+- The initial explanation of the block layout from the whitepaper.
+
+<Feedback />
+
