@@ -1,18 +1,21 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TMA 设计指南
 
 :::info
-从 **6.10** 版本开始，Telegram 更新了小程序的配色方案：修正了一些旧的配色，同时添加了新的配色。
+Starting with version **6.10**, Telegram updated the Mini App color palette by fixing some old colors and adding new ones.
+
 :::
 
 为了更好地理解背景，让我们回顾一下历史上的更新。
 
-更新日志。
+### 更新日志。
 
 1. `bg_color` 和 `secondary_bg_color` 已更新。
 
 ![](/img/docs/tma-design-guidelines/tma-design_1.png)
 
-原因是：
+### Reasons for these changes
 
 • 最初，这些颜色是为页面背景而不是UI控制项设计的。
 
@@ -22,18 +25,19 @@
 
 为了提高应用程序的外观，您应该稍微调整颜色变量的使用。
 
-上述是一个清晰的例子，准确解释了iOS上会发生什么变化。在Android上不应有任何变化。
+上述是一个清晰的例子，准确解释了iOS上会发生什么变化。在Android上不应有任何变化。 There should be no changes on Android.
 
-新颜色。
-此外，还增加了许多新颜色。它们中的大多数在Android上最为明显。因此，下面的示例将基于Android展示，但适用于所有平台。
+1. New colors.
+   新颜色。
+   此外，还增加了许多新颜色。它们中的大多数在Android上最为明显。因此，下面的示例将基于Android展示，但适用于所有平台。 The examples focus on Android but apply to all platforms.
 
-
+![](/img/docs/tma-design-guidelines/tma-design_2.png)
 
 2. 对于小程序，现在可以使用Telegram header的颜色。
 
+![](/img/docs/tma-design-guidelines/tma-design_3.png)
 
-
-3. 已经提供了 token accent_text_color，它适用于应用程序中的任何突出元素。以前，大家都使用了不太合适的 dark link_color。
+3. 已经提供了 token accent_text_color，它适用于应用程序中的任何突出元素。以前，大家都使用了不太合适的 dark link_color。 Previously, everyone used the less suitable dark link_color.
 
 ![](/img/docs/tma-design-guidelines/tma-design_4.png)
 
@@ -53,10 +57,12 @@
     <br />
 </p>
 
-7. [原始来源](https://telegra.ph/Changes-in-Color-Variables-for-Telegram-Mini-Apps-11-20)
+7. A reasonable question arises: how should `link_color` and `hint_color` be used now?
 
-我建议将它们用作部分下方的提示部分的颜色，以及 `secondary_bg_color` 这类背景的链接颜色。
+Use `hint_color` for hint sections under different sections. 我建议将它们用作部分下方的提示部分的颜色，以及 `secondary_bg_color` 这类背景的链接颜色。
 
 ## 参阅
 
 - [原始来源](https://telegra.ph/Changes-in-Color-Variables-for-Telegram-Mini-Apps-11-20)
+
+<Feedback />
