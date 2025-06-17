@@ -1,8 +1,6 @@
-# Понимание тестовой сети
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Понимание тестовой сети
 
 Используйте тестовую сеть TON для разработки и тестирования.
 
@@ -30,10 +28,11 @@
 
 ### Кошельки
 
-- Чтобы переключиться на [тестовую сеть Tonkeeper](https://tonkeeper.com/), нажмите на версию 5 раз в настройках.
-- Тестовая сеть CryptoBot: https://t.me/CryptoTestnetBot
-- Специальная ссылка для тестовой сети TON Space: https://t.me/wallet/start?startapp=tonspace_settings
-- https://multisig.ton.org/?testnet=true
+- To use [Tonkeeper's testnet](https://tonkeeper.com/), tap the Wallets list and then Add Wallet, then use Testnet Account button.
+
+* Тестовая сеть CryptoBot: https://t.me/CryptoTestnetBot
+* Специальная ссылка для тестовой сети TON Space: https://t.me/wallet/start?startapp=tonspace_settings
+* https://multisig.ton.org/?testnet=true
 
 ### Обозреватели
 
@@ -46,17 +45,12 @@
 ### Другие сервисы
 
 - https://minter.ton.org/?testnet=true
-
 - https://dns.ton.org/?testnet=true
-
 - https://vesting.ton.org/?testnet=true
-
 - https://teststaking.xyz
-
 - https://testnet.getgems.io
-
 - https://app.hipo.finance/#/network=testnet/
-
 - https://testnet-elections.toncenter.com/getValidationCycles?limit=2&return_participants=true
 
+<Feedback />
 
