@@ -1,14 +1,16 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # 发布小程序
 
-作为开发者，了解我们所处的生态系统是非常重要的。Telegram 为小程序开发者提供了独特的机会，得益于其强大的平台和广泛的用户基础。本文将指导您通过 Telegram 可用的渠道发布您的小程序。
+As developers, it's important to understand the ecosystem we operate in. Telegram offers a unique opportunity for Mini App developers through its robust platform and expansive user base. This article outlines the available channels for publishing your Mini Apps on Telegram.
 
 ## tApps 中心
 
-**什么是 tApps 中心？** TON 基金会引入了 Telegram 应用中心，以创建 Telegram 机器人和小程序 (TMAs) 的集中式库。这个平台旨在通过提供一个类似于您已经熟悉的知名应用商店的界面来增强用户体验。
+**什么是 tApps 中心？** TON 基金会引入了 Telegram 应用中心，以创建 Telegram 机器人和小程序 (TMAs) 的集中式库。这个平台旨在通过提供一个类似于您已经熟悉的知名应用商店的界面来增强用户体验。 This platform enhances the user experience by providing an interface similar to familiar app stores.
 
-**广泛的生态系统支持**。Telegram 应用中心不仅仅关注 TON 生态系统；它还欢迎来自其他区块链的应用。您甚至不需要 web3 集成就可以成为这个目录的一部分。这种包容性的做法旨在将 Telegram 建立成一个“一切皆应用”的超级应用，类似于微信等平台，用户可以在一个界面访问多种服务。
+**Broad ecosystem support**. **广泛的生态系统支持**。Telegram 应用中心不仅仅关注 TON 生态系统；它还欢迎来自其他区块链的应用。您甚至不需要 web3 集成就可以成为这个目录的一部分。这种包容性的做法旨在将 Telegram 建立成一个“一切皆应用”的超级应用，类似于微信等平台，用户可以在一个界面访问多种服务。 Web3 integration is not required to be listed in this catalog. This inclusive approach aims to position Telegram as an "Everything Super App", similar to WeChat, where users can access a variety of services within a single interface.
 
 <Button href="https://www.tapps.center/" colorType={'primary'} sizeType={'sm'}>
 
@@ -18,9 +20,9 @@ import Button from '@site/src/components/button'
 
 ### 为什么在 tApps 中心发布？
 
-**更大的曝光度**。Telegram 应用中心为开发者提供了一个展示他们项目给广泛受众的绝佳机会，使得吸引用户和投资者变得更加容易。
+**Greater visibility**. **更大的曝光度**。Telegram 应用中心为开发者提供了一个展示他们项目给广泛受众的绝佳机会，使得吸引用户和投资者变得更加容易。
 
-**社区精神**。该平台采取了以社区为中心的方法，鼓励合作以及资源和知识的共享。
+**社区精神**。该平台采取了以社区为中心的方法，鼓励合作以及资源和知识的共享。 The platform fosters a community-driven environment, promoting collaboration and the exchange of resources and knowledge.
 
 <Button href="https://blog.ton.org/ton-ecosystem-evolved-introducing-telegram-apps-center-t-apps-center" colorType={'secondary'} sizeType={'sm'}>
 
@@ -38,11 +40,11 @@ Telegram 目前支持六种不同的方式来启动小程序：从 [键盘按钮
 
 **简而言之：** 从 **web_app** 类型的 [键盘按钮](https://core.telegram.org/bots/api#keyboardbutton) 启动的小程序可以使用 [Telegram.WebApp.sendData](https://core.telegram.org/bots/webapps#initializing-web-apps) 将数据以 _服务消息_ 的形式发送回机器人。这使得机器人能够在不与任何外部服务器通信的情况下产生响应。
 
-用户可以使用 [自定义键盘](https://core.telegram.org/bots#keyboards)、[机器人消息下的按钮](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating)，以及发送自由格式的 **文本消息** 或 Telegram 支持的任何 **附件类型** 与机器人互动：照片和视频、文件、地点、联系人和投票。为了更多的灵活性，机器人可以利用 **HTML5** 的全部功能来创建用户友好的输入接口。
+用户可以使用 [自定义键盘](https://core.telegram.org/bots#keyboards)、[机器人消息下的按钮](https://core.telegram.org/bots#inline-keyboards-and-on-the-fly-updating)，以及发送自由格式的 **文本消息** 或 Telegram 支持的任何 **附件类型** 与机器人互动：照片和视频、文件、地点、联系人和投票。为了更多的灵活性，机器人可以利用 **HTML5** 的全部功能来创建用户友好的输入接口。 Bots can leverage **HTML5** for user-friendly input interfaces.
 
 您可以发送一个 **web_app** 类型的 [KeyboardButton](https://core.telegram.org/bots/api#keyboardbutton)，以从指定的 URL 打开一个小程序。
 
-要将数据从用户传回机器人，小程序可以调用 [Telegram.WebApp.sendData](https://core.telegram.org/bots/webapps#initializing-web-apps) 方法。数据将以字符串形式通过服务消息传输给机器人。机器人在接收到数据后可以继续与用户通信。
+要将数据从用户传回机器人，小程序可以调用 [Telegram.WebApp.sendData](https://core.telegram.org/bots/webapps#initializing-web-apps) 方法。数据将以字符串形式通过服务消息传输给机器人。机器人在接收到数据后可以继续与用户通信。 The bot receives the data as a string in a service message and can continue interacting with the user.
 
 **适合：**
 
@@ -51,13 +53,13 @@ Telegram 目前支持六种不同的方式来启动小程序：从 [键盘按钮
 
 ### 内联按钮小程序
 
-**简而言之：** 对于像 [@DurgerKingBot](https://t.me/durgerkingbot) 这样更互动的小程序，使用 **web_app** 类型的 [内联键盘按钮](https://core.telegram.org/bots/api#inlinekeyboardbutton)，它可以获取基本用户信息，并可用于代表用户向机器人聊天发送消息。
-
 如果仅接收文本数据不足够，或者您需要更高级和个性化的界面，您可以使用 **web_app** 类型的 [内联键盘按钮](https://core.telegram.org/bots/api#inlinekeyboardbutton) 打开一个小程序。
 
-从按钮中打开的小程序会和按钮中指定的 URL 一样。除了用户的 [主题设置](https://core.telegram.org/bots/webapps#color-schemes)，它还会收到基本的用户信息（ID、名称、用户名、语言代码）和一个唯一的会话标识符，**query_id**，这允许代表用户的消息被发送回机器人。
+**简而言之：** 对于像 [@DurgerKingBot](https://t.me/durgerkingbot) 这样更互动的小程序，使用 **web_app** 类型的 [内联键盘按钮](https://core.telegram.org/bots/api#inlinekeyboardbutton)，它可以获取基本用户信息，并可用于代表用户向机器人聊天发送消息。
 
-机器人可以调用 Bot API 方法 [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery) 来发送内联消息从用户返回到机器人并关闭小程序。接收到消息后，机器人可以继续与用户通信。
+Clicking the button opens a Mini App at the specified URL. 从按钮中打开的小程序会和按钮中指定的 URL 一样。除了用户的 [主题设置](https://core.telegram.org/bots/webapps#color-schemes)，它还会收到基本的用户信息（ID、名称、用户名、语言代码）和一个唯一的会话标识符，**query_id**，这允许代表用户的消息被发送回机器人。
+
+机器人可以调用 Bot API 方法 [answerWebAppQuery](https://core.telegram.org/bots/api#answerwebappquery) 来发送内联消息从用户返回到机器人并关闭小程序。接收到消息后，机器人可以继续与用户通信。 After receiving the message, the bot can continue interacting with the user.
 
 **适合：**
 
@@ -66,14 +68,14 @@ Telegram 目前支持六种不同的方式来启动小程序：从 [键盘按钮
 
 ### 从菜单按钮启动小程序
 
-**简而言之：** 小程序可以从定制的菜单按钮启动。这仅仅提供了一种更快访问应用的方式，并且与 [从内联按钮启动小程序](https://core.telegram.org/bots/webapps#inline-button-web-apps) 没有区别。
+**TL;DR:** Mini Apps can be launched from a customized menu button. **简而言之：** 小程序可以从定制的菜单按钮启动。这仅仅提供了一种更快访问应用的方式，并且与 [从内联按钮启动小程序](https://core.telegram.org/bots/webapps#inline-button-web-apps) 没有区别。
 
-默认情况下，与机器人的聊天总是显示一个方便的 **菜单按钮**，提供快速访问所有列出的 [命令](https://core.telegram.org/bots#commands)。使用 [Bot API 6.0](https://core.telegram.org/bots/api-changelog#april-16-2022)，这个按钮可以用来 **启动一个小程序** 代替。
+默认情况下，与机器人的聊天总是显示一个方便的 **菜单按钮**，提供快速访问所有列出的 [命令](https://core.telegram.org/bots#commands)。使用 [Bot API 6.0](https://core.telegram.org/bots/api-changelog#april-16-2022)，这个按钮可以用来 **启动一个小程序** 代替。 With [Bot API 6.0](https://core.telegram.org/bots/api-changelog#april-16-2022), this button can be used to **launch a Mini App** instead.
 
-要配置菜单按钮，您必须指定它应该显示的文本和小程序的 URL。有两种设置这些参数的方法：
+要配置菜单按钮，您必须指定它应该显示的文本和小程序的 URL。有两种设置这些参数的方法： There are two ways to set these parameters:
 
 - 为了为 **所有用户** 自定义按钮，请使用 [@BotFather](https://t.me/botfather)（/setmenubutton 命令或 _Bot 设置 > 菜单按钮_）。
-- 为了为 **所有用户** 和 **特定用户** 自定义按钮，请使用 Bot API 中的 [setChatMenuButton](https://core.telegram.org/bots/api#setchatmenubutton) 方法。例如，根据用户的语言更改按钮文本，或根据用户在您的机器人中的设置显示不同的 Web 应用链接。
+- 为了为 **所有用户** 和 **特定用户** 自定义按钮，请使用 Bot API 中的 [setChatMenuButton](https://core.telegram.org/bots/api#setchatmenubutton) 方法。例如，根据用户的语言更改按钮文本，或根据用户在您的机器人中的设置显示不同的 Web 应用链接。 For example, change the button text according to the user's language, or show links to different web apps based on the user's settings in your bot.
 
 除此之外，通过菜单按钮打开的 Web 应用与 [使用内联按钮时](https://core.telegram.org/bots/webapps#inline-button-web-apps) 的工作方式完全相同。
 
@@ -81,11 +83,11 @@ Telegram 目前支持六种不同的方式来启动小程序：从 [键盘按钮
 
 ### 内联模式小程序
 
-**简而言之：** 通过 **web_app** 类型的 [InlineQueryResultsButton](https://core.telegram.org/bots/api#inlinequeryresultsbutton) 启动的小程序可以在内联模式中的任何地方使用。用户可以在 Web 界面中创建内容，然后通过内联模式无缝发送到当前聊天。
+**简而言之：** 通过 **web_app** 类型的 [InlineQueryResultsButton](https://core.telegram.org/bots/api#inlinequeryresultsbutton) 启动的小程序可以在内联模式中的任何地方使用。用户可以在 Web 界面中创建内容，然后通过内联模式无缝发送到当前聊天。 Users can create content in a web interface and seamlessly send it to the current chat via inline mode.
 
-您可以在 [answerInlineQuery](https://core.telegram.org/bots/api#answerinlinequery) 方法中使用 _button_ 参数来显示一个特殊的“切换到小程序”的按钮，它可以在内联结果的上方或者代替内联结果显示。这个按钮将 **打开一个指定 URL 的小程序**。完成后，您可以调用 [Telegram.WebApp.switchInlineQuery](https://core.telegram.org/bots/webapps#initializing-web-apps) 方法将用户送回内联模式。
+您可以在 [answerInlineQuery](https://core.telegram.org/bots/api#answerinlinequery) 方法中使用 _button_ 参数来显示一个特殊的“切换到小程序”的按钮，它可以在内联结果的上方或者代替内联结果显示。这个按钮将 **打开一个指定 URL 的小程序**。完成后，您可以调用 [Telegram.WebApp.switchInlineQuery](https://core.telegram.org/bots/webapps#initializing-web-apps) 方法将用户送回内联模式。 This button will **open a Mini App** from the specified URL. Once done, you can call the [Telegram.WebApp.switchInlineQuery](https://core.telegram.org/bots/webapps#initializing-web-apps) method to send the user back to inline mode.
 
-内联小程序 **无法访问** 聊天 - 它们不能读取消息或代表用户发送新消息。要发送消息，用户必须被重定向到 **内联模式** 并主动选择一个结果。
+内联小程序 **无法访问** 聊天 - 它们不能读取消息或代表用户发送新消息。要发送消息，用户必须被重定向到 **内联模式** 并主动选择一个结果。 To send messages, the user must be redirected to **inline mode** and actively pick a result.
 
 **适合：**
 
@@ -93,13 +95,13 @@ Telegram 目前支持六种不同的方式来启动小程序：从 [键盘按钮
 
 ### 直接链接小程序
 
-**简而言之：** 小程序机器人可以从任何聊天中的直接链接启动。它们支持 _startapp_ 参数并且知道当前聊天上下文。
+**简而言之：** 小程序机器人可以从任何聊天中的直接链接启动。它们支持 _startapp_ 参数并且知道当前聊天上下文。 They support a _startapp_ parameter and are aware of the current chat context.
 
-NEW 您可以使用直接链接在当前聊天中 **直接打开一个小程序**。如果链接中包含非空的 _startapp_ 参数，它将在 _start_param_ 字段和 GET 参数 _tgWebAppStartParam_ 中传递给小程序。
+**New**: Direct links **open a Mini App** in the current chat. NEW 您可以使用直接链接在当前聊天中 **直接打开一个小程序**。如果链接中包含非空的 _startapp_ 参数，它将在 _start_param_ 字段和 GET 参数 _tgWebAppStartParam_ 中传递给小程序。
 
-在这种模式下，小程序可以使用 _chat_type_ 和 _chat_instance_ 参数来跟踪当前聊天上下文。这引入了对多个聊天成员的 **并发** 和 **共享** 使用的支持 - 创建实时白板、团体订购、多人游戏和类似应用。
+在这种模式下，小程序可以使用 _chat_type_ 和 _chat_instance_ 参数来跟踪当前聊天上下文。这引入了对多个聊天成员的 **并发** 和 **共享** 使用的支持 - 创建实时白板、团体订购、多人游戏和类似应用。 This enables **concurrent** and **shared** usage among multiple chat members–ideal for live whiteboards, group orders, multiplayer games, and similar apps.
 
-从直接链接打开的小程序 **无法访问** 聊天 - 它们不能读取消息或代表用户发送新消息。要发送消息，用户必须被重定向到 **内联模式** 并主动选择一个结果。
+从直接链接打开的小程序 **无法访问** 聊天 - 它们不能读取消息或代表用户发送新消息。要发送消息，用户必须被重定向到 **内联模式** 并主动选择一个结果。 Users must switch to inline mode to send messages.
 
 **示例**
 
@@ -110,5 +112,6 @@ NEW 您可以使用直接链接在当前聊天中 **直接打开一个小程序*
 
 - 任何用户都可以一键打开的完全成熟的 Web 服务和集成。
 - 协作、多人或团队合作导向的聊天上下文中的服务。
+- 使用案例实际上是 **无限的**。
 
-使用案例实际上是 **无限的**。
+<Feedback />
