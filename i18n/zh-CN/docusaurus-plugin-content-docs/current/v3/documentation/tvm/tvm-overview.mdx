@@ -1,8 +1,10 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # TVM 概览
 
-本文提供了TVM如何执行交易的概览。
+The TON Virtual Machine (TVM) executes all TON smart contracts. TVM operates on the **stack principle**, which ensures efficiency and ease of implementation.
 
 本文档提供 TVM 如何执行事务的鸟瞰图。
 
@@ -15,12 +17,10 @@ import Button from '@site/src/components/button'
 ## TON 课程：TVM
 
 :::tip
-在开始课程之前，请确保您已充分了解区块链技术的基础知识。如果您的知识有缺口，我们建议您参加[区块链基础知识与 TON](https://stepik.org/course/201294/promo)（[RU 版本](https://stepik.org/course/202221/), [CHN 版本](https://stepik.org/course/200976/)）课程。
+Before starting the course, ensure you have a solid understanding of blockchain basics. If you need to fill knowledge gaps, consider taking the [Blockchain basics with TON](https://stepik.org/course/201294/promo) course ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)).
 :::
 
-[TON Blockchain 课程](https://stepik.org/course/176754/)是TON Blockchain 开发的综合指南。
-
-模块 2 完全涵盖 **TVM**、事务、可扩展性和业务案例。
+[TON Blockchain 课程](https://stepik.org/course/176754/)是TON Blockchain 开发的综合指南。 模块 2 完全涵盖 **TVM**、事务、可扩展性和业务案例。
 
 <Button href="https://stepik.org/course/176754/promo"
         colorType={'primary'} sizeType={'sm'}>
@@ -32,32 +32,32 @@ import Button from '@site/src/components/button'
 <Button href="https://stepik.org/course/201638/promo"
         colorType={'secondary'} sizeType={'sm'}>
 
-中文
+CHN
 
 </Button>
 
 <Button href="https://stepik.org/course/201855/promo"
         colorType={'secondary'} sizeType={'sm'}>
 
-以及四种不同的cell类型：
+RU
 
 </Button>
 
-## 控制寄存器
+## Transactions and phases
 
-当某个 TON 链上的账户发生某些事件时，就会引起**交易**。最常见的事件是 "某些信息的到达"，但一般来说也可能有 "滴答"、"合并"、"拆分 "和其他事件。
+当某个 TON 链上的账户发生某些事件时，就会引起**交易**。最常见的事件是 "某些信息的到达"，但一般来说也可能有 "滴答"、"合并"、"拆分 "和其他事件。 The most common event is receiving a message, but other events like `tick-tock`, `merge`, and `split` can also initiate transactions.
 
 每个交易最多由 5 个阶段组成：
 
 1. **Storage phase** - in this phase, storage fees accumulated by the contract due to the occupation of some space in the chain state are calculated. Read more in [Storage Fees](/develop/smart-contracts/fees#storage-fee).
 2. **Credit phase** - 在这一阶段，将计算与（可能的）接收信息值有关的合约余额和收取的存储费。
-3. **Compute phase** - 在此阶段，TVM 正在执行合约（见下文），合约执行的结果是`exit_code`、`actions`（序列化的操作列表）、`gas_details`、`new_storage`和一些其他信息的集合。
-4. **Action phase** - 如果计算阶段成功，则在此阶段处理计算阶段的 "行动"。具体而言，行动可能包括发送消息、更新智能合约代码、更新库等。请注意，某些操作在处理过程中可能会失败（例如，如果我们尝试发送的消息的 TON 超过合约所拥有的 TON），在这种情况下，整个交易可能会回退或跳过该操作（这取决于操作的模式，换句话说，合约可能会发送 "发送或回退 "或 "尝试发送-如果不忽略 "类型的消息）。
+3. **Compute phase**: executes the contract code on TVM. The result includes `exit_code`, `actions`, `gas_details`, `new_storage`, and other data.
+4. **Action phase**: processes actions from the compute phase if it succeeds. Actions may include sending messages, updating contract code, or modifying libraries. If an action fails, for example, due to lack of funds, the transaction may revert or skip the action, depending on its mode (`send-or-revert` or `try-send-if-no-ignore`).
 5. **Bounce phase** - 如果计算阶段失败（返回 `exit_code >=2`），在此阶段，将为由传入报文启动的事务生成_反弹报文_。
 
 ## Compute phase
 
-在此阶段，执行 TVM。
+The compute phase involves executing the contract code on TVM.
 
 :::tip
 
@@ -66,59 +66,52 @@ import Button from '@site/src/components/button'
 
 ### 计算阶段跳过
 
-计算阶段包括用正确的输入调用 TVM。在某些情况下，TVM 根本无法调用（例如，账户不存在、未初始化或冻结，正在处理的入站报文没有代码或数据字段，或者这些字段的哈希值不正确）。
-
-相应的 [构造函数](https://github.com/ton-blockchain/ton/blob/5c392e0f2d946877bb79a09ed35068f7b0bd333a/crypto/block/block.tlb#L314) 反映了这一点：
+The compute phase may be skipped under certain conditions, such as when the account is missing, uninitialized, or frozen, or when the incoming message lacks code or data fields. These scenarios are represented by specific constructors:
 
 - `cskip_no_state$00` - 帐户（不存在、未初始化或冻结）和报文中的[无状态](https://testnet.tonviewer.com/transaction/7e78394d082882375a5d21affa6397dec60fc5a3ecbea87f401b0e460fb5c80c)（即智能合约代码和数据）。
-
 - `cskip_bad_state$01` - 信息中传递的无效状态（即状态的哈希值与预期值不同）到冻结或未初始化的帐户。
-
 - `cskip_no_gas$10` - [没有资金](https://testnet.tonviewer.com/transaction/a1612cde7fd66139a7d04b30f38db192bdb743a8b12054feba3c16061a4cb9a6) 购买 gas 。(大约 < 0.00004 TON by [08.2024](https://testnet.tonviewer.com/transaction/9789306d7b29318c90477aa3df6599ee4a897031162ad41a24decb87db65402b))
 
 ### TVM 状态
 
 在任何给定时刻，TVM 的状态完全由 6 种属性决定：
 
-- 堆栈（见下文）
+- **Stack**: a last-in-first-out data structure.
 - Control registers --（见下文）简单地说，这意味着在执行过程中最多可直接设置和读取 16 个变量
 - Current continuation - 描述当前执行的指令序列的对象
-- Current codepage - 简单地说，就是当前运行的 TVM 版本
+- **Current codepage**: specifies the TVM version in use.
 - Gas limits - 一组 4 个整数值；当前 gas 限值 g<sub>l</sub>、最大 gas 限值 g<sub>m</sub>、剩余 gas 限值 g<sub>r</sub>和 gas credit g<sub>c</sub>
 - Library context - 可以由 TVM 调用的库的哈希映射
 
 ### TVM 的初始化
 
-所有其他寄存器值都将被忽略。
+TVM operates as a stack machine, supporting seven variable types:
 
-- Integer(整数) - 有符号的 257 位整数
-- Tuple(元组) - 由最多 255 个元素组成的有序集合，具有任意值类型，可能是不同的。
-- Null(空)
-
-还有四种截然不同的 cell ：
-
-- [TVM 指令](/learn/tvm-instructions/instructions)
-- [TON TVM](https://ton.org/tvm.pdf) TVM 概念（可能包含过时的信息）
-- Builder(构建器) - 一种特殊的对象，允许您创建新的cell
-- Continuation - 一种特殊对象，可将Cell用作 TVM 指令源
+- **Non-cell types**:
+  - Integer(整数) - 有符号的 257 位整数
+  - Tuple(元组) - 由最多 255 个元素组成的有序集合，具有任意值类型，可能是不同的。
+  - Null(空)
+- **Cell types**:
+  - Cell: basic data structure for storing information.
+  - Slice: allows reading data from a cell.
+  - Builder(构建器) - 一种特殊的对象，允许您创建新的cell
+  - Continuation - 一种特殊对象，可将Cell用作 TVM 指令源
 
 ### 控制寄存器
 
 - `c0` — 包含下一个 continuation 或返回 continuation（类似于常规设计中的子例程返回地址）。此值必须是一个 Continuation。
-- `c1` — 包含备用（返回） continuation ；此值必须是一个 Continuation。
-- `c2` — 包含异常处理程序。该值是一个 Continuation，每当异常触发时就会调用。
-- `c3` — 支持寄存器，包含当前字典，本质上是一个包含程序中使用的所有函数的代码的哈希映射。此值必须是一个 Continuation。
-- `c4` — 包含持久数据的根，或简单地说，合约的 `data` 部分。此值是一个 Cell。
-- `c5` — 包含输出操作。该值是一个 cell 。
-- `c7` — 包含临时数据的根。它是一个 Tuple。
+- `c1`: stores the alternative continuation.
+- `c2`: contains the exception handler. Continuation.
+- `c3` — 支持寄存器，包含当前字典，本质上是一个包含程序中使用的所有函数的代码的哈希映射。此值必须是一个 Continuation。 Continuation.
+- `c4`: stores the persistent data (contract's `data` section). Cell.
+- `c5`: contains output actions. Cell.
+- `c7`: stores temporary data. Tuple.
 
 ### TVM 的初始化
 
-所有其他寄存器值都将被忽略。
+TVM initializes during the compute phase and executes commands/opcodes from the **current continuation** until no more commands remain. Detailed description of the initialization process can be found here: [TVM Initialization](/learn/tvm-instructions/tvm-initialization.md)
 
-Detailed description of the initialization process can be found here: [TVM Initialization](/learn/tvm-instructions/tvm-initialization.md)
-
-## 参见
+## [TVM 指令](/learn/tvm-instructions/instructions)
 
 The list of TVM instructions can be found here: [TVM instructions](/learn/tvm-instructions/instructions).
 
@@ -127,13 +120,20 @@ The list of TVM instructions can be found here: [TVM instructions](/learn/tvm-in
 除了退出代码和消耗的 gas 数据外，TVM 还间接输出以下数据：
 
 - c4 寄存器 - 将作为智能合约的新 `data` 存储的cell（如果执行不会在此阶段或以后的阶段回滚）
-- c5 寄存器 - （输出动作列表）列表中最后一个动作和对先前动作的引用的cell（递归）
+- `c5` — 包含输出操作。该值是一个 cell 。
 
-所有其他寄存器的值都将被忽略。
+Other register values are discarded. Note:
 
-请注意，由于最大 cell 深度有限制 `<1024`，特别是 c4 和 c5 深度有限制 `<=512`，因此一个 tx 中的输出操作数量也有限制 `<=255`。如果一个合约需要发送的信息超过了这个数量，它可以向自己发送一条带有 `continue_sending` 请求的信息，并在随后的事务中发送所有必要的信息。
+- The maximum cell depth during execution is `<1024`, but `c4` and `c5` must not exceed a depth of `512`.
+- A contract can't create more than 255 output actions.
+
+:::tip
+To send more than 255 messages, a contract can send a message to itself with a request to process the remaining messages. See an example in the [highload wallet contract](https://github.com/ton-blockchain/highload-wallet-contract-v3/blob/main/contracts/highload-wallet-v3.func#L50).
+:::
 
 ## 参阅
 
 - [TVM Instructions](/learn/tvm-instructions/instructions)
-- [TON TVM](https://ton.org/tvm.pdf) TVM 概念（可能包含过期信息）
+- [TON TVM](https://ton.org/tvm.pdf) TVM 概念（可能包含过时的信息）
+
+<Feedback />
