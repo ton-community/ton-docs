@@ -1,10 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Кулинарная книга FunC
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-Основная цель создания кулинарной книги FunC - собрать весь опыт разработчиков FunC в одном месте, чтобы будущие разработчики могли им воспользоваться!
+Основная цель создания кулинарной книги FunC - собрать весь опыт разработчиков FunC в одном месте, чтобы будущие разработчики могли им воспользоваться! The goal is to make it easier for future developers to build smart contracts efficiently.
 
 По сравнению с [документацией FunC](/v3/documentation/smart-contracts/func/docs/types), эта статья больше сосредоточена на повседневных задачах каждого разработчика FunC, которые необходимо решать при разработке смарт-контрактов.
 
@@ -13,6 +11,8 @@
 ### Как написать оператор if
 
 Допустим, мы хотим проверить, имеет ли значение какое-либо событие. Для этого мы используем переменную флага. Помните, что в FunC `true` — это `-1`, а `false` — это `0`.
+
+To check whether an event is relevant, use a flag variable. In FunC, `true` is represented by `-1`, and `false` is `0`.
 
 ```func
 int flag = 0; ;; false
@@ -25,17 +25,13 @@ else {
 }
 ```
 
-> 💡 Примечание
->
-> Нам не нужен оператор `==`, потому что значение `0` — это `false`, поэтому любое другое значение будет `true`.
+Нам не нужен оператор `==`, потому что значение `0` — это `false`, поэтому любое другое значение будет `true`.
 
-> 💡 Полезные ссылки
->
-> ["Оператор If" в документации](/v3/documentation/smart-contracts/func/docs/statements#if-statements)
+["Оператор If" в документации](/v3/documentation/smart-contracts/func/docs/statements#if-statements)
 
 ### Как написать цикл repeat
 
-Как пример, возьмем возведение в степень
+A repeat loop helps execute an action a fixed number of times. Как пример, возьмем возведение в степень
 
 ```func
 int number = 2;
@@ -48,9 +44,7 @@ repeat(degree - 1) {
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["Цикл repeat" в документации](/v3/documentation/smart-contracts/func/docs/statements#repeat-loop)
+["Цикл repeat" в документации](/v3/documentation/smart-contracts/func/docs/statements#repeat-loop)
 
 ### Как написать цикл while
 
@@ -73,21 +67,15 @@ while (msg.slice_refs_empty?() != -1) { ;; we should remind that -1 is true
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["Цикл while" в документации](/v3/documentation/smart-contracts/func/docs/statements#while-loop)
->
-> ["Cell" в документации](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage)
->
-> ["slice_refs_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#slice_refs_empty)
->
-> ["store_ref()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
->
-> ["begin_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
->
-> ["end_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
->
-> ["begin_parse()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
+**References:**
+
+- ["Цикл while" в документации](/v3/documentation/smart-contracts/func/docs/statements#while-loop)
+- ["Cell" в документации](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage)
+- ["slice_refs_empty?()" в документациии](/v3/documentation/smart-contracts/func/docs/stdlib#slice_refs_empty)
+- ["store_ref()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
+- ["begin_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- ["end_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- ["begin_parse()" в документациии](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
 ### Как написать цикл do until
 
@@ -101,13 +89,11 @@ do {
 } until (flag == -1); ;; -1 is true
 ```
 
-> 💡 Полезные ссылки
->
-> ["Until loop" в документации](/v3/documentation/smart-contracts/func/docs/statements#until-loop)
+["Until loop" в документации](/v3/documentation/smart-contracts/func/docs/statements#until-loop)
 
 ### Как определить, пуст ли срез
 
-Перед тем, как работать с `slice`, необходимо проверить, есть ли у него какие-либо данные, чтобы правильно их обработать. Для этого можно использовать `slice_empty?()`, но нужно учитывать, что он вернет `0` (`false`), если есть хотя бы один `bit` данных или одна `ref`.
+Чтобы проверить, есть ли какие-либо данные в `cell`, мы должны сначала преобразовать ее в `slice`. Если нас интересуют только `bits`, мы должны использовать `slice_data_empty?()`, если только `refs` - `slice_refs_empty?()`. В случае, если мы хотим проверить наличие каких-либо данных, независимо от того, являются ли они `bit` или `ref`, мы должны использовать `slice_empty?()`.
 
 ```func
 ;; creating empty slice
@@ -138,23 +124,18 @@ slice slice_with_bits_and_refs = begin_cell()
 slice_with_bits_and_refs.slice_empty?();
 ```
 
-> 💡 Полезные ссылки
->
-> ["slice_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#slice_empty)
->
-> ["store_slice()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
->
-> ["store_ref()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
->
-> ["begin_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
->
-> ["end_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
->
-> ["begin_parse()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
+**References:**
+
+- ["slice_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#slice_empty)
+- ["store_slice()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- ["store_ref()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
+- ["begin_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- ["end_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- ["begin_parse()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
 ### Как определить, является ли срез пустым (не имеет битов, но может иметь ссылки)
 
-Если нам нужно проверить только `bits` и неважно, есть ли какие-либо `refs` в `slice`, то нам следует использовать `slice_data_empty?()`.
+Если нас не интересуют `refs` внутри `slice`, то мы можем получить отдельные данные и работать с ними.
 
 ```func
 ;; creating empty slice
@@ -185,21 +166,18 @@ slice slice_with_bits_and_refs = begin_cell()
 slice_with_bits_and_refs.slice_data_empty?();
 ```
 
-> 💡 Полезные ссылки
->
-> ["slice_data_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#slice_data_empty)
->
-> ["store_slice()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
->
-> ["store_ref()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
->
-> ["begin_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
->
-> ["end_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
->
-> ["begin_parse()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
+**References:**
+
+- ["slice_data_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#slice_data_empty)
+- ["store_slice()" в документациии](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- ["store_ref()" в документациии](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
+- ["begin_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- ["end_cell()" в документациии](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- ["begin_parse()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
 ### Как определить, является ли срез пустым (не имеет ссылок, но может иметь биты)
+
+Если мы хотим узнать длину `tuple` для итерации, мы должны написать новую функцию с инструкцией `TLEN` asm:
 
 В случае, если нас интересуют только `refs`, мы должны проверить их наличие с помощью `slice_refs_empty?()`.
 
@@ -232,23 +210,22 @@ slice slice_with_bits_and_refs = begin_cell()
 slice_with_bits_and_refs.slice_refs_empty?();
 ```
 
-> 💡 Полезные ссылки
->
-> ["slice_refs_empty?()" в документациии](/v3/documentation/smart-contracts/func/docs/stdlib#slice_refs_empty)
->
-> ["store_slice()" в документациии](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
->
-> ["store_ref()" в документациии](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
->
-> ["begin_cell()" в документациии](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
->
-> ["end_cell()" в документациии](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
->
-> ["begin_parse()" в документациии](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
+**References:**
+
+- ["slice_refs_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#slice_refs_empty)
+- ["store_slice()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- ["store_ref()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_ref)
+- ["begin_cell()" в документациии](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- ["end_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- ["begin_parse()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
 ### Как определить, пуста ли ячейка
 
-Чтобы проверить, есть ли какие-либо данные в `cell`, мы должны сначала преобразовать ее в `slice`. Если нас интересуют только `bits`, мы должны использовать `slice_data_empty?()`, если только `refs` - `slice_refs_empty?()`. В случае, если мы хотим проверить наличие каких-либо данных, независимо от того, являются ли они `bit` или `ref`, мы должны использовать `slice_empty?()`.
+To check whether a `cell` contains any data, it must first be converted into a `slice`.
+
+- Поскольку нам нужно определить количество бит, занимаемых адресом, необходимо также [объявить функцию asm](#how-to-write-own-functions-using-asm-keyword) с кодом операции `UBITSIZE`, которая вернет минимальное количество бит, необходимое для хранения числа.
+- 💡 Полезные ссылки:
+- Если нам нужно проверить только `bits` и неважно, есть ли какие-либо `refs` в `slice`, то нам следует использовать `slice_data_empty?()`.
 
 ```func
 cell cell_with_bits_and_refs = begin_cell()
@@ -268,17 +245,13 @@ else {
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["slice_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#slice_empty)
->
-> ["begin_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
->
-> ["store_uint()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
->
-> ["end_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
->
-> ["begin_parse()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
+**References:**
+
+- ["slice_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#slice_empty)
+- ["begin_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- ["store_uint()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
+- ["end_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#end_cell)
+- ["begin_parse()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_parse)
 
 ### Как определить, пуст ли словарь
 
@@ -297,13 +270,11 @@ else {
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["dict_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#dict_empty)
->
-> ["new_dict()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#new_dict) создание пустого словаря
->
-> ["dict_set()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_set) добавление некоторых элементов в словарь d с помощью функции, чтобы он не был пустым
+**References:**
+
+- ["dict_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#dict_empty)
+- ["new_dict()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#new_dict) создание пустого словаря
+- ["dict_set()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_set) добавление некоторых элементов в словарь d с помощью функции, чтобы он не был пустым
 
 ### Как определить, пуст ли кортеж
 
@@ -327,19 +298,17 @@ else {
 }
 ```
 
-> 💡 Примечание
->
-> Мы объявляем функцию сборки tlen. Вы можете прочитать больше [здесь](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) и посмотреть [список всех команд ассемблера](/v3/documentation/tvm/instructions).
+Мы объявляем функцию ассемблера `tlen`. Вы можете прочитать больше [здесь](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) и посмотреть [список всех команд ассемблера](/v3/documentation/tvm/instructions).
 
-> 💡 Полезные ссылки
->
-> ["empty_tuple?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#empty_tuple)
->
-> ["tpush()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
->
-> ["Коды выхода" в документации](/v3/documentation/tvm/tvm-exit-codes)
+**References:**
+
+- ["empty_tuple?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#empty_tuple)
+- ["tpush()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
+- ["Коды выхода" в документации](/v3/documentation/tvm/tvm-exit-codes)
 
 ### Как определить, пуст ли lisp-подобный список
+
+Мы добавляем число 100 в наш lisp-подобный список с помощью функции [cons](/v3/documentation/smart-contracts/func/docs/stdlib/#cons), поэтому он не пуст. For example, adding 100 to the list ensures it is not empty.
 
 ```func
 tuple numbers = null();
@@ -352,11 +321,10 @@ if (numbers.null?()) {
 }
 ```
 
-Мы добавляем число 100 в наш lisp-подобный список с помощью функции [cons](/v3/documentation/smart-contracts/func/docs/stdlib/#cons), поэтому он не пуст.
-
 ### Как определить, что состояние контракта пустое
 
-Допустим, у нас есть `counter`, который хранит количество транзакций. Эта переменная недоступна во время первой транзакции в состоянии смарт-контракта, поскольку состояние пустое, поэтому необходимо обработать такой случай. Если состояние пустое, мы создаем переменную `counter` и сохраняем ее.
+Допустим, у нас есть `counter`, который хранит количество транзакций. Эта переменная недоступна во время первой транзакции в состоянии смарт-контракта, поскольку состояние пустое, поэтому необходимо обработать такой случай.
+Если состояние пустое, мы создаем переменную `counter` и сохраняем ее.
 
 ```func
 ;; `get_data()` will return the data cell from contract state
@@ -377,23 +345,18 @@ else {
 }
 ```
 
-> 💡 Примечание
->
-> Мы можем определить, что состояние контракта пустое, определив, что [ячейка пуста](/v3/documentation/smart-contracts/func/cookbook#how-to-determine-if-cell-is-empty).
+Мы можем определить, что состояние контракта пустое, определив, что [ячейка пуста](/v3/documentation/smart-contracts/func/cookbook#how-to-determine-if-cell-is-empty).
 
-> 💡 Полезные ссылки
->
-> ["get_data()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#get_data)
->
-> ["begin_parse()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#begin_parse)
->
-> ["slice_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
->
-> ["set_data?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#set_data)
+**References:**
+
+- ["get_data()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#get_data)
+- ["begin_parse()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#begin_parse)
+- ["slice_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
+- ["set_data?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#set_data)
 
 ### Как построить ячейку внутреннего сообщения
 
-Если мы хотим, чтобы контракт отправлял внутреннее сообщение, мы должны сначала правильно создать его как ячейку, указав технические флаги, адрес получателя и остальные данные.
+When a smart contract needs to send an internal message, it must first construct the message as a `cell`. This includes specifying technical flags, the recipient's address, and additional data.
 
 ```func
 ;; We use literal `a` to get valid address inside slice from string containing address 
@@ -413,27 +376,19 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
 
-> 💡 Примечание
->
-> В этом примере мы используем литерал `a` для получения адреса. Подробнее о строковых литералах можно узнать в [документации](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals)
+**Note:**
 
-> 💡 Примечание
->
-> Подробнее можно узнать в [документации](/v3/documentation/smart-contracts/message-management/sending-messages). Также можно перейти к [макету](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) по этой ссылке.
+- В этом примере мы используем литерал `a` для получения адреса. Подробнее о строковых литералах можно узнать в [документации](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals)
+- Подробнее можно узнать в [документации](/v3/documentation/smart-contracts/message-management/sending-messages). Также можно перейти к [макету](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) по этой ссылке.
 
-> 💡 Полезные ссылки
->
-> ["begin_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
->
-> ["store_uint()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
->
-> ["store_slice()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
->
-> ["store_coins()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_coins)
->
-> ["end_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#end_cell)
->
-> ["send_raw_message()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
+**References:**
+
+- ["begin_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- ["store_uint()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
+- ["store_slice()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- ["store_coins()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_coins)
+- ["end_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#end_cell)
+- ["send_raw_message()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
 
 ### Как включить тело в качестве ссылки на внутреннюю ячейку сообщения
 
@@ -463,31 +418,22 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
 
-> 💡 Примечание
->
-> В этом примере мы используем литерал `a` для получения адреса. Подробнее о строковых литералах можно узнать в [документации](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals)
+**Note:**
 
-> 💡 Примечание
->
-> В этом примере мы использовали режим 3, чтобы взять входящие ton и отправить ровно столько, сколько указано (сумма), при этом выплачивая комиссию с баланса контракта и игнорируя ошибки. Режим 64 необходим для возврата всех полученных ton, вычитая комиссию, а режим 128 отправит весь баланс.
+- В этом примере мы используем литерал `a` для получения адреса. Подробнее о строковых литералах можно узнать в [документации](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals)
+- В этом примере мы использовали режим 3, чтобы взять входящие ton и отправить ровно столько, сколько указано (сумма), при этом выплачивая комиссию с баланса контракта и игнорируя ошибки.
+  - Режим 64 необходим для возврата всех полученных ton, вычитая комиссию, а режим 128 отправит весь баланс.
+  - Режим 64 необходим для возврата всех полученных ton, вычитая комиссию, а режим 128 отправит весь баланс.
+- Мы [создаем сообщение](/v3/documentation/smart-contracts/func/cookbook#how-to-build-an-internal-message-cell), но добавляем тело сообщения отдельно.
 
-> 💡 Примечание
->
-> Мы [создаем сообщение](/v3/documentation/smart-contracts/func/cookbook#how-to-build-an-internal-message-cell), но добавляем тело сообщения отдельно.
+**References:**
 
-> 💡 Полезные ссылки
->
-> ["begin_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
->
-> ["store_uint()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
->
-> ["store_slice()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
->
-> ["store_coins()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_coins)
->
-> ["end_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#end_cell)
->
-> ["send_raw_message()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
+- ["begin_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
+- ["store_uint()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_uint)
+- ["store_slice()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_slice)
+- ["store_coins()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#store_coins)
+- ["end_cell()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#end_cell)
+- ["send_raw_message()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
 
 ### Как включить тело в качестве среза во внутреннюю ячейку сообщения
 
@@ -512,17 +458,11 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
 ```
 
-> 💡 Примечание
->
-> В этом примере мы используем литерал `a` для получения адреса. Подробнее о строковых литералах можно узнать в [документации](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals)
+**Note:**
 
-> 💡 Примечание
->
-> В этом примере мы использовали режим 3, чтобы взять входящие ton и отправить ровно столько, сколько указано (сумма), при этом выплачивая комиссию из баланса контракта и игнорируя ошибки. Режим 64 необходим для возврата всех полученных ton, вычитая комиссию, а режим 128 отправит весь баланс.
-
-> 💡 Примечание
->
-> Мы [строим сообщение](/v3/documentation/smart-contracts/func/cookbook#how-to-build-an-internal-message-cell), но добавляем сообщение как срез.
+- В этом примере мы используем литерал `a` для получения адреса. Подробнее о строковых литералах можно узнать в [документации](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals)
+- The example uses `mode 3`, `mode 64`, and `mode 128`, as described above.
+- Мы [строим сообщение](/v3/documentation/smart-contracts/func/cookbook#how-to-build-an-internal-message-cell), но добавляем сообщение как срез.
 
 ### Как перебирать кортежи (в обоих направлениях)
 
@@ -552,11 +492,10 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 }
 ```
 
-> 💡 Примечание
->
-> Мы объявляем функцию ассемблера `tlen`. Вы можете прочитать больше [здесь](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) и посмотреть [список всех команд ассемблера](/v3/documentation/tvm/instructions).
->
-> Также мы объявляем функцию `to_tuple`. Она просто изменяет тип данных любого ввода на кортеж, поэтому будьте осторожны при ее использовании.
+**Note:**
+
+- Мы объявляем функцию сборки tlen. Вы можете прочитать больше [здесь](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) и посмотреть [список всех команд ассемблера](/v3/documentation/tvm/instructions).
+- Также мы объявляем функцию `to_tuple`. Она просто изменяет тип данных любого ввода на кортеж, поэтому будьте осторожны при ее использовании.
 
 ### Как писать собственные функции с использованием ключевого слова `asm`
 
@@ -569,7 +508,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP"; 
 ```
 
-Если мы хотим узнать длину `tuple` для итерации, мы должны написать новую функцию с инструкцией `TLEN` asm:
+We must determine its length if we want to iterate over a `tuple`. We can achieve this by writing a new function using the `TLEN` asm instruction.
 
 ```func
 int tuple_length (tuple t) asm "TLEN";
@@ -583,13 +522,11 @@ builder begin_cell() asm "NEWC";
 cell end_cell(builder b) asm "ENDC";
 ```
 
-> 💡 Полезные ссылки:
->
-> ["Метод изменения" в документации](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)
->
-> ["stdlib" в документации](/v3/documentation/smart-contracts/func/docs/stdlib)
->
-> ["Инструкции TVM" в документации](/v3/documentation/tvm/instructions)
+**References:**
+
+- ["Методы изменения" в документации](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)
+- ["stdlib" в документации](/v3/documentation/smart-contracts/func/docs/stdlib)
+- ["Инструкции TVM" в документации](/v3/documentation/tvm/instructions)
 
 ### Итерация n-вложенных кортежей
 
@@ -630,13 +567,11 @@ global int max_value;
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["Глобальные переменные" в документации](/v3/documentation/smart-contracts/func/docs/global_variables)
->
-> ["~dump" в документации](/v3/documentation/smart-contracts/func/docs/builtins#dump-variable)
->
-> ["Инструкции TVM" в документации](/v3/documentation/tvm/instructions)
+**References:**
+
+- ["Глобальные переменные" в документации](/v3/documentation/smart-contracts/func/docs/global_variables)
+- ["~dump" в документации](/v3/documentation/smart-contracts/func/docs/builtins#dump-variable)
+- ["Инструкции TVM" в документации](/v3/documentation/tvm/instructions)
 
 ### Основные операции с кортежами
 
@@ -720,9 +655,7 @@ forall X -> () resolve_type (X value) impure {
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["Инструкции TVM" в документации](/v3/documentation/tvm/instructions)
+["Инструкции TVM" в документации](/v3/documentation/tvm/instructions)
 
 ### Как получить текущее время
 
@@ -736,8 +669,9 @@ if (current_time > 1672080143) {
 
 ### Как сгенерировать случайное число
 
-:::caution черновик
+:::caution draft
 
+This method is not cryptographically secure.
 Ознакомьтесь с [генерацией случайных чисел](/v3/guidelines/smart-contracts/security/random-number-generation) для получения дополнительной информации.
 :::
 
@@ -751,7 +685,12 @@ int c = random();
 
 ### Операции по модулю
 
-В качестве примера предположим, что мы хотим выполнить следующее вычисление всех 256 чисел: `(xp + zp)*(xp-zp)`. Поскольку большинство этих операций используются в криптографии, в следующем примере мы используем оператор по модулю для кривых Монтгомери.
+В качестве примера предположим, что мы хотим выполнить следующее вычисление всех 256 чисел: `(xp + zp)*(xp-zp)`.
+
+`(xp + zp) * (xp - zp)`.
+
+Поскольку большинство этих операций используются в криптографии, в следующем примере мы используем оператор по модулю для кривых Монтгомери.
+
 Обратите внимание, что xp+zp — это допустимое имя переменной (без пробелов между ними).
 
 ```func
@@ -767,9 +706,7 @@ int c = random();
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["muldivmod" в документации](/v3/documentation/tvm/instructions#A98C)
+["muldivmod" в документации](/v3/documentation/tvm/instructions#A98C)
 
 ### Как вызывать ошибки
 
@@ -787,7 +724,7 @@ throw(36); ;; the error will be triggered anyway
 
 ### Переворачивание кортежей
 
-Поскольку кортеж хранит данные в виде стека, иногда нам приходится переворачивать его, чтобы прочитать данные с другого конца.
+Since tuples behave as stacks in FunC, sometimes we need to **reverse** them to access data from the opposite end.
 
 ```func
 forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
@@ -810,9 +747,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["tpush()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
+["tpush()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
 
 ### Как удалить элемент с определенным индексом из списка
 
@@ -850,7 +785,10 @@ int tlen (tuple t) asm "TLEN";
 
 ### Определить, равны ли срезы
 
-Есть два разных способа определить равенство. Один основан на хэше среза, а другой — на использовании инструкции SDEQ asm.
+There are two main ways to check if two slices are equal:
+
+- Comparing their hashes.
+- Один основан на хэше среза, а другой — на использовании инструкции SDEQ asm.
 
 ```func
 int are_slices_equal_1? (slice a, slice b) {
@@ -871,14 +809,14 @@ int are_slices_equal_2? (slice a, slice b) asm "SDEQ";
 }
 ```
 
-#### 💡 Полезные ссылки
+**References:**
 
 - ["slice_hash()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_hash)
 - ["SDEQ" в документации](/v3/documentation/tvm/instructions#C705)
 
 ### Определяем, равны ли ячейки
 
-Мы можем легко определить равенство ячеек на основе их хеша.
+We can determine if two cells are equal by comparing their hashes.
 
 ```func
 int are_cells_equal? (cell a, cell b) {
@@ -898,9 +836,7 @@ int are_cells_equal? (cell a, cell b) {
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["cell_hash()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
+["cell_hash()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
 
 ### Определить, равны ли кортежи
 
@@ -980,11 +916,10 @@ int are_cells_equal? (cell a, cell b) {
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["cell_hash()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
->
-> ["Инструкции TVM" в документации](/v3/documentation/tvm/instructions)
+**References:**
+
+- ["cell_hash()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
+- ["Инструкции TVM" в документации](/v3/documentation/tvm/instructions)
 
 ### Генерация внутреннего адреса
 
@@ -1010,13 +945,9 @@ int are_cells_equal? (cell a, cell b) {
 }
 ```
 
-> 💡 Примечание
->
-> В этом примере мы используем `workchain()` для получения идентификатора воркчейна. Подробнее о идентификаторе воркчейна можно узнать в [документации](/v3/documentation/smart-contracts/addresses#workchain-id).
+В этом примере мы используем `workchain()` для получения идентификатора воркчейна. Подробнее о идентификаторе воркчейна можно узнать в [документации](/v3/documentation/smart-contracts/addresses#workchain-id).
 
-> 💡 Полезные ссылки
->
-> ["cell_hash()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
+["cell_hash()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
 
 ### Генерация внешнего адреса
 
@@ -1038,15 +969,13 @@ slice generate_external_address (int address) {
 }
 ```
 
-Поскольку нам нужно определить количество бит, занимаемых адресом, необходимо также [объявить функцию asm](#how-to-write-own-functions-using-asm-keyword) с кодом операции `UBITSIZE`, которая вернет минимальное количество бит, необходимое для хранения числа.
+Since we need to find the exact number of bits occupied by the address, we must [declare an asm function](#how-to-write-custom-functions-using-asm-keyword) with the `UBITSIZE` opcode. This function will return the minimum number of bits required to store a given number.
 
-> 💡 Полезные ссылки
->
-> ["Инструкции TVM" в документации](/v3/documentation/tvm/instructions#B603)
+["Инструкции TVM" в документации](/v3/documentation/tvm/instructions#B603)
 
 ### Как хранить и загружать словарь в локальном хранилище
 
-Логика загрузки словаря
+В то время как логика хранения словаря похожа на следующий пример:
 
 ```func
 slice local_storage = get_data().begin_parse();
@@ -1056,23 +985,19 @@ if (~ slice_empty?(local_storage)) {
 }
 ```
 
-В то время как логика хранения словаря похожа на следующий пример:
+Storing the dictionary follows a similar approach, ensuring data persistence.
 
 ```func
 set_data(begin_cell().store_dict(dictionary_cell).end_cell());
 ```
 
-> 💡 Полезные ссылки
->
-> ["get_data()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#get_data)
->
-> ["new_dict()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#new_dict)
->
-> ["slice_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
->
-> ["load_dict()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#load_dict)
->
-> ["~" в документации](/v3/documentation/smart-contracts/func/docs/statements#unary-operators)
+**References:**
+
+- ["get_data()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#get_data)
+- ["new_dict()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#new_dict)
+- ["slice_empty?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
+- ["load_dict()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#load_dict)
+- ["~" в документации](/v3/documentation/smart-contracts/func/docs/statements#unary-operators)
 
 ### Как отправить простое сообщение
 
@@ -1090,13 +1015,11 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 ```
 
-> 💡 Полезные ссылки
->
-> ["Макет сообщения" в документации](/v3/documentation/smart-contracts/message-management/sending-messages)
+["Макет сообщения" в документации](/v3/documentation/smart-contracts/message-management/sending-messages)
 
 ### Как отправить сообщение с помощью входящего аккаунта
 
-Пример контракта ниже пригодится нам, если нам нужно выполнить какие-либо действия между пользователем и основным контрактом, то есть нам нужен прокси-контракт.
+A proxy contract can facilitate secure message exchange if interaction between a user and the main contract is needed.
 
 ```func
 () recv_internal (slice in_msg_body) {
@@ -1120,11 +1043,10 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["Макет сообщения" в документации](/v3/documentation/smart-contracts/message-management/sending-messages)
->
-> ["load_msg_addr()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#load_msg_addr)
+**References:**
+
+- ["Макет сообщения" в документации](/v3/documentation/smart-contracts/message-management/sending-messages)
+- ["load_msg_addr()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#load_msg_addr)
 
 ### Как отправить сообщение со всем балансом
 
@@ -1142,15 +1064,15 @@ cell msg = begin_cell()
 send_raw_message(msg, 128); ;; mode = 128 is used for messages that are to carry all the remaining balance of the current smart contract
 ```
 
-> 💡 Полезные ссылки
->
-> ["Макет сообщения" в документации](/v3/documentation/smart-contracts/message-management/sending-messages)
->
-> ["Режимы сообщения" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
+**References:**
+
+- ["Макет сообщения" в документации](/v3/documentation/smart-contracts/message-management/sending-messages)
+- ["Режимы сообщения" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#send_raw_message)
 
 ### Как отправить сообщение с длинным текстовым комментарием
 
-Как мы знаем, в одну `cell` помещается только 127 символов (< 1023 бит). Если нам нужно больше - нужно организовать ячейки змейкой.
+Как мы знаем, в одну `cell` помещается только 127 символов (< 1023 бит).
+Если нам нужно больше - нужно организовать ячейки змейкой.
 
 ```func
 {-
@@ -1182,13 +1104,11 @@ cell msg = begin_cell()
 send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 ```
 
-> 💡 Полезные ссылки
->
-> ["Внутренние сообщения" в документации](/v3/documentation/smart-contracts/message-management/internal-messages)
+["Внутренние сообщения" в документации](/v3/documentation/smart-contracts/message-management/internal-messages)
 
 ### Как получить только биты данных из среза (без ссылок)
 
-Если нас не интересуют `refs` внутри `slice`, то мы можем получить отдельные данные и работать с ними.
+If `refs` within a `slice` are unnecessary, only the raw data bits can be extracted for further processing.
 
 ```func
 slice s = begin_cell()
@@ -1200,13 +1120,11 @@ slice s = begin_cell()
 slice s_only_data = s.preload_bits(s.slice_bits());
 ```
 
-> 💡 Полезные ссылки
->
-> ["Примитивы срезов" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#slice-primitives)
->
-> ["preload_bits()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#preload_bits)
->
-> ["slice_bits()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_bits)
+**References:**
+
+- ["Примитивы срезов" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#slice-primitives)
+- ["preload_bits()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#preload_bits)
+- ["slice_bits()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_bits)
 
 ### Как определить собственный метод изменения
 
@@ -1228,9 +1146,7 @@ slice s_only_data = s.preload_bits(s.slice_bits());
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["Методы изменения" в документации](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)
+["Метод изменения" в документации](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)
 
 ### Как возвести число в степень n
 
@@ -1268,7 +1184,7 @@ int pow (int a, int n) {
 }
 ```
 
-### Как преобразовать строку в целое число
+### Как преобразовать целое число в строку
 
 ```func
 slice string_number = "26052021";
@@ -1282,7 +1198,7 @@ while (~ string_number.slice_empty?()) {
 ~dump(number);
 ```
 
-### Как преобразовать целое число в строку
+### Как преобразовать строку в целое число
 
 ```func
 int n = 261119911;
@@ -1320,17 +1236,13 @@ while (flag) {
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["Примитивы словарей" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#dictionaries-primitives)
->
-> ["dict_get_max?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_max)
->
-> ["dict_get_min?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_min)
->
-> ["dict_get_next?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_next)
->
-> ["dict_set()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_set)
+**References:**
+
+- ["Примитивы словарей" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#dictionaries-primitives)
+- ["dict_get_max?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_max)
+- ["dict_get_min?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_min)
+- ["dict_get_next?()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_next)
+- ["dict_set()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_set)
 
 ### Как удалить значение из словарей
 
@@ -1391,13 +1303,11 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["Списки в стиле Lisp" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#lisp-style-lists)
->
-> ["null()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#null)
->
-> ["slice_refs()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_refs)
+**References:**
+
+- ["Списки в стиле Lisp" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#lisp-style-lists)
+- ["null()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#null)
+- ["slice_refs()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_refs)
 
 ### Как перебирать списки в стиле lisp
 
@@ -1425,11 +1335,10 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 }
 ```
 
-> 💡 Полезные ссылки
->
-> ["Списки в стиле Lisp" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#lisp-style-lists)
->
-> ["null()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#null)
+**References:**
+
+- ["Списки в стиле Lisp" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#lisp-style-lists)
+- ["null()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib/#null)
 
 ### Как отправить сообщение о развертывании (только с stateInit, с stateInit и body)
 
@@ -1549,13 +1458,10 @@ await contractV1.sendUpgrade(provider.sender(), {
 });
 ```
 
-> 💡 Полезные ссылки
->
-> [Возможно ли повторно развернуть код на существующий адрес или его нужно развернуть как новый контракт?](/v3/documentation/faq#is-it-possible-to-re-deploy-code-to-an-existing-address-or-does-it-have-to-be-deployed-as-a-new-contract)
->
-> ["set_code()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#set_code)
+**References:**
 
+- [Возможно ли повторно развернуть код на существующий адрес или его нужно развернуть как новый контракт?](/v3/documentation/faq#is-it-possible-to-re-deploy-code-to-an-existing-address-or-does-it-have-to-be-deployed-as-a-new-contract)
+- ["set_code()" в документации](/v3/documentation/smart-contracts/func/docs/stdlib#set_code)
 
-
-
+<Feedback />
 
