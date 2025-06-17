@@ -1,45 +1,53 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 无限分片范式
 
 ## 理解TON区块链中的拆分合并
 
-TON（Telegram Open Network）区块链引入了一些创新概念来提高区块链的可扩展性和效率。其中一个概念是拆分合并功能，这是其区块链架构的一个组成部分。本短文探讨了TON区块链中拆分合并的关键方面，重点讨论其在无限分片范式（ISP,Infinity Sharding Paradigm）中的作用。
+The TON (The Open Network) blockchain introduces innovative mechanisms for scalability and efficiency. One of the key features is **split-merge**, a fundamental component of its architecture. This article outlines the core principles of split-merge within the Infinite Sharding Paradigm (ISP) framework.
 
 #### 无限分片范式（ISP）及其应用
 
-ISP是TON区块链设计的基础，将每个账户视为其独立的“账户链”的一部分。这些账户链然后被聚合到分片链块中以提高效率。一个分片链的状态包括其所有账户链的状态。因此，一个分片链区块本质上是一系列分配给它的虚拟账户区块的集合。
+At the heart of TON's design is the ISP, which treats each account as its own **AccountChain**—a unique chain of transactions associated with a single account. These AccountChains are grouped into ShardChain blocks to improve processing efficiency. The state of a ShardChain is derived from the combined states of all the AccountChains it contains. As a result, a ShardChain block can be viewed as a collection of virtual blocks corresponding to individual accounts.
 
 - **ShardState**：近似表示为 Hashmap(n, AccountState)，其中n是account_id的位长度。
 - **ShardBlock**：近似表示为 Hashmap(n, AccountBlock)。
 
 每个分片链，或更准确地说，每个分片链区块，由`workchain_id`和账户id的二进制前缀`s`的组合来标识。
 
-## 分片示例
+## Algorithm for deciding whether to split or merge
 
-![](/img/docs/blockchain-fundamentals/split-merge.svg)
+The decision to split or merge shards proceeds as follows:
 
-1. 对每个区块的区块大小(Block size estimation) 、gas消耗量(Gasconsumption)和区块的起始点和终点点点之间的差异( lt delta)去计算它们的变化量
-2. 使用这些值，可将区块视为超载或欠载。
-3. 每个分片都会保存欠载和过载历史。如果最近有足够多的区块被欠载或超载，就会设置 `want_merge` 或 `want_split` 标志。
-4. 验证器使用这些标志合并或拆分分片。
+1. Each block is evaluated using key metrics, such as block size, gas consumption, and logical time (LT) delta.
+2. These metrics are used to determine whether the block is **overloaded** or **underloaded**.
+3. Each shard maintains a history of overload and underload events. Based on recent trends, it sets `want_split` or `want_merge` flags.
+4. Validators make split or merge decisions using these flags by configuration parameters.
 
 ### 1. 对当前区块状态评估
 
-总之，TON区块链中的拆分合并是一个复杂但高效的机制，增强了区块链网络的可扩展性和交互性。它体现了TON解决常见区块链挑战的方法，强调效率和全局一致性。
+Each block includes three core parameters that are used to assess load:
 
 1. _Block size estimation_ - 不是实际的块大小，而是在整理过程中计算出的估计值。
 2. _Gas consumption_ - 所有交易中消耗的 gas 总量（不包括 ticktock 和造币/回收特殊交易）。
 3. _Lt delta_ -- 区块起始和结束时长之差。
 
-### 分片链的拆分和非拆分部分
+### 4. 决定区块的拆分还是合并
 
-一个分片链块和状态分为两部分：
+Limits for these metrics are defined in [configuration parameters 22 and 23](/v3/documentation/network/configs/blockchain-configs#param-22-and-23).
+Each parameter has three thresholds: **underload**, **soft**, and **hard**:
 
-1. **拆分部分**：符合ISP形式，包含特定于账户的数据。
-2. **非拆分部分**：涉及区块与其他区块和外部世界的交互相关的数据。
-3. _Lt delta_：`1000/5000/10000`.
-   此外，还有一个中等限制，等于 `(soft + hard) / 2`。
+#### Threshold table
 
-我们将三个参数 (大小(size) 、gas和 lt delta) 分类为类别：
+| **Parameter**     | **Underload / Soft / Hard (BaseChain)**           | **Underload / Soft / Hard (MasterChain)**  |
+| ----------------- | ------------------------------------------------- | ------------------------------------------ |
+| Block size        | 128 / 256 / 512 KiB                               | N/A                                        |
+| Gas consumption   | 2M / 10M / 20M                                    | 200K / 1M / 2.5M                           |
+| LT delta          | _Lt delta_：`1000/5000/10000`.                     | Same as BaseChain                          |
+
+此外，还有一个中等限制，等于 `(soft + hard) / 2`。
+
+Each parameter is classified as follows:
 
 - `0` - 未达到欠载限制。
 - `1` - 超过欠载限制。
@@ -50,34 +58,45 @@ ISP是TON区块链设计的基础，将每个账户视为其独立的“账户�
 区块分类最终的标准以最大值为主，在 (“size”、“gas”、“lt delta” ) 中取最大值
 。 例如，如果尺寸分类为2，气体分类为3， lt delta的分类是。据此可以判断出最后的区块分类是3。
 
-- 当块的分类是0 (underload) 时，该块倾向于与其他合并。
-- 当块的分类为 2  轻微 (soft) 限制已经达到时，整理器停止处理内部消息。该块倾向于分裂。
-- 当块的分类为 3 达到中等 (medium) 限制时，整理器停止处理外部消息。
+Example: size = 2, gas = 3, lt = 1 → block classification = 3.
+
+Based on classification:
+
+- 0 (Underload): merge candidate.
+- 2 (Soft): internal messages are no longer processed; candidate for split.
+- 3 (Medium): external messages are skipped.
 
 ### 3. 过载或欠载的判定
 
-在对数据块进行分类后，整理器会检查过载和欠载情况。
-出站报文队列的大小和调度队列的处理状态也在考虑之列。
+Additional heuristics are applied beyond classification based on the message queue status:
 
-- 如果区块类别大于等于“2” (soft) 并且消息队列大小没有超过“SPLIT_MAX_QUEUE_SIZE = 100000”，则该块过载。
-- 如果达到了调度队列中已处理消息总数的限制，并且消息队列大小没有超过`SPLIT_MAX_QUEUE_SIZE = 100000`，则该区块判定为过载。
-- 如果区块类别为“0” (欠载) 且消息队列大小没有超过“MERGE_MAX_QUEUE_SIZE = 2047”，则该块欠载。
-- 如果消息队列尺寸大于等于`FORCE_SPLIT_QUEUE_SIZE = 4096`且没有超过`SPLIT_MAX_QUEUE_SIZE = 100000`，则该区块将被当作超载。
-
-### 4. 决定区块的拆分还是合并
-
-每个区块都保存着过载和欠载的历史记录——这是一个64位的掩码，记录了最近64个区块的过载/欠载状态 ，它被用来决定是否要进行分割或合并。
-
-分片链状态中的OutMsgQueue是一个关键的非拆分部分。它保存OutMsgDescr中的未处理消息，直到它们被处理或发送到目的地。
-
-当欠载或过载的历史记录具有非负权重时，会设置 `want_merge` 或 `want_split` 标志。
+- A block is **overloaded** if:
+  - 如果区块类别大于等于“2” (soft) 并且消息队列大小没有超过“SPLIT_MAX_QUEUE_SIZE = 100000”，则该块过载。
+  - 如果达到了调度队列中已处理消息总数的限制，并且消息队列大小没有超过`SPLIT_MAX_QUEUE_SIZE = 100000`，则该区块判定为过载。
+  - 如果消息队列尺寸大于等于`FORCE_SPLIT_QUEUE_SIZE = 4096`且没有超过`SPLIT_MAX_QUEUE_SIZE = 100000`，则该区块将被当作超载。
+- A block is **underloaded** if:
+  - 如果区块类别为“0” (欠载) 且消息队列大小没有超过“MERGE_MAX_QUEUE_SIZE = 2047”，则该块欠载。
 
 ### 5. 区块分割合并的最后决定
 
+每个区块都保存着过载和欠载的历史记录——这是一个64位的掩码，记录了最近64个区块的过载/欠载状态 ，它被用来决定是否要进行分割或合并。 This mask is used to determine whether a shard should split or merge.
+
+The underload and overload histories are evaluated using a weighted formula:
+
+`one_bits(mask & 0xffff) * 3 + one_bits(mask & 0xffff0000) * 2 + one_bits(mask & 0xffff00000000) - (3 + 2 + 1) * 16 * 2 / 3`
+
+Here, `one_bits` counts the number of `1`-bits in the mask. Lower-order bits correspond to the most recent blocks.
+
+当欠载或过载的历史记录具有非负权重时，会设置 `want_merge` 或 `want_split` 标志。
+
+### 5. Final decision
+
+验证器使用这些标志合并或拆分分片。
+
 验证者 (Validators ) 使用 `want_split`和 `want_merge`标志以及`工作链配置参数`[workchain configuration parameters](/v3/documentation/network/configs/blockchain-configs#param-12).来决定是否要分割或合并分片(shards)。
 
-- [区块布局](/develop/data-formats/block-layout)
-- [白皮书](/learn/docs)
+- 当块的分类为 2  轻微 (soft) 限制已经达到时，整理器停止处理内部消息。该块倾向于分裂。
+- 每个分片都会保存欠载和过载历史。如果最近有足够多的区块被欠载或超载，就会设置 `want_merge` 或 `want_split` 标志。
 - 深度为 `min_split` 的分片不能合并，深度为 `max_split` 的分片不能分割。
 - 如果区块有`want_split`标志，分片将会分割。
 - 如果区块及其兄弟区块都设置了 `want_merge` 标志，则这些分片将会合并。
@@ -86,9 +105,29 @@ ISP是TON区块链设计的基础，将每个账户视为其独立的“账户�
 
 ## 消息和即时超立方路由（即时超立方路由）
 
-在无限分片模式中，每个账户（或智能合约）都被视为独立的分片链。
-账户之间的交互仅通过发送消息来实现，这也是账户作为行为体的行为体模型的一部分。分片链之间高效的消息传递系统对 TON 区块链的运行至关重要。 
-TON 的一项功能是即时超立方路由（Instant Hypercube Routing），它可以在分片链之间快速传递和处理消息，确保在一个分片链的一个区块中创建的消息在目标分片链的下一个区块中得到处理，而不管它们在系统中的编号如何。
+In the infinite sharding paradigm, each account or smart contract is treated as if it were a part of its own ShardChain.
+Interactions between accounts occur exclusively through message passing, following the **actor model**, where accounts act as actors.
+An efficient messaging system between ShardChains is essential for the operation of the TON blockchain. A key feature supporting this is **Instant Hypercube Routing**, which enables near-instantaneous message delivery and processing across ShardChains. Messages created in one ShardChain block are processed in the next block of the target ShardChain — regardless of how many messages are in the system.
+
+### Current Status of IHR
+
+:::info Important Clarification
+
+- **IHR is not implemented** and is not yet fully specified
+- **IHR is only relevant** when there are more than 16 shards and not all shards are neighbors to each other
+- **Current network settings forbid splitting deeper than 16 shards**, so IHR is not relevant in any practical sense today
+
+Currently, TON uses standard **Hypercube Routing (HR)** for message delivery between shards, which routes messages through intermediate shards when necessary. IHR would provide a more direct routing mechanism, but only becomes necessary in much larger shard configurations than are currently possible.
+:::
+
+### Message Routing Mechanisms
+
+TON blockchain supports two conceptual message routing mechanisms:
+
+1. **Hypercube Routing (HR)** - Currently implemented mechanism that routes messages between shards through intermediate hops when necessary
+2. **Instant Hypercube Routing (IHR)** - Alternative mechanism (not implemented) that would allow direct message delivery without intermediate hops
+
+The choice between these mechanisms would depend on the network topology and shard configuration, but given current limitations on shard depth, only HR is relevant.
 
 ## 分片示例
 
@@ -96,11 +135,11 @@ TON 的一项功能是即时超立方路由（Instant Hypercube Routing），它
 
 在提供的图形方案中：
 
-- 工作链的分片按时间划分，用虚线表示。
-- 区块 222、223 和 224 与 seqno=102 的主链区块有关。在这里，222 位于一个分片中，而 223 和 224 位于另一个分片中。
+- The shards of a WorkChain are shown over time and separated by dashed lines.
+- Blocks 222, 223, and 224 correspond to MasterChain block `seqno = 102`. 区块 222、223 和 224 与 seqno=102 的主链区块有关。在这里，222 位于一个分片中，而 223 和 224 位于另一个分片中。
 - 如果发生拆分或合并事件，受影响的分片会暂停，直到下一个主链块。
 
-总之，TON区块链中的拆分合并是一个复杂但高效的机制，增强了区块链网络的可扩展性和交互性。它体现了TON解决常见区块链挑战的方法，强调效率和全局一致性。
+总之，TON区块链中的拆分合并是一个复杂但高效的机制，增强了区块链网络的可扩展性和交互性。它体现了TON解决常见区块链挑战的方法，强调效率和全局一致性。 It exemplifies TON's approach to solving core blockchain challenges by prioritizing efficiency and global consistency.
 
 ## 分片细节
 
@@ -113,34 +152,50 @@ TON 的一项功能是即时超立方路由（Instant Hypercube Routing），它
 
 #### 与其他块的交互
 
-非拆分部分对于确保全局一致性至关重要，简化为内部和外部的局部一致性条件。它们对以下方面非常重要：
+The non-split parts are vital in maintaining global consistency across the network. They address both internal and external local consistency conditions and are responsible for:
 
-- 分片链之间的消息转发。
-- 涉及多个分片链的交易。
+- Forwarding messages between ShardChains
+- Facilitating cross-shard transactions
 - 交付保证和验证，关于区块的初始状态与其前一个区块的一致性。
 
 #### 入站和出站消息
 
 分片链区块的非拆分部分的关键组成部分包括：
 
-- **InMsgDescr**：导入到区块的所有消息的描述(例如，由包含在区块中的交易处理或转发到输出队列， 如果是沿着\`Hypercube Routing'指定的路径路由的中转消息，则是如此) 。
-- **OutMsgDescr**：区块输出或生成的所有消息的描述（即由区块中包含的交易生成的消息，或目的地不属于当前分片链的中转消息，由 `InMsgDescr` 转发）。
+- **InMsgDescr**: describes all messages imported into the block. These messages are either:
+  - processed by a block or transit transaction, i.e., temporarily forwarded as per `Hypercube Routing`.
+- **OutMsgDescr**：区块输出或生成的所有消息的描述（即由区块中包含的交易生成的消息，或目的地不属于当前分片链的中转消息，由 `InMsgDescr` 转发）。 These may be:
+  - newly generated messages from a transaction in the block or
+  - transit messages are forwarded to a destination outside the current ShardChain forwarded from `InMsgDescr`.
 
 #### 区块头和验证者签名
 
-区块头是另一个非拆分组件，包含 `workchain_id`、`account_ids` 的二进制前缀、区块序列号（定义为大于其前代序列号的最小非负整数）、逻辑时间和时间戳生成等基本信息。它还包含该区块的直接前置区块的哈希值（或其两个直接前置区块的哈希值，如果之前发生了
-分片链合并事件）、其初始状态和最终状态（即处理当前区块之前和之后的分片链状态）的哈希值，以及生成该分片链区块时已知的最新主链区块的哈希值。验证者签名被附加到未签名区块上，形成被签名的区块。
+一个分片链块和状态分为两部分：
+
+- `workchain_id`
+- Binary prefix of `account_ids`
+- Block sequence number. The smallest non-negative integer greater than its predecessors' sequence numbers.
+- Logical time and UNIX time of generation
+- Hashes of:
+  - The block's predecessor(s) (two, in the case of a merge)
+  - The block's initial and final states
+  - The latest known MasterChain block at the time of block generation
+
+After the block is created, validator signatures are appended to produce a signed block.
 
 #### 出站消息队列
 
-分片链状态中的 "OutMsgQueue "是一个关键的非拆分部分。它包含了`OutMsgDescr`中的未交付消息，这些消息可能是由导致此状态的最后一个分片链区块或其前一个分片链区块发出的。 
-最初，每条发出的消息都会被包含在 "OutMsgQueue "中并存储在那里，直到它们被处理或传递到目的地。
+The `OutMsgQueue` is another crucial non-split component of the ShardChain state. It holds undelivered outbound messages, as recorded in `OutMsgDescr`, from either the latest block or one of its predecessors.
+Each outgoing message is initially placed in `OutMsgQueue`, which remains until it is successfully delivered to its target.
 
 #### 分片的拆分和合并机制
 
-在动态分片的背景下，分片配置可能因拆分和合并事件而变化。这些事件与主链区块同步。例如，如果发生拆分或合并，受影响的分片会等待下一个主链区块之后再继续。
+Shard configurations can change over time due to split or merge events in dynamic sharding. These changes are coordinated via the MasterChain.
+When a split or merge is triggered, the affected shards pause and wait for the next MasterChain block before resuming activity.
 
 ## 参阅
 
 - [区块布局](/v3/documentation/data-formats/tlb/block-layout)
 - [白皮书](/v3/documentation/whitepapers/overview)
+
+<Feedback />
