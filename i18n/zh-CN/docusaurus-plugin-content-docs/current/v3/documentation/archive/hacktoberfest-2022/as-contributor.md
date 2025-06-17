@@ -1,10 +1,12 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 作为贡献者参与
 
-要成为获得限量版 *Hack-TON-berfest NFT* 的贡献者，请设置你自己的 [TON 钱包](https://ton.org/wallets) 并验证你的 GitHub 账户。
+要成为获得限量版 _Hack-TON-berfest NFT_ 的贡献者，请设置你自己的 [TON 钱包](https://ton.org/wallets) 并验证你的 GitHub 账户。
 
 ## 开始你的旅程
 
-1. 从 [ton.org/wallets](https://ton.org/wallets) 页面设置任意钱包。（例如，[TON Wallet 扩展](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd)。）
+1. 从 [ton.org/wallets](https://ton.org/wallets) 页面设置任意钱包。（例如，[TON Wallet 扩展](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd)。） ([TON Wallet extension](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd), for example.)
 2. 请将你的钱包地址提供给 Telegram 中的 [@toncontests_bot](https://t.me/toncontests_bot)。
 3. 在同一个机器人中验证你的 GitHub 账户。
 
@@ -12,9 +14,9 @@
 
 欢迎加入俱乐部，这只是个开始！
 
-## 第一次参与开源项目？
+## New to contributing to open source?
 
-Hacktoberfest 是首次尝试开源贡献的绝佳场所。有很多关于如何开始的直播、帖子、指南和讨论。你将会认识许多在这个月开始他们旅程的人们！
+Hacktoberfest 是首次尝试开源贡献的绝佳场所。有很多关于如何开始的直播、帖子、指南和讨论。你将会认识许多在这个月开始他们旅程的人们！ There are plenty of streams, posts, guides, and discussions about to get started. You’ll be joining many folks who are also starting their journey this month!
 
 - [初学者关于 Hacktoberfest 的基本信息](https://hacktoberfest.com/participation/#beginner-resources)
 - [进行首次贡献的指南](https://dev.to/codesandboxio/how-to-make-your-first-open-source-contribution-2oim)，作者 Ceora Ford
@@ -31,3 +33,6 @@ TON 生态系统拥有几个组织和代码库：
     寻找贡献者的项目列表
   </a>
 </span>
+
+<Feedback />
+
