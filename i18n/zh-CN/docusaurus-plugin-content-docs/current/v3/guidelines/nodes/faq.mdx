@@ -1,106 +1,109 @@
-# 常见问题
+import Feedback from '@site/src/components/Feedback';
 
-## MyTonCtrl 目录用法
+# FAQ
 
-MyTonCtrl 是一个包装器，它将文件存储在两个地方：
+## MyTonCtrl directory usage
 
-1. `~/.local/share/mytonctrl/` - 日志等长期文件存储在这里。
-2. `/tmp/mytonctrl/` - 临时文件存储在这里。
+MyTonCtrl is a wrapper that stores its files in two locations:
 
-MyTonCtrl 还包括另一个脚本，即 mytoncore，它将文件存储在以下位置：
+1. `~/.local/share/mytonctrl/`: Long-term files such as logs are stored here.
+2. `/tmp/mytonctrl/`: Temporary files are stored here.
 
-1. `~/.local/share/mytoncore/` - 永久文件，主要配置将存储在这里。
-2. `/tmp/mytoncore/` - 临时文件，用于选举的参数将保存在这里。
+MyTonCtrl includes another script called `mytoncore`, which stores files in the following locations:
 
-MyTonCtrl 会将自身和验证器的源代码下载到以下目录中：
+1. `~/.local/share/mytoncore/`: Permanent files, the main configuration will be stored here.
+2. `/tmp/mytoncore/`: Temporary files and parameters used for elections will be saved here.
+
+MyTonCtrl downloads its source code, along with the validator, into the following directories:
 
 1. `/usr/src/mytonctrl/`
 2. `/usr/src/ton/`
 
-MyTonCtrl 将验证器组件编译到以下目录中：
+MyTonCtrl compiles the validator components into the following directory:
 
 1. `/usr/bin/ton/`
 
-MyTonCtrl 会在此处为验证器创建一个工作目录：
+MyTonCtrl creates a working directory for the validator here:
 
 1. `/var/ton/`
 
 ---
 
-## 如果 MyTonCtrl 是以 root 用户身份安装的
+## If MyTonCtrl was installed as root
 
-配置将以不同方式存储：
+The configurations will be stored differently:
 
 1. `/usr/local/bin/mytonctrl/`
 2. `/usr/local/bin/mytoncore/`
 
 ---
 
-## 如何删除 MyTonCtrl
+## How to remove MyTonCtrl
 
-以管理员身份运行脚本，删除编译后的 TON 组件：
+Run the script as an administrator and remove the compiled TON components:
 
 ```bash
 sudo bash /usr/src/mytonctrl/scripts/uninstall.sh
 sudo rm -rf /usr/bin/ton
 ```
 
-在此过程中，请确保您有足够的权限来删除或修改这些文件或目录。
+Ensure you have the necessary permissions to delete or modify files and directories.
 
-## 使用 MyTonCtrl 更改目录
+## Directory changes with MyTonCtrl
 
-### 安装前更改验证器工作目录
+### Changing validator working directory pre-installation
 
-如果想在安装前更改验证器的工作目录，有两种方法：
+If you want to change the working directory of the validator before installation, you have two options:
 
-1. **分叉项目** - 您可以分叉项目并在其中进行修改。了解如何使用 `man git-fork` fork 项目。
-2. ** 创建符号链接** - 也可以使用以下命令创建符号链接：
+1. **Fork the project**: You can fork the project and make your modifications there. To learn how to fork a project, use the command `man git-fork`.
 
-   ````
+2. **Create a symbolic link**: Alternatively, you can create a symbolic link with the following command:
+
    ```bash
-   ln -s /opt/ton/var/ton
+   ln -s /opt/ton/var/ton /var/ton
    ```
-   ````
 
-   此命令将创建指向 `/opt/ton` 的链接 `/var/ton`。
+This command will create a link at `/var/ton` that points to `/opt/ton`.
 
-### 安装后更改验证器工作目录
+### Changing validator working directory post-installation
 
-如果想在安装后将验证器的工作目录从 `/var/ton/` 改为 `/var/ton/`，请执行以下步骤：
+To change the working directory of the validator from `/var/ton/` after installation, follow these steps:
 
-1. ** 停止服务** - 您需要使用这些命令停止服务：
+1. **Stop services**: First, stop the services using the following commands:
 
    ```bash
    systemctl stop validator.service
    systemctl stop mytoncore.service
    ```
 
-2. ** 移动验证程序文件** - 然后，您需要使用该命令移动验证程序文件：
+2. **Move validator files**: Next, move the validator files with this command:
 
    ```bash
    mv /var/ton/* /opt/ton/
    ```
 
-3. **更新配置路径** - 替换位于 `~/.local/share/mytoncore/mytoncore.db` 的配置路径。
+3. **Update configuration paths**: Ensure you update the paths in the configuration file located at `~/.local/share/mytoncore/mytoncore.db`.
 
-4. **关于经验的说明** - 没有进行过这种转移的经验，因此在进行转移时要考虑到这一点。
+4. **Consider experience**: Note that there might be limited experience with this type of transfer, so take this into account as you proceed.
 
-请确保您有足够的权限进行这些更改或运行这些命令。
+Make sure you have sufficient permissions to execute these commands and make these changes.
 
-## 在 MyTonCtrl 中了解验证程序状态并重启验证程序
+## Understanding validator status and restarting validator in MyTonCtrl
 
-本文档将帮助您了解如何确认 MyTonCtrl 是否已成为正式验证程序，以及如何重新启动验证程序。
+This [document](/v3/guidelines/nodes/running-nodes/validator-node) will help you confirm if MyTonCtrl has become a full validator.
 
-## 重启校验器
+## Restarting your validator
 
-如果需要重启验证器，可以运行以下命令：
+If you need to restart your validator, run this command:
 
 ```bash
 systemctl restart validator.service
 ```
 
-确保您有足够的权限执行这些命令并进行必要的调整。在执行可能影响验证程序的操作前，请务必备份重要数据。
+Please ensure you have the necessary permissions to execute these commands and make any needed adjustments. <u>**Remember to back up important data before performing operations that may affect your validator.**</u>
 
-## 另请参见
+## See also
 
-- [故障排除](/v3/guidelines/nodes/nodes-troubleshooting)
+- [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
+
+<Feedback />
