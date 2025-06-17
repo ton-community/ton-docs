@@ -1,94 +1,106 @@
-# 节点安全准则
+import Feedback from '@site/src/components/Feedback';
 
-确保节点的安全性，尤其是在区块链或分布式系统等去中心化网络中，对于维护数据的完整性、保密性和可用性至关重要。节点安全指南应涉及从网络通信到硬件和软件配置的各个层面。下面是一套节点安全指南：
+# Secure guidelines for nodes
 
-### 1. 仅使用服务器运行 TON 节点
+Ensuring the security of nodes, particularly in decentralized networks such as blockchain or distributed systems, is essential for maintaining data integrity, confidentiality, and availability. The guidelines for securing nodes should cover several layers, including network communication, hardware, and software configurations. Below are a set of guidelines to enhance node security:
 
-- 使用服务器执行其他任务会带来潜在的安全风险
+### 1. Use the server exclusively to operate the TON node:
 
-### 2. 定期更新和打补丁
+- Using the server for additional tasks presents a potential security risk.
 
-- 确保您的系统始终使用最新的安全补丁。
-- 使用软件包管理工具，如 apt（适用于 Debian/Ubuntu）或 yum/dnf（适用于 CentOS/Fedora），定期更新：
+### 2. Update and patch regularly:
 
-```bash
-sudo apt update && sudo apt upgrade -y
-```
+- Keep your system updated with the latest security patches.
 
-- 考虑通过启用无人值守升级来自动进行安全更新。
+- Regularly use package management tools like apt (Debian/Ubuntu) or yum/dnf (CentOS/Fedora) to perform updates.
 
-### 3. 使用强 SSH 配置
+    ```bash
+    #Debian/Ubuntu
+    sudo apt update && sudo  apt  upgrade  -y
 
-- 禁用 Root 登录：防止通过 SSH 进行 root 访问。编辑 /etc/ssh/sshd_config 文件：
+    #CentOS
+    sudo yum update && sudo yum upgrade -y
 
-```bash
-PermitRootLogin no
-```
+    #Fedora
+    sudo dnf update && sudo dnf upgrade -y
+    ```
 
-- 使用 SSH 密钥：避免使用密码验证，改用 SSH 密钥。
+- Consider automating security updates by enabling unattended upgrades for your system.
 
-```bash
-PasswordAuthentication no
-```
+### 3. Ensure a robust SSH configuration:
 
-- 更改 SSH 默认端口：将 SSH 改为非标准端口可减少自动暴力破解攻击。例如
+- **Disable root login:** Prevent root access through SSH by editing the `/etc/ssh/sshd_config` file.
 
-```bash
-Port 2222
-```
+    ```bash
+    PermitRootLogin no
+    ```
+- **Use SSH keys:** For a more secure connection, opt for SSH keys instead of password authentication.
+    ```bash
+    PasswordAuthentication no
+    ```
+- **Modify the default SSH port:** Changing the default SSH port can help reduce automated brute-force attacks:
 
-- 限制 SSH 访问：使用防火墙规则，只允许来自受信任 IP 的 SSH 访问
+    ```bash
+    Port 2222
+    ```
+- **Restrict SSH access:** Allow SSH connections only from trusted IP addresses by implementing firewall rules.
 
-### 4. 安装防火墙
+### 4. Implement a firewall
 
-- 配置防火墙，只允许必要的服务。常用的工具有 ufw（简易防火墙）或 iptables：
+- Set up a firewall to permit only essential services. Common tools are **ufw (Uncomplicated Firewall)** and **iptables**:
 
-```bash
-sudo ufw allow 22/tcp   # Allow SSH
-sudo ufw allow 80/tcp   # Allow HTTP
-sudo ufw allow 443/tcp  # Allow HTTPS
-sudo ufw enable         # Enable firewall
-```
+    ```bash
+    sudo ufw allow 22/tcp # Allow SSH
+    sudo ufw allow 80/tcp # Allow HTTP
+    sudo ufw allow 443/tcp # Allow HTTPS
+    sudo ufw enable # Enable firewall
+    ```
 
-### 5. 监控日志
+### 5. Monitor logs
 
-- 定期监控系统日志，识别可疑活动：
-  - */var/log/auth.log*（用于验证尝试）
-  - */var/log/syslog* 或 */var/log/messages*。
-- 考虑集中登录
+- Regularly monitor system logs to detect suspicious activities:
+    - `/var/log/auth.log` (for authentication attempts)
+    - `/var/log/syslog` or `/var/log/messages`
+- Consider implementing centralized logging.
 
-### 6. 限制用户权限
+### 6. Limit user privileges
 
-- 只为受信任的用户提供 root 或 sudo 权限。谨慎使用 sudo 命令，并审计 */etc/sudoers*，以尽量减少访问权限。
-- 定期检查用户账户，删除不必要或不活跃的用户。
+- Grant root or sudo privileges only to trusted users. Use the sudo command carefully and audit the `/etc/sudoers` file to limit access.
 
-### 7. 配置 SELinux 或 AppArmor
+- Regularly review user accounts and remove any unnecessary or inactive users.
 
-- **SELinux**（在 RHEL/CentOS 上）和**AppArmor**（在 Ubuntu/Debian 上）提供强制访问控制，通过限制程序访问特定系统资源，增加了一层额外的安全性。
+### 7. Utilize SELinux or AppArmor
 
-### 8. 安装安全工具
+- **SELinux** (on RHEL/CentOS) and **AppArmor** (on Ubuntu/Debian) provide mandatory access control, adding an extra layer of security by restricting programs from accessing specific system resources.
 
-- 使用 Lynis 等工具定期进行安全审计，找出潜在漏洞：
+### 8. Install security tools
 
-```bash
-sudo apt install lynis
-sudo lynis audit system
-```
+- Utilize tools such as **Lynis** to conduct regular security audits and identify potential vulnerabilities:
 
-### 9. 停用不必要的服务
+    ```bash
+    sudo apt install lynis
+    sudo lynis audit system
+    ```
 
-- 禁用或删除不使用的服务，以尽量减少攻击面。例如，如果您不需要 FTP 或邮件服务，请禁用它们：
+### 9. Disable unnecessary services
 
-```bash
-sudo systemctl disable service_name
-```
+- To minimize the attack surface, disable or remove any unused services. For instance, if FTP or mail services are not needed, ensure to disable them:
 
-### 10. 使用入侵检测和防御系统（IDS/IPS）
+    ```bash
+    sudo systemctl disable service_name
+    ```
 
-- 安装 Fail2ban 等工具，在尝试登录失败次数过多后阻止 IP 地址：
+### 10. Implement intrusion detection and prevention systems (IDS/IPS)
 
-```bash
-sudo apt install fail2ban
-```
+- Use tools like **Fail2ban** to block IP addresses after multiple failed login attempts:
 
-- 使用 AIDE（高级入侵检测环境）监控文件完整性并检测未经授权的更改。
+    ```bash
+    sudo apt install fail2ban
+    ```
+
+- Utilize **AIDE (Advanced Intrusion Detection Environment)** to monitor file integrity and identify any unauthorized changes.
+
+:::caution
+Please remain vigilant and ensure that your node is secure at all times.
+:::
+
