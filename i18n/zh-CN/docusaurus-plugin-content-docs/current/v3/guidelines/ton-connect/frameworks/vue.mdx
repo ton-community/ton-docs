@@ -1,55 +1,66 @@
-# 用于 Vue 的 TON Connect
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Feedback from '@site/src/components/Feedback';
 
-为 Vue 应用程序推荐的 SDK 是 [UI Vue SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-vue)。它是一个 Vue 组件，提供了与 TON Connect 交互的高级方法。
+# TON Connect for Vue
 
-## 实现
+The recommended SDK for Vue Apps is a [UI Vue SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-vue). A Vue component provides a high-level way to interact with TON Connect.
 
-### 1. 安装
+## Implementation
 
-要开始将 TON Connect 集成到您的 DApp 中，您需要安装 `@townsquarelabs/ui-vue` 软件包。为此，您可以使用 npm 或 yarn：
+### Installation
+
+To start integrating TON Connect into your dApp, install the `@townsquarelabs/ui-vue` package. You can use npm or yarn for this purpose:
 
 ```bash npm2yarn
 npm i @townsquarelabs/ui-vue
 ```
 
-### 2. TON Connect初始化
+### Use TonConnectUIPlugin
 
-将 TonConnectUIProvider 添加到应用程序的根目录。您可以使用道具指定用户界面选项。
+Use TonConnectUIPlugin before mounting the app. You can specify UI options using plugin options.
+:::tip
+[See all available options](https://github.com/TownSquareXYZ/tonconnect-ui-vue/blob/ff8cbb66aa30b7c29ac1a1f76c96ebef91700ff3/src/utils/UIProvider.ts#L9).
+:::
 
-<!-- [See all available options](https://github.com/TownSquareXYZ/tonconnect-ui-vue/blob/aa7439073dae5f7ccda3ab10291fc4658f5d3588/src/utils/UIProvider.ts#L11) -->
+<Tabs groupId="TonConnectUIPlugin">
+  <TabItem value="For Vue@3" label="For Vue@3">
+  ```html
+  import { createApp } from 'vue'
+  import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
 
-所有 TonConnect 用户界面钩子调用和 `<TonConnectButton />` 组件必须置于 `<TonConnectUIProvider>` 内。
+  import App from './App.vue'
 
+  const app = createApp(App)
+  app
+    .use(TonConnectUIPlugin,{ manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json" })
+    .mount('#app')
+
+````
+</TabItem>
+<TabItem value="For Vue@2.7" label="For Vue@2.7">
 ```html
-<template>
-  <TonConnectUIProvider :options="options">
-    <!-- Your app -->
-  </TonConnectUIProvider>
-</template>
+import Vue from 'vue'
+import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
 
-<script>
-import { TonConnectUIProvider } from '@townsquarelabs/ui-vue';
+import App from './App.vue'
 
-export default {
-  components: {
-    TonConnectUIProvider
-  },
-  setup(){
-    const options = {
-      manifestUrl:"https://<YOUR_APP_URL>/tonconnect-manifest.json",
-    };
-    return {
-      options
-    }
-  }
-}
-</script>
-```
+Vue.use(TonConnectUIPlugin, {
+  manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json"
+});
 
-### 连接到钱包
+new Vue({
+  render: (h) => h(App)
+}).$mount('#app')
+````
 
-TonConnect Button 是用于初始化连接的通用 UI 组件。连接钱包后，它将转换为钱包菜单。
-建议将它放在应用程序的右上角。
+</TabItem>
+</Tabs>
+
+### Connect to the wallet
+
+`TonConnectButton` is a universal UI component for initializing connection. After the wallet is connected, it transforms into a wallet menu.
+You should place it in the top right corner of your app.
 
 ```html
 <template>
@@ -70,54 +81,55 @@ export default {
 </script>
 ```
 
-您还可以为按钮添加 `class` 和 `:style` 属性。请注意，您不能向 TonConnectButton 传递子按钮。
-`<TonConnectButton class="my-button-class" :style="{ float: 'right' }"/>`
+You can add `buttonRootId` props to the button as well. 
 
-### 重定向
+```ts
+<TonConnectButton button-root-id="button-root-id" />
+```
 
-如果想在钱包连接后将用户重定向到特定页面，可以使用 `useTonConnectUI` 钩子和 [自定义返回策略](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy)。
+You can also add `class` and `style` props to the button. Note that you cannot pass a child to the `TonConnectButton`.
 
-#### Telegram 小程序
+```ts
+<TonConnectButton class="my-button-class" :style="{ float: 'right' }"/>
+```
 
-如果您想在钱包连接后将用户重定向到[Telegram 迷你应用](/v3/guidelines/dapps/tma/overview)，您可以自定义 "TonConnectUIProvider "元素：
+### Redirects
+
+If you want to redirect the user to a specific page after wallet connection, you can use the `useTonConnectUI` hook and [customize your return strategy](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-the-return-strategy).
+
+#### Telegram Mini Apps
+
+If you want to redirect the user to a [Telegram Mini App](/v3/guidelines/dapps/tma/overview) after wallet connection, you can customize the `TonConnectUIProvider` element:
 
 ```html
 <template>
-  <TonConnectUIProvider :options="options">
-    <!-- Your app -->
-  </TonConnectUIProvider>
+  <!-- Your app -->
 </template>
 
 <script>
-import { TonConnectUIProvider } from '@townsquarelabs/ui-vue';
+import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
 export default {
-  components: {
-    TonConnectUIProvider,
-  },
+  name: 'SetRedirect',
   setup() {
-    const options = {
-      actionsConfiguration: { twaReturnUrl: 'https://t.me/<YOUR_APP_NAME>' },
-    };
-    return {
-      options,
-    };
-  },
+    const {tonConnectUI, setOptions} = useTonConnectUI();
+    setOptions({ actionsConfiguration: { twaReturnUrl: 'https://t.me/<YOUR_APP_NAME>' } });
+  }
 };
 </script>
 ```
 
-[在 SDK 文档中阅读更多内容](https://github.com/ton-connect/sdk/tree/main/packages/ui#use-inside-twa-telegram-web-app)
+[Read more in SDK documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#use-inside-twa-telegram-web-app)
 
-### 用户界面定制
+### UI customization
 
-要[自定义用户界面](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)，您可以使用`useTonConnectUI`钩子和`setOptions`函数。有关 useTonConnectUI 钩子的更多信息，请参阅 [钩子](#usetonconnectui) 部分。
+To [customize UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) of the modal, you can use the `useTonConnectUI` hook and the `setOptions` function. See more about the `useTonConnectUI` hook in the [Hooks](#usetonconnectui) section.
 
-## 钩子（Hooks）
+## Hooks
 
 ### useTonAddress
 
-用它来获取用户当前的 ton 钱包地址。通过布尔参数 isUserFriendly 来选择地址格式。如果钱包未连接，钩子将返回空字符串。
+Use it to get the user's current ton wallet address. Pass the boolean parameter `isUserFriendly` to choose the address format. The hook will return an empty string if the wallet is not connected.
 
 ```html
 <template>
@@ -146,14 +158,7 @@ export default {
 
 ### useTonWallet
 
-用它来获取用户当前的 ton 钱包。如果钱包未连接，钩子将返回空值。
-
-查看钱包的所有属性
-// todo
-
-<!-- [Wallet interface](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html) -->
-
-<!-- [WalletInfo interface](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html) -->
+Use it to get the user's current ton wallet. If the wallet is not connected, the hook will return null.
 
 ```html
 <template>
@@ -181,7 +186,7 @@ export default {
 
 ### useTonConnectModal
 
-使用此钩子可访问打开和关闭模态窗口的功能。钩子会返回一个对象，其中包含当前模式窗口状态以及打开和关闭模式窗口的方法。
+Use this hook to access the functions for opening and closing the modal window. The hook returns an object with the current modal state and methods to open and close the modal.
 
 ```html
 <template>
@@ -206,12 +211,10 @@ export default {
 
 ### useTonConnectUI
 
-使用它可访问 `TonConnectUI` 实例和用户界面选项更新功能。
+Use it to get access to the `TonConnectUI` instance and UI options updating function.
 
-[查看有关 TonConnectUI 实例方法的更多信息](https://github.com/ton-connect/sdk/tree/main/packages/ui#send-transaction)
-
-[查看有关 setOptions 函数的更多信息](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
-
+<details>
+  <summary><b>Show the example</b></summary>
 ```html
 <template>
   <div>
@@ -233,7 +236,7 @@ import { Locales, useTonConnectUI } from '@townsquarelabs/ui-vue';
 export default {
   name: 'Settings',
   setup() {
-    const [tonConnectUI, setOptions] = useTonConnectUI();
+    const {tonConnectUI, setOptions} = useTonConnectUI();
 
     const onLanguageChange = (lang) => {
       setOptions({ language: lang as Locales });
@@ -263,12 +266,29 @@ export default {
   }
 };
 </script>
-```
+
+````
+
+
+</details>
+
+or
+
+```ts 
+<script lang="ts">
+import { TonConnectUI, useTonWallet, tonConnectUIKey } from "@townsquarexyz/ui-vue";
+const tonConnectUI = inject<TonConnectUI | null>(tonConnectUIKey, null);
+</script>
+````
+
+[See more about TonConnectUI instance methods](https://github.com/ton-connect/sdk/tree/main/packages/ui#send-transaction)
+
+[See more about the `setOptions` function](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
 
 ### useIsConnectionRestored
 
-表示连接恢复进程的当前状态。
-您可以用它来检测连接恢复进程是否已完成。
+`useIsConnectionRestored` indicates the current status of the connection restoring process.
+You can use it to detect when the connection restoring process is finished.
 
 ```html
 <template>
@@ -291,13 +311,13 @@ export default {
 </script>
 ```
 
-## 使用方法
+## Usage
 
-让我们看看如何在实践中使用 Vue UI SDK。
+Let's take a look at how to use the Vue UI SDK in practice.
 
-### 发送交易
+### Sending transactions
 
-向指定地址发送 TON 硬币（以 nanotons  为单位）：
+Send Toncoins to a specific address:
 
 ```html
 <template>
@@ -312,8 +332,7 @@ import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 export default {
   name: 'Settings',
   setup() {
-    const [tonConnectUI, setOptions] = useTonConnectUI();
-
+    const { tonConnectUI } = useTonConnectUI();
 
     const myTransaction = {
       validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
@@ -341,42 +360,44 @@ export default {
 </script>
 ```
 
-### 通过哈希值了解交易状态
+### Understanding transaction status by hash
 
-该原理位于支付处理部分（使用 tonweb）。[查看更多](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions)
+Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions) using the tonweb library.
 
-### 添加连接请求参数（ton_proof）
+### Add connect request parameters: ton_proof
 
 :::tip
-了解如何签署和验证信息：[签名和验证](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
+Understand how to sign and verify messages: [Signing and Verification](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
 :::
 
-使用 `tonConnectUI.setConnectRequestParameters` 函数传递连接请求参数。
+Use the `tonConnectUI.setConnectRequestParameters` function to pass your connect request parameters.
 
-该函数需要一个参数：
+This function takes one parameter:
 
-在等待后台响应时，将状态设置为 'loading'。如果用户此时打开连接钱包模式，他将看到一个加载器。
+#### loading
+
+Set state to `'loading'` while waiting for your backend's response. If a user opens the connect wallet modal, he will see a loader.
 
 ```ts
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 tonConnectUI.setConnectRequestParameters({
     state: 'loading'
 });
 ```
 
-或
+#### ready
 
-将状态设为 `ready` 并定义 `tonProof` 值。传递的参数将应用于连接请求（QR 和通用链接）。
+Set the state to `'ready'` and define the `tonProof` value. Apply the parameters passed to the connect request using QR and a universal link.
 
 ```ts
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 tonConnectUI.setConnectRequestParameters({
     state: 'ready',
@@ -386,26 +407,28 @@ tonConnectUI.setConnectRequestParameters({
 });
 ```
 
-或
+#### remove loading
 
-如果已通过 `state：'loading'`（例如，您从后端收到的是错误而不是响应）。创建的连接请求将不带任何附加参数。
+Remove the loader if enabled via `state: 'loading'`. For example, if you received an error instead of a response from your backend. 
+
+Connect requests will be created without any additional parameters.
 
 ```ts
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 tonConnectUI.setConnectRequestParameters(null);
 ```
 
-如果您的 tonProof 有效载荷有一定的生命周期，您可以多次调用 `tonConnectUI.setConnectRequestParameters` （例如，您可以每 10 分钟刷新一次连接请求参数）。
+You can call `tonConnectUI.setConnectRequestParameters` multiple times if your tonProof payload has a bounded lifetime. For instance, you can refresh connect request parameters every 10 minutes.
 
 ```ts
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 // enable ui loader
 tonConnectUI.setConnectRequestParameters({ state: 'loading' });
@@ -426,13 +449,13 @@ if (!tonProofPayload) {
 
 ```
 
-连接钱包后，您可以在钱包对象中找到 `ton_proof` 结果：
+You can find the `ton_proof` result in the `wallet` object when the wallet is connected:
 
 ```ts
 import { ref, onMounted } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 onMounted(() =>
     tonConnectUI.onStatusChange(wallet => {
@@ -442,48 +465,55 @@ onMounted(() =>
 }));
 ```
 
-### 钱包断线
+### Wallet disconnection
 
-调用以断开钱包连接：
+Call to disconnect the wallet:
 
 ```js
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const [tonConnectUI] = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 await tonConnectUI.disconnect();
 ```
 
-## 故障排除
+## Troubleshooting
 
-### 动画不工作
+### Animations not working
 
-如果您遇到动画无法在您的环境中运行的问题，可能是因为缺乏对 Web Animations API 的支持。要解决这个问题，您可以使用 `web-animations-js` 填充。
+If you are experiencing issues with animations not working in your environment, it might be due to a lack of support for the Web Animations API. To resolve this issue, you can use the `web-animations-js` polyfill.
 
-#### 使用 npm
+#### Using npm
 
-要安装 polyfill，请运行以下命令：
+To install the polyfill, run the following command:
 
 ```shell
 npm install web-animations-js
 ```
 
-然后，在项目中导入 polyfill：
+Then, import the polyfill into your project:
 
 ```typescript
 import 'web-animations-js';
 ```
 
-#### 使用 CDN
+#### Using CDN
 
-或者，您也可以通过 CDN 添加以下脚本标签到 HTML 中，从而包含 polyfill 功能：
+Alternatively, you can include the polyfill via CDN by adding the following script tag to your HTML:
 
 ```html
 <script src="https://www.unpkg.com/web-animations-js@latest/web-animations.min.js"></script>
 ```
 
-这两种方法都将提供 Web Animations API 的后备实现，并应能解决您所面临的动画问题。
+Both methods will provide a fallback implementation of the Web Animations API and should resolve your animation issues.
 
-## 实例
+## Examples
 
-- [Demo dApp](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui) - 使用 `@townsquarelabs/ui-vue`的 DApp 示例。
+- [Demo dApp](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui) - Example of a dApp with `@townsquarelabs/ui-vue`.
+
+## See also
+
+- [TON Connect for React apps](/v3/guidelines/ton-connect/frameworks/react/)
+- [TON Connect for HTML/JS apps](/v3/guidelines/ton-connect/frameworks/web/)
+
+<Feedback />
