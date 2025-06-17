@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        lang: [ru, en, ja, ko, zh-cn]
+        lang: [ru] # , en, ja, ko, zh-cn
 
     steps:
       - name: Checkout branch
@@ -21,6 +21,7 @@ jobs:
       - name: Download translations from Crowdin
         uses: crowdin/github-action@v2
         with:
+          config: crowdin-oss.yml
           download_translations: true
           download_language: ${{  github.event.inputs.language }}
           crowdin_branch_name: release-candidate-${{ matrix.lang }}
