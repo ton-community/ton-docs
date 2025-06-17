@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -13,9 +15,9 @@ import TabItem from '@theme/TabItem';
 Существует 3 типа сообщений, которые полностью описаны [здесь](/v3/documentation/smart-contracts/message-management/sending-messages#types-of-messages). Если коротко:
 
 - [внешнее сообщение](/v3/documentation/smart-contracts/message-management/external-messages):
-  - `external in message` (иногда называемое просто `external message`) — это сообщение, которое отправляется из *вне* блокчейна в смарт-контракт *внутри* блокчейна.
-  - `external out message` (обычно называемое `logs message`) отправляется из *сущности блокчейна* во *внешний мир*.
-- [внутреннее сообщение](/v3/documentation/smart-contracts/message-management/internal-messages) отправляется из одной *сущности блокчейна* в *другую*, может нести некоторое количество цифровых активов и произвольную часть данных.
+  - `external in message` (иногда называемое просто `external message`) — это сообщение, которое отправляется из _вне_ блокчейна в смарт-контракт _внутри_ блокчейна.
+  - `external out message` (обычно называемое `logs message`) отправляется из _сущности блокчейна_ во _внешний мир_.
+- [внутреннее сообщение](/v3/documentation/smart-contracts/message-management/internal-messages) отправляется из одной _сущности блокчейна_ в _другую_, может нести некоторое количество цифровых активов и произвольную часть данных.
 
 Стандартный формат любого взаимодействия начинается с отправки внешнего сообщения на смарт-контракт `wallet`. Он, в свою очередь, аутентифицирует отправителя сообщения с помощью криптографии с открытым ключом, берет на себя оплату комиссии и отправляет внутренние сообщения блокчейна. Эта очередь сообщений образует направленный ациклический граф или дерево.
 
@@ -39,7 +41,7 @@ import TabItem from '@theme/TabItem';
 Транзакции TON необратимы после всего лишь одного подтверждения. Для лучшего пользовательского опыта рекомендуется избегать ожидания дополнительных блоков после завершения транзакций в блокчейне TON. Подробнее читайте в [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
 :::
 
-Смарт-контракты выплачивают несколько видов [комиссий](/v3/documentation/smart-contracts/transaction-fees/fees) за транзакции. Обычно они вычитаются с баланса входящего сообщения. Формат работы зависит от [режима работы сообщений](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).Размер комиссий напрямую зависит от конфигурации воркчейна – с максимальными комиссиями в `masterchain` и существенно более низкими комиссиями в `basechain`.
+Смарт-контракты выплачивают несколько видов [комиссий](/v3/documentation/smart-contracts/transaction-fees/fees) за транзакции. Обычно они вычитаются с баланса входящего сообщения. Amount of fees depends on workchain configs with maximal fees on `masterchain` and substantially lower fees on `basechain`.
 
 ## Типы цифровых активов на TON
 
@@ -51,7 +53,7 @@ TON имеет три типа цифровых активов.
 
 ## Взаимодействие с блокчейном TON
 
-Основные операции в блокчейне TON можно выполнять через TonLib. Это общая библиотека, которая может быть скомпилирована вместе с узлом TON и предоставлять API для взаимодействия с блокчейном через так называемые lite server (серверы для lite clients).TonLib следует подходу без доверия, проверяя доказательства для всех входящих данных. Таким образом, при взаимодействии нет необходимости в доверенном поставщике данных.Методы, доступные TonLib, перечислены [в схеме TL](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L234). Их можно использовать как общую библиотеку через [обертки](/v3/guidelines/dapps/asset-processing/payments-processing/#sdks).
+Основные операции в блокчейне TON можно выполнять через TonLib. Это общая библиотека, которая может быть скомпилирована вместе с узлом TON и предоставлять API для взаимодействия с блокчейном через так называемые lite server (серверы для lite clients).TonLib следует подходу без доверия, проверяя доказательства для всех входящих данных. TonLib follows a trustless approach by checking proofs for all incoming data; thus, there is no necessity for a trusted data provider. Methods available to TonLib are listed [in the TL scheme](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L234). Их можно использовать как общую библиотеку через [обертки](/v3/guidelines/dapps/asset-processing/payments-processing/#sdks).
 
 ## Читать далее
 
@@ -60,3 +62,6 @@ TON имеет три типа цифровых активов.
 1. [Обработка платежей](/v3/guidelines/dapps/asset-processing/payments-processing), чтобы узнать, как работать с `TON coins`
 2. [Обработка жетонов](/v3/guidelines/dapps/asset-processing/jettons), чтобы узнать, как работать с `jettons` (иногда называемыми `tokens`)
 3. [Обработка NFT](/v3/guidelines/dapps/asset-processing/nft-processing/nfts), чтобы узнать, как работать с NFT (это особый тип  `jetton`)
+
+<Feedback />
+
