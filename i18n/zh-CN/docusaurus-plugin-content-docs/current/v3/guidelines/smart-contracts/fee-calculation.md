@@ -1,10 +1,14 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 费用计算
 
-当您的合约开始处理收到的报文时，您应该检查报文所附的 TON 数，以确保它们足以支付[所有类型的费用](/v3/documentation/smart-contracts/transaction-fees/fees#elements-of-transaction-fee)。为此，您需要计算（或预测）当前交易的费用。
+## 参数
+
+当您的合约开始处理收到的报文时，您应该检查报文所附的 TON 数，以确保它们足以支付[所有类型的费用](/v3/documentation/smart-contracts/transaction-fees/fees#elements-of-transaction-fee)。为此，您需要计算（或预测）当前交易的费用。 To achieve this, you need to calculate (or predict) the fee for the current transaction.
 
 本文档描述了如何使用新的 TVM 操作码 (opcode) 计算FunC 合约的费用。
 
-:::info 有关操作码的更多信息
+:::info opcodes
 有关 TVM 操作码（包括下面提到的操作码）的完整列表，请查看 [TVM 指令页面](/v3/documentation/tvm/instructions)。
 :::
 
@@ -12,7 +16,7 @@
 
 ### 概述
 
-简而言之，`存储费` 是您为在区块链上存储智能合约而支付的费用。智能合约在区块链上存储的每一秒都需要付费。
+简而言之，`存储费` 是您为在区块链上存储智能合约而支付的费用。智能合约在区块链上存储的每一秒都需要付费。 You pay for every second the smart contract remains stored on the blockchain.
 
 使用带有以下参数的 `GETSTORAGEFEE` 操作码：
 
@@ -22,16 +26,13 @@
 | bits                       | 合约位数                |
 | is_mc | 如果源或目标位于主链中，则为 True |
 
-:::info 存储和转发费用只计算唯一的哈希 cell ，即 3 个相同的哈希 cell 算作一个。
-
-特别是，它可以重复数据：如果在不同分支中引用了多个等效子 cell ，则其内容只需存储一次。
-
-[有关重复数据删除的更多信息](/v3/documentation/data-formats/ltb/library-cells)。
+:::info
+存储和转发费用只计算唯一的哈希 cell ，即 3 个相同的哈希 cell 算作一个。 For example, it counts three identical hash cells as one. This mechanism deduplicates data by storing the content of multiple equivalent sub-cells only once, even if they are referenced across different branches. [有关重复数据删除的更多信息](/v3/documentation/data-formats/ltb/library-cells)。
 :::
 
 ### 计算流程
 
-每份合约都有余额。您可以使用函数计算在指定的 "秒 "时间内，您的合约需要多少 TON 才能继续有效：
+Each contract has its balance. 每份合约都有余额。您可以使用函数计算在指定的 "秒 "时间内，您的合约需要多少 TON 才能继续有效：
 
 ```func
 int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
@@ -61,7 +62,7 @@ const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 }
 ```
 
-如果 `storage_fee` 是硬编码，**记得在合约更新过程中更新它**。并非所有合约都支持更新，因此这是一个可选要求。
+如果 `storage_fee` 是硬编码，**记得在合约更新过程中更新它**。并非所有合约都支持更新，因此这是一个可选要求。 Not all contracts support updates, so this is an optional requirement.
 
 ## 计算费
 
@@ -69,7 +70,7 @@ const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 
 在大多数情况下，使用带有以下参数的 `GETGASFEE` 操作码：
 
-| 参数         | 说明                  |
+| Param      | 说明                  |
 | :--------- | :------------------ |
 | `gas_used` | gas 量，在测试中计算并硬编码    |
 | `is_mc`    | 如果源或目标位于主链中，则为 True |
@@ -80,7 +81,7 @@ const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 int get_compute_fee(int workchain, int gas_used) asm(gas_used workchain) "GETGASFEE";
 ```
 
-但如何获取 `gas_used` 呢？通过测试！
+但如何获取 `gas_used` 呢？通过测试！ Through testing!
 
 要计算 `gas_used`，您应该为合约编写一个测试：
 
@@ -88,7 +89,7 @@ int get_compute_fee(int workchain, int gas_used) asm(gas_used workchain) "GETGAS
 2. 检查是否成功，并检索传输信息。
 3. 检查该传输实际使用的 gas 量，以便计算。
 
-合约的计算流程可能取决于输入数据。您应该以这种方式运行合约，以尽可能多地使用 gas 。确保使用最昂贵的计算方式来计算合约
+The contract's computation flow can depend on input data. 合约的计算流程可能取决于输入数据。您应该以这种方式运行合约，以尽可能多地使用 gas 。确保使用最昂贵的计算方式来计算合约 Ensure you are using the most computationally expensive path to test the contract.
 
 ```ts
 // Just Init code
@@ -176,28 +177,24 @@ send_gas_fee = printTxGasStats("Jetton transfer", transferTx);
 | bits                       | 位数                  |
 | is_mc | 如果源或目标位于主链中，则为 True |
 
-:::info 存储和转发费用只计算唯一的哈希 cell ，即 3 个相同的哈希 cell 算作一个。
-
-特别是，它可以重复数据：如果在不同分支中引用了多个等效 sub-cells，则其内容只需存储一次。
-
-[有关重复数据删除的更多信息](/v3/documentation/data-formats/ltb/library-cells)。
+:::info
+存储和转发费用只计算唯一的哈希 cell ，即 3 个相同的哈希 cell 算作一个。 For example, it counts three identical hash cells as one. 特别是，它可以重复数据：如果在不同分支中引用了多个等效 sub-cells，则其内容只需存储一次。 [有关重复数据删除的更多信息](/v3/documentation/data-formats/ltb/library-cells)。
 :::
 
-但是，有时发出的报文在很大程度上取决于收到的结构，在这种情况下，您无法完全预测费用。请尝试使用带有以下参数的 `GETORIGINALFWDFEE` 操作码：
+但是，有时发出的报文在很大程度上取决于收到的结构，在这种情况下，您无法完全预测费用。请尝试使用带有以下参数的 `GETORIGINALFWDFEE` 操作码： 如果连 `GETORIGINALFWDFEE` 都无法使用，还有一个选择。使用带有以下参数的 `SENDMSG` 操作码：
 
 | 参数名称                         | 说明                  |
 | :--------------------------- | :------------------ |
 | fwd_fee | 从接收到的信息中解析出来        |
 | is_mc   | 如果源或目标位于主链中，则为 True |
 
-:::caution 小心使用 `SENDMSG` 操作码
-
-它使用的 gas 量**无法预测**。
-
-非必要不使用
+:::caution
+Be careful with the `SENDMSG` opcode, as it uses an **unpredictable amount** of gas. 非必要不使用
 :::
 
-如果连 `GETORIGINALFWDFEE` 都无法使用，还有一个选择。使用带有以下参数的 `SENDMSG` 操作码：
+The `SENDMSG` opcode is the least optimal way to calculate fees, but it is better than not checking.
+
+If even `GETORIGINALFWDFEE` cannot be used, one more option exists. 小心使用 `SENDMSG` 操作码
 
 | 参数名称  | 说明     |
 | :---- | :----- |
@@ -206,12 +203,12 @@ send_gas_fee = printTxGasStats("Jetton transfer", transferTx);
 
 模式对费用计算的影响如下：
 
-- `+1024` 不创建行动，只估算费用。其他模式将在行动阶段发送信息。
-- `+128` 代替了计算阶段开始前合约全部余额的价值（略有不准确，因为在计算阶段结束前无法估算的 gas 费用没有考虑在内）。
-- `+64` 将接收信息的全部余额替换为输出值（略有误差，因为计算完成前无法估算的 gas 费用不会计算在内）。
+- `+1024` 不创建行动，只估算费用。其他模式将在行动阶段发送信息。 Other modes will send a message during the action phase.
+- **`+128`**: This mode substitutes the value of the entire contract balance before the computation phase begins. This is slightly inaccurate because gas expenses, which cannot be estimated before the computation phase, are excluded.
+- **`+64`**: This mode substitutes the entire balance of the incoming message as the outgoing value. This is also slightly inaccurate, as gas expenses that cannot be estimated until the computation is completed are excluded.
 - 其他模式见 [信息模式页面](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes)。
 
-它创建一个输出操作，并返回创建信息的费用。但是，它使用的 gas 量无法预测，无法用公式计算，那么如何计算呢？使用 `GASCONSUMED`：
+It creates an output action and returns the fee for creating a message. However, it uses an unpredictable amount of gas, which cannot be calculated using formulas. To measure gas usage, use `GASCONSUMED`:
 
 ```func
 int send_message(cell msg, int mode) impure asm "SENDMSG";
@@ -231,3 +228,6 @@ int gas_consumed() asm "GASCONSUMED";
 ## 另请参见
 
 - [带费用计算的稳定币合约](https://github.com/ton-blockchain/stablecoin-contract)
+
+<Feedback />
+
