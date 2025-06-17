@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 小贴士和技巧
 
 在本页中，您将找到一系列与TMA中常见问题相关的常见问题解答。
@@ -5,13 +7,13 @@
 ### 如何解决 TMA 中的缓存溢出问题？
 
 :::tip
-只有重新安装Telegram应用程序可能会有所帮助。
+Reinstalling the Telegram application is the only effective solution.
 :::
 
 ### 有关 HTML 文件的缓存头部是否有任何推荐？
 
 :::tip
-It's preferable to switch off cache in the HTML. To ensure your cache switched off, specify headers in your request according the following:
+It’s best to disable caching in HTML files. To ensure caching is turned off, specify the following headers in your request:
 
 ```curl
 Cache-Control: no-store, must-revalidate
@@ -29,7 +31,7 @@ Expires: 0
 
 ### 结束行为
 
-在许多Web应用程序中，用户在向上滚动时可能会无意中关闭应用。如果他们将应用程序的一个部分拖得太远，无意中触发了应用关闭，就会发生这种情况。
+在许多Web应用程序中，用户在向上滚动时可能会无意中关闭应用。如果他们将应用程序的一个部分拖得太远，无意中触发了应用关闭，就会发生这种情况。 This can happen if they drag a section of the app too far, inadvertently triggering its closure.
 
 <p align="center">
     <br />
@@ -37,7 +39,7 @@ Expires: 0
     <br />
 </p>
 
-为了防止这种意外关闭，启用TMA中的`closing_behavior`。这个方法会添加一个对话框，用户可以批准或拒绝关闭Web应用。
+为了防止这种意外关闭，启用TMA中的`closing_behavior`。这个方法会添加一个对话框，用户可以批准或拒绝关闭Web应用。 This method adds a confirmation dialog, where the user can either approve or decline closing of the Web App.
 
 ```typescript
 window.Telegram.WebApp.enableClosingConfirmation()
@@ -46,9 +48,11 @@ window.Telegram.WebApp.enableClosingConfirmation()
 ## 如何为 TMA 中特定语言指定描述？
 
 :::tip
-You can configure your description with following methods:
+Use the following methods to configure descriptions in different languages:
 
 - https://core.telegram.org/bots/api#setmydescription
 - https://core.telegram.org/bots/api#setmyshortdescription
 
 :::
+
+<Feedback />
