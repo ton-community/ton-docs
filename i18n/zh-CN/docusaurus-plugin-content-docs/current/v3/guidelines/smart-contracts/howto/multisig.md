@@ -2,15 +2,18 @@
 description: 本教程结束时，您将在TON区块链上部署了多签合约。
 ---
 
+import Feedback from '@site/src/components/Feedback';
+
 # 如何制作一个简单的多签合约
 
 :::caution 高级模式
-这些信息是**非常低级的**。新手可能难以理解，专为希望了解 [fift](/v3/documentation/smart-contracts/fift/overview) 的高级人员设计。日常工作中不需要使用 fift。
+This information is **very low-level**. 这些信息是**非常低级的**。新手可能难以理解，专为希望了解 [fift](/v3/documentation/smart-contracts/fift/overview) 的高级人员设计。日常工作中不需要使用 fift。 The use of fift is not required in everyday tasks.
 :::
 
 ## 💡 概览
 
-基于akifoq对原始多签合约代码的更新：
+This tutorial helps you learn how to deploy your multisig contract.\
+Recall that an (n, k)-multisig contract is a multisignature wallet with n private key holders, which accepts requests to send messages if the request (aka order, query) collects at least k holders' signatures.
 
 基于akifoq对原始多签合约代码的更新：
 
@@ -18,7 +21,7 @@ description: 本教程结束时，您将在TON区块链上部署了多签合约�
 - [akifoq/multisig](https://github.com/akifoq/multisig)，带有fift库以使用多签。
 
 :::tip 初学者提示
-对多签不熟悉的人可以看：[什么是多签技术？(视频)](https://www.youtube.com/watch?v=yeLqe_gg2u0)
+For anyone new to multisig: [What is Multisig Technology? (video)](https://www.youtube.com/watch?v=yeLqe_gg2u0)
 :::
 
 ## 📖 您将学到什么
@@ -82,15 +85,15 @@ fift -s new-key.fif multisig_key
 Public key = Pub5XqPLwPgP8rtryoUDg2sadfuGjkT4DLRaVeIr08lb8CB5HW
 ```
 
-让我们将其存储在`keys.txt`文件中。每行一个公钥，这很重要。
+Anything after `"Public key = "` needs to be saved somewhere!
 
-让我们将其存储在`keys.txt`文件中。每行一个公钥，这很重要。
+让我们将其存储在`keys.txt`文件中。每行一个公钥，这很重要。 It's important to have one public key per line.
 
-### 通过轻客户端部署
+### 创建请求
 
 #### 通过轻客户端部署
 
-例如：
+让我们将其存储在`keys.txt`文件中。每行一个公钥，这很重要。
 
 例如：
 
@@ -105,11 +108,11 @@ PubH821csswh8R1uO9rLYyP1laCpYWxhNkx+epOkqwdWXgzY4
 fift -s new-multisig.fif 0 $WALLET_ID$ wallet $KEYS_COUNT$ ./keys.txt
 ```
 
-- `$WALLET_ID$` - 分配给当前密钥的钱包号。对于每个使用相同密钥的新钱包，建议使用唯一的`$WALLET_ID$`。
+- `$WALLET_ID$` - the wallet number assigned for the current key. It is recommended that each new wallet with the same key use a unique `$WALLET_ID$`.
 - `$KEYS_COUNT$` - 确认所需的密钥数量，通常等于公钥数量
 
 :::info wallet_id 解释
-使用相同的密钥（Alice密钥，Bob密钥）可以创建许多钱包。如果Alice和Bob已经有treasure怎么办？这就是为什么`$WALLET_ID$`在这里至关重要。
+使用相同的密钥（Alice密钥，Bob密钥）可以创建许多钱包。如果Alice和Bob已经有treasure怎么办？这就是为什么`$WALLET_ID$`在这里至关重要。 What should we do if Alice and Bob already have a treasure? That's why `$WALLET_ID$` is crucial here.
 :::
 
 脚本将输出类似于以下的内容：
@@ -127,7 +130,7 @@ Bounceable address (for later access): kQBLuyZgCX21xy3V6QhhFQEPD4yFAeC4_vH-MY2d5
 ```
 
 :::info
-最好保留可弹回地址 - 这是钱包的地址。
+If you have a "public key must be 48 characters long" error, please make sure your `keys.txt` has a Unix-type word wrap - LF. For example, word wrap can be changed via the Sublime text editor.
 :::
 
 :::tip
@@ -136,7 +139,7 @@ Bounceable address (for later access): kQBLuyZgCX21xy3V6QhhFQEPD4yFAeC4_vH-MY2d5
 
 #### 激活您的合约
 
-之后，您需要运行轻客户端：
+You need to send some TON to our newly generated _treasure_. For example, 0.5 TON. You can send testnet coins via [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
 
 之后，您需要运行轻客户端：
 
@@ -154,9 +157,9 @@ lite-client -C global.config.json
 time
 ```
 
-之后，您需要部署钱包。运行命令：
+Okay, lite-client works!
 
-之后，您需要部署钱包。运行命令：
+之后，您需要部署钱包。运行命令： Run the command:
 
 ```
 sendfile ./wallet-create.boc
@@ -164,7 +167,7 @@ sendfile ./wallet-create.boc
 
 之后，钱包将在一分钟内准备好可供使用。
 
-### 创建请求
+### Interact with a multisig wallet
 
 #### 创建请求
 
@@ -185,7 +188,7 @@ fift -s create-msg.fif EQApAj3rEnJJSxEjEHVKrH3QZgto_MQMOmk8l72azaXlY1zB 0.1 mess
 ```
 
 :::tip
-要为您的交易添加评论，请使用`-C comment`属性。要获取更多信息，请在没有参数的情况下运行_create-msg.fif_文件。
+Use the `-C comment` attribute to add a comment for your transaction. 要为您的交易添加评论，请使用`-C comment`属性。要获取更多信息，请在没有参数的情况下运行_create-msg.fif_文件。
 :::
 
 #### 选择钱包
@@ -196,14 +199,14 @@ fift -s create-msg.fif EQApAj3rEnJJSxEjEHVKrH3QZgto_MQMOmk8l72azaXlY1zB 0.1 mess
 fift -s create-order.fif $WALLET_ID$ $MESSAGE$ -t $AWAIT_TIME$
 ```
 
-其中
+Where
 
 - `$WALLET_ID$` — 是由此多签合约支持的钱包的ID。
 - `$AWAIT_TIME$` — 智能合约将等待多签钱包所有者对请求签名的时间（以秒为单位）。
 - `$MESSAGE$` — 上一步中创建的消息boc文件的名称。
 
 :::info
-如果在请求得到签名之前，时间等于`$AWAIT_TIME$`这样的条件已经过去了，请求将过期。通常，$AWAIT_TIME$等于几个小时（7200秒）
+如果在请求得到签名之前，时间等于`$AWAIT_TIME$`这样的条件已经过去了，请求将过期。通常，$AWAIT_TIME$等于几个小时（7200秒） As usual, `$AWAIT_TIME$` equals a couple of hours (7200 seconds).
 :::
 
 例如：
@@ -243,7 +246,7 @@ fift -s add-signature.fif multisig_key 0
 fift -s create-external-message.fif wallet $KEY$ $KEY_INDEX$
 ```
 
-例如：
+In this case, only one sign of the wallet's owner will be enough. The idea is that you can't attack a contract with invalid signatures.
 
 例如：
 
@@ -259,16 +262,19 @@ fift -s create-external-message.fif wallet multisig_key 0
 lite-client -C global.config.json
 ```
 
-最后，我们要发送我们的签名！只需运行：
+最后，我们要发送我们的签名！只需运行： Just run:
 
 ```bash
 sendfile wallet-query.boc
 ```
 
-您做到了，哈哈！🚀🚀🚀
+If everyone else signed the request, it will be completed!
 
-您做到了，哈哈！🚀🚀🚀
+您做到了，哈哈！🚀🚀🚀 🚀🚀🚀
 
-## 接下来
+## See also
 
 - [阅读更多关于TON中多签钱包的信息](https://github.com/akifoq/multisig)，来自akifoq。
+- `$WALLET_ID$` - 分配给当前密钥的钱包号。对于每个使用相同密钥的新钱包，建议使用唯一的`$WALLET_ID$`。
+
+<Feedback />
