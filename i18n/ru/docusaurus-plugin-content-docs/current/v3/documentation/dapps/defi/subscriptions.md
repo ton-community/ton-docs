@@ -1,8 +1,6 @@
-# Подписки на контент
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Подписки на контент
 
 Благодаря тому, что транзакции в блокчейне TON выполняются быстро, а сетевые сборы низкие, вы можете обрабатывать повторяющиеся платежи on-chain с помощью смарт-контрактов.
 
@@ -37,6 +35,7 @@ Subscription contract requires authorization exactly once, on installation; then
 - [Исходный код смарт-контракта Wallet v4](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc)
 - [Исходный код смарт-контракта Subscription](https://github.com/ton-blockchain/wallet-contract/blob/main/func/simple-subscription-plugin.fc)
 
-## Реализация
+## Implementation
 
-Хорошим примером реализации являются децентрализованные подписки на Toncoin на приватные каналы в Telegram с помощью бота [@donate](https://t.me/donate) и кошелька [Tonkeeper](https://tonkeeper.com).
+Хорошим примером реализации являются децентрализованные подписки на Toncoin на приватные каналы в Telegram с помощью бота [@donate](https://t.me/donate) и кошелька [Tonkeeper](https://tonkeeper.com). <Feedback />
+
