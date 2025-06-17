@@ -1,216 +1,224 @@
-# 智能合约地址
+import Feedback from '@site/src/components/Feedback';
 
-本节将描述TON区块链上智能合约地址的特点，并解释在TON上，actor与智能合约是如何等同的。
+# Smart contract addresses
 
-## 一切皆为智能合约
+This section describes the specifics of smart contract addresses on the TON Blockchain. It also explains how actors are synonymous with smart contracts on TON.
 
-在TON上，智能合约是使用[Actor模型](/learn/overviews/ton-blockchain#single-actor)构建的。实际上，在TON中的actor在技术上是以智能合约的形式表示的。这意味着，即使您的钱包也是一个简单的actor（以及一个智能合约）。
+## Everything is a smart contract
 
-通常，actor处理传入消息，改变其内部状态，并生成传出消息。这就是为什么TON区块链上的每一个actor（即智能合约）都必须有一个地址，以便能够从其他actor接收消息。
+On TON, smart contracts are built using the [Actor model](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor). In fact, actors on TON are technically represented as smart contracts. This means that even your wallet is a simple actor (and a smart contract).
 
-:::info 以太坊虚拟机(EVM)
-在以太坊虚拟机(EVM)上，地址与智能合约完全分离。欢迎阅读Tal Kol的文章["TON 区块链的六个独特之处，会让 Solidity 开发者感到惊讶"](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers) 了解更多差异。
+Typically, actors process incoming messages, change their internal states, and generate outbound messages as a result. That's why every actor (i.e., smart contract) on TON Blockchain must have an address, so it can receive messages from other actors.
+
+:::info EVM EXPERIENCE
+On the Ethereum Virtual Machine (EVM), addresses are completely separate from smart contracts. Feel free to learn more about the differences by reading our article ["Six unique aspects of TON Blockchain that will surprise Solidity developers"](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers) - _Tal Kol_.
 :::
 
-## 智能合约的地址
+## Address of smart contract
 
-在TON上运行的智能合约地址通常包含两个主要组成部分：
+Smart contract addresses on TON typically consist of two main components:
 
-- **(workchain_id)**：代表工作链ID（一个有符号的32位整数）
+- **(workchain_id)**: Denotes the workchain ID (a signed 32-bit integer)
 
-- **(account_id)** 代表账户的地址（根据工作链不同，为64-512位，）
+- **(account_id)** Denotes the address of the account (64-512 bits, depending on the workchain)
 
-在本文档的原始地址概述部分，我们将讨论\*\*(workchain_id, account_id)\*\* 是如何呈现。
+In the raw address overview section of this documentation, we'll discuss how  **(workchain_id, account_id)** pairs are presented.
 
-### 工作链ID和账户ID
+### WorkChain ID and Account ID
 
-#### 工作链ID
+#### Workchain ID
 
-[正如我们之前所见](/learn/overviews/ton-blockchain#workchain-blockchain-with-your-own-rules)，在TON区块链上可以创建多达`2^32`个工作链。我们还注意到，32位前缀的智能合约地址用于识别并链接到不同工作链中的智能合约地址。这允许智能合约在TON区块链的不同工作链之间发送和接收消息。
+[As we've seen before](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules), it is possible to create as many as `2^32` workchains operating on TON Blockchain. We also noted how 32-bit prefix smart contract addresses identify and are linked to smart contract addresses within different workchains. This allows smart contracts to send and receive messages to and from different workchains on TON Blockchain.
 
-如今，TON区块链中仅运行主链（workchain_id=-1）和不定期地运行基本工作链（workchain_id=0）。
+Nowadays, only the Masterchain (workchain_id=-1) and occasionally the basic workchain (workchain_id=0) are running in TON Blockchain.
 
-它们都有256位地址，因此，我们假设workchain_id是0或-1，工作链中的地址正好是256位。
+Both of them have 256-bit addresses, therefore, we assume that the workchain_id is either 0 or -1, and the address within the workchain is precisely 256 bits.
 
-#### 账户ID
+#### Account ID
 
-TON的所有账户ID都在主链和基本链（或基本工作链）上使用256位地址。
+All account IDs on TON use 256-bit addresses on the Masterchain and Basechain (also referred to as the basic workchain).
 
-实际上，账户ID **(account_id)** 被定义为智能合约对象的哈希函数（专指SHA-256）。每个在TON区块链上运行的智能合约都存储两个主要组件。这些包括：
+In fact, an Account ID (**account_id**) is defined as the result of applying a hash function (specifically SHA-256) to a smart contract object. Every smart contract operating on the TON Blockchain stores two main components:
 
-1. *编译后的代码*。智能合约的逻辑以字节码形式编译。
-2. *初始状态*。合约在链上部署时的值。
+1. _Compiled code_. The logic of the smart contract, compiled into bytecode.
+2. _Initial state_. The contract's values at the moment it is deployed on-chain.
 
-最后，为了准确地推导出合约的地址，需要计算与\*\*（初始代码，初始状态）\*\* 对象相对应的哈希。目前，我们不会深入研究[TVM](/learn/tvm-instructions/tvm-overview)的工作方式，但重要的是要理解TON上的账户ID是使用这个公式确定的：
-:
-**account_id = hash（初始代码，初始状态）**
+To derive the contract's address, you calculate the hash of the **(Initial code, Initial state)** pair. We won’t explore how the [TVM](/v3/documentation/tvm/tvm-overview) works at this time, but it is important to understand that account IDs on TON follow this formula:
 
-随着本文档的深入，我们将进一步深入技术规格和TVM及TL-B方案的概述。现在我们熟悉了**account_id**的生成以及它们与TON上智能合约地址的交互，接下来让我们解释什么是原始地址和用户友好地址。
+**account_id = hash(initial code, initial state)**
 
-## 原始地址和用户友好地址
+Later in this documentation, we will dive deeper into the technical specifications of the TVM and TL-B scheme. Now that we are familiar with how the **account_id** is generated and how it interacts with smart contract addresses on TON, let’s discuss Raw and User-Friendly addresses.
 
-在简要概述了TON上的智能合约地址是如何利用工作链和账户ID（特别是对于主链和基本链）之后，那重要的是要理解这些地址以下面两种主要格式表示：
+## Addresses state
 
-- **原始地址**：智能合约地址的原始完整表示。
-- **用户友好地址**：用户友好地址是原始地址的增强格式，有更好的安全性和易用性。
-- `active` - 地址拥有智能合约代码、持久数据和余额。在此状态下，它可以在交易过程中执行一些逻辑，并更改其持久数据。当地址处于 `uninit` 状态，且有带 state_init 参数的消息传入时，它就会进入此状态（注意，要部署此地址， `state_init` 和 `code` 的哈希值必须等于地址）。
-- `frozen` - 地址不能执行任何操作，此状态只包含前一状态的两个哈希值（分别是代码 cell 和状态 cell ）。当地址的存储费用超过余额时，就会进入这种状态。要解冻它，可以发送带有 `state_init` 和 `code` 的内部信息，其中存储了前面描述的哈希值和一些 Toncoin。要恢复它可能会很困难，所以你不应该允许这种情况发生。有一个解冻地址的项目，你可以在 [这里](https://unfreezer.ton.org/) 找到。
+Each address can be in one of possible states:
 
-## 简单易用的地址
+- `nonexist` - there were no accepted transactions on this address, so it doesn't have any data (or the contract was deleted). We can say that initially all 2<sup>256</sup> address are in this state.
+- `uninit` - address has some data, which contains balance and meta info. At this state address doesn't have any smart contract code/persistent data yet. An address enters this state, for example, when it was in a nonexist state, and another address sent tokens to it.
+- `active` - address has smart contract code, persistent data and balance. At this state it can perform some logic during the transaction and change its persistent data. An address enters this state when it was `uninit` and there was an incoming message with state_init param (note, that to be able to deploy this address, hash of `state_init` and `code` must be equal to address).
+- `frozen` - address cannot perform any operations, this state contains only two hashes of the previous state (code and state cells respectively). When an address's storage charge exceeds its balance, it goes into this state. To unfreeze it, you can send an internal message with `state_init` and `code` which store the hashes described earlier and some Toncoin. It can be difficult to recover it, so you should not allow this situation. There is a project to unfreeze the address, which you can find [here](https://unfreezer.ton.org/).
 
-在简要介绍了 TON 上的智能合约地址如何利用工作链和账户 ID（具体针对主链和底层链）之后，我们有必要了解这些地址主要有两种格式：
+## Raw and user-friendly addresses
 
-- **原始地址**：智能合约地址的原始完整表示。
-- **用户友好地址**：用户友好地址是一种原始地址的增强格式，具有更好的安全性和易用性。
+After providing a brief overview of how smart contract addresses on TON leverage workchains and account IDs (for the Masterchain and Basechain specifically), it is important to understand that these addresses are expressed in two main formats:
 
-下面，我们将详细介绍这两种地址类型的区别，并深入探讨 TON 使用用户友好地址的原因。
+- **Raw addresses**: Original full representation of smart contract addresses.
+- **User-friendly addresses**: User-friendly addresses are an enhanced format of raw address that employ better security and ease of use.
 
-### 原始地址
+Below, we’ll explain more about the differences between these two address types and dive deeper into why user-friendly addresses are used on TON.
+
+### Raw address
+
+Raw smart contract addresses consist of a workchain ID and account ID _(workchain_id, account_id)_ and are displayed in the following format:
+
+- [decimal workchain_id\]:[64 hexadecimal digits with account_id\]
+
+Provided below, is an example of a raw smart contract address using a  workchain ID and account ID together (expressed as **workchain_id** and **account_id**):
 
 `-1:fcb91a3a3816d0f7b8c2c76108b8a9bc5a6b7a55bd79f8ab101c52db29232260`
 
-- [十进制workchain_id\]：[64个十六进制数字的account_id\]
-
-以下是一个使用工作链ID和账户ID的原始智能合约地址示例（表示为**workchain_id**和**account_id**）：
-
-`-1:fcb91a3a3816d0f7b8c2c76108b8a9bc5a6b7a55bd79f8ab101c52db29232260`
-
-使用原始地址形式存在两个主要问题：
+Notice the `-1` at the start of the address string, which denotes a _workchain_id_ that belongs to the Masterchain.
 
 :::note
-地址字符串中可以使用大写字母（如 'A'、'B'、'C'、'D'等）替代其小写的对应字母（如 'a'、'b'、'c' 'd'等）。
+Uppercase letters (such as 'A', 'B', 'C', 'D' etc.) may be used in address strings instead of their lowercase counterparts (such as 'a', 'b', 'c', 'd' etc.).
 :::
 
-#### 用户友好地址
+#### Issues with raw addresses
 
-用户友好地址是为了保护和简化在互联网上（例如，在公共消息平台上或通过电子邮件服务提供商）以及现实世界中分享地址的TON用户的体验而开发的。
+Using the Raw Address form presents two main issues:
 
-1. 在使用原始地址格式时，无法在发送交易前验证地址以消除错误。
-   这意味着，如果您在发送交易前不小心在地址字符串中添加或删除字符，您的交易将被发送到错误的目的地，导致资金损失。
-2. 在使用原始地址格式时，无法添加像使用用户友好地址时发送交易所用的特殊标志位。
-   为了帮助您更好地理解这个概念，我们将在下面解释可以使用哪些标志位。
+1. When using the raw address format, it's not possible to verify addresses to eliminate errors prior to sending a transaction.
+   This means that if you accidentally add or remove characters in the address string prior to sending the transaction, your transaction will be sent to the wrong destination, resulting in loss of funds.
+2. When using the raw address format, it's impossible to add special flags like those used when sending transactions that employ user-friendly addresses.
+   To help you better understand this concept, we’ll explain which flags can be used below.
 
-### 用户友好的地址
+### User-friendly address
 
-用户友好地址是为了保护和简化在互联网上（例如，在公共消息平台上或通过电子邮件服务提供商）以及现实世界中分享地址的TON用户的体验而开发的。
+User-friendly addresses were developed to secure and simplify the experience for TON users who share addresses on the internet (for example, on public messaging platforms or via their email service providers), as well as in the real world.
 
-#### 用户友好地址结构
+#### User-friendly address structure
 
-要生成用户友好地址，开发者必须使用以下方式对所有36个字节进行编码：
+User-friendly addresses are made up of 36 bytes in total and are obtained by generating the following components in order:
 
-1. *base64*（即数字、大小写拉丁字母、'/' 和 '+'）
+1. _[flags - 1 byte]_ — Flags that are pinned to addresses change the way smart contracts react to the received message.
+   Flags types that employ the user-friendly address format include:
 
-   - isBounceable。表示可弹回或不可弹回的地址类型。(*0x11* 表示“可弹回”，*0x51* 表示“不可弹回”)
-   - isTestnetOnly。表示仅用于测试网的地址类型。以_0x80_ 开头的地址不应被生产网络上运行的软件接受
-   - isUrlSafe。表示已定义为地址的URL安全的已弃用标志位。所有地址都被认为是URL安全的。
-2. *base64url*（用 '_' 和 '-' 代替 '/' 和 '+'）
-3. *\[account_id - 32字节]* — 账户ID由工作链中的256位（[大端序](https://www.freecodecamp.org/news/what-is-endianness-大端-vs-little-endian/)）地址组成。
-4. *\[地址验证 - 2字节]* — 在用户友好地址中，地址验证由前34个字节的CRC16-CCITT签名组成。([示例](https://github.com/andreypfau/ton-kotlin/blob/ce9595ec9e2ad0eb311351c8a270ef1bd2f4363e/ton-kotlin-crypto/common/src/crc32.kt))
-   实际上，用户友好地址的验证思想与所有信用卡上使用的[Luhn算法](https://en.wikipedia.org/wiki/Luhn_algorithm)类似，以防止用户错误输入不存在的卡号。
+   - isBounceable. Denotes a bounceable or non-bounceable address type. (_0x11_ for "bounceable", _0x51_ for "non-bounceable")
+   - isTestnetOnly. Denotes an address type used for testnet purposes only. Addresses beginning with _0x80_ should not be accepted by software running on the production network
+   - isUrlSafe. Denotes a deprecated flag that is defined as URL-safe for an address. All addresses are then considered URL-safe.
+2. _\[workchain_id - 1 byte]_ — The workchain ID (_workchain_id_) is defined by a signed 8-bit integer _workchain_id_.\
+   (_0x00_ for the BaseChain, _0xff_ for the MasterChain)
+3. _\[account_id - 32 byte]_ — The account ID is made up of a ([big-endian](https://www.freecodecamp.org/news/what-is-endianness-big-endian-vs-little-endian/)) 256-bit address in the workchain.
+4. _\[address verification - 2 bytes]_ —  In user-friendly addresses, address verification is composed of a CRC16-CCITT signature from the previous 34 bytes. ([Example](https://github.com/andreypfau/ton-kotlin/blob/ce9595ec9e2ad0eb311351c8a270ef1bd2f4363e/ton-kotlin-crypto/common/src/crc32.kt))
+   In fact, the idea pertaining to verification for user-friendly addresses is quite similar to the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm), which is used on all credit cards to prevent users from entering non-existing card numbers by mistake.
 
-完成这个过程后，会生成一个长度为48个非空格字符的用户友好地址。
+The addition of these 4 main components means that: `1 + 1 + 32 + 2 = 36` bytes in total (per user-friendly address).
 
-要生成用户友好地址，开发者必须使用以下方式对所有36个字节进行编码：
+To generate a user-friendly address, the developer must encode all 36 bytes using either:
 
-- *base64*（即数字、大小写拉丁字母、'/' 和 '+'）
-- *base64url*（用 '_' 和 '-' 代替 '/' 和 '+'）
+- _base64_ (i.e., with digits, upper and lowercase Latin letters, '/' and '+')
+- _base64url_ (with '_' and '-' instead of '/' and '+')
 
-例如，“测试赠予者”智能合约（一个特殊的智能合约，位于测试网主链中，向任何请求者发送2个测试代币）使用以下原始地址：
+After this process is complete, the generation of a user-friendly address with a length of 48 non-spaced characters is finalized.
 
-:::info DNS地址标志位
-在TON上，有时使用诸如mywallet.ton之类的DNS地址，而不是原始和用户友好地址。实际上，DNS地址由用户友好地址组成，并包括所有必需的标志位，允许开发者从TON域中的DNS记录访问所有标志位。
+:::info DNS ADDRESS FLAGS
+On TON, DNS addresses such as mywallet.ton are sometimes used instead of raw and user-friendly addresses. DNS addresses are made up of user-friendly addresses and include all the required flags that allow developers to access all the flags from the DNS record within the TON domain.
 :::
 
-#### 用户友好地址编码示例
+#### User-friendly address encoding examples
 
-例如，“测试赠予者”智能合约（一个特殊的智能合约，位于测试网主链中，向任何请求者发送2个测试代币）使用以下原始地址：
+For example, the "test giver" smart contract (a special smart contract residing in the testnet masterchain that sends 2 test tokens to anyone who requests them) makes use of the following raw address:
 
 `-1:fcb91a3a3816d0f7b8c2c76108b8a9bc5a6b7a55bd79f8ab101c52db29232260`
 
-上述“测试赠予者”的原始地址必须转换为用户友好地址形式。这可以通过使用之前介绍的base64或base64url形式来获得，如下所示：
+The above "test giver" raw address must be converted into the user-friendly address form. This is obtained using either the base64 or base64url forms (that we introduced previously) as follows:
 
 - `kf/8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15+KsQHFLbKSMiYIny` (base64)
 - `kf_8uRo6OBbQ97jCx2EIuKm8Wmt6Vb15-KsQHFLbKSMiYIny` (base64url)
 
 :::info
-注意，*base64* 和 *base64url* 两种形式都是有效的，都会被接受！
+Notice that both forms (_base64_ and _base64url_) are valid and must be accepted!
 :::
 
-#### 可弹回与不可弹回地址
+#### Bounceable vs non-bounceable addresses
 
-可弹回地址标志位背后的核心思想是发件人资金的安全。
+The core idea behind the bounceable address flag is sender's funds security.
 
-请阅读我们的文档以更好地了解[不可弹回消息](/develop/smart-contracts/guidelines/non-bouncable-messages)。
+For example, if the destination smart contract does not exist, or if an issue happens during the transaction, the message will be "bounced" back to the sender and constitute the remainder of the original value of the transaction (minus all transfer and gas fees).
+In relation to bounceable addresses specifically:
 
-1. **bounceable=false** 标志位通常意味着接收者是一个钱包。
-2. **bounceable=true** 标志位通常表示具有自己应用逻辑的自定义智能合约（例如，DEX）。在这个例子中，因为安全原因不应发送非弹回消息。
+1. The **bounceable=false** flag generally means the receiver is a wallet.
+2. The **bounceable=true** flag typically denotes a custom smart contract with its own application logic (for example, a DEX). In this example, non-bounceable messages should not be sent because of security reasons.
 
-TON区块链相关的附加二进制数据采用类似的"加固型" base64 用户友好地址表示。它们根据字节标签的前4个字符来进行区分。例如，256位Ed25519公钥通过以下顺序创建的36字节序列来表示：
+Feel free to read more on this topic in our documentation to gain a better understanding of [non-bounceable messages](/v3/documentation/smart-contracts/message-management/non-bounceable-messages).
 
-#### base64加固型表示
+#### Armored base64 representations
 
-获得的36字节序列会转换为标准方式的48字符base64或base64url字符串。例如，Ed25519公钥`E39ECDA0A7B0C60A7107EC43967829DBE8BC356A49B9DFC6186B3EAC74B5477D`（通常由32字节序列表示，例如：`0xE3, 0x9E, ..., 0x7D`）通过“加固型”表示呈现如下：
+Additional binary data related to TON Blockchain employs similar "armored" base64 user-friendly address representations. These differentiate from one another depending on the first 4 characters of their byte tag. For example, 256-bit Ed25519 public keys are represented by first creating a 36-byte sequence using the below process in order:
 
-- 使用_0x3E_格式的单字节标签表示公钥
-- 使用_0xE6_格式的单字节标签表示Ed25519公钥
-- 32字节标签含标准二进制表示的Ed25519公钥
-- 2字节标签含大端序表示的前34字节的CRC16-CCITT
+- A single byte tag using the _0x3E_ format denotes a public key
+- A single byte tag using the _0xE6_ format denotes a Ed25519 public key
+- 32 bytes containing the standard binary representation of the Ed25519 public key
+- 2 bytes containing the big-endian representation of CRC16-CCITT of the previous 34 bytes
 
-由此产生的 36 字节序列会按标准方式转换成 48 个字符的 base64 或 base64url 字符串。例如，Ed25519 公钥 `E39ECDA0A7B0C60A7107EC43967829DBE8BC356A49B9DFC6186B3EAC74B5477D`（通常由 32 个字节组成，如  0xE3，0x9E，...，0x7D`）通过 `加固\` 表示法呈现如下：
+The resulting 36-byte sequence is converted into a 48-character base64 or base64url string in the standard fashion. For example, the Ed25519 public key `E39ECDA0A7B0C60A7107EC43967829DBE8BC356A49B9DFC6186B3EAC74B5477D` (usually represented by a sequence of 32 bytes such as:  `0xE3, 0x9E, ..., 0x7D`) presents itself through the "armored" representation as follows:
 
-转换用户友好和原始地址的最简单方式是使用几个TON API和其他工具，包括：
+`Pubjns2gp7DGCnEH7EOWeCnb6Lw1akm538YYaz6sdLVHfRB2`
 
-### 用户友好地址和原始地址的转换
+### Converting user-friendly addresses and raw addresses
 
-此外，使用JavaScript为钱包转换用户友好和原始地址有两种方式：
+The simplest way to convert user-friendly and raw addresses is to use one of several TON APIs and other tools, including:
 
-- [使用ton.js转换地址的形式，从/到用户友好或原始形式](https://github.com/ton-org/ton-core/blob/main/src/address/Address.spec.ts)
-- [使用tonweb转换地址的形式，从/到用户友好或原始形式](https://github.com/toncenter/tonweb/tree/master/src/utils#address-class)
-- [toncenter主网的API方法](https://toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
-- [toncenter测试网的API方法](https://testnet.toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
+- [ton.org/address](https://ton.org/address)
+- [dton.io API method](https://dton.io/api/address/0:867ac2b47d1955de6c8e23f57994fad507ea3bcfe2a7d76ff38f29ec46729627)
+- [toncenter API methods in mainnet](https://toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
+- [toncenter API methods in testnet](https://testnet.toncenter.com/api/v2/#/accounts/pack_address_packAddress_get)
 
-还可以使用[SDKs](/develop/dapps/apis/sdk)进行类似的转换。
+Additionally, there are two ways to convert user-friendly and raw addresses for wallets using JavaScript:
 
-- [使用ton.js转换地址的形式，从/到用户友好或原始形式](https://github.com/ton-org/ton-core/blob/main/src/address/Address.spec.ts)
-- [使用tonweb转换地址的形式，从/到用户友好或原始形式](https://github.com/toncenter/tonweb/tree/master/src/utils#address-class)
+- [Convert address from/to user-friendly or raw form using ton.js](https://github.com/ton-org/ton-core/blob/main/src/address/Address.spec.ts)
+- [Convert address from/to user-friendly or raw form using tonweb](https://github.com/toncenter/tonweb/tree/master/src/utils#address-class)
 
-在 [TON Cookbook](/develop/dapps/cookbook#working-with-contracts-addresses) 中了解有关 TON 地址的更多示例。
+It's also possible to make use of similar mechanisms using [SDKs](/v3/guidelines/dapps/apis-sdks/sdk).
 
-### 地址示例
+### Address examples
 
-在 [TON Cookbook](/v3/guidelines/dapps/cookbook#working-with-contracts-addresses) 中了解有关 TON 地址的更多示例。
+Learn more examples on TON Addresses in the [TON cookbook](/v3/guidelines/dapps/cookbook#working-with-contracts-addresses).
 
-## 可能出现的问题
+## Possible problems
 
-在与 TON 区块链交互时，了解将 TON 币转移到 "未激活 "钱包地址的影响至关重要。本节概述了各种情况及其结果，以明确如何处理此类交易。
+When interacting with the TON blockchain, it's crucial to understand the implications of transferring TON coins to `uninit` wallet addresses. This section outlines the various scenarios and their outcomes to provide clarity on how such transactions are handled.
 
-### 将 Toncoin 转移到未登录地址时会发生什么？
+### What happens when you transfer Toncoin to an uninit address?
 
-#### 包含 `state_init` 的事务
+#### Transaction with `state_init` included
 
-如果您在交易中包含 `state_init`（由钱包或智能合约的代码和数据组成）。智能合约会首先使用所提供的 `state_init` 进行部署。部署完成后，将对收到的信息进行处理，类似于向已初始化的账户发送信息。
+If you include the `state_init` (which consists of the wallet or smart contract's code and data) with your transaction. The smart contract is deployed first using the provided `state_init`. After deployment, the incoming message is processed, similar to sending to an already initialized account.
 
-#### 未设置 `state_init` 和 `bounce` 标志的事务
+#### Transaction without `state_init` and `bounce` flag set
 
-信息无法传递到 `uninit` 智能合约，将被退回给发件人。在扣除消耗的 gas 费用后，剩余金额将返回发件人地址。
+The message cannot be delivered to the `uninit` smart contract, and it will be bounced back to the sender. After deducting the consumed gas fees, the remaining amount is returned to the sender's address.
 
-#### 未设置 `state_init` 和 `bounce` 标志的事务
+#### Transaction without `state_init` and `bounce` flag unset
 
-信息无法送达，但也不会退回给发送者。相反，发送的金额会记入接收地址，增加其余额，即使钱包尚未初始化。在地址持有者部署智能钱包合约之前，它们将被存储在那里，然后他们就可以访问余额了。
+The message cannot be delivered, but it will not bounce back to the sender. Instead, the sent amount will be credited to the receiving address, increasing its balance even though the wallet is not yet initialized. They will be stored there until the address holder deploys a smart wallet contract and then they can access the balance.
 
-#### 如何正确操作
+#### How to do it right
 
-部署钱包的最佳方法是向其地址（尚未初始化）发送一些 TON，并清除 `bounce` 标志。完成这一步后，所有者就可以使用当前未初始化地址的资金部署和初始化钱包。这一步通常发生在第一次钱包操作中。
+The best way to deploy a wallet is to send some TON to its address (which is not yet initialized) with the `bounce` flag cleared. After this step, the owner can deploy and initialize the wallet using funds at the current uninitialized address. This step usually occurs on the first wallet operation.
 
-### TON 区块链可防止错误交易
+### The TON blockchain implements protection against erroneous transactions
 
-在 TON 区块链中，标准钱包和应用程序通过使用可反弹地址和不可反弹地址自动管理向未初始化地址进行交易的复杂性，[此处](#bounceable-vs-non-bounceable-addresses) 对这两种地址进行了描述。钱包在向非初始化地址发送硬币时，通常会同时向可反弹地址和不可反弹地址发送硬币而不返回。
+In the TON blockchain, standard wallets and apps automatically manage the complexities of transactions to uninitialized addresses by using bounceable and non-bounceable address, which are described [here](#bounceable-vs-non-bounceable-addresses). It is common practice for wallets, when sending coins to non-initialized addresses, to send coins to both bounceable and non-bounceable addresses without return.
 
-如果需要快速获取可跳转/不可跳转形式的地址，可以 [在此](https://ton.org/address/) 进行操作。
+If you need to quickly get an address in bounceable/non-bounceable form, this can be done [here](https://ton.org/address/).
 
-### 定制产品的责任
+### Responsibility for custom products
 
-如果您要在 TON 区块链上开发定制产品，就必须实施类似的检查和逻辑：
+If you are developing a custom product on the TON blockchain, it is essential to implement similar checks and logic:
 
-确保您的应用程序在发送资金前验证收件人地址是否已初始化。
-根据地址状态，为用户智能合约使用可反弹地址，并使用自定义应用逻辑确保资金退回。钱包使用不可反弹地址。
+Ensure your application verifies whether the recipient address is initialized before sending funds.
+Based on the address state, use bounceable addresses for user smart contracts with custom application logic to ensure funds are returned. Use non-bounceable addresses for wallets.
+
+<Feedback />
+
