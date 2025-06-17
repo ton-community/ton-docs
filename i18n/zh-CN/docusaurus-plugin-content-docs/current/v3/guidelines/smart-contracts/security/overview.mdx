@@ -1,45 +1,52 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
-# 概览
+# Overview
 
-:::info
-本文需要更新。请帮助我们改进它。
+:::info 
+This article needs an update. Please help us improve it.\
 :::
 
-**本页包含了可以帮助您确保智能合约安全的建议。**
+**This page provides recommendations to help secure your smart contract.**
 
-如果您正在创建智能合约，那么在这里您可以看到一些示例，这些错误可能导致您丢失资金：
+If you are developing a smart contract, here are some examples of errors that could lead to losing funds:
 
-- [TON Hack挑战赛#1](https://github.com/ton-blockchain/hack-challenge-1)
-  - [从TON Hack挑战赛中得出的结论](/develop/smart-contracts/security/ton-hack-challenge-1)
+- [TON Hack Challenge #1](https://github.com/ton-blockchain/hack-challenge-1)
+  - [Drawing conclusions from TON Hack Challenge](/v3/guidelines/smart-contracts/security/ton-hack-challenge-1)
 
-## TON 课程：安全性
+## TON course: security
 
-:::tip
-在深入学习开发人员层面的安全知识之前，请确保您已充分了解用户层面的主题。为此，建议您学习 [Blockchain Basics with TON](https://stepik.org/course/201294/promo) （[RU 版本](https://stepik.org/course/202221/), [CHN 版本](https://stepik.org/course/200976/)）课程，其中模块 5 涵盖用户安全基础知识。
+:::tip 
+Before diving into developer-level security topics, ensure you understand security at the user level. To achieve this, take the [Blockchain Basics with TON](https://stepik.org/course/201294/promo) course ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)). Module 5 covers the basics of user-level security.\
 :::
 
-第8模块完全涵盖了TON区块链上智能合约的安全性。
+The [TON Blockchain course](https://stepik.org/course/176754/) is a comprehensive guide to TON Blockchain development.
 
-第8模块完全涵盖了TON区块链上智能合约的安全性。
+Module 8 thoroughly covers smart contract security on TON Blockchain.
 
-<Button href="https://stepik.org/course/176754/promo"
-        colorType={'primary'} sizeType={'sm'}>
+<Button
+  href="https://stepik.org/course/176754/promo"
+  colorType={"primary"}
+  sizeType={"sm"}
+>
+  Check TON Blockchain course
+</Button>{" "}
 
-查看TON区块链课程
+<Button
+  href="https://stepik.org/course/201638/promo"
+  colorType={"secondary"}
+  sizeType={"sm"}
+>
+  CHN
+</Button>{" "}
 
-</Button>
+<Button
+  href="https://stepik.org/course/201855/promo"
+  colorType={"secondary"}
+  sizeType={"sm"}
+>
+  RU
+</Button>{" "}
 
-<Button href="https://stepik.org/course/201638/promo"
-        colorType={'secondary'} sizeType={'sm'}>
-
-中文
-
-</Button>
-
-<Button href="https://stepik.org/course/201855/promo"
-        colorType={'secondary'} sizeType={'sm'}>
-
-RU
-
-</Button>
+<Feedback />
