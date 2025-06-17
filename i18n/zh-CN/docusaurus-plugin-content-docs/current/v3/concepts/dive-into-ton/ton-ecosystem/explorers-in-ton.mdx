@@ -1,169 +1,170 @@
-import Player from '@site/src/components/player'
+import Feedback from "@site/src/components/Feedback";
+import Player from "@site/src/components/player";
 
-# TON 中的 Explorers
+# Explorers in TON
 
-在这篇文章中，我们将考虑TONExplorers，他们的能力和特点，从开发者的角度出发。
+This article will consider TON explorers and their capabilities and features from the user's perspective.
 
-## 什么是 Explorers？
+## What is an explorer?
 
-Explorer是一个网站，允许您查看区块链中的信息，如账户余额、交易历史、区块等。
+An explorer is a website that allows you to view information in a blockchain, such as the account balance, transaction history, and blocks.
 
 <Player url="https://www.youtube.com/watch?v=i5en19kzX6M" />
 
-## 哪些 Explorers 存在？
+## Which explorers exist?
 
-在TON Explorers中，您可以区分几个类别：
+Among TON explorers, you can distinguish several categories:
 
-- 日常使用
-- 为开发者提供扩展信息
-- 专业化
+- For everyday use
+- With extended information for developers
+- Specialized
 
-这种分类大体上是有条件的，一个Explorer可以同时属于几个类别。所以我们不要过多地关注这个。
+This division into categories is mainly conditional, and one explorer can belong to several categories simultaneously. So let's not pay too much attention to this.
 
-## Explorers 中的地址别名
+## General functionality
 
-通过使用地址别名使您的服务地址更加用户友好。根据提供的指南创建拉取请求（PR）：
+Blockchain explorers allow you to view and search the blockchain, similarly to how you might use a banking app to check transaction history and account balances. They provide a user-friendly interface to access real-time data about blockchain transactions, blocks, and addresses.
 
-- [tonkeeper/ton-assets](https://github.com/tonkeeper/ton-assets) - Tonviewer.com别名
-- [catchain/address-book](https://github.com/catchain/address-book)- Tonscan.org别名
+Just as you use a banking app to track where your money goes, who sends you payments, and when transactions occur, blockchain explorers let you see this information for digital assets on the blockchain. They are essential for transparency, allowing anyone to verify transactions independently, see the flow of cryptocurrency, and analyze the activity on the blockchain.
 
-## 通用功能
+Typically, an explorer allows you to find a transaction or an account by its identifier. Some explorers also support DNS extensions or their own [address book](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton#address-alias-in-explorers), which adds a human-readable label to a specific account. Example: [TON Foundation](https://tonviewer.com/UQAFmjUoZUqKFEBGYFEMbv-m61sFStgAfUR8J6hJDwUU04VW).
 
-让我们从所有Explorers中都存在的通用功能开始。
+## Native explorers
 
-几乎所有的Explorers都能查找关于余额、交易历史和智能合约的信息，如果部署在地址上的话。
+### Tonscan
 
-接下来，我们将考虑几个可以归为这些类别的Explorers。
+It is a good explorer for everyday use. It provides a comprehensive view of the TON Blockchain, allowing users to search for transactions, addresses, blocks, and more.
 
-## TON Scan.org
+- Mainnet: [tonscan.org](https://tonscan.org/)
+- Testnet: [testnet.tonscan.org](https://testnet.tonscan.org/)
 
-适合日常使用的好Explorer。它提供了TON区块链的全面视图，允许用户搜索交易、地址、区块等。任何搜索都是针对公共[地址簿](https://github.com/catchain/tonscan/blob/master/src/addrbook.json)（TON基金会，OKX等）进行的。
+#### Features
 
-### 特点
+- Convenient for everyday use and developers
+- Advanced jetton and nominator pools pages for users
+- Contract types and disassembler
+- User-friendly search uses DNS and [address book](https://github.com/catchain/address-book) labels.
 
-- **适合日常使用**
-- 对开发者方便
-- TON DNS支持
-- 合约类型
-- 合约反汇编器
+### Tonviewer
 
-### 链接
+It is a good explorer for everyday use with a balanced UI for users and developers.
 
-- 网址：https://tonscan.org/
-- 测试网网址：https://testnet.tonscan.org/
+- Mainnet: [tonviewer.com](https://tonviewer.com/)
+- Testnet: [testnet.tonviewer.com](https://testnet.tonviewer.com/)
 
-## TON Scan.com
+#### Features
 
-### 特点
+- Convenient for everyday use and developers
+- Advanced information for developers with traces
+- Contract types and disassembler
+- User-friendly search uses DNS and [tonkeeper/ton-assets](https://github.com/tonkeeper/ton-assets) labels.
 
-- 交易聚合分析
-- 交易追踪
+### Tonscan by Bastion
 
-### 链接
+- Mainnet: [tonscan.com](https://tonscan.com/)
 
-- 网址：https://tonscan.com/
+#### Features
 
-## Ton 鲸鱼浏览器
+- Transaction aggregation analytics
+- Transaction traces
 
-这个Explorer比普通用户更倾向于开发者。
+### DTON
 
-### 特点
+DTON is another explorer for developers. It provides a lot of information about transactions in a convenient form.
 
-- **对开发者方便**
-- 合约类型
-- 合约反汇编器
+It also has a feature that allows you to see the computation phase of the transaction step by step.
 
-### 链接
+- Mainnet: [dton.io](https://dton.io/)
 
-- 网址：https://tonwhales.com/explorer
+#### Features
 
-## Tonviewer 浏览器
+- Convenient for developers
+- Extended information about the computation phase
+- Contract types and disassembler
 
-这个Explorer是最新的，有自己独特的特点。
-例如，追踪。这个功能允许您看到智能合约之间的整个交易序列，即使后续交易不包含您的地址。
+### Ton Whales explorer
 
-交易信息不如TON Whales那样详细。
+Explorer for developers.
 
-### 特点
+- Mainnet: [tonwhales.com/explorer](https://tonwhales.com/explorer)
 
-- 对开发者方便
-- 适合日常使用
-- Jetton交易历史
-- **追踪**
-- TON DNS支持
+#### Features
 
-### 链接
+- Convenient for developers
+- Contract types and disassembler
+- Simple and convenient validator details
 
-- 网址：https://tonviewer.com/
-- 测试网网址：https://testnet.tonviewer.com/
+### TON NFT EXPLORER
 
-## TON NFT Explorer
+This explorer specializes in NFTs but is also suitable as a regular explorer.
 
-这个Explorer专注于NFT，但也可以作为常规Explorer使用。
+- Mainnet: [explorer.tonnft.tools](https://explorer.tonnft.tools/)
+- Testnet: [testnet.explorer.tonnft.tools](https://testnet.explorer.tonnft.tools/)
 
-查看钱包地址时，您可以找出它存储了哪些NFT，并在查看NFT时，您可以找出元数据、集合地址、所有者和交易历史。
+When viewing the wallet address, you can find out which NFT it stores, and when viewing the NFT, you can find the metadata, collection address, owner, and transaction history.
 
-### 特点
+#### Features
 
-- 对开发者方便
-- 合约类型
-- **专注于NFT**
+- Convenient for developers
+- Specialized in NFT
+- Contract types
 
-### 链接
+## Crosschain explorers
 
-- 网址：https://explorer.tonnft.tools/
-- 测试网网址：https://testnet.explorer.tonnft.tools/
+### OKX TON explorer
 
-## DTON
+This explorer is designed to provide comprehensive and detailed data insights into TON. Whether you're tracking wallet addresses, exploring Jetton tokens, or delving into NFT collections, it offers a user-friendly experience tailored for both beginners and developers.
 
-DTON是另一个面向开发者的Explorer。它以方便的形式提供了大量的交易信息。
+- Mainnet: [web3.okx.com/explorer/ton](https://web3.okx.com/explorer/ton)
 
-此外，它有一个功能，允许您逐步查看交易的 Compute Phase 。
+#### Features
 
-### 特点
+- Convenient for everyday use
+- TON DNS support
+- Jetton and NFT data
 
-- 对开发者方便
-- 关于 Compute Phase 的扩展信息
-- 合约类型
-- 合约反汇编器
+### TON NFTscan
 
-### 链接
+This explorer is designed explicitly for Non-Fungible Tokens (NFTs) on the TON Blockchain. It allows users to explore, track, and verify NFT transactions, contracts, and metadata.
 
-- 网址：https://dton.io/
+- Mainnet: [ton.nftscan.com](https://ton.nftscan.com/)
 
-## TON NFTscan
+#### Features
 
-这个Explorer专为TON区块链上的非同质化代币（NFT）设计。它允许用户探索、跟踪和验证NFT交易、合约和元数据。
+- Convenient for regular users
+- NFT collection ranking
+- Useful information for traders, such as daily volume
 
-### 特点
+## Analytics explorers
 
-- 对普通用户方便
-- 对交易者有用的信息，如日交易量
-- NFT集合排名
+### TonStat
 
-### 链接
+- Mainnet: [tonstat.com](https://www.tonstat.com/)
 
-- 网址：https://ton.nftscan.com/
+It displays various statistics, such as the number of registered network addresses and wallets, the volume of Toncoin burned, the volume of Toncoin staked, the volume of NFTs issued, the number of validators, and other metrics.
 
-## 想在这个列表中吗？
+#### Features
 
-请给其中一个[维护者](/docs/contribute/maintainers.md)写信。
+- Convenient for regular users
+- DeFi information
+- Useful information for traders, such as daily volume
 
-### 参考资料
+## Address alias in explorers
 
-- [ton.app/explorers](https://ton.app/explorers)
-- [非常棒的TON库](https://github.com/ton-community/awesome-ton)
-- DeFi 信息
+Make your service address more user-friendly by using an address alias. Create Pull Requests (PRs) according to the provided guidelines:
 
-### 链接
+- [tonkeeper/ton-assets](https://github.com/tonkeeper/ton-assets) - Tonviewer.com alias
+- [catchain/address-book](https://github.com/catchain/address-book)- Tonscan.org alias
+- [ton-labels](https://github.com/ton-studio/ton-labels) - Public dataset of labeled TON blockchain addresses
 
-- URL: https://www.tonstat.com/
+## Want to be on this list?
 
-## 想上榜吗？
+Please write to one of the [maintainers](/v3/contribute/maintainers).
 
-请写信给其中一位 [维护者](/v3/contribute/maintainers)。
+## See also
 
-## 参考
-
+- [TON wallet apps](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps)
 - [ton.app/explorers](https://ton.app/explorers)
 - [Awesome TON repository](https://github.com/ton-community/awesome-ton)
+
+<Feedback />
