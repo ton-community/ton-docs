@@ -1,6 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 安全审计
 
-TON 区块链生态系统的安全性至关重要。以下是由知名审计公司对 TON 区块链关键部分完成的审计摘要。
+TON 区块链生态系统的安全性至关重要。以下是由知名审计公司对 TON 区块链关键部分完成的审计摘要。 Below is a summary of completed audits conducted by renowned auditing firms for key components of the TON blockchain.
 
 ## TON 区块链
 
@@ -16,7 +18,7 @@ TON 区块链生态系统的安全性至关重要。以下是由知名审计公�
 
 ## TON 区块链库（tonlib）
 
-Zellic 于 2023 年 10 月 16 日至 11 月 17 日对 TON 进行了安全评估。在评估过程中，Zellic 对 Tonlib 的代码进行了审查，以发现安全漏洞、设计问题和安全态势中的总体弱点。
+Zellic conducted a security assessment for TON from October 16th to November 17th, 2023. Zellic 于 2023 年 10 月 16 日至 11 月 17 日对 TON 进行了安全评估。在评估过程中，Zellic 对 Tonlib 的代码进行了审查，以发现安全漏洞、设计问题和安全态势中的总体弱点。
 
 **审计公司**：Zellic\
 **审计报告**：
@@ -43,6 +45,9 @@ TON 虚拟机和 Fift 编程语言。
 
 ---
 
-## 漏洞悬赏计划
+## Bug bounty program
 
 为了进一步加强TON生态系统的安全性，我们鼓励安全研究人员和开发人员参与[TON区块链错误赏金计划](https://github.com/ton-blockchain/bug-bounty)。
+
+<Feedback />
+
