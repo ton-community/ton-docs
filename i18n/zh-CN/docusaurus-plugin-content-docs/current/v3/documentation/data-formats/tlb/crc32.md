@@ -1,10 +1,12 @@
+import Feedback from '@site/src/components/Feedback';
+
 # CRC32
 
 ## 概述
 
-CRC代表循环冗余检查，这是一种常用的方法，用于验证数字数据的完整性。它是一种用于检测在数据传输或存储过程中是否发生错误的算法。CRC生成一个数据的简短校验和或哈希，附加在数据上。当数据被接收或检索时，重新计算CRC并与原始校验和比较。如果两个校验和匹配，则假定数据未被损坏。如果它们不匹配，则表明发生了错误，需要重新发送或再次检索数据。
+CRC代表循环冗余检查，这是一种常用的方法，用于验证数字数据的完整性。它是一种用于检测在数据传输或存储过程中是否发生错误的算法。CRC生成一个数据的简短校验和或哈希，附加在数据上。当数据被接收或检索时，重新计算CRC并与原始校验和比较。如果两个校验和匹配，则假定数据未被损坏。如果它们不匹配，则表明发生了错误，需要重新发送或再次检索数据。 An error-detecting algorithm checks whether data has been altered during transmission or storage. CRC generates a short checksum or hash from the original data, which is appended to it. The checksum is recalculated and compared with the original upon retrieval or receipt. If the values match, the data is considered intact; if not, it indicates corruption and the data must be resent or recovered.
 
-CRC32 IEEE版本用于TL-B方案。通过查看此[NFT操作码](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema)示例，可以更清楚地理解各种消息的TL-B计算。
+The CRC32 IEEE variant is used in TL-B schemes. CRC32 IEEE版本用于TL-B方案。通过查看此[NFT操作码](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema)示例，可以更清楚地理解各种消息的TL-B计算。
 
 ## 工具
 
@@ -58,3 +60,6 @@ function calculateResponseOpcode_2(str: string): string {
     return ((a | b) < 0 ? (a | b) + BigInt('4294967296') : a | b).toString(16);
 }
 ```
+
+<Feedback />
+
