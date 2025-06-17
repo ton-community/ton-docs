@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 词汇表
 
 ## 介绍
@@ -34,7 +36,7 @@ ____________
 
 ### Bearish
 
-**Bearish** — 当资产价格由于投资者抛售而下降时使用的术语。（该术语通常用于描述整体市场情绪。）
+**Bearish** — 当资产价格由于投资者抛售而下降时使用的术语。（该术语通常用于描述整体市场情绪。） (The term is often used to describe the overall market sentiment.)
 
 ### Binance
 
@@ -54,23 +56,23 @@ ____________
 
 ### BoC
 
-**BoC** —  cell 包。通常在代码中使用。
+**BoC** —  cell 包。通常在代码中使用。 Usually, used in code.
 
 ### BoF
 
-**BoF** — 文件袋。通常在代码中使用。
+**BoF** — 文件袋。通常在代码中使用。 Usually, used in code.
 
 ### Bot
 
-**Bot** — 为两个生态系统编写的程序，例如开放网络和Telegram信使。在Telegram上，机器人是由软件操作的信使中的账户。
+**Bot** — 为两个生态系统编写的程序，例如开放网络和Telegram信使。在Telegram上，机器人是由软件操作的信使中的账户。 On Telegram, bots are accounts in the messenger operated by software.
 
 ### Bridge
 
-**Bridge** — 一种连接各种区块链以在网络之间传输代币和数据的程序。TON桥可以在此链接找到。
+**Bridge** — 一种连接各种区块链以在网络之间传输代币和数据的程序。TON桥可以在此链接找到。 TON Bridge is available at this [link](https://ton.org/bridge/).
 
 ### Bullish
 
-**Bullish** — 用于描述价值上升的资产的术语。（“牛市”是市场整体价值增长的相反情况。）
+**Bullish** — the term “bullish” is used to describe an asset whose value is appreciating. **Bullish** — 用于描述价值上升的资产的术语。（“牛市”是市场整体价值增长的相反情况。）
 
 ### Burning
 
@@ -114,7 +116,7 @@ ___________
 
 ### Decentralization
 
-**Decentralization** — 是TON和其他区块链的主要原则之一。没有去中心化，将无法实现Web3；因此，TON生态系统的每个元素都围绕最大化去中心化展开。
+**Decentralization** — one of the main tenets behind TON and other blockchains. **Decentralization** — 是TON和其他区块链的主要原则之一。没有去中心化，将无法实现Web3；因此，TON生态系统的每个元素都围绕最大化去中心化展开。
 
 ### DeFi
 
@@ -122,7 +124,7 @@ ___________
 
 ### DEX
 
-**DEX** — 去中心化交易所（DEX），用户可以在没有任何中介的情况下交易加密货币。确保安全交易所需的在线实体是区块链本身。
+**DEX** — 去中心化交易所（DEX），用户可以在没有任何中介的情况下交易加密货币。确保安全交易所需的在线实体是区块链本身。 The online entity needed to guarantee safe transactions is the blockchain itself.
 
 ### Diamond hands
 
@@ -146,7 +148,7 @@ ___________
 
 ### Durov
 
-**Durov** — Pavel Durov，一位因创办VK社交网络和Telegram信使而闻名的俄罗斯企业家。Nikolai Durov是Pavel的兄弟，参与了VK、Telegram以及TON的开发。
+**Durov** — Pavel Durov，一位因创办VK社交网络和Telegram信使而闻名的俄罗斯企业家。Nikolai Durov是Pavel的兄弟，参与了VK、Telegram以及TON的开发。 Nikolai Durov is Pavel's brother who participated in developing VK, Telegram and also TON.
 
 ### DYOR
 
@@ -178,7 +180,7 @@ ___________
 
 ### FOMO
 
-**FOMO**--"害怕错过"，这是一种心理状态，当一些投资者想到可能会失去某个机会的潜在收益时，就会产生这种心理。它通常出现在牛市期间，以及交易者没有尽职尽责地分析某个项目时。
+**FOMO** — “fear of missing out,” a psychological state that consumes some investors when the idea of losing potential gains from an opportunity is present. It usually appears during a bull market and when traders don’t do their due diligence analyzing a particular project.
 
 ### Fungible tokens
 
@@ -232,7 +234,7 @@ ___________
 
 ## I
 
-###
+### ICO
 
 **ICO**--首次代币发行，这是加密项目在早期阶段吸引资金的一种方法。
 
@@ -242,7 +244,7 @@ ___________
 
 ### Inflation
 
-**Inflation** - 一种货币（如美元或欧元）价值下降的过程。 Toncoin （和其他加密货币）的发行具有高度的透明度和可预测性，具有通货紧缩的特性。
+**Inflation** — the process when the value of a currency — e.g., U.S. dollar or the euro — decreases. Toncoin (and other cryptocurrencies) are emitted with a high degree of transparency and a predictable issuance, which has deflationary properties.
 
 ___________
 
@@ -250,7 +252,7 @@ ___________
 
 ### KYC
 
-**KYС** - *Know Your Customer*，用户在创建加密服务账户时验证身份的过程。
+**KYС** - _Know Your Customer_，用户在创建加密服务账户时验证身份的过程。
 
 ___________
 
@@ -258,11 +260,11 @@ ___________
 
 ### Launchpad
 
-\*\* Launchpad\*\*--一个将投资者和项目聚集在一起的加密初创企业平台。TON生态系统的主要启动平台是Tonstarter。
+**Launchpad** — a platform for crypto startups that brings investors and projects together. \*\* Launchpad\*\*--一个将投资者和项目聚集在一起的加密初创企业平台。TON生态系统的主要启动平台是Tonstarter。
 
 ### Liquidity pool
 
-**Liquidity pool**--将加密资产组合在一起并冻结在智能合约中。流动池可用于去中心化交易、贷款和其他活动。
+**Liquidity pool**--将加密资产组合在一起并冻结在智能合约中。流动池可用于去中心化交易、贷款和其他活动。 Liquidity pools are used for decentralized trading, loans, and other endeavors.
 
 __________
 
@@ -278,7 +280,7 @@ __________
 
 ### Masterchain
 
-**Masterchain** - 在多层区块链中，主链是最重要的。对于 TON 来说，主链是网络的主链。在区块链上进行的操作都是在主链上进行的。
+**Masterchain** - 在多层区块链中，主链是最重要的。对于 TON 来说，主链是网络的主链。在区块链上进行的操作都是在主链上进行的。 For TON, the masterchain is the main chain of the network. When operations happen on the blockchain, they do so on the masterchain.
 
 ### Metaverse
 
@@ -322,7 +324,7 @@ __________
 
 ### Onion routing
 
-**Onion routing** - 一种类似于 TOR 的技术，允许在网络上进行匿名交互。所有信息都经过层层加密，就像洋葱一样。TON Proxy 就采用了这种技术。
+**Onion routing** - 一种类似于 TOR 的技术，允许在网络上进行匿名交互。所有信息都经过层层加密，就像洋葱一样。TON Proxy 就采用了这种技术。 All messages are encrypted in various layers akin to an onion. TON Proxy applies such a technique.
 
 __________
 
@@ -338,7 +340,7 @@ __________
 
 ### Proof-of-work
 
-**Proof-of-work** - 一种共识算法，一方向另一方证明已花费了特定数量的计算工作。通过消耗一点能量，一方可以验证这一点。
+**Proof-of-work** - 一种共识算法，一方向另一方证明已花费了特定数量的计算工作。通过消耗一点能量，一方可以验证这一点。 By expending a little energy, a party can verify this.
 
 ### Proxy
 
@@ -370,7 +372,7 @@ _________
 
 ### SBT
 
-**SBT** - *Soulbound token*，一种永远无法转让的 NFT，因为它包含了其所有者及其成就的信息。
+**SBT** - _Soulbound token_，一种永远无法转让的 NFT，因为它包含了其所有者及其成就的信息。
 
 ### Scalability
 
@@ -398,7 +400,7 @@ _________
 
 ### Staking
 
-**Staking**--用户通过在押注证明算法中存储硬币或代币赚取被动收入的一种方式，而押注证明算法反过来又能确保区块链顺利运行。为此，他们可以获得奖励作为激励。
+**Staking**--用户通过在押注证明算法中存储硬币或代币赚取被动收入的一种方式，而押注证明算法反过来又能确保区块链顺利运行。为此，他们可以获得奖励作为激励。 For this, they earn rewards as an incentive.
 
 ### Swap
 
@@ -434,11 +436,11 @@ ________
 
 ### To the moon
 
-**To the moon**--这是人们产生 FOMO 时使用的一个俗语。它指的是希望加密货币的价值迅速获得大量增值--因此它的轨迹是奔月。
+**To the moon**--这是人们产生 FOMO 时使用的一个俗语。它指的是希望加密货币的价值迅速获得大量增值--因此它的轨迹是奔月。 It refers to hopefuls wanting the value of a cryptocurrency rapidly gaining a lot of value — hence its trajectory to the moon.
 
 ### Toncoin
 
-**Toncoin** - TON 生态系统的本地加密货币，用于开发服务以及支付费用和服务。它可以买卖和交易。
+**Toncoin** - TON 生态系统的本地加密货币，用于开发服务以及支付费用和服务。它可以买卖和交易。 It can be bought, sold, and traded.
 
 ### Trading
 
@@ -470,7 +472,7 @@ ___________
 
 ### Wallet
 
-**Wallet** - 通过购买或出售加密货币和代币所需的私钥系统存储加密货币的软件。它也是 TON 生态系统中用于买卖 Toncoin 的机器人。
+**Wallet** - 通过购买或出售加密货币和代币所需的私钥系统存储加密货币的软件。它也是 TON 生态系统中用于买卖 Toncoin 的机器人。 It is also a bot in the TON ecosystem for buying and selling Toncoin.
 
 ### Web3
 
@@ -486,7 +488,7 @@ ___________
 
 ### White paper
 
-**White paper** - 由项目开发人员撰写的项目主要文件。它解释了技术和项目目标。
+**White paper** - 由项目开发人员撰写的项目主要文件。它解释了技术和项目目标。 It explains the technology and the project’s goals.
 
 ### Watchlist
 
@@ -494,7 +496,7 @@ ___________
 
 ### Workchain
 
-**Workchain** - 连接到主链的次级链。它们可以包含大量不同的连接链，这些链有自己的共识规则。它们还可以包含地址和交易信息以及智能合约的虚拟机。此外，它们还可以与主链兼容并相互影响。
+**Workchain** - 连接到主链的次级链。它们可以包含大量不同的连接链，这些链有自己的共识规则。它们还可以包含地址和交易信息以及智能合约的虚拟机。此外，它们还可以与主链兼容并相互影响。 They can contain a massive number of different connected chains that have their own consensus rules. They can also contain address and transaction information and virtual machines for smart contracts. Additionally, they can be compatible with the masterchain and interact with one another.
 
 ___________
 
@@ -507,3 +509,6 @@ ___________
 ### Yolo
 
 **Yolo**--"你只能活一次"，这是一个俚语缩写，用来号召人们尽情享受生活，而不考虑所做努力的风险。
+
+<Feedback />
+
