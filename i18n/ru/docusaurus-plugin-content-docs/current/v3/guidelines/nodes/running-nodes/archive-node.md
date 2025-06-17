@@ -1,8 +1,6 @@
-# Архивный узел
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Архивный узел
 
 :::info
 Прочитайте о [Полном узле](/v3/guidelines/nodes/running-nodes/full-node) перед этой статьей
@@ -24,23 +22,23 @@
 
 - 16 x ядерный процессор
 - 128ГБ ОЗУ с исправлением ошибок (ECC)
-- Твердотельный накопитель объемом 9 ТБ *или* Оборудованное хранилище с более 64 000 операций ввода/вывода в секунду (IOPS)
+- 12 TB SSD _OR_ Provisioned 64+k IOPS storage
 - Возможность подключения к сети 1 Гбит/с
 - 16 ТБ/месяц трафика при пиковой нагрузке
+- Linux OS with open files limit above 400k
 - публичный IP-адрес (фиксированный IP-адрес)
 
 :::info Сжатие данных
-Для несжатых данных требуется 9 ТБ. 6 ТБ - это при использовании тома ZFS с включенным сжатием.
-Объем данных увеличивается примерно на 0,5 ТБ и 0,25 ТБ каждый месяц, с последним обновлением в ноябре 2024 года.
+Uncompressed data requires 12 TB of storage. Для несжатых данных требуется 9 ТБ. 6 ТБ - это при использовании тома ZFS с включенным сжатием. Объем данных увеличивается примерно на 0,5 ТБ и 0,25 ТБ каждый месяц, с последним обновлением в ноябре 2024 года.
 :::
 
 ## Установка
 
 ### Установите ZFS и подготовьте том
 
-Дампы поставляются в виде снимков ZFS, сжатых с помощью plzip, вам необходимо установить ZFS на вашем хосте и восстановить дамп, см. в [Документацию Oracle](https://docs.oracle.com/cd/E23824_01/html/821-1448/gavvx.html#scrolltoc).
+Dumps come in the form of ZFS snapshots compressed using plzip. Дампы поставляются в виде снимков ZFS, сжатых с помощью plzip, вам необходимо установить ZFS на вашем хосте и восстановить дамп, см. в [Документацию Oracle](https://docs.oracle.com/cd/E23824_01/html/821-1448/gavvx.html#scrolltoc). See [Oracle Documentation](https://docs.oracle.com/cd/E23824_01/html/821-1448/gavvx.html#scrolltoc) for more details.
 
-Обычно рекомендуется создать отдельный пул ZFS для вашего узла на выделенном SSD-диске, это позволит вам легко управлять дисковым пространством и создавать резервные копии вашего узла.
+Обычно рекомендуется создать отдельный пул ZFS для вашего узла на выделенном SSD-диске, это позволит вам легко управлять дисковым пространством и создавать резервные копии вашего узла. This will allow you to manage storage space and back up your node easily.
 
 1. Установите [zfs](https://ubuntu.com/tutorials/setup-zfs-storage-pool#1-overview)
 
@@ -54,7 +52,7 @@ sudo apt install zfsutils-linux
 sudo zpool create data <disk>
 ```
 
-3. Перед восстановлением настоятельно рекомендуем включить сжатие на родительском файловой системе ZFS, что позволит вам освободить [много места](https://www.servethehome.com/the-case-for-using-zfs-compression/). Чтобы включить сжатие для тома `data`, войдите под учетной записью root и выполните следующую команду:
+3. Перед восстановлением настоятельно рекомендуем включить сжатие на родительском файловой системе ZFS, что позволит вам освободить [много места](https://www.servethehome.com/the-case-for-using-zfs-compression/). This will save you a [significant amount of space](https://www.servethehome.com/the-case-for-using-zfs-compression/). Чтобы включить сжатие для тома `data`, войдите под учетной записью root и выполните следующую команду:
 
 ```shell
 sudo zfs set compression=lz4 data
@@ -83,11 +81,10 @@ mv /var/ton-work /var/ton-work.bak
 
 #### Скачайте дамп
 
-1. Запросите учетные данные `user` и `password`для получения доступа к скачиванию дампов в чате [@TONBaseChatEn](https://t.me/TONBaseChatEn) в Telegram.
-2. Вот пример команды для скачивания и восстановления дампа **mainnet** с сервера ton.org:
+Вот пример команды для скачивания и восстановления дампа **mainnet** с сервера ton.org:
 
 ```shell
-wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
+curl -L -s https://archival-dump.ton.org/dumps/mainnet_full_44888096.zfs.zstd | pv | zstd -d -T16 | zfs recv mypool/ton-db
 ```
 
 Чтобы установить дамп **testnet**, используйте следующую команду:
@@ -101,8 +98,7 @@ wget --user <usr> --password <pwd> -c https://archival-dump.ton.org/dumps/latest
 Подготовьте и выполните команду:
 
 1. При необходимости установите инструменты (`pv`, `plzip`)
-2. Замените `<usr>` и `<pwd>` вашими учетными данными
-3. Сообщите `plzip` использовать столько ядер, сколько позволяет ваша машина для ускорения извлечения (`-n`)
+2. Сообщите `plzip` использовать столько ядер, сколько позволяет ваша машина для ускорения извлечения (`-n`)
 
 #### Установите дамп
 
@@ -170,11 +166,11 @@ nano /etc/systemd/system/validator.service
 systemctl start validator.service
 ```
 
-2. Откройте `mytonctrl` из *local user* и проверьте состояние узла с помощью команды `status`.
+2. Откройте `mytonctrl` из _local user_ и проверьте состояние узла с помощью команды `status`.
 
 ## Обслуживание узла
 
-База данных узла требует периодической очистки (мы рекомендуем проводить ее раз в неделю), для этого, пожалуйста, выполните следующие шаги под учетной записью root:
+База данных узла требует периодической очистки (мы рекомендуем проводить ее раз в неделю), для этого, пожалуйста, выполните следующие шаги под учетной записью root: To do so, please perform the following steps as root:
 
 1. Остановите процесс validator (Никогда не пропускайте этот момент!)
 
@@ -189,13 +185,13 @@ systemctl stop validator.service
 find /var/ton-work -name 'LOG.old*' -exec rm {} +
 ```
 
-4. Удалите временные файлы
+3. Удалите временные файлы
 
 ```shell
 rm -r /var/ton-work/db/files/packages/temp.archive.*
 ```
 
-5. Запустите процесс validator
+4. Запустите процесс validator
 
 ```shell
 systemctl start validator.service
@@ -203,9 +199,9 @@ systemctl start validator.service
 
 ## Устранение неполадок и резервное копирование
 
-Если по какой-то причине что-то не работает или ломается, вы всегда можете [откатиться](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk) к снимку @archstate в вашей файловой системе ZFS, это исходное состояние, полученное из дампа.
+Если по какой-то причине что-то не работает или ломается, вы всегда можете [откатиться](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk) к снимку @archstate в вашей файловой системе ZFS, это исходное состояние, полученное из дампа. This is the original state from the dump.
 
-1. Остановите процесс валидатора (\*\*Никогда не пропускайте это! \*\*).
+1. Остановите процесс валидатора (\*\*Никогда не пропускайте это!
 
 ```shell
 sudo -s
@@ -218,19 +214,37 @@ systemctl stop validator.service
 zfs list -t snapshot
 ```
 
-3. Откатить к состоянию моментального снимка
+3. Roll back to the snapshot:
 
 ```shell
 zfs rollback data/ton-work@dumpstate
 ```
 
-Если ваш узел работает нормально, вы можете удалить моментальный снимок, чтобы сэкономить место на диске, но мы рекомендуем регулярно делать снимки вашей файловой системы для целей отката, поскольку известно, что узел валидатора может повреждать данные и config.json. [zfsnap](https://www.zfsnap.org/docs.html) - это отличный инструмент для автоматизации циклической обработки снимков.
+If your node operates properly, you may remove this snapshot to reclaim storage space. However, we recommend creating regular filesystem snapshots for rollback capability since the validator node may occasionally corrupt data and `config.json`. [zfsnap](https://www.zfsnap.org/docs.html) - это отличный инструмент для автоматизации циклической обработки снимков.
 
 :::tip Нужна помощь?
 У вас есть вопросы или вам нужна помощь? Пожалуйста, задавайте вопросы в [TON Dev Chat (РУ)](https://t.me/tondev), чтобы получить помощь сообщества. Разработчики MyTonCtrl также присутствуют там.
 :::
 
 ## Советы и рекомендации
+
+:::info
+Basic info about archival dumps is present at https://archival-dump.ton.org/
+:::
+
+### Remove dump snapshot
+
+1. Find the correct snapshot
+
+```bash
+zfs list -t snapshot
+```
+
+2. Delete it
+
+```bash
+zfs destroy <snapshot>
+```
 
 ### Заставьте архивный узел не хранить блоки
 
@@ -248,3 +262,6 @@ installer set_node_argument --archive-ttl 86400
 
 - [Типы узлов TON](/v3/documentation/infra/nodes/node-types)
 - [Запуск полного узла](/v3/guidelines/nodes/running-nodes/full-node)
+
+<Feedback />
+
