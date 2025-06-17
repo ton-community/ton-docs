@@ -3,6 +3,7 @@ name: Deploy to Kubernetes
 on:
   push:
     branches:
+      - release-candidate-main
       - release-candidate-ru
       - release-candidate-en
       - release-candidate-ja
