@@ -1,10 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Внутренние сообщения
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-## Общие сведения
+## Overview
 
 Смарт-контракты взаимодействуют друг с другом, отправляя так называемые **внутренние сообщения**. Когда внутреннее сообщение достигает своего адресата, создается обычная транзакция от имени акккаунта получателя, а внутреннее сообщение обрабатывается в соответствии с кодом и постоянными данными этого аккаунта (смарт-контракт).
 
@@ -12,7 +10,13 @@
 В частности, транзакция обработки может создавать одно или несколько исходящих внутренних сообщений, некоторые из которых могут быть адресованы исходному адресу обрабатываемого внутреннего сообщения. Это можно использовать для создания простых "клиент-серверных приложений", когда запрос инкапсулируется во внутреннее сообщение и отправляется другому смарт-контракту, который обрабатывает запрос и снова отправляет ответ в качестве внутреннего сообщения.
 :::
 
-Этот подход приводит к необходимости различать, предназначено ли внутреннее сообщение как "запрос", "ответ" или не требует никакой дополнительной обработки (например, "простой денежный перевод"). Кроме того, при получении ответа должен быть способ определить, какому запросу он соответствует.
+This approach requires distinguishing whether an internal message is a:
+
+1. **Query** - initiating an action/request
+2. **Response** - replying to a query
+3. **Simple transfer** - requiring no processing (like basic value transfers)
+
+Кроме того, при получении ответа должен быть способ определить, какому запросу он соответствует.
 
 Для достижения этой цели можно использовать следующие подходы к внутреннему макету сообщения (обратите внимание, что блокчейн TON не накладывает никаких ограничений на тело сообщения, поэтому это всего лишь рекомендации).
 
@@ -24,17 +28,17 @@
 message$_ {X:Type} ... body:(Either X ^X) = Message X;
 ```
 
-Принимающий смарт-контракт должен принимать как минимум внутренние сообщения со встроенными телами сообщений (всякий раз, когда они помещаются в ячейку, содержащую сообщение). Если он принимает тела сообщений в отдельных ячейках (используя конструктор `right` из `(Either X ^X)`), обработка входящего сообщения не должна зависеть от конкретного варианта встраивания, выбранного для тела сообщения. С другой стороны, совершенно допустимо не поддерживать тела сообщений в отдельных ячейках для более простых запросов и ответов.
+Принимающий смарт-контракт должен принимать как минимум внутренние сообщения со встроенными телами сообщений (всякий раз, когда они помещаются в ячейку, содержащую сообщение). Если он принимает тела сообщений в отдельных ячейках (используя конструктор `right` из `(Either X ^X)`), обработка входящего сообщения не должна зависеть от конкретного варианта встраивания, выбранного для тела сообщения. In that case, the processing of the inbound message should not depend on the specific embedding option chosen for the message body. С другой стороны, совершенно допустимо не поддерживать тела сообщений в отдельных ячейках для более простых запросов и ответов.
 
 ### Внутреннее тело сообщения
 
 Тело сообщения обычно начинается со следующих полей:
 
-```
-* A 32-bit (big-endian) unsigned integer `op`, identifying the `operation` to be performed, or the `method` of the smart contract to be invoked.
-* A 64-bit (big-endian) unsigned integer `query_id`, used in all query-response internal messages to indicate that a response is related to a query (the `query_id` of a response must be equal to the `query_id` of the corresponding query). If `op` is not a query-response method (e.g., it invokes a method that is not expected to send an answer), then `query_id` may be omitted.
-* The remainder of the message body is specific for each supported value of `op`.
-```
+- - A 32-bit (big-endian) unsigned integer `op`, identifying the `operation` to be performed, or the `method` of the smart contract to be invoked.
+  - A 64-bit (big-endian) unsigned integer `query_id`, used in all query-response internal messages to indicate that a response is related to a query (the `query_id` of a response must be equal to the `query_id` of the corresponding query). If `op` is not a query-response method (e.g., it invokes a method that is not expected to send an answer), then `query_id` may be omitted.
+  - The remainder of the message body is specific for each supported value of `op`.
+- A 64-bit (big-endian) unsigned integer `query_id`, used in all query-response internal messages to indicate that a response is related to a query (the `query_id` of a response must be equal to the `query_id` of the corresponding query). If `op` is not a query-response method (e.g., it invokes a method that is not expected to send an answer), then `query_id` may be omitted.
+- The remainder of the message body is specific for each supported value of `op`.
 
 ### Простое сообщение с комментарием
 
@@ -65,7 +69,7 @@ root_cell("0x00000000" - 32 bit, "string" up to 123 bytes)
 - `pub_2` - Ed25519 открытый ключ получателя, 32 байта.
 - `msg` - сообщение для шифрования, произвольная строка байтов. `len(msg) <= 960`.
 
-Алгоритм шифрования следующий:
+#### Алгоритм шифрования следующий:
 
 1. Вычислить `shared_secret` с помощью `priv_1` и `pub_2`.
 2. Пусть `salt` будет [представлением bas64url](/v3/documentation/smart-contracts/addresses#user-friendly-address) адреса кошелька отправителя с `isBounceable=1` и `isTestnetOnly=0`.
@@ -82,7 +86,7 @@ root_cell("0x00000000" - 32 bit, "string" up to 123 bytes)
   2. `c_1` содержит до 35 байт (не включая 4-байтовый тег), все остальные ячейки содержат до 127 байт.
   3. Этот формат имеет следующие ограничения: `k <= 16`, максимальная длина строки 1024.
 
-Тот же формат используется для комментариев при переводе NFT и жетонов, обратите внимание, что следует использовать открытый ключ адреса отправителя и адреса получателя (не адреса jetton-wallet).
+Comments for NFT and jetton transfers follow the same format. Тот же формат используется для комментариев при переводе NFT и жетонов, обратите внимание, что следует использовать открытый ключ адреса отправителя и адреса получателя (не адреса jetton-wallet).
 
 :::info
 Learn from examples of the message encryption algorithm:
@@ -93,7 +97,8 @@ Learn from examples of the message encryption algorithm:
 
 ### Простые сообщения о передаче без комментариев
 
-"Простое сообщение о передаче без комментариев" имеет пустое тело (даже без поля `op`). Вышеизложенные соображения применимы и к таким сообщениям. Обратите внимание, что такие сообщения должны иметь свои тела, встроенные в ячейку сообщения.
+"Простое сообщение о передаче без комментариев" имеет пустое тело (даже без поля `op`).
+Вышеизложенные соображения применимы и к таким сообщениям. Обратите внимание, что такие сообщения должны иметь свои тела, встроенные в ячейку сообщения.
 
 ### Различие между сообщениями запроса и ответа
 
@@ -103,10 +108,8 @@ Learn from examples of the message encryption algorithm:
 
 Существуют некоторые "стандартные" сообщения ответа с `op`, равным `0xffffffff` и `0xfffffffe`. В общем случае значения `op` от `0xffffffff0` до `0xffffffff` зарезервированы для таких стандартных ответов.
 
-```
-* `op` = `0xffffffff` means "operation not supported". It is followed by the 64-bit `query_id` extracted from the original query, and the 32-bit `op` of the original query. All but the simplest smart contracts should return this error when they receive a query with an unknown `op` in the range `1 .. 2^31-1`.
-* `op` = `0xfffffffe` means "operation not allowed". It is followed by the 64-bit `query_id` of the original query, followed by the 32-bit `op` extracted from the original query.
-```
+- `op` = `0xffffffff` means "operation not supported". It is followed by the 64-bit `query_id` extracted from the original query and the 32-bit `op` of the original query. All but the simplest smart contracts should return this error when they receive a query with an unknown `op` in the range `1 .. 2^31-1`.
+- `op` = `0xfffffffe` means "operation not allowed". It is followed by the 64-bit `query_id` of the original query, followed by the 32-bit `op` extracted from the original query.
 
 Обратите внимание, что неизвестные "ответы" (с `op` в диапазоне `2^31 .. 2^32-1`) следует игнорировать (в частности, в ответ на них не следует генерировать ответ с `op`, равным `0xffffffff`), так же как и неожиданные возвращенные сообщения (с установленным флагом "bounced").
 
@@ -119,26 +122,26 @@ Learn from examples of the message encryption algorithm:
 | Тип контракта | Шестнадцатеричный код | OP::Code                                                                                                   |
 | ------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | Общий         | 0x00000000            | Текстовый комментарий                                                                                                                      |
-| Общий         | 0xffffffff            | Отклонение                                                                                                                                 |
+| Общий         | 0xffffffff            | Bounce                                                                                                                                     |
 | Общий         | 0x2167da4b            | [Зашифрованный комментарий](/v3/documentation/smart-contracts/message-management/internal-messages#messages-with-encrypted-comments)       |
 | Общий         | 0xd53276db            | Избыток                                                                                                                                    |
 | Электор       | 0x4e73744b            | Новая ставка                                                                                                                               |
 | Электор       | 0xf374484c            | Подтверждение новой ставки                                                                                                                 |
 | Электор       | 0x47657424            | Запрос на восстановление ставки                                                                                                            |
 | Электор       | 0x47657424            | Ответ на восстановление ставки                                                                                                             |
-| Кошелек       | 0x0f8a7ea5            | Перевод жетонов                                                                                                                            |
+| Кошелек       | 0x0f8a7ea5            | Jetton transfer                                                                                                                            |
 | Кошелек       | 0x235caf52            | [Вызов жетона](https://testnet.tonviewer.com/transaction/1567b14ad43be6416e37de56af198ced5b1201bb652f02bc302911174e826ef7)                 |
 | Жетон         | 0x178d4519            | Внутренняя передача жетона                                                                                                                 |
 | Жетон         | 0x7362d09c            | Уведомление жетона                                                                                                                         |
 | Жетон         | 0x595f07bc            | Сжигание жетона                                                                                                                            |
 | Жетон         | 0x7bdd97de            | Уведомление о сжигании жетона                                                                                                              |
 | Жетон         | 0xeed236d3            | Установка статуса жетона                                                                                                                   |
-| Выпуск жетона | 0x642b7d07            | Выпуск жетона                                                                                                                              |
-| Выпуск жетона | 0x6501f354            | Изменение администратора жетона                                                                                                            |
-| Выпуск жетона | 0xfb88e119            | Запрос администратора жетона                                                                                                               |
-| Выпуск жетона | 0x7431f221            | Сброс администратора жетона                                                                                                                |
-| Выпуск жетона | 0xcb862902            | Изменение метаданных жетона                                                                                                                |
-| Выпуск жетона | 0x2508d66a            | Обновление жетона                                                                                                                          |
+| Jetton-Minter | 0x642b7d07            | Jetton mint                                                                                                                                |
+| Jetton-Minter | 0x6501f354            | Изменение администратора жетона                                                                                                            |
+| Jetton-Minter | 0xfb88e119            | Запрос администратора жетона                                                                                                               |
+| Jetton-Minter | 0x7431f221            | Сброс администратора жетона                                                                                                                |
+| Jetton-Minter | 0xcb862902            | Изменение метаданных жетона                                                                                                                |
+| Jetton-Minter | 0x2508d66a            | Обновление жетона                                                                                                                          |
 | Вестинг       | 0xd372158c            | [Пополнение](https://github.com/ton-blockchain/liquid-staking-contract/blob/be2ee6d1e746bd2bb0f13f7b21537fb30ef0bc3b/PoolConstants.ts#L28) |
 | Вестинг       | 0x7258a69b            | Добавление белого списка                                                                                                                   |
 | Вестинг       | 0xf258a69b            | Добавление ответа в белый список                                                                                                           |
@@ -148,14 +151,14 @@ Learn from examples of the message encryption algorithm:
 | Dedust        | 0xe3a0d482            | Обмен жетонов на Dedust                                                                                                                    |
 | Dedust        | 0xea06185d            | Внутренний обмен Dedust                                                                                                                    |
 | Dedust        | 0x61ee542d            | Внешний обмен                                                                                                                              |
-| Dedust        | 0x72aca8aa            | Обмен пирами                                                                                                                               |
+| Dedust        | 0x72aca8aa            | Swap peer                                                                                                                                  |
 | Dedust        | 0xd55e4686            | Внутренний депозит ликвидности                                                                                                             |
 | Dedust        | 0x40e108d6            | Депозит ликвидности жетона                                                                                                                 |
 | Dedust        | 0xb56b9598            | Ликвидность всех депозитов                                                                                                                 |
-| Dedust        | 0xad4eb6f5            | Выплаты из пула                                                                                                                            |
-| Dedust        | 0x474а86са            | Выплата                                                                                                                                    |
+| Dedust        | 0xad4eb6f5            | Pay out from pool                                                                                                                          |
+| Dedust        | 0x474а86са            | Payout                                                                                                                                     |
 | Dedust        | 0xb544f4a4            | Депозит                                                                                                                                    |
-| Dedust        | 0x3aa870a6            | Вывод                                                                                                                                      |
+| Dedust        | 0x3aa870a6            | Отклонение                                                                                                                                 |
 | Dedust        | 0x21cfe02b            | Создать хранилище                                                                                                                          |
 | Dedust        | 0x97d51f2f            | Создать непостоянный пул                                                                                                                   |
 | Dedust        | 0x166cedee            | Отмена депозита                                                                                                                            |
@@ -170,3 +173,6 @@ Learn from examples of the message encryption algorithm:
 
 [Документация StonFi](https://docs.ston.fi/docs/developer-section/architecture#calls-descriptions)
 :::
+
+<Feedback />
+
