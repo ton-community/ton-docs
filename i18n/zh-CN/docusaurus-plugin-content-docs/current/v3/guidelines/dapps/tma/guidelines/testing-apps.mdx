@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ConceptImage from '@site/src/components/conceptImage'
 
 # 测试小程序
@@ -6,11 +8,11 @@ import ConceptImage from '@site/src/components/conceptImage'
 
 要登录测试环境，请使用以下任一方式：
 
-- **iOS：** 在设置图标上点击 10 次 > 账号 > 登录另一个账户 > 测试。
+- **iOS:** Tap 10 times on the Settings icon. Navigate to > Accounts > Login to another account > Test.
 - **Telegram 桌面版：** 打开 ☰ 设置 > Shift + Alt + 右键点击“添加账号”并选择“测试服务器”。
-- **macOS：** 点击设置图标 10 次以打开调试菜单，⌘ + 点击“添加账号”并通过电话号码登录。
+- **macOS:** Click the Settings icon 10 times to open the Debug Menu. `⌘` + Click **Add Account** and log in using your phone number.
 
-测试环境与主环境完全分开，因此你需要创建一个**新的用户账号**和一个与 @BotFather 的**新机器人**。
+The test environment is completely separate from the main environment. 测试环境与主环境完全分开，因此你需要创建一个**新的用户账号**和一个与 @BotFather 的**新机器人**。
 
 收到你的机器人令牌后，你可以按照此格式向 Bot API 发送请求：
 
@@ -28,26 +30,27 @@ import ConceptImage from '@site/src/components/conceptImage'
 - 在 Telegram 设置中，一直滚动到底部，两次按住**版本号**。
 - 在调试设置中选择_启用 WebView 调试_。
 - 将手机连接到电脑并在 Chrome 中打开 chrome://inspect/#devices - 当你在手机上启动时，你会在那里看到你的小程序。
+- 部署好 Mini App 后，启动它，只需按下 Eruda 图标即可开始调试！
 
-### Telegram 桌面版（Windows 和 Linux）
+### **iOS：** 在设置图标上点击 10 次 > 账号 > 登录另一个账户 > 测试。
 
 iOS 网络视图调试需要 Safari 桌面浏览器，因此需要 macOS。
 
 **在 iOS 设备上：**
 
-- 下载并启动 Telegram macOS 的[测试版](https://telegram.org/dl/macos/beta)。
 - 快速点击设置图标 5 次以打开调试菜单并启用“调试小程序”。
+- 下载并启动 Telegram macOS 的[测试版](https://telegram.org/dl/macos/beta)。
 - 向下滚动并按下 _Advanced_。
 - 启用 _Web Inspector_ 选项。
 
-在小程序中点击右键并选择 _检查元素_。
+**macOS：** 点击设置图标 10 次以打开调试菜单，⌘ + 点击“添加账号”并通过电话号码登录。
 
 - 打开 Safari 浏览器。
 - 打开 _Settings_ （⌘ + ，）。
 - 选择 _Advanced_ 选项卡。
 - 选中底部的 _Show features for web developers_ 选项。
 
-[Eruda](https://github.com/liriliri/eruda) 是一个提供基于 Web 的控制台的工具，用于在移动设备和桌面浏览器上调试和检查网页。以下是在 Telegram 小程序项目中使用 Eruda 的逐步指南。
+**Next steps:**
 
 - 通过数据线将 iOS 设备连接到 Mac。
 - 在 iOS Telegram 客户端中打开 Mini App。
@@ -56,7 +59,7 @@ iOS 网络视图调试需要 Safari 桌面浏览器，因此需要 macOS。
 - 可选项：选择 _Connect via network_ 并拔掉电缆。
 - 在 _Telegram_ 块下选择已打开的网络视图 URL。
 
-### 步骤 1：包含 Eruda 库
+### Telegram 桌面版（Windows 和 Linux）
 
 - 在 **Windows**、**Linux** 或 **macOS** 上下载并启动最新版本的 Telegram Desktop（目前版本为 5.0.1）。
 - 转到 _设置 > 高级 > 实验性设置 > 启用 webview 检查_。
@@ -67,13 +70,13 @@ iOS 网络视图调试需要 Safari 桌面浏览器，因此需要 macOS。
 ### Telegram macOS
 
 - 下载并启动 Telegram macOS 的[测试版](https://telegram.org/dl/macos/beta)。
-- 快速点击设置图标 5 次以打开调试菜单并启用“调试小程序”。
+- Quickly click the Settings icon five times to open the debug menu and enable **Debug Mini Apps**.
 
-在小程序中点击右键并选择 _检查元素_。
+Right-click inside the Mini App and choose _Inspect Element_.
 
-## 步骤 2：初始化 Eruda
+## Testing with Eruda
 
-接下来，你需要初始化 Eruda。你通常在网页加载时执行此操作。如果你通过 CDN 运行 Eruda。
+[Eruda](https://github.com/liriliri/eruda) 是一个提供基于 Web 的控制台的工具，用于在移动设备和桌面浏览器上调试和检查网页。以下是在 Telegram 小程序项目中使用 Eruda 的逐步指南。
 
 ![1](/img/docs/telegram-apps/eruda-1.png)
 
@@ -81,12 +84,14 @@ iOS 网络视图调试需要 Safari 桌面浏览器，因此需要 macOS。
 
 首先，在 HTML 文件中包含 Eruda 库。您可以从 CDN 加载它：
 
+**Option 1:** use a CDN (recommended).
+
 ```html
 <!-- Include Eruda from CDN (Recommended) -->
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 ```
 
-部署你的小程序，启动它，然后只需按 Eruda 图标即可开始调试！
+**Option 2:** install via npm.
 
 ```bash npm2yarn
 npm install eruda --save
@@ -115,7 +120,12 @@ eruda.init()
 
 ### 步骤 3：启动 Eruda
 
-部署好 Mini App 后，启动它，只需按下 Eruda 图标即可开始调试！
+After deploying your Mini App:
+
+- Open it in Telegram.
+- Press the Eruda icon to start debugging.
 
 <ConceptImage style={{maxWidth:'200pt', margin: '10pt 20pt 0 0', display: 'flex-box'}} src="/img/docs/telegram-apps/eruda-2.png" />
 <ConceptImage style={{maxWidth:'200pt', margin: '10pt 20pt', display: 'flex-box'}}  src="/img/docs/telegram-apps/eruda-3.png" />
+
+<Feedback />
