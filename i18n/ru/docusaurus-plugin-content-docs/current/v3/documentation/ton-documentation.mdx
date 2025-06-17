@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 import Player from '@site/src/components/player'
 
@@ -7,7 +9,7 @@ import Player from '@site/src/components/player'
 
 Здесь вы найдете всю необходимую информацию для разработки, тестирования и развертывания приложений на блокчейне TON.
 
-Этот проект создается совместно с сообществом и имеет открытый исходный код. Мы всегда рады новым участникам. Всю документацию можно редактировать на GitHub. Инструкция и формат работы представлен по [ссылке](/v3/contribute).
+This is a collaborative, open-source initiative, and **contributions are always welcome**. Всю документацию можно редактировать на GitHub. Инструкция и формат работы представлен по [ссылке](/v3/contribute).
 
 - Серия _TON Hello World_ содержит подробные пошаговые руководства по кошелькам, смарт-контрактам, мини-приложениям, а также тестированию и отладке смарт-контрактов на TON
 - _Начало работы с TON_ — пошаговое руководство и видеоуроки по работе с блокчейном TON
@@ -39,22 +41,25 @@ TON Hello World
 <Button href="https://stepik.org/course/200976/promo"
         colorType={'secondary'} sizeType={'sm'}>
 
-На китайском
+CHN
 
 </Button>
 
 <Button href="https://stepik.org/course/202221/promo"
         colorType={'secondary'} sizeType={'sm'}>
 
-На русском
+RU
 
 </Button>
 
 ### Курс по TON
 
-Мы рады представить **курс по блокчейну TON** — полное руководство для разработчиков, желающих научиться создавать смарт-контракты и децентрализованные приложения на TON. Курс разработан в интерактивном формате, чтобы обучение было максимально увлекательным и полезным.
+We're excited to offer the **TON Blockchain course** — a comprehensive, hands-on learning path for developers. Мы рады представить **курс по блокчейну TON** — полное руководство для разработчиков, желающих научиться создавать смарт-контракты и децентрализованные приложения на TON. Курс разработан в интерактивном формате, чтобы обучение было максимально увлекательным и полезным.
+The course consists of 9 modules, covering:
 
-Он состоит из **9 модулей** и охватывает основы блокчейна TON, язык программирования FunC и виртуальную машину TON (TVM).
+- Он состоит из **9 модулей** и охватывает основы блокчейна TON, язык программирования FunC и виртуальную машину TON (TVM).
+- The FunC programming language
+- [TON Virtual Machine (TVM)](/v3/documentation/tvm/tvm-overview) - Подробный обзор виртуальной машины TON
 
 <Button href="https://stepik.org/course/176754/promo"
         colorType={'primary'} sizeType={'sm'}>
@@ -66,14 +71,14 @@ TON Hello World
 <Button href="https://stepik.org/course/201638/promo"
         colorType={'secondary'} sizeType={'sm'}>
 
-На китайском
+CHN
 
 </Button>
 
 <Button href="https://stepik.org/course/201855/promo"
         colorType={'secondary'} sizeType={'sm'}>
 
-На русском
+RU
 
 </Button>
 
@@ -88,7 +93,7 @@ TON Hello World
 - [Адреса смарт-контрактов](/v3/documentation/smart-contracts/addresses) - Подробное описание адресов
 - [Ячейки как структура данных](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) - Подробное описание структур данных
 - [TON Networking](/v3/concepts/dive-into-ton/ton-blockchain/ton-networking) - Подробный обзор одноранговых протоколов на TON
-- [TON Virtual Machine (TVM)](/v3/documentation/tvm/tvm-overview) - Подробный обзор виртуальной машины TON
+- [TON Hello World: пошаговое руководство по написанию вашего первого смарт-контракта](https://helloworld.tonstudio.io/02-contract/) — доступное и краткое объяснение основ работы с JS
 - [Транзакции и фазы](/v3/documentation/tvm/tvm-overview#transactions-and-phases) - Подробное описание транзакций и фаз
 - [Транзакционные комиссии](/v3/documentation/smart-contracts/transaction-fees/fees) - Подробное описание комиссий за транзакции
 
@@ -107,12 +112,13 @@ TON Hello World
 
 ## Разработка смарт-контрактов
 
-Смарт-контракты — это строительные блоки децентрализованных приложений (DApps) на блокчейне TON. Если вы хотите разрабатывать собственные DApps, вам важно понимать, как работают смарт-контракты.
+Смарт-контракты — это строительные блоки децентрализованных приложений (DApps) на блокчейне TON.
+Если вы хотите разрабатывать собственные DApps, вам важно понимать, как работают смарт-контракты.
 
 <Button href="/v3/documentation/smart-contracts/overview"
         colorType="primary" sizeType={'sm'}>
 
-Вводная статья
+Getting started
 
 </Button>
 
@@ -126,29 +132,32 @@ TON Hello World
 
 Следующие ресурсы содержат ценную информацию для разработки смарт-контрактов TON:
 
-- [TON Hello World: пошаговое руководство по написанию вашего первого смарт-контракта](https://helloworld.tonstudio.io/02-contract/) — доступное и краткое объяснение основ работы с JS
+- [TON Hello World: Step-by-step guide for writing your first smart contract](https://helloworld.tonstudio.io/02-contract/) - a step-by-step guide for writing your first smart contract. Offers an accessible and concise introduction to the fundamentals of using JavaScript.
 - [Как работать со смарт-контрактами кошелька](/v3/guidelines/smart-contracts/howto/wallet) — подробные и тщательные объяснения основ смарт-контрактов с использованием JS и GO
 - [Изучите смарт-контракты на примерах](/v3/documentation/smart-contracts/contracts-specs/examples) (FunC, Fift)
 - [Speed ​​Run TON](/v3/documentation/smart-contracts/contracts-specs/examples) — 6 интерактивных задач и пошаговых руководств для изучения разработки смарт-контрактов
 
 ## Разработка DApp
 
-Децентрализованные приложения (DApps) — это приложения, которые работают в одноранговой сети компьютеров (например, в блокчейне TON), а не на одном сервере. Они напоминают традиционные веб-приложения, но функционируют на базе блокчейна. Это означает, что DApps децентрализованы, то есть не контролируются какой-либо одной организацией.
+Децентрализованные приложения (DApps) — это приложения, которые работают в одноранговой сети компьютеров (например, в блокчейне TON), а не на одном сервере.
+Они напоминают традиционные веб-приложения, но функционируют на базе блокчейна. Это означает, что DApps децентрализованы, то есть не контролируются какой-либо одной организацией.
 
 <Button href="/v3/guidelines/dapps/overview/" colorType={'primary'} sizeType={'sm'}>
 
-Вводная статья
+Getting started
 
 </Button>
 
 ### Разработка DeFi
+
+Explore key tools and concepts for building decentralized finance (DeFi) applications on the TON Blockchain:
 
 - [TON Connect](/v3/guidelines/ton-connect/overview) — инструмент для интеграции и аутентификации DApps
 - [Обработка платежей Off-chain](/v3/guidelines/dapps/asset-processing/payments-processing) — примеры и концепции
 - [Работа с жетонами TON](/v3/guidelines/dapps/asset-processing/jettons) — примеры и концепции
 - [Взаимозаменяемые (FT) / невзаимозаменяемые (NFT) токены](/v3/documentation/dapps/defi/tokens) — смарт-контракты, примеры, инструменты
 
-Начните разработку DApps с подробного пошагового руководства:
+Take your first steps in building decentralized applications with this comprehensive guide:
 
 - [TON Hello World: пошаговое руководство по созданию вашего первого веб-клиента](https://helloworld.tonstudio.io/03-client/)
 
@@ -160,3 +169,5 @@ TON Hello World
 ## Часто задаваемые вопросы
 
 Ознакомьтесь с [ответами на часто задаваемые вопросы](/v3/documentation/faq).
+
+<Feedback />
