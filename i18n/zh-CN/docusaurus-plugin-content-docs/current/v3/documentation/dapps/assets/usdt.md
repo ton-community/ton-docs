@@ -1,52 +1,58 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
-# USDT 处理
+# USDT processing
 
 ## Tether
 
-稳定币是一种加密货币，其价值与另一种资产（如法定货币或黄金）1:1挂钩，以保持价格稳定。直到最近，存在一种名为jUSDT的代币，它是通过Ethereum的ERC-20代币桥接<a href="https://bridge.ton.org" target="_blank">bridge.ton.org</a>转换而来的 。然而，在[2023年4月18日](https://t.me/toncoin/824)，由 <a href="https://tether.to/en/" target="_blank">Tether</a> 公司发行的原生USD₮代币进行了公开发布。USD₮发布后，jUSDT成为了次要优先级的代币，但仍然作为USD₮的替代品或补充在服务中使用。
+[Apr 18, 2023](https://t.me/toncoin/824), the public launch of native USD₮ token issued by the company <a href="https://tether.to/en/" target="_blank">Tether</a>.
 
-在 TON 区块链中，美元作为[Jetton 资产](/v3/guidelines/dapps/asset-processing/jettons) 得到支持。
+In TON Blockchain USD₮ supported as a [Jetton asset](/v3/guidelines/dapps/asset-processing/jettons).
 
 :::info
-要在 TON 区块链上集成 Tether 的 USD₮ 代币，请使用合约地址：
+To integrate Tether’s USD₮ Token on TON Blockchain use the contract address:
 [EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs](https://tonviewer.com/EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs?section=jetton)
 :::
 
 <Button href="https://github.com/ton-community/assets-sdk" colorType="primary" sizeType={'sm'}>Assets SDK</Button>
-<Button href="/v3/guidelines/dapps/asset-processing/jettons" colorType={'secondary'} sizeType={'sm'}>Jetton Processing</Button>
-<Button href="https://github.com/ton-community/tma-usdt-payments-demo?tab=readme-ov-file#tma-usdt-payments-demo" colorType={'secondary'} sizeType={'sm'}>TMA USDT 支付演示</Button>
+<Button href="/v3/guidelines/dapps/asset-processing/jettons" colorType={'secondary'} sizeType={'sm'}>Jetton processing</Button>
+<Button href="https://github.com/ton-community/tma-usdt-payments-demo?tab=readme-ov-file#tma-usdt-payments-demo" colorType={'secondary'} sizeType={'sm'}>TMA USDT payments demo</Button>
 
-## 在 TON 上使用 USD₮ 的优势
+## Advantages of USD₮ on TON
 
-### 无缝集成 Telegram
+### Seamless Telegram integration
 
-[TON 上的 USD₮](https://ton.org/borderless) 将无缝集成到 Telegram 中，提供独特的用户友好体验，使 TON 成为进行 USDt 交易最方便的区块链。这一整合将简化 Telegram 用户的 DeFi，使其更易于使用和理解。
+[USD₮ on TON](https://ton.org/borderless) will be seamlessly integrated into Telegram, offering a uniquely user-friendly experience that positions TON as the most convenient blockchain for USDt transactions. This integration will simplify DeFi for Telegram users, making it more accessible and understandable.
 
-### 降低交易费用
+### Lower transaction fees
 
-以太坊 USD₮ 转账所消耗的费用是根据网络负载动态计算的。这就是为什么交易费用会很高。
+Fees for Ethereum USD₮ transfers are calculated dynamically depending on network load. This is why transactions can become expensive.
 
-```cpp
-transaction_fee = gas_used * gas_price
-```
+ ```cpp
+ transaction_fee = gas_used * gas_price
+ ```
 
-- `gas_used` 是事务执行过程中使用的 gas 量。
-- 以 Gwei 为单位的 `gas_price`  gas 价格，动态计算
+- `gas_used` is the amount of gas used during transaction execution.
+- `gas_price` is the cost of one unit of gas in Gwei, calculated dynamically.
 
-另一方面，如今在 TON 区块链上发送任意金额的美元的平均费用约为 0.0145 TON。即使 TON 价格上涨 100 倍，交易也将 [保持超低价](/v3/documentation/smart-contracts/transaction-fees/fees#average-transaction-cost)。TON 的核心开发团队对 Tether 的智能合约进行了优化，使其比其他任何 Jetton 便宜三倍。
+On the other hand average fee for sending any amount of USD₮ in TON Blockchain is about 0.0145 TON nowadays. Even if the price of TON increases 100 times, transactions will [remain ultra-cheap](/v3/documentation/smart-contracts/transaction-fees/fees#average-transaction-cost). The core TON development team has optimized Tether’s smart contract to make it three times cheaper than any other Jetton.
 
-### 更快、可扩展
+### Faster and scalable
 
-TON 的高吞吐量和快速确认时间使美元交易的处理速度比以往任何时候都快。
+TON’s high throughput and rapid confirmation times enable USD₮ transactions to be processed more quickly than ever before.
 
-## 高级详细信息
+## Advanced details
 
-:::caution 重要事项
+:::caution IMPORTANT
+In TON Blockchain jettons can be created with duplicate names. Technically, it will not differ in any way from the real USD₮ but it will have no value because of no security. You can verify legitimacy and check for fraud only by confirming the Jetton Master address.
 
-参见重要 [建议](/v3/guidelines/dapps/asset-processing/jettons)。
+See important [recommendations](/v3/guidelines/dapps/asset-processing/jettons).
 :::
 
-## 另请参见
+## See also
 
-- [支付处理](/v3/guidelines/dapps/asset-processing/payments-processing)
+- [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing)
+
+<Feedback />
+
