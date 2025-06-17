@@ -1,23 +1,25 @@
-# 使用 Blueprint 编写测试
+import Feedback from '@site/src/components/Feedback';
 
-## 概览
+# Writing tests with Blueprint
 
-测试工具包（通常是沙盒）已经包含在名为[Blueprint](/develop/smart-contracts/sdk/javascript)的TypeScript SDK中。您可以创建一个演示项目并通过两个步骤启动默认测试：
+## Overview
 
-1. 创建一个新的Blueprint项目：
+The TypeScript SDK, named [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript), already includes the test toolkit (usually Sandbox). You can create a demo project and run the default test in two steps:
+
+1. Create a new Blueprint project:
 
 ```bash
 npm create ton@latest MyProject
 ```
 
-2. 运行测试：
+2. Run a test:
 
 ```bash
 cd MyProject
 npx blueprint test
 ```
 
-然后，您将在终端窗口中看到相应的输出：
+As a result, you’ll see the corresponding output in the terminal window:
 
 ```bash
 % npx blueprint test
@@ -36,102 +38,110 @@ Time:        1.224 s, estimated 2 s
 Ran all test suites.
 ```
 
-## 基本用法
+## Basic usage
 
-测试智能合约可以涵盖安全性、优化Gas支出和检查极端情况。
-在Blueprint（基于[Sandbox](https://github.com/ton-org/sandbox)）中编写测试是通过定义与合约的任意操作并将测试结果与预期结果进行比较来实现的，例如：
+Testing smart contracts allows you to cover security, optimize gas spending, and examine edge cases.\
+Writing tests in Blueprint (based on [Sandbox](https://github.com/ton-org/sandbox)) involves defining arbitrary actions with the contract and comparing the test results with the expected outcome. For example:
 
 ```typescript
-it('should execute with success', async () => {                              // description of the test case
-    const res = await main.sendMessage(sender.getSender(), toNano('0.05'));  // performing an action with contract main and saving result in res
+it("should execute with success", async () => {
+  // Description of the test case
+  const res = await main.sendMessage(sender.getSender(), toNano("0.05")); // Perform an action with the contract and save the result in res
 
-    expect(res.transactions).toHaveTransaction({                             // configure the expected result with expect() function
-        from: main.address,                                                  // set expected sender for transaction we want to test matcher properties from
-        success: true                                                        // set the desirable result using matcher property success
-    });
+  expect(res.transactions).toHaveTransaction({
+    // Configure the expected result with the expect() function
+    from: main.address, // Set the expected sender for the transaction
+    success: true, // Set the desirable result using the matcher property success
+ });
 
-    printTransactionFees(res.transactions);                                  // print table with details on spent fees
+  printTransactionFees(res.transactions); // Print a table with details on spent fees
 });
 ```
 
-### 编写复杂Assertion的测试
+### Writing tests for complex assertions
 
-创建测试的基本流程是：
+The basic workflow for creating a test is as follows:
 
-1. 使用`blockchain.openContract()`创建特定的wrapped`Contract`实体。
-2. 描述您的`Contract`应执行的操作并将执行结果保存在`res`变量中。
-3. 使用`expect()`函数和匹配器`toHaveTransaction()`验证属性。
+1. Create a specific wrapped `Contract` entity using `blockchain.openContract()`.
+2. Describe the actions your `Contract` should perform and save the execution result in the `res` variable.
+3. Verify the properties using the `expect()` function and the matcher `toHaveTransaction()`.
 
-`toHaveTransaction`匹配器所期望的对象包含以下属性中的任意组合，这些属性来自`FlatTransaction`类型
+The `toHaveTransaction` matcher expects an object with any combination of fields from the `FlatTransaction` type, defined with the following properties:
 
-| 名称                   | 类型             | 描述                                                                                                                                                         |
-| -------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| from                 | Address?       | 消息发送者的合约地址                                                                                                                                                 |
-| on                   | Address        | 消息目的地的合约地址  （属性`to`的替代名称）。                                                                                                                                 |
-| value                |                | 消息中Toncoin的数量，以nanotons计算                                                                                                                                  |
-| body                 | Cell           | 定义为Cell的消息体                                                                                                                                                |
-| op                   | number?        | op是操作标识符号码（通常为TL-B的crc32）。在消息体的前32位中。                                                                                                                      |
-| success              | boolean?       | 自定义沙盒标志，定义特定交易的结果状态。如果计算和行动阶段都成功，则为True。否则为False。                                                                                                          |
+| Name    | Type     | Description                                                                                                                                                 |
+| ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| from    | Address? | Contract address of the message sender                                                                                                                      |
+| on      | Address  | Contract address of the message destination (alternative name for the property `to`).                                                                       |
+| value   | bigint?  | Amount of TON coins in the message, in nanotons                                                                                                             |
+| body    | Cell     | Message body defined as a Cell                                                                                                                              |
+| op      | number?  | Op code is usually the operation identifier number (crc32 from TL-B). Expected in the first 32 bits of a message body.                                      |
+| success | boolean? | Custom Sandbox flag that defines the resulting status of a certain transaction. True if both the compute and the action phases succeeded. Otherwise, False. |
 
-您可以省略您不感兴趣的字段，并传递接受类型并返回布尔值的函数（true表示可以），以检查例如数字范围、消息操作码等。请注意，如果字段是可选的（如`from?: Address`），那么函数也需要接受可选类型。
+You can omit fields you’re not interested in and pass functions that accept the types and return booleans (`true` meaning good) to check, for example, number ranges, message opcodes, etc. Note that if a field is optional (like `from?: Address`), the function must also accept the optional type.
 
-:::tip
-您可以从[Sandbox文档](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher)中查看所有匹配器字段的完整列表。
+:::tip 
+The complete list of matcher fields is in the [Sandbox documentation](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).\
 :::
 
-### 特定测试套件
+### Specific test suite
 
-#### 提取发送模式
+#### Extract send mode
 
-要提取发送消息的发送模式，您可以使用以下代码：
+To extract the send mode of a sent message, use the following code:
 
 ```ts
 const re = await blockchain.executor.runTransaction({
-    message: beginCell().endCell(),
-    config: blockchain.configBase64,
-    libs: null,
-    verbosity: 'short',
-    shardAccount: beginCell().storeAddress(address).endCell().toBoc().toString('base64'),
-    now: Math. floor (Date.now()) / 1000,
-    lt: BigInt(Date.now()),
-    randomSeed: null,
-    ignoreChksig: false,
-    debugEnabled: true
+  message: beginCell().endCell(),
+  config: blockchain.configBase64,
+  libs: null,
+  verbosity: "short",
+  shardAccount: beginCell()
+ .storeAddress(address)
+ .endCell()
+ .toBoc()
+ .toString("base64"),
+  now: Math.floor(Date.now()) / 1000,
+  lt: BigInt(Date.now()),
+  randomSeed: null,
+  ignoreChksig: false,
+  debugEnabled: true,
 });
 
 if (!re.result.success || !re.result.actions) {
-    throw new Error('fail');
+  throw new Error("fail");
 }
 
 const actions = loadOutList(Cell.fromBase64(re.result.actions).beginParse());
 for (const act of actions) {
-    if (act.type === "sendMsg") {
-        // process action
-        console.log(act.mode)
-    }
+  if (act.type === "sendMsg") {
+    // process action
+    console.log(act.mode);
+ }
 }
 ```
 
-## 教程
+## Tutorials
 
-从TON社区最有价值的教程中了解更多关于测试的信息：
+Learn more about testing from the most valuable community tutorials on TON:
 
-- [第2课：为智能合约测试FunC](https://github.com/romanovichim/TonFunClessons_Eng/blob/main/lessons/smartcontract/2lesson/secondlesson.md)
-- [TON Hello World第4部分：逐步指导测试您的第一个智能合约](https://helloworld.tonstudio.io/04-testing/)
-- [TON智能合约传递途径](https://dev.to/roma_i_m/ton-smart-contract-pipeline-write-simple-contract-and-compile-it-4pnh)
-- [\[YouTube\]第六课 FunC & Blueprint。Gas，费用，测试。](https://youtu.be/3XIpKZ6wNcg)
+- [Lesson 2: Testing FunC for a Smart Contract](https://github.com/romanovichim/TonFunClessons_Eng/blob/main/lessons/smartcontract/2lesson/secondlesson.md)
+- [TON Hello World part 4: Step-by-step guide for testing your first smart contract](https://helloworld.tonstudio.io/04-testing/)
+- [TON Smart Contract Pipeline](https://dev.to/roma_i_m/ton-smart-contract-pipeline-write-simple-contract-and-compile-it-4pnh)
+- [[YouTube] Sixth lesson FunC & Blueprint: Gas, fees, tests](https://youtu.be/3XIpKZ6wNcg)
 
-## 示例
+## Examples
 
-查看用于TON生态系统合约的测试套件，并通过示例进行学习。
+Check test suites used for TON Ecosystem contracts and learn by examples:
 
-- [liquid-staking-contract沙盒测试](https://github.com/ton-blockchain/liquid-staking-contract/tree/main/tests)
-- [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/config_tests/tests/)
+- [Liquid-staking-contract sandbox tests](https://github.com/ton-blockchain/liquid-staking-contract/tree/main/tests)
+- [Governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/config_tests/tests/)
 - [JettonWallet.spec.ts](https://github.com/EmelyanenkoK/modern_jetton/blob/master/tests/JettonWallet.spec.ts)
-- [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/elector_tests/tests/complaint-test.fc)
+- [Governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/elector_tests/tests/complaint-test.fc)
 - [MassSender.spec.ts](https://github.com/Gusarich/ton-mass-sender/blob/main/tests/MassSender.spec.ts)
-- [TonForwarder.spec.ts](https://github.com/TrueCarry/ton-contract-forwarder/blob/main/src/contracts/ton-forwarder/TonForwarder.spec.ts)
+- [Assurer.spec.ts](https://github.com/aSpite/dominant-assurance-contract/blob/main/tests/Assurer.spec.ts)
 
-## 参阅
+## See also
 
 - [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript)
+
+<Feedback />
