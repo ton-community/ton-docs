@@ -1,22 +1,24 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON 区块链适用于游戏
 
 ## 教程内容
 
-在本教程中，我们将探讨如何将 TON 区块链添加到游戏中。作为示例，我们将使用 Phaser 编写的 Flappy Bird 克隆游戏，并逐步添加 GameFi 功能。在教程中，我们将使用短代码片段和伪代码来增加可读性。同时，我们还将提供指向真实代码块的链接，以帮助您更好地理解。完整的实现可以在[演示库](https://github.com/ton-community/flappy-bird)中找到。
+In this tutorial, we will explore how to integrate TON Blockchain into a game. As an example, we will use a Flappy Bird clone built with Phaser and gradually add GameFi features. To improve readability, we will use short code snippets and pseudocode. Additionally, we will provide links to real code blocks for better understanding. The complete implementation can be found in the [demo repo](https://github.com/ton-community/flappy-bird).
 
 ![没有 GameFi 功能的 Flappy Bird 游戏](/img/tutorials/gamefi-flappy/no-gamefi-yet.png)
 
 我们将实现以下功能：
 
-- 成就奖励。让我们用 [SBTs](https://docs.ton.org/learn/glossary#sbt) 奖励我们的用户。成就系统是增加用户参与度的绝佳工具。
-- 游戏货币。在 TON 区块链上，启动自己的代币（jetton）很容易。代币可以用来创建游戏内经济。我们的用户将能够赚取游戏币并在之后消费它们。
-- 游戏商店。我们将为用户提供使用游戏货币或 TON 代币购买游戏内物品的可能性。
+- Achievements. Let’s reward our users with [SBTs](/v3/concepts/glossary#sbt). The achievement system is a great tool for increasing user engagement.
+- Game currency. On the TON blockchain, it’s easy to launch your own token (jetton). The token can be used to create an in-game economy. Our users will be able to earn game coins and spend them later.
+- Game shop. 游戏商店。我们将为用户提供使用游戏货币或 TON 代币购买游戏内物品的可能性。
 
 ## 准备工作
 
 ### 安装 GameFi SDK
 
-首先，我们将设置游戏环境。为此，我们需要安装 `assets-sdk`。该包旨在准备开发者集成区块链到游戏中所需的一切。该库可以从 CLI 或 Node.js 脚本中使用。在本教程中，我们选择 CLI 方法。
+首先，我们将设置游戏环境。为此，我们需要安装 `assets-sdk`。该包旨在准备开发者集成区块链到游戏中所需的一切。该库可以从 CLI 或 Node.js 脚本中使用。在本教程中，我们选择 CLI 方法。 This package is designed to provide developers with everything required to integrate blockchain into games. The library can be used either from the CLI or within Node.js scripts. In this tutorial, we will use the CLI approach.
 
 ```sh
 npm install -g @ton-community/assets-sdk@beta
@@ -24,7 +26,7 @@ npm install -g @ton-community/assets-sdk@beta
 
 ### 创建主钱包
 
-接下来，我们需要创建一个主钱包。主钱包是我们将用来铸造 jetton、收藏品、NFT、SBT 和接收支付的钱包。
+Next, we need to create a master wallet. This wallet will be used to mint jettons, collections, NFTs, and SBTs, as well as to receive payments.
 
 ```sh
 assets-cli setup-env
@@ -32,21 +34,20 @@ assets-cli setup-env
 
 您将被问及几个问题：
 
-| 字段      | 提示                                                                                                         |
-| :------ | :--------------------------------------------------------------------------------------------------------- |
-| 网络      | 选择 `testnet`，因为它是测试游戏。                                                                                     |
-| 类型      | 选择 `highload-v2` 类型的钱包，因为它是用作主钱包的最佳、最高性能选项。                                                                |
-| 存储      | 用于存储 `NFT`/`SBT` 文件的存储。可以选择 `Amazon S3`（集中式）或 `Pinata`（去中心化）。 对于本教程，让我们使用 `Pinata`，因为去中心化存储对 Web3 游戏更具说明性。 |
-| IPFS 网关 | 从中加载资产元数据的服务：`pinata`、`ipfs.io` 或输入其他服务 URL。                                                               |
+| 字段      | 提示                                                                                                                                                                                                                                                                                                         |
+| :------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 网络      | 选择 `testnet`，因为它是测试游戏。                                                                                                                                                                                                                                                                                     |
+| 类型      | 选择 `highload-v2` 类型的钱包，因为它是用作主钱包的最佳、最高性能选项。                                                                                                                                                                                                                                                                |
+| 存储      | Storage is used to hold `NFT`/`SB`T files. You can choose between `Amazon S3` (centralized) or `Pinata` (decentralized).  用于存储 `NFT`/`SBT` 文件的存储。可以选择 `Amazon S3`（集中式）或 `Pinata`（去中心化）。 对于本教程，让我们使用 `Pinata`，因为去中心化存储对 Web3 游戏更具说明性。 |
+| IPFS 网关 | 从中加载资产元数据的服务：`pinata`、`ipfs.io` 或输入其他服务 URL。                                                                                                                                                                                                                                                               |
 
 脚本输出您可以打开的链接，以查看创建的钱包状态。
 
 ![新钱包处于 Nonexist 状态](/img/tutorials/gamefi-flappy/wallet-nonexist-status.png)
 
-如您所见，钱包实际上还没有创建。要想钱包真正创建，我们需要往里面存一些资金。在现实世界场景中，您可以使用任何喜欢的方式通过钱包地址存入钱包。在我们的案例中，我们将使用 [Testgiver TON Bot](https://t.me/testgiver_ton_bot)。请打开它领取 5 个测试 TON 代币。
+As you can see, the wallet has not actually been created yet. To finalize the creation, we need to deposit funds into it. In a real-world scenario, you can fund the wallet however you prefer using its address. In our case, we will use the [Testgiver TON Bot](https://t.me/testgiver_ton_bot). Open it to claim 5 test TON coins.
 
-稍后您将看到钱包中有 5 个 TON，并且其状态变为 `Uninit`。钱包准备就绪。首次使用后，其状态会变为 `Active`。
-
+稍后您将看到钱包中有 5 个 TON，并且其状态变为 `Uninit`。钱包准备就绪。首次使用后，其状态会变为 `Active`。 The wallet is now ready. After the first transaction, its status will change to Active.
 ![充值后的钱包状态](/img/tutorials/gamefi-flappy/wallet-nonexist-status.png)
 
 ### 铸造游戏货币
@@ -59,21 +60,21 @@ assets-cli deploy-jetton
 
 您将被问及几个问题：
 
-| 字段  | 提示                                                                                                                                                                            |
-| :-- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 名称  | 代币名称，例如 `Flappy Jetton`。                                                                                                                                                      |
-| 描述  | 代币描述，例如：来自 Flappy Bird 宇宙的生动数字代币。                                                                                                                                             |
-| 图片  | 下载预备好的 [jetton 标志](https://raw.githubusercontent.com/ton-community/flappy-bird/ca4b6335879312a9b94f0e89384b04cea91246b1/scripts/tokens/flap/image.png) 并指定文件路径。当然，您也可以使用任何图片。 |
-| 符号  | `FLAP` 或输入您想使用的任何缩写。                                                                                                                                                          |
-| 小数位 | 货币小数点后将有多少个零。在我们的案例中，让它为 `0`。                                                                                                                                                 |
+| 字段  | 提示                                                                                                                                                                                                                              |
+| :-- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 名称  | 代币名称，例如 `Flappy Jetton`。                                                                                                                                                                                                        |
+| 描述  | 代币描述，例如：来自 Flappy Bird 宇宙的生动数字代币。                                                                                                                                                                                               |
+| 图片  | 下载预备好的 [jetton 标志](https://raw.githubusercontent.com/ton-community/flappy-bird/ca4b6335879312a9b94f0e89384b04cea91246b1/scripts/tokens/flap/image.png) 并指定文件路径。当然，您也可以使用任何图片。 Of course, you can use any image. |
+| 符号  | `FLAP` 或输入您想使用的任何缩写。                                                                                                                                                                                                            |
+| 小数位 | 货币小数点后将有多少个零。在我们的案例中，让它为 `0`。 Let’ it be `0` in our case.                                                                                                                                                       |
 
-脚本输出您可以打开的链接，以查看创建的 jetton 状态。它将具有 `Active` 状态。钱包状态将从 `Uninit` 变为 `Active`。
+脚本输出您可以打开的链接，以查看创建的 jetton 状态。它将具有 `Active` 状态。钱包状态将从 `Uninit` 变为 `Active`。 It will have an **Active** status. The wallet’s status will change from **Uninit** to **Active**.
 
 ![游戏货币 / jetton](/img/tutorials/gamefi-flappy/jetton-active-status.png)
 
 ### 为 SBT 创建收藏品
 
-仅作为示例，演示游戏中我们将奖励用户玩第一次和第五次游戏。因此，我们将铸造两个收藏品，以便在用户达到相关条件（第一次和第五次玩游戏）时将 SBT 放入其中：
+For our demo game, we will reward users after their first and fifth games. 仅作为示例，演示游戏中我们将奖励用户玩第一次和第五次游戏。因此，我们将铸造两个收藏品，以便在用户达到相关条件（第一次和第五次玩游戏）时将 SBT 放入其中：
 
 ```sh
 assets-cli deploy-nft-collection
@@ -89,6 +90,8 @@ assets-cli deploy-nft-collection
 我们已经做好充分准备。接下来，让我们进入逻辑实现。
 
 ## 连接钱包
+
+The process begins with the user connecting their wallet. Let's integrate wallet connectivity.
 
 一切从用户连接其钱包开始。因此，让我们添加钱包连接集成。要从客户端操作区块链，我们需要为 Phaser 安装 GameFi SDK：
 
@@ -135,7 +138,7 @@ const gameFi = await GameFi.create({
 
 > 要了解什么是 `tonconnect-manifest.json`，请查看 ton-connect [manifest描述](https://docs.ton.org/develop/dapps/ton-connect/manifest)。
 
-现在我们准备创建一个连接钱包按钮。让我们在 Phaser 中创建一个 UI 场景，该场景将包含连接按钮：
+Next, we are ready to create a **Wallet Connect** button. 现在我们准备创建一个连接钱包按钮。让我们在 Phaser 中创建一个 UI 场景，该场景将包含连接按钮：
 
 ```typescript
 class UiScene extends Phaser.Scene {
@@ -192,9 +195,9 @@ const unsubscribe = gameFi.onWalletChange(onWalletChange)
 
 我们需要创建一个 `/played` 端点，该端点必须完成以下操作：
 
-- 接收带有用户钱包地址和 Mini App 启动时传递给 Mini App 的 Telegram 初始数据的正文。需要解析初始数据以提取认证数据，并确保用户只代表其自身发送请求。
+- 接收带有用户钱包地址和 Mini App 启动时传递给 Mini App 的 Telegram 初始数据的正文。需要解析初始数据以提取认证数据，并确保用户只代表其自身发送请求。 The initial data must be parsed to extract authentication details and verify that the user is sending the request on their own behalf.
 - 该端点必须计算并存储用户玩的游戏数。
-- 该端点必须检查是否是用户的第一次或第五次游戏，如果是，便使用相关的 SBT 奖励用户。
+- 该端点必须检查是否是用户的第一次或第五次游戏，如果是，便使用相关的 SBT 奖励用户。 If so, it rewards the user with the corresponding SBT.
 - 该端点必须为每次游戏奖励用户 1 FLAP。
 
 > 阅读[/played 端点](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/server/src/index.ts#L197)的代码。
@@ -222,17 +225,15 @@ const playedInfo = await submitPlayed('http://localhost:3001', wallet.account.ad
 
 > 阅读[submitPlayer 函数](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/game-scene.ts#L10)的代码。
 
-让我们玩第一次，确保我们将获得 FLAP 代币和 SBT 的奖励。点击 Play 按钮，穿过一个或两个管道，然后撞到一个管道上。好的，一切都在工作！
+让我们玩第一次，确保我们将获得 FLAP 代币和 SBT 的奖励。点击 Play 按钮，穿过一个或两个管道，然后撞到一个管道上。好的，一切都在工作！ Click the Play button, fly through a pipe or two, then crash into a pipe. Everything works!
 
 ![被奖励的代币和 SBT](/img/tutorials/gamefi-flappy/sbt-rewarded.png)
 
-再次玩 4 次以获得第二个 SBT，然后打开您的钱包，TON Space。这里是您的收藏品：
-
-![钱包中的成就 SBT](/img/tutorials/gamefi-flappy/sbts-in-wallet.png)
+再次玩 4 次以获得第二个 SBT，然后打开您的钱包，TON Space。这里是您的收藏品： ![钱包中的成就 SBT](/img/tutorials/gamefi-flappy/sbts-in-wallet.png)
 
 ## 实现游戏商店
 
-要拥有游戏内商店，我们需要两个组件。第一个是提供关于用户购买的信息的端点。第二个是全局循环，以监视用户交易并为其所有者分配游戏属性。
+To set up an in-game shop, we need two components. The first is an endpoint that provides information about users' purchases. The second is a global loop that monitors user transactions and assigns game properties to item owners.
 
 ### `/purchases` 端点
 
@@ -245,7 +246,7 @@ const playedInfo = await submitPlayed('http://localhost:3001', wallet.account.ad
 
 ### 购买循环
 
-要知道用户何时进行支付，我们需要监视主钱包的交易记录。每笔交易都必须包含消息 `userId`：`itemId`。我们将记住最后处理的交易，只获取新的交易，使用 `userId` 和 `itemId` 为用户分配他们购买的属性，重写最后一笔交易的哈希。这将在无限循环中工作。
+o track user payments, we need to monitor transactions in the master wallet. Each transaction must include a message in the format `userId`:`itemId`. We will store the last processed transaction, retrieve only new ones, assign purchased properties to users based on `userId` and `itemId`, and update the last transaction hash. This process will run in an infinite loop.
 
 > 阅读[购买循环](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/server/src/index.ts#L110)的代码。
 
@@ -255,7 +256,7 @@ const playedInfo = await submitPlayed('http://localhost:3001', wallet.account.ad
 
 ![进入商店按钮](/img/tutorials/gamefi-flappy/shop-enter-button.png)
 
-当用户点击按钮时，将打开商店场景。商店场景包含用户可以购买的物品列表。每个物品都有价格和购买按钮。当用户点击购买按钮时，将进行购买。
+When a user clicks this button, the **Shop Scene** opens. The shop contains a list of items available for purchase. Each item has a price and a Buy button. When a user clicks the Buy button, the purchase is processed.
 
 打开商店会触发购买商品的加载，并每 10 秒更新一次：
 
@@ -268,7 +269,7 @@ setTimeout(() => { fetchPurchases() }, 10000)
 
 > 阅读[showShop 函数](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/ui.ts#L191)的代码。
 
-现在我们需要实现购买本身。为此，我们首先将创建 GameFi SDK 实例，然后使用 `buyWithJetton` 方法：
+Now, we need to implement the purchase process. 现在我们需要实现购买本身。为此，我们首先将创建 GameFi SDK 实例，然后使用 `buyWithJetton` 方法：
 
 ```typescript
 gameFi.buyWithJetton({
@@ -293,12 +294,15 @@ gameFi.buyWithTon({
 });
 ```
 
-## 后记
+## Afterword
 
-本教程到此结束！我们考虑了基本的 GameFi 功能，但 SDK 提供了更多功能，如玩家之间的转账、操作 NFT 和收藏品的工具等。将来我们会提供更多功能。
+That’s it for this tutorial! 本教程到此结束！我们考虑了基本的 GameFi 功能，但 SDK 提供了更多功能，如玩家之间的转账、操作 NFT 和收藏品的工具等。将来我们会提供更多功能。 More features will be introduced in the future.
 
 要了解所有可用的 GameFi 功能，请阅读 [ton-org/game-engines-sdk](https://github.com/ton-org/game-engines-sdk) 和 [@ton-community/assets-sdk](https://github.com/ton-community/assets-sdk) 的文档。
 
 所以，请在[讨论区](https://github.com/ton-org/game-engines-sdk/discussions)告诉我们您的想法！
 
 完整的实现可在 [flappy-bird](https://github.com/ton-community/flappy-bird) 库中找到。
+
+<Feedback />
+
