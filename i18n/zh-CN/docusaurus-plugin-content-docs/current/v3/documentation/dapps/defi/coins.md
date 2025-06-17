@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 原生代币：Toncoin
 
 TON 区块链的原生加密货币是 **Toncoin**。
@@ -26,4 +28,7 @@ TLB: `extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) = ExtraCurrencyColl
 
 对于其他任务，[Jettons](/develop/dapps/defi/tokens#jettons) 更为合适。
 
-目前，TON 区块链上尚未创建任何额外代币。TON 区块链对账户和消息完全支持额外代币，但创建它们的铸币系统合约尚未创建。
+At the moment, no extra currency has been created on TON Blockchain. 目前，TON 区块链上尚未创建任何额外代币。TON 区块链对账户和消息完全支持额外代币，但创建它们的铸币系统合约尚未创建。
+
+<Feedback />
+
