@@ -1,29 +1,34 @@
-# 原生代币：Toncoin
+import Feedback from '@site/src/components/Feedback';
 
-TON 区块链的原生加密货币是 **Toncoin**。
+# Native token: Toncoin
 
-交易费、gas费（即智能合约消息处理费）和持久存储费用都以 Toncoin 收取。
+The native cryptocurrency of TON Blockchain is **Toncoin**.
 
-Toncoin 用于支付成为区块链验证者所需的押金。
+Transaction fees, gas payments (i.e., smart contract message processing fees), and persistent storage payments are collected in Toncoin.
 
-制作 Toncoin 支付的过程在[相应部分](/develop/dapps/asset-processing)有描述。
+Toncoin is used to make the deposits required to become a blockchain validator.
 
-您可以在[网站](https://ton.org/coin)上找到在哪里购买或交换 Toncoin。
+The process of making Toncoin payments is described in the [corresponding section](/v3/guidelines/dapps/asset-processing/payments-processing).
 
-## 额外代币
+You can find out where to buy or exchange Toncoin on the [website](https://ton.org/coin).
 
-TON 区块链支持多达 2^32 种内建的额外代币。
+## Extra currencies
 
-额外代币余额可以存储在每个区块链账户上，并原生地（在一个智能合约到另一个智能合约的内部消息中，您可以除了 Toncoin 数量之外，指定一个额外代币数量的哈希映射）转移到其他账户。
+TON Blockchain supports up to 2^32 built-in extra currencies.
 
-TLB: `extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) = ExtraCurrencyCollection;` - 代币 ID 和数量的哈希映射。
+Extra currency balances can be stored on each blockchain account and transferred to other accounts natively (in an internal message from one smart contract to another, you can specify a hashmap of the extra currency amounts in addition to the Toncoin amount).
 
-然而，额外代币只能像 Toncoin 那样存储和转移，并且没有自己的任意代码或功能。
+TLB: `extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) = ExtraCurrencyCollection;` - hashmap of currency ID and amount.
 
-注意，如果创建了大量额外代币，账户会因为需要存储它们而“膨胀”。
+However, extra currencies can only be stored and transferred (like Toncoin) and do not have their own arbitrary code or functionality.
 
-因此，额外代币最适合用于知名的去中心化货币（例如，Wrapped Bitcoin 或 Ether），并且创建这样的额外代币应该相当昂贵。
+Note that if there are a large number of extra currencies created, the accounts will "swell" because they need to store them.
 
-对于其他任务，[Jettons](/develop/dapps/defi/tokens#jettons) 更为合适。
+Thus, extra currencies are best used for well-known decentralized currencies (for example, Wrapped Bitcoin or Ether), and creating such an extra currency should be quite expensive.
 
-目前，TON 区块链上尚未创建任何额外代币。TON 区块链对账户和消息完全支持额外代币，但创建它们的铸币系统合约尚未创建。
+[Jettons](/v3/documentation/dapps/defi/tokens#jettons-fungible-tokens) are suitable for other tasks.
+
+At the moment, no extra currency has been created on TON Blockchain. TON Blockchain has full support for extra currencies by accounts and messages, but the minter system contract for their creation has not yet been created.
+
+<Feedback />
+
