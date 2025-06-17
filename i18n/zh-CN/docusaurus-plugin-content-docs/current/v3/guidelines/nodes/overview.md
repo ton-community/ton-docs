@@ -1,20 +1,25 @@
-# 概览
+import Feedback from '@site/src/components/Feedback';
 
-本页收集了一些可用于管理 TON 区块链节点的建议。
+# Overview
 
-- [TON 节点类型](/v3/documentation/infra/nodes/node-types)
+This page collects some recommendations that could be followed to manage Nodes on TON Blockchain.
 
-## 运行 TON 节点
+- [TON node types](/v3/documentation/infra/nodes/node-types)
 
-- [运行验证器节点](/v3/guidelines/nodes/running-nodes/validator-node)
-- [运行全节点](/v3/guidelines/nodes/running-nodes/full-node)
-- [运行中的 liteserver 节点](/v3/guidelines/nodes/running-nodes/liteserver-node)
-- [运行中的存档节点](/v3/guidelines/nodes/running-nodes/archive-node)
+## Running TON node
 
-## 维护
+- [Running validator node](/v3/guidelines/nodes/running-nodes/validator-node)
+- [Running full node](/v3/guidelines/nodes/running-nodes/full-node)
+- [Running liteserver node](/v3/guidelines/nodes/running-nodes/liteserver-node)
+- [Running archive node](/v3/guidelines/nodes/running-nodes/archive-node)
 
-如果您在运行节点时遇到问题，建议您阅读以下文章。
+## Maintenance
 
-- [故障排除](/v3/guidelines/nodes/nodes-troubleshooting)
-- [维护与安全](/v3/guidelines/nodes/node-maintenance-and-security)
-- [常见问题](/v3/guidelines/nodes/faq)
+If you have problems with running nodes it's recommended to get acquainted with the following articles.
+
+- [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
+- [Maintenance and security](/v3/guidelines/nodes/node-maintenance-and-security)
+- [FAQ](/v3/guidelines/nodes/faq)
+
+<Feedback />
+
