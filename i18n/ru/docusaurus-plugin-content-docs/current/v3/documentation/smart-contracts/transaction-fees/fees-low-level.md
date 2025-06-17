@@ -1,15 +1,12 @@
-# Обзор низкоуровневых комиссий
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Обзор низкоуровневых комиссий
 
 :::caution
 This section describes instructions and manuals for interacting with TON at a low level.
-
 Здесь вы найдете **сырые формулы** для расчета комиссий и сборов в TON.
-
-Однако большинство из них **уже реализованы через коды операций**! Поэтому вы **используете их вместо ручных вычислений**
+Однако большинство из них **уже реализованы через коды операций**!
+Поэтому вы **используете их вместо ручных вычислений**
 :::
 
 В этом документе дается общее представление о комиссиях за транзакции в TON и, в частности, о комиссиях за вычисления для кода FunC. Также есть [подробная спецификация в техническом документе TVM](https://ton.org/tvm.pdf).
@@ -27,7 +24,7 @@ This section describes instructions and manuals for interacting with TON at a lo
 
 Важно помнить, что в TON вы платите как за выполнение смарт-контракта, так и за **используемое хранилище** (см. [статью @thedailyton](https://telegra.ph/Commissions-on-TON-07-22)), `storage_fee` зависит от размера вашего контракта: количества ячеек и суммы битов из этих ячеек. Это означает, что вам придется платить комиссию за хранение за наличие кошелька TON (даже если он очень-очень маленький).
 
-Если вы не использовали свой кошелек TON в течение значительного периода времени (1 год), *вам придется заплатить значительно большую комиссию, чем обычно, поскольку кошелек платит комиссию за отправку и получение транзакций*.
+Если вы не использовали свой кошелек TON в течение значительного периода времени (1 год), _вам придется заплатить значительно большую комиссию, чем обычно, поскольку кошелек платит комиссию за отправку и получение транзакций_.
 
 :::info **Примечание**:
 Когда сообщение возвращается из контракта, контракт выплачивает свою текущую `storage_fee`
@@ -57,7 +54,7 @@ storage_fee = ceil(
 
 Текущие значения:
 
-- Воркчейн.
+- Workchain.
   ```cpp
   bit_price_ps:1
   cell_price_ps:500
@@ -108,7 +105,7 @@ function storageFeeCalculator() {
 ### Стоимость инструкций TVM
 
 На самом низком уровне (выполнение инструкций TVM) стоимость газа для большинства примитивов
-равна *базовой цене газа*, вычисляемой как `P_b := 10 + b + 5r`,
+равна _базовой цене газа_, вычисляемой как `P_b := 10 + b + 5r`,
 где `b` — длина инструкции в битах, а `r` — количество ссылок на ячейки, включенных в инструкцию.
 
 Помимо этих основных сборов, появляются следующие сборы:
@@ -119,9 +116,9 @@ function storageFeeCalculator() {
 | Анализ ячейки в первый раз  | **100**   | Операция преобразования ячеек в срезы первый раз в ходе текущей транзакции.                                                                                                                             |
 | Повторный анализ ячейки     | **25**    | Операция преобразования ячеек в срезы, которая уже была проанализирована в ходе той же транзакции.                                                                                                      |
 | Вызов исключения            | **50**    |                                                                                                                                                                                                                         |
-| Операция с кортежем         | **1**     | Эта цена будет умножена на количество элементов кортежа.                                                                                                                                                |
-| Неявный переход             | **10**    | Оплачивается, когда выполняются все инструкции в текущей ячейке продолжения. Однако в этой ячейке продолжения есть ссылки, и поток выполнения переходит к первой ссылке.                |
-| Неявный обратный переход    | **5**     | Он оплачивается, когда все инструкции в текущем продолжении выполнены, и поток выполнения возвращается к продолжению, из которого было вызвано только что завершенное продолжение.                      |
+| Операции со стеком          | **1**     | Эта цена будет умножена на количество элементов кортежа.                                                                                                                                                |
+| Implicit Jump               | **10**    | Оплачивается, когда выполняются все инструкции в текущей ячейке продолжения. Однако в этой ячейке продолжения есть ссылки, и поток выполнения переходит к первой ссылке.                |
+| Implicit Back Jump          | **5**     | Он оплачивается, когда все инструкции в текущем продолжении выполнены, и поток выполнения возвращается к продолжению, из которого было вызвано только что завершенное продолжение.                      |
 | Перемещение элементов стека | **1**     | Цена за перемещение элементов стека между продолжениями. Будет взиматься соответствующая цена газа за каждый элемент. Однако перемещение первых 32 элементов бесплатно. |
 
 ### Плата за газ для FunC конструкций
@@ -204,7 +201,7 @@ builder payload_encoding(int a, int b, int c) {
 - б) целесообразно оптимизировать использование словаря, используя специальные инструкции, такие как `replace` вместо `delete` и `add`
 - в) разработчик должен знать об операциях итерации (таких как next и prev), а также об операциях `min_key`/`max_key`, чтобы избежать ненужной итерации по всему словарю
 
-### Операции со стеком
+### Операция с кортежем
 
 Обратите внимание, что FunC манипулирует записями стека под капотом. Это означает, что код:
 
@@ -223,8 +220,16 @@ return (c, b, a);
 
 ### IHR
 
-:::tip
-На данный момент (ноябрь 2024 г.) [IHR](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) не реализован, и если вы установите `ihr_fee` на ненулевое значение, оно всегда будет добавлено к значению сообщения при получении. На данный момент нет практических причин делать это.
+:::info What is IHR?
+[**Instant Hypercube Routing (IHR)**](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) is an alternative mechanism for message delivery without intermediate hops between shards. To understand why IHR is not currently relevant:
+
+- **IHR is not implemented** and is not yet fully specified
+- **IHR would only be relevant** when the network has more than 16 shards and not all shards are neighbors to each other
+- **Current network settings forbid splitting deeper than 16 shards**, which means IHR is not relevant in any practical sense
+
+In the current TON network configuration, all message routing uses standard **Hypercube Routing (HR)**, which can handle message delivery efficiently with the current shard topology. The `ihr_fee` field exists in the message structure for future compatibility, but serves no functional purpose today.
+
+[IHR](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) не реализован, и если вы установите `ihr_fee` на ненулевое значение, оно всегда будет добавлено к значению сообщения при получении. На данный момент нет практических причин делать это.
 :::
 
 ### Формула
@@ -246,6 +251,7 @@ total_fwd_fees = msg_fwd_fees + ihr_fwd_fees; // ihr_fwd_fees - is 0 for externa
 ```
 
 :::info ВАЖНО
+Please note that `msg_fwd_fees` above includes `action_fee` below. For a basic message this fee = lump_price = 400000 nanotons, action_fee = (400000 \* 21845) / 65536 = 133331. Or approximately a third of the `msg_fwd_fees`.
 
 `fwd_fee` = `msg_fwd_fees` - `action_fee` = 266669 nanoton = 0,000266669 TON
 :::
@@ -294,7 +300,7 @@ action_fine = fine_per_cell * min(max_cells, cells_in_msg);
 :::info
 [A direct link to the mainnet live config file](https://tonviewer.com/config)
 
-В образовательных целях пример старого
+For educational purposes example of the old one.
 :::
 
 ## Ссылки
@@ -306,3 +312,6 @@ action_fine = fine_per_cell * min(max_cells, cells_in_msg);
 - [Обзор комиссий TON](/v3/documentation/smart-contracts/transaction-fees/fees)
 - [Транзакции и фазы](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
 - [Расчет комиссий](/v3/guidelines/smart-contracts/fee-calculation)
+
+<Feedback />
+
