@@ -25,8 +25,7 @@ jobs:
         run: npm install -g @crowdin/cli
 
       - name: Push source strings
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         run: |
-          # Push all source strings from main branch
-          crowdin push sources \
-            --branch main \
-            --config crowdin-oss.yml
+          crowdin push sources --branch main --config crowdin-oss.yml

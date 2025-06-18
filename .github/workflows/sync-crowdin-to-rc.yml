@@ -29,12 +29,10 @@ jobs:
         run: npm install -g @crowdin/cli
 
       - name: Download completed translations
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         run: |
-          crowdin download \
-            --only-completed \
-            --branch main \
-            --config crowdin-oss.yml \
-            --language ${{ matrix.lang }}
+          crowdin download --export-only-approved --branch main --config crowdin-oss.yml --language=${{ matrix.lang }}
 
       - name: Configure Git
         run: |
