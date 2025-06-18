@@ -1,10 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
 # Проверка авторизованных пользователей на стороне сервера
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
 
 На этой странице описывается метод для backend, позволяющий убедиться, что пользователь действительно владеет заявленным адресом.
 
@@ -163,7 +161,7 @@ export function useBackendAuth() {
 ## Пример backend
 
 <details>
-<summary>Проверьте, действителен ли Proof (Next.js)</summary>
+<summary>Check if proof valid with [ton-proof-service](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/services/ton-proof-service.ts)</summary>
 
 ```tsx
 'use server'
@@ -248,8 +246,8 @@ signature = Ed25519Sign(privkey, sha256(0xffff ++ utf8_encode("ton-connect") ++ 
 
 <!---->
 
-- `Length` - это 32-битное значение длины доменного имени приложения в кодировке utf-8 в байтах
-- `EncodedDomainName` id `Length` -байт доменное имя приложения в кодировке utf-8
+- `Timestamp` 64-bit unix epoch time of the signing operation
+- `Payload` is a variable-length binary string.
 
 Примечание: payload - это ненадежные данные переменной длины. Мы помещаем ее в конец, чтобы избежать использования ненужных префиксов длины.
 
@@ -267,15 +265,17 @@ signature = Ed25519Sign(privkey, sha256(0xffff ++ utf8_encode("ton-connect") ++ 
 
 ### Примеры проверки доказательств TON
 
-- Сначала попробуйте получить открытый ключ через `get_public_key` get-method на смарт-контракте, развернутом в `Address`.
-- Если смарт-контракт еще не развернут или get-метод отсутствует, то:
+- [Перейти к демонстрационному приложению](https://github.com/ton-connect/demo-dapp-backend)
+- [Демонстрационное приложение Rust](https://github.com/liketurbo/demo-dapp-backend-rs)
 - [Демонстрационное приложение JS](https://github.com/liketurbo/demo-dapp-backend-js)
 - [Пример Python](https://github.com/XaBbl4/pytonconnect/blob/main/examples/check_proof.py)
 - [Пример PHP](https://github.com/vladimirfokingithub/Ton-Connect-Proof-Php-Check)
 - [Демонстрационное приложение C#](https://github.com/WinoGarcia/TonProof.NET)
 
-## Примеры проверки доказательств TON
+## See also
 
-- [Перейти к демонстрационному приложению](https://github.com/ton-connect/demo-dapp-backend)
-- [Демонстрационное приложение Rust](https://github.com/liketurbo/demo-dapp-backend-rs)
-- [Демонстрационное приложение JS](https://github.com/liketurbo/demo-dapp-backend-js)
+- [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+- [Sending messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
+- [[YouTube] Check ton_proof for @tonconnect/react-ui [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=2971)
+
+<Feedback />
