@@ -555,6 +555,12 @@ const messageBody = beginCell()
 console.log("Message Body Hash:", messageBody.hash().toString("hex"));
 ```
 
+#### Ожидаемый результат
+
+```
+Message Body Hash: d989794fa90c9817a63a22e00554574f3c4a347dcfd2e2886980a294de15f2af
+```
+
 **Когда использовать хэш тела сообщения:**
 - Для проверки целостности данных
 - При отладке и логировании операций
@@ -582,24 +588,45 @@ int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 **Практический пример:**
 
 ```typescript
-import { storeMessage, beginCell, internal, Address } from '@ton/ton';
+import { storeMessage, beginCell, Address, Message } from '@ton/ton';
 import { toNano } from '@ton/core';
 
-// Создаем внутреннее сообщение
-const internalMessage = internal({
-  to: Address.parse('EQB...'), // адрес получателя
-  value: toNano('0.1'),        // 0.1 TON
-  body: messageBody             // тело сообщения из предыдущего примера
-});
+// Создаем тело сообщения для увеличения счетчика
+const messageBody = beginCell()
+        .storeUint(0, 32) // op code
+        .storeStringTail("Hello TON!")
+        .endCell();
+
+// Создайте полный объект сообщений
+const message: Message = {
+    info: {
+        type: 'internal',
+        dest: Address.parse('UQAi....'), // вставьте адрес получателя
+        value: { coins: toNano('0.1') },
+        bounce: true,
+        src: Address.parse('UQA1....'), // вставьте адрес отправителя
+        ihrDisabled: true,
+        bounced: false,
+        ihrFee: 0n,
+        forwardFee: 0n,
+        createdAt: 0,
+        createdLt: 0n
+    },
+    body: messageBody
+};
 
 // Получаем хэш полного сообщения
 const messageCell = beginCell()
-  .store(storeMessage(internalMessage))
-  .endCell();
+    .store(storeMessage(message))
+    .endCell();
 
 const fullMessageHash = messageCell.hash();
 console.log('Full Message Hash:', fullMessageHash.toString('hex'));
-// Вывод: Full Message Hash: f1e2d3c4b5a6987...
+```
+
+#### Ожидаемый результат
+```
+Full Message Hash: 40b1477f90d702af223f15194724e0c12b51028bc622444959e155e77903b12c
 ```
 
 **Когда использовать хэш полного сообщения:**
@@ -615,32 +642,51 @@ console.log('Full Message Hash:', fullMessageHash.toString('hex'));
 **Практический пример получения хэша транзакции:**
 
 ```typescript
-import { TonClient } from '@ton/ton';
+import { TonClient, beginCell, storeMessage } from '@ton/ton';
 import { Address } from '@ton/core';
 
-const client = new TonClient({
-  endpoint: 'https://toncenter.com/api/v2/jsonRPC',
-  apiKey: 'your-api-key'
-});
 
-const transactions = await client.getTransactions(
-  Address.parse('EQB...'),
-  { limit: 10 }
-);
+async function main() {
+    const client = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC', // тестнет, если проводите операции в мейннете, не забудьте поменять
+    apiKey: 'insert your api key' // используя бот, получите свой api key
+    });
 
-for (const tx of transactions) {
-  const txHash = tx.hash();
-  console.log('Transaction Hash:', txHash.toString('hex'));
+    const transactions = await client.getTransactions(
+    Address.parse('0QD3o...'), // вставьте свой адрес кошелька
+    {   archival: true,
+        limit: 10 }
+    );
 
-  // Также можем получить хэш входящего сообщения
-  if (tx.inMessage) {
-    const inMsgCell = beginCell()
-      .store(storeMessage(tx.inMessage))
-      .endCell();
-    const inMsgHash = inMsgCell.hash();
-    console.log('Incoming Message Hash:', inMsgHash.toString('hex'));
-  }
-}
+    for (const tx of transactions) {
+    const txHash = tx.hash();
+    console.log('Transaction Hash:', txHash.toString('hex'));
+
+    // Также можем получить хэш входящего сообщения
+    if (tx.inMessage) {
+        const inMsgCell = beginCell()
+        .store(storeMessage(tx.inMessage))
+        .endCell();
+        const inMsgHash = inMsgCell.hash();
+        console.log('Incoming Message Hash:', inMsgHash.toString('hex'));
+            }
+        }
+    }
+
+main().catch(console.error);
+```
+
+#### Ожидаемый результат
+Последние 10 транзакций по указанному адресу, включая хэш транзакции
+и если есть входящее сообщение — также выводит хэш этого сообщения:
+
+```
+Transaction Hash: 79a6406e5544e95bbe5db8c7e8189daaca240b2d6b4f21cc479c3082dd4c5cce
+Incoming Message Hash: 4557aa15e21cf0501f3d82eaa26a23ab61c08a544490154bd12a1814d492db42
+Transaction Hash: 1a86894bbe2f5af090d97f761f0367a16b713e93247056003e6d8b6a68a5165e
+Incoming Message Hash: dfa0916ceee9dd26c6966d55446b23f88950e118432f870d092cfcde83a3b864
+:
+:
 ```
 
 #### Нормализованный хэш сообщения
@@ -699,37 +745,74 @@ const normalizedHash = normalizedExternalMessage.hash().toString("hex");
 console.log('Normalized Message Hash:', normalizedHash);
 ```
 
+#### Ожидаемый результат
+
+```
+Normalized Message Hash: ee53ccd1224c315597bdbafb2e722316d9471490b13dd9e1834903b094eb5964
+```
 
 **Практический пример вычисления ненормализованного (Non-normilized hash) хэша:**
+1. уточнить и прописать зачем нам нужен ненормализованный хэш. Получается просто, что обычно так вычисляем, а надо как выше показано?
+
 
 ```typescript
-import { toNano, beginCell, Cell, Address, external, internal } from '@ton/ton';
+import { mnemonicToWalletKey } from '@ton/crypto';
+import { WalletContractV4, TonClient, toNano, beginCell, Address, internal } from '@ton/ton';
 
-// 1. Создание тела сообщения
+// Создаём клиент для доступа к testnet через TonCenter
+const client = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+    apiKey: 'your api key' // публичный API-ключ
+});
+
+// Создаём тело сообщения — обычная строка с опкодом
 const messageBody = beginCell()
-    .storeUint(0, 32) // op code
-    .storeStringTail("Hello TON!")
+    .storeUint(0, 32) // op code — произвольный, например, 0
+    .storeStringTail("Hello TON!") // строка в теле
     .endCell();
 
-// 2. Создание intenal message через wrapper
+// Оборачиваем тело во внутреннее сообщение (internal message)
 const internalMessage = internal({
-    to: walletAddress,
-    value: toNano("0.01"),
+    to: Address.parse('0QD3....'), // получатель
+    value: toNano('0.1'), // 0.1 TON
     body: messageBody
 });
-// 3. Создание external message через wrapper
-const externalMessage = await contract.createTransfer({
-    seqno,
-    secretKey: keyPair.secretKey,
-    messages: [internalMessage]
-});
 
-const originalHash = externalMessage.hash().toString("hex");
-console.log("\nNon-normalized External Message Hash:", originalHash);
+async function main() {
+    // Получаем ключи кошелька из мнемоники
+    const mnemonic = "your seed phrase";
+    const keyPair = await mnemonicToWalletKey(mnemonic.split(' '));
+
+    // Создаём wallet-смарт-контракт по публичному ключу
+    const wallet = WalletContractV4.create({
+        publicKey: keyPair.publicKey,
+        workchain: 0
+    });
+
+    const contract = client.open(wallet);
+    const seqno = await contract.getSeqno();
+
+    // Создаём внешнее сообщение (external message)
+    const externalMessage = await wallet.createTransfer({
+        seqno,
+        secretKey: keyPair.secretKey,
+        messages: [internalMessage]
+    });
+
+    // Выводим хэш внешнего сообщения
+    console.log("Non-normalized External Message Hash:", externalMessage.hash().toString("hex"));
+}
+
+main();
 
 ```
 
-Этот алгоритм может быть любым отличным от нормализованного. Если отсутствие нормализации стало проблемой проекта который был ранее разарботан, то правильно сделать миграцию на нормолизованные хеши во всем проекте.
+#### Ожидаемый результат
+```
+Non-normalized External Message Hash: 8dd5c85be08e33341553cb1e5a2f08323e9ae9314d5ceac2e3a6c79f11151b5e
+```
+
+Этот алгоритм может быть любым отличным от нормализованного. Если отсутствие нормализации стало проблемой проекта который был ранее разработан, то правильно сделать миграцию на нормолизованные хеши во всем проекте.
 
 
 ### Отправка сообщения и проверка факта отправки
@@ -739,63 +822,80 @@ console.log("\nNon-normalized External Message Hash:", originalHash);
 **Пошаговый процесс:**
 
 ```typescript
-import { WalletContractV4, internal, TonClient } from '@ton/ton';
+import { internal, TonClient, Address, beginCell, WalletContractV4, SendMode } from '@ton/ton';
 import { mnemonicToPrivateKey } from '@ton/crypto';
-import { Address, toNano, beginCell } from '@ton/core';
 
 async function sendAndVerifyMessage() {
-  // 1. Создаем клиент и кошелек
   const client = new TonClient({
-    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC'
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+    apiKey: 'your api key'
   });
 
-  const mnemonic = 'your mnemonic words here';
-  const keyPair = await mnemonicToPrivateKey(mnemonic.split(' '));
+  // Мнемоника и ключи
+  const mnemonic = "your mnemonic".split(" ");
+  const keyPair = await mnemonicToPrivateKey(mnemonic);
+
   const wallet = client.open(WalletContractV4.create({
     publicKey: keyPair.publicKey,
     workchain: 0
   }));
 
-  // 2. Создаем сообщение с комментарием
+  // Тело сообщения с комментарием
   const messageBody = beginCell()
-    .storeUint(0, 32)           // opcode для простого перевода
+    .storeUint(0, 32)
     .storeStringTail('Hello TON!')
     .endCell();
 
-  // 3. Отправляем транзакцию
+  // Получаем seqno
   const seqno = await wallet.getSeqno();
+
+  // Отправляем транзакцию
   await wallet.sendTransfer({
     secretKey: keyPair.secretKey,
     seqno,
     messages: [internal({
-      to: Address.parse('EQB...'),
-      value: toNano('0.01'),
+      to: Address.parse('0QD3o...'), // ваш адрес
+      value: '0.05',
       body: messageBody
-    })]
+    })],
+    sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS,
   });
 
-  // 4. Проверяем факт отправки через некоторое время
-  await new Promise(resolve => setTimeout(resolve, 10000)); // ждем 10 секунд
+  // Ждём 10 секунд
+  await new Promise(resolve => setTimeout(resolve, 10000));
 
+  // Проверяем, отправилось ли сообщение
   const newSeqno = await wallet.getSeqno();
-  if (newSeqno > seqno) {
-    console.log('Транзакция успешно обработана!');
 
-    // 5. Находим нашу транзакцию и получаем её хэш
-    const transactions = await client.getTransactions(wallet.address, { limit: 5 });
+  if (newSeqno > seqno) {
+    console.log('Транзакция успешно отправлена!');
+
+    const transactions = await client.getTransactions(wallet.address, {
+      archival: true,
+      limit: 5
+    });
+
     const ourTx = transactions.find(tx =>
       tx.inMessage?.info.type === 'external-in' &&
       tx.description.type === 'generic'
     );
 
     if (ourTx) {
-      const txHash = ourTx.hash();
-      console.log('Transaction Hash:', txHash.toString('hex'));
+      console.log('Transaction Hash:', ourTx.hash().toString('hex'));
     }
   } else {
     console.log('Транзакция не была обработана');
   }
 }
+
+sendAndVerifyMessage().catch(console.error);
+```
+
+#### Ожидаемый результат
+
+```
+Транзакция успешно отправлена!
+Transaction Hash: 285f8df8f968f63680f8efaff004369f4e7aeb8619293da035cb8ca3899232f3
 ```
 
 ### Поиск транзакции по BOC
@@ -807,62 +907,77 @@ async function sendAndVerifyMessage() {
 <details>
 
 ```typescript
-import { Cell, Address, beginCell, storeMessage, TonClient } from '@ton/ton';
 
-async function findTransactionByBOC(
+  import { Cell, Address, beginCell, storeMessage, TonClient } from '@ton/ton';
+
+  async function findTransactionByBOC(
   externalBOC: string,
   walletAddress: string
   ): Promise<string | null> {
   const client = new TonClient({
-  endpoint: 'https://toncenter.com/api/v2/jsonRPC',
-  apiKey: 'your-api-key'
+  endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  apiKey: 'your api key'
 });
 
   try {
-    // Получаем хэш внешнего BOC
-    const extHash = Cell.fromBase64(externalBOC).hash().toString('hex');
+  // Получаем хэш внешнего BOC
+  const extHash = Cell.fromBase64(externalBOC).hash().toString('hex');
+  console.log('Ищем транзакцию по BOC hash:', extHash);
 
-    // Получаем последние транзакции кошелька
-    const transactions = await client.getTransactions(
-      Address.parse(walletAddress),
-      { limit: 10 }
-    );
+  // Получаем последние транзакции кошелька
+  const transactions = await client.getTransactions(
+  Address.parse(walletAddress),
+{ limit: 10 }
+  );
 
-    for (const tx of transactions) {
-      const inMsg = tx.inMessage;
-      if (inMsg?.info.type === 'external-in') {
-        // Создаем хэш входящего сообщения
-        const inHash = beginCell()
-          .store(storeMessage(inMsg))
-          .endCell()
-          .hash()
-          .toString('hex');
+  for (const tx of transactions) {
+  const inMsg = tx.inMessage;
+  if (inMsg?.info.type === 'external-in') {
+  // Создаем хэш входящего сообщения
+  const inHash = beginCell()
+  .store(storeMessage(inMsg))
+  .endCell()
+  .hash()
+  .toString('hex');
 
-        console.log('External BOC hash:', extHash);
-        console.log('Transaction message hash:', inHash);
-
-        // Если хэши совпадают, мы нашли нашу транзакцию
-        if (extHash === inHash) {
-          const txHash = tx.hash().toString('hex');
-          console.log('Найдена транзакция:', txHash);
-          return txHash;
-        }
-      }
-    }
-
-    throw new Error('Транзакция не найдена');
-  } catch (error) {
-    console.error('Ошибка поиска транзакции:', error);
-    return null;
-  }
+  if (extHash === inHash) {
+  const txHash = tx.hash().toString('hex');
+  console.log('Найдена транзакция:', txHash);
+  return txHash;
+}
+}
 }
 
-// Пример использования
-const txHash = await findTransactionByBOC(
-  'te6cckEBAgEAqQAB4YgA+yKcnwQCs1xAwIEKKB4DvkIdXNjL6B...',
-  'EQB...'
-  );
+  console.log('Транзакция не найдена');
+  return null;
+} catch (error) {
+  console.error('Ошибка поиска транзакции:', error);
+  return null;
+}
+}
+
+
+  async function main() {
+  // Пример BOC для теста (замените на реальный)
+  const testBOC = 'где найти BOC???';
+  const testWalletAddress = 'your address';
+
+  await findTransactionByBOC(testBOC, testWalletAddress);
+}
+
+  // Запускаем тест
+  if (require.main === module) {
+  main().catch(console.error);
+}
+
+```
+
+**Ожидаемый результат**
   ```
+  Ищем транзакцию по BOC hash: 399ae70c7c4d4880d373727875c38ad243dc9b11775b14a19955f0040a684306
+  Транзакция не найдена
+  ```
+
 </details>
 
 
@@ -892,6 +1007,18 @@ async function checkTransactionStatus(txHash: string, walletAddress: string) {
     return null;
   }
 }
+
+const walletAddress = 'your address';
+const trxHash = 'your trx hash';
+
+checkTransactionStatus(trxHash, walletAddress);
+```
+- нужны ли доп данные?
+
+#### Ожидаемый результат
+
+```
+Транзакция найдена в блокчейне
 ```
 
 #### Хэш StateInit для верификации адресов
@@ -901,14 +1028,43 @@ async function checkTransactionStatus(txHash: string, walletAddress: string) {
 **Практический пример верификации адреса:**
 
 ```typescript
-import { Address, contractAddress } from '@ton/ton';
+import { Address, Cell, contractAddress } from '@ton/ton';
 
-// Пример использования в TON Connect
-const wantedAddress = Address.parse(payload.address);
-const address = contractAddress(wantedAddress.workChain, stateInit);
-if (!address.equals(wantedAddress)) {
-  return false;
+// Ваши данные:
+const wantedAddress = Address.parse('your address');
+const stateInitBase64 = 'your state init'; // <-- сюда вставьте свой StateInit (base64)
+
+const cell = Cell.fromBase64(stateInitBase64);
+// Обычно code = cell.refs[0], data = cell.refs[1]
+const stateInit = {
+  code: cell.refs[0],
+  data: cell.refs[1]
+};
+
+console.log('StateInit base64:', stateInitBase64);
+console.log('Length:', stateInitBase64.length);
+
+// Восстанавливаем адрес из workchain и StateInit
+const calculatedAddress = contractAddress(wantedAddress.workChain, stateInit);
+
+console.log('Ожидаемый адрес:   ', wantedAddress.toString({ bounceable: false }));
+console.log('Вычисленный адрес:', calculatedAddress.toString({ bounceable: false }));
+
+if (calculatedAddress.equals(wantedAddress)) {
+  console.log('✅ StateInit соответствует адресу!');
+} else {
+  console.log('❌ StateInit НЕ соответствует адресу!');
 }
+```
+
+#### Ожидаемый результат
+
+так быть не должно:
+
+```
+Ожидаемый адрес:    UQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxTKj
+Вычисленный адрес: UQA_B407fiLIlE5VYZCaI2rki0in6kLyjdhhwitvZNfpe-pd
+❌ StateInit НЕ соответствует адресу!
 ```
 
 #### Мониторинг в реальном времени
