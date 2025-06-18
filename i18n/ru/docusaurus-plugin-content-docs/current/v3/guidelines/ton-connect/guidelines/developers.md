@@ -1,8 +1,6 @@
-# TON Connect SDK
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Если у вас возникли дополнительные проблемы или вы хотите представить предложение по улучшению TON Connect 2.0, свяжитесь с нами напрямую через соответствующий [репозиторий GitHub](https://github.com/ton-connect/).
 
 ## Список SDK
 
@@ -133,7 +131,7 @@ Dart SDK для TON Connect 2.0. Аналог библиотеки `@tonconnect/
 
 - [GitHub](https://github.com/romanovichim/dartTonconnect)
 
-## TON Connect C\\#
+## TON Connect C\\\#
 
 C# SDK для TON Connect 2.0. Аналог библиотеки `@tonconnect/sdk`.
 
@@ -145,11 +143,20 @@ C# SDK для TON Connect 2.0. Аналог библиотеки `@tonconnect/sd
 
 - [GitHub](https://github.com/continuation-team/TonSdk.NET/tree/main/TonSDK.Connect)
 
+## TON Connect Unity
+
+Ресурс Unity для TON Connect 2.0. Использует `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`.
+
+Используйте его для подключения вашего приложения к кошелькам TON через протокол TonConnect.
+
+- [GitHub](https://github.com/continuation-team/unity-ton-connect)
+- [Документация](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
+
 ## TON Connect Go
 
 Go SDK для TON Connect 2.0.
 
-Используйте его для подключения вашего приложения к кошелькам TON через протокол TonConnect.
+Используйте его для интеграции протокола TonConnect с вашей игрой.
 
 ```bash
  go get github.com/cameo-engineering/tonconnect
@@ -161,21 +168,13 @@ Go SDK для TON Connect 2.0.
 
 Если у кого-либо из наших разработчиков или членов сообщества возникнут дополнительные проблемы во время внедрения TON Connect 2.0, свяжитесь с [каналом разработчиков Tonkeeper](https://t.me/tonkeeperdev).
 
-Если у вас возникли дополнительные проблемы или вы хотите представить предложение по улучшению TON Connect 2.0, свяжитесь с нами напрямую через соответствующий [репозиторий GitHub](https://github.com/ton-connect/).
-
-## TON Connect Unity
-
-Ресурс Unity для TON Connect 2.0. Использует `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`.
-
-Используйте его для интеграции протокола TonConnect с вашей игрой.
-
-- [GitHub](https://github.com/continuation-team/unity-ton-connect)
-- [Документация](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
-
 ## См. также
 
 - [Пошаговое руководство по созданию вашего первого веб-клиента](https://helloworld.tonstudio.io/03-client/)
-- [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU\\&t=254s\\&ab_channel=AlefmanVladimir%5BEN%5D)
+- [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU\\\&t=254s\\\&ab_channel=AlefmanVladimir%5BEN%5D)
 - [Начало работы Ton Connect](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
 - [Руководство по интеграции](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)
 - [[YouTube] TON Dev Study TON Connect Protocol [RU]] (https://www.youtube.com/playlist?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_)
+
+<Feedback />
+
