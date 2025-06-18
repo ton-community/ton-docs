@@ -1,12 +1,10 @@
-# Сборка Fift и TVM
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Сборка Fift и TVM
 
 Fift — это язык программирования на основе стека, который имеет специфичные для TON функции и, следовательно, может работать с ячейками. Сборка TVM — это также язык программирования на основе стека, также специфичный для TON, и он также может работать с ячейками. Так в чем же разница между ними?
 
-## В чем разница
+## Key differences
 
 Fift выполняется **во время компиляции** — когда ваш компилятор создает код смарт-контракта BOC, после обработки кода FunC. Fift может выглядеть по-разному:
 
@@ -49,22 +47,23 @@ x{6F02} dup @Defop PAIR @Defop CONS
 
 > wallet_v3_r2.fif
 
-Последний фрагмент кода выглядит как сборка TVM, и большая его часть на самом деле таковой и является Как это может произойти?
+Последний фрагмент кода выглядит как сборка TVM, и большая его часть на самом деле таковой и является Как это может произойти? Here's why:
 
-Представьте, что вы разговариваете с программистом-стажером и говорите ему: "А теперь добавьте команды, выполняющие это, это и то, в конец функции". Ваши команды оказываются в программе стажера. Они обрабатываются дважды — как и здесь, коды операций написанные заглавными буквами (SETCP0, DUP и т. д.) обрабатываются как Fift, так и TVM.
+Imagine explaining programming concepts to a trainee. Ваши команды оказываются в программе стажера. Они обрабатываются дважды — как и здесь, коды операций написанные заглавными буквами (SETCP0, DUP и т. д.) обрабатываются как Fift, так и TVM.
 
 Вы можете объяснить высокоуровневые абстракции своему стажеру, в конечном итоге он поймет и сможет их использовать. Fift также расширяем — вы можете определять свои собственные команды. Фактически, Asm[Tests].fif полностью посвящен определению кодов операций TVM.
 
-Коды операций TVM, с другой стороны, выполняются **во время выполнения** — это код смарт-контрактов. Их можно рассматривать как программу вашего стажера — сборка TVM может делать меньше вещей (например, у нее нет встроенных примитивов для подписи данных — потому что все, что TVM делает в блокчейне, является публичным), но она действительно может взаимодействовать со своей средой.
+TVM assembly, in contrast, is like the trainee's final working program. While it operates with fewer built-in features (it can't perform cryptographic signing, for instance), it has direct access to the blockchain environment during contract execution. Where Fift works at compile-time to shape the contract's code, TVM assembly runs that code on the actual blockchain.
 
 ## Использование в смарт-контрактах
 
 ### [Fift] — Помещение большого BOC в контракт
 
-Это возможно, если вы используете `toncli`. Если вы используете другие компиляторы для сборки контракта, возможно, есть другие способы включить большой BOC.
-Отредактируйте `project.yaml` так, чтобы `fift/blob.fif` был включен при сборке кода смарт-контракта:
+When using `toncli`, you can include large BoCs by:
 
-```
+1. Отредактируйте `project.yaml` так, чтобы `fift/blob.fif` был включен при сборке кода смарт-контракта:
+
+```yaml
 contract:
   fift:
     - fift/blob.fif
@@ -72,7 +71,9 @@ contract:
     - func/code.fc
 ```
 
-Поместите BOC в `fift/blob.boc`, затем добавьте следующий код в `fift/blob.fif`:
+2. Поместите BOC в `fift/blob.boc`, затем добавьте следующий код в `fift/blob.fif`:
+
+3. slice int_to_string(int x) asm "(.) $>s PUSHSLICE";
 
 ```
 <b 8 4 u, 8 4 u, "fift/blob.boc" file>B B>boc ref, b> <s @Defop LDBLOB
@@ -89,12 +90,6 @@ cell load_blob() asm "LDBLOB";
 ```
 
 ### [Сборка TVM] - Преобразование целого числа в строку
-
-К сожалению, попытка преобразования int в строку с использованием примитивов Fift завершилась неудачей.
-
-```
-slice int_to_string(int x) asm "(.) $>s PUSHSLICE";
-```
 
 Причина очевидна: Fift выполняет вычисления во время компиляции, где еще нет `x`, доступного для преобразования. Чтобы преобразовать непостоянное целое число в фрагмент строки, вам нужна сборка TVM. Например, это код одного из участников TON Smart Challenge 3:
 
@@ -118,6 +113,8 @@ builder store_signed(builder msg, int v) inline_ref {
 
 ### [Сборка TVM] - Дешевое умножение по модулю
 
+Compare these implementations:
+
 ```
 int mul_mod(int a, int b, int m) inline_ref {               ;; 1232 gas units
   (_, int r) = muldivmod(a % m, b % m, m);
@@ -130,4 +127,5 @@ int mul_mod_better(int a, int b, int m) inline_ref {        ;; 1110 gas units
 int mul_mod_best(int a, int b, int m) asm "x{A988} s,";     ;; 65 gas units
 ```
 
-`x{A988}` - это код операции, отформатированный в соответствии с [5.2 Деление](/v3/documentation/tvm/instructions#A988): деление с предварительным умножением, где единственным возвращаемым результатом является остаток по модулю третьего аргумента. Но код операции должен попасть в код смарт-контракта - именно это и делает `s,`: он сохраняет фрагмент поверх стека в сборщике немного ниже.
+The `x{A988}` opcode implements an optimized division operation with built-in multiplication (as specified in [section 5.2 Division](/v3/documentation/tvm/instructions#A988)). This specialized instruction directly computes just the modulo remainder of the operation, skipping unnecessary computation steps. The `s,` suffix then handles the result storage - it takes the resulting slice from the stack's top and efficiently writes it into the target builder. Together, this combination delivers substantial gas savings compared to conventional approaches. <Feedback />
+
