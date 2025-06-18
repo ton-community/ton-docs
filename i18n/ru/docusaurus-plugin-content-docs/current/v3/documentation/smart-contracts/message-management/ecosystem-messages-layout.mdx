@@ -1,11 +1,9 @@
-import ConceptImage from '@site/src/components/conceptImage';
-import ThemedImage from '@theme/ThemedImage';
+import Feedback from '@site/src/components/Feedback';
+
+import ConceptImage from "@site/src/components/conceptImage";
+import ThemedImage from "@theme/ThemedImage";
 
 # Макет сообщений экосистемы
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
 
 ## Отправка сообщений
 
@@ -38,70 +36,100 @@ import ThemedImage from '@theme/ThemedImage';
 ## Сжигание жетонов
 
 - Смарт-контракт [modern_jetton](https://github.com/EmelyanenkoK/modern_jetton/blob/master/contracts/op-codes.func)
-
-<br></br>
-<div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_3.svg?raw=true',
-    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_3_dark.svg?raw=true',
-  }}
-/>
-</div>
-<br></br>
+  <br></br>
+  <div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_3.svg?raw=true',
+      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_3_dark.svg?raw=true',
+    }}
+  />
+  </div>
+  <br></br>
 
 ## Запросить адрес кошелька жетонов
 
-- Смарт-контракт [modern_jetton](https://github.com/EmelyanenkoK/modern_jetton/blob/master/contracts/op-codes.func)
-
-<br></br>
-<div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_4.svg?raw=true',
-    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_4_dark.svg?raw=true',
-  }}
-/>
-</div>
-<br></br>
-
-## Перевод жетонов
-
-- Смарт-контракт [modern_jetton](https://github.com/EmelyanenkoK/modern_jetton/blob/master/contracts/op-codes.func)
-
-<br></br>
-<div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5.svg?raw=true',
-    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5_dark.svg?raw=true',
-  }}
-/>
-</div>
-<br></br>
-
-## Выпуск жетонов
-
 - Смарт-контракт [minter-contract](https://github.com/ton-blockchain/minter-contract/blob/main/contracts/imports/op-codes.fc)
+  <br></br>
+  <div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_4.svg?raw=true',
+      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_4_dark.svg?raw=true',
+    }}
+  />
+  </div>
+  <br></br>
 
-<br></br>
-<div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_6.png?raw=true',
-    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_6_dark.png?raw=true',
-  }}
-/>
-</div>
-<br></br>
+## Transfer jettons
+
+- Смарт-контракт [modern_jetton](https://github.com/EmelyanenkoK/modern_jetton/blob/master/contracts/op-codes.func)
+  <br></br>
+  <div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5.svg?raw=true',
+      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5_dark.svg?raw=true',
+    }}
+  />
+  </div>
+  <br></br>
+
+## Mint jettons
+
+- Смарт-контракт [modern_jetton](https://github.com/EmelyanenkoK/modern_jetton/blob/master/contracts/op-codes.func)
+  <br></br>
+  <div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_6.png?raw=true',
+      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_6_dark.png?raw=true',
+    }}
+  />
+  </div>
+  <br></br>
 
 ## Подтвердить право собственности SBT на контракт
 
 - Смарт-контракт [nft_contracts](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/op-codes.fc)
+  <br></br>
+  <div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_10.svg?raw=true',
+      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_10_dark.svg?raw=true',
+    }}
+  />
+  </div>
+  <br></br>
+
+## Перевод NFT
+
+- Смарт-контракт [nft_contracts](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/op-codes.fc)
+  <br></br>
+  <div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_9.svg?raw=true',
+      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_9_dark.svg?raw=true',
+    }}
+  />
+  </div>
+  <br></br>
+
+## Выпуск NFT
+
+:::info
+:::info
+Не указано в стандарте NFT для /ton-blockchain /token-contract
+:::
+:::
 
 <br></br>
 <div class="text--center">
@@ -115,9 +143,13 @@ import ThemedImage from '@theme/ThemedImage';
 </div>
 <br></br>
 
-## Перевод NFT
+## Пакетный выпуск NFT
 
-- Смарт-контракт [nft_contracts](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/op-codes.fc)
+:::info
+:::info
+Не указано в стандарте NFT для /ton-blockchain /token-contract
+:::
+:::
 
 <br></br>
 <div class="text--center">
@@ -131,70 +163,34 @@ import ThemedImage from '@theme/ThemedImage';
 </div>
 <br></br>
 
-## Выпуск NFT
-
-:::info
-Не указано в стандарте NFT для /ton-blockchain /token-contract
-:::  
-
-<br></br>
-<div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_9.svg?raw=true',
-    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_9_dark.svg?raw=true',
-  }}
-/>
-</div>
-<br></br>
-
-## Пакетный выпуск NFT
-
-:::info
-Не указано в стандарте NFT для /ton-blockchain /token-contract
-:::   
-
-<br></br>
-<div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_10.svg?raw=true',
-    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_10_dark.svg?raw=true',
-  }}
-/>
-</div>
-<br></br>
-
 ## Уничтожение SBT пользователем
 
 - Смарт-контракт [nft_contracts](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/op-codes.fc)
-
-<br></br>
-<div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_11.svg?raw=true',
-    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_11_dark.svg?raw=true',
-  }}
-/>
-</div>
-<br></br>
+  <br></br>
+  <div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_11.svg?raw=true',
+      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_11_dark.svg?raw=true',
+    }}
+  />
+  </div>
+  <br></br>
 
 ## Уничтожение SBT администратором
 
 - Смарт-контракт [nft_contracts](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/op-codes.fc)
+  <br></br>
+  <div class="text--center">
+  <ThemedImage
+    alt=""
+    sources={{
+      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_12.svg?raw=true',
+      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_12_dark.svg?raw=true',
+    }}
+  />
+  </div>
+  <br></br>
 
-<br></br>
-<div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_12.svg?raw=true',
-    dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_12_dark.svg?raw=true',
-  }}
-/>
-</div>
-<br></br>
+<Feedback />
