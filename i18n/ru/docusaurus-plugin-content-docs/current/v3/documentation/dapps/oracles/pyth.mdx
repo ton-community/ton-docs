@@ -1,10 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
 # Оракулы Pyth
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
 
 ## Как использовать данные в режиме реального времени в контрактах TON
 
@@ -35,7 +33,6 @@ import ThemedImage from '@theme/ThemedImage';
 
 В следующем примере используется контракт testnet. Для использования mainnet измените `PYTH_CONTRACT_ADDRESS_TESTNET` на `PYTH_CONTRACT_ADDRESS_MAINNET` соответственно. 
 
-```ts
 import { TonClient, Address, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core";
 import { mnemonicToPrivateKey } from "@ton/crypto";
@@ -95,7 +92,6 @@ async function main() {
   console.log("Price feeds updated successfully.");
 }
 main().catch(console.error);
-```
 
 В этом фрагменте кода выполняется следующее:
 
@@ -114,3 +110,5 @@ main().catch(console.error);
 - [Pyth TON Contract](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/contracts)
 - [Pyth TON SDK](https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/ton/sdk)
 - [Пример Pyth TON](https://github.com/pyth-network/pyth-examples/tree/main/price_feeds/ton/sdk_js_usage)
+
+<Feedback />
