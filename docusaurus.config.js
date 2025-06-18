@@ -24,6 +24,10 @@ const getEnvLangConfig = () => {
         label: '简体中文',
         path: "zh-CN",
       },
+      ru: {
+        label: "Русский",
+        path: "ru",
+      },
     },
   };
 };
