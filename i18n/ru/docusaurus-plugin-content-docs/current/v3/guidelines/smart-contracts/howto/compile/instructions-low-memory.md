@@ -1,8 +1,6 @@
-# Компиляция TON на компьютерах с ограниченной памятью
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Компиляция TON на компьютерах с ограниченной памятью
 
 :::caution
 В этом разделе описываются инструкции и руководства по взаимодействию с TON на низком уровне.
@@ -20,7 +18,7 @@ C++: fatal error: Killed signal terminated program cc1plus compilation terminate
 
 ## Решение
 
-Это происходит из-за нехватки памяти и решается путем создания разделов подкачки.
+Follow these steps to create a 4GB swap partition:
 
 ```bash
 # Create the partition path
@@ -38,17 +36,22 @@ sudo swapon /var/cache/swap/swap0
 sudo swapon -s
 ```
 
-Команда для удаления раздела подкачки:
+### Swap management commands
+
+**Remove swap partition:**
 
 ```bash
 sudo swapoff /var/cache/swap/swap0
 sudo rm /var/cache/swap/swap0
 ```
 
-Команда освобождения места:
+**Free all swap space:**
 
 ```bash
 sudo swapoff -a
 #Detailed usage: swapoff --help
 #View current memory usage: --swapoff: free -m
 ```
+
+<Feedback />
+

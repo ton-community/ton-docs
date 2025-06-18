@@ -1,8 +1,6 @@
-# Как это работает
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Как это работает
 
 ![how it works](/img/localizationProgramGuideline/localization-program.png)
 
@@ -50,51 +48,52 @@
 1. Войдите в свою учетную запись [**Crowdin**](https://accounts.crowdin.com/login).
 
 2. Нажмите `Создать проект` в меню.
-   ![Create new project](/img/localizationProgramGuideline/howItWorked/create-new-project.png)
+  ![Create new project](/img/localizationProgramGuideline/howItWorked/create-new-project.png)
 
 3. Укажите название проекта и целевые языки. Вы можете изменить языки в настройках позже.
-   ![Create project setting](/img/localizationProgramGuideline/howItWorked/create-project-setting.png)
+  ![Create project setting](/img/localizationProgramGuideline/howItWorked/create-project-setting.png)
 
 4. Перейдите к только что созданному проекту, выберите вкладку "Интеграции", нажмите кнопку `Добавить интеграцию`, найдите GitHub и установите его.
-   ![install-github-integration](/img/localizationProgramGuideline/howItWorked/install-github-integration.png)
+  ![install-github-integration](/img/localizationProgramGuideline/howItWorked/install-github-integration.png)
 
 5. Перед настройкой интеграций GitHub на Crowdin укажите, какие файлы следует загрузить на Crowdin, чтобы избежать загрузки ненужных файлов:
 
-   1. Создайте файл **crowdin.yml** в корне **репозитория GitHub** с базовой конфигурацией:
+  1. Создайте файл **crowdin.yml** в корне **репозитория GitHub** с базовой конфигурацией:
 
-   ```yml
-   project_id: <Your project id>
-   preserve_hierarchy: 1
-   files:
-     - source: <Path of your original files>
-       translation: <Path of your translated files>
-   ```
+      ```yml
+      project_id: <Your project id>
+      preserve_hierarchy: 1
+      files:
+        - source: <Path of your original files>
+          translation: <Path of your translated files>
+      ```
 
-   2. Введите правильные значения конфигурации:
-      - **project_id**: В проекте Crowdin перейдите на вкладку "Инструменты", выберите API и найдите там **project_id**.
-        ![select-api-tool](/img/localizationProgramGuideline/howItWorked/select-api-tool.png)
-        ![projectId](/img/localizationProgramGuideline/howItWorked/projectId.png)
-      - **preserve_hierarchy**: Поддерживает структуру каталогов GitHub на сервере Crowdin.
-      - **source** и **translation**: Укажите пути для файлов, которые нужно загрузить в Crowdin, и место, где должны быть переведенные файлы.
+  2. Введите правильные значения конфигурации:
+    - **project_id**: В проекте Crowdin перейдите на вкладку "Инструменты", выберите API и найдите там **project_id**.
+      ![select-api-tool](/img/localizationProgramGuideline/howItWorked/select-api-tool.png)
+      ![projectId](/img/localizationProgramGuideline/howItWorked/projectId.png)
+    - **preserve_hierarchy**: Поддерживает структуру каталогов GitHub на сервере Crowdin.
+    - **source** и **translation**: Укажите пути для файлов, которые нужно загрузить в Crowdin, и место, где должны быть переведенные файлы.
 
-        Обратитесь к [**нашему официальному конфигурационному файлу**](https://github.com/TownSquareXYZ/ton-docs/blob/localization/crowdin.yml) для примера.\
-        Более подробную информацию можно найти в [**документации по конфигурации Crowdin**](https://developer.crowdin.com/configuration-file/).
+      Обратитесь к [**нашему официальному конфигурационному файлу**](https://github.com/TownSquareXYZ/ton-docs/blob/localization/crowdin.yml) для примера.\
+      Более подробную информацию можно найти в [**документации по конфигурации Crowdin**](https://developer.crowdin.com/configuration-file/).\
+      Find more in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).
 
 6. Настройте Crowdin для подключения к вашему репозиторию на GitHub:
-   1. Нажмите `Добавить репозиторий` и выберите режим `Исходные файлы и файлы перевода`.
-      ![select-integration-mode](/img/localizationProgramGuideline/howItWorked/select-integration-mode.png)
-   2. Подключите свою учетную запись GitHub и найдите репозиторий, который нужно перевести.
-      ![search-repo](/img/localizationProgramGuideline/howItWorked/search-repo.png)
-   3. Выберите ветку слева, которая создаст новую ветку, в которой Crowding будет публиковать переводы.
-      ![setting-branch](/img/localizationProgramGuideline/howItWorked/setting-branch.png)
-   4. Выберите частоту обновления переводов в вашей ветке GitHub. Настройки по умолчанию можно сохранить для других конфигураций, затем нажмите "Сохранить", чтобы включить интеграцию.
-      ![frequency-save](/img/localizationProgramGuideline/howItWorked/frequency-save.png)
+  1. Нажмите `Добавить репозиторий` и выберите режим `Исходные файлы и файлы перевода`.
+    ![select-integration-mode](/img/localizationProgramGuideline/howItWorked/select-integration-mode.png)
+  2. Подключите свою учетную запись GitHub и найдите репозиторий, который нужно перевести.
+    ![search-repo](/img/localizationProgramGuideline/howItWorked/search-repo.png)
+  3. Выберите ветку слева, которая создаст новую ветку, в которой Crowding будет публиковать переводы.
+    ![setting-branch](/img/localizationProgramGuideline/howItWorked/setting-branch.png)
+  4. В репозитории нажмите "Предварительный перевод" и выберите "Машинный перевод".
+    ![pre-translation](/img/localizationProgramGuideline/howItWorked/pre-translation.png)
 
 Дополнительные сведения см. в [**документации по интеграции GitHub**](https://support.crowdin.com/github-integration/).
 
 7. Наконец, вы можете нажать кнопку "Синхронизировать сейчас", чтобы синхронизировать репозиторий и переводы при необходимости.
 
-## Глоссарий
+## Glossary
 
 ### Что такое глоссарий?
 
@@ -120,12 +119,15 @@
 1. Если английский термин уже есть в глоссарии, найдите соответствующую строку и столбец для языка, который вы хотите перевести, введите перевод и загрузите его.
 2. Чтобы загрузить новый глоссарий, клонируйте проект и запустите:
 
-   - `npm i`
-   - `npm run generate -- <glossary name you want>`
+```bash
+`npm i`
+```
+
+```bash
+`npm run generate -- <glossary name you want>`
+```
 
 Повторите шаг 1, чтобы добавить новый термин.
-
-**Просто и эффективно, не так ли?**
 
 ## Как воспользоваться преимуществами AI Translation Copilot?
 
@@ -133,23 +135,26 @@ AI Translation Copilot помогает сломать языковые барь
 
 - **Повышенная согласованность**: переводы AI основаны на актуальной информации, предоставляя самые точные и актуальные переводы.
 - **Скорость и эффективность**: перевод AI выполняется мгновенно, обрабатывая большие объемы контента в режиме реального времени.
-- **Надежная масштабируемость**: системы AI постоянно обучаются и совершенствуются, повышая качество перевода с течением времени. С помощью предоставленного глоссария переводы AI можно адаптировать к конкретным потребностям различных репозиториев.
+- **Просто и эффективно, не так ли?**
 
 Чтобы использовать AI перевод в Crowdin (мы используем DeepL в нашем проекте):
 
 1. Выберите «Машинный перевод» в меню Crowdin и нажмите "Изменить" в строке DeepL.
-   ![select-deepl](/img/localizationProgramGuideline/howItWorked/select-deepl.png)
+  ![select-deepl](/img/localizationProgramGuideline/howItWorked/select-deepl.png)
 2. Включите поддержку DeepL и введите ключ API переводчика DeepL.
-   > [Как получить ключ API переводчика DeepL](https://www.deepl.com/pro-api?cta=header-pro-api)
+  > [Как получить ключ API переводчика DeepL](https://www.deepl.com/pro-api?cta=header-pro-api)
 
 ![config-crowdin-deepl](/img/localizationProgramGuideline/howItWorked/config-crowdin-deepl.png)
 
 3. В нашей настройке DeepL используется настраиваемый глоссарий. Проверьте [**ton-i18n-glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) для получения подробной информации о загрузке глоссария.
 
-4. В репозитории нажмите "Предварительный перевод" и выберите "Машинный перевод".
-   ![pre-translation](/img/localizationProgramGuideline/howItWorked/pre-translation.png)
+4. Выберите DeepL в качестве движка перевода, выберите целевые языки и выберите файлы для перевода.
+  ![pre-translate-config](/img/localizationProgramGuideline/howItWorked/pre-translate-config.png)
 
-5. Выберите DeepL в качестве движка перевода, выберите целевые языки и выберите файлы для перевода.
-   ![pre-translate-config](/img/localizationProgramGuideline/howItWorked/pre-translate-config.png)
+5. Choose DeepL as the Translation Engine, select the target languages, and select the translated files.
+  ![pre-translate-config](/img/localizationProgramGuideline/howItWorked/pre-translate-config.png)
 
 Вот и все! Теперь вы можете сделать перерыв и дождаться завершения предварительного перевода.
+
+<Feedback />
+

@@ -1,12 +1,10 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
 # Проверка доказательств (низкий уровень)
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-## Общие сведения
+## Overview
 
 :::caution
 В этом разделе описываются инструкции и руководства по взаимодействию с TON на низком уровне.
@@ -17,9 +15,11 @@ import ThemedImage from '@theme/ThemedImage';
 В этой статье описаны продвинутые примеры проверки доказательств с Liteservers.
 
 Важно проверять любые данные, которые вы получаете от узла, на предмет доверительного взаимодействия с блокчейном.
-Однако статья охватывает только часть ненадежной коммуникации с Liteserver,
-потому что предполагается, что вы проверили хэш блока, который вы получили от Liteserver (или любого другого источника).
-Проверка хэша блока является более сложной, поскольку вам нужно синхронизировать ключевые блоки и (или) проверить подписи блоков, что будет описано в другой статье в будущем. Тем не менее даже используя только эти примеры вы уменьшаете вероятность того, что Liteserver отправит вам не те данные, которым вы поверите.
+However, this article covers only a portion of the trustless communication process with a liteserver.
+It assumes you have verified the block hash received from a liteserver or any other source.
+Block hash verification is a more advanced topic.
+It requires syncing key blocks and/or validating block signatures. This topic will be covered in a future article.
+Тем не менее даже используя только эти примеры вы уменьшаете вероятность того, что Liteserver отправит вам не те данные, которым вы поверите.
 
 ## Заголовок блока
 
@@ -29,7 +29,8 @@ import ThemedImage from '@theme/ThemedImage';
 <TL BlockIdExt [wc=-1, shard=-9223372036854775808, seqno=31220993, root_hash=51ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a52c7b1f46c26406, file_hash=d4fcdc692de1a252deb379cd25774842b733e6a96525adf82b8ffc41da667bf5] >
 ```
 
-И мы запрашиваем у Liteserver заголовок для этого блока. Liteserver [отвчает](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L35)
+И мы запрашиваем у Liteserver заголовок для этого блока.
+Liteserver [отвчает](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/tl/generate/scheme/lite_api.tl#L35)
 содержимым `header_proof` boc.
 
 <details>
@@ -97,7 +98,7 @@ b5ee9c72010207010001470009460351ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a5
 }
 ```
 
-Теперь мы должны проверить, что `seqno` в десериализованном блоке соответствует `seqno` блока, который мы знаем, а затем вычислить hash_1 единственной
+Next, we need to verify that the `seqno` in the deserialized block matches the `seqno` of the block we know. Теперь мы должны проверить, что `seqno` в десериализованном блоке соответствует `seqno` блока, который мы знаем, а затем вычислить hash_1 единственной
 ссылки доказательства Меркла и сравнить его с хешем блока, который мы знаем:
 
 ```python
@@ -110,11 +111,15 @@ _Примеры проверки доказательства:_ [Python](https:/
 
 ## Полный блок
 
-Для метода `liteserver.getBlock` проверка доказательства такая же, как описано выше, однако она содержит полные ячейки вместо сокращенных ветвей для [потока значений](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L464), [состояния обновления](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413) и [расширенного блока](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L452) схем.
+In the `liteserver.getBlock` method, proof verification is performed in the same manner as described above. Для метода `liteserver.getBlock` проверка доказательства такая же, как описано выше, однако она содержит полные ячейки вместо сокращенных ветвей для [потока значений](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L464), [состояния обновления](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413) и [расширенного блока](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L452) схем.
 
-## Блок шарда
+## Shard block
 
-Доказательства шарда — это доказательства того, что ссылка на шард фактически хранится в блоке мастерчейна, который мы предоставили Liteserver. Нам нужно проверить такие доказательства, когда мы вызываем методы `liteServer.getShardInfo`, `liteServer.getAccountState` и `liteServer.runSmcMethod`.
+Shard proofs verify that a shard reference is stored in the MasterChain block provided to the liteserver. These proofs are necessary when calling the following methods:
+
+- `liteServer.getShardInfo`
+- `liteServer.getAccountState`
+- `liteServer.runSmcMethod`
 
 Давайте запросим у Liteserver информацию о шарде для блока мастерчейна, о котором мы упоминали выше:
 
@@ -128,7 +133,7 @@ await client.raw_get_shard_info(master, wc=0)
 <TL BlockIdExt [wc=0, shard=-9223372036854775808, seqno=36908135, root_hash=39e5cbca5bf69750b5d9897872c3a0d7a3e614e521c53e4de728fafed38dce27, file_hash=f1f0e5cdc4b8a12cf2438dcab60f4712d1dc04f3792b1d72f2500cbf640948b7] >
 ```
 
-Подтверждение шарда boc:
+Shard proof BoC:
 
 <details>
 
@@ -180,7 +185,7 @@ b5ee9c7201010201007d0001db50119963380ee3280800011e9c5cb7ee0000011e9c5cb7ee29cf2e
 }
 ```
 
-Ячейка
+The cell
 
 ```json
 552[0478E0F0E601BA1161ECC1395E9A0475C4F80AADBD6C483F210E96E29CF36789E432BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F016F] -> {
@@ -189,7 +194,7 @@ b5ee9c7201010201007d0001db50119963380ee3280800011e9c5cb7ee0000011e9c5cb7ee29cf2e
 }
 ```
 
-Является обновлением Меркла схемы TLB [ShardState](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413), поэтому нам нужно запомнить новый хэш.
+Является обновлением Меркла схемы TLB [ShardState](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413), поэтому нам нужно запомнить новый хэш. The resulting new hash should be stored.
 
 После того, как мы убедились, что единственная ссылка доказзательства Меркла ячейки Hash_1 совпадает с известным нам хешем блока, и запомнили новый хеш ShardState, мы проверяем вторую ячейку `shard proof`:
 
@@ -219,8 +224,7 @@ b5ee9c7201010201007d0001db50119963380ee3280800011e9c5cb7ee0000011e9c5cb7ee29cf2e
 }
 ```
 
-Как мы видим, единственная ссылка доказательства Меркла имеет префикс `9023AFE2`, который является [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410)
-префиксом схемы TLB, поэтому нам нужно сравнить эту ссылку Hash_1 с той, которую мы запомнили на предыдущем шаге:
+The Merkle proof reference in this cell has the prefix `9023AFE2`, corresponding to the [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410) TLB schema. This reference's `Hash_1` must match the hash stored in the previous step:
 
 ```python
 """
@@ -235,7 +239,7 @@ if mc_state_hash != state_hash:
     raise ProofError('mc state hashes mismatch')
 ```
 
-- _Почему?_ - потому что мы проверили доказательство заголовка блока, и это означает, что мы можем доверять другим данным ячейки. Итак, теперь мы доверяем новому хешу обновления Меркла ShardState, и чтобы доверять данным второй ячейки, нам нужно проверить, совпадают ли хеши.
+- _Почему?_ - потому что мы проверили доказательство заголовка блока, и это означает, что мы можем доверять другим данным ячейки. Итак, теперь мы доверяем новому хешу обновления Меркла ShardState, и чтобы доверять данным второй ячейки, нам нужно проверить, совпадают ли хеши. We must confirm the hashes match to validate the second cell’s data.
 
 Теперь давайте десериализуем вторую ячейку:
 
@@ -359,7 +363,7 @@ if state_cell[0].get_hash(0) != state_hash:
     raise ProofError('state hashes mismatch')
 ```
 
-Теперь мы можем доверять `state_cell`, который выглядит так:
+Теперь мы можем доверять `state_cell`, который выглядит так: Its structure is as follows:
 
 <details>
 
@@ -449,8 +453,9 @@ if state_cell[0].get_hash(0) != state_hash:
 
 </details>
 
-Опять же, единственная ссылка доказательсва Меркла имеет префикс `9023AFE2`, который является [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410)
-Префикс схемы TLB, поэтому мы собираемся десериализовать его в соответствии со схемой TLB:
+Как мы видим, единственная ссылка доказательства Меркла имеет префикс `9023AFE2`, который является [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410)
+префиксом схемы TLB, поэтому нам нужно сравнить эту ссылку Hash_1 с той, которую мы запомнили на предыдущем шаге:
+Therefore, it must be deserialized accordingly.
 
 ```python
 {
@@ -499,6 +504,10 @@ if state_cell[0].get_hash(0) != state_hash:
 Анализируя адрес `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWsIL0XggGG`, мы получаем hash_part, равный `50368879097771769677871174881221998657607998794347754829932074327482686052226`, поэтому нам нужно
 получить из хэшпама значение этого ключа:
 
+`50368879097771769677871174881221998657607998794347754829932074327482686052226`
+
+We then use this key to retrieve the corresponding value from the Hashmap.
+
 ```python
 {
     50368879097771769677871174881221998657607998794347754829932074327482686052226: {
@@ -510,7 +519,7 @@ if state_cell[0].get_hash(0) != state_hash:
 }
 ```
 
-Нам нужно запомнить `last_trans_hash` и `last_trans_lt`, потому что мы можем использовать их для получения транзакций по аккаунту, и давайте проверим всю ячейку этих данных:
+Нам нужно запомнить `last_trans_hash` и `last_trans_lt`, потому что мы можем использовать их для получения транзакций по аккаунту, и давайте проверим всю ячейку этих данных: Let's examine the entire cell containing this data.
 
 ```json
 320[649B46AC72E6E4D4C1293B66D58D9ED7A54902BEEFD97F5BFF7977DD85998B3D000023C564393441] -> {
@@ -518,7 +527,9 @@ if state_cell[0].get_hash(0) != state_hash:
 }
 ```
 
-Как мы видим, ячейка является обычной ячейкой с уровнем 1, которая имеет только одну ссылку - обрезанные данные акканта, поэтому давайте вычислим Hash_1 этой обрезанной ветви - это хэш состояния аккаунта, которому мы можем доверять: `8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`.
+This is a regular cell with level 1, containing a single reference — the pruned account data. We compute the `Hash_1` of this pruned branch, which serves as the trusted account state hash:
+
+`8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`.
 
 Теперь последний шаг - десериализация boc `state`:
 
@@ -557,7 +568,9 @@ if state_cell[0].get_hash(0) != state_hash:
 }
 ```
 
-Вычислите его хэш представления и убедитесь, что он соответствует тому, который мы получили из обрезанной: `8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`.
+Compute its representation hash, and verify that it matches the trusted hash obtained from the pruned data:
+
+`8282d13bf66b9ace1fbf5d3abd1c59cc46d61af1d47af1665d3013d8f9e47488`.
 
 И десериализуем его в соответствии со схемой TLB [аккаунта](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L231-L233):
 
@@ -589,7 +602,8 @@ if state_cell[0].get_hash(0) != state_hash:
 ## Блок транзакций
 
 Давайте спросим Liteserver о транзакциях, принадлежащих блоку, с которого мы начали статью.
-LiteServer [ответ](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L46) содержит поле `ids` с транзакциями и `proof` boc. Сначала давайте десериализуем `proof`:
+LiteServer [ответ](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L46) содержит поле `ids` с транзакциями и `proof` boc.
+Сначала давайте десериализуем `proof`:
 
 ```json
 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
@@ -623,7 +637,7 @@ LiteServer [ответ](https://github.com/ton-blockchain/ton/blob/master/tl/gen
 }
 ```
 
-Теперь мы должны проверить доказательство заголовка блока (чтобы доверять этим данным ячейки) и десериализовать его в соответствии со схемой блока TLB:
+We must verify the **block header proof** to trust the cell's contents. Once verified, we can deserialize it using the block TLB Scheme.
 
 ```python
 {
@@ -667,8 +681,13 @@ LiteServer [ответ](https://github.com/ton-blockchain/ton/blob/master/tl/gen
 }
 ```
 
-В этом случае мы должны запомнить поле `block` -> `extra` -> `account_blocks`, которое имеет тип [ShardAccountBlocks](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L282),
-который является HashmapAugE, где key — это адрес hash_part, value имеет тип [AccountBlock](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L277-L280) и дополнительный тип `CurrencyCollection`:
+After successful deserialization, we should extract and remember the following field: `block` -> `extra` -> `account_blocks`.
+This field has the type [ShardAccountBlocks](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L282), which is a `HashmapAugE`, where:
+
+- The key is the address `hash_part`.
+- В этом случае мы должны запомнить поле `block` -> `extra` -> `account_blocks`, которое имеет тип [ShardAccountBlocks](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L282),
+  который является HashmapAugE, где key — это адрес hash_part, value имеет тип [AccountBlock](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L277-L280) и дополнительный тип `CurrencyCollection`:
+- The extra data is a `CurrencyCollection`.
 
 ```python
 {
@@ -715,11 +734,9 @@ assert block_tr.get_hash(0) == tr['hash']
 ```
 
 :::note
-
 В этом примере не было необходимости проверять поле `ids`, мы могли просто взять транзакции из блока аккаунта.
 Но когда вы запрашиваете метод [liteServer.listBlockTransactionsExt](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl#L80)
 вы проверяете доказательства аналогично, но в этом случае вам действительно нужно сравнивать хеши.
-
 :::
 
 ## Конфигурация
@@ -842,9 +859,7 @@ assert block_tr.get_hash(0) == tr['hash']
 }
 ```
 
-</details>
-
-Нам нужно сравнить Hash_1 этой ссылки доказательства Меркла только с хешем, который мы получили из функции `check_block_header` выше, чтобы мы могли доверять этой ячейке:
+Нам нужно сравнить Hash_1 этой ссылки доказательства Меркла только с хешем, который мы получили из функции `check_block_header` выше, чтобы мы могли доверять этой ячейке: If they match, the cell can be trusted:
 
 ```python
 state_hash = check_block_header_proof(state_proof[0], block.root_hash, True)
@@ -931,3 +946,5 @@ if config_proof[0].get_hash(0) != state_hash:
 ## См. также
 
 - [Экзотические ячейки](/v3/documentation/data-formats/tlb/exotic-cells)
+
+<Feedback />
