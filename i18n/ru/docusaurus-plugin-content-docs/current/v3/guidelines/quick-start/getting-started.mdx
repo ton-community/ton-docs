@@ -7,7 +7,7 @@ import Button from '@site/src/components/button'
 
 Добро пожаловать в руководство для быстрого старта в TON-разработке! Здесь вы найдёте отправную точку для погружения в концепции TON, а также получите базовый опыт разработки приложений в экосистеме TON.
 
-## Что требуется для прохождения 
+## Prerequisites
 
 - Базовые знания о программировании.
 - Около **30 минут** времени.
@@ -135,7 +135,7 @@ import Button from '@site/src/components/button'
 </div>
 
 :::info
-Это может ощущаться контринтуитивным: почему ваш кошелёк находится в состоянии `неинициализирован` (`uninit`), если вы его уже создали? Тут есть важный нюанс: разница между `приложением кошелька` и `смарт-контрактом кошелька`:
+This might seem unintuitive: why is your wallet in the `uninit` state when you’ve already created it? There is a small difference between the `wallet app` and the `wallet smart contract`:
 
 - `Приложение кошелька` — это ваш офчейн-клиент для `смарт-контракта кошелька`.
 
@@ -147,7 +147,8 @@ import Button from '@site/src/components/button'
 <div style={{marginBottom: '30px'}}><img src="/img/tutorials/quick-start/active.png" alt="Скриншот кошелька в активном состоянии"/></div>
 
 :::info
-Есть также четвёртое состояние «[frozen](/ru/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee/)». Оно означает, что расходы смарт-контракта на [хранение данных](/ru/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee/) превысили его баланс. В этом состоянии смарт-контракт не может осуществлять никакие операции.
+:::info
+Есть также четвёртое состояние «[frozen](/ru/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee/)». В этом состоянии смарт-контракт не может осуществлять никакие операции.
 :::
 
 Теперь наш контракт кошелька развёрнут и готов к использованию. Давайте изучим, что показывает пользовательский интерфейс:
