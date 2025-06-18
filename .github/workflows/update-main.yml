@@ -1,0 +1,32 @@
+name: Update main
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+
+jobs:
+  push-sources:
+    name: Push Source Strings to Crowdin
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Crowdin CLI
+        run: npm install -g @crowdin/cli
+
+      - name: Push source strings
+        run: |
+          # Push all source strings from main branch
+          crowdin push sources \
+            --branch main \
+            --config crowdin-oss.yml

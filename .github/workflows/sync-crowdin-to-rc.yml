@@ -1,4 +1,4 @@
-name: Sync Crowdin Translations to Release candidate
+name: Sync Translations
 
 on:
   schedule:
@@ -6,37 +6,61 @@ on:
   workflow_dispatch:
 
 jobs:
-  download-translations:
+  sync-translations:
+    name: Sync Translations for release-candidate-${{ matrix.lang }}
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        lang: [ru] # , en, ja, ko, zh-cn
+        lang: [ru, ko, ja, zh-CN]
 
     steps:
-      - name: Checkout branch
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
         with:
-          ref: release-candidate-${{ matrix.lang }}
+          fetch-depth: 0
 
-      - name: Download translations from Crowdin
-        uses: crowdin/github-action@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          config: crowdin-oss.yml
-          download_translations: true
-          download_language: ${{  github.event.inputs.language }}
-          crowdin_branch_name: release-candidate-${{ matrix.lang }}
-          pull_request_title: 'New Crowdin Translations'
-          pull_request_body: 'New Crowdin translations (${{ matrix.lang }})'
-          pull_request_base_branch_name: 'release-candidate-${{ matrix.lang }}'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          node-version: '20'
 
-      - name: Commit and push updates
+      - name: Install Crowdin CLI
+        run: npm install -g @crowdin/cli
+
+      - name: Download completed translations
         run: |
-          git config user.name "Crowdin Bot"
-          git config user.email "bot@crowdin.com"
-          git add .
-          git commit -m "Update ${{ matrix.lang }} translations from Crowdin"
-          git push
+          crowdin download \
+            --only-completed \
+            --branch main \
+            --config crowdin-oss.yml \
+            --language ${{ matrix.lang }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Create translations branch
+        run: |
+          git checkout -B l10n-release-candidate-${{ matrix.lang }}
+
+      - name: Commit and push translations
+        run: |
+          git add i18n/${{ matrix.lang }}
+          git diff --quiet --cached || ( \
+            git commit -m "chore: update ${{ matrix.lang }} translations" && \
+            git push -u origin l10n-release-candidate-${{ matrix.lang }} \
+          )
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          commit-message: "chore: update ${{ matrix.lang }} translations"
+          branch: l10n-release-candidate-${{ matrix.lang }}
+          base: release-candidate-${{ matrix.lang }}
+          title: "Update ${{ matrix.lang }} translations — release-candidate-${{ matrix.lang }}"
+          body: |
+            This automated PR updates only the fully translated `${{ matrix.lang }}` files.
+          labels: translation, automated
