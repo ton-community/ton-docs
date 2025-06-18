@@ -1,8 +1,6 @@
-# Резолверы TON DNS
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Резолверы TON DNS
 
 ## Введение
 
@@ -22,9 +20,9 @@ TON DNS — это мощный инструмент. Он позволяет н
 Поддомены имеют практическое применение. Например, в блокчейн-эксплорерах на данный момент нет способа найти доменный контракт по его названию. Давайте разберемся, как создать контракт, который позволит находить такие домены.
 
 :::info
-This contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH\_Zp](https://tonscan.org/address/EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp#source) and linked to `resolve-contract.ton`. To test it, you may write `<your-domain.ton>.resolve-contract.ton` in the address bar of your favourite TON explorer and get to the page of TON DNS domain contract. Subdomains and .t.me domains are supported as well.
+This contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH\_Zp](https://tonscan.org/address/EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp#source) and linked to `resolve-contract.ton`. To test it, you may write `<your-domain.ton>.resolve-contract.ton` in the address bar of your favourite TON explorer and get to the page of TON DNS domain contract. This resolves to the corresponding TON DNS domain contract page. Subdomains and .t.me domains are supported as well.
 
-Вы можете попытаться просмотреть код резолвера, перейдя по адресу `resolve-contract.ton.resolve-contract.ton`. Однако это не покажет вам субрезолвер (так как это отдельный смарт-контракт), а лишь страницу самого доменного контракта.
+Вы можете попытаться просмотреть код резолвера, перейдя по адресу `resolve-contract.ton.resolve-contract.ton`. Однако это не покажет вам субрезолвер (так как это отдельный смарт-контракт), а лишь страницу самого доменного контракта. Instead, it displays the domain contract itself.
 :::
 
 ### Код dnsresolve()
@@ -114,56 +112,65 @@ This contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH\_Zp]
 
 ### Объяснение функции dnsresolve()
 
-- Пользователь запрашивает `"stabletimer.ton.resolve-contract.ton"`.
-- Приложение преобразует этот запрос в `"\0ton\0resolve-contract\0ton\0stabletimer\0"` (первый нулевой байт необязателен).
-- Корневой DNS-резолвер перенаправляет запрос в коллекцию TON DNS, оставшаяся часть -`"\0resolve-contract\0ton\0stabletimer\0"`.
-- Коллекция TON DNS делегирует запрос определенному домену, оставляя `"\0ton\0stabletimer\0"`.
-- Доменный контракт .TON DNS передает разрешение субрезолверу, указанному редактором, поддомен - `"ton\0stabletimer\0"`.
+Here's a step-by-step breakdown of when a user resolves a domain like `stabletimer.ton.resolve-contract.ton`:
+
+1. Пользователь запрашивает `"stabletimer.ton.resolve-contract.ton"`.
+2. Приложение преобразует этот запрос в `"\0ton\0resolve-contract\0ton\0stabletimer\0"` (первый нулевой байт необязателен).  Note: the leading null byte is optional.
+3. Корневой DNS-резолвер перенаправляет запрос в коллекцию TON DNS, оставшаяся часть -`"\0resolve-contract\0ton\0stabletimer\0"`.
+4. Коллекция TON DNS делегирует запрос определенному домену, оставляя `"\0ton\0stabletimer\0"`.
+5. The `.ton` DNS domain contract passes the resolution to the subresolver specified by the editor. The subdomain is: `"ton\0stabletimer\0"`.
 
 **В этот момент вызывается dnsresolve().** Пошаговый разбор работы функции:
+
+Таким образом, dnsresolve() может:
 
 1. Она принимает в качестве входных данных поддомен и категорию.
 2. Если в начале присутствует нулевой байт, он пропускается.
 3. Она проверяет, начинается ли поддомен с `"ton\0"`. Если да, то
-  1. Она пропускает первые 32 бита (поддомен = `"resolve-contract\0"`)
-  2. Значение `subdomain_sfx` устанавливается на `subdomain`, и функция считывает байты до нулевого байта
-  3. (subdomain = `"resolve-contract\0"`, subdomain_sfx = `""`)
-  4. Нулевой байт и subdomain_sfx удаляются с конца среза поддомена subdomain (subdomain = `"resolve-contract"`)
-  5. Функции slice_hash и get_ton_dns_nft_address_by_index используются для преобразования доменного имени в адрес контракта. Вы можете увидеть их в [[Subresolvers#Appendix 1. Code of resolve-contract.ton|Appendix 1]].
-4. В противном случае, dnsresolve() проверяет, начинается ли поддомен с `"address\0"`. Если да, то он пропускает этот префикс и считывает адрес в формате base64.
-5. Если переданный поддомен не соответствует ни одному из этих префиксов, функция указывает на неудачу, возвращая `(0, null())` (префикс с нулевыми байтами разрешен без записей DNS).
-6. Затем функция проверяет, является ли суффикс поддомена пустым. Пустой суффикс означает, что запрос полностью обработан. Если суффикс пуст:
-  1. dnsresolve() создает DNS-запись для подраздела "wallet" домена, используя полученный адрес контракта TON Domain.
-  2. Если запрашивается категория 0 (все DNS-записи), запись оборачивается в словарь и возвращается.
-  3. Если запрашивается категория "wallet"H, запись возвращается как есть.
-  4. В противном случае DNS-запись для указанной категории отсутствует, поэтому функция сообщает, что разрешение прошло успешно, но результаты не найдены.
-7. Если суффикс не пуст:
-  1. Полученный ранее адрес контракта используется как следующий резолвер. Функция создает запись следующего резолвера, указывающую на него.
-  2. `"\0ton\0stabletimer\0"` передается дальше в этот контракт: обработанные биты — это биты поддомена.
+  - Она пропускает первые 32 бита (поддомен = `"resolve-contract\0"`)
+  - A suffix variable `subdomain_sfx` is set to the `subdomain`. It reads bytes until the zero byte.
+  - (subdomain = `"resolve-contract\0"`, subdomain_sfx = `""`)
+  - Доменный контракт .TON DNS передает разрешение субрезолверу, указанному редактором, поддомен - `"ton\0stabletimer\0"`.
+  - Функции slice_hash и get_ton_dns_nft_address_by_index используются для преобразования доменного имени в адрес контракта. Code of resolve-contract.ton|Appendix 1]].
+4. Нулевой байт и subdomain_sfx удаляются с конца среза поддомена subdomain (subdomain = `"resolve-contract"`)
+  - Если да, то он пропускает этот префикс и считывает адрес в формате base64.
+5. If the subdomain doesn't match any known prefix:
+  - The function returns `(0, null())`, indicating a failed resolution with no entries.
+6. Значение `subdomain_sfx` устанавливается на `subdomain`, и функция считывает байты до нулевого байта
+  - If **yes**, the request is considered fully resolved.
+    - dnsresolve() создает DNS-запись для подраздела "wallet" домена, используя полученный адрес контракта TON Domain.
+    - Если запрашивается категория 0 (все DNS-записи), запись оборачивается в словарь и возвращается.
+    - Если запрашивается категория "wallet"H, запись возвращается как есть.
+    - The function returns a successful resolution for any other category with no matching record.
+  - If **not**, the request is only partially resolved.
+    - Полученный ранее адрес контракта используется как следующий резолвер. Функция создает запись следующего резолвера, указывающую на него.
+    - `"\0ton\0stabletimer\0"` передается дальше в этот контракт: обработанные биты — это биты поддомена.
 
-Таким образом, dnsresolve() может:
+Если переданный поддомен не соответствует ни одному из этих префиксов, функция указывает на неудачу, возвращая `(0, null())` (префикс с нулевыми байтами разрешен без записей DNS).
 
 - Полностью преобразовать поддомен в DNS-запись
-- Частично преобразовать его в запись резолвера для передачи разрешения другому контракту
+- Partially resolve it, delegating to another resolver contract.
 - Вернуть результат "домен не найден" для неизвестных поддоменов
 
 :::warning
-На самом деле, синтаксический анализ адресов в формате base64 не работает: если вы попытаетесь ввести `<some-address>.address.resolve-contract.ton`, вы получите ошибку о том, что домен неправильно настроен или не существует. Причина в том, что доменные имена не чувствительны к регистру (функция, унаследованная от реального DNS) и поэтому преобразуются в нижний регистр, перенаправляя вас на какой-то несуществующий адрес.
+Base64 address parsing is currently not functional. На самом деле, синтаксический анализ адресов в формате base64 не работает: если вы попытаетесь ввести `<some-address>.address.resolve-contract.ton`, вы получите ошибку о том, что домен неправильно настроен или не существует. This issue arises because domain names are case-insensitive—a behavior inherited from traditional DNS, which results in the lowercase. Consequently, the resolver may attempt to query a non-existent or invalid WorkChain address.
 :::
 
-### Привязка резольвера
+### Binding the resolver
 
 Теперь, когда контракт субрезолвера развернут, нам нужно привязать к нему домен, то есть изменить запись домена `dns_next_resolver`. Это можно сделать, отправив сообщение с следующей структурой TL-B в доменный контракт.
 
-1. `change_dns_record#4eb1f0f9 query_id:uint64 record_key#19f02441ee588fdb26ee24b2568dd035c3c9206e11ab979be62e55558a1d17ff record:^[dns_next_resolver#ba93 resolver:MsgAddressInt]`
+```
+`change_dns_record#4eb1f0f9 query_id:uint64 record_key#19f02441ee588fdb26ee24b2568dd035c3c9206e11ab979be62e55558a1d17ff record:^[dns_next_resolver#ba93 resolver:MsgAddressInt]`
+```
 
 ## Создание собственного менеджера поддоменов
 
-Поддомены могут быть полезны обычным пользователям — например, для привязки нескольких проектов к одному домену или для связи с кошельками друзей.
+Subdomains can be helpful for everyday users. Поддомены могут быть полезны обычным пользователям — например, для привязки нескольких проектов к одному домену или для связи с кошельками друзей.
 
 ### Данные контракта
 
-В данных контракта необходимо хранить адрес владельца и словарь вида *domain*->*record hash*->*record value*.
+В данных контракта необходимо хранить адрес владельца и словарь вида _domain_->_record hash_->_record value_.
 
 ```func
 global slice owner;
@@ -217,13 +224,18 @@ const int op::update_record = 0x537a3491;
 }
 ```
 
-Мы проверяем, что входящее сообщение содержит какой-либо запрос, не является возвратным, отправлено владельцем и что запрос является `op::update_record`.
+We begin by verifying that the incoming message:
 
-Затем мы загружаем доменное имя из сообщения. Мы не можем хранить домены в словаре в исходном виде: они могут иметь разную длину, но не-префиксные словари TVM могут содержать только ключи одинаковой длины. Поэтому мы вычисляем `string_hash(domain)` - SHA-256 доменного имени; доменное имя гарантированно содержит целое число октетов, поэтому это работает.
+- Contains a valid request
+- Is not bounced
+- Comes from the owner
+- Specifies the `op::update_record` operation.
+
+Затем мы загружаем доменное имя из сообщения. Мы не можем хранить домены в словаре в исходном виде: они могут иметь разную длину, но не-префиксные словари TVM могут содержать только ключи одинаковой длины. Поэтому мы вычисляем `string_hash(domain)` - SHA-256 доменного имени; доменное имя гарантированно содержит целое число октетов, поэтому это работает. Domain names are guaranteed to contain an integer number of octets, so hashing them is safe and consistent.
 
 После этого мы обновляем запись для указанного домена и сохраняем новые данные в хранилище контракта.
 
-### Преобразование доменов
+### Resolving domains
 
 ```func
 (slice, slice) ~parse_sd(slice subdomain) {
@@ -260,7 +272,7 @@ const int op::update_record = 0x537a3491;
 }
 ```
 
-Функция `dnsresolve` проверяет, содержит ли запрашиваемый поддомен целое число октетов, пропускает необязательный нулевой байт в начале среза поддомена, затем разделяет его на домен верхнего уровня и остальную часть (`test\0qwerty\0` разделяется на `test` и `qwerty\0`). Загружается словарь записей, соответствующий запрашиваемому домену.
+Функция `dnsresolve` проверяет, содержит ли запрашиваемый поддомен целое число октетов, пропускает необязательный нулевой байт в начале среза поддомена, затем разделяет его на домен верхнего уровня и остальную часть (`test\0qwerty\0` разделяется на `test` и `qwerty\0`). It skips an optional zero byte at the start of the subdomain slice, then splits the slice into the top-level domain and the remaining portion. For example, `test\0qwerty\0` is split into `test` and `qwerty\0`. Загружается словарь записей, соответствующий запрашиваемому домену.
 
 Если есть непустой суффикс поддомена, функция возвращает количество разрешённых байтов и следующую запись резолвера, найденную по ключу `"dns_next_resolver"H`. В противном случае функция возвращает количество разрешённых байтов (то есть полную длину фрагмента) и запрошенную запись.
 
@@ -268,8 +280,7 @@ const int op::update_record = 0x537a3491;
 
 ## Приложение 1. Код resolve-contract.ton
 
-<details>
-<summary>subresolver.fc</summary>
+<details><summary>subresolver.fc</summary>
 
 ```func showLineNumbers
 (builder, ()) ~store_slice(builder to, slice s) asm "STSLICER";
@@ -448,3 +459,6 @@ slice decode_base64_address(slice readable) method_id {
 ```
 
 </details>
+
+<Feedback />
+
