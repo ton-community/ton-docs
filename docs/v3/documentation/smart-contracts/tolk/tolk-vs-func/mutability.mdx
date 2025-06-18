@@ -67,9 +67,9 @@ The goal is to have calls identical to JS and other languages:
 
 Tolk offers a mutability conception to make this available, a generalization of what a `~` tilda means in FunC.
 
-<h3 className="cmp-func-tolk-header">
-  By default, all arguments are copied by value (identical to FunC)
-</h3>
+
+###  By default, all arguments are copied by value (identical to FunC)
+
 
 ```tolk
 fun someFn(x: int) {
@@ -94,9 +94,8 @@ var flags = readFlags(msgBody);  // msgBody is not modified
 
 This means that when you call a function, you are sure that the original data has not been modified.
 
-<h3 className="cmp-func-tolk-header">
-  `mutate` keyword and mutating functions
-</h3>
+### mutate keyword and mutating functions
+
 
 But if you add the `mutate` keyword to a parameter, it will make a passed argument mutable. To avoid unexpected mutations, you must specify `mutate` when calling it, also:
 ```tolk
@@ -138,9 +137,8 @@ incrementXY(mutate origX, mutate origY, 10);   // both += 10
 
 *You may ask — is it just passing by reference? It effectively is, but since "ref" is an overloaded term in TON (cells and slices have refs), the keyword `mutate` was chosen.*
 
-<h3 className="cmp-func-tolk-header">
-  By default, `self` in methods is immutable
-</h3>
+### By default, self in methods is immutable
+
 
 Methods — unlike global functions `fun f()` — are declared as `fun receiver_type.f()`.
 If a method accepts `self`, it's an instance method (if not, it's a static one).
@@ -168,9 +166,8 @@ fun slice.preloadInt32(self) {
 
 Combining `mutate` and `self`, we get mutating methods.
 
-<h3 className="cmp-func-tolk-header">
-  `mutate self` is a method, called via dot, mutating an object
-</h3>
+### mutate self is a method, called via dot, mutating an object
+
 
 As follows:
 ```tolk
@@ -206,9 +203,8 @@ fun tuple.push<X>(mutate self, value: X): void
 t.push(1);
 ```
 
-<h3 className="cmp-func-tolk-header">
-  `return self` makes a method chainable
-</h3>
+### return self makes a method chainable
+
 
 It is precisely like `return self` in Python or `return this` in JavaScript. That makes methods like `storeInt()` and others chainable.
 ```tolk
@@ -227,9 +223,8 @@ b = b.storeInt32(5); // and works with assignment, since also returns
 
 Pay attention to the return type, it's `self`. You should specify it; otherwise, the compilation will fail if left empty. Probably, in the future, it will be correct.
 
-<h3 className="cmp-func-tolk-header">
-  `mutate self` and asm functions
-</h3>
+### mutate self and asm functions
+
 
 While it's evident for user-defined functions, one could be interested in how to make an `asm` function with such behavior. To answer this question, we should look under the hood at how mutation works inside the compiler.
 
@@ -292,9 +287,8 @@ fun builder.myStoreMessageOp(mutate self, flags: int): self {
 }
 ```
 
-<h3 className="cmp-func-tolk-header">
-  Do I need `@inline` for simple functions/methods?
-</h3>
+### Do I need @inline for simple functions/methods?
+
 
 For now, better do it, yes. In most examples above, `@inline` was omitted for clarity. Without `@inline`, it will be a separate TVM continuation with jumps in/out. With `@inline`, a function will be generated, but inlined by Fift, like the `inline` specifier in FunC.
 
