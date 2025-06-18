@@ -1,0 +1,52 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Notcoin
+
+## Links
+
+- [Notcoin telegram mini app](https://t.me/notcoin_bot/click)
+- [GitHub teams](https://github.com/OpenBuilders)
+- [Notcoin clicker frontend](https://github.com/OpenBuilders/notcoin-clicker)
+- [Notcoin smart-contract](https://github.com/OpenBuilders/notcoin-contract)
+
+## Project description
+
+Notcoin was created by the Open Builders team, the independent developers from the TON community. It is a pioneering digital asset that has quickly captured the attention of the online community, reaching an impressive milestone of 4 million players. Unlike traditional cryptocurrencies, Notcoin is designed with a unique approach that combines elements of gamification, social interaction, and digital scarcity to create an engaging user experience. This innovation not only challenges conventional wisdom about digital currencies but also demonstrates the potential for viral growth in digital assets.
+
+### Key features
+
+- **Gamification**: Notcoin integrates game-like elements into its ecosystem, encouraging user engagement and participation through challenges, achievements, and rewards. This approach significantly differs from the typical transaction-based model of other cryptocurrencies, making it more accessible and enjoyable for a broader audience.
+- **Social dynamics**: The platform leverages social networks and community-building as a core part of its strategy. Users are motivated to invite friends and participate in community events, fostering a sense of belonging and significantly contributing to its viral spread.
+- **Digital scarcity and rewards**: Notcoin employs a mechanism of digital scarcity, ensuring that the asset remains valuable and sought after. This is coupled with a rewards system that incentivizes active participation and contribution to the community.
+- **Innovative technology**: The underlying technology of Notcoin is designed for scalability, security, and ease of use. This ensures that as the platform grows, it remains efficient and accessible to users worldwide.
+- **Environmental considerations**: Notcoin takes a conscious approach to its environmental impact, utilizing energy-efficient methods in its operation and promoting sustainable practices within its community.
+
+### Summary
+
+Notcoin’s rise to 4 million players is a testament to its innovative approach to digital assets. By combining gamification, social dynamics, digital scarcity, and cutting-edge technology, Notcoin has established a new paradigm in the cryptocurrency world. Its focus on community and environmental sustainability further sets it apart, making it not just a digital currency but a movement towards a more engaging and responsible digital economy. The platform’s success signals a growing interest in alternative digital currencies and the potential for viral growth in the sector, challenging traditional notions of value and community in the digital age.
+
+## Front-end
+
+The project presents a very simple functionality. The Notcoin component is an interactive button that reacts to user touches with animations and dynamic updates. This component can be used in various interactive applications (games) where animation and feedback on user actions are needed.
+
+## Smart contract
+
+### Notcoin jetton
+
+The Notcoin jetton is forked from https://github.com/ton-blockchain/stablecoin-contract but with the governance functionality removed.
+
+### Details
+
+Notcoin represents a standard TON jetton smart contract with additional functionality:
+
+- The admin of the jetton can change the jetton-minter code and its full data.
+
+:::warning
+It is critically important for the issuer to carefully manage the admin's account private key to avoid any potential risks of being hacked. It is highly recommended to use a multi-signature wallet as the admin account, with private keys stored on different air-gapped hosts/hardware wallets.
+:::
+
+:::warning
+The contract does not check the code and data on upgrade messages, so it is possible to brick the contract if you send invalid data or code. Therefore, always check the upgrade in the testnet before applying it on the main network.
+:::
+
+<Feedback />

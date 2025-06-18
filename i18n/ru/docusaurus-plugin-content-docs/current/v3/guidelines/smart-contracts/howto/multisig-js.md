@@ -2,11 +2,13 @@
 description: В рамках этого руководства вы научитесь разворачивать кошелек с мультиподписью, а также отправите несколько транзакций с помощью библиотеки ton
 ---
 
+import Feedback from '@site/src/components/Feedback';
+
 # Взаимодействие с кошельками с мультиподписью при помощи TypeScript
 
 :::warning
-Эта страница сильно устарела и скоро будет обновлена.
-См. [multisig-contract-v2](https://github.com/ton-blockchain/multisig-contract-v2), самый новый контракт с мультиподписью на TON.
+Эта страница сильно устарела и скоро будет обновлена.\
+См. [multisig-contract-v2](https://github.com/ton-blockchain/multisig-contract-v2), самый новый контракт с мультиподписью на TON.\
 Используйте npm и не обновляйте.
 :::
 
@@ -26,15 +28,17 @@ yarn add typescript @types/node ton ton-crypto ton-core buffer @orbs-network/ton
 yarn tsc --init -t es2022
 ```
 
-Полный код этого руководства доступен по ссылке:
+https://github.com/Gusarich/multisig-ts-example
 
-- https://github.com/Gusarich/multisig-ts-example
+---
 
 ## Создание и развертывание кошелька с мультиподписью
 
 Давайте создадим исходный файл, например `main.ts`. Откройте его в вашем любимом редакторе кода и следуйте этому руководству!
 
-Сначала нам необходимо импортировать все основные компоненты
+### 1. Import required modules
+
+First, import the necessary modules:
 
 ```js
 import { Address, beginCell, MessageRelaxed, toNano, TonClient, WalletContractV4, MultisigWallet, MultisigOrder, MultisigOrderBuilder } from "ton";
@@ -42,12 +46,16 @@ import { KeyPair, mnemonicToPrivateKey } from 'ton-crypto';
 import { getHttpEndpoint } from "@orbs-network/ton-access";
 ```
 
+### 2. Create a TonClient instance
+
 Создайте экземпляр `TonClient`:
 
 ```js
 const endpoint = await getHttpEndpoint();
 const client = new TonClient({ endpoint });
 ```
+
+### 3. Generate key pairs
 
 Далее нам понадобятся пары ключей для работы:
 
@@ -65,38 +73,44 @@ let mnemonics[] = [
 for (let i = 0; i < mnemonics.length; i++) keyPairs[i] = await mnemonicToPrivateKey(mnemonics[i]);
 ```
 
+### 4. Create a MultisigWallet object
+
 Существует два способа создать объект `MultisigWallet`:
 
-- Импортировать существующий из адреса
+- **Import an existing wallet by address**:
 
-```js
-let addr: Address = Address.parse('EQADBXugwmn4YvWsQizHdWGgfCTN_s3qFP0Ae0pzkU-jwzoE');
-let mw: MultisigWallet = await MultisigWallet.fromAddress(addr, { client });
-```
+  ```js
+  let addr: Address = Address.parse('EQADBXugwmn4YvWsQizHdWGgfCTN_s3qFP0Ae0pzkU-jwzoE');
+  let mw: MultisigWallet = await MultisigWallet.fromAddress(addr, { client });
+  ```
 
-- Создать новый
+- **Create a new wallet**:
+  ```js
+  let mw: MultisigWallet = new MultisigWallet([keyPairs[0].publicKey, keyPairs[1].publicKey], 0, 0, 1, { client });
+  ```
 
-```js
-let mw: MultisigWallet = new MultisigWallet([keyPairs[0].publicKey, keyPairs[1].publicKey], 0, 0, 1, { client });
-```
+### 5. Deploy the multisig wallet
 
 Есть также два способа его развертывания
 
-- Через внутреннее сообщение
+- **Via internal message**:
 
-```js
-let wallet: WalletContractV4 = WalletContractV4.create({ workchain: 0, publicKey: keyPairs[4].publicKey });
-//wallet should be active and have some balance
-await mw.deployInternal(wallet.sender(client.provider(wallet.address, null), keyPairs[4].secretKey), toNano('0.05'));
-```
+  ```js
+  let wallet: WalletContractV4 = WalletContractV4.create({ workchain: 0, publicKey: keyPairs[4].publicKey });
+  //wallet should be active and have some balance
+  await mw.deployInternal(wallet.sender(client.provider(wallet.address, null), keyPairs[4].secretKey), toNano('0.05'));
+  ```
 
-- Через внешнее сообщение
+- **Via external message**:
+  ```js
+  await mw.deployExternal();
+  ```
 
-```js
-await mw.deployExternal();
-```
+---
 
 ## Создание, подпись и отправка заявки
+
+### 1. Create an order
 
 Для создания новой заявки нам нужен объект `MultisigOrderBuilder`.
 
@@ -104,7 +118,9 @@ await mw.deployExternal();
 let order1: MultisigOrderBuilder = new MultisigOrderBuilder(0);
 ```
 
-Далее мы можем добавить в нее несколько сообщений.
+### 2. Add messages to the order
+
+Add messages to the order:
 
 ```js
 let msg: MessageRelaxed = {
@@ -126,12 +142,16 @@ let msg: MessageRelaxed = {
 order1.addMessage(msg, 3);
 ```
 
-После того как вы закончите с добавлением сообщений, преобразуйте `MultisigOrderBuilder` в `MultisigOrder`, используя метод `build()`.
+### 3. Build and sign the order
+
+Convert the `MultisigOrderBuilder` to `MultisigOrder` and sign it:
 
 ```js
 let order1b: MultisigOrder = order1.build();
 order1b.sign(0, keyPairs[0].secretKey);
 ```
+
+### 4. Create and sign another order
 
 Теперь давайте создадим еще одну заявку, добавим в нее сообщение, подпишем ее другим набором ключей и объединим подписи этих заявок.
 
@@ -144,13 +164,17 @@ order2b.sign(1, keyPairs[1].secretKey);
 order1b.unionSignatures(order2b); //Now order1b have also have all signatures from order2b
 ```
 
-И, в завершение, отправим подписанную заявку:
+### 5. Send the signed order
+
+Send the signed order:
 
 ```js
 await mw.sendOrder(order1b, keyPairs[0].secretKey);
 ```
 
-Далее нам необходимо собрать проект
+### 6. Build and run the project
+
+Compile the project:
 
 ```bash
 yarn tsc
@@ -164,7 +188,11 @@ node main.js
 
 Если компиляция не выдает никаких ошибок, вы все сделали правильно! Теперь осталось проверить, прошла ли ваша транзакция успешно в любом кошельке или проводнике.
 
+---
+
 ## Другие методы и свойства
+
+### Clear messages
 
 Вы можете легко очистить сообщения из объектов `MultisigOrderBuilder`:
 
@@ -172,32 +200,43 @@ node main.js
 order2.clearMessages();
 ```
 
+### Clear signatures
+
 Вы также можете очистить подписи из объектов `MultisigOrder`:
 
 ```js
 order2b.clearSignatures();
 ```
 
+### Access public properties
+
 И, конечно, вы можете получить внешние свойства из объектов `MultisigWallet`, `MultisigOrderBuilder` и `MultisigOrder`
 
 - MultisigWallet:
- - `owners` - `словарь <number, Buffer>` подписей *ownerId => signature*
- - `workchain` - воркчейн, где развернут кошелек
- - `walletId` - идентификатор кошелька
- - `k` - количество подписей, необходимых для подтверждения транзакции
- - `address` - адрес кошелька
- - `provider` - экземпляр `ContractProvider`.
+
+  - `owners` - `словарь <number, Buffer>` подписей _ownerId => signature_
+  - `workchain` - воркчейн, где развернут кошелек
+  - `walletId` - идентификатор кошелька
+  - `k` - количество подписей, необходимых для подтверждения транзакции
+  - `address` - адрес кошелька
+  - `provider` - экземпляр `ContractProvider`.
 
 - MultisigOrderBuilder
- - `messages` - массив `MessageWithMode`, который будет добавлен к заявке
- - `queryId` - глобальное время, до наступления которого заявка является действительной
+
+  - `messages` - массив `MessageWithMode`, который будет добавлен к заявке
+  - `queryId` - глобальное время, до наступления которого заявка является действительной
 
 - MultisigOrder
- - `payload` - `Cell` с полезной нагрузкой заявки
- - `signatures` - `Dictionary <number, Buffer>` подписей *ownerId => signature*
+  - `payload` - `Cell` с полезной нагрузкой заявки
+  - `signatures` - `Dictionary <number, Buffer>` подписей _ownerId => signature_
+
+---
 
 ## Ссылки
 
 - [Низкоуровневое руководство по мультиподписи](/v3/guidelines/smart-contracts/howto/multisig)
 - [Документация ton.js](https://ton-community.github.io/ton/)
 - [Исходный код контракта мультиподписи](https://github.com/ton-blockchain/multisig-contract)
+
+<Feedback />
+

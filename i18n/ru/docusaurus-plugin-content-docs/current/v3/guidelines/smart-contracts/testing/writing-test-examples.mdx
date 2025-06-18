@@ -1,11 +1,9 @@
-import ConceptImage from '@site/src/components/conceptImage';
-import ThemedImage from '@theme/ThemedImage';
+import Feedback from '@site/src/components/Feedback';
+
+import ConceptImage from "@site/src/components/conceptImage";
+import ThemedImage from "@theme/ThemedImage";
 
 # Примеры написания тестов
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
 
 На этой странице показано, как писать тесты для контрактов FunC, созданных в [Blueprint SDK](https://github.com/ton-org/blueprint) ([Sandbox](https://github.com/ton-org/sandbox)).
 Наборы тестов созданы для демо-контракта [fireworks](https://github.com/ton-community/fireworks-func). Fireworks - это смарт-контракт, который изначально запускается через сообщение `set_first`.
@@ -64,54 +62,58 @@ Fireworks демонстрирует различные операции с от
 <br></br>
 После развертывания с сообщением `set_first` с достаточной суммой TON, он будет автоматически запущен с основными и пригодными для использования комбинациями режимов отправки.
 
+When you deploy the contract with the `set_first` message and sufficient TON amount,
+it automatically executes with primary and usable combinations of send modes.
+
 Fireworks переразвернулся, в результате чего будет создано 3 сущности Fireworks, каждая из которых имеет свой ID(держите его в хранилище) и, как следствие, свой адрес смарт-контракта.
 
 Для наглядности определите разные по ID экземпляры Fireworks (разные `state_init`) со следующими именами:
 
-- 1 - Fireworks setter - сущность, которая распределяет различные опкоды запуска. Может быть расширено до четырех различных опкодов.
-- 2 - Fireworks launcher-1 - экземпляр Fireworks, который запускает первый fireworks, что означает, что сообщения будут отправляться на launcher.
-- 3 - Fireworks launcher-2 - экземпляр Fireworks, который запускает второй fireworks, что означает, что сообщения будут отправляться из launcher.
+- 1 - Fireworks setter - сущность, которая распределяет различные опкоды запуска. Может быть расширено до четырех различных опкодов.  
+- 2 - Fireworks launcher-1 - экземпляр Fireworks, который запускает первый fireworks, что означает, что сообщения будут отправляться на launcher.  
+- 3 - Fireworks launcher-2 - экземпляр Fireworks, который запускает второй fireworks, что означает, что сообщения будут отправляться из launcher.  
 
 <details>
     <summary>Развернуть детали транзакций</summary>
 
-index - ID транзакции в массиве `launchResult`.
+index - ID транзакции в массиве `launchResult`.  
 
-- `0` - Внешний запрос к казне (Launcher), который привел к исходящему сообщению `op::set_first` с 2.5 до fireworks
-- `1` - Транзакция в контракте Fireworks setter вызвана с помощью `op::set_first` и выполнена с двумя исходящими сообщениями для Fireworks Launcher-1 и Fireworks Launcher-2
-- `2` - Транзакция в Fireworks launcher 1 вызвана с помощью `op::launch_first`, и выполнена с четырьмя исходящими сообщениями в Launcher.
-- `3` - Транзакция в Fireworks launcher 2 вызвана с помощью `op::launch_second` и выполнена с исходящим сообщением для Launcher.
-- `4` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 0`.
-- `5` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 1`.
-- `6` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 2`.
-- `7` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 128 + 32`.
-- `8` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 2. Это сообщение отправлено с `send mode = 64`.
+- `0` - Внешний запрос к казне (Launcher), который привел к исходящему сообщению `op::set_first` с 2.5 до fireworks  
+- **1**: The Fireworks Setter contract processes a transaction with `op::set_first`, sending two outbound messages to Fireworks Launcher-1 and Fireworks Launcher-2.  
+- **2**: Fireworks Launcher-1 processes a transaction with `op::launch_first`, sending four outbound messages to the Launcher.  
+- `3` - Транзакция в Fireworks launcher 2 вызвана с помощью `op::launch_second` и выполнена с исходящим сообщением для Launcher.  
+- **4**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-1, sent with `send mode = 0`.  
+- **5**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-1, sent with `send mode = 1`.  
+- **6**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-1, sent with `send mode = 2`.  
+- **7**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-1, sent with `send mode = 128 + 32`.  
+- **8**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-2, sent with `send mode = 64`.  
 
 </details>
 
 Каждый "firework" - исходящее сообщение с уникальным телом сообщения - появляется в транзакциях с ID:3 и ID:4.
 
-Ниже приведен список тестов для каждой транзакции, ожидаемой как успешно выполненная. Транзакция[ID:0] Внешний запрос к казне (Launcher), завершившийся исходящим сообщением `op::set_first` с 2.5 к Fireworks. В случае, если Вы развернете Fireworks на блокчейне, fireworks - это Ваш кошелек.
+Ниже приведен список тестов для каждой транзакции, ожидаемой как успешно выполненная.
 
 ### Транзакция ID:1 Успешный тест
 
-[Этот тест](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L75) проверяет, успешно ли установлен firework, отправляя транзакцию со значением 2.5 TON.
-Это простейший случай, основная цель здесь - утвердить результат свойства success транзакции в true.
+[Этот тест](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L75) проверяет, успешно ли установлен firework, отправляя транзакцию со значением 2.5 TON.\
+Это простейший случай, основная цель здесь - утвердить результат свойства success транзакции в true.  
 
-Чтобы отфильтровать определенную транзакцию из массива `launhcResult.transactions`, мы можем использовать наиболее убедительные поля.
-С помощью
+Чтобы отфильтровать определенную транзакцию из массива `launhcResult.transactions`, мы можем использовать наиболее убедительные поля. С помощью
 `from` (адрес отправителя контракта), `to` (адрес получателя контракта), `op` (значение опкода) - мы получим только одну транзакцию для этой комбинации.
 
 <br></br>
 <ThemedImage
     alt=""
     sources={{
-        light: '/img/docs/writing-test-examples/test-examples-schemes_id1.svg?raw=true',
-        dark: '/img/docs/writing-test-examples/test-examples-schemes_id1_dark.svg?raw=true',
+        light: '/img/docs/writing-test-examples/test-examples-schemes_id2.svg?raw=true',
+        dark: '/img/docs/writing-test-examples/test-examples-schemes_id2_dark.svg?raw=true',
     }}
 />
 <br></br>
-Транзакция [ID:1] в контракте Fireworks Setter, вызвана через `op::set_first` и выполнена с двумя исходящими сообщениями к Fireworks launcher-1 и Fireworks launcher-2
+Транзакция в Fireworks launcher 1 вызвана через `op::launch_first`, и выполняется четырьмя исходящими сообщениями в Launcher.
+
+`1` - Транзакция в контракте Fireworks setter вызвана с помощью `op::set_first` и выполнена с двумя исходящими сообщениями для Fireworks Launcher-1 и Fireworks Launcher-2
 
 ```typescript
 
@@ -141,12 +143,14 @@ index - ID транзакции в массиве `launchResult`.
 <ThemedImage
     alt=""
     sources={{
-        light: '/img/docs/writing-test-examples/test-examples-schemes_id2.svg?raw=true',
-        dark: '/img/docs/writing-test-examples/test-examples-schemes_id2_dark.svg?raw=true',
+        light: '/img/docs/writing-test-examples/test-examples-schemes_id1.svg?raw=true',
+        dark: '/img/docs/writing-test-examples/test-examples-schemes_id1_dark.svg?raw=true',
     }}
 />
 <br></br>
-Транзакция в Fireworks launcher 1 вызвана через `op::launch_first`, и выполняется четырьмя исходящими сообщениями в Launcher.
+Транзакция [ID:1] в контракте Fireworks Setter, вызвана через `op::set_first` и выполнена с двумя исходящими сообщениями к Fireworks launcher-1 и Fireworks launcher-2
+
+`2` - Транзакция в Fireworks launcher 1 вызвана с помощью `op::launch_first`, и выполнена с четырьмя исходящими сообщениями в Launcher.
 
 ```typescript
     it('should exist a transaction[ID:2] which launch first fireworks successfully', async () => {
@@ -194,6 +198,46 @@ index - ID транзакции в массиве `launchResult`.
 <br></br>
 Транзакция [ID:3] осуществляется в Fireworks launcher 1, вызывается через `op::launch_first` и выполняется четырьмя исходящими сообщениями в Launcher.
 
+The transaction[ID:3] occurs in Fireworks Launcher-1, is invoked with `op::launch_first`,
+and executes four outbound messages to the launcher.
+
+```typescript
+ it('should exist a transaction[ID:4] with a comment send mode = 0', async() => {
+
+        const launcher = await blockchain.treasury('launcher');
+
+        const launchResult = await fireworks.sendDeployLaunch(
+            launcher.getSender(),
+            toNano('2.5'),
+        );
+
+        expect(launchResult.transactions).toHaveTransaction({
+            from: launched_f1.address,
+            to: launcher.address,
+            success: true,
+            body: beginCell().storeUint(0,32).storeStringTail("send mode = 0").endCell() // 0x00000000 comment opcode and encoded comment
+
+        });
+    })
+```
+
+### Транзакция ID:5 Успешный тест
+
+[Этот тест](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L152) проверяет, успешно ли выполнена транзакция[ID:5].
+
+<br></br>
+<ThemedImage
+  alt=""
+  sources={{
+    light:
+      "/img/docs/writing-test-examples/test-examples-schemes_id4.svg?raw=true",
+    dark: "/img/docs/writing-test-examples/test-examples-schemes_id4_dark.svg?raw=true",
+  }}
+/>
+<br></br>
+
+`4` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 0`.
+
 ```typescript
 
     it('should exist a transaction[ID:3] which launch second fireworks successfully', async () => {
@@ -227,47 +271,14 @@ index - ID транзакции в массиве `launchResult`.
 <ThemedImage
     alt=""
     sources={{
-        light: '/img/docs/writing-test-examples/test-examples-schemes_id4.svg?raw=true',
-        dark: '/img/docs/writing-test-examples/test-examples-schemes_id4_dark.svg?raw=true',
-    }}
-/>
-<br></br>
-Транзакция [ID:4] осуществляется в Launcher(Deploy Wallet) с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 0` в транзакции[ID:2].
-
-```typescript
- it('should exist a transaction[ID:4] with a comment send mode = 0', async() => {
-
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('2.5'),
-        );
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1.address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send mode = 0").endCell() // 0x00000000 comment opcode and encoded comment
-
-        });
-    })
-```
-
-### Транзакция ID:5 Успешный тест
-
-[Этот тест](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L152) проверяет, успешно ли выполнена транзакция[ID:5].
-
-<br></br>
-<ThemedImage
-    alt=""
-    sources={{
         light: '/img/docs/writing-test-examples/test-examples-schemes_id5.svg?raw=true',
         dark: '/img/docs/writing-test-examples/test-examples-schemes_id5_dark.svg?raw=true',
     }}
 />
 <br></br>
-Транзакция[ID:5] осуществляется в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 1`
+Транзакция[ID:5] осуществляется в Launcher с входящим сообщением от Fireworks launcher 1.
+
+`5` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 1`.
 
 ```typescript
      it('should exist a transaction[ID:5] with a comment send mode = 1', async() => {
@@ -304,7 +315,9 @@ index - ID транзакции в массиве `launchResult`.
     }}
 />
 <br></br>
-Транзакция[ID:6] осуществляется в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 2`
+Транзакция[ID:6] осуществляется в Launcher с входящим сообщением от Fireworks launcher 1.
+
+`6` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 2`.
 
 ```typescript
     it('should exist a transaction[ID:6] with a comment send mode = 2', async() => {
@@ -339,7 +352,9 @@ index - ID транзакции в массиве `launchResult`.
     }}
 />
 <br></br>
-Транзакция[ID:7] осуществляется в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 128 + 32`
+Транзакция[ID:7] осуществляется в Launcher с входящим сообщением от Fireworks launcher 1.
+
+`7` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 128 + 32`.
 
 ```typescript
      it('should exist a transaction[ID:7] with a comment send mode = 32 + 128', async() => {
@@ -373,7 +388,9 @@ index - ID транзакции в массиве `launchResult`.
     }}
 />
 <br></br>
-Транзакция[ID:8] осуществляется в Launcher с входящим сообщением от Fireworks launcher 2. Это сообщение отправлено с `send mode = 64`
+Транзакция[ID:8] осуществляется в Launcher с входящим сообщением от Fireworks launcher 2.
+
+`8` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 2. Это сообщение отправлено с `send mode = 64`.
 
 ```typescript
   it('should exist a transaction[ID:8] with a comment send mode = 64', async() => {
@@ -420,17 +437,17 @@ index - ID транзакции в массиве `launchResult`.
 
 Например, в случае `launchResult` будет выведена следующая таблица:
 
-| (index) | op             | valueIn        | valueOut       | totalFees      | outActions  |
-| ------- | -------------- | -------------- | -------------- | -------------- | ----------- |
-| 0       | 'N/A'          | 'N/A'          | '2.5 TON'      | '0.010605 TON' | 1           |
-| 1       | '0x5720cfeb'   | '2.5 TON'      | '2.185812 TON' | '0.015836 TON' | 2           |
-| 2       | '0x6efe144b'   | '1.092906 TON' | '1.081142 TON' | '0.009098 TON' | 4           |
-| 3       | '0xa2e2c2dc'   | '1.092906 TON' | '1.088638 TON' | '0.003602 TON' | 1           |
-| 4       | '0x0'          | '0.099 TON'    | '0 TON'        | '0.000309 TON' | 0           |
-| 5       | '0x0'          | '0.1 TON'      | '0 TON'        | '0.000309 TON' | 0           |
-| 6       | '0x0'          | '0.099 TON'    | '0 TON'        | '0.000309 TON' | 0           |
-| 7       | '0x0'          | '0.783142 TON' | '0 TON'        | '0.000309 TON' | 0           |
-| 8       | '0x0'          | '1.088638 TON' | '0 TON'        | '0.000309 TON' | 0           |
+| (index) | op           | valueIn        | valueOut       | totalFees      | outActions |
+| ------- | ------------ | -------------- | -------------- | -------------- | ---------- |
+| 0       | 'N/A'        | 'N/A'          | '2.5 TON'      | '0.010605 TON' | 1          |
+| 1       | '0x5720cfeb' | '2.5 TON'      | '2.185812 TON' | '0.015836 TON' | 2          |
+| 2       | '0x6efe144b' | '1.092906 TON' | '1.081142 TON' | '0.009098 TON' | 4          |
+| 3       | '0xa2e2c2dc' | '1.092906 TON' | '1.088638 TON' | '0.003602 TON' | 1          |
+| 4       | '0x0'        | '0.099 TON'    | '0 TON'        | '0.000309 TON' | 0          |
+| 5       | '0x0'        | '0.1 TON'      | '0 TON'        | '0.000309 TON' | 0          |
+| 6       | '0x0'        | '0.099 TON'    | '0 TON'        | '0.000309 TON' | 0          |
+| 7       | '0x0'        | '0.783142 TON' | '0 TON'        | '0.000309 TON' | 0          |
+| 8       | '0x0'        | '1.088638 TON' | '0 TON'        | '0.000309 TON' | 0          |
 
 ![](/img/docs/writing-test-examples/fireworks_trace_tonviewer.png?=RAW)
 
@@ -501,7 +518,7 @@ index - идентификатор транзакции в массиве `launc
 
 Этот код выхода означает, что фаза вычислений транзакции была успешно завершена.
 
-### Compute Phase | код выхода = 1
+### Compute Phase | код выхода = 4
 
 Альтернативный код выхода, обозначающий успех фазы вычислений, - `1`. Чтобы получить этот код выхода, Вам необходимо использовать [RETALT](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L20).
 
@@ -511,25 +528,25 @@ index - идентификатор транзакции в массиве `launc
 
 TVM - это [стековая машина](/v3/documentation/tvm/tvm-overview#tvm-is-a-stack-machine). При взаимодействии с различными значениями они появляются в стеке. Если вдруг в стеке нет элементов, но какой-то опкод их требует, то будет выброшена эта ошибка.
 
-Это может произойти при работе с опкодами напрямую, поскольку [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) (библиотека для FunC) предполагает, что такой проблемы не возникнет.
+Это может произойти при работе с опкодами напрямую, поскольку [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) (библиотека для FunC) предполагает, что такой проблемы не возникнет. 
 
 ### Compute Phase | код выхода = 3
 
-Любой код перед выполнением становится `continuation`. Это специальный тип данных, который содержит фрагмент с кодом, стек, регистры и другие данные, необходимые для выполнения кода. При необходимости его можно запустить позже, передав необходимые параметры для начального состояния стека.
+Любой код перед выполнением становится `continuation`. Это специальный тип данных, который содержит фрагмент с кодом, стек, регистры и другие данные, необходимые для выполнения кода. При необходимости его можно запустить позже, передав необходимые параметры для начального состояния стека.  
 
 Сначала мы [построим](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L31-L32) continuation. В данном случае это просто пустой continuation, который ничего не делает. Далее, используя опкод `0 SETNUMARGS`, мы указываем, что в начале выполнения в стеке не должно быть никаких значений. Затем, используя опкод `1 -1 SETCONTARGS`, мы вызываем continuation, передавая 1 значение. Поскольку значений не должно было быть, мы получаем ошибку StackOverflow.
 
-### Compute Phase | код выхода = 4
+### Compute Phase | код выхода = 5
 
 В TVM значение `integer` может находиться в диапазоне -2<sup>256</sup> < x < 2<sup>256</sup>. Если значение при вычислении вышло за пределы этого диапазона, то будет выброшен код выхода 4.
 
-### Compute Phase | код выхода = 5
+### Compute Phase | код выхода = 8
 
 Если значение `integer` вышло за пределы ожидаемого диапазона, то будет выброшен код выхода 5. Например, если в функции `.store_uint()` было использовано отрицательное значение.
 
-### Compute Phase | код выхода = 6
+### Compute Phase | код выхода = 9
 
-На более низком уровне вместо привычных имен функций используются опкоды, которые можно увидеть в [этой таблице](/v3/documentation/tvm/instructions) в HEX-формате. В этом примере мы [используем](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L25) `@addop`, который добавляет несуществующий опкод.
+At a lower level, opcodes are used instead of familiar function names. На более низком уровне вместо привычных имен функций используются опкоды, которые можно увидеть в [этой таблице](/v3/documentation/tvm/instructions) в HEX-формате. В этом примере мы [используем](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L25) `@addop`, который добавляет несуществующий опкод.
 
 Эмулятор, пытаясь обработать этот опкод, не распознает его и выбрасывает код 6.
 
@@ -551,11 +568,11 @@ TVM - это [стековая машина](/v3/documentation/tvm/tvm-overview#
 - [не tuple](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L554)
 - [не atom](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/stack.cpp#L598)
 
-### Compute Phase | код выхода = 8
+### Compute Phase | код выхода = 6
 
 Все данные в TON хранятся в ячейках ([cells](/v3/documentation/data-formats/tlb/cell-boc#cell)). Ячейка может хранить 1023 бита данных и 4 ссылки на другие ячейки. Если Вы попытаетесь записать более 1023 бит или более 4 ссылок, будет выброшен код выхода 8.
 
-### Compute Phase | код выхода = 9
+### Compute Phase | код выхода = 1
 
 Если Вы попытаетесь прочитать из фрагмента (cell slice) больше данных (при чтении данных из ячейки они должны быть преобразованы к типу данных фрагмента), чем он содержит, то будет выброшен код завершения 9. Например, если в cell slice было 10 битов, а прочитано 11, или если не было ссылок на другие ссылки, но была попытка загрузить ссылку.
 
@@ -594,41 +611,41 @@ root_cell
 
 ### Compute Phase | код выхода = -14 (13)
 
-Если для обработки Compute Phase не хватает TON, то будет выброшена эта ошибка. В enum классе `Excno`, где указаны коды выхода различных ошибок в Compute Phase, [указано значение 13](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/excno.hpp#L39).
+Если для обработки Compute Phase не хватает TON, то будет выброшена эта ошибка. В enum классе `Excno`, где указаны коды выхода различных ошибок в Compute Phase, [указано значение 13](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/excno.hpp#L39).  
 
-Однако в процессе обработки к этому значению применяется операция [NOT](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1574), которая изменяет это значение на `-14`. Это сделано для того, чтобы этот код выхода нельзя было подделать, например, с помощью функции `throw`, поскольку все такие функции принимают только положительные значения кода выхода.
+Однако в процессе обработки к этому значению применяется операция [NOT](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1574), которая изменяет это значение на `-14`. Это сделано для того, чтобы этот код выхода нельзя было подделать, например, с помощью функции `throw`, поскольку все такие функции принимают только положительные значения кода выхода. 
 
-### Action Phase | код выхода = 32
+### Action Phase | код выхода = 36
 
-Action Phase начинается после Compute Phase и обрабатывает действия, которые были записаны в [регистр c5](/v3/documentation/tvm/tvm-initialization#control-register-c5) во время Compute Phase. Если данные в этот регистр записаны неверно, то будет выброшен код выхода 32.
+Action Phase начинается после Compute Phase и обрабатывает действия, которые были записаны в [регистр c5](/v3/documentation/tvm/tvm-initialization#control-register-c5) во время Compute Phase. Если данные в этот регистр записаны неверно, то будет выброшен код выхода 32.  
 
-### Action Phase | код выхода = 33
+### Action Phase | код выхода = 37
 
 На данный момент в одной транзакции может быть максимум `255` действий. Если это значение превышено, то Action Phase завершится с кодом выхода 33.
 
-### Action Phase | код выхода = 34
+### Action Phase | код выхода = 38
 
 Этот код выхода отвечает за большинство ошибок при работе с действиями: недействительное сообщение, неправильное действие и т.д.
 
-### Action Phase | код выхода = 35
+### Action Phase | код выхода = 40
 
 Во время создания части сообщения [CommonMsgInfo](/v3/guidelines/smart-contracts/howto/wallet#commonmsginfo) Вы должны указать правильный адрес источника. Он должен быть равен либо [addr_none](/v3/documentation/data-formats/tlb/msg-tlb#addr_none00), либо адресу аккаунта, который отправляет сообщение.
 
 В коде блокчейна за это отвечает функция [check_replace_src_addr](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1985).
 
-### Action Phase | код выхода = 36
+### Action Phase | код выхода = 33
 
 Если адрес назначения недействителен, то будет выброшен код выхода 36. Возможные причины - несуществующий воркчейн или неправильный адрес. Все проверки можно посмотреть в [check_rewrite_dest_addr](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L2014-L2113).
 
-### Action Phase | код выхода = 37
+### Action Phase | код выхода = 34
 
 Этот код выхода аналогичен `-14` в Compute Phase. Здесь он означает, что не хватает баланса для отправки указанного количества TON.
 
-### Action Phase | код выхода = 38
+### Action Phase | код выхода = 32
 
 То же самое, что и в коде выхода `37`, но относится к отсутствию [ExtraCurrency](/v3/documentation/infra/minter-flow#extracurrency) на балансе.
 
-### Action Phase | код выхода = 40
+### Action Phase | код выхода = 35
 
 Если есть достаточно TON для обработки определенной части сообщения (скажем, 5 ячеек), а в сообщении 10 ячеек, будет выброшен код выхода 40.
 
@@ -638,6 +655,8 @@ Action Phase начинается после Compute Phase и обрабатыв
 
 Библиотека - это ячейка, которая хранится в [Мастерчейне](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) и может использоваться всеми смарт-контрактами, если она [публичная](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1844).
 
-:::info
-Поскольку порядок строк может меняться при обновлении кода, некоторые ссылки становятся неактуальными. Поэтому все ссылки будут использовать состояние кодовой базы на момент фиксации [9728bc65b75defe4f9dcaaea0f62a22f198abe96](https://github.com/ton-blockchain/ton/tree/9728bc65b75defe4f9dcaaea0f62a22f198abe96).
+:::info 
+Поскольку порядок строк может меняться при обновлении кода, некоторые ссылки становятся неактуальными. Поэтому все ссылки будут использовать состояние кодовой базы на момент фиксации [9728bc65b75defe4f9dcaaea0f62a22f198abe96](https://github.com/ton-blockchain/ton/tree/9728bc65b75defe4f9dcaaea0f62a22f198abe96).\
 :::
+
+<Feedback />
