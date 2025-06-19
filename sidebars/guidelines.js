@@ -189,6 +189,7 @@ module.exports = [
     items: [
       'v3/guidelines/dapps/overview',
       'v3/guidelines/dapps/cookbook',
+      'v3/guidelines/dapps/interact-with-transactions',
       {
         type: 'category',
         label: 'APIs and SDKs',
