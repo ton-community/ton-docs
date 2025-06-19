@@ -1,1 +1,1793 @@
-check check check
+import { BlockMath, InlineMath } from 'react-katex';
+import 'katex/dist/katex.min.css';
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Interact with transactions
+
+## How can I check if my transaction was successful using the API?
+//TODO briefing: what you will learn in this guide
+
+## Terminology
+
+### General Terms
+#### Actor and actor Model
+
+An **actor** is an abstract computational entity that reacts to incoming messages, changes its internal state, creates new actors, and sends messages to other actors.
+Actors are isolated: they cannot access each other's state and interact solely through message passing.
+
+In other words:
+
+An actor is an independent entity with its own state and behavior. Actors communicate by sending messages to each other.
+
+![](/img/docs/blockchain-fundamentals/actor.svg)
+
+Each actor can:
+
+* Change its own state
+* Send messages to other actors
+* Spawn new actors
+
+The **actor model** is a model of concurrent computation in which a system is described as a collection of actors that communicate via message passing.
+
+Key properties of the model:
+
+* Actor isolation
+* Asynchronous communication
+* Any computational abstraction can be represented as an actor
+
+This model is used to precisely describe and analyze distributed systems. For example:
+
+* Email can be modeled as an actor system: users are actors, and email addresses are their identifiers.
+* Web services with endpoints (e.g., SOAP) can be interpreted as actors handling messages sent to their address.
+
+In TON, all active entities are actors.
+
+An account is an actor defined by the following properties:
+
+- General account state (ID, balance, status)
+- Data (state)
+- Code (behavior)
+
+Every account in the blockchain is defined at minimum by its address, balance, and status:
+
+* (ID1, 0, unexist)
+* (ID2, 10, uninit)
+* (ID3, -0.5, frozen)
+
+![](/img/docs/blockchain-fundamentals/account.svg)
+
+An account that also has defined code and data in addition to the general state is called a smart contract.
+
+![](/img/docs/blockchain-fundamentals/smart_contract.svg)
+
+**Difference between an account and a smart contract**
+* An account is an actor that contains general state (i.e., balance, address, status), and optionally — code and data.
+* (ID1, 0, unexist)
+* (ID2, 2, inited, data, code)
+
+* A smart contract is an actor with mandatory code and data, which define its unique behavior.
+* (ID2, 2, inited, data, code)
+
+#### Entity structure in TON Blockchain
+
+![](/img/docs/blockchain-fundamentals/structure.svg)
+
+#### Asynchrony
+
+In TON, contracts (actors) do not call each other directly. Instead, they send messages, each of which is processed separately and independently. All communication occurs through asynchronous messages.
+
+**Asynchrony** refers to a communication pattern where the sender does not require the recipient to be immediately ready to respond.
+
+* The sender does not wait for an immediate reply — it simply sends a message.
+* The recipient may process the message later once it is their turn.
+* If a response is important, the recipient must explicitly send a new message in return — otherwise, the sender will not receive any feedback.
+
+This differs from synchronous models, where the flow is: call →, get a response, → continue logic.
+In TON, a result can only be received in the form of a new message and only if it is explicitly sent.
+
+![](/img/docs/blockchain-fundamentals/actors_msging.svg)
+
+### Actor structure and interaction in TON
+#### Account
+
+Earlier, we mentioned that an account is an actor defined by the following properties:
+
+- General account state (ID, balance, status)
+- State (data)
+- Behavior (code)
+
+In reality, the data layout is somewhat more complex; however, the logical distinction between an account and a smart contract remains the same.
+
+To describe data structures in TON, **TL-B schemas** are used. They define how data is laid out at the bit level.
+
+Let’s look at how an account is described:
+
+The account structure is defined through several nested objects:
+
+```tlb
+account_none$0 = Account;
+account$1 addr:MsgAddressInt storage_stat:StorageInfo
+          storage:AccountStorage = Account;
+```
+
+* Address — `MsgAddressInt`
+* Balance — `CurrencyCollection`
+* State — `AccountState`, which defines the account’s behavior
+* Logical time of the last applied transaction — `last_trans_lt`
+* Storage statistics — `StorageInfo`
+
+<details>
+
+  ```tlb
+
+  account_none$0 = Account;
+  account$1 addr:MsgAddressInt storage_stat:StorageInfo
+  storage:AccountStorage = Account;
+
+  account_storage$_ last_trans_lt:uint64
+  balance:CurrencyCollection state:AccountState
+  = AccountStorage;
+
+  account_uninit$00 = AccountState;
+  account_active$1 _:StateInit = AccountState;
+  account_frozen$01 state_hash:bits256 = AccountState;
+
+  acc_state_uninit$00 = AccountStatus;
+  acc_state_frozen$01 = AccountStatus;
+  acc_state_active$10 = AccountStatus;
+  acc_state_nonexist$11 = AccountStatus;
+
+
+  _ fixed_prefix_length:(Maybe (## 5)) special:(Maybe TickTock)
+  code:(Maybe ^Cell) data:(Maybe ^Cell)
+  library:(Maybe ^Cell) = StateInit;
+
+  ```
+
+</details>
+
+Let’s clarify, according to the TL-B schema, which properties belong to the general account state:
+
+- General account state:
+- ID → `MsgAddressInt`
+- balance → `CurrencyCollection`
+- status → `AccountState`
+- `last_trans_lt` — also part of the general state
+
+Meanwhile, the **state (data)** and **behavior (code)** are defined in the `state: AccountState` field.
+
+Let’s take a closer look at the general account state and how it is represented in data.
+
+#### Account Status
+
+TON defines account states (`AccountState`) as follows:
+
+| Status     | TL-B Code | Description                                                                                                                              |
+|------------|------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| `uninit`   | `00`       | The account exists but contains no code or data. It may hold a balance but is not yet initialized.                                      |
+| `frozen`   | `01`       | The account is frozen, its code and data are deleted, but the hash of its former state is retained. It cannot be used but can be restored. |
+| `active`   | `10`       | The account contains a `StateInit` with code and data. This is an active smart contract ready to process messages.                      |
+
+
+```tlb
+account_uninit$00 = AccountState;
+account_active$1 _:StateInit = AccountState;
+account_frozen$01 state_hash:bits256 = AccountState;
+```
+
+#### Smart Contract
+
+A smart contract is an actor with mandatory code and data which define its unique behavior.
+In terms of actual data, this means:
+
+* A smart contract in TON is an `Account` in the active state (`AccountState = active`)
+* The `code` field in `StateInit` is initialized
+* The `data` field in `StateInit` is initialized
+
+The presence of `code` and `data` in `StateInit` makes an account executable and defines it as a smart contract.
+
+#### Address
+
+An address in TON is a unique identifier for an account or smart contract required for interaction between network participants.
+It consists of the following components:
+
+* **WorkChain ID** — a 32-bit signed integer defining which WorkChain the account belongs to (e.g., -1 for the MasterChain, 0 for the BaseChain)
+* **Account ID** — a 256-bit hash of the `StateInit` structure, which contains the contract's initial state: `code`, `data`, and (optionally) `library`
+
+An address is defined as:
+
+<BlockMath math="{Address} := ({workchain\_id},{account\_id})" />, where <BlockMath math="{account\_id}:= {SHA256(BoC(StateInit))}" />
+Here, BoC (Bag of Cells) is a special serialization format used in TON.
+
+Such an address corresponds to a specific initial state of the contract and can be calculated even before the contract is deployed.
+This allows using the address before initialization — for example, to receive tokens or prepare interactions.
+
+:::important
+The address depends only on the `StateInit`. Even a minor change to the code, data, or library results in a completely new `account_id`.
+
+At the same time, `StateInit` defines only the initial configuration of the contract — it does not include balance, current data, the message queue, or any other parameters that may change over time.
+These changes **do not affect** the address. Moreover, validators verify the sender's address during message processing, and if it is incorrect, they replace it with the correct one.
+:::
+
+#### Message feature
+
+A message is a set of instructions for a desired action directed at a single actor.
+
+#### Transaction feature
+
+A transaction is an update to an account's state on the blockchain, triggered by an incoming message and, if needed, resulting in one or more outgoing messages.
+
+In TON, a transaction is necessary to change an account's state in response to an incoming message and, optionally, to continue interaction with other accounts via outgoing messages.
+
+#### Transactions asynchronous nature
+
+In TON, all accounts interact **exclusively through messages** — this is the foundation of actor communication.
+Each message becomes part of a transaction that describes the whole history: which message initiated it, how the state changed, and whether any new messages were sent.
+
+Transactions in the network are processed **asynchronously**, meaning that calls and state changes of accounts occur independently over time.
+
+#### AccountChain
+
+**AccountChain** is a chain of transactions executed on a single account in the TON blockchain.
+It forms a linear sequence: `Tx1 → Tx2 → Tx3 → …`, where each transaction references the previous one.
+For efficient processing and consensus, transactions are grouped into blocks — for example, `[Tx1 → Tx2] → [Tx3 → Tx4 → Tx5] → [] → [Tx6]`.
+These blocks also contain incoming and outgoing message queues, recording all events and state changes for the account during that period.
+
+In other words, an AccountChain is a “micro-blockchain” of a single account.
+It stores and orders the complete history of the account’s operations and interactions, ensuring transparency and traceability.
+
+At the network scale, many such chains are grouped into a **ShardChain** (or just "shard"), which handles a collection of accounts.
+This abstraction is introduced for logical grouping (AccountChain) on physical carriers (ShardChain ↔ Validator).
+
+#### ShardChain
+
+A **ShardChain** is a blockchain that aggregates multiple ** AccountChains ** — i.e., individual transaction chains associated with different accounts.
+Suppose an AccountChain describes the history of one account. In that case, a ShardChain manages and stores data for a group of accounts sharing a common binary address prefix (e.g., all addresses starting with `0b00101`).
+
+You can think of a ShardChain as a “horizontal” blockchain composed of **ShardBlocks**, each of which aggregates **AccountBlocks** — blocks of individual accounts.
+ShardChains also participate in message routing between accounts, ensuring message delivery and order: if one message is sent before another, it will arrive first.
+
+Thus, a ShardChain is a key structural unit in TON, enabling parallel transaction processing within a scalable and deterministic architecture.
+
+#### WorkChain
+
+A **WorkChain** is an independent blockchain within TON that groups multiple ShardChains (shards).
+Unlike a shard, a WorkChain may have its own set of rules. (to be explained)
+
+TON supports up to 2³² WorkChains, each of which can be split into 2⁶⁰ shards.
+
+#### Types of WorkChain: MasterChain and BaseChain
+
+**MasterChain** is the main coordinating blockchain. It contains:
+
+* protocol parameters
+* validator list and their stakes
+* validator account chains
+* meta-information about all active WorkChains and ShardChains
+* hashes of the latest blocks from all other chains
+
+MasterChain is essential for the network’s operation, but due to its importance, it is intentionally expensive to use.
+High gas costs are enforced here to ensure stability and prevent spam.
+
+**BaseChain** is the main working chain intended for daily transactions and smart contracts.
+It is low-cost and suitable for regular users and developers.
+
+Thanks to the presence of ShardChains and WorkChains, we can say that TON is a **blockchain of blockchains** — a system of interconnected blocks, where each block references the previous one via its hash.
+
+![](/img/docs/blockchain-fundamentals/chains_of_chains.svg)
+
+#### Testnet and Mainnet
+
+#### Mainnet (the main network)
+
+The **Mainnet** is the live production network where:
+
+* all transactions are real and irreversible
+* real tokens are used (e.g., actual Toncoin)
+* any actions (transfers, contract deployments) affect the main blockchain
+
+All users and projects operating in production use the Mainnet.
+
+#### Testnet (the test network)
+
+The **Testnet** is a sandbox environment for developers — a copy of the main network but without risk. In Testnet:
+
+* test coins are used, which have no real value
+* contracts, transactions, DApps, and errors can be safely tested
+* the blockchain can be reset or altered at any time
+
+Testnet is essential for safe development and debugging before launching to the main network.
+
+
+## Messages
+
+In the TON blockchain, a **message** is the fundamental unit of interaction between accounts (smart contracts).
+All actions, state changes, and logic execution in the system occur through sending and receiving messages.
+Messages can be compared to requests sent to a server.
+
+## Transaction and Message Real-Life Examples
+
+Let’s explore the characteristics of transactions and messages using an analogy:
+Imagine that the TON blockchain is a special city in the global world — the Internet.
+This city has very strict rules: people **never meet face-to-face**, and the **only** way to communicate is through a **postal service**.
+People can receive messages requesting them to perform a task, carry out that task inside their homes, and then send back the results to others.
+
+Each person checks their mailbox, picks up **exactly one incoming message**, then locks themselves inside and doesn’t come out until the task is completed.
+While they’re working, new letters may arrive — but they **do not get distracted**.
+If, during the work, they realize that some required information is missing, they **cannot pause to request clarification**.
+In that case, they must declare the task as failed and, at best, return leftover resources and fragments of the original instructions.
+
+If the task is successful, the person, following the original request, may either:
+
+- send new messages to others
+- or store the manufactured items inside their home
+
+After finishing, they recheck their mailbox and pick up the following message.
+
+Now imagine that for each work episode, the person keeps a **detailed journal**.
+To separate and organize their labour history, each journal entry is referred to as a **transaction**.
+This transaction will include:
+
+- the full content of the incoming message (the task)
+- a record of what was produced and where it was stored
+- and optionally, information about new messages sent to others
+
+The messages delivered by the postal system between city residents are **internal messages**.
+Messages from the outside world also arrive in this city. Such messages have a clearly defined recipient, but the sender is unknown.
+These are special incoming **external in** messages.
+
+`external in` and `external out` messages serve a similar function from the actor’s point of view.
+However, each actor may behave differently when processing them — and some may **completely ignore messages from the outside** (like a very private person who doesn’t open letters from strangers).
+
+#### Message structure: TL-B
+
+Now, let’s talk about the actual data inside a message.
+We’ve already mentioned that both external and internal messages can carry data — but how is this data actually encoded?
+
+In TON, all data is represented in the form of **cells**.
+To serialize data into a cell, TON uses a widely accepted standard called **TL-B** (Type Language – Binary).
+
+## Particular message structure
+
+```
+message$_ {X:Type} info:CommonMsgInfo
+init:(Maybe (Either StateInit ^StateInit))
+body:(Either X ^X) = Message X;
+```
+
+* `info: CommonMsgInfo` — contains message metadata
+* `init: (Maybe (Either StateInit ^StateInit))` — optional data used to initialize an account or update its state
+* `body: (Either X ^X)` — the main content (payload) of the message, which can be either embedded directly or stored as a reference
+
+* Header fields (CommonMsgInfo)
+
+
+### Message types
+
+There are three types of messages:
+
+- **external incoming**: sender is outside the blockchain → recipient is a smart contract
+- **internal**: sender is a smart contract → recipient is a smart contract
+- **external outgoing**: sender is a smart contract → recipient is outside the blockchain (unknown actor)
+
+### External incoming
+
+#### Functional purpose
+
+**External incoming** messages serve as the entry point for the outside world into the TON blockchain.
+Any user can send arbitrary data to any smart contract, and the contract decides how to handle it.
+
+Fundamentally, any account can receive an external message.
+However, how a specific contract behaves concerning a given external-in message is defined in its code.
+The most common type of contract that processes external-in messages is the **wallet contract**.
+
+They usually come from:
+
+- users of wallet applications
+- validators
+- DApp services
+
+Although external-in messages are rarely used in core smart contract logic, they are essential for wallets.
+Almost every user action in TON — such as sending TON or interacting with a DEX — starts with an **external incoming message** from the user’s wallet.
+The wallet then sends **internal messages** to other contracts.
+
+#### Sending an external-in message
+
+The term **message** is closely related to a transaction, but it's important to distinguish between them:
+
+- A **message** is a data packet sent between smart contracts containing instructions for some action
+- A **transaction** is the result of executing a smart contract in response to an incoming message.
+During execution, the smart contract may update its state and send one or more outgoing messages.
+
+An **external-in** message is one whose `CommonMsgInfo` header is described by the structure `ext_in_msg_info$10`.
+
+```
+message$_ {X:Type} info:CommonMsgInfo
+init:(Maybe (Either StateInit ^StateInit))
+body:(Either X ^X) = Message X;
+```
+
+**TL-B:**
+```
+//external incoming message
+ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
+import_fee:Grams = CommonMsgInfo;
+```
+
+Since this message is sent **from outside the blockchain into the blockchain**, the initiator is an external actor.
+The tool used may be a wallet contract or a piece of code interacting with blockchain API services.
+
+Thus, to send an external-in message to a smart contract, you need to:
+
+1. Construct a structure that matches the TL-B schema
+2. Send this structure to the blockchain using an API service
+
+For example, in **Blueprint**, there is a built-in helper that assembles this structure on the fly for the developer.
+
+
+```@ton/blueprint 0.36.1
+
+import {Address} from "@ton/ton";
+import {NetworkProvider} from "@ton/blueprint";
+
+export async function run(provider: NetworkProvider, args: string[]) {
+
+    const address = Address.parse('kQBUCuxgGsF6znHM_yNmnV_EwtlmdvmDzqTxiWHJip2ux6Wn');
+    const contractProvider = provider.provider(address);
+
+    return contractProvider.internal(
+        provider.sender(),{
+        value: '0.01'
+    });
+
+}
+
+
+//TODO - simplify for case like https://tonviewer.com/transaction/ba9202b8d389def350a56f296812b90e8d0222a49be29a6fdce756ef65e11ed5
+```
+
+:::info How to use examples with Blueprint
+
+1. Prepare a wallet application (e.g., Tonkeeper) that you’ll use to send the external message
+2. Install the Blueprint project locally:
+`npm create ton@latest`
+3. Add the provided script to your Blueprint project under the `scripts` directory, for example:
+`blueprintproject/scripts/yourscript.ts`
+4. Run the script with the command:
+`npx blueprint run yourscript`
+
+:::
+
+
+### Internal
+
+#### Functional purpose
+
+An **internal message** is a message sent from one smart contract to another within the TON blockchain.
+When a smart contract receives an internal message, it knows:
+
+* how many TON coins are attached to the message
+* the sender and recipient contracts
+* the blockchain guarantees the integrity of this information, allowing the smart contract to trust and use it safely.
+
+**TL-B:**
+
+A contract initiates an internal message — meaning it is the result of executing a transaction.
+In other words, the **sender of an internal message is always a contract**, as the name implies.
+
+The primary way to trigger the sending of an internal message is to send an external message to a contract
+that contains instructions to forward an internal message to another contract.
+
+```
+//internal message
+int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
+src:MsgAddressInt dest:MsgAddressInt
+value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
+created_lt:uint64 created_at:uint32 = CommonMsgInfo;
+```
+
+
+| Structure      | Description                                                                                                         |
+|----------------|---------------------------------------------------------------------------------------------------------------------|
+| int_msg_info$0 | $0 tag means, that in serialization CommonMsgInfo started with 0 bit describes a internal message.                  |
+| ihr_disabled   | Hyper cube routing flag.                                                                                            |
+| bounce         | Message should be bounced if there are errors during processing. If message's flat bounce = 1, it calls bounceable. |
+| bounced        | Flag that describes, that message itself is a result of bounce.                                                     |
+| src            | Address of smart contract sender of message.                                                                        |
+| dest           | Address of smart contract destination of message.                                                                   |
+| value          | Structure which describes currency information including total funds transferred in message.                        |
+| ihr_fee        | Fees for hyper routing delivery                                                                                     |
+| fwd_fee        | Fees for forwarding messages assigned by validators                                                                 |
+| created_lt     | Logic time of sending message assigned by validator. Using for odering actions in smart contract.                   |
+| created_at     | Unix time                                                                                                           |
+
+
+The first thing a developer needs to define is the amount of Toncoin attached to the internal message (`value`)
+and the destination address (`dest`) where it will be sent.
+
+In this example, an external message is sent with additional instructions to your wallet contract.
+As a result of executing the transaction on the wallet contract, an outgoing internal message will be sent
+with the specified `value` of TON and the recipient `address`.
+
+
+```@ton/blueprint 0.36.1
+
+import {Address} from "@ton/ton";
+import {NetworkProvider} from "@ton/blueprint";
+
+export async function run(provider: NetworkProvider, args: string[]) {
+
+    const address = Address.parse('kQBUCuxgGsF6znHM_yNmnV_EwtlmdvmDzqTxiWHJip2ux6Wn');
+    const contractProvider = provider.provider(address);
+
+    return contractProvider.internal(
+        provider.sender(),{
+        value: '0.01'
+    });
+
+}
+
+```
+
+### External outgoing
+
+External outgoing messages (also known as **logs**) are a special type of message generated by smart contracts,
+which are **not delivered to a specific recipient**.
+Instead, they act as logs or signals that can be tracked **outside** the blockchain.
+
+Although such messages are rarely used in the core blockchain logic, they play an important role in tasks like:
+
+* indexing and monitoring blockchain state
+* triggering off-chain processes, such as notifying external services or updating a user interface
+
+For example, a decentralized exchange (DEX) smart contract might generate an external outgoing message
+after a successful token swap — to notify external services or users about the event.
+
+
+**TL-B:**
+```
+//external outgoing message
+ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
+created_lt:uint64 created_at:uint32 = CommonMsgInfo;
+```
+
+#### Bounce of messages
+
+A **bounce message** is a message that is automatically sent back to the sender if a transaction fails.
+For example, if the recipient smart contract does not exist or execution fails with an error.
+It not only indicates an error but also allows the sender to handle it — for instance, by refunding tokens or showing an error message to the user.
+
+Most internal messages between smart contracts should be **bounceable**, i.e., with the `bounce` flag set, so that in case of an error:
+
+* the message is returned to the sender
+* the remaining funds (minus fees) are refunded
+
+In turn, smart contracts must:
+
+* check the `bounced` flag in incoming messages
+* either ignore such messages (terminate with exit code 0)
+* or handle the error
+
+:::important
+The content of a bounce message **must not be executed** like a regular request — it is used only for error reporting and refunding.
+:::
+
+**Address with flags as a field of a message**
+
+* Serializers for messages (Message builders)
+* Types of message descriptors
+* Additional TL-B standards:
+[https://github.com/ton-blockchain/TEPs/blob/master/text/0089-jetton-wallet-discovery.md](https://github.com/ton-blockchain/TEPs/blob/master/text/0089-jetton-wallet-discovery.md)
+
+
+### Custom messages for executing contract operations
+
+We’ve reviewed the native mechanisms for contract communication, including both external and internal messages.
+To trigger the execution of various logic within smart contracts, it is necessary to attach a **payload** to the standard message.
+In internal messages, this optional payload is placed in the `body`.
+There are two approaches to defining the structure of the `body`:
+
+- Build the message based on a TL-B schema provided in the documentation or the contract source
+- Build the message by **analyzing the contract code**, essentially inverting the deserialization process
+
+#### Serializing internal messages via TL-B
+
+Let’s take a look at the `nft-item.fc` contract.
+The standard defines a TL-B schema for the message structure required to initiate a transfer of ownership to another user.
+
+Technically, this is a message sent from the current owner’s contract, specifying the **operation code** for transfer and the **address of the new owner**.
+
+
+```tlb
+
+transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress
+custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;`
+
+```
+
+In the TON SDK, predefined primitives are available for the most essential structures, allowing complex structures to be packed using built-in helpers.
+
+```
+import {Address, beginCell, toNano} from "@ton/ton";
+/*
+`transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress
+custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;`
+*/
+
+
+const messageBody = beginCell()
+    .storeUint(0x5fcc3d14, 32) // opcode for NFT transfer
+    .storeUint(0, 64) // query id, by default 0
+    .storeAddress(destinationAddress) //
+    .storeAddress(destinationAddress) // response destination for lasts funds
+    .storeBit(0) // if 0, no custom payload
+    .storeCoins(toNano('0.01')) // forward amount - if >0, will send additional message to destination as a wallet notification message
+    .endCell();
+```
+
+A prepared example can be used to test the sending process.
+To run the example, you need to specify the wallet address and the NFT contract address.
+
+```@ton/blueprint 0.36.1
+import {Address, beginCell, toNano} from "@ton/ton";
+import {NetworkProvider} from "@ton/blueprint";
+
+
+export async function run(provider: NetworkProvider, args: string[]) {
+
+    // PREPARE INTERNAL MESSAGE TRANSFER
+    const nftItemAddress = Address.parse('kQBUCuxgGsF6znHM_yNmnV_EwtlmdvmDzqTxiWHJip2ux6Wn');
+    const destinationAddress = Address.parse('0QABa48hjKzg09hN_HjxOic7r8T1PleIy1dRd8NvZ3922CW7');
+
+    const address = nftItemAddress;
+    const contractProvider = provider.provider(address);
+    /*
+    `transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress
+    custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;`
+     */
+    const messageBody = beginCell()
+        .storeUint(0x5fcc3d14, 32) // opcode for NFT transfer
+        .storeUint(0, 64) // query id
+        .storeAddress(destinationAddress)
+        .storeAddress(destinationAddress) // response destination
+        .storeBit(0) // if 0, no custom payload
+        .storeCoins(toNano('0.01')) // forward amount - if >0, will send additional message to destination as a wallet notification message
+        .endCell();
+
+
+    return contractProvider.internal(
+        provider.sender(),{
+        value: toNano('0.5'),
+        body: messageBody
+    });
+
+}
+```
+
+### Internal message serializer based on contract code
+//TODO
+  * Receivers in the code  (https://github.com/ton-blockchain/highload-wallet-contract-v3)
+  * Build message serializer according to source code
+  * Assembler (blockchain explorer preview/ https://tonviewer.com/EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1?section=code )
+
+## Hashes in TON Blockchain
+
+Hashes play a crucial role in the TON ecosystem, ensuring the identification and verification of data at all levels of the blockchain.
+Understanding how hashes work will help you effectively track transactions, verify messages, and integrate your applications with TON.
+
+### What is a hash?
+
+In the context of TON, a **hash** is a unique cryptographic fingerprint of data calculated using the **SHA-256** algorithm.
+Each cell, message, or transaction has its unique hash that serves as its digital signature.
+
+### Data representation in TON
+
+All data in TON is stored in **cells**. Conceptually, this is a structure containing **1023 bits** and **4 references** to other cells.
+Serialized cell trees are packed according to a unified cell format standard.
+
+In TL-B, this structure is called a **Bag of Cells (BoC)**:
+
+
+```tlb
+
+
+serialized_boc#b5ee9c72 has_idx:(## 1) has_crc32c:(## 1)
+  has_cache_bits:(## 1) flags:(## 2) { flags = 0 }
+  size:(## 3) { size <= 4 }
+  off_bytes:(## 8) { off_bytes <= 8 }
+  cells:(##(size * 8))
+  roots:(##(size * 8)) { roots >= 1 }
+  absent:(##(size * 8)) { roots + absent <= cells }
+  tot_cells_size:(##(off_bytes * 8))
+  root_list:(roots * ##(size * 8))
+  index:has_idx?(cells * ##(off_bytes * 8))
+  cell_data:(tot_cells_size * [ uint8 ])
+  crc32c:has_crc32c?uint32
+  = BagOfCells;
+
+```
+
+A deep understanding of this structure is not required,
+Since TON development tools and SDKs already provide helpers that build this structure for developers.
+
+### Hash types in TON
+
+:::info Important
+Hashes in TON are irreversible — it’s impossible to restore the original data from a hash.
+However, they are **deterministic** — the same input will always produce the same hash.
+:::
+
+#### Message body hash
+
+The **message body hash** is a unique identifier of your message's content.
+It is computed from the cell that contains the message data.
+
+The body of the message is the part found in the field:
+`body: (Either X ^X)`
+
+
+```tlb
+message$_ {X:Type} info:CommonMsgInfo
+  init:(Maybe (Either StateInit ^StateInit))
+  body:(Either X ^X) = Message X;
+
+```
+
+Let’s examine an example of a message body with the comment "Hello, TON!" and calculate its hash.
+
+```typescript
+import { beginCell } from '@ton/core';
+
+// Создаем тело сообщения для увеличения счетчика
+const messageBody = beginCell()
+        .storeUint(0, 32) // op code
+        .storeStringTail("Hello TON!")
+        .endCell();
+
+console.log("Message Body Hash:", messageBody.hash().toString("hex"));
+```
+
+#### Expected output
+
+```
+Message Body Hash: d989794fa90c9817a63a22e00554574f3c4a347dcfd2e2886980a294de15f2af
+```
+
+**When to use the message body hash:**
+- To verify data integrity
+- During debugging and operation logging
+- For message deduplication in your application
+
+#### Full message hash
+
+A full message includes not only the body but also headers with metadata (sender, recipient, amount, fees).
+Its hash is a unique identifier of the entire message.
+
+For example, in the case of an internal message, this is the `Message X` structure defined by the following TL-B:
+
+```tlb
+message$_ {X:Type} info:CommonMsgInfo
+  init:(Maybe (Either StateInit ^StateInit))
+  body:(Either X ^X) = Message X;
+
+
+int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
+  src:MsgAddressInt dest:MsgAddressInt
+  value:CurrencyCollection ihr_fee:Grams fwd_fee:Grams
+  created_lt:uint64 created_at:uint32 = CommonMsgInfo;
+```
+
+#### Example:
+
+```typescript
+import { storeMessage, beginCell, Address, Message } from '@ton/ton';
+import { toNano } from '@ton/core';
+
+// Создаем тело сообщения для увеличения счетчика
+const messageBody = beginCell()
+        .storeUint(0, 32) // op code
+        .storeStringTail("Hello TON!")
+        .endCell();
+
+// Создайте полный объект сообщений
+const message: Message = {
+    info: {
+        type: 'internal',
+        dest: Address.parse('UQAi....'), // вставьте адрес получателя
+        value: { coins: toNano('0.1') },
+        bounce: true,
+        src: Address.parse('UQA1....'), // вставьте адрес отправителя
+        ihrDisabled: true,
+        bounced: false,
+        ihrFee: 0n,
+        forwardFee: 0n,
+        createdAt: 0,
+        createdLt: 0n
+    },
+    body: messageBody
+};
+
+// Получаем хэш полного сообщения
+const messageCell = beginCell()
+    .store(storeMessage(message))
+    .endCell();
+
+const fullMessageHash = messageCell.hash();
+console.log('Full Message Hash:', fullMessageHash.toString('hex'));
+```
+
+#### Expected output
+```
+Full Message Hash: 40b1477f90d702af223f15194724e0c12b51028bc622444959e155e77903b12c
+```
+
+**When to use the complete message hash:**
+- To track specific messages on the blockchain
+- When working with the TON Center API to search for transactions
+- To verify that the message has not been modified
+
+#### Transaction hash
+
+A **transaction hash** is a unique identifier of the entire transaction.
+It depends on all the data within the transaction, such as incoming and outgoing messages, state changes, and fees.
+This data becomes available **only after the transaction is executed**, and the hash can also only be computed once it is recorded on the blockchain.
+
+**Practical example of obtaining a transaction hash:**
+
+```typescript
+import { TonClient, beginCell, storeMessage } from '@ton/ton';
+import { Address } from '@ton/core';
+
+
+async function main() {
+    const client = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC', // тестнет, если проводите операции в мейннете, не забудьте поменять
+    apiKey: 'insert your api key' // используя бот, получите свой api key
+    });
+
+    const transactions = await client.getTransactions(
+    Address.parse('0QD3o...'), // вставьте свой адрес кошелька
+    {   archival: true,
+        limit: 10 }
+    );
+
+    for (const tx of transactions) {
+    const txHash = tx.hash();
+    console.log('Transaction Hash:', txHash.toString('hex'));
+
+    // Также можем получить хэш входящего сообщения
+    if (tx.inMessage) {
+        const inMsgCell = beginCell()
+        .store(storeMessage(tx.inMessage))
+        .endCell();
+        const inMsgHash = inMsgCell.hash();
+        console.log('Incoming Message Hash:', inMsgHash.toString('hex'));
+            }
+        }
+    }
+
+main().catch(console.error);
+```
+#### Expected output
+
+The last 10 transactions for the specified address, including the transaction hash,
+and if there is an incoming message — also displays the hash of that message:
+
+```
+Transaction Hash: 79a6406e5544e95bbe5db8c7e8189daaca240b2d6b4f21cc479c3082dd4c5cce
+Incoming Message Hash: 4557aa15e21cf0501f3d82eaa26a23ab61c08a544490154bd12a1814d492db42
+Transaction Hash: 1a86894bbe2f5af090d97f761f0367a16b713e93247056003e6d8b6a68a5165e
+Incoming Message Hash: dfa0916ceee9dd26c6966d55446b23f88950e118432f870d092cfcde83a3b864
+:
+:
+```
+
+#### Normalized Message Hash
+
+Normalization is a standardization concept that brings different representations into a unified form.
+Messages in different interfaces are defined according to TL-B, but collisions sometimes occurred
+where the structure was represented differently.
+
+To solve this issue, a standard was introduced within the ecosystem to ensure consistent hash computation.
+Normalization is defined in detail in [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467).
+
+**The problem normalization solves:**
+
+Functionally identical messages may be formed in different ways for the `src`, `import_fee`, and `init` fields.
+As a result, messages with duplicate content may have different hashes.
+This complicates transaction tracking and message deduplication.
+
+**How normalization works:**
+
+The normalized hash is computed by standardizing the following fields of an external-in message:
+
+1. **Source Address (`src`)**: Set to `addr_none$00`
+2. **Import Fee (`import_fee`)**: Set to `0`
+3. **InitState (`init`)**: Set to an empty value
+4. **Body**: Always saved as a reference
+
+**Practical example of calculating a normalized hash:**
+
+```typescript
+import { toNano, beginCell, Cell, Address } from "@ton/core";
+
+function normalizeExternalMessage(destAddress: Address, bodyCell: Cell): Cell {
+    try {
+        const normalizedExtMessage = beginCell()
+            .storeUint(0b10, 2) // ext_msg prefix (10 in binary)
+            .storeUint(0, 2) // src -> addr_none (НОРМАЛИЗАЦИЯ!)
+            .storeAddress(destAddress) // Address.parse(destAddress.toString({ bounceable: false })) если пытаться использовать .address из WalletContractV4
+            .storeCoins(0) // import_fee:Grams -> 0 (НОРМАЛИЗАЦИЯ!)
+            .storeBit(false) // init:(Maybe (Either StateInit ^StateInit)) -> nothing$0 (НОРМАЛИЗАЦИЯ!)
+            .storeBit(true) // body:(Either X ^X) -> right$1 (НОРМАЛИЗАЦИЯ!)
+            .storeRef(bodyCell) // Store body as reference (НОРМАЛИЗАЦИЯ!)
+            .endCell();
+
+        return normalizedExtMessage;
+    } catch (error: any) {
+        console.error("❌ Error in normalization:", error.message);
+        throw error;
+    }
+}
+
+// Пример использования
+const messageBody = beginCell()
+  .storeUint(0, 32) // opcode для простого перевода
+  .storeStringTail('Normalized hash example')
+  .endCell();
+
+const destinationAddress = Address.parse('EQB...');
+const normalizedExternalMessage = normalizeExternalMessage(destinationAddress, messageBody);
+const normalizedHash = normalizedExternalMessage.hash().toString("hex");
+
+console.log('Normalized Message Hash:', normalizedHash);
+```
+
+#### Expected output
+
+```
+Normalized Message Hash: ee53ccd1224c315597bdbafb2e722316d9471490b13dd9e1834903b094eb5964
+```
+
+
+**Practical example of calculating a non-normalized hash:**
+
+Before April 2025, hashes were not normalized,
+so if your code looks like this — normalization is required.
+
+
+```typescript
+import { mnemonicToWalletKey } from '@ton/crypto';
+import { WalletContractV4, TonClient, toNano, beginCell, Address, internal } from '@ton/ton';
+
+// Создаём клиент для доступа к testnet через TonCenter
+const client = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+    apiKey: 'your api key' // публичный API-ключ
+});
+
+// Создаём тело сообщения — обычная строка с опкодом
+const messageBody = beginCell()
+    .storeUint(0, 32) // op code — произвольный, например, 0
+    .storeStringTail("Hello TON!") // строка в теле
+    .endCell();
+
+// Оборачиваем тело во внутреннее сообщение (internal message)
+const internalMessage = internal({
+    to: Address.parse('0QD3....'), // получатель
+    value: toNano('0.1'), // 0.1 TON
+    body: messageBody
+});
+
+async function main() {
+    // Получаем ключи кошелька из мнемоники
+    const mnemonic = "your seed phrase";
+    const keyPair = await mnemonicToWalletKey(mnemonic.split(' '));
+
+    // Создаём wallet-смарт-контракт по публичному ключу
+    const wallet = WalletContractV4.create({
+        publicKey: keyPair.publicKey,
+        workchain: 0
+    });
+
+    const contract = client.open(wallet);
+    const seqno = await contract.getSeqno();
+
+    // Создаём внешнее сообщение (external message)
+    const externalMessage = await wallet.createTransfer({
+        seqno,
+        secretKey: keyPair.secretKey,
+        messages: [internalMessage]
+    });
+
+    // Выводим хэш внешнего сообщения
+    console.log("Non-normalized External Message Hash:", externalMessage.hash().toString("hex"));
+}
+
+main();
+
+```
+
+#### Expected output
+```
+Non-normalized External Message Hash: 8dd5c85be08e33341553cb1e5a2f08323e9ae9314d5ceac2e3a6c79f11151b5e
+```
+
+This algorithm may differ from the normalized one in any way.
+If the lack of normalization has become an issue for a previously developed project,
+the correct solution is to **migrate to normalized hashes throughout the entire project**.
+
+### Sending a message and verifying delivery
+
+One of the most important scenarios is sending a message
+and making sure the blockchain has processed it.
+
+**Step-by-step process:**
+
+```typescript
+import { internal, TonClient, Address, beginCell, WalletContractV4, SendMode } from '@ton/ton';
+import { mnemonicToPrivateKey } from '@ton/crypto';
+
+async function sendAndVerifyMessage() {
+  const client = new TonClient({
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+    apiKey: 'your api key'
+  });
+
+  // Мнемоника и ключи
+  const mnemonic = "your mnemonic".split(" ");
+  const keyPair = await mnemonicToPrivateKey(mnemonic);
+
+  const wallet = client.open(WalletContractV4.create({
+    publicKey: keyPair.publicKey,
+    workchain: 0
+  }));
+
+  // Тело сообщения с комментарием
+  const messageBody = beginCell()
+    .storeUint(0, 32)
+    .storeStringTail('Hello TON!')
+    .endCell();
+
+  // Получаем seqno
+  const seqno = await wallet.getSeqno();
+
+  // Отправляем транзакцию
+  await wallet.sendTransfer({
+    secretKey: keyPair.secretKey,
+    seqno,
+    messages: [internal({
+      to: Address.parse('0QD3o...'), // ваш адрес
+      value: '0.05',
+      body: messageBody
+    })],
+    sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS,
+  });
+
+  // Ждём 10 секунд
+  await new Promise(resolve => setTimeout(resolve, 10000));
+
+  // Проверяем, отправилось ли сообщение
+  const newSeqno = await wallet.getSeqno();
+
+  if (newSeqno > seqno) {
+    console.log('Транзакция успешно отправлена!');
+
+    const transactions = await client.getTransactions(wallet.address, {
+      archival: true,
+      limit: 5
+    });
+
+    const ourTx = transactions.find(tx =>
+      tx.inMessage?.info.type === 'external-in' &&
+      tx.description.type === 'generic'
+    );
+
+    if (ourTx) {
+      console.log('Transaction Hash:', ourTx.hash().toString('hex'));
+    }
+  } else {
+    console.log('Транзакция не была обработана');
+  }
+}
+
+sendAndVerifyMessage().catch(console.error);
+```
+
+#### Expected output
+
+```
+Транзакция успешно отправлена!
+Transaction Hash: 285f8df8f968f63680f8efaff004369f4e7aeb8619293da035cb8ca3899232f3
+```
+
+### Searching for a Transaction by BOC
+
+When a user confirms the sending of an external message via TON Connect,
+you receive a BOC (Bag of Cells).
+You can use this BOC to find the corresponding transaction on the blockchain.
+
+**Practical example:**
+
+<details>
+
+  ```typescript
+
+  import { Cell, Address, beginCell, storeMessage, TonClient } from '@ton/ton';
+
+  async function findTransactionByBOC(
+  externalBOC: string,
+  walletAddress: string
+  ): Promise<string | null> {
+  const client = new TonClient({
+  endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+  apiKey: 'your api key'
+});
+
+  try {
+  // Получаем хэш внешнего BOC
+  const extHash = Cell.fromBase64(externalBOC).hash().toString('hex');
+  console.log('Ищем транзакцию по BOC hash:', extHash);
+
+  // Получаем последние транзакции кошелька
+  const transactions = await client.getTransactions(
+  Address.parse(walletAddress),
+{ limit: 10 }
+  );
+
+  for (const tx of transactions) {
+  const inMsg = tx.inMessage;
+  if (inMsg?.info.type === 'external-in') {
+  // Создаем хэш входящего сообщения
+  const inHash = beginCell()
+  .store(storeMessage(inMsg))
+  .endCell()
+  .hash()
+  .toString('hex');
+
+  if (extHash === inHash) {
+  const txHash = tx.hash().toString('hex');
+  console.log('Найдена транзакция:', txHash);
+  return txHash;
+}
+}
+}
+
+  console.log('Транзакция не найдена');
+  return null;
+} catch (error) {
+  console.error('Ошибка поиска транзакции:', error);
+  return null;
+}
+}
+
+
+  async function main() {
+  // Пример BOC для теста (замените на реальный)
+  const testBOC = 'где найти BOC???';
+  const testWalletAddress = 'your address';
+
+  await findTransactionByBOC(testBOC, testWalletAddress);
+}
+
+  // Запускаем тест
+  if (require.main === module) {
+  main().catch(console.error);
+}
+
+  ```
+
+  **Expected output**
+  ```
+  Ищем транзакцию по BOC hash: 399ae70c7c4d4880d373727875c38ad243dc9b11775b14a19955f0040a684306
+  Транзакция не найдена
+  ```
+
+</details>
+
+### Practical tips
+
+#### Checking transaction status via API
+
+```typescript
+// Проверяем статус транзакции по её хэшу
+async function checkTransactionStatus(txHash: string, walletAddress: string) {
+  try {
+    const response = await fetch(
+      `https://testnet.toncenter.com/api/v2/getTransactions?` +
+      `address=${walletAddress}&hash=${txHash}`
+    );
+    const data = await response.json();
+
+    if (data.result.length > 0) {
+      console.log('Транзакция найдена в блокчейне');
+      const viewerUrl = `https://testnet.tonviewer.com/transaction/${trxHash}`;
+      console.log('Ссылка на транзакцию:', viewerUrl);
+      return data.result[0];
+    } else {
+      console.log('Транзакция не найдена');
+      return null;
+    }
+  } catch (error) {
+    console.error('Ошибка при проверке транзакции:', error);
+    return null;
+  }
+}
+
+const walletAddress = 'your address';
+const trxHash = 'your trx hash';
+
+checkTransactionStatus(trxHash, walletAddress);
+```
+
+#### Expected output
+
+```
+Транзакция найдена в блокчейне
+Ссылка на транзакцию: https://testnet.tonviewer.com/transaction/df51860233d75...
+```
+
+#### StateInit Hash for Address Verification
+
+In [TON Connect](v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#backend-example),
+it's often necessary to verify the match between a wallet address and its `StateInit`.
+The hash of `StateInit` must match the hash part of the address.
+
+**Practical example of address verification:**
+
+1. Retrieve `StateInit`:
+
+
+```typescript
+
+import { WalletContractV4, beginCell } from '@ton/ton';
+import { mnemonicToPrivateKey } from '@ton/crypto';
+
+async function getStateInit() {
+    try {
+        // Вам нужно заменить эти слова на ваши 24 слова (мнемоник)
+        const mnemonic = "your mnemonic".split(" ");
+        const keyPair = await mnemonicToPrivateKey(mnemonic);
+
+        // Создаем кошелек v4
+        const wallet = WalletContractV4.create({
+            publicKey: keyPair.publicKey,
+            workchain: 0
+        });
+
+        // Получаем stateInit
+        const stateInitCell = beginCell()
+            .storeRef(wallet.init.code)
+            .storeRef(wallet.init.data)
+            .endCell();
+
+        const stateInitBase64 = stateInitCell.toBoc().toString('base64');
+
+        console.log('StateInit (base64):', stateInitBase64);
+        console.log('Wallet address:', wallet.address.toString({ bounceable: true }));
+        console.log('Public key (hex):', Buffer.from(keyPair.publicKey).toString('hex'));
+
+        return stateInitBase64;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+getStateInit().catch(console.error);
+```
+#### Expected output
+
+```
+StateInit (base64): te6cckECFgEAAwMAAgABFQEU/wD0pBP0vPL....
+Wallet address: EQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxW9m
+Public key (hex): f102a5c140272019550b05e6a50b2072aa737dd3c5948622ddf1ca249b6e0f00
+```
+
+```typescript
+import { Address, Cell, contractAddress } from '@ton/ton';
+
+// Ваши данные:
+const wantedAddress = Address.parse('your address');
+const stateInitBase64 = 'your state init'; // <-- сюда вставьте свой StateInit (base64)
+
+const cell = Cell.fromBase64(stateInitBase64);
+// Обычно code = cell.refs[0], data = cell.refs[1]
+const stateInit = {
+  code: cell.refs[0],
+  data: cell.refs[1]
+};
+
+// Восстанавливаем адрес из workchain и StateInit
+const calculatedAddress = contractAddress(wantedAddress.workChain, stateInit);
+
+console.log('Ожидаемый адрес:   ', wantedAddress.toString({ bounceable: false }));
+console.log('Вычисленный адрес:', calculatedAddress.toString({ bounceable: false }));
+
+if (calculatedAddress.equals(wantedAddress)) {
+  console.log('✅ StateInit соответствует адресу!');
+} else {
+  console.log('❌ StateInit НЕ соответствует адресу!');
+}
+```
+
+#### Expected output
+
+```
+Ожидаемый адрес:    UQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxTKj
+Вычисленный адрес: UQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxTKj
+✅ StateInit соответствует адресу!
+```
+
+#### Real time monitoring
+
+<details>
+
+  ```typescript
+  // Пример функции для мониторинга входящих транзакций
+  async function monitorIncomingTransactions(walletAddress: Address, client: TonClient) {
+  let lastLt = '0';
+
+  setInterval(async () => {
+  try {
+  const transactions = await client.getTransactions(walletAddress, {
+  limit: 10,
+  lt: lastLt
+});
+
+  for (const tx of transactions) {
+  if (tx.lt > lastLt) {
+  const txHash = tx.hash();
+  console.log('Новая транзакция:', txHash.toString('hex'));
+
+  // Обрабатываем входящие сообщения
+  if (tx.inMessage) {
+  const msgCell = beginCell()
+  .store(storeMessage(tx.inMessage))
+  .endCell();
+  const msgHash = msgCell.hash();
+  console.log('Хэш сообщения:', msgHash.toString('hex'));
+}
+
+  lastLt = tx.lt;
+}
+}
+} catch (error) {
+  console.error('Ошибка мониторинга:', error);
+}
+}, 5000); // проверяем каждые 5 секунд
+}
+  ```
+</details>
+
+### Best Practices
+
+1. **Always store hashes**: Save hashes of important transactions and messages for later tracking.
+
+2. **Use the correct hash type**: Use the transaction hash for tracking and the message hash for data verification.
+
+3. **Consider confirmation time**: In TON, transactions typically finalise within 3–6 seconds, but this may take longer during periods of high network load.
+
+4. **Implement retry logic**: If a transaction doesn’t appear on the blockchain within a minute, consider resending the message.
+
+## Sending a Message
+
+There are two important and practical cases for sending a message to the blockchain:
+
+- You send a message from the backend, where you own the wallet and can sign and send it directly.
+- You use **TON Connect** on the frontend, where you prepare the message and let the user sign and send it themselves.
+
+### Sending from the Backend
+
+If you have a wallet with a seed phrase, the message is sent like this:
+Code [source](/v3/guidelines/dapps/cookbook/#how-to-transfer-ton-and-send-a-text-message-to-another-wallet)
+
+### Sending from the Frontend (TON Connect)
+
+In this case, you prompt the user to sign and send the message.
+
+```
+const myTransaction = {
+validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
+messages: [
+{
+address: destination, // Address of smart contract to send internal message to
+amount: amount, // Amount in nanotons to attach to the message
+payload: Base64.encode(messageBody.toBoc())
+}
+]
+}
+
+tonConnectUI.sendTransaction(myTransaction)
+
+```
+## Get методы
+Get methods
+Build get method wrapper
+Get balance
+Get jetton wallet address
+Get collection data
+
+## Blockchain HTTP API
+### TON main services
+
+We will review services that build native infrastructure; other API providers most likely rely on one of these standard solutions.
+We recommend evaluating a provider's quality independently based on historical performance and suitability for your specific use case.
+
+#### TON Center
+TON Center services are developed by the TON Core team using the Go stack. It includes two distinct services:
+- **TON Center API V3**: Provides blockchain indexing solutions.
+- **TON Center API V2**: Offers fast reading from and sending to the blockchain.
+
+#### TON API
+A solution focused on business needs, often providing ready-to-use implementations for typical tasks in TON.
+
+#### TONX API
+An API service that originated from TON Center but continued closed development, expanding interfaces for client-specific needs.
+
+#### Tonhub API
+An HTTP API service with a unique structure different from TON API and TON Center. This interface better serves some use cases.
+
+---
+
+### A Transaction is a Part of a Block
+
+HTTP services read data from LiteServer nodes and deserialize it according to TL-B standards.
+Data that undergoes minimal post-processing is often referred to as **RAW data**.
+Such raw data is ideal for in-depth analytics where security and precision outweigh simplicity.
+
+On the other hand, solutions that do not involve large asset movements — but require event analytics — are more efficiently implemented using **high-level interfaces**, i.e., APIs that apply post-processing before returning the data.
+
+Transactions in TON are packed into blocks. Finalized BaseChain blocks are committed into MasterChain blocks.
+Therefore, to extract transaction data, services read from both the MasterChain and the corresponding BaseChain blocks.
+
+Additionally, because TON implements **sharding**, each MasterChain block points to shard blocks that must also be parsed.
+Each shard block contains all transactions associated with that MasterChain block.
+
+All WorkChain blocks share the same structure. For transaction analysis, the relevant section is `block_extra`.
+
+
+```tlb
+block#11ef55aa global_id:int32
+info:^BlockInfo value_flow:^ValueFlow
+state_update:^(MERKLE_UPDATE ShardState)
+extra:^BlockExtra = Block;
+```
+The `block_extra` section of a block, in turn, contains the `account_blocks` structure.
+It is within `account_blocks` that you'll find the transactions processed by all accounts within the corresponding shard for that block.
+
+```tlb
+block_extra in_msg_descr:^InMsgDescr
+out_msg_descr:^OutMsgDescr
+account_blocks:^ShardAccountBlocks
+rand_seed:bits256
+created_by:bits256
+custom:(Maybe ^McBlockExtra) = BlockExtra;
+```
+
+Thus, in the process of reading the blockchain, services iteratively process from the last read block to the next finalized one. The resulting transactions are **RAW data** that can be provided to downstream services for further processing. Additionally, specialized services analyze and enhance this data to balance between implementation complexity and a trustless approach.
+
+#### Account status
+
+Account status describes the condition of the account from the perspective of a transaction but is **not** stored within the account itself. There are four possible `AccountStatus` values, each encoded as two bits in TL-B:
+
+| Status      | TL-B Code | Description                                                                 |
+|-------------|------------|------------------------------------------------------------------------------|
+| `nonexist`  | `11`       | Account doesn't exist on the blockchain — no state and no balance.           |
+| `uninit`    | `00`       | Account exists but contains no code or data. It may have a balance.          |
+| `frozen`    | `01`       | Account has been deleted, but its state hash is retained. It cannot be used. |
+| `active`    | `10`       | Account has a `StateInit` with code and data — an active smart contract.     |
+
+The presence of `code` in `StateInit` makes the account executable and thus defines it as a smart contract.
+
+:::important
+Account status is used only within transactions (`orig_status` and `end_status`) and is **not** stored in the account itself. The actual account state is stored in the `AccountState` structure.
+:::
+
+### Approaches to retrieving transactions from Blockchain API
+
+#### Key concepts:
+
+- **Transaction**: A state update of an account triggered by an incoming message and optionally producing one or more outgoing messages. Analyzing the transaction body is fundamental to most services.
+- **Trace**: A deterministic graph of all transactions triggered by a single external message. Useful for debugging or understanding business logic chains. Exchanges use it to verify asset movements.
+- **Action**: A high-level abstraction representing a business operation. For example, a Jetton transfer between two users. It is used for visualization — not for transferring funds.
+
+---
+
+#### High-Level data analysis
+
+**How to fetch a list of transactions or a single transaction via API:**
+
+Use high-level interfaces like `GET /actions`, `GET /traces`, `GET /jetton/transfers`, `GET /nft`, etc.
+This approach is suitable if you **do not move funds** or require deep validation.
+
+For more advanced use cases (e.g., tracing all related transactions via `Traces`), these APIs help simplify complex logic analysis.
+
+---
+
+#### Searching for a transaction by message body
+
+Use `GetTransaction by message (external/internal)` — only available via [API v3](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_message).
+This is ideal when monitoring a small number of accounts (≤ 10), like in wallet-v4 or wallet-v5 interactions.
+
+:::note
+Note that there can be a delay of up to 10 seconds; therefore, for real-time needs, also monitor the `pending` pool.
+:::
+
+---
+
+#### Searching transactions by account address
+
+Available via [API v2](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get).
+This method is broadly supported (even in LiteClient) and is practical for tracking up to ~100 accounts.
+
+---
+
+#### Scanning the blockchain for all transactions
+
+This method is used when tracking 1,000+ accounts:
+
+- **API v2**:
+1. Fetch shards for a masterchain block.
+2. Compute shard diffs.
+3. Use `getBlockTransactionsExt` to fetch all transactions per shard.
+
+See: [TON Center Cookbook](https://docs.toncenter.com/docs/ton-center-cookbook#how-to-scan-blockchain)
+
+- **API v3**:
+Instead of following v2 logic, use:
+[GET /transactions/by-masterchain-block](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_masterchain_block)
+
+You must decide between a **simple high-trust implementation** using a major provider or a **complex trustless setup** that verifies blocks and transactions independently.
+
+---
+
+#### Transaction response from API
+
+Each transaction in API responses (`Transaction[]`) mirrors its TL-B-defined structure but often includes additional computed fields for convenience.
+
+One of the **most important computed fields** is the **transaction hash**, which is not part of the blockchain but generated by the API provider.
+
+```json
+"hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM="
+```
+
+In the blockchain, a regular transaction is a structure described by a complete body and a unique header.
+
+```tlb
+transaction$0111 account_addr:bits256 lt:uint64
+    prev_trans_hash:bits256 prev_trans_lt:uint64 now:uint32
+    outmsg_cnt:uint15
+    orig_status:AccountStatus end_status:AccountStatus
+    ^[ in_msg:(Maybe ^(Message Any)) out_msgs:(HashmapE 15 ^(Message Any)) ]
+    total_fees:CurrencyCollection state_update:^(HASH_UPDATE Account)
+    description:^TransactionDescr = Transaction;
+```
+
+The header TransactionDescr defines the nature of the transaction in the blockchain. All user transactions for service operations are of the regular type — Ordinary.
+
+
+```tlb
+trans_ord$0000 credit_first:Bool
+  storage_ph:(Maybe TrStoragePhase)
+  credit_ph:(Maybe TrCreditPhase)
+  compute_ph:TrComputePhase action:(Maybe ^TrActionPhase)
+  aborted:Bool bounce:(Maybe TrBouncePhase)
+  destroyed:Bool
+  = TransactionDescr;
+```
+
+The API service deserializes the entire structure with precision down to string and numeric data types. As a result, the transaction body returned in JSON format:
+
+```curl
+curl -X 'GET' \
+  'https://toncenter.com/api/v3/transactions?limit=10&offset=0&sort=desc' \
+  -H 'accept: application/json'
+```
+
+Returns a very large structure (example for API/v3):
+
+```json
+ {
+  "account": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF",
+  "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=",
+  "lt": "15371766000003",
+  "now": 1696238450,
+  "mc_block_seqno": 13353447,
+  "trace_id": "13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=",
+  "prev_trans_hash": "6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=",
+  "prev_trans_lt": "15371704000004",
+  "orig_status": "active",
+  "end_status": "active",
+  "total_fees": "12446659",
+  "description": {
+  ...
+  },
+  "compute_ph": {
+   ....
+  },
+  "action": {
+    ...
+  },
+  "block_ref": {
+    ...
+  },
+  "in_msg": {
+  ...
+  },
+  "out_msgs": [
+   ...
+  ],
+
+  "account_state_before": {
+    ...
+  },
+
+  "account_state_after": {
+  ...
+  }
+}
+
+```
+
+<details>
+  ```json
+  {
+    "account": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account of transcation
+    "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=",
+    "lt": "15371766000003", # logical time, may have same values for txs on different accounts but every transaction on a given account will have unique lt
+    "now": 1696238450, # unix timestamp
+    "mc_block_seqno": 13353447, # seqno of masterchain block
+    "trace_id": "13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=", # tx_hash of the root transaction of the trace
+    "prev_trans_hash": "6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=", # hash of previous transaction on this account
+    "prev_trans_lt": "15371704000004", # lt of prev. transaction
+    "orig_status": "active", # account status before transaction
+    "end_status": "active", # ... after transaction
+    "total_fees": "12446659", # ... sum of fees from description
+    "description": {
+    "type": "ord",
+    "aborted": false,
+    "destroyed": false,
+    "credit_first": false,
+    "storage_ph": {
+    "storage_fees_collected": "48",
+    "status_change": "unchanged"
+  },
+    "compute_ph": {
+    "skipped": false,
+    "success": true,
+    "msg_state_used": false,
+    "account_activated": false,
+    "gas_fees": "8823000",
+    "gas_used": "8823",
+    "gas_limit": "400000",
+    "mode": 0,
+    "exit_code": 0,
+    "vm_steps": 178,
+    "vm_init_state_hash": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+    "vm_final_state_hash": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+  },
+    "action": {
+    "success": true,
+    "valid": true,
+    "no_funds": false,
+    "status_change": "unchanged",
+    "total_fwd_fees": "10871000",
+    "total_action_fees": "3623611",
+    "result_code": 0,
+    "tot_actions": 1,
+    "spec_actions": 0,
+    "skipped_actions": 0,
+    "msgs_created": 1,
+    "action_list_hash": "9XTNK6e1Fmmhd3cdzI0XcNDYRAoP5f5L4bWPUD3KNIE=",
+    "tot_msg_size": {
+    "cells": "23",
+    "bits": "8377"
+  }
+  }
+  },
+    # reference for the block of the transaction
+    "block_ref": {
+    "workchain": 0,
+    "shard": "8000000000000000",
+    "seqno": 14627985
+  },
+    # in message
+    "in_msg": {
+    "hash": "O9XCuICyXBWOs4hHMOYA0k6o4GPBsWbAkjFi2qbttQE=", # hash of whole message
+    "source": "0:F0C9C78F021AC65839B4006321A68BBB32DE5025F84C853CB9D75EB4894D0848", # account who has sended this message
+    "destination": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account who received this message (for in_msg should be same as account of transaction)
+    "value": "400000000", # attached TONS
+    "fwd_fee": "1494679", # fee for forwarding the message using Hypercube Routing
+    "ihr_fee": "0", # fee for forwarding the message throught Instant Hypercube Routing (now IHR is not implemented so this should be added to value)
+    "created_lt": "15371766000002", # logical time of creation (usually slightly differs from transaction lt, where this message appears as an out_msg)
+    "created_at": "1696238450", # unix timestamp
+    "opcode": "0x0f8a7ea5", # opcode
+    "ihr_disabled": true,
+    "bounce": true, # if bounce should be perfomed on failure
+    "bounced": false, # if bounce has happened
+    "import_fee": null,
+    "message_content": { # message body
+    "hash": "tWjTyEL/sabOLNt97uyCj5na740lW54GUcVa0UrSDao=", # hash of the message body
+    # message body in base64 format
+    "body": "te6cckEBAgEAiAABbQ+KfqUAAAAAdJizmkC/A/doAc9ztfOy5YIoBWjnofpWHchoFtAb/s4FvzXctxUu0Cf0ED8uUQMBAJclk4VhgB3j1vChEcRNFz9a4PfQWGcds91PdwGR6Jm4o4muESRZKAJfTMEAPDJx48CGsZYObQAYyGmi7sy3lAl+EyFPLnXXrSJTQhIQIjm5Xw==",
+    "decoded": null # text comment if it could be decoded
+  },
+    "init_state": null
+  },
+    "out_msgs": [
+  {
+    "hash": "FuV4JPR/uZZOCzZxWQ473bASToqChvKDLmnf5BiCspI=",
+    "source": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # should coinside with transaction account for out_msg
+    "destination": "0:794760D36E657A27CDB8D3D65F243D6B468CAD2C34AF413E7709390E4DBE9907",
+    "value": "380306000",
+    "fwd_fee": "7247389",
+    "ihr_fee": "0",
+    "created_lt": "15371766000004",
+    "created_at": "1696238450",
+    "opcode": "0x178d4519",
+    "ihr_disabled": true,
+    "bounce": true,
+    "bounced": false,
+    "import_fee": null,
+    "message_content": {
+    "hash": "o+VOluS6wdyl44k2AIFTcRBvdxZD/98275dunIWcVIA=",
+    "body": "te6cckEBAgEAiAABbReNRRkAAAAAdJizmkC/A/doAeGTjx4ENYywc2gAxkNNF3ZlvKBL8JkKeXOuvWkSmhCQIH5cogYBAJclk4VhgB3j1vChEcRNFz9a4PfQWGcds91PdwGR6Jm4o4muESRZKAJfTMEAPDJx48CGsZYObQAYyGmi7sy3lAl+EyFPLnXXrSJTQhIQPzgXtA==",
+    "decoded": null
+  },
+    # init state in same format as message body
+    # needed to deploy a new contract
+    "init_state": {
+    "hash": "eUdg025leifNuNPWXyQ9a0aMrSw0r0E+dwk5Dk2+mQc=",
+    "body": "te6cckECFAEAA4AAAgE0AgEBhwgBz3O187LlgigFaOeh+lYdyGgW0Bv+zgW/Ndy3FS7QJ/UAN1wXvOOOdJfwh7sHnzxnFjjhTeJ04Bmd10caY4RPyrggAgEU/wD0pBP0vPLICwMCAWIEBQICywYHABug9gXaiaH0AfSB9IGoYQIBIAgJAIPSAINch7UTQ+gD6QPpA1DAE0x+CEBeNRRlSILqCEHvdl94TuhKx8uLF0z8x+gAwE6BQI8hQBPoCWM8WAc8WzMntVICAUgKCwIBWAwNAMNCDHAJJfBOAB0NMDAXGwlRNfA/AQ4PpA+kAx+gAxcdch+gAx+gAwc6m0AALTH4IQD4p+pVIgupUxNFnwDeCCEBeNRRlSILqWMUREA/AO4DWCEFlfB7y6k1nwD+BfBIQX8vCAART6RDBwuvLhTYAfFQPTP/oA+kAh8ALtRND6APpA+kDUMFE2oVIqxwXy4sEowv/y4sJUNEJwVCATVBQDyFAE+gJYzxYBzxbMySLIywES9AD0AMsAySD5AHB0yMsCygfL/8nQBPpA9AQx+gAg10nCAPLixHeAGMjLBVAIzxZw+gIXy2sTzIDgIBIA8QAK6CEBeNRRnIyx8Zyz9QB/oCIs8WUAbPFiX6AlADzxbJUAXMI5FykXHiUAioE6CCCOThwKoAggiYloCgoBS88uLFBMmAQPsAECPIUAT6AljPFgHPFszJ7VQD9ztRND6APpA+kDUMAjTP/oAUVGgBfpA+kBTW8cFVHNtcFQgE1QUA8hQBPoCWM8WAc8WzMkiyMsBEvQA9ADLAMn5AHB0yMsCygfL/8nQUA3HBRyx8uLDCvoAUaihggiYloCCCJiWgBK2CKGCCOThwKAYoSfjDyXXCwHDACOAREhMA2ztRND6APpA+kDUMAfTP/oA+kAwUVGhUknHBfLiwSfC//LiwoII5OHAqgAWoBa88uLDghB73ZfeyMsfFcs/UAP6AiLPFgHPFslxgBjIywUkzxZw+gLLaszJgED7AEATyFAE+gJYzxYBzxbMye1UgAHBSeaAYoYIQc2LQnMjLH1Iwyz9Y+gJQB88WUAfPFslxgBDIywUkzxZQBvoCFctqFMzJcfsAECQQIwAOEEkQODdfBAB2wgCwjiGCENUydttwgBDIywVQCM8WUAT6AhbLahLLHxLLP8ly+wCTNWwh4gPIUAT6AljPFgHPFszJ7VTOKoYI",
+    "decoded": null
+  }
+  }
+    ],
+    # account state before the transaction
+    "account_state_before": {
+    "hash": "ICpM+dm0PYhxtwS/EnIwMAvOQbtDhVWMnPtMAlw5Dog=", # hash of whole account state
+    "balance": "37821399", # balance
+    "account_status": "active", # status of account (active, nonexist = deleted, frozen, uninitialized)
+    "frozen_hash": null, # hash of state when it became frozen
+    "data_hash": "XeSmBiLWvwn00CWu5oq/q9Q6d4luPKxnOWC4NgEeugU=", # hash of data
+    "code_hash": "ITmGtOPGMSaMQ8fGUTxczC5zEmkqfhV7VEQchrqjpGc=" # hash of code
+  },
+    # account state after the transaction
+    "account_state_after": {
+    "hash": "7vvsHBjy5KoM/rIs6U8nHZt0pYOW5I3oTbBirxVK+Go=",
+    "balance": "37821351",
+    "account_status": "active",
+    "frozen_hash": null,
+    "data_hash": "aD0LD2LpPQYYR81n5b/EBHCPYmhBo4soNdvPoTL+xIk=",
+    "code_hash": "ITmGtOPGMSaMQ8fGUTxczC5zEmkqfhV7VEQchrqjpGc="
+  }
+  }
+  ```
+</details>
+
+Depending on the task, the fields of interest may vary. Below are the most relevant ones:
+
+- Native – present in the blockchain. The description refers to the field name defined in TL-B `block.tlb` schemas.
+- Postprocessing – calculated additionally by the API provider.
+- Native object extended inside – this object exists on-chain, but the data is extended on the API side. See a separate table for details.
+
+| Field              | Origin                     | Description                                                                                                                       | Example                                                        |
+|--------------------|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|
+| `trace_id`         | Postprocessing             | `tx_hash` of the root transaction of the trace                                                                                   | `13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=`                |
+| `prev_trans_hash`  | Native                     | `tx_hash` of the previous transaction                                                                                             | `6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=`                |
+| `account`          | Native                     | Account address where the transaction occurred; returned in RAW format                                                           | `0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF` |
+| `hash`             | Postprocessing             | Hash of the current transaction                                                                                                   | `/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=`                |
+| `lt`               | Native                     | Logical time of the transaction; unique per account. TL-B field name: `lt`                                                       | `15371766000003`                                              |
+| `now`              | Native                     | UNIX timestamp of the transaction. TL-B field name: `now`                                                                         | `1696238450`                                                  |
+| `mc_block_seqno`   | Postprocessing             | Masterchain block sequence number that includes this transaction. Not stored on-chain, added by HTTP service                     | `13353447`                                                    |
+| `trace_id`         | Postprocessing             | Hash of the root transaction in the trace chain. `trace` is an entity formed by TON Center API v3                                | `13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=`                |
+| `prev_trans_hash`  | Native                     | Hash of the previous transaction for this account. TL-B field: `prev_trans_hash`                                                 | `6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=`                |
+| `prev_trans_lt`    | Native                     | Logical time of the previous transaction for this account. TL-B field: `prev_trans_lt`                                           | `15371704000004`                                              |
+| `orig_status`      | Native                     | Account status before the transaction. TL-B field: `orig_status`                                                                 | `active`                                                      |
+| `end_status`       | Native                     | Account status after the transaction. TL-B field: `end_status`                                                                   | `active`                                                      |
+| `total_fees`       | Native                     | Total amount of fees associated with the transaction. TL-B field: `total_fees`                                                   | `12446659`                                                    |
+| `in_msg`           | Native object extended inside | Input message body object                                                                                                       | `"in_msg": {...}`                                             |
+
+
+TODO определить набор полей которые здесь полезно рассмотреть.
