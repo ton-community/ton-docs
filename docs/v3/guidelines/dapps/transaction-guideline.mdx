@@ -847,7 +847,7 @@ Incoming Message Hash: dfa0916ceee9dd26c6966d55446b23f88950e118432f870d092cfcde8
 3. **InitState (`init`)**: Устанавливается в пустое значение
 4. **Body**: Всегда сохраняется как ссылка
 
-**Практический пример вычисления нормализованного (Normilized hash) хэша:**
+**Практический пример вычисления нормализованного (Normalized hash) хэша:**
 
 ```typescript
 import { toNano, beginCell, Cell, Address } from "@ton/core";
@@ -891,8 +891,8 @@ Normalized Message Hash: ee53ccd1224c315597bdbafb2e722316d9471490b13dd9e1834903b
 ```
 
 **Практический пример вычисления ненормализованного (Non-normilized hash) хэша:**
-1. уточнить и прописать зачем нам нужен ненормализованный хэш. Получается просто, что обычно так вычисляем, а надо как выше показано?
 
+до апреля 2025 года хэши не нормализировались, поэтому если ваш код выглядит так, то надо нормализовать.
 
 ```typescript
 import { mnemonicToWalletKey } from '@ton/crypto';
@@ -1136,6 +1136,8 @@ async function checkTransactionStatus(txHash: string, walletAddress: string) {
 
     if (data.result.length > 0) {
       console.log('Транзакция найдена в блокчейне');
+      const viewerUrl = `https://testnet.tonviewer.com/transaction/${trxHash}`;
+      console.log('Ссылка на транзакцию:', viewerUrl);
       return data.result[0];
     } else {
       console.log('Транзакция не найдена');
@@ -1152,12 +1154,12 @@ const trxHash = 'your trx hash';
 
 checkTransactionStatus(trxHash, walletAddress);
 ```
-- нужны ли доп данные?
 
 #### Ожидаемый результат
 
 ```
 Транзакция найдена в блокчейне
+Ссылка на транзакцию: https://testnet.tonviewer.com/transaction/df51860233d75...
 ```
 
 #### Хэш StateInit для верификации адресов
@@ -1165,6 +1167,53 @@ checkTransactionStatus(trxHash, walletAddress);
 В [TON Connect](v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#backend-example) часто требуется верифицировать соответствие между адресом кошелька и его StateInit. Хэш StateInit должен совпадать с хэш-частью адреса.
 
 **Практический пример верификации адреса:**
+
+1. Получить StatInit:
+
+```typescript
+
+import { WalletContractV4, beginCell } from '@ton/ton';
+import { mnemonicToPrivateKey } from '@ton/crypto';
+
+async function getStateInit() {
+    try {
+        // Вам нужно заменить эти слова на ваши 24 слова (мнемоник)
+        const mnemonic = "your mnemonic".split(" ");
+        const keyPair = await mnemonicToPrivateKey(mnemonic);
+
+        // Создаем кошелек v4
+        const wallet = WalletContractV4.create({
+            publicKey: keyPair.publicKey,
+            workchain: 0
+        });
+
+        // Получаем stateInit
+        const stateInitCell = beginCell()
+            .storeRef(wallet.init.code)
+            .storeRef(wallet.init.data)
+            .endCell();
+
+        const stateInitBase64 = stateInitCell.toBoc().toString('base64');
+
+        console.log('StateInit (base64):', stateInitBase64);
+        console.log('Wallet address:', wallet.address.toString({ bounceable: true }));
+        console.log('Public key (hex):', Buffer.from(keyPair.publicKey).toString('hex'));
+
+        return stateInitBase64;
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+getStateInit().catch(console.error);
+```
+#### Ожидаемый результат
+
+```
+StateInit (base64): te6cckECFgEAAwMAAgABFQEU/wD0pBP0vPL....
+Wallet address: EQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxW9m
+Public key (hex): f102a5c140272019550b05e6a50b2072aa737dd3c5948622ddf1ca249b6e0f00
+```
 
 ```typescript
 import { Address, Cell, contractAddress } from '@ton/ton';
@@ -1179,9 +1228,6 @@ const stateInit = {
   code: cell.refs[0],
   data: cell.refs[1]
 };
-
-console.log('StateInit base64:', stateInitBase64);
-console.log('Length:', stateInitBase64.length);
 
 // Восстанавливаем адрес из workchain и StateInit
 const calculatedAddress = contractAddress(wantedAddress.workChain, stateInit);
@@ -1198,15 +1244,15 @@ if (calculatedAddress.equals(wantedAddress)) {
 
 #### Ожидаемый результат
 
-так быть не должно:
-
 ```
 Ожидаемый адрес:    UQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxTKj
-Вычисленный адрес: UQA_B407fiLIlE5VYZCaI2rki0in6kLyjdhhwitvZNfpe-pd
-❌ StateInit НЕ соответствует адресу!
+Вычисленный адрес: UQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxTKj
+✅ StateInit соответствует адресу!
 ```
 
 #### Мониторинг в реальном времени
+
+<details>
 
 ```typescript
 // Пример функции для мониторинга входящих транзакций
@@ -1243,6 +1289,7 @@ async function monitorIncomingTransactions(walletAddress: Address, client: TonCl
   }, 5000); // проверяем каждые 5 секунд
 }
 ```
+  </details>
 
 ### Лучшие практики
 
