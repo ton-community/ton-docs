@@ -10,8 +10,7 @@ import TabItem from '@theme/TabItem';
 
 ## Terminology
 
-### General Terms
-#### Actor and actor Model
+### Actor 
 
 An **actor** is an abstract computational entity that reacts to incoming messages, changes its internal state, creates new actors, and sends messages to other actors.
 Actors are isolated: they cannot access each other's state and interact solely through message passing.
@@ -28,6 +27,8 @@ Each actor can:
 * Send messages to other actors
 * Spawn new actors
 
+### Actor model
+
 The **actor model** is a model of concurrent computation in which a system is described as a collection of actors that communicate via message passing.
 
 Key properties of the model:
@@ -43,28 +44,33 @@ This model is used to precisely describe and analyze distributed systems. For ex
 
 In TON, all active entities are actors.
 
+### Account
+
 An account is an actor defined by the following properties:
 
-- General account state (ID, balance, status)
-- Data (state)
-- Code (behavior)
+- General account state - general properties of each account: ID, balance, status, last_tx properties
+- Data - custom account state  
+- Code - custom account logic  
 
-Every account in the blockchain is defined at minimum by its address, balance, and status:
+General account state properties completely define all accounts in TON:
 
 * (ID1, 0, unexist)
-* (ID2, 10, uninit)
+* (ID2, 10, uninit, last_tx)
 * (ID3, -0.5, frozen)
 
 ![](/img/docs/blockchain-fundamentals/account.svg)
 
-An account that also has defined code and data in addition to the general state is called a smart contract.
+### Smart contract
+
+An **account** that also has defined **code** and **data** in addition to the general state is called a **smart contract**.
 
 ![](/img/docs/blockchain-fundamentals/smart_contract.svg)
 
 **Difference between an account and a smart contract**
+
 * An account is an actor that contains general state (i.e., balance, address, status), and optionally — code and data.
 * (ID1, 0, unexist)
-* (ID2, 2, inited, data, code)
+* (ID2, 2, inited, last_tx, data, code)
 
 * A smart contract is an actor with mandatory code and data, which define its unique behavior.
 * (ID2, 2, inited, data, code)
@@ -73,7 +79,7 @@ An account that also has defined code and data in addition to the general state 
 
 ![](/img/docs/blockchain-fundamentals/structure.svg)
 
-#### Asynchrony
+### Asynchrony
 
 In TON, contracts (actors) do not call each other directly. Instead, they send messages, each of which is processed separately and independently. All communication occurs through asynchronous messages.
 
@@ -89,11 +95,12 @@ In TON, a result can only be received in the form of a new message and only if i
 ![](/img/docs/blockchain-fundamentals/actors_msging.svg)
 
 ### Actor structure and interaction in TON
+
 #### Account
 
 Earlier, we mentioned that an account is an actor defined by the following properties:
 
-- General account state (ID, balance, status)
+- General account state (ID, balance, status, last_tx)
 - State (data)
 - Behavior (code)
 
@@ -337,7 +344,7 @@ The messages delivered by the postal system between city residents are **interna
 Messages from the outside world also arrive in this city. Such messages have a clearly defined recipient, but the sender is unknown.
 These are special incoming **external in** messages.
 
-`external in` and `external out` messages serve a similar function from the actor’s point of view.
+*external in* messages serve a similar function from the actor’s point of view.
 However, each actor may behave differently when processing them — and some may **completely ignore messages from the outside** (like a very private person who doesn’t open letters from strangers).
 
 #### Message structure: TL-B
@@ -1586,6 +1593,15 @@ curl -X 'GET' \
 ```
 
 Returns a very large structure (example for API/v3):
+
+Briefly content of Transaction body consists of:
+* Header data - transaction metadata lt, now(unix time) 
+* Incoming message data - message, that initiated transaction
+* Compute phase data - results of command executions
+* Action phase data  - results of actions done after computed
+* Block ref - data of the blockchain block belonging.
+* Account state before
+* Account state after
 
 ```json
  {
