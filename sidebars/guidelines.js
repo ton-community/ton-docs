@@ -463,6 +463,11 @@ module.exports = [
                 id: 'v3/guidelines/ton-connect/frameworks/web',
                 label: 'HTML/JS apps',
               },
+              {
+                type: 'doc',
+                id: 'v3/guidelines/ton-connect/frameworks/python',
+                label: 'Python apps',
+              },
             ],
           },
           'v3/guidelines/ton-connect/guidelines/preparing-messages',
