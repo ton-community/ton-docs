@@ -12,105 +12,99 @@ import TabItem from '@theme/TabItem';
 
 ### Actor 
 
-An **actor** is an abstract computational entity that reacts to incoming messages, changes its internal state, creates new actors, and sends messages to other actors.
-Actors are isolated: they cannot access each other's state and interact solely through message passing.
+An **actor** is an abstract behavioral model, formalized as a computational object that reacts to incoming messages, changes its internal state, creates new actors, and sends messages to others. Actors are isolated: they do not have access to each other’s state and interact only through message passing.
 
 In other words:
 
-An actor is an independent entity with its own state and behavior. Actors communicate by sending messages to each other.
+An actor is an independent entity with its state and behavior. Actors interact by exchanging messages. Each actor can:
+* change its state
+* send messages to other actors
+* spawn new actors
 
-![](/img/docs/blockchain-fundamentals/actor.svg)
 
-Each actor can:
+![](/img/docs/blockchain-fundamentals/actor_eng_light.svg)
 
-* Change its own state
-* Send messages to other actors
-* Spawn new actors
 
 ### Actor model
 
-The **actor model** is a model of concurrent computation in which a system is described as a collection of actors that communicate via message passing.
+The **actor model** is a model of concurrent computation in which a system is described as a collection of actors that interact through message passing.
 
 Key properties of the model:
+* actor isolation
+* asynchronous communication
+* any computational abstraction can be implemented as an actor
 
-* Actor isolation
-* Asynchronous communication
-* Any computational abstraction can be represented as an actor
-
-This model is used to precisely describe and analyze distributed systems. For example:
-
-* Email can be modeled as an actor system: users are actors, and email addresses are their identifiers.
-* Web services with endpoints (e.g., SOAP) can be interpreted as actors handling messages sent to their address.
+The model is used to precisely describe and analyze distributed systems. For example:
+* Email can be modelled as an actor system: users are represented as actors and email addresses serve as actor addresses.
+* Web services with endpoints (e.g., SOAP) can be interpreted as actors that handle messages sent to their addresses.
 
 In TON, all active entities are actors.
 
+
 ### Account
 
-An account is an actor defined by the following properties:
+An **account** in TON is an actor characterized by the following components:
+* **General account state** — common properties of any account: *ID, balance, status, and last transaction (`last_tx`)*
+* **Data** — custom account-specific state
+* **Code** — custom logic defining the account's behavior
 
-- General account state - general properties of each account: ID, balance, status, last_tx properties
-- Data - custom account state  
-- Code - custom account logic  
+The general state fully defines all account types in TON. Examples:
+* `(ID1, 0, unexist)`
+* `(ID2, 10, uninit, last_tx)`
+* `(ID3, -0.5, frozen)`
 
-General account state properties completely define all accounts in TON:
 
-* (ID1, 0, unexist)
-* (ID2, 10, uninit, last_tx)
-* (ID3, -0.5, frozen)
+![](/img/docs/blockchain-fundamentals/account_eng.svg)
 
-![](/img/docs/blockchain-fundamentals/account.svg)
 
 ### Smart contract
 
-An **account** that also has defined **code** and **data** in addition to the general state is called a **smart contract**.
+An account that, in addition to the general state, also contains **code** and **data** is called a **smart contract**.
 
-![](/img/docs/blockchain-fundamentals/smart_contract.svg)
+![](/img/docs/blockchain-fundamentals/smart_contract_eng.svg)
 
-**Difference between an account and a smart contract**
+#### Difference between an account and a smart contract
 
-* An account is an actor that contains general state (i.e., balance, address, status), and optionally — code and data.
-* (ID1, 0, unexist)
-* (ID2, 2, inited, last_tx, data, code)
+- An **account** is an actor that has a general state — such as balance, address, and status — and may optionally include code and data.
 
-* A smart contract is an actor with mandatory code and data, which define its unique behavior.
-* (ID2, 2, inited, data, code)
+Example: `(ID1, 0, unexist)` or `(ID2, 2, inited, last_tx, data, code)`
+- A **smart contract** is an actor with **mandatory** code and data that define its specific behavior.
+
+Example: `(ID2, 2, inited, data, code)`
+
 
 #### Entity structure in TON Blockchain
 
-![](/img/docs/blockchain-fundamentals/structure.svg)
+![](/img/docs/blockchain-fundamentals/structure_eng.svg)
 
 ### Asynchrony
 
-In TON, contracts (actors) do not call each other directly. Instead, they send messages, each of which is processed separately and independently. All communication occurs through asynchronous messages.
+In TON, contracts or actors do not call each other directly. Instead, they communicate by sending messages, each of which is processed independently of the others. All interaction happens through asynchronous message passing.
 
-**Asynchrony** refers to a communication pattern where the sender does not require the recipient to be immediately ready to respond.
+**Asynchrony** is a property of communication, meaning that sending a message does not require the recipient to be immediately available.
+* The sender doesn’t wait for a response — it simply sends the message.
+* The recipient may process the message later when it’s their turn.
+* If a result is required, the recipient must send a new message explicitly. Otherwise, the sender won’t receive any feedback.
 
-* The sender does not wait for an immediate reply — it simply sends a message.
-* The recipient may process the message later once it is their turn.
-* If a response is important, the recipient must explicitly send a new message in return — otherwise, the sender will not receive any feedback.
+This is different from synchronous models, where the flow is: call → wait for a response → continue.
+In TON, a result can only be received as a separate message — and only if it is explicitly sent.
 
-This differs from synchronous models, where the flow is: call →, get a response, → continue logic.
-In TON, a result can only be received in the form of a new message and only if it is explicitly sent.
+![](/img/docs/blockchain-fundamentals/actors_msging_eng.svg)
 
-![](/img/docs/blockchain-fundamentals/actors_msging.svg)
-
-### Actor structure and interaction in TON
+### Structure and communication of actors in TON
 
 #### Account
 
-Earlier, we mentioned that an account is an actor defined by the following properties:
+Earlier, we mentioned that an account is an actor defined by the following components:
 
-- General account state (ID, balance, status, last_tx)
-- State (data)
-- Behavior (code)
+* General account state (ID, balance, status, last_tx)
+* Data
+* Code
 
-In reality, the data layout is somewhat more complex; however, the logical distinction between an account and a smart contract remains the same.
+In practice, the actual data layout is more complex, but the logical distinction between an account and a smart contract remains the same. To describe data structures, in TON, TL-B schemas are used. These define how data is laid out at the bit level.
 
-To describe data structures in TON, **TL-B schemas** are used. They define how data is laid out at the bit level.
-
-Let’s look at how an account is described:
-
-The account structure is defined through several nested objects:
+Let’s take a look at how an account is defined.
+The account structure consists of several nested objects:
 
 ```tlb
 account_none$0 = Account;
@@ -121,7 +115,7 @@ account$1 addr:MsgAddressInt storage_stat:StorageInfo
 * Address — `MsgAddressInt`
 * Balance — `CurrencyCollection`
 * State — `AccountState`, which defines the account’s behavior
-* Logical time of the last applied transaction — `last_trans_lt`
+* Logical time of the account's last applied transaction — `last_trans_lt`
 * Storage statistics — `StorageInfo`
 
 <details>
@@ -151,30 +145,28 @@ account$1 addr:MsgAddressInt storage_stat:StorageInfo
   library:(Maybe ^Cell) = StateInit;
 
   ```
-
 </details>
 
-Let’s clarify, according to the TL-B schema, which properties belong to the general account state:
+Let’s clarify which properties are part of the **general account state**, according to the TL-B schema:
 
-- General account state:
-- ID → `MsgAddressInt`
-- balance → `CurrencyCollection`
-- status → `AccountState`
-- `last_trans_lt` — also part of the general state
+* ID → `MsgAddressInt`
+* Balance → `CurrencyCollection`
+* Status → `AccountState`
+* Last transaction logical time (`last_trans_lt`) — also part of the general state
 
-Meanwhile, the **state (data)** and **behavior (code)** are defined in the `state: AccountState` field.
+Meanwhile, the data and code are defined within the state:` AccountState` field.
 
-Let’s take a closer look at the general account state and how it is represented in data.
+Now, let’s take a closer look at the general account state and how it’s represented in the data layout.
 
-#### Account Status
+#### Account status
 
-TON defines account states (`AccountState`) as follows:
+TON defines account states `AccountState` as follows:
 
-| Status     | TL-B Code | Description                                                                                                                              |
-|------------|------------|------------------------------------------------------------------------------------------------------------------------------------------|
-| `uninit`   | `00`       | The account exists but contains no code or data. It may hold a balance but is not yet initialized.                                      |
-| `frozen`   | `01`       | The account is frozen, its code and data are deleted, but the hash of its former state is retained. It cannot be used but can be restored. |
-| `active`   | `10`       | The account contains a `StateInit` with code and data. This is an active smart contract ready to process messages.                      |
+| Status     | TL-B Code | Description                                                                                                                                   |
+|------------|------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| `uninit`   | `00`       | The account exists but contains no code or data. It may hold a non-zero balance but is not initialized yet.                                      |
+| `frozen`   | `01`       | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. **CHECK** The account has zero or negative balance, or doesn't meet the workchain’s minimum requirement.     |
+| `active`   | `10`       | The account includes a `StateInit` with code and data. It is an active smart contract, ready to process incoming messages.             |
 
 
 ```tlb
@@ -183,7 +175,12 @@ account_active$1 _:StateInit = AccountState;
 account_frozen$01 state_hash:bits256 = AccountState;
 ```
 
-#### Smart Contract
+The diagram below illustrates the lifecycle of an account in the TON blockchain, showing how its state changes under different conditions.
+
+
+![](/img/docs/blockchain-fundamentals/account_states.svg)
+
+#### Smart contract
 
 A smart contract is an actor with mandatory code and data which define its unique behavior.
 In terms of actual data, this means:
@@ -194,95 +191,116 @@ In terms of actual data, this means:
 
 The presence of `code` and `data` in `StateInit` makes an account executable and defines it as a smart contract.
 
+A smart contract is an actor that must have both code and data, which together define its unique behavior.
+In terms of actual data, this means:
+
+* A smart contract in TON is an `Account` in the active state `AccountState = active`
+* The `code` field in `StateInit` is initialized
+* The `data` field in `StateInit` is initialized
+
+The presence of both `code` and `data` in `StateInit` makes the account executable and qualifies it as a smart contract.
+
 #### Address
 
-An address in TON is a unique identifier for an account or smart contract required for interaction between network participants.
+An address in TON uniquely identifies an account or smart contract and is required for interaction between network participants.
 It consists of the following components:
 
-* **WorkChain ID** — a 32-bit signed integer defining which WorkChain the account belongs to (e.g., -1 for the MasterChain, 0 for the BaseChain)
-* **Account ID** — a 256-bit hash of the `StateInit` structure, which contains the contract's initial state: `code`, `data`, and (optionally) `library`
+* **WorkChain ID** — a 32-bit signed integer indicating the WorkChain to which the account belongs (e.g., -1 for the MasterChain, 0 for the BaseChain).
+* **Account ID**— a 256-bit hash of the `StateInit` structure, which contains the contract’s initial state: `code`, `data`, and optionally a `library`.
 
-An address is defined as:
+The address is defined as:
 
 <BlockMath math="{Address} := ({workchain\_id},{account\_id})" />, where <BlockMath math="{account\_id}:= {SHA256(BoC(StateInit))}" />
-Here, BoC (Bag of Cells) is a special serialization format used in TON.
+Here, boc (bag of cells) is a special serialization format used in TON.
 
-Such an address corresponds to a specific initial state of the contract and can be calculated even before the contract is deployed.
-This allows using the address before initialization — for example, to receive tokens or prepare interactions.
+An address corresponds to a specific initial state of a contract and can be calculated even **before** the contract is deployed.
+This allows you to use the address ahead of time — for example, to receive tokens or set up interactions.
 
 :::important
-The address depends only on the `StateInit`. Even a minor change to the code, data, or library results in a completely new `account_id`.
+An address depends only on the `StateInit`. Even a small change to the `code`, `data`, or `library` results in a completely different `account_id`.
 
-At the same time, `StateInit` defines only the initial configuration of the contract — it does not include balance, current data, the message queue, or any other parameters that may change over time.
-These changes **do not affect** the address. Moreover, validators verify the sender's address during message processing, and if it is incorrect, they replace it with the correct one.
+At the same time, `StateInit` defines only the initial configuration of the contract. It does **not** include balance, current data, message queue, or any other runtime parameters. These changes do not affect the address.
+In fact, during message processing, validators verify the sender’s address — if it’s incorrect, they silently replace it with the correct one.
 :::
 
 #### Message feature
 
-A message is a set of instructions for a desired action directed at a single actor.
+A message is a set of instructions intended for a single actor.
 
 #### Transaction feature
 
-A transaction is an update to an account's state on the blockchain, triggered by an incoming message and, if needed, resulting in one or more outgoing messages.
+A transaction represents an update to an account's state triggered by an incoming message.
+It may also produce one or more outgoing messages, depending on the contract logic.
 
-In TON, a transaction is necessary to change an account's state in response to an incoming message and, optionally, to continue interaction with other accounts via outgoing messages.
+In TON, a transaction is required to update an account's state in response to an incoming message and, if necessary, to continue interacting with other accounts by sending outgoing messages.
 
-#### Transactions asynchronous nature
+#### Asynchronous nature of transactions
 
-In TON, all accounts interact **exclusively through messages** — this is the foundation of actor communication.
-Each message becomes part of a transaction that describes the whole history: which message initiated it, how the state changed, and whether any new messages were sent.
+In TON, accounts interact exclusively through messages — this is the core of actor-based communication.
+Each message triggers a transaction, which records the entire context: the triggering message, state updates, and any generated outbound messages.
 
-Transactions in the network are processed **asynchronously**, meaning that calls and state changes of accounts occur independently over time.
+Transactions are processed **asynchronously**, meaning that each account’s updates and message handling occur independently over time.
 
 #### AccountChain
 
 **AccountChain** is a chain of transactions executed on a single account in the TON blockchain.
 It forms a linear sequence: `Tx1 → Tx2 → Tx3 → …`, where each transaction references the previous one.
-For efficient processing and consensus, transactions are grouped into blocks — for example, `[Tx1 → Tx2] → [Tx3 → Tx4 → Tx5] → [] → [Tx6]`.
-These blocks also contain incoming and outgoing message queues, recording all events and state changes for the account during that period.
+For efficient processing and consensus, transactions are grouped into blocks — for example:
+`[Tx1 → Tx2] → [Tx3 → Tx4 → Tx5] → [] → [Tx6]`.
 
-In other words, an AccountChain is a “micro-blockchain” of a single account.
-It stores and orders the complete history of the account’s operations and interactions, ensuring transparency and traceability.
+These blocks also include incoming and outgoing message queues, recording all events and state changes for the account during that period.
 
-At the network scale, many such chains are grouped into a **ShardChain** (or just "shard"), which handles a collection of accounts.
-This abstraction is introduced for logical grouping (AccountChain) on physical carriers (ShardChain ↔ Validator).
+In other words, an AccountChain is a *micro-blockchain* scoped to a single account.
+Like a regular blockchain, it is a linear, append-only sequence of transactions — but dedicated to just one account.
+It stores and orders the entire history of that account’s operations and interactions, ensuring transparency and traceability.
+
+At the network level, many such chains are grouped into a **ShardChain** or simply **shard**, which manages a collection of accounts. This abstraction supports logical grouping *AccountChains* across physical infrastructure *ShardChain ↔ Validator*.
+
+The diagram below provides a graphical representation of an AccountChain and its structure.
+![](/img/docs/blockchain-fundamentals/accountchain.svg)
 
 #### ShardChain
 
-A **ShardChain** is a blockchain that aggregates multiple ** AccountChains ** — i.e., individual transaction chains associated with different accounts.
-Suppose an AccountChain describes the history of one account. In that case, a ShardChain manages and stores data for a group of accounts sharing a common binary address prefix (e.g., all addresses starting with `0b00101`).
+A **ShardChain** is a blockchain that aggregates multiple AccountChains.
+While an AccountChain represents the transaction history of a single account, a ShardChain processes and stores data for a group of accounts that share a common binary address prefix (e.g., all addresses starting with `0b00101`).
+C
+onceptually, a ShardChain can be seen as a **horizontal** blockchain composed of **ShardBlocks**, each of which contains AccountBlocks. ShardChains also facilitate message routing between accounts, ensuring both delivery and order: if one message is sent before another, it will arrive first.
 
-You can think of a ShardChain as a “horizontal” blockchain composed of **ShardBlocks**, each of which aggregates **AccountBlocks** — blocks of individual accounts.
-ShardChains also participate in message routing between accounts, ensuring message delivery and order: if one message is sent before another, it will arrive first.
+ShardChains are a fundamental unit of TON’s architecture, enabling parallel transaction processing within a scalable and deterministic system.
+Each validator is responsible for a specific ShardChain or a group of them, allowing the network to process transactions concurrently across different shards.
 
-Thus, a ShardChain is a key structural unit in TON, enabling parallel transaction processing within a scalable and deterministic architecture.
+![](/img/docs/blockchain-fundamentals/shardchain.svg)
 
 #### WorkChain
 
-A **WorkChain** is an independent blockchain within TON that groups multiple ShardChains (shards).
-Unlike a shard, a WorkChain may have its own set of rules. (to be explained)
+A **WorkChain** is an independent blockchain within TON that groups multiple ShardChains or shards.
+Unlike a ShardChain, a WorkChain may define its own protocol rules.
 
-TON supports up to 2³² WorkChains, each of which can be split into 2⁶⁰ shards.
+TON supports up to 2³² WorkChains, each of which can be divided into up to 2⁶⁰ ShardChains.
 
 #### Types of WorkChain: MasterChain and BaseChain
 
-**MasterChain** is the main coordinating blockchain. It contains:
+**BaseChain** is the primary execution chain used for everyday transactions and smart contracts.
+It is optimized for low fees, making it suitable for regular users and developers.
 
+![](/img/docs/blockchain-fundamentals/basechain.svg)
+
+
+**MasterChain** is the main coordinating blockchain, including one ShardChain. It contains:
 * protocol parameters
-* validator list and their stakes
+* the current validator set and their stakes
 * validator account chains
-* meta-information about all active WorkChains and ShardChains
+* metadata about all active WorkChains and ShardChains
 * hashes of the latest blocks from all other chains
 
-MasterChain is essential for the network’s operation, but due to its importance, it is intentionally expensive to use.
-High gas costs are enforced here to ensure stability and prevent spam.
+Gas costs are intentionally high in the MasterChain to ensure stability, prioritize critical operations, and prevent spam.
 
-**BaseChain** is the main working chain intended for daily transactions and smart contracts.
-It is low-cost and suitable for regular users and developers.
+![](/img/docs/blockchain-fundamentals/masterchain.svg)
 
-Thanks to the presence of ShardChains and WorkChains, we can say that TON is a **blockchain of blockchains** — a system of interconnected blocks, where each block references the previous one via its hash.
 
-![](/img/docs/blockchain-fundamentals/chains_of_chains.svg)
+Thanks to the hierarchical structure of WorkChains and ShardChains, TON forms a **blockchain of blockchains** — a scalable architecture where each chain operates independently, and all blocks reference their predecessors via cryptographic hashes.
+
+![](/img/docs/blockchain-fundamentals/chain-of-chains.svg)
 
 #### Testnet and Mainnet
 
@@ -290,9 +308,8 @@ Thanks to the presence of ShardChains and WorkChains, we can say that TON is a *
 
 The **Mainnet** is the live production network where:
 
-* all transactions are real and irreversible
+* all transactions are real
 * real tokens are used (e.g., actual Toncoin)
-* any actions (transfers, contract deployments) affect the main blockchain
 
 All users and projects operating in production use the Mainnet.
 
