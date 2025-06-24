@@ -1,11 +1,9 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Генерация случайного начального значения блока
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-:::caution
-Эта информация актуальна на момент написания статьи. Она может измениться при любом обновлении сети.
+:::caution\
+This information is accurate at the time of writing. Она может измениться при любом обновлении сети.\
 :::
 
 Время от времени на TON создается лотерейный контракт. Обычно в нем используется небезопасный способ обработки случайности, так что сгенерированные значения могут быть предсказаны пользователем, и лотерея может быть сведена на нет.
@@ -16,7 +14,7 @@
 
 Конечно, отправитель никак не влияет на случайность. Но валидаторы, генерирующие блоки и включающие предложенные внешние сообщения, влияют.
 
-## Как валидаторы влияют на начальное значение
+## How validators affect the seed
 
 Об этом не так много информации даже в whitepapers, поэтому большинство разработчиков оказываются в затруднении. Вот единственное упоминание о случайности блока в [TON Whitepaper](https://docs.ton.org/ton.pdf):
 
@@ -42,7 +40,7 @@
 
 Таким образом, существует \*\*способ взломать "небезопасный" (назовем его single-block, поскольку он не использует никакой информации из блоков после отправки сообщения) рандом, если отправитель может сотрудничать с валидатором. Даже если используется `randomize_lt()`. Валидатор может либо сгенерировать начальное значение, подходящее отправителю, либо включить в блок предложенное внешнее сообщение, которое будет удовлетворять всем условиям. Валидатор, поступающий таким образом, все равно будет считаться справедливым. В этом и заключается суть децентрализации.
 
-И, чтобы эта статья полностью охватила тему случайности, вот еще один вопрос.
+To fully cover randomness, let's address one more question.
 
 ## Как начальные значения блока влияют на случайность в контрактах?
 
@@ -75,6 +73,9 @@ bool Transaction::prepare_rand_seed(td::BitArray<256>& rand_seed, const ComputeP
 
 Обычное использование PRNG (генератор псевдослучайных чисел) может включать `randomize_lt()`, но такой контракт можно обмануть, выбрав правильные блоки для отправки ему сообщений. Предлагаемое решение - отправлять сообщения в другой воркчейн, получать ответ, пропуская блоки, и т.д... но это только снижает степень уязвимости. На самом деле, любой валидатор (то есть 1/250 блокчейна TON) может выбрать правильное время для отправки запроса лотерейному контракту так, чтобы ответ от другого воркчейна пришел в сгенерированном им блоке, после чего он волен выбрать любое начальное значение блока по своему усмотрению. Опасность возрастет, как только коллаторы появятся в mainnet, так как они никогда не смогут быть оштрафованы по стандартным жалобам, потому что они не вкладывают никаких средств в контракт Elector.
 
-<!-- TODO: find an example contract using random without any additions, show how to find result of RANDU256 knowing block random seed (implies link on dton.io to show generated value) -->
+<!-- TODO: Find an example contract using random without any additions and demonstrate how to determine the result of RANDU256 knowing the block random seed (include a link to dton.io to show the generated value). -->  
 
-<!-- TODO: next article. "Let's proceed to writing tool that will exploit this. It will be attached to validator and put proposed external messages in blocks satisfying some conditions - provided some fee is paid." -->
+<!-- TODO: Next article. "Let's proceed to writing a tool that exploits this. It will attach to a validator and include proposed external messages in blocks satisfying specific conditions—provided a fee is paid." -->  
+
+<Feedback />
+

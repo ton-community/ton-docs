@@ -1,8 +1,6 @@
-# Участвовать в качестве Мейнтейнера
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Участвовать в качестве Мейнтейнера
 
 Событие Hacktoberfest - лучшее время года для получения поддержки от сообщества!
 
@@ -24,11 +22,11 @@
 
 После этого можете добавить свой репозиторий в список.
 
-## Награды для мейнтейнеров
+## Rewards for Maintainers
 
 Как мейнтейнер репозитория в экосистеме TON, Вы сможете получать два вида вознаграждений:
 
-1. [Hacktoberfest Reward Kit](https://hacktoberfest.com/participation/#maintainers) (*смотрите REWARD FOR MAINTAINERS*)
+1. [Hacktoberfest Reward Kit](https://hacktoberfest.com/participation/#maintainers) (_смотрите REWARD FOR MAINTAINERS_)
 2. [Ограниченный Hack-TON-berfest NFT](/v3/documentation/archive/hacktoberfest-2022#what-are-the-rewards) (пожалуйста, зарегистрируйте адрес кошелька в [@toncontests_bot](https://t.me/toncontests_bot)_)
 
 ## Как присоединиться и попасть в список?
@@ -41,3 +39,6 @@
     Добавьте репозиторий в список
   </a>
 </span>
+
+<Feedback />
+

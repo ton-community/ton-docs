@@ -1,8 +1,6 @@
-# Ошибки MyTonCtrl
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Ошибки MyTonCtrl
 
 ## Обзор
 
@@ -33,7 +31,7 @@
 | Validator wallet not found                                                                                          | Проверьте [статью о валидаторе](/v3/guidelines/nodes/running-nodes/validator-node#view-the-list-of-wallets)                                                                                                     |
 | Validator is not synchronized                                                                                       | Подождите еще или проверьте статью [ошибки синхронизации](/v3/guidelines/nodes/nodes-troubleshooting#about-no-progress-in-node-synchronization-within-3-hours)                                                  |
 | Stake less than the minimum stake. Minimum stake: `minStake`                        | Используйте [`set stake {amount}`](/v3/guidelines/nodes/running-nodes/validator-node#your-validator-is-now-ready) и [проверьте параметры стейка](/v3/documentation/network/configs/blockchain-configs#param-17) |
-| Don't have enough coins. stake: `stake`, account balance: `balance` | Пополните свой `balance` до `stake`                                                                                                                                                                             |
+| Don't have enough coins. stake: `stake`, account balance: `balance` | Add funds to your account `balance`, ensuring it reaches the required `stake` amount                                                                                                                            |
 
 ## Ошибки Nominator Pool
 
@@ -45,3 +43,5 @@
 ## См. также
 
 - [Устранение неполадок узлов](/v3/guidelines/nodes/nodes-troubleshooting)
+  <Feedback />
+

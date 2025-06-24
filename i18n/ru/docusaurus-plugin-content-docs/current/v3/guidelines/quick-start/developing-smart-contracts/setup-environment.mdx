@@ -7,7 +7,7 @@ import Button from '@site/src/components/button'
 
 Это руководство описывает основные шаги настройки вашей среды разработки смарт-контрактов с помощью **`Blueprint`** и создания базового шаблона проекта.
 
-## Что требуется для прохождения
+## Prerequisites
 
 - Базовые навыки программирования.
 - Знакомство с командной строкой.
@@ -17,8 +17,7 @@ import Button from '@site/src/components/button'
 В этом руководстве мы используем [Blueprint](https://github.com/ton-org/blueprint/) и стек [Node.js](https://nodejs.org/en)/TypeScript для написания обёрток, тестов и скриптов развёртывания вашего смарт-контракта. Это обеспечивает самую лёгкую и готовую среду для разработки смарт-контрактов.
 
 :::info
-
-Использование нативных инструментов и языко-специфичных SDK для разработки смарт-контрактов рассмотрено в разделах документации более продвинутого уровня:
+Using native tools and language-dependent SDKs for smart contract development is covered in more advanced sections here:
 
 - [Компилируйте и собирайте смарт-контракты в TON](/ru/v3/documentation/archive/compile#ton-compiler/).
 - [Создайте исходное состояние для развёртывания](/ru/v3/guidelines/smart-contracts/howto/wallet#creating-the-state-init-for-deployment/).
@@ -40,7 +39,9 @@ node -v
 В этом гайде мы приводим примеры на языках `FunC`, `Tolk` и `Tact`. Вы можете выбрать любой из них и даже комбинировать смарт-контракты на разных языках. Для дальнейшего изучения этого гайда не требуется глубокое понимание выбранного языка — достаточно будет базовых программистских знаний.
 
 :::info
+:::info
 Краткий обзор языков доступен в разделе [Языки программирования](/ru/v3/documentation/smart-contracts/overview#языки-программирования)
+:::
 :::
 
 ### Шаг 3: настройте Blueprint

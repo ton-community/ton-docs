@@ -1,12 +1,10 @@
-# Типы API
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Типы API
 
 **Высокодоступные API для блокчейна - это основной элемент безопасной, удобной и быстрой разработки полезных приложений на TON.**
 
-- [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis) - API, позволяющий работать с *индексированной информацией блокчейна*.
+- [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis) - API, позволяющий работать с _индексированной информацией блокчейна_.
 - [TON ADNL API](/v3/guidelines/dapps/apis-sdks/ton-adnl-apis) - безопасный API для взаимодействия с TON, основанный на протоколе ADNL.
 
 :::tip Состояние инфраструктуры TON
@@ -40,7 +38,7 @@
 ### API для преобразования адресов
 
 :::info
-Предпочтительнее преобразовывать адрес с помощью локального алгоритма, дополнительную информацию ознакомьтесь в разделе документации [Адреса](/v3/documentation/smart-contracts/addresses).
+It is preferable to convert addresses using a local algorithm. Предпочтительнее преобразовывать адрес с помощью локального алгоритма, дополнительную информацию ознакомьтесь в разделе документации [Адреса](/v3/documentation/smart-contracts/addresses).
 :::
 
 #### От удобной к Raw формату
@@ -90,3 +88,6 @@ Response body
 - [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis)
 - [Список SDK](/v3/guidelines/dapps/apis-sdks/sdk)
 - [TON Cookbook](/v3/guidelines/dapps/cookbook)
+
+<Feedback />
+
