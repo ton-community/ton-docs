@@ -337,51 +337,46 @@ Testnet is essential for safe development and debugging before launching to the 
 
 ## Messages
 
-In the TON blockchain, a **message** is the fundamental unit of interaction between accounts (smart contracts).
-All actions, state changes, and logic execution in the system occur through sending and receiving messages.
-Messages can be compared to requests sent to a server.
+In the TON blockchain, a **message** is the fundamental unit of interaction between accounts (smart contracts). All actions, state changes, and logic execution within accounts are triggered by messages.
 
-## Transaction and Message Real-Life Examples
+## Transaction and message real-life examples
 
-Let’s explore the characteristics of transactions and messages using an analogy:
-Imagine that the TON blockchain is a special city in the global world — the Internet.
-This city has very strict rules: people **never meet face-to-face**, and the **only** way to communicate is through a **postal service**.
-People can receive messages requesting them to perform a task, carry out that task inside their homes, and then send back the results to others.
+Let’s explore how transactions and messages work in TON through an analogy.
+Imagine the TON blockchain as a unique city in the global world — the Internet.
+In this city, the rules are strict: residents **never meet in person**, and the **only** way to communicate is via a postal service.
+People receive messages asking them to perform a task, complete it privately in their homes, and then send the results back to others.
 
-Each person checks their mailbox, picks up **exactly one incoming message**, then locks themselves inside and doesn’t come out until the task is completed.
-While they’re working, new letters may arrive — but they **do not get distracted**.
-If, during the work, they realize that some required information is missing, they **cannot pause to request clarification**.
-In that case, they must declare the task as failed and, at best, return leftover resources and fragments of the original instructions.
+Each person checks their mailbox and picks up *exactly one incoming message*, then locks themselves inside and doesn’t come out until the task is completed.
+While they’re working, new letters may arrive — but they *ignore them completely*.
 
-If the task is successful, the person, following the original request, may either:
+If they realize mid-task that some necessary information is missing, they *cannot pause to ask for clarification*.
+In that case, they must declare the task as failed and, at best, return leftover resources along with scraps of the original instructions.
 
-- send new messages to others
-- or store the manufactured items inside their home
+If the task is successful, the person, as specified in the original message:
+* send new messages to other residents, or
+* store the resulting items safely in their home.
 
-After finishing, they recheck their mailbox and pick up the following message.
+After finishing, they return to their mailbox and retrieve the **next** incoming message.
 
-Now imagine that for each work episode, the person keeps a **detailed journal**.
-To separate and organize their labour history, each journal entry is referred to as a **transaction**.
-This transaction will include:
+Now imagine that for each work session, the person keeps a **detailed journal**.
+To keep their work organized and separate, each journal entry is called a **transaction**.
+Each transaction contains:
+* the full content of the incoming message (the task),
+* a note on what was produced and where it was stored,
+* and, optionally, information about any messages sent to others.
 
-- the full content of the incoming message (the task)
-- a record of what was produced and where it was stored
-- and optionally, information about new messages sent to others
+Messages delivered via the postal system between residents are called **internal messages**.
+Messages from the outside world also reach the city. These have a specified recipient, but their sender is unknown — they are known as **external incoming** or **external-in messages**.
 
-The messages delivered by the postal system between city residents are **internal messages**.
-Messages from the outside world also arrive in this city. Such messages have a clearly defined recipient, but the sender is unknown.
-These are special incoming **external in** messages.
-
-*external in* messages serve a similar function from the actor’s point of view.
-However, each actor may behave differently when processing them — and some may **completely ignore messages from the outside** (like a very private person who doesn’t open letters from strangers).
+While external-in and internal messages fulfil a similar role from the actor’s perspective, each actor may handle them differently. Some may process them normally, while others might completely ignore messages from the outside world — like someone who refuses to open letters from strangers.
 
 #### Message structure: TL-B
 
-Now, let’s talk about the actual data inside a message.
-We’ve already mentioned that both external and internal messages can carry data — but how is this data actually encoded?
+Now, let’s look at the data contained in the messages.
+As mentioned earlier, both external and internal messages can carry data — but how exactly is this data encoded?
 
-In TON, all data is represented in the form of **cells**.
-To serialize data into a cell, TON uses a widely accepted standard called **TL-B** (Type Language – Binary).
+In TON, all data is represented using **cells**.
+To serialize data into a cell, TON relies on a well-established standard called **TL-B** (Type Language – Binary).
 
 ## Particular message structure
 
@@ -391,11 +386,9 @@ init:(Maybe (Either StateInit ^StateInit))
 body:(Either X ^X) = Message X;
 ```
 
-* `info: CommonMsgInfo` — contains message metadata
-* `init: (Maybe (Either StateInit ^StateInit))` — optional data used to initialize an account or update its state
-* `body: (Either X ^X)` — the main content (payload) of the message, which can be either embedded directly or stored as a reference
-
-* Header fields (CommonMsgInfo)
+* `info: CommonMsgInfo` — contains metadata about the message.
+* `init: (Maybe (Either StateInit ^StateInit))` — optional field used to initialize a new account or update the existing one.
+* `body: (Either X ^X)` —  the main payload of the message; can be embedded directly or stored as a reference.
 
 
 ### Message types
