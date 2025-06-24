@@ -1,8 +1,6 @@
-# Обзор
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Обзор
 
 Цель этого статьи - помочь вам выбрать правильные инструменты для разработки приложений в экосистеме TON.
 
@@ -42,3 +40,6 @@
 - [Руководства по разработке TMA](/v3/guidelines/dapps/tma/tutorials/step-by-step-guide)
 - [Руководства по TON Connect](/v3/guidelines/ton-connect/guidelines/how-ton-connect-works)
 - [Обработка платежей](/v3/guidelines/dapps/asset-processing/payments-processing)
+
+<Feedback />
+

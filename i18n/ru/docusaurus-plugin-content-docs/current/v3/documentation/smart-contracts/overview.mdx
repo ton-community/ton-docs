@@ -1,11 +1,13 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # Введение
 
 Создание, разработка и деплой смарт-контрактов на блокчейне TON реализуется с помощью [виртуальной машины TON (TVM)](/v3/documentation/smart-contracts/overview#ton-virtual-machine-tvm) и одного из следующих языков программирования:
 
-* [Tact](/v3/documentation/smart-contracts/overview#-tact)
-* [FunC](/v3/documentation/smart-contracts/overview#-func)
+- [Tact](/v3/documentation/smart-contracts/overview#-tact)
+- [FunC](/v3/documentation/smart-contracts/overview#-func)
 
 ## Быстрый старт: ваш первый смарт-контракт
 
@@ -20,7 +22,7 @@ npm create ton@latest
 
 <Button href="/v3/documentation/smart-contracts/getting-started/javascript" colorType="primary" sizeType={'sm'}>
 
-Подробнее
+Примеры Tact
 
 </Button>
 
@@ -44,7 +46,7 @@ npm create ton@latest
   - [🚩 Задача 4: Лотерея/Розыгрыш](https://github.com/romanovichim/TONQuest4)
   - [🚩 Задача 5: Создайте пользовательский интерфейс для взаимодействия с контрактом за 5 минут](https://github.com/romanovichim/TONQuest5)
   - [🚩 Задача 6: Анализ продаж NFT на маркетплейсе Getgems](https://github.com/romanovichim/TONQuest6)
-- [Плейлист по TON разработке](https://www.youtube.com/playlist?list=PLOIvUFGfwP93tZI_WnaLyJsZlskU4ao92)
+- Создано [TON Studio](https://tonstudio.io), развивается совместно с сообществом.
 
 ### Курс TON
 
@@ -127,10 +129,21 @@ TON предлагает по-настоящему безграничные во
 
 Tact — это новый язык программирования для блокчейна TON, ориентированный на эффективность и простоту разработки. Он хорошо подходит для сложных смарт-контрактов, быстрого онбординга и создания прототипов.
 
-Создано [TON Studio](https://tonstudio.io), развивается совместно с сообществом.
+Developed by [TON Studio](https://tonstudio.io), powered by the community — by the end of 2024, the number of _unique code_[^1] contracts deployed on the Mainnet reached almost 28 thousand, of which about 33% were written in Tact.
 
-<Button href="https://tact-lang.org/"
+View some of the selected projects: [Tact in production](https://github.com/tact-lang/awesome-tact#tact-in-production-).
+
+[^1]: The "unique code" means that each contract in the data sample has at least one TVM instruction that differs from the other contracts, excluding many preprocessed wallets with everything inlined — even seqno and a public key for signature verification!
+
+<Button href="/v3/documentation/smart-contracts/tact"
         colorType={'primary'} sizeType={'sm'}>
+
+Подробнее
+
+</Button>
+
+<Button href="https://tact-by-example.org/"
+        colorType="secondary" sizeType={'sm'}>
 
 Официальный сайт
 
@@ -143,10 +156,10 @@ Tact — это новый язык программирования для бл
 
 </Button>
 
-<Button href="https://tact-by-example.org/"
-        colorType="secondary" sizeType={'sm'}>
+<Button href="https://tact-lang.org/"
+        colorType={'primary'} sizeType={'sm'}>
 
-Примеры Tact
+Awesome Tact
 
 </Button>
 
@@ -190,8 +203,11 @@ Tact — это новый язык программирования для бл
 - [Руководства по смарт-контрактам](/v3/guidelines/smart-contracts/guidelines)
 - [Путь обучения TON FunC](https://blog.ton.org/func-journey) ([версия RU](https://github.com/romanovichim/TonFunClessons_ru))
 - [Обучающие видео на YouTube](https://www.youtube.com/@TONDevStudy) [[RU версия]](https://www.youtube.com/@WikiMar)
+- [Плейлист по TON разработке](https://www.youtube.com/playlist?list=PLOIvUFGfwP93tZI_WnaLyJsZlskU4ao92)
 
 ## Дополнительные ресурсы
 
 - [Что такое блокчейн? Что такое смарт-контракт? Что такое газ?](https://blog.ton.org/what-is-blockchain)
 - [Понимание комиссий за транзакции](/v3/guidelines/smart-contracts/fee-calculation)
+
+<Feedback />
