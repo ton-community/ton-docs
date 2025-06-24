@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Whitepapers
 
-В этом разделе представлена ​​оригинальная документация, написанная доктором Николаем Дуровым, которая всесторонне описывает все части TON. Nikolai Durov_, providing a comprehensive overview of all aspects of TON.
+This section contains the original documentation written by _Dr. Николаем Дуровым, которая всесторонне описывает все части TON.
 
 ## Оригинальная документация
 
@@ -18,7 +18,7 @@ import Feedback from '@site/src/components/Feedback';
 
 - [Catchain Consensus Protocol](https://docs.ton.org/catchain.pdf)
 
-- [Fift Documentation](https://docs.ton.org/fiftbase.pdf) – a guide to the Fift programming language and its application within TON.
+- [Fift Documentation](https://docs.ton.org/fiftbase.pdf) – руководство по языку программирования Fift и его применению в TON.
 
 ## Переводы
 
