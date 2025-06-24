@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        lang: [ru, ko, ja, zh-CN]
+        lang: [ru]
 
     steps:
       - name: Checkout code
@@ -28,37 +28,21 @@ jobs:
       - name: Install Crowdin CLI
         run: npm install -g @crowdin/cli
 
-      - name: Download completed translations
-        env:
-          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
-        run: |
-          crowdin download --export-only-approved --branch main --config crowdin-oss.yml --language=${{ matrix.lang }}
-
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Create translations branch
-        run: |
-          git checkout -B l10n-release-candidate-${{ matrix.lang }}
-
       - name: Commit and push translations
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
+          git stash --include-untracked
+          git checkout -b l10n-release-candidate-${{ matrix.lang }}
+          git pull --rebase origin l10n-release-candidate-${{ matrix.lang }} || true
+          crowdin download --export-only-approved --branch main --config crowdin-oss.yml --language=${{ matrix.lang }}
           git add i18n/${{ matrix.lang }}
-          git diff --quiet --cached || ( \
-            git commit -m "chore: update ${{ matrix.lang }} translations" && \
-            git push -u origin l10n-release-candidate-${{ matrix.lang }} \
-          )
-
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GH_TOKEN }}
-          commit-message: "chore: update ${{ matrix.lang }} translations"
-          branch: l10n-release-candidate-${{ matrix.lang }}
-          base: release-candidate-${{ matrix.lang }}
-          title: "Update ${{ matrix.lang }} translations — release-candidate-${{ matrix.lang }}"
-          body: |
-            This automated PR updates only the fully translated `${{ matrix.lang }}` files.
-          labels: translation, automated
+          git commit -m "chore: update ${{ matrix.lang }} translations"
+          git push -u origin l10n-release-candidate-${{ matrix.lang }} || true
+          gh pr create -B release-candidate-${{ matrix.lang }} -H l10n-release-candidate-${{ matrix.lang }} --title "chore: update `${{ matrix.lang }}` translations" --body 'This automated PR updates only the fully translated `${{ matrix.lang }}` files.' || true
