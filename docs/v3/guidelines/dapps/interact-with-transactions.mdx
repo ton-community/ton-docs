@@ -162,7 +162,7 @@ Now, let’s take a closer look at the general account state and how it’s repr
 
 TON defines account states `AccountState` as follows:
 
-| Status     | TL-B Code | Description                                                                                                                                   |
+| Status     | TL-B code | Description                                                                                                                                   |
 |------------|------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
 | `uninit`   | `00`       | The account exists but contains no code or data. It may hold a non-zero balance but is not initialized yet.                                      |
 | `frozen`   | `01`       | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. **CHECK** The account has zero or negative balance, or doesn't meet the workchain’s minimum requirement.     |
@@ -175,21 +175,20 @@ account_active$1 _:StateInit = AccountState;
 account_frozen$01 state_hash:bits256 = AccountState;
 ```
 
-
-#### Smart contract
-
-Smart contracts are a set of promises in digital form, including protocols by which the parties fulfill these promises.
-
-In TON typically by smart contract recognize:
-- the program code executed described in FunC, Tact or Tolk in the blockchain.
-- the account that implement business logic and contets code.
-
 The diagram below illustrates the lifecycle of an account in the TON blockchain, showing how its state changes under different conditions.
 
 
 ![](/img/docs/blockchain-fundamentals/account_states.svg)
 
 
+
+#### Smart contract
+
+Smart contracts are a set of promises in digital form, including protocols that govern how the parties fulfil these promises.
+
+In TON, typically by smart contract recognize:
+- the program code executed, as described in FunC, Tact, or Tolk, in the blockchain.
+- the account that implements business logic and content code.
 
 A smart contract is an account with mandatory code and data which define its unique behavior.
 In terms of TON account, this means:
@@ -200,19 +199,10 @@ In terms of TON account, this means:
 
 The presence of `code` and `data` in `StateInit` makes an account executable and defines it as a smart contract.
 
-A smart contract is an actor that must have both code and data, which together define its unique behavior.
-In terms of actual data, this means:
-
-* A smart contract in TON is an `Account` in the active state `AccountState = active`
-* The `code` field in `StateInit` is initialized
-* The `data` field in `StateInit` is initialized
-
-The presence of both `code` and `data` in `StateInit` makes the account executable and qualifies it as a smart contract.
-
 #### Address
 
 An address in TON is a unique identifier for a smart contract required for interaction between network participants.
-Account itself has address, but we completly define the address for arbitary using only with smart contract.
+The account itself has an address, but we define the address entirely for arbitrary use only through a smart contract.
 It consists of the following components:
 
 
@@ -393,42 +383,37 @@ body:(Either X ^X) = Message X;
 
 ### Message types
 
-There are three types of messages:
+There are three types of messages in TON:
 
-- **external incoming**: sender is outside the blockchain → recipient is a smart contract
-- **internal**: sender is a smart contract → recipient is a smart contract
-- **external outgoing**: sender is a smart contract → recipient is outside the blockchain (unknown actor)
+* External incoming: sent from outside the blockchain → received by a smart contract
+* Internal: sent from a smart contract → received by a smart contract
+* External outgoing: sent from a smart contract → received outside the blockchain (unknown actor)
 
 ### External incoming
 
-#### Functional purpose
+#### Functional role
 
-**External incoming** messages serve as the entry point for the outside world into the TON blockchain.
-Any user can send arbitrary data to any smart contract, and the contract decides how to handle it.
+**External incoming** or **external-in** messages serve as the primary entry point for the outside world to interact with the TON blockchain. Any user can send arbitrary data to any smart contract, and it’s up to the contract to decide how to handle it.
+Technically, any account can receive external messages. However, how a specific contract processes an external-in message depends entirely on its internal logic. The most common type of contract that handles such messages is the **wallet contract**.
 
-Fundamentally, any account can receive an external message.
-However, how a specific contract behaves concerning a given external-in message is defined in its code.
-The most common type of contract that processes external-in messages is the **wallet contract**.
+Typical sources of external-in messages include:
 
-They usually come from:
+* users of wallet applications
+* validators
+* DApp services
 
-- users of wallet applications
-- validators
-- DApp services
-
-Although external-in messages are rarely used in core smart contract logic, they are essential for wallets.
-Almost every user action in TON — such as sending TON or interacting with a DEX — starts with an **external incoming message** from the user’s wallet.
-The wallet then sends **internal messages** to other contracts.
+Although external-in messages are rarely used in the core logic of smart contracts, they are essential for integrating external actions into the blockchain. Any interaction that originates outside TON — such as sending TON or interacting with a DEX — begins with an external-in message.
+The most common example of this is a wallet contract, which receives the user’s instruction and then relays it by sending *internal messages* to other contracts.
 
 #### Sending an external-in message
 
-The term **message** is closely related to a transaction, but it's important to distinguish between them:
+The term **message** is closely related to a **transaction**, but they serve different purposes and should not be confused:
 
-- A **message** is a data packet sent between smart contracts containing instructions for some action
-- A **transaction** is the result of executing a smart contract in response to an incoming message.
-During execution, the smart contract may update its state and send one or more outgoing messages.
+* A **message** is a data packet exchanged between smart contracts that contains instructions for an action.
+* A **transaction** is the result of executing a smart contract in response to an incoming message. During execution, the contract may update its state and produce one or more outgoing messages.
 
-An **external-in** message is one whose `CommonMsgInfo` header is described by the structure `ext_in_msg_info$10`.
+An **external-in message** is a message whose `CommonMsgInfo` header uses the `ext_in_msg_info$10` structure.
+
 
 ```
 message$_ {X:Type} info:CommonMsgInfo
@@ -443,16 +428,13 @@ ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
 import_fee:Grams = CommonMsgInfo;
 ```
 
-Since this message is sent **from outside the blockchain into the blockchain**, the initiator is an external actor.
-The tool used may be a wallet contract or a piece of code interacting with blockchain API services.
+Since an external-in message is sent into the blockchain from the outside, the initiator is an external actor. This can be either a wallet contract or custom code interacting with blockchain API services.
 
-Thus, to send an external-in message to a smart contract, you need to:
+To send an external-in message to a smart contract, you need to:
+* Construct a data structure that conforms to the TL-B schema
+* Submit this structure to the blockchain using an API service
 
-1. Construct a structure that matches the TL-B schema
-2. Send this structure to the blockchain using an API service
-
-For example, in **Blueprint**, there is a built-in helper that assembles this structure on the fly for the developer.
-
+For example, in **Blueprint**, there is a built-in helper that dynamically assembles this structure for the developer.
 
 ```@ton/blueprint 0.36.1
 
@@ -496,22 +478,21 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
 ### Internal
 
-#### Functional purpose
+#### Functional role
 
 An **internal message** is a message sent from one smart contract to another within the TON blockchain.
-When a smart contract receives an internal message, it knows:
+When a contract receives an internal message, it can reliably determine:
+* how many TON coins are attached
+* which contracts are the sender and the recipient
 
-* how many TON coins are attached to the message
-* the sender and recipient contracts
-* the blockchain guarantees the integrity of this information, allowing the smart contract to trust and use it safely.
+The blockchain ensures the integrity of this information, allowing the contract to be trusted and used safely.
 
 **TL-B:**
 
-A contract initiates an internal message — meaning it is the result of executing a transaction.
-In other words, the **sender of an internal message is always a contract**, as the name implies.
+A contract always initiates internal messages — they are the result of a transaction’s execution.
+In other words, as the name implies, the sender of an internal message is always a smart contract.
 
-The primary way to trigger the sending of an internal message is to send an external message to a contract
-that contains instructions to forward an internal message to another contract.
+The most common way to send an internal message is by first sending an external message to a contract that contains the logic to forward the internal message to another contract.
 
 ```
 //internal message
@@ -522,28 +503,24 @@ created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ```
 
 
-| Structure      | Description                                                                                                         |
-|----------------|---------------------------------------------------------------------------------------------------------------------|
-| int_msg_info$0 | $0 tag means, that in serialization CommonMsgInfo started with 0 bit describes a internal message.                  |
-| ihr_disabled   | Hyper cube routing flag.                                                                                            |
-| bounce         | Message should be bounced if there are errors during processing. If message's flat bounce = 1, it calls bounceable. |
-| bounced        | Flag that describes, that message itself is a result of bounce.                                                     |
-| src            | Address of smart contract sender of message.                                                                        |
-| dest           | Address of smart contract destination of message.                                                                   |
-| value          | Structure which describes currency information including total funds transferred in message.                        |
-| ihr_fee        | Fees for hyper routing delivery                                                                                     |
-| fwd_fee        | Fees for forwarding messages assigned by validators                                                                 |
-| created_lt     | Logic time of sending message assigned by validator. Using for odering actions in smart contract.                   |
-| created_at     | Unix time                                                                                                           |
+| Structure        | Description                                                                                     |
+|------------------|-------------------------------------------------------------------------------------------------|
+| `int_msg_info$0` | Indicates an internal message. The `$0` tag means that `CommonMsgInfo` starts with a 0 bit.     |
+| `ihr_disabled`   | Flag indicating whether Hypercube Routing (IHR) is disabled.                                    |
+| `bounce`         | If set to 1, the message will be bounced in case of a processing error.                         |
+| `bounced`        | Indicates that the message is a result of a bounce.                                             |
+| `src`            | Address of the smart contract that sent the message.                                            |
+| `dest`           | Address of the destination smart contract.                                                      |
+| `value`          | Structure describing the amount and type of value transferred in the message.                   |
+| `ihr_fee`        | Fee for delivery via Hypercube Routing.                                                         |
+| `fwd_fee`        | Fee for forwarding the message.                                                                 |
+| `created_lt`     | Logical time at which the message was created, used for ordering contract actions.              |
+| `created_at`     | Unix timestamp of when the message was created.                                                 |
 
 
-The first thing a developer needs to define is the amount of Toncoin attached to the internal message (`value`)
-and the destination address (`dest`) where it will be sent.
+The first thing a developer needs to specify is the amount of Toncoin attached to the internal message `value` and the destination address `dest`.
 
-In this example, an external message is sent with additional instructions to your wallet contract.
-As a result of executing the transaction on the wallet contract, an outgoing internal message will be sent
-with the specified `value` of TON and the recipient `address`.
-
+In this example, an external message is sent to the wallet contract with additional instructions for sending an internal message. As a result of processing the transaction, the wallet contract sends an outgoing internal message with the specified `value` and recipient `address`.
 
 ```@ton/blueprint 0.36.1
 
@@ -566,18 +543,13 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
 ### External outgoing
 
-External outgoing messages (also known as **logs**) are a special type of message generated by smart contracts,
-which are **not delivered to a specific recipient**.
-Instead, they act as logs or signals that can be tracked **outside** the blockchain.
+**External outgoing** messages, also known as logs, are a special type of message generated by smart contracts that are *not addressed to any specific recipient*.
+Instead, they serve as logs or signals that can be tracked outside the blockchain.
+While these messages are rarely used in core smart contract logic, they are important for tasks such as:
+* indexing and monitoring the blockchain state
+* triggering off-chain processes like notifying external services or updating user interfaces
 
-Although such messages are rarely used in the core blockchain logic, they play an important role in tasks like:
-
-* indexing and monitoring blockchain state
-* triggering off-chain processes, such as notifying external services or updating a user interface
-
-For example, a decentralized exchange (DEX) smart contract might generate an external outgoing message
-after a successful token swap — to notify external services or users about the event.
-
+For example, a decentralized exchange (DEX) contract might emit an external outgoing message after a successful token swap — to notify external systems or users about the event.
 
 **TL-B:**
 ```
@@ -588,41 +560,37 @@ created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 
 #### Bounce of messages
 
-A **bounce message** is a message that is automatically sent back to the sender if a transaction fails.
-For example, if the recipient smart contract does not exist or execution fails with an error.
-It not only indicates an error but also allows the sender to handle it — for instance, by refunding tokens or showing an error message to the user.
+A **bounce message** is automatically sent back to the sender when a transaction fails — for example, if the recipient smart contract doesn't exist or if its execution ends with an error.
+This mechanism not only signals the failure but also allows the sender to respond appropriately, such as by refunding tokens or displaying an error message to the user.
 
-Most internal messages between smart contracts should be **bounceable**, i.e., with the `bounce` flag set, so that in case of an error:
-
+Most internal messages between smart contracts should be bounceable — meaning they have the bounce flag set — so that in case of failure:
 * the message is returned to the sender
-* the remaining funds (minus fees) are refunded
+* any remaining funds after deducting fees are refunded
 
-In turn, smart contracts must:
+Smart contracts, in turn, must:
+* check the bounced flag in incoming messages
+* either ignore bounced messages (exit with `code = 0`)
+* or explicitly handle the error
 
-* check the `bounced` flag in incoming messages
-* either ignore such messages (terminate with exit code 0)
-* or handle the error
 
 :::important
-The content of a bounce message **must not be executed** like a regular request — it is used only for error reporting and refunding.
+The contents of a bounce message **must not** be executed as a regular request; it is intended only for error signalling and refund processing.
 :::
 
 ### Custom messages for executing contract operations
 
-We’ve reviewed the native mechanisms for contract communication, including both external and internal messages.
-To trigger the execution of various logic within smart contracts, it is necessary to attach a **payload** to the standard message.
-In internal messages, this optional payload is placed in the `body`.
-There are two approaches to defining the structure of the `body`:
-
-- Build the message based on a TL-B schema provided in the documentation or the contract source
-- Build the message by **analyzing the contract code**, essentially inverting the deserialization process
+We've covered the native communication mechanisms in TON — *external* and *internal* messages.
+To trigger specific logic within a smart contract, you need to attach a **payload** to the standard message.
+For internal messages, this optional payload is included in the `body` field.
+There are two main ways to define the structure of the message body:
+* Based on a TL-B schema provided in the documentation or contract source.
+* By analyzing the contract code and effectively reversing the deserialization logic.
 
 #### Serializing internal messages according to TL-B
 
-Let’s take a look at the `nft-item.fc` contract.
-The standard defines a TL-B schema for the message structure required to initiate a transfer of ownership to another user.
+Let's take the `nft-item.fc` contract as an example. The standard defines a TL-B schema for the message required to transfer ownership to another user.
 
-Technically, this is a message sent from the current owner’s contract, specifying the **operation code** for transfer and the **address of the new owner**.
+From a technical standpoint, this is an internal message sent from the current owner's contract containing the *operation code* for transfer and *the new owner's address*.
 
 
 ```tlb
@@ -632,7 +600,7 @@ custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Ei
 
 ```
 
-In the TON SDK, predefined primitives are available for the most essential structures, allowing complex structures to be packed using built-in helpers.
+The TON SDK provides predefined primitives for the most common structures, so complex ones are typically encoded using **built-in helpers**.
 
 ```
 import {Address, beginCell, toNano} from "@ton/ton";
@@ -652,8 +620,8 @@ const messageBody = beginCell()
     .endCell();
 ```
 
-A prepared example can be used to test the sending process.
-To run the example, you need to specify the wallet address and the NFT contract address.
+A preconfigured example is available for testing the sending process.
+To run it, you need to specify the wallet address and the NFT contract address.
 
 ```@ton/blueprint 0.36.1
 import {Address, beginCell, toNano} from "@ton/ton";
@@ -705,21 +673,20 @@ Example: [Simplecontract](https://verifier.ton.org/EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9
 
 ## Hashes in TON Blockchain
 
-Hashes play a crucial role in the TON ecosystem, ensuring the identification and verification of data at all levels of the blockchain.
-Understanding how hashes work will help you effectively track transactions, verify messages, and integrate your applications with TON.
+Hashes play a vital role in TON Ecosystem, enabling data identification and verification at all layers of the blockchain.
+Understanding how hashing works will help you effectively track transactions, validate messages, and integrate your applications with TON.
 
 ### What is a hash?
 
-In the context of TON, a **hash** is a unique cryptographic fingerprint of data calculated using the **SHA-256** algorithm.
-Each cell, message, or transaction has its unique hash that serves as its digital signature.
+In TON, a **hash** is a unique cryptographic fingerprint of data computed using the **SHA-256** algorithm.
+Each cell, message, or transaction has its unique hash, which acts as a digital signature.
 
 ### Data representation in TON
 
-All data in TON is stored in **cells**. Conceptually, this is a structure containing **1023 bits** and **4 references** to other cells.
-Serialized cell trees are packed according to a unified cell format standard.
+All data in TON is stored in **cells**. Conceptually, a cell is a structure that holds up to **1023 bits of data** and up to **4 references** to other cells.
+Cell trees are serialized and packed using a unified standard cell format.
 
-In TL-B, this structure is called a **Bag of Cells (BoC)**:
-
+In TL-B, this structure is referred to as a **bag of cells (BoC):
 
 ```tlb
 
@@ -740,24 +707,21 @@ serialized_boc#b5ee9c72 has_idx:(## 1) has_crc32c:(## 1)
 
 ```
 
-A deep understanding of this structure is not required,
-Since TON development tools and SDKs already provide helpers that build this structure for developers.
+A deep understanding of this structure isn’t required — TON development tools and SDKs already include helpers that handle it for you.
 
 ### Hash types in TON
 
 :::info Important
-Hashes in TON are irreversible — it’s impossible to restore the original data from a hash.
-However, they are **deterministic** — the same input will always produce the same hash.
+Hashes in TON are irreversible — the original data cannot be reconstructed from the hash.
+However, they are deterministic — the same input always produces the same hash.
 :::
 
 #### Message body hash
 
-The **message body hash** is a unique identifier of your message's content.
-It is computed from the cell that contains the message data.
+The **message body hash** is a unique identifier of a message’s content.
+It is calculated from the cell containing the message data.
 
-The body of the message is the part found in the field:
-`body: (Either X ^X)`
-
+The body refers to the field `body: (Either X ^X)`:
 
 ```tlb
 message$_ {X:Type} info:CommonMsgInfo
@@ -766,37 +730,38 @@ message$_ {X:Type} info:CommonMsgInfo
 
 ```
 
-Let’s examine an example of a message body with the comment "Hello, TON!" and calculate its hash.
+Let’s walk through an example using a message body with the comment "Hello, TON!" and compute its hash.
 
 ```typescript
 import { beginCell } from '@ton/core';
 
-// Создаем тело сообщения для увеличения счетчика
+// Create the message body to increment the counter
 const messageBody = beginCell()
         .storeUint(0, 32) // op code
         .storeStringTail("Hello TON!")
         .endCell();
 
-console.log("Message Body Hash:", messageBody.hash().toString("hex"));
+console.log("Message body hash:", messageBody.hash().toString("hex"));
 ```
 
 #### Expected output
 
 ```
-Message Body Hash: d989794fa90c9817a63a22e00554574f3c4a347dcfd2e2886980a294de15f2af
+Message body hash: d989794fa90c9817a63a22e00554574f3c4a347dcfd2e2886980a294de15f2af
 ```
 
-**When to use the message body hash:**
-- To verify data integrity
-- During debugging and operation logging
-- For message deduplication in your application
+**When to use a message body hash:**
+
+* to verify data integrity
+* for debugging and logging operations
+* to deduplicate messages in your application
 
 #### Full message hash
 
-A full message includes not only the body but also headers with metadata (sender, recipient, amount, fees).
-Its hash is a unique identifier of the entire message.
+A full message includes not just the body but also headers with metadata such as the sender, recipient, amount, and fees.
+Its hash uniquely identifies the entire message.
 
-For example, in the case of an internal message, this is the `Message X` structure defined by the following TL-B:
+For internal messages, this corresponds to the `Message X` structure defined in the following TL-B schema:
 
 ```tlb
 message$_ {X:Type} info:CommonMsgInfo
@@ -816,20 +781,20 @@ int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 import { storeMessage, beginCell, Address, Message } from '@ton/ton';
 import { toNano } from '@ton/core';
 
-// Создаем тело сообщения для увеличения счетчика
+// Create the message body to increment the counter
 const messageBody = beginCell()
         .storeUint(0, 32) // op code
         .storeStringTail("Hello TON!")
         .endCell();
 
-// Создайте полный объект сообщений
+// Create a complete message object
 const message: Message = {
     info: {
         type: 'internal',
-        dest: Address.parse('UQAi....'), // вставьте адрес получателя
+        dest: Address.parse('UQAi....'), // Insert recipient address
         value: { coins: toNano('0.1') },
         bounce: true,
-        src: Address.parse('UQA1....'), // вставьте адрес отправителя
+        src: Address.parse('UQA1....'),  // Insert sender address
         ihrDisabled: true,
         bounced: false,
         ihrFee: 0n,
@@ -840,30 +805,31 @@ const message: Message = {
     body: messageBody
 };
 
-// Получаем хэш полного сообщения
+// Get the complete message hash
 const messageCell = beginCell()
     .store(storeMessage(message))
     .endCell();
 
 const fullMessageHash = messageCell.hash();
-console.log('Full Message Hash:', fullMessageHash.toString('hex'));
+console.log('Full message hash:', fullMessageHash.toString('hex'));
 ```
 
 #### Expected output
 ```
-Full Message Hash: 40b1477f90d702af223f15194724e0c12b51028bc622444959e155e77903b12c
+Full message hash: 40b1477f90d702af223f15194724e0c12b51028bc622444959e155e77903b12c
 ```
 
 **When to use the complete message hash:**
-- To track specific messages on the blockchain
-- When working with the TON Center API to search for transactions
-- To verify that the message has not been modified
+
+* to track specific messages on the blockchain
+* when using the TON Center API to search for transactions
+* to verify that no one modified the message
 
 #### Transaction hash
 
-A **transaction hash** is a unique identifier of the entire transaction.
-It depends on all the data within the transaction, such as incoming and outgoing messages, state changes, and fees.
-This data becomes available **only after the transaction is executed**, and the hash can also only be computed once it is recorded on the blockchain.
+A **transaction hash** is a unique identifier for an entire transaction.
+It derives from all the data involved in the transaction, including incoming and outgoing messages, state changes, and fees.
+This data becomes available only after the blockchain executes the transaction, so the hash is calculated once the transaction is recorded.
 
 **Practical example of obtaining a transaction hash:**
 
@@ -874,27 +840,28 @@ import { Address } from '@ton/core';
 
 async function main() {
     const client = new TonClient({
-    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC', // тестнет, если проводите операции в мейннете, не забудьте поменять
-    apiKey: 'insert your api key' // используя бот, получите свой api key
+    // Testnet endpoint; if you're working on Mainnet, don't forget to update this
+    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+    apiKey: 'insert your api key' // Get your API key via the toncenter.com bot
     });
 
     const transactions = await client.getTransactions(
-    Address.parse('0QD3o...'), // вставьте свой адрес кошелька
+    Address.parse('0QD3o...'), // Insert your wallet address here
     {   archival: true,
         limit: 10 }
     );
 
     for (const tx of transactions) {
     const txHash = tx.hash();
-    console.log('Transaction Hash:', txHash.toString('hex'));
+    console.log('Transaction hash:', txHash.toString('hex'));
 
-    // Также можем получить хэш входящего сообщения
+    // You can also get the hash of the incoming message
     if (tx.inMessage) {
         const inMsgCell = beginCell()
         .store(storeMessage(tx.inMessage))
         .endCell();
         const inMsgHash = inMsgCell.hash();
-        console.log('Incoming Message Hash:', inMsgHash.toString('hex'));
+        console.log('Incoming message hash:', inMsgHash.toString('hex'));
             }
         }
     }
@@ -903,57 +870,53 @@ main().catch(console.error);
 ```
 #### Expected output
 
-The last 10 transactions for the specified address, including the transaction hash,
-and if there is an incoming message — also displays the hash of that message:
+Displays the last 10 transactions for the specified address.
+For each transaction, it prints the transaction hash.
+If an incoming message exists, it also prints the hash of that message.
 
 ```
-Transaction Hash: 79a6406e5544e95bbe5db8c7e8189daaca240b2d6b4f21cc479c3082dd4c5cce
-Incoming Message Hash: 4557aa15e21cf0501f3d82eaa26a23ab61c08a544490154bd12a1814d492db42
-Transaction Hash: 1a86894bbe2f5af090d97f761f0367a16b713e93247056003e6d8b6a68a5165e
-Incoming Message Hash: dfa0916ceee9dd26c6966d55446b23f88950e118432f870d092cfcde83a3b864
+Transaction hash: 79a6406e5544e95bbe5db8c7e8189daaca240b2d6b4f21cc479c3082dd4c5cce
+Incoming message hash: 4557aa15e21cf0501f3d82eaa26a23ab61c08a544490154bd12a1814d492db42
+Transaction hash: 1a86894bbe2f5af090d97f761f0367a16b713e93247056003e6d8b6a68a5165e
+Incoming message hash: dfa0916ceee9dd26c6966d55446b23f88950e118432f870d092cfcde83a3b864
 :
 :
 ```
 
-#### Normalized Message Hash
+#### Normalized message hash
 
-Normalization is a standardization concept that brings different representations into a unified form.
-Messages in different interfaces are defined according to TL-B, but collisions sometimes occurred
-where the structure was represented differently.
+Normalization is a standardization process that converts different representations into a consistent format. While messages across interfaces follow the TL-B scheme, structural differences in implementation sometimes lead to collisions.
 
-To solve this issue, a standard was introduced within the ecosystem to ensure consistent hash computation.
-Normalization is defined in detail in [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467).
+To address this, the ecosystem defines a standard that ensures consistent hash calculation. The normalization rules are specified in detail in [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467).
 
 **The problem normalization solves:**
 
-Functionally identical messages may be formed in different ways for the `src`, `import_fee`, and `init` fields.
-As a result, messages with duplicate content may have different hashes.
-This complicates transaction tracking and message deduplication.
+Functionally identical messages may differ in how they represent the `src`, `import_fee`, and `init` fields. These variations result in different hashes for messages with equivalent content, which complicates transaction tracking and deduplication.
 
 **How normalization works:**
 
-The normalized hash is computed by standardizing the following fields of an external-in message:
+The normalized hash is computed by applying the following standardization rules to an external-in message:
 
-1. **Source Address (`src`)**: Set to `addr_none$00`
-2. **Import Fee (`import_fee`)**: Set to `0`
-3. **InitState (`init`)**: Set to an empty value
-4. **Body**: Always saved as a reference
+1. **Source Address (`src`)**: set to `addr_none$00`
+2. **Import Fee (`import_fee`)**: set to `0`
+3. **InitState (`init`)**: set to an empty value
+4. **Body**: always stored as a reference
 
 **Practical example of calculating a normalized hash:**
 
 ```typescript
-import { toNano, beginCell, Cell, Address } from "@ton/core";
+import { beginCell, Cell, Address } from "@ton/core";
 
 function normalizeExternalMessage(destAddress: Address, bodyCell: Cell): Cell {
     try {
         const normalizedExtMessage = beginCell()
-            .storeUint(0b10, 2) // ext_msg prefix (10 in binary)
-            .storeUint(0, 2) // src -> addr_none (НОРМАЛИЗАЦИЯ!)
-            .storeAddress(destAddress) // Address.parse(destAddress.toString({ bounceable: false })) если пытаться использовать .address из WalletContractV4
-            .storeCoins(0) // import_fee:Grams -> 0 (НОРМАЛИЗАЦИЯ!)
-            .storeBit(false) // init:(Maybe (Either StateInit ^StateInit)) -> nothing$0 (НОРМАЛИЗАЦИЯ!)
-            .storeBit(true) // body:(Either X ^X) -> right$1 (НОРМАЛИЗАЦИЯ!)
-            .storeRef(bodyCell) // Store body as reference (НОРМАЛИЗАЦИЯ!)
+            .storeUint(0b10, 2) // Set external message prefix (10 in binary)
+            .storeUint(0, 2) // Set src to addr_none (normalization)
+            .storeAddress(destAddress)  // Set destination address
+            .storeCoins(0) // Set import_fee to 0 (normalization)
+            .storeBit(false) // Set init to nothing$0 (normalization)
+            .storeBit(true) //  Use right$1 to store body by reference (normalization)
+            .storeRef(bodyCell) // Store body as a reference (normalization)
             .endCell();
 
         return normalizedExtMessage;
@@ -963,9 +926,9 @@ function normalizeExternalMessage(destAddress: Address, bodyCell: Cell): Cell {
     }
 }
 
-// Пример использования
+// Example
 const messageBody = beginCell()
-  .storeUint(0, 32) // opcode для простого перевода
+  .storeUint(0, 32) // Set opcode for a simple transfer
   .storeStringTail('Normalized hash example')
   .endCell();
 
@@ -973,39 +936,41 @@ const destinationAddress = Address.parse('EQB...');
 const normalizedExternalMessage = normalizeExternalMessage(destinationAddress, messageBody);
 const normalizedHash = normalizedExternalMessage.hash().toString("hex");
 
-console.log('Normalized Message Hash:', normalizedHash);
+console.log('Normalized message hash:', normalizedHash);
 ```
 
 #### Expected output
 
 ```
-Normalized Message Hash: ee53ccd1224c315597bdbafb2e722316d9471490b13dd9e1834903b094eb5964
+Normalized message hash: ee53ccd1224c315597bdbafb2e722316d9471490b13dd9e1834903b094eb5964
 ```
 
 
 **Practical example of calculating a non-normalized hash:**
 
-Before April 2025, hashes were not normalized,
-so if your code looks like this — normalization is required.
+Before April 2025, message hashes were not normalized across the ecosystem. If your code constructs messages without applying normalization, it may produce inconsistent hashes. In such cases, update the logic to follow the normalization rules described in [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467).
 
+Below is an example of non-normalized message construction — avoid using this approach:
 
+<details>
+  <summary> Avoid this approach </summary>
 ```typescript
 import { mnemonicToWalletKey } from '@ton/crypto';
 import { WalletContractV4, TonClient, toNano, beginCell, Address, internal } from '@ton/ton';
 
-// Создаём клиент для доступа к testnet через TonCenter
+  // Create a client instance for accessing Testnet via TonCenter
 const client = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
-    apiKey: 'your api key' // публичный API-ключ
+    apiKey: 'your api key' // Get your API key via the toncenter.com bot
 });
 
-// Создаём тело сообщения — обычная строка с опкодом
+  // Construct the message body — arbitrary opcode and payload string
 const messageBody = beginCell()
     .storeUint(0, 32) // op code — произвольный, например, 0
     .storeStringTail("Hello TON!") // строка в теле
     .endCell();
 
-// Оборачиваем тело во внутреннее сообщение (internal message)
+  // Wrap the body into an internal message
 const internalMessage = internal({
     to: Address.parse('0QD3....'), // получатель
     value: toNano('0.1'), // 0.1 TON
@@ -1013,11 +978,11 @@ const internalMessage = internal({
 });
 
 async function main() {
-    // Получаем ключи кошелька из мнемоники
+  // Derive wallet keys from the mnemonic phrase
     const mnemonic = "your seed phrase";
-    const keyPair = await mnemonicToWalletKey(mnemonic.split(' '));
+    const keyPair = await mnemonicToWalletKey(mnemonic.split(' ')); // Insert your seed phrase here
 
-    // Создаём wallet-смарт-контракт по публичному ключу
+  // Create a WalletContractV4 instance from the public key
     const wallet = WalletContractV4.create({
         publicKey: keyPair.publicKey,
         workchain: 0
@@ -1026,34 +991,34 @@ async function main() {
     const contract = client.open(wallet);
     const seqno = await contract.getSeqno();
 
-    // Создаём внешнее сообщение (external message)
+  // Create an external message using the wallet contract
     const externalMessage = await wallet.createTransfer({
         seqno,
         secretKey: keyPair.secretKey,
         messages: [internalMessage]
     });
 
-    // Выводим хэш внешнего сообщения
-    console.log("Non-normalized External Message Hash:", externalMessage.hash().toString("hex"));
+    console.log("Non-normalized external message hash:", externalMessage.hash().toString("hex"));
 }
 
 main();
 
 ```
 
-#### Expected output
+
+**Expected output**
 ```
-Non-normalized External Message Hash: 8dd5c85be08e33341553cb1e5a2f08323e9ae9314d5ceac2e3a6c79f11151b5e
+Non-normalized external message hash: 8dd5c85be08e33341553cb1e5a2f08323e9ae9314d5ceac2e3a6c79f11151b5e
 ```
 
-This algorithm may differ from the normalized one in any way.
-If the lack of normalization has become an issue for a previously developed project,
-the correct solution is to **migrate to normalized hashes throughout the entire project**.
+</details>
+
+The algorithm may differ from the normalized version in any way.
+If the absence of normalization causes issues in an existing project, the correct approach is to **migrate to normalized hashes across the entire codebase**.
 
 ### Sending a message and verifying delivery
 
-One of the most important scenarios is sending a message
-and making sure the blockchain has processed it.
+One common scenario is sending a message and checking that the blockchain accepts and processes it.
 
 **Step-by-step process:**
 
@@ -1063,12 +1028,13 @@ import { mnemonicToPrivateKey } from '@ton/crypto';
 
 async function sendAndVerifyMessage() {
   const client = new TonClient({
+    // Testnet endpoint; if you're working on Mainnet, don't forget to update this
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
-    apiKey: 'your api key'
-  });
+    apiKey: 'insert your api key' // Get your API key via the toncenter.com bot
+    });
 
-  // Мнемоника и ключи
-  const mnemonic = "your mnemonic".split(" ");
+  // Load wallet key pair from mnemonic
+  const mnemonic = "your mnemonic".split(" "); // Insert your seed phrase here
   const keyPair = await mnemonicToPrivateKey(mnemonic);
 
   const wallet = client.open(WalletContractV4.create({
@@ -1076,41 +1042,42 @@ async function sendAndVerifyMessage() {
     workchain: 0
   }));
 
-  // Тело сообщения с комментарием
+  // Create message body with comment
   const messageBody = beginCell()
     .storeUint(0, 32)
     .storeStringTail('Hello TON!')
     .endCell();
 
-  // Получаем seqno
+  // Get current seqno
   const seqno = await wallet.getSeqno();
 
-  // Отправляем транзакцию
+  // Send transaction
   await wallet.sendTransfer({
     secretKey: keyPair.secretKey,
     seqno,
     messages: [internal({
-      to: Address.parse('0QD3o...'), // ваш адрес
+      to: Address.parse('0QD3o...'), // Insert the address here
       value: '0.05',
       body: messageBody
     })],
     sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS,
   });
 
-  // Ждём 10 секунд
+  // Wait 10 seconds before checking seqno again
   await new Promise(resolve => setTimeout(resolve, 10000));
 
-  // Проверяем, отправилось ли сообщение
+  // Check if transaction was processed
   const newSeqno = await wallet.getSeqno();
 
   if (newSeqno > seqno) {
-    console.log('Транзакция успешно отправлена!');
+    console.log('Transaction sent successfully!');
 
+    // Fetch recent transactions for this wallet
     const transactions = await client.getTransactions(wallet.address, {
       archival: true,
       limit: 5
     });
-
+    // Find the relevant external-in transaction
     const ourTx = transactions.find(tx =>
       tx.inMessage?.info.type === 'external-in' &&
       tx.description.type === 'generic'
@@ -1120,7 +1087,7 @@ async function sendAndVerifyMessage() {
       console.log('Transaction Hash:', ourTx.hash().toString('hex'));
     }
   } else {
-    console.log('Транзакция не была обработана');
+    console.log('Transaction was not processed');
   }
 }
 
@@ -1130,11 +1097,11 @@ sendAndVerifyMessage().catch(console.error);
 #### Expected output
 
 ```
-Транзакция успешно отправлена!
-Transaction Hash: 285f8df8f968f63680f8efaff004369f4e7aeb8619293da035cb8ca3899232f3
+Transaction sent successfully!
+Transaction hash: 285f8df8f968f63680f8efaff004369f4e7aeb8619293da035cb8ca3899232f3
 ```
 
-### Searching for a Transaction by BOC
+### Searching for a transaction by BOC
 
 When a user confirms the sending of an external message via TON Connect,
 you receive a BOC (Bag of Cells).
@@ -1278,8 +1245,7 @@ import { mnemonicToPrivateKey } from '@ton/crypto';
 
 async function getStateInit() {
     try {
-        // Вам нужно заменить эти слова на ваши 24 слова (мнемоник)
-        const mnemonic = "your mnemonic".split(" ");
+        const mnemonic = "your mnemonic".split(" "); // Insert your seed phrase here
         const keyPair = await mnemonicToPrivateKey(mnemonic);
 
         // Создаем кошелек v4
@@ -1503,7 +1469,7 @@ Thus, in the process of reading the blockchain, services iteratively process fro
 
 Account status describes the condition of the account from the perspective of a transaction but is **not** stored within the account itself. There are four possible `AccountStatus` values, each encoded as two bits in TL-B:
 
-| Status      | TL-B Code | Description                                                                 |
+| Status      | TL-B code | Description                                                                 |
 |-------------|------------|------------------------------------------------------------------------------|
 | `nonexist`  | `11`       | Account doesn't exist on the blockchain — no state and no balance.           |
 | `uninit`    | `00`       | Account exists but contains no code or data. It may have a balance.          |
