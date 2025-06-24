@@ -859,6 +859,8 @@ assert block_tr.get_hash(0) == tr['hash']
 }
 ```
 
+</details>
+
 Нам нужно сравнить Hash_1 этой ссылки доказательства Меркла только с хешем, который мы получили из функции `check_block_header` выше, чтобы мы могли доверять этой ячейке: If they match, the cell can be trusted:
 
 ```python
