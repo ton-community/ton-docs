@@ -1,10 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # TON Connect для Telegram ботов - Python
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
 
 :::warning устаревшее
 В этом руководстве описан устаревший метод интеграции TON Connect с ботами Telegram. Для более безопасного и актуального способа рекомендуется использовать [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview для более современной и безопасной интеграции.
@@ -346,8 +344,7 @@ async def disconnect_wallet(message: Message):
 
 А `main.py` выглядит следующим образом:
 
-<details>
-<summary>Показать main.py</summary>
+<details><summary>Показать main.py</summary>
 
 ```python
 # main.py
@@ -583,3 +580,6 @@ async def connect_wallet(message: Message, wallet_name: str):
 
 - [Полный код бота](https://github.com/yungwine/ton-connect-bot)
 - [Подготовка сообщений](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+
+<Feedback />
+

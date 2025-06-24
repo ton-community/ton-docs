@@ -1,8 +1,6 @@
-# Мониторинг производительности
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Мониторинг производительности
 
 ## Мониторинг производительности сервера TON
 
@@ -61,7 +59,7 @@ sar -2   # two days ago
 sar -f /var/log/sysstat/sa23
 ```
 
-Какие отчеты sar нужно запускать и как их читать, чтобы выявить проблемы с производительностью?
+To identify performance issues, it is essential to run specific SAR reports and analyze their results effectively.
 
 Ниже приведен список команд sar, которые можно использовать для сбора различной системной статистики. Вы можете дополнить их приведенными выше параметрами, чтобы быстро получить отчет за нужную дату.
 
@@ -75,9 +73,9 @@ sar -rh
 
 В то же время, в колонке `kbcached` всегда будет высокое число. По той же причине Вам не стоит беспокоиться о низком количестве свободной оперативной памяти, показанном в колонке `kbmemfree`. Однако важным показателем является число, полученное из столбца `%memused`.
 
-Если оно превышает 90%, Вам следует задуматься о добавлении большего объема оперативной памяти и следить за тем, не останавливается ли движок валидатора по причине OOM (out of memory - нехватка памяти) - лучший способ проверить это - поискать сообщения Signal в файле `/var/ton-work/log`.
+If the percentage exceeds 90%, you should consider adding more RAM. Additionally, keep an eye on your validator engine to ensure it doesn't stop unexpectedly due to an out-of-memory (OOM) issue. The best way to check for this is to grep the `/var/ton-work/log` file for any **Signal** messages.
 
-Использование свопа
+**Swap usage:**
 
 ```bash
 sar -Sh
@@ -102,6 +100,8 @@ sar -dh
 Следите за колонкой '%util' и реагируйте соответственно, если она остается выше 90% для определенного диска.
 
 ### Сетевой отчет
+
+Use the commands :
 
 ```bash
 sar -n DEV -h
@@ -133,11 +133,13 @@ cat /sys/class/net/<interface>/speed
 
 Прежде чем сообщать о проблемах с производительностью, убедитесь, что минимальные требования к узлу удовлетворены. Затем выполните следующие команды:
 
+Для вчерашнего отчета выполните:
+
 ```bash
 sar -rudh | cat && sar -n DEV -h --iface=eno1 | cat > report_today.txt
 ```
 
-Для вчерашнего отчета выполните:
+For yesterday's report, use the following command:
 
 ```bash
 sar -rudh -1 | cat && sar -n DEV -h --iface=eno1 -1 | cat > report_yesterday.txt
@@ -151,6 +153,8 @@ sudo fio --randrepeat=1 --ioengine=io_uring --direct=1 --gtod_reduce=1 --name=te
 
 Найдите значение `read: IOPS=` и отправьте его вместе с отчетом. Значение выше 10k IOPS должно считаться хорошим.
 
+Check your download and upload speeds using the following command:
+
 ```bash
 curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -
 ```
@@ -160,3 +164,5 @@ curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.p
 При составлении отчета, пожалуйста, отправьте отчет SAR, а также результаты IOPS и скорости сети на [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot).
 
 Первоначальная версия от [@neodix](https://t.me/neodix) - Команда Ton Core, 23 сентября 2024 г.
+
+<Feedback />

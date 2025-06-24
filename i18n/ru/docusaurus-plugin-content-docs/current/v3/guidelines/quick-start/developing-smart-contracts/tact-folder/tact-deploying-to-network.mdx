@@ -45,11 +45,11 @@ init(id: Int, owner: Address) {
 
 Если мы удалим поле `id` из его первоначального состояния хранилища, то сможем быть уверенными, что для определённого владельца может существовать **только один** смарт-контракт `HelloWorld`.
 
-:::info Токены
+:::info Tokens
 Этот механизм играет ключевую роль в [обработке Jetton](/ru/v3/guidelines/dapps/asset-processing/jettons/). Каждый токен, не являющийся нативным (Jetton), требует наличия собственного `Jetton Wallet` для определённого владельца и, следовательно, предоставляет для него вычислимый адрес, создавая **схему звезды** с базовым кошельком в центре.
 :::
 
-## Реализация
+## Implementation
 
 Теперь, когда наши контракты полностью протестированы, мы готовы развернуть их в TON. В `Blueprint` этот процесс выглядит одинаково для `мейннета` и `тестнета`, а также для любого из языков в этом гайде: `Tact`, `FunC` и `Tolk`.
 
@@ -142,5 +142,20 @@ You can view it at https://testnet.tonscan.org/address/EQBrFHgzSwxVYBXjIYAM6g2RH
 :::tip
 Использование `Blueprint` и приложений кошельков — не единственный вариант. Вы можете создать сообщение со [state_init](/ru/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) самостоятельно. Более того, вы даже можете сделать это с помощью [внутреннего сообщения](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) от смарт-контракта.
 :::
+
+## What’s next?
+
+You’ve made it through the guide — great job!
+Now, it’s time to dive deeper and keep building. Here are some helpful resources to continue _your Tact journey_:
+
+- [Official website](https://tact-lang.org) - overview, news, and ecosystem links
+- [Tact documentation](https://docs.tact-lang.org) — the go-to reference for language features
+- [Tact github repo](https://github.com/tact-lang) — source code, issues, and contributions
+- [Tact by example](https://tact-by-example.org/all) — hands-on smart contract examples
+- [Tact smart battle](https://github.com/ton-studio/tact-smart-battle) — coding challenges to sharpen your skills
+- [@tact_kitchen](https://t.me/tact_kitchen) — channel with the latest Tact updates
+- [@tactlang](https://t.me/tactlang) — chat for dev discussions and help
+
+Stay curious, build boldly, and don’t hesitate to ask questions — the Tact community is here for you!
 
 <Feedback />

@@ -70,7 +70,7 @@ npx ts-node script.ts
 В отличие от раздела [Чтение из сети](/ru/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/), в следующих примерах понадобится ключ Toncenter API. Его можно получить с помощью [следующего руководства](/ru/v3/guidelines/dapps/apis-sdks/api-keys/).
 :::
 
-#### Реализация
+#### Implementation
 
 Создать новый файл `1-send-ton.ts`:
 
@@ -146,10 +146,12 @@ npx ts-node 1-send-ton.ts
 Основная операция [стандарта NFT](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) в TON — `передача`. На самом деле это изменение адреса `владельца` в хранимых данных NFT на `нового владельца`: адрес другого контракта, который после этого сможет осуществлять операции с этим `экземпляром NFT`.
 
 :::tip
+
 Смотрите раздел «[Акторы и роли](/ru/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/processing-messages#actors-and-roles)» для более концептуального описания.
+
 :::
 
-#### Реализация
+#### Implementation
 
 Создать новый файл `2-send-nft.ts`:
 

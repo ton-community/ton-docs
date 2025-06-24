@@ -1,8 +1,6 @@
-# Общие сведения
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Overview
 
 На этой странице собраны некоторые рекомендации, которым можно следовать для управления узлами в блокчейне TON.
 
@@ -22,4 +20,6 @@
 - [Устранение неполадок](/v3/guidelines/nodes/nodes-troubleshooting)
 - [Техническое обслуживание и безопасность](/v3/guidelines/nodes/node-maintenance-and-security)
 - [Часто задаваемые вопросы](/v3/guidelines/nodes/faq)
+
+<Feedback />
 

@@ -1,10 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Сопровождающие
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-## Основная команда
+## Active team
 
 Ниже представлен алфавитный список текущих членов команды документации TON.
 
@@ -48,3 +46,6 @@
 - [Стандартизация контента](/v3/contribute/content-standardization/)
 - [Типографика](/v3/contribute/typography/)
 - [Программа локализации](/v3/contribute/localization-program/overview/)
+
+<Feedback />
+
