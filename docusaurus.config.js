@@ -25,7 +25,7 @@ const getEnvLangConfig = () => {
         path: "zh-CN",
       },
       ru: {
-        label: 'Русский',
+        label: "Русский",
         path: "ru",
       },
     },
