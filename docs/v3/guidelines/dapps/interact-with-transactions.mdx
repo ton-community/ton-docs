@@ -166,7 +166,7 @@ Meanwhile, the **state (data)** and **behavior (code)** are defined in the `stat
 
 Let’s take a closer look at the general account state and how it is represented in data.
 
-#### Account Status
+#### Account status
 
 TON defines account states (`AccountState`) as follows:
 
@@ -183,10 +183,16 @@ account_active$1 _:StateInit = AccountState;
 account_frozen$01 state_hash:bits256 = AccountState;
 ```
 
-#### Smart Contract
+#### Smart contract
 
-A smart contract is an actor with mandatory code and data which define its unique behavior.
-In terms of actual data, this means:
+Smart contracts are a set of promises in digital form, including protocols by which the parties fulfill these promises.
+
+In TON typically by smart contract recognize:
+- the program code executed described in FunC, Tact or Tolk in the blockchain.
+- the account that implement business logic and contets code.
+
+A smart contract is an account with mandatory code and data which define its unique behavior.
+In terms of TON account, this means:
 
 * A smart contract in TON is an `Account` in the active state (`AccountState = active`)
 * The `code` field in `StateInit` is initialized
@@ -196,8 +202,9 @@ The presence of `code` and `data` in `StateInit` makes an account executable and
 
 #### Address
 
-An address in TON is a unique identifier for an account or smart contract required for interaction between network participants.
-It consists of the following components:
+An address in TON is a unique identifier for a smart contract required for interaction between network participants.
+Account itself has address, but we completly define the address for arbitary using only with smart contract.
+Address consists of the following components:
 
 * **WorkChain ID** — a 32-bit signed integer defining which WorkChain the account belongs to (e.g., -1 for the MasterChain, 0 for the BaseChain)
 * **Account ID** — a 256-bit hash of the `StateInit` structure, which contains the contract's initial state: `code`, `data`, and (optionally) `library`
@@ -435,23 +442,29 @@ For example, in **Blueprint**, there is a built-in helper that assembles this st
 
 ```@ton/blueprint 0.36.1
 
-import {Address} from "@ton/ton";
+import {Address, beginCell} from "@ton/ton";
 import {NetworkProvider} from "@ton/blueprint";
 
 export async function run(provider: NetworkProvider, args: string[]) {
+    
+    //Mainnet address : 'EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2'
+    const address = Address.parse('EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2');
+    
+    //Switch address for the Testnet :
+    //const address = Address.parse('kQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16z768');
 
-    const address = Address.parse('kQBUCuxgGsF6znHM_yNmnV_EwtlmdvmDzqTxiWHJip2ux6Wn');
+
+    // Get current seqno using blueprint's provider
     const contractProvider = provider.provider(address);
+    const result = await contractProvider.get('seqno', []);
+    const currentSeqno = result.stack.readNumber();
 
-    return contractProvider.internal(
-        provider.sender(),{
-        value: '0.01'
-    });
-
+    // Send external message with current seqno
+    return contractProvider.external(
+        beginCell().storeUint(currentSeqno, 32).endCell()
+    );
 }
 
-
-//TODO - simplify for case like https://tonviewer.com/transaction/ba9202b8d389def350a56f296812b90e8d0222a49be29a6fdce756ef65e11ed5
 ```
 
 :::info How to use examples with Blueprint
@@ -580,14 +593,6 @@ In turn, smart contracts must:
 The content of a bounce message **must not be executed** like a regular request — it is used only for error reporting and refunding.
 :::
 
-**Address with flags as a field of a message**
-
-* Serializers for messages (Message builders)
-* Types of message descriptors
-* Additional TL-B standards:
-[https://github.com/ton-blockchain/TEPs/blob/master/text/0089-jetton-wallet-discovery.md](https://github.com/ton-blockchain/TEPs/blob/master/text/0089-jetton-wallet-discovery.md)
-
-
 ### Custom messages for executing contract operations
 
 We’ve reviewed the native mechanisms for contract communication, including both external and internal messages.
@@ -598,7 +603,7 @@ There are two approaches to defining the structure of the `body`:
 - Build the message based on a TL-B schema provided in the documentation or the contract source
 - Build the message by **analyzing the contract code**, essentially inverting the deserialization process
 
-#### Serializing internal messages via TL-B
+#### Serializing internal messages according to TL-B
 
 Let’s take a look at the `nft-item.fc` contract.
 The standard defines a TL-B schema for the message structure required to initiate a transfer of ownership to another user.
@@ -672,11 +677,17 @@ export async function run(provider: NetworkProvider, args: string[]) {
 }
 ```
 
-### Internal message serializer based on contract code
+### Internal message serializer according to contract code
 //TODO
   * Receivers in the code  (https://github.com/ton-blockchain/highload-wallet-contract-v3)
-  * Build message serializer according to source code
-  * Assembler (blockchain explorer preview/ https://tonviewer.com/EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1?section=code )
+  * Build message serializer example in blueprint according to source code 
+
+
+### Internal messages serializer according disabled code
+In case developer hase no documentation with TL-B and contract code, the only way to analyze and find approach to contract reading disassmbled code.
+This approach have the worst effectivness but can be helpful for legacy contracts.
+Example: [Simplecontract](https://verifier.ton.org/EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2)
+
 
 ## Hashes in TON Blockchain
 
