@@ -1005,7 +1005,6 @@ main();
 
 ```
 
-
 **Expected output**
 ```
 Non-normalized external message hash: 8dd5c85be08e33341553cb1e5a2f08323e9ae9314d5ceac2e3a6c79f11151b5e
@@ -1066,7 +1065,7 @@ async function sendAndVerifyMessage() {
   // Wait 10 seconds before checking seqno again
   await new Promise(resolve => setTimeout(resolve, 10000));
 
-  // Check if transaction was processed
+  // Check if the transaction was processed
   const newSeqno = await wallet.getSeqno();
 
   if (newSeqno > seqno) {
@@ -1084,7 +1083,10 @@ async function sendAndVerifyMessage() {
     );
 
     if (ourTx) {
-      console.log('Transaction Hash:', ourTx.hash().toString('hex'));
+      const txHash = ourTx.hash().toString('hex');
+      console.log('Transaction Hash:', txHash);
+      const viewerUrl = `https://testnet.tonviewer.com/transaction/${txHash}`;
+      console.log('Transaction link:', viewerUrl);
     }
   } else {
     console.log('Transaction was not processed');
@@ -1099,88 +1101,206 @@ sendAndVerifyMessage().catch(console.error);
 ```
 Transaction sent successfully!
 Transaction hash: 285f8df8f968f63680f8efaff004369f4e7aeb8619293da035cb8ca3899232f3
+Transaction link: https://testnet.tonviewer.com/transaction/82ee8ee68d8b764105139b7b783b3d91d8344c6e44ee67a38ca5ee967615d31a
 ```
 
-### Searching for a transaction by BOC
+### Transaction lookup via BoC
 
-When a user confirms the sending of an external message via TON Connect,
-you receive a BOC (Bag of Cells).
-You can use this BOC to find the corresponding transaction on the blockchain.
+When a user confirms the sending of an external message via TON Connect, you receive a BoC or bag of cells.
+You can use this BoC to look up the corresponding transaction on the blockchain.
 
-**Practical example:**
+**Usage example:**
+
+Let’s walk through an example of sending an external message using TON Connect in a React app.
+We use the [demo-dapp-with-react-ui](https://github.com/ton-connect/demo-dapp-with-react-ui) project as a reference to obtain the BoC and hash to find a transaction.
+
+In this project, navigate to `src/components/TxForm` and replace the contents of the `TxForm.tsx` react file with the following code:
 
 <details>
+  <summary>Obtaining BoC and hash using react example</summary>
+  ```tsx
+  import React, { useState } from 'react';
+  import './style.scss';
+  import { SendTransactionRequest, useTonConnectUI } from "@tonconnect/ui-react";
+  import { Address, beginCell, Cell, loadMessage } from '@ton/ton';
+
+  // This example uses a predefined smart contract `stateInit`.
+  // to interact with an EchoContract — a contract that returns the sent value back to the sender.
+  // This is useful for testing, as it prevents unintentional token loss.
+  const defaultTx: SendTransactionRequest = {
+  // The transaction is valid for 10 minutes from the current time (in Unix epoch seconds).
+  validUntil: Math.floor(Date.now() / 1000) + 600,
+  messages: [
+{
+  // Insert the recipient address
+  address: 'your address',
+  // Amount to send in nanoTON. For example, 0.005 TON is 5000000 nanoTON.
+  amount: '5000',
+  // (Optional) State initialization in BOC (base64).
+  stateInit: 'te6cckEBBAEAOgACATQCAQAAART/APSkE/S88sgLAwBI0wHQ0wMBcbCRW+D6QDBwgBDIywVYzxYh+gLLagHPFsmAQPsAlxCarA==',
+},
+
+  ],
+};
+
+  /**
+  * Normalize an external message according to TEP-467:
+  * https://github.com/ton-blockchain/TEPs/blob/master/text/0467-normalized-message-hash.md
+  *
+  * Normalization rules:
+  * 1. Source Address (`src`): always set to `addr_none$00`
+  * 2. Import Fee (`import_fee`): always set to `0`
+  * 3. Init State (`init`): always set to empty
+  * 4. Body: always stored as a reference
+  */
+
+  function normalizeExternalMessage(destAddress: Address, bodyCell: Cell): Cell {
+  return beginCell()
+  .storeUint(0b10, 2)
+  .storeUint(0, 2)
+  .storeAddress(destAddress)
+  .storeCoins(0)
+  .storeBit(false)
+  .storeBit(true)
+  .storeRef(bodyCell)
+  .endCell();
+}
+
+  export function TxForm() {
+  const [boc, setBoc] = useState<string | null>(null);
+  const [hash, setHash] = useState<string | null>(null);
+  const [normalizedHash, setNormalizedHash] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isSending, setIsSending] = useState(false);
+  const [tonConnectUi] = useTonConnectUI();
+
+  const send = async () => {
+  setIsSending(true);
+  setError(null);
+  setBoc(null);
+  setHash(null);
+  setNormalizedHash(null);
+  try {
+  const result = await tonConnectUi.sendTransaction(defaultTx);
+  const receivedBoc = result.boc;
+  setBoc(receivedBoc);
+  const externalMessageCell = Cell.fromBoc(Buffer.from(receivedBoc, 'base64'))[0];
+  const originalHash = externalMessageCell.hash().toString('hex');
+  setHash(originalHash);
+
+  const message = loadMessage(externalMessageCell.beginParse());
+  if (message.info.type !== 'external-in') throw new Error(`Expected an external-in message, got ${message.info.type}.`);
+
+  const destAddress = message.info.dest;
+  if (!destAddress || !(destAddress instanceof Address)) {
+  throw new Error('Destination address not found in the parsed message.');
+}
+
+  const bodyCell = message.body;
+  const normalizedExtMessage = normalizeExternalMessage(destAddress, bodyCell);
+  setNormalizedHash(normalizedExtMessage.hash().toString('hex'));
+} catch (e) {
+  setError((e as Error).message);
+} finally {
+  setIsSending(false);
+}
+};
+
+  return (
+  <div className="send-tx-form">
+  <button onClick={send} disabled={isSending}>
+  {isSending ? 'Sending...' : 'Send transaction'}
+</button>
+
+{error && <p style={{ color: 'red' }}>Error: {error}</p>}
+
+{boc && (
+  <div className="boc-hash-block">
+    <span className="boc-label">BOC (base64):</span>
+    <pre className="boc-pre">{boc}</pre>
+
+    <span className="hash-label">Original hash to find a transaction:</span>
+    <pre>{hash}</pre>
+
+    <span className="hash-label">Normalized hash (TEP-467):</span>
+    <pre>{normalizedHash}</pre>
+
+    {hash && normalizedHash && (
+      <div
+        style={{
+          marginTop: '10px',
+          padding: '10px',
+          backgroundColor: hash === normalizedHash ? '#d4edda' : '#f8d7da',
+          borderRadius: '5px',
+        }}
+      >
+        <strong>Hashes {hash === normalizedHash ? 'MATCH' : 'DO NOT MATCH'}</strong>
+        {hash !== normalizedHash && (
+          <div style={{ fontSize: '12px', marginTop: '5px' }}>
+            The original message is not normalized according to TEP-467.
+          </div>
+        )}
+      </div>
+    )}
+  </div>
+)}
+</div>
+);
+}
+```
+
+</details>
+
+After you run the code, the demo DApp launches.
+To proceed:
+* Connect your Tonkeeper wallet.
+* Click the **Send transaction** button.
+* Approve the transaction in your wallet.
+
+Once the transaction is sent, the UI displays the following fields:
+* **BOC (base64)** – the raw external message in base64 format.
+* **Original hash** – the hash of the message as sent. You can use it to look up the transaction on-chain.
+* **Normalized hash (TEP-467)** – the hash computed after normalization, used for consistent message identification.
+
+<details>
+ <summary>Transaction lookup via BoC</summary>
 
   ```typescript
-
-  import { Cell, Address, beginCell, storeMessage, TonClient } from '@ton/ton';
-
-  async function findTransactionByBOC(
-  externalBOC: string,
-  walletAddress: string
-  ): Promise<string | null> {
-  const client = new TonClient({
-  endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
-  apiKey: 'your api key'
-});
-
+  // Check transaction by its hash
+  async function checkTransactionStatus(txHash: string, walletAddress: string) {
   try {
-  // Получаем хэш внешнего BOC
-  const extHash = Cell.fromBase64(externalBOC).hash().toString('hex');
-  console.log('Ищем транзакцию по BOC hash:', extHash);
-
-  // Получаем последние транзакции кошелька
-  const transactions = await client.getTransactions(
-  Address.parse(walletAddress),
-{ limit: 10 }
+  const response = await fetch(
+  `https://testnet.toncenter.com/api/v2/getTransactions?` +
+  `address=${walletAddress}&hash=${txHash}`
   );
+  const data = await response.json();
 
-  for (const tx of transactions) {
-  const inMsg = tx.inMessage;
-  if (inMsg?.info.type === 'external-in') {
-  // Создаем хэш входящего сообщения
-  const inHash = beginCell()
-  .store(storeMessage(inMsg))
-  .endCell()
-  .hash()
-  .toString('hex');
-
-  if (extHash === inHash) {
-  const txHash = tx.hash().toString('hex');
-  console.log('Найдена транзакция:', txHash);
-  return txHash;
-}
-}
-}
-
-  console.log('Транзакция не найдена');
+  if (data.result.length > 0) {
+  console.log('Transaction found on the blockchain');
+  const viewerUrl = `https://testnet.tonviewer.com/transaction/${trxHash}`;
+  console.log('Transaction link:', viewerUrl);
+  return data.result[0];
+} else {
+  console.log('Transaction not found');
   return null;
+}
 } catch (error) {
-  console.error('Ошибка поиска транзакции:', error);
+  console.error('Error while checking transaction:', error);
   return null;
 }
 }
 
+  const walletAddress = 'insert your wallet address';
+  \\ Here you can insert the hash that you obtained from the react example
+  const trxHash = 'insert the transaction hash';
 
-  async function main() {
-  // Пример BOC для теста (замените на реальный)
-  const testBOC = 'где найти BOC???';
-  const testWalletAddress = 'your address';
-
-  await findTransactionByBOC(testBOC, testWalletAddress);
-}
-
-  // Запускаем тест
-  if (require.main === module) {
-  main().catch(console.error);
-}
-
+  checkTransactionStatus(trxHash, walletAddress);
   ```
 
   **Expected output**
   ```
-  Ищем транзакцию по BOC hash: 399ae70c7c4d4880d373727875c38ad243dc9b11775b14a19955f0040a684306
-  Транзакция не найдена
+  Transaction found on the blockchain
+  Transaction link: https://testnet.tonviewer.com/transaction/ad53eb8d1145b239d615dfd3bffb1b9cb7c8c5823530dc217d988fb89794f59a
   ```
 
 </details>
