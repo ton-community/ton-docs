@@ -42,6 +42,6 @@ import Feedback from '@site/src/components/Feedback';
 
 ## См. также
 
-- [Устранение неполадок узлов](/v3/guidelines/nodes/nodes-troubleshooting)
+- [Устранение неполадок узлов](/v3/guidelines/nodes/nodes-troubleshooting) <Feedback />
   <Feedback />
 

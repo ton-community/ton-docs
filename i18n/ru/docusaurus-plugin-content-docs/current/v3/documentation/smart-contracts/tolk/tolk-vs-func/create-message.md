@@ -207,6 +207,7 @@ In TON Blockchain, according to the specification, a message is a cell (flags, d
 and its _body_ can be either inlined into the same cell or can be placed into its own cell (and be a ref).
 
 In FunC, you had to manually calculate whether it's safe to embed body (you did it _on paper_ or dynamically).\
+In Tolk, you just pass `body`, and the compiler does all calculations for you:\
 In Tolk, you just pass `body`, and the compiler does all calculations for you:
 
 ```tolk
@@ -383,8 +384,7 @@ excessesMsg.send(mode);
 excessesMsg.sendAndEstimateFee(mode);
 ```
 
-This strategy makes the code **easier to read** later. You see — okay, this is about excesses, this one is about burn notification, etc.
-As opposed to a potential `send(...)` function, you have to dig into what body is actually being sent to understand what’s going on.
+This strategy makes the code **easier to read** later. You see — okay, this is about excesses, this one is about burn notification, etc. As opposed to a potential `send(...)` function, you have to dig into what body is actually being sent to understand what’s going on.
 
 ## Why not provide a separate deploy function?
 

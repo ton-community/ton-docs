@@ -54,6 +54,6 @@ _Из [сообщения TON Community RUS](https://t.me/toncoin_rus/362)._
 
 - [Running validator node](/v3/guidelines/nodes/running-nodes/validator-node)
 - [Nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool/)
-- [Single nominator pool](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool/)
+- [Single nominator pool](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool/) <Feedback />
   <Feedback />
 

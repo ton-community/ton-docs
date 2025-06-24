@@ -135,8 +135,10 @@ Track MyLocalTon's operation through these log files:
   If you use MacPorts instead of Homebrew, execute these commands:
 
      ```bash
-     mkdir -p /usr/local/opt/readline/lib
-     ln -s /opt/local/lib/libreadline.8.dylib /usr/local/opt/readline/lib
+      ```bash
+      mkdir -p /usr/local/opt/readline/lib
+      ln -s /opt/local/lib/libreadline.8.dylib /usr/local/opt/readline/lib
+      ```
      ```
 
 3. Upgrade process :
@@ -178,6 +180,6 @@ Developers currently classify MyLocalTon as alpha software, making it unsuitable
 
 - [Бинарные файлы MyLocalTon](https://github.com/neodiX42/MyLocalTon/releases)
 
-- [Исходный код MyLocalTon](https://github.com/neodiX42/MyLocalTon)
+- [Исходный код MyLocalTon](https://github.com/neodiX42/MyLocalTon) <Feedback />
   <Feedback />
 

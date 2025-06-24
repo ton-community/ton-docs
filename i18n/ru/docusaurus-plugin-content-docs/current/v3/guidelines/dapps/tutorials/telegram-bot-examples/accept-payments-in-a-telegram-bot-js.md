@@ -359,7 +359,7 @@ import {
 } from "../../services/ton.js";
 ```
 
-После этого мы создадим обработчик startPaymentProcess, который мы уже зарегистрировали в app.js для выполнения при нажатии определенной кнопки This function is executed when a specific button is pressed.
+После этого мы создадим обработчик startPaymentProcess, который мы уже зарегистрировали в app.js для выполнения при нажатии определенной кнопки This function is executed when a specific button is pressed. This function is executed when a specific button is pressed.
 
 To remove the spinning watch icon in Telegram, we acknowledge the callback before proceeding.
 

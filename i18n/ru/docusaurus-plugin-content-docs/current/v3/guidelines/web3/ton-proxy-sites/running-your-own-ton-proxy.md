@@ -42,7 +42,7 @@ From a technical standpoint, TON Sites function similarly to standard websites. 
 - `3333`: UDP port used for outbound and inbound RLDP and ADNL communication — connecting to TON Sites via the TON Network.
 - `global.config.json` — это имя файла глобальной конфигурации TON.
 
-Если вы все сделали правильно, прокси не завершит свою работу и будет продолжать работать в терминале. Теперь его можно использовать для доступа к TON Sites.
+The proxy will stay running in the terminal if everything is configured correctly. Теперь его можно использовать для доступа к TON Sites.
 
 Когда он больше не нужен, вы можете завершить его работу, нажав `Ctrl-C`, или просто закрыв окно терминала.
 
@@ -99,11 +99,11 @@ You can either:
   - `3333`: UDP port used for RLDP/ADNL activity — connecting to TON Sites via the TON Network.
   - `global.config.json` — это имя файла глобальной конфигурации TON.
 
-The proxy will stay running in the terminal if everything is configured correctly. Теперь его можно использовать для доступа к TON Sites.
+Если вы все сделали правильно, прокси не завершит свою работу и будет продолжать работать в терминале. Теперь его можно использовать для доступа к TON Sites.
 
 Когда он больше не нужен, вы можете завершить его работу, нажав `Ctrl-C`, или просто закрыв окно терминала.
 
-## Запуск TON Site
+## Доступ к TON Sites
 
 Теперь предположим, что у вас на компьютере запущен экземпляр RLDP-HTTP Proxy, который слушает `localhost:8080` для входящих TCP-соединений, как объяснялось [выше] (#running-an-entry-proxy-on-a-remote-computer).
 
@@ -150,7 +150,7 @@ Once the proxy is configured, you can visit TON Sites directly by entering their
 
 You can interact with these TON Sites just like regular websites.
 
-## Доступ к TON Sites
+## Запуск TON Site
 
 :::tip Туториал найден!
 Want to create your own TON Site? (/v3/guidelines/web3/ton-proxy-sites/how-to-run-ton-site)

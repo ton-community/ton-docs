@@ -118,13 +118,13 @@ cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. \
 
 Для таких инструментов, как Lite Client, вам необходимо загрузить сетевой Global Config.
 
-или https://ton-blockchain.github.io/testnet-global.config.json для testnet:
+Загрузите актуальный файл конфигурации https://ton-blockchain.github.io/global.config.json для mainnet:
 
 ```bash
 wget https://ton-blockchain.github.io/global.config.json
 ```
 
-Загрузите актуальный файл конфигурации https://ton-blockchain.github.io/global.config.json для mainnet:
+или https://ton-blockchain.github.io/testnet-global.config.json для testnet:
 
 ```bash
 wget https://ton-blockchain.github.io/testnet-global.config.json
@@ -183,13 +183,13 @@ cmake --build . --target fift
 
 ## Tonlib-cli
 
-Запустите tonlib-cli с Global Config:
+Чтобы собрать tonlib-cli, выполните [общее](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [загрузка config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config), а затем запустите сборку:
 
 ```bash
 cmake --build . --target tonlib-cli
 ```
 
-Чтобы собрать tonlib-cli, выполните [общее](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [загрузка config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config), а затем запустите сборку:
+Запустите tonlib-cli с Global Config:
 
 ```bash
 ./tonlib/tonlib-cli -C global.config.json
@@ -261,7 +261,7 @@ cmake --build . --target func
 
 TON поддерживает Apple M1 с 11 июня 2022 года ([Добавить поддержку Apple M1 (#401)](https://github.com/ton-blockchain/ton/commit/c00302ced4bc4bf1ee0efd672e7c91e457652430)).
 
-Для компиляции старых ревизий TON на Apple M1:
+TON поддерживает Apple M1 с 11 июня 2022 года ([Добавить поддержку Apple M1 (#401)](https://github.com/ton-blockchain/ton/commit/c00302ced4bc4bf1ee0efd672e7c91e457652430)).
 
 1. Обновите субмодуль RocksDb до версии 6.27.3
 

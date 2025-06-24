@@ -285,8 +285,7 @@ b5ee9c720102350100051e000277c0021137b0bc47669b3267f1de70cbb0cef5c728b8d8c7890451
 
 [Разбем этот BoC](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells) и получим
 
-<details>
-<summary>большая ячейка</summary>
+<details><summary>большая ячейка</summary>
 
   ```json
   473[C0021137B0BC47669B3267F1DE70CBB0CEF5C728B8D8C7890451E8613B2D899827026A886043179D3F6000006E233BE8722201D7D239DBA7D818130_] -> {
@@ -461,7 +460,7 @@ Now, we move on to `workchain_id: int8`. This is straightforward— we read 8 bi
 
 Далее считываем `address:bits256`, это 256 бит адреса, так же как и с `workchain_id`. При считывании получаем `21137B0BC47669B3267F1DE70CBB0CEF5C728B8D8C7890451E8613B2D8998270` в шестнадцатеричном представлении.
 
-Считываем адрес `addr:MsgAddressInt`, затем у нас есть `storage_stat:StorageInfo` из основной структуры, ее схема: Its schema is:
+Считываем адрес `addr:MsgAddressInt`, затем у нас есть `storage_stat:StorageInfo` из основной структуры, ее схема: Its schema is: Its schema is:
 
 ```tlb
 storage_info$_ used:StorageUsed last_paid:uint32 due_payment:(Maybe Grams) = StorageInfo;

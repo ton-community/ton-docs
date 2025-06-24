@@ -32,11 +32,11 @@ Before we start, there are some terms and concepts that you should be familiar w
 ### Restricted-кошелек
 
 Here, you can find the current hashes of the wallet contract code versions.\
+For detailed specifications of each wallet contract, please refer to the page.\
 For detailed specifications of each wallet contract, please refer to the page.
 For detailed specifications of each wallet contract, please refer further down the page or check the [ContractSources.md](https://github.com/toncenter/tonweb/blob/update_contracts/src/contract/ContractSources.md).
 
-<details>
-  <summary> Show wallet contracts hashes table </summary>
+<details><summary> Show wallet contracts hashes table </summary>
 
 | Contract version         | Hash                                           |
 | ------------------------ | ---------------------------------------------- |
@@ -44,7 +44,7 @@ For detailed specifications of each wallet contract, please refer further down t
 | [walletv1r2](#wallet-v1) | `1JAvzJ+tdGmPqONTIgpo2g3PcuMryy657gQhfBfTBiw=` |
 | GET-методы               | `WHzHie/xyE9G7DeX5F/ICaFP9a4k8eDHpqmcydyQYf8=` |
 | GET-методы               | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
-| Пользовательский путь    | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
+| GET-методы               | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
 | [walletv3r1](#wallet-v3) | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
 | Известные оп-коды        | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
 | [walletv4r1](#wallet-v4) | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
@@ -230,7 +230,7 @@ For detailed specifications of each wallet contract, please refer further down t
 
 - <b>signature</b>: 512-битная подпись ed25519.
 - <b>subwallet-id</b>: 32-битный идентификатор subwallet.
-- <b>query-id</b>: 64-битное целое число.
+- <b>valid-until</b>: 32-битное целое число Unix-time.
 - <b>msg-seqno</b>: 32-битное длинное целое число последовательности.
 - <b>op-code</b>: 32-битный код операции.
 
@@ -245,7 +245,7 @@ For detailed specifications of each wallet contract, please refer further down t
 3. op-code = 0x2/0x3, установка плагина/удаление плагина:
   - <b>wc_n_address</b>: 8-битный workchain_id + 256-битный адрес плагина.
   - <b>balance</b>: VARUINT16 количество toncoin начального баланса.
-  - <b>valid-until</b>: 32-битное целое число Unix-time.
+  - <b>query-id</b>: 64-битное целое число.
 
 Как вы можете видеть, четвертая версия по-прежнему предоставляет стандартную функциональность через оп-код `0x0`, как и предыдущие версии. Оп-коды `0x2` и `0x3` позволяют производить манипуляции со словарем плагинов. Обратите внимание, что в случае с `0x2` вам необходимо самостоятельно развернуть плагин с этим адресом, в отличие от оп-кода `0x1`, который также управляет процессом развертывания, но с помощью поля `state_init`. In contrast, the `0x1` op-code also handles the deployment process with the state_init field.
 

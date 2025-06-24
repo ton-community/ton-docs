@@ -21,6 +21,7 @@ Before you start contributing, **read the guidelines below** to ensure standardi
 ## Режим "Бок о бок"
 
 Все задачи выполняются в режиме **бок о бок** в редакторе Crowdin. Чтобы включить его, щелкните файл, над которым вы хотите работать. В правом верхнем углу страницы щелкните кнопку **Вид редактора** и выберите режим **бок о бок"** для более удобного просмотра в редакторе.\
+![Режим "бок о бок"](/img/localizationProgramGuideline/side-by-side.png)\
 ![Режим "бок о бок"](/img/localizationProgramGuideline/side-by-side.png)
 
 ## Роли
@@ -57,6 +58,7 @@ Before you start contributing, **read the guidelines below** to ensure standardi
     - **Значение** должно быть новой переменной, которую вы только что создали для вашего языка.
   6. Выполните команду **`yarn start:local [YOUR_IOS_LANG_CODE]`**, чтобы просмотреть новый нижний колонтитул на вашем языке.\
     (например, **`yarn start:local ru`** для предварительного просмотра на **русском** языке)\
+    (e.g., **`yarn start:local ru`** for a preview of the **Russian** footer)\
     (e.g., **`yarn start:local ru`** for a preview of the **Russian** footer)
   7. Если все выглядит хорошо, создайте pull request в ветку **`i18n_feat`**.
 - **Загрузите файлы**

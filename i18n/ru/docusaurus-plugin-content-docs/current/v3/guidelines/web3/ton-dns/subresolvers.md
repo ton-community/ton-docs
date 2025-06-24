@@ -130,9 +130,9 @@ Here's a step-by-step breakdown of when a user resolves a domain like `stabletim
   - Она пропускает первые 32 бита (поддомен = `"resolve-contract\0"`)
   - A suffix variable `subdomain_sfx` is set to the `subdomain`. It reads bytes until the zero byte.
   - (subdomain = `"resolve-contract\0"`, subdomain_sfx = `""`)
-  - Доменный контракт .TON DNS передает разрешение субрезолверу, указанному редактором, поддомен - `"ton\0stabletimer\0"`.
+  - Нулевой байт и subdomain_sfx удаляются с конца среза поддомена subdomain (subdomain = `"resolve-contract"`)
   - Функции slice_hash и get_ton_dns_nft_address_by_index используются для преобразования доменного имени в адрес контракта. Code of resolve-contract.ton|Appendix 1]].
-4. Нулевой байт и subdomain_sfx удаляются с конца среза поддомена subdomain (subdomain = `"resolve-contract"`)
+4. Если переданный поддомен не соответствует ни одному из этих префиксов, функция указывает на неудачу, возвращая `(0, null())` (префикс с нулевыми байтами разрешен без записей DNS).
   - Если да, то он пропускает этот префикс и считывает адрес в формате base64.
 5. If the subdomain doesn't match any known prefix:
   - The function returns `(0, null())`, indicating a failed resolution with no entries.
@@ -280,8 +280,7 @@ We begin by verifying that the incoming message:
 
 ## Приложение 1. Код resolve-contract.ton
 
-<details>
-<summary>subresolver.fc</summary>
+<details><summary>subresolver.fc</summary>
 
 ```func showLineNumbers
 (builder, ()) ~store_slice(builder to, slice s) asm "STSLICER";

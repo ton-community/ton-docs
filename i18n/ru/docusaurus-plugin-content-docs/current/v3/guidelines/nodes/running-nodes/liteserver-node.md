@@ -298,6 +298,6 @@ installer clcf # in mytonctrl
 
 ## См. также
 
-- [[YouTube]инструкция по запуску liteserver]] (https://youtu.be/p5zPMkSZzPc)
+- [[YouTube]инструкция по запуску liteserver]] (https://youtu.be/p5zPMkSZzPc) <Feedback />
   <Feedback />
 

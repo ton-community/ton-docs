@@ -54,8 +54,8 @@ For example, if you assign 256 to uint8, asm command "8 STU" will fail with code
 | `builder`                                 | only for writing, not for reading                      | `STBR`                                                                                                                                                                                                 |
 | `slice`                                   | only for writing, not for reading                      | `STSLICE`                                                                                                                                                                                              |
 | `T?`                                      | TL-B `(Maybe T)`                                       | `1 STI` + IF ...                                                                                                                                       |
-| `T1 \\| T2`                              | TL-B `(Either T1 T2)`                                  | `1 STI` + IF ... + ELSE ... (3)                                                     |
-| `T1 \\| T2 \\| ...`                     | TL-B multiple constructors                             | IF ... + ELSE IF ... + ELSE ... (4) |
+| \`T1 \\                                 | TL-B `(Either T1 T2)`                                  | `1 STI` + IF ... + ELSE ... (3)                                                     |
+| \`T1 \\                                 | TL-B multiple constructors                             | IF ... + ELSE IF ... + ELSE ... (4) |
 | `(T1, T2)`                                | TL-B `(Pair T1 T2)` = one by one                       | pack T1 + pack T2                                                                                                                                                                                      |
 | `(T1, T2, ...)`                           | nested pairs = one by one                              | pack T1 + pack T2 + ...                                                                                                                                |
 | `SomeStruct`                              | fields one by one                                      | like a tensor                                                                                                                                                                                          |
@@ -255,8 +255,7 @@ hint: replace `int` with `int32` / `uint64` / `coins` / etc.
 ## Controlling cell references. Typed cells
 
 Tolk gives you full control over how your data is placed in cells and how cells reference each other.
-When you declare fields in a struct, there is no compiler magic of reordering fields, making any implicit references, etc.
-As follows, whenever you need to place data in a ref, you do it manually. As well as you manually control, when contents of that ref is loaded.
+When you declare fields in a struct, there is no compiler magic of reordering fields, making any implicit references, etc. As follows, whenever you need to place data in a ref, you do it manually. As well as you manually control, when contents of that ref is loaded.
 
 There are two types of references: typed and untyped.
 

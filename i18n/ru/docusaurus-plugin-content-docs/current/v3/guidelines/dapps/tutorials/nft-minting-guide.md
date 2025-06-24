@@ -426,7 +426,7 @@ async function init() {
 Как будет храниться ссылка на наши метаданные в смарт-контракте? Этот вопрос можно полностью ответить с помощью [Стандарта токен-данных](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 В некоторых случаях будет недостаточно просто указать нужный флаг и предоставить ссылку в виде ASCII-символов, поэтому давайте рассмотрим вариант, при котором потребуется разделить нашу ссылку на несколько частей, используя формат с подчеркиваниями (snake format). That is why let's consider splitting our link into several parts using the snake format.
 
-Сначала создайте функцию в файле `./src/utils.ts`, которая будет разбивать наш буфер на части: The function that will convert our buffer into chunks:
+Сначала создайте функцию в файле `./src/utils.ts`, которая будет разбивать наш буфер на части: Сначала создайте функцию в файле `./src/utils.ts`, которая будет разбивать наш буфер на части: The function that will convert our buffer into chunks:
 
 ```ts
 function bufferToChunks(buff: Buffer, chunkSize: number) {
@@ -1027,7 +1027,7 @@ private createDataCell(): Cell {
   feesCell.storeCoins(saleData.royaltyAmount);
 ```
 
-После этого мы можем создать пустую ячейку и просто сохранить в нее информацию из `saleData` в правильном порядке, а сразу после этого сохранить ссылку на ячейку с информацией о сборах: Right after that, store the reference to the cell with the fees information:
+После этого мы можем создать пустую ячейку и просто сохранить в нее информацию из `saleData` в правильном порядке, а сразу после этого сохранить ссылку на ячейку с информацией о сборах: Right after that, store the reference to the cell with the fees information: Right after that, store the reference to the cell with the fees information:
 
 ```ts
   const dataCell = beginCell();

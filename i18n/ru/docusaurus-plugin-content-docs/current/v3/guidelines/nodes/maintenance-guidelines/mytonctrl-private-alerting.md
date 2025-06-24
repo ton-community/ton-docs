@@ -39,7 +39,7 @@ The bot is designed to send notification messages to Telegram only. It **does no
 2. Включите команду
 
     ```bash
-    Вы должны получить сообщение от бота в своем аккаунте Telegram или чате.
+    MyTonCtrl> set ChatId <ChatId>
     ```
 
 If you configure everything correctly, you will receive a welcome message listing all available alerts.

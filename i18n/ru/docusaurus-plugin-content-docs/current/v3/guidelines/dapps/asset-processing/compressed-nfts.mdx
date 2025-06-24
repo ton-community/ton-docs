@@ -35,6 +35,7 @@ Before deployment, you need to prepare the metadata and images for your NFTs.
 
 - **Collection metadata**\
   Create a `collection.json` file that includes the required fields as specified in the [NFT token data standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#nft-collection-metadata-example-offchain).\
+  **Example:**\
   **Example:**
 
   ```json
@@ -45,8 +46,11 @@ Before deployment, you need to prepare the metadata and images for your NFTs.
   }
   ```
 
+<!---->
+
 - **NFT item metadata**\
     For each NFT, create a separate JSON file (e.g., `0.json`, `1.json`, etc.) with the required fields as specified in the [NFT token data standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#nft-item-metadata-example-offchain).\
+    **Example:**\
     **Example:**
   ```json
   {
@@ -66,6 +70,7 @@ Before deployment, you need to prepare the metadata and images for your NFTs.
 ### TON Connect manifest preparation
 
 Create a [TON Connect manifest](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#app-manifest) JSON file to describe your application during the wallet connection process.\
+**Example:**\
 **Example:**
 
 ```json
@@ -81,6 +86,7 @@ Create a [TON Connect manifest](https://github.com/ton-blockchain/ton-connect/bl
 ### Owner list preparation
 
 Prepare an `owners.txt` file that lists the addresses of NFT owners, one per line. The first address corresponds to item index `0`, the second to item index `1`, and so on.\
+**Example:**\
 **Example:**
 
 ```text

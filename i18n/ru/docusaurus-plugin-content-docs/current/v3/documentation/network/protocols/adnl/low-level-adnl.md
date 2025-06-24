@@ -14,7 +14,7 @@ import Feedback from '@site/src/components/Feedback';
 | ---------------------------- | ------------------- |
 | 0x4813b4c6                   | ed25519<sup>1</sup> |
 
-- _1. Для выполнения x25519 пара ключей должна быть сгенерирована в формате x25519. Однако открытый ключ передается по сети в формате ed25519, поэтому вам придется преобразовать открытый ключ из x25519 в ed25519, примеры таких преобразований можно найти [здесь](https://github.com/andreypfau/curve25519-kotlin/blob/f008dbc2c0ebc3ed6ca5d3251ffb7cf48edc91e2/src/commonMain/kotlin/curve25519/MontgomeryPoint.kt#L39) для Kotlin._
+- Для выполнения x25519 пара ключей должна быть сгенерирована в формате x25519. Однако открытый ключ передается по сети в формате ed25519, поэтому вам придется преобразовать открытый ключ из x25519 в ed25519, примеры таких преобразований можно найти [здесь](https://github.com/andreypfau/curve25519-kotlin/blob/f008dbc2c0ebc3ed6ca5d3251ffb7cf48edc91e2/src/commonMain/kotlin/curve25519/MontgomeryPoint.kt#L39) для Kotlin._
 
 ## Клиент-серверный протокол (ADNL через TCP)
 
@@ -36,7 +36,7 @@ The client connects to the server using TCP and sends an ADNL handshake packet. 
 
 Цель padding неизвестна, он не используется реализациями сервера. Рекомендуется заполнять весь 160-байтовый буфер случайными байтами, в противном случае злоумышленник может провести активную MitM-атаку, используя скомпрометированные параметры сеанса AES-CTR. Otherwise, an attacker may perform an active MitM attack using compromised AES-CTR session parameters.
 
-Следующий шаг — зашифровать параметры сеанса с помощью `secret` через протокол согласования ключей выше. Для этого AES-256 должен быть инициализирован в режиме CTR с 128-битным счетчиком big-endian с использованием пары (key, nonce), которая вычисляется следующим образом (`aes_params` — это 160-байтовый буфер, который был построен выше): This will utilize a (key, nonce) pair that is computed as follows (note that `aes_params` is a 160-byte buffer that was created earlier):
+Следующий шаг — зашифровать параметры сеанса с помощью `secret` через протокол согласования ключей выше. Для этого AES-256 должен быть инициализирован в режиме CTR с 128-битным счетчиком big-endian с использованием пары (key, nonce), которая вычисляется следующим образом (`aes_params` — это 160-байтовый буфер, который был построен выше): This will utilize a (key, nonce) pair that is computed as follows (note that `aes_params` is a 160-byte buffer that was created earlier): This will utilize a (key, nonce) pair that is computed as follows (note that `aes_params` is a 160-byte buffer that was created earlier):
 
 ```cpp
 hash = SHA-256(aes_params)
@@ -72,7 +72,7 @@ nonce = hash[0..4] || secret[20..32]
 | length   | 4 байта (LE) | Длина всей датаграммы, исключая поле `length`     |
 | nonce    | 32 байта                        | Случайное значение                                |
 | buffer   | `length - 64` байта             | Фактические данные для отправки на другую сторону |
-| hash     | 32 байта                        | \\`SHA-256(nonce \\         |
+| hash     | 32 байта                        | \\\`SHA-256(nonce \\       |
 
 Вся структура должна быть зашифрована с использованием соответствующего экземпляра AES (TX для клиента -> сервера, RX для сервера -> клиента).
 

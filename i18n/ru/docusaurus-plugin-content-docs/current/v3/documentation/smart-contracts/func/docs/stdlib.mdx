@@ -588,13 +588,13 @@ The source address can have a dummy value `addr_none`, which the current smart c
 1. Сообщение имеет недопустимый формат.
 2. Режим сообщения включает как 64, так и 128 модификаций.
 3. Исходящее сообщение имеет недопустимые библиотеки в StateInit.
-4. **Флаг +2** - важно во внешних сообщениях (например, на кошельках).
+4. **+2 flag** is important in external messages (e.g., to wallets).
    :::
 
 :::warning
 
 1. **Флаг +16** - не использовать во внешних сообщениях (например, на кошельках), так как нет отправителя, который мог бы получить отклоненное сообщение.
-2. **+2 flag** is important in external messages (e.g., to wallets).
+2. **Флаг +2** - важно во внешних сообщениях (например, на кошельках).
    :::
 
 Вы можете увидеть подробный пример [здесь](/v3/documentation/smart-contracts/message-management/sending-messages#example-with-use-cases).

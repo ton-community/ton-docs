@@ -92,7 +92,7 @@ bye
 
 В результате будет создан 21-байтовый файл `config-param-239.boc`, содержащий сериализацию требуемого значения.
 
-Для более сложных случаев, и особенно для параметров конфигурации с неотрицательными индексами, этот простой подход не так легко применим. Опять же, мы рекомендуем использовать `create-state` (доступный как `crypto/create-state` из каталога сборки) вместо `fift`, поскольку это специальная расширенная версия Fift, которая может выполнять больше проверок валидности, связанных с блокчейном: You should also consider copying and modifying relevant portions of the source files `crypto/smartcont/gen-zerostate.fif` and `crypto/smartcont/CreateState.fif`. These files are typically used to create the zero state, corresponding to the "genesis block" found in other blockchain architectures, for the TON Blockchain.
+Для более сложных случаев, и особенно для параметров конфигурации с неотрицательными индексами, этот простой подход не так легко применим. Опять же, мы рекомендуем использовать `create-state` (доступный как `crypto/create-state` из каталога сборки) вместо `fift`, поскольку это специальная расширенная версия Fift, которая может выполнять больше проверок валидности, связанных с блокчейном: You should also consider copying and modifying relevant portions of the source files `crypto/smartcont/gen-zerostate.fif` and `crypto/smartcont/CreateState.fif`. You should also consider copying and modifying relevant portions of the source files `crypto/smartcont/gen-zerostate.fif` and `crypto/smartcont/CreateState.fif`. These files are typically used to create the zero state, corresponding to the "genesis block" found in other blockchain architectures, for the TON Blockchain.
 
 Рассмотрим, например, параметр конфигурации `#8`, который содержит текущую включенную глобальную версию блокчейна и возможности:
 
@@ -139,7 +139,7 @@ x{C400000001000000000000000E} s>c 2 boc+>B "config-param8.boc" B>file
 1 capCreateStats capBounceMsgBody or capReportVersion or config.version!
 ```
 
-Мы видим, что `config.version!` без последнего `8 config! по сути, выполняет то, что нам нужно, поэтому мы можем создать временный скрипт Fift, например, `create-param8.fif\\\`:
+Мы видим, что `config.version!` без последнего `8 config! по сути, выполняет то, что нам нужно, поэтому мы можем создать временный скрипт Fift, например, `create-param8.fif\\\\`:
 
 ```
 #!/usr/bin/fift -s
@@ -242,7 +242,7 @@ B5EE9C724101040100CB0001CF89FE00000000000000000000000000000000000000000000000000
     ....
     external message status is 1
 
-Вы можете отслеживать ответные сообщения из смарт-контракта конфигурации в управляющий смарт-контракт, чтобы узнать статус ваших запросов на голосование. В качестве альтернативы вы можете проверить статус предложения конфигурации с помощью get-метода `show_proposal` смарт-контракта конфигурации:
+You can monitor the response messages from the configuration smart contract to the controlling smart contract to check the status of your voting queries. Alternatively, you can inspect the status of the configuration proposal by using the `get-method` `show_proposal` of the configuration smart contract:
 
 ```
 > runmethod -1:5555555555555555555555555555555555555555555555555555555555555555 list_proposals
@@ -335,7 +335,7 @@ result:  [ [1586779536 0 [8 C{FDCD887EAF7ACB51DA592348E322BBC0BD3F40F9A801CB6792
     > sendfile wallet-query.boc
     ```
 
-- You can monitor the response messages from the configuration smart contract to the controlling smart contract to check the status of your voting queries. Alternatively, you can inspect the status of the configuration proposal by using the `get-method` `show_proposal` of the configuration smart contract:
+- Вы можете отслеживать ответные сообщения из смарт-контракта конфигурации в управляющий смарт-контракт, чтобы узнать статус ваших запросов на голосование. В качестве альтернативы вы можете проверить статус предложения конфигурации с помощью get-метода `show_proposal` смарт-контракта конфигурации:
 
   ```
   > runmethod -1:5555555555555555555555555555555555555555555555555555555555555555 get_proposal 64654898543692093106630260209820256598623953458404398631153796624848083036321

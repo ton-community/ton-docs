@@ -182,7 +182,7 @@ The argument limits for the following operations have been removed:
 
 Certain operations now consume additional gas when arguments exceed 255:
 
-- `ROLL`, `ROLLREV`, `REVX`, `ONLYTOPX` потребляют больше газа, когда аргументы большие: дополнительная стоимость газа составляет `max(arg-255,0)` (для аргумента меньше 256 потребление газа постоянно и соответствует текущему режиму) _For arguments ≤ 255, gas consumption remains unchanged_.
+- `ROLL`, `ROLLREV`, `REVX`, `ONLYTOPX` потребляют больше газа, когда аргументы большие: дополнительная стоимость газа составляет `max(arg-255,0)` (для аргумента меньше 256 потребление газа постоянно и соответствует текущему режиму) _For arguments ≤ 255, gas consumption remains unchanged_. _For arguments ≤ 255, gas consumption remains unchanged_.
 
 - Для `BLKSWX` дополнительная стоимость составляет `max(arg1+arg2-255,0)` (это не соответствует текущему режиму, так как в настоящее время и `arg1`, и `arg2` ограничены 255). _This differs from previous behavior, where both arguments were limited to 255_.
 

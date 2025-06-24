@@ -246,7 +246,7 @@ colorType="primary" sizeType={'lg'}>
 ### Счета со ссылкой ton://
 
 :::warning
-Ссылка Ton устарела, не используйте ее Avoid using it.
+Ссылка Ton устарела, не используйте ее Avoid using it. Avoid using it.
 :::
 
 Если вам нужна простая интеграция для простого пользовательского потока, подойдет ссылка ton://.
@@ -407,8 +407,7 @@ run();
 
 - **xssnick/tonutils-go:**
 
-<details>
-<summary>Проверка депозитов</summary>
+<details><summary>Проверка депозитов</summary>
 
 ```go
 package main 

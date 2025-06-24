@@ -661,7 +661,7 @@ await jetton.send(
 <Tabs groupId="Отправка жетона с комментарием">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-`body` для сжигатие жетона основано на стандарте ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)).  Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
+`messageBody` для отправки жетона ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) с комментарием.  Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
 
 - 9 decimals: 1 TON = 1 × 10<sup>9</sup> typically for various jettons and always for Toncoin
 - 6 decimals: 1 USDT = 1 × 10<sup>6</sup> specific jettons, like USDT
@@ -865,7 +865,7 @@ jetton.send(sender, RECEIVER_ADDRESS, toNano(10), { notify: { payload: forwardPa
 <Tabs groupId="Сжигание жетонов">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-`messageBody` для отправки жетона ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) с комментарием. Please note that the number of decimals can vary between different tokens:
+`body` для сжигатие жетона основано на стандарте ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)). Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
 
 - 9 decimals: 1 TON = 1 × 10<sup>9</sup> typically for various jettons and always for Toncoin
 - Обратите внимание, что количество десятичных знаков может различаться в разных токенах: например, USDT использует 6 десятичных знаков (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 десятичных знаков (1 TON = 1 \* 10 \*\* 9).

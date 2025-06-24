@@ -116,7 +116,6 @@ TON поставляется с утилитой [lite-client](https://github.co
 :::info
 Узнайте больше о техническом описании процесса [здесь](https://github.com/ton-blockchain/TIPs/issues/13#issuecomment-786627474)
 :::
-:::
 
 ### Рабочий процесс подачи жалоб
 

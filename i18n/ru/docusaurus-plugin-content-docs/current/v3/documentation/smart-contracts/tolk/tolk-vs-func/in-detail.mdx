@@ -184,7 +184,7 @@ FunC имеет спецификатор функции `impure`. При его 
   <tbody>
   <tr>
     <td><code>{'forall X -> tuple cons(X head, tuple tail)'}</code></td>
-    <td><code dangerouslySetInnerHTML={{__html: 'fun cons&amp;amp;lt;X&amp;amp;gt;(head: X, tail: tuple): tuple'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'fun cons&amp;amp;amp;lt;X&amp;amp;amp;gt;(head: X, tail: tuple): tuple'}}></code></td>
   </tr>
   </tbody>
 </table>
@@ -387,12 +387,10 @@ if (smth) {
 
 Также обратите внимание, что `T` для функций asm должен занимать 1 слот стека (иначе тело asm не сможет обработать его должным образом), тогда как для пользовательской функции `T` может иметь любую форму.
 
-```tolk
 fun replaceLast<T>(mutate self: tuple, value: T) {
     val size = self.tupleSize();
     self.tupleSetAt(value, size - 1);
 }
-```
 
 The function `ton()` only accepts constant values (e.g., `ton(some_var)` is invalid).
 Its type is `coins` (not `int`!), although it's still a regular `int` from the TVM point of view.
@@ -497,7 +495,7 @@ var i = boolValue as int;  // -1 / 0
 Но, как правило, если вам нужно такое приведение, вероятно, вы делаете что-то неправильно (если только вы не делаете сложную побитовую оптимизацию).
 
 <h3 className="cmp-func-tolk-header">
-  ✅ Универсальные функции и экземпляры, такие как <code>f&amp;amp;lt;int&amp;amp;gt;(...)</code>
+  ✅ Универсальные функции и экземпляры, такие как <code>f&amp;amp;amp;lt;int&amp;amp;amp;gt;(...)</code>
 </h3>
 
 Tolk представляет правильно сделанные универсальные функции. Их синтаксис напоминает основные языки:

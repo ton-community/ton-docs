@@ -131,7 +131,7 @@ Dart SDK для TON Connect 2.0. Аналог библиотеки `@tonconnect/
 
 - [GitHub](https://github.com/romanovichim/dartTonconnect)
 
-## TON Connect C\\\#
+## TON Connect C\\\\#
 
 C# SDK для TON Connect 2.0. Аналог библиотеки `@tonconnect/sdk`.
 
@@ -171,7 +171,7 @@ Go SDK для TON Connect 2.0.
 ## См. также
 
 - [Пошаговое руководство по созданию вашего первого веб-клиента](https://helloworld.tonstudio.io/03-client/)
-- [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU\\\&t=254s\\\&ab_channel=AlefmanVladimir%5BEN%5D)
+- [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU\\\\&t=254s\\\\&ab_channel=AlefmanVladimir%5BEN%5D)
 - [Начало работы Ton Connect](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
 - [Руководство по интеграции](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)
 - [[YouTube] TON Dev Study TON Connect Protocol [RU]] (https://www.youtube.com/playlist?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_)

@@ -32,8 +32,7 @@ import ThemedImage from '@theme/ThemedImage';
 - TON Testnet: [EQB4ZnrI5qsP_IUJgVJNwEGKLzZWsQOFhiaqDbD7pTt_f9oU](https://docs.pyth.network/price-feeds/contract-addresses/ton)
 
 В следующем примере используется контракт testnet. Для использования mainnet измените `PYTH_CONTRACT_ADDRESS_TESTNET` на `PYTH_CONTRACT_ADDRESS_MAINNET` соответственно. 
-<details>
-```ts
+
 import { TonClient, Address, WalletContractV4 } from "@ton/ton";
 import { toNano } from "@ton/core";
 import { mnemonicToPrivateKey } from "@ton/crypto";
@@ -93,8 +92,6 @@ async function main() {
   console.log("Price feeds updated successfully.");
 }
 main().catch(console.error);
-```
-</details>
 
 В этом фрагменте кода выполняется следующее:
 

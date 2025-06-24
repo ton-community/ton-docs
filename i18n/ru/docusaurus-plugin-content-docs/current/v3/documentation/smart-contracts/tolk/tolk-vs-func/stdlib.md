@@ -22,6 +22,7 @@ createEmptyDict()    // available due to import
 ## Functions vs methods
 
 In FunC, there are no methods, actually. All functions are global-scoped.\
+All functions are global-scoped.\
 You just call any function via dot:
 
 ```func
@@ -142,7 +143,7 @@ The table is "sorted" in a way how functions are declared in stdlib.fc:
 | skip_dict                                                                  | skipDict                                                                                     |                    |
 | load_maybe_ref                                        | loadMaybeRef                                                                                 |                    |
 | preload_maybe_ref                                     | preloadMaybeRef                                                                              |                    |
-| getCellDepth                                                                                    | cell_depth                                                              |                    |
+| cell_depth                                                                 | cell_depth                                                              |                    |
 | slice_refs                                                                 | getRemainingRefsCount                                                                        |                    |
 | slice_bits                                                                 | getRemainingBitsCount                                                                        |                    |
 | slice_bits_refs                                       | getRemainingBitsAndRefsCount                                                                 |                    |
@@ -153,7 +154,7 @@ The table is "sorted" in a way how functions are declared in stdlib.fc:
 | equal_slice_bits                                      | a.bitsEqual(b)                                            |                    |
 | builder_refs                                                               | getBuilderRefsCount                                                                          |                    |
 | builder_bits                                                               | getBuilderBitsCount                                                                          |                    |
-| getBuilderDepth                                                                                 | builder_depth                                                           |                    |
+| builder_depth                                                              | builder_depth                                                           |                    |
 | begin_cell                                                                 | beginCell                                                                                    |                    |
 | end_cell                                                                   | endCell                                                                                      |                    |
 | store_ref                                                                  | storeRef                                                                                     |                    |

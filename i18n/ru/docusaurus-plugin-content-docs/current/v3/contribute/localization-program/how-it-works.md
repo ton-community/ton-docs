@@ -69,14 +69,17 @@ import Feedback from '@site/src/components/Feedback';
       ```
 
   2. Введите правильные значения конфигурации:
-    - **project_id**: В проекте Crowdin перейдите на вкладку "Инструменты", выберите API и найдите там **project_id**.
+    - Введите правильные значения конфигурации:
+      \- **project_id**: В проекте Crowdin перейдите на вкладку "Инструменты", выберите API и найдите там **project_id**.
       ![select-api-tool](/img/localizationProgramGuideline/howItWorked/select-api-tool.png)
       ![projectId](/img/localizationProgramGuideline/howItWorked/projectId.png)
+      \- **preserve_hierarchy**: Поддерживает структуру каталогов GitHub на сервере Crowdin.
     - **preserve_hierarchy**: Поддерживает структуру каталогов GitHub на сервере Crowdin.
     - **source** и **translation**: Укажите пути для файлов, которые нужно загрузить в Crowdin, и место, где должны быть переведенные файлы.
 
       Обратитесь к [**нашему официальному конфигурационному файлу**](https://github.com/TownSquareXYZ/ton-docs/blob/localization/crowdin.yml) для примера.\
       Более подробную информацию можно найти в [**документации по конфигурации Crowdin**](https://developer.crowdin.com/configuration-file/).\
+      Find more in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).\
       Find more in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).
 
 6. Настройте Crowdin для подключения к вашему репозиторию на GitHub:
@@ -148,10 +151,10 @@ AI Translation Copilot помогает сломать языковые барь
 
 3. В нашей настройке DeepL используется настраиваемый глоссарий. Проверьте [**ton-i18n-glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) для получения подробной информации о загрузке глоссария.
 
-4. Выберите DeepL в качестве движка перевода, выберите целевые языки и выберите файлы для перевода.
+4. Choose DeepL as the Translation Engine, select the target languages, and select the translated files.
   ![pre-translate-config](/img/localizationProgramGuideline/howItWorked/pre-translate-config.png)
 
-5. Choose DeepL as the Translation Engine, select the target languages, and select the translated files.
+5. Выберите DeepL в качестве движка перевода, выберите целевые языки и выберите файлы для перевода.
   ![pre-translate-config](/img/localizationProgramGuideline/howItWorked/pre-translate-config.png)
 
 Вот и все! Теперь вы можете сделать перерыв и дождаться завершения предварительного перевода.

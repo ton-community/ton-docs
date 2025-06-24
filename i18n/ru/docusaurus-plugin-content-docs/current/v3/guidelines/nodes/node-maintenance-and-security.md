@@ -40,7 +40,7 @@ MyTonCtrl> installer set_node_argument --state-ttl <value>
 
 ### Backups
 
-Самый простой и эффективный способ сделать резервную копию валидатора — скопировать важные файлы конфигурации узла, ключи и настройки mytonctrl: Here are the important files to back up:
+Самый простой и эффективный способ сделать резервную копию валидатора — скопировать важные файлы конфигурации узла, ключи и настройки mytonctrl: Here are the important files to back up: Here are the important files to back up:
 
 1. Файл конфигурации узла: `/var/ton-work/db/config.json`
 
@@ -166,7 +166,8 @@ sudo ufw allow proto udp from any to any port `sudo jq -r '.addrs[0].port' /var/
 
 #### Перепроверьте сети управления
 
-:::caution important <mark>Важно</mark>: перед включением брандмауэра дважды проверьте, что вы добавили правильные адреса управления!
+:::caution important
+important <mark>Важно</mark>: перед включением брандмауэра дважды проверьте, что вы добавили правильные адреса управления!
 :::
 
 #### Включите брандмауэр ufw
@@ -213,7 +214,8 @@ sudo ufw allow proto tcp from any to any port `sudo jq -r '.liteservers[0].port'
 Если вы считаете, что ваш узел подвергся атаке, вам следует рассмотреть возможность смены IP-адреса. The method for switching will depend on your hosting provider. Способ переключения зависит от вашего хостинг-провайдера; вы можете предварительно заказать второй адрес, клонировать **остановленную** виртуальную машину в другой экземпляр или настроить новый экземпляр, выполнив процесс **[аварийного восстановления](#disaster-recovery)**.
 
 :::warning
-В любом случае убедитесь, что вы **[установили свой новый IP-адрес](/v3/guidelines/nodes/node-maintenance-and-security#-set-node-ip-address)** в файле конфигурации узла!
+:::warning
+В любом случае убедитесь, что вы **[установили свой новый IP-адрес](/v3/guidelines/nodes/node-maintenance-and-security#-set-node-ip-address)** в файле конфигурации узла! :::
 :::
 
 <Feedback />

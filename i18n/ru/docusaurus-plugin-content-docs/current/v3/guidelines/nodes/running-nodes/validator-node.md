@@ -161,6 +161,6 @@ https://toncenter.com/api/qos/index.html#/ - используйте этот API
 
 - [Запуск полного узла](/v3/guidelines/nodes/running-nodes/full-node)
 - [Устранение неполадок](/v3/guidelines/nodes/nodes-troubleshooting)
-- [Мотивация для стейкинга](/v3/documentation/infra/nodes/validation/staking-incentives)
+- [Мотивация для стейкинга](/v3/documentation/infra/nodes/validation/staking-incentives) <Feedback />
     <Feedback />
 

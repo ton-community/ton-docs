@@ -90,7 +90,7 @@ docker compose build ton-node
 docker compose up -d
 ```
 
-## Вы можете изменить его в файле docker-compose.yml, указав требуемый путь в разделе **volumes**
+## Перенесите полный узел или валидатор на докеризованную версию MyTonCtrl v2
 
 Укажите пути к бинарным файлам и исходному коду TON, а также к рабочему каталогу, но самое главное, к настройкам MyTonCtrl и кошелькам.
 
@@ -180,7 +180,7 @@ docker compose build ton-node
 docker compose up -d
 ```
 
-При подключении к MyTonCtrl выполняется автоматическая проверка на наличие обновлений. Если обновления обнаружены, отображается сообщение "_MyTonCtrl update available. Please update it with `update` command._"  Обновление выполняется с помощью команды update, указав необходимую ветвь
+При подключении к MyTonCtrl выполняется автоматическая проверка на наличие обновлений. Если обновления обнаружены, отображается сообщение "_MyTonCtrl update available. Please update it with `update` command._"  Обновление выполняется с помощью команды update, указав необходимую ветвь  Обновление выполняется с помощью команды update, указав необходимую ветвь
 
 ```bash
 MyTonCtrl> update mytonctrl2

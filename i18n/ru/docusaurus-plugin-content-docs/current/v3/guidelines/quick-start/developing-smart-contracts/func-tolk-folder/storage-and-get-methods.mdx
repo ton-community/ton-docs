@@ -26,7 +26,7 @@ import Button from '@site/src/components/button'
 <TabItem value="Tolk" label="Tolk">
 Есть две основные инструкции, обеспечивающие доступ к хранилищу смарт-контракта:
 
-- `getContractData()` возвращает текущую \`ячейку\`\\`	 хранения.
+- `getContractData()` возвращает текущую \`ячейку\`\\\`	 хранения.
 - `setContractData()` записывает `ячейку` хранения.
 
 </TabItem>
@@ -134,12 +134,9 @@ fun saveData() {
 
 Также давайте добавим еще **256-битное целое число** в наше хранилище как глобальную переменную `ctx_counter_ext`. Изменённая реализация должна выглядеть следующим образом:
 
-<Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func title="/contracts/hello_world.fc"
-(int, int, int) load_data() {
-    var ds = get_data().begin_parse();
+</TabItem></Tabs>
 
+```
 int ctx_id = ds~load_uint(32);
 int ctx_counter = ds~load_uint(32);
 int ctx_counter_ext = ds~load_uint(256);
@@ -147,6 +144,7 @@ int ctx_counter_ext = ds~load_uint(256);
 ds.end_parse();
 
 return (ctx_id, ctx_counter, ctx_counter_ext);
+```
 
 }
 
@@ -233,24 +231,13 @@ saveData(ctxID, ctxCounter, ctxCounterExt);
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 ```func title="/contracts/hello_world.fc"
-(int, int) get_counters() method_id {
-    var (_, ctx_counter, ctx_counter_ext) = load_data();
-    return (ctx_counter, ctx_counter_ext);
-}
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk title="/contracts/hello_world.tolk"
-get get_counters(): (int, int) {
-    var (_, ctxCounter, ctxCounterExt) = loadData();
-    return (ctxCounter, ctxCounterExt);
-}
-```
-</TabItem>
-</Tabs>
+(int, int, int) load_data() {
+    var ds = get_data().begin_parse();
+    int ctx_id = ds~load_uint(32);
+    int ctx_counter = ds~load_uint(32);
+    int ctx_counter_ext = ds~load_uint(256);
 
 И не забудьте обновить переменные в get-методах, чтобы они совпадали с распаковкой из `load_data()`.
-
 
 <Tabs groupId="language">
   <TabItem value="FunC" label="FunC">
@@ -260,12 +247,16 @@ get get_counters(): (int, int) {
     return ctx_counter;
   }
 
-    int get_id() method_id {
-    var (ctx_id, _, _) = load_data();
-    return ctx_id;
+```
+int get_id() method_id {
+var (ctx_id, _, _) = load_data();
+return ctx_id;
+```
+
   }
-    ```
-  </TabItem>
+    \`\`\`
+
+</TabItem>
   <TabItem value="Tolk" label="Tolk">
     ```tolk title="/contracts/hello_world.tolk"
     get currentCounter(): int {
@@ -273,14 +264,17 @@ get get_counters(): (int, int) {
     return ctxCounter;
   }
 
-    get initialId(): int {
-    var (ctxID, ctxCounter, ctxCounterExt) = loadData();
-    return ctxID;
-  }
-    ```
-  </TabItem>
-</Tabs>
+```
+get initialId(): int {
+var (ctxID, ctxCounter, ctxCounterExt) = loadData();
+return ctxID;
+```
 
+  }
+    \`\`\`
+
+</TabItem>
+</Tabs>
 
 И это все! На практике все **get-методы** следуют этому прямолинейному паттерну и не требуют дополнительной сложности. Помните, что вы можете проигнорировать возвращаемые значения, используя синтаксис заглушки `_`.
 
@@ -291,26 +285,29 @@ get get_counters(): (int, int) {
 ```func title="/contracts/hello_world.fc"
 #include "imports/stdlib.fc";
 
-const op::increase = "op::increase"c; ;; create an opcode from string using the "c" prefix, this results in 0x7e8764ef opcode in this case
+const op::increase = "op::increase"c; ;; создайте opcode из строки, используя префикс "c", в данном случае это приводит к opcode 0x7e8764ef
 
 (int, int, int) load_data() {
     var ds = get_data().begin_parse();
 
-    int ctx_id = ds~load_uint(32);
-    int ctx_counter = ds~load_uint(32);
-    int ctx_counter_ext = ds~load_uint(256);
+```
+int ctx_id = ds~load_uint(32);
+int ctx_counter = ds~load_uint(32);
+int ctx_counter_ext = ds~load_uint(256);
 
-    ds.end_parse();
+ds.end_parse();
 
-    return (ctx_id, ctx_counter, ctx_counter_ext);
+return (ctx_id, ctx_counter, ctx_counter_ext);
+```
+
 }
 
 () save_data(int ctx_id, int ctx_counter, int ctx_counter_ext) impure {
     set_data(
         begin_cell()
-            .store_uint(ctx_id, 32)
-            .store_uint(ctx_counter, 32)
-            .store_uint(ctx_counter_ext, 256)
+            . tore_uint(ctx_id, 32)
+            . tore_uint(ctx_counter, 32)
+            . tore_uint(ctx_counter_ext, 256)
         .end_cell()
     );
 }
@@ -320,25 +317,28 @@ const op::increase = "op::increase"c; ;; create an opcode from string using the 
         return ();
     }
 
-    slice cs = in_msg_full.begin_parse();
-    int flags = cs~load_uint(4);
-    if (flags & 1) { ;; ignore all bounced messages
-        return ();
-    }
+```
+slice cs = in_msg_full.begin_parse();
+int flags = cs~load_uint(4);
+if (flags & 1) { ;; ignore all bounced messages
+    return ();
+}
 
-    var (ctx_id, ctx_counter, ctx_counter_ext) = load_data(); ;; here we populate the storage variables
+var (ctx_id, ctx_counter, ctx_counter_ext) = load_data(); ;; here we populate the storage variables
 
-    int op = in_msg_body~load_uint(32); ;; by convention, the first 32 bits of incoming message is the op
-    int query_id = in_msg_body~load_uint(64); ;; also by convention, the next 64 bits contain the "query id", although this is not always the case
+int op = in_msg_body~load_uint(32); ;; by convention, the first 32 bits of incoming message is the op
+int query_id = in_msg_body~load_uint(64); ;; also by convention, the next 64 bits contain the "query id", although this is not always the case
 
-    if (op == op::increase) {
-        int increase_by = in_msg_body~load_uint(32);
-        ctx_counter += increase_by;
-        save_data(ctx_id, ctx_counter, ctx_counter_ext);
-        return ();
-    }
+if (op == op::increase) {
+    int increase_by = in_msg_body~load_uint(32);
+    ctx_counter += increase_by;
+    save_data(ctx_id, ctx_counter, ctx_counter_ext);
+    return ();
+}
 
-    throw(0xffff); ;; if the message contains an op that is not known to this contract, we throw
+throw(0xffff); ;; if the message contains an op that is not known to this contract, we throw
+```
+
 }
 
 int get_counter() method_id {
@@ -355,7 +355,8 @@ int get_id() method_id {
     var (_, ctx_counter, ctx_counter_ext) = load_data();
     return (ctx_counter, ctx_counter_ext);
 }
-```
+
+````
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk title="/contracts/hello_world.tolk"
@@ -423,7 +424,8 @@ get get_counters(): (int, int) {
     var (_, ctxCounter, ctxCounterExt) = loadData();
     return (ctxCounter, ctxCounterExt);
 }
-```
+````
+
 </TabItem>
 </Tabs>
 

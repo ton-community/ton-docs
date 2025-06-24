@@ -51,9 +51,9 @@ The proxy also adds the following headers:
 
 ### Установка на любую другую ОС
 
-Соберите проект из исходников и запустите так же, как в шаге 2 для Linux. Для сборки требуется среда языка Go.
-
 To install it on other systems, build the project from the source and run it as in step 2 for Linux. A `Go` environment is required.
+
+Соберите проект из исходников и запустите так же, как в шаге 2 для Linux. Для сборки требуется среда языка Go.
 
 ```bash
 git clone https://github.com/tonutils/reverse-proxy.git

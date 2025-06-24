@@ -170,7 +170,7 @@ systemctl start validator.service
 
 ## Обслуживание узла
 
-База данных узла требует периодической очистки (мы рекомендуем проводить ее раз в неделю), для этого, пожалуйста, выполните следующие шаги под учетной записью root: To do so, please perform the following steps as root:
+База данных узла требует периодической очистки (мы рекомендуем проводить ее раз в неделю), для этого, пожалуйста, выполните следующие шаги под учетной записью root: To do so, please perform the following steps as root: To do so, please perform the following steps as root:
 
 1. Остановите процесс validator (Никогда не пропускайте этот момент!)
 

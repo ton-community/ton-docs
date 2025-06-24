@@ -163,7 +163,7 @@ import Feedback from '@site/src/components/Feedback';
 
 - [Введение в разработку смарт-контрактов](/v3/documentation/smart-contracts/overview)
 - [Как работать со смарт-контрактами кошелька](/v3/guidelines/smart-contracts/howto/wallet)
-- [[You Tube] Ton Dev Study FunC и уроки BluePrint](https://www.youtube.com/watch?v=7omBDfSqGfA\\\&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa)
+- [[You Tube] Ton Dev Study FunC и уроки BluePrint](https://www.youtube.com/watch?v=7omBDfSqGfA\\\\&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa)
 
 <Feedback />
 

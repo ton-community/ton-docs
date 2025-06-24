@@ -18,7 +18,7 @@ import Feedback from '@site/src/components/Feedback';
   ```
   это ассемблерное определение той же функции `add` типа `(int, int) -> int`, которое будет транслироваться в код операции TVM `ADD`.
 
-- Объявление неиспользуемого аргумента: только тип. Например,
+- Argument with inferred type declaration: If an argument's type is not explicitly declared, it is inferred by the type-checker. For example,
   ```func
   int add(int x, int y) {
     return x + y;
@@ -99,7 +99,7 @@ It computes Pythagorean triples based on the given input values.
 
 - Обычное объявление: тип + имя. Например, `int x` — это объявление аргумента типа `int` и имени `x` в объявлении функции `() foo(int x);`
 
-- Аргумент с выведенным объявлением типа: только имя. Например,
+- Объявление неиспользуемого аргумента: только тип. Например,
   ```func
   int first(int x, int) {
     return x;
@@ -107,8 +107,8 @@ It computes Pythagorean triples based on the given input values.
   ```
   это допустимое определение функции типа `(int, int) -> int`
 
-- Argument with inferred type declaration: If an argument's type is not explicitly declared, it is inferred by the type-checker.
-  For example,
+- Аргумент с выведенным объявлением типа: только имя.
+  Например,
   ```func
   int inc(x) {
     return x + 1;
@@ -338,8 +338,7 @@ If no ID is specified, the default is calculated as `(crc16(<function_name>) & 0
 **Best practice**: It's recommended to **avoid setting method IDs manually** and rely on automatic generation instead. Manual assignment can lead to conflicts and unexpected behavior.
 :::
 
-<details>
-<summary><b>Technical details about method_id parsing</b></summary>
+<details><summary><b>Technical details about method_id parsing</b></summary>
 
 While the FunC compiler can initially accept larger hex values during parsing, the actual limitation comes from the TVM assembler which restricts method IDs to 19 bits (`@procdictkeylen = 19` in Asm.fif).
 
