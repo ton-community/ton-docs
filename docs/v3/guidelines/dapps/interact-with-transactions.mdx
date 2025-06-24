@@ -12,105 +12,99 @@ import TabItem from '@theme/TabItem';
 
 ### Actor 
 
-An **actor** is an abstract computational entity that reacts to incoming messages, changes its internal state, creates new actors, and sends messages to other actors.
-Actors are isolated: they cannot access each other's state and interact solely through message passing.
+An **actor** is an abstract behavioral model, formalized as a computational object that reacts to incoming messages, changes its internal state, creates new actors, and sends messages to others. Actors are isolated: they do not have access to each other’s state and interact only through message passing.
 
 In other words:
 
-An actor is an independent entity with its own state and behavior. Actors communicate by sending messages to each other.
+An actor is an independent entity with its state and behavior. Actors interact by exchanging messages. Each actor can:
+* change its state
+* send messages to other actors
+* spawn new actors
 
-![](/img/docs/blockchain-fundamentals/actor.svg)
 
-Each actor can:
+![](/img/docs/blockchain-fundamentals/actor_eng_light.svg)
 
-* Change its own state
-* Send messages to other actors
-* Spawn new actors
 
 ### Actor model
 
-The **actor model** is a model of concurrent computation in which a system is described as a collection of actors that communicate via message passing.
+The **actor model** is a model of concurrent computation in which a system is described as a collection of actors that interact through message passing.
 
 Key properties of the model:
+* actor isolation
+* asynchronous communication
+* any computational abstraction can be implemented as an actor
 
-* Actor isolation
-* Asynchronous communication
-* Any computational abstraction can be represented as an actor
-
-This model is used to precisely describe and analyze distributed systems. For example:
-
-* Email can be modeled as an actor system: users are actors, and email addresses are their identifiers.
-* Web services with endpoints (e.g., SOAP) can be interpreted as actors handling messages sent to their address.
+The model is used to precisely describe and analyze distributed systems. For example:
+* Email can be modelled as an actor system: users are represented as actors and email addresses serve as actor addresses.
+* Web services with endpoints (e.g., SOAP) can be interpreted as actors that handle messages sent to their addresses.
 
 In TON, all active entities are actors.
 
+
 ### Account
 
-An account is an actor defined by the following properties:
+An **account** in TON is an actor characterized by the following components:
+* **General account state** — common properties of any account: *ID, balance, status, and last transaction (`last_tx`)*
+* **Data** — custom account-specific state
+* **Code** — custom logic defining the account's behavior
 
-- General account state - general properties of each account: ID, balance, status, last_tx properties
-- Data - custom account state  
-- Code - custom account logic  
+The general state fully defines all account types in TON. Examples:
+* `(ID1, 0, unexist)`
+* `(ID2, 10, uninit, last_tx)`
+* `(ID3, -0.5, frozen)`
 
-General account state properties completely define all accounts in TON:
 
-* (ID1, 0, unexist)
-* (ID2, 10, uninit, last_tx)
-* (ID3, -0.5, frozen)
+![](/img/docs/blockchain-fundamentals/account_eng.svg)
 
-![](/img/docs/blockchain-fundamentals/account.svg)
 
 ### Smart contract
 
-An **account** that also has defined **code** and **data** in addition to the general state is called a **smart contract**.
+An account that, in addition to the general state, also contains **code** and **data** is called a **smart contract**.
 
-![](/img/docs/blockchain-fundamentals/smart_contract.svg)
+![](/img/docs/blockchain-fundamentals/smart_contract_eng.svg)
 
-**Difference between an account and a smart contract**
+#### Difference between an account and a smart contract
 
-* An account is an actor that contains general state (i.e., balance, address, status), and optionally — code and data.
-* (ID1, 0, unexist)
-* (ID2, 2, inited, last_tx, data, code)
+- An **account** is an actor that has a general state — such as balance, address, and status — and may optionally include code and data.
 
-* A smart contract is an actor with mandatory code and data, which define its unique behavior.
-* (ID2, 2, inited, data, code)
+Example: `(ID1, 0, unexist)` or `(ID2, 2, inited, last_tx, data, code)`
+- A **smart contract** is an actor with **mandatory** code and data that define its specific behavior.
+
+Example: `(ID2, 2, inited, data, code)`
+
 
 #### Entity structure in TON Blockchain
 
-![](/img/docs/blockchain-fundamentals/structure.svg)
+![](/img/docs/blockchain-fundamentals/structure_eng.svg)
 
 ### Asynchrony
 
-In TON, contracts (actors) do not call each other directly. Instead, they send messages, each of which is processed separately and independently. All communication occurs through asynchronous messages.
+In TON, contracts or actors do not call each other directly. Instead, they communicate by sending messages, each of which is processed independently of the others. All interaction happens through asynchronous message passing.
 
-**Asynchrony** refers to a communication pattern where the sender does not require the recipient to be immediately ready to respond.
+**Asynchrony** is a property of communication, meaning that sending a message does not require the recipient to be immediately available.
+* The sender doesn’t wait for a response — it simply sends the message.
+* The recipient may process the message later when it’s their turn.
+* If a result is required, the recipient must send a new message explicitly. Otherwise, the sender won’t receive any feedback.
 
-* The sender does not wait for an immediate reply — it simply sends a message.
-* The recipient may process the message later once it is their turn.
-* If a response is important, the recipient must explicitly send a new message in return — otherwise, the sender will not receive any feedback.
+This is different from synchronous models, where the flow is: call → wait for a response → continue.
+In TON, a result can only be received as a separate message — and only if it is explicitly sent.
 
-This differs from synchronous models, where the flow is: call →, get a response, → continue logic.
-In TON, a result can only be received in the form of a new message and only if it is explicitly sent.
+![](/img/docs/blockchain-fundamentals/actors_msging_eng.svg)
 
-![](/img/docs/blockchain-fundamentals/actors_msging.svg)
-
-### Actor structure and interaction in TON
+### Structure and communication of actors in TON
 
 #### Account
 
-Earlier, we mentioned that an account is an actor defined by the following properties:
+Earlier, we mentioned that an account is an actor defined by the following components:
 
-- General account state (ID, balance, status, last_tx)
-- State (data)
-- Behavior (code)
+* General account state (ID, balance, status, last_tx)
+* Data
+* Code
 
-In reality, the data layout is somewhat more complex; however, the logical distinction between an account and a smart contract remains the same.
+In practice, the actual data layout is more complex, but the logical distinction between an account and a smart contract remains the same. To describe data structures, in TON, TL-B schemas are used. These define how data is laid out at the bit level.
 
-To describe data structures in TON, **TL-B schemas** are used. They define how data is laid out at the bit level.
-
-Let’s look at how an account is described:
-
-The account structure is defined through several nested objects:
+Let’s take a look at how an account is defined.
+The account structure consists of several nested objects:
 
 ```tlb
 account_none$0 = Account;
@@ -121,7 +115,7 @@ account$1 addr:MsgAddressInt storage_stat:StorageInfo
 * Address — `MsgAddressInt`
 * Balance — `CurrencyCollection`
 * State — `AccountState`, which defines the account’s behavior
-* Logical time of the last applied transaction — `last_trans_lt`
+* Logical time of the account's last applied transaction — `last_trans_lt`
 * Storage statistics — `StorageInfo`
 
 <details>
@@ -151,30 +145,28 @@ account$1 addr:MsgAddressInt storage_stat:StorageInfo
   library:(Maybe ^Cell) = StateInit;
 
   ```
-
 </details>
 
-Let’s clarify, according to the TL-B schema, which properties belong to the general account state:
+Let’s clarify which properties are part of the **general account state**, according to the TL-B schema:
 
-- General account state:
-- ID → `MsgAddressInt`
-- balance → `CurrencyCollection`
-- status → `AccountState`
-- `last_trans_lt` — also part of the general state
+* ID → `MsgAddressInt`
+* Balance → `CurrencyCollection`
+* Status → `AccountState`
+* Last transaction logical time (`last_trans_lt`) — also part of the general state
 
-Meanwhile, the **state (data)** and **behavior (code)** are defined in the `state: AccountState` field.
+Meanwhile, the data and code are defined within the state:` AccountState` field.
 
-Let’s take a closer look at the general account state and how it is represented in data.
+Now, let’s take a closer look at the general account state and how it’s represented in the data layout.
 
 #### Account status
 
-TON defines account states (`AccountState`) as follows:
+TON defines account states `AccountState` as follows:
 
-| Status     | TL-B Code | Description                                                                                                                              |
-|------------|------------|------------------------------------------------------------------------------------------------------------------------------------------|
-| `uninit`   | `00`       | The account exists but contains no code or data. It may hold a balance but is not yet initialized.                                      |
-| `frozen`   | `01`       | The account is frozen, its code and data are deleted, but the hash of its former state is retained. It cannot be used but can be restored. |
-| `active`   | `10`       | The account contains a `StateInit` with code and data. This is an active smart contract ready to process messages.                      |
+| Status     | TL-B Code | Description                                                                                                                                   |
+|------------|------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| `uninit`   | `00`       | The account exists but contains no code or data. It may hold a non-zero balance but is not initialized yet.                                      |
+| `frozen`   | `01`       | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. **CHECK** The account has zero or negative balance, or doesn't meet the workchain’s minimum requirement.     |
+| `active`   | `10`       | The account includes a `StateInit` with code and data. It is an active smart contract, ready to process incoming messages.             |
 
 
 ```tlb
@@ -183,6 +175,7 @@ account_active$1 _:StateInit = AccountState;
 account_frozen$01 state_hash:bits256 = AccountState;
 ```
 
+
 #### Smart contract
 
 Smart contracts are a set of promises in digital form, including protocols by which the parties fulfill these promises.
@@ -190,6 +183,13 @@ Smart contracts are a set of promises in digital form, including protocols by wh
 In TON typically by smart contract recognize:
 - the program code executed described in FunC, Tact or Tolk in the blockchain.
 - the account that implement business logic and contets code.
+
+The diagram below illustrates the lifecycle of an account in the TON blockchain, showing how its state changes under different conditions.
+
+
+![](/img/docs/blockchain-fundamentals/account_states.svg)
+
+
 
 A smart contract is an account with mandatory code and data which define its unique behavior.
 In terms of TON account, this means:
@@ -200,96 +200,118 @@ In terms of TON account, this means:
 
 The presence of `code` and `data` in `StateInit` makes an account executable and defines it as a smart contract.
 
+A smart contract is an actor that must have both code and data, which together define its unique behavior.
+In terms of actual data, this means:
+
+* A smart contract in TON is an `Account` in the active state `AccountState = active`
+* The `code` field in `StateInit` is initialized
+* The `data` field in `StateInit` is initialized
+
+The presence of both `code` and `data` in `StateInit` makes the account executable and qualifies it as a smart contract.
+
 #### Address
 
 An address in TON is a unique identifier for a smart contract required for interaction between network participants.
 Account itself has address, but we completly define the address for arbitary using only with smart contract.
-Address consists of the following components:
+It consists of the following components:
 
-* **WorkChain ID** — a 32-bit signed integer defining which WorkChain the account belongs to (e.g., -1 for the MasterChain, 0 for the BaseChain)
-* **Account ID** — a 256-bit hash of the `StateInit` structure, which contains the contract's initial state: `code`, `data`, and (optionally) `library`
 
-An address is defined as:
+* **WorkChain ID** — a 32-bit signed integer indicating the WorkChain to which the account belongs (e.g., -1 for the MasterChain, 0 for the BaseChain).
+* **Account ID**— a 256-bit hash of the `StateInit` structure, which contains the contract’s initial state: `code`, `data`, and optionally a `library`.
+
+The address is defined as:
 
 <BlockMath math="{Address} := ({workchain\_id},{account\_id})" />, where <BlockMath math="{account\_id}:= {SHA256(BoC(StateInit))}" />
-Here, BoC (Bag of Cells) is a special serialization format used in TON.
+Here, boc (bag of cells) is a special serialization format used in TON.
 
-Such an address corresponds to a specific initial state of the contract and can be calculated even before the contract is deployed.
-This allows using the address before initialization — for example, to receive tokens or prepare interactions.
+An address corresponds to a specific initial state of a contract and can be calculated even **before** the contract is deployed.
+This allows you to use the address ahead of time — for example, to receive tokens or set up interactions.
 
 :::important
-The address depends only on the `StateInit`. Even a minor change to the code, data, or library results in a completely new `account_id`.
+An address depends only on the `StateInit`. Even a small change to the `code`, `data`, or `library` results in a completely different `account_id`.
 
-At the same time, `StateInit` defines only the initial configuration of the contract — it does not include balance, current data, the message queue, or any other parameters that may change over time.
-These changes **do not affect** the address. Moreover, validators verify the sender's address during message processing, and if it is incorrect, they replace it with the correct one.
+At the same time, `StateInit` defines only the initial configuration of the contract. It does **not** include balance, current data, message queue, or any other runtime parameters. These changes do not affect the address.
+In fact, during message processing, validators verify the sender’s address — if it’s incorrect, they silently replace it with the correct one.
 :::
 
 #### Message feature
 
-A message is a set of instructions for a desired action directed at a single actor.
+A message is a set of instructions intended for a single actor.
 
 #### Transaction feature
 
-A transaction is an update to an account's state on the blockchain, triggered by an incoming message and, if needed, resulting in one or more outgoing messages.
+A transaction represents an update to an account's state triggered by an incoming message.
+It may also produce one or more outgoing messages, depending on the contract logic.
 
-In TON, a transaction is necessary to change an account's state in response to an incoming message and, optionally, to continue interaction with other accounts via outgoing messages.
+In TON, a transaction is required to update an account's state in response to an incoming message and, if necessary, to continue interacting with other accounts by sending outgoing messages.
 
-#### Transactions asynchronous nature
+#### Asynchronous nature of transactions
 
-In TON, all accounts interact **exclusively through messages** — this is the foundation of actor communication.
-Each message becomes part of a transaction that describes the whole history: which message initiated it, how the state changed, and whether any new messages were sent.
+In TON, accounts interact exclusively through messages — this is the core of actor-based communication.
+Each message triggers a transaction, which records the entire context: the triggering message, state updates, and any generated outbound messages.
 
-Transactions in the network are processed **asynchronously**, meaning that calls and state changes of accounts occur independently over time.
+Transactions are processed **asynchronously**, meaning that each account’s updates and message handling occur independently over time.
 
 #### AccountChain
 
 **AccountChain** is a chain of transactions executed on a single account in the TON blockchain.
 It forms a linear sequence: `Tx1 → Tx2 → Tx3 → …`, where each transaction references the previous one.
-For efficient processing and consensus, transactions are grouped into blocks — for example, `[Tx1 → Tx2] → [Tx3 → Tx4 → Tx5] → [] → [Tx6]`.
-These blocks also contain incoming and outgoing message queues, recording all events and state changes for the account during that period.
+For efficient processing and consensus, transactions are grouped into blocks — for example:
+`[Tx1 → Tx2] → [Tx3 → Tx4 → Tx5] → [] → [Tx6]`.
 
-In other words, an AccountChain is a “micro-blockchain” of a single account.
-It stores and orders the complete history of the account’s operations and interactions, ensuring transparency and traceability.
+These blocks also include incoming and outgoing message queues, recording all events and state changes for the account during that period.
 
-At the network scale, many such chains are grouped into a **ShardChain** (or just "shard"), which handles a collection of accounts.
-This abstraction is introduced for logical grouping (AccountChain) on physical carriers (ShardChain ↔ Validator).
+In other words, an AccountChain is a *micro-blockchain* scoped to a single account.
+Like a regular blockchain, it is a linear, append-only sequence of transactions — but dedicated to just one account.
+It stores and orders the entire history of that account’s operations and interactions, ensuring transparency and traceability.
+
+At the network level, many such chains are grouped into a **ShardChain** or simply **shard**, which manages a collection of accounts. This abstraction supports logical grouping *AccountChains* across physical infrastructure *ShardChain ↔ Validator*.
+
+The diagram below provides a graphical representation of an AccountChain and its structure.
+![](/img/docs/blockchain-fundamentals/accountchain.svg)
 
 #### ShardChain
 
-A **ShardChain** is a blockchain that aggregates multiple ** AccountChains ** — i.e., individual transaction chains associated with different accounts.
-Suppose an AccountChain describes the history of one account. In that case, a ShardChain manages and stores data for a group of accounts sharing a common binary address prefix (e.g., all addresses starting with `0b00101`).
+A **ShardChain** is a blockchain that aggregates multiple AccountChains.
+While an AccountChain represents the transaction history of a single account, a ShardChain processes and stores data for a group of accounts that share a common binary address prefix (e.g., all addresses starting with `0b00101`).
+C
+onceptually, a ShardChain can be seen as a **horizontal** blockchain composed of **ShardBlocks**, each of which contains AccountBlocks. ShardChains also facilitate message routing between accounts, ensuring both delivery and order: if one message is sent before another, it will arrive first.
 
-You can think of a ShardChain as a “horizontal” blockchain composed of **ShardBlocks**, each of which aggregates **AccountBlocks** — blocks of individual accounts.
-ShardChains also participate in message routing between accounts, ensuring message delivery and order: if one message is sent before another, it will arrive first.
+ShardChains are a fundamental unit of TON’s architecture, enabling parallel transaction processing within a scalable and deterministic system.
+Each validator is responsible for a specific ShardChain or a group of them, allowing the network to process transactions concurrently across different shards.
 
-Thus, a ShardChain is a key structural unit in TON, enabling parallel transaction processing within a scalable and deterministic architecture.
+![](/img/docs/blockchain-fundamentals/shardchain.svg)
 
 #### WorkChain
 
-A **WorkChain** is an independent blockchain within TON that groups multiple ShardChains (shards).
-Unlike a shard, a WorkChain may have its own set of rules. (to be explained)
+A **WorkChain** is an independent blockchain within TON that groups multiple ShardChains or shards.
+Unlike a ShardChain, a WorkChain may define its own protocol rules.
 
-TON supports up to 2³² WorkChains, each of which can be split into 2⁶⁰ shards.
+TON supports up to 2³² WorkChains, each of which can be divided into up to 2⁶⁰ ShardChains.
 
 #### Types of WorkChain: MasterChain and BaseChain
 
-**MasterChain** is the main coordinating blockchain. It contains:
+**BaseChain** is the primary execution chain used for everyday transactions and smart contracts.
+It is optimized for low fees, making it suitable for regular users and developers.
 
+![](/img/docs/blockchain-fundamentals/basechain.svg)
+
+
+**MasterChain** is the main coordinating blockchain, including one ShardChain. It contains:
 * protocol parameters
-* validator list and their stakes
+* the current validator set and their stakes
 * validator account chains
-* meta-information about all active WorkChains and ShardChains
+* metadata about all active WorkChains and ShardChains
 * hashes of the latest blocks from all other chains
 
-MasterChain is essential for the network’s operation, but due to its importance, it is intentionally expensive to use.
-High gas costs are enforced here to ensure stability and prevent spam.
+Gas costs are intentionally high in the MasterChain to ensure stability, prioritize critical operations, and prevent spam.
 
-**BaseChain** is the main working chain intended for daily transactions and smart contracts.
-It is low-cost and suitable for regular users and developers.
+![](/img/docs/blockchain-fundamentals/masterchain.svg)
 
-Thanks to the presence of ShardChains and WorkChains, we can say that TON is a **blockchain of blockchains** — a system of interconnected blocks, where each block references the previous one via its hash.
 
-![](/img/docs/blockchain-fundamentals/chains_of_chains.svg)
+Thanks to the hierarchical structure of WorkChains and ShardChains, TON forms a **blockchain of blockchains** — a scalable architecture where each chain operates independently, and all blocks reference their predecessors via cryptographic hashes.
+
+![](/img/docs/blockchain-fundamentals/chain-of-chains.svg)
 
 #### Testnet and Mainnet
 
@@ -297,9 +319,8 @@ Thanks to the presence of ShardChains and WorkChains, we can say that TON is a *
 
 The **Mainnet** is the live production network where:
 
-* all transactions are real and irreversible
+* all transactions are real
 * real tokens are used (e.g., actual Toncoin)
-* any actions (transfers, contract deployments) affect the main blockchain
 
 All users and projects operating in production use the Mainnet.
 
@@ -1818,3 +1839,1044 @@ Depending on the task, the fields of interest may vary. Below are the most relev
 
 
 TODO определить набор полей которые здесь полезно рассмотреть.
+
+
+## Transaction
+
+Any change to an account’s state in the TON blockchain is recorded through transactions. Unlike messages, transactions cannot "move", "be sent", or "be received". These two terms are often confused, but it’s important to understand that a transaction is a record that captures all changes that occurred with a specific account.
+
+### TL-B Structure of the Transaction Body
+
+Before we dive into how transactions work in TON, let’s first examine their structure using TL-B. To begin with, note that there are several types of transactions, but in this tutorial, we’ll focus only on ordinary transactions. These are the ones relevant for handling payments and developing any product.
+
+```tlb
+trans_ord$0000 credit_first:Bool
+  storage_ph:(Maybe TrStoragePhase)
+  credit_ph:(Maybe TrCreditPhase)
+  compute_ph:TrComputePhase action:(Maybe ^TrActionPhase)
+  aborted:Bool bounce:(Maybe TrBouncePhase)
+  destroyed:Bool
+  = TransactionDescr;
+```
+
+According to TL-B, a transaction consists of the following fields:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `credit_first` | `Bool` | Indicates whether the credit phase should come first. This depends on whether [bounce is enabled](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/transaction.cpp#L3530). This will be discussed in more detail in one of the next sections. |
+| `storage_ph` | `Maybe TrStoragePhase` | The phase responsible for handling storage-related fees for the account. |
+| `credit_ph` | `Maybe TrCreditPhase` | The phase responsible for processing incoming funds that were included with the inbound message, if it is internal ([#1](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2926), [#2](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2935)). |
+| `compute_ph` | `TrComputePhase` | The phase responsible for executing the smart contract code (stored in the account’s `code` cell). |
+| `action` | `Maybe ^TrActionPhase` | The phase responsible for handling actions generated during the execution of the smart contract code. |
+| `aborted` | `Bool` | Indicates whether the transaction was aborted during any of the phases. If this field is `true`, the transaction was not completed, and all changes from the `compute_ph` and `action` phases were not applied. |
+| `bounce` | `Maybe TrBouncePhase` | The phase responsible for handling errors that occurred during the `compute_ph` or `action` phases. |
+| `destroyed` | `Bool` | Indicates whether the account was destroyed during the execution of the transaction. |
+
+:::info
+Other types of transactions, such as [trans_storage](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L352-L353), [trans_tick_tock](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L355-L357), [trans_split_prepare](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L362-L366), and others are used for events that are invisible to the end user. For example, shard splitting and merging, tick-tock transactions, and so on.
+
+Since they are not relevant to tasks related to DApp development, we will not cover them in this tutorial.
+:::
+
+### Credit phase
+
+This phase is pretty small and straightforward. If we look at the blockchain source code, we’ll see that the main logic of this phase is to top up the contract’s balance with the remaining funds from the incoming message:
+
+```cpp
+  credit_phase->credit = msg_balance_remaining;
+  if (!msg_balance_remaining.is_valid()) {
+    LOG(ERROR) << "cannot compute the amount to be credited in the credit phase of transaction";
+    return false;
+  }
+  // NB: msg_balance_remaining may be deducted from balance later during bounce phase
+  balance += msg_balance_remaining;
+  if (!balance.is_valid()) {
+    LOG(ERROR) << "cannot credit currency collection to account";
+    return false;
+  }
+```
+
+This phase is serialized in TL-B as follows:
+
+```tlb
+tr_phase_credit$_ due_fees_collected:(Maybe Grams)
+  credit:CurrencyCollection = TrCreditPhase;
+```
+
+Here we see that the phase consists of two fields:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `due_fees_collected` | `Maybe Grams` | The amount of storage fees that were collected. This happens if the account had no balance and a debt had accumulated. |
+| `credit` | `CurrencyCollection` | The amount that was credited to the account during message receipt. |
+
+
+### Storage phase
+
+This phase handles the processing of storage-related fees for the account. Let's start by looking at the TL-B scheme:
+
+```tlb
+tr_phase_storage$_ storage_fees_collected:Grams
+  storage_fees_due:(Maybe Grams)
+  status_change:AccStatusChange
+  = TrStoragePhase;
+```
+
+Here we see that the phase consists of the following fields:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `storage_fees_collected` | `Grams` | The amount of storage fees that were collected from the account. |
+| `storage_fees_due` | `Maybe Grams` | The amount of storage fees that were charged but not collected. This occurs when the account has no balance and a debt has accumulated. |
+| `status_change` | `AccStatusChange` | The change in account status after the transaction was executed. |
+
+`storage_fees_due` has type `Maybe` because if the contract has a balance, this value is not present. It's only needed to represent debt. `AccStatusChange`, in turn, indicates whether the account status changed after this phase. For example, if the debt exceeds 0.1 TON, the account state will [freeze](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L949C11-L953C12), and after 1 TON — it will be [deleted](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L936C11-L946C12).
+
+### Compute phase
+
+One of the most complex phases of a transaction is the compute phase. This is the phase where the smart contract code stored in the account is executed. This time, the TL-B contains multiple schemas:
+
+```tlb
+tr_phase_compute_skipped$0 reason:ComputeSkipReason
+  = TrComputePhase;
+tr_phase_compute_vm$1 success:Bool msg_state_used:Bool
+  account_activated:Bool gas_fees:Grams
+  ^[ gas_used:(VarUInteger 7)
+  gas_limit:(VarUInteger 7) gas_credit:(Maybe (VarUInteger 3))
+  mode:int8 exit_code:int32 exit_arg:(Maybe int32)
+  vm_steps:uint32
+  vm_init_state_hash:bits256 vm_final_state_hash:bits256 ]
+  = TrComputePhase;
+cskip_no_state$00 = ComputeSkipReason;
+cskip_bad_state$01 = ComputeSkipReason;
+cskip_no_gas$10 = ComputeSkipReason;
+cskip_suspended$110 = ComputeSkipReason;
+```
+
+To start with, note that the compute phase can be skipped, and the reason for skipping may be one of the following:
+
+| Skip Reason | Description |
+| --- | --- |
+| `cskip_no_state` | The smart contract has no state (and thus no code), so it cannot be executed. |
+| `cskip_bad_state` | This error is thrown in two cases: [an invalid value for the `fixed_prefix_length` field](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1721), or a StateInit passed in the message [does not match the account address](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1726). |
+| `cskip_no_gas` | The incoming message did not include enough TON to execute the smart contract code. |
+| `cskip_suspended` | The account was frozen, so code execution is not allowed. This was used to freeze early miner accounts as part of TON tokenomics stabilization. |
+
+:::tip
+The `fixed_prefix_length` field allows setting fixed leading bits of an account address so that it is located in a specific shard. This is outside the scope of this tutorial, but you can read more [here](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md#anycast-addresses-and-address-rewrite).
+:::
+
+Once we understand the reasons for skipping the compute phase, we can examine what happens after the smart contract code has been executed:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `success` | `Bool` | Indicates whether the compute phase completed successfully. If this is `false`, then all changes made during this phase were discarded. |
+| `msg_state_used`, `account_activated`, `mode`, `vm_init_state_hash`, `vm_final_state_hash` | - | These fields are not used in the current blockchain version and are recorded as zero values. |
+| `gas_fees` | `Grams` | The amount of fees paid for executing the smart contract code. |
+| `gas_used`, `gas_limit` | `VarUInteger` | The amount of gas used and the gas limit set for smart contract execution. |
+| `gas_credit` | `Maybe (VarUInteger 3)` | Used in external messages. Since they cannot carry TON, a small amount of gas is allocated so that the smart contract code can run and decide whether it's ready to continue execution using its own balance. |
+| `exit_code` | `int32` | The virtual machine exit code. If the code is 0 or 1 (alternative success), the smart contract code executed successfully. If it’s non-zero, it means the code failed (except when `commit` is used). <br></br> For convenience, people often refer to this as the “smart contract exit code,” though that’s not entirely accurate. |
+| `exit_arg` | `Maybe int32` | An argument thrown by the virtual machine in case of an error. Useful for debugging smart contract code. |
+| `vm_steps` | `uint32` | Number of steps executed by the virtual machine. |
+
+:::tip
+The `commit` instruction is used to finalize changes made up to that point and apply them even if an error occurs later in the phase. It can only be reverted if the Action Phase fails.
+:::
+
+### Action phase
+
+After the smart contract code has executed, the action phase begins. If any actions were generated during code execution, they are processed during this phase. There are four types of actions:
+
+
+```tlb
+action_send_msg#0ec3c86d mode:(## 8)
+  out_msg:^(MessageRelaxed Any) = OutAction;
+action_set_code#ad4de08e new_code:^Cell = OutAction;
+action_reserve_currency#36e6b809 mode:(## 8)
+  currency:CurrencyCollection = OutAction;
+libref_hash$0 lib_hash:bits256 = LibRef;
+libref_ref$1 library:^Cell = LibRef;
+action_change_library#26fa1dd4 mode:(## 7)
+  libref:LibRef = OutAction;
+```
+
+| Type | Description |
+| --- | --- |
+| `action_send_msg` | Sends a message. |
+| `action_set_code` | Sets new smart contract code. |
+| `action_reserve_currency` | Reserves funds on the account. Very useful for gas management. |
+| `action_change_library` | Changes the library used by the smart contract. |
+
+These actions are executed in the order in which they were created during code execution. A maximum of [255 actions](https://github.com/ton-blockchain/ton/blob/72056a1d139402ef343081810677d2582c3eff51/crypto/block/transaction.h#L165) can be created.
+
+Now let’s take a look at the TL-B scheme that describes the action phase:
+
+```tlb
+tr_phase_action$_ success:Bool valid:Bool no_funds:Bool
+  status_change:AccStatusChange
+  total_fwd_fees:(Maybe Grams) total_action_fees:(Maybe Grams)
+  result_code:int32 result_arg:(Maybe int32) tot_actions:uint16
+  spec_actions:uint16 skipped_actions:uint16 msgs_created:uint16
+  action_list_hash:bits256 tot_msg_size:StorageUsed
+  = TrActionPhase;
+```
+
+Here we see that the phase consists of the following fields:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `success` | `Bool` | Indicates whether the action phase completed successfully. If this is `false`, then all changes made during this phase were discarded. Changes made during the compute phase are also rolled back. |
+| `valid` | `Bool` | Indicates whether the action phase was valid. If this is `false`, it means that invalid actions were created during smart contract execution. Each action type has its own set of validity criteria. |
+| `no_funds` | `Bool` | Indicates whether the account had sufficient funds to execute the actions. `false` means the Action Phase was aborted due to insufficient funds. |
+| `status_change` | `AccStatusChange` | Change in the account's status after executing the action phase. Since account deletion is done through actions (using mode 32), this field may contain information about whether the account was deleted. |
+| `total_fwd_fees` | `Maybe Grams` | Total forwarding fees paid for messages created during action execution. |
+| `total_action_fees` | `Maybe Grams` | Total fees paid for executing actions. |
+| `result_code` | `int32` | Result code of action execution. If the code is 0, it means all actions completed successfully. |
+| `result_arg` | `Maybe int32` | Argument returned in case of error. Useful for debugging smart contract code. |
+| `tot_actions` | `uint16` | Total number of actions created during smart contract execution. |
+| `spec_actions` | `uint16` | Number of special actions (everything except `action_send_msg`). |
+| `skipped_actions` | `uint16` | Number of actions that were skipped during execution. Refers to message sends that had issues but were created with the `ignore_errors` flag (2). |
+| `msgs_created` | `uint16` | Number of messages created during action execution. |
+| `action_list_hash` | `bits256` | Hash of the action list. |
+| `tot_msg_size` | `StorageUsed` | Total size of created messages. |
+
+### Bounce phase
+
+If either the compute phase or action phase ends with an error and the incoming message had the `bounce` flag set, the bounce phase will be executed:
+
+:::note
+For the bounce phase to start due to an error in the action phase, the failed action must have been created with flag 16, which indicates a bounce on failure.
+:::
+
+```tlb
+tr_phase_bounce_negfunds$00 = TrBouncePhase;
+tr_phase_bounce_nofunds$01 msg_size:StorageUsed
+  req_fwd_fees:Grams = TrBouncePhase;
+tr_phase_bounce_ok$1 msg_size:StorageUsed
+  msg_fees:Grams fwd_fees:Grams = TrBouncePhase;
+```
+
+`tr_phase_bounce_negfunds` is not used in the current version of the blockchain, so we will consider the remaining two:
+
+| Type | Description |
+| --- | --- |
+| `tr_phase_bounce_nofunds` | Indicates that there were not enough funds to process the message that was supposed to be returned to the sender. |
+| `tr_phase_bounce_ok` | Indicates that the message was successfully processed and sent back to the sender. |
+
+Here, `msg_fees` and `fwd_fees` are calculated based on the total `fwd_fees` for processing the message. One-third of this fee is paid immediately and recorded in `msg_fees`, while the remaining part is recorded in `fwd_fees`.
+
+### Full transaction body
+
+Now that we’ve covered the transaction header and its description, we can look at what a full transaction in TON looks like. First, let’s examine the TL-B scheme:
+
+```tlb
+transaction$0111 account_addr:bits256 lt:uint64
+  prev_trans_hash:bits256 prev_trans_lt:uint64 now:uint32
+  outmsg_cnt:uint15
+  orig_status:AccountStatus end_status:AccountStatus
+  ^[ in_msg:(Maybe ^(Message Any)) out_msgs:(HashmapE 15 ^(Message Any)) ]
+  total_fees:CurrencyCollection state_update:^(HASH_UPDATE Account)
+  description:^TransactionDescr = Transaction;
+```
+
+Here we see that a transaction consists of the following fields:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `account_addr` | `bits256` | Address of the account to which this transaction belongs. |
+| `lt` | `uint64` | Logical time of the transaction. |
+| `prev_trans_hash` | `bits256` | Hash of the previous transaction executed on this account. |
+| `prev_trans_lt` | `uint64` | Logical time of the previous transaction on this account. |
+| `now` | `uint32` | Timestamp of transaction creation in Unix format. |
+| `outmsg_cnt` | `uint15` | Number of outbound messages created during transaction execution. |
+| `orig_status` | `AccountStatus` | Initial status of the account before the transaction. |
+| `end_status` | `AccountStatus` | Status of the account after the transaction. |
+| `in_msg` | `Maybe ^(Message Any)` | Incoming message processed during transaction execution. For ordinary transactions, this is always present. |
+| `out_msgs` | `HashmapE 15 ^(Message Any)` | Outgoing messages created during the transaction. |
+| `total_fees` | `CurrencyCollection` | Total fees paid for executing the transaction. |
+| `state_update` | `^(HASH_UPDATE Account)` | Contains the hash of the account’s previous state and the hash of the new state. |
+| `description` | `^TransactionDescr` | Transaction description containing details about all execution phases. This field was discussed earlier. |
+
+The `orig_status` and `end_status` fields describe how the account state changed as a result of the transaction. There are four possible statuses:
+
+```tlb
+acc_state_uninit$00 = AccountStatus;
+acc_state_frozen$01 = AccountStatus;
+acc_state_active$10 = AccountStatus;
+acc_state_nonexist$11 = AccountStatus;
+```
+
+### How to get a transaction using api/v2
+
+Among the available and supported Open Source APIs, we can use [APIv2](https://toncenter.com/api/v2/) and [APIv3](https://toncenter.com/api/v3/index.html#/), both provided by TON Center. APIv2 is a lower-level interface and provides only very basic blockchain data. There are two ways to retrieve a transaction:
+
+- Use the `/api/v2/getTransactions` endpoint:
+
+<Tabs groupId="code-examples">
+  <TabItem value="js" label="JavaScript">
+
+    ```js
+    import axios from 'axios';
+
+    async function main() {
+    const client = axios.create({
+    baseURL: 'https://toncenter.com/api/v2',
+    'timeout': 5000,
+    headers: {
+    'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+  }
+  });
+
+    const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
+    const response = await client.get('/getTransactions', {
+    params: {
+    address: address,
+    limit: 1,
+    to_lt: 0,
+    archival: false
+  },
+    headers: {
+    'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+  }
+  });
+    console.log(response.data)
+  }
+
+    main().finally(() => console.log("Exiting..."));
+    ```
+
+  </TabItem>
+</Tabs>
+
+
+- Use `JSON-RPC` protocol:
+
+<Tabs groupId="code-examples">
+  <TabItem value="js" label="JavaScript">
+
+    ```js
+    import { Address, TonClient } from '@ton/ton';
+
+    async function main() {
+    const client = new TonClient({
+    endpoint: "https://toncenter.com/api/v2/jsonRPC",
+    apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
+  });
+
+    const address = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
+    const response = await client.getTransactions(address, {
+    limit: 1,
+  });
+    console.log(response[0]);
+  }
+
+    main().finally(() => console.log("Exiting..."));
+    ```
+
+  </TabItem>
+</Tabs>
+
+The recommended method is to use the `JSON-RPC` protocol, since you can take advantage of an existing SDK where all fields are predefined and properly typed. This way, you don't need to manually interpret each field.
+
+:::note
+When retrieving transactions, you might encounter the error `LITE_SERVER_UNKNOWN: cannot compute block with specified transaction: cannot find block (0,ca6e321c7cce9ece) lt=57674065000003: lt not in db`.
+
+This means that the transactions on this account happened a long time ago, and the blocks containing them are no longer stored on the LiteServer. In such cases, you can use `archival: true` to request data from an archival node.
+:::
+
+### How to get a transaction using api/v3
+
+`APIv3` is more advanced and convenient for retrieving various events from the blockchain. For example, it allows you to fetch information about NFT transfers, token operations, and even transactions in `pending` status. In this tutorial, we'll focus only on the `transactions` endpoint, which returns finalized transactions:
+
+<Tabs groupId="code-examples">
+  <TabItem value="js" label="JavaScript">
+
+    ```js
+    import axios from 'axios';
+
+    async function main() {
+    const client = axios.create({
+    baseURL: 'https://toncenter.com/api/v3',
+    'timeout': 5000,
+    headers: {
+    'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+  }
+  });
+
+    const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
+    const response = await client.get('/transactions', {
+    params: {
+    account: address,
+    limit: 1,
+    to_lt: 0,
+    archival: false
+  }
+  });
+    console.log(response.data.transactions[0])
+  }
+
+    main().finally(() => console.log("Exiting..."));
+    ```
+
+  </TabItem>
+</Tabs>
+
+If we look at the response, we’ll notice that it’s significantly different from the `APIv2` response. The main difference is that this version **indexes** transactions, whereas the previous version was essentially a wrapper around LiteServer communication. This means the data is fetched directly from the server's database.
+
+As a result, we receive already-processed information. For example, if we dig into the response, we can see that the `account_state_before` and `account_state_after` fields contain not just the state hashes, but full account information — including code, data, TON balance, and even ExtraCurrency balance:
+
+
+```json
+[
+  account_state_before: {
+    hash: 'Rljfqi3l3198Fok7x1lyf9OlT5jcVRae7muNhaOyqNQ=',
+    balance: '235884286762',
+    extra_currencies: {},
+    account_status: 'active',
+    frozen_hash: null,
+    data_hash: 'uUe+xBA4prK3EyIJ8iBk8unWktT4Grj+abz4LF2opX0=',
+    code_hash: '/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA='
+  },
+  account_state_after: {
+    hash: 'asmytWJakUpuVVYtuSMgwjmlZefj5tV5AgnWgGYP+Qo=',
+    balance: '225825734714',
+    extra_currencies: {},
+    account_status: 'active',
+    frozen_hash: null,
+    data_hash: '6L0wUi1S55GRvdizozJj2GkCqjKSx8iK7dEHlTOe8d0=',
+    code_hash: '/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA='
+  }
+]
+```
+
+Additionally, the response includes an `address_book` field, which contains an array of addresses that were interacted with during the transaction execution.
+
+### Transaction fields in the SDK
+
+When inspecting the response obtained via the `JSON-RPC` protocol in `@ton/ton@`, we can see that in addition to the fields discussed above, there are also `hash` and `raw`. These fields are not part of the transaction structure on the blockchain itself — they are added by the SDK for convenience.
+
+The `hash` field provides a function that can be used to compute the transaction hash, while the `raw` field contains the transaction's BOC. This allows us to parse the transaction either using a built-in method from the SDK or manually:
+
+
+<Tabs groupId="code-examples">
+  <TabItem value="js" label="JavaScript">
+
+    ```js
+    import { Address, loadTransaction, TonClient } from '@ton/ton';
+
+    async function main() {
+    const client = new TonClient({
+    endpoint: "https://toncenter.com/api/v2/jsonRPC",
+    apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
+  });
+
+    const address = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
+    const response = await client.getTransactions(address, {
+    limit: 1,
+  });
+
+    const transaction = response[0];
+    console.log(loadTransaction(transaction.raw.beginParse()));
+    console.log(`Transaction hash: ${transaction.hash().toString('hex')}`);
+  }
+
+    main().finally(() => console.log("Exiting..."));
+    ```
+  </TabItem>
+</Tabs>
+
+
+
+### Which API should you use?
+
+After reviewing APIv2 and APIv3, the question may arise: which one should you choose? The answer depends entirely on your specific use case. As a general recommendation, you can use the `JSON-RPC` protocol from APIv2, since this allows you to leverage a ready-made SDK that includes all necessary methods and types.
+
+If this functionality doesn't meet your needs, consider a full or partial switch to APIv3 or explore other APIs in the ecosystem that might offer more comprehensive data.
+
+### Action: User Context (a.k.a. Event)
+
+Before we dive into user-facing operations and how to handle them, let’s recap what we’ve learned about transactions:
+
+- A transaction is a record of all changes made to a specific account.
+- A transaction consists of several phases that process incoming messages, execute smart contract code, and handle generated actions.
+- Each phase has a description that provides details about what occurred during execution.
+- A transaction can either complete successfully or fail, depending on whether all phases were completed and whether the generated actions were valid.
+- Ordinary transactions always contain an incoming message but may or may not include outgoing messages.
+- Transactions can be retrieved using either APIv2 or APIv3, both of which present the data in a convenient format.
+- APIv3 indexes transactions and returns processed data, while APIv2 is merely a wrapper over LiteServer.
+- The SDK may include additional fields such as `hash` and `raw` for convenience, allowing you to compute the transaction hash and access the BOC directly.
+
+Previously, we discussed actions from a technical standpoint. However, in many API services, the term "action" is used to describe user-level operations. It’s important to remember that TON is an asynchronous blockchain, meaning a single logical operation may consist of a chain of multiple transactions. In this context, the full picture is what matters — not individual transactions.
+
+For example, transferring Jettons from one wallet to another involves at least 3 separate transactions. Different services refer to these chains using different terms such as "action", "event", or "operation". To avoid confusion with technical terms used earlier, we'll use the term `Event`.
+
+:::tip
+Keep in mind that not every Jetton transfer is considered a `Jetton Transfer Event`. For example, if you're sending Jettons to a DEX to receive a different token, it would be classified as a `Swap Event`.
+
+The context can vary significantly depending on what you're doing with the Jettons. API services typically pre-parse the `forward_payload` and evaluate many other parameters to determine the exact type of operation and present it clearly to the user. This applies not only to Jettons but also to NFTs and other on-chain operations.
+:::
+
+### Event success in the ecosystem: Ordinary TON Transfer
+
+As discussed earlier, everything in TON is asynchronous, so the success of a single transaction doesn’t necessarily mean that the entire chain of operations has succeeded or will succeed in the future. Therefore, we need a more abstract notion of success.
+
+Let’s consider a simple example: an ordinary TON transfer from one wallet to another. This consists of two transactions:
+
+1. The sender’s wallet receives an external message with a signature for verification. After processing this message, the sender’s smart contract creates outbound messages as specified in the body of the external message.
+2. The recipient’s wallet receives the incoming message with the specified TON amount.
+
+To determine whether the transfer was successful, it makes sense to check the second transaction. If the recipient’s account has a transaction triggered by an incoming message from our wallet, and the funds were not returned (we'll cover this below), we can consider the transfer successful.
+
+Suppose we want to check for deposits to our wallet: `UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL`. For convenience, we’ll use APIv3 and request the latest 10 transactions on this account:
+
+
+<Tabs groupId="code-examples">
+  <TabItem value="js" label="JavaScript">
+
+    ```js
+    import { fromNano } from '@ton/core';
+    import axios from 'axios';
+
+    async function main() {
+    const client = axios.create({
+    baseURL: 'https://toncenter.com/api/v3',
+    'timeout': 5000,
+    headers: {
+    'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+  }
+  });
+
+    const address = 'UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL';
+    const response = await client.get('/transactions', {
+    params: {
+    account: address,
+    limit: 10,
+    to_lt: 0,
+    archival: false
+  }
+  });
+
+    for (const transaction of response.data.transactions) {
+    const description = transaction.description;
+    if (description.type !== 'ord') {
+    continue;
+  }
+
+    const inMsg = transaction.in_msg;
+    if (inMsg.created_lt === null) {
+    continue; // Skip external messages
+  }
+    const bouncePhase = description.bounce;
+
+    if (bouncePhase && bouncePhase.type === 'ok') {
+    console.log(`Fake deposit detected: ${transaction.hash}`);
+    continue;
+  }
+
+    console.log(`Deposit detected: ${transaction.hash}. Value: ${fromNano(inMsg.value)} TON.`);
+  }
+  }
+
+    main().finally(() => console.log("Exiting..."));
+    ```
+
+  </TabItem>
+</Tabs>
+
+
+After retrieving the transactions, we need to verify the following:
+
+1. The transaction must be an ordinary one, meaning `description.type` should equal `ord`.
+2. The incoming message must be internal. This means the `created_lt` field must be present.
+3. If the transaction description includes a `bounce` field (this applies only to the `transactions` endpoint in APIv3), it indicates that a bounce phase was triggered. In this case, we must check whether it completed successfully, which would mean the funds were returned to the sender.
+4. If all checks pass, we can consider the deposit successfully received on the wallet.
+
+:::danger
+Note that the provided code is just an example and not a full-fledged deposit tracking solution. In production applications, you should process not just the last 10 transactions but all transactions that occurred since the last check.
+
+Also keep in mind that the expected field values in a fake deposit scenario may differ depending on the API service. This example reflects the response format of Toncenter's APIv3 `transactions` endpoint only.
+:::
+
+If we run this code, we’ll get the following output:
+
+```
+Fake deposit detected: 4vXGhdvtfgFx8tkkaL17POhOwrUZq3sQDVSdNpW+Duk=
+```
+
+If we take a look at this transaction in the [explorer](https://tonviewer.com/transaction/e2f5c685dbed7e0171f2d92468bd7b3ce84ec2b519ab7b100d549d3695be0ee9), we’ll see that the funds were indeed returned to the sender.
+
+:::note
+If we request transactions for this account using APIv2, we won't get any results. This is because the transaction data was only recorded in the block itself, and APIv3’s indexer was able to index it.
+
+However, since this account has no state (not even a single balance top-up), there are no transactions directly associated with it. If there had been at least one deposit, the account state would have changed from `nonexist` to `uninit`, and then APIv2 would have been able to return the transaction.
+:::
+
+### Event success in the ecosystem: Jetton Transfer
+
+Now let’s consider a more complex example — a Jetton transfer. To start, here’s what a Jetton transfer looks like:
+
+
+1. external_in -> User_A - > internal (op::jetton_transfer)
+2. internal (op::jetton_transfer) -> User_A_Jetton_Wallet -> internal (op::internal_transfer)
+3. internal (op::internal_transfer) -> User_B_Jetton_Wallet
+
+
+As we can see, in this case there are 3 transactions involved, and the Jetton transfer is only truly complete once the third transaction has been successfully processed. After the third transaction, 2 additional messages may be sent:
+
+1. internal (op::jetton_transfer_notification) -> User_B | If `forward_amount` is set
+2. internal (op::excesses) -> response_destination | If `response_destination` is set
+
+However, to verify the transfer, we only need the third transaction.
+To simplify the example, let’s assume we want to check for incoming Jettons on a specific wallet:
+`EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX`, for the USDT Jetton:
+
+<Tabs groupId="code-examples">
+  <TabItem value="js" label="JavaScript">
+
+    <details>
+      <summary>
+        Source code
+      </summary>
+
+      ```js
+      import { Address, TonClient } from '@ton/ton';
+
+      // Changed version of
+      // https://github.com/ton-org/ton-core/blob/b2e781f67b41958e4fde0440752a27c168602717/src/utils/convert.ts#L69C1-L96C2
+      export function fromMicro(src: bigint | number | string) {
+      let v = BigInt(src);
+      let neg = false;
+      if (v < 0) {
+      neg = true;
+      v = -v;
+    }
+
+      // Convert fraction
+      let frac = v % 1000000n;
+      let facStr = frac.toString();
+      while (facStr.length < 6) {
+      facStr = '0' + facStr;
+    }
+      facStr = facStr.match(/^([0-9]*[1-9]|0)(0*)/)![1];
+
+      // Convert whole
+      let whole = v / 1000000n;
+      let wholeStr = whole.toString();
+
+      // Value
+      let value = `${wholeStr}${facStr === '0' ? '' : `.${facStr}`}`;
+      if (neg) {
+      value = '-' + value;
+    }
+
+      return value;
+    }
+
+      async function main() {
+      const client = new TonClient({
+      endpoint: "https://toncenter.com/api/v2/jsonRPC",
+      apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
+    });
+
+      const address = Address.parse('EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX');
+      const response = await client.getTransactions(address, {
+      limit: 10,
+      archival: true,
+    });
+
+      for (const transaction of response) {
+      if (transaction.description.type !== 'generic') {
+      continue;
+    }
+
+      // Check if the compute phase is present and successful
+      if (transaction.description.computePhase.type !== 'vm') {
+      continue;
+    }
+      if (transaction.description.computePhase.exitCode !== 0) {
+      continue;
+    }
+
+      // Check if the action phase is present and successful
+      if (transaction.description.actionPhase && transaction.description.actionPhase.resultCode !== 0) {
+      continue;
+    }
+
+      if (transaction.description.aborted === true) {
+      continue;
+    }
+
+      if (transaction.inMessage.info.type !== 'internal') {
+      continue;
+    }
+
+      const body = transaction.inMessage.body.beginParse();
+      try {
+      /*
+      internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
+               response_address:MsgAddress
+               forward_ton_amount:(VarUInteger 16)
+               forward_payload:(Either Cell ^Cell)
+               = InternalMsgBody;
+      */
+
+      const op = body.loadUint(32);
+      if (op !== 0x178d4519) { // op::internal_transfer
+      continue;
+    }
+      const queryId = body.loadUintBig(64);
+      const amount = body.loadCoins();
+      const from = body.loadAddress();
+      const responseAddress = body.loadMaybeAddress();
+      const forwardTonAmount = body.loadCoins();
+      const eitherForwardPayload = body.loadBoolean();
+      const forwardPayload = eitherForwardPayload ? body.loadRef() : body.asCell();
+
+      console.log(`Deposit detected:
+    Transaction hash: ${transaction.hash().toString('hex')}
+    Query ID: ${queryId}
+    Amount: ${fromMicro(amount)} USDT
+    From: ${from.toString({ testOnly: true })}
+    Response Address: ${responseAddress ? responseAddress.toString({ testOnly: true }) : 'None'}
+    Forward TON Amount: ${forwardTonAmount.toString()} TON
+    Forward Payload: ${forwardPayload.toBoc().toString('hex')}`);
+    } catch (e) {
+      console.error(`Error processing transaction ${transaction.hash().toString('hex')}:`, e);
+    }
+    }
+    }
+
+      main().finally(() => console.log("Exiting..."));
+      ```
+
+    </details>
+
+  </TabItem>
+</Tabs>
+
+
+First, we retrieve the last 10 transactions from the USDT Jetton Wallet smart contract.
+Then we need to validate the following:
+
+1. The transaction must be ordinary, meaning `description.type` should be equal to `generic`.
+2. The compute phase must be successful, so `description.computePhase.type` must be `vm`, and `description.computePhase.exitCode` must be `0`.
+3. If an action phase is present, it must also be successful — `description.actionPhase.resultCode` must be `0`.
+4. The incoming message must be internal — `inMessage.info.type` should be `internal`.
+5. The body of the incoming message must contain an `internal_transfer` operation, meaning `body.loadUint(32)` should return `0x178d4519`.
+6. If all checks pass, we can consider the deposit successfully credited to the wallet.
+
+To parse the body of the incoming message, we use the TL-B schema from [TEP-0074](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md):
+
+```tlb
+internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
+                     response_address:MsgAddress
+                     forward_ton_amount:(VarUInteger 16)
+                     forward_payload:(Either Cell ^Cell)
+                     = InternalMsgBody;
+```
+
+:::note
+It's important to understand that this was a very simplified example.
+In real-world applications, the logic for handling deposits may differ.
+For more detailed guidance on how to handle such events, refer to the
+[dedicated article](/v3/guidelines/dapps/asset-processing/jettons).
+:::
+
+### Event Success in the Ecosystem: NFT Transfer
+
+An NFT is a smart contract that stores content.
+This can be [either a link to the content or the content itself](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
+Additionally, the contract holds the owner’s address.
+Transferring an NFT means updating this field.
+
+To do this, the owner must send a special message formatted according to
+the [TL-B schema](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema)
+described in [TEP-0062]:
+
+
+```tlb
+transfer query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell)  forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)  = InternalMsgBody;
+```
+
+This process is similar to a Jetton Transfer, with one key difference:
+the event is considered successful if the field storing the owner's address has changed to the expected value.
+If a `response_destination` is specified, any remaining funds are returned to that address:
+
+
+```tlb
+excesses query_id:uint64 = InternalMsgBody;
+```
+
+Additionally, if a `forward_amount` is specified, the given amount of TON
+along with the `forward_payload` will be sent to the new owner of the NFT:
+
+```tlb
+ownership_assigned query_id:uint64 prev_owner:MsgAddress forward_payload:(Either Cell ^Cell) = InternalMsgBody;
+```
+
+The `custom_payload` field is not required for standard NFTs.
+It exists solely to allow more complex NFT contracts to pass data
+without breaking compatibility with the standard.
+
+To retrieve the owner of an NFT, we will use the `get_nft_data` GET method:
+
+```func
+(int, int, slice, slice, cell) get_nft_data() method_id {
+  (int init?, int index, slice collection_address, slice owner_address, cell content) = load_data();
+  return (init?, index, collection_address, owner_address, content);
+}
+```
+
+This means we won’t need to parse transactions or perform complex checks.
+We can simply retrieve the NFT data and check the owner's address:
+
+<Tabs groupId="code-examples">
+  <TabItem value="js" label="JavaScript">
+
+    ```js
+    import { Address } from '@ton/core';
+    import { TonClient } from '@ton/ton';
+
+    async function main() {
+    const client = new TonClient({
+    endpoint: "https://toncenter.com/api/v2/jsonRPC",
+    apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
+  });
+
+    const nftAddress = Address.parse('EQB9Jp075VrO2IXDPEqdxGb_3lBOkKXpvRYV1zFvYp-UVMUY');
+    const result = await client.runMethod(nftAddress, 'get_nft_data', []);
+    result.stack.skip(3); // init?, index, collection_address
+    const nftOwner = result.stack.readAddress();
+    console.log(`NFT owner: ${nftOwner.toString()}`);
+  }
+
+    main().finally(() => console.log("Exiting..."));
+    ```
+
+  </TabItem>
+</Tabs>
+
+
+:::note
+As with the two previous examples, it's important to note that this is just a simplified case.
+In real-world scenarios, the system will be more complex.
+For more detailed information, refer to the [dedicated article](/v3/guidelines/dapps/asset-processing/nft-processing/nfts).
+:::
+
+### How to Analyze a Contract and Its TL-B Schema to Build Success Criteria Logic
+
+In this section, we’ll use the [Jetton Wallet contract source code](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc)
+and the [TL-B schema](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#tl-b-schema)
+to understand how to determine whether an operation has been successfully completed.
+
+To do this, we first need to broadly analyze the available operations in the contract:
+
+```func
+  if (op == op::transfer()) { ;; outgoing transfer
+    send_tokens(in_msg_body, sender_address, msg_value, fwd_fee);
+    return ();
+  }
+
+  if (op == op::internal_transfer()) { ;; incoming transfer
+    receive_tokens(in_msg_body, sender_address, my_balance, fwd_fee, msg_value);
+    return ();
+  }
+```
+
+In this code, we see that there are two operations related to sending and receiving jettons:
+
+1. `op::transfer` — this operation is executed when sending jettons. It calls the `send_tokens` function, which is responsible for sending jettons to another wallet.
+2. `op::internal_transfer` — this operation is executed when receiving jettons. It calls the `receive_tokens` function, which is responsible for receiving jettons into the wallet.
+
+Let's break down the sending process. First, let's look at what the incoming message consists of:
+
+```tlb
+transfer query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
+           response_destination:MsgAddress custom_payload:(Maybe ^Cell)
+           forward_ton_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)
+           = InternalMsgBody;
+```
+
+Here we can see that this message is quite similar to the `internal_transfer` message we looked at earlier. It specifies who to send the jettons to, how many to send, where to return any remaining funds, and optionally, a payload to forward to the jetton recipient.
+
+Now let’s look at the `send_tokens` function, which is responsible for sending jettons:
+
+<details>
+  <summary>
+
+    `send_tokens` function
+
+  </summary>
+
+  ```func
+  () send_tokens (slice in_msg_body, slice sender_address, int msg_value, int fwd_fee) impure {
+  int query_id = in_msg_body~load_uint(64);
+  int jetton_amount = in_msg_body~load_coins();
+  slice to_owner_address = in_msg_body~load_msg_addr();
+  force_chain(to_owner_address);
+  (int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();
+  balance -= jetton_amount;
+
+  throw_unless(705, equal_slices(owner_address, sender_address));
+  throw_unless(706, balance >= 0);
+
+  cell state_init = calculate_jetton_wallet_state_init(to_owner_address, jetton_master_address, jetton_wallet_code);
+  slice to_wallet_address = calculate_jetton_wallet_address(state_init);
+  slice response_address = in_msg_body~load_msg_addr();
+  cell custom_payload = in_msg_body~load_dict();
+  int forward_ton_amount = in_msg_body~load_coins();
+  throw_unless(708, slice_bits(in_msg_body) >= 1);
+  slice either_forward_payload = in_msg_body;
+  var msg = begin_cell()
+  .store_uint(0x18, 6)
+  .store_slice(to_wallet_address)
+  .store_coins(0)
+  .store_uint(4 + 2 + 1, 1 + 4 + 4 + 64 + 32 + 1 + 1 + 1)
+  .store_ref(state_init);
+  var msg_body = begin_cell()
+  .store_uint(op::internal_transfer(), 32)
+  .store_uint(query_id, 64)
+  .store_coins(jetton_amount)
+  .store_slice(owner_address)
+  .store_slice(response_address)
+  .store_coins(forward_ton_amount)
+  .store_slice(either_forward_payload)
+  .end_cell();
+
+  msg = msg.store_ref(msg_body);
+  int fwd_count = forward_ton_amount ? 2 : 1;
+  throw_unless(709, msg_value >
+  forward_ton_amount +
+  ;; 3 messages: wal1->wal2,  wal2->owner, wal2->response
+  ;; but last one is optional (it is ok if it fails)
+  fwd_count * fwd_fee +
+  (2 * gas_consumption() + min_tons_for_storage()));
+  ;; universal message send fee calculation may be activated here
+  ;; by using this instead of fwd_fee
+  ;; msg_fwd_fee(to_wallet, msg_body, state_init, 15)
+
+  send_raw_message(msg.end_cell(), 64); ;; revert on errors
+  save_data(balance, owner_address, jetton_master_address, jetton_wallet_code);
+}
+
+  ```
+
+</details>
+
+
+Even though the code might seem complex, it’s actually quite straightforward:
+
+1. First, the required fields are read from `in_msg_body`, which represents the body of the incoming message.
+2. Based on these fields, the contract verifies that the sender is the owner of the jettons and that the balance is sufficient for the transfer.
+3. The recipient’s jetton wallet address is derived from the recipient's address.
+4. It checks that the incoming message includes enough TON to cover the fees for sending the jettons (and for refunding them in case of an error), and, if necessary, enough to cover delivery of the `forward_payload`.
+5. A message is created and sent to the recipient’s jetton wallet. This message contains the `internal_transfer` payload we already know.
+6. The contract updates its storage.
+
+Now let’s examine the receiving logic:
+
+<details>
+  <summary>
+
+    `receive_tokens` function
+
+  </summary>
+
+  ```func
+
+  () receive_tokens (slice in_msg_body, slice sender_address, int my_ton_balance, int fwd_fee, int msg_value) impure {
+  ;; NOTE we can not allow fails in action phase since in that case there will be
+  ;; no bounce. Thus check and throw in computation phase.
+  (int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();
+  int query_id = in_msg_body~load_uint(64);
+  int jetton_amount = in_msg_body~load_coins();
+  balance += jetton_amount;
+  slice from_address = in_msg_body~load_msg_addr();
+  slice response_address = in_msg_body~load_msg_addr();
+  throw_unless(707,
+  equal_slices(jetton_master_address, sender_address)
+  |
+  equal_slices(calculate_user_jetton_wallet_address(from_address, jetton_master_address, jetton_wallet_code), sender_address)
+  );
+  int forward_ton_amount = in_msg_body~load_coins();
+
+  int ton_balance_before_msg = my_ton_balance - msg_value;
+  int storage_fee = min_tons_for_storage() - min(ton_balance_before_msg, min_tons_for_storage());
+  msg_value -= (storage_fee + gas_consumption());
+  if(forward_ton_amount) {
+  msg_value -= (forward_ton_amount + fwd_fee);
+  slice either_forward_payload = in_msg_body;
+
+  var msg_body = begin_cell()
+  .store_uint(op::transfer_notification(), 32)
+  .store_uint(query_id, 64)
+  .store_coins(jetton_amount)
+  .store_slice(from_address)
+  .store_slice(either_forward_payload)
+  .end_cell();
+
+  var msg = begin_cell()
+  .store_uint(0x10, 6) ;; we should not bounce here cause receiver can have uninitialized contract
+  .store_slice(owner_address)
+  .store_coins(forward_ton_amount)
+  .store_uint(1, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+  .store_ref(msg_body);
+
+  send_raw_message(msg.end_cell(), 1);
+}
+
+  if ((response_address.preload_uint(2) != 0) & (msg_value > 0)) {
+  var msg = begin_cell()
+  .store_uint(0x10, 6) ;; nobounce - int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool src:MsgAddress -> 010000
+  .store_slice(response_address)
+  .store_coins(msg_value)
+  .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+  .store_uint(op::excesses(), 32)
+  .store_uint(query_id, 64);
+  send_raw_message(msg.end_cell(), 2);
+}
+
+  save_data(balance, owner_address, jetton_master_address, jetton_wallet_code);
+}
+
+  ```
+
+</details>
+
+In this function we see the following steps:
+
+1. The contract reads the required fields from the body of the incoming message.
+2. It increments the token balance counter by the specified amount.
+3. It verifies that the sender is either a valid wallet or the jetton master contract.
+4. Some calculations are performed for gas management, to handle the contract’s storage fees.
+5. If `forward_ton_amount` is specified in the message, a message is created and sent to the actual recipient of the jettons.
+6. If `response_address` is provided, a message is created and sent to that address with the remaining funds.
+
+Now we know that the recipient's balance is credited only after the successful execution of the transaction initiated by the `internal_transfer` message. In case of failure, a bounce message is generated and sent to the sender’s jetton wallet. By examining the contract code, we can see that handling of such a message is implemented:
+
+
+```func
+slice cs = in_msg_full.begin_parse();
+int flags = cs~load_uint(4);
+if (flags & 1) {
+  on_bounce(in_msg_body);
+  return ();
+}
+```
+
+When a bounce message is received, the contract invokes the `on_bounce` function:
+
+```func
+() on_bounce (slice in_msg_body) impure {
+  in_msg_body~skip_bits(32); ;; 0xFFFFFFFF
+  (int balance, slice owner_address, slice jetton_master_address, cell jetton_wallet_code) = load_data();
+  int op = in_msg_body~load_uint(32);
+  throw_unless(709, (op == op::internal_transfer()) | (op == op::burn_notification()));
+  int query_id = in_msg_body~load_uint(64);
+  int jetton_amount = in_msg_body~load_coins();
+  balance += jetton_amount;
+  save_data(balance, owner_address, jetton_master_address, jetton_wallet_code);
+}
+```
+
+Here we see that the contract simply returns the tokens to the balance. In this case, there's no need to verify the sender of the message, since a bounce message cannot be faked. If such a message is received, it means that we previously sent a message with the specified content, so we can safely read the amount of tokens and return them to the balance.
