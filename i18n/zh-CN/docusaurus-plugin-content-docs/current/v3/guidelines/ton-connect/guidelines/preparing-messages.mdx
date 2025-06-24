@@ -1,27 +1,26 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # 准备消息
 
-在使用TON Connect时，您应该为在各种交易中使用的Payload构造消息体。在此页面上，您可以找到与TON Connect SDK一起使用的payload的最相关示例。
+While using TON Connect, you should construct the message body for the payload used in various operations. On this page, you can find the most relevant payload examples for use with the TON Connect SDKs.
 
-:::info
-期望您学习了创建TON Connect连接的基础知识。了解更多请参阅[集成手册](/develop/dapps/ton-connect/integration)。
-:::
-
-## TON Connect JS SDK 示例
+## Cells and message serialization
 
 在深入研究构建消息之前，我们先来介绍一下 cell 的概念，消息体就是由 cell 组成的。
 
 ### 什么是 cell ？
 
- cell 是 TON 区块链中的基本数据结构。它可以存储多达 `1023` 位的数据，并持有多达 `4` 个指向其他 cell 的引用，从而允许您存储更复杂的数据结构。
-像 `@ton/core` 和 `@ton-community/assets-sdk`这样的库提供了处理 cell 的有效方法。
+A cell is a basic data structure in the TON Blockchain. It can store up to `1023` bits and hold up to `4` references to other cells, which allows you to store more complex data structures.
+Libraries like `@ton/core` and `@ton-community/assets-sdk` provide efficient cell handling.
 
 您可以在 [此处](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) 了解有关 cell 的更多信息。
 
-### 创建 cell 
+### 创建 cell
 
+To build a cell, you use the `beginCell()` function. While the cell is _open_, you can store various data types with `store...()` functions.
 要创建 cell ，需要使用 `beginCell()` 函数。当 cell  "打开" 时，您可以使用 `store...()` 函数存储各种数据类型。
 完成后，使用 `endCell()` 函数关闭 cell 。
 
@@ -35,9 +34,13 @@ const cell = beginCell()
   .endCell() // Closes the cell
 ```
 
-### 解析 cell 
+:::info
+Examples were provided only for @ton/ton library. However, every version of [SDKs](/v3/guidelines/dapps/apis-sdks/sdk) implementation has similar functions.
+:::
 
-要从 cell 中读取或解析数据，需要调用 `beginParse()` 函数。使用类似的`load...()` 函数，读取数据的顺序与存储数据的顺序相同：
+### 解析 cell
+
+要从 cell 中读取或解析数据，需要调用 `beginParse()` 函数。使用类似的`load...()` 函数，读取数据的顺序与存储数据的顺序相同： You read data in the same order it was stored using similar `load...()` functions:
 
 ```ts
 const slice = cell.beginParse();
@@ -48,7 +51,7 @@ const coins = slice.loadCoins();
 
 ### 数据量更大
 
-每个 cell 都有 1023 位的限制。如果超过上限，就会发生错误：
+每个 cell 都有 1023 位的限制。如果超过上限，就会发生错误： If you exceed this, an error occurs:
 
 ```ts
 // This will fail due to overflow
@@ -60,7 +63,7 @@ const cell = beginCell()
   .endCell()
 ```
 
-使用TON Connect JS SDK执行常规TON转账如下所示：
+To store more data, cells can reference up to four other cells. You can use the `storeRef()` function to create nested cells:
 
 ```ts
 const cell = beginCell()
@@ -86,7 +89,7 @@ const uint4 = innerSlice.loadUint(256);
 
 ### 可选引用和值
 
- cell 可以存储可选值（可能为空）。这些值使用 `storeMaybe...()` 函数存储：
+Cells can store optional values, which may be null. cell 可以存储可选值（可能为空）。这些值使用 `storeMaybe...()` 函数存储：
 
 ```ts
 const cell = beginCell()
@@ -98,7 +101,7 @@ const cell = beginCell()
     .endCell());
 ```
 
-您可以使用相应的 loadMaybe...() 函数解析可选值。返回值可以为空，因此不要忘记检查它们是否为空！
+您可以使用相应的 loadMaybe...() 函数解析可选值。返回值可以为空，因此不要忘记检查它们是否为空！ Returned values are nullable so do not forget to check them for null!
 
 ```ts
 const slice = cell.beginParse();
@@ -115,7 +118,7 @@ if (maybeRef1) {
 
 手动处理 cell 可能很繁琐，因此 `@ton-community/assets-sdk` 提供了序列化和反序列化信息的便捷方法。
 
-对于特定的自定义交易，必须定义特定的载荷。
+Using `@ton-community/assets-sdk` is more readable and less error-prone.
 
 <Tabs groupId="Serialization/Deserialization">
 
@@ -184,6 +187,7 @@ const transferMessage = { op, queryId, amount, destination, responseDestination,
 
 无论开发者解决的是哪个层级的任务，通常都需要使用来自 `@tonconnect/sdk` 或 `@tonconnect/ui` 的连接器实体。\
 以下是基于 `@tonconnect/sdk` 和 `@tonconnect/ui` 创建的示例：
+Examples created based on `@tonconnect/sdk` and `@tonconnect/ui`:
 
 <Tabs groupId="TON Connect template">
 
@@ -248,6 +252,8 @@ await connector.sendTransaction({
 ### 常规 TON 转账
 
 TON Connect SDK提供了发送消息的封装器，使准备两个钱包之间的Toncoin的常规转账作为默认交易无需载荷变得容易。
+
+The `address` must be in a [user-friendly format](/v3/documentation/smart-contracts/addresses#user-friendly-address), not a raw. If the message is being sent to a smart contract, it must be bounceable; if the message is being sent to a wallet, it must be non-bounceable.
 
 使用TON Connect JS SDK执行常规TON转账如下所示：
 
@@ -333,9 +339,10 @@ await connector.sendTransaction({
 
 对于特定的自定义交易，必须定义特定的载荷。
 
-### 添加评论的转账
+### 带评论的转让
 
-最简单的示例涉及添加一个带有注释的负载。更多细节请参见[此页面](/v3/documentation/smart-contracts/message-management/internal-messages#simple-message-with-comment)。在交易之前，需要通过[@ton/ton](https://github.com/ton-org/ton) JavaScript 库准备一个 `body` [cell](/v3/documentation/data-formats/tlb/cell-boc)。
+The simplest example involves adding a payload with a comment. See more details on [this page](/v3/documentation/smart-contracts/message-management/internal-messages#simple-message-with-a-comment).
+Before the transaction, it is necessary to prepare a `body` [cell](/v3/documentation/data-formats/tlb/cell-boc) via the [@ton/ton](https://github.com/ton-org/ton) JavaScript library.
 
 ```js
 import { beginCell } from '@ton/ton'
@@ -429,8 +436,7 @@ await connector.sendTransaction({
 
 ### Jetton 转账
 
-`WALLET_DST` - 地址 - 初始 NFT 持有者地址，用于接收超额资金
-将 `NFTitem` 转移给新所有者 `NEW_OWNER_WALLET`。
+The `body` for jetton transfers is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. jetton 转帐信息函数示例。请注意，不同代币的小数位数可能不同：例如，USDT 使用 6 个小数位 (1 USDT = 1 _ 10\*\*6)，而 TON 使用 9 个小数位(1 TON = 1 _ 10\*\*9)。
 
 :::info
 您可以在开箱即用的方法中使用 `assets-sdk` 库（甚至可以使用 `ton-connect`)
@@ -461,7 +467,7 @@ await connector.sendTransaction({
 然后，将带有此 body 的交易发送到发送者的 jettonWalletContract 执行：
 
 <Tabs groupId="Jetton Transfer">
-<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+  <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
 ```js
 import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -540,11 +546,11 @@ await connector.sendTransaction({
 
 - `validUntil` - 消息有效的 UNIX 时间
 - `jettonWalletAddress` - 地址，基于 JettonMaser 和 Wallet 合约定义的 JettonWallet 地址
-- `balance` - 整数，用于gas费用的 Toncoin 金额，以 nanotons 计。
+- `amount` - 整数，用于gas费用的 Toncoin 金额，以 nanotons 计。
 - `body` - 用于 jettonContract 的载荷
 
 <details>
-    <summary>Jetton 钱包状态初始化和地址准备示例</summary>
+  <summary>Jetton 钱包状态初始化和地址准备示例</summary>
 
 ```js
 import { Address, TonClient, beginCell, StateInit, storeStateInit } from '@ton/ton'
@@ -652,12 +658,15 @@ await jetton.send(
 </TabItem>
 </Tabs>
 
-### Jetton 销毁
+### 添加评论的转账
 
 <Tabs groupId="Jetton Transfer with Comment">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-Jetton 转账（[TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)）的 `messageBody` 带有注释，我们应在常规转账的 `body` 之外将注释序列化，并将其打包到 `forwardPayload` 中。请注意，不同代币的小数位数可能不同：例如，USDT 使用 6 个小数位 (1 USDT = 1 _ 10\*\*9)，而 TON 使用 9 个小数位 (1 TON = 1 _ 10\*\*9)。
+Jetton 转账（[TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)）的 `messageBody` 带有注释，我们应在常规转账的 `body` 之外将注释序列化，并将其打包到 `forwardPayload` 中。请注意，不同代币的小数位数可能不同：例如，USDT 使用 6 个小数位 (1 USDT = 1 _ 10\*\*9)，而 TON 使用 9 个小数位 (1 TON = 1 _ 10\*\*9)。  Please note that the number of decimals can vary between different tokens:
+
+- 9 decimals: 1 TON = 1 × 10<sup>9</sup> typically for various jettons and always for Toncoin
+- 6 decimals: 1 USDT = 1 × 10<sup>6</sup> specific jettons, like USDT
 
 ```js
     import { beginCell, toNano, Address } from '@ton/ton'
@@ -687,10 +696,10 @@ Jetton 转账（[TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text
 
 ```
 
-消息放入以下请求中：
+准备好的 `transferNftBody` 应发送到 NFT 项目合约，至少要有 `1.08`  TON ，这是成功处理的预期。超出部分将退回发件人钱包。
 
 <Tabs groupId="Jetton Transfer">
-  <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
 ```js
     import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -770,13 +779,13 @@ Jetton 转账（[TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text
 </TabItem>
 </Tabs>
 
+- Jetton 销毁消息的函数示例。请注意，不同代币的小数位数可能会有所不同：例如，USDT 使用 6 位小数（1 USDT = 1 _ 10\*\*9），而 TON 使用 9 位小数（1 TON = 1 _ 10\*\*9）。
 - `jettonWalletAddress` - Jetton 钱包合约地址，基于 JettonMaser 和 Wallet 合约定义
-- `amount` - 整数，用于gas费用的 Toncoin 金额，以 nanotons 计。
-- `body` - 带有 `burn#595f07bc` 操作码的 Jetton 钱包载荷
+- `balance` - 整数，用于支付 gas 费用的 Toncoin 数量（单位： nanotons  ）。
 - `body` - jettonContract 的有效载荷
 
 <details>
-  <summary>Jetton 钱包状态初始化和地址准备示例</summary>
+    <summary>Jetton 钱包状态初始化和地址准备示例</summary>
 
 ```js
   import { Address, TonClient, beginCell, StateInit, storeStateInit } from '@ton/ton'
@@ -818,7 +827,7 @@ Jetton 转账（[TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text
 <TabItem value="assets/sdk" label="assets/sdk">
 
 :::tip
-阅读示例 [源码](https://github.com/yungwine/ton-connect-examples/blob/master/main.py)。
+对于特定的自定义交易，必须定义特定的载荷。
 :::
 
 ```js
@@ -853,12 +862,15 @@ jetton.send(sender, RECEIVER_ADDRESS, toNano(10), { notify: { payload: forwardPa
 </TabItem>
 </Tabs>
 
-### 附带评论的转账
+### jetton 销毁
 
 <Tabs groupId="Jetton Burn">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-Jetton Burn 的 `body` 以 ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) 标准为基础。请注意，不同代币的小数位数可能不同：例如，USDT 使用 6 个小数位 (1 USDT = 1 _ 10\*\*9)，而 TON 使用 9 个小数位 (1 TON = 1 _ 10\*\*9)。
+Jetton Burn 的 `body` 以 ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) 标准为基础。请注意，不同代币的小数位数可能不同：例如，USDT 使用 6 个小数位 (1 USDT = 1 _ 10\*\*9)，而 TON 使用 9 个小数位 (1 TON = 1 _ 10\*\*9)。 Please note that the number of decimals can vary between different tokens:
+
+- 9 decimals: 1 TON = 1 × 10<sup>9</sup> typically for various jettons and always for Toncoin
+- 6 decimals: 1 USDT = 1 × 10<sup>6</sup> specific jettons, like USDT
 
 ```js
     import { beginCell, Address } from '@ton/ton'
@@ -875,7 +887,7 @@ Jetton Burn 的 `body` 以 ([TEP-74](https://github.com/ton-blockchain/TEPs/blob
         .endCell();
 ```
 
-信息内容如下
+消息放入以下请求中：
 
 <Tabs groupId="Jetton Burn">
 <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
@@ -1022,7 +1034,7 @@ await jetton.sendBurn(
 </TabItem>
 </Tabs>
 
-### NFT 销售 (GetGems)
+### NFT 转移
 
 <Tabs groupId="NFT Transfer">
 <TabItem value="@ton/ton" label="@ton/ton">
@@ -1122,7 +1134,7 @@ await connector.sendTransaction({
 </Tabs>
 
 - `NFTitem` - 地址 - NFT 项目智能合约的地址，我们希望将其转移给新的所有者 `NEW_OWNER_WALLET`。
-- `balance` - 整数，用于支付 gas 费用的 Toncoin 数量（单位： nanotons  ）。
+- `balance` - 整数，用于gas费用的 Toncoin 金额，以 nanotons 计。
 - `body` - NFT 合约的有效载荷
 
 </TabItem>
@@ -1187,8 +1199,7 @@ const royaltyPercent =
 
 以下是根据 [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) 合约在 GetGems 市场上准备出售信息和交易的示例。
 
-购买 [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc) 销售合约的 NFT 的过程可以通过常规转账进行，无需负荷，唯一重要的是准确的 TON 数量，按如下计算：
-`buyAmount = Nftprice TON + 1.0 TON`。
+NFT 特卖会 (GetGems)
 
 ```js
     const transferNftBody = beginCell()
@@ -1282,7 +1293,7 @@ async function main() {
 
 </details>
 
-准备好的 `transferNftBody` 应发送到 NFT 项目合约，至少要有 `1.08`  TON ，这是成功处理的预期。超出部分将退回发件人钱包。
+The prepared `transferNftBody` should be sent to the NFT Item contract with at least `1.08` TON, which is expected for successful processing. Excess will be returned to a sender's wallet.
 
 <Tabs groupId="NFT Sale Fix Price">
 <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
@@ -1363,7 +1374,8 @@ await connector.sendTransaction({
 <TabItem value="@ton/ton" label="@ton/ton">
 
 [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) 销售合约的买入 NFT 过程可以通过常规转账进行，无需付费，唯一重要的是准确的 TON 数，计算公式如下：
-`buyAmount = Nftprice TON + 1.0 TON`。
+`buyAmount = Nftprice TON + 1.0 TON`。 The only important thing is the accurate TON amount, which is calculated as follows:
+`buyAmount = Nftprice TON + 1.0 TON`.
 
 <Tabs groupId="NFT Buy">
 <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
@@ -1462,7 +1474,7 @@ Python 示例使用 [PyTonConnect](https://github.com/XaBbl4/pytonconnect) 和 [
 阅读示例 [资料来源](https://github.com/yungwine/ton-connect-examples/blob/master/main.py)。
 :::
 
-### NFT 转账
+### 使用TON Connect JS SDK执行常规TON转账如下所示：
 
 ```python
 connector = TonConnect(
@@ -1480,9 +1492,9 @@ transaction = {
 }
 ```
 
-### 带评论的转让
+### 附带评论的转账
 
-最终的交易体：
+At first order, implement a message with comment via the following function:
 
 ```python
     def get_comment_message(destination_address: str, amount: int, comment: str) -> dict:
@@ -1522,9 +1534,9 @@ transaction = {
 了解有关 [TON 智能合约地址](/v3/documentation/smart-contracts/addresses) 的更多信息。
 :::
 
-### Jetton Transfer
+### Jetton 转账
 
-建立 jetton 转帐交易的函数示例。请注意，不同代币的小数位数可能不同：例如，USDT 使用 6 个小数位 (1 USDT = 1 _ 10\*\*9)，而 TON 使用 9 个小数位 (1 TON = 1 _ 10\*\*9)。
+Example of function for building jetton transfer transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 ```python
 from pytoniq_core import begin_cell
@@ -1553,7 +1565,7 @@ def get_jetton_transfer_message(jetton_wallet_address: str, recipient_address: s
     return data
 ```
 
-最终交易体：
+最终交易主体：
 
 ```python
 transaction = {
@@ -1571,9 +1583,9 @@ transaction = {
 
 ```
 
-### NFT 购买 (GetGems)
+### `body` - 带有 `burn#595f07bc` 操作码的 Jetton 钱包载荷
 
-建立 jetton 刻录交易的函数示例。请注意，不同代币的小数位数可能不同：例如，USDT 使用 6 个小数位 (1 USDT = 1 _ 10\*\*9)，而 TON 使用 9 个小数位 (1 TON = 1 _ 10\*\*9)。
+Example of function for building jetton burn transaction. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 ```python
 from pytoniq_core import begin_cell
@@ -1613,7 +1625,7 @@ transaction = {
 }
 ```
 
-### 参阅
+### NFT 转账
 
 NFT 转账交易功能示例：
 
@@ -1644,7 +1656,7 @@ def get_nft_transfer_message(nft_address: str, recipient_address: str, transfer_
 
 ```
 
-最终交易正文：
+最终交易主体：
 
 ```python
 transaction = {
@@ -1660,7 +1672,7 @@ transaction = {
 }
 ```
 
-### NFT 特卖会 (GetGems)
+### NFT 销售 (GetGems)
 
 以下是根据合约 [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) 在 GetGems 市场上准备出售信息和交易的示例。
 
@@ -1766,7 +1778,7 @@ transaction = {
 
 ### 购买 NFT (GetGems)
 
-[nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) 销售合约的 NFT 购买流程可以通过常规转账进行，无需支付载荷，唯一重要的是准确的 TON 数，计算公式如下：
+购买 [nft-fixprice-sale-v3r2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r2.fc) 销售合约的 NFT 的过程可以通过常规转账进行，无需负荷，唯一重要的是准确的 TON 数量，按如下计算：
 `buyAmount = Nftprice TON + 1.0 TON`。
 
 ```python
@@ -1885,9 +1897,9 @@ if err != nil {
 }
 ```
 
-### Jetton 转账
+### Jetton Transfer
 
-jetton 转帐信息函数示例。请注意，不同代币的小数位数可能不同：例如，USDT 使用 6 个小数位 (1 USDT = 1 _ 10\*\*6)，而 TON 使用 9 个小数位(1 TON = 1 _ 10\*\*9)。
+Example of function for jetton transfer message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 ```go
 import (
@@ -1947,9 +1959,9 @@ if err != nil {
 }
 ```
 
-###  jetton 销毁
+### Jetton 销毁
 
-Jetton 销毁消息的函数示例。请注意，不同代币的小数位数可能会有所不同：例如，USDT 使用 6 位小数（1 USDT = 1 _ 10\*\*9），而 TON 使用 9 位小数（1 TON = 1 _ 10\*\*9）。
+Example of function for jetton burn message. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while TON uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
 
 ```go
 import (
@@ -1983,7 +1995,7 @@ func JettonBurnMessage(jetton_wallet_address string, amount uint64,
 }
 ```
 
-最终交易主体：
+最终的交易体：
 
 ```go
 msg, err := JettonBurnMessage("kQA8Q7m_pSNPr6FcqRYxllpAZv-0ieXy_KYER2iP195hBXiX",
@@ -2003,7 +2015,7 @@ if err != nil {
 }
 ```
 
-### NFT 转移
+### 购买 NFT (GetGems)
 
 NFT 转移消息的函数示例：
 
@@ -2042,7 +2054,7 @@ func NftTransferMessage(nft_address string, amount uint64, recipient_address, re
 }
 ```
 
-最终交易主体：
+最终交易体：
 
 ```go
 msg, err := NftTransferMessage("EQDrA-3zsJXTfGo_Vdzg8d07Da4vSdHZllc6W9qvoNoMstF-",
@@ -2206,9 +2218,9 @@ if err != nil {
 
 </details>
 
-### 购买 NFT (GetGems)
+### NFT 购买 (GetGems)
 
-[nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) 销售合约的买入 NFT 过程可以通过常规转账进行，无需付费，唯一重要的是准确的 TON 数，计算公式如下：
+[nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc) 销售合约的 NFT 购买流程可以通过常规转账进行，无需支付载荷，唯一重要的是准确的 TON 数，计算公式如下：
 `buyAmount = Nftprice TON + 1.0 TON`。
 
 ```go
@@ -2239,3 +2251,5 @@ if err != nil {
 - [智能合约开发 - 发送消息（低级）](/v3/documentation/smart-contracts/message-management/sending-messages)
 - [TON jetton 处理](/v3/guidelines/dapps/asset-processing/jettons)
 - [TON 上的 NFT 处理](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
+
+<Feedback />

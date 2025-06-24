@@ -1,8 +1,10 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 如何运行 TON 网站
 
-## 👋 引言
+## Introduction
 
-[TON 网站](https://blog.ton.org/ton-sites)的工作方式几乎与普通网站相同，除了它们的安装。需要执行一些额外的操作来启动它们。在这篇教程中，我将向您展示如何做到这一点。
+[TON 网站](https://blog.ton.org/ton-sites)的工作方式几乎与普通网站相同，除了它们的安装。需要执行一些额外的操作来启动它们。在这篇教程中，我将向您展示如何做到这一点。 This guide walks you through the setup process.
 
 ## 🖥 运行 TON 网站
 
@@ -25,7 +27,7 @@ chmod +x tonutils-reverse-proxy-linux-amd64
 ./tonutils-reverse-proxy-linux-amd64 --domain your-domain.ton 
 ```
 
-使用 Tonkeeper、Tonhub 或任何其他钱包扫描你的终端中的 QR 码，执行交易。您的域将会链接到您的网站上。
+使用 Tonkeeper、Tonhub 或任何其他钱包扫描你的终端中的 QR 码，执行交易。您的域将会链接到您的网站上。 Confirm the transaction to link your domain to the site.
 
 ###### 无域运行
 
@@ -39,14 +41,19 @@ chmod +x tonutils-reverse-proxy-linux-amd64
 
 现在任何人都可以访问您的 TON 网站了！使用 ADNL 地址或域名。
 
-如果您想更改一些设置，如代理pass url - 打开 `config.json` 文件，编辑后重启代理。默认的代理pass url是 `http://127.0.0.1:80/`
+如果您想更改一些设置，如代理pass url - 打开 `config.json` 文件，编辑后重启代理。默认的代理pass url是 `http://127.0.0.1:80/` The default proxy pass URL is: `http://127.0.0.1:80/`.
 
-代理添加了额外的头部：
-`X-Adnl-Ip` - 客户端的 IP 和 `X-Adnl-Id` - 客户端的 ADNL ID
+The proxy also adds the following headers:
+
+- 代理添加了额外的头部：
+  `X-Adnl-Ip` - 客户端的 IP 和 `X-Adnl-Id` - 客户端的 ADNL ID
+- 完成所选方法的所有步骤后，TON 代理服务器应已启动。如果一切顺利，您的网站将在相应步骤中收到的 ADNL 地址上可用。
 
 ### 在任何其他操作系统上的安装
 
-使用 `./build.sh` 从源代码构建，然后如第 2 步中的 Linux 一样运行。构建需要 Go 环境。
+使用 `./build.sh` 从源代码构建，然后如第 2 步中的 Linux 一样运行。构建需要 Go 环境。 Go environment is required to build.
+
+To install it on other systems, build the project from the source and run it as in step 2 for Linux. A `Go` environment is required.
 
 ```bash
 git clone https://github.com/tonutils/reverse-proxy.git
@@ -60,9 +67,9 @@ make build
 
 ### 🔍 检查网站的可用性
 
-完成所选方法的所有步骤后，TON 代理服务器应已启动。如果一切顺利，您的网站将在相应步骤中收到的 ADNL 地址上可用。
+After completing the setup, the TON Proxy should be running. If the setup is successful, your site will be available at the ADNL address generated during the configuration.
 
-您可以使用域名 `.adnl`打开该地址，查看网站是否可用。另外请注意，为了打开该网站，您必须在浏览器中运行 TON 代理，例如通过扩展 [MyTonWallet](https://mytonwallet.io/)。
+You can check availability by opening the address with the `.adnl` suffix. 您可以使用域名 `.adnl`打开该地址，查看网站是否可用。另外请注意，为了打开该网站，您必须在浏览器中运行 TON 代理，例如通过扩展 [MyTonWallet](https://mytonwallet.io/)。
 
 ## 📌 参考资料
 
@@ -73,3 +80,6 @@ make build
 ## 参阅
 
 - [运行 C++ 实现](/v3/guidelines/web3/ton-proxy-sites/running-your-your-ton-proxy)
+
+<Feedback />
+

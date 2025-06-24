@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 从源代码编译
 
 您可以[在此处](/develop/smart-contracts/environment/installation#1-download)下载预构建的二进制文件。
@@ -12,7 +14,7 @@ This is a simplified quick build guide.
 
 ## 通用
 
-该软件可能在大多数Linux系统上都能正确编译和工作。它应该适用于macOS甚至Windows。
+该软件可能在大多数Linux系统上都能正确编译和工作。它应该适用于macOS甚至Windows。 It should work on macOS and even Windows.
 
 1. 在GitHub库 https://github.com/ton-blockchain/ton/ 下载TON区块链源代码的最新版本：
 
@@ -21,11 +23,11 @@ git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
 ```
 
 2. 安装最新版本的：
-   - `make`
-   - `cmake` 版本 3.0.2 或更高
-   - `g++` 或 `clang`（或适用于您的操作系统的另一种C++14兼容编译器）。
-   - OpenSSL（包括C头文件）版本 1.1.1 或更高
-   - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`, `pkg-config`, `libsodium-dev`, `libsecp256k1-dev`
+  - `make`
+  - `cmake` 版本 3.0.2 或更高
+  - `g++` 或 `clang`（或适用于您的操作系统的另一种C++14兼容编译器）。
+  - OpenSSL（包括C头文件）版本 1.1.1 或更高
+  - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`, `pkg-config`, `libsodium-dev`, `libsecp256k1-dev`
 
 ### 关于 Ubuntu
 
@@ -51,14 +53,14 @@ cmake -DCMAKE_BUILD_TYPE=Release ../ton && cmake --build . -j$(nproc)
 
 ### 在 MacOS 上
 
-然后需要检查`/usr/local/opt`：
+Prepare the system by installing required system packages
 
 ```zsh
 brew install ninja libsodium libmicrohttpd pkg-config automake libtool autoconf gnutls
 brew install llvm@16
 ```
 
-找到`openssl@3`库并导出本地变量：
+Use newly installed clang.
 
 ```zsh
   export CC=/opt/homebrew/opt/llvm@16/bin/clang
@@ -87,7 +89,7 @@ brew install llvm@16
   make -j12
 ```
 
-从 https://ton-blockchain.github.io/global.config.json 下载主网的最新配置文件：
+and relink OpenSSL 3.0
 
 ```zsh
 brew unlink openssl@1.1
@@ -95,7 +97,7 @@ brew install openssl@3
 brew unlink openssl@3 &&  brew link --overwrite openssl@3
 ```
 
-或从 https://ton-blockchain.github.io/testnet-global.config.json 下载测试网的配置文件：
+Now you can compile TON
 
 ```zsh
 cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. \
@@ -108,15 +110,13 @@ cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. \
 -DLZ4_INCLUDE_DIRS=$lz4Path/lib
 ```
 
-:::
-
 :::tip
 如果您在内存较低的计算机上编译（例如 1GB 内存），请不要忘记 [创建交换分区](/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory)。
 :::
 
 ## 下载全局配置
 
-使用配置运行轻客户端：
+For tools like lite client you need to download the global network config.
 
 从 https://ton-blockchain.github.io/global.config.json 下载主网的最新配置文件：
 
@@ -130,27 +130,28 @@ wget https://ton-blockchain.github.io/global.config.json
 wget https://ton-blockchain.github.io/testnet-global.config.json
 ```
 
-## FunC
+## Lite client
 
-要从源代码构建FunC编译器，请执行上面描述的[通用部分](/develop/howto/compile#common)，然后：
+To build a lite client, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [download the config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config), and then do:
 
 ```bash
 cmake --build . --target lite-client
 ```
 
-要编译FunC智能合约：
+使用配置运行轻客户端：
 
 ```bash
 ./lite-client/lite-client -C global.config.json
 ```
 
+If everything was installed successfully, the Lite Client will connect to a special server (a full node for the TON Blockchain Network) and will send some queries to the server.
 如果一切安装成功，轻客户端将连接到一个特殊的服务器（TON区块链网络的完整节点）并向服务器发送一些查询。如果您向客户端指示一个可写的“数据库”目录作为额外参数，它将下载并保存与最新的主链块相对应的块和状态：
 
 ```bash
 ./lite-client/lite-client -C global.config.json -D ~/ton-db-dir
 ```
 
-通过在轻客户端中输入`help`可以获得基本帮助信息。输入`quit`或按`Ctrl-C`退出。
+通过在轻客户端中输入`help`可以获得基本帮助信息。输入`quit`或按`Ctrl-C`退出。 Type `quit` or press `Ctrl-C` to exit.
 
 ## FunC
 
@@ -160,7 +161,7 @@ cmake --build . --target lite-client
 cmake --build . --target func
 ```
 
-要构建tonlib-cli，请执行[通用部分](/develop/howto/compile#common)，[下载配置](/develop/howto/compile#download-global-config)，然后执行：
+要编译FunC智能合约：
 
 ```bash
 ./crypto/func -o output.fif -SPA source0.fc source1.fc ...
@@ -182,7 +183,7 @@ cmake --build . --target fift
 
 ## Tonlib-cli
 
-代理二进制文件将位于：
+要构建tonlib-cli，请执行[通用部分](/develop/howto/compile#common)，[下载配置](/develop/howto/compile#download-global-config)，然后执行：
 
 ```bash
 cmake --build . --target tonlib-cli
@@ -194,7 +195,7 @@ cmake --build . --target tonlib-cli
 ./tonlib/tonlib-cli -C global.config.json
 ```
 
-通过在tonlib-cli中输入`help`可以获得基本帮助信息。输入`quit`或按`Ctrl-C`退出。
+通过在tonlib-cli中输入`help`可以获得基本帮助信息。输入`quit`或按`Ctrl-C`退出。 Type `quit` or press `Ctrl-C` to exit.
 
 ## RLDP-HTTP-Proxy
 
@@ -204,7 +205,7 @@ cmake --build . --target tonlib-cli
 cmake --build . --target rldp-http-proxy
 ```
 
-要构建storage-daemon和storage-daemon-cli，请执行[通用部分](/develop/howto/compile#common)，然后执行：
+代理二进制文件将位于：
 
 ```bash
 ./rldp-http-proxy/rldp-http-proxy
@@ -218,15 +219,15 @@ cmake --build . --target rldp-http-proxy
 cmake --build . --target generate-random-id
 ```
 
-TON版本发布：https://github.com/ton-blockchain/ton/tags
+The binary will be located as:
 
 ```bash
 ./utils/generate-random-id
 ```
 
-## 在Apple M1上编译旧版本：
+## Storage-daemon
 
-TON从2022年6月11日开始支持Apple M1（[添加apple m1支持 (#401)](https://github.com/ton-blockchain/ton/commit/c00302ced4bc4bf1ee0efd672e7c91e457652430)提交）。
+要构建storage-daemon和storage-daemon-cli，请执行[通用部分](/develop/howto/compile#common)，然后执行：
 
 ```bash
 cmake --build . --target storage-daemon storage-daemon-cli
@@ -263,9 +264,13 @@ TON从2022年6月11日开始支持Apple M1（[添加apple m1支持 (#401)](https
 在 Apple M1 上编译 TON 旧版本：
 
 1. 将RocksDb子模块更新到6.27.3
+
    ```bash
    cd ton/third-party/rocksdb/
    git checkout fcf3d75f3f022a6a55ff1222d6b06f8518d38c7c
    ```
 
 2. 用https://github.com/ton-blockchain/ton/blob/c00302ced4bc4bf1ee0efd672e7c91e457652430/CMakeLists.txt 替换根目录的`CMakeLists.txt`
+
+<Feedback />
+

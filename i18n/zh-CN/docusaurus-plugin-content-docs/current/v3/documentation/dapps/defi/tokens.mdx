@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # 代币（FT, NFT）
@@ -6,7 +8,7 @@ import Button from '@site/src/components/button'
 
 > 由 TON 驱动的代币和 NFT 没有单一中心，不会造成瓶颈。
 >
-> 特定集合中的每个 NFT 都是一个独立的智能合约。每个用户的代币余额都存储在单独的用户钱包中。
+> 特定集合中的每个 NFT 都是一个独立的智能合约。每个用户的代币余额都存储在单独的用户钱包中。 The token balance for each user is stored in a separate user wallet.
 >
 > 智能合约之间直接互动，分散了整个网络的负载。
 >
@@ -15,10 +17,11 @@ import Button from '@site/src/components/button'
 ## TON 课程：Jettons 和 NFT
 
 :::tip
-在开始课程之前，请确保您已充分了解区块链技术的基础知识。如果您的知识有缺口，我们建议您参加[区块链基础知识与 TON](https://stepik.org/course/201294/promo)（[RU 版本](https://stepik.org/course/202221/), [CHN 版本](https://stepik.org/course/200976/)）课程。
-模块 4 涵盖 NFT 和 Jettons 的基本知识。
+Before starting the course, make sure you have a good understanding of the basics of blockchain technology. If you have gaps in your knowledge, we recommend taking the [Blockchain Basics with TON](https://stepik.org/course/201294/promo) ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)) course.
+Module 4 covers the basic knowledge of NFT & Jettons.
 :::
 
+The [TON Blockchain Course](https://stepik.org/course/176754/) is a comprehensive guide to TON Blockchain development.
 
 模块 7 完全涵盖**NFT 和 Jettons**开发。
 
@@ -32,7 +35,7 @@ import Button from '@site/src/components/button'
 <Button href="https://stepik.org/course/201638/promo"
         colorType={'secondary'} sizeType={'sm'}>
 
-中国
+CHN
 
 </Button>
 
@@ -58,7 +61,7 @@ RU
 - [🚩 挑战 5：在 5 分钟内创建与合约交互的用户界面](https://github.com/romanovichim/TONQuest5)
 - [🚩 挑战 6：分析 Getgems 市场上的 NFT 销售](https://github.com/romanovichim/TONQuest6)
 
-## 指南
+## Jettons (fungible tokens)
 
 ### 指南
 
@@ -75,7 +78,7 @@ RU
 
 ### Jetton 部署器
 
-Jettons 是 TON 区块链上的自定义可替代代币。您可以使用下面的 Jetton Deployer 示例在 TON 区块链上创建自己的代币：
+Jettons are custom fungible tokens on TON Blockchain. Jettons 是 TON 区块链上的自定义可替代代币。您可以使用下面的 Jetton Deployer 示例在 TON 区块链上创建自己的代币：
 
 - **[TON Minter](https://minter.ton.org/)** - 开放源码 Jetton Deployer dApp
 - [Jetton Deployer - contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
@@ -111,3 +114,5 @@ Jettons 是 TON 区块链上的自定义可替代代币。您可以使用下面�
 ### 使用 NFT 的工具
 
 - [LiberMall/tnt](https://github.com/LiberMall/tnt)—TNT 是一个一体化命令行工具，用于在 The Open Network 上查询、编辑和铸造新的非同质化代币。
+
+<Feedback />

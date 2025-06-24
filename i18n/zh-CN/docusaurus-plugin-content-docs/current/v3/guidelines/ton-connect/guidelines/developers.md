@@ -1,27 +1,29 @@
+import Feedback from '@site/src/components/Feedback';
+
 # TON Connect SDKs
 
 ## SDK 列表
 
 :::info
-如果可能，建议您为您的 dApps 使用 [@tonconnect/ui-react](/develop/dapps/ton-connect/developers#ton-connect-ui-react) 工具包。仅当您的产品确实需要时，才切换到 SDK 的更低层级或重新实现协议版本。
+如果可能，建议您为您的 dApps 使用 [@tonconnect/ui-react](/develop/dapps/ton-connect/developers#ton-connect-ui-react) 工具包。仅当您的产品确实需要时，才切换到 SDK 的更低层级或重新实现协议版本。 Only switch to lower levels of the SDK or reimplement your protocol version if your product requires it.
 :::
 
 本页内容包括 TON Connect 的有用的库列表。
 
 - [TON Connect React](/develop/dapps/ton-connect/developers#ton-connect-react)
 - [TON Connect JS SDK](/develop/dapps/ton-connect/developers#ton-connect-js-sdk)
+- [TON Connect Go](/develop/dapps/ton-connect/developers#ton-connect-go)
 - [TON Connect Python SDK](/develop/dapps/ton-connect/developers#ton-connect-python)
 - [TON Connect Dart](/develop/dapps/ton-connect/developers#ton-connect-dart)
 - [TON Connect C#](/develop/dapps/ton-connect/developers#ton-connect-c)
 - [TON Connect Unity](/develop/dapps/ton-connect/developers#ton-connect-unity)
-- [TON Connect Go](/develop/dapps/ton-connect/developers#ton-connect-go)
 - [TON Connect Go](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-go)
 
 ## TON Connect React
 
 - [@tonconnect/ui-react](/develop/dapps/ton-connect/developers#ton-connect-ui-react) - 适用于 React 应用的 TON Connect 用户界面（UI）
 
-TonConnect UI React 是一个 React UI 工具包，用于在 React 应用中通过 TonConnect 协议连接您的应用程序至 TON 钱包。
+`@tonconnect/ui-react` is a React UI kit for the TON Connect SDK. TonConnect UI React 是一个 React UI 工具包，用于在 React 应用中通过 TonConnect 协议连接您的应用程序至 TON 钱包。
 
 - 包含 `@tonconnect/ui-react` 的 DApp 示例：[GitHub](https://github.com/ton-connect/demo-dapp-with-react-ui)
 - 部署的 `demo-dapp-with-react-ui` 示例：[GitHub](https://ton-connect.github.io/demo-dapp-with-react-ui/)
@@ -44,7 +46,7 @@ TON Connect 存储库包含以下主要包：
 
 ### TON Connect UI
 
-TonConnect UI 是 TonConnect SDK 的一个 UI 工具包。使用它可以通过 TonConnect 协议将您的应用程序连接到 TON 钱包。它允许您使用我们的 UI 元素（如“连接钱包按钮”、“选择钱包对话框”和确认modals）更轻松地将 TonConnect 集成到您的应用中。
+TonConnect UI 是 TonConnect SDK 的一个 UI 工具包。使用它可以通过 TonConnect 协议将您的应用程序连接到 TON 钱包。它允许您使用我们的 UI 元素（如“连接钱包按钮”、“选择钱包对话框”和确认modals）更轻松地将 TonConnect 集成到您的应用中。 Use it to connect your app to TON wallets via the TON Connect protocol. It allows you to integrate TON Connect into your app more efficiently using our UI elements, such as the **connect wallet** button, **select wallet** dialog, and **confirmation** modals.
 
 ```bash
 npm i @tonconnect/ui
@@ -56,31 +58,31 @@ npm i @tonconnect/ui
 
 TON Connect 用户界面（UI）是一个框架，允许开发者提高应用用户的用户体验（UX）。
 
-TON Connect 可以通过简单的 UI 元素（如“连接钱包按钮”、“选择钱包对话框”和确认模态）轻松地与应用集成。这里有三个主要示例，展示了 TON Connect 如何在应用中提升 UX：
+TON Connect 可以通过简单的 UI 元素（如“连接钱包按钮”、“选择钱包对话框”和确认模态）轻松地与应用集成。这里有三个主要示例，展示了 TON Connect 如何在应用中提升 UX： Here are three primary examples of how TON Connect improves UX in apps:
 
 - DApp 浏览器中的应用功能示例：[GitHub](https://ton-connect.github.io/demo-dapp/)
 - 上述 DApp 的后端部分示例：[GitHub](https://github.com/ton-connect/demo-dapp-backend)
 - 使用 Go 的 Bridge 服务器：[GitHub](https://github.com/ton-connect/bridge)
 
-此工具包将简化用 TON Connect 实现到 TON 区块链为目标平台所构建的应用中。它支持标准的前端框架，以及不使用预定框架的应用。
+此工具包将简化用 TON Connect 实现到 TON 区块链为目标平台所构建的应用中。它支持标准的前端框架，以及不使用预定框架的应用。 Standard frontend frameworks are supported, as are applications that don’t use predetermined frameworks.
 
 ### TON Connect SDK
 
-这三个框架中最底层的一个是 TON Connect SDK，它帮助开发者将 TON Connect 集成到他们的应用程序中。它主要用于通过 TON Connect 协议将应用程序连接到 TON 钱包。
+这三个框架中最底层的一个是 TON Connect SDK，它帮助开发者将 TON Connect 集成到他们的应用程序中。它主要用于通过 TON Connect 协议将应用程序连接到 TON 钱包。 It primarily connects apps to TON wallet apps via the TON Connect protocol.
 
 - [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
 - [NPM](https://www.npmjs.com/package/@tonconnect/sdk)
 
 ### TON Connect 协议模型
 
-该包含协议请求、协议响应、事件模型以及编码和解码功能。它可用于将 TON Connect 集成到用 TypeScript 编写的钱包应用中。为了将 TON Connect 集成到 DApp 中，应该使用 [@tonconnect/sdk](https://www.npmjs.com/package/@tonconnect/sdk)。
+This package contains protocol requests, protocol responses, event models, and encoding and decoding functions. Developers may use this to integrate TON Connect to wallet apps written in TypeScript. 该包含协议请求、协议响应、事件模型以及编码和解码功能。它可用于将 TON Connect 集成到用 TypeScript 编写的钱包应用中。为了将 TON Connect 集成到 DApp 中，应该使用 [@tonconnect/sdk](https://www.npmjs.com/package/@tonconnect/sdk)。
 
 - [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/protocol)
 - [NPM](https://www.npmjs.com/package/@tonconnect/protocol)
 
-## TON Connect Python
+## TonConnect UI Vue 是用于 TonConnect SDK 的 Vue UI 工具包。使用它可以在 Vue 应用程序中通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
 
-TonConnect UI Vue 是用于 TonConnect SDK 的 Vue UI 工具包。使用它可以在 Vue 应用程序中通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
+TON Connect UI Vue is a Vue UI kit for the TON Connect SDK. Use it to connect your app to TON wallets via the TON Connect protocol in Vue apps.
 
 - 使用 `@townsquarelabs/ui-vue` 的 DApp 示例：[GitHub](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui)
 - 已部署的 `demo-dapp-with-vue-ui` 示例：[GitHub](https://townsquarexyz.github.io/demo-dapp-with-vue-ui/)
@@ -92,13 +94,13 @@ npm i @townsquarelabs/ui-vue
 - [GitHub](https://github.com/TownSquareXYZ/tonconnect-ui-vue)
 - [NPM](https://www.npmjs.com/package/@townsquarelabs/ui-vue)
 
-## TON 连接 Python
+## TON Connect Python
 
-### ClickoTON-Foundation tonconnect
+### TON 连接 Python
 
-用于将 TON Connect 连接到 Python 应用的库
+Python SDK for TON Connect 2.0. An analog of the `@tonconnect/sdk` library.
 
-使用它可通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
+使用它可以通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
 
 ```bash
 pip3 install pytonconnect
@@ -108,7 +110,7 @@ pip3 install pytonconnect
 
 ### ClickoTON-Foundation tonconnect
 
-使用它可以通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
+用于将 TON Connect 连接到 Python 应用的库
 
 ```bash
 git clone https://github.com/ClickoTON-Foundation/tonconnect.git
@@ -117,9 +119,9 @@ pip install -e tonconnect
 
 [GitHub](https://github.com/ClickoTON-Foundation/tonconnect)
 
-## TON Connect C\\#
+## TON Connect C\\\#
 
-TON Connect 2.0 的 C# SDK。相当于 `@tonconnect/sdk` 库。
+Dart SDK for TON Connect 2.0. analog of the `@tonconnect/sdk` library.
 
 使用它可以通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
 
@@ -127,11 +129,11 @@ TON Connect 2.0 的 C# SDK。相当于 `@tonconnect/sdk` 库。
  $ dart pub add darttonconnect
 ```
 
-- [GitHub](https://github.com/continuation-team/TonSdk.NET/tree/main/TonSDK.Connect)
+- [GitHub](https://github.com/romanovichim/dartTonconnect)
 
-## TON Connect Go
+## TON Connect 2.0 的 C# SDK。相当于 `@tonconnect/sdk` 库。
 
-TON Connect 2.0 的 Go SDK。
+C# SDK for TON Connect 2.0. An analog of the `@tonconnect/sdk` library.
 
 使用它可以通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
 
@@ -139,13 +141,22 @@ TON Connect 2.0 的 Go SDK。
  $ dotnet add package TonSdk.Connect
 ```
 
-- [GitHub](https://github.com/cameo-engineering/tonconnect)
+- [GitHub](https://github.com/continuation-team/TonSdk.NET/tree/main/TonSDK.Connect)
 
-## 常见问题和关注点
+## TON 连接统一
 
-如果我们的开发者或社区成员在使用 TON Connect 2.0 期间遇到任何额外问题，请联系 [Tonkeeper 开发者](https://t.me/tonkeeperdev) 频道。
+TON Connect 2.0 的 Unity 资产。使用`continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`。 Uses `continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`.
 
-如果您遇到任何额外的问题，或者想提出有关如何改进 TON Connect 2.0 的提议，请通过适当的 [GitHub 目录](https://github.com/ton-connect/) 直接联系我们。
+使用它可将 TonConnect 协议与您的游戏集成。
+
+- [GitHub](https://github.com/continuation-team/unity-ton-connect)
+- [文档](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
+
+## TON Connect Go
+
+TON Connect 2.0 的 Go SDK。
+
+使用它可通过 TonConnect 协议将您的应用程序连接到 TON 钱包。
 
 ```bash
  go get github.com/cameo-engineering/tonconnect
@@ -155,23 +166,15 @@ TON Connect 2.0 的 Go SDK。
 
 ## 常见问题和关注点
 
-如果我们的任何开发人员或社区成员在 TON Connect 2.0 的实施过程中遇到任何其他问题，请联系 [Tonkeeper developer](https://t.me/tonkeeperdev) 频道。
-
 如果您遇到其他问题，或希望就如何改进 TON Connect 2.0 提出建议，请通过相应的 [GitHub 目录](https://github.com/ton-connect/) 直接联系我们。
-
-## TON 连接统一
-
-TON Connect 2.0 的 Unity 资产。使用`continuation-team/TonSdk.NET/tree/main/TonSDK.Connect`。
-
-使用它可将 TonConnect 协议与您的游戏集成。
-
-- [GitHub](https://github.com/continuation-team/unity-ton-connect)
-- [文档](https://docs.tonsdk.net/user-manual/unity-tonconnect-2.0/getting-started)
 
 ## 另请参见
 
 - [建立第一个网络客户端的分步指南](https://helloworld.tonstudio.io/03-client/)
-- [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU\&t=254s\&ab_channel=AlefmanVladimir%5BEN%5D)
+- [[YouTube] TON Smart Contracts | 10 | Telegram DApp[EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU\\&t=254s\\&ab_channel=AlefmanVladimir%5BEN%5D)
 - [Ton Connect 入门](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
 - [集成手册](/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk)
 - [[YouTube] TON Dev Study TON Connect Protocol [RU]](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_)
+
+<Feedback />
+

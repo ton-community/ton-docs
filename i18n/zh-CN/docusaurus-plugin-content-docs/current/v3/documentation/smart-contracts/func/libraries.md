@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # FunC SDK和库
 
 ## 标准库
@@ -15,3 +17,6 @@
 - [open-contracts/crypto](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/crypto) — 提供secp256k1曲线的操作
 - [toncli/test-libs](https://github.com/disintar/toncli/tree/master/src/toncli/lib/test-libs) - 对TLB的操作，生成和解析典型消息和类型
 - [ston-fi/funcbox](https://github.com/ston-fi/funcbox) - FunC片段和实用工具的集合。
+
+<Feedback />
+

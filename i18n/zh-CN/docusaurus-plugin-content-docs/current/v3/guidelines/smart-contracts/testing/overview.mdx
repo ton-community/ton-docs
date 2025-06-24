@@ -1,8 +1,10 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 使用 Blueprint 编写测试
 
 ## 概览
 
-测试工具包（通常是沙盒）已经包含在名为[Blueprint](/develop/smart-contracts/sdk/javascript)的TypeScript SDK中。您可以创建一个演示项目并通过两个步骤启动默认测试：
+测试工具包（通常是沙盒）已经包含在名为[Blueprint](/develop/smart-contracts/sdk/javascript)的TypeScript SDK中。您可以创建一个演示项目并通过两个步骤启动默认测试： You can create a demo project and run the default test in two steps:
 
 1. 创建一个新的Blueprint项目：
 
@@ -38,8 +40,9 @@ Ran all test suites.
 
 ## 基本用法
 
+Testing smart contracts allows you to cover security, optimize gas spending, and examine edge cases.\
 测试智能合约可以涵盖安全性、优化Gas支出和检查极端情况。
-在Blueprint（基于[Sandbox](https://github.com/ton-org/sandbox)）中编写测试是通过定义与合约的任意操作并将测试结果与预期结果进行比较来实现的，例如：
+在Blueprint（基于[Sandbox](https://github.com/ton-org/sandbox)）中编写测试是通过定义与合约的任意操作并将测试结果与预期结果进行比较来实现的，例如： For example:
 
 ```typescript
 it('should execute with success', async () => {                              // description of the test case
@@ -64,19 +67,19 @@ it('should execute with success', async () => {                              // 
 
 `toHaveTransaction`匹配器所期望的对象包含以下属性中的任意组合，这些属性来自`FlatTransaction`类型
 
-| 名称                   | 类型             | 描述                                                                                                                                                         |
-| -------------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| from                 | Address?       | 消息发送者的合约地址                                                                                                                                                 |
-| on                   | Address        | 消息目的地的合约地址  （属性`to`的替代名称）。                                                                                                                                 |
-| value                |                | 消息中Toncoin的数量，以nanotons计算                                                                                                                                  |
-| body                 | Cell           | 定义为Cell的消息体                                                                                                                                                |
-| op                   | number?        | op是操作标识符号码（通常为TL-B的crc32）。在消息体的前32位中。                                                                                                                      |
-| success              | boolean?       | 自定义沙盒标志，定义特定交易的结果状态。如果计算和行动阶段都成功，则为True。否则为False。                                                                                                          |
+| 名称      | 类型       | 描述                                                                                                                                                          |
+| ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| from    | Address? | 消息发送者的合约地址                                                                                                                                                  |
+| on      | Address  | 消息目的地的合约地址  （属性`to`的替代名称）。                                                                                                                                  |
+| value   | bigint?  | 消息中Toncoin的数量，以nanotons计算                                                                                                                                   |
+| body    | Cell     | 定义为Cell的消息体                                                                                                                                                 |
+| op      | number?  | Op code is usually the operation identifier number (crc32 from TL-B). Expected in the first 32 bits of a message body.                                      |
+| success | boolean? | Custom Sandbox flag that defines the resulting status of a certain transaction. True if both the compute and the action phases succeeded. Otherwise, False. |
 
-您可以省略您不感兴趣的字段，并传递接受类型并返回布尔值的函数（true表示可以），以检查例如数字范围、消息操作码等。请注意，如果字段是可选的（如`from?: Address`），那么函数也需要接受可选类型。
+您可以省略您不感兴趣的字段，并传递接受类型并返回布尔值的函数（true表示可以），以检查例如数字范围、消息操作码等。请注意，如果字段是可选的（如`from?: Address`），那么函数也需要接受可选类型。 Note that if a field is optional (like `from?: Address`), the function must also accept the optional type.
 
-:::tip
-您可以从[Sandbox文档](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher)中查看所有匹配器字段的完整列表。
+:::tip 
+您可以从[Sandbox文档](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher)中查看所有匹配器字段的完整列表。\
 :::
 
 ### 特定测试套件
@@ -130,8 +133,10 @@ for (const act of actions) {
 - [JettonWallet.spec.ts](https://github.com/EmelyanenkoK/modern_jetton/blob/master/tests/JettonWallet.spec.ts)
 - [governance_tests](https://github.com/Trinketer22/governance_tests/blob/master/elector_tests/tests/complaint-test.fc)
 - [MassSender.spec.ts](https://github.com/Gusarich/ton-mass-sender/blob/main/tests/MassSender.spec.ts)
-- [TonForwarder.spec.ts](https://github.com/TrueCarry/ton-contract-forwarder/blob/main/src/contracts/ton-forwarder/TonForwarder.spec.ts)
+- [Assurer.spec.ts](https://github.com/aSpite/dominant-assurance-contract/blob/main/tests/Assurer.spec.ts)
 
 ## 参阅
 
 - [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript)
+
+<Feedback />

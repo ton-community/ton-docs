@@ -1,6 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
-# Blueprint SDK
+# Blueprint
 
 ![Blueprint](\img\blueprint\logo.svg)
 
@@ -29,13 +31,16 @@ npm create ton@latest
 ### 技术栈
 
 - 编译FunC https://github.com/ton-community/func-js (无需 cli)
+- Compiling Tact with https://github.com/tact-lang/tact
 - 测试智能合约 https://github.com/ton-org/sandbox
 - 使用TON Connect 2.0兼容钱包或`ton://`深层链接部署智能合约
 
 ### 要求
 
 - [Node.js](https://nodejs.org/) 使用像v18这样的近期版本，用`node -v`验证版本
-- 支持TypeScript和FunC的IDE，如[Visual Studio Code](https://code.visualstudio.com/)，配合[FunC插件](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
+- IDE with TypeScript and TON support:
+  - 支持TypeScript和FunC的IDE，如[Visual Studio Code](https://code.visualstudio.com/)，配合[FunC插件](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
+  - [IntelliJ IDEA](https://www.jetbrains.com/idea/) with the [TON Development plugin](https://plugins.jetbrains.com/plugin/23382-ton)
 
 ## 参考资料
 
@@ -43,7 +48,7 @@ npm create ton@latest
 
 - https://github.com/ton-org/blueprint
 
-### 资料
+### Materials
 
 - [在DoraHacks直播中使用Blueprint](https://www.youtube.com/watch?v=5ROXVM-Fojo)
 - [创建一个新项目](https://github.com/ton-org/blueprint#create-a-new-project)
@@ -54,4 +59,6 @@ npm create ton@latest
 
 - [开发智能合约介绍](/develop/smart-contracts/)
 - [如何使用钱包智能合约工作](/develop/smart-contracts/tutorials/wallet)
-- [使用toncli](/develop/smart-contracts/sdk/toncli)
+- [SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
+
+<Feedback />

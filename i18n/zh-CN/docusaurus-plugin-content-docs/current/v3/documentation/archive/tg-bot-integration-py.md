@@ -1,10 +1,15 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # Telegram 机器人的 TON Connect - Python
 
 :::warning 弃用
-本指南介绍了将 TON Connect 与 Telegram 机器人集成的过时方法。如需更安全、更现代的方法，请考虑使用 [Telegram 小程序](/v3/guidelines/dapps/tma/overview)。
+本指南介绍了将 TON Connect 与 Telegram 机器人集成的过时方法。如需更安全、更现代的方法，请考虑使用 [Telegram 小程序](/v3/guidelines/dapps/tma/overview)。 For a more secure and modern approach, consider using [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview for a more modern and secure integration.
 :::
+
+In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication using Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect).
+We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
 
 <Button href="https://t.me/ton_connect_example_bot" colorType={'primary'} sizeType={'sm'}>
 
@@ -18,14 +23,17 @@ import Button from '@site/src/components/button'
 
 </Button>
 
-## 安装库
+## Preparing
 
 ### 安装库
 
+To make bot we are going to use `aiogram` 3.0 Python library.
 要制作机器人，我们将使用 `aiogram` 3.0 Python 库。
 要开始将 TON Connect 集成到 Telegram 机器人中，你需要安装 `pytonconnect` 软件包。
 要使用 TON 基元和解析用户地址，我们需要 `pytoniq-core`。
 为此您可以使用 pip：
+And to use TON primitives and parse user address we need `pytoniq-core`.
+You can use pip for this purpose:
 
 ```bash
 pip install aiogram pytoniq-core python-dotenv
@@ -34,7 +42,7 @@ pip install pytonconnect
 
 ### 设置配置
 
-在 `.env` 文件中指定 [机器人令牌](https://t.me/BotFather) 和 TON Connect [清单文件](https://github.com/ton-connect/sdk/tree/main/packages/sdk#add-the-tonconnect-manifest) 的链接。之后在 `config.py` 中加载它们：
+在 `.env` 文件中指定 [机器人令牌](https://t.me/BotFather) 和 TON Connect [清单文件](https://github.com/ton-connect/sdk/tree/main/packages/sdk#add-the-tonconnect-manifest) 的链接。之后在 `config.py` 中加载它们： After load them in `config.py`:
 
 ```dotenv
 # .env
@@ -95,9 +103,9 @@ if __name__ == "__main__":
 
 ```
 
-## TON Connect 存储
+## Wallet connection
 
-### TON 连接存储
+### TON Connect 存储
 
 让我们为 TON Connect 创建一个简单的存储空间
 
@@ -174,6 +182,7 @@ async def command_start_handler(message: Message):
 
 现在，对于尚未连接钱包的用户，机器人会发送一条包含所有可用钱包按钮的消息。
 因此，我们需要编写函数来处理 `connect:{wallet["name"]}` 回调：
+So we need to write function to handle `connect:{wallet["name"]}` callbacks:
 
 ```python
 # main.py
@@ -339,8 +348,7 @@ async def disconnect_wallet(message: Message):
 
 而 `main.py` 看起来是这样的：
 
-<details>
-<summary>显示 main.py</summary>
+<details><summary>显示 main.py</summary>
 
 ```python
 # main.py
@@ -496,11 +504,12 @@ if __name__ == "__main__":
 
 </details>
 
-## 添加持久存储 - Redis
+## Improving
 
 ### 添加永久存储 - Redis
 
-在启动 Redis 数据库后安装用于与之交互的 python 库：
+Currently, our TON Connect Storage uses dict which causes to lost sessions after bot restart.
+添加持久存储 - Redis
 
 启动 Redis 数据库后，安装 python 库与之交互：
 
@@ -575,3 +584,6 @@ async def connect_wallet(message: Message, wallet_name: str):
 
 - [完整机器人代码](https://github.com/yungwine/ton-connect-bot)
 - [准备信息](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+
+<Feedback />
+

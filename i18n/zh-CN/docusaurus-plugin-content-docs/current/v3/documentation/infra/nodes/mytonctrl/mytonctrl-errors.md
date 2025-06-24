@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # MyTonCtrl 错误
 
 ## 概述
@@ -29,7 +31,7 @@
 | Validator wallet not found                                                                                          | 检查 [验证器文章](/v3/guidelines/nodes/running-nodes/validator-node#view-the-list-of-wallets)                                                                                                           |
 | Validator is not synchronized                                                                                       | 等待更长时间进行同步或检查 [sync troubleshouting](/v3/guidelines/nodes/nodes-troubleshooting#about-no-progress-in-node-synchronization-within-3-hours)。                                                       |
 | Stake less than the minimum stake. Minimum stake: `minStake`                        | 使用[`set stake {amount}`](/v3/guidelines/nodes/running-nodes/validator-node#your-validator-is-now-ready)和[check stake parameters](/v3/documentation/network/configs/blockchain-configs#param-17)。 |
-| Don't have enough coins. stake: `stake`, account balance: `balance` | 将您的 `balance` 充值到 `stake`。                                                                                                                                                                       |
+| Don't have enough coins. stake: `stake`, account balance: `balance` | Add funds to your account `balance`, ensuring it reaches the required `stake` amount                                                                                                             |
 
 ## 提名池错误
 
@@ -41,3 +43,5 @@
 ## 另请参见
 
 - [节点故障排除](/v3/guidelines/nodes/nodes-troubleshooting)
+  <Feedback />
+

@@ -2,9 +2,11 @@
 title: Tolk vs FunC：可变性
 ---
 
+import Feedback from '@site/src/components/Feedback';
+
 # Tolk 与 FunC 中 tilda 函数的可变性对比
 
-:::tip TLDR
+:::tip :::tip TLDR
 
 - 无 `~` tilda 方法
 - `cs.loadInt(32)` 修改片段并返回整数
@@ -17,7 +19,7 @@ title: Tolk vs FunC：可变性
 - tilda `~` 在 Tolk 中根本不存在
   :::
 
-这是一个巨大的变化。如果 FunC 有 `.methods()` 和 `~methods()`，那么 Tolk 就只有 dot，一种也是唯一一种调用`.methods()`的方法。一个方法可以_mutate_ 一个对象，也可以不 _mutate_ 一个对象。与列表中的 "简而言之 "不同，这是与 FunC 在行为和语义上的区别。
+This is a drastic change. 这是一个巨大的变化。如果 FunC 有 `.methods()` 和 `~methods()`，那么 Tolk 就只有 dot，一种也是唯一一种调用`.methods()`的方法。一个方法可以_mutate_ 一个对象，也可以不 _mutate_ 一个对象。与列表中的 "简而言之 "不同，这是与 FunC 在行为和语义上的区别。 The method may or may not _mutate_ an object. Also, there is a behavioral and semantic difference between FunC and the list.
 
 目标是实现与 JS 和其他语言相同的调用：
 
@@ -81,7 +83,7 @@ someFn(10);     // ok, just int
 origX.someFn(); // still allowed (but not recommended), origX remains 0
 ```
 
- cells、 slices 等也是如此：
+cells、 slices 等也是如此：
 
 ```tolk
 fun readFlags(cs: slice) {
@@ -98,7 +100,7 @@ var flags = readFlags(msgBody);  // msgBody is not modified
   `突变` 关键字和突变函数
 </h3>
 
-但如果在参数中添加 `mutate` 关键字，传递的参数就会发生变化。为了避免意外突变，在调用它时也必须指定 `mutate` ：
+但如果在参数中添加 `mutate` 关键字，传递的参数就会发生变化。为了避免意外突变，在调用它时也必须指定 `mutate` ： To avoid unexpected mutations, you must specify `mutate` when calling it, also:
 
 ```tolk
 fun increment(mutate x: int) {
@@ -117,7 +119,7 @@ val constX = getSome();
 increment(mutate constX); // error, it's immutable, since `val`
 ```
 
- slices 和其他类型也是如此：
+slices 和其他类型也是如此：
 
 ```tolk
 fun readFlags(mutate cs: slice) {
@@ -128,7 +130,7 @@ val flags = readFlags(mutate msgBody);
 // msgBody.loadInt(32) will read the next integer
 ```
 
-这是一种概括。一个函数可能有多个突变参数：
+It's a generalization. 这是一种概括。一个函数可能有多个突变参数：
 
 ```tolk
 fun incrementXY(mutate x: int, mutate y: int, byValue: int) {
@@ -139,13 +141,14 @@ fun incrementXY(mutate x: int, mutate y: int, byValue: int) {
 incrementXY(mutate origX, mutate origY, 10);   // both += 10
 ```
 
-_你可以询问 — — 它是否只是通过引用？ 它实际上是有效的，但由于“ref”在TON中是一个过载的术语(ells and slices have refs)，选择了一个关键词`mutate`。_
+\*You may ask — is it just passing by reference? _你可以询问 — — 它是否只是通过引用？ 它实际上是有效的，但由于“ref”在TON中是一个过载的术语(ells and slices have refs)，选择了一个关键词`mutate`。_
 
 <h3 className="cmp-func-tolk-header">
   将函数转化为方法的 `self` 参数
 </h3>
 
-当第一个参数被命名为 `self` 时，它强调函数（仍然是全局函数）是一个方法，应通过 dot 来调用。
+Methods — unlike global functions `fun f()` — are declared as `fun receiver_type.f()`.
+If a method accepts `self`, it's an instance method (if not, it's a static one).
 
 ```tolk
 fun assertNotEq(self: int, throwIfEq: int) {
@@ -159,7 +162,7 @@ someN.assertNotEq(10);
 assertNotEq(someN, 10);  // still allowed (but not recommended)
 ```
 
-`self` 在没有 `mutate` 的情况下是 **不可变的**（与所有其他参数不同）。可以把它想象成 "只读方法"。
+`self` by default is immutable. Think of it like a **read-only method**.
 
 ```tolk
 fun readFlags(self: slice) {
@@ -203,7 +206,7 @@ fun incrementWithY(mutate self: int, mutate y: int, byValue: int) {
 origX.incrementWithY(mutate origY, 10);   // both += 10
 ```
 
-如果查看一下 stdlib，你会发现很多函数实际上都是 `mutate self`，也就是说，它们是修改对象的方法。元组、字典等等。在 FunC 中，它们通常通过 tilda 调用。
+如果查看一下 stdlib，你会发现很多函数实际上都是 `mutate self`，也就是说，它们是修改对象的方法。元组、字典等等。在 FunC 中，它们通常通过 tilda 调用。 Tuples, dictionaries, and so on. In FunC, they were usually called via tilda.
 
 ```tolk
 @pure
@@ -217,7 +220,7 @@ t.tuplePush(1);
   `return self` 使方法可链式运行
 </h3>
 
-就像 Python 中的 `return self` 或 JavaScript 中的 `return this` 一样。这也是 `storeInt()` 等方法可以链式处理的原因。
+就像 Python 中的 `return self` 或 JavaScript 中的 `return this` 一样。这也是 `storeInt()` 等方法可以链式处理的原因。 That makes methods like `storeInt()` and others chainable.
 
 ```tolk
 fun storeInt32(mutate self: builder, x: int): self {
@@ -233,15 +236,15 @@ b.storeInt32(4);     // works without assignment, since mutates b
 b = b.storeInt32(5); // and works with assignment, since also returns
 ```
 
-请注意返回类型，它是 `self`。目前，您应该指定它。如果不指定，编译就会失败。也许将来会正确。
+请注意返回类型，它是 `self`。目前，您应该指定它。如果不指定，编译就会失败。也许将来会正确。 You should specify it; otherwise, the compilation will fail if left empty. Probably, in the future, it will be correct.
 
 <h3 className="cmp-func-tolk-header">
   `mutate self` 和 asm 函数
 </h3>
 
-对于用户定义的函数来说，这一点显而易见，但人们可能会感兴趣，如何制作一个具有这种行为的 `asm` 函数？要回答这个问题，我们应该先了解一下编译器内部的突变工作原理。
+对于用户定义的函数来说，这一点显而易见，但人们可能会感兴趣，如何制作一个具有这种行为的 `asm` 函数？要回答这个问题，我们应该先了解一下编译器内部的突变工作原理。 To answer this question, we should look under the hood at how mutation works inside the compiler.
 
-当一个函数有 `mutate` 参数时，它实际上是隐式返回参数，并将参数隐式赋值给参数。举例说明效果更好：
+当一个函数有 `mutate` 参数时，它实际上是隐式返回参数，并将参数隐式赋值给参数。举例说明效果更好： It's better by example:
 
 ```tolk
 // actually returns (int, void)
@@ -277,7 +280,7 @@ fun loadMessageFlags(mutate self: slice): int
     asm(-> 1 0) "4 LDU";
 ```
 
-请注意，要返回 self，无需做任何特殊处理，只需指定返回类型即可。剩下的就交给编译器吧。
+请注意，要返回 self，无需做任何特殊处理，只需指定返回类型即可。剩下的就交给编译器吧。 The compiler will do the rest.
 
 ```tolk
 // "STU" pops (int, builder) and pushes (builder')
@@ -288,7 +291,7 @@ fun storeMessageOp(mutate self: builder, op: int): self
     asm(op self) "32 STU";
 ```
 
-您不太可能需要使用这些技巧。最有可能的情况是，您只需为现有函数编写封装程序：
+It's doubtful you'll have to do such tricks. Most likely, you'll write wrappers around existing functions:
 
 ```tolk
 // just do like this, without asm, it's the same effective
@@ -307,29 +310,12 @@ fun myStoreMessageOp(mutate self: builder, flags: int): self {
 <h3 className="cmp-func-tolk-header">
   简单函数/方法是否需要 `@inline`？
 </h3>
-
-现在，最好这样做，没错。在上述大多数示例中，为了清晰起见，省略了 `@inline`。目前，如果没有 `@inline`，它将是一个单独的 TVM 续程，有跳入/跳出。如果使用 `@inline`，就会生成一个函数，但会被 Fift 内联（就像 FunC 中的 `inline` specifer）。
-
-未来，Tolk 将自动检测简单函数，并在 AST 层面上执行真正的内联。这样的函数甚至都不需要编入 Fift。编译器将比人类更好地决定是否内联、是否进行 ref 等。但 Tolk 要变得如此聪明还需要一些时间:)现在，请指定 `@inline` 属性。
-
-<h3 className="cmp-func-tolk-header">
-  但 `self` 不是方法，它仍然是函数！我觉得我被骗了
 </h3>
 
-当然可以。与 FunC 一样，Tolk 也只有全局函数（截至 v0.6）。没有带方法的类/结构。没有针对 `slice` 的 `hash()` 方法和针对 `cell` 的 `hash()`方法。取而代之的是函数 `sliceHash()` 和 `cellHash()`，它们可以像函数一样调用，也可以用点调用（首选）：
+For now, better do it, yes. In most examples above, `@inline` was omitted for clarity. Without `@inline`, it will be a separate TVM continuation with jumps in/out. With `@inline`, a function will be generated, but inlined by Fift, like the `inline` specifier in FunC.
 
-```tolk
-fun f(s: slice, c: cell) {
-    // not like this
-    s.hash();
-    c.hash();
-    // but like this
-    s.sliceHash();
-    c.cellHash();
-    // since it's the same as
-    sliceHash(s);
-    cellHash(s);
-}
-```
+In the future, Tolk will automatically detect simple functions and perform true inlining on the AST level. Such functions won't be even generated to Fift. The compiler would decide, better than a human, whether to inline, to make a ref, etc. But it will take some time for Tolk to become so smart :)
 
-未来，在对类型系统进行了大量工作，并对 FunC 内核进行了全面重构之后，Tolk 可能会具备用真正的方法声明结构的能力，其通用性足以覆盖内置类型。但这还需要很长的路要走。
+For now, please specify the `@inline` attribute.
+
+<Feedback />

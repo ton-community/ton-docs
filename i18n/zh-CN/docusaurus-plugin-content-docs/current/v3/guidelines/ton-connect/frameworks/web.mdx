@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -5,9 +7,9 @@ import TabItem from '@theme/TabItem';
 
 本指南将帮助您把 TON Connect 集成到您的 Javascript 应用程序中，用于用户身份验证和交易。
 
-如果您的 DApp 使用 React，请查看 [TON Connect UI React SDK](/v3/guidelines/ton-connect/frameworks/react)。
-
 如果您的 DApp 使用 Vue，请参阅 [TON Connect UI Vue SDK](/v3/guidelines/ton-connect/frameworks/vue)。
+
+如果您的 DApp 使用 React，请查看 [TON Connect UI React SDK](/v3/guidelines/ton-connect/frameworks/react)。
 
 ## 实现
 
@@ -37,6 +39,7 @@ npm i @tonconnect/ui
 ### TON 连接启动
 
 安装软件包后，请为您的应用程序创建一个 `manifest.json` 文件。有关如何创建 manifest.json 文件的更多信息，请参阅 [此处](/v3/guidelines/ton-connect/guidelines/creating-manifest)。
+More information on how to create a `manifest.json` file can be found [here](/v3/guidelines/ton-connect/guidelines/creating-manifest).
 
 添加一个 ID 为 `ton-connect` 的按钮，用于连接到钱包：
 
@@ -96,7 +99,7 @@ tonConnectUI.uiOptions = {
 
 ### 用户界面定制
 
-TonConnect UI 提供的界面应是用户在使用各种应用程序时熟悉和可识别的。不过，应用程序开发人员可以修改该界面，使其与应用程序的界面保持一致。
+TonConnect UI 提供的界面应是用户在使用各种应用程序时熟悉和可识别的。不过，应用程序开发人员可以修改该界面，使其与应用程序的界面保持一致。 However, the app developer can modify this interface to keep it consistent with the app's interface.
 
 - [TonConnect用户界面文档](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
 
@@ -133,7 +136,9 @@ const transaction = {
 const result = await tonConnectUI.sendTransaction(transaction)
 ```
 
-- 在此获取更多示例：[准备信息](/v3/guidelines/ton-connect/guidelines/preparing-messages)。
+:::tip
+在此获取更多示例：[准备信息](/v3/guidelines/ton-connect/guidelines/preparing-messages)。
+:::
 
 ### 通过哈希值了解交易状态
 
@@ -159,3 +164,5 @@ await tonConnectUI.disconnect();
 - [用户界面定制](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
 - [[YouTube]TON Connect UI React [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=1747)
 - [[YouTube]连接 TON 将用户界面连接到网站 [RU]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)。
+
+<Feedback />

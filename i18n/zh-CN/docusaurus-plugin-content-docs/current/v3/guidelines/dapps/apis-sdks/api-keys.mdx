@@ -1,12 +1,14 @@
-# Api keys
+import Feedback from '@site/src/components/Feedback';
+
+# 使用 TON HTTP API时，通常不需要一个 `token` (`key`)，但它解锁了请求限制。 有几个可用的计划，都可以在 Toncentry mini 应用程序中查看
 
 ## 概述
 
-使用 TON HTTP API时，通常不需要一个 `token` (`key`)，但它解锁了请求限制。 有几个可用的计划，都可以在 Toncentry mini 应用程序中查看
+When using the TON HTTP API, a token (API key) is generally not required. However, having a key removes request limitations. There are several available plans, all of which can be viewed in Toncenter mini app.
 
 ## 如何获取 Key
 
-若要获取 key，请访问 [@tonapibot](https://t.me/tonapibot), 按下 "start" 按钮，并按照说明操作。
+To get a key, visit [@toncenter](https://t.me/toncenter), press the `start` button, and follow the on-screen instructions.
 
 ![Telegram Bot](/img/registration-process/telegram-bot.png)
 
@@ -18,7 +20,7 @@
 
 ![Create API Key](/img/registration-process/create-api-key.png)
 
-填写必填字段，然后按 `Create`。就这样！现在就可以使用该 key 发送请求了。
+填写必填字段，然后按 `Create`。就这样！现在就可以使用该 key 发送请求了。 That's it! Your API key is now ready for use in requests.
 
 ## 如何更新订阅计划
 
@@ -30,4 +32,6 @@
 
 ## 故障排除
 
-如果您的 Telegram 应用程序已过期，小程序可能无法正常工作。请尝试更新 Telegram 应用程序。
+If the TON Center mini app does not work properly, your Telegram app may be outdated. 如果您的 Telegram 应用程序已过期，小程序可能无法正常工作。请尝试更新 Telegram 应用程序。
+
+<Feedback />

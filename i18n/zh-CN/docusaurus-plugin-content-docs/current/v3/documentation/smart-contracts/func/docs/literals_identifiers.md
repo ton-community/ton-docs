@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 字面量和标识符
 
 ## 数字字面量
@@ -10,6 +12,19 @@ FunC 支持十进制和十六进制整数字面量（允许前导零）。
 
 FunC 中的字符串使用双引号 `"` 包裹，如 `"this is a string"`。不支持特殊符号如 `\n` 和多行字符串。
 可选地，字符串字面量后可以指定类型，如 `"string"u`。
+You can optionally specify a type after the string literal, such as `"string"u`.<br />
+Special characters like `\n` are not supported, but you can create multi-line <br />  strings simply by writing the text across multiple lines, like this:
+
+```
+;; somewhere inside of a function body
+
+var a = """
+   hash me baby one more time
+"""h;
+var b = a + 42;
+
+b; ;; 623173419
+```
 
 支持以下字符串类型：
 
@@ -21,7 +36,8 @@ FunC 中的字符串使用双引号 `"` 包裹，如 `"this is a string"`。不�
 - `H` —— 创建字符串的 SHA256 哈希的所有 256 位的 int 常量
 - `c` —— 创建字符串的 crc32 值的 int 常量
 
-例如，以下值会生成对应的常量：
+**Examples**
+The following string literals produce these corresponding constants:
 
 - `"string"` 变成 `x{737472696e67}` slice 常量
 - `"abcdef"s` 变成 `x{abcdef}` slice 常量
@@ -33,7 +49,15 @@ FunC 中的字符串使用双引号 `"` 包裹，如 `"this is a string"`。不�
 
 ## 标识符
 
-FunC 允许使用非常广泛的标识符类别（函数和变量名）。具体来说，任何不包含特殊符号 `;`、`,`、`(`、`)`、` `（空格或制表符）、`~` 和 `.`，不以注释或字符串字面量（以 `"` 开头）开始，不是数字字面量，不是下划线 `_`，也不是关键字的单行字符串都是有效的标识符（唯一的例外是，如果它以 `` ` `` 开头，则必须以相同的 `` ` `` 结尾，并且不能包含除这两个外的任何其他 `` ` ``）。
+FunC allows a broad range of identifiers for functions and variable names.
+Any **single-line string** that meets the following conditions qualifies as a valid identifier:
+
+- It **does not** contain special symbols: `;`, `,`, `(`, `)`, `[`, `]`, spaces including tabs, `~`, and `.`.
+- It **does not** start as a comment or a string literal (i.e., with `"` at the beginning).
+- It is **not** a number literal.
+- It is **not** an underscore `_`.
+- It is **not** a reserved keyword. Exception: if it starts with a backtick `` ` ``, it must also end with a backtick and cannot contain any additional backticks inside.
+- It is **not** a name of a [builtin](https://github.com/ton-blockchain/ton/blob/5c392e0f2d946877bb79a09ed35068f7b0bd333a/crypto/func/builtins.cpp#L1133).
 
 此外，函数定义中的函数名可以以 `.` 或 `~` 开头。
 
@@ -49,19 +73,25 @@ FunC 允许使用非常广泛的标识符类别（函数和变量名）。具体
 - `_+_`（标准加法运算符，类型为 `(int, int) -> int`，虽然已被定义）
 - `fatal!`
 
-变量名末尾的 `'` 通常用于表示某个旧值的修改版本。例如，几乎所有用于 hashmap 操作的内置修改原语（除了以 `~` 为前缀的原语）都会接收一个 hashmap 并返回新版本的 hashmap 及必要时的其他数据。将这些值命名为相同名称后加 `'` 很方便。
+**Naming conventions:**
 
-后缀 `?` 通常用于布尔变量（TVM 没有内置的 bool 类型；bools 由整数表示：0 为 false，-1 为 true）或返回某些标志位的函数，通常表示操作的成功（如 [stdlib.fc](/develop/func/stdlib) 中的 `udict_get?`）。
+- **Apostrophe `'` at the end:** used when a variable is a modified version of its original value.
 
-以下是无效的标识符：
+  - 变量名末尾的 `'` 通常用于表示某个旧值的修改版本。例如，几乎所有用于 hashmap 操作的内置修改原语（除了以 `~` 为前缀的原语）都会接收一个 hashmap 并返回新版本的 hashmap 及必要时的其他数据。将这些值命名为相同名称后加 `'` 很方便。
+    The updated version is typically named with the same identifier, adding a `'` suffix.
+
+- **Question mark (?) at the end:** typically used for boolean variables or functions that return a success flag.
+  - Example: `udict_get?` from [stdlib.fc](/v3/documentation/smart-contracts/func/docs/stdlib), which checks if a value exists.
+
+**Invalid identifiers:**
 
 - `take(first)Entry`
 - `"not_a_string`
 - `msg.sender`
 - `send_message,then_terminate`
-- `_`
+- `_` - just an underscore, which is not valid on its own
 
-一些不太常见的有效标识符示例：
+**Less common but valid identifiers:**
 
 - `123validname`
 - `2+2=2*2`
@@ -70,35 +100,44 @@ FunC 允许使用非常广泛的标识符类别（函数和变量名）。具体
 - `{hehehe}`
 - ``pa{--}in"`aaa`"``
 
-这些也是无效的标识符：
+**More invalid identifiers:**
 
 - ``pa;;in"`aaa`"``（因为禁止使用 `;`）
-- `{-aaa-}`
-- `aa(bb`
+- `{-aaa-}` - contains `{}` incorrectly
+- `aa(bb` - contains an opening parenthesis without closing it
 - `123`（它是一个数字）
 
-此外，FunC 有一种特殊类型的标识符，用反引号 `` ` `` 引用。
-在引号内，任何符号都是允许的，除了 `\n` 和引号本身。
+**Special identifiers in backticks:**
 
-例如，`` `I'm a variable too` `` 是一个有效的标识符，`` `any symbols ; ~ () are allowed here...` `` 也是。
+FunC allows identifiers enclosed in backticks `` ` ``. 这些也是无效的标识符：
+
+- Newline characters `\n`
+- Backticks `` ` `` themselves except the opening and closing ones.
+
+**Examples of valid backtick-quoted identifiers:**
+
+- `I'm a variable too`
+- `any symbols ; ~ () are allowed here...`
 
 ## 常量
 
 FunC 允许定义编译时的常量，这些常量在编译期间被替换和预计算。
 
+**Syntax:**
+
+```func
 常量的定义格式为 `const optional-type identifier = value-or-expression;`
+```
 
-`optional-type` 可用于强制指定常量的特定类型，也用于更好的可读性。
+- `optional-type` 可用于强制指定常量的特定类型，也用于更好的可读性。
+- `value-or-expression` 可以是字面量或由字面量和常量组成的可预计算表达式。
 
-目前，支持 `int` 和 `slice` 类型。
+**Example usage:**
 
-`value-or-expression` 可以是字面量或由字面量和常量组成的可预计算表达式。
-
-例如，可以这样定义常量：
-
-- `const int101 = 101;` 定义等同于数字字面量 `101` 的 `int101` 常量
-- `const str1 = "const1", str2 = "aabbcc"s;` 定义两个等于其对应字符串的常量
-- `const int int240 = ((int1 + int2) * 10) << 3;` 定义等于计算结果的 `int240` 常量
-- `const slice str2r = str2;` 定义等于 `str2` 常量值的 `str2r` 常量
+```func
+`const int int240 = ((int1 + int2) * 10) << 3;` 定义等于计算结果的 `int240` 常量
+```
 
 由于数字常量在编译期间被替换，所有在编译期间进行的优化和预计算都能成功执行（与旧方法通过内联 asm `PUSHINT` 定义常量不同）。
+
+<Feedback />

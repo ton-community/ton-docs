@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 常见问题
 
 ## MyTonCtrl 目录用法
@@ -53,16 +55,17 @@ sudo rm -rf /usr/bin/ton
 
 如果想在安装前更改验证器的工作目录，有两种方法：
 
-1. **分叉项目** - 您可以分叉项目并在其中进行修改。了解如何使用 `man git-fork` fork 项目。
+1. **Fork the project**: You can fork the project and make your modifications there. **分叉项目** - 您可以分叉项目并在其中进行修改。了解如何使用 `man git-fork` fork 项目。
+
 2. ** 创建符号链接** - 也可以使用以下命令创建符号链接：
 
-   ````
+   ````bash
    ```bash
    ln -s /opt/ton/var/ton
    ```
    ````
 
-   此命令将创建指向 `/opt/ton` 的链接 `/var/ton`。
+此命令将创建指向 `/opt/ton` 的链接 `/var/ton`。
 
 ### 安装后更改验证器工作目录
 
@@ -99,8 +102,10 @@ sudo rm -rf /usr/bin/ton
 systemctl restart validator.service
 ```
 
-确保您有足够的权限执行这些命令并进行必要的调整。在执行可能影响验证程序的操作前，请务必备份重要数据。
+确保您有足够的权限执行这些命令并进行必要的调整。在执行可能影响验证程序的操作前，请务必备份重要数据。 <u>**Remember to back up important data before performing operations that may affect your validator.**</u>
 
 ## 另请参见
 
 - [故障排除](/v3/guidelines/nodes/nodes-troubleshooting)
+
+<Feedback />

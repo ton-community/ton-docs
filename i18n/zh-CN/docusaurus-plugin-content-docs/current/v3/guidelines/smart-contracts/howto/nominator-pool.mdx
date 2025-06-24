@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 如何使用提名池？
 
 :::tip
@@ -8,11 +10,11 @@
 
 1. 为验证器设置硬件：需要 8 个 vCPU、128GB 内存、1TB SSD、固定 IP 地址和 1Gb/s 网速。
 
-   为了保持网络的稳定性，建议将验证器节点分布在全球不同的地理位置，而不是集中在一个数据中心。您可以使用 [this site](https://status.toncenter.com/) 来评估不同地点的负载情况。地图显示，欧洲的数据中心利用率很高，尤其是芬兰、德国和巴黎。因此，不建议使用 Hetzner 和 OVH 等提供商。
+   To maintain network stability, distribute validator nodes across different geographical locations worldwide rather than concentrating them in a single data center. Use [this site](https://status.toncenter.com/) to assess the load of various locations. The map indicates high data center utilization in Europe, especially in Finland, Germany, and Paris. Therefore, avoid using providers such as Hetzner and OVH.
 
-   > 确保您的硬件符合或超过上述规格。在硬件不足的情况下运行验证器会对网络造成负面影响，并可能导致处罚。
+   > Ensure your hardware meets or exceeds the specifications above. 确保您的硬件符合或超过上述规格。在硬件不足的情况下运行验证器会对网络造成负面影响，并可能导致处罚。
    >
-   > 请注意，自 2021 年 5 月起，Hetzner 已禁止在其服务器上挖矿，该禁令包括 PoW 和 PoS 算法。即使安装普通节点也可能被视为违反其服务条款。
+   > Note that as of May 2021, Hetzner has prohibited mining on its servers. This ban includes both PoW and PoS algorithms. Even installing a regular node may violate their terms of service.
    >
    > **推荐的提供商包括：** [Amazon](https://aws.amazon.com/), [DigitalOcean](https://www.digitalocean.com/), [Linode](https://www.linode.com/), [Alibaba Cloud](https://alibabacloud.com/), [Latitude](https://www.latitude.sh/).
 
@@ -38,7 +40,7 @@
    new_pool p2 0 1 1001 300000
    ```
 
-   其中：
+   Where:
 
    - `p1` 为池名称；
    - `0` % 是验证器的奖励份额（例如，用 40 表示 40%）；
@@ -46,7 +48,7 @@
    - `1000`  TON 是最小验证器质押（应 >= 1K  TON ）；
    - `300000`  TON 是最低提名人质押（应 >= 10K  TON ）；
 
-   > (!) 池配置不一定要完全相同，您可以在一个池的最低质押额上加 1，使其有所不同。
+   > (!) Pool configurations do not have to be identical. You can add 1 to the minimum stake of one pool to make them different.
    >
    > (!) 使用 https://tonmon.xyz/ 确定当前的最小验证器质押。
 
@@ -86,27 +88,43 @@
     deposit_to_pool validator_wallet_001 <address_of_pool_2> 1005
     ```
 
-   在这些命令中，`1005` TON 是存款金额。请注意，资金池在处理存款时将扣除 1  TON 。
+在这些命令中，`1005` TON 是存款金额。请注意，资金池在处理存款时将扣除 1  TON 。 The pool will deduct 1 TON to process the deposit.
 
 12. 继续向每个提名池交存提名人押金：
 
     访问池链接（来自**步骤 9**）并点击**添加质押**。
     您也可以使用 **mytonctrl**，使用以下命令存款：
+    You can also make a deposit using **mytonctrl**, using the following commands:
 
     ```bash
     mg nominator_wallet_001 <address_of_pool_1> 300001 -C d
     mg nominator_wallet_001 <address_of_pool_2> 300001 -C d
     ```
 
-> (提名人钱包必须在基链（工作链 0）中初始化。）
->
 > (!) 请注意，验证者钱包和提名者钱包必须分开存储！验证者钱包应与验证者节点一起存储在服务器上，以确保处理所有系统交易。同时，提名者钱包应存储在您的冷加密货币钱包中。
 >
-> 要提取提名人存款，请向资金池地址发送带注释 `w` 的交易（附加 1  TON 以处理交易）。您也可以使用 **mytonctrl** 执行此操作。
+> (!) Remember that the validator and nominator wallets must be stored separately! Store the validator wallet on the server with the validator node to ensure the processing of all system transactions. Meanwhile, store the nominator wallet in your cold cryptocurrency wallet.
+>
+> 要提取提名人存款，请向资金池地址发送带注释 `w` 的交易（附加 1  TON 以处理交易）。您也可以使用 **mytonctrl** 执行此操作。 You can also perform this action using **mytonctrl**.
 
-13. 邀请提名者存入您的池。参与验证将自动开始。
+13. 邀请提名者存入您的池。参与验证将自动开始。 The participation in validation will commence automatically.
 
-    > (!) 确保您的验证器钱包中至少有 200  TON /月的操作费。
+> (!) 确保您的验证器钱包中至少有 200  TON /月的操作费。
+>
+> In the TON blockchain, the validator cycle is approximately 18 hours, and there are roughly 40.5 validation rounds per month (assuming a 30-day month).
+>
+> Here's the breakdown of costs based on participation:
+>
+> - **Participating in only odd or even cycles (half of the rounds):**
+>
+>   - Rounds per month: ~20.25
+>   - Cost per round: ~5 Toncoins
+>   - `total cost = 20.25 * 5 -> ~101.25 Toncoins`
+>
+> - **Participating in both odd and even cycles (all rounds):**
+>   - Rounds per month: ~40.5
+>   - Cost per round : ~ 5 Toncoins
+>   - `total cost = 40.5 * 5 -> ~202.50 Toncoins`
 
 ## 池配置
 
@@ -121,3 +139,4 @@
 2. 等待选举人归还你们的质押。
 
 3. 从 **第 4 步** 开始，继续执行 "在提名池模式下运行验证器" 下的步骤。
+   <Feedback />

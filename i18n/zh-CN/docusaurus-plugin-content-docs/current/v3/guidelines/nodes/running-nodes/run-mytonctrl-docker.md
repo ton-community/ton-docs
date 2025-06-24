@@ -1,6 +1,12 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 在 Docker 中运行 MyTonCtrl
 
+This guide provides a step-by-step process for installing MyTonCtrl using Docker.
+
 ## 硬件要求
+
+To ensure an optimal experience while running MyTonCtrl, here are the recommended hardware specifications:
 
 - 16 核 CPU
 - 128 GB 内存
@@ -9,11 +15,13 @@
 - 公共 IP 地址（固定 IP 地址）
 - 峰值流量为每月 16 TB
 
-***不建议使用！***  ***仅供测试！***
-
-变量 **IGNORE_MINIMAL_REQS=true** 关闭 CPU/RAM 需求验证。
+:::warning
+This setup is primarily intended for testing purposes, so it may not be suitable for production environments. If you’d like to bypass hardware checks for any reason, you can easily do this by setting the variable `IGNORE_MINIMAL_REQS=true`.
+:::
 
 ## 软件要求：
+
+To get started, please ensure you have the following software installed:
 
 - docker-ce
 - docker-ce-cli
@@ -21,9 +29,11 @@
 - docker-buildx-plugin
 - docker-compose-plugin
 
-  *官方 [Docker](https://docs.docker.com/engine/install/)中的安装指南*
+_官方 [Docker](https://docs.docker.com/engine/install/)中的安装指南_
 
 ## 测试运行系统：
+
+We’ve successfully tested MyTonCtrl on these operating systems:
 
 - Ubuntu 20.04
 - Ubuntu 22.04
@@ -33,7 +43,17 @@
 
 ## 使用官方 docker 镜像运行 MyTonCtrl v2：
 
-- 使用 MyTonCtrl 提取镜像并运行节点
+Here’s how you can pull the image and set up your MyTonCtrl node:
+
+```bash
+默认情况下，TON 和 Mytoncore 作品存储在 **/var/lib/docker/volumes/** 中。
+```
+
+## 使用 MyTonCtrl 提取镜像并运行节点
+
+If you prefer to install from source, just follow these easy steps:
+
+1. Clone the repository with the latest version:
 
 ````bash
 docker run -d --name ton-node -v <YOUR_LOCAL_FOLDER>:/var/ton-work -it ghcr.io/ton-community/ton-docker-ctrl:latest
@@ -46,13 +66,13 @@ docker run -d --name ton-node -v <YOUR_LOCAL_FOLDER>:/var/ton-work -it ghcr.io/t
 git clone https://github.com/ton-community/ton-docker-ctrl.git
 ````
 
-2. 转到目录
+2. Change into the project directory:
 
 ```bash
 cd ./ton-docker-ctrl
 ```
 
-3. 在 .env 文件中指明必要的值
+3. Open the `.env` file and make any necessary updates:
 
 ```bash
 vi .env
@@ -95,6 +115,8 @@ ghcr.io/ton-community/ton-docker-ctrl:latest
 
 ## 停止并删除 MyTonCtrl：
 
+连接到 MyTonCtrl 时，将自动进行更新验证。如果检测到任何更新，则会显示一条信息"_MyTonCtrl 更新可用。请使用 `update` 命令进行更新。_"
+
 1. 停止容器
 
 ```bash
@@ -115,6 +137,8 @@ docker compose down --volumes
 
 ## 连接到 MyTonCtrl：
 
+反映可访问的命令列表 `help`
+
 ```bash
 docker compose exec -it ton-node bash -c "mytonctrl"
 ```
@@ -127,13 +151,15 @@ MyTonCtrl> status
 
 ![](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
 
-反映可访问的命令列表 `help`
+And if you would like to see a list of commands you can use, simply enter:
 
 ```bash
 MyTonCtrl> help
 ```
 
 ## 查看 MyTonCtrl 日志：
+
+Monitoring the situation is simple, as you can easily view the logs:
 
 ```bash
 docker compose logs
@@ -154,9 +180,7 @@ docker compose build ton-node
 docker compose up -d
 ```
 
-连接到 MyTonCtrl 时，将自动进行更新验证。如果检测到任何更新，则会显示一条信息"*MyTonCtrl 更新可用。请使用 `update` 命令进行更新。*"
-
-更新可使用更新命令，通过指定必要的分支来完成
+When you’re connected to MyTonCtrl, it will automatically check for updates. If any are available, you’ll see a message saying, “``MyTonCtrl update available. Please update it with the `update` command``”.  更新可使用更新命令，通过指定必要的分支来完成
 
 ```bash
 MyTonCtrl> update mytonctrl2
@@ -164,6 +188,5 @@ MyTonCtrl> update mytonctrl2
 
 ## 更改数据存储路径：
 
-默认情况下，TON 和 Mytoncore 作品存储在 **/var/lib/docker/volumes/** 中。
+TON and MyTonCore data is stored in `/var/lib/docker/volumes/`by default. 你可以在文件 docker-compose.yml 中进行修改，方法是在 **volumes** 部分指出所需的路由 <Feedback />
 
-你可以在文件 docker-compose.yml 中进行修改，方法是在 **volumes** 部分指出所需的路由

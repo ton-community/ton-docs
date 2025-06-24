@@ -1,3 +1,5 @@
+import Feedback from '@site/src/components/Feedback';
+
 # 发送消息
 
 TON Connect 2.0 不仅仅提供了在 dApp 中认证用户的强大选项：它还可以通过已连接的钱包发送外部消息！
@@ -10,7 +12,7 @@ TON Connect 2.0 不仅仅提供了在 dApp 中认证用户的强大选项：它�
 
 ## 演示页面
 
-我们将使用 JavaScript 的低级 [TON Connect SDK](https://github.com/ton-connect/sdk/tree/main/packages/sdk) 。我们将在钱包已连接的页面上的浏览器控制台上做实验。以下是示例页面：
+We will use the low level [TON Connect SDK](https://github.com/ton-connect/sdk/tree/main/packages/sdk) for JavaScript. We'll experiment in the browser console on a page where the wallet is already connected. Here is the sample page:
 
 ```html
 <!DOCTYPE html>
@@ -37,7 +39,7 @@ TON Connect 2.0 不仅仅提供了在 dApp 中认证用户的强大选项：它�
 
 ## 发送多条消息
 
-### 1. 了解任务
+### 了解任务
 
 我们将在一次交易中发送两条独立的消息：一条发送到您自己的地址，携带 0.2 TON，另一条发送到其他钱包地址，携带 0.1 TON。
 
@@ -46,7 +48,7 @@ TON Connect 2.0 不仅仅提供了在 dApp 中认证用户的强大选项：它�
 - 标准 ([v3](/participate/wallets/contracts#wallet-v3)/[v4](/participate/wallets/contracts#wallet-v4)) 钱包：4 条传出消息；
 - 高负载钱包：255 条传出消息（接近区块链限制）。
 
-### 2. 发送消息
+### 打开您的钱包应用，您会看到原因。有一个请求，显示您要发送的内容以及coin将会去向哪里。请接受它。
 
 运行以下代码：
 
@@ -66,11 +68,11 @@ console.log(await connector.sendTransaction({
 }));
 ```
 
-您会注意到这个命令没有在控制台打印任何东西，像返回无内容的函数一样，`null` 或 `undefined`。这意味着 `connector.sendTransaction` 不会立即退出。
+您会注意到这个命令没有在控制台打印任何东西，像返回无内容的函数一样，`null` 或 `undefined`。这意味着 `connector.sendTransaction` 不会立即退出。 This means that `connector.sendTransaction` does not exit immediately.
 
-打开您的钱包应用，您会看到原因。有一个请求，显示您要发送的内容以及coin将会去向哪里。请接受它。
+Open your wallet application, and you'll see why. There is a request showing what you are sending and where the coins would go. Please, accept it.
 
-### 3. 获取结果
+### 获取结果
 
 函数将退出，并且区块链的输出将被打印：
 
@@ -80,7 +82,7 @@ console.log(await connector.sendTransaction({
 }
 ```
 
-BOC 是 [Bag of Cells](/learn/overviews/cells)，这是 TON 中存储数据的方式。现在我们可以解码它。
+BOC 是 [Bag of Cells](/learn/overviews/cells)，这是 TON 中存储数据的方式。现在我们可以解码它。 Now, we can decode it.
 
 在您选择的工具中解码这个 BOC，您将得到以下cell树：
 
@@ -90,7 +92,7 @@ x{88016543D9EAA8BC0ED9A6D5CA2DD4FD7BE655D401195457095F30CD7D9641112B5A02501DD1A8
  x{42005950F67AAA2F03B669B5728B753F5EF9957500465515C257CC335F6590444AD69CC4B40000000000000000000000000000}
 ```
 
-返回发送交易的 BOC 的目的是跟踪它。
+This is a serialized external message, and two references are outgoing messages representations.
 
 ```bash
 x{88016543D9EAA8BC0ED9A6D5CA2DD4FD7BE655D401195457095F30CD7D964111...
@@ -105,18 +107,40 @@ x{88016543D9EAA8BC0ED9A6D5CA2DD4FD7BE655D401195457095F30CD7D964111...
 
 返回发送交易的 BOC 的目的是跟踪它。
 
+### 我们将使用 JavaScript 的低级 [TON Connect SDK](https://github.com/ton-connect/sdk/tree/main/packages/sdk) 。我们将在钱包已连接的页面上的浏览器控制台上做实验。以下是示例页面：
+
+To find a transaction by `extInMsg`, you need to do the following:
+
+1. Parse the received `extInMsg` as a cell.
+2. Calculate the `hash()` of the obtained cell.
+
+:::info
+The received hash is what the `sendBocReturnHash` methods of TON Center API are already returning to you.
+:::
+
+3. Search for the required transaction using this hash through an indexer:
+
+  - Using TON Center [api_v3_transactionsByMessage_get](https://toncenter.com/api/v3/#/default/get_transactions_by_message_api_v3_transactionsByMessage_get).
+
+  - Using the `/v2/blockchain/messages/{msg_id}/transaction` method from [TON API](https://tonapi.io/api-v2).
+
+  - Collect transactions independently and search for the required extInMsg by its hash: [see example](/v3/guidelines/dapps/cookbook#how-to-find-transaction-for-a-certain-ton-connect-result).
+
+It's important to note that `extInMsg` may not be unique, which means collisions can occur. However, all transactions are unique.
+If you are using this for an informative display, this method should be sufficient. With standard wallet contracts, collisions can occur only in exceptional situations.
+
 ## 发送复杂的交易
 
 ### cell 的序列化
 
-构建消息后，您可以将其序列化为 BOC。
+Before we proceed, let's talk about the format of the messages we will send.
 
 - **payload** (string base64, 可选): 以 Base64 编码的单cell BoC。
   - 我们将使用它来存储转账上的文本评论
 - **stateInit** (string base64, 可选): 以 Base64 编码的单cell BoC。
   - 我们将用它来部署智能合约
 
-创建信息后，可以将其序列化到 BOC 中。
+构建消息后，您可以将其序列化为 BOC。
 
 ```js
 TonWeb.utils.bytesToBase64(await payloadCell.toBoc())
@@ -126,7 +150,7 @@ TonWeb.utils.bytesToBase64(await payloadCell.toBoc())
 
 您可以使用 [toncenter/tonweb](https://github.com/toncenter/tonweb) JS SDK 或您喜欢的工具将 cell 序列化为 BOC。
 
-传输的文本注释编码为操作码 0（32 个零位）+ UTF-8 注释字节。下面是一个如何将其转换为 cell 包的示例。
+Text comments on transfer are encoded as opcode 0 (32 zero bits) + UTF-8 bytes of comment. Here's an example of how to convert it into a bag of cells.
 
 ```js
 let a = new TonWeb.boc.Cell();
@@ -140,7 +164,7 @@ console.log(payload);
 
 ### 智能合约部署
 
-现在，是时候发送我们的交易了！
+And we'll deploy an instance of super simple [chatbot Doge](https://github.com/LaDoger/doge.fc), mentioned as one of [smart contract examples](/v3/documentation/smart-contracts/overview#examples-of-smart-contracts). First of all, we load its code and store something unique in data to receive our very own instance that someone else has not deployed. Then, we combine code and data into stateInit.
 
 ```js
 let code = TonWeb.boc.Cell.oneFromBoc(TonWeb.utils.base64ToBytes('te6cckEBAgEARAABFP8A9KQT9LzyyAsBAGrTMAGCCGlJILmRMODQ0wMx+kAwi0ZG9nZYcCCAGMjLBVAEzxaARfoCE8tqEssfAc8WyXP7AN4uuM8='));
@@ -181,14 +205,23 @@ console.log(await connector.sendTransaction({
 更多示例请参阅传输 NFT 和 Jettons 的 [准备信息](/v3/guidelines/ton-connect/guidelines/preparing-messages) 页面。
 :::
 
-处理请求拒绝相当简单，但当您正在开发某个项目时，最好提前知道会发生什么。
+After confirmation, we may see our transaction complete at [tonscan.org](https://tonscan.org/tx/pCA8LzWlCRTBc33E2y-MYC7rhUiXkhODIobrZVVGORg=).
 
 ## 如果用户拒绝交易请求会发生什么情况？
 
 处理请求被拒绝的情况很容易，但在开发项目时，最好事先知道会发生什么。
 
+When a user clicks **Cancel** in the popup in the wallet application, an exception is thrown:
+
+```ts
 当用户点击钱包应用程序弹出窗口中的 "取消" 时，会出现一个异常：`Error: [TON_CONNECT_SDK_ERROR] Wallet declined the request`。该错误可视为最终错误（与取消连接不同）-- 如果该错误被触发，那么在下一个请求发送之前，请求的交易肯定不会发生。
+```
+
+This error can be considered final (unlike connection cancellation) - if it has been raised, then the requested transaction will definitely not happen until the next request is sent.
 
 ## 另请参见
 
 - [准备信息](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+
+<Feedback />
+
