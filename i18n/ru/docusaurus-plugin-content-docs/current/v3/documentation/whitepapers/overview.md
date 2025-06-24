@@ -1,8 +1,8 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Whitepapers
+# Технические документы
 
-This section contains the original documentation written by _Dr. Николаем Дуровым, которая всесторонне описывает все части TON.
+В этом разделе представлена ​​оригинальная документация, написанная доктором  Николаем Дуровым, которая всесторонне описывает все части TON.
 
 ## Оригинальная документация
 
