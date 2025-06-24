@@ -44,5 +44,5 @@ jobs:
           crowdin download --export-only-approved --branch main --config crowdin-oss.yml --language=${{ matrix.lang }}
           git add i18n/${{ matrix.lang }}
           git commit -m "chore: update ${{ matrix.lang }} translations"
-          git push -u origin l10n-release-candidate-${{ matrix.lang }}
-          gh pr create -B release-candidate-${{ matrix.lang }} -H l10n-release-candidate-${{ matrix.lang }} --title "chore: update `${{ matrix.lang }}` translations" --body 'This automated PR updates only the fully translated `${{ matrix.lang }}` files.'
+          git push -u origin l10n-release-candidate-${{ matrix.lang }} || true
+          gh pr create -B release-candidate-${{ matrix.lang }} -H l10n-release-candidate-${{ matrix.lang }} --title "chore: update `${{ matrix.lang }}` translations" --body 'This automated PR updates only the fully translated `${{ matrix.lang }}` files.' || true
