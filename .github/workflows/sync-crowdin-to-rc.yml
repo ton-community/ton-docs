@@ -47,6 +47,7 @@ jobs:
 
       - name: Commit and push translations
         run: |
+          git pull --rebase origin l10n-release-candidate-${{ matrix.lang }} || true
           git add i18n/${{ matrix.lang }}
           git diff --quiet --cached || ( \
             git commit -m "chore: update ${{ matrix.lang }} translations" && \
