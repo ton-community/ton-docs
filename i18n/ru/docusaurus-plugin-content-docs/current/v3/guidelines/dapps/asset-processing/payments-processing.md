@@ -407,7 +407,8 @@ run();
 
 - **xssnick/tonutils-go:**
 
-<details><summary>Проверка депозитов</summary>
+<details>
+<summary>Проверка депозитов</summary>
 
 ```go
 package main 

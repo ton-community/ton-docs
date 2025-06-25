@@ -363,7 +363,7 @@ if state_cell[0].get_hash(0) != state_hash:
     raise ProofError('state hashes mismatch')
 ```
 
-Теперь мы можем доверять `state_cell`, который выглядит так: Its structure is as follows: Its structure is as follows:
+Теперь мы можем доверять `state_cell`, который выглядит так: Its structure is as follows:
 
 <details>
 
@@ -456,7 +456,6 @@ if state_cell[0].get_hash(0) != state_hash:
 Как мы видим, единственная ссылка доказательства Меркла имеет префикс `9023AFE2`, который является [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410)
 префиксом схемы TLB, поэтому нам нужно сравнить эту ссылку Hash_1 с той, которую мы запомнили на предыдущем шаге:
 Therefore, it must be deserialized accordingly.
-Therefore, it must be deserialized accordingly.
 
 ```python
 {
@@ -520,7 +519,7 @@ We then use this key to retrieve the corresponding value from the Hashmap.
 }
 ```
 
-Нам нужно запомнить `last_trans_hash` и `last_trans_lt`, потому что мы можем использовать их для получения транзакций по аккаунту, и давайте проверим всю ячейку этих данных: Let's examine the entire cell containing this data. Let's examine the entire cell containing this data.
+Нам нужно запомнить `last_trans_hash` и `last_trans_lt`, потому что мы можем использовать их для получения транзакций по аккаунту, и давайте проверим всю ячейку этих данных: Let's examine the entire cell containing this data.
 
 ```json
 320[649B46AC72E6E4D4C1293B66D58D9ED7A54902BEEFD97F5BFF7977DD85998B3D000023C564393441] -> {
@@ -860,7 +859,7 @@ assert block_tr.get_hash(0) == tr['hash']
 }
 ```
 
-Нам нужно сравнить Hash_1 этой ссылки доказательства Меркла только с хешем, который мы получили из функции `check_block_header` выше, чтобы мы могли доверять этой ячейке: If they match, the cell can be trusted: If they match, the cell can be trusted:
+Нам нужно сравнить Hash_1 этой ссылки доказательства Меркла только с хешем, который мы получили из функции `check_block_header` выше, чтобы мы могли доверять этой ячейке: If they match, the cell can be trusted:
 
 ```python
 state_hash = check_block_header_proof(state_proof[0], block.root_hash, True)

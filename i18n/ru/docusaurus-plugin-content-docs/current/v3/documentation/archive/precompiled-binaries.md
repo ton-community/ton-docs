@@ -40,7 +40,7 @@ colorType="primary" sizeType={'sm'}>
 | MacOS x86-64                      | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/ton-mac-x86-64.zip)   | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/fift-mac-x86-64)   | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/func-mac-x86-64)   | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/lite-client-mac-x86-64)   |                                                                                                                 |
 | MacOS arm64                       | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/ton-mac-arm64.zip)    |                                                                                             |                                                                                             |                                                                                                    | `brew install openssl ninja libmicrohttpd pkg-config`                                                           |
 | Windows x86-64                    | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/ton-win-x86-64.zip)   | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/fift.exe)          | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/func.exe)          | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/lite-client.exe)          | Установите [OpenSSL 1.1.1](/ton-binaries/windows/Win64OpenSSL_Light-1_1_1q.msi) |
-| Linux x86_64 | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/ton-linux-x86_64.zip) | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/fift-linux-x86_64) | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/func-linux-x86_64) | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/lite-client-linux-x86_64) |                                                                                                                 |
+| Linux x86_64                      | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/ton-linux-x86_64.zip) | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/fift-linux-x86_64) | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/func-linux-x86_64) | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/lite-client-linux-x86_64) |                                                                                                                 |
 | Linux arm64                       | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/ton-linux-arm64.zip)  |                                                                                             |                                                                                             |                                                                                                    | `sudo apt install libatomic1 libssl-dev`                                                                        |
 
 ### 2. Настройка бинарных файлов
@@ -89,23 +89,6 @@ padding: '0.2rem',
 
 :::caution важно
 Instead of the `%USERNAME%` keyword, you must insert your own `username`.\
-:::</TabItem>
-<TabItem value="mac" label="Linux / MacOS">1. After downloading, make sure the downloaded binaries are executable by changing their permissions.```bash
-chmod +x func
-chmod +x fift
-chmod +x lite-client
-```2. It's also useful to add these binaries to your path (or copy them to `/usr/local/bin`) so you can access them from anywhere.```bash
-cp ./func /usr/local/bin/func
-cp ./fift /usr/local/bin/fift
-cp ./lite-client /usr/local/bin/lite-client
-```3. To check that everything was installed correctly, run in terminal.```bash
-fift -V && func -V && lite-client -V
-```4. If you plan to `use fift`, also download [fiftlib.zip](/ton-binaries/windows/fiftlib.zip), open the zip in some directory on your device (like `/usr/local/lib/fiftlib`), and set the environment variable `FIFTPATH` to point to this directory.```
-unzip fiftlib.zip
-mkdir -p /usr/local/lib/fiftlib
-cp fiftlib/* /usr/local/lib/fiftlib
-```:::info Hey, you're almost finished :)
-Remember to set the [environment variable](https://stackoverflow.com/questions/14637979/how-to-permanently-set-path-on-linux-unix) `FIFTPATH` to point to this directory.
 :::
 
 </TabItem>
@@ -147,6 +130,9 @@ Remember to set the [environment variable](https://stackoverflow.com/questions/1
   </TabItem>
 </Tabs>
 
+
+
+
 ## Сборка из исходного кода
 
 Если вы не хотите использовать предварительно скомпилированные бинарные файлы и предпочитаете собрать их самостоятельно, следуйте [официальным инструкциям](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions).
@@ -162,7 +148,6 @@ cd ~ && git clone https://github.com/ton-blockchain/ton.git
 cd ~/ton && git submodule update --init
 mkdir ~/ton/build && cd ~/ton/build && cmake .. -DCMAKE_BUILD_TYPE=Release && make -j 4
 ```
-
 ## Другие источники для бинарных файлов
 
 Основная команда предоставляет автоматические сборки для нескольких операционных систем через [GitHub Actions](https://github.com/ton-blockchain/ton/releases/latest).

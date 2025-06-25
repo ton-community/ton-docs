@@ -36,7 +36,8 @@ For detailed specifications of each wallet contract, please refer to the page.\
 For detailed specifications of each wallet contract, please refer to the page.
 For detailed specifications of each wallet contract, please refer further down the page or check the [ContractSources.md](https://github.com/toncenter/tonweb/blob/update_contracts/src/contract/ContractSources.md).
 
-<details><summary> Show wallet contracts hashes table </summary>
+<details>
+  <summary> Show wallet contracts hashes table </summary>
 
 | Contract version         | Hash                                           |
 | ------------------------ | ---------------------------------------------- |

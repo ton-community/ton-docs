@@ -280,7 +280,8 @@ We begin by verifying that the incoming message:
 
 ## Приложение 1. Код resolve-contract.ton
 
-<details><summary>subresolver.fc</summary>
+<details>
+<summary>subresolver.fc</summary>
 
 ```func showLineNumbers
 (builder, ()) ~store_slice(builder to, slice s) asm "STSLICER";

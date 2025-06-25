@@ -387,10 +387,12 @@ if (smth) {
 
 Также обратите внимание, что `T` для функций asm должен занимать 1 слот стека (иначе тело asm не сможет обработать его должным образом), тогда как для пользовательской функции `T` может иметь любую форму.
 
+```tolk
 fun replaceLast<T>(mutate self: tuple, value: T) {
     val size = self.tupleSize();
     self.tupleSetAt(value, size - 1);
 }
+```
 
 The function `ton()` only accepts constant values (e.g., `ton(some_var)` is invalid).
 Its type is `coins` (not `int`!), although it's still a regular `int` from the TVM point of view.
