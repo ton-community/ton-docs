@@ -73,8 +73,11 @@ import Button from '@site/src/components/button';
 
 Быстрый переход к основному описанию обработки Jetton:
 
-<Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>
-Централизованная обработка </Button>
+<Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>Centralized Processing</Button>
+<Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
+colorType="secondary" sizeType={'sm'}>
+On-chain processing
+</Button>
 
 <br></br><br></br>
 
@@ -127,7 +130,7 @@ Jetton с `symbol` ==`TON` или те, которые содержат сист
 | `total_supply`       | `int`   | общее количество выпущенных жетонов, измеренное в неделимых единицах.                                                                                                                               |
 | `mintable`           | `int`   | Indicates whether new jettons can be minted (-1 for mintable, 0 for non-mintable).                                                                                               |
 | `admin_address`      | `slice` |                                                                                                                                                                                                                     |
-| `jetton_content`     | `cell`  | <Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"&#xA;colorType="secondary" sizeType={'sm'}>&#xA;On-Chain обработка&#xA;</Button> |
+| `jetton_content`     | `cell`  | Data formatted according to [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md), check [jetton metadata parsing page](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing) for more. |
 | `jetton_wallet_code` | `cell`  |                                                                                                                                                                                                                     |
 
 Также можно использовать метод `/jetton/masters` из [Toncenter API](https://toncenter.com/api/v3/#/default/get_jetton_masters_api_v3_jetton_masters_get) для получения уже декодированных данных и метаданных жетона. Мы также разработали методы для (js) [tonweb](https://github.com/toncenter/tonweb/blob/master/src/contract/token/ft/JettonMinter.js#L85) и (js) [ton-core/ton](https://github.com/ton-core/ton/blob/master/src/jetton/JettonMaster.ts#L28), (go) [tongo](https://github.com/tonkeeper/tongo/blob/master/liteapi/jetton.go#L48) и (go) [tonutils-go](https://github.com/xssnick/tonutils-go/blob/33fd62d754d3a01329ed5c904db542ab4a11017b/ton/jetton/jetton.go#L79), (python) [pytonlib](https://github.com/toncenter/pytonlib/blob/d96276ec8a46546638cb939dea23612876a62881/pytonlib/client.py#L742) и многих других [SDK](/v3/guidelines/dapps/apis-sdks/sdk).

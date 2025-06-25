@@ -1,5 +1,7 @@
 import Feedback from '@site/src/components/Feedback';
 
+
+
 import Button from '@site/src/components/button'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -407,91 +409,92 @@ run();
 
 - **xssnick/tonutils-go:**
 
-<details><summary>Проверка депозитов</summary>
+<summary>Проверка депозитов</summary>
+<details>
 
-```go
-package main 
-
-import (
-	"context"
-	"encoding/base64"
-	"log"
-
-	"github.com/xssnick/tonutils-go/address"
-	"github.com/xssnick/tonutils-go/liteclient"
-	"github.com/xssnick/tonutils-go/ton"
-)
-
-const (
-	num = 10
-)
-
-func main() {
-	client := liteclient.NewConnectionPool()
-	err := client.AddConnectionsFromConfigUrl(context.Background(), "https://ton.org/global.config.json")
-	if err != nil {
-		panic(err)
-	}
-
-	api := ton.NewAPIClient(client, ton.ProofCheckPolicyFast).WithRetry()
-
-	accountAddr := address.MustParseAddr("0QA__NJI1SLHyIaG7lQ6OFpAe9kp85fwPr66YwZwFc0p5wIu")
-
-	// we need fresh block info to run get methods
-	b, err := api.CurrentMasterchainInfo(context.Background())
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// we use WaitForBlock to make sure block is ready,
-	// it is optional but escapes us from liteserver block not ready errors
-	res, err := api.WaitForBlock(b.SeqNo).GetAccount(context.Background(), b, accountAddr)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	lastTransactionId := res.LastTxHash
-	lastTransactionLT := res.LastTxLT
-
-	headSeen := false
-
-	for {
-		trxs, err := api.ListTransactions(context.Background(), accountAddr, num, lastTransactionLT, lastTransactionId)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		for i, tx := range trxs {
-			// should include only first time lastTransactionLT
-			if !headSeen {
-				headSeen = true
-			} else if i == 0 {
-				continue
-			}
-
-			if tx.IO.In == nil || tx.IO.In.Msg.SenderAddr().IsAddrNone() {
-				// external message should be omitted
-				continue
-			}
-
-      if tx.IO.Out != nil {
-				// no outgoing messages - this is incoming Toncoins
-				continue
-			}
-
-			// process trx
-			log.Printf("found in transaction hash %s", base64.StdEncoding.EncodeToString(tx.Hash))
-		}
-
-		if len(trxs) == 0 || (headSeen && len(trxs) == 1) {
-			break
-		}
-
-		lastTransactionId = trxs[0].Hash
-		lastTransactionLT = trxs[0].LT
-	}
-}
-```
+  ```go
+  package main 
+  
+  import (
+      "context"
+      "encoding/base64"
+      "log"
+  
+      "github.com/xssnick/tonutils-go/address"
+      "github.com/xssnick/tonutils-go/liteclient"
+      "github.com/xssnick/tonutils-go/ton"
+  )
+  
+  const (
+      num = 10
+  )
+  
+  func main() {
+      client := liteclient.NewConnectionPool()
+      err := client.AddConnectionsFromConfigUrl(context.Background(), "https://ton.org/global.config.json")
+      if err != nil {
+          panic(err)
+      }
+  
+      api := ton.NewAPIClient(client, ton.ProofCheckPolicyFast).WithRetry()
+  
+      accountAddr := address.MustParseAddr("0QA__NJI1SLHyIaG7lQ6OFpAe9kp85fwPr66YwZwFc0p5wIu")
+  
+      // we need fresh block info to run get methods
+      b, err := api.CurrentMasterchainInfo(context.Background())
+      if err != nil {
+          log.Fatal(err)
+      }
+  
+      // we use WaitForBlock to make sure block is ready,
+      // it is optional but escapes us from liteserver block not ready errors
+      res, err := api.WaitForBlock(b.SeqNo).GetAccount(context.Background(), b, accountAddr)
+      if err != nil {
+          log.Fatal(err)
+      }
+  
+      lastTransactionId := res.LastTxHash
+      lastTransactionLT := res.LastTxLT
+  
+      headSeen := false
+  
+      for {
+          trxs, err := api.ListTransactions(context.Background(), accountAddr, num, lastTransactionLT, lastTransactionId)
+          if err != nil {
+              log.Fatal(err)
+          }
+  
+          for i, tx := range trxs {
+              // should include only first time lastTransactionLT
+              if !headSeen {
+                  headSeen = true
+              } else if i == 0 {
+                  continue
+              }
+  
+              if tx.IO.In == nil || tx.IO.In.Msg.SenderAddr().IsAddrNone() {
+                  // external message should be omitted
+                  continue
+              }
+  
+        if tx.IO.Out != nil {
+                  // no outgoing messages - this is incoming Toncoins
+                  continue
+              }
+  
+              // process trx
+              log.Printf("found in transaction hash %s", base64.StdEncoding.EncodeToString(tx.Hash))
+          }
+  
+          if len(trxs) == 0 || (headSeen && len(trxs) == 1) {
+              break
+          }
+  
+          lastTransactionId = trxs[0].Hash
+          lastTransactionLT = trxs[0].LT
+      }
+  }
+  ```
 
 </details>
 </TabItem>

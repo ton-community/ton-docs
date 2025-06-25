@@ -344,7 +344,8 @@ async def disconnect_wallet(message: Message):
 
 А `main.py` выглядит следующим образом:
 
-<details><summary>Показать main.py</summary>
+<details>
+<summary>Показать main.py</summary>
 
 ```python
 # main.py

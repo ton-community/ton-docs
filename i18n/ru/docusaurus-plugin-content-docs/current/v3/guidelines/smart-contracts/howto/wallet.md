@@ -2,6 +2,7 @@
 description: Как работать с кошельками, сообщениями и смарт-контрактами.
 ---
 
+import Feedback from '@site/src/components/Feedback';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -71,44 +72,19 @@ npx tsc --init --rootDir src --outDir build \ --esModuleInterop --target es2020 
 
 :::info
 To help us carry out the following process, a `ts-node` executes TypeScript code directly without precompiling. Процесс `ts-node` запускает выполнение кода TypeScript без предварительной компиляции, а `nodemon` используется для автоматического перезапуска приложения node при обнаружении изменений файлов в директории.
-:::4) Next, remove these lines from `tsconfig.json`:```json
+:::
+
+4. Next, remove these lines from `tsconfig.json`:
+ 
+```json
   "files": [
     "\\",
     "\\"
  ]
-```5) Then, create a `nodemon.json` config in your project root with the following content:```json
-{
-  "watch": ["src"],
-  "ext": ".ts,.js",
-  "ignore": [],
-  "exec": "npx ts-node ./src/index.ts"
-}
-```6) Add this script to `package.json` instead of "test", which is included when the project is created.```json
-"start:dev": "npx nodemon"
-```7) Create a `src` folder in the project root and an `index.ts` file in this folder.
-8) Next, the following code should be added:```ts
-async function main() {
-  console.log("Hello, TON!");
-}
-
-main().finally(() => console.log("Exiting..."));
-```9) Run the code using the terminal:```bash
-npm run start:dev
-```10) Finally, the console output will appear.![](/img/docs/how-to-wallet/wallet_1.png):::tip Blueprint
-The TON Community created an excellent tool for automating all development processes (deployment, contract writing, testing) called [Blueprint](https://github.com/ton-org/blueprint). However, we will not need such a powerful tool, so the instructions above should be followed.
-:::
-
-4. Next, remove these lines from `tsconfig.json`:
-
-```json
-  "files": [
-    "\\",
-    "\\"
-  ]
 ```
 
-5. Затем создайте конфигурацию `nodemon.json` в корне проекта со следующим содержанием:
-
+5. Then, create a `nodemon.json` config in your project root with the following content:
+ 
 ```json
 {
   "watch": ["src"],
@@ -118,14 +94,13 @@ The TON Community created an excellent tool for automating all development proce
 }
 ```
 
-6. Добавьте этот скрипт в `package.json` вместо "test", который добавляется при создании проекта:
-
+6. Add this script to `package.json` instead of "test", which is included when the project is created.
 ```json
 "start:dev": "npx nodemon"
 ```
 
-7. Создайте папку `src` в корне проекта и файл `index.ts` в этой папке.
-8. Далее добавьте следующий код:
+7. Create a `src` folder in the project root and an `index.ts` file in this folder.
+8. Next, the following code should be added:
 
 ```ts
 async function main() {
@@ -135,16 +110,17 @@ async function main() {
 main().finally(() => console.log("Exiting..."));
 ```
 
-9. Запустите код в терминале:
+9. Run the code using the terminal:
 
 ```bash
 npm run start:dev
 ```
 
-10. В итоге в консоли появится следующий вывод:
+10. Finally, the console output will appear.
 
 ![](/img/docs/how-to-wallet/wallet_1.png)
 
+:::tip
 TON Community создали отличный инструмент для автоматизации всех процессов разработки (развертывание, написание контрактов, тестирование) под названием [Blueprint](https://github.com/ton-org/blueprint). Однако нам не понадобится такой мощный инструмент, поэтому следует держаться приведенных выше инструкций.
 :::
 
