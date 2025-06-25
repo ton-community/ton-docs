@@ -665,6 +665,259 @@ export async function run(provider: NetworkProvider, args: string[]) {
   * Receivers in the code  (https://github.com/ton-blockchain/highload-wallet-contract-v3)
   * Build message serializer example in blueprint according to source code 
 
+Imagine you have to compose a message for some contract, we will use jetton wallet and wallet v3 as example.
+There are two types of receiving functions:
+
+- [() recv_internal(cell in_msg_full, slice in_msg_body) impure](https://github.com/ton-blockchain/jetton-contract/blob/3d24b419f2ce49c09abf6b8703998187fe358ec9/contracts/jetton-wallet.fc#L187)
+
+To serialize an internal message which will be correct for this smart-contract we should check how it deserializes the message:
+
+```func
+() send_jettons(slice in_msg_body, slice sender_address, int msg_value, int fwd_fee) impure inline_ref {
+    ;; see transfer TL-B layout in jetton.tlb
+    int query_id = in_msg_body~load_query_id();
+    int jetton_amount = in_msg_body~load_coins();
+    slice to_owner_address = in_msg_body~load_msg_addr();
+    check_same_workchain(to_owner_address);
+    (int status, int balance, slice owner_address, slice jetton_master_address) = load_data();
+    throw_unless(error::not_owner, equal_slices_bits(owner_address, sender_address));
+
+    balance -= jetton_amount;
+    throw_unless(error::balance_error, balance >= 0);
+
+    cell state_init = calculate_jetton_wallet_state_init(to_owner_address, jetton_master_address, my_code());
+    slice to_wallet_address = calculate_jetton_wallet_address(state_init);
+    slice response_address = in_msg_body~load_msg_addr();
+    in_msg_body~skip_maybe_ref(); ;; custom_payload
+    int forward_ton_amount = in_msg_body~load_coins();
+    check_either_forward_payload(in_msg_body);
+    slice either_forward_payload = in_msg_body;
+}
+
+() recv_internal(int my_ton_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    slice in_msg_full_slice = in_msg_full.begin_parse();
+    int msg_flags = in_msg_full_slice~load_msg_flags();
+    if (msg_flags & 1) { ;; is bounced
+        on_bounce(in_msg_body);
+        return ();
+    }
+    slice sender_address = in_msg_full_slice~load_msg_addr();
+    int fwd_fee_from_in_msg = in_msg_full_slice~retrieve_fwd_fee();
+    int fwd_fee = get_original_fwd_fee(MY_WORKCHAIN, fwd_fee_from_in_msg); ;; we use message fwd_fee for estimation of forward_payload costs
+
+    int op = in_msg_body~load_op();
+
+    ;; outgoing transfer
+    if (op == op::transfer) {
+        send_jettons(in_msg_body, sender_address, msg_value, fwd_fee);
+        return ();
+    }
+}
+```
+
+Now we must use it as a guidance to compose the correct message:
+
+```ts
+import { Address, toNano, beginCell } from '@ton/core';
+import { NetworkProvider } from '@ton/blueprint';
+
+// How to run this script:
+// 1. https://t.me/testgiver_ton_bot
+// 2. https://t.me/testnet_usdt_giver_bot
+// 3. replace jettonWalletAddress with your own jetton wallet
+// 4. npx blueprint run sendInternalMessage --testnet --tonconnect
+
+export async function run(provider: NetworkProvider): Promise<void> {
+    const sender = provider.sender();
+    const myAddress = sender.address;
+    if (!myAddress) {
+        throw new Error('Wallet not connected!');
+    }
+
+    console.log(`Sending internal message from wallet: ${myAddress.toString()}`);
+
+    // Attention: Replace with your real Jetton Wallet address
+    const jettonWalletAddress = Address.parse('kQCQm4DAW2QXcwPeo54K1UWn5LVi_v5qTuB9akoTEhpH8y0o');
+
+    // --- Correct body for () send_jettons ---
+    const jettonTransferBody = beginCell()
+        .storeUint(0xf8a7ea5, 32) // op::internal_transfer
+        .storeUint(0, 64) // query_id
+        .storeCoins(1) // jetton_amount 0.000001 for testnet USDT
+        .storeAddress(myAddress) // to_address (sending to myself)
+        .storeAddress(myAddress) // response_address for excesses
+        .storeMaybeRef(null) // custom_payload
+        .storeCoins(toNano('0.000000001')) // forward_ton_amount lowest possible amount to get jetton notify message
+        .storeMaybeRef(null) // forward_payload
+        .endCell();
+
+    // --- This wrapper will handle basic internal message ---
+    await sender.send({
+        to: jettonWalletAddress,
+        value: toNano('0.02'), // To handle gas
+        body: jettonTransferBody,
+    });
+
+    console.log('Internal message on Jetton Wallet successfully sent!');
+}
+//=======================================================================
+// TEP - 74
+// https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md
+
+/*
+transfer#0f8a7ea5
+  query_id:uint64
+  amount:Coins
+  destination:MsgAddress
+  response_destination:MsgAddress
+  custom_payload:(Maybe ^Cell)
+  forward_ton_amount:Coins
+  forward_payload:(Either Cell ^Cell)
+  = JettonMsg;
+*/
+```
+
+
+- [() recv_external(slice msg_body) impure](https://github.com/aSpite/wallet-tutorial/blob/73c213add90ff115e45e58d0bcd9f1ea1fd44c89/JavaScript%20-%20TypeScript/src/wallet_v3.fc#L7)
+
+Although you can use `blueprint --tonconnect` to send internal message, you can't use it for external message.
+
+It doesn't expose low-level signing capabilities because:
+
+1. **Security by design**: Wallets (like Tonkeeper) should not expose raw private keys to dApps
+2. **Ton Connect abstraction**: The provider abstracts away the underlying wallet implementation
+3. **Limited API surface**: Blueprint focuses on contract deployment and testing, not raw message crafting
+
+That is why we will use mnemonic method of the blueprint instead of tonconnect:
+
+```func
+() recv_external(slice in_msg) impure {
+  var signature = in_msg~load_bits(512);
+  var cs = in_msg;
+  var (subwallet_id, valid_until, msg_seqno) = (cs~load_uint(32), cs~load_uint(32), cs~load_uint(32));
+  throw_if(35, valid_until <= now());
+  var ds = get_data().begin_parse();
+  var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_uint(32), ds~load_uint(256));
+  ds.end_parse();
+  throw_unless(33, msg_seqno == stored_seqno);
+  throw_unless(34, subwallet_id == stored_subwallet);
+  throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
+  accept_message();
+  cs~touch();
+  while (cs.slice_refs()) {
+    var mode = cs~load_uint(8);
+    send_raw_message(cs~load_ref(), mode);
+  }
+}
+```
+
+```ts
+import { NetworkProvider } from '@ton/blueprint';
+import { beginCell, toNano } from '@ton/core';
+import { sign, mnemonicToWalletKey } from '@ton/crypto';
+import { WalletContractV3R2, WalletContractV4 } from '@ton/ton';
+
+// How to run this script:
+//
+// Option 1: With environment variables in the command line.
+// Use a backslash `\` to wrap the command on multiple lines for readability.
+//
+// WALLET_MNEMONIC="unfold sugar water ... other words" \
+// WALLET_VERSION="v4r2" \
+// npx blueprint run sendExternalMessage --testnet --mnemonic
+//
+//
+// Option 2: Using a .env file.
+// Create a `.env` file in the `examples` directory with your mnemonic:
+//
+// WALLET_MNEMONIC="unfold sugar water ... other words"
+// WALLET_VERSION="v4r2"
+//
+// Then run the script without any variables:
+// npx blueprint run sendExternalMessage --testnet --mnemonic
+
+export async function run(provider: NetworkProvider): Promise<void> {
+    // --- Get wallet data from environment variables ---
+    const mnemonic = process.env.WALLET_MNEMONIC;
+    const versionStr = process.env.WALLET_VERSION || 'v4r2';
+
+    if (!mnemonic) {
+        throw new Error('WALLET_MNEMONIC environment variable is not set');
+    }
+
+    // --- Initialize wallet from mnemonic ---
+    const keyPair = await mnemonicToWalletKey(mnemonic.split(' '));
+    const secretKey = keyPair.secretKey;
+    
+    let wallet;
+    if (versionStr === 'v3r1' || versionStr === 'v3r2') {
+        wallet = WalletContractV3R2.create({ workchain: 0, publicKey: keyPair.publicKey });
+    } else if (versionStr === 'v4r1' || versionStr === 'v4r2') {
+        wallet = WalletContractV4.create({ workchain: 0, publicKey: keyPair.publicKey });
+    } else {
+        throw new Error('Unsupported wallet version: ' + versionStr + '. Supported versions are v3r1, v3r2, v4r1, v4r2.');
+    }
+    const myAddress = wallet.address;
+
+    console.log(`Using wallet ${versionStr} at address: ${myAddress.toString()}`);
+
+    // --- Check if wallet is deployed ---
+    if (!(await provider.isContractDeployed(myAddress))) {
+        console.log('Wallet is not deployed. Please send some TON to this address and try again.');
+        return;
+    }
+
+    // --- Get current seqno ---
+    const walletProvider = provider.provider(myAddress);
+    const seqno = await wallet.getSeqno(walletProvider);
+    console.log(`   Current seqno: ${seqno}`);
+
+    // --- Create internal message (a simple transfer to self) ---
+    const internalMessage = beginCell()
+        .storeUint(0x10, 6) // flags: ihrDisabled, bounce, bounced
+        .storeAddress(myAddress)
+        .storeCoins(toNano('0.01'))
+        .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // empty simple message body
+        .endCell();
+
+    // --- Create unsigned external message for signing ---
+    const subwalletId = 698983191; // Standard subwallet ID
+    const validUntil = Math.floor(Date.now() / 1000) + 60; // 60 seconds from now
+
+    const toSign = beginCell()
+        .storeUint(subwalletId, 32)
+        .storeUint(validUntil, 32)
+        .storeUint(seqno, 32);
+        // var (subwallet_id, valid_until, msg_seqno) from func
+
+    // Add 'op' field for v4 wallets
+    if (versionStr.startsWith('v4')) {
+        toSign.storeUint(0, 8); // op = 0 for simple transfer
+    }
+    
+    toSign.storeUint(3, 8)            // var mode from func
+          .storeRef(internalMessage); // cs~load_ref() from func
+
+    const toSignCell = toSign.endCell();
+
+    // --- Sign the message hash ---
+    const signature = sign(toSignCell.hash(), secretKey);
+    console.log(`      Message signed`);
+
+    // --- Create final external message body with signature ---
+    const body = beginCell()
+        .storeBuffer(signature)       // var signature
+        .storeBuilder(toSign)         // in_msg
+        .endCell();
+
+    console.log(`  Sending external message...`);
+    
+    // --- Send the external message to the network ---
+    await provider.provider(myAddress).external(body);
+    
+    console.log('  Message sent successfully!');
+}
+```
 
 ### Internal messages serializer according disabled code
 In case developer hase no documentation with TL-B and contract code, the only way to analyze and find approach to contract reading disassmbled code.
