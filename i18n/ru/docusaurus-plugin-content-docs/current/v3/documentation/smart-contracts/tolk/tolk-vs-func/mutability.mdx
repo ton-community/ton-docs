@@ -6,7 +6,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Изменчивость в Tolk по сравнению с функциями тильда в FunC
 
-:::tip :::tip :::tip TLDR
+:::tip :::tip :::tip :::tip TLDR
 
 - нет методов тильда `~`
 - `cs.loadInt(32)` изменяет срез и возвращает целое число
@@ -68,7 +68,7 @@ import Feedback from '@site/src/components/Feedback';
 
 Чтобы сделать это доступным, Tolk предлагает концепцию изменяемости, которая является обобщением того, что означает тильда в FunC.
 
-<h3 className="cmp-func-tolk-header">
+### <h3 className="cmp-func-tolk-header">
   По умолчанию все аргументы копируются по значению (идентично FunC)
 </h3>
 
@@ -96,9 +96,7 @@ var flags = readFlags(msgBody);  // msgBody is not modified
 
 Это означает, что при вызове функции вы уверены, что исходные данные не изменяются.
 
-<h3 className="cmp-func-tolk-header">
-Ключевое слово `mutate` и функции изменения
-</h3>
+### mutate keyword and mutating functions
 
 Но если вы добавите ключевое слово `mutate` к параметру, переданный аргумент будет изменен. Чтобы избежать неожиданных изменений, вы должны указать `mutate` при его вызове, а также:
 
@@ -143,9 +141,7 @@ incrementXY(mutate origX, mutate origY, 10);   // both += 10
 
 _Вы можете спросить — это просто передача по ссылке? По сути, это так, но поскольку "ref" — это перегруженный термин в TON (у ячеек и срезов есть ссылки), было выбрано ключевое слово `mutate`._
 
-<h3 className="cmp-func-tolk-header">
-Параметр `self`, превращающий функцию в метод
-</h3>
+### By default, self in methods is immutable
 
 Methods — unlike global functions `fun f()` — are declared as `fun receiver_type.f()`.
 If a method accepts `self`, it's an instance method (if not, it's a static one).
@@ -176,9 +172,7 @@ fun preloadInt32(self: slice) {
 
 Объединяя `mutate` и `self`, мы получаем методы изменяемости.
 
-<h3 className="cmp-func-tolk-header">
-`mutate self` — это метод, вызываемый через точку, изменяющий объект
-</h3>
+### mutate self is a method, called via dot, mutating an object
 
 Следующим образом:
 
@@ -216,9 +210,7 @@ fun tuplePush<X>(mutate self: tuple, value: X): void
 t.tuplePush(1);
 ```
 
-<h3 className="cmp-func-tolk-header">
-  `return self` делает метод доступным для цепочки
-</h3>
+### return self makes a method chainable
 
 Точно как `return self` в Python или `return this` в JavaScript. Это то, что делает методы типа `storeInt()` и другие, цепочечными.
 
@@ -238,9 +230,7 @@ b = b.storeInt32(5); // and works with assignment, since also returns
 
 Обратите внимание на возвращаемый тип, это `self`. Если оставить пустым, компиляция завершится неудачей. Возможно, в будущем это будет правильным.
 
-<h3 className="cmp-func-tolk-header">
-`mutate self` и функции asm
-</h3>
+### mutate self and asm functions
 
 Хотя для пользовательских функций это очевидно, может быть интересно, как сделать функцию `asm` с таким поведением? Чтобы ответить на этот вопрос, мы должны заглянуть под капот, как работает изменение внутри компилятора.
 
@@ -307,9 +297,7 @@ fun myStoreMessageOp(mutate self: builder, flags: int): self {
 }
 ```
 
-<h3 className="cmp-func-tolk-header">
-Нужно ли мне `@inline` для простых функций/методов?
-</h3>
+### Do I need @inline for simple functions/methods?
 
 Пока что лучше сделать это, да. В большинстве приведенных выше примеров `@inline` было опущено для ясности. В настоящее время без `@inline` это будет отдельное продолжение TVM с переходами в и из неё. С `@inline` функция будет сгенерирована, но встроена Fift (как спецификатор `inline` в FunC).
 

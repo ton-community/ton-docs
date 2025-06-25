@@ -17,7 +17,7 @@ NFT, работающие на блокчейне TON, представлены 
 
 ### NFT Collections
 
-NFT Collection - это контракт, который служит для индексирования и хранения содержимого NFT и должен содержать следующие интерфейсы: It should implement the following interfaces: It should implement the following interfaces:
+NFT Collection - это контракт, который служит для индексирования и хранения содержимого NFT и должен содержать следующие интерфейсы: It should implement the following interfaces: It should implement the following interfaces: It should implement the following interfaces:
 
 #### Get method `get_collection_data`
 

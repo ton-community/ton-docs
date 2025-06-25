@@ -8,8 +8,10 @@ import Feedback from '@site/src/components/Feedback';
 
 :::warning
 Эта страница сильно устарела и скоро будет обновлена.\
+Эта страница сильно устарела и скоро будет обновлена.\
 См.\
 [multisig-contract-v2](https://github.com/ton-blockchain/multisig-contract-v2), самый новый контракт с мультиподписью на TON.\
+Используйте npm и не обновляйте.\
 Используйте npm и не обновляйте.\
 Используйте npm и не обновляйте.
 :::

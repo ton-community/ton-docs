@@ -338,8 +338,7 @@ If no ID is specified, the default is calculated as `(crc16(<function_name>) & 0
 **Best practice**: It's recommended to **avoid setting method IDs manually** and rely on automatic generation instead. Manual assignment can lead to conflicts and unexpected behavior.
 :::
 
-<details>
-<summary><b>Technical details about method_id parsing</b></summary>
+<details><summary><b>Technical details about method_id parsing</b></summary>
 
 While the FunC compiler can initially accept larger hex values during parsing, the actual limitation comes from the TVM assembler which restricts method IDs to 19 bits (`@procdictkeylen = 19` in Asm.fif).
 

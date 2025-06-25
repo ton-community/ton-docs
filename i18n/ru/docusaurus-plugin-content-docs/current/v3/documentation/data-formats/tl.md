@@ -52,5 +52,5 @@ The type is explicitly specified, so the prefix is not needed.
 
 ## Ссылки
 
-_Вот [ссылка на оригинальную статью](https://github.com/xssnick/ton-deep-doc/blob/master/TL.md) [Олега Баранова](https://github.com/xssnick)._ <Feedback /> <Feedback />
+_Вот [ссылка на оригинальную статью](https://github.com/xssnick/ton-deep-doc/blob/master/TL.md) [Олега Баранова](https://github.com/xssnick)._ <Feedback /> <Feedback /> <Feedback />
 

@@ -26,7 +26,7 @@ import Button from '@site/src/components/button'
 <TabItem value="Tolk" label="Tolk">
 Есть две основные инструкции, обеспечивающие доступ к хранилищу смарт-контракта:
 
-- `getContractData()` возвращает текущую \`ячейку\`\\`	 хранения.
+- `getContractData()` возвращает текущую \`ячейку\`\\\`	 хранения.
 - `setContractData()` записывает `ячейку` хранения.
 
 </TabItem>
@@ -159,8 +159,10 @@ return (ctx_id, ctx_counter, ctx_counter_ext);
 }
 
 ````
+
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+
 ```tolk title="/contracts/hello_world.tolk"
 // load_data retrieves variables from TVM storage cell
 // impure because of writting into global variables
@@ -252,7 +254,7 @@ return ctx_id;
 ```
 
   }
-    \`\`\`
+    \`\`\\`
 
 </TabItem>
   <TabItem value="Tolk" label="Tolk">
@@ -269,7 +271,7 @@ return ctxID;
 ```
 
   }
-    \`\`\`
+    \`\`\\`
 
 </TabItem>
 </Tabs>

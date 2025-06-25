@@ -12,7 +12,7 @@ import ThemedImage from '@theme/ThemedImage';
 - cell stores bits and references separately
 - Циклические ссылки запрещены. Это означает, что для любой ячейки ни одна из ее дочерних ячеек не может иметь эту исходную ячейку в качестве ссылки.
 
-Таким образом, все ячейки формируют направленный ациклический граф (DAG), наглядная иллюстрация предоставлена ниже: Here's a good picture to illustrate: Here's a good picture to illustrate:
+Таким образом, все ячейки формируют направленный ациклический граф (DAG), наглядная иллюстрация предоставлена ниже: Here's a good picture to illustrate: Here's a good picture to illustrate: Here's a good picture to illustrate:
 
 <br></br>
 <ThemedImage

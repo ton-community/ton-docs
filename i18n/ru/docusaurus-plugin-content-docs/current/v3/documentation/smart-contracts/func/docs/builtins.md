@@ -45,6 +45,6 @@ FunC also includes parameterized versions of these primitives:
 
 - `null?` проверяет, является ли аргумент `null`. По значению `null` типа TVM, `Null` FunC представляет отсутствие значения некоторого атомарного типа; смотрите [значения null](/v3/documentation/smart-contracts/func/docs/types#null-values). See [null values](/v3/documentation/smart-contracts/func/docs/types#null-values) for details.
 - `touch` и `~touch` перемещают переменную на вершину стека
-- `at` получает значение компонента кортежа в указанной позиции <Feedback />
+- `at` получает значение компонента кортежа в указанной позиции <Feedback /> <Feedback />
   <Feedback />
 

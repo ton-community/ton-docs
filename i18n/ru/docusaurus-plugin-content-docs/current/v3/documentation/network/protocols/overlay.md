@@ -30,7 +30,7 @@ We are already familiar with the first two protocols; in this section, we will f
 
 Оверлейные подсети могут быть общедоступными или частными.
 
-Оверлейные подсети работают по специальному протоколу [gossip](https://ru.wikipedia.org/wiki/Gossip_\\\\(%D0%Bf%D1%80%D0%Be%D1%82%D0%Be%D0%Ba%D0%Be%D0%Bb\\\\)).
+Оверлейные подсети работают по специальному протоколу [gossip](https://ru.wikipedia.org/wiki/Gossip_\\\\\(%D0%Bf%D1%80%D0%Be%D1%82%D0%Be%D0%Ba%D0%Be%D0%Bb\\\\\)).
 
 ## Взаимодействие с оверлейными узлами
 

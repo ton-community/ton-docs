@@ -23,6 +23,8 @@ createEmptyDict()    // available due to import
 
 In FunC, there are no methods, actually. All functions are global-scoped.\
 All functions are global-scoped.\
+You just call any function via dot:\
+All functions are global-scoped.\
 You just call any function via dot:
 
 ```func
@@ -76,11 +78,11 @@ The table is "sorted" in a way how functions are declared in stdlib.fc:
 | single                                                                                          | _(удалено)_                                                               |                    |
 | unsingle                                                                                        | _(удалено)_                                                               |                    |
 | pair                                                                                            | _(удалено)_                                                               |                    |
-| unpair                                                                                          | _(удалено)_                                                               |                    |
+| unpair                                                                                          | getMyAddress                                                                                 |                    |
 | triple                                                                                          | _(удалено)_                                                               |                    |
 | untriple                                                                                        | _(удалено)_                                                               |                    |
 | tuple4                                                                                          | _(удалено)_                                                               |                    |
-| untuple4                                                                                        | getMyAddress                                                                                 |                    |
+| untuple4                                                                                        | _(удалено)_                                                               |                    |
 | second                                                                                          | _(удалено)_                                                               |                    |
 | third                                                                                           | _(удалено)_                                                               |                    |
 | fourth                                                                                          | _(удалено)_                                                               |                    |

@@ -136,8 +136,10 @@ Track MyLocalTon's operation through these log files:
 
      ```bash
       ```bash
-      mkdir -p /usr/local/opt/readline/lib
-      ln -s /opt/local/lib/libreadline.8.dylib /usr/local/opt/readline/lib
+       ```bash
+       mkdir -p /usr/local/opt/readline/lib
+       ln -s /opt/local/lib/libreadline.8.dylib /usr/local/opt/readline/lib
+       ```
       ```
      ```
 
@@ -180,6 +182,6 @@ Developers currently classify MyLocalTon as alpha software, making it unsuitable
 
 - [Бинарные файлы MyLocalTon](https://github.com/neodiX42/MyLocalTon/releases)
 
-- [Исходный код MyLocalTon](https://github.com/neodiX42/MyLocalTon) <Feedback />
+- [Исходный код MyLocalTon](https://github.com/neodiX42/MyLocalTon) <Feedback /> <Feedback />
   <Feedback />
 

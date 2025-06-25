@@ -12,6 +12,6 @@ import Feedback from '@site/src/components/Feedback';
 
 - [Типы узлов](/v3/documentation/infra/nodes/node-types)
 
-- [Конфигурация параметров блокчейна](/v3/documentation/network/configs/blockchain-configs) <Feedback />
+- [Конфигурация параметров блокчейна](/v3/documentation/network/configs/blockchain-configs) <Feedback /> <Feedback />
   <Feedback />
 

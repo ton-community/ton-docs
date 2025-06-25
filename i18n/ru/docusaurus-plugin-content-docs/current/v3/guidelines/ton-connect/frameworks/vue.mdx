@@ -242,43 +242,6 @@ import { Locales, useTonConnectUI } from '@townsquarelabs/ui-vue';
 export default {
   name: 'Settings',
   setup() {
-    const [tonConnectUI, setOptions] = useTonConnectUI();
-
-    const onLanguageChange = (lang) => {
-      setOptions({ language: lang as Locales });
-    };
-
-    const myTransaction = {
-      validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
-      messages: [
-        {
-          address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA",
-          amount: "20000000",
-          // stateInit: "base64bocblahblahblah==" // just for instance. Replace with your transaction initState or remove
-        },
-        {
-          address: "EQDmnxDMhId6v1Ofg_h5KR5coWlFG6e86Ro3pc7Tq4CA0-Jn",
-          amount: "60000000",
-          // payload: "base64bocblahblahblah==" // just for instance. Replace with your transaction payload or remove
-        }
-      ]
-    }
-
-    const sendTransaction = () => {
-      tonConnectUI.sendTransaction(myTransaction);
-    };
-
-    return { onLanguageChange, sendTransaction };
-  }
-};
-</script>
-
-<script>
-import { Locales, useTonConnectUI } from '@townsquarelabs/ui-vue';
-
-export default {
-  name: 'Settings',
-  setup() {
     const {tonConnectUI, setOptions} = useTonConnectUI();
 
     const onLanguageChange = (lang) => {
@@ -311,12 +274,12 @@ export default {
 </script>
 
 ```
-<!-- [Интерфейс кошелька](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html) -->
+<!-- [Интерфейс WalletInfo](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html) -->
 ```
 
-[Подробнее о методах экземпляра TonConnectUI](https://github.com/ton-connect/sdk/tree/main/packages/ui#send-transaction)
-
 [Подробнее о функции setOptions](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
+
+[Подробнее о методах экземпляра TonConnectUI](https://github.com/ton-connect/sdk/tree/main/packages/ui#send-transaction)
 
 ### useIsConnectionRestored
 
@@ -410,7 +373,7 @@ export default {
 
 #### loading
 
-Установите состояние на 'loading\\\`, пока вы ждете ответа от вашего backend. Если пользователь открывает модальное окно для подключения кошелька в этот момент, он увидит загрузчик.
+Установите состояние на 'loading\\\\`, пока вы ждете ответа от вашего backend. Если пользователь открывает модальное окно для подключения кошелька в этот момент, он увидит загрузчик.
 
 ```ts
 import { ref } from 'vue';
@@ -426,6 +389,37 @@ tonConnectUI.setConnectRequestParameters({
 #### ready
 
 Установите состояние на 'ready' и определите значение `tonProof`. Переданный параметр будет применен к запросу на подключение (QR и универсальная ссылка).
+
+```ts
+import { ref } from 'vue';
+import { useTonConnectUI } from '@townsquarelabs/ui-vue';
+
+const tonConnectUI = useTonConnectUI();
+
+tonConnectUI.setConnectRequestParameters({
+    state: 'ready',
+    value: {
+        tonProof: '<your-proof-payload>'
+    }
+});
+```
+
+#### remove loading
+
+Удалите загрузчик, если он был включен через \\\\`state: 'loading' (например, вы получили ошибку вместо ответа от вашего backend). For example, if you received an error instead of a response from your backend. 
+
+Запрос на подключение будет создан без дополнительных параметров.
+
+```ts
+import { ref } from 'vue';
+import { useTonConnectUI } from '@townsquarelabs/ui-vue';
+
+const tonConnectUI = useTonConnectUI();
+
+tonConnectUI.setConnectRequestParameters(null);
+```
+
+Вы можете вызвать `tonConnectUI.setConnectRequestParameters` несколько раз, если ваш payload tonProof имеет ограниченное время жизни (например, вы можете обновлять параметры запроса на подключение каждые 10 минут). For instance, you can refresh connect request parameters every 10 minutes.
 
 ```ts
 import { ref } from 'vue';
@@ -450,37 +444,6 @@ if (!tonProofPayload) {
     });
 }
 
-```
-
-#### remove loading
-
-Удалите загрузчик, если он был включен через \\\`state: 'loading' (например, вы получили ошибку вместо ответа от вашего backend). For example, if you received an error instead of a response from your backend. 
-
-Запрос на подключение будет создан без дополнительных параметров.
-
-```ts
-import { ref } from 'vue';
-import { useTonConnectUI } from '@townsquarelabs/ui-vue';
-
-const tonConnectUI = useTonConnectUI();
-
-tonConnectUI.setConnectRequestParameters(null);
-```
-
-Вы можете вызвать `tonConnectUI.setConnectRequestParameters` несколько раз, если ваш payload tonProof имеет ограниченное время жизни (например, вы можете обновлять параметры запроса на подключение каждые 10 минут). For instance, you can refresh connect request parameters every 10 minutes.
-
-```ts
-import { ref } from 'vue';
-import { useTonConnectUI } from '@townsquarelabs/ui-vue';
-
-const tonConnectUI = useTonConnectUI();
-
-tonConnectUI.setConnectRequestParameters({
-    state: 'ready',
-    value: {
-        tonProof: '<your-proof-payload>'
-    }
-});
 ```
 
 Вы можете найти результат `ton_proof` в объекте `wallet`, когда кошелек будет подключен:

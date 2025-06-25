@@ -23,7 +23,7 @@ import Feedback from '@site/src/components/Feedback';
 
 Теперь наша цель - найти ip, порт и открытый ключ узла, имеющего этот адрес.
 
-Для этого нам нужно получить идентификатор ключа DHT, для начала заполним схему ключа DHT: Для этого нам нужно получить идентификатор ключа DHT, для начала заполним схему ключа DHT: We will begin by populating the DHT key schema:
+Для этого нам нужно получить идентификатор ключа DHT, для начала заполним схему ключа DHT: Для этого нам нужно получить идентификатор ключа DHT, для начала заполним схему ключа DHT: We will begin by populating the DHT key schema: Для этого нам нужно получить идентификатор ключа DHT, для начала заполним схему ключа DHT: We will begin by populating the DHT key schema:
 
 ```tlb
 dht.key id:int256 name:bytes idx:int = dht.Key

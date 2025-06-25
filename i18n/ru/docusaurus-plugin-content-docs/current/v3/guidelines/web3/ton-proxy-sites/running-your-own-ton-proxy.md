@@ -26,7 +26,7 @@ From a technical standpoint, TON Sites function similarly to standard websites. 
 
   or
 
-  - Или Вы можете скомпилировать **rldp-http-proxy** самостоятельно, следуя этим [инструкциям](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy).
+  - Или вы можете скомпилировать **rldp-http-proxy** самостоятельно, следуя этим [инструкциям](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy).
 
 2. [Скачать](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config) глобальную конфигурацию TON.
 
@@ -55,7 +55,7 @@ You can either:
 - Загрузите **rldp-http-proxy** с [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest).
 
   or
-- Или вы можете скомпилировать **rldp-http-proxy** самостоятельно, следуя этим [инструкциям](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy).
+- Или Вы можете скомпилировать **rldp-http-proxy** самостоятельно, следуя этим [инструкциям](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy).
 
 2. [Скачать](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config) глобальную конфигурацию TON.
 

@@ -126,7 +126,7 @@ cell idict_set_ref(cell dict, int key_len, int index, cell value) asm(value inde
 
 Here, the `asm(value index dict key_len)` notation dictates a reordering of arguments.
 
-Это поведение можно изменить на строгий порядок вычислений слева направо с помощью `#pragma compute-asm-ltr` With this directive enabled, the same function call: With this directive enabled, the same function call:
+Это поведение можно изменить на строгий порядок вычислений слева направо с помощью `#pragma compute-asm-ltr` Это поведение можно изменить на строгий порядок вычислений слева направо с помощью `#pragma compute-asm-ltr` With this directive enabled, the same function call: With this directive enabled, the same function call:
 
 ```func
 #pragma compute-asm-ltr

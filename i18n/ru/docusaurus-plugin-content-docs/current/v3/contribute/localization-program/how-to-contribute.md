@@ -59,6 +59,7 @@ Before you start contributing, **read the guidelines below** to ensure standardi
   6. Выполните команду **`yarn start:local [YOUR_IOS_LANG_CODE]`**, чтобы просмотреть новый нижний колонтитул на вашем языке.\
     (например, **`yarn start:local ru`** для предварительного просмотра на **русском** языке)\
     (e.g., **`yarn start:local ru`** for a preview of the **Russian** footer)\
+    (e.g., **`yarn start:local ru`** for a preview of the **Russian** footer)\
     (e.g., **`yarn start:local ru`** for a preview of the **Russian** footer)
   7. Если все выглядит хорошо, создайте pull request в ветку **`i18n_feat`**.
 - **Загрузите файлы**

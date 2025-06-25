@@ -95,14 +95,23 @@ Besides this PR, I've written a roadmap for what can be enhanced in FunC, syntac
 Во всех славянских языках корень _толк_ и фраза _иметь толк_ означают "иметь смысл", "иметь глубокие внутренние чувства".
 
 Но на самом деле **TOLK** — это аббревиатура.\
+Но на самом деле **TOLK** — это аббревиатура.\
 Вы знаете, что TON — это **The Open Network**.\
 По аналогии, TOLK — это **The Open Language K**.\
 Вы знаете, что TON — это **The Open Network**.\
+По аналогии, TOLK — это **The Open Language K**.\
+По аналогии, TOLK — это **The Open Language K**.\
+Но на самом деле **TOLK** — это аббревиатура.\
+Вы знаете, что TON — это **The Open Network**.\
+По аналогии, TOLK — это **The Open Language K**.\
+Вы знаете, что TON — это **The Open Network**.\
+По аналогии, TOLK — это **The Open Language K**.\
 По аналогии, TOLK — это **The Open Language K**.
 
 Что такое К, спросите вы? Наверное, "кот" — ник Николая Дурова? Или Коля? Котенок? Ядро (Kernel)? Кит? Знание (Knowledge)?\
 Правильный ответ — ничего из этого.\
 Правильный ответ — ничего из этого. Эта буква ничего не значит. Она открытая.\
+Она открытая.\
 Она открытая.\
 _The Open Letter K_
 

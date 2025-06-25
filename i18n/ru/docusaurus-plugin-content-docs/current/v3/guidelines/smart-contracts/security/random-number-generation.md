@@ -24,6 +24,7 @@ Below we outline three fundamental approaches:
 
 **Mechanism**: Generates [randomness using block logical time](/v3/guidelines/smart-contracts/security/ton-hack-challenge-1/#4-lottery) (`lt`) and blockchain entropy.\
 **Security model**:\
+**Security model**:\
 **Security model**:
 
 - ✅ Safe against user manipulation
@@ -40,6 +41,7 @@ Below we outline three fundamental approaches:
 ## Approach 2: block skipping {#block-skip}
 
 **Mechanism**: Uses [entropy from skipped blocks](https://github.com/puppycats/ton-random?tab=readme-ov-file#ton-random) in blockchain history.\
+**Security model**:\
 **Security model**:\
 **Security model**:
 

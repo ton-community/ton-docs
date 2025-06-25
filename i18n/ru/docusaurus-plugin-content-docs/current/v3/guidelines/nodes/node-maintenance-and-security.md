@@ -40,7 +40,7 @@ MyTonCtrl> installer set_node_argument --state-ttl <value>
 
 ### Backups
 
-Самый простой и эффективный способ сделать резервную копию валидатора — скопировать важные файлы конфигурации узла, ключи и настройки mytonctrl: Here are the important files to back up: Here are the important files to back up:
+Самый простой и эффективный способ сделать резервную копию валидатора — скопировать важные файлы конфигурации узла, ключи и настройки mytonctrl: Here are the important files to back up: Here are the important files to back up: Here are the important files to back up:
 
 1. Файл конфигурации узла: `/var/ton-work/db/config.json`
 

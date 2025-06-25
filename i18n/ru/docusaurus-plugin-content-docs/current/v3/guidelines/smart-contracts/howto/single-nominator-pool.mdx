@@ -287,7 +287,7 @@ func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, a
 	return msg, nil
 }
 ```
-</TabItem>
+
 </Tabs>
 
 ## Процесс выборов
@@ -449,8 +449,8 @@ MyTonCtrl> activate_single_pool my_s_pool
 6. После получения адреса `single_nominator_pool` on-chain, попросите того, кто отправил вам Vesting-контракт внести адрес в whitelist.
 7. После того, как `single_nominator_pool` будет внесен в whitelist, вы сможете отправлять заблокированные токены из `vesting`-контракта в `single_nominator_pool` с помощью [vesting.ton.org](https://vesting.ton.org/):
    - c. с помощью интерфейса [vesting.ton.org](https://vesting.ton.org/) верните остаток средств (~ 8 TON) обратно в `vesting` с сообщением `amount 0, comment w`.
+   - d. с помощью интерфейса [vesting.ton.org](https://vesting.ton.org/) верните остаток средств (~ 8 TON) обратно в `vesting` с сообщением `amount 0, comment w`.
    - d. убедитесь, что вы получили остаток на `vesting`.
-   - b. с помощью интерфейса [vesting.ton.org](https://vesting.ton.org/) верните остаток средств (~ 8 TON) обратно в `vesting` с сообщением `amount 0, comment w`.
    - d. Откройте deeplink на телефоне владельца.
 8. Переведите необходимое количество TON из `vesting`-контракта в `single_nominator_pool` для обоих циклов.
 9. Дождитесь голосования валидаторов.

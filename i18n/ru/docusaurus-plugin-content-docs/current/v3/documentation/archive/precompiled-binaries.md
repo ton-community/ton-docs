@@ -4,6 +4,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Button from '@site/src/components/button'
 
+
 # Предварительно скомпилированные бинарные файлы
 
 :::caution важно
@@ -12,12 +13,14 @@ import Button from '@site/src/components/button'
 
 Все бинарные файлы для разработки и тестирования предоставляются вместе с Blueprint SDK.
 
+
 <Button href="/v3/documentation/smart-contracts/getting-started/javascript"
 colorType="primary" sizeType={'sm'}>
 
 Переход на Blueprint SDK
 
 </Button>
+
 
 ## Предварительно скомпилированные бинарные файлы
 
@@ -28,7 +31,6 @@ colorType="primary" sizeType={'sm'}>
 Для локальной разработки смарт-контрактов TON _без Javascript_, необходимо подготовить бинарные файлы `func`, `fift` и `lite client` на вашем устройстве.
 
 Вы можете скачать и настроить их ниже или изучить эту статью от TON Society:
-
 - [Настройка среды разработки TON](https://blog.ton.org/setting-up-a-ton-development-environment)
 
 ### 1. Загрузка
@@ -40,7 +42,7 @@ colorType="primary" sizeType={'sm'}>
 | MacOS x86-64                      | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/ton-mac-x86-64.zip)   | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/fift-mac-x86-64)   | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/func-mac-x86-64)   | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/lite-client-mac-x86-64)   |                                                                                                                 |
 | MacOS arm64                       | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/ton-mac-arm64.zip)    |                                                                                             |                                                                                             |                                                                                                    | `brew install openssl ninja libmicrohttpd pkg-config`                                                           |
 | Windows x86-64                    | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/ton-win-x86-64.zip)   | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/fift.exe)          | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/func.exe)          | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/lite-client.exe)          | Установите [OpenSSL 1.1.1](/ton-binaries/windows/Win64OpenSSL_Light-1_1_1q.msi) |
-| Linux x86_64                      | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/ton-linux-x86_64.zip) | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/fift-linux-x86_64) | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/func-linux-x86_64) | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/lite-client-linux-x86_64) |                                                                                                                 |
+| Linux x86_64 | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/ton-linux-x86_64.zip) | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/fift-linux-x86_64) | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/func-linux-x86_64) | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/lite-client-linux-x86_64) |                                                                                                                 |
 | Linux arm64                       | [скачать](https://github.com/ton-blockchain/ton/releases/latest/download/ton-linux-arm64.zip)  |                                                                                             |                                                                                             |                                                                                                    | `sudo apt install libatomic1 libssl-dev`                                                                        |
 
 ### 2. Настройка бинарных файлов
@@ -53,7 +55,8 @@ borderRadius: '2px',
 color: '#fff',
 padding: '0.2rem',
 }}>
-{children} </span>
+{children}
+</span>
 );
 
 <Tabs groupId="operating-systems">
@@ -95,7 +98,6 @@ Instead of the `%USERNAME%` keyword, you must insert your own `username`.\
 <TabItem value="mac" label="Linux / MacOS">
 
 1. После загрузки убедитесь, что загруженные бинарные файлы могут быть выполнены, изменив их разрешения.
-
    ```bash
    chmod +x func
    chmod +x fift
@@ -103,7 +105,6 @@ Instead of the `%USERNAME%` keyword, you must insert your own `username`.\
    ```
 
 2. Также полезно добавить эти бинарные файлы в путь (или скопировать их в `/usr/local/bin`), чтобы вы могли запускать их из любой директории.
-
    ```bash
    cp ./func /usr/local/bin/func
    cp ./fift /usr/local/bin/fift
@@ -124,6 +125,7 @@ Instead of the `%USERNAME%` keyword, you must insert your own `username`.\
    cp fiftlib/* /usr/local/lib/fiftlib
    ```
 
+:::info Hey, you're almost finished :)
 Не забудьте задать [переменную среды](https://stackoverflow.com/questions/14637979/how-to-permanently-set-path-on-linux-unix) `FIFTPATH`, указывающую на эту директорию.
 :::
 
@@ -148,6 +150,7 @@ cd ~ && git clone https://github.com/ton-blockchain/ton.git
 cd ~/ton && git submodule update --init
 mkdir ~/ton/build && cd ~/ton/build && cmake .. -DCMAKE_BUILD_TYPE=Release && make -j 4
 ```
+
 ## Другие источники для бинарных файлов
 
 Основная команда предоставляет автоматические сборки для нескольких операционных систем через [GitHub Actions](https://github.com/ton-blockchain/ton/releases/latest).

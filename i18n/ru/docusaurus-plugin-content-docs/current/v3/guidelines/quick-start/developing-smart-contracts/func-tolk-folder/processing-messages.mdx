@@ -58,29 +58,26 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 ```func
-;; This is NOT a part of the project, just an example.
-() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
-    ;; Parse the sender address from in_msg_full
-    slice cs = in_msg_full.begin_parse();
-    int flags = cs~load_uint(4);
-    slice sender_address = cs~load_msg_addr();
+;; Это не часть проекта, просто пример.
+const int op::increment = 1;
+const int op::decrement = 2;
 
-    ;; check if message was send by owner
-    if (equal_slices_bits(sender_address, owner_address)) {
-      ;;owner operations
-      return
-    } else if (equal_slices_bits(sender_address, other_role_address)){
-      ;;other role operations
-      return
-    } else {
-      ;;anyone else operations
-      return
-    }
-
-    ;;no known operation were obtained for presented role
-    ;;0xffff is not standard exit code, but is standard practice among TON developers
-    throw(0xffff);
+```
+;; check if message was send by owner
+if (equal_slices_bits(sender_address, owner_address)) {
+  ;;owner operations
+  return
+} else if (equal_slices_bits(sender_address, other_role_address)){
+  ;;other role operations
+  return
+} else {
+  ;;anyone else operations
+  return
 }
+```
+
+}
+
 ````
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
@@ -106,9 +103,8 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
     throw 0xffff; // if the message contains an op that is not known to this contract, we throw
 }
 ````
-</TabItem>
-</Tabs>
 
+</TabItem></Tabs>
 
 ### Операции
 
@@ -117,33 +113,31 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
 ```func
-;; This is NOT a part of the project, just an example!
+;; Это не часть проекта, просто пример!
 const int op::increment = 1;
 const int op::decrement = 2;
 
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
-    ;; Step 1: Check if the message is empty
-    if (in_msg_body.slice_empty?()) {
-        return; ;; Nothing to do with empty messages
+    ; Шаг 1: Проверим, является ли сообщение пустым
+    if (in_msg_body. lice_empty?()) {
+        return; ;; Ничего не делаем с пустыми сообщениями
     }
 
-    ;; Step 2: Extract the operation code
-    int op = in_msg_body~load_uint(32);
-
-    ;; Step 3-7: Handle the requested operation
-    if (op == op::increment) {
-        increment();   ;;call to specific operation handler
-        return;
-    } else if (op == op::decrement) {
-        decrement();
-        ;; Just accept the money
-        return;
-    }
-
-    ;; Unknown operation
-    throw(0xffff);
+```
+;; Step 3-7: Handle the requested operation
+if (op == op::increment) {
+    increment();   ;;call to specific operation handler
+    return;
+} else if (op == op::decrement) {
+    decrement();
+    ;; Just accept the money
+    return;
 }
 ```
+
+}
+
+````
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk
@@ -173,10 +167,9 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
     // Unknown operation
     throw(0xffff);
 }
-```
-</TabItem>
-</Tabs>
+````
 
+</TabItem></Tabs>
 
 Объединяя оба этих шаблона, вы можете добиться полного описания систем ваших смарт-контрактов, обеспечив безопасное взаимодействие между ними и раскрыв полностью потенциал модели акторов в TON.
 
@@ -383,7 +376,7 @@ describe('HelloWorld', () => {
 });
 ```
 
-{/*Этот тест описывает стандартный поток транзакций любой `многоконтрактной` системы:
+{/\*Этот тест описывает стандартный поток транзакций любой `многоконтрактной` системы:
 
 1. Отправьте внешнее сообщение для обращения к логике смарт-контракта извне блокчейна.
 2. Инициируйте отправку одного или нескольких внутренних сообщений другим контрактам.  

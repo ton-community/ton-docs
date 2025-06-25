@@ -139,7 +139,7 @@ x{C400000001000000000000000E} s>c 2 boc+>B "config-param8.boc" B>file
 1 capCreateStats capBounceMsgBody or capReportVersion or config.version!
 ```
 
-Мы видим, что `config.version!` без последнего `8 config! по сути, выполняет то, что нам нужно, поэтому мы можем создать временный скрипт Fift, например, `create-param8.fif\\\\`:
+Мы видим, что `config.version!` без последнего `8 config! по сути, выполняет то, что нам нужно, поэтому мы можем создать временный скрипт Fift, например, `create-param8.fif\\\\\`:
 
 ```
 #!/usr/bin/fift -s

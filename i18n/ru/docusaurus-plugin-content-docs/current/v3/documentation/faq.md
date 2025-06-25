@@ -61,12 +61,12 @@ import Feedback from '@site/src/components/Feedback';
 
 Базовый lite client доступен в нашем репозитории на GitHub:
 
-[ton-blockchain/tonlib](https://github.com/ton-blockchain/ton/tree/master/tonlib)
+Чтобы получить доступ к ядру Lite Client, ознакомьтесь с этим разделом нашего GitHub: [ton-blockchain/tonlib](https://github.com/ton-blockchain/ton/tree/master/tonlib)
 
 Кроме того, вот три популярных сторонних обозревателя блоков (эксплорера):
 
-- [TON Explorer](https://explorer.toncoin.org/last)
-- [TON Center](https://toncenter.com/)
+- https://explorer.toncoin.org/last
+- https://toncenter.com/
 - https://tonwhales.com/explorer
 
 Подробнее читайте в разделе [Обозреватели в TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton) нашей документации.
@@ -113,7 +113,7 @@ max_block_bytes:2097152
 
 Для подробностей обращайтесь к отдельному ответу:
 
-- [Ответ](/ru/v3/documentation/faq#are-there-any-standardized-protocols-for-minting-burning-and-transferring-fungible-and-non-fungible-tokens-in-transactions#%D1%81%D1%83%D1%89%D0%B5%D1%81%D1%82%D0%B2%D1%83%D1%8E%D1%82-%D0%BB%D0%B8-%D1%81%D1%82%D0%B0%D0%BD%D0%B4%D0%B0%D1%80%D1%82%D0%B8%D0%B7%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B5-%D0%BF%D1%80%D0%BE%D1%82%D0%BE%D0%BA%D0%BE%D0%BB%D1%8B-%D0%B4%D0%BB%D1%8F-%D0%B2%D1%8B%D0%BF%D1%83%D1%81%D0%BA%D0%B0-%D1%81%D0%B6%D0%B8%D0%B3%D0%B0%D0%BD%D0%B8%D1%8F-%D0%B8-%D0%BF%D0%B5%D1%80%D0%B5%D0%B4%D0%B0%D1%87%D0%B8-%D0%B2%D0%B7%D0%B0%D0%B8%D0%BC%D0%BE%D0%B7%D0%B0%D0%BC%D0%B5%D0%BD%D1%8F%D0%B5%D0%BC%D1%8B%D1%85-%D0%B8-%D0%BD%D0%B5%D0%B2%D0%B7%D0%B0%D0%B8%D0%BC%D0%BE%D0%B7%D0%B0%D0%BC%D0%B5%D0%BD%D1%8F%D0%B5%D0%BC%D1%8B%D1%85-%D1%82%D0%BE%D0%BA%D0%B5%D0%BD%D0%BE%D0%B2-%D0%B2-%D1%82%D1%80%D0%B0%D0%BD%D0%B7%D0%B0%D0%BA%D1%86%D0%B8%D1%8F%D1%85)
+- ответ выше](/v3/documentation/faq#are-there-any-standardized-protocols-for-minting-burning-and-transferring-fungible-and-non-fungible-tokens-in-transactions)
 
 ### Является ли транзакция в TON асинхронной или синхронной? Можно ли получить доступ к документации, которая показывает, как работает эта система?
 

@@ -108,6 +108,7 @@ import Feedback from '@site/src/components/Feedback';
    - isUrlSafe. Обозначает устаревший флаг, который определен как безопасный для URL для адреса. Все адреса затем считаются безопасными для URL.
 2. _\[workchain_id - 1 байт]_ — идентификатор воркчейна (_workchain_id_) определяется 8-битным целым числом со знаком _workchain_id_.\
    (_0x00_ для Бейсчейна, _0xff_ для Мастерчейна)\
+   (_0x00_ для Бейсчейна, _0xff_ для Мастерчейна)\
    (_0x00_ для Бейсчейна, _0xff_ для Мастерчейна)
 3. _\[account_id - 32 байта]_ — идентификатор аккаунта состоит ([от большего к меньшему](https://www.freecodecamp.org/news/what-is-endianness-big-endian-vs-little-endian/)) 256-битного адреса в воркчейне.
 4. _\[проверка адреса - 2 байта]_ — В удобных для пользователя адресах проверка адреса состоит из подписи CRC16-CCITT из предыдущих 34 байтов. ([Пример](https://github.com/andreypfau/ton-kotlin/blob/ce9595ec9e2ad0eb311351c8a270ef1bd2f4363e/ton-kotlin-crypto/common/src/crc32.kt))

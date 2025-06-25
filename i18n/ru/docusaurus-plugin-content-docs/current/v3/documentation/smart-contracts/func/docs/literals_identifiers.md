@@ -85,7 +85,7 @@ FunC допускает действительно широкий класс и�
 **Invalid identifiers:**
 
 - `take(first)Entry`
-- \\\\`"not_a_string
+- \\\\\`"not_a_string
 - `msg.sender`
 - `send_message,then_terminate`
 - `_` - just an underscore, which is not valid on its own

@@ -208,6 +208,14 @@ and its _body_ can be either inlined into the same cell or can be placed into it
 
 In FunC, you had to manually calculate whether it's safe to embed body (you did it _on paper_ or dynamically).\
 In Tolk, you just pass `body`, and the compiler does all calculations for you:\
+In FunC, you had to manually calculate whether it's safe to embed body (you did it _on paper_ or dynamically).\
+In Tolk, you just pass `body`, and the compiler does all calculations for you:\
+In Tolk, you just pass `body`, and the compiler does all calculations for you:\
+In FunC, you had to manually calculate whether it's safe to embed body (you did it _on paper_ or dynamically).\
+In Tolk, you just pass `body`, and the compiler does all calculations for you:\
+In Tolk, you just pass `body`, and the compiler does all calculations for you:\
+In FunC, you had to manually calculate whether it's safe to embed body (you did it _on paper_ or dynamically).\
+In Tolk, you just pass `body`, and the compiler does all calculations for you:\
 In Tolk, you just pass `body`, and the compiler does all calculations for you:
 
 ```tolk

@@ -51,7 +51,7 @@ Working with potentially large trees of cells creates a couple of considerations
 
 Давайте посмотрим, как выглядят хэш-карты, уделив особое внимание сопоставлению 257-битных целочисленных ключей с пустыми срезами значений (такая карта будет указывать только на наличие или отсутствие элемента). This type of hashmap serves as a presence indicator, storing only the existence of elements.
 
-Способ быстрой проверки — запустить следующий скрипт на Python (возможно, заменив `pytoniq` на другой SDK по мере необходимости): Способ быстрой проверки — запустить следующий скрипт на Python (возможно, заменив `pytoniq` на другой SDK по мере необходимости): If needed, you can use a different SDK instead of `pytoniq`:
+Способ быстрой проверки — запустить следующий скрипт на Python (возможно, заменив `pytoniq` на другой SDK по мере необходимости): Способ быстрой проверки — запустить следующий скрипт на Python (возможно, заменив `pytoniq` на другой SDK по мере необходимости): Способ быстрой проверки — запустить следующий скрипт на Python (возможно, заменив `pytoniq` на другой SDK по мере необходимости): If needed, you can use a different SDK instead of `pytoniq`:
 
 ```python
 import pytoniq

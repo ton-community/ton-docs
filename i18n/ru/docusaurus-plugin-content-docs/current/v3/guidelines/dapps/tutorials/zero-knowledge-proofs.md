@@ -89,7 +89,7 @@ npm i --save-dev @ton-community/sandbox@0.12.0-tvmbeta.1
 
 ## Схема Circom
 
-Сначала давайте создадим папку `simple-zk/circuits`, а затем создадим в ней файл и добавим в него следующий код: Сначала давайте создадим папку `simple-zk/circuits`, а затем создадим в ней файл и добавим в него следующий код: Inside this folder, create a new file and add the following code::
+Сначала давайте создадим папку `simple-zk/circuits`, а затем создадим в ней файл и добавим в него следующий код: Сначала давайте создадим папку `simple-zk/circuits`, а затем создадим в ней файл и добавим в него следующий код: Inside this folder, create a new file and add the following code:: Сначала давайте создадим папку `simple-zk/circuits`, а затем создадим в ней файл и добавим в него следующий код: Inside this folder, create a new file and add the following code::
 
 ```circom
 template Multiplier() {
@@ -109,7 +109,7 @@ component main = Multiplier();
 
 Чтобы узнать больше о языке circom, посетите [этот сайт](https://docs.circom.io/).
 
-Далее мы создадим папку для наших файлов сборки и переместим туда данные, выполнив следующее (находясь в папке `simple-zk`): Далее мы создадим папку для наших файлов сборки и переместим туда данные, выполнив следующее (находясь в папке `simple-zk`): While inside the `simple-zk` folder, run the following commands:
+Далее мы создадим папку для наших файлов сборки и переместим туда данные, выполнив следующее (находясь в папке `simple-zk`): Далее мы создадим папку для наших файлов сборки и переместим туда данные, выполнив следующее (находясь в папке `simple-zk`): Далее мы создадим папку для наших файлов сборки и переместим туда данные, выполнив следующее (находясь в папке `simple-zk`): While inside the `simple-zk` folder, run the following commands:
 
 ```bash
 mkdir -p ./build/circuits

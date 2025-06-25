@@ -70,15 +70,17 @@ import Feedback from '@site/src/components/Feedback';
 
   2. Введите правильные значения конфигурации:
     - Введите правильные значения конфигурации:
+      \- Введите правильные значения конфигурации:
       \- **project_id**: В проекте Crowdin перейдите на вкладку "Инструменты", выберите API и найдите там **project_id**.
       ![select-api-tool](/img/localizationProgramGuideline/howItWorked/select-api-tool.png)
       ![projectId](/img/localizationProgramGuideline/howItWorked/projectId.png)
       \- **preserve_hierarchy**: Поддерживает структуру каталогов GitHub на сервере Crowdin.
-    - **preserve_hierarchy**: Поддерживает структуру каталогов GitHub на сервере Crowdin.
+    - - **preserve_hierarchy**: Поддерживает структуру каталогов GitHub на сервере Crowdin.
     - **source** и **translation**: Укажите пути для файлов, которые нужно загрузить в Crowdin, и место, где должны быть переведенные файлы.
 
       Обратитесь к [**нашему официальному конфигурационному файлу**](https://github.com/TownSquareXYZ/ton-docs/blob/localization/crowdin.yml) для примера.\
       Более подробную информацию можно найти в [**документации по конфигурации Crowdin**](https://developer.crowdin.com/configuration-file/).\
+      Find more in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).\
       Find more in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).\
       Find more in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).
 
