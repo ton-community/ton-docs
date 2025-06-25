@@ -1685,6 +1685,7 @@ Instead, use the dedicated method:
 
 You have a choice: either a straightforward implementation that places a high level of trust in major providers or a more complex one that does not require trusting the provider.
 However, for greater security, it is always recommended to process transactions block by block independently.
+
 ---
 
 #### Transaction response from API
@@ -1949,11 +1950,11 @@ TODO определить набор полей которые здесь пол
 
 ## Transaction
 
-Any change to an account’s state in the TON blockchain is recorded through transactions. Unlike messages, transactions cannot "move", "be sent", or "be received". These two terms are often confused, but it’s important to understand that a transaction is a record that captures all changes that occurred with a specific account.
+In the TON blockchain, any change to an account's state is recorded via a **transaction**. Unlike messages, transactions do not *move*, *send*, or *receive* anything. These terms are often confused, but it's important to understand that a transaction is simply a **record** of all changes that occurred to a specific account.
 
-### TL-B Structure of the Transaction Body
+### Transaction structure: TL-B
 
-Before we dive into how transactions work in TON, let’s first examine their structure using TL-B. To begin with, note that there are several types of transactions, but in this tutorial, we’ll focus only on ordinary transactions. These are the ones relevant for handling payments and developing any product.
+Before diving into how transactions work in TON, we first need to understand their structure using **TL-B**(Type Language – Binary). It's worth noting that there are several types of transactions in TON; however, for this guide, we will focus solely on **ordinary transaction**. These are the transactions relevant for payment processing and the development of most applications built on TON.
 
 ```tlb
 trans_ord$0000 credit_first:Bool
@@ -1965,28 +1966,29 @@ trans_ord$0000 credit_first:Bool
   = TransactionDescr;
 ```
 
-According to TL-B, a transaction consists of the following fields:
+According to the TL-B schema, a transaction consists of the following fields:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `credit_first` | `Bool` | Indicates whether the credit phase should come first. This depends on whether [bounce is enabled](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/transaction.cpp#L3530). This will be discussed in more detail in one of the next sections. |
-| `storage_ph` | `Maybe TrStoragePhase` | The phase responsible for handling storage-related fees for the account. |
-| `credit_ph` | `Maybe TrCreditPhase` | The phase responsible for processing incoming funds that were included with the inbound message, if it is internal ([#1](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2926), [#2](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2935)). |
-| `compute_ph` | `TrComputePhase` | The phase responsible for executing the smart contract code (stored in the account’s `code` cell). |
-| `action` | `Maybe ^TrActionPhase` | The phase responsible for handling actions generated during the execution of the smart contract code. |
-| `aborted` | `Bool` | Indicates whether the transaction was aborted during any of the phases. If this field is `true`, the transaction was not completed, and all changes from the `compute_ph` and `action` phases were not applied. |
-| `bounce` | `Maybe TrBouncePhase` | The phase responsible for handling errors that occurred during the `compute_ph` or `action` phases. |
+| `credit_first` | `Bool` | Indicates whether the credit phase should be executed first. This depends on whether the [bounce flag](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/transaction.cpp#L3530) is set. This will be explained in more detail in a later section.  |
+| `storage_ph` | `Maybe TrStoragePhase` | The storage phase, responsible for handling fees related to the account's persistent storage.|
+| `credit_ph` | `Maybe TrCreditPhase` | The credit phase, responsible for processing the transfer of value delivered with the incoming message, if it's an internal message (types [#1](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2926) or [#2](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2935)). |
+| `compute_ph` | `TrComputePhase` | The compute phase, responsible for executing the smart contract code stored in the account's `code` cell. |
+| `action` | `Maybe ^TrActionPhase` | The action phase, responsible for handling any actions generated during the compute phase. |
+| `aborted` | `Bool` | Indicates whether the transaction was aborted during one of the phases. If `true`, the transaction was not executed, and changes from the `compute_ph` and `action` phases were not applied.|
+| `bounce` | `Maybe TrBouncePhase` | TrBouncePhase	The bounce phase, responsible for handling errors that occurred during the `compute_ph` or `action` phases. |
 | `destroyed` | `Bool` | Indicates whether the account was destroyed during the execution of the transaction. |
 
 :::info
-Other types of transactions, such as [trans_storage](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L352-L353), [trans_tick_tock](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L355-L357), [trans_split_prepare](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L362-L366), and others are used for events that are invisible to the end user. For example, shard splitting and merging, tick-tock transactions, and so on.
 
-Since they are not relevant to tasks related to DApp development, we will not cover them in this tutorial.
+Other types of transactions—such as [trans_storage](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L352-L353), [trans_tick_tock](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L355-L357), [trans_split_prepare](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L362-L366),  and others—are used for internal events that are invisible to end users. These include shard splitting and merging, tick-tock transactions, etc.
+
+Since they are not relevant to DApp development, we will not cover them in this tutorial.
 :::
 
 ### Credit phase
 
-This phase is pretty small and straightforward. If we look at the blockchain source code, we’ll see that the main logic of this phase is to top up the contract’s balance with the remaining funds from the incoming message:
+This phase is relatively small and straightforward. If you look at the blockchain source code, you’ll see that the main logic of this phase is to **credit the contract’s balance** with the remaining value from the incoming message.
 
 ```cpp
   credit_phase->credit = msg_balance_remaining;
@@ -2002,24 +2004,24 @@ This phase is pretty small and straightforward. If we look at the blockchain sou
   }
 ```
 
-This phase is serialized in TL-B as follows:
+The credit phase is serialized in TL-B as follows:
 
 ```tlb
 tr_phase_credit$_ due_fees_collected:(Maybe Grams)
   credit:CurrencyCollection = TrCreditPhase;
 ```
 
-Here we see that the phase consists of two fields:
+HThis phase consists of the following two fields:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `due_fees_collected` | `Maybe Grams` | The amount of storage fees that were collected. This happens if the account had no balance and a debt had accumulated. |
-| `credit` | `CurrencyCollection` | The amount that was credited to the account during message receipt. |
+| `due_fees_collected` | `Maybe Grams` | The amount of storage fees collected. This field is present if the account has no balance and has accumulated storage. |
+| `credit` | `CurrencyCollection` | The amount credited to the account as a result of receiving the incoming message.|
 
 
 ### Storage phase
 
-This phase handles the processing of storage-related fees for the account. Let's start by looking at the TL-B scheme:
+In this phase, the blockchain processes fees related to the account's persistent storage. Let's start by looking at the TL-B schema:
 
 ```tlb
 tr_phase_storage$_ storage_fees_collected:Grams
@@ -2028,19 +2030,31 @@ tr_phase_storage$_ storage_fees_collected:Grams
   = TrStoragePhase;
 ```
 
-Here we see that the phase consists of the following fields:
+This phase contains the following fields:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `storage_fees_collected` | `Grams` | The amount of storage fees that were collected from the account. |
-| `storage_fees_due` | `Maybe Grams` | The amount of storage fees that were charged but not collected. This occurs when the account has no balance and a debt has accumulated. |
-| `status_change` | `AccStatusChange` | The change in account status after the transaction was executed. |
+| `storage_fees_collected` | `Grams` | The amount of storage fees collected from the account. |
+| `storage_fees_due` | `Maybe Grams` | The amount of storage fees that were charged but could not be collected due to insufficient balance. This represents accumulated debt.|
+| `status_change` | `AccStatusChange` | The change in the account's status after the transaction is executed. |
 
-`storage_fees_due` has type `Maybe` because if the contract has a balance, this value is not present. It's only needed to represent debt. `AccStatusChange`, in turn, indicates whether the account status changed after this phase. For example, if the debt exceeds 0.1 TON, the account state will [freeze](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L949C11-L953C12), and after 1 TON — it will be [deleted](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L936C11-L946C12).
+
+The `storage_fees_due` field is of type `Maybe` because it is only present when the account has **insufficient balance** to cover the storage fees. When the account has enough funds, this field is omitted.
+
+The `AccStatusChange` field indicates whether the account's status changed during this phase. For example:
+* If the debt exceeds **0.1 TON**, the account becomes [frozen](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L949C11-L953C12).
+* If the debt exceeds **1 TON**, the account is [deleted](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L936C11-L946C12).
+
+
+
+
+`storage_fees_due` has type `Maybe` because if the contract has a balance, this value is not present. It's only needed to represent debt. `AccStatusChange`, in turn, indicates whether the account status changed after this phase. For example, if the debt exceeds 0.1 TON, the account state will , and after 1 TON — it will be .
 
 ### Compute phase
 
-One of the most complex phases of a transaction is the compute phase. This is the phase where the smart contract code stored in the account is executed. This time, the TL-B contains multiple schemas:
+The **compute phase** is one of the most complex stages of a transaction. This is where the smart contract code, stored in the account’s state, is executed.
+
+Unlike previous phases, the TL-B definition for the compute phase includes multiple variants.
 
 ```tlb
 tr_phase_compute_skipped$0 reason:ComputeSkipReason
@@ -2059,34 +2073,34 @@ cskip_no_gas$10 = ComputeSkipReason;
 cskip_suspended$110 = ComputeSkipReason;
 ```
 
-To start with, note that the compute phase can be skipped, and the reason for skipping may be one of the following:
+To start, note that the compute phase can be **skipped** entirely. In that case, the reason for skipping is explicitly recorded and can be one of the following:
 
-| Skip Reason | Description |
+| Skip reason | Description |
 | --- | --- |
-| `cskip_no_state` | The smart contract has no state (and thus no code), so it cannot be executed. |
-| `cskip_bad_state` | This error is thrown in two cases: [an invalid value for the `fixed_prefix_length` field](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1721), or a StateInit passed in the message [does not match the account address](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1726). |
-| `cskip_no_gas` | The incoming message did not include enough TON to execute the smart contract code. |
-| `cskip_suspended` | The account was frozen, so code execution is not allowed. This was used to freeze early miner accounts as part of TON tokenomics stabilization. |
+| `cskip_no_state` | The smart contract has no state and, therefore, no code, so execution is not possible. |
+| `cskip_bad_state` | Raised in two cases: when the `fixed_prefix_length` [field has an invalid value]((https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1721)) or when the `StateInit` provided in the incoming message [does not match the account’s address](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1726).|
+| `cskip_no_gas` |The incoming message did not provide enough TON to cover the gas required to execute the smart contract. |
+| `cskip_suspended` | The account is frozen, so execution is disabled. This was used to freeze early miner accounts during the stabilization of TON’s tokenomics.|
 
 :::tip
-The `fixed_prefix_length` field allows setting fixed leading bits of an account address so that it is located in a specific shard. This is outside the scope of this tutorial, but you can read more [here](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md#anycast-addresses-and-address-rewrite).
+The `fixed_prefix_length` field can be used to specify a fixed prefix for the account address, ensuring that the account resides in a specific shard. This topic is outside the scope of this guide, but more information is available [here](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md#anycast-addresses-and-address-rewrite).
 :::
 
-Once we understand the reasons for skipping the compute phase, we can examine what happens after the smart contract code has been executed:
+Now that we've covered the reasons why the compute phase might be skipped, let's examine what happens when the smart contract code is **executed**. The following fields are used to describe the result:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `success` | `Bool` | Indicates whether the compute phase completed successfully. If this is `false`, then all changes made during this phase were discarded. |
-| `msg_state_used`, `account_activated`, `mode`, `vm_init_state_hash`, `vm_final_state_hash` | - | These fields are not used in the current blockchain version and are recorded as zero values. |
+| `success` | `Bool` | Indicates whether the compute phase was completed successfully. If `false`, any state changes made during this phase are discarded.|
+| `msg_state_used`, `account_activated`, `mode`, `vm_init_state_hash`, `vm_final_state_hash` | - | These fields are currently unused in the blockchain. They are always recorded as zero values. |
 | `gas_fees` | `Grams` | The amount of fees paid for executing the smart contract code. |
-| `gas_used`, `gas_limit` | `VarUInteger` | The amount of gas used and the gas limit set for smart contract execution. |
-| `gas_credit` | `Maybe (VarUInteger 3)` | Used in external messages. Since they cannot carry TON, a small amount of gas is allocated so that the smart contract code can run and decide whether it's ready to continue execution using its own balance. |
-| `exit_code` | `int32` | The virtual machine exit code. If the code is 0 or 1 (alternative success), the smart contract code executed successfully. If it’s non-zero, it means the code failed (except when `commit` is used). <br></br> For convenience, people often refer to this as the “smart contract exit code,” though that’s not entirely accurate. |
-| `exit_arg` | `Maybe int32` | An argument thrown by the virtual machine in case of an error. Useful for debugging smart contract code. |
-| `vm_steps` | `uint32` | Number of steps executed by the virtual machine. |
+| `gas_used`, `gas_limit` | `VarUInteger` | The actual amount of gas used and the maximum gas limit set for execution. |
+| `gas_credit` | `Maybe (VarUInteger 3)` | Used only in external messages. Since external messages cannot carry TON, a small gas credit is granted to allow the smart contract to start execution and decide whether it wants to continue using its balance. |
+| `exit_code` | `int32` | The virtual machine exit code. A value of `0` or `1` (alternative success) indicates successful execution. Any other value means the contract code exited with an error—except in cases where the `commit` instruction was used. **Note:** for convenience, developers often refer to this as the *smart contract exit code*, though this isn’t technically accurate. |
+| `exit_arg` | `Maybe int32` | The virtual machine threw an optional argument on failure. Useful for debugging smart contract errors. |
+| `vm_steps` | `uint32` | The number of steps executed by the virtual machine during code execution. |
 
 :::tip
-The `commit` instruction is used to finalize changes made up to that point and apply them even if an error occurs later in the phase. It can only be reverted if the Action Phase fails.
+The `commit` instruction is used to persist any changes made before it is called, even if an error occurs later in the same phase. These changes will only be rolled back if the **Action phase** fails.
 :::
 
 ### Action phase
