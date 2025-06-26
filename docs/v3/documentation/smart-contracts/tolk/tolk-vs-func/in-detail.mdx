@@ -1,4 +1,6 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
 # Tolk vs FunC: in detail
 
@@ -12,6 +14,7 @@ Here: [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-fu
 ### Traditional comments
 
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -30,6 +33,7 @@ Here: [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-fu
   </tr>
   </tbody>
 </table>
+````
 
 
 
@@ -42,6 +46,7 @@ You can even declare a variable with such a name.
 
 In Tolk, spaces are not mandatory. `2+2` is 4, as expected. `3+~x` is `3 + (~ x)`, and so on.
 
+````mdx-code-block
 <table className="cmp-func-tolk-table different-col-widths">
   <thead>
   <tr>
@@ -56,14 +61,18 @@ In Tolk, spaces are not mandatory. `2+2` is 4, as expected. `3+~x` is `3 + (~ x)
   </tr>
   </tbody>
 </table>
+````
 
+````mdx-code-block
 More precisely, an identifier can start from <code style={{display: 'inline-block'}}>{'[a-zA-Z$_]'}</code>
 and be continued with <code style={{display: 'inline-block'}}>{'[a-zA-Z0-9$_]'}</code>. Note that `?`, `:`, and others are not valid symbols, and `found?` and `op::increase` are invalid identifiers.
+````
 
 Note, that `cell`, `slice`, etc. are valid identifiers: `var cell = ...` or even `var cell: cell = ...` is okay. (like in TypeScript, `number` is a valid identifier)
 
 You can use backticks to surround an identifier, and then it can contain any symbols (similar to Kotlin and some other languages). This potential usage is to allow keywords to be used as identifiers in case of code generation by a scheme, for example.
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -82,6 +91,7 @@ You can use backticks to surround an identifier, and then it can contain any sym
   </tr>
   </tbody>
 </table>
+````
 
 
 ### Impure by default, compiler won't drop user function calls
@@ -102,6 +112,7 @@ and then impure operations are forbidden in its body (exceptions, globals modifi
 ### New functions syntax: fun keyword, @ attributes, types on the right (like in TypeScript, Kotlin, Python, etc.)
 
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -124,9 +135,11 @@ and then impure operations are forbidden in its body (exceptions, globals modifi
   </tr>
   </tbody>
 </table>
+````
 
 Types of variables — also to the right:
 
+````mdx-code-block
 <table className="cmp-func-tolk-table different-col-widths">
   <thead>
   <tr>
@@ -149,9 +162,11 @@ Types of variables — also to the right:
   </tr>
   </tbody>
 </table>
+````
 
 Modifiers `inline` and others — with annotations:
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -174,9 +189,11 @@ Modifiers `inline` and others — with annotations:
   </tr>
   </tbody>
 </table>
+````
 
 `forall` — this way:
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -191,6 +208,7 @@ Modifiers `inline` and others — with annotations:
   </tr>
   </tbody>
 </table>
+````
 
 `asm` implementation — like in FunC, but being properly aligned, it looks nicer:
 ```tolk
@@ -215,6 +233,7 @@ There is also a `@deprecated` attribute, not affecting compilation, but for a hu
 
 In FunC, `method_id` (without arguments) declared a get method. In Tolk, you use a straightforward syntax:
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -229,11 +248,13 @@ In FunC, `method_id` (without arguments) declared a get method. In Tolk, you use
   </tr>
   </tbody>
 </table>
+````
 
 Both `get methodName()` and `get fun methodName()` are acceptable.
 
 For `method_id(xxx)` (uncommon in practice, but valid), there is an attribute:
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -248,6 +269,7 @@ For `method_id(xxx)` (uncommon in practice, but valid), there is an attribute:
   </tr>
   </tbody>
 </table>
+````
 
 
 ### It's essential to declare types of parameters (though optional for locals)
@@ -321,6 +343,7 @@ fun send(msg: cell) {
 
 Tolk removes the old FunC-style string postfixes (`"..."c`, etc.) in favor of a **more transparent and more flexible approach**.
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
     <thead>
     <tr>
@@ -359,6 +382,7 @@ Tolk removes the old FunC-style string postfixes (`"..."c`, etc.) in favor of a 
     </tr>
     </tbody>
 </table>
+````
 
 These functions:
 * compile-time only
@@ -424,6 +448,7 @@ if (smth) {
 ### Function ton("...") for human-readable amounts of Toncoins
 
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
     <thead>
     <tr>
@@ -442,6 +467,7 @@ if (smth) {
     </tr>
     </tbody>
 </table>
+````
 
 The function `ton()` only accepts constant values (e.g., `ton(some_var)` is invalid).
 Its type is `coins` (not `int`!), although it's still a regular `int` from the TVM point of view.
@@ -610,6 +636,7 @@ All parameter types and their order rename the same, only naming is changed. `fu
 ### #include → import. Strict imports
 
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -624,6 +651,7 @@ All parameter types and their order rename the same, only naming is changed. `fu
   </tr>
   </tbody>
 </table>
+````
 
 In Tolk, you can not use a symbol from `a.tolk` without importing this file. In other words, **import what you use**.
 
@@ -667,6 +695,7 @@ It sounds simple, but internally, it's a very huge job. To make this available, 
 
 Creating null values and checking variables on null looks very pretty now.
 
+````mdx-code-block
 <table className="cmp-func-tolk-table different-col-widths">
   <thead>
   <tr>
@@ -693,6 +722,7 @@ Creating null values and checking variables on null looks very pretty now.
   </tr>
   </tbody>
 </table>
+````
 
 
 ### throw and assert keywords
@@ -702,6 +732,7 @@ Tolk dramatically simplifies working with exceptions.
 
 If FunC has `throw()`, `throw_if()`, `throw_arg_if()`, and the same for unless, Tolk has only two primitives: `throw` and `assert`.
 
+````mdx-code-block
 <table className="cmp-func-tolk-table different-col-widths">
   <thead>
   <tr>
@@ -728,6 +759,7 @@ If FunC has `throw()`, `throw_if()`, `throw_arg_if()`, and the same for unless, 
   </tr>
   </tbody>
 </table>
+````
 
 Note, that `!condition` is possible since logical NOT is available, see below.
 
@@ -739,6 +771,7 @@ assert(condition) throw excNo;
 
 Also, Tolk swaps `catch` arguments: it's `catch (excNo, arg)`, both optional (since arg is most likely empty).
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -761,11 +794,13 @@ Also, Tolk swaps `catch` arguments: it's `catch (excNo, arg)`, both optional (si
   </tr>
   </tbody>
 </table>
+````
 
 
 ### do ... until → do ... while
 
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -784,6 +819,7 @@ Also, Tolk swaps `catch` arguments: it's `catch (excNo, arg)`, both optional (si
   </tr>
   </tbody>
 </table>
+````
 
 Note, that `!condition` is possible since logical NOT is available, see below.
 
@@ -874,6 +910,7 @@ Only one input file can be passed, others should be `import`'ed.
 
 All names in the standard library were reconsidered. Now, functions are called using longer but clear names.
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -888,6 +925,7 @@ All names in the standard library were reconsidered. Now, functions are called u
   </tr>
   </tbody>
 </table>
+````
 
 A former "stdlib.fc" was split into multiple files: common.tolk, tvm-dicts.tolk, and others.
 
@@ -897,6 +935,7 @@ Continue here: [Tolk vs FunC: standard library](/v3/documentation/smart-contract
 ### stdlib is now embedded, not downloaded from GitHub
 
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -922,6 +961,7 @@ Continue here: [Tolk vs FunC: standard library](/v3/documentation/smart-contract
   </tr>
   </tbody>
 </table>
+````
 
 In Tolk, stdlib a part of distribution. Standard library is inseparable, since keeping a triple **language, compiler, stdlib** together is the only correct way to maintain release cycle.
 
@@ -946,6 +986,7 @@ JetBrains IDE plugin automatically discovers stdlib folder and inserts necessary
 
 In FunC, there are only bitwise operators `~ & | ^`. Developers making first steps, thinking "okay, no logical, I'll use bitwise in the same manner", often do errors, since operator behavior is completely different:
 
+````mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -970,7 +1011,9 @@ In FunC, there are only bitwise operators `~ & | ^`. Developers making first ste
   </tr>
   </tbody>
 </table>
+````
 
+````mdx-code-block
 <table className="cmp-func-tolk-table different-col-widths">
   <thead>
   <tr>
@@ -995,7 +1038,9 @@ In FunC, there are only bitwise operators `~ & | ^`. Developers making first ste
   </tr>
   </tbody>
 </table>
+````
 
+````mdx-code-block
 <table className="cmp-func-tolk-table different-col-widths">
   <thead>
   <tr>
@@ -1010,7 +1055,9 @@ In FunC, there are only bitwise operators `~ & | ^`. Developers making first ste
   </tr>
   </tbody>
 </table>
+````
 
+````mdx-code-block
 <table className="cmp-func-tolk-table different-col-widths">
   <thead>
   <tr>
@@ -1025,9 +1072,11 @@ In FunC, there are only bitwise operators `~ & | ^`. Developers making first ste
   </tr>
   </tbody>
 </table>
+````
 
 Tolk supports logical operators. They behave exactly as you get used to (right column). For now, `&&` and `||` sometimes produce not optimal Fift code, but in the future, Tolk compiler will become smarter in this case. It's negligible, just use them like in other languages.
 
+````mdx-code-block
 <table className="cmp-func-tolk-table different-col-widths">
   <thead>
   <tr>
@@ -1054,6 +1103,7 @@ Tolk supports logical operators. They behave exactly as you get used to (right c
   </tr>
   </tbody>
 </table>
+````
 
 Keywords `ifnot` and `elseifnot` were removed, since now we have logical not (for optimization, Tolk compiler generates `IFNOTJMP`, btw). The `elseif` keyword  was replaced by the traditional `else if`.
 
@@ -1292,7 +1342,9 @@ fun analyzeStorage(nCells: int, lastCell: cell?) {
 ```
 
 In practice, you'll use this operator working with low-level dicts API.
+````mdx-code-block
 Tolk will have a high-level `map<K,V>` in the future.
+````
 For now, working with dicts will require the `!` operator.
 ```tolk
 // it returns either (slice, true) or (null, false)
@@ -1426,8 +1478,10 @@ match (val v = getPair2Or3()) {
 }
 ```
 
+````mdx-code-block
 <details>
 <summary>How are union types represented on the stack, at the TVM level?</summary>
+````
 
 Internally, at the TVM level, they are stored as tagged unions, like enums in Rust:
 * each type is assigned a unique type ID, which is stored alongside the value
@@ -1455,7 +1509,9 @@ fun complex(v: int | slice | (int, int)) {
 complex(v);   // passes (null, v.slot1, v.typeid)
 complex(5);   // passes (null, 5, 0xF831)
 ```
+````mdx-code-block
 </details>
+````
 
 Besides `match`, you can test a union type by `is`. Smart casts work as expected:
 ```tolk
@@ -1613,7 +1669,9 @@ doSmth({ item: 123 });         // T = int
 doSmth({ item: cellOrNull });  // T = cell?
 ```
 
+````mdx-code-block
 Demo: `Response<TResult, TError>`:
+````
 ```tolk
 struct Ok<TResult> { result: TResult; }
 struct Err<TError> { err: TError; }
@@ -1681,7 +1739,9 @@ fun builder.storeInt32(mutate self, v: int32): self {
 ```
 
 Methods for generic structs created seamlessly.
+````mdx-code-block
 Note, that no extra `<T>` is required: while parsing the receiver type, compiler treats unknown symbols as generic arguments.
+````
 ```tolk
 struct Container<T> {
     item: T;
@@ -1738,7 +1798,9 @@ someVar.copy();   // ???
 So, the compiler performs matching to find as precise method as follows:
 1) Search for exact type receiver like `int.copy` (most practical cases finish here)
 2) Search for non-generic receivers that are acceptable (like `int32.copy` / `int?.copy`)
+````mdx-code-block
 3) Search for generic receivers except `T` (like `Container<T>.copy`)
+````
 4) Search for `T` receivers (`T.copy`)
 
 ```tolk
@@ -1824,9 +1886,13 @@ reply.send(SEND_MODE_REGULAR);
 Continue reading on a separate page: [Universal createMessage](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message).
 
 
+````mdx-code-block
 <hr />
+````
 
+````mdx-code-block
 <h3>Tolk vs FunC gas consumption</h3>
+````
 
 :::tip The same or slightly less
 If you transform FunC code line-by-line (for example, using a [converter](https://github.com/ton-blockchain/convert-func-to-tolk)),
@@ -1844,5 +1910,7 @@ However, once Tolk v1.0 is released, it will be significantly more efficient.
 Auto-serialized structures, automatic message construction, and other features will be
 noticeably cheaper than manual work with builders and slices — almost always.
 
+````mdx-code-block
 <Feedback />
+````
 

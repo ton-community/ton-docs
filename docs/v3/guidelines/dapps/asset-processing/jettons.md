@@ -1,9 +1,13 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
+````mdx-code-block
 import ThemedImage from '@theme/ThemedImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Button from '@site/src/components/button';
+````
 
 # Jetton processing
 
@@ -73,13 +77,17 @@ For the best user experience, avoid waiting for additional blocks once transacti
 
 Quick jump to the core description of jetton processing:
 
+````mdx-code-block
 <Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>Centralized Processing</Button>
 <Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses"
         colorType="secondary" sizeType={'sm'}>
   On-chain processing
 </Button>
+````
 
+````mdx-code-block
 <br></br><br></br>
+````
 
 
 TON Blockchain and its ecosystem classify fungible tokens (FTs) as jettons. Because TON Blockchain applies sharding, its fungible token implementation differs from similar blockchain models.
@@ -96,6 +104,7 @@ Standardized tokens on TON are implemented using a set of smart contracts, inclu
 * [Jetton master](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-minter.fc) smart contract
 * [Jetton wallet](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc) smart contracts
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -105,6 +114,7 @@ Standardized tokens on TON are implemented using a set of smart contracts, inclu
     }}
 />
 <br></br>
+````
 
 ## Jetton master smart contract
 Standardized tokens on TON use a set of smart contracts, including:
@@ -176,13 +186,17 @@ When `transferring jettons` between wallets, transactions require TON to cover n
 ### Retrieving jetton wallet addresses for a given user
 To get the `address` of a `jetton wallet` using the `owner address` (the TON wallet address), the `jetton main contract` provides the `get_wallet_address(slice owner_address)` method.
 
+````mdx-code-block
 <Tabs groupId="retrieve-wallet-address">
 <TabItem value="api" label="API">
+````
 
 > Run `get_wallet_address(slice owner_address)` through `/runGetMethod` method from the [TON Center API](https://toncenter.com/api/v3/#/default/run_get_method_api_v3_runGetMethod_post). In real cases (not test ones) it is important to always check that wallet indeed is attributed to desired jetton Master. Check the code example for more.
 
+````mdx-code-block
 </TabItem>
 <TabItem value="js" label="js">
+````
 
 ```js
 import TonWeb from 'tonweb';
@@ -202,8 +216,10 @@ if (jettonData.JettonMinterAddress.toString(false) !== JettonMinter.address.toSt
 console.log('jetton wallet address:', jettonWalletAddress.toString(true, true, true));
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 :::tip
 For more examples, read the [TON cookbook](/v3/guidelines/dapps/cookbook#tep-74-jettons-standard).
@@ -223,14 +239,20 @@ This method returns the following data:
 | `jetton`             | slice   |
 | `jetton_wallet_code` | cell    |
 
+````mdx-code-block
 <Tabs groupId="retrieve-jetton-wallet-data">
 <TabItem value="api" label="API">
+````
 
 > Use the `/jetton/wallets` get method from the [TON Center API](https://toncenter.com/api/v3/#/default/get_jetton_wallets_api_v3_jetton_wallets_get) to retrieve previously decoded jetton wallet data.
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 <TabItem value="js" label="js">
+````
 
 ```js
 import TonWeb from "tonweb";
@@ -250,8 +272,10 @@ if (expectedjettonWalletAddress.toString(false) !== new TonWeb.utils.Address(wal
 console.log('jetton master address:', data.JettonMinterAddress.toString(true, true, true));
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 ## Message layouts
 
@@ -261,6 +285,7 @@ Read more about messages [here](/v3/documentation/smart-contracts/message-manage
 
 Communication between jetton wallets and TON wallets follows this sequence:
 
+````mdx-code-block
 <br></br>
 <ThemedImage
     alt=""
@@ -270,6 +295,7 @@ Communication between jetton wallets and TON wallets follows this sequence:
     }}
 />
 <br></br>
+````
 
 #### Message 0
 `Sender -> sender's jetton wallet`. _Transfer_ message contains the following data:
@@ -585,13 +611,19 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
 
 
 ### Send jettons with comment
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="tonweb" label="JS (tonweb)">
+````
 
+````mdx-code-block
 <details>
 <summary>
+````
 Source code
+````mdx-code-block
 </summary>
+````
 
 ```js
 // first 4 bytes are tag of text comment
@@ -613,15 +645,23 @@ await wallet.methods.transfer({
 }).send()
 ```
 
+````mdx-code-block
 </details>
+````
 
+````mdx-code-block
 </TabItem>
 <TabItem value="tonutils-go" label="Golang">
+````
 
+````mdx-code-block
 <details>
 <summary>
+````
 Source code
+````mdx-code-block
 </summary>
+````
 
 ```go
 client := liteclient.NewConnectionPool()
@@ -679,15 +719,23 @@ if err != nil {
 log.Println("transaction confirmed, hash:", base64.StdEncoding.EncodeToString(tx.Hash))
 ```
 
+````mdx-code-block
 </details>
+````
 
+````mdx-code-block
 </TabItem>
 <TabItem value="TonTools" label="Python">
+````
 
+````mdx-code-block
 <details>
 <summary>
+````
 Source code
+````mdx-code-block
 </summary>
+````
 
 ```py
 my_wallet = Wallet(provider=client, mnemonics=my_wallet_mnemonics, version='v4r2')
@@ -699,16 +747,26 @@ await my_wallet.transfer_jetton(destination_address='address', jetton_master_add
 await my_wallet.transfer_jetton_by_jetton_wallet(destination_address='address', jetton_wallet='your jetton wallet address', jettons_amount=1000, fee=0.1)  
 ```
 
+````mdx-code-block
 </details>
+````
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 <TabItem value="pytoniq" label="Python">
+````
 
+````mdx-code-block
 <details>
 <summary>
+````
 Source code
+````mdx-code-block
 </summary>
+````
 
 ```py
 from pytoniq import LiteBalancer, WalletV4R2, begin_cell
@@ -750,21 +808,31 @@ async def main():
 asyncio.run(main())
 ```
 
+````mdx-code-block
 </details>
+````
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 
 ### Accept jetton transfer with comment parse
 
+````mdx-code-block
 <Tabs groupId="parse-code-examples">
 <TabItem value="tonweb" label="JS (tonweb)">
+````
 
+````mdx-code-block
 <details>
 <summary>
+````
 Source code
+````mdx-code-block
 </summary>
+````
 
 ```ts
 import {
@@ -958,15 +1026,23 @@ export async function tryProcessjetton(orderId: string) : Promise<string> {
 }
 ```
 
+````mdx-code-block
 </details>
+````
 
+````mdx-code-block
 </TabItem>
 <TabItem value="tonutils-go" label="Golang">
+````
 
+````mdx-code-block
 <details>
 <summary>
+````
 Source code
+````mdx-code-block
 </summary>
+````
 
 ```go
 import (
@@ -1150,15 +1226,23 @@ func GetTransferTransactions(orderId string, foundTransfer chan<- *tlb.Transacti
 }
 ```
 
+````mdx-code-block
 </details>
 </TabItem>
+````
 
+````mdx-code-block
 <TabItem value="pythoniq" label="Python">
+````
 
+````mdx-code-block
 <details>
 <summary>
+````
 Source code
+````mdx-code-block
 </summary>
+````
 
 ```py
 import asyncio
@@ -1254,9 +1338,11 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+````mdx-code-block
 </details>
 </TabItem>
 </Tabs>
+````
 
 ## SDKs
 You can find a list of SDKs for different languages ​​(JS, Python, Golang, C#, Rust, etc.) list [here](/v3/guidelines/dapps/apis-sdks/sdk).
@@ -1267,5 +1353,7 @@ You can find a list of SDKs for different languages ​​(JS, Python, Golang, C
 * [NFT processing on TON](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
 * [Metadata parsing on TON](/v3/guidelines/dapps/asset-processing/nft-processing/metadata-parsing)
 
+````mdx-code-block
 <Feedback />
+````
 

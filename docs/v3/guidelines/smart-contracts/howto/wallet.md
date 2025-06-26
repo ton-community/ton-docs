@@ -2,9 +2,11 @@
 description: In this tutorial, you will learn how to fully work with wallets, messages and smart contracts.
 ---
 
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+````
 
 # Working with wallet smart contracts
 
@@ -37,15 +39,19 @@ All code examples used in this tutorial can be found in the following [GitHub re
 
 **OPTIONAL**: If you prefer Go instead of JS, install the [tonutils-go](https://github.com/xssnick/tonutils-go) library and the GoLand IDE to develop on TON. This library will be used in this tutorial for the GO version.
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```bash
 npm i --save @ton/ton @ton/core @ton/crypto
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```bash
 go get github.com/xssnick/tonutils-go
@@ -53,8 +59,10 @@ go get github.com/xssnick/tonutils-go/adnl
 go get github.com/xssnick/tonutils-go/address
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 ## ⚙ Set your environment
 
@@ -70,9 +78,11 @@ npm install typescript @types/node ts-node nodemon --save-dev
 npx tsc --init --rootDir src --outDir build \ --esModuleInterop --target es2020 --resolveJsonModule --lib es6 \ --module commonjs --allowJs true --noImplicitAny false --allowSyntheticDefaultImports true --strict false
 ```
 
+````mdx-code-block
 :::info
 To help us carry out the following process, a `ts-node` executes TypeScript code directly without precompiling. `nodemon` restarts the node application automatically when file changes in the directory are detected.
 ::: 
+````
 
 4. Next, remove these lines from `tsconfig.json`:
 
@@ -80,7 +90,7 @@ To help us carry out the following process, a `ts-node` executes TypeScript code
   "files": [
     "\\",
     "\\"
- ]
+  ]
 ```
 
 5. Then, create a `nodemon.json` config in your project root with the following content:
@@ -436,8 +446,10 @@ If the number value fits within fewer bits than is specified, then the missing z
 
 Next, we’ll prepare a message to send Toncoins to another wallet v3. For example, let’s say a user wants to send 0.5 TON to themselves with the comment "**Hello, TON!**". To learn how to send a message with a comment, refer to this documentation section: [How to send a simple message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-simple-message).
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { beginCell } from "@ton/core";
@@ -448,8 +460,10 @@ let internalMessageBody = beginCell()
   .endCell();
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -462,15 +476,19 @@ internalMessageBody := cell.BeginCell().
   EndCell()
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Above, we created an `InternalMessageBody` to store the body of our message. Note that if the text exceeds the capacity of a single Cell (1023 bits), it’s necessary to **split the data into multiple cells**, as outlined in [this documentation](/v3/documentation/smart-contracts/message-management/internal-messages). However, high-level libraries handle cell creation according to the requirements in this case, so there’s no need to worry about it at this stage.
 
 Next, the `InternalMessage` is created according to the information we have studied earlier as follows:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { toNano, Address } from "@ton/ton";
@@ -496,8 +514,10 @@ let internalMessage = beginCell()
   .endCell();
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -526,15 +546,19 @@ internalMessage := cell.BeginCell().
   EndCell()
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 ### Creating a message
 
 We must create a `client` to retrieve our wallet smart contract's `seqno` (sequence number). This client will send a request to execute the Get method `seqno` on our wallet. Additionally, we must include the seed phrase (saved during wallet creation [here](#-external-and-internal-messages)) to sign our message. Follow these steps to proceed:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { TonClient } from "@ton/ton";
@@ -553,8 +577,10 @@ const mnemonicArray = mnemonic.split(" "); // get array from string
 const keyPair = await mnemonicToWalletKey(mnemonicArray); // get Secret and Public keys from mnemonic
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -600,13 +626,17 @@ k := pbkdf2.Key(hash, []byte("TON default seed"), 100000, 32, sha512.New) // In 
 privateKey := ed25519.NewKeyFromSeed(k)
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 To proceed, we must send the `seqno`, `keys`, and `internal message`. Next, we’ll create a [message](/v3/documentation/smart-contracts/message-management/sending-messages) for our wallet and store the data in the sequence outlined at the beginning of the tutorial. This is achieved as follows:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { sign } from "@ton/crypto";
@@ -626,8 +656,10 @@ let body = beginCell()
   .endCell();
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -649,8 +681,10 @@ body := cell.BeginCell().
   EndCell()
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Note that no `.endCell()` was used in defining the `toSign` here. In this case, it is necessary **to transfer toSign content directly to the message body**. If writing a cell was required, it would have to be stored as a reference.
 
@@ -662,8 +696,10 @@ In addition to the basic verification process we learned above for the Wallet V3
 
 To deliver an internal message to the blockchain from the outside world, it must be sent within an external message. As previously discussed, we’ll use the `ext_in_msg_info$10` structure since our goal is to send an external message to our contract. Now, let’s create the external message that will be sent to our wallet:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 let externalMessage = beginCell()
@@ -677,8 +713,10 @@ let externalMessage = beginCell()
   .endCell();
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 externalMessage := cell.BeginCell().
@@ -692,8 +730,10 @@ externalMessage := cell.BeginCell().
   EndCell()
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 |    Option    |                                                                                                                      Explanation                                                                                                                      |
 | :----------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
@@ -708,8 +748,10 @@ externalMessage := cell.BeginCell().
 
 Now that we have a completed message ready to send to our contract, the next step is to serialize it into a `BoC` ([bag of cells](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells)). Once serialized, we can send it using the following code:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 console.log(externalMessage.toBoc().toString("base64"));
@@ -717,8 +759,10 @@ console.log(externalMessage.toBoc().toString("base64"));
 client.sendFile(externalMessage.toBoc());
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -737,8 +781,10 @@ if err != nil {
 }
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 > 💡 Useful link:
 >
@@ -758,8 +804,10 @@ The first step in creating a wallet is generating a `private` and `public` key. 
 
 Here’s how to accomplish this:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { mnemonicToWalletKey, mnemonicNew } from "@ton/crypto";
@@ -770,8 +818,10 @@ const keyPair = await mnemonicToWalletKey(mnemonicArray); // extract private and
 console.log(mnemonicArray); // if we want, we can print our mnemonic
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -799,8 +849,10 @@ log.Println(publicKey) // print publicKey so that at this stage, the compiler do
 log.Println(mnemonic) // if we want, we can print our mnemonic
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 The private key is needed to sign messages, and the public key is stored in the wallet’s smart contract.
 
@@ -832,22 +884,28 @@ throw_unless(34, subwallet_id == stored_subwallet);
 
 We will need to add the above value to the initial data of the contract, so the variable needs to be saved as follows:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 const subWallet = 698983191;
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 var subWallet uint64 = 698983191
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 ### Compiling wallet code
 
@@ -926,8 +984,10 @@ Hash: idlku00WfSC36ujyK2JVT92sMBEpCNRUXOGO4sJVBPA=
 
 Once this process is complete, you can retrieve the same cell (using the base64 encoded output) containing our wallet code using other libraries and languages:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -945,8 +1005,10 @@ if err != nil { // check if there are any error
 log.Println("Hash:", base64.StdEncoding.EncodeToString(codeCell.Hash())) // get the hash of our cell, encode it to base64 because it has []byte type, and output to the terminal
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 The result will be the following output in the terminal:
 
@@ -971,8 +1033,10 @@ Before building a message, it is essential to understand what a State Init is. F
 
 Next, we’ll prepare the `initial data`, which will be present in our contract’s storage immediately after deployment:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { beginCell } from "@ton/core";
@@ -984,8 +1048,10 @@ const dataCell = beginCell()
   .endCell();
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 dataCell := cell.BeginCell().
@@ -995,13 +1061,17 @@ dataCell := cell.BeginCell().
   EndCell()
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 The contract `code` and its `initial data` are present at this stage. With this data, we can produce our **wallet address**. The wallet's address depends on the State Init, which includes the code and initial data.
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { Address } from "@ton/core";
@@ -1020,8 +1090,10 @@ const contractAddress = new Address(0, stateInit.hash()); // get the hash of sta
 console.log(`Contract address: ${contractAddress.toString()}`); // Output contract address to console
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -1042,8 +1114,10 @@ contractAddress := address.NewAddress(0, 0, stateInit.Hash()) // get the hash of
 log.Println("Contract address:", contractAddress.String()) // Output contract address to console
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 We can build and send the message to the blockchain using the State Init.
 
@@ -1057,8 +1131,10 @@ Deployment by external messages is presented here primarily for educational purp
 
 Let’s start with building a message similar to the one we built **in the previous section**:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { sign } from "@ton/crypto";
@@ -1091,8 +1167,10 @@ const signature = sign(toSign.endCell().hash(), keyPair.secretKey);
 const body = beginCell().storeBuffer(signature).storeBuilder(toSign).endCell();
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -1128,8 +1206,10 @@ body := cell.BeginCell().
   EndCell()
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Once this process is complete, the result is a properly constructed State Init and Message Body.
 
@@ -1137,8 +1217,10 @@ Once this process is complete, the result is a properly constructed State Init a
 
 The **main difference** lies in including the external message, as the State Init is stored to ensure proper contract deployment. Since the contract doesn’t yet have its code, it cannot process internal messages. Therefore, we send its code and initial data, enabling it to process our message with the "Hello, TON!" comment **after successful deployment**.
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 const externalMessage = beginCell()
@@ -1154,8 +1236,10 @@ const externalMessage = beginCell()
   .endCell();
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 externalMessage := cell.BeginCell().
@@ -1171,13 +1255,17 @@ externalMessage := cell.BeginCell().
   EndCell()
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Finally, we can send our message to the blockchain to deploy our wallet and use it.
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { TonClient } from "@ton/ton";
@@ -1190,8 +1278,10 @@ const client = new TonClient({
 client.sendFile(externalMessage.toBoc());
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -1217,8 +1307,10 @@ if err != nil {
 }
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Note that we sent an internal message using mode `3`. If you must redeploy the same wallet, **the smart contract can be destroyed**. To do this, set the [mode](/v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode160) to `160` by adding `128` (take the entire balance of the smart contract) + `32` (destroy the smart contract). This will retrieve the remaining TON balance and allow you to deploy the wallet again.
 
@@ -1238,8 +1330,10 @@ As you already know, [a single cell can store up to 1023 bits of data and up to 
 
 To accomplish this, we need to create four different internal messages. We can do this manually or through a `loop`. We need to define three arrays: an array of TON amount, an array of comments, and an array of messages. For messages, we need to prepare another array - internalMessages.
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { Cell } from "@ton/core";
@@ -1261,8 +1355,10 @@ const destinationAddresses = [
 let internalMessages: Cell[] = []; // array for our internal messages
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -1286,13 +1382,17 @@ destinationAddresses := [4]string{
 var internalMessages [len(internalMessagesAmount)]*cell.Cell // array for our internal messages
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 [Sending mode](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) for all messages is set to `mode 3`. However, an array can be created to fulfill different purposes if different modes are required.
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { Address, beginCell, toNano } from "@ton/core";
@@ -1330,8 +1430,10 @@ It’s unclear whether we’ll have a message body at this stage. Therefore, we�
 }
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -1373,13 +1475,17 @@ It’s unclear whether we’ll have a message body at this stage. Therefore, we�
 }
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Now let's use our knowledge from [chapter two](/v3/guidelines/smart-contracts/howto/wallet#-deploying-a-wallet) to build a message for our wallet that can send four messages simultaneously:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { TonClient } from "@ton/ton";
@@ -1405,8 +1511,10 @@ let toSign = beginCell()
 // Do not forget that if we use Wallet V4, we need to add .storeUint(0, 8)
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -1464,13 +1572,17 @@ toSign := cell.BeginCell().
   // Do not forget that if we use Wallet V4, we need to add MustStoreUInt(0, 8).
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Next, we’ll add the messages that we built earlier in the loop:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 for (let index = 0; index < internalMessages.length; index++) {
@@ -1480,8 +1592,10 @@ for (let index = 0; index < internalMessages.length; index++) {
 }
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 for i := 0; i < len(internalMessages); i++ {
@@ -1491,13 +1605,17 @@ for i := 0; i < len(internalMessages); i++ {
 }
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Now that the above processes are complete, let’s **sign** our message, **build an external message** (as outlined in previous sections of this tutorial), and **send it** to the blockchain:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { sign } from "@ton/crypto";
@@ -1522,8 +1640,10 @@ let externalMessage = beginCell()
 client.sendFile(externalMessage.toBoc());
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -1556,8 +1676,10 @@ if err != nil {
 }
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 :::info Connection error
 If an error related to the lite-server connection (in Golang) occurs, you may need to run the code repeatedly until the message is successfully sent. This happens because the `tonutils-go` library uses multiple lite-servers from the global configuration specified in the code. However, not all lite-servers may accept the connection.
@@ -1583,8 +1705,10 @@ Specifically, we need to thoroughly understand the TL-B schema for [NFT Transfer
 
 Now, let's build the message itself:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { Address, beginCell, toNano } from "@ton/core";
@@ -1624,8 +1748,10 @@ const internalMessage = beginCell()
   .endCell();
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -1665,8 +1791,10 @@ internalMessage := cell.BeginCell().
   EndCell()
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 The NFT transfer opcode comes from [the same standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema).
 Now, let's complete the message as laid out in this tutorial's previous sections. The correct code to complete the message is in the [GitHub repository](/v3/guidelines/smart-contracts/howto/wallet#-source-code).
@@ -1696,8 +1824,10 @@ Let’s consider the `get_public_key` and the `is_plugin_installed` methods. The
 
 First, we need a client who is capable of sending requests. Therefore, we’ll use a specific wallet address ([EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF](https://tonscan.org/address/EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF)) as an example:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { TonClient } from "@ton/ton";
@@ -1713,8 +1843,10 @@ const walletAddress = Address.parse(
 ); // my wallet address as an example
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -1742,13 +1874,17 @@ if err != nil {
 walletAddress := address.MustParseAddr("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF") // my wallet address as an example
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Now, we need to call the GET method wallet.
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 // I always call runMethodWithError instead of runMethod to be able to check the exit_code of the called method.
@@ -1761,8 +1897,10 @@ const publicKey = publicKeyUInt.toString(16); // get hex string from bigint (uin
 console.log(publicKey);
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 getResult, err := client.RunGetMethod(context.Background(), block, walletAddress, "get_public_key") // run get_public_key GET Method
@@ -1778,16 +1916,20 @@ publicKey := publicKeyUInt.Text(16)   // get hex string from bigint (uint256)
 log.Println(publicKey)
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 After the call is successfully completed, the end result is an extremely large 256-bit number that must be translated into a hex string. The resulting hex string for the wallet address we provided above is as follows: `430db39b13cf3cb76bfa818b6b13417b82be2c6c389170fbe06795c71996b1f8`.
 Next, we leverage the [TonAPI](https://docs.tonconsole.com/tonapi/rest-api) (/v1/wallet/findByPubkey method) by inputting the obtained hex string into the system. It is immediately clear that the first element in the array within the answer will identify my wallet.
 
 Then, we switch to the `is_plugin_installed` method. As an example, we’ll again use the wallet we used earlier ([EQAM7M--HGyfxlErAIUODrxBA3yj5roBeYiTuy6BHgJ3Sx8k](https://tonscan.org/address/EQAM7M--HGyfxlErAIUODrxBA3yj5roBeYiTuy6BHgJ3Sx8k)) and the plugin ([EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_N9qwOTSAy3sQSZ](https://tonscan.org/address/EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_N9qwOTSAy3sQSZ)):
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 const oldWalletAddress = Address.parse(
@@ -1798,21 +1940,27 @@ const subscriptionAddress = Address.parseFriendly(
 ); // subscription plugin address, which is already installed on the wallet
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 oldWalletAddress := address.MustParseAddr("EQAM7M--HGyfxlErAIUODrxBA3yj5roBeYiTuy6BHgJ3Sx8k")
 subscriptionAddress := address.MustParseAddr("EQBTKTis-SWYdupy99ozeOvnEBu8LRrQP_N9qwOTSAy3sQSZ") // subscription plugin address which is already installed on the wallet
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Now, we need to retrieve the plugin’s hash address to translate it into a number and send it to the GET Method.
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 const hash = BigInt(`0x${subscriptionAddress.address.hash.toString("hex")}`);
@@ -1828,8 +1976,10 @@ getResult = await client.runMethodWithError(
 console.log(getResult.stack.readNumber()); // -1
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -1850,8 +2000,10 @@ if err != nil {
 log.Println(getResult.MustInt(0)) // -1
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 The response must be `-1`, meaning the result is `true`. It is also possible to send a slice and a cell if required. It would be enough to create and transfer a Slice or Cell instead of using the BigInt, specifying the appropriate type.
 
@@ -1861,8 +2013,10 @@ In chapter three, we deployed a wallet. To accomplish this, we initially sent so
 
 To achieve this, we’ll use the V3R2 wallet smart contract introduced in [the third chapter](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code). In this case, we’ll set the `subwallet_id` to `3` or any other number required to generate a different address while using the same private key (this value is customizable):
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { beginCell, Cell } from "@ton/core";
@@ -1891,8 +2045,10 @@ const stateInit = beginCell()
   .endCell();
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -1937,13 +2093,17 @@ stateInit := cell.BeginCell().
   EndCell()
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Next, we’ll retrieve the address from our contract and build the Internal Message. We'll also add the "Deploying..." comment to our message.
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { Address, toNano } from "@ton/core";
@@ -1969,8 +2129,10 @@ const internalMessage = beginCell()
   .endCell();
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -2000,8 +2162,10 @@ internalMessage := cell.BeginCell().
   EndCell()
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 :::info
 Note that the bits have been specified above and that the stateInit and internalMessageBody have been saved as references.
@@ -2023,8 +2187,10 @@ Then, save two references.
 
 Next, we’ll prepare a message for our wallet and send it:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { TonClient } from "@ton/ton";
@@ -2070,8 +2236,10 @@ console.log(external.toBoc().toString("base64"));
 client.sendFile(external.toBoc());
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -2145,8 +2313,10 @@ if err != nil {
 }
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 This concludes our work with ordinary wallets. At this stage, you should have a strong understanding of how to interact with wallet smart contracts, send messages, and be able to use various library types.
 
@@ -2388,8 +2558,10 @@ However, in such cases, we must ensure that no more than `timeout` time has pass
 
 To deploy a contract, we need 2 cells: `code` and `date`. For the code, we will use the following cell:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { Cell } from "@ton/core";
@@ -2402,13 +2574,17 @@ const HIGHLOAD_V3_CODE = Cell.fromBoc(
 )[0];
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Unlike the other examples, here we will work [with a ready-made wrapper](https://github.com/aSpite/highload-wallet-contract-v3/blob/main/wrappers/HighloadWalletV3.ts), as it will be quite difficult and time-consuming to build each message manually. To create an instance of the HighloadWalletV3 class, we pass `publicKey`, `subwalletId`, and `timeout` and also the code:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { TonClient } from "@ton/ton";
@@ -2436,13 +2612,17 @@ const wallet = client.open(
 console.log(`Wallet address: ${wallet.address.toString()}`);
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Now, we need a regular wallet from which we will deploy the contract:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { WalletContractV3R2 } from "@ton/ton";
@@ -2460,13 +2640,17 @@ const deployerWallet = client.open(
 console.log(`Deployer wallet address: ${deployerWallet.address.toString()}`);
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 If you have a V4 version wallet, you can use the `WalletContractV4` class. Now, all we have to do is to deploy the contract:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 await wallet.sendDeploy(
@@ -2475,8 +2659,10 @@ await wallet.sendDeploy(
 );
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 We can confirm that our wallet has been successfully deployed by checking the address output to the console in a blockchain explorer.
 
@@ -2484,8 +2670,10 @@ We can confirm that our wallet has been successfully deployed by checking the ad
 
 Sending messages is also done through the wrapper, but we will need to keep the Query ID up to date. First, let's get an instance of our wallet class:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { Address } from "@ton/core";
@@ -2508,13 +2696,17 @@ const wallet = client.open(
 console.log(`Wallet address: ${wallet.address.toString()}`);
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Now, we need to create an instance of the `HighloadQueryId` class. This class makes working with `shift` and `bit_number` easy. To create it, we use the `fromShiftAndBitNumber` method:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { HighloadQueryId } from "./wrappers/HighloadQueryId";
@@ -2522,13 +2714,17 @@ import { HighloadQueryId } from "./wrappers/HighloadQueryId";
 const queryHandler = HighloadQueryId.fromShiftAndBitNumber(0n, 0n);
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 We put zeros here since this is the first request. However, if you've sent any messages before, you'll need to pick an unused combination of these values. Now let's create an array where we will store all our actions and add one action to it to get our TONs back:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import {
@@ -2551,13 +2747,17 @@ actions.push({
 });
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Next, we need to fill in the `subwalletId`, `timeout`, `internalMessageValue`, and `createdAt` fields to send the message:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 const subwalletId = 0x10ad;
@@ -2576,20 +2776,26 @@ await wallet.sendBatch(
 );
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 After submitting, we should use the `getNext` method in `queryHandler` and save the current value. In a real case, this value should be stored in the database and reset after the `timeout * 2` time.
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 queryHandler.getNext();
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 ## 🔥 High-load wallet v2 
 
@@ -2772,8 +2978,10 @@ To deploy a high-load wallet, you need to generate a mnemonic key in advance, wh
 
 To begin the process required to deploy a high-load wallet it's necessary to copy [the code of the smart contract](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif) to the same directory where the stdlib.fc and wallet_v3 are located and remember to add `#include "stdlib.fc";` to the beginning of the code. Next, we’ll compile the high-load wallet code as we did in [section three](/v3/guidelines/smart-contracts/howto/wallet#compiling-wallet-code):
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { compileFunc } from "@ton-community/func-js";
@@ -2802,8 +3010,10 @@ console.log("Code BOC: " + result.codeBoc);
 console.log("\nHash: " + codeCell.hash().toString("base64")); // get the hash of cell and convert in to base64 encoded string
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 The result will be the following output in the terminal:
 
@@ -2815,8 +3025,10 @@ Hash: lJTRzI7fEvBWcaGpugmSEJbrUIEeGSTsZcPGKfu4CBI=
 
 With the above result, it is possible to use the base64 encoded output to retrieve the cell with our wallet code in other libraries and languages as follows:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -2835,13 +3047,17 @@ if err != nil { // check if there is any error
 log.Println("Hash:", base64.StdEncoding.EncodeToString(codeCell.Hash())) // get the hash of our cell, encode it to base64 because it has []byte type, and output to the terminal
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Next, we need to retrieve a cell containing its initial data, build a State Init, and calculate the high-load wallet address. After analyzing the smart contract code, we determined that the `subwallet_id`, `last_cleaned`, `public_key`, and `old_queries` are stored sequentially in the storage:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { Address, beginCell } from "@ton/core";
@@ -2872,8 +3088,10 @@ const contractAddress = new Address(0, stateInit.hash()); // get the hash of sta
 console.log(`Contract address: ${contractAddress.toString()}`); // Output contract address to console
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -2914,8 +3132,10 @@ contractAddress := address.NewAddress(0, 0, stateInit.Hash()) // get the hash of
 log.Println("Contract address:", contractAddress.String())    // Output contract address to console
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 :::caution
 Everything we have detailed above follows the same steps as the contract [deployment via wallet](/v3/guidelines/smart-contracts/howto/wallet#contract-deployment-via-wallet) section. To better understand, read the entire [GitHub source code](https://github.com/aSpite/wallet-tutorial).
@@ -2931,8 +3151,10 @@ The contract balance must be at least 0.5 TON to complete the transaction.
 
 Each message carries its own comment with code, and the destination address will be the wallet from which we deployed:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { Address, beginCell, Cell, toNano } from "@ton/core";
@@ -2962,8 +3184,10 @@ for (let i = 0; i < 12; i++) {
 }
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -3002,13 +3226,17 @@ for i := 0; i < 12; i++ {
 }
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 After completing the above process, the result is an array of internal messages. Next, creating a dictionary for message storage and preparing and signing the message body is necessary. This is completed as follows:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { Dictionary } from '@ton/core';
@@ -3056,8 +3284,10 @@ const highloadWalletAddress = Address.parse('put your high-load wallet address')
 const signature = sign(toSign.endCell().hash(), highloadKeyPair.secretKey); // get the hash of our message to the wallet smart contract and sign it to get the signature
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -3103,8 +3333,10 @@ highloadWalletAddress := address.MustParseAddr("put your high-load wallet addres
 signature := ed25519.Sign(highloadPrivateKey, toSign.EndCell().Hash())
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 :::note IMPORTANT
 Note that when using JavaScript and TypeScript, our messages are saved into an array without a send mode. This happens because, when using the `@ton/ton` library, developers are expected to handle the serialization and deserialization process manually. As a result, the method first saves the message mode and then the message itself. Using the `Dictionary.Values.Cell()` specification for the value method saves the entire message as a cell reference without storing the mode separately.
@@ -3112,8 +3344,10 @@ Note that when using JavaScript and TypeScript, our messages are saved into an a
 
 Next, we’ll create an external message and send it to the blockchain using the following code:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js" label="JavaScript">
+````
 
 ```js
 import { TonClient } from "@ton/ton";
@@ -3142,8 +3376,10 @@ const client = new TonClient({
 client.sendFile(externalMessage.toBoc());
 ```
 
+````mdx-code-block
 </TabItem>
 <TabItem value="go" label="Golang">
+````
 
 ```go
 import (
@@ -3185,8 +3421,10 @@ if err != nil {
 }
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Once complete, you can look up your wallet and verify that 12 outgoing messages were sent. You can also call the `processed?` GET method using the `query_id` initially used in the console. If the request is processed correctly, it will return `-1` (true).
 
@@ -3233,4 +3471,6 @@ External references:
 - Useful concept documents(may include outdated information): [ton.pdf](https://docs.ton.org/ton.pdf), [tblkch.pdf](https://ton.org/tblkch.pdf), [tvm.pdf](https://ton.org/tvm.pdf)
   
 
+````mdx-code-block
 <Feedback />
+````

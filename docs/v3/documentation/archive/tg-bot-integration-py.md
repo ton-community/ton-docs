@@ -1,6 +1,10 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
+````mdx-code-block
 import Button from '@site/src/components/button'
+````
 
 # TON Connect for Telegram Bots - Python
 
@@ -12,18 +16,26 @@ In this tutorial, we’ll create a sample telegram bot that supports TON Connect
 We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
 
  
+````mdx-code-block
 <Button href="https://t.me/test_tonconnect_bot" colorType={'primary'} sizeType={'sm'}>
+````
 
 Open Demo Bot
  
+````mdx-code-block
 </Button>
+````
 
  
+````mdx-code-block
 <Button href="https://github.com/yungwine/ton-connect-bot" colorType={'secondary'} sizeType={'sm'}>
+````
 
 Check out GitHub
  
+````mdx-code-block
 </Button>
+````
 
 
 ## Preparing
@@ -344,8 +356,10 @@ Currently, the project has the following structure:
 ```
 And the `main.py` looks like this:
 
+````mdx-code-block
 <details>
 <summary>Show main.py</summary>
+````
 
 ```python
 # main.py
@@ -498,7 +512,9 @@ if __name__ == "__main__":
     asyncio.run(main())
 
 ```
+````mdx-code-block
 </details>
+````
 
 ## Improving
 
@@ -580,5 +596,7 @@ What is next?
 - [Full bot code](https://github.com/yungwine/ton-connect-bot)
 - [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
 
+````mdx-code-block
 <Feedback />
+````
 

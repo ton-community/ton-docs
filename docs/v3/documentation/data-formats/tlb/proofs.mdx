@@ -1,6 +1,10 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
+````mdx-code-block
 import ThemedImage from '@theme/ThemedImage';
+````
 
 # Proofs verifying (low-level)
 
@@ -32,16 +36,22 @@ We then request the corresponding block header from a liteserver.
 The liteserver’s [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L36) includes a `header_proof` BoC.
 
 
+````mdx-code-block
 <details>
+````
 
+````mdx-code-block
   <summary><b>Show BoC</b></summary>
+````
 
 ```boc
 
 b5ee9c72010207010001470009460351ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a52c7b1f46c26406001601241011ef55aaffffff110204050601a09bc7a98700000000040101dc65010000000100ffffffff000000000000000064b6c356000023d38ba64000000023d38ba64004886d00960007028101dc64fd01dc42bec400000003000000000000002e030098000023d38b96fdc401dc650048a3971c46472b85c8d761060a6e7ae9f13a90cdda815915a89597cfecb393a6b568807adfb3c1c5efc920907225175db61ca384e4f8b313799e3cbb8b7b4085284801018c6053c1185700c0fe4311d5cf8fa533ea0382e361a7b76d0cf299b75ac0356c000328480101741100d622b0d5264bcdb86a14e36fc8c349b82ae49e037002eb07079ead8b060015284801015720b6aefcbf406209522895faa6c0d10cc3315d90bcaf09791b19f595e86f8f0007
 
 ```
+````mdx-code-block
 </details>
+````
 
 After deserializing the BoC, we obtain the following cell:
 
@@ -128,29 +138,41 @@ The liteserver response contains the `BlockIdExt` of the shard block:
 ```
 Shard proof BoC:
 
+````mdx-code-block
 <details>
+````
 
+````mdx-code-block
   <summary><b>Show BoC</b></summary>
+````
 
 ```boc
 
 b5ee9c72010219020004b9010009460332bf3592969931ca4fbc7715494b50597f1884c0d847456029d8cf0e526e6046016f0209460351ed3b9e728e7c548b15a5e5ce988b4a74984c3f8374f3f1a52c7b1f46c26406001611245b9023afe2ffffff1100ffffffff000000000000000001dc65010000000164b6c356000023d38ba6400401dc64fd600304050628480101affe84cdd73951bce07eeaad120d00400295220d6f66f1163b5fa8668202d72b000128480101faed0dd3ca110ada3d22980e3795d2bdf15450e9159892bbf330cdfd13a3b880016e22330000000000000000ffffffffffffffff820ce9d9c3929379c82807082455cc26aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaac23519b11eddc69b7e090a0b0c28480101a5a7d24057d8643b2527709d986cda3846adcb3eddc32d28ec21f69e17dbaaef000128480101deab5a5aaf79c5e24f8dcbbe51747d6804104f75f58ed5bed4702c353545c6ac00110103d0400d284801015394592e3a3f1e3bc2d4249e993d0ec1e33ca18f49533991274ebc65276cd9a5001122bf0001aaa0161d000702816000047a7172dfb88800011e8b625908200ee215f71061846393a08c682e87bc3a12aff2d246eb97a09164f5657f96f9a252ef71580fe5309a823f73f3c4c3f8ab73f5a85bbf204bfd22e68d36d0efab1818e7b428be0f1028480101b20e36a3b36a4cdee601106c642e90718b0a58daf200753dbb3189f956b494b6000101db50119963380ee3280800011e9c5cb7ee0000011e9c5cb7ee29cf2e5e52dfb4ba85aecc4bc3961d06bd1f30a7290e29f26f3947d7f69c6e713f8f872e6e25c50967921c6e55b07a38968ee0279bc958eb97928065fb204a45b88000381abc00000000000000000ee327eb25b61a8a0e001343c9b67a721dcd6500202848010150fcc05bd9723571b83316a5f650be31edb131d05fdc78d271486e5d4ef077e1001928480101e5be728200b172cf7e2356cba2ae1c6e2c790be7c03cd7814c6e6fe3080b944b0011241011ef55aaffffff111213141501a09bc7a98700000000040101dc65010000000100ffffffff000000000000000064b6c356000023d38ba64000000023d38ba64004886d00960007028101dc64fd01dc42bec400000003000000000000002e16284801018c6053c1185700c0fe4311d5cf8fa533ea0382e361a7b76d0cf299b75ac0356c00032a8a0478e0f0e601ba1161ecc1395e9a0475c4f80aadbd6c483f210e96e29cf36789e432bf3592969931ca4fbc7715494b50597f1884c0d847456029d8cf0e526e6046016f016f1718284801015720b6aefcbf406209522895faa6c0d10cc3315d90bcaf09791b19f595e86f8f00070098000023d38b96fdc401dc650048a3971c46472b85c8d761060a6e7ae9f13a90cdda815915a89597cfecb393a6b568807adfb3c1c5efc920907225175db61ca384e4f8b313799e3cbb8b7b4085688c010378e0f0e601ba1161ecc1395e9a0475c4f80aadbd6c483f210e96e29cf36789e46492304dfb6ef9149781871464af686056a9627f882f60e3b24f8c944a75ebaf016f0014688c010332bf3592969931ca4fbc7715494b50597f1884c0d847456029d8cf0e526e6046da58493ccb5da3876129b0190f3c375e69e59c3ad9ff550be708999dad1f6f39016f0014
 
 ```
+````mdx-code-block
 </details>
+````
 
 The `shard_descr` BoC can be used if the liteserver is trusted.
 
+````mdx-code-block
 <details>
+````
 
+````mdx-code-block
   <summary><b>Show BoC</b></summary>
+````
 
 ```boc
 
 b5ee9c7201010201007d0001db50119963380ee3280800011e9c5cb7ee0000011e9c5cb7ee29cf2e5e52dfb4ba85aecc4bc3961d06bd1f30a7290e29f26f3947d7f69c6e713f8f872e6e25c50967921c6e55b07a38968ee0279bc958eb97928065fb204a45b88000381abc00000000000000000ee327eb25b61a8a01001343c9b67a721dcd650020
 
 ```
+````mdx-code-block
 </details>
+````
 
 After deserializing the shard proof BoC, 2 root cells are obtained:
 
@@ -297,9 +319,13 @@ Next, let's prove the state of account `EQBvW8Z5huBkMJYdnfAEM5JqTNkuWX3diqYENkWs
 The liteserver [response](https://github.com/ton-blockchain/ton/blob/v2025.03/tl/generate/scheme/lite_api.tl#L38) includes the MasterChain block ID, which must match the one sent to the liteserver, the shard block ID, and a `shard_proof` BoC, which must be verified as described above, along with a `proof` BoC and a `state` BoC.
 
 
+````mdx-code-block
 <details>
+````
 
+````mdx-code-block
   <summary><b>Show BoCs</b></summary>
+````
 
 ```boc
 Proof BoC:
@@ -307,7 +333,9 @@ Proof BoC:
 State BoC:
     b5ee9c720102160100033c000271c006f5bc67986e06430961d9df00433926a4cd92e597ddd8aa6043645ac20bd178222c859043259e0d9000008f1590e4d10d405786bd75534001020114ff00f4a413f4bcf2c80b030051000000e929a9a317c1b3226ce226d6d818bafe82d3633aa0f06a6c677272d1f9b760ff0d0dcf56d8400201200405020148060704f8f28308d71820d31fd31fd31f02f823bbf264ed44d0d31fd31fd3fff404d15143baf2a15151baf2a205f901541064f910f2a3f80024a4c8cb1f5240cb1f5230cbff5210f400c9ed54f80f01d30721c0009f6c519320d74a96d307d402fb00e830e021c001e30021c002e30001c0039130e30d03a4c8cb1f12cb1fcbff1213141502e6d001d0d3032171b0925f04e022d749c120925f04e002d31f218210706c7567bd22821064737472bdb0925f05e003fa403020fa4401c8ca07cbffc9d0ed44d0810140d721f404305c810108f40a6fa131b3925f07e005d33fc8258210706c7567ba923830e30d03821064737472ba925f06e30d08090201200a0b007801fa00f40430f8276f2230500aa121bef2e0508210706c7567831eb17080185004cb0526cf1658fa0219f400cb6917cb1f5260cb3f20c98040fb0006008a5004810108f45930ed44d0810140d720c801cf16f400c9ed540172b08e23821064737472831eb17080185005cb055003cf1623fa0213cb6acb1fcb3fc98040fb00925f03e20201200c0d0059bd242b6f6a2684080a06b90fa0218470d4080847a4937d29910ce6903e9ff9837812801b7810148987159f31840201580e0f0011b8c97ed44d0d70b1f8003db29dfb513420405035c87d010c00b23281f2fff274006040423d029be84c6002012010110019adce76a26840206b90eb85ffc00019af1df6a26840106b90eb858fc0006ed207fa00d4d422f90005c8ca0715cbffc9d077748018c8cb05cb0222cf165005fa0214cb6b12ccccc973fb00c84014810108f451f2a7020070810108d718fa00d33fc8542047810108f451f2a782106e6f746570748018c8cb05cb025006cf165004fa0214cb6a12cb1fcb3fc973fb0002006c810108d718fa00d33f305224810108f459f2a782106473747270748018c8cb05cb025005cf165003fa0213cb6acb1f12cb3fc973fb00000af400c9ed54
 ```
+````mdx-code-block
 </details>
+````
 
 After verifying the `shard_proof`, the `proof` and `state` cells must be deserialized. The `proof` cell must contain exactly 2 root cells:
 
@@ -356,9 +384,13 @@ if state_cell[0].get_hash(0) != state_hash:
 
 Once the hash matches, the `state_cell` can be trusted. Its structure is as follows:
 
+````mdx-code-block
 <details>
+````
 
+````mdx-code-block
   <summary><b>Show cell</b></summary>
+````
 
 ```json
 280[03F93FE5EDA41A6CE9ECB353FD589842BD3F5D5E73B846CB898525293FC742FD690219] -> {
@@ -442,7 +474,9 @@ Once the hash matches, the `state_cell` can be trusted. Its structure is as foll
 }
 ```
 
+````mdx-code-block
 </details>
+````
 
 The only Merkle proof reference has the prefix `9023AFE2`, which corresponds to the [ShardStateUnsplit](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L410) TLB schema.
 Therefore, it must be deserialized accordingly.
@@ -756,9 +790,13 @@ To do this, verify the block header proof and store the new hash from the `State
 
 Next, deserialize the `config_proof` cell:
 
+````mdx-code-block
 <details>
+````
 
+````mdx-code-block
   <summary><b>Show cell</b></summary>
+````
 
 ```json
 280[0332BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F] -> {
@@ -848,8 +886,9 @@ Next, deserialize the `config_proof` cell:
 	}
 }
 ```
-
+````mdx-code-block
 </details>
+````
 Compare the `Hash_1` from the Merkle proof (reference only) with the hash obtained from the `check_block_header` function above. If they match, the cell can be trusted:
 
 ```python
@@ -937,5 +976,7 @@ After deserializing all parameters, we obtain:
 
 * [Exotic cells](/v3/documentation/data-formats/tlb/exotic-cells)
 
+````mdx-code-block
 <Feedback />
+````
 

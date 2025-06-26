@@ -1,7 +1,9 @@
+````mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Feedback from "@site/src/components/Feedback";
 import Button from '@site/src/components/button'
+````
 
 # Processing messages
 
@@ -28,17 +30,21 @@ Since TON implements the [actor](/v3/concepts/dive-into-ton/ton-blockchain/block
 
 Let's examine the `recv_internal` function signature to understand how we could use that:
 
+````mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+````
 ```func
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure
-```
  - `my_balance` - smart-contract balance at the beginning of the transaction.
  - `msg_value` - funds received with message.
  - `in_msg_full` - `cell` containing "header" fields of the message.
  - `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containing payload of the message.
+ ```
+````mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+````
 ```tolk
 fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice)
 ```
@@ -46,8 +52,10 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
  - `msgValue` - funds received with message.
  - `msgFull` - `cell` containing "header" fields of message.
  - `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containing payload pf the message.
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 :::info  
 You can find a comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
@@ -55,8 +63,10 @@ You can find a comprehensive description of sending messages in this [section](/
 
 What we are specifically interested in is the source address of the message, which we can extract from the `msg_full` cell. By obtaining that address and comparing it to a stored one — we can conditionally allow access to crucial parts of our smart contract functionality. A common approach looks like this:
 
+````mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+````
 ```func
 ;; This is NOT a part of the project, just an example.
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
@@ -82,8 +92,10 @@ What we are specifically interested in is the source address of the message, whi
     throw(0xffff);
 }
 ```
+````mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+````
 ```tolk
 // This is NOT a part of the project, just an example.
 fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
@@ -106,16 +118,20 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
     throw 0xffff; // if the message contains an op that is not known to this contract, we throw
 }
 ```
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 
 ### Operations
 
 A common pattern in TON contracts is to include a **32-bit operation code** in message bodies, which tells your contract what action to perform:
 
+````mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+````
 ```func
 ;; This is NOT a part of the project, just an example!
 const int op::increment = 1;
@@ -144,8 +160,10 @@ const int op::decrement = 2;
     throw(0xffff);
 }
 ```
+````mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+````
 ```tolk
 //This is NOT a part of the project, just an example!
 const op::increment : int = 1;
@@ -174,8 +192,10 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
     throw(0xffff);
 }
 ```
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 By combining both of these patterns, you can achieve a comprehensive description of your smart contract's systems, ensuring secure interaction between them and unleashing the full potential of the TON actors model.
 
@@ -197,8 +217,10 @@ Let's modify our smart contract to receive external messages following the stand
 
 Add the `recv_external` function to the `HelloWorld` smart contract:
 
+````mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+````
 ```func title="/contracts/hello_world.fc"
 () recv_external(slice in_msg) impure {
     accept_message();
@@ -226,8 +248,10 @@ Add the `recv_external` function to the `HelloWorld` smart contract:
     return ();
 }
 ```
+````mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+````
 ```tolk title="/contracts/HelloWorld.tolk"
 fun acceptExternalMessage(): void
     asm "ACCEPT";
@@ -257,8 +281,10 @@ fun onExternalMessage(inMsg: slice) {
     return ();
 }
 ```
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 This function, upon receiving an external message, will increment our `ctx_counter_ext` and also send an internal message to the specified address with the `increase` operation.
 
@@ -379,17 +405,6 @@ describe('HelloWorld', () => {
 });
 ```
 
-{/*This test describes the common transaction flow of any `multi-contract` system:
-1. Send an external message to toggle the smart contract logic outside the blockchain.
-2. Trigger one or more internal messages to be sent to other contracts.  
-3. Upon receiving an internal message, change the contract state and repeat **step 2** if required.
-
-Since the resulting sequence of transactions might be overwhelming for understanding, it's a good practice to create a `sequence diagram` describing your system. Here is an example of our case:
-
-<div style={{marginBottom: '30px'}} align="center">
-  <img src="/img/tutorials/quick-start/multi-contract.png" alt="Multi-contract scheme"/>
-</div> */}
-
 Verify that all examples are correct by running the test script:
 
 ```bash
@@ -415,10 +430,16 @@ Ran all test suites.
 
 Now that you understand how smart contracts send and receive messages, you can **deploy your contract** to TON Blockchain.
 
+````mdx-code-block
 <Button href="/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/deploying-to-network" colorType={'primary'} sizeType={'sm'}>
+````
 
   Deploying to network
 
+````mdx-code-block
 </Button>
+````
 
+````mdx-code-block
 <Feedback />
+````

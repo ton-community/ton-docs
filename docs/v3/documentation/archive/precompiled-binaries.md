@@ -1,8 +1,12 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
+````mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Button from '@site/src/components/button'
+````
 
 
 # Precompiled binaries
@@ -13,13 +17,14 @@ You no longer need to manually install binaries with Blueprint SDK.
 
 All binaries for development and testing are provided with the Blueprint SDK.
 
- 
-<Button href="/v3/documentation/smart-contracts/getting-started/javascript"
-colorType="primary" sizeType={'sm'}>
-
+````mdx-code-block
+<Button href="/v3/documentation/smart-contracts/getting-started/javascript" colorType="primary" sizeType={'sm'}>
+````
 Migrate to Blueprint SDK
  
+````mdx-code-block
 </Button>
+````
 
 
 ## Precompiled binaries
@@ -46,31 +51,33 @@ Download the binaries from the table below.  Make sure to select the correct ver
 | Linux  arm64   | [download](https://github.com/ton-blockchain/ton/releases/latest/download/ton-linux-arm64.zip)  | |                                                                                             |  | `sudo apt install libatomic1 libssl-dev`                                             |
 
 ### 2. Setup your binaries
- 
-export const Highlight = ({children, color}) => (
-<span
-style={{
-backgroundColor: color,
-borderRadius: '2px',
-color: '#fff',
-padding: '0.2rem',
-}}>
-{children}
-</span>
-);
 
+````mdx-code-block
+export const Highlight = ({children, color}) => (<span style={{backgroundColor: color, borderRadius: '2px', color: '#fff', padding: '0.2rem' }}> {children} </span>);
+````
+
+````mdx-code-block
 <Tabs groupId="operating-systems">
   <TabItem value="win" label="Windows">
+````
 
   1. After downloading, you need to `create` a new folder. For example: **`C:/Users/%USERNAME%/ton/bin`** and move the installed files there.
 
+````mdx-code-block
   2. To open the Windows environment variables, press the <Highlight color="#1877F2">Win + R</Highlight> buttons on the keyboard, type `sysdm.cpl`, and press Enter.
+````
 
+````mdx-code-block
   3. On the "_Advanced_" tab, click the <Highlight color="#1877F2">"Environment Variables..."</Highlight> button.
+````
 
+````mdx-code-block
   4. In the _"User variables"_ section, select the "_Path_" variable and click <Highlight color="#1877F2">"Edit"</Highlight> (this is usually required).
+````
   
+````mdx-code-block
   5. To add a new value `(path)` to the system variable in the next window, click the  button <Highlight color="#1877F2">"New"</Highlight>.
+````
   In the new field, you need to specify the path to the folder where the previously installed files are stored:
 
   ```
@@ -84,7 +91,7 @@ padding: '0.2rem',
   ```
 
   7. If you plan to use fift, you need `FIFTPATH` environment variable with the necessary imports:
-
+````mdx-code-block
      1. Download [fiftlib.zip](/ton-binaries/windows/fiftlib.zip)
      2. Open the zip in some directory on your machine (like **`C:/Users/%USERNAME%/ton/lib/fiftlib`**)
      3. Create a new (click button <Highlight color="#1877F2">"New"</Highlight>) environment variable `FIFTPATH` in "_User variables_" section. 
@@ -95,8 +102,10 @@ padding: '0.2rem',
 Instead of the `%USERNAME%` keyword, you must insert your own `username`.  
 :::  
 
+
 </TabItem>
 <TabItem value="mac" label="Linux / MacOS">
+````
 
   1. After downloading, make sure the downloaded binaries are executable by changing their permissions.
    ```bash
@@ -129,8 +138,10 @@ Instead of the `%USERNAME%` keyword, you must insert your own `username`.
 Remember to set the [environment variable](https://stackoverflow.com/questions/14637979/how-to-permanently-set-path-on-linux-unix) `FIFTPATH` to point to this directory.
 :::
 
+````mdx-code-block
   </TabItem>
 </Tabs>
+````
 
 
 
@@ -156,5 +167,7 @@ The core team provides automatic builds for several operating systems as [GitHub
 
 Click on the link above, choose the workflow on the left relevant to your operating system, click on a recent green passing build, and download `ton-binaries` under "Artifacts".
 
+````mdx-code-block
 <Feedback />
+````
 

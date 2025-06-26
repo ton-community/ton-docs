@@ -29,10 +29,8 @@ import Feedback from '@site/src/components/Feedback';
   </tbody>
 </table>
 
-###
-<h3 className="cmp-func-tolk-header">\
-✅ `2+2` — это 4, а не идентификатор. Идентификаторы могут быть только буквенно-цифровыми\
-</h3>\
+### ✅ `2+2` — это 4, а не идентификатор. Идентификаторы могут быть только буквенно-цифровыми\
+
 
 В FunC почти любой символ может быть частью идентификатора.
 Например, `2+2` (без пробела) — это идентификатор.
@@ -92,8 +90,7 @@ FunC имеет спецификатор функции `impure`. При его 
 В Tolk все функции по умолчанию являются нечистыми. Вы можете пометить функцию как чистую с помощью аннотации,
 и тогда в ее теле будут запрещены нечистые операции (исключения, изменение глобальных параметров, вызов нечистых функций и т. д.).
 
-###
- <h3 className="cmp-func-tolk-header"> ✅ Новый синтаксис функций: ключевое слово `fun`, атрибуты `@`, типы справа (как в TypeScript, Kotlin, Python и т. д.)</h3>
+### ✅ Новый синтаксис функций: ключевое слово `fun`, атрибуты `@`, типы справа (как в TypeScript, Kotlin, Python и т. д.)
 
 <table className="cmp-func-tolk-table">
   <thead>
@@ -352,9 +349,7 @@ var items = (
 Note that `(5)` is not a tensor. It's just the integer `5` in parentheses.
 With a trailing comma `(5,)` it's still `(5)`.
 
-<h3 className="cmp-func-tolk-header">
-  ✅ Optional semicolon for the last statement in a block
-</h3>
+### ✅ Optional semicolon for the last statement in a block
 
 In Tolk, you can omit the semicolon after the final statement in a block.
 While semicolons are still required between statements, the trailing semicolon on the last statement is now optional.
@@ -536,9 +531,7 @@ return t.tupleLast();       // ok if function specifies return type
 
 Also note that `T` for asm functions must occupy one stack slot, whereas for a user-defined function, `T` could be of any shape. Otherwise, asm body is unable to handle it properly.
 
-<h3 className="cmp-func-tolk-header">
-  ✅ Другое наименование для recv_internal / recv_external
-</h3>
+### ✅ Другое наименование для recv_internal / recv_external
 
 ```tolk
 fun onInternalMessage
@@ -550,9 +543,7 @@ fun onSplitInstall
 
 Все типы параметров и их порядок переименования остаются прежними, меняется только наименование. Также доступен `fun main`.
 
-<h3 className="cmp-func-tolk-header">
-  ✅ #include → import. Строгий импорт
-</h3>
+### ✅ #include → import. Строгий импорт
 
 <table className="cmp-func-tolk-table">
   <thead>
@@ -589,9 +580,7 @@ fun onSplitInstall
 tolk 0.6
 ```
 
-<h3 className="cmp-func-tolk-header">
-  ✅ Позднее разрешение символов. Представление AST
-</h3>
+### ✅ Позднее разрешение символов. Представление AST
 
 В FunC (как и в С) вы не можете получить доступ к функции, объявленной ниже:
 
@@ -704,9 +693,7 @@ assert(condition) throw excNo;
   </tbody>
 </table>
 
-<h3 className="cmp-func-tolk-header">
-  ✅ `do ... until` → `do ... while`
-</h3>
+### ✅ `do ... until` → `do ... while`
 
 <table className="cmp-func-tolk-table">
   <thead>
@@ -811,9 +798,7 @@ processOpIncrease(msgBody);  // by value, not modified
 
 Можно передать только один входной файл, другие следует `import`.
 
-<h3 className="cmp-func-tolk-header">
-  ✅ функции stdlib переименованы в ~~verbose~~ понятные имена, стиль camelCase
-</h3>
+### ✅ функции stdlib переименованы в ~~verbose~~ понятные имена, стиль camelCase
 
 Все наименования в стандартной библиотеке были пересмотрены. Теперь функции именуются с использованием более длинных, но понятных имен.
 
@@ -836,9 +821,7 @@ processOpIncrease(msgBody);  // by value, not modified
 
 Продолжение здесь: [Tolk vs FunC: стандартная библиотека](/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib).
 
-<h3 className="cmp-func-tolk-header">
-  ✅ stdlib теперь встроен, а не загружается с GitHub
-</h3>
+### ✅ stdlib теперь встроен, а не загружается с GitHub
 
 <table className="cmp-func-tolk-table">
   <thead>
@@ -1466,9 +1449,7 @@ val nextValue = match (curValue) {
 }
 ```
 
-<h3 className="cmp-func-tolk-header">
-  ✅ Structures <code>{'struct A { ... }'}</code>
-</h3>
+### ✅ Structures <code>{'struct A { ... }'}</code>
 
 Looks like TypeScript — but works in TVM!
 
@@ -1775,9 +1756,7 @@ var p = Point.fromCell(c);
 
 Continue reading on a separate page: [Auto-packing to/from cells](/v3/documentation/smart-contracts/tolk/tolk-vs-func/pack-to-from-cells).
 
-<h3 className="cmp-func-tolk-header">
-  ✅ Universal createMessage: avoid manual cells composition
-</h3>
+### ✅ Universal createMessage: avoid manual cells composition
 
 No more manual `beginCell().storeUint(...).storeRef(...)` boilerplate. Just describe the message in a literal, and let the compiler do the rest.
 
@@ -1795,7 +1774,7 @@ Continue reading on a separate page: [Universal createMessage](/v3/documentation
 
 <hr />
 
-<h3>Сравнение потребления газа в Tolk и FunC</h3>
+### Сравнение потребления газа в Tolk и FunC
 
 :::tip The same or slightly less
 If you transform FunC code line-by-line (for example, using a [converter](https://github.com/ton-blockchain/convert-func-to-tolk)),

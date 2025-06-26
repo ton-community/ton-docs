@@ -1,4 +1,6 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
 # ADNL TCP - liteserver
 
@@ -283,8 +285,10 @@ b5ee9c720102350100051e000277c0021137b0bc47669b3267f1de70cbb0cef5c728b8d8c7890451
 
 [Parse this BoC](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells) and get:
 
+````mdx-code-block
 <details>
   <summary>large cell</summary>
+````
 
   ```json
   473[C0021137B0BC47669B3267F1DE70CBB0CEF5C728B8D8C7890451E8613B2D899827026A886043179D3F6000006E233BE8722201D7D239DBA7D818130_] -> {
@@ -387,7 +391,9 @@ b5ee9c720102350100051e000277c0021137b0bc47669b3267f1de70cbb0cef5c728b8d8c7890451
   }
   ```
 
+````mdx-code-block
 </details>
+````
 
 Now we need to parse the cell according to the TL-B structure:
 
@@ -567,5 +573,7 @@ The details of the ECDH itself will be omitted for the sake of simplicity. It is
 
 Here is a [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-TCP-Liteserver.md) - _[Oleg Baranov](https://github.com/xssnick)_.
 
+````mdx-code-block
 <Feedback />
+````
 

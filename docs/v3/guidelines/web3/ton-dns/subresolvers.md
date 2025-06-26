@@ -1,4 +1,6 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
 # TON DNS resolvers
 
@@ -21,7 +23,9 @@ Subdomains provide helpful functionality. For example, most blockchain explorers
 
 
 :::info
+````mdx-code-block
 The example contract is deployed at [EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp](https://tonscan.org/address/EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp#source) and is associated with `resolve-contract.ton`. To test it, enter `<your-domain.ton>.resolve-contract.ton` in the address bar of your preferred TON explorer. This resolves to the corresponding TON DNS domain contract page. Subdomains and `.t.me` domains are supported. 
+````
 
 To view the resolver’s code, navigate to `resolve-contract.ton.resolve-contract.ton`. Note that this does not show the subresolver contract; it is a separate smart contract. Instead, it displays the domain contract itself.
 :::
@@ -154,7 +158,9 @@ The `dnsresolve()` function can:
 - Return a "domain not found" result if the subdomain is unknown.
 
 :::warning
+````mdx-code-block
 Base64 address parsing is currently not functional. Suppose you attempt to resolve a domain like `<some-address>.address.resolve-contract.ton`, you will receive an error indicating that the domain is misconfigured or does not exist. This issue arises because domain names are case-insensitive—a behavior inherited from traditional DNS, which results in the lowercase. Consequently, the resolver may attempt to query a non-existent or invalid WorkChain address.
+````
 :::
 
 ### Binding the resolver
@@ -277,8 +283,10 @@ While this function could be improved to handle errors more gracefully, such enh
 
 ## Appendix 1: code of resolve-contract.ton
 
+````mdx-code-block
 <details>
 <summary>subresolver.fc</summary>
+````
 
 ```func showLineNumbers
 (builder, ()) ~store_slice(builder to, slice s) asm "STSLICER";
@@ -456,7 +464,11 @@ slice decode_base64_address(slice readable) method_id {
 }
 ```
 
+````mdx-code-block
 </details>
+````
 
+````mdx-code-block
 <Feedback />
+````
 

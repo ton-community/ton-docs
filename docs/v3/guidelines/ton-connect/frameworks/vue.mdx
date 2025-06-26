@@ -1,6 +1,8 @@
+````mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Feedback from '@site/src/components/Feedback';
+````
 
 # TON Connect for Vue
 
@@ -23,8 +25,10 @@ Use TonConnectUIPlugin before mounting the app. You can specify UI options using
 [See all available options](https://github.com/TownSquareXYZ/tonconnect-ui-vue/blob/ff8cbb66aa30b7c29ac1a1f76c96ebef91700ff3/src/utils/UIProvider.ts#L9).
 :::
 
+````mdx-code-block
 <Tabs groupId="TonConnectUIPlugin">
   <TabItem value="For Vue@3" label="For Vue@3">
+````
   ```html
   import { createApp } from 'vue'
   import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
@@ -36,8 +40,10 @@ Use TonConnectUIPlugin before mounting the app. You can specify UI options using
     .use(TonConnectUIPlugin,{ manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json" })
     .mount('#app')
   ```
+````mdx-code-block
   </TabItem>
   <TabItem value="For Vue@2.7" label="For Vue@2.7">
+````
   ```html
   import Vue from 'vue'
   import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
@@ -52,8 +58,10 @@ Use TonConnectUIPlugin before mounting the app. You can specify UI options using
     render: (h) => h(App)
   }).$mount('#app')
   ```
+````mdx-code-block
   </TabItem>
 </Tabs>
+````
 
 ### Connect to the wallet
 `TonConnectButton` is a universal UI component for initializing connection. After the wallet is connected, it transforms into a wallet menu.
@@ -208,8 +216,10 @@ export default {
 ### useTonConnectUI
 Use it to get access to the `TonConnectUI` instance and UI options updating function.
 
+````mdx-code-block
 <details>
   <summary><b>Show the example</b></summary>
+````
 ```html
 <template>
   <div>
@@ -264,7 +274,9 @@ export default {
 ```
 
 
+````mdx-code-block
 </details>
+````
 
 or
 
@@ -510,5 +522,7 @@ Both methods will provide a fallback implementation of the Web Animations API an
 - [TON Connect for React apps](/v3/guidelines/ton-connect/frameworks/react/)
 - [TON Connect for HTML/JS apps](/v3/guidelines/ton-connect/frameworks/web/)
 
+````mdx-code-block
 <Feedback />
+````
 

@@ -1,4 +1,6 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
 # Compressed NFT processing
 
@@ -158,17 +160,20 @@ Set up a server to host your API and the interface for claiming NFTs. Also, obta
     ```
 
 9.  **Rediscover items**  
+````mdx-code-block
     In your browser, navigate to `<API_URI>/admin/rediscover` and log in using your `ADMIN_USERNAME` and `ADMIN_PASSWORD`. If successful, you will see `ok` in the browser. After a short time (depending on the number of items), a file (e.g., `1.json`) appears in the `api/apidata/upd` folder.
+````
     
 10. **Generate an update**  
     Run the following command to generate an update:
-    
+````mdx-code-block
     ```bash
-    docker-compose exec api /ctl genupd <path-to-update-file> <collection-owner> <collection-meta> <item-meta-prefix> <royalty-base> <royalty-factor> <royalty-recipient> <api-uri-including-v1> 
+    docker-compose exec api /ctl genupd <path-to-update-file> <collection-owner> <collection-meta> <item-meta-prefix> <royalty-base> <royalty-factor> <royalty-recipient> <api-uri-including-v1>
     ```
-
+````
     Replace the placeholders as follows:
     
+````mdx-code-block
     * **`<path-to-update-file>`**: Path to the update file created in step 9 (e.g., `api/apidata/upd/1.json`).
     * **`<collection-owner>`**: Address of the NFT collection owner.
     * **`<collection-meta>`**: Full URL to the collection metadata file (e.g., `https://yourdomain.com/collection.json`).
@@ -177,11 +182,14 @@ Set up a server to host your API and the interface for claiming NFTs. Also, obta
     * **`<royalty-factor>`**: Denominator for royalties (for example, `100`).
     * **`<royalty-recipient>`**: Address receiving royalties (this can be the same as `<collection-owner>`).
     * **`<api-uri-including-v1>`**: Public API URL with the `/v1` postfix (for example, if you used `https://yourapi.com/admin/rediscover` to generate the update file, use `https://yourapi.com/v1` here).
+````
 11. **Invoke the `ton://` deeplink**  
     After generating the update, a `ton://` link appears in the console logs. Follow the link and confirm the transaction. For convenience, you can paste the link into a QR code generator and scan the QR code with the Tonhub wallet (on testnet or mainnet).
     
 12. **Set the collection address**  
+````mdx-code-block
     In your browser, navigate to `<API_URI>/admin/setaddr/<collection-address>`, replacing `<collection-address>` with the address observed during the deployment step.
+````
     
 13. **Wait for confirmation**  
     Monitor the container API logs until you see a message indicating a `committed state`.
@@ -226,19 +234,25 @@ Follow these steps to update the list of owners and integrate the changes into y
     ```
 
 3.  **Rediscover items**  
+````mdx-code-block
     In your browser, navigate to `<API_URI>/admin/rediscover` and log in with your `ADMIN_USERNAME` and `ADMIN_PASSWORD`.
+````
     
 4.  **Locate the update file**  
     After rediscovering, locate the new update file in the `api/apidata/upd` folder (for example, `2.json` if the previous update was `1.json`).
     
 5.  **Generate an update**  
     Run:
-    
-    ```bash
-    docker-compose exec api /ctl genupd <path-to-update-file> <collection-address> 
-    ```
 
+````mdx-code-block
+    ```bash
+    docker-compose exec api /ctl genupd <path-to-update-file> <collection-address>
+    ```
+````
+
+````mdx-code-block
     Replace `<path-to-update-file>` with the new update file’s path (e.g., `api/apidata/upd/2.json`) and `<collection-address>` with the NFT collection address.
+````
     
 6.  **Invoke the `ton://` deeplink**  
     Follow the generated `ton://` link and confirm the transaction. You may also generate a QR code from the link and scan it with the Tonhub wallet.
@@ -268,5 +282,7 @@ See also
 * [NFT item metadata example](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#nft-item-metadata-example-offchain)
 * [Compressed NFT toolbox](https://github.com/nessshon/cnft-toolbox)
 
+````mdx-code-block
 <Feedback />
+````
 

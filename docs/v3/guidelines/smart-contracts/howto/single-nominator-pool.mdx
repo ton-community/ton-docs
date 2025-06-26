@@ -1,7 +1,11 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
+````mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+````
 
 # How to use a single nominator pool
 
@@ -232,8 +236,10 @@ MyTonCtrl> withdraw_from_pool <pool-addr> <amount>
 
 Alternatively, create and send the transaction manually:
 
+````mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="toncore" label="JS (@ton)">
+````
 
 ```js
 import {
@@ -264,9 +270,13 @@ async function main() {
 }
 ```
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 <TabItem value="tonconnect" label="Golang">
+````
 
 ```go
 func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, amount uint64) (*tonconnect.Message, error) {
@@ -292,8 +302,10 @@ func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, a
 }
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 ## Election process
 
@@ -459,4 +471,6 @@ MyTonCtrl> activate_single_pool my_s_pool
    - d. Confirm the remaining funds are received in `vesting`.
 8. Transfer the required TON amount from `vesting` to `single_nominator_pool` for both cycles.
 9. Wait for the validators’ voting.
+````mdx-code-block
    <Feedback />
+````

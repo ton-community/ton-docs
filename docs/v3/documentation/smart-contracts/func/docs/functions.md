@@ -1,4 +1,6 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
 # Functions
 A FunC program is a list of function declarations, function definitions, and global variable declarations. This section focuses on function declarations and definitions.
@@ -303,8 +305,10 @@ When a function is marked with the `inline_ref` specifier, its code is stored in
 
 In a TVM program, every function has an internal integer ID that determines how it can be called. 
 By default, ordinary functions are assigned sequential numbers starting from `1`, while contract get-methods use `crc16` hashes of their names.
+````mdx-code-block
 The `method_id(<some_number>)` specifier allows you to set a function's ID to a specific value manually. 
 If no ID is specified, the default is calculated as `(crc16(<function_name>) & 0xffff) | 0x10000`. 
+````
 If a function has the `method_id` specifier, it can be invoked by its name as a get-method in lite client or TON explorer.
 
 :::warning Important limitations and recommendations
@@ -318,8 +322,10 @@ If a function has the `method_id` specifier, it can be invoked by its name as a 
 **Best practice**: It's recommended to **avoid setting method IDs manually** and rely on automatic generation instead. Manual assignment can lead to conflicts and unexpected behavior.
 :::
 
+````mdx-code-block
 <details>
 <summary><b>Technical details about method_id parsing</b></summary>
+````
 
 While the FunC compiler can initially accept larger hex values during parsing, the actual limitation comes from the TVM assembler which restricts method IDs to 19 bits (`@procdictkeylen = 19` in Asm.fif).
 
@@ -347,7 +353,9 @@ The calculated bit limit for the quick check is 322 bits. Since `260` is not gre
 
 After this initial parsing into internal `digits_`, `parse_hex_any` calls `normalize_bool_any()`. This function converts the internal representation into a canonical signed form.
 If `normalize_bool_any()` returns `false`, it indicates an overflow during this canonicalization. This can happen even if the number passed the initial length check, for example, if a carry propagates such that it requires more than `max_size()` words to represent in the specific signed format, or if the most significant word itself overflows. In such a case, `parse_hex_any` invalidates the `BigInt` and returns `0`, leading to `td::string_to_int256` returning a `null RefInt256` and FunC reporting an "invalid integer constant".
+````mdx-code-block
 </details>
+````
 
 **Example**
 ```func
@@ -457,5 +465,7 @@ slice hello_world() asm """
 """;
 ```
 
+````mdx-code-block
 <Feedback />
+````
 

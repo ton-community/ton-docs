@@ -239,12 +239,10 @@ signature = Ed25519Sign(privkey, sha256(0xffff ++ utf8_encode("ton-connect") ++ 
 - `hash`: 256-битное целое число без знака big endian;
 - `AppDomain` это Length ++ EncodedDomainName
 
-<!---->
 
 - `Length` - это 32-битное значение длины доменного имени приложения в кодировке utf-8 в байтах
 - `EncodedDomainName` id `Length` -байт доменное имя приложения в кодировке utf-8
 
-<!---->
 
 - `Timestamp` 64-bit unix epoch time of the signing operation
 - `Payload` is a variable-length binary string.

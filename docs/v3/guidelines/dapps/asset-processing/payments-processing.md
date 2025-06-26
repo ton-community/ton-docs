@@ -1,9 +1,13 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
 
+````mdx-code-block
 import Button from '@site/src/components/button'
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+````
 
 # Payments processing
 
@@ -48,17 +52,23 @@ Read more on the [Wallet tutorial](/v3/guidelines/smart-contracts/howto/wallet#-
 
 Most SDKs automatically verify a wallet address during creation or transaction preparation, so additional manual validation is usually unnecessary.
 
+````mdx-code-block
 <Tabs groupId="address-examples">
+````
 
+````mdx-code-block
   <TabItem value="Tonweb" label="JS (Tonweb)">
+````
 
   ```js
     const TonWeb = require("tonweb")
     TonWeb.utils.Address.isValid('...')
   ```
 
+````mdx-code-block
   </TabItem>
   <TabItem value="GO" label="tonutils-go">
+````
 
   ```python
   package main
@@ -74,8 +84,10 @@ Most SDKs automatically verify a wallet address during creation or transaction p
   ```
 
 
+````mdx-code-block
   </TabItem>
   <TabItem value="Java" label="Ton4j">
+````
 
   ```javascript
   try {
@@ -85,8 +97,10 @@ Most SDKs automatically verify a wallet address during creation or transaction p
   }
   ```
 
+````mdx-code-block
   </TabItem>
   <TabItem value="Kotlin" label="ton-kotlin">
+````
 
 ```javascript
   try {
@@ -96,8 +110,10 @@ Most SDKs automatically verify a wallet address during creation or transaction p
   }
 ```
 
+````mdx-code-block
   </TabItem>
 </Tabs>
+````
 
 :::tip
 Full Address description on the [Smart contract addresses](/v3/documentation/smart-contracts/addresses) page.
@@ -119,8 +135,10 @@ It is possible to track message flows during transaction processing. Since the m
 2. Identify incoming transactions by checking out_msg with [tryLocateResultTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get).
 3. Identify outgoing transactions by checking in_msg with [tryLocateSourceTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
 
+````mdx-code-block
 <Tabs groupId="example-outgoing-transaction">
 <TabItem value="JS" label="JS">
+````
 
 ```ts
 import { TonClient, Transaction } from '@ton/ton';
@@ -173,8 +191,10 @@ async function main() {
 main();
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 ### Send payments
 
@@ -235,7 +255,9 @@ colorType="primary" sizeType={'lg'}>
 
 Learn more
 
+````mdx-code-block
 </Button>
+````
 
 
 ### Invoices with ton:// link
@@ -286,8 +308,10 @@ Note: tonviewer and tonscan also support external-in message hashes instead of t
 
 ### Wallet creation
 
+````mdx-code-block
 <Tabs groupId="example-create_wallet">
 <TabItem value="JS" label="JS">
+````
 
 - **toncenter:**
   - [Wallet creation + get wallet address](https://github.com/toncenter/examples/blob/main/common.js)
@@ -295,16 +319,24 @@ Note: tonviewer and tonscan also support external-in message hashes instead of t
 - **ton-community/ton:**
   - [Wallet creation + get balance](https://github.com/ton-community/ton#usage)
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 <TabItem value="Go" label="Go">
+````
 
 - **xssnick/tonutils-go:**
   - [Wallet creation + get balance](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#wallet)
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 <TabItem value="Python" label="Python">
+````
 
 - **psylopunk/pythonlib:**
   - [Wallet creation + get wallet address](https://github.com/psylopunk/pytonlib/blob/main/examples/generate_wallet.py)
@@ -331,9 +363,13 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 </Tabs>
+````
 
 
 ### Wallet creation for different shards
@@ -390,21 +426,29 @@ This way, you can provide the best user experience regardless of the current net
 
 ### Toncoin deposits (get Toncoins)
 
+````mdx-code-block
 <Tabs groupId="example-toncoin_deposit">
 <TabItem value="JS" label="JS">
+````
 
 - **toncenter:**
   - [Process Toncoins deposit](https://github.com/toncenter/examples/blob/main/deposits.js)
   - [Process Toncoins deposit multi wallets](https://github.com/toncenter/examples/blob/main/deposits-multi-wallets.js)
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 <TabItem value="Go" label="Go">
+````
 
 - **xssnick/tonutils-go:**
 
+````mdx-code-block
 <details>
 <summary>Checking deposits</summary>
+````
 
 ```go
 package main 
@@ -490,14 +534,20 @@ func main() {
 }
 ```
 
+````mdx-code-block
 </details>
 </TabItem>
+````
 
+````mdx-code-block
 <TabItem value="Python" label="Python">
+````
 
 - **yungwine/pytoniq:**
 
+````mdx-code-block
 <summary>Checking deposits</summary>
+````
 
 ```python
 import asyncio
@@ -555,13 +605,17 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 ### Toncoin withdrawals (send Toncoins)
 
+````mdx-code-block
 <Tabs groupId="example-toncoin_withdrawals">
 <TabItem value="JS" label="JS">
+````
 
 - **toncenter:**
   - [Withdraw Toncoins from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-highload-batch.js)
@@ -570,16 +624,24 @@ if __name__ == "__main__":
 - **ton-community/ton:**
   - [Withdraw Toncoins from a wallet](https://github.com/ton-community/ton#usage)
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 <TabItem value="Go" label="Go">
+````
 
 - **xssnick/tonutils-go:**
   - [Withdraw Toncoins from a wallet](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#wallet)
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 <TabItem value="Python" label="Python">
+````
 
 - **yungwine/pytoniq:**
 
@@ -610,39 +672,59 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 </Tabs>
+````
 
 ### Get contract's transactions
 
+````mdx-code-block
 <Tabs groupId="example-get_transactions">
 <TabItem value="JS" label="JS">
+````
 
 - **ton-community/ton:**
   - [Client with getTransaction method](https://github.com/ton-community/ton/blob/master/src/client/TonClient.ts)
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 <TabItem value="Go" label="Go">
+````
 
 - **xssnick/tonutils-go:**
   - [Get transactions](https://github.com/xssnick/tonutils-go?tab=readme-ov-file#account-info-and-transactions)
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 <TabItem value="Python" label="Python">
+````
 
 - **yungwine/pytoniq:**
   - [Get transactions](https://github.com/yungwine/pytoniq/blob/master/examples/transactions.py)
 
+````mdx-code-block
 </TabItem>
+````
 
+````mdx-code-block
 </Tabs>
+````
 
 ## SDKs
 
 A full list of SDKs for various programming languages (JS, Python, Golang, etc.) is available [here](/v3/guidelines/dapps/apis-sdks/sdk).
 
+````mdx-code-block
 <Feedback />
+````
 

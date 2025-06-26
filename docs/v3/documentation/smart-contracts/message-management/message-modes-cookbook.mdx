@@ -1,7 +1,11 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
+````mdx-code-block
 import ConceptImage from "@site/src/components/conceptImage";
 import ThemedImage from "@theme/ThemedImage";
+````
 
 # Message modes cookbook
 
@@ -84,7 +88,7 @@ For live calculations, refer to the [**fee calculator**](/v3/documentation/smart
 The transaction fees used in these examples are hypothetical and for illustrative purposes only. Any fees other than message forwarding are outside the scope of this article.
 Funds included with an ignored message will still be [credited to the receiving address](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557).
 
-## 1. (Mode 0, flag 0) basic message {#mode0}
+## 1. (Mode 0, flag 0) basic message `{#mode0}`
 
 State before transaction: Account A has 1 TON, Account B has 1 TON
 
@@ -92,6 +96,7 @@ State before transaction: Account A has 1 TON, Account B has 1 TON
 
 State after the transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -104,8 +109,9 @@ State after the transaction: Account A has 0.9 TON, Account B has 1.096 TON
   />
 </div>
 <br></br>
+````
 
-## 2. (Mode 0, flag 2) error‐silent message {#mode2}
+## 2. (Mode 0, flag 2) error‐silent message `{#mode2}`
 
 :::info
 Please note that omitting the `+2` flag may be unsafe. For more information, refer to [this section](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
@@ -122,6 +128,7 @@ State after the transaction: Account A has 0.9 TON, Account B has 1.096 TON
 If no errors occur, the result is the same as [mode = 0](#mode0).
 :::
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -134,8 +141,9 @@ If no errors occur, the result is the same as [mode = 0](#mode0).
   />
 </div>
 <br></br>
+````
 
-## 3. (Mode 0, flag 16) bounce on action error {#mode16}
+## 3. (Mode 0, flag 16) bounce on action error `{#mode16}`
 
 State before transaction: Account A has 1 TON, Account B has 1 TON
 
@@ -144,6 +152,7 @@ In case of an error during [action phase](https://retracer.ton.org/?tx=e9dccba82
 
 State after the transaction with error: Account A has 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, Account B has 1 TON
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -156,6 +165,7 @@ State after the transaction with error: Account A has 1 - ([total_fee](/v3/docum
   />
 </div>
 <br></br>
+````
 
 :::info tip
 If no errors occur, the result is the same as [mode = 0](#mode0).
@@ -166,6 +176,7 @@ The key difference is that `flag 16` creates bounces for [action phase errors](/
 - The destination contract throws an unhandled exception.
   :::
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -178,8 +189,9 @@ The key difference is that `flag 16` creates bounces for [action phase errors](/
   />
 </div>
 <br></br>
+````
 
-## 4. (Mode 0, flag 1) separate fees {#mode1}
+## 4. (Mode 0, flag 1) separate fees `{#mode1}`
 
 :::info
 Please note that using only this flag is unsafe, for more information refer to [this section](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
@@ -191,6 +203,7 @@ State before the transaction: Account A has 1 TON, Account B has 1 TON
 
 State after the transaction: Account A has 0.896 TON, Account B has 1.1 TON
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -203,8 +216,9 @@ State after the transaction: Account A has 0.896 TON, Account B has 1.1 TON
   />
 </div>
 <br></br>
+````
 
-## 5. (Mode 0, flag 17) separate fees and bounce on action error {#mode17}
+## 5. (Mode 0, flag 17) separate fees and bounce on action error `{#mode17}`
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON
 
@@ -213,6 +227,7 @@ In case of an error [during the action phase](https://retracer.ton.org/?tx=e9dcc
 
 State after the transaction with an error: Account A has 1 - ([total_fee](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula) + `fwd_fee`) TON, Account B has 1 TON
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -225,11 +240,13 @@ State after the transaction with an error: Account A has 1 - ([total_fee](/v3/do
   />
 </div>
 <br></br>
+````
 
 :::info tip
 If no errors occur, the result is the same as [mode = 0, flag = 1](#mode1).
 :::
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -242,8 +259,9 @@ If no errors occur, the result is the same as [mode = 0, flag = 1](#mode1).
   />
 </div>
 <br></br>
+````
 
-## 6. (Mode 64, flag 0) carry forward the remaining value {#mode64}
+## 6. (Mode 64, flag 0) carry forward the remaining value `{#mode64}`
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -262,6 +280,7 @@ Please note that `SENDRAWMSG` doesn't update the balance.
 If you try to send multiple messages (e.g., mode 0 **and** mode 64), you'll get exit code 37.
 :::
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -274,8 +293,9 @@ If you try to send multiple messages (e.g., mode 0 **and** mode 64), you'll get 
   />
 </div>
 <br></br>
+````
 
-## 7. (Mode 64, flag 1) carry forward with separate fees {#mode65}
+## 7. (Mode 64, flag 1) carry forward with separate fees `{#mode65}`
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -288,6 +308,7 @@ You might check [this example](https://testnet.tonviewer.com/transaction/ad93e78
 Please note that `storage_fee` is included in `total_fee` but is always paid from the contract `balance`.
 :::
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -300,8 +321,9 @@ Please note that `storage_fee` is included in `total_fee` but is always paid fro
   />
 </div>
 <br></br>
+````
 
-## 8. (Mode 64, flag 16) bounce‐protected carry forward {#mode80}
+## 8. (Mode 64, flag 16) bounce‐protected carry forward `{#mode80}`
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -310,6 +332,7 @@ If an error occurs during the action phase, the message will bounce, and `total_
 
 State after the transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -322,11 +345,13 @@ State after the transaction with an error: Account A has 1 - (total_fee + `fwd_f
   />
 </div>
 <br></br>
+````
 
 :::info tip
 If no errors occur, the result is the same as [mode = 64, flag 0](#mode64). This mode is widely used in TON for jetton transfers. You can [check it in the C5 action list](https://retracer.ton.org/?tx=6489d60d9197c0be7ee64b0812139d82221e8f94c6e378c356acc10f9067310c) of the jetton wallet.
 :::
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -339,8 +364,9 @@ If no errors occur, the result is the same as [mode = 64, flag 0](#mode64). This
   />
 </div>
 <br></br>
+````
 
-## 9. (Mode 64, flag 17) bounce‐protected carry forward with separate fees {#mode81}
+## 9. (Mode 64, flag 17) bounce‐protected carry forward with separate fees `{#mode81}`
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -349,6 +375,7 @@ If an error occurs during the action phase, the message will bounce, and `total_
 
 State after the transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -361,11 +388,13 @@ State after the transaction with an error: Account A has 1 - (total_fee + `fwd_f
   />
 </div>
 <br></br>
+````
 
 :::info tip
 If no errors occur, the result is the same as [mode = 65](#mode65).
 :::
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -378,8 +407,9 @@ If no errors occur, the result is the same as [mode = 65](#mode65).
   />
 </div>
 <br></br>
+````
 
-## 10. (Mode 128, flag 0) send whole balance {#mode128}
+## 10. (Mode 128, flag 0) send whole balance `{#mode128}`
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -387,6 +417,7 @@ State before the transaction: Account A has 1 TON, Account B has 1 TON, Account 
 
 State after the transaction: Account A has 0.896 TON, Account B has 0 TON, Account C has 2.1 - (total_fee + `fwd_fee`) TON
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -399,8 +430,9 @@ State after the transaction: Account A has 0.896 TON, Account B has 0 TON, Accou
   />
 </div>
 <br></br>
+````
 
-## 11. (Mode 128, flag 16) send the whole balance bounce‐protected {#mode144}
+## 11. (Mode 128, flag 16) send the whole balance bounce‐protected `{#mode144}`
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -408,6 +440,7 @@ State before the transaction: Account A has 1 TON, Account B has 1 TON, Account 
 
 State after the transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -420,25 +453,21 @@ State after the transaction with an error: Account A has 1 - (total_fee + `fwd_f
   />
 </div>
 <br></br>
+````
 
 :::info tip
 If no errors occur, the result is the same as [mode = 128](#mode128). This mode is widely used in TON for jetton transfers. You can [check it in the C5 action list](https://retracer.ton.org/?tx=e4f31e37eec74a8cfcecdad9246a6bbf3da20c4edb3635150cb0fa54b9def558) of the jetton wallet.
 :::
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
-  <ThemedImage
-    alt=""
-    sources={{
-      light:
-        "/img/docs/message-modes-cookbook/carry_remaining_value_11_noerror.png?raw=true",
-      dark: "/img/docs/message-modes-cookbook/carry_remaining_value_11_noerror_dark.png?raw=true",
-    }}
-  />
+  <ThemedImage alt="" sources={{light: "/img/docs/message-modes-cookbook/carry_remaining_value_11_noerror.png?raw=true",dark: "/img/docs/message-modes-cookbook/carry_remaining_value_11_noerror_dark.png?raw=true"}}  />
 </div>
 <br></br>
+````
 
-## 12. (Mode 128, flag 32) send the whole balance and destroy the contract {#mode160}
+## 12. (Mode 128, flag 32) send the whole balance and destroy the contract `{#mode160}`
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
@@ -448,6 +477,7 @@ State after the transaction: Account A has 0.896 TON, Account B has 0 TON and `n
 
 When the balance reaches 0 TON, destroy the contract.
 
+````mdx-code-block
 <br></br>
 <div class="text--center">
   <ThemedImage
@@ -460,6 +490,7 @@ When the balance reaches 0 TON, destroy the contract.
   />
 </div>
 <br></br>
+````
 
 [cb]: https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/block.tlb#L263C1-L265C20
 [msg]: /v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo
@@ -467,5 +498,7 @@ When the balance reaches 0 TON, destroy the contract.
 [account_storage]: https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L651-L675
 [in_msg_import]: https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L783-L816
 
+````mdx-code-block
 <Feedback />
+````
 

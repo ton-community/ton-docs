@@ -1,7 +1,11 @@
+````mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+````
 
+````mdx-code-block
 import ConceptImage from '@site/src/components/conceptImage';
 import ThemedImage from '@theme/ThemedImage';
+````
 
 # Wallet contracts
 
@@ -35,8 +39,10 @@ Here, you can find the current hashes of the wallet contract code versions.
 For detailed specifications of each wallet contract, please refer to the page.
 For detailed specifications of each wallet contract, please refer further down the page or check the [ContractSources.md](https://github.com/toncenter/tonweb/blob/update_contracts/src/contract/ContractSources.md).
 
+````mdx-code-block
 <details>
   <summary> Show wallet contracts hashes table </summary>
+````
 
 | Contract version         | Hash                                     |
 |--------------------------|------------------------------------------|
@@ -51,7 +57,9 @@ For detailed specifications of each wallet contract, please refer further down t
 | [walletv4r2](#wallet-v4) | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
 | [walletv5r1](#wallet-v5) | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
 
+````mdx-code-block
 </details>
+````
 
 **Note:** These hashes can also be found in the explorers.
 
@@ -83,15 +91,19 @@ Nevertheless, because each subsequent version inherits the functionality of the 
 
 #### Persistent memory layout
 
+````mdx-code-block
 - <b>seqno</b>: 32-bit long sequence number.
 - <b>public-key</b>: 256-bit long public key.
+````
 
 #### External message body layout
 
 1. Data:
+````mdx-code-block
    - <b>signature</b>: 512-bit long ed25519 signature.
    - <b>msg-seqno</b>: 32-bit long sequence number.
    - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
+````
 2. Up to 4 references to cells containing messages.
 
 As you can see, the main functionality of the wallet is to provide a safe way to communicate with the TON blockchain from the outside world. The `seqno` mechanism protects against replay attacks, and the `Ed25519 signature` provides authorized access to wallet functionality. We will not dwell in detail on each of these mechanisms, as they are described in detail in the [external message](/v3/documentation/smart-contracts/message-management/external-messages) documentation page and are quite common among smart contracts receiving external messages. The payload data consists of up to 4 references to cells and the corresponding number of modes, which will be directly transferred to the [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
@@ -138,10 +150,12 @@ All differences compared to the previous version are a consequence of adding the
 #### External message body layout
 
 1. Data:
+````mdx-code-block
    - <b>signature</b>: 512-bit long ed25519 signature.
    - <b>msg-seqno</b>: 32-bit long sequence number.
    - <b>valid-until</b>: 32-bit long Unix-time integer.
    - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
+````
 2. Up to 4 references to cells containing messages.
 
 
@@ -166,18 +180,22 @@ Essentially, `subwallet_id` is just a number added to the contract state when it
 
 #### Persistent memory layout
 
+````mdx-code-block
 - <b>seqno</b>: 32-bit sequence number.
 - <b>subwallet</b>: 32-bit subwallet ID.
 - <b>public-key</b>: 256-bit public key.
+````
 
 #### External message layout
 
 1. Data:
+````mdx-code-block
    - <b>signature</b>: 512-bit ed25519 signature.
    - <b>subwallet-id</b>: 32-bit subwallet ID.
    - <b>msg-seqno</b>: 32-bit sequence number.
    - <b>valid-until</b>: 32-bit UNIX time integer.
    - <b>(0-4)mode</b>: Up to four 8-bit integers defining the sending mode for each message.
+````
 2. Up to 4 references to cells containing messages.
 
 #### Exit codes
@@ -216,43 +234,57 @@ Plugins are essentially other smart contracts on TON that developers are free to
 
 #### Persistent memory layout
 
+````mdx-code-block
 - <b>seqno</b>: 32-bit long sequence number.
 - <b>subwallet-id</b>: 32-bit long subwallet-id.
 - <b>public-key</b>: 256-bit long public key.
 - <b>plugins</b>: dictionary containing plugins(may be empty)
+````
 
 #### Receiving internal messages
 
 All previous versions of wallets had a straightforward implementation for receiving internal messages. They simply accepted incoming funds from any sender, ignoring the internal message body if present, or in other words, they had an empty recv_internal method. However, as mentioned earlier, the fourth version of the wallet introduces two additional available operations. Let's take a look at the internal message body layout:
 
+````mdx-code-block
 - <b>op-code?</b>: 32-bit long operation code. This is an optional field; any message containing less than 32 bits in the message body, an incorrect op-code, or a sender address that isn't registered as a plugin will be considered as simple transfer, similar to previous wallet versions.
 - <b>query-id</b>: 64-bit long integer. This field has no effect on the smart contract's behavior; it is used to track chains of messages between contracts.
+````
 
 1. op-code = 0x706c7567, request funds operation code.
+````mdx-code-block
    - <b>toncoins</b>: VARUINT16 amount of requested toncoins.
    - <b>extra_currencies</b>: Dictionary containing the amount of requested extra currencies (may be empty).
+````
 2. op-code = 0x64737472, request removal of plugin-sender from the "allowed list".
 
 #### External message body layout
 
+````mdx-code-block
 - <b>signature</b>: 512-bit long ed25519 signature.
 - <b>subwallet-id</b>: 32-bit long subwallet ID.
 - <b>valid-until</b>: 32-bit long Unix-time integer.
 - <b>msg-seqno</b>: 32-bit long sequence integer.
 - <b>op-code</b>: 32-bit long operation code.
+````
 
 1. op-code = 0x0, simple send.
+````mdx-code-block
    - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
    - <b>(0-4)messages</b>:Up to four references to cells containing messages.
+````
 2. op-code = 0x1, deploy and install plugin.
+````mdx-code-block
    - <b>workchain</b>: 8-bit long integer.
    - <b>balance</b>: VARUINT16 toncoins amount of initial balance.
    - <b>state-init</b>: Cell reference containing plugin initial state.
    - <b>body</b>: Cell reference containing body.
+````
 3. op-code = 0x2/0x3, install plugin/remove plugin.
+````mdx-code-block
    - <b>wc_n_address</b>: 8-bit long workchain_id + 256-bit long plugin address.
    - <b>balance</b>: VARUINT16 toncoins amount of initial balance.
    - <b>query-id</b>: 64-bit long integer.
+````
 
 As you can see, the fourth version still provides standard functionality through the `0x0` op-code, similar to previous versions. The `0x2` and `0x3` operations allow manipulation of the plugins dictionary. Note that in the case of `0x2`, you need to deploy the plugin with that address yourself. In contrast, the `0x1` op-code also handles the deployment process with the state_init field.
 
@@ -288,7 +320,9 @@ If `state_init` doesn't make much sense from its name, take a look at the follow
 ### Wallet V5 {#wallet-v5}
 
 It is the most modern wallet version at the moment, developed by the Tonkeeper team, aimed at replacing V4 and allowing arbitrary extensions.
+````mdx-code-block
 <br></br>
+````
 <ThemedImage
 alt=""
 sources={{
@@ -296,7 +330,9 @@ sources={{
         dark: '/img/docs/wallet-contracts/wallet-contract-V5_dark.png?raw=true',
     }}
 />
+````mdx-code-block
 <br></br><br></br><br></br>
+````
 The V5 wallet standard offers many benefits that improve the experience for both users and merchants. V5 supports gas-free transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers. In addition to retaining the previous functionality (V4), the new contract allows you to send up to 255 messages at a time.
 
 Wallet source code:
@@ -488,5 +524,7 @@ As you see, there are many different versions of wallets in TON. But in most cas
 - [Restricted wallet sources](https://github.com/EmelyanenkoK/nomination-contract/tree/master/restricted-wallet)
 - [Gasless transactions on TON](https://medium.com/@buidlingmachine/gasless-transactions-on-ton-75469259eff2)
 
+````mdx-code-block
 <Feedback />
+````
 

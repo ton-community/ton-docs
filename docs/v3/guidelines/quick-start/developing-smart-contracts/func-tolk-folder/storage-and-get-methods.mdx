@@ -1,7 +1,9 @@
+````mdx-code-block
 import Feedback from "@site/src/components/Feedback";
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Button from '@site/src/components/button'
+````
 
 # Storage and get methods
 
@@ -15,22 +17,28 @@ Almost all smart contracts need to store their `data` between transactions. This
 
 ## Smart contract storage operations
 
+````mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+````
 There are two main instructions that provide access to smart contract storage:
 
  - `get_data()` returning the current storage cell.
  - `set_data()` setting storage cell.
 
+````mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+````
 There are two main instructions that provide access to smart contract storage: 
 
  - `getContractData()` returning current storage `Cell`.
  - `setContractData()` setting storage `Cell`.
 
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Let's examine the [Cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) structure to understand how to manage contract storage:
 
@@ -60,8 +68,10 @@ Let's modify our smart contract by following the standard steps described in the
 
 If manually serializing and deserializing the storage cell becomes inconvenient, a common practice is to define two wrapper methods that handle this logic. If you haven't modified the smart contract code, it should include the following lines in the `/contracts/hello_world.fc`:
 
+````mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+````
 ```func title="/contracts/hello_world.fc"
 global int ctx_id;
 global int ctx_counter;
@@ -86,8 +96,10 @@ global int ctx_counter;
     );
 }
 ```
+````mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+````
 ```tolk title="/contracts/hello_world.tolk"
 global ctxID: int;
 global ctxCounter: int;
@@ -111,8 +123,10 @@ fun saveData() {
         .endCell());
 }
 ```
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 #### Managing storage
 
@@ -125,8 +139,10 @@ Rather than initializing global variables, we'll:
 
 Also let's add an additional **256-bit integer** to our storage as `ctx_counter_ext` global variable. The modified implementation should appear as follows:
 
+````mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+````
 ```func title="/contracts/hello_world.fc"
 (int, int, int) load_data() {
     var ds = get_data().begin_parse();
@@ -150,8 +166,10 @@ Also let's add an additional **256-bit integer** to our storage as `ctx_counter_
     );
 }
 ```
+````mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+````
 ```tolk title="/contracts/hello_world.tolk"
 // load_data retrieves variables from TVM storage cell
 // impure because of writting into global variables
@@ -180,15 +198,19 @@ fun saveData(ctxID: int, ctxCounter: int, ctxCounterExt: int) {
     );
 }
 ```
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Remember to:
 1. Remove the global variables `ctx_id` and `ctx_counter`
 2. Update the function usage by copying storage members locally as shown:
 
+````mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+````
 ```func title="/contracts/hello_world.fc"
 ;; load_data() on:
 var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
@@ -196,8 +218,10 @@ var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
 ;; save_data() on:
 save_data(ctx_id, ctx_counter, ctx_counter_ext);
 ```
+````mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+````
 ```tolk title="/contracts/hello_world.tolk"
 // loadData() on:
 var (ctxID, ctxCounter, ctxCounterExt) = loadData();
@@ -205,38 +229,48 @@ var (ctxID, ctxCounter, ctxCounterExt) = loadData();
 // saveData() on:
 saveData(ctxID, ctxCounter, ctxCounterExt);
 ```
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 #### Get methods
 
 The main purpose of `get methods` is to provide an external read access to storage data through a convenient interface — primarily to extract the information needed for preparing **transactions**.
 Let's add a getter function that returns both the main and extended counter values stored in the smart contract.
 
+````mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+````
 ```func title="/contracts/hello_world.fc"
 (int, int) get_counters() method_id {
     var (_, ctx_counter, ctx_counter_ext) = load_data();
     return (ctx_counter, ctx_counter_ext);
 }
 ```
+````mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+````
 ```tolk title="/contracts/hello_world.tolk"
 get get_counters(): (int, int) {
     var (_, ctxCounter, ctxCounterExt) = loadData();
     return (ctxCounter, ctxCounterExt);
 }
 ```
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 And don’t forget to update the variables in the get methods to match the unpacking from `load_data()`.
 
 
+````mdx-code-block
 <Tabs groupId="language">
   <TabItem value="FunC" label="FunC">
+````
     ```func title="/contracts/hello_world.fc"
     int get_counter() method_id {
     var (_, ctx_counter, _) = load_data();
@@ -248,8 +282,10 @@ And don’t forget to update the variables in the get methods to match the unpac
     return ctx_id;
   }
     ```
+````mdx-code-block
   </TabItem>
   <TabItem value="Tolk" label="Tolk">
+````
     ```tolk title="/contracts/hello_world.tolk"
     get currentCounter(): int {
     var (ctxID, ctxCounter, ctxCounterExt) = loadData();
@@ -261,15 +297,19 @@ And don’t forget to update the variables in the get methods to match the unpac
     return ctxID;
   }
     ```
+````mdx-code-block
   </TabItem>
 </Tabs>
+````
 
 
 And that's all! In practice, all **get methods** follow this straightforward pattern and require no additional complexity. Remember, you can ignore return values using the `_` placeholder syntax.
 
 Here's the final smart contract implementation:
+````mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+````
 ```func title="/contracts/hello_world.fc"
 #include "imports/stdlib.fc";
 
@@ -338,8 +378,10 @@ int get_id() method_id {
     return (ctx_counter, ctx_counter_ext);
 }
 ```
+````mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+````
 ```tolk title="/contracts/hello_world.tolk"
 const OP_INCREASE = 0x7e8764ef;  // arbitrary 32-bit number, equal to OP_INCREASE in wrappers/CounterContract.ts
 
@@ -406,8 +448,10 @@ get get_counters(): (int, int) {
     return (ctxCounter, ctxCounterExt);
 }
 ```
+````mdx-code-block
 </TabItem>
 </Tabs>
+````
 
 Before proceeding, verify your changes by compiling the smart contract:
 
@@ -590,10 +634,16 @@ You’ve written your first smart contract using FunC or Tolk, tested it, and ex
 
 Now it’s time to move on to one of the most important parts of smart contracts —**processing messages:** sending and receiving them.
 
+````mdx-code-block
 <Button href="/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/processing-messages" colorType={'primary'} sizeType={'sm'}>
+````
 
   Processing messages
 
+````mdx-code-block
 </Button>
+````
 
+````mdx-code-block
 <Feedback />
+````
