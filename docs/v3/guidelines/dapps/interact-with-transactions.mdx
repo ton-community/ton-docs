@@ -38,20 +38,18 @@ The model is used to precisely describe and analyze distributed systems. For exa
 * Email can be modelled as an actor system: users are represented as actors and email addresses serve as actor addresses.
 * Web services with endpoints (e.g., SOAP) can be interpreted as actors that handle messages sent to their addresses.
 
-In TON, all active entities are actors.
-
 
 ### Account
 
 An **account** in TON is an actor characterized by the following components:
 * **General account state** — common properties of any account: *ID, balance, status, and last transaction (`last_tx`)*
-* **Data** — custom account-specific state
+* **Data** — user defined data
 * **Code** — custom logic defining the account's behavior
 
 The general state fully defines all account types in TON. Examples:
-* `(ID1, 0, unexist)`
-* `(ID2, 10, uninit, last_tx)`
-* `(ID3, -0.5, frozen)`
+* `(ID1, 0 TON, unexist)`
+* `(ID2, 10 TON, uninit, last_tx)`
+* `(ID3, -0.5 TON, frozen)`
 
 
 ![](/img/docs/blockchain-fundamentals/account_eng.svg)
@@ -59,7 +57,7 @@ The general state fully defines all account types in TON. Examples:
 
 ### Smart contract
 
-An account that, in addition to the general state, also contains **code** and **data** is called a **smart contract**.
+A **smart contract** is an account whose *code* and *data* are already deployed to the blockchain in addition to its general state.
 
 ![](/img/docs/blockchain-fundamentals/smart_contract_eng.svg)
 
@@ -67,10 +65,10 @@ An account that, in addition to the general state, also contains **code** and **
 
 - An **account** is an actor that has a general state — such as balance, address, and status — and may optionally include code and data.
 
-Example: `(ID1, 0, unexist)` or `(ID2, 2, inited, last_tx, data, code)`
+Example: `(ID1, 0 TON, unexist)` or `(ID2, 2 TON, inited, last_tx, data, code)`
 - A **smart contract** is an actor with **mandatory** code and data that define its specific behavior.
 
-Example: `(ID2, 2, inited, data, code)`
+Example: `(ID2, 2 TON, inited, data, code)`
 
 
 #### Entity structure in TON Blockchain
@@ -81,10 +79,10 @@ Example: `(ID2, 2, inited, data, code)`
 
 In TON, contracts or actors do not call each other directly. Instead, they communicate by sending messages, each of which is processed independently of the others. All interaction happens through asynchronous message passing.
 
-**Asynchrony** is a property of communication, meaning that sending a message does not require the recipient to be immediately available.
-* The sender doesn’t wait for a response — it simply sends the message.
-* The recipient may process the message later when it’s their turn.
-* If a result is required, the recipient must send a new message explicitly. Otherwise, the sender won’t receive any feedback.
+**Asynchrony** is a property of communication, meaning that a message does not need to be processed immediately. This implies the following:
+1. *No immediate response is guaranteed*. The receiver may delay responding or may not respond at all.
+2. *The sender does not wait for a reply*. After sending a message, an actor continues handling other messages or tasks without blocking or waiting for a response to the previous one—even if that response never arrives.
+3. *Message ordering is preserved*. All incoming messages are processed in the order they are received. However, if a message is malformed or incomplete, it is skipped, and the next message is processed without delay.
 
 This is different from synchronous models, where the flow is: call → wait for a response → continue.
 In TON, a result can only be received as a separate message — and only if it is explicitly sent.
@@ -242,6 +240,10 @@ Each message triggers a transaction, which records the entire context: the trigg
 
 Transactions are processed **asynchronously**, meaning that each account’s updates and message handling occur independently over time.
 
+#### BlockChain
+
+**BlockChain** is a distributed ledger consisting of blocks, each containing a set of data. These blocks are cryptographically linked to one another via hashes, forming an immutable chain. This entire chain is replicated and consistently maintained across all participants in the network.
+
 #### AccountChain
 
 **AccountChain** is a chain of transactions executed on a single account in the TON blockchain.
@@ -264,8 +266,7 @@ The diagram below provides a graphical representation of an AccountChain and its
 
 A **ShardChain** is a blockchain that aggregates multiple AccountChains.
 While an AccountChain represents the transaction history of a single account, a ShardChain processes and stores data for a group of accounts that share a common binary address prefix (e.g., all addresses starting with `0b00101`).
-C
-onceptually, a ShardChain can be seen as a **horizontal** blockchain composed of **ShardBlocks**, each of which contains AccountBlocks. ShardChains also facilitate message routing between accounts, ensuring both delivery and order: if one message is sent before another, it will arrive first.
+Conceptually, a ShardChain can be seen as a **horizontal** blockchain composed of **ShardBlocks**, each of which contains AccountBlocks. ShardChains also facilitate message routing between accounts, ensuring both delivery and order: if one message is sent before another, it will arrive first.
 
 ShardChains are a fundamental unit of TON’s architecture, enabling parallel transaction processing within a scalable and deterministic system.
 Each validator is responsible for a specific ShardChain or a group of them, allowing the network to process transactions concurrently across different shards.
@@ -663,6 +664,259 @@ export async function run(provider: NetworkProvider, args: string[]) {
   * Receivers in the code  (https://github.com/ton-blockchain/highload-wallet-contract-v3)
   * Build message serializer example in blueprint according to source code 
 
+Imagine you have to compose a message for some contract, we will use jetton wallet and wallet v3 as example.
+There are two types of receiving functions:
+
+- [() recv_internal(cell in_msg_full, slice in_msg_body) impure](https://github.com/ton-blockchain/jetton-contract/blob/3d24b419f2ce49c09abf6b8703998187fe358ec9/contracts/jetton-wallet.fc#L187)
+
+To serialize an internal message which will be correct for this smart-contract we should check how it deserializes the message:
+
+```func
+() send_jettons(slice in_msg_body, slice sender_address, int msg_value, int fwd_fee) impure inline_ref {
+    ;; see transfer TL-B layout in jetton.tlb
+    int query_id = in_msg_body~load_query_id();
+    int jetton_amount = in_msg_body~load_coins();
+    slice to_owner_address = in_msg_body~load_msg_addr();
+    check_same_workchain(to_owner_address);
+    (int status, int balance, slice owner_address, slice jetton_master_address) = load_data();
+    throw_unless(error::not_owner, equal_slices_bits(owner_address, sender_address));
+
+    balance -= jetton_amount;
+    throw_unless(error::balance_error, balance >= 0);
+
+    cell state_init = calculate_jetton_wallet_state_init(to_owner_address, jetton_master_address, my_code());
+    slice to_wallet_address = calculate_jetton_wallet_address(state_init);
+    slice response_address = in_msg_body~load_msg_addr();
+    in_msg_body~skip_maybe_ref(); ;; custom_payload
+    int forward_ton_amount = in_msg_body~load_coins();
+    check_either_forward_payload(in_msg_body);
+    slice either_forward_payload = in_msg_body;
+}
+
+() recv_internal(int my_ton_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    slice in_msg_full_slice = in_msg_full.begin_parse();
+    int msg_flags = in_msg_full_slice~load_msg_flags();
+    if (msg_flags & 1) { ;; is bounced
+        on_bounce(in_msg_body);
+        return ();
+    }
+    slice sender_address = in_msg_full_slice~load_msg_addr();
+    int fwd_fee_from_in_msg = in_msg_full_slice~retrieve_fwd_fee();
+    int fwd_fee = get_original_fwd_fee(MY_WORKCHAIN, fwd_fee_from_in_msg); ;; we use message fwd_fee for estimation of forward_payload costs
+
+    int op = in_msg_body~load_op();
+
+    ;; outgoing transfer
+    if (op == op::transfer) {
+        send_jettons(in_msg_body, sender_address, msg_value, fwd_fee);
+        return ();
+    }
+}
+```
+
+Now we must use it as a guidance to compose the correct message:
+
+```ts
+import { Address, toNano, beginCell } from '@ton/core';
+import { NetworkProvider } from '@ton/blueprint';
+
+// How to run this script:
+// 1. https://t.me/testgiver_ton_bot
+// 2. https://t.me/testnet_usdt_giver_bot
+// 3. replace jettonWalletAddress with your own jetton wallet
+// 4. npx blueprint run sendInternalMessage --testnet --tonconnect
+
+export async function run(provider: NetworkProvider): Promise<void> {
+    const sender = provider.sender();
+    const myAddress = sender.address;
+    if (!myAddress) {
+        throw new Error('Wallet not connected!');
+    }
+
+    console.log(`Sending internal message from wallet: ${myAddress.toString()}`);
+
+    // Attention: Replace with your real Jetton Wallet address
+    const jettonWalletAddress = Address.parse('kQCQm4DAW2QXcwPeo54K1UWn5LVi_v5qTuB9akoTEhpH8y0o');
+
+    // --- Correct body for () send_jettons ---
+    const jettonTransferBody = beginCell()
+        .storeUint(0xf8a7ea5, 32) // op::internal_transfer
+        .storeUint(0, 64) // query_id
+        .storeCoins(1) // jetton_amount 0.000001 for testnet USDT
+        .storeAddress(myAddress) // to_address (sending to myself)
+        .storeAddress(myAddress) // response_address for excesses
+        .storeMaybeRef(null) // custom_payload
+        .storeCoins(toNano('0.000000001')) // forward_ton_amount lowest possible amount to get jetton notify message
+        .storeMaybeRef(null) // forward_payload
+        .endCell();
+
+    // --- This wrapper will handle basic internal message ---
+    await sender.send({
+        to: jettonWalletAddress,
+        value: toNano('0.02'), // To handle gas
+        body: jettonTransferBody,
+    });
+
+    console.log('Internal message on Jetton Wallet successfully sent!');
+}
+//=======================================================================
+// TEP - 74
+// https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md
+
+/*
+transfer#0f8a7ea5
+  query_id:uint64
+  amount:Coins
+  destination:MsgAddress
+  response_destination:MsgAddress
+  custom_payload:(Maybe ^Cell)
+  forward_ton_amount:Coins
+  forward_payload:(Either Cell ^Cell)
+  = JettonMsg;
+*/
+```
+
+
+- [() recv_external(slice msg_body) impure](https://github.com/aSpite/wallet-tutorial/blob/73c213add90ff115e45e58d0bcd9f1ea1fd44c89/JavaScript%20-%20TypeScript/src/wallet_v3.fc#L7)
+
+Although you can use `blueprint --tonconnect` to send internal message, you can't use it for external message.
+
+It doesn't expose low-level signing capabilities because:
+
+1. **Security by design**: Wallets (like Tonkeeper) should not expose raw private keys to dApps
+2. **Ton Connect abstraction**: The provider abstracts away the underlying wallet implementation
+3. **Limited API surface**: Blueprint focuses on contract deployment and testing, not raw message crafting
+
+That is why we will use mnemonic method of the blueprint instead of tonconnect:
+
+```func
+() recv_external(slice in_msg) impure {
+  var signature = in_msg~load_bits(512);
+  var cs = in_msg;
+  var (subwallet_id, valid_until, msg_seqno) = (cs~load_uint(32), cs~load_uint(32), cs~load_uint(32));
+  throw_if(35, valid_until <= now());
+  var ds = get_data().begin_parse();
+  var (stored_seqno, stored_subwallet, public_key) = (ds~load_uint(32), ds~load_uint(32), ds~load_uint(256));
+  ds.end_parse();
+  throw_unless(33, msg_seqno == stored_seqno);
+  throw_unless(34, subwallet_id == stored_subwallet);
+  throw_unless(35, check_signature(slice_hash(in_msg), signature, public_key));
+  accept_message();
+  cs~touch();
+  while (cs.slice_refs()) {
+    var mode = cs~load_uint(8);
+    send_raw_message(cs~load_ref(), mode);
+  }
+}
+```
+
+```ts
+import { NetworkProvider } from '@ton/blueprint';
+import { beginCell, toNano } from '@ton/core';
+import { sign, mnemonicToWalletKey } from '@ton/crypto';
+import { WalletContractV3R2, WalletContractV4 } from '@ton/ton';
+
+// How to run this script:
+//
+// Option 1: With environment variables in the command line.
+// Use a backslash `\` to wrap the command on multiple lines for readability.
+//
+// WALLET_MNEMONIC="unfold sugar water ... other words" \
+// WALLET_VERSION="v4r2" \
+// npx blueprint run sendExternalMessage --testnet --mnemonic
+//
+//
+// Option 2: Using a .env file.
+// Create a `.env` file in the `examples` directory with your mnemonic:
+//
+// WALLET_MNEMONIC="unfold sugar water ... other words"
+// WALLET_VERSION="v4r2"
+//
+// Then run the script without any variables:
+// npx blueprint run sendExternalMessage --testnet --mnemonic
+
+export async function run(provider: NetworkProvider): Promise<void> {
+    // --- Get wallet data from environment variables ---
+    const mnemonic = process.env.WALLET_MNEMONIC;
+    const versionStr = process.env.WALLET_VERSION || 'v4r2';
+
+    if (!mnemonic) {
+        throw new Error('WALLET_MNEMONIC environment variable is not set');
+    }
+
+    // --- Initialize wallet from mnemonic ---
+    const keyPair = await mnemonicToWalletKey(mnemonic.split(' '));
+    const secretKey = keyPair.secretKey;
+    
+    let wallet;
+    if (versionStr === 'v3r1' || versionStr === 'v3r2') {
+        wallet = WalletContractV3R2.create({ workchain: 0, publicKey: keyPair.publicKey });
+    } else if (versionStr === 'v4r1' || versionStr === 'v4r2') {
+        wallet = WalletContractV4.create({ workchain: 0, publicKey: keyPair.publicKey });
+    } else {
+        throw new Error('Unsupported wallet version: ' + versionStr + '. Supported versions are v3r1, v3r2, v4r1, v4r2.');
+    }
+    const myAddress = wallet.address;
+
+    console.log(`Using wallet ${versionStr} at address: ${myAddress.toString()}`);
+
+    // --- Check if wallet is deployed ---
+    if (!(await provider.isContractDeployed(myAddress))) {
+        console.log('Wallet is not deployed. Please send some TON to this address and try again.');
+        return;
+    }
+
+    // --- Get current seqno ---
+    const walletProvider = provider.provider(myAddress);
+    const seqno = await wallet.getSeqno(walletProvider);
+    console.log(`   Current seqno: ${seqno}`);
+
+    // --- Create internal message (a simple transfer to self) ---
+    const internalMessage = beginCell()
+        .storeUint(0x10, 6) // flags: ihrDisabled, bounce, bounced
+        .storeAddress(myAddress)
+        .storeCoins(toNano('0.01'))
+        .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) // empty simple message body
+        .endCell();
+
+    // --- Create unsigned external message for signing ---
+    const subwalletId = 698983191; // Standard subwallet ID
+    const validUntil = Math.floor(Date.now() / 1000) + 60; // 60 seconds from now
+
+    const toSign = beginCell()
+        .storeUint(subwalletId, 32)
+        .storeUint(validUntil, 32)
+        .storeUint(seqno, 32);
+        // var (subwallet_id, valid_until, msg_seqno) from func
+
+    // Add 'op' field for v4 wallets
+    if (versionStr.startsWith('v4')) {
+        toSign.storeUint(0, 8); // op = 0 for simple transfer
+    }
+    
+    toSign.storeUint(3, 8)            // var mode from func
+          .storeRef(internalMessage); // cs~load_ref() from func
+
+    const toSignCell = toSign.endCell();
+
+    // --- Sign the message hash ---
+    const signature = sign(toSignCell.hash(), secretKey);
+    console.log(`      Message signed`);
+
+    // --- Create final external message body with signature ---
+    const body = beginCell()
+        .storeBuffer(signature)       // var signature
+        .storeBuilder(toSign)         // in_msg
+        .endCell();
+
+    console.log(`  Sending external message...`);
+    
+    // --- Send the external message to the network ---
+    await provider.provider(myAddress).external(body);
+    
+    console.log('  Message sent successfully!');
+}
+```
 
 ### Internal messages serializer according disabled code
 In case developer hase no documentation with TL-B and contract code, the only way to analyze and find approach to contract reading disassmbled code.
@@ -685,7 +939,7 @@ Each cell, message, or transaction has its unique hash, which acts as a digital 
 All data in TON is stored in **cells**. Conceptually, a cell is a structure that holds up to **1023 bits of data** and up to **4 references** to other cells.
 Cell trees are serialized and packed using a unified standard cell format.
 
-In TL-B, this structure is referred to as a **bag of cells (BoC):
+In TL-B, this structure is referred to as a **bag of cells (BoC)**:
 
 ```tlb
 
@@ -731,7 +985,7 @@ message$_ {X:Type} info:CommonMsgInfo
 
 Let’s walk through an example using a message body with the comment "Hello, TON!" and compute its hash.
 
-```typescript
+```typescript title="msg_body_hash.ts"
 import { beginCell } from '@ton/core';
 
 // Create the message body to increment the counter
@@ -776,7 +1030,7 @@ int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 
 #### Example:
 
-```typescript
+```typescript title="full_msg_hash.ts"
 import { storeMessage, beginCell, Address, Message } from '@ton/ton';
 import { toNano } from '@ton/core';
 
@@ -832,7 +1086,7 @@ This data becomes available only after the blockchain executes the transaction, 
 
 **Practical example of obtaining a transaction hash:**
 
-```typescript
+```typescript title="trx_hash.ts"
 import { TonClient, beginCell, storeMessage } from '@ton/ton';
 import { Address } from '@ton/core';
 
@@ -903,7 +1157,7 @@ The normalized hash is computed by applying the following standardization rules 
 
 **Practical example of calculating a normalized hash:**
 
-```typescript
+```typescript title="norm_hash.ts"
 import { beginCell, Cell, Address } from "@ton/core";
 
 function normalizeExternalMessage(destAddress: Address, bodyCell: Cell): Cell {
@@ -953,7 +1207,7 @@ Below is an example of non-normalized message construction — avoid using this 
 
 <details>
   <summary> Avoid this approach </summary>
-```typescript
+  ```typescript title="non_norm_hash.ts"
 import { mnemonicToWalletKey } from '@ton/crypto';
 import { WalletContractV4, TonClient, toNano, beginCell, Address, internal } from '@ton/ton';
 
@@ -965,13 +1219,13 @@ const client = new TonClient({
 
   // Construct the message body — arbitrary opcode and payload string
 const messageBody = beginCell()
-    .storeUint(0, 32) // op code — произвольный, например, 0
-    .storeStringTail("Hello TON!") // строка в теле
+    .storeUint(0, 32) // op-code — arbitrary, e.g., 0
+    .storeStringTail("Hello TON!") // Payload string in the message body
     .endCell();
 
   // Wrap the body into an internal message
 const internalMessage = internal({
-    to: Address.parse('0QD3....'), // получатель
+    to: Address.parse('0QD3....'), // recipient
     value: toNano('0.1'), // 0.1 TON
     body: messageBody
 });
@@ -1020,7 +1274,7 @@ One common scenario is sending a message and checking that the blockchain accept
 
 **Step-by-step process:**
 
-```typescript
+```typescript title="send_and_verify_msg.ts"
 import { internal, TonClient, Address, beginCell, WalletContractV4, SendMode } from '@ton/ton';
 import { mnemonicToPrivateKey } from '@ton/crypto';
 
@@ -1117,7 +1371,7 @@ In this project, navigate to `src/components/TxForm` and replace the contents of
 
 <details>
   <summary>Obtaining BoC and hash using react example</summary>
-  ```tsx
+  ```tsx title="TxForm.tsx"
   import React, { useState } from 'react';
   import './style.scss';
   import { SendTransactionRequest, useTonConnectUI } from "@tonconnect/ui-react";
@@ -1264,7 +1518,7 @@ Once the transaction is sent, the UI displays the following fields:
 <details>
  <summary>Transaction lookup via BoC</summary>
 
-  ```typescript
+  ```typescript title="trx_lookup_via_boc.ts"
   // Check transaction by its hash
   async function checkTransactionStatus(txHash: string, walletAddress: string) {
   try {
@@ -1304,12 +1558,12 @@ Once the transaction is sent, the UI displays the following fields:
 
 </details>
 
-### Practical tips
+### Best practices
 
-#### Checking transaction status via API
+#### Verify transaction status via API
 
-```typescript
-// Проверяем статус транзакции по её хэшу
+```typescript title="status_api.ts"
+// Check the transaction status by its hash
 async function checkTransactionStatus(txHash: string, walletAddress: string) {
   try {
     const response = await fetch(
@@ -1319,16 +1573,16 @@ async function checkTransactionStatus(txHash: string, walletAddress: string) {
     const data = await response.json();
 
     if (data.result.length > 0) {
-      console.log('Транзакция найдена в блокчейне');
+      console.log('Transaction found on the blockchain');
       const viewerUrl = `https://testnet.tonviewer.com/transaction/${trxHash}`;
-      console.log('Ссылка на транзакцию:', viewerUrl);
+      console.log('Transaction link:', viewerUrl);
       return data.result[0];
     } else {
-      console.log('Транзакция не найдена');
+      console.log('Transaction not found');
       return null;
     }
   } catch (error) {
-    console.error('Ошибка при проверке транзакции:', error);
+    console.error('Error while checking transaction status:', error);
     return null;
   }
 }
@@ -1342,23 +1596,20 @@ checkTransactionStatus(trxHash, walletAddress);
 #### Expected output
 
 ```
-Транзакция найдена в блокчейне
-Ссылка на транзакцию: https://testnet.tonviewer.com/transaction/df51860233d75...
+Transaction found on the blockchain
+Transaction link: https://testnet.tonviewer.com/transaction/df51860233d75...
 ```
 
-#### StateInit Hash for Address Verification
+#### StateInit hash for address verification
 
-In [TON Connect](v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#backend-example),
-it's often necessary to verify the match between a wallet address and its `StateInit`.
-The hash of `StateInit` must match the hash part of the address.
+In [TON Connect](v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#backend-example), you often need to verify that a wallet address corresponds to its `StateInit`.
+The `StateInit` hash must match the hash portion of the address.
 
 **Practical example of address verification:**
 
-1. Retrieve `StateInit`:
+Retrieve the wallet’s `StateInit`:
 
-
-```typescript
-
+```typescript title="get_stateinit.ts"
 import { WalletContractV4, beginCell } from '@ton/ton';
 import { mnemonicToPrivateKey } from '@ton/crypto';
 
@@ -1367,13 +1618,13 @@ async function getStateInit() {
         const mnemonic = "your mnemonic".split(" "); // Insert your seed phrase here
         const keyPair = await mnemonicToPrivateKey(mnemonic);
 
-        // Создаем кошелек v4
+         // Create a wallet V4
         const wallet = WalletContractV4.create({
             publicKey: keyPair.publicKey,
             workchain: 0
         });
 
-        // Получаем stateInit
+        // Generate the StateInit cell
         const stateInitCell = beginCell()
             .storeRef(wallet.init.code)
             .storeRef(wallet.init.data)
@@ -1401,91 +1652,111 @@ Wallet address: EQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxW9m
 Public key (hex): f102a5c140272019550b05e6a50b2072aa737dd3c5948622ddf1ca249b6e0f00
 ```
 
-```typescript
+Next, compare the wallet address with the generated `StateInit`.
+
+```typescript title="address_verification.ts"
 import { Address, Cell, contractAddress } from '@ton/ton';
 
-// Ваши данные:
+// Your data
 const wantedAddress = Address.parse('your address');
-const stateInitBase64 = 'your state init'; // <-- сюда вставьте свой StateInit (base64)
+const stateInitBase64 = 'your state init'; // Insert your StateInit (base64) here
+
 
 const cell = Cell.fromBase64(stateInitBase64);
-// Обычно code = cell.refs[0], data = cell.refs[1]
+// Typically, code = cell.refs[0], data = cell.refs[1]
 const stateInit = {
   code: cell.refs[0],
   data: cell.refs[1]
 };
 
-// Восстанавливаем адрес из workchain и StateInit
+// Derive the address from WorkChain and StateInit
 const calculatedAddress = contractAddress(wantedAddress.workChain, stateInit);
 
-console.log('Ожидаемый адрес:   ', wantedAddress.toString({ bounceable: false }));
-console.log('Вычисленный адрес:', calculatedAddress.toString({ bounceable: false }));
+console.log('Expected address: ', wantedAddress.toString({ bounceable: false }));
+console.log('Calculated address:', calculatedAddress.toString({ bounceable: false }));
 
 if (calculatedAddress.equals(wantedAddress)) {
-  console.log('✅ StateInit соответствует адресу!');
+  console.log('StateInit matches the address!');
 } else {
-  console.log('❌ StateInit НЕ соответствует адресу!');
+  console.log('StateInit does NOT match the address!');
 }
 ```
 
 #### Expected output
 
 ```
-Ожидаемый адрес:    UQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxTKj
-Вычисленный адрес: UQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxTKj
-✅ StateInit соответствует адресу!
+Expected address:    UQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpYoC7W--WbXxxTKj
+Calculated address: UQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpYoC7W--WbXxxTKj
+StateInit matches the address!
 ```
 
-#### Real time monitoring
+#### Real-time transactions monitoring
+
+The example below shows how to set up a listener that receives transaction data as soon as it becomes available.
 
 <details>
+  ```typescript title="trxs_monitoring.ts"
+  import {Address, TonClient, beginCell, storeMessage} from '@ton/ton';
 
-  ```typescript
-  // Пример функции для мониторинга входящих транзакций
+  // Example function to monitor incoming transactions
   async function monitorIncomingTransactions(walletAddress: Address, client: TonClient) {
-  let lastLt = '0';
+  let lastLt = 0n;
 
   setInterval(async () => {
   try {
   const transactions = await client.getTransactions(walletAddress, {
   limit: 10,
-  lt: lastLt
+  lt: lastLt.toString()
 });
 
   for (const tx of transactions) {
   if (tx.lt > lastLt) {
   const txHash = tx.hash();
-  console.log('Новая транзакция:', txHash.toString('hex'));
+  console.log('New transaction:', txHash.toString('hex'));
+  const viewerUrl = `https://testnet.tonviewer.com/transaction/${txHash.toString('hex')}`;
+  console.log('Transaction link:', viewerUrl);
 
-  // Обрабатываем входящие сообщения
+  // Process incoming messages
   if (tx.inMessage) {
   const msgCell = beginCell()
   .store(storeMessage(tx.inMessage))
   .endCell();
   const msgHash = msgCell.hash();
-  console.log('Хэш сообщения:', msgHash.toString('hex'));
+  console.log('Message hash:', msgHash.toString('hex'));
 }
 
   lastLt = tx.lt;
 }
 }
 } catch (error) {
-  console.error('Ошибка мониторинга:', error);
+  console.error('Monitoring error:', error);
 }
-}, 5000); // проверяем каждые 5 секунд
+}, 5000); // Check every 5 seconds
 }
+
+  const walletAddress = Address.parse('Insert your address here');
+  const client = new TonClient({ endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC' });
+
+  monitorIncomingTransactions(walletAddress, client);
   ```
+
+  **Expected output**
+
+  ```
+  New transaction: 2e995e47f47bb95f1802337f4a63841b93aa8972aabba545048ef286dcc14309
+  Transaction link: https://testnet.tonviewer.com/transaction/2e995e47f47bb95f1802337f4a63841b93aa8972aabba545048ef286dcc14309
+  Message hash: 8263a63380532154a3850aa1d2dca719bf768845738c8177d889af05826626c8
+  ```
+
 </details>
 
-### Best Practices
+### Recommendations
 
-1. **Always store hashes**: Save hashes of important transactions and messages for later tracking.
+1. **Persist hashes**: store the hashes of critical transactions and messages for future reference and tracking.
+2. **Use the correct hash type**: use the transaction hash to track execution and the message hash to verify payload integrity.
+3. **Account for confirmation time**: in TON, transactions are usually finalized within 3–6 seconds, but this can take longer under a high network load.
+4. **Implement retry logic**: if a transaction is not visible on-chain within one minute, consider resubmitting the message.
 
-2. **Use the correct hash type**: Use the transaction hash for tracking and the message hash for data verification.
-
-3. **Consider confirmation time**: In TON, transactions typically finalise within 3–6 seconds, but this may take longer during periods of high network load.
-
-4. **Implement retry logic**: If a transaction doesn’t appear on the blockchain within a minute, consider resending the message.
 
 ## Sending a Message
 
@@ -1537,35 +1808,30 @@ The one how provide solution calls a HTTP API _provider_.
 We will review services that build native infrastructure; regarding API providers most likely rely on one of these standard solutions.
 We recommend evaluating a provider's quality independently based on [historical performance](https://tonstat.us/) and suitability for your specific use case.
 
+
 #### TON Center
-TON Center services are developed by the TON Core team using the Go stack. It includes two distinct services:
-- **TON Center API V3**: Provides blockchain indexing solutions.
-- **TON Center API V2**: Offers fast reading from and sending to the blockchain.
+The TON Center was developed by the TON Core team using the Go stack. It consists of two separate services:
+* TON Center API V3: provides blockchain indexing functionality.
+* TON Center API V2: optimized for fast read and write operations to the blockchain.
 
 #### TON API
-A solution focused on business needs, often providing ready-to-use implementations for typical tasks in TON.
+A solution focused on business needs. It often provides ready-made implementations for common tasks in TON.
 
 #### Tonhub API
 An alternative opensource HTTP API service with a unique structure different from TON API and TON Center. This interface may be helpful in some specific use cases.
 
 ---
 
-### A Transaction is a Part of a Block
+### A transaction is part of a block
 
-HTTP services read data from LiteServer nodes and deserialize it according to TL-B standards.
-Data that undergoes minimal post-processing is often referred to as **RAW data**.
-Such raw data is ideal for in-depth analytics where security and precision outweigh simplicity.
+HTTP services retrieve data from LiteServer nodes and deserialize it according to the TL-B schema.
+Data that undergoes minimal post-processing is often referred to as **raw data**. This format is typically used in solutions where architectural priorities favor security and precision over ease of integration or simplicity. These solutions offload the interpretation and analysis of raw data to the client side, allowing for greater control and reliability at the cost of additional local resource consumption.
 
-On the other hand, solutions that do not involve large asset movements — but require event analytics — are more efficiently implemented using **high-level interfaces**, i.e., APIs that apply post-processing before returning the data.
+In contrast, when working with event analytics that does **not** involve significant asset transfers, it is often more efficient to use **high-level interfaces** — such as APIs that apply post-processing before returning results. These interfaces provide simplified, structured data that is easier to work with in most application-level scenarios.
 
-Transactions in TON are packed into blocks. Finalized BaseChain blocks are committed into MasterChain blocks.
-Therefore, to extract transaction data, services read from both the MasterChain and the corresponding BaseChain blocks.
+In TON, transactions are bundled into blocks. Finalized BaseChain blocks are committed into MasterChain blocks. To extract transaction data, services must, therefore, read both the MasterChain and the corresponding BaseChain blocks. Additionally, since TON uses **sharding**, each MasterChain block includes references to relevant shard blocks, which must also be parsed. Each shard block contains all transactions associated with that MasterChain block.
 
-Additionally, because TON implements **sharding**, each MasterChain block points to shard blocks that must also be parsed.
-Each shard block contains all transactions associated with that MasterChain block.
-
-All WorkChain blocks share the same structure. For transaction analysis, the relevant section is `block_extra`.
-
+All WorkChain blocks follow a consistent structure. For transaction analysis, the relevant section is the `block_extra` field.
 
 ```tlb
 block#11ef55aa global_id:int32
@@ -1573,8 +1839,8 @@ info:^BlockInfo value_flow:^ValueFlow
 state_update:^(MERKLE_UPDATE ShardState)
 extra:^BlockExtra = Block;
 ```
-The `block_extra` section of a block, in turn, contains the `account_blocks` structure.
-It is within `account_blocks` that you'll find the transactions processed by all accounts within the corresponding shard for that block.
+The `block_extra` section of a block contains the `account_blocks` structure,
+which in turn includes the transactions processed by all accounts within the corresponding shard.
 
 ```tlb
 block_extra in_msg_descr:^InMsgDescr
@@ -1585,80 +1851,95 @@ created_by:bits256
 custom:(Maybe ^McBlockExtra) = BlockExtra;
 ```
 
-Thus, in the process of reading the blockchain, services iteratively process from the last read block to the next finalized one. The resulting transactions are **RAW data** that can be provided to downstream services for further processing. Additionally, specialized services analyze and enhance this data to balance between implementation complexity and a trustless approach.
+Thus, when reading the blockchain, services iteratively process blocks, starting from the most recently read one and proceeding up to the latest finalizedz block. The extracted transactions are considered **raw data** and can be passed to downstream services for further use. Additionally, specialized services may analyze and enrich this data to strike a balance between the complexity and the trustless nature of the system.
 
 #### Account status
 
-Account status describes the condition of the account from the perspective of a transaction but is **not** stored within the account itself. There are four possible `AccountStatus` values, each encoded as two bits in TL-B:
+Account status indicates the runtime state of an account as it relates to transaction execution, but it is not part of the account’s persistent storage. There are four possible `AccountStatus` values, each encoded as two bits in TL-B:
 
-| Status      | TL-B code | Description                                                                 |
-|-------------|------------|------------------------------------------------------------------------------|
-| `nonexist`  | `11`       | Account doesn't exist on the blockchain — no state and no balance.           |
-| `uninit`    | `00`       | Account exists but contains no code or data. It may have a balance.          |
-| `frozen`    | `01`       | Account has been deleted, but its state hash is retained. It cannot be used. |
-| `active`    | `10`       | Account has a `StateInit` with code and data — an active smart contract.     |
+| Status      | TL-B code | Description                                                                                                                                 |
+|-------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `nonexist`  | `11`       | The account does not exist — no state and no balance.                                                                                       |
+| `uninit`    | `00`       | The account exists but is uninitialized — it contains no deployed code or data. It may hold a balance but has not yet been activated.       |
+| `frozen`    | `01`       | The account is frozen; only its state hash is retained. It cannot be used.                                                                           |
+| `active`    | `10`       | The account includes a `StateInit` with deployed code and data, making it an active smart contract.                                                                  |
 
-The presence of `code` in `StateInit` makes the account executable and thus defines it as a smart contract.
+An account becomes executable—and is considered a smart contract—when its `StateInit` includes `code`.
 
 :::important
-Account status is used only within transactions (`orig_status` and `end_status`) and is **not** stored in the account itself. The actual account state is stored in the `AccountState` structure.
+Account status appears only in transactions (`orig_status` and `end_status`) and is **not** part of the account’s persistent data. The actual account state is stored in the `AccountState` structure.
 :::
 
 ### Approaches to retrieving transactions from Blockchain API
 
-#### Key concepts:
+#### Key terms
 
-- **Transaction**: A state update of an account triggered by an incoming message and optionally producing one or more outgoing messages. Analyzing the transaction body is fundamental to most services.
-- **Trace**: A deterministic graph of all transactions triggered by a single external message. Useful for debugging or understanding business logic chains. Exchanges use it to verify asset movements.
-- **Action**: A high-level abstraction representing a business operation. For example, a Jetton transfer between two users. It is used for visualization — not for transferring funds.
+* **Transaction**: a transaction represents a state change of an account in the blockchain. It is triggered by an incoming message and may optionally result in one or more outgoing messages. Analyzing the contents of a transaction is a fundamental method used across all services.
+
+* **Trace**: a trace is a deterministic graph of all transactions triggered by a single external message. Trace interfaces enable the retrieval of the complete graph associated with a specific transaction, making it easier to analyze all related interactions.
+This is especially useful for exchanges and analytical tools to verify asset flows or to reconstruct the logic of a business operation.
+Trace can also be used to detect Jetton transfers even in the absence of Jetton notification messages. It is particularly relevant when a business operation spans multiple interdependent transactions.
+
+* **Action**: an action is an aggregated abstraction that represents a complete business operation across one or more account state changes.
+For example, transferring Jettons between two users would be represented as a single action.
+Actions are used exclusively for visualization and have no role in the actual execution or validation of fund transfers.
 
 ---
 
 #### High-Level data analysis
 
-**How to fetch a list of transactions or a single transaction via API:**
+**How to fetch a list of transactions or a single transaction via API**
 
-Use high-level interfaces like `GET /actions`, `GET /traces`, `GET /jetton/transfers`, `GET /nft`, etc.
-This approach is suitable if you **do not move funds** or require deep validation.
+To fetch transaction data, you can use high-level interfaces such as:
+* `get /actions`
+* `get  /traces`
+* `get /jetton/transfers` and `get /jetton/burns`
+* `get /nft`
 
-For more advanced use cases (e.g., tracing all related transactions via `Traces`), these APIs help simplify complex logic analysis.
+With this approach, the developer doesn’t need to parse the contents of individual transactions.
+This method, which involves no additional data validation, is only suitable when fund transfers are not involved.
+In addition to simple service-level checks, this approach can also be used in more advanced scenarios. For example, by using the **traces** method, you can identify all related transactions for further analysis.
 
 ---
 
-#### Searching for a transaction by message body
+#### Transaction lookup by message payload
 
-Use `GetTransaction by message (external/internal)` — only available via [API v3](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_message).
-This is ideal when monitoring a small number of accounts (≤ 10), like in wallet-v4 or wallet-v5 interactions.
+Use `getTransaction` by external or internal message. Available in [API v3](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_message) only.
+
+This method is beneficial when tracking a small number of accounts (up to ~10).
+It works well for wallet-v4 and wallet-v5 transfers and is primarily used to find transactions triggered by external messages.
 
 :::note
-Note that there can be a delay of up to 10 seconds; therefore, for real-time needs, also monitor the `pending` pool.
+There may be a delay of up to 10 seconds.
+For better performance in real-time scenarios, consider also monitoring the pending pool.
 :::
 
 ---
 
-#### Searching transactions by account address
+#### Transaction lookup by account address
 
-Available via [API v2](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get).
-This method is broadly supported (even in LiteClient) and is practical for tracking up to ~100 accounts.
+To query transactions for an account you are monitoring, use [API v2](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get).
+This method is broadly supported, including in LiteClient, and is suitable for tracking up to ~100 accounts.
 
 ---
 
-#### Scanning the blockchain for all transactions
+#### Scanning Blockchain for the full set of transactions
 
-This method is used when tracking 1,000+ accounts:
+When monitoring a large number of accounts (1,000 or more), you need to iterate through all transactions starting from the latest masterchain block.
 
 - **API v2**:
-1. Fetch shards for a masterchain block.
-2. Compute shard diffs.
-3. Use `getBlockTransactionsExt` to fetch all transactions per shard.
-
-See: [TON Center Cookbook](https://docs.toncenter.com/docs/ton-center-cookbook#how-to-scan-blockchain)
+1. Fetch shard information for the MasterChain block
+2. Compute shard diffs
+3. For each resulting block, call `getBlockTransactionsExt`
+See: TON Center cookbook: [How to scan blockchain](https://docs.toncenter.com/docs/ton-center-cookbook#how-to-scan-blockchain)
 
 - **API v3**:
-Instead of following v2 logic, use:
+Do not reuse the API v2 logic.
+Instead, use the dedicated method:
 [GET /transactions/by-masterchain-block](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_masterchain_block)
 
-You must decide between a **simple high-trust implementation** using a major provider or a **complex trustless setup** that verifies blocks and transactions independently.
+You have a choice: either a straightforward implementation that places a high level of trust in major providers or a more complex one that does not require trusting the provider.
+However, for greater security, it is always recommended to process transactions block by block independently.
 
 ---
 
@@ -2044,11 +2325,11 @@ Once developer fetched data set of transactions related to point of his interest
 
 ## Transaction
 
-Any change to an account’s state in the TON blockchain is recorded through transactions. Unlike messages, transactions cannot "move", "be sent", or "be received". These two terms are often confused, but it’s important to understand that a transaction is a record that captures all changes that occurred with a specific account.
+In the TON blockchain, any change to an account's state is recorded via a **transaction**. Unlike messages, transactions do not *move*, *send*, or *receive* anything. These terms are often confused, but it's important to understand that a transaction is simply a **record** of all changes that occurred to a specific account.
 
-### TL-B Structure of the Transaction Body
+### Transaction structure: TL-B
 
-Before we dive into how transactions work in TON, let’s first examine their structure using TL-B. To begin with, note that there are several types of transactions, but in this tutorial, we’ll focus only on ordinary transactions. These are the ones relevant for handling payments and developing any product.
+Before diving into how transactions work in TON, we first need to understand their structure using **TL-B**(Type Language – Binary). It's worth noting that there are several types of transactions in TON; however, for this guide, we will focus solely on **ordinary transaction**. These are the transactions relevant for payment processing and the development of most applications built on TON.
 
 ```tlb
 trans_ord$0000 credit_first:Bool
@@ -2060,28 +2341,29 @@ trans_ord$0000 credit_first:Bool
   = TransactionDescr;
 ```
 
-According to TL-B, a transaction consists of the following fields:
+According to the TL-B schema, a transaction consists of the following fields:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `credit_first` | `Bool` | Indicates whether the credit phase should come first. This depends on whether [bounce is enabled](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/transaction.cpp#L3530). This will be discussed in more detail in one of the next sections. |
-| `storage_ph` | `Maybe TrStoragePhase` | The phase responsible for handling storage-related fees for the account. |
-| `credit_ph` | `Maybe TrCreditPhase` | The phase responsible for processing incoming funds that were included with the inbound message, if it is internal ([#1](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2926), [#2](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2935)). |
-| `compute_ph` | `TrComputePhase` | The phase responsible for executing the smart contract code (stored in the account’s `code` cell). |
-| `action` | `Maybe ^TrActionPhase` | The phase responsible for handling actions generated during the execution of the smart contract code. |
-| `aborted` | `Bool` | Indicates whether the transaction was aborted during any of the phases. If this field is `true`, the transaction was not completed, and all changes from the `compute_ph` and `action` phases were not applied. |
-| `bounce` | `Maybe TrBouncePhase` | The phase responsible for handling errors that occurred during the `compute_ph` or `action` phases. |
+| `credit_first` | `Bool` | Indicates whether the credit phase should be executed first. This depends on whether the [bounce flag](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/transaction.cpp#L3530) is set. This will be explained in more detail in a later section.  |
+| `storage_ph` | `Maybe TrStoragePhase` | The storage phase, responsible for handling fees related to the account's persistent storage.|
+| `credit_ph` | `Maybe TrCreditPhase` | The credit phase, responsible for processing the transfer of value delivered with the incoming message, if it's an internal message (types [#1](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2926) or [#2](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2935)). |
+| `compute_ph` | `TrComputePhase` | The compute phase, responsible for executing the smart contract code stored in the account's `code` cell. |
+| `action` | `Maybe ^TrActionPhase` | The action phase, responsible for handling any actions generated during the compute phase. |
+| `aborted` | `Bool` | Indicates whether the transaction was aborted during one of the phases. If `true`, the transaction was not executed, and changes from the `compute_ph` and `action` phases were not applied.|
+| `bounce` | `Maybe TrBouncePhase` | TrBouncePhase	The bounce phase, responsible for handling errors that occurred during the `compute_ph` or `action` phases. |
 | `destroyed` | `Bool` | Indicates whether the account was destroyed during the execution of the transaction. |
 
 :::info
-Other types of transactions, such as [trans_storage](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L352-L353), [trans_tick_tock](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L355-L357), [trans_split_prepare](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L362-L366), and others are used for events that are invisible to the end user. For example, shard splitting and merging, tick-tock transactions, and so on.
 
-Since they are not relevant to tasks related to DApp development, we will not cover them in this tutorial.
+Other types of transactions—such as [trans_storage](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L352-L353), [trans_tick_tock](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L355-L357), [trans_split_prepare](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L362-L366),  and others—are used for internal events that are invisible to end users. These include shard splitting and merging, tick-tock transactions, etc.
+
+Since they are not relevant to DApp development, we will not cover them in this tutorial.
 :::
 
 ### Credit phase
 
-This phase is pretty small and straightforward. If we look at the blockchain source code, we’ll see that the main logic of this phase is to top up the contract’s balance with the remaining funds from the incoming message:
+This phase is relatively small and straightforward. If you look at the blockchain source code, you’ll see that the main logic of this phase is to **credit the contract’s balance** with the remaining value from the incoming message.
 
 ```cpp
   credit_phase->credit = msg_balance_remaining;
@@ -2097,24 +2379,24 @@ This phase is pretty small and straightforward. If we look at the blockchain sou
   }
 ```
 
-This phase is serialized in TL-B as follows:
+The credit phase is serialized in TL-B as follows:
 
 ```tlb
 tr_phase_credit$_ due_fees_collected:(Maybe Grams)
   credit:CurrencyCollection = TrCreditPhase;
 ```
 
-Here we see that the phase consists of two fields:
+HThis phase consists of the following two fields:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `due_fees_collected` | `Maybe Grams` | The amount of storage fees that were collected. This happens if the account had no balance and a debt had accumulated. |
-| `credit` | `CurrencyCollection` | The amount that was credited to the account during message receipt. |
+| `due_fees_collected` | `Maybe Grams` | The amount of storage fees collected. This field is present if the account has no balance and has accumulated storage. |
+| `credit` | `CurrencyCollection` | The amount credited to the account as a result of receiving the incoming message.|
 
 
 ### Storage phase
 
-This phase handles the processing of storage-related fees for the account. Let's start by looking at the TL-B scheme:
+In this phase, the blockchain processes fees related to the account's persistent storage. Let's start by looking at the TL-B schema:
 
 ```tlb
 tr_phase_storage$_ storage_fees_collected:Grams
@@ -2123,19 +2405,31 @@ tr_phase_storage$_ storage_fees_collected:Grams
   = TrStoragePhase;
 ```
 
-Here we see that the phase consists of the following fields:
+This phase contains the following fields:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `storage_fees_collected` | `Grams` | The amount of storage fees that were collected from the account. |
-| `storage_fees_due` | `Maybe Grams` | The amount of storage fees that were charged but not collected. This occurs when the account has no balance and a debt has accumulated. |
-| `status_change` | `AccStatusChange` | The change in account status after the transaction was executed. |
+| `storage_fees_collected` | `Grams` | The amount of storage fees collected from the account. |
+| `storage_fees_due` | `Maybe Grams` | The amount of storage fees that were charged but could not be collected due to insufficient balance. This represents accumulated debt.|
+| `status_change` | `AccStatusChange` | The change in the account's status after the transaction is executed. |
 
-`storage_fees_due` has type `Maybe` because if the contract has a balance, this value is not present. It's only needed to represent debt. `AccStatusChange`, in turn, indicates whether the account status changed after this phase. For example, if the debt exceeds 0.1 TON, the account state will [freeze](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L949C11-L953C12), and after 1 TON — it will be [deleted](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L936C11-L946C12).
+
+The `storage_fees_due` field is of type `Maybe` because it is only present when the account has **insufficient balance** to cover the storage fees. When the account has enough funds, this field is omitted.
+
+The `AccStatusChange` field indicates whether the account's status changed during this phase. For example:
+* If the debt exceeds **0.1 TON**, the account becomes [frozen](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L949C11-L953C12).
+* If the debt exceeds **1 TON**, the account is [deleted](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L936C11-L946C12).
+
+
+
+
+`storage_fees_due` has type `Maybe` because if the contract has a balance, this value is not present. It's only needed to represent debt. `AccStatusChange`, in turn, indicates whether the account status changed after this phase. For example, if the debt exceeds 0.1 TON, the account state will , and after 1 TON — it will be .
 
 ### Compute phase
 
-One of the most complex phases of a transaction is the compute phase. This is the phase where the smart contract code stored in the account is executed. This time, the TL-B contains multiple schemas:
+The **compute phase** is one of the most complex stages of a transaction. This is where the smart contract code, stored in the account’s state, is executed.
+
+Unlike previous phases, the TL-B definition for the compute phase includes multiple variants.
 
 ```tlb
 tr_phase_compute_skipped$0 reason:ComputeSkipReason
@@ -2154,34 +2448,34 @@ cskip_no_gas$10 = ComputeSkipReason;
 cskip_suspended$110 = ComputeSkipReason;
 ```
 
-To start with, note that the compute phase can be skipped, and the reason for skipping may be one of the following:
+To start, note that the compute phase can be **skipped** entirely. In that case, the reason for skipping is explicitly recorded and can be one of the following:
 
-| Skip Reason | Description |
+| Skip reason | Description |
 | --- | --- |
-| `cskip_no_state` | The smart contract has no state (and thus no code), so it cannot be executed. |
-| `cskip_bad_state` | This error is thrown in two cases: [an invalid value for the `fixed_prefix_length` field](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1721), or a StateInit passed in the message [does not match the account address](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1726). |
-| `cskip_no_gas` | The incoming message did not include enough TON to execute the smart contract code. |
-| `cskip_suspended` | The account was frozen, so code execution is not allowed. This was used to freeze early miner accounts as part of TON tokenomics stabilization. |
+| `cskip_no_state` | The smart contract has no state and, therefore, no code, so execution is not possible. |
+| `cskip_bad_state` | Raised in two cases: when the `fixed_prefix_length` [field has an invalid value]((https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1721)) or when the `StateInit` provided in the incoming message [does not match the account’s address](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1726).|
+| `cskip_no_gas` |The incoming message did not provide enough TON to cover the gas required to execute the smart contract. |
+| `cskip_suspended` | The account is frozen, so execution is disabled. This was used to freeze early miner accounts during the stabilization of TON’s tokenomics.|
 
 :::tip
-The `fixed_prefix_length` field allows setting fixed leading bits of an account address so that it is located in a specific shard. This is outside the scope of this tutorial, but you can read more [here](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md#anycast-addresses-and-address-rewrite).
+The `fixed_prefix_length` field can be used to specify a fixed prefix for the account address, ensuring that the account resides in a specific shard. This topic is outside the scope of this guide, but more information is available [here](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md#anycast-addresses-and-address-rewrite).
 :::
 
-Once we understand the reasons for skipping the compute phase, we can examine what happens after the smart contract code has been executed:
+Now that we've covered the reasons why the compute phase might be skipped, let's examine what happens when the smart contract code is **executed**. The following fields are used to describe the result:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `success` | `Bool` | Indicates whether the compute phase completed successfully. If this is `false`, then all changes made during this phase were discarded. |
-| `msg_state_used`, `account_activated`, `mode`, `vm_init_state_hash`, `vm_final_state_hash` | - | These fields are not used in the current blockchain version and are recorded as zero values. |
+| `success` | `Bool` | Indicates whether the compute phase was completed successfully. If `false`, any state changes made during this phase are discarded.|
+| `msg_state_used`, `account_activated`, `mode`, `vm_init_state_hash`, `vm_final_state_hash` | - | These fields are currently unused in the blockchain. They are always recorded as zero values. |
 | `gas_fees` | `Grams` | The amount of fees paid for executing the smart contract code. |
-| `gas_used`, `gas_limit` | `VarUInteger` | The amount of gas used and the gas limit set for smart contract execution. |
-| `gas_credit` | `Maybe (VarUInteger 3)` | Used in external messages. Since they cannot carry TON, a small amount of gas is allocated so that the smart contract code can run and decide whether it's ready to continue execution using its own balance. |
-| `exit_code` | `int32` | The virtual machine exit code. If the code is 0 or 1 (alternative success), the smart contract code executed successfully. If it’s non-zero, it means the code failed (except when `commit` is used). <br></br> For convenience, people often refer to this as the “smart contract exit code,” though that’s not entirely accurate. |
-| `exit_arg` | `Maybe int32` | An argument thrown by the virtual machine in case of an error. Useful for debugging smart contract code. |
-| `vm_steps` | `uint32` | Number of steps executed by the virtual machine. |
+| `gas_used`, `gas_limit` | `VarUInteger` | The actual amount of gas used and the maximum gas limit set for execution. |
+| `gas_credit` | `Maybe (VarUInteger 3)` | Used only in external messages. Since external messages cannot carry TON, a small gas credit is granted to allow the smart contract to start execution and decide whether it wants to continue using its balance. |
+| `exit_code` | `int32` | The virtual machine exit code. A value of `0` or `1` (alternative success) indicates successful execution. Any other value means the contract code exited with an error—except in cases where the `commit` instruction was used. **Note:** for convenience, developers often refer to this as the *smart contract exit code*, though this isn’t technically accurate. |
+| `exit_arg` | `Maybe int32` | The virtual machine threw an optional argument on failure. Useful for debugging smart contract errors. |
+| `vm_steps` | `uint32` | The number of steps executed by the virtual machine during code execution. |
 
 :::tip
-The `commit` instruction is used to finalize changes made up to that point and apply them even if an error occurs later in the phase. It can only be reverted if the Action Phase fails.
+The `commit` instruction is used to persist any changes made before it is called, even if an error occurs later in the same phase. These changes will only be rolled back if the **Action phase** fails.
 :::
 
 ### Action phase
