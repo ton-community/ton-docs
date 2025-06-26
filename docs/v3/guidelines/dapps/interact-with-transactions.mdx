@@ -2480,7 +2480,9 @@ The `commit` instruction is used to persist any changes made before it is called
 
 ### Action phase
 
-After the smart contract code has executed, the action phase begins. If any actions were generated during code execution, they are processed during this phase. There are four types of actions:
+Once the smart contract code has finished executing, the **Action phase** begins. If any actions were created during the compute phase, they are processed at this stage.
+
+There are precisely 4 types of actions in TON:
 
 
 ```tlb
@@ -2498,13 +2500,13 @@ action_change_library#26fa1dd4 mode:(## 7)
 | Type | Description |
 | --- | --- |
 | `action_send_msg` | Sends a message. |
-| `action_set_code` | Sets new smart contract code. |
-| `action_reserve_currency` | Reserves funds on the account. Very useful for gas management. |
-| `action_change_library` | Changes the library used by the smart contract. |
+| `action_set_code` | Updates the smart contract’s code. |
+| `action_reserve_currency` | Reserves a portion of the account’s balance. This is especially useful for gas management. |
+| `action_change_library` | Changes the library used by the smart contract.|
 
-These actions are executed in the order in which they were created during code execution. A maximum of [255 actions](https://github.com/ton-blockchain/ton/blob/72056a1d139402ef343081810677d2582c3eff51/crypto/block/transaction.h#L165) can be created.
+These actions are executed *in the order in which they were created* during code execution. A total of up to [255 actions](https://github.com/ton-blockchain/ton/blob/72056a1d139402ef343081810677d2582c3eff51/crypto/block/transaction.h#L165) can be made.
 
-Now let’s take a look at the TL-B scheme that describes the action phase:
+Next, let’s examine the TL-B schema, which defines the structure of the action phase.
 
 ```tlb
 tr_phase_action$_ success:Bool valid:Bool no_funds:Bool
@@ -2516,31 +2518,31 @@ tr_phase_action$_ success:Bool valid:Bool no_funds:Bool
   = TrActionPhase;
 ```
 
-Here we see that the phase consists of the following fields:
+The action phase includes the following fields:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `success` | `Bool` | Indicates whether the action phase completed successfully. If this is `false`, then all changes made during this phase were discarded. Changes made during the compute phase are also rolled back. |
-| `valid` | `Bool` | Indicates whether the action phase was valid. If this is `false`, it means that invalid actions were created during smart contract execution. Each action type has its own set of validity criteria. |
-| `no_funds` | `Bool` | Indicates whether the account had sufficient funds to execute the actions. `false` means the Action Phase was aborted due to insufficient funds. |
-| `status_change` | `AccStatusChange` | Change in the account's status after executing the action phase. Since account deletion is done through actions (using mode 32), this field may contain information about whether the account was deleted. |
-| `total_fwd_fees` | `Maybe Grams` | Total forwarding fees paid for messages created during action execution. |
-| `total_action_fees` | `Maybe Grams` | Total fees paid for executing actions. |
-| `result_code` | `int32` | Result code of action execution. If the code is 0, it means all actions completed successfully. |
-| `result_arg` | `Maybe int32` | Argument returned in case of error. Useful for debugging smart contract code. |
+| `success` | `Bool` | Indicates whether the action phase was successfully completed. If this value is `false`, all changes made during this phase are discarded. Changes made during the compute phase are also reverted. |
+| `valid` | `Bool` | Indicates whether the action phase was valid. If this value is `false`, it means that invalid actions were created during smart contract execution. Each action type has its validity criteria. |
+| `no_funds` | `Bool` | Indicates whether there were sufficient funds in the account to execute the actions. If `false`, the action phase was interrupted due to lack of funds. |
+| `status_change` | `AccStatusChange` | The change in account status after the action phase. Since account deletion happens through actions (via mode 32), this field may indicate whether the account was deleted. |
+| `total_fwd_fees` | `Maybe Grams` | The total amount of forwarding fees paid for messages created during the action phase. |
+| `total_action_fees` | `Maybe Grams` | The total amount of fees paid for executing actions. |
+| `result_code` | `int32` | The result code of the action execution. A value of `0` means all actions were successfully completed. |
+| `result_arg` | `Maybe int32` | An error message is returned in case of an error. Useful for debugging smart contract code.|
 | `tot_actions` | `uint16` | Total number of actions created during smart contract execution. |
-| `spec_actions` | `uint16` | Number of special actions (everything except `action_send_msg`). |
-| `skipped_actions` | `uint16` | Number of actions that were skipped during execution. Refers to message sends that had issues but were created with the `ignore_errors` flag (2). |
-| `msgs_created` | `uint16` | Number of messages created during action execution. |
-| `action_list_hash` | `bits256` | Hash of the action list. |
-| `tot_msg_size` | `StorageUsed` | Total size of created messages. |
+| `spec_actions` | `uint16` | A number of special actions (all except `action_send_msg`). |
+| `skipped_actions` | `uint16` | Number of actions skipped during smart contract execution. Refers to message sends that failed but had the `ignore_errors` flag (value 2) set. |
+| `msgs_created` | `uint16` | Number of messages created during action execution.|
+| `action_list_hash` | `bits256` | The hash of the action list. |
+| `tot_msg_size` | `StorageUsed` | Total size of the messages. |
 
 ### Bounce phase
 
-If either the compute phase or action phase ends with an error and the incoming message had the `bounce` flag set, the bounce phase will be executed:
+If the **Compute phase** or **Action phase** ends with an error, and the incoming message has the `bounce` flag set, the system triggers the **Bounce phase**.
 
 :::note
-For the bounce phase to start due to an error in the action phase, the failed action must have been created with flag 16, which indicates a bounce on failure.
+For the bounce phase to trigger due to an error in the action phase, the failed action must have **flag 16** set, which enables bounce on error.
 :::
 
 ```tlb
@@ -2551,18 +2553,20 @@ tr_phase_bounce_ok$1 msg_size:StorageUsed
   msg_fees:Grams fwd_fees:Grams = TrBouncePhase;
 ```
 
-`tr_phase_bounce_negfunds` is not used in the current version of the blockchain, so we will consider the remaining two:
+The `tr_phase_bounce_negfunds` type is not used in the current version of the blockchain. The other two types function as follows:
 
 | Type | Description |
 | --- | --- |
-| `tr_phase_bounce_nofunds` | Indicates that there were not enough funds to process the message that was supposed to be returned to the sender. |
-| `tr_phase_bounce_ok` | Indicates that the message was successfully processed and sent back to the sender. |
+| `tr_phase_bounce_nofunds` | Indicates that the account does not have enough funds to process the message that should be bounced back to the sender. |
+| `tr_phase_bounce_ok` | Indicates that the system successfully processes the bounce and sends the message back to the sender. |
 
-Here, `msg_fees` and `fwd_fees` are calculated based on the total `fwd_fees` for processing the message. One-third of this fee is paid immediately and recorded in `msg_fees`, while the remaining part is recorded in `fwd_fees`.
+In this phase, `msg_fees` and `fwd_fees` are calculated based on the total forwarding fee `fwd_fees` for the message:
+* **One-third** of the fee goes into `msg_fees` and is charged immediately.
+* The remaining **two-thirds** go into `fwd_fees`.
 
 ### Full transaction body
 
-Now that we’ve covered the transaction header and its description, we can look at what a full transaction in TON looks like. First, let’s examine the TL-B scheme:
+Now that we've reviewed the transaction header and its description, we can look at what a complete transaction in TON looks like. First, examine the TL-B schema:
 
 ```tlb
 transaction$0111 account_addr:bits256 lt:uint64
@@ -2574,25 +2578,26 @@ transaction$0111 account_addr:bits256 lt:uint64
   description:^TransactionDescr = Transaction;
 ```
 
-Here we see that a transaction consists of the following fields:
+This schema shows that a transaction includes the following fields:
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `account_addr` | `bits256` | Address of the account to which this transaction belongs. |
-| `lt` | `uint64` | Logical time of the transaction. |
-| `prev_trans_hash` | `bits256` | Hash of the previous transaction executed on this account. |
+| `account_addr` | `bits256` | The account's address to which the transaction belongs. |
+| `lt` | `uint64` | Logical time of the transaction.|
+| `prev_trans_hash` | `bits256` | The hash of the previous transaction executed on this account. |
 | `prev_trans_lt` | `uint64` | Logical time of the previous transaction on this account. |
-| `now` | `uint32` | Timestamp of transaction creation in Unix format. |
-| `outmsg_cnt` | `uint15` | Number of outbound messages created during transaction execution. |
-| `orig_status` | `AccountStatus` | Initial status of the account before the transaction. |
-| `end_status` | `AccountStatus` | Status of the account after the transaction. |
-| `in_msg` | `Maybe ^(Message Any)` | Incoming message processed during transaction execution. For ordinary transactions, this is always present. |
-| `out_msgs` | `HashmapE 15 ^(Message Any)` | Outgoing messages created during the transaction. |
+| `now` | `uint32` | Time the transaction is created, in Unix timestamp format.|
+| `outmsg_cnt` | `uint15` | Number of outbound messages generated during transaction execution. |
+| `orig_status` | `AccountStatus` | Account status before the transaction. |
+| `end_status` | `AccountStatus` | Account status after the transaction. |
+| `in_msg` | `Maybe ^(Message Any)` | Incoming message processed during the transaction. For ordinary transactions, this field is always present. |
+| `out_msgs` | `HashmapE 15 ^(Message Any)` | Outgoing messages generated during the transaction. |
 | `total_fees` | `CurrencyCollection` | Total fees paid for executing the transaction. |
-| `state_update` | `^(HASH_UPDATE Account)` | Contains the hash of the account’s previous state and the hash of the new state. |
-| `description` | `^TransactionDescr` | Transaction description containing details about all execution phases. This field was discussed earlier. |
+| `state_update` | `^(HASH_UPDATE Account)` | Contains the hash of the previous account state and the hash of the new state.|
+| `description` | `^TransactionDescr` | Transaction description containing execution phase details. We covered this earlier. |
 
-The `orig_status` and `end_status` fields describe how the account state changed as a result of the transaction. There are four possible statuses:
+
+The `orig_status` and `end_status` fields indicate how the account state changes as a result of the transaction. There are 4 possible statuses:
 
 ```tlb
 acc_state_uninit$00 = AccountStatus;
@@ -2601,11 +2606,12 @@ acc_state_active$10 = AccountStatus;
 acc_state_nonexist$11 = AccountStatus;
 ```
 
-### How to get a transaction using api/v2
+### How to retrieve a transaction using api/v2
 
-Among the available and supported Open Source APIs, we can use [APIv2](https://toncenter.com/api/v2/) and [APIv3](https://toncenter.com/api/v3/index.html#/), both provided by TON Center. APIv2 is a lower-level interface and provides only very basic blockchain data. There are two ways to retrieve a transaction:
+Among the supported open-source APIs, we can use TON Center [APIv2](https://toncenter.com/api/v2/) and [APIv3](https://toncenter.com/api/v3/index.html#/).
+API v2 is a more raw version and provides only basic access to blockchain data. To retrieve a transaction, there are two options:
 
-- Use the `/api/v2/getTransactions` endpoint:
+* Use the `/api/v2/getTransactions` endpoint:
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
@@ -2644,7 +2650,7 @@ Among the available and supported Open Source APIs, we can use [APIv2](https://t
 </Tabs>
 
 
-- Use `JSON-RPC` protocol:
+* Use the `JSON-RPC` protocol:
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
@@ -2671,12 +2677,14 @@ Among the available and supported Open Source APIs, we can use [APIv2](https://t
   </TabItem>
 </Tabs>
 
-The recommended method is to use the `JSON-RPC` protocol, since you can take advantage of an existing SDK where all fields are predefined and properly typed. This way, you don't need to manually interpret each field.
+
+The recommended approach is to use **JSON-RPC**, as it integrates with existing SDKs, where all fields are predefined and typed correctly. This removes the need to interpret each field manually.
 
 :::note
-When retrieving transactions, you might encounter the error `LITE_SERVER_UNKNOWN: cannot compute block with specified transaction: cannot find block (0,ca6e321c7cce9ece) lt=57674065000003: lt not in db`.
+When retrieving transactions, you might encounter the following error:
+`LITE_SERVER_UNKNOWN: cannot compute block with specified transaction: cannot find block (0,ca6e321c7cce9ece) lt=57674065000003: lt not in db.`
 
-This means that the transactions on this account happened a long time ago, and the blocks containing them are no longer stored on the LiteServer. In such cases, you can use `archival: true` to request data from an archival node.
+This means the account’s transactions are old, and the blocks containing them are no longer stored on the LiteServer. In this case, you can use the option `archival: true` to fetch data from an archival node.
 :::
 
 ### How to get a transaction using api/v3
