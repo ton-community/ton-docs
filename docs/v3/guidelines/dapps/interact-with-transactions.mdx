@@ -1795,6 +1795,7 @@ StateInit matches the address!
 The example below shows how to set up a listener that receives transaction data as soon as it becomes available.
 
 <details>
+  <summary>Code</summary>
   ```typescript title="trxs_monitoring.ts"
   import {Address, TonClient, beginCell, storeMessage} from '@ton/ton';
 
@@ -2705,7 +2706,7 @@ acc_state_nonexist$11 = AccountStatus;
 ### How to retrieve a transaction using api/v2
 
 Among the supported open-source APIs, we can use TON Center [APIv2](https://toncenter.com/api/v2/) and [APIv3](https://toncenter.com/api/v3/index.html#/).
-API v2 is a more raw version and provides only basic access to blockchain data. To retrieve a transaction, there are two options:
+**APIv2** is a more raw version and provides only basic access to blockchain data. To retrieve a transaction, there are two options:
 
 * Use the `/api/v2/getTransactions` endpoint:
 
@@ -2787,6 +2788,11 @@ This means the account’s transactions are old, and the blocks containing them 
 
 `APIv3` is more advanced and convenient for retrieving various events from the blockchain. For example, it allows you to fetch information about NFT transfers, token operations, and even transactions in `pending` status. In this tutorial, we'll focus only on the `transactions` endpoint, which returns finalized transactions:
 
+
+**APIv3** is more advanced and convenient for accessing various types of blockchain events. For example, it allows you to retrieve data on NFT transfers, token movements, and even transactions that are still in the **pending** state.
+
+In this guide, we focus only on the `transactions` endpoint, which returns *confirmed* transactions.
+
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
 
@@ -2820,9 +2826,9 @@ This means the account’s transactions are old, and the blocks containing them 
   </TabItem>
 </Tabs>
 
-If we look at the response, we’ll notice that it’s significantly different from the `APIv2` response. The main difference is that this version **indexes** transactions, whereas the previous version was essentially a wrapper around LiteServer communication. This means the data is fetched directly from the server's database.
+If you examine the response, you’ll see that it differs significantly from the APIv2 output. The key difference is that APIv3 **indexes** transactions, while the previous version acts only as a wrapper around LiteServer. In API v3, all information comes directly from the server’s database.
 
-As a result, we receive already-processed information. For example, if we dig into the response, we can see that the `account_state_before` and `account_state_after` fields contain not just the state hashes, but full account information — including code, data, TON balance, and even ExtraCurrency balance:
+This allows the API to return preprocessed data. For example, if you examine the `account_state_before` and `account_state_after` fields, they include not only the account state hash but also complete data, such as the code, data, TON balance, and even the ExtraCurrency balance.
 
 
 ```json
@@ -2848,13 +2854,14 @@ As a result, we receive already-processed information. For example, if we dig in
 ]
 ```
 
-Additionally, the response includes an `address_book` field, which contains an array of addresses that were interacted with during the transaction execution.
+Additionally, the response includes an `address_book` field, which contains an array of addresses the account interacted with during transaction execution.
 
 ### Transaction fields in the SDK
 
-When inspecting the response obtained via the `JSON-RPC` protocol in `@ton/ton@`, we can see that in addition to the fields discussed above, there are also `hash` and `raw`. These fields are not part of the transaction structure on the blockchain itself — they are added by the SDK for convenience.
+When inspecting the response returned via the JSON-RPC protocol in `@ton/ton@`, you may notice two additional fields — `hash` and `raw` — that are not part of the on-chain transaction data. The SDK adds these fields for convenience.
 
-The `hash` field provides a function that can be used to compute the transaction hash, while the `raw` field contains the transaction's BOC. This allows us to parse the transaction either using a built-in method from the SDK or manually:
+* The `hash` field provides a function that lets you compute the transaction hash.
+* The `raw` field contains the transaction BOC, which you can parse yourself using either a built-in method from the SDK or manually.
 
 
 <Tabs groupId="code-examples">
@@ -2885,48 +2892,53 @@ The `hash` field provides a function that can be used to compute the transaction
 </Tabs>
 
 
+### Which API to use?
 
-### Which API should you use?
+After reviewing both API v2 and API v3, a natural question is which one to choose, the answer depends entirely on your specific use case.
+As a general recommendation, you can use the `JSON-RPC` protocol from APIv2 since it allows you to rely on an existing SDK that already provides all the necessary methods and types.
 
-After reviewing APIv2 and APIv3, the question may arise: which one should you choose? The answer depends entirely on your specific use case. As a general recommendation, you can use the `JSON-RPC` protocol from APIv2, since this allows you to leverage a ready-made SDK that includes all necessary methods and types.
-
-If this functionality doesn't meet your needs, consider a full or partial switch to APIv3 or explore other APIs in the ecosystem that might offer more comprehensive data.
+If this functionality does not cover all your requirements, you should consider a full or partial transition to API v3 or explore other APIs in the ecosystem that may offer more data.
 
 ### Action: User Context (a.k.a. Event)
 
-Before we dive into user-facing operations and how to handle them, let’s recap what we’ve learned about transactions:
+Before moving on to user operations and their processing, let’s summarize what we’ve learned about transactions:
 
-- A transaction is a record of all changes made to a specific account.
-- A transaction consists of several phases that process incoming messages, execute smart contract code, and handle generated actions.
-- Each phase has a description that provides details about what occurred during execution.
-- A transaction can either complete successfully or fail, depending on whether all phases were completed and whether the generated actions were valid.
-- Ordinary transactions always contain an incoming message but may or may not include outgoing messages.
-- Transactions can be retrieved using either APIv2 or APIv3, both of which present the data in a convenient format.
-- APIv3 indexes transactions and returns processed data, while APIv2 is merely a wrapper over LiteServer.
-- The SDK may include additional fields such as `hash` and `raw` for convenience, allowing you to compute the transaction hash and access the BOC directly.
+* A **transaction** is a record that captures all changes applied to a specific account.
+* A transaction consists of multiple **phases** that handle incoming messages, execute smart contract code, and process generated actions.
+* Each phase has its description that contains information about what occurred during execution.
+* A transaction may complete successfully or fail, depending on whether all phases execute correctly and whether valid actions are created.
+* Regular transactions always include an incoming message but may not include any outgoing messages.
+* A transaction can be retrieved using **API v2** or **API v3**, both of which return transaction data in a convenient format.
+* In API v3, transactions are **indexed**, which allows access to preprocessed data, whereas API v2 acts only as a **wrapper** for communicating with LiteServer.
+* The SDK may include additional fields, such as `hash` and `raw`, for convenience. These fields allow you to obtain the transaction hash and BoC, respectively.
 
-Previously, we discussed actions from a technical standpoint. However, in many API services, the term "action" is used to describe user-level operations. It’s important to remember that TON is an asynchronous blockchain, meaning a single logical operation may consist of a chain of multiple transactions. In this context, the full picture is what matters — not individual transactions.
 
-For example, transferring Jettons from one wallet to another involves at least 3 separate transactions. Different services refer to these chains using different terms such as "action", "event", or "operation". To avoid confusion with technical terms used earlier, we'll use the term `Event`.
+Earlier, we discussed **actions** from a technical perspective. However, many API services use this term to refer to user-level operations. It's essential to note that TON is an asynchronous blockchain, meaning that a single operation can span multiple transactions. In this context, the overall sequence matters more than individual transactions.
+
+For example, transferring Jettons from one wallet to another typically involves at least three separate transactions. Different services refer to these sequences using terms like **action**, **event**, or **operation**. To avoid confusion with the previously defined technical term **action**, we use the term **Event** here.
+
 
 :::tip
-Keep in mind that not every Jetton transfer is considered a `Jetton Transfer Event`. For example, if you're sending Jettons to a DEX to receive a different token, it would be classified as a `Swap Event`.
+Note that not every Jetton transfer qualifies as a `Jetton Transfer Event`. For instance, sending Jettons to a DEX to receive other tokens is classified as a `Swap Event`.
 
-The context can vary significantly depending on what you're doing with the Jettons. API services typically pre-parse the `forward_payload` and evaluate many other parameters to determine the exact type of operation and present it clearly to the user. This applies not only to Jettons but also to NFTs and other on-chain operations.
+The classification depends heavily on how Jettons are used. API services typically parse the `forward_payload` and check additional parameters to determine the exact type of operation, then present it in a user-friendly format.
+This approach applies not only to Jettons but also to NFTs and other on-chain operations.
 :::
 
-### Event success in the ecosystem: Ordinary TON Transfer
+### Event success in the ecosystem: ordinary TON transfer
 
-As discussed earlier, everything in TON is asynchronous, so the success of a single transaction doesn’t necessarily mean that the entire chain of operations has succeeded or will succeed in the future. Therefore, we need a more abstract notion of success.
+As discussed earlier, everything in TON happens asynchronously. This means that the success of a single transaction does not guarantee that the entire chain of related transactions has completed—or will complete—successfully. As a result, we need to rely on more abstract criteria for determining success.
 
-Let’s consider a simple example: an ordinary TON transfer from one wallet to another. This consists of two transactions:
+Let’s take a basic example: an ordinary TON transfer from one wallet to another. This operation involves two transactions:
 
-1. The sender’s wallet receives an external message with a signature for verification. After processing this message, the sender’s smart contract creates outbound messages as specified in the body of the external message.
-2. The recipient’s wallet receives the incoming message with the specified TON amount.
+1. The sender’s wallet receives an external message containing a signature for verification. After validating this message, the sender’s smart contract creates outbound messages as specified in the body of the external message.
+2. The recipient’s wallet receives an inbound message containing the specified amount of TON.
 
-To determine whether the transfer was successful, it makes sense to check the second transaction. If the recipient’s account has a transaction triggered by an incoming message from our wallet, and the funds were not returned (we'll cover this below), we can consider the transfer successful.
+To determine whether the transfer was successful, we should focus on the second transaction. If the recipient’s account has a transaction initiated by an inbound message from our wallet—and the funds weren’t subsequently returned (this scenario will be covered below)—we can consider the transfer successful.
 
-Suppose we want to check for deposits to our wallet: `UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL`. For convenience, we’ll use APIv3 and request the latest 10 transactions on this account:
+Suppose we want to monitor deposits sent to our wallet:
+`UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL`
+For simplicity, we’ll use **APIv3** to fetch the latest 10 transactions for this account.
 
 
 <Tabs groupId="code-examples">
@@ -2983,51 +2995,56 @@ Suppose we want to check for deposits to our wallet: `UQDHkdee26bn3ezu3cpoXxPtWa
 </Tabs>
 
 
-After retrieving the transactions, we need to verify the following:
+After retrieving the transactions, we need to perform the following checks:
 
-1. The transaction must be an ordinary one, meaning `description.type` should equal `ord`.
-2. The incoming message must be internal. This means the `created_lt` field must be present.
-3. If the transaction description includes a `bounce` field (this applies only to the `transactions` endpoint in APIv3), it indicates that a bounce phase was triggered. In this case, we must check whether it completed successfully, which would mean the funds were returned to the sender.
-4. If all checks pass, we can consider the deposit successfully received on the wallet.
+1. The transaction must be ordinary, meaning `description.type` should be equal to `ord`.
+2. The inbound message must be **internal**. This means the `created_lt` field must be present.
+3. If the transaction description includes a `bounce` field (specific to the `transactions` endpoint in APIv3), it indicates that the **bounce phase** was triggered. In that case, we must check whether the bounce was completed successfully, which means the funds were returned to the sender.
+
+If all these conditions are met, we can consider the deposit successfully credited to the wallet.
+
 
 :::danger
-Note that the provided code is just an example and not a full-fledged deposit tracking solution. In production applications, you should process not just the last 10 transactions but all transactions that occurred since the last check.
+Please note that the provided code is a simplified example and does not constitute a complete deposit tracking solution.
+In real applications, you should not limit the check to just the latest 10 transactions.
+Instead, you must process all transactions that occurred since the last check.
 
-Also keep in mind that the expected field values in a fake deposit scenario may differ depending on the API service. This example reflects the response format of Toncenter's APIv3 `transactions` endpoint only.
+Additionally, note that field values for fake deposits may vary depending on the API service used. This example only reflects the APIv3 response from the TON Center `transactions` endpoint.
 :::
 
-If we run this code, we’ll get the following output:
+If we run this code, the expected output is:
 
 ```
 Fake deposit detected: 4vXGhdvtfgFx8tkkaL17POhOwrUZq3sQDVSdNpW+Duk=
 ```
 
-If we take a look at this transaction in the [explorer](https://tonviewer.com/transaction/e2f5c685dbed7e0171f2d92468bd7b3ce84ec2b519ab7b100d549d3695be0ee9), we’ll see that the funds were indeed returned to the sender.
+By inspecting this transaction in the [explorer](https://tonviewer.com/transaction/e2f5c685dbed7e0171f2d92468bd7b3ce84ec2b519ab7b100d549d3695be0ee9), we see that the funds return to the sender.
 
 :::note
-If we request transactions for this account using APIv2, we won't get any results. This is because the transaction data was only recorded in the block itself, and APIv3’s indexer was able to index it.
+If we query this account’s transactions using APIv2, we don’t see any transactions. This happens because the transaction data exists only in the block, and only the APIv3 indexer captures it.
 
-However, since this account has no state (not even a single balance top-up), there are no transactions directly associated with it. If there had been at least one deposit, the account state would have changed from `nonexist` to `uninit`, and then APIv2 would have been able to return the transaction.
+Since the account has no state at all—not even a single balance top-up—there are no transactions formally associated with it. If there is at least one deposit, the state changes from `nonexist` to `uninit`, and APIv2 then returns the transaction.
 :::
 
-### Event success in the ecosystem: Jetton Transfer
+### Event success in the ecosystem: Jetton transfer
 
-Now let’s consider a more complex example — a Jetton transfer. To start, here’s what a Jetton transfer looks like:
+Now, let’s look at a more complex example involving a Jetton transfer. First, consider the typical structure of a Jetton Transfer:
 
+```
+external_in → User_A → internal (op::jetton_transfer)
+internal (op::jetton_transfer) → User_A_Jetton_Wallet → internal (op::internal_transfer)
+internal (op::internal_transfer) → User_B_Jetton_Wallet
+```
 
-1. external_in -> User_A - > internal (op::jetton_transfer)
-2. internal (op::jetton_transfer) -> User_A_Jetton_Wallet -> internal (op::internal_transfer)
-3. internal (op::internal_transfer) -> User_B_Jetton_Wallet
+As shown, this operation involves **three transactions**, and the actual Jetton transfer is completed only after the **third transaction** is successfully finished. After the third transaction, the following additional messages may be sent:
 
+* `internal (op::jetton_transfer_notification) → User_B` — if `forward_amount` is set
+* `internal (op::excesses) → response_destination` — if `response_destination` is set
 
-As we can see, in this case there are 3 transactions involved, and the Jetton transfer is only truly complete once the third transaction has been successfully processed. After the third transaction, 2 additional messages may be sent:
+However, to verify the transfer, we only need to check the third transaction.
+To simplify the example, assume we want to track incoming Jettons for a specific wallet:
+`EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX` — for the USDT Jetton.
 
-1. internal (op::jetton_transfer_notification) -> User_B | If `forward_amount` is set
-2. internal (op::excesses) -> response_destination | If `response_destination` is set
-
-However, to verify the transfer, we only need the third transaction.
-To simplify the example, let’s assume we want to check for incoming Jettons on a specific wallet:
-`EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX`, for the USDT Jetton:
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
@@ -3105,9 +3122,9 @@ To simplify the example, let’s assume we want to check for incoming Jettons on
       continue;
     }
 
-      if (transaction.inMessage.info.type !== 'internal') {
+      if (!transaction.inMessage || transaction.inMessage.info.type !== 'internal') {
       continue;
-    }
+    }x
 
       const body = transaction.inMessage.body.beginParse();
       try {
@@ -3154,17 +3171,21 @@ To simplify the example, let’s assume we want to check for incoming Jettons on
 </Tabs>
 
 
-First, we retrieve the last 10 transactions from the USDT Jetton Wallet smart contract.
-Then we need to validate the following:
+First, we fetch the latest 10 transactions for the USDT Jetton Wallet smart contract. Then, we check the following conditions:
+1. The transaction must be **ordinary**, meaning `description.type` is equal to `generic`.
+2. The **compute phase** must be successful:
+* `description.computePhase.type` is `vm`
+* `description.computePhase.exitCode` is `0`
+3. If an **action phase** is present, it must also be successful:
+* `description.actionPhase.resultCode` is `0`
+4. The **inbound message** must be internal:
+* `inMessage.info.type` is `internal`
+5. The **body** of the inbound message must contain an `internal_transfer` operation:
+* `body.loadUint(32)` returns `0x178d4519`
 
-1. The transaction must be ordinary, meaning `description.type` should be equal to `generic`.
-2. The compute phase must be successful, so `description.computePhase.type` must be `vm`, and `description.computePhase.exitCode` must be `0`.
-3. If an action phase is present, it must also be successful — `description.actionPhase.resultCode` must be `0`.
-4. The incoming message must be internal — `inMessage.info.type` should be `internal`.
-5. The body of the incoming message must contain an `internal_transfer` operation, meaning `body.loadUint(32)` should return `0x178d4519`.
-6. If all checks pass, we can consider the deposit successfully credited to the wallet.
+If all checks pass, we consider the deposit successfully credited to the wallet.
+To parse the body of the inbound message, we use the TL-B schema defined in [TEP-0074](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md):
 
-To parse the body of the incoming message, we use the TL-B schema from [TEP-0074](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md):
 
 ```tlb
 internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
@@ -3175,49 +3196,41 @@ internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
 ```
 
 :::note
-It's important to understand that this was a very simplified example.
-In real-world applications, the logic for handling deposits may differ.
-For more detailed guidance on how to handle such events, refer to the
-[dedicated article](/v3/guidelines/dapps/asset-processing/jettons).
+Note that this is a highly simplified example.
+Real applications may implement different logic for handling deposits.
+For more details on how to process such events, refer to the [dedicated article](/v3/guidelines/dapps/asset-processing/jettons).
 :::
 
-### Event Success in the Ecosystem: NFT Transfer
+### Event success in the ecosystem: NFT transfer
 
 An NFT is a smart contract that stores content.
-This can be [either a link to the content or the content itself](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
-Additionally, the contract holds the owner’s address.
-Transferring an NFT means updating this field.
+This can be either [the content itself or a link to it, such as a URL](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 
-To do this, the owner must send a special message formatted according to
-the [TL-B schema](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema)
-described in [TEP-0062]:
-
+The contract also stores the owner’s address. Transferring an NFT means updating this address field.
+To initiate the transfer, the owner must send a special message formatted according to the [TL-B schema](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md#tl-b-schema) defined in [TEP-0062](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md):
 
 ```tlb
 transfer query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell)  forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell)  = InternalMsgBody;
 ```
 
-This process is similar to a Jetton Transfer, with one key difference:
-the event is considered successful if the field storing the owner's address has changed to the expected value.
-If a `response_destination` is specified, any remaining funds are returned to that address:
+This process is similar to Jetton transfers, with one key difference: the event is considered successful if the owner address field changes to the expected value.
 
+If `response_destination` is provided, any remaining funds are returned to that address:
 
 ```tlb
 excesses query_id:uint64 = InternalMsgBody;
 ```
 
-Additionally, if a `forward_amount` is specified, the given amount of TON
-along with the `forward_payload` will be sent to the new owner of the NFT:
+If `forward_amount` is set, the specified amount of TON and `forward_payload` are sent to the new NFT owner:
 
 ```tlb
 ownership_assigned query_id:uint64 prev_owner:MsgAddress forward_payload:(Either Cell ^Cell) = InternalMsgBody;
 ```
 
-The `custom_payload` field is not required for standard NFTs.
-It exists solely to allow more complex NFT contracts to pass data
-without breaking compatibility with the standard.
+The `custom_payload` field is not needed in standard NFTs. It exists to support more complex NFT contracts
+that may require passing additional data without breaking compatibility with the standard.
 
-To retrieve the owner of an NFT, we will use the `get_nft_data` GET method:
+To retrieve the current owner of an NFT, we use the `get_nft_data` GET method:
 
 ```func
 (int, int, slice, slice, cell) get_nft_data() method_id {
@@ -3226,8 +3239,8 @@ To retrieve the owner of an NFT, we will use the `get_nft_data` GET method:
 }
 ```
 
-This means we won’t need to parse transactions or perform complex checks.
-We can simply retrieve the NFT data and check the owner's address:
+This means we don’t need to parse transactions or perform complex validation.
+We call the method and check the owner's address.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
@@ -3257,18 +3270,14 @@ We can simply retrieve the NFT data and check the owner's address:
 
 
 :::note
-As with the two previous examples, it's important to note that this is just a simplified case.
-In real-world scenarios, the system will be more complex.
-For more detailed information, refer to the [dedicated article](/v3/guidelines/dapps/asset-processing/nft-processing/nfts).
+As with the previous two examples, please note that this is a simplified scenario. In real-world applications, the system is more complex overall. For more detailed information, refer to the [dedicated article](/v3/guidelines/dapps/asset-processing/nft-processing/nfts).
 :::
 
-### How to Analyze a Contract and Its TL-B Schema to Build Success Criteria Logic
+### How to analyze a contract and its TL-B schema to define success criteria
 
-In this section, we’ll use the [Jetton Wallet contract source code](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc)
-and the [TL-B schema](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#tl-b-schema)
-to understand how to determine whether an operation has been successfully completed.
+In this section, we utilize the [Jetton Wallet contract source code](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc) and its [TL-B schema](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#tl-b-schema) to determine what needs to be verified to confirm that an operation has fully completed successfully.
 
-To do this, we first need to broadly analyze the available operations in the contract:
+To do this, we first analyze the available operations in the contract at a high level.
 
 ```func
   if (op == op::transfer()) { ;; outgoing transfer
@@ -3282,12 +3291,11 @@ To do this, we first need to broadly analyze the available operations in the con
   }
 ```
 
-In this code, we see that there are two operations related to sending and receiving jettons:
+In this code, we see two operations related to sending and receiving Jettons:
+1. `op::transfer` — the operation used when sending Jettons. It calls the `send_tokens` function, which handles transferring Jettons to another wallet.
+2. `op::internal_transfer` — the operation used when receiving Jettons. It calls the `receive_tokens` function, which handles accepting Jettons into the wallet.
 
-1. `op::transfer` — this operation is executed when sending jettons. It calls the `send_tokens` function, which is responsible for sending jettons to another wallet.
-2. `op::internal_transfer` — this operation is executed when receiving jettons. It calls the `receive_tokens` function, which is responsible for receiving jettons into the wallet.
-
-Let's break down the sending process. First, let's look at what the incoming message consists of:
+Let’s start by examining the sending process. First, we look at the structure of the inbound message:
 
 ```tlb
 transfer query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
@@ -3296,9 +3304,9 @@ transfer query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
            = InternalMsgBody;
 ```
 
-Here we can see that this message is quite similar to the `internal_transfer` message we looked at earlier. It specifies who to send the jettons to, how many to send, where to return any remaining funds, and optionally, a payload to forward to the jetton recipient.
+We can see that this message is quite similar to the `internal_transfer` operation we examined earlier. It specifies the recipient, the amount of Jettons to send, the address for returning any remaining funds, and an optional payload to forward to the Jetton recipient.
 
-Now let’s look at the `send_tokens` function, which is responsible for sending jettons:
+Now let’s look at the `send_tokens` function, which handles sending Jettons:
 
 <details>
   <summary>
@@ -3362,17 +3370,15 @@ Now let’s look at the `send_tokens` function, which is responsible for sending
 
 </details>
 
+Although the code may seem complex at first glance, its logic is straightforward:
+1. The required fields are read from `in_msg_body`, which represents the body of the inbound message.
+2. Based on these fields, the contract verifies that the sender is the token owner and that the balance is sufficient for the transfer.
+3. Using the recipient’s address, it computes the address of the recipient’s Jetton wallet.
+4. It ensures that the inbound message includes sufficient TON to cover the gas fees for the transfer (and for a possible refund in case of failure), as well as for delivering the `forward_payload`, if applicable.
+5. The contract constructs a message to be sent to the recipient’s Jetton wallet. This message includes the `internal_transfer` operation we’ve already seen.
+6. Finally, the contract updates its storage.
 
-Even though the code might seem complex, it’s actually quite straightforward:
-
-1. First, the required fields are read from `in_msg_body`, which represents the body of the incoming message.
-2. Based on these fields, the contract verifies that the sender is the owner of the jettons and that the balance is sufficient for the transfer.
-3. The recipient’s jetton wallet address is derived from the recipient's address.
-4. It checks that the incoming message includes enough TON to cover the fees for sending the jettons (and for refunding them in case of an error), and, if necessary, enough to cover delivery of the `forward_payload`.
-5. A message is created and sent to the recipient’s jetton wallet. This message contains the `internal_transfer` payload we already know.
-6. The contract updates its storage.
-
-Now let’s examine the receiving logic:
+Now, let’s examine the receiving side:
 
 <details>
   <summary>
@@ -3442,16 +3448,19 @@ Now let’s examine the receiving logic:
 
 </details>
 
-In this function we see the following steps:
+In this function, we observe the following:
 
-1. The contract reads the required fields from the body of the incoming message.
-2. It increments the token balance counter by the specified amount.
-3. It verifies that the sender is either a valid wallet or the jetton master contract.
-4. Some calculations are performed for gas management, to handle the contract’s storage fees.
-5. If `forward_ton_amount` is specified in the message, a message is created and sent to the actual recipient of the jettons.
-6. If `response_address` is provided, a message is created and sent to that address with the remaining funds.
+1. The contract reads the required fields from the body of the inbound message.
+2. It increases the Jetton balance counter by the specified amount.
+3. It verifies that the sender is either a valid Jetton wallet or the Jetton master.
+4. It performs some calculations for gas management to account for storage fees.
+5. If the message specifies a `forward_ton_amount`, the contract creates a message to forward the specified amount of TON and payload to the final Jetton recipient.
+6. If a `response_address` is specified, the contract creates a message to send the remaining funds to that address.
 
-Now we know that the recipient's balance is credited only after the successful execution of the transaction initiated by the `internal_transfer` message. In case of failure, a bounce message is generated and sent to the sender’s jetton wallet. By examining the contract code, we can see that handling of such a message is implemented:
+From this, we know that the recipient’s balance increases only if the transaction initiated by the `internal_transfer` message completes successfully.
+If an error occurs, the contract generates a bounce message that is sent to the recipient’s Jetton wallet.
+
+Looking at the contract code, we can see that it explicitly handles such bounce messages:
 
 
 ```func
@@ -3463,7 +3472,7 @@ if (flags & 1) {
 }
 ```
 
-When a bounce message is received, the contract invokes the `on_bounce` function:
+When the contract receives a bounce message, it calls the `on_bounce` function.
 
 ```func
 () on_bounce (slice in_msg_body) impure {
@@ -3478,4 +3487,6 @@ When a bounce message is received, the contract invokes the `on_bounce` function
 }
 ```
 
-Here we see that the contract simply returns the tokens to the balance. In this case, there's no need to verify the sender of the message, since a bounce message cannot be faked. If such a message is received, it means that we previously sent a message with the specified content, so we can safely read the amount of tokens and return them to the balance.
+In this case, the contract restores the Jettons back to the balance.
+There is no need to verify the sender of the message since bounce messages cannot be forged.
+If such a message is received, it means the contract previously sent a message with the specified content. Therefore, it safely reads the Jetton amount and adds it back to the balance.
