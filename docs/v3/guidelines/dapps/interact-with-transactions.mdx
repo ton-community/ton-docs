@@ -42,7 +42,7 @@ The model is used to precisely describe and analyze distributed systems. For exa
 ### Account
 
 An **account** in TON is an actor characterized by the following components:
-* **General account state** — common properties of any account: *ID, balance, status, and last transaction (`last_tx`)*
+* **Account properties** — common properties of any account: *ID, balance, status, and last transaction (`last_tx`)*
 * **Data** — user defined data
 * **Code** — custom logic defining the account's behavior
 
@@ -66,7 +66,7 @@ A **smart contract** is an account whose *code* and *data* are already deployed 
 - An **account** is an actor that has a general state — such as balance, address, and status — and may optionally include code and data.
 
 Example: `(ID1, 0 TON, unexist)` or `(ID2, 2 TON, inited, last_tx, data, code)`
-- A **smart contract** is an actor with **mandatory** code and data that define its specific behavior.
+- A **smart contract** is an actor with **deployed** code and data that define its specific behavior.
 
 Example: `(ID2, 2 TON, inited, data, code)`
 
@@ -95,7 +95,7 @@ In TON, a result can only be received as a separate message — and only if it i
 
 Earlier, we mentioned that an account is an actor defined by the following components:
 
-* General account state (ID, balance, status, last_tx)
+* Account properties (ID, balance, status, last_tx)
 * Data
 * Code
 
@@ -145,7 +145,7 @@ account$1 addr:MsgAddressInt storage_stat:StorageInfo
   ```
 </details>
 
-Let’s clarify which properties are part of the **general account state**, according to the TL-B schema:
+Let’s clarify which properties are part of the **account properties**, according to the TL-B schema:
 
 * ID → `MsgAddressInt`
 * Balance → `CurrencyCollection`
@@ -154,17 +154,17 @@ Let’s clarify which properties are part of the **general account state**, acco
 
 Meanwhile, the data and code are defined within the state:` AccountState` field.
 
-Now, let’s take a closer look at the general account state and how it’s represented in the data layout.
+Now, let’s take a closer look at the account properties and how it’s represented in the data layout.
 
 #### Account status
 
 TON defines account states `AccountState` as follows:
 
-| Status     | TL-B code | Description                                                                                                                                   |
-|------------|------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
-| `uninit`   | `00`       | The account exists but contains no code or data. It may hold a non-zero balance but is not initialized yet.                                      |
-| `frozen`   | `01`       | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. **CHECK** The account has zero or negative balance, or doesn't meet the workchain’s minimum requirement.     |
-| `active`   | `10`       | The account includes a `StateInit` with code and data. It is an active smart contract, ready to process incoming messages.             |
+| Status   | TL-B code | Description                                                                                                                                                                                                                                  |
+|----------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `uninit` | `00`      | The account exists but contains no code or data. It may hold a non-zero balance but is not initialized yet.                                                                                                                                  |
+| `frozen` | `01`      | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. The account has zero or negative balance, or doesn't meet the workchain’s minimum requirement. |
+| `active` | `10`      | The account includes a `StateInit`, which stands for State Initialized, with deployed code and data, meaning that it's already initialized. It is an active smart contract, ready to process incoming messages.  |
 
 
 ```tlb
@@ -179,23 +179,18 @@ The diagram below illustrates the lifecycle of an account in the TON blockchain,
 ![](/img/docs/blockchain-fundamentals/account_states.svg)
 
 
-
 #### Smart contract
 
 Smart contracts are a set of promises in digital form, including protocols that govern how the parties fulfil these promises.
 
 In TON, typically by smart contract recognize:
-- the program code executed, as described in FunC, Tact, or Tolk, in the blockchain.
-- the account that implements business logic and content code.
+- The program code executed, as described in FunC, Tact, or Tolk, in the blockchain.
+- The account that implements business logic and content code.
 
-A smart contract is an account with mandatory code and data which define its unique behavior.
-In terms of TON account, this means:
+In technical terms, a smart contract in TON is an `Account` in the active state (`AccountState = active`) with:
+* an initialized `code` field in `StateInit` — containing the executable logic
+* an initialized `data` field in `StateInit` — storing the persistent contract state
 
-* A smart contract in TON is an `Account` in the active state (`AccountState = active`)
-* The `code` field in `StateInit` is initialized
-* The `data` field in `StateInit` is initialized
-
-The presence of `code` and `data` in `StateInit` makes an account executable and defines it as a smart contract.
 
 #### Address
 
@@ -205,20 +200,18 @@ It consists of the following components:
 
 
 * **WorkChain ID** — a 32-bit signed integer indicating the WorkChain to which the account belongs (e.g., -1 for the MasterChain, 0 for the BaseChain).
-* **Account ID**— a 256-bit hash of the `StateInit` structure, which contains the contract’s initial state: `code`, `data`, and optionally a `library`.
+* **Account ID** — a 256-bit hash of the `StateInit` structure, which includes the contract’s initialized `code`, `data`, and optionally a `library`, precisely as they were *at the time of deployment*. This hash is based solely on the original `StateInit`; later updates to the contract state do **not** affect the account_id.
 
 The address is defined as:
 
-<BlockMath math="{Address} := ({workchain\_id},{account\_id})" />, where <BlockMath math="{account\_id}:= {SHA256(BoC(StateInit))}" />
-Here, boc (bag of cells) is a special serialization format used in TON.
+<BlockMath math="{Address} := ({workchain\_id},{account\_id})" />, where <BlockMath math="{account\_id}:= {HASH(StateInit)}" />
 
-An address corresponds to a specific initial state of a contract and can be calculated even **before** the contract is deployed.
+An address corresponds to the first initialized state of a contract and can be calculated even **before** the contract is deployed.
 This allows you to use the address ahead of time — for example, to receive tokens or set up interactions.
 
 :::important
-An address depends only on the `StateInit`. Even a small change to the `code`, `data`, or `library` results in a completely different `account_id`.
+An address depends only on the `StateInit` used *at the moment of the contract's first deployment*. Even a small change to the `code`, `data`, or `library` in this initialized state results in a completely different `account_id` — and, therefore, a different **address**.
 
-At the same time, `StateInit` defines only the initial configuration of the contract. It does **not** include balance, current data, message queue, or any other runtime parameters. These changes do not affect the address.
 In fact, during message processing, validators verify the sender’s address — if it’s incorrect, they silently replace it with the correct one.
 :::
 
@@ -240,9 +233,9 @@ Each message triggers a transaction, which records the entire context: the trigg
 
 Transactions are processed **asynchronously**, meaning that each account’s updates and message handling occur independently over time.
 
-#### BlockChain
+#### Blockchain
 
-**BlockChain** is a distributed ledger consisting of blocks, each containing a set of data. These blocks are cryptographically linked to one another via hashes, forming an immutable chain. This entire chain is replicated and consistently maintained across all participants in the network.
+**Blockchain** is a distributed ledger consisting of blocks, each containing a set of data. These blocks are cryptographically linked to one another via hashes, forming an immutable chain. This entire chain is replicated and consistently maintained across all participants in the network.
 
 #### AccountChain
 
@@ -2528,10 +2521,6 @@ The `AccStatusChange` field indicates whether the account's status changed durin
 * If the debt exceeds **1 TON**, the account is [deleted](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L936C11-L946C12).
 
 
-
-
-`storage_fees_due` has type `Maybe` because if the contract has a balance, this value is not present. It's only needed to represent debt. `AccStatusChange`, in turn, indicates whether the account status changed after this phase. For example, if the debt exceeds 0.1 TON, the account state will , and after 1 TON — it will be .
-
 ### Compute phase
 
 The **compute phase** is one of the most complex stages of a transaction. This is where the smart contract code, stored in the account’s state, is executed.
@@ -2794,7 +2783,7 @@ When retrieving transactions, you might encounter the following error:
 This means the account’s transactions are old, and the blocks containing them are no longer stored on the LiteServer. In this case, you can use the option `archival: true` to fetch data from an archival node.
 :::
 
-### How to get a transaction using api/v3
+### How to retrieve a transaction using api/v3
 
 `APIv3` is more advanced and convenient for retrieving various events from the blockchain. For example, it allows you to fetch information about NFT transfers, token operations, and even transactions in `pending` status. In this tutorial, we'll focus only on the `transactions` endpoint, which returns finalized transactions:
 
