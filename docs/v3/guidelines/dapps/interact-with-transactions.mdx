@@ -572,6 +572,113 @@ Smart contracts, in turn, must:
 * either ignore bounced messages (exit with `code = 0`)
 * or explicitly handle the error
 
+You can run this script in blueprint to get visual result of difference between bounceable and non-bounceable messages:
+
+```ts
+import { Address, toNano, beginCell, internal } from '@ton/core';
+import { NetworkProvider } from '@ton/blueprint';
+import { mnemonicToWalletKey } from '@ton/crypto';
+import { WalletContractV3R2, WalletContractV4 } from '@ton/ton';
+
+// How to run this script:
+//
+// Option 1: With environment variables in the command line.
+// Use a backslash `\` to wrap the command on multiple lines for readability.
+//
+// WALLET_MNEMONIC="unfold sugar water ... other words" \
+// WALLET_VERSION="v4r2" \
+// npx blueprint run sendBounceableMessages --testnet --mnemonic
+//
+//
+// Option 2: Using a .env file.
+// Create a `.env` file in the `examples` directory with your mnemonic:
+//
+// WALLET_MNEMONIC="unfold sugar water ... other words"
+// WALLET_VERSION="v4r2"
+//
+// Then run the script without any variables:
+// npx blueprint run sendBounceableMessages --testnet --mnemonic
+//
+// NOTE: We can't use TonConnect (e.g. with the `--tonconnect` flag) for this script
+// because wallet extensions (like Tonkeeper) do not allow dApps to control the `bounce`
+// flag for security reasons. They always send bounceable messages.
+// To have full control, we must create and sign the message manually using a mnemonic.
+
+export async function run(provider: NetworkProvider): Promise<void> {
+    // --- Get wallet data from environment variables ---
+    const mnemonic = process.env.WALLET_MNEMONIC;
+    const versionStr = process.env.WALLET_VERSION || 'v4r2';
+
+    if (!mnemonic) {
+        throw new Error('WALLET_MNEMONIC environment variable is not set. Please see instructions in the script file.');
+    }
+
+    // --- Initialize wallet from mnemonic ---
+    const keyPair = await mnemonicToWalletKey(mnemonic.split(' '));
+    const secretKey = keyPair.secretKey;
+    
+    let wallet;
+    if (versionStr === 'v3r1' || versionStr === 'v3r2') {
+        wallet = WalletContractV3R2.create({ workchain: 0, publicKey: keyPair.publicKey });
+    } else if (versionStr === 'v4r1' || versionStr === 'v4r2') {
+        wallet = WalletContractV4.create({ workchain: 0, publicKey: keyPair.publicKey });
+    } else {
+        throw new Error('Unsupported wallet version: ' + versionStr + '. Supported versions are v3r1, v3r2, v4r1, v4r2.');
+    }
+    const myAddress = wallet.address;
+    console.log(`Using wallet ${versionStr} at address: ${myAddress.toString()}`);
+
+    // --- Check if wallet is deployed ---
+    if (!(await provider.isContractDeployed(myAddress))) {
+        console.log('Wallet is not deployed. Please send some TON to this address and try again.');
+        return;
+    }
+
+    // This is a valid address, but its purpose is for burning.
+    // 0:0000000000000000000000000000000000000000000000000000000000000000
+    // https://ton.org/address/
+    // We will send messages to it to demonstrate bounce handling.
+    const burnAddress = Address.parse('EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c');
+
+    // --- Get current seqno ---
+    const walletProvider = provider.provider(myAddress);
+    let seqno = await wallet.getSeqno(walletProvider);
+    console.log(`   Current seqno: ${seqno}`);
+
+    // --- Create messages ---
+    
+    // This message is sent to a burn address, but it is marked as "bounceable".
+    // The transaction will fail on the recipient's side (as it's just a blackhole),
+    // and the value (minus fees) will be returned to the sender.
+    const bounceableMessage = internal({
+        to: burnAddress,
+        value: toNano('0.005'),
+        body: beginCell().storeUint(0, 32).storeStringTail('bounceable test').endCell(),
+        bounce: true,
+    });
+
+    // This message is also sent to a burn address, but it is marked as "non-bounceable".
+    // The value sent with this message will be lost forever.
+    const nonBounceableMessage = internal({
+        to: burnAddress,
+        value: toNano('0.005'),
+        body: beginCell().storeUint(0, 32).storeStringTail('non-bounceable test').endCell(),
+        bounce: false,
+    });
+    
+    // --- Create a transfer with both messages ---
+    console.log("Sending one external message with two internal messages (one bounceable, one non-bounceable)...");
+
+    const transfer = wallet.createTransfer({
+        seqno: seqno,
+        secretKey: secretKey,
+        messages: [bounceableMessage, nonBounceableMessage], // Send both in one transaction
+    });
+
+    await walletProvider.external(transfer);
+    console.log('External message sent successfully!');
+} 
+```
 
 :::important
 The contents of a bounce message **must not** be executed as a regular request; it is intended only for error signalling and refund processing.
