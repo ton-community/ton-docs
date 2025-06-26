@@ -2,10 +2,12 @@
 description: По итогу урока вы напишете красивого бота, который сможет принимать платежи за ваш товар прямо в TON.
 ---
 
+import Feedback from '@site/src/components/Feedback';
+
 # Бот для продажи пельменей
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
+:::caution
+The integration method described in this guide is one of the available approaches. With ongoing developments, Telegram Mini Apps provide additional capabilities that better suit modern security and functionality requirements.
 :::
 
 В этой статье мы создадим простого Telegram-бота для приема платежей в TON.
@@ -98,15 +100,13 @@ OWNER_WALLET=
 Мы решим эту задачу следующим образом:
 
 1. Мы получим последние транзакции, поступившие на наш кошелек. Почему именно на наш? В этом случае нам не нужно беспокоиться об адресе кошелька пользователя, нам не нужно подтверждать, что это его кошелек, нам не нужно нигде хранить этот кошелек где-либо.
-2. Отсортируйте и оставьте только входящие транзакции
+2. Filter incoming transactions only.
 3. Давайте пройдемся по всем транзакциям, и каждый раз будем проверять, равны ли комментарий и сумма тем данным, которые у нас есть
 4. Празднуем решение нашей проблемы🎉
 
 #### Получение последних транзакций
 
-Если мы используем TON Center API, то мы можем обратиться к их [документации](https://toncenter.com/api/v2/) и найти метод, который идеально решает нашу проблему - [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get).
-
-Для получения транзакций нам достаточно одного параметра - адреса кошелька для приема платежей, но мы также будем использовать параметр limit, чтобы ограничить выдачу транзакций до 100 штук.
+Если мы используем TON Center API, то мы можем обратиться к их [документации](https://toncenter.com/api/v2/) и найти метод, который идеально решает нашу проблему - [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get). Для получения транзакций нам достаточно одного параметра - адреса кошелька для приема платежей, но мы также будем использовать параметр limit, чтобы ограничить выдачу транзакций до 100 штук.
 
 Давайте попробуем вызвать тестовый запрос для адреса `EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N` (кстати, это адрес TON Foundation)
 
@@ -202,7 +202,7 @@ let incomingTransactions = transactions.filter(
   );
 ```
 
-Теперь нам остается пройтись по всем транзакциям, и если комментарий и значение транзакции совпадают, мы вернем true
+Now we just have to go through all the transactions. If a matching transaction is found, we return true.
 
 ```js
   for (let i = 0; i < incomingTransactions.length; i++) {
@@ -228,7 +228,7 @@ let incomingTransactions = transactions.filter(
 Обратите внимание, что по умолчанию значение дается в нанотонах, поэтому нам нужно разделить его на 1 миллиард, или же мы можем просто использовать метод `fromNano` из библиотеки TON.
 Вот и все для функции `verifyTransactionExistance`!
 
-Теперь мы можем создать функцию для генерации ссылки для быстрого перехода к приложению кошелька для оплаты
+Finally, we create a function to generate a payment link by embedding the transaction parameters in a URL.
 
 ```js
 export function generatePaymentLink(toWallet, amount, comment, app) {
@@ -269,7 +269,7 @@ import handleStart from "./bot/handlers/start.js";
 dotenv.config();
 ```
 
-После этого мы создаем функцию, которая будет запускать наш проект. Чтобы наш бот не останавливался при возникновении ошибок, мы добавляем следующий код
+Now, define a function to run the bot. To prevent it from stopping due to errors, include:
 
 ```js
 async function runApp() {
@@ -344,8 +344,7 @@ Welcome to the best Dumplings Shop in the world <tg-spoiler>and concurrently an 
 
 Здесь мы сначала импортируем InlineKeyboard из модуля grammy. После этого мы создаем инлайн-клавиатуру в обработчике с предложением купить пельмени и ссылкой на эту статью (здесь немного рекурсии😁).
 .row() - означает перенос следующей кнопки на новую строку.
-После этого мы отправляем приветственное сообщение с текстом (важно - я использую html-разметку в сообщении, чтобы украсить его) вместе с созданной клавиатурой.
-Приветственное сообщение может быть любым, каким вы захотите.
+После этого мы отправляем приветственное сообщение с текстом (важно - я использую html-разметку в сообщении, чтобы украсить его) вместе с созданной клавиатурой. Приветственное сообщение может быть любым, каким вы захотите.
 
 #### Процесс оплаты
 
@@ -360,9 +359,9 @@ import {
 } from "../../services/ton.js";
 ```
 
-После этого мы создадим обработчик startPaymentProcess, который мы уже зарегистрировали в app.js для выполнения при нажатии определенной кнопки
+После этого мы создадим обработчик startPaymentProcess, который мы уже зарегистрировали в app.js для выполнения при нажатии определенной кнопки This function is executed when a specific button is pressed. This function is executed when a specific button is pressed.
 
-В Telegram при нажатии на инлайн-кнопку появляются крутящиеся часы, чтобы убрать их, мы ответ на callback-запрос
+To remove the spinning watch icon in Telegram, we acknowledge the callback before proceeding.
 
 ```js
   await ctx.answerCallbackQuery();
@@ -485,3 +484,6 @@ npm run app
 - Сделано для TON как часть [ton-footsteps/58] (https://github.com/ton-society/ton-footsteps/issues/58)
 - By Coalus ([Telegram @coalus](https://t.me/coalus), [Coalus на GitHub](https://github.com/coalus))
 - [Источники ботов](https://github.com/coalus/DumplingShopBot)
+
+<Feedback />
+

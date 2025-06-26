@@ -1,10 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
 # Оракулы RedStone
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
 
 ## Как оракулы RedStone работают с TON
 
@@ -42,7 +40,8 @@ import ThemedImage from '@theme/ThemedImage';
   .end_cell();
 ```
 
-Значение `signers` должно быть передано как сериализованный `tuple` из `int`.См. [tuple](https://github.com/ton-core/ton-core/blob/main/src/tuple/tuple.ts).
+Значение `signers` должно быть передано как сериализованный `tuple` из `int`.См.
+[tuple](https://github.com/ton-core/ton-core/blob/main/src/tuple/tuple.ts).
 
 <!-- Чтобы определить начальные (хранимые) данные для контракта Prices, используйте предопределенный
 класс [PriceManagerInitData.ts](../src/price-manager/PriceManagerInitData.ts). -->
@@ -56,6 +55,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 Значение `feed_ids` должно быть передано как сериализованный `tuple` из `int`.
 
+The value `payload` is packed from an array of bytes representing the serialized RedStone payload.
 Значение `payload` упаковывается из массива байтов, представляющих сериализованную полезную нагрузку RedStone.См. раздел [Упаковка полезной нагрузки TON RedStone](#ton-redstone-payload-packing) ниже, а также файл [constants.fc](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/contracts/redstone/constants.fc), содержащий все необходимые константы длины `int`.
 
 #### get_prices
@@ -346,3 +346,5 @@ begin_cell()
 - [Документация по внутренним сообщениям](/v3/documentation/smart-contracts/message-management/internal-messages)
 - [RedStone data-packing](https://docs.redstone.finance/docs/smart-contract-devs/how-it-works)
 - [RedStone oracles smart-contracts](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector/contracts)
+
+<Feedback />

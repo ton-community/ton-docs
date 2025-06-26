@@ -1,8 +1,6 @@
-# SDK и библиотеки для FunC
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# SDK и библиотеки для FunC
 
 ## Стандартные библиотеки
 
@@ -19,3 +17,6 @@
 - [open-contracts/crypto](https://github.com/TonoxDeFi/open-contracts/tree/main/contracts/crypto) — Предоставляет операции на кривой secp256k1
 - [toncli/test-libs](https://github.com/disintar/toncli/tree/master/src/toncli/lib/test-libs) - Операции над TLB, генерация и разбор обычных сообщений и типов
 - [ston-fi/funcbox](https://github.com/ston-fi/funcbox) - Коллекция фрагментов кода и утилит на FunC.
+
+<Feedback />
+

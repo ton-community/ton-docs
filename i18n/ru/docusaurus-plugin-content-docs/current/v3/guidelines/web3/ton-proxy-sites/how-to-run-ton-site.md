@@ -1,12 +1,10 @@
-# Как создавать TON Sites
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Как создавать TON Sites
 
 ## 👋 Введение
 
-[TON-сайты](https://blog.ton.org/ton-sites) работают почти как обычные сайты, за исключением их установки. Для их запуска требуется несколько дополнительных действий. В этом уроке я покажу вам, как это сделать.
+[TON-сайты](https://blog.ton.org/ton-sites) работают почти как обычные сайты, за исключением их установки. Для их запуска требуется несколько дополнительных действий. This guide walks you through the setup process.
 
 ## 🖥 Запуск TON-сайта
 
@@ -45,10 +43,15 @@ chmod +x tonutils-reverse-proxy-linux-amd64
 
 Если вы хотите изменить некоторые настройки, например, URL прокси-пасса, откройте файл `config.json`, отредактируйте его и перезапустите прокси. По умолчанию URL прокси-пасса – `http://127.0.0.1:80/`
 
-Прокси добавляет дополнительные заголовки:
-`X-Adnl-Ip` – ip клиента, и `X-Adnl-Id` – adnl id клиента
+The proxy also adds the following headers:
+
+- Прокси добавляет дополнительные заголовки:
+  `X-Adnl-Ip` – ip клиента, и `X-Adnl-Id` – adnl id клиента
+- `X-Adnl-Id` – the client's ADNL ID.
 
 ### Установка на любую другую ОС
+
+To install it on other systems, build the project from the source and run it as in step 2 for Linux. A `Go` environment is required.
 
 Соберите проект из исходников и запустите так же, как в шаге 2 для Linux. Для сборки требуется среда языка Go.
 
@@ -68,7 +71,7 @@ make build
 
 Вы можете проверить доступность сайта, открыв этот адрес с доменом `.adnl`. Также обратите внимание, что для того, чтобы сайт открылся, в вашем браузере должен быть запущен TON Proxy, например, через расширение [MyTonWallet](https://mytonwallet.io/).
 
-## 📌 Материалы
+## References
 
 - [Сайты TON, TON WWW и TON Proxy](https://blog.ton.org/ton-sites)
 - [Tonutils Reverse Proxy](https://github.com/tonutils/reverse-proxy)
@@ -77,3 +80,6 @@ make build
 ## См. также
 
 - [Запустить реализацию на C++](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy)
+
+<Feedback />
+

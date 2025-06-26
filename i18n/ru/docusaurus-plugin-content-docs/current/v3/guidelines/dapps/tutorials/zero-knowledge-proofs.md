@@ -1,8 +1,6 @@
-# Создание простого проекта ZK на TON
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Создание простого проекта ZK на TON
 
 ## 👋 Введение
 
@@ -23,11 +21,11 @@
 
 Прежде чем углубиться в детали нулевого разглашения, давайте начнем с простой проблемы. Предположим, вы хотите доказать дальтонику, что можно различать цвета. Мы воспользуемся интерактивным решением для решения этой проблемы. Предположим, дальтоник (проверяющий) находит два одинаковых листка бумаги, один из которых красный 🟥, а другой синий 🟦.
 
-Проверяющий показывает один из листков бумаги вам (доказывающему) и просит запомнить цвет. Затем проверяющий держит этот конкретный листок бумаги за спиной и либо оставляет его прежним, либо меняет его и спрашивает вас, изменился ли цвет или нет. Если вы можете заметить разницу, то вы можете видеть цвета (или вам просто повезло, потому что у вас был 50% шанс угадать правильный цвет).
+Проверяющий показывает один из листков бумаги вам (доказывающему) и просит запомнить цвет. Затем проверяющий держит этот конкретный листок бумаги за спиной и либо оставляет его прежним, либо меняет его и спрашивает вас, изменился ли цвет или нет. Afterward, they ask the prover whether the color has changed. Если вы можете заметить разницу, то вы можете видеть цвета (или вам просто повезло, потому что у вас был 50% шанс угадать правильный цвет).
 
 Теперь, если проверяющий выполнит этот процесс 10 раз, и вы сможете заметить разницу каждый раз, то проверяющий на ~99,90234% (1 - (1/2)^10) уверен, что используются правильные цвета. Таким образом, если верификатор завершит процесс 30 раз, то верификатор будет уверен на 99,99999990686774% (1 - (1/2)^30).
 
-Тем не менее, это интерактивное решение, и неэффективно иметь DApp, которое просит пользователей отправить 30 транзакций для подтверждения определенных данных. Поэтому необходимо неинтерактивное решение; здесь вступают в дело Zk-SNARK и Zk-STARK.
+However, this method is interactive, meaning it requires multiple steps between the prover and verifier. Тем не менее, это интерактивное решение, и неэффективно иметь DApp, которое просит пользователей отправить 30 транзакций для подтверждения определенных данных. Поэтому необходимо неинтерактивное решение; здесь вступают в дело Zk-SNARK и Zk-STARK.
 
 Для целей этого руководства мы рассмотрим только Zk-SNARK. Однако вы можете прочитать больше о том, как работают Zk-STARK, на [сайте StarkWare](https://starkware.co/stark/), а информацию, сравнивающую различия между Zk-SNARK и Zk-STARK, можно найти в этой [записи в блоге Panther Protocol](https://blog.pantherprotocol.io/zk-snarks-vs-zk-starks-differences-in-zero-knowledge-technologies/).\*\*
 
@@ -67,7 +65,7 @@ npm add --save-dev snarkjs ffjavascript
 npm i -g circom
 ```
 
-4. Далее мы добавим следующий раздел в package.json (обратите внимание, что некоторые из кодов операций, которые мы будем использовать, пока недоступны в выпуске основной сети)
+4. Modify the package.json file by adding the necessary dependencies. Note that some opcodes used in this tutorial are not yet available on the mainnet release.
 
 ```json
 "overrides": {
@@ -91,7 +89,7 @@ npm i --save-dev @ton-community/sandbox@0.12.0-tvmbeta.1
 
 ## Схема Circom
 
-Сначала давайте создадим папку `simple-zk/circuits`, а затем создадим в ней файл и добавим в него следующий код:
+Сначала давайте создадим папку `simple-zk/circuits`, а затем создадим в ней файл и добавим в него следующий код: Сначала давайте создадим папку `simple-zk/circuits`, а затем создадим в ней файл и добавим в него следующий код: Inside this folder, create a new file and add the following code:: Сначала давайте создадим папку `simple-zk/circuits`, а затем создадим в ней файл и добавим в него следующий код: Inside this folder, create a new file and add the following code::
 
 ```circom
 template Multiplier() {
@@ -111,7 +109,7 @@ component main = Multiplier();
 
 Чтобы узнать больше о языке circom, посетите [этот сайт](https://docs.circom.io/).
 
-Далее мы создадим папку для наших файлов сборки и переместим туда данные, выполнив следующее (находясь в папке `simple-zk`):
+Далее мы создадим папку для наших файлов сборки и переместим туда данные, выполнив следующее (находясь в папке `simple-zk`): Далее мы создадим папку для наших файлов сборки и переместим туда данные, выполнив следующее (находясь в папке `simple-zk`): Далее мы создадим папку для наших файлов сборки и переместим туда данные, выполнив следующее (находясь в папке `simple-zk`): While inside the `simple-zk` folder, run the following commands:
 
 ```bash
 mkdir -p ./build/circuits
@@ -137,11 +135,10 @@ echo 'Verify the final ptau'
 node ../../../snarkjs/build/cli.cjs powersoftau verify pot14_final.ptau
 ```
 
-После завершения описанного выше процесса в папке build/circuits будет создан файл pot14_final.ptau, который можно использовать для написания будущих связанных схем.
+После завершения описанного выше процесса в папке build/circuits будет создан файл pot14_final.ptau, который можно использовать для написания будущих связанных схем. This file can be reused for generating future circuits.
 
 :::caution Размер ограничений
 Если написана более сложная схема с большим количеством ограничений, необходимо сгенерировать настройку PTAU с использованием большего параметра.
-:::
 
 Вы можете удалить ненужные файлы:
 
@@ -159,7 +156,6 @@ circom ../../circuits/test.circom --r1cs circuit.r1cs --wasm circuit.wasm --prim
 
 Теперь наша схема скомпилирована в файлы `build/circuits/circuit.sym`, `build/circuits/circuit.r1cs` и `build/circuits/circuit.wasm`.
 
-:::info кривые altbn-128 и bls12-381
 Эллиптические кривые altbn-128 и bls12-381 в настоящее время поддерживаются snarkjs. Кривая [altbn-128](https://eips.ethereum.org/EIPS/eip-197) поддерживается только в Ethereum. Однако в TON поддерживается только кривая bls12-381.
 :::
 
@@ -243,7 +239,7 @@ node ../../../snarkjs/build/cli.cjs zkey export funcverifier circuit_final.zkey 
 
 ## 🚢 Развертывание контракта верификатора​
 
-Давайте рассмотрим файл `contracts/verifier.fc` пошагово, поскольку он содержит магию ZK-SNARK:
+Now, let's review the `contracts/verifier.fc` file step by step. This file contains the core logic required for ZK-SNARK verification.
 
 ```func
 const slice IC0 = "b514a6870a13f33f07bc314cdad5d426c61c50b453316c241852089aada4a73a658d36124c4df0088f2cd8838731b971"s;
@@ -290,7 +286,7 @@ int bls_pairing(slice x1, slice y1, slice x2, slice y2, slice x3, slice y3, slic
 }
 ```
 
-Далее следует несколько простых функций утилит, которые используются для загрузки данных доказательства, отправленных в контракт:
+Next there are several simple util functions. These functions process and load proof data sent to the contract.
 
 ```func
 (slice, slice) load_p1(slice body) impure {
@@ -344,7 +340,7 @@ int bls_pairing(slice x1, slice y1, slice x2, slice y2, slice x3, slice y3, slic
 }
 ```
 
-Теперь необходимо отредактировать два файла в папке `wrappers`. Первый файл, требующий нашего внимания, — это файл `ZkSimple.compile.ts` (если на шаге 1 было задано другое имя для контракта, его имя будет другим). Мы поместим файл `verifier.fc` в список контрактов, которые должны быть скомпилированы.
+Теперь необходимо отредактировать два файла в папке `wrappers`. Первый файл, требующий нашего внимания, — это файл `ZkSimple.compile.ts` (если на шаге 1 было задано другое имя для контракта, его имя будет другим). ). Мы поместим файл `verifier.fc` в список контрактов, которые должны быть скомпилированы.
 
 ```ts
 import { CompilerConfig } from '@ton-community/blueprint';
@@ -480,7 +476,7 @@ const wasmPath = path.join(__dirname, "../build/circuits", "circuit.wasm");
 const zkeyPath = path.join(__dirname, "../build/circuits", "circuit_final.zkey");
 ````
 
-Заполним тест `should verify`. Сначала нам нужно будет сгенерировать доказательство.
+Заполним тест `should verify`. Сначала нам нужно будет сгенерировать доказательство. The proof will later be sent to the contract for verification.
 
 ```ts
 it('should verify', async () => {
@@ -629,3 +625,6 @@ Ran all test suites.
 ## 📬 Об авторе
 
 - Saber в [Telegram](https://t.me/saber_coder) или [GitHub](https://github.com/saberdotcoder) или [LinkedIn](https://www.linkedin.com/in/szafarpoor/)
+
+<Feedback />
+
