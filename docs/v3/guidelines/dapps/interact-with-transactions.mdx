@@ -1529,10 +1529,13 @@ Get collection data
 
 This section consider how developer may access set of transaction from blockchain.
 
-### TON main services
+### TON HTTP API services
 
-We will review services that build native infrastructure; other API providers most likely rely on one of these standard solutions.
-We recommend evaluating a provider's quality independently based on historical performance and suitability for your specific use case.
+_HTTP API service_ is a software solution that retrive RAW data from Liteserver node and encode this for other service to standard formats.
+The one how provide solution calls a HTTP API _provider_.
+
+We will review services that build native infrastructure; regarding API providers most likely rely on one of these standard solutions.
+We recommend evaluating a provider's quality independently based on [historical performance](https://tonstat.us/) and suitability for your specific use case.
 
 #### TON Center
 TON Center services are developed by the TON Core team using the Go stack. It includes two distinct services:
@@ -1542,11 +1545,8 @@ TON Center services are developed by the TON Core team using the Go stack. It in
 #### TON API
 A solution focused on business needs, often providing ready-to-use implementations for typical tasks in TON.
 
-#### TONX API
-An API service that originated from TON Center but continued closed development, expanding interfaces for client-specific needs.
-
 #### Tonhub API
-An HTTP API service with a unique structure different from TON API and TON Center. This interface better serves some use cases.
+An alternative opensource HTTP API service with a unique structure different from TON API and TON Center. This interface may be helpful in some specific use cases.
 
 ---
 
