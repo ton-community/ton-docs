@@ -617,11 +617,14 @@ public async deploy(wallet: OpenedWallet) {
     return seqno;
   }
 ```
+
 :::info
 `sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
 :::
+
 Deploying a new smart contract in our case means sending a message from our wallet to the collection address, which we can calculate if we have `StateInit`, along with its `StateInit`.
 When the owner mints a new NFT, the collection accepts the owner's message and sends a new message to the created NFT smart contract, which requires a fee. Let's write a method to replenish the collection's balance based on the number of NFTs to be minted:
+
 ```ts
 public async topUpBalance(
     wallet: OpenedWallet,
@@ -688,6 +691,7 @@ export type mintParams = {
   commonContentUrl: string
 }
 ```
+
 Name | Explanation 
 ---|---
 itemOwnerAddress |	The address set as the item's owner
@@ -762,6 +766,10 @@ export class NftItem {
   }
 }
 ```
+
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
 
 At the end, we write a short method to retrieve an NFT's address by its index:
 
@@ -1079,6 +1087,10 @@ Finally, let's send our message:
   return seqno;
 }
 ```
+
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
 
 Once the sale contract is deployed, the only step left is to transfer ownership of the NFT item to the sale contract's address.
 
