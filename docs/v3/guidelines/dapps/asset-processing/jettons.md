@@ -47,7 +47,7 @@ Each service in the ecosystem is expected to set `forward_ton_amount` to 0.00000
 
 
 :::tip
-The following documents provide details on jetton architecture and core TON concepts, which differ from EVM-like and other blockchains. Understanding these concepts is crucial and will greatly aid in grasping TON’s functionality.
+The following documents provide details on jetton architecture and core TON concepts, which differ from EVM-like and other blockchains. Understanding these concepts is crucial and will greatly aid in grasping TON's functionality.
 :::
 
 This document covers the following topics in order:
@@ -119,7 +119,7 @@ Anyone can create a counterfeit version of a valuable jetton by using an arbitra
 
 Jettons with the symbol TON or those containing system notification messages such as ERROR or SYSTEM should be displayed in a way that prevents confusion with TON transfers or system notifications. Sometimes, scammers design the `symbol`, `name`, and `image` to mimic the original and mislead users.
 
-To prevent fraud, verify the **original jetton address** (jetton master contract) for specific jetton types. Alternatively, **check the project’s official social media** or website for **accurate information**. Use [Tonkeeper ton-assets list](https://github.com/tonkeeper/ton-assets) ton-assets list to verify assets.
+To prevent fraud, verify the **original jetton address** (jetton master contract) for specific jetton types. Alternatively, **check the project's official social media** or website for **accurate information**. Use [Tonkeeper ton-assets list](https://github.com/tonkeeper/ton-assets) ton-assets list to verify assets.
 
 
 ### Retrieving jetton data
@@ -171,7 +171,7 @@ In certain cases, token wallets are used for individual token holders for each t
 `Jetton wallets` should not be confused with blockchain wallets used for storing only the Toncoin asset (e.g., v3R2 wallets, highload wallets). Jetton wallets are dedicated to managing specific jetton types.
 
 ### Jetton wallet deployment
-When `transferring jettons` between wallets, transactions require TON to cover network **gas fees**. The recipient does not need to deploy a jetton wallet beforehand. If the sender has enough TON to cover fees, the recipient’s jetton wallet will be deployed automatically.
+When `transferring jettons` between wallets, transactions require TON to cover network **gas fees**. The recipient does not need to deploy a jetton wallet beforehand. If the sender has enough TON to cover fees, the recipient's jetton wallet will be deployed automatically.
 
 ### Retrieving jetton wallet addresses for a given user
 To get the `address` of a `jetton wallet` using the `owner address` (the TON wallet address), the `jetton main contract` provides the `get_wallet_address(slice owner_address)` method.
@@ -212,7 +212,7 @@ For more examples, read the [TON cookbook](/v3/guidelines/dapps/cookbook#tep-74-
 
 ### Retrieving data for a specific jetton wallet
 
-To retrieve the wallet’s account balance, owner identification information, and other details related to a specific jetton wallet contract, use the get_wallet_data() method within the jetton wallet contract.
+To retrieve the wallet's account balance, owner identification information, and other details related to a specific jetton wallet contract, use the get_wallet_data() method within the jetton wallet contract.
 
 This method returns the following data:
 
@@ -286,7 +286,7 @@ Communication between jetton wallets and TON wallets follows this sequence:
 
 
 #### Message 2'
-The `payee’s jetton wallet` → payee. Transfer notification message. This is sent only if `forward_ton_amount` is not zero and contains the following data:
+The `payee's jetton wallet` → payee. Transfer notification message. This is sent only if `forward_ton_amount` is not zero and contains the following data:
 
 | Name              | Type    |
 |-------------------|---------|
@@ -295,7 +295,7 @@ The `payee’s jetton wallet` → payee. Transfer notification message. This is 
 | `sender`          | address |
 | `forward_payload` | cell    |
 
-In this case, the `sender` address refers to Alice’s `jetton wallet`.
+In this case, the `sender` address refers to Alice's `jetton wallet`.
 
 #### Message 2''
 `payee's jetton wallet -> Sender`. Excess message body. This is sent only if there are remaining Toncoin after paying the fees. Contains the following data:
@@ -617,6 +617,10 @@ await wallet.methods.transfer({
 
 </TabItem>
 <TabItem value="tonutils-go" label="Golang">
+
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
 
 <details>
 <summary>
