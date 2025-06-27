@@ -792,6 +792,10 @@ export class NftItem {
 }
 ```
 
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
+
 At the end, we write a short method to retrieve an NFT's address by its index:
 
 Create a client variable to call the collection's get-method.
@@ -1117,6 +1121,10 @@ Finally, let's send our message:
   return seqno;
 }
 ```
+
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
 
 Once the sale contract is deployed, the only step left is to transfer ownership of the NFT item to the sale contract's address.
 
