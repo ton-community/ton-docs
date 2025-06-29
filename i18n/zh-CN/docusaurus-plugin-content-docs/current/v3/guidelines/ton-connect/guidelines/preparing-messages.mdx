@@ -657,7 +657,7 @@ await jetton.send(
 <Tabs groupId="Jetton Transfer with Comment">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-Jetton 转账（[TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)）的 `messageBody` 带有注释，我们应在常规转账的 `body` 之外将注释序列化，并将其打包到 `forwardPayload` 中。请注意，不同代币的小数位数可能不同：例如，USDT 使用 6 个小数位 (1 USDT = 1 _ 10\*\*9)，而 TON 使用 9 个小数位 (1 TON = 1 _ 10\*\*9)。
+Jetton 转账（[TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.mdx#1-transfer)）的 `messageBody` 带有注释，我们应在常规转账的 `body` 之外将注释序列化，并将其打包到 `forwardPayload` 中。请注意，不同代币的小数位数可能不同：例如，USDT 使用 6 个小数位 (1 USDT = 1 _ 10\*\*9)，而 TON 使用 9 个小数位 (1 TON = 1 _ 10\*\*9)。
 
 ```js
     import { beginCell, toNano, Address } from '@ton/ton'
@@ -858,7 +858,7 @@ jetton.send(sender, RECEIVER_ADDRESS, toNano(10), { notify: { payload: forwardPa
 <Tabs groupId="Jetton Burn">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-Jetton Burn 的 `body` 以 ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) 标准为基础。请注意，不同代币的小数位数可能不同：例如，USDT 使用 6 个小数位 (1 USDT = 1 _ 10\*\*9)，而 TON 使用 9 个小数位 (1 TON = 1 _ 10\*\*9)。
+Jetton Burn 的 `body` 以 ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.mdx#1-transfer)) 标准为基础。请注意，不同代币的小数位数可能不同：例如，USDT 使用 6 个小数位 (1 USDT = 1 _ 10\*\*9)，而 TON 使用 9 个小数位 (1 TON = 1 _ 10\*\*9)。
 
 ```js
     import { beginCell, Address } from '@ton/ton'

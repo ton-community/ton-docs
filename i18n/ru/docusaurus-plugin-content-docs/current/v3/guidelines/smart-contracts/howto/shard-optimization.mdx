@@ -33,8 +33,7 @@ On the other hand, consider a smart contract, contract A, that interacts with je
 Если вы ожидаете, что скорость пополнения счета превысит, скажем, 30 переводов в секунду, желательно иметь несколько адресов, которые позволят принимать пополнения параллельно, существенно увеличивая пропускную способность. Если вам известен адрес, с которого пользователь будет вносить депозит, например, через транзакцию в TON Connect, тогда вам стоит выбрать адрес, наиболее близкий к адресу кошелька пользователя. Готовый к использованию код на Typescript для выбора ближайшего адреса может выглядеть так:
 
 ```typescript
-
-import { Address } from '@ton/ton';
+import { Address } from "@ton/ton";
 
 function findMatchingBits (a: number, b: number, start_from: number) {
     let bitPos    = start_from;
@@ -45,31 +44,31 @@ function findMatchingBits (a: number, b: number, start_from: number) {
         const shift    = 8 - bitCount;
         if(((a >> shift) & mask) == ((b >> shift) & mask)) {
             bitPos++;
-        }
+ }
         else {
             keepGoing = false;
-        }
-    } while(keepGoing && bitPos < 7);
+ }
+ } while(keepGoing && bitPos < 7);
 
     return bitPos;
 }
 
 function chooseAddress(user: Address, contracts: Address[]) {
-    const maxBytes = 32;
-    let byteIdx = 0;
-    let bitIdx  = 0;
-    let bestMatch: Address | undefined;
+  const maxBytes = 32;
+  let byteIdx = 0;
+  let bitIdx = 0;
+  let bestMatch: Address | undefined;
 
     if(user.workChain !== 0) {
         throw new TypeError(`Only basechain user address allowed:${user}`);
-    }
+ }
     for(let testContract of contracts) {
         if(testContract.workChain !== 0) {
             throw new TypeError(`Only basechain deposit address allowed:${testContract}`);
-        }
+ }
         if(byteIdx >= maxBytes) {
             break;
-        }
+ }
         if(byteIdx == 0 || testContract.hash.subarray(0, byteIdx).equals(user.hash.subarray(0, byteIdx))) {
             let keepGoing  = true;
             do {
@@ -79,8 +78,8 @@ function chooseAddress(user: Address, contracts: Address[]) {
                     bitIdx = 0;
                     if(byteIdx == maxBytes) {
                         break;
-                    }
-                }
+ }
+ }
                 else {
                     keepGoing = false;
                     if(bitIdx < 7) {
@@ -88,16 +87,16 @@ function chooseAddress(user: Address, contracts: Address[]) {
                         if(resIdx > bitIdx) {
                             bitIdx = resIdx;
                             bestMatch = testContract;
-                        }
-                    }
-                }
-            } while(keepGoing);
-        }
-    }
+ }
+ }
+ }
+ } while(keepGoing);
+ }
+ }
     return {
         match: bestMatch,
         prefixLength: byteIdx * 8 + bitIdx
-    }
+ }
 }
 ```
 
@@ -119,8 +118,10 @@ If you expect jetton deposits, you should not only create multiple deposit addre
 
 #### Shards
 
-В логике web2, шард — это не более чем подсеть. Единственное отличие с этой точки зрения в том, что у IPv4 32-битная схема адресации, а у TON — 256-битная.\
-Таким образом, префикс шарда в адресе контракта — это часть адреса контракта, которая идентифицирует группу валидаторов, которые будут вычислять результат входящего сообщения. С точки зрения сети, очевидно, что запрос в том же шарде сети будет обрабатываться быстрее, чем тот, который маршрутизируется в другое месте, верно? Это аналогично использованию CDN для размещения контента ближе к конечным пользователям, в свою очередь в TON мы развертываем контракт ближе к конечным пользователям.
+In this analogy, a shard functions like a subnet. The key difference lies in the addressing scheme: IPv4 uses a 32-bit system, while TON employs a 256-bit one.\
+The shard prefix of a contract address identifies the group of validators responsible for computing the results of its incoming messages.\
+The shard prefix of a contract address identifies the group of validators responsible for computing the results of its incoming messages.\
+The shard prefix of a contract address identifies the group of validators responsible for computing the results of its incoming messages. С точки зрения сети, очевидно, что запрос в том же шарде сети будет обрабатываться быстрее, чем тот, который маршрутизируется в другое месте, верно? Это аналогично использованию CDN для размещения контента ближе к конечным пользователям, в свою очередь в TON мы развертываем контракт ближе к конечным пользователям.
 
 Если нагрузка на шард превышает [определенный уровень](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#algorithm-for-deciding-whether-to-split-or-merge), шард разделяется. Цель состоит в том, чтобы предоставить выделенные вычислительные ресурсы загружаемому контракту и изолировать его влияние на всю сеть. Максимальная длина префикса шарда составляет всего 4 бита, поэтому блокчейн может быть разделен максимум на 16 шардов с префиксом 0 до 15.
 
@@ -137,7 +138,7 @@ import { Address } from '@ton/core';
 const addressA = Address.parse(...);
 const addressB = Address.parse(...);
 
-if((addressA.hash[0] >> 4) == (addressb.hash[0] >> 4)) {
+if((addressA.hash[0] >> 4) == (addressB.hash[0] >> 4)) {
   console.log("Same shard");
 } else {
   console.log("Nope");

@@ -11,10 +11,14 @@ import Button from "@site/src/components/button";
 Компилятор Tolk — это буквально ответвление компилятора FunC, представляющее знакомый синтаксис, похожий на TypeScript, но оставляющее все низкоуровневые оптимизации нетронутыми. Представьте себе Tolk как «**следующее поколение FunC**».
 
 ```tolk
-import "storage.tolk"
+import "utils.tolk"
 
-fun loadData() {
-    ctxCounter = getContractData().beginParse().loadUint(32);
+struct Storage {
+    counter: int32;
+}
+
+fun Storage.load() {
+    return Storage.fromCell(contract.getData());
 }
 
 fun onInternalMessage(msgValue: int, msgFull: cell, msgBody: slice) {
@@ -26,19 +30,23 @@ fun onInternalMessage(msgValue: int, msgFull: cell, msgBody: slice) {
     ...
 }
 
-get currentCounter(): int {
-    loadData(); // fills global variables
-    return ctxCounter;
+get currentCounter(): int32 {
+    val st = Storage.load();
+    return st.counter;
 }
 ```
 
+```mdx-code-block
 <details>
-  <summary><b>См. ту же логику, реализованную с помощью FunC</b></summary>
+  <summary><b>See same logic implemented with FunC</b></summary>
+```
 
 ```func
-#include "storage.fc";
+#include "utils.fc";
 
-() load_data() impure {
+global int ctx_counter;
+
+int load_data() impure {
   slice cs = get_data().begin_parse();
   ctx_counter = cs~load_uint(32);
 }
@@ -58,15 +66,25 @@ int currentCounter() method_id {
 }
 ```
 
+```mdx-code-block
 </details>
 
-<Button href="https://github.com/ton-blockchain/convert-func-to-tolk" colorType={'primary'} sizeType={'sm'}>
-Попробуйте конвертер FunC → Tolk
+<Button
+  href="https://github.com/ton-blockchain/convert-func-to-tolk"
+  colorType={"primary"}
+  sizeType={"sm"}
+>
+  Try a FunC → Tolk converter
 </Button>
-<Button href="/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short" colorType={'secondary'} sizeType={'sm'}>
-Прочитайте "Различия Tolk и FunC"
+<Button
+  href="/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short"
+  colorType={"secondary"}
+  sizeType={"sm"}
+>
+  Tolk vs FunC differences
 </Button>
-<div style={{height: '2em'}}></div>
+<div style={{ height: "2em" }}></div>
+```
 
 ## Мотивация, стоящая за Tolk
 
@@ -149,6 +167,8 @@ Here are some points to investigate:
 
 ## See also
 
-- лучший опыт для общих вариантов использования (жетонов, nft и т. д.)
+- [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short)
 
+```mdx-code-block
 <Feedback />
+```

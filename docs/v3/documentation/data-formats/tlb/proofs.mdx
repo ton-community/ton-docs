@@ -252,7 +252,7 @@ if mc_state_hash != state_hash:
     raise ProofError('mc state hashes mismatch')
 ```
 
-* _Why?_ — We can trust the associated cell data because the block header proof is verified. Therefore, the new hash from the ShardState Merkle update is considered trusted. We must confirm the hashes match to validate the second cell’s data.
+- _Why?_ — We can trust the associated cell data because the block header proof is verified. Therefore, the new hash from the ShardState Merkle update is considered trusted. We must confirm the hashes match to validate the second cell’s data.
 
 Now, proceed to deserialize the second cell:
 
@@ -974,7 +974,7 @@ After deserializing all parameters, we obtain:
 
 ## See also
 
-* [Exotic cells](/v3/documentation/data-formats/tlb/exotic-cells)
+- [Exotic cells](/v3/documentation/data-formats/tlb/exotic-cells)
 
 ````mdx-code-block
 <Feedback />

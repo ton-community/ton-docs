@@ -23,8 +23,10 @@ Raw: 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 
 Чтобы получить объект адреса из строки в вашем SDK, вы можете использовать следующий код:
 
+```mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
+```
 
 ```js
 import { Address } from "@ton/core";
@@ -43,8 +45,10 @@ console.log(address2.toString()); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5g
 console.log(address2.toRawString()); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 ```
 
+```mdx-code-block
 </TabItem>
 <TabItem value="js-tonweb" label="JS (tonweb)">
+```
 
 ```js
 const TonWeb = require('tonweb');
@@ -61,8 +65,10 @@ console.log(address1.toString(true, true, true)); // EQDKbjIcfM6ezt8KjKJJLshZJJS
 console.log(address2.toString(isUserFriendly = false)); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 ```
 
+```mdx-code-block
 </TabItem>
 <TabItem value="go" label="Go">
+```
 
 ```go
 package main
@@ -89,8 +95,10 @@ func rawAddr(addr *address.Address) string {
 }
 ```
 
+```mdx-code-block
 </TabItem>
 <TabItem value="py" label="Python">
+```
 
 ```py
 from pytoniq_core import Address
@@ -107,12 +115,14 @@ print(address2.to_str(is_user_friendly=True, is_bounceable=True, is_url_safe=Tru
 print(address2.to_str(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 ```
 
+```mdx-code-block
 </TabItem>
 </Tabs>
+```
 
 ### Какие флаги существуют в user-friendly адресах?
 
-Определены два флага: **bounceable**/**non-bounceable** and **testnet**/**any-net**. These flags are represented in the first character of the address, which corresponds to the first 6 bits of the address encoding. Их можно легко определить, взглянув на первую букву адреса, поскольку она обозначает первые 6 бит в кодировке адреса, а флаги расположены там в соответствии с [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
+Определены два флага: **bounceable**/**non-bounceable** and **testnet**/**any-net**. These flags are represented in the first character of the address, which corresponds to the first 6 bits of the address encoding. Их можно легко определить, взглянув на первую букву адреса, поскольку она обозначает первые 6 бит в кодировке адреса, а флаги расположены там в соответствии с [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.mdx#smart-contract-addresses):
 
 | Начало адреса | Бинарная форма | Bounceable | Testnet-only |
 | :-----------: | :------------: | :--------: | :----------: |
@@ -127,8 +137,10 @@ print(address2.to_str(is_user_friendly=False))  # 0:ca6e321c7cce9ecedf0a8ca2492e
 
 Кроме того, в некоторых библиотеках вы можете встретить параметр сериализации `urlSafe`. Формат base64 не является безопасным для URL-адресов, а это значит, что некоторые символы (а именно, `+` и `/`) могут вызвать проблемы при передаче адреса в ссылке. Когда `urlSafe = true`, все символы `+` заменяются на `-`, а все символы `/` заменяются на `_`. Вы можете получить эти форматы адресов, используя следующий код:
 
+```mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
+```
 
 ```js
 import { Address } from "@ton/core";
@@ -145,8 +157,10 @@ console.log(address.toString({testOnly: true})) // kQDKbjIcfM6ezt8KjKJJLshZJJSqX
 console.log(address.toString({bounceable: false, testOnly: true})) // 0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK
 ```
 
+```mdx-code-block
 </TabItem>
 <TabItem value="js-tonweb" label="JS (tonweb)">
+```
 
 ```js
 const TonWeb = require('tonweb');
@@ -162,8 +176,10 @@ console.log(address.toString(true, true, true, true)); // kQDKbjIcfM6ezt8KjKJJLs
 console.log(address.toString(true, true, false, true)); // 0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK
 ```
 
+```mdx-code-block
 </TabItem>
 <TabItem value="go" label="Go">
+```
 
 ```go
 package main
@@ -187,8 +203,10 @@ func main() {
 }
 ```
 
+```mdx-code-block
 </TabItem>
 <TabItem value="py" label="Python">
+```
 
 ```py
 from pytoniq_core import Address
@@ -204,14 +222,18 @@ print(address.to_str(is_user_friendly=True, is_bounceable=True, is_url_safe=True
 print(address.to_str(is_user_friendly=True, is_bounceable=False, is_url_safe=True, is_test_only=True))  # 0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK
 ```
 
+```mdx-code-block
 </TabItem>
 </Tabs>
+```
 
 ### Как проверить корректность адреса TON?
 
+```mdx-code-block
 <Tabs groupId="address-examples">
 
 <TabItem value="Tonweb" label="JS (Tonweb)">
+```
 
 ```js
 
@@ -220,8 +242,10 @@ const TonWeb = require("tonweb")
 TonWeb.utils.Address.isValid('...')
 ```
 
+```mdx-code-block
 </TabItem>
 <TabItem value="GO" label="tonutils-go">
+```
 
 ```python
 package main
@@ -236,8 +260,10 @@ if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
 }
 ```
 
+```mdx-code-block
 </TabItem>
 <TabItem value="Java" label="ton4j">
+```
 
 ```javascript
   /* Maven
@@ -255,8 +281,10 @@ if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
   }
 ```
 
+```mdx-code-block
 </TabItem>
 <TabItem value="Kotlin" label="ton-kotlin">
+```
 
 ```javascript
 try {
@@ -266,8 +294,10 @@ try {
 }
 ```
 
+```mdx-code-block
 </TabItem>
 </Tabs>
+```
 
 ## Стандартные кошельки в экосистеме TON
 
@@ -275,6 +305,7 @@ try {
 
 #### Отправка сообщений
 
+```mdx-code-block
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -286,9 +317,11 @@ try {
 />
 </div>
 <br></br>
+```
 
 #### Развертывание контракта
 
+```mdx-code-block
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -300,6 +333,7 @@ try {
 />
 </div>
 <br></br>
+```
 
 Большинство SDK обеспечивают следующий процесс отправки сообщений из вашего кошелька:
 
@@ -308,8 +342,10 @@ try {
 - Затем вы _открываете_ контракт в блокчейн-обёртке. Это означает, что объект контракта больше не является абстрактным и представляет собой реальную учётную запись в основной или тестовой сети TON.
 - После этого вы можете формировать необходимые вам сообщения и отправлять их. Вы также можете отправлять до 4 сообщений за один запрос, как описано в [расширенном руководстве](/v3/guidelines/smart-contracts/howto/wallet#sending-multiple-messages-simultaneously).
 
+```mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js-ton-v4" label="JS (@ton) for Wallet V4">
+```
 
 ```js
 import { TonClient, WalletContractV4, internal } from "@ton/ton";
@@ -342,9 +378,11 @@ await contract.sendTransfer({
 });
 ```
 
+```mdx-code-block
 </TabItem>
 
 <TabItem value="js-ton-v5" label="JS (@ton) for Wallet V5">
+```
 
 ```js
 import { TonClient, WalletContractV5R1, internal, SendMode } from "@ton/ton";
@@ -382,9 +420,11 @@ await contract.sendTransfer({
 });
 ```
 
+```mdx-code-block
 </TabItem>
 
 <TabItem value="ton-kotlin" label="ton-kotlin">
+```
 
 ```kotlin
 // Setup liteClient
@@ -418,9 +458,11 @@ runBlocking {
 }
 ```
 
+```mdx-code-block
 </TabItem>
 
 <TabItem value="py" label="Python">
+```
 
 ```py
 from pytoniq import LiteBalancer, WalletV4R2
@@ -446,16 +488,20 @@ async def main():
 asyncio.run(main())
 ```
 
+```mdx-code-block
 </TabItem>
 
 </Tabs>
+```
 
 ### Написание комментариев: длинные строки в формате snake
 
 Sometimes, it's necessary to store large strings in cells, but the maximum size for a cell is 1023 bits. В этом случае можно использовать snake cells.
 
+```mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js-tonweb" label="JS (tonweb)">
+```
 
 ```js
 const TonWeb = require("tonweb");
@@ -476,7 +522,7 @@ function writeStringTail(str, cell) {
 function readStringTail(slice) {
     const str = new TextDecoder('ascii').decode(slice.array); // decode uint8array to string
     if (cell.refs.length > 0) {
-        return str + readStringTail(cell.refs[0].beginParse()); // read next cell
+        return str + readStringTail(slice.refs[0]); // read next cell
     } else {
         return str;
     }
@@ -489,8 +535,10 @@ const text = readStringTail(cell.beginParse());
 console.log(text);
 ```
 
+```mdx-code-block
 </TabItem>
 </Tabs>
+```
 
 Во многих SDK уже есть функции для разбора и хранения длинных строк. В других случаях можно работать с такими ячейками с помощью рекурсии или оптимизировать их (метод, известный как "хвостовые вызовы" или "tail calls").
 
@@ -506,8 +554,10 @@ console.log(text);
 В `JettonMaster` из `@ton/ton` отсутствует множество функций, но _эта_, к счастью, реализована.
 :::
 
+```mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="user-jetton-wallet-method-js" label="@ton/ton">
+```
 
 ```js
 const { Address, beginCell } = require("@ton/core")
@@ -524,9 +574,11 @@ const jettonMaster = client.open(JettonMaster.create(jettonMasterAddress))
 console.log(await jettonMaster.getWalletAddress(userAddress))
 ```
 
+```mdx-code-block
 </TabItem>
 
 <TabItem value="user-jetton-wallet-get-method-js" label="Manually call get-method">
+```
 
 ```js
 const { Address, beginCell } = require("@ton/core")
@@ -549,9 +601,11 @@ getUserWalletAddress(userAddress, jettonMasterAddress)
     .then((jettonWalletAddress) => {console.log(jettonWalletAddress)})
 ```
 
+```mdx-code-block
 </TabItem>
 
 <TabItem value="ton-kotlin" label="ton-kotlin">
+```
 
 ```kotlin
 // Setup liteClient
@@ -588,9 +642,11 @@ println(jettonWalletAddress.toString(userFriendly = true))
 
 ```
 
+```mdx-code-block
 </TabItem>
 
 <TabItem value="py" label="Python">
+```
 
 ```py
 from pytoniq import LiteBalancer, begin_cell
@@ -613,17 +669,21 @@ async def main():
 asyncio.run(main())
 ```
 
+```mdx-code-block
 </TabItem>
 
 </Tabs>
+```
 
 ### Как вычислить адрес кошелька пользователя Jetton (offline)?
 
 Постоянный вызов GET-метода для получения адреса кошелька может занимать много времени и ресурсов. 
 Если вам заранее известен код Jetton Wallet и структура его хранилища, можно определить адрес кошелька без сетевых запросов.
 
+```mdx-code-block
 <Tabs groupId="code-examples">
-<TabItem value="js-ton" label="JS (@ton/ton)">
+<TabItem value="ts-ton" label="TS (@ton/ton)">
+```
 
 ```ts
 import { Cell, contractAddress, toNano, TupleBuilder } from "@ton/core";
@@ -701,9 +761,11 @@ async function main() {
 void main();
 ```
 
+```mdx-code-block
 </TabItem>
 
 <TabItem value="Python" label="Python">
+```
 
 Unfortunately, there is currently no tool like Sandbox for Python to emulate the blockchain. 
 However, you can still implement something similar with [pytvm](https://github.com/yungwine/pytvm).
@@ -712,53 +774,228 @@ Essentially you need to build the same thing as `get_wallet_address(slice owner_
 
 ```python
 
-from pytoniq_core import Address, Cell, begin_cell
+# Recreate from jetton-utils.fc calculate_jetton_wallet_address()
+# https://tonscan.org/jetton/EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo#source
 
-def calculate_jetton_address(
-    owner_address: Address, jetton_master_address: Address, jetton_wallet_code: str
-):
-    # Recreate from jetton-utils.fc calculate_jetton_wallet_address()
-    # https://tonscan.org/jetton/EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs#source
+from pytoniq_core import Address, Cell, Builder, Slice
 
-    data_cell = (
-        begin_cell()
-        .store_uint(0, 4)
-        .store_coins(0)
-        .store_address(owner_address)
-        .store_address(jetton_master_address)
-        .end_cell()
+# Constants from the HMSTR FunC code
+STATUS_SIZE = 4
+MERKLE_ROOT_SIZE = 256
+SALT_SIZE = 10  # Bits for salt
+ITERATION_NUM = 32  # Number of salt iterations
+MY_WORKCHAIN = 0  # Assuming Basechain (0)
+
+# --- Configuration Variables ---
+# Replace these values with your actual data before running the script
+OWNER_ADDRESS_EXAMPLE = "UQDKHZ7e70CzqdvZCC83Z4WVR8POC_ZB0J1Y4zo88G-zCSRH" # Binance Hot Wallet
+JETTON_MASTER_ADDRESS_EXAMPLE = "EQAJ8uWd7EBqsmpSWaRdf_I-8R8-XHwh3gsNKhy-UrdrPcUo" # HMSTR Jetton Master
+# Gather from the blockchain using master's get_jetton_data method or compile from source.
+JETTON_WALLET_CODE_HEX_EXAMPLE = "b5ee9c72010101010023000842020f1ad3d8a46bd283321dde639195fb72602e9b31b1727fecc25e2edc10966df4"
+# The merkle_root from the master contract using get_mintless_airdrop_hashmap_root method.
+MERKLE_ROOT_EXAMPLE = 29945721131613672054990630604903528297803118035866103598622265652475246912273
+# --- End Configuration Variables ---
+
+def pack_jetton_wallet_data(
+    status: int,
+    balance: int,
+    owner_address_slice: Slice,
+    jetton_master_address_slice: Slice,
+    merkle_root: int,
+    salt: int,
+) -> Cell:
+    """
+    Packs the jetton wallet data into a cell, similar to FunC's pack_jetton_wallet_data.
+    Note: owner_address_slice and jetton_master_address_slice should be slices
+    representing the full MsgAddressInt structure (e.g., from builder.store_address().end_cell().begin_parse()).
+    """
+    builder = Builder()
+    builder.store_uint(status, STATUS_SIZE)
+    builder.store_coins(balance)
+    builder.store_slice(owner_address_slice)
+    builder.store_slice(jetton_master_address_slice)
+    builder.store_uint(merkle_root, MERKLE_ROOT_SIZE)
+    builder.store_uint(salt, SALT_SIZE)
+    return builder.end_cell()
+
+def calculate_jetton_wallet_state_init_and_salt(
+    owner_address: Address,
+    jetton_master_address: Address,
+    jetton_wallet_code: Cell,
+    merkle_root: int,
+) -> tuple[Cell, int]:
+    """
+    Calculates the optimal StateInit for a jetton wallet and the salt used.
+    This function mirrors the logic of `calculate_jetton_wallet_properties_cheap`
+    and subsequent StateInit construction in FunC.
+    """
+    owner_hash_part_int = int.from_bytes(owner_address.hash_part, "big")
+    owner_prefix = owner_hash_part_int >> (256 - 4)  # First 4 bits of owner's address hash
+
+    # Create full slice representations of addresses for storing in the data cell
+    owner_addr_builder = Builder()
+    owner_addr_builder.store_address(owner_address)
+    owner_addr_data_slice = owner_addr_builder.end_cell().begin_parse()
+
+    jetton_master_addr_builder = Builder()
+    jetton_master_addr_builder.store_address(jetton_master_address)
+    jetton_master_addr_data_slice = jetton_master_addr_builder.end_cell().begin_parse()
+
+    min_distance = 0xFFFF
+    best_salt = 0 # FunC starts salt at -1 and increments, so first real salt is 0
+    
+    best_state_init_cell = None
+
+    # Loop for salt values from 0 to ITERATION_NUM (inclusive)
+    for current_salt in range(ITERATION_NUM + 1):
+        # 1. Create the jetton wallet data cell
+        # Status and balance are 0 for this calculation, as in FunC's _cheap version
+        data_cell = pack_jetton_wallet_data(
+            status=0,
+            balance=0,
+            owner_address_slice=owner_addr_data_slice,
+            jetton_master_address_slice=jetton_master_addr_data_slice,
+            merkle_root=merkle_root,
+            salt=current_salt,
+        )
+
+        # 2. Create the StateInit cell
+        state_init_builder = Builder()
+        state_init_builder.store_uint(0, 2)  # No split_depth, No special
+        state_init_builder.store_maybe_ref(jetton_wallet_code)
+        state_init_builder.store_maybe_ref(data_cell)
+        state_init_builder.store_uint(0, 1)  # Empty libraries
+        current_state_init_cell = state_init_builder.end_cell()
+
+        # 3. Calculate account_hash (hash of state_init)
+        account_hash_bytes = current_state_init_cell.hash
+        account_hash_int = int.from_bytes(account_hash_bytes, "big")
+
+        # 4. Calculate wallet_prefix (first 4 bits of StateInit hash)
+        wallet_prefix = account_hash_int >> (256 - 4)
+
+        # 5. Calculate XOR distance
+        distance = wallet_prefix ^ owner_prefix
+
+        if distance < min_distance:
+            min_distance = distance
+            best_salt = current_salt
+            best_state_init_cell = current_state_init_cell
+        
+        if min_distance == 0: # Found a perfect match
+            break
+            
+    if best_state_init_cell is None:
+        # This should not happen if ITERATION_NUM >= 0, as at least one iteration will run.
+        # For safety, if it were to occur, recompute with the initial salt (0 or best_salt if it was updated).
+        # However, the logic ensures best_state_init_cell is set on the first iteration.
+        # Re-create the data cell and state_init with the best_salt found (or default 0)
+        final_data_cell = pack_jetton_wallet_data(
+            status=0, balance=0,
+            owner_address_slice=owner_addr_data_slice,
+            jetton_master_address_slice=jetton_master_addr_data_slice,
+            merkle_root=merkle_root, salt=best_salt
+        )
+        final_state_init_builder = Builder()
+        final_state_init_builder.store_uint(0, 2)
+        final_state_init_builder.store_maybe_ref(jetton_wallet_code)
+        final_state_init_builder.store_maybe_ref(final_data_cell)
+        final_state_init_builder.store_uint(0, 1)
+        best_state_init_cell = final_state_init_builder.end_cell()
+
+
+    return best_state_init_cell, best_salt
+
+def calculate_jetton_wallet_address_from_state_init(
+    state_init: Cell, workchain: int = MY_WORKCHAIN
+) -> Address:
+    """
+    Calculates the jetton wallet address from its StateInit cell.
+    """
+    state_init_hash = state_init.hash  # This is the 256-bit hash part of the address
+    return Address(f"{workchain}:{state_init_hash.hex()}")
+
+def calculate_user_jetton_wallet_address_py(
+    owner_address_str: str,  # User-friendly address string, e.g., "EQ..."
+    jetton_master_address_str: str,  # User-friendly address string, e.g., "EQ..."
+    jetton_wallet_code_boc_hex: str,  # BOC HEX string for the jetton wallet code cell
+    merkle_root: int = 0,
+) -> tuple[str, int]:
+    """
+    Calculates the user's jetton wallet address and the salt used.
+    This is the Python equivalent of FunC's `calculate_user_jetton_wallet_address`.
+    Returns the address as a user-friendly string and the salt.
+    """
+    owner_address = Address(owner_address_str)
+    jetton_master_address = Address(jetton_master_address_str)
+    
+    # Ensure jetton_wallet_code_boc_hex is bytes if it's hex string
+    if isinstance(jetton_wallet_code_boc_hex, str):
+        jetton_wallet_code_boc_bytes = bytes.fromhex(jetton_wallet_code_boc_hex)
+    else:
+        jetton_wallet_code_boc_bytes = jetton_wallet_code_boc_hex
+
+    jetton_wallet_code = Cell.one_from_boc(jetton_wallet_code_boc_bytes)
+
+    state_init_cell, salt_used = calculate_jetton_wallet_state_init_and_salt(
+        owner_address, jetton_master_address, jetton_wallet_code, merkle_root
     )
 
-    code_cell = Cell.one_from_boc(jetton_wallet_code)
-
-    state_init = (
-        begin_cell()
-        .store_uint(0, 2)
-        .store_maybe_ref(code_cell)
-        .store_maybe_ref(data_cell)
-        .store_uint(0, 1)
-        .end_cell()
+    wallet_address = calculate_jetton_wallet_address_from_state_init(
+        state_init_cell, MY_WORKCHAIN
     )
-    state_init_hex = state_init.hash.hex()
-    jetton_address = Address(f'0:{state_init_hex}')
+    
+    # Return user-friendly, bounceable address string and the salt
+    return wallet_address.to_str(is_user_friendly=True, is_bounceable=True, is_test_only=False), salt_used
 
-    return jetton_address
+if __name__ == "__main__":
+    # Example Usage:
+    # Ensure the CONFIGURATION VARIABLES at the top of the script are set correctly.
+
+    # You can get this by compiling your jetton wallet FunC code to a .cell file, 
+    # then converting that .cell file (which is BOC) to a hex string.
+    # Or if you have the .fif file for the code: fift -s build/jetton-wallet-code.fif -o jetton-wallet-code.cell
+    # Then convert jetton-wallet-code.cell (binary file) to hex.
+
+    print(f"Note: Using HMSTR jetton wallet code from the top of the script if not changed.\n"
+          f"Ensure 'JETTON_WALLET_CODE_HEX_EXAMPLE' is the actual BOC hex of your jetton wallet code.\n")
+
+    try:
+
+        calculated_address, salt = calculate_user_jetton_wallet_address_py(
+            owner_address_str=OWNER_ADDRESS_EXAMPLE,
+            jetton_master_address_str=JETTON_MASTER_ADDRESS_EXAMPLE,
+            jetton_wallet_code_boc_hex=JETTON_WALLET_CODE_HEX_EXAMPLE,
+            merkle_root=MERKLE_ROOT_EXAMPLE # Pass the actual merkle_root here
+        )
+        print(f"Calculated Jetton Wallet Address: {calculated_address}")
+        print(f"Salt used: {salt}")
+
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        print("Please ensure you have 'pytoniq-core' installed (pip install pytoniq-core).")
+        print("And provide valid address strings and a valid BOC hex for the jetton wallet code.") 
+
 
 ```
 
 Полный пример можно почитать [здесь](/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py).
 
+```mdx-code-block
 </TabItem>
 </Tabs>
+```
 
 Большинство основных токенов используют [стандартную реализацию стандарта TEP-74](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc), поэтому их структура хранилища не отличается. Исключением являются новые [контракты Jetton-with-governance](https://github.com/ton-blockchain/stablecoin-contract) для централизованных стейблкоинов. В них разница заключается [в наличии поля статуса кошелька и отсутствии кодовой ячейки в хранилище](https://github.com/ton-blockchain/stablecoin-contract/blob/7a22416d4de61336616960473af391713e100d7b/contracts/jetton-utils.fc#L3-L12). 
 
 ### Как создать сообщение для передачи jetton с комментарием?
 
-Чтобы понять, как создать сообщение для передачи токена, мы используем [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer), в котором описан стандарт токена.
+Чтобы понять, как создать сообщение для передачи токена, мы используем [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.mdx#1-transfer), в котором описан стандарт токена.
 
 #### Transfer jettons
 
+```mdx-code-block
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -770,6 +1007,7 @@ def calculate_jetton_address(
 />
 </div>
 <br></br>
+```
 
 :::warning
 When displaying token amounts, they are usually divided by `10^decimals` (often `9 decimals`). This allows for the use of the `toNano` function. If the number of decimals is different (e.g., 6), you will need to adjust accordingly.
@@ -777,8 +1015,10 @@ When displaying token amounts, they are usually divided by `10^decimals` (often 
 Конечно, всегда можно производить расчеты в неделимых единицах.
 :::
 
+```mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
+```
 
 ```js
 import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
@@ -818,8 +1058,10 @@ async function main() {
 main().finally(() => console.log("Exiting..."));
 ```
 
+```mdx-code-block
 </TabItem>
 <TabItem value="js-tonweb" label="JS (tonweb)">
+```
 
 ```js
 const TonWeb = require("tonweb");
@@ -880,9 +1122,11 @@ async function main() {
 main().finally(() => console.log("Exiting..."));
 ```
 
+```mdx-code-block
 </TabItem>
 
 <TabItem value="py" label="Python">
+```
 
 ```py
 from pytoniq import LiteBalancer, WalletV4R2, begin_cell
@@ -924,9 +1168,11 @@ async def main():
 asyncio.run(main())
 ```
 
+```mdx-code-block
 </TabItem>
 
 </Tabs>
+```
 
 Если `forward_amount` ненулевое, на контракт назначения отправляется уведомление о получении джеттона, как показано в схеме в начале этого раздела. Если адрес `response_destination` не равен null, оставшиеся toncoin (они называются "излишки") отправляются на этот адрес.
 
@@ -954,6 +1200,7 @@ asyncio.run(main())
 Не определено стандартом NFT для /ton-blockchain /token-contract
 :::
 
+```mdx-code-block
 <br></br>
 <div class="text--center">
 <ThemedImage
@@ -968,6 +1215,7 @@ asyncio.run(main())
 
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
+```
 
 ```js
 import { Address, Cell, Dictionary, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
@@ -994,8 +1242,10 @@ async function main() {
     let nextItemIndex = getMethodResult.stack.readNumber();
 ```
 
+```mdx-code-block
 </TabItem>
 </Tabs>
+```
 
 Чтобы это реализовать, нам нужно хранить информацию о новых NFT в словаре. Затем мы получим массивы с владельцами новых NFT и их содержимым. После этого, используя GET-метод `get_collection_data`, получаем `next_item_index`.
 
@@ -1055,8 +1305,10 @@ async function main() {
 main().finally(() => console.log("Exiting..."));
 ```
 
+```mdx-code-block
 </TabItem>
 </Tabs>
+```
 
 Далее необходимо правильно рассчитать общую стоимость транзакции. Значение `0,015` было получено в результате тестирования, но оно может варьироваться в зависимости от ситуации. Это главным образом зависит от содержимого NFT, так как увеличение размера содержимого приводит к увеличению **forward fee** (комиссии за доставку).
 
@@ -1064,8 +1316,10 @@ main().finally(() => console.log("Exiting..."));
 
 Изменить владельца коллекции очень просто. Для этого нужно указать **opcode = 3**, любой query_id и адрес нового владельца:
 
+```mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
+```
 
 ```js
 import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
@@ -1094,8 +1348,10 @@ async function main() {
 main().finally(() => console.log("Exiting..."));
 ```
 
+```mdx-code-block
 </TabItem>
 <TabItem value="js-tonweb" label="JS (tonweb)">
+```
 
 ```js
 const TonWeb = require("tonweb");
@@ -1136,8 +1392,10 @@ async function main() {
 main().finally(() => console.log("Exiting..."));
 ```
 
+```mdx-code-block
 </TabItem>
 </Tabs>
+```
 
 ### Как изменить содержимое смарт-контракта коллекции?
 
@@ -1150,8 +1408,10 @@ main().finally(() => console.log("Exiting..."));
 
 Часто метаданные коллекции хранятся в формате, похожем на `0.json`, с последующим увеличением номера, при этом адрес перед этим файлом остается неизменным. Именно этот адрес должен храниться в NFT common content.
 
+```mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
+```
 
 ```js
 import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
@@ -1204,8 +1464,10 @@ async function main() {
 main().finally(() => console.log("Exiting..."));
 ```
 
+```mdx-code-block
 </TabItem>
 <TabItem value="js-tonweb" label="JS (tonweb)">
+```
 
 ```js
 const TonWeb = require("tonweb");
@@ -1265,8 +1527,10 @@ async function main() {
 main().finally(() => console.log("Exiting..."));
 ```
 
+```mdx-code-block
 </TabItem>
 </Tabs>
+```
 
 Кроме того, нам нужно включить в сообщение информацию о роялти, так как они также изменяются с использованием этого опкода. Важно отметить, что не обязательно указывать новые значения везде. Например, если нужно изменить только общее содержимое NFT (NFT common content), то все остальные значения можно оставить прежними.
 
@@ -1312,9 +1576,12 @@ jetton$0001 workchain_id:int8 address:uint256 = Asset; // for jetton
 
 Этого достаточно для формирования сообщения.
 
+```mdx-code-block
 <Tabs groupId="code-examples">
 
-<TabItem value="js-ton" label="JS (@ton)">
+ <TabItem value="js-ton" label="JS (@ton)">
+```
+
 DEX используют разные протоколы для своей работы, поэтому нам необходимо ознакомиться с ключевыми понятиями и некоторыми важными компонентами, а также знать схему TL-B, чтобы правильно выполнить процесс свопа. В этом руководстве мы рассмотрим DeDust, одну из популярных DEX, полностью реализованных на TON.
  В DeDust у нас есть абстрактная концепция актива, которая включает в себя все типы активов, доступных для обмена. Абстракция типов активов упрощает процесс свопа, поскольку тип актива не имеет значения, а дополнительные валюты или даже активы из других сетей при таком подходе будут легко приниматься. This abstraction allows the straightforward exchange of extra currency or even assets from other chains.
 
@@ -1323,7 +1590,8 @@ DEX используют разные протоколы для своей ра�
 ```tlb
 native$0000 = Asset; // for ton
 
-jetton$0001 workchain_id:int8 address:uint256 = Asset; // for any jetton,address refer to jetton master address
+// for any jetton,address refer to jetton master address
+jetton$0001 workchain_id:int8 address:uint256 = Asset;
 
 // Upcoming, not implemented yet.
 extra_currency$0010 currency_id:int32 = Asset;
@@ -1482,9 +1750,11 @@ await scaleWallet.sendTransfer(sender, toNano("0.3"), {
 });
 ```
 
+```mdx-code-block
 </TabItem>
 
 <TabItem value="ton-kotlin" label="ton-kotlin">
+```
 
 Создание среза актива:
 
@@ -1553,9 +1823,11 @@ runBlocking {
 }
 ```
 
+```mdx-code-block
 </TabItem>
 
 <TabItem value="py" label="Python">
+```
 
 В этом примере показано, как обменять Toncoins на Jettons.
 
@@ -1624,8 +1896,10 @@ asyncio.run(main())
 
 ```
 
+```mdx-code-block
 </TabItem>
 </Tabs>
+```
 
 ## Основы обработки сообщений
 
@@ -1640,8 +1914,10 @@ asyncio.run(main())
 
 Ниже приведен пример, как можно получить 5 последних транзакций с любого аккаунта в блокчейне, проанализировать их в зависимости от типа и вывести в цикле.
 
+```mdx-code-block
 <Tabs groupId="code-examples">
 <TabItem value="js-ton" label="JS (@ton)">
+```
 
 ```js
 import { Address, TonClient, beginCell, fromNano } from '@ton/ton';
@@ -1791,9 +2067,11 @@ async function main() {
 main().finally(() => console.log('Exiting...'));
 ```
 
+```mdx-code-block
 </TabItem>
 
 <TabItem value="py" label="Python">
+```
 
 ```py
 from pytoniq import LiteBalancer, begin_cell
@@ -1895,9 +2173,11 @@ async def main():
 asyncio.run(main())
 ```
 
+```mdx-code-block
 </TabItem>
 
 </Tabs>
+```
 
 Обратите внимание, что данный пример охватывает только самый простой случай со входящими сообщениями, когда достаточно получить транзакции по одному аккаунту. Если вы хотите углубиться в тему и работать с более сложными цепочками транзакций и сообщений, вам следует учитывать поле `tx.outMessages`. Оно содержит список исходящих сообщений, отправленных смарт-контрактом в результате данной транзакции. Для лучшего понимания всей логики, вы можете ознакомиться с этими статьями:
 
@@ -1935,8 +2215,10 @@ export async function retry<T>(fn: () => Promise<T>, options: { retries: number,
 
 Создайте функцию-слушатель, которая будет проверять определенную транзакцию на конкретном аккаунте с определенным входящим внешним сообщением, равным телу сообщения в boc:
 
+```mdx-code-block
 <Tabs>
 <TabItem value="ts" label="@ton/ton">
+```
 
 ```typescript
 
@@ -1993,9 +2275,11 @@ export async function getTxByBOC(exBoc: string): Promise<string> {
  console.log(txRes);
 ```
 
+```mdx-code-block
 </TabItem>
 
 </Tabs>
+```
 
 ### Как узнать хеш транзакции или сообщения?
 
@@ -2005,8 +2289,10 @@ export async function getTxByBOC(exBoc: string): Promise<string> {
 
 Чтобы получить хеш транзакции, нужно использовать метод `hash` транзакции. Чтобы получить хеш внешнего сообщения, нужно создать ячейку сообщения с помощью метода `storeMessage`, а затем использовать метод `hash` этой ячейки.
 
+```mdx-code-block
 <Tabs>
   <TabItem value="ts" label="@ton/ton">
+```
 
 ```typescript
 import { storeMessage, TonClient } from '@ton/ton';
@@ -2034,14 +2320,18 @@ for (const transaction of transactions) {
 }
 ```
 
-</TabItem>
+```mdx-code-block
+  </TabItem>
 
 </Tabs>
+```
 
 Также вы можете получить хеш сообщения при его создании. Обратите внимание, что это тот же хеш, что и хеш сообщения, отправленного для инициирования транзакции, как в предыдущем примере.
 
+```mdx-code-block
 <Tabs>
   <TabItem value="ts" label="@ton/ton">
+```
 
 ```typescript
 import { mnemonicNew, mnemonicToPrivateKey } from '@ton/crypto';
@@ -2066,8 +2356,12 @@ const transfer = await wallet.createTransfer({
 const inMessageHash = transfer.hash();
 ```
 
-</TabItem>
+```mdx-code-block
+  </TabItem>
 
 </Tabs>
+```
 
+```mdx-code-block
 <Feedback />
+```

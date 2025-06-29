@@ -1,0 +1,243 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Расчёт комиссии
+
+## Introduction
+
+Когда ваш контракт начинает обрабатывать входящее сообщение, важно проверить, достаточно ли прикрепленных к нему токенов TON для покрытия [всех типов комиссий](/v3/documentation/smart-contracts/transaction-fees/fees#elements-of-transaction-fee). Для этого необходимо рассчитать или спрогнозировать комиссию за текущую транзакцию.
+
+В этой статье мы разберём, как рассчитывать комиссии в контрактах FunC с использованием новых опкодов (кодов операций) TVM.
+
+:::info opcodes
+Полный список опкодов TVM, включая упомянутые ниже, вы можете найти на странице [инструкций по TVM](/v3/documentation/tvm/instructions).
+:::
+
+## Storage fee
+
+### Обзор
+
+`storage fees` - это плата за размещение смарт-контракта в блокчейне. Она взимается за каждую секунду его хранения.
+
+Для получения значений комиссии, используйте опкод `GETSTORAGEFEE` со следующими параметрами:
+
+| Param name | Описание                                                   |
+| :--------- | :--------------------------------------------------------- |
+| cells      | Количество ячеек контракта                                 |
+| bits       | Количество битов контракта                                 |
+| is_mc      | True if the source or destination is in the MasterChain    |
+
+:::info
+The system counts only unique hash cells for storage and forward fees. For example, it counts three identical hash cells as one. This mechanism deduplicates data by storing the content of multiple equivalent sub-cells only once, even if they are referenced across different branches. [Подробнее о дедупликации](/v3/documentation/data-formats/tlb/library-cells). 
+:::
+
+### Последовательность расчёта
+
+У каждого контракта есть свой баланс. Можно рассчитать, сколько TON (токенов) потребуется, чтобы контракт оставался активным в течение указанного времени `seconds`, с помощью следующей функции:
+
+```func
+int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
+```
+
+Затем это значение можно вписать в код контракта и рассчитать актуальную комиссию за хранение следующим образом:
+
+```func
+;; functions from func stdlib (not available on mainnet)
+() raw_reserve(int amount, int mode) impure asm "RAWRESERVE";
+int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
+int my_storage_due() asm "DUEPAYMENT";
+
+;; constants from stdlib
+;;; Creates an output action which reserves exactly x nanoTONs (if y = 0).
+const int RESERVE_REGULAR = 0;
+;;; Creates an output action which reserves at most x nanoTONs (if y = 2).
+;;; Bit +2 in y ensures the external action does not fail if the specified amount cannot be reserved. Instead, it reserves all remaining balance.
+const int RESERVE_AT_MOST = 2;
+;;; In the case of action failure, the transaction is bounced. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. [v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages](https://ton.org/docs/#/tvm/changelog/tvm-upgrade-2023-07#sending-messages)
+const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
+
+() calculate_and_reserve_at_most_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
+ int on_balance_before_msg = my_ton_balance - msg_value;
+ int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; You can hardcode this value if the contract code will not be updated.
+ raw_reserve(max(on_balance_before_msg, min_storage_fee + my_storage_due()), RESERVE_AT_MOST);
+}
+```
+
+Если значение `storage_fee` задано в виде константы, **не забудьте его обновить** при изменении контракта. Поскольку не все контракты поддерживают обновление, это не обязательное требование.
+
+## Computation fee
+
+### Обзор
+
+В большинстве случаев для получения значений комиссии необходимо использовать опкод `GETGASFEE` со следующими параметрами:
+
+| Param      | Описание                                                                       |
+| :--------- | :----------------------------------------------------------------------------- |
+| `gas_used` | Количество газа, полученное в ходе тестов, задается в виде константы           |
+| `is_mc`    | True if the source or destination is in the MasterChain                        |
+
+### Последовательность расчёта
+
+```func
+int get_compute_fee(int workchain, int gas_used) asm(gas_used workchain) "GETGASFEE";
+```
+
+Каким образом можно получить значение `gas_used`? Через тесты!
+
+To calculate `gas_used`, you should write a test for your contract that:
+
+1. Executes a transfer.
+2. Проверить, прошла ли операция успешно, и получить информацию о переводе
+3. Проверить фактическое количество газа, использованное этим переводом для вычисления
+
+Последовательность расчета контракта может зависеть от входных данных. Вам следует запускать контракт так, чтобы он потреблял максимальное количество газа. Убедитесь, что вы используете наиболее ресурсоёмкий метод вычислений.
+
+```ts
+// Initialization code
+const deployerJettonWallet = await userWallet(deployer.address);
+let initialJettonBalance = await deployerJettonWallet.getJettonBalance();
+const notDeployerJettonWallet = await userWallet(notDeployer.address);
+let initialJettonBalance2 = await notDeployerJettonWallet.getJettonBalance();
+let sentAmount = toNano("0.5");
+let forwardAmount = toNano("0.05");
+let forwardPayload = beginCell().storeUint(0x1234567890abcdefn, 128).endCell();
+// Ensure the payload is unique to charge cell loading for each payload.
+let customPayload = beginCell().storeUint(0xfedcba0987654321n, 128).endCell();
+
+// Let's use this case for fee calculation
+// Embed the forward payload into the custom payload to ensure maximum gas usage during computation
+const sendResult = await deployerJettonWallet.sendTransfer(
+  deployer.getSender(),
+  toNano("0.17"), // tons
+  sentAmount,
+  notDeployer.address,
+  deployer.address,
+  customPayload,
+  forwardAmount,
+  forwardPayload
+);
+expect(sendResult.transactions).toHaveTransaction({
+  // excesses
+  from: notDeployerJettonWallet.address,
+  to: deployer.address,
+});
+/*
+transfer_notification#7362d09c query_id:uint64 amount:(VarUInteger 16)
+ sender:MsgAddress forward_payload:(Either Cell ^Cell)
+ = InternalMsgBody;
+*/
+expect(sendResult.transactions).toHaveTransaction({
+  // notification
+  from: notDeployerJettonWallet.address,
+  to: notDeployer.address,
+  value: forwardAmount,
+  body: beginCell()
+    .storeUint(Op.transfer_notification, 32)
+    .storeUint(0, 64) // default queryId
+    .storeCoins(sentAmount)
+    .storeAddress(deployer.address)
+    .storeUint(1, 1)
+    .storeRef(forwardPayload)
+    .endCell(),
+});
+const transferTx = findTransactionRequired(sendResult.transactions, {
+  on: deployerJettonWallet.address,
+  from: deployer.address,
+  op: Op.transfer,
+  success: true,
+});
+
+let computedGeneric: (transaction: Transaction) => TransactionComputeVm;
+computedGeneric = (transaction) => {
+  if (transaction.description.type !== "generic")
+    throw "Expected generic transaction";
+  if (transaction.description.computePhase.type !== "vm")
+    throw "Compute phase expected";
+  return transaction.description.computePhase;
+};
+
+let printTxGasStats: (name: string, trans: Transaction) => bigint;
+printTxGasStats = (name, transaction) => {
+  const txComputed = computedGeneric(transaction);
+  console.log(`${name} used ${txComputed.gasUsed} gas`);
+  console.log(`${name} gas cost: ${txComputed.gasFees}`);
+  return txComputed.gasFees;
+};
+
+send_gas_fee = printTxGasStats("Jetton transfer", transferTx);
+```
+
+## Forward fee
+
+### Обзор
+
+Комиссия за пересылку взимается за исходящие сообщения.
+
+Как правило, существует три варианта обработки комиссии за пересылку:
+
+1. Структура сообщения детерминирована и вы можете спрогнозировать размер комиссии.
+2. Структура сообщения во многом зависит от структуры входящего сообщения.
+3. Вы вообще не можете спрогнозировать структуру исходящего сообщения.
+
+### Последовательность расчёта
+
+Если структура сообщения детерминирована, используйте опкод `GETFORWARDFEE` со следующими параметрами:
+
+| Param name | Описание                                                  |
+| :--------- | :-------------------------------------------------------- |
+| cells      | Количество ячеек                                          |
+| bits       | Количество битов                                          |
+| is_mc      | True if the source or destination is in the MasterChain   |
+
+:::info
+Для расчета комиссии за хранение и пересылку учитываются только уникальные хеш-ячейки, то есть 3 идентичные хеш-ячейки считаются как одна. For example, it counts three identical hash cells as one. В частности, происходит дедупликация данных: если в разных ветвях есть несколько одинаковых подъячеек, их содержимое сохраняется только один раз. [Подробнее о дедупликации](/v3/documentation/data-formats/tlb/library-cells). 
+:::
+
+Однако иногда исходящее сообщение сильно зависит от структуры входящего, и в таком случае спрогнозировать комиссию невозможно. Попробуйте использовать опкод `GETORIGINALFWDFEE` со следующими параметрами:
+
+| Param name | Описание                                                |
+| :--------- | :------------------------------------------------------ |
+| fwd_fee    | Извлечено из входящего сообщения                        |
+| is_mc      | True if the source or destination is in the MasterChain |
+
+:::caution
+Будьте осторожны с опкодом `SENDMSG`. Не используйте его без необходимости.
+:::
+
+The `SENDMSG` opcode is the least optimal way to calculate fees, but it is better than not checking.
+
+If even `GETORIGINALFWDFEE` cannot be used, one more option exists. Если опкод `GETORIGINALFWDFEE` не подходит, то можно использовать опкод `SENDMSG` со следующими параметрами:
+
+| Param name | Описание           |
+| :--------- | :----------------- |
+| cells      | Количество ячеек   |
+| mode       | Режим сообщений    |
+
+Режимы влияют на расчет комиссии следующим образом:
+
+- `+1024`  не выполняет действие, а только оценивает комиссию. В других режимах сообщение отправляется на этапе выполнения действия
+- **`+128`**: This mode substitutes the value of the entire contract balance before the computation phase begins. This is slightly inaccurate because gas expenses, which cannot be estimated before the computation phase, are excluded.
+- **`+64`**: This mode substitutes the entire balance of the incoming message as the outgoing value. This is also slightly inaccurate, as gas expenses that cannot be estimated until the computation is completed are excluded.
+- Другие режимы можно найти [на странице режимов сообщений](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes)
+
+Он создает действие вывода и возвращает комиссию за создание сообщения. Однако расходует непредсказуемое количество газа, которое нельзя вычислить формулами. To measure gas usage, use `GASCONSUMED`:
+
+```func
+int send_message(cell msg, int mode) impure asm "SENDMSG";
+int gas_consumed() asm "GASCONSUMED";
+;; ... some code ...
+
+() calculate_forward_fee(cell msg, int mode) inline {
+ int gas_before = gas_consumed();
+ int forward_fee = send_message(msg, mode);
+ int gas_usage = gas_consumed() - gas_before;
+
+ ;; forward fee -- fee value
+ ;; gas_usage -- the amount of gas used to send the message
+}
+```
+
+## См. также
+
+- [Контракт Stablecoin с расчетом комиссии](https://github.com/ton-blockchain/stablecoin-contract)
+
+<Feedback />

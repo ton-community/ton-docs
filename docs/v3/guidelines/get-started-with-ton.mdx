@@ -55,7 +55,7 @@ Today, we are going to teach our prospective builders how to mine on TON Blockch
 
 Although the proof-of-work giver smart contract framework, which defined the initial mining process that laid the foundation for TON, was completed at launch, the last TON was mined in June 2022 to conclude TON's proof-of-work (PoW) token distribution mechanism. That said, with our recent transition to proof-of-stake (PoS), the era of staking on TON has just begun.
 
-* [Dive deeper into our economic model and mining on TON](https://ton.org/mining)
+- [Dive deeper into our economic model and mining on TON](https://ton.org/mining)
 
 
 Now, let’s focus on the first steps to becoming a **TON Developer** and learn how to mine an NFT on TON! Below is an example of what we're aiming to create.
@@ -76,9 +76,9 @@ If we stay focused on the task at hand, we can create a miner in about half an h
 
 To get started, all developers will make use of the following components:
 
-* __Wallet__: You need a non-custodial wallet to store an NFT in Testnet mode.
-* __Repository__:  We’ll use a ready-made template designed specifically for you.
-* __Developer Environment__:  Developers need to determine whether they want to mine in a local or cloud environment.
+- __Wallet__: You need a non-custodial wallet to store an NFT in Testnet mode.
+- __Repository__:  We’ll use a ready-made template designed specifically for you.
+- __Developer Environment__:  Developers need to determine whether they want to mine in a local or cloud environment.
 
 ### Download and create a wallet
 
@@ -140,9 +140,9 @@ Ensure you have opened the repository in your GitHub profile generated from the 
 
 #### Local and cloud development environments
 
-* Using a Javascript IDE can be challenging for users unfamiliar with it, especially if your computer and tooling systems are not configured for this purpose.
+- Using a Javascript IDE can be challenging for users unfamiliar with it, especially if your computer and tooling systems are not configured for this purpose.
 
-* However, if you're familiar with NodeJS and Git and know how to work with `npm`, you may find it more comfortable to use a **local environment**.
+- However, if you're familiar with NodeJS and Git and know how to work with `npm`, you may find it more comfortable to use a **local environment**.
 
 #### Cloud codespaces
 
@@ -211,9 +211,9 @@ Great! After these steps, you're ready to get deeper into TON Blockchain secrets
 
 Okay, what do you need to connect to TON Blockchain?
 
-* __Smart contract address__ as a point of destination. We aim to mine an NFT from the _proof-of-work smart contract_, so we need an address to determine the current mining complexity.
-* __API provider__ to make requests to TON Blockchain. TON has multiple [API types](/v3/guidelines/dapps/apis-sdks/api-types) for different purposes. We will use the testnet version of [toncenter.com](https://toncenter.com/) API.
-* __JavaScript SDK__: a JavaScript SDK (recall that an SDK is a Software Development Kit) is needed to parse the smart contract address used and prepare it to create an API request. To better understand TON addresses and why they need to be parsed to carry out this process, please see this [resource](/v3/documentation/smart-contracts/addresses) to understand why we should parse it. To carry out this procedure, we use [`@ton/ton`](https://github.com/ton-org/ton).
+- __Smart contract address__ as a point of destination. We aim to mine an NFT from the _proof-of-work smart contract_, so we need an address to determine the current mining complexity.
+- __API provider__ to make requests to TON Blockchain. TON has multiple [API types](/v3/guidelines/dapps/apis-sdks/api-types) for different purposes. We will use the testnet version of [toncenter.com](https://toncenter.com/) API.
+- __JavaScript SDK__: a JavaScript SDK (recall that an SDK is a Software Development Kit) is needed to parse the smart contract address used and prepare it to create an API request. To better understand TON addresses and why they need to be parsed to carry out this process, please see this [resource](/v3/documentation/smart-contracts/addresses) to understand why we should parse it. To carry out this procedure, we use [`@ton/ton`](https://github.com/ton-org/ton).
 
 In the next section, we describe how users send their initial requests to TON Blockchain using the TON Center API and `@ton/ton` to receive data from the PoW smart contract.
 
@@ -406,10 +406,10 @@ Here is an example output:
 
 Let's cover the Mining Data command that translates different data parameters when programming mining data into TON Blockchain. These include:
 
-* `complexity` is the most important number for miners. It's a Proof-of-Work complexity for the values. You're successful _if the final hash is less than complexity_.
-* `lastSuccess` is a [unix timestamp](https://www.unixtimestamp.com/) date and time representation that keeps track of the last mining transaction on TON. Each time the last_success metric changes, it's necessary to rerun the miner because the seed also changes during this process.
-* `seed` denotes a unique value a smart contract generates to calculate the desired hash. To better understand this process and learn more about how the seed changes and why, look at the project files folder using the `ctx_seed` keyword (Ctrl+F with the keyword `ctx_seed`).
-* `targetDelta`, `minCpl` and `maxCpl` won't be used in our tutorial. But you can always read more about how they are used in smart contracts to calculate proof-of-work complexity in the source files of the collection in your project.
+- `complexity` is the most important number for miners. It's a Proof-of-Work complexity for the values. You're successful _if the final hash is less than complexity_.
+- `lastSuccess` is a [unix timestamp](https://www.unixtimestamp.com/) date and time representation that keeps track of the last mining transaction on TON. Each time the last_success metric changes, it's necessary to rerun the miner because the seed also changes during this process.
+- `seed` denotes a unique value a smart contract generates to calculate the desired hash. To better understand this process and learn more about how the seed changes and why, look at the project files folder using the `ctx_seed` keyword (Ctrl+F with the keyword `ctx_seed`).
+- `targetDelta`, `minCpl` and `maxCpl` won't be used in our tutorial. But you can always read more about how they are used in smart contracts to calculate proof-of-work complexity in the source files of the collection in your project.
 
 Now that we understand the parameters discussed above, we have the values(`complexity`, `lastSuccess`, `seed`) that we will use in our NFT Miner in the next chapter.
 
@@ -453,8 +453,8 @@ let msg = Queries.mine(mineParams); // transaction builder
 
 Probably you have a question: where are the _op_ and _data2_ from the [table](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive)?
 
-* In the table, the numerical value of data1 must equal that of data2. To omit the filling of the data2 value, the transaction builder performs a low-level process (see Queries.mine() sources).
-* Because the `op` classification is always constant, it is already implemented in transaction builder _Queries_ and in _OpCodes_. You can find the opcode by going to the source code of the `mine()` method.
+- In the table, the numerical value of data1 must equal that of data2. To omit the filling of the data2 value, the transaction builder performs a low-level process (see Queries.mine() sources).
+- Because the `op` classification is always constant, it is already implemented in transaction builder _Queries_ and in _OpCodes_. You can find the opcode by going to the source code of the `mine()` method.
 
 :::tip
 Though it may be interesting to check out the source code (`../wrappers/NftGiver.ts`), but it is unnecessary.
@@ -611,8 +611,8 @@ Do you sense the _experience_ in the air? That's you on your way to becoming a T
 
 There are two main ways to mine an NFT on TON:
 
-* [Simple: NFT Testnet Mining](/v3/guidelines/get-started-with-ton#simple-nft-testnet-mining)
-* [Genuine: NFT Mainnet Mining](/v3/guidelines/get-started-with-ton#genuine-nft-mainnet-mining)
+- [Simple: NFT Testnet Mining](/v3/guidelines/get-started-with-ton#simple-nft-testnet-mining)
+- [Genuine: NFT Mainnet Mining](/v3/guidelines/get-started-with-ton#genuine-nft-mainnet-mining)
 
 ### Simple: NFT Testnet mining
 
@@ -693,16 +693,16 @@ _First, take a rest! You did a big task! You are a TON developer now. But it's o
 
 After finishing the TON onboarding challenge, where we successfully mined an NFT, consider taking a look at some of these materials that detail different portions of TON's Ecosystem:
 
-* [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
-* [TON Hello World: Step-by-step guide for writing your first smart contract](https://helloworld.tonstudio.io/02-contract/)
-* [Develop smart contracts: Introduction](/v3/documentation/smart-contracts/overview)
-* [[YouTube] Ton Dev Study - FunC & Blueprint](https://www.youtube.com/playlist?list=PLyDBPwv9EPsDjIMAF3XqNI2XGNwdcB3sg)
-* [How to work with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet)
-* [FunC Journey: Part 1](https://blog.ton.org/func-journey)
-* [Bot for sales of dumplings](/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-js)
-* [Mint Your first Jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token)
-* [Step by step NFT collection minting](/v3/guidelines/dapps/tutorials/nft-minting-guide)
-* [How to run TON Site](/v3/guidelines/web3/ton-proxy-sites/how-to-run-ton-site)
+- [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
+- [TON Hello World: Step-by-step guide for writing your first smart contract](https://helloworld.tonstudio.io/02-contract/)
+- [Develop smart contracts: Introduction](/v3/documentation/smart-contracts/overview)
+- [[YouTube] Ton Dev Study - FunC & Blueprint](https://www.youtube.com/playlist?list=PLyDBPwv9EPsDjIMAF3XqNI2XGNwdcB3sg)
+- [How to work with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet)
+- [FunC Journey: Part 1](https://blog.ton.org/func-journey)
+- [Bot for sales of dumplings](/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot-js)
+- [Mint Your first Jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token)
+- [Step by step NFT collection minting](/v3/guidelines/dapps/tutorials/nft-minting-guide)
+- [How to run TON Site](/v3/guidelines/web3/ton-proxy-sites/how-to-run-ton-site)
 
 
 :::info have some feedback?

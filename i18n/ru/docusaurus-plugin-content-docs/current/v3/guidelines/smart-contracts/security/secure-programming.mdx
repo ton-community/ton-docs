@@ -80,14 +80,14 @@ TON не может автоматически рассчитать газ. По
 > Во время недавнего аудита CertiK мы заметили, что разработчик перепутал два аргумента местами и написал:  
 >
 > ```func
-> save_data(total_supply, min_amount, swap_fee, ...)
+> save_data(total_supply, min_amount, swap_fee, ...)  
 > ```
 >
-> Без внешнего аудита, проведённого командой экспертов, обнаружить такую ошибку очень сложно. Функция использовалась редко, и оба перепутанных параметра обычно имели нулевое значение. Чтобы заметить подобную ошибку, нужно знать, что искать.\
-> Во-вторых, существует проблема "загрязнения пространства имён". Давайте разберёмся, в чем она заключается, на другом примере из аудита. В середине функции входной параметр читается:  
+> Без внешнего аудита, проведённого командой экспертов, обнаружить такую ошибку очень сложно. Функция использовалась редко, и оба перепутанных параметра обычно имели нулевое значение. Identifying this type of error requires knowing exactly what to look for.\
+> Secondly, "namespace pollution" is a common issue. For example, in another audit, we found the following code in the middle of a function:  
 >
 > ```func
-> int min_amount = in_msg_body~load_coins();
+> int min_amount = in_msg_body~load_coins();  
 > ```
 >
 > То есть произошло затенение поля хранения локальной переменной, и в конце функции это измененнёное значение было записано в хранилище. У злоумышленника была возможность перезаписать состояние контракта. Ситуация усугубляется тем, что FunC допускает [переобъявление переменных](/v3/documentation/smart-contracts/func/docs/statements#variable-declaration): "Это не объявление, а просто проверка во время компиляции, что min_amount имеет тип int".
@@ -163,7 +163,7 @@ Instead, implement an alternative flow:
 
 ### 6. Рассчитайте газ и проверьте значение msg_value
 
-Согласно нашей диаграмме потока сообщений, мы можем оценить стоимость каждого обработчика в каждом из сценариев и вставить проверку на достаточность msg_value. Avoid demanding excessive gas, as it must be divided among subsequent messages. Все усложняется, если во время разработки ваш код начинает отправлять больше сообщений. Требования к газу необходимо перепроверять и обновлять.
+Estimate the gas cost of each handler in your message flow and check the sufficiency of `msg_value`. Avoid demanding excessive gas, as it must be divided among subsequent messages. Все усложняется, если во время разработки ваш код начинает отправлять больше сообщений. Требования к газу необходимо перепроверять и обновлять.
 
 ### 7. Осторожно возвращайте избыточный газ
 
@@ -187,12 +187,11 @@ if(forward_ton_amount) {
 ...
 }
 
-if (msg_value > 0) {    ;; there is still something to return
-
-var msg = begin_cell()
-    .store_uint(0x10, 6)
-    .store_slice(response_address)
-    .store_coins(msg_value)
+if (msg_value > 0) {    ;; return excess gas
+    var msg = begin_cell()
+        .store_uint(0x10, 6)
+        .store_slice(response_address)
+        .store_coins(msg_value)
 ...
 }
 ```
@@ -242,7 +241,7 @@ Use:
 
 ```func
 const int SEND_MODE_REGULAR = 0;
-const int SEND_MODE_PAY_FEES_SEPARETELY = 1;
+const int SEND_MODE_PAY_FEES_SEPARATELY = 1;
 const int SEND_MODE_IGNORE_ERRORS = 2;
 const int SEND_MODE_CARRY_ALL_REMAINING_MESSAGE_VALUE = 64;
 

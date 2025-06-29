@@ -32,7 +32,7 @@ import { miscellaneousOpcodes as opcodes } from '@site/src/data/opcodes';
 | xxxxxxx<br/>操作码 | xxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>Fift 语法 | xxxxxxxxxxxxxxxxx<br/>堆栈 | xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br/>描述 | xxxx<br/>Gas |
 |:-|:-|:-|:-|:-|
 | **`FEnn`** | `{nn} DEBUG` | _`-`_ | `0 <= nn < 240` | `26` |
-| **`FEFnssss`** | `{string} DEBUGSTR`<br/>`{string} {x} DEBUGSTRI` | _`-`_ | `0 <= n < 16`。`ssss` 的长度为 `n+1` 字节。<br/>`{string}` 是一个[字符串字面量](https://github.com/Piterden/TON-docs/blob/master/Fift.%20A%20Brief%20Introduction.md#user-content-29-string-literals)。<br/>[`DEBUGSTR`](#instr-debugstr): `ssss` 是给定的字符串。<br/>[`DEBUGSTRI`](#instr-debugstr): `ssss` 是由一个字节的整数 `0 <= x <= 255` 加上给定字符串组成。| `26` |
+| **`FEFnssss`** | `{string} DEBUGSTR`<br/>`{string} {x} DEBUGSTRI` | _`-`_ | `0 <= n < 16`。`ssss` 的长度为 `n+1` 字节。<br/>`{string}` 是一个[字符串字面量](https://github.com/Piterden/TON-docs/blob/master/Fift.%20A%20Brief%20Introduction.mdx#user-content-29-string-literals)。<br/>[`DEBUGSTR`](#instr-debugstr): `ssss` 是给定的字符串。<br/>[`DEBUGSTRI`](#instr-debugstr): `ssss` 是由一个字节的整数 `0 <= x <= 255` 加上给定字符串组成。| `26` |
 | **`FE00`** | `DUMPSTK` | _`-`_ | 转储堆栈（最多顶部 255 个值）并显示总堆栈深度。 | `26` |
 | **`FE2i`** | `s[i] DUMP` | _`-`_ | 转储 `s[i]`。| `26` |
 

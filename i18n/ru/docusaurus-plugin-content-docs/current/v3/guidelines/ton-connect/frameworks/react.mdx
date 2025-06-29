@@ -8,7 +8,7 @@ import Feedback from '@site/src/components/Feedback';
 
 ### Установка
 
-Реализация
+To start integrating TON Connect into your dApp, you need to install the `@tonconnect/ui-react` package:
 
 ```bash npm2yarn
 npm i @tonconnect/ui-react
@@ -299,7 +299,7 @@ const [tonConnectUI] = useTonConnectUI();
 // Set loading state
 tonConnectUI.setConnectRequestParameters({ state: "loading" });
 
-// Fetch tonProofPayload from backend
+// Fetch tonProofPayload from the backend
 const tonProofPayload: string | null =
   await fetchTonProofPayloadFromBackend();
 
@@ -436,7 +436,7 @@ export const Opcodes = {
     increase: 0x7e8764ef,
 };
 
-export class Counter implements Contract {
+export class Counter implements contract {
     constructor(
         readonly address: Address,
         readonly init?: { code: Cell; data: Cell },
@@ -544,7 +544,7 @@ class TonConnectProvider implements Sender {
     // The transaction is valid for 10 minutes.
     const validUntil = Math.floor(Date.now() / 1000) + 600;
 
-    // The address of the recipient, should be in bounceable format for all smart contracts.
+    // The recipient's address should be in bounceable format for all smart contracts.
     const address = args.to.toString({ urlSafe: true, bounceable: true });
 
     // The address of the sender, if available.
@@ -571,7 +571,7 @@ class TonConnectProvider implements Sender {
       payload = args.body.toBoc().toString("base64");
     }
 
-    // Send the message using the TonConnect UI and wait for the message to be sent.
+    // Use the TonConnect UI to send the message and wait for the sending
     await this.provider.sendTransaction({
       validUntil: validUntil,
       from: from,

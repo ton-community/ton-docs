@@ -1,6 +1,8 @@
+```mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Feedback from '@site/src/components/Feedback';
+```
 
 # TON Connect для Vue
 
@@ -23,38 +25,47 @@ npm i @townsquarelabs/ui-vue
 [See all available options](https://github.com/TownSquareXYZ/tonconnect-ui-vue/blob/ff8cbb66aa30b7c29ac1a1f76c96ebef91700ff3/src/utils/UIProvider.ts#L9).
 :::
 
-
+```mdx-code-block
 <Tabs groupId="TonConnectUIPlugin">
   <TabItem value="For Vue@3" label="For Vue@3">
-  ```html
-  import { createApp } from 'vue'
-  import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
+```
 
-  import App from './App.vue'
+```html
+import { createApp } from 'vue'
+import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
 
-  const app = createApp(App)
-  app
-    .use(TonConnectUIPlugin,{ manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json" })
-    .mount('#app')
-  ```
+import App from './App.vue'
+
+const app = createApp(App)
+app
+  .use(TonConnectUIPlugin,{ manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json" })
+  .mount('#app')
+```
+
+```mdx-code-block
   </TabItem>
   <TabItem value="For Vue@2.7" label="For Vue@2.7">
-  ```html
-  import Vue from 'vue'
-  import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
+```
 
-  import App from './App.vue'
+```html
+import Vue from 'vue'
+import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
 
-  Vue.use(TonConnectUIPlugin, {
-    manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json"
-  });
+import App from './App.vue'
 
-  new Vue({
-    render: (h) => h(App)
-  }).$mount('#app')
-  ```
+Vue.use(TonConnectUIPlugin, {
+  manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json"
+});
+
+new Vue({
+  render: (h) => h(App)
+}).$mount('#app')
+```
+
+```mdx-code-block
   </TabItem>
 </Tabs>
+```
 
 ### Подключение кошелка
 
@@ -89,7 +100,7 @@ You can add `buttonRootId` props to the button as well.
 Вы также можете добавить `class` и `:style` props к кнопке. Обратите внимание, что вы не можете передать child в TonConnectButton.
 
 ```ts
-`<TonConnectButton class="my-button-class" :style="{ float: 'right' } "/>`
+<TonConnectButton class="my-button-class" :style="{ float: 'right' }"/>
 ```
 
 ### Перенаправления
@@ -102,26 +113,18 @@ You can add `buttonRootId` props to the button as well.
 
 ```html
 <template>
-  <TonConnectUIProvider :options="options">
-    <!-- Your app -->
-  </TonConnectUIProvider>
+  <!-- Your app -->
 </template>
 
 <script>
-import { TonConnectUIProvider } from '@townsquarelabs/ui-vue';
+import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
 export default {
-  components: {
-    TonConnectUIProvider,
-  },
+  name: 'SetRedirect',
   setup() {
-    const options = {
-      actionsConfiguration: { twaReturnUrl: 'https://t.me/<YOUR_APP_NAME>' },
-    };
-    return {
-      options,
-    };
-  },
+    const {tonConnectUI, setOptions} = useTonConnectUI();
+    setOptions({ actionsConfiguration: { twaReturnUrl: 'https://t.me/<YOUR_APP_NAME>' } });
+  }
 };
 </script>
 ```
@@ -219,8 +222,12 @@ export default {
 ### useTonConnectUI
 
 Используйте его для получения доступа к экземпляру `TonConnectUI` и функции обновления параметров пользовательского интерфейса.
+
+```mdx-code-block
 <details>
   <summary><b>Show the example</b></summary>
+```
+
 ```html
 <template>
   <div>
@@ -272,9 +279,11 @@ export default {
   }
 };
 </script>
-
 ```
+
+```mdx-code-block
 </details>
+```
 
 or
 
@@ -285,9 +294,9 @@ const tonConnectUI = inject<TonConnectUI | null>(tonConnectUIKey, null);
 </script>
 ```
 
-[Подробнее о функции setOptions](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
-
 [Подробнее о методах экземпляра TonConnectUI](https://github.com/ton-connect/sdk/tree/main/packages/ui#send-transaction)
+
+[Подробнее о функции setOptions](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
 
 ### useIsConnectionRestored
 
@@ -336,8 +345,7 @@ import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 export default {
   name: 'Settings',
   setup() {
-    const [tonConnectUI, setOptions] = useTonConnectUI();
-
+    const { tonConnectUI } = useTonConnectUI();
 
     const myTransaction = {
       validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
@@ -381,13 +389,13 @@ export default {
 
 #### loading
 
-Установите состояние на 'loading\\\\`, пока вы ждете ответа от вашего backend. Если пользователь открывает модальное окно для подключения кошелька в этот момент, он увидит загрузчик.
+Установите состояние на 'loading\\\\\\\\\\\\\`, пока вы ждете ответа от вашего backend. Если пользователь открывает модальное окно для подключения кошелька в этот момент, он увидит загрузчик.
 
 ```ts
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 tonConnectUI.setConnectRequestParameters({
     state: 'loading'
@@ -402,7 +410,7 @@ tonConnectUI.setConnectRequestParameters({
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 tonConnectUI.setConnectRequestParameters({
     state: 'ready',
@@ -414,7 +422,7 @@ tonConnectUI.setConnectRequestParameters({
 
 #### remove loading
 
-Удалите загрузчик, если он был включен через \\\\`state: 'loading' (например, вы получили ошибку вместо ответа от вашего backend). For example, if you received an error instead of a response from your backend.
+Удалите загрузчик, если он был включен через \\\\\\\\\\\\\`state: 'loading' (например, вы получили ошибку вместо ответа от вашего backend). For example, if you received an error instead of a response from your backend. 
 
 Запрос на подключение будет создан без дополнительных параметров.
 
@@ -422,7 +430,7 @@ tonConnectUI.setConnectRequestParameters({
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 tonConnectUI.setConnectRequestParameters(null);
 ```
@@ -433,7 +441,7 @@ tonConnectUI.setConnectRequestParameters(null);
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 // enable ui loader
 tonConnectUI.setConnectRequestParameters({ state: 'loading' });
@@ -460,7 +468,7 @@ if (!tonProofPayload) {
 import { ref, onMounted } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const tonConnectUI = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 onMounted(() =>
     tonConnectUI.onStatusChange(wallet => {
@@ -477,7 +485,7 @@ onMounted(() =>
 ```js
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-const [tonConnectUI] = useTonConnectUI();
+const { tonConnectUI } = useTonConnectUI();
 
 await tonConnectUI.disconnect();
 ```
@@ -521,4 +529,6 @@ import 'web-animations-js';
 - [TON Connect for React apps](/v3/guidelines/ton-connect/frameworks/react/)
 - [TON Connect for HTML/JS apps](/v3/guidelines/ton-connect/frameworks/web/)
 
+```mdx-code-block
 <Feedback />
+```

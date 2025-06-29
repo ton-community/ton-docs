@@ -1,4 +1,6 @@
+```mdx-code-block
 import Feedback from "@site/src/components/Feedback";
+```
 
 # Развёртывание в сеть
 
@@ -31,9 +33,10 @@ import Feedback from "@site/src/components/Feedback";
 
 Вспомним, что нельзя развернуть много разных смарт-контрактов с одним и тем же `state_init` — получится одинаковый контракт с одним адресом. Поэтому единственный способ предоставить всем вам один и тот же исходный код и **"одинаковые"** исходные данные — добавить в `state_init` отдельное поле, обеспечивающее дополнительную уникальность. В случае кошелька это даёт вам возможность использовать одну и ту же пару ключей для нескольких смарт-контрактов кошелька.
 
+````mdx-code-block
 {/*### One to rule them all
 
-Если вы уже предположили, что поле `ID` является обязательным для любого смарт-контракта, есть и другая возможность, которая может изменить ваше мнение. Рассмотрим раздел инициализации ранее разработанного контракта `CounterInternal`:
+If you've already considered that the `ID` field is a must-have for any smart contract, there is another opportunity that could change your mind. Let's examine the previously developed `CounterInternal` smart contract's init section:
 
 ```tact
 init(id: Int, owner: Address) {
@@ -43,12 +46,14 @@ init(id: Int, owner: Address) {
 }
 ```
 
-Если мы удалим поле `id` из его первоначального состояния хранилища, то сможем быть уверенными, что для определённого владельца может существовать **только один** смарт-контракт `CounterInternal`.
+If we remove the `id` field from its initial storage, we can ensure that **only one** `CounterInternal` smart contract can exist for a particular owner.
 
 :::info Tokens
-Этот механизм играет ключевую роль в [обработке Jetton](/ru/v3/guidelines/dapps/asset-processing/jettons/). Каждый токен, не являющийся нативным (Jetton), требует наличия собственного `Jetton Wallet` для определённого владельца и, следовательно, предоставляет для него вычислимый адрес, создавая **схему звезды** с базовым кошельком в центре.
+This mechanism plays a crucial role in [Jetton Processing](/v3/guidelines/dapps/asset-processing/jettons/). Each non-native (jetton) token requires its own `Jetton Wallet` for a particular owner and, therefore, provides a calculable address for it, creating a **star scheme** with the basic wallet in the center.
 :::
 */}
+````
+
 ## Implementation
 
 Теперь, когда наши контракты полностью протестированы, мы готовы развернуть их в TON. В `Blueprint` этот процесс выглядит одинаково для `мейннета` и `тестнета`, а также для любого из языков в этом гайде: `FunC` и `Tolk`.
@@ -141,4 +146,6 @@ You can view it at https://testnet.tonscan.org/address/EQBrFHgzSwxVYBXjIYAM6g2RH
 Использование Blueprint и приложений кошельков — не единственный вариант. Вы можете создать сообщение со [state_init](/ru/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) самостоятельно. Более того, вы даже можете сделать это с помощью [внутреннего сообщения](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) от смарт-контракта.
 :::
 
+```mdx-code-block
 <Feedback />
+```

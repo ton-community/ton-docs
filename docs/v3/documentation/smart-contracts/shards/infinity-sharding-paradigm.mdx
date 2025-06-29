@@ -62,11 +62,11 @@ Based on classification:
 
 Additional heuristics are applied beyond classification based on the message queue status:
 
-* A block is **overloaded** if:
+- A block is **overloaded** if:
   * Classification ≥ `2` (soft) and message queue size ≤ `SPLIT_MAX_QUEUE_SIZE = 100000`
   * Dispatch queue limit is reached, and message queue size ≤ `SPLIT_MAX_QUEUE_SIZE = 100000`
   * Message queue size is  ≥ `FORCE_SPLIT_QUEUE_SIZE = 4096`, and ≤ `SPLIT_MAX_QUEUE_SIZE = 100000`
-* A block is **underloaded** if:
+- A block is **underloaded** if:
   * Classification = `0` (underload) and message queue size ≤ `MERGE_MAX_QUEUE_SIZE = 2047`
 
 
@@ -189,8 +189,8 @@ When a split or merge is triggered, the affected shards pause and wait for the n
 
 ## See also
 
-* [Block layout](/v3/documentation/data-formats/tlb/block-layout)
-* [Whitepapers](/v3/documentation/whitepapers/overview)
+- [Block layout](/v3/documentation/data-formats/tlb/block-layout)
+- [Whitepapers](/v3/documentation/whitepapers/overview)
 
 <Feedback />
 

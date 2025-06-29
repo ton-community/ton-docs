@@ -47,10 +47,10 @@ message(0x7e8764ef) Add {
 
 ```func
 begin_cell()
-    .store_uint(0x7e8764ef, 32) ;; message opcode
-    .store_uint(query_id, 64)
-    .store_uint(amount, 32)
-    .end_cell()
+.store_uint(0x7e8764ef, 32) ;; message opcode
+.store_uint(query_id, 64)
+.store_uint(amount, 32)
+.end_cell()
 ```
 
   Usually, you don’t need to think about this — Tact takes care of it behind the scenes. However, it can be helpful to understand when debugging or interacting with low-level language like FunC.
@@ -85,10 +85,9 @@ Use `self.id` and `self.counter` to access them within contract functions.
 Определите функцию [`init()`](https://docs.tact-lang.org/book/contracts/#init-function/), чтобы делать это:
 
 ```tact title="/contracts/hello_world.tact"
-init(id: Int, owner: Address) {
+init(id: Int) {
     self.id = id;
     self.counter = 0;
-    self.owner = owner;
 }
 ```
 
@@ -128,38 +127,32 @@ get fun counter(): Int {
 #### Полный контракт
 
 ```tact title="/contracts/hello_world.tact"
-import "@stdlib/ownable";
-
 // message with opcode
 message(0x7e8764ef) Add {
     queryId: Int as uint64;
     amount: Int as uint32;
 }
 
-// Contract defenition. `Ownable` is a trait to share functionality.
-contract HelloWorld with Ownable {
+// Contract defenition
+contract HelloWorld {
 
     // storage variables
     id: Int as uint32;
     counter: Int as uint32;
-    owner: Address;
 
     // init function.
-    init(id: Int, owner: Address) {
+    init(id: Int) {
         self.id = id;
         self.counter = 0;
-        self.owner = owner;
     }
 
-    // default(null) recieve for deploy
+    // default(null) receive for deploy
     receive() {
         cashback(sender())
     }
 
-    // function to recive messages from other contracts
+    // function to receive messages from other contracts
     receive(msg: Add) {
-        // function from `Ownable` trait to assert, that only owner may call this
-        self.requireOwner();
         self.counter += msg.amount;
 
         // Notify the caller that the receiver was executed and forward remaining value back
@@ -231,130 +224,61 @@ import { HelloWorld } from '../wrappers/HelloWorld';
 import '@ton/test-utils';
 
 describe('HelloWorld Basic Tests', () => {
-    let blockchain: Blockchain;
-    let helloWorld: SandboxContract<HelloWorld >;
-    let owner: SandboxContract<TreasuryContract>;
+let blockchain: Blockchain;
+let helloWorld: SandboxContract<HelloWorld>;
+let sender: SandboxContract<TreasuryContract>;
 
-    beforeEach(async () => {
-        // Create a new blockchain instance
-        blockchain = await Blockchain.create();
+beforeEach(async () => {
+blockchain = await Blockchain.create();
+sender = await blockchain.treasury('user');
 
-        // Create an owner wallet
-        owner = await blockchain.treasury('owner');
+helloWorld = blockchain.openContract(
+// init with id = 0
+await HelloWorld.fromInit(0n)
+);
 
-        // Deploy the contract
-        helloWorld = blockchain.openContract(
-            await HelloWorld .fromInit(0n, owner.address)
-        );
+const deployResult = await helloWorld.send(
+sender.getSender(),
+{ value: toNano('1') },
+null
+);
 
-        // Send deploy transaction
-        const deployResult = await helloWorld.send(
-            owner.getSender(),
-            { value: toNano('1.00') },
-            null
-        );
-
-        // Verify deployment was successful
-        expect(deployResult.transactions).toHaveTransaction({
-            from: owner.address,
-            to: helloWorld.address,
-            deploy: true,
-            success: true
-        });
-    });
-
-    it('should initialize with correct values', async () => {
-        // Check initial counter value
-        const initialCounter = await helloWorld.getCounter();
-        expect(initialCounter).toBe(0n);
-
-        // Check initial ID
-        const id = await helloWorld.getId();
-        expect(id).toBe(0n);
-    });
-
-    it('should allow owner to increment counter', async () => {
-        // Get initial counter value
-        const initialCounter = await helloWorld.getCounter();
-
-        // Increment counter by 5
-        const incrementAmount = 5n;
-        const result = await helloWorld.send(
-            owner.getSender(),
-            { value: toNano('0.05') },
-            {
-                $$type: 'Add',
-                amount: incrementAmount,
-                queryId: 0n
-            }
-        );
-
-        // Verify transaction was successful
-        expect(result.transactions).toHaveTransaction({
-            from: owner.address,
-            to: helloWorld.address,
-            success: true
-        });
-
-        // Check counter was incremented correctly
-        const newCounter = await helloWorld.getCounter();
-        expect(newCounter).toBe(initialCounter + incrementAmount);
-    });
-
-    it('should prevent non-owner from incrementing counter', async () => {
-        // Create a non-owner wallet
-        const nonOwner = await blockchain.treasury('nonOwner');
-
-        // Get initial counter value
-        const initialCounter = await helloWorld.getCounter();
-
-        // Try to increment counter as non-owner
-        const result = await helloWorld.send(
-            nonOwner.getSender(),
-            { value: toNano('0.05') },
-            {
-                $$type: 'Add',
-                amount: 5n,
-                queryId: 0n
-            }
-        );
-
-        // Verify transaction failed
-        expect(result.transactions).toHaveTransaction({
-            from: nonOwner.address,
-            to: helloWorld.address,
-            success: false
-        });
-
-        // Verify counter was not changed
-        const newCounter = await helloWorld.getCounter();
-        expect(newCounter).toBe(initialCounter);
-    });
-
-    it('should handle multiple increments correctly', async () => {
-        // Perform multiple increments
-        const increments = [3n, 7n, 2n];
-        let expectedCounter = 0n;
-
-        for (const amount of increments) {
-            await helloWorld.send(
-                owner.getSender(),
-                { value: toNano('0.05') },
-                {
-                    $$type: 'Add',
-                    amount: amount,
-                    queryId: 0n
-                }
-            );
-            expectedCounter += amount;
-        }
-
-        // Verify final counter value
-        const finalCounter = await helloWorld.getCounter();
-        expect(finalCounter).toBe(expectedCounter);
-    });
+expect(deployResult.transactions).toHaveTransaction({
+from: sender.address,
+to: helloWorld.address,
+deploy: true,
+success: true
+});
 });
 
+it('should initialize with id = 0 and counter = 0', async () => {
+const id = await helloWorld.getId();
+const counter = await helloWorld.getCounter();
+expect(id).toBe(0n);
+expect(counter).toBe(0n);
+});
+
+it('should increase counter by given amount', async () => {
+const result = await helloWorld.send(
+sender.getSender(),
+{ value: toNano('0.1') },
+{
+$$type: 'Add',
+queryId: 0n,
+amount: 10n
+}
+);
+
+expect(result.transactions).toHaveTransaction({
+from: sender.address,
+to: helloWorld.address,
+success: true
+});
+
+const counter = await helloWorld.getCounter();
+expect(counter).toBe(10n);
+});
+});
 
 ```
 
@@ -368,18 +292,17 @@ npx blueprint test
 
 ```bash
 
- PASS  tests/HelloWorld.spec.ts
-  HelloWorld Basic Tests
-    ✓ should initialize with correct values (211 ms)
-    ✓ should allow owner to increment counter (100 ms)
-    ✓ should prevent non-owner from incrementing counter (152 ms)
-    ✓ should handle multiple increments correctly (112 ms)
+PASS  tests/HelloWorld.spec.ts
+HelloWorld Basic Tests
+✓ should initialize with id = 0 and counter = 0 (305 ms)
+✓ should increase counter by given amount (120 ms)
 
 Test Suites: 1 passed, 1 total
-Tests:       4 passed, 4 total
+Tests:       2 passed, 2 total
 Snapshots:   0 total
-Time:        1.193 s, estimated 2 s
+Time:        1.399 s
 Ran all test suites.
+
 
 ```
 

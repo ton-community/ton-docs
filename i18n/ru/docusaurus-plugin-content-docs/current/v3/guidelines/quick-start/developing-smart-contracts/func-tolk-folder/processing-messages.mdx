@@ -1,7 +1,9 @@
+```mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 import Feedback from "@site/src/components/Feedback";
 import Button from '@site/src/components/button'
+```
 
 # Обработка сообщений
 
@@ -28,26 +30,37 @@ import Button from '@site/src/components/button'
 
 Давайте рассмотрим сигнатуру функции `recv_internal` для понимания того, как мы можем использовать это:
 
+```mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
-```func
-() recv_internal(int my_balance, int msg_value, cell in_msg_full, ломтик in_msg_body) нарушает
 ```
- - `my_balance` - смарт-контрактный баланс при начале транзакции.
- - `msg_value` - средства, полученные с сообщением.
- - `in_msg_full` - `ячейка`, включающая "заголовочные" поля сообщения.
- - `in_msg_body` - [slice](/ru/v3/documentation/smart-contracts/func/docs/types#atomic-types) содержит тело сообщения.
+
+```func
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure
+ - `my_balance` - smart-contract balance at the beginning of the transaction.
+ - `msg_value` - funds received with message.
+ - `in_msg_full` - `cell` containing "header" fields of the message.
+ - `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containing payload of the message.
+```
+
+```mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+```
+
 ```tolk
 fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice)
 ```
- - `myBalance` - баланс смарт-контракта при попрошайничестве транзакции.
- - `msgValue` - средства, полученные с сообщением.
- - `msgFull` - `cell` с полями "header" сообщения.
- - `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) захват сообщения payload pf.
+
+- `myBalance` - balance of smart contract at the beginning of the transaction.
+- `msgValue` - funds received with message.
+- `msgFull` - `cell` containing "header" fields of message.
+- `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) захват сообщения payload pf.
+
+```mdx-code-block
 </TabItem>
 </Tabs>
+```
 
 :::info 
 Вы можете найти полное описание отправки сообщений в этом [разделе](/ru/v3/documentation/smart-contracts/message-management/sending-messages#%D0%BC%D0%B0%D0%BA%D0%B5%D1%82-%D1%81%D0%BE%D0%BE%D0%B1%D1%89%D0%B5%D0%BD%D0%B8%D1%8F).
@@ -55,12 +68,18 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 
 Из всего этого нам сейчас интересен исходный адрес сообщения, который мы можем извлечь из ячейки `msg_full`. Получив этот адрес и сравнив его с хранимым, мы при выполнении требуемого условия можем разрешить доступ к важнейшим частям функциональности нашего смарт-контракта. Обычный подход выглядит следующим образом:
 
+```mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+```
+
 ```func
-;; This is NOT a part of the project, just an example!
-const int op::increment = 1;
-const int op::decrement = 2;
+;; This is NOT a part of the project, just an example.
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    ;; Parse the sender address from in_msg_full
+    slice cs = in_msg_full.begin_parse();
+    int flags = cs~load_uint(4);
+    slice sender_address = cs~load_msg_addr();
 
     ;; check if message was send by owner
     if (equal_slices_bits(sender_address, owner_address)) {
@@ -78,9 +97,13 @@ const int op::decrement = 2;
     ;;0xffff is not standard exit code, but is standard practice among TON developers
     throw(0xffff);
 }
-````
+```
+
+```mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+```
+
 ```tolk
 // This is NOT a part of the project, just an example.
 fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
@@ -102,24 +125,26 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 
     throw 0xffff; // if the message contains an op that is not known to this contract, we throw
 }
-````
+```
+
+```mdx-code-block
 </TabItem>
 </Tabs>
-
+```
 
 ### Операции
 
 Обычный шаблон контрактов в TON — включать **32-битный код операции** в тела сообщений, который сообщает вашему контракту, какие действия необходимо выполнить:
 
+```mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+```
+
 ```func
-;; This is NOT a part of the project, just an example.
-() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
-    ;; Parse the sender address from in_msg_full
-    slice cs = in_msg_full.begin_parse();
-    int flags = cs~load_uint(4);
-    slice sender_address = cs~load_msg_addr();
+;; This is NOT a part of the project, just an example!
+const int op::increment = 1;
+const int op::decrement = 2;
 
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
     ;; Step 1: Check if the message is empty
@@ -144,8 +169,12 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
     throw(0xffff);
 }
 ```
+
+```mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+```
+
 ```tolk
 //This is NOT a part of the project, just an example!
 const op::increment : int = 1;
@@ -174,9 +203,11 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
     throw(0xffff);
 }
 ```
+
+```mdx-code-block
 </TabItem>
 </Tabs>
-
+```
 
 Объединяя оба этих шаблона, вы можете добиться полного описания систем ваших смарт-контрактов, обеспечив безопасное взаимодействие между ними и раскрыв полностью потенциал модели акторов в TON.
 
@@ -198,40 +229,44 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 
 Добавьте функцию `recv_external` в смарт-контракт `HelloWorld`:
 
+```mdx-code-block
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
+```
+
 ```func title="/contracts/hello_world.fc"
 () recv_external(slice in_msg) impure {
     accept_message();
+
     var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
 
-```
-var query_id = in_msg~load_uint(64);
-var addr = in_msg~load_msg_addr();
-var coins = in_msg~load_coins();
-var increase_by = in_msg~load_uint(32);
+    var query_id = in_msg~load_uint(64);
+    var addr = in_msg~load_msg_addr();
+    var coins = in_msg~load_coins();
+    var increase_by = in_msg~load_uint(32);
 
-var msg = begin_cell()
-    .store_uint(0x18, 6)
-    .store_slice(addr)
-    .store_coins(coins)
-    .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-    .store_uint(op::increase, 32)
-    .store_uint(query_id, 64)
-    .store_uint(increase_by, 32);
-send_raw_message(msg.end_cell(), 0);
+    var msg = begin_cell()
+        .store_uint(0x18, 6)
+        .store_slice(addr)
+        .store_coins(coins)
+        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+        .store_uint(op::increase, 32)
+        .store_uint(query_id, 64)
+        .store_uint(increase_by, 32);
+    send_raw_message(msg.end_cell(), 0);
 
-ctx_counter_ext += increase_by;
-save_data(ctx_id, ctx_counter, ctx_counter_ext);
+    ctx_counter_ext += increase_by;
+    save_data(ctx_id, ctx_counter, ctx_counter_ext);
 
-return ();
-```
-
+    return ();
 }
+```
 
-````
+```mdx-code-block
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
+```
+
 ```tolk title="/contracts/HelloWorld.tolk"
 fun acceptExternalMessage(): void
     asm "ACCEPT";
@@ -260,9 +295,12 @@ fun onExternalMessage(inMsg: slice) {
 
     return ();
 }
-````
+```
 
-</TabItem></Tabs>
+```mdx-code-block
+</TabItem>
+</Tabs>
+```
 
 Эта функция при получении внешнего сообщения увеличит нашу переменную `ctx_counter_ext` и отправит внутреннее сообщение на указанный адрес с операцией `increase`.
 
@@ -383,18 +421,6 @@ describe('HelloWorld', () => {
 });
 ```
 
-{/*Этот тест описывает стандартный поток транзакций любой `многоконтрактной` системы:
-
-1. Отправьте внешнее сообщение для обращения к логике смарт-контракта извне блокчейна.
-2. Инициируйте отправку одного или нескольких внутренних сообщений другим контрактам.  
-3. После получения внутреннего сообщения измените состояние контракта и повторите **шаг 2**, если требуется.
-
-Поскольку результирующая последовательность транзакций может быть сложной для понимания, полезной практикой будет создать `диаграмму последовательности`, описывающую вашу систему. Вот пример нашего случая:
-
-<div style={{marginBottom: '30px'}} align="center">
-  <img src="/img/tutorials/quick-start/multi-contract.png" alt="Multi-contract scheme"/>
-</div>*/}
-
 Проверьте, что все примеры верны, запустив тестовый скрипт:
 
 ```bash
@@ -420,10 +446,16 @@ Ran all test suites.
 
 Теперь, когда вы понимаете, как смарт-контракты отправляют и получают сообщения, вы можете **развернуть свой контракт** в блокчейне TON.
 
+```mdx-code-block
 <Button href="/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/deploying-to-network" colorType={'primary'} sizeType={'sm'}>
+```
 
   Развёртывание в сети
 
+```mdx-code-block
 </Button>
+```
 
+```mdx-code-block
 <Feedback />
+```

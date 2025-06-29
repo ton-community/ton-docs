@@ -12,7 +12,7 @@ TON区块链生态系统推出了对Jetton标准的创新扩展，名为 [Mintle
 
 ## 概览
 
-免铸造 jetton  - 是 TON 区块链上标准 jetton 实现（[TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)）的扩展（[TEP-177](https://github.com/ton-blockchain/TEPs/pull/177) 和 [TEP-176](https://github.com/ton-blockchain/TEPs/pull/176)）。
+免铸造 jetton  - 是 TON 区块链上标准 jetton 实现（[TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.mdx)）的扩展（[TEP-177](https://github.com/ton-blockchain/TEPs/pull/177) 和 [TEP-176](https://github.com/ton-blockchain/TEPs/pull/176)）。
 
 这种实现方式可以向数百万用户进行大规模、去中心化的空投，而不会产生大量成本或给区块链增加过多负载。
 
@@ -35,7 +35,7 @@ TON区块链生态系统推出了对Jetton标准的创新扩展，名为 [Mintle
 
 这可以通过以下两种方式实现
 
-- 与 **[自定义有效载荷 API](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain)** 中指定的链外 API 集成：
+- 与 **[自定义有效载荷 API](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.mdx#jetton-metadata-example-offchain)** 中指定的链外 API 集成：
   - 检查每个 jetton 是否是免铸造的。
   - 如果是免铸造的，请检查钱包的主人是否已经认领。
   - 如果还未认领，则从自定义负载 API 获取数据，并将链下余额添加到链上余额中。
@@ -76,7 +76,7 @@ TON区块链生态系统推出了对Jetton标准的创新扩展，名为 [Mintle
 
 4. 更新元数据：
 
-- 根据[元数据标准](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md)，在令牌的元数据中添加 `mintless_merkle_dump_uri` 和 `custom_payload_api_uri`。
+- 根据[元数据标准](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.mdx)，在令牌的元数据中添加 `mintless_merkle_dump_uri` 和 `custom_payload_api_uri`。
 
 5. 请求钱包支持：
 
@@ -179,5 +179,5 @@ make
 
 - [了解免铸造 jetton ：综合指南](https://gist.github.com/EmelyanenkoK/bfe633bdf8e22ca92a5138e59134988f) - 原帖。
 - [免铸造 jetton 标准实施](https://github.com/ton-community/mintless-jetton)
-- [Jetton 链下有效载荷TEP](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain)
-- [Jetton元数据标准](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md)
+- [Jetton 链下有效载荷TEP](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.mdx#jetton-metadata-example-offchain)
+- [Jetton元数据标准](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.mdx)

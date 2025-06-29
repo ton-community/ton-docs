@@ -106,7 +106,7 @@ Where:
 
 2. **Bits descriptor (2nd byte)**
 
-Объединяя байты из предыдущих шагов, мы получаем `00080000000f`, а SHA256 из этой строки байтов равен `57b520dbcb9d135863fc33963cde9f6db2ded1430d88056810a2c9434a3860f9` — это хэш представления ячейки.
+This byte indicates the size of the cell’s bitstring and is calculated as: `floor(b / 8) + ceil(b / 8)`.
 
 Второй - **битовый дескриптор** - равен `floor(b / 8) + ceil (b / 8)`, где `0 <= b <= 1023` - количество бит в ячейке.
 
@@ -199,7 +199,7 @@ We now concatenate the header and the serialized cell content:
 
 **BoC implementation examples**
 
-- Поэтому мы строим заголовок согласно его [схеме](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/tl/boc.tlb#L25).
+- [Serialization](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/serialize.go)
 - Примеры реализации Bag of Cells: [Сериализация](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/serialize.go), [Десериализация](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/parse.go)
 
 ## Специальные (экзотические) ячейки
@@ -330,7 +330,7 @@ Exotic cells follow separate rules for computing their higher hashes. Экзот
 
 ## См. также
 
-[//]: # "* [Оригинальная статья на RU](https://github.com/xssnick/ton-deep-doc/blob/master/Cells-BoC.md)"
+[//]: # "* [Оригинальная статья на RU](https://github.com/xssnick/ton-deep-doc/blob/master/Cells-BoC.mdx)"
 
 - [Экзотические (специальные) ячейки](/v3/documentation/data-formats/tlb/exotic-cells)
 - [Проверка доказательства Меркла](/v3/documentation/data-formats/tlb/proofs)

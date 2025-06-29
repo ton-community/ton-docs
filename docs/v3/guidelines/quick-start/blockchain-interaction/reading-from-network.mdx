@@ -67,18 +67,18 @@ Account state may be obtained using the [`getContractState`](https://testnet.ton
 To get account information, you need the account's address. In TON, we can use a user-friendly address — a base64url-encoded string that represents a blockchain account in a human-readable and error-resistant format.
 
 User-friendly addresses also include special flags that define how the address should be used. For example, some addresses are valid only on Testnet, while others work on any network. These flags are encoded in the first few bits and influence the first letter of the address:
-* Addresses beginning with **E** or **U** are used on **Mainnet**
-* Addresses beginning with **k** or **0** are used for **Testnet**
+- Addresses beginning with **E** or **U** are used on **Mainnet**
+- Addresses beginning with **k** or **0** are used for **Testnet**
 
 **Mainnet example:**
 
-* `EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF`
-* `UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA`
+- `EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF`
+- `UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA`
 
 **Testnet example:**
 
-* `kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP`
-* `0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK`
+- `kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP`
+- `0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK`
 
 
 #### Your address in the following examples
@@ -208,8 +208,8 @@ User-friendly address: kQB11H0oDahylXlASZjiDtINlrS0PevVMsvtsbmKmvN5l9np
 
 As you can see, the get method returns the contract address in two formats:
 
-* The _raw address_ (hexadecimal format) is how TON represents addresses internally. It’s precise but not very human-friendly.
-* The _user-friendly address_  is a readable, safer format designed for sharing and everyday use. It’s easier to work with in wallets and apps.
+- The _raw address_ (hexadecimal format) is how TON represents addresses internally. It’s precise but not very human-friendly.
+- The _user-friendly address_  is a readable, safer format designed for sharing and everyday use. It’s easier to work with in wallets and apps.
 
 Both addresses point to the same contract — in this case, the **Jetton wallet contract** associated with the user’s wallet address.
 
@@ -333,9 +333,9 @@ A message is a packet of data exchanged between actors (users, applications, or 
 Let’s now try to fetch transactions for an account we control.
 
 Before running this code:
-* Go to [Tonviewer](https://testnet.tonviewer.com) and open your Testnet wallet address, which we created earlier in the [Getting Started](/v3/guidelines/quick-start/getting-started#interacting-with-ton-ecosystem) section.
-* Send some test TON to yourself using [Testgiver Ton Bot](https://t.me/testgiver_ton_bot/).
-* Wait a few seconds and make sure the transaction appears in Tonviewer.
+- Go to [Tonviewer](https://testnet.tonviewer.com) and open your Testnet wallet address, which we created earlier in the [Getting Started](/v3/guidelines/quick-start/getting-started#interacting-with-ton-ecosystem) section.
+- Send some test TON to yourself using [Testgiver Ton Bot](https://t.me/testgiver_ton_bot/).
+- Wait a few seconds and make sure the transaction appears in Tonviewer.
 
 :::important
 Make sure you're working in the Testnet, not the Mainnet.
@@ -343,7 +343,7 @@ Make sure you're working in the Testnet, not the Mainnet.
 Also, please note that the Testnet API may update data with some delay, so your transaction might not appear immediately when querying through the API.
 :::
 
-* Then, create a new file `3-fetch-account-transaction.ts`:
+- Then, create a new file `3-fetch-account-transaction.ts`:
 
 ```typescript title="3-fetch-account-transaction.ts"
 import { Address, TonClient } from "@ton/ton";
@@ -378,7 +378,7 @@ async function main() {
 main();
 ```
 
-* Replace `Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-')` with your Testnet address.
+- Replace `Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-')` with your Testnet address.
 
 Run this example using the following command:
 

@@ -14,7 +14,7 @@ This extension enables decentralized, [merkle-proof](/v3/documentation/data-form
 
 ## Overview
 
-Mintless jettons are an extension ([TEP-177](https://github.com/ton-blockchain/TEPs/pull/177) and [TEP-176](https://github.com/ton-blockchain/TEPs/pull/176)) of the standard jetton implementation ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)) on TON Blockchain.
+Mintless jettons are an extension ([TEP-177](https://github.com/ton-blockchain/TEPs/pull/177) and [TEP-176](https://github.com/ton-blockchain/TEPs/pull/176)) of the standard jetton implementation ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.mdx)) on TON Blockchain.
 
 This implementation enables large-scale, decentralized airdrops to millions of users while minimizing costs and blockchain load.
 
@@ -37,7 +37,7 @@ Wallet applications play a key role in improving the user experience with mintle
 
 Wallets can achieve this by:
 
-Integrating with the off-chain API specified in the [custom payload API](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain):
+Integrating with the off-chain API specified in the [custom payload API](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.mdx#jetton-metadata-example-offchain):
   - Check if the jetton is mintless.
   - Verify whether the wallet owner has claimed it.
   - If unclaimed, retrieve data from the custom payload API and add the off-chain balance to the on-chain one.
@@ -74,7 +74,7 @@ Deploying a mintless jetton involves several steps:
   - Implement the custom payload API to allow wallets to fetch the necessary proofs.
 
 4. Update metadata:
-  - Add `mintless_merkle_dump_uri` and `custom_payload_api_uri` to the token's metadata as per the [metadata standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
+  - Add `mintless_merkle_dump_uri` and `custom_payload_api_uri` to the token's metadata as per the [metadata standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.mdx).
 
 5. Request support from wallets:
   - Ask wallet applications to index your mintless jetton.
@@ -172,8 +172,8 @@ Supporting mintless jettons across smart contracts, wallet applications, and dAp
 
 - [Understanding mintless jettons: a comprehensive guide](https://gist.github.com/EmelyanenkoK/bfe633bdf8e22ca92a5138e59134988f) - the original post.
 - [Mintless jetton standard implementation](https://github.com/ton-community/mintless-jetton)
-- [Jetton offchain payloads TEP](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain)
-- [Jetton metadata standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md)
+- [Jetton offchain payloads TEP](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.mdx#jetton-metadata-example-offchain)
+- [Jetton metadata standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.mdx)
 
 <Feedback />
 

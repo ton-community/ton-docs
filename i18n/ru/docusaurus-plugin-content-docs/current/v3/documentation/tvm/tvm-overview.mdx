@@ -20,7 +20,11 @@ import Button from '@site/src/components/button'
 :::tip
 :::tip
 :::tip
-Перед началом курса убедитесь, что вы хорошо понимаете основы технологии блокчейн. Если у вас есть пробелы в знаниях, рекомендуем пройти курс [Основы блокчейна с TON](https://stepik.org/course/201294/promo) ([версия RU](https://stepik.org/course/202221/), [версия CHN](https://stepik.org/course/200976/)).
+:::tip
+:::tip
+:::tip
+:::tip
+Before starting the course, ensure you have a solid understanding of blockchain basics. If you need to fill knowledge gaps, consider taking the [Blockchain basics with TON](https://stepik.org/course/201294/promo) course ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)).
 :::
 
 [Курс по блокчейну TON](https://stepik.org/course/176754/) — это комплексное руководство по разработке на блокчейне TON. Модуль 2 полностью охватывает **TVM**, транзакции, масштабируемость и бизнес-кейсы.
@@ -69,7 +73,7 @@ The compute phase involves executing the contract code on TVM.
 
 ### Пропуск фазы вычислений
 
-В некоторых случаях TVM вообще не может быть вызван (например, если аккаунт отсутствует, не инициализирован или заморожен, а обрабатываемое входящее сообщение не имеет полей кода или данных или эти поля имеют неверный хеш) These scenarios are represented by specific constructors:
+The compute phase may be skipped under certain conditions, such as when the account is missing, uninitialized, or frozen, or when the incoming message lacks code or data fields. These scenarios are represented by specific constructors:
 
 - `cskip_no_state$00` - [Отсутствие состояния](https://testnet.tonviewer.com/transaction/7e78394d082882375a5d21affa6397dec60fc5a3ecbea87f401b0e460fb5c80c) (т. е. код и данные смарт-контракта) как в аккаунте (несуществующем, неинициализированном или замороженном), так и в сообщении.
 - `cskip_bad_state$01` - Недопустимое состояние, переданное в сообщении (т. е. хэш состояния отличается от ожидаемого значения) замороженного или неинициализированного аккаунта.
@@ -130,6 +134,15 @@ TVM инициализируется, когда выполнение транз
 - Обратите внимание, что существует глобальное ограничение на максимальную глубину ячейки `<1024` во время выполнения контракта. Однако регистры c4 и c5 должны быть `<=512` в глубину.
 - Контракт не может создать более 255 выходных действий.
 
+:::tip
+:::tip
+:::tip
+:::tip
+:::tip
+:::tip
+:::tip
+:::tip
+:::tip
 :::tip
 :::tip
 :::tip

@@ -193,7 +193,7 @@
   },
   "sidebar.participate.link.Wallet Contract Versions": {
     "message": "Wallet Contract Versions",
-    "description": "The label for link Wallet Contract Versions in sidebar participate, linking to https://github.com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources.md"
+    "description": "The label for link Wallet Contract Versions in sidebar participate, linking to https://github.com/toncenter/tonweb/blob/master/src/contract/wallet/WalletSources.mdx"
   },
   "sidebar.participate.link.Run a Validator Node": {
     "message": "Run a Validator Node",

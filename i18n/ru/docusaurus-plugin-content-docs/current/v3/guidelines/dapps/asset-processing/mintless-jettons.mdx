@@ -12,9 +12,9 @@ import Feedback from '@site/src/components/Feedback';
 
 Это расширение позволяет проводить децентрализованные, доказуемые с помощью [доказательства Меркла](/v3/documentation/data-formats/tlb/exotic-cells#merkle-proof) эирдропы без необходимости традиционных процессов чеканки.
 
-## Общие сведения
+## Overview
 
-Mintless Jettons - это расширение ([TEP-177](https://github.com/ton-blockchain/TEPs/pull/177) и [TEP-176](https://github.com/ton-blockchain/TEPs/pull/176)) стандартной реализации Jetton ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)) на блокчейне TON.
+Mintless Jettons - это расширение ([TEP-177](https://github.com/ton-blockchain/TEPs/pull/177) и [TEP-176](https://github.com/ton-blockchain/TEPs/pull/176)) стандартной реализации Jetton ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.mdx)) на блокчейне TON.
 
 Эта реализация обеспечивает крупномасштабные децентрализованные эирдропы миллионам пользователей без значительных затрат или чрезмерной нагрузки на блокчейн.
 
@@ -37,7 +37,7 @@ Mintless Jettons - это расширение ([TEP-177](https://github.com/ton
 
 Wallets can achieve this by:
 
-Интеграция с API Off-Chain, указанным в API [Custom Payload](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain)\*\*:
+Интеграция с API Off-Chain, указанным в API [Custom Payload](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.mdx#jetton-metadata-example-offchain)\*\*:
 
 - Для каждого jetton проверьте, является ли он Mintless.
 - Если это Mintless, проверьте, заявил ли его владелец кошелька.
@@ -81,7 +81,7 @@ Wallets can achieve this by:
 
 4. Обновите метаданные:
 
-- Добавьте `mintless_merkle_dump_uri` и `custom_payload_api_uri` в метаданные токена в соответствии со [стандартом метаданных](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
+- Добавьте `mintless_merkle_dump_uri` и `custom_payload_api_uri` в метаданные токена в соответствии со [стандартом метаданных](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.mdx).
 
 5. Запросите поддержку из кошельков:
 
@@ -185,7 +185,7 @@ Mintless Jettons предлагает эффективное и масштаби
 
 - [Понимание Mintless Jettons: Полное руководство](https://gist.github.com/EmelyanenkoK/bfe633bdf8e22ca92a5138e59134988f) - исходная публикация.
 - [Стандартная реализация Mintless Jetton](https://github.com/ton-community/mintless-jetton)
-- [Jetton Offchain Payloads TEP](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md#jetton-metadata-example-offchain)
-- [Стандарт метаданных для Jetton](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md)
+- [Jetton Offchain Payloads TEP](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.mdx#jetton-metadata-example-offchain)
+- [Стандарт метаданных для Jetton](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.mdx)
 
 <Feedback />

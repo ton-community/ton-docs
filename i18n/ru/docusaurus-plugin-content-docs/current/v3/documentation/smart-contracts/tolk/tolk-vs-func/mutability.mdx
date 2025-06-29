@@ -2,11 +2,13 @@
 title: "Сравнение Tolk и FunC: изменчивость"
 ---
 
+```mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+```
 
 # Изменчивость в Tolk по сравнению с функциями тильда в FunC
 
-:::tip :::tip :::tip :::tip TLDR
+:::tip :::tip :::tip TLDR
 
 - нет методов тильда `~`
 - `cs.loadInt(32)` изменяет срез и возвращает целое число
@@ -23,6 +25,7 @@ import Feedback from '@site/src/components/Feedback';
 
 Цель состоит в том, чтобы иметь вызовы, идентичные JS и другим языкам:
 
+```mdx-code-block
 <table className="cmp-func-tolk-table">
   <thead>
   <tr>
@@ -45,7 +48,7 @@ import Feedback from '@site/src/components/Feedback';
   </tr>
   <tr>
     <td><code dangerouslySetInnerHTML={{__html: 'slice data = get_data()<br>             .begin_parse();<br>int flag = data~load_uint(32);'}}></code></td>
-    <td><code dangerouslySetInnerHTML={{__html: 'val flag = getContractData()<br>           .beginParse()<br>           .loadUint(32);'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'val flag = contract.getData()<br>           .beginParse()<br>           .loadUint(32);'}}></code></td>
   </tr>
   <tr>
     <td><code>{'dict~udict_set(...);'}</code></td>
@@ -57,14 +60,15 @@ import Feedback from '@site/src/components/Feedback';
   </tr>
   <tr>
     <td><code>{'b = b.store_int(x, 32);'}</code></td>
-    <td><code dangerouslySetInnerHTML={{__html: 'b.storeInt(x, 32);<br><br>// также работает<br>b = b.storeUint(32);'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'b.storeInt(x, 32);<br><br>// also works<br>b = b.storeUint(32);'}}></code></td>
   </tr>
   <tr>
     <td><code dangerouslySetInnerHTML={{__html: 'b = b.store_int(x, 32)<br>     .store_int(y, 32);'}}></code></td>
-    <td><code dangerouslySetInnerHTML={{__html: 'b.storeInt(x, 32)<br> .storeInt(y, 32);<br><br>// b = ...; также работает'}}></code></td>
+    <td><code dangerouslySetInnerHTML={{__html: 'b.storeInt(x, 32)<br> .storeInt(y, 32);<br><br>// b = ...; also works'}}></code></td>
   </tr>
   </tbody>
 </table>
+```
 
 Чтобы сделать это доступным, Tolk предлагает концепцию изменяемости, которая является обобщением того, что означает тильда в FunC.
 
@@ -112,7 +116,7 @@ increment(origX);         // error, unexpected mutation
 increment(10);            // error, not lvalue
 origX.increment();        // error, not a method, unexpected mutation
 val constX = getSome();
-increment(mutate constX); // error, it's immutable, since `val`
+increment(mutate constX); // error, it's immutable since `val`
 ```
 
 То же самое для срезов и любых других типов:
@@ -145,7 +149,7 @@ Methods — unlike global functions `fun f()` — are declared as `fun receiver_
 If a method accepts `self`, it's an instance method (if not, it's a static one).
 
 ```tolk
-fun assertNotEq(self: int, throwIfEq: int) {
+fun int.assertNotEq(self, throwIfEq: int) {
     if (self == throwIfEq) {
         throw 100;
     }
@@ -153,17 +157,16 @@ fun assertNotEq(self: int, throwIfEq: int) {
 
 someN.assertNotEq(10);
 10.assertNotEq(10);      // also ok, since self is not mutating
-assertNotEq(someN, 10);  // still allowed (but not recommended)
 ```
 
 `self`, без `mutate`, является **неизменяемым** (в отличие от всех других параметров). Думайте об этом как о "методе, доступном только для чтения".
 
 ```tolk
-fun readFlags(self: slice) {
+fun slice.readFlags(self) {
     return self.loadInt(32);  // error, modifying immutable variable
 }
 
-fun preloadInt32(self: slice) {
+fun slice.preloadInt32(self) {
     return self.preloadInt(32);  // ok, it's a read-only method
 }
 ```
@@ -175,13 +178,13 @@ fun preloadInt32(self: slice) {
 Следующим образом:
 
 ```tolk
-fun readFlags(mutate self: slice) {
+fun slice.readFlags(mutate self) {
     return self.loadInt(32);
 }
 
 val flags = msgBody.readFlags(); // pretty obvious
 
-fun increment(mutate self: int) {
+fun int.increment(mutate self) {
     self += 1;
 }
 
@@ -190,7 +193,7 @@ origX.increment();    // 11
 10.increment();       // error, not lvalue
 
 // even this is possible
-fun incrementWithY(mutate self: int, mutate y: int, byValue: int) {
+fun int.incrementWithY(mutate self, mutate y: int, byValue: int) {
     self += byValue;
     y += byValue;
 }
@@ -202,10 +205,10 @@ origX.incrementWithY(mutate origY, 10);   // both += 10
 
 ```tolk
 @pure
-fun tuplePush<X>(mutate self: tuple, value: X): void
+fun tuple.push<X>(mutate self, value: X): void
     asm "TPUSH";
 
-t.tuplePush(1);
+t.push(1);
 ```
 
 ### return self makes a method chainable
@@ -213,7 +216,7 @@ t.tuplePush(1);
 Точно как `return self` в Python или `return this` в JavaScript. Это то, что делает методы типа `storeInt()` и другие, цепочечными.
 
 ```tolk
-fun storeInt32(mutate self: builder, x: int): self {
+fun builder.storeInt32(mutate self, x: int): self {
     self.storeInt(x, 32);
     return self;
 
@@ -247,7 +250,7 @@ fun f2(mutate x: int, mutate y: int): (slice, cell) { ... }
 // actually does: (x', y', r) = f2(x, y); x = x'; y = y'; someF(r)
 someF(f2(mutate x, mutate y));
 
-// when `self`, it's exactly the same
+// when `self`, it's the same
 // actually does: (cs', r) = loadInt(cs, 32); cs = cs'; flags = r
 flags = cs.loadInt(32);
 ```
@@ -258,13 +261,13 @@ flags = cs.loadInt(32);
 // "TPUSH" pops (tuple) and pushes (tuple')
 // so, self' = tuple', and return an empty tensor
 // `void` is a synonym for an empty tensor
-fun tuplePush<X>(mutate self: tuple, value: X): void
+fun tuple.push<X>(mutate self, value: X): void
     asm "TPUSH";
 
 // "LDU" pops (slice) and pushes (int, slice')
 // with asm(-> 1 0), we make it (slice', int)
 // so, self' = slice', and return int
-fun loadMessageFlags(mutate self: slice): int
+fun slice.loadMessageFlags(mutate self): int
     asm(-> 1 0) "4 LDU";
 ```
 
@@ -275,22 +278,22 @@ fun loadMessageFlags(mutate self: slice): int
 // with asm(op self), we put arguments to correct order
 // so, self' = builder', and return an empty tensor
 // but to make it chainable, `self` instead of `void`
-fun storeMessageOp(mutate self: builder, op: int): self
+fun builder.storeMessageOp(mutate self, op: int): self
     asm(op self) "32 STU";
 ```
 
 Маловероятно, что вам придется делать такие трюки. Скорее всего, вы просто напишете обертки вокруг существующих функций:
 
 ```tolk
-// just do like this, without asm, it's the same effective
+// just do it like this, without asm; it's the same effective
 
 @inline
-fun myLoadMessageFlags(mutate self: slice): int {
+fun slice.myLoadMessageFlags(mutate self): int {
     return self.loadUint(4);
 }
 
 @inline
-fun myStoreMessageOp(mutate self: builder, flags: int): self {
+fun builder.myStoreMessageOp(mutate self, flags: int): self {
     return self.storeUint(32, flags);
 }
 ```
@@ -303,4 +306,6 @@ fun myStoreMessageOp(mutate self: builder, flags: int): self {
 
 For now, please specify the `@inline` attribute.
 
+```mdx-code-block
 <Feedback />
+```

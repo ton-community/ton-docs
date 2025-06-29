@@ -37,8 +37,8 @@ Here's the breakdown of costs based on participation:
 После завершения раунда проверки пул возвращает свои средства Избирателю. Rewards are split as follows:
 
 ```
-validator_reward = (reward * validator_reward_share) / 10000;
-nominators_reward = reward - validator_reward;
+validator_reward = (reward * validator_reward_share) / 10000
+nominators_reward = reward - validator_reward
 ```
 
 Nominators receive shares proportional to their stakes. Например, если в пуле есть два номинатора со ставками 100 000 и 300 000 TON, то первый из них получит 25%, а второй – 75% от `nominators_reward`.
@@ -102,7 +102,7 @@ Send a message with the comment "w" and 1 TON for fees:
 
 ## Голосование за предложения по конфигурации сети
 
-В рамках такого голосования валидатор отправляет финальный голос смарт-контракту конфигурации сети через программное обеспечение валидатора.
+The pool implements weighted voting for network config proposals:
 
 1. Proposals announced via [@tonblockchain](https://t.me/tonblockchain) or [@tonstatus](https://t.me/tonstatus) with HEX hashes like `D855FFBCF813E50E10BEAB902D1177529CE79785CAE913EB96A72AE8EFBCBF47`
 2. Nominators vote by sending a message to the nominator pool:
@@ -133,7 +133,7 @@ Returns complete pool state information as a tuple containing:
    Validator's reward percentage. Например, установите 4000, чтобы получить 40%.
 
 ```
-Валидатор получает часть вознаграждения в соответствии с неизменяемым параметром пула `validator_reward_share`.
+validator_reward = (reward * validator_reward_share) / 10000
 ```
 
 7. max_nominators_count – immutable – uint – максимальное количество номинаторов в этом пуле.
@@ -178,7 +178,7 @@ Returns detailed nominator information for the specified address.
 > Address must be in raw format without the `0:` prefix.
 
 1. количество – nanotons – текущая активная ставка номинатора.
-2. количество – nanotons – текущая активная ставка номинатора.
+2. `pending_deposit_amount` (nanotons) - Queued deposit
 3. withdraw_request – int – если `-1`, то этот номинатор отправил запрос на вывод всех своих средств.
 
 Если в пуле нет такого номинатора, то метод выдаст ошибку `86`.
@@ -220,7 +220,7 @@ Returns voting details per proposal:
 Чтобы узнать текущую прибыль, вызовите метод `get_nominator_data(your_address)`.
 
 ```python
-Прибыль будет равна (`amount + pending_deposit_amount – sent_amount_stored_in_local_storage`).
+current_profit = (amount + pending_deposit_amount) - sent_amount_stored_in_local_storage
 ```
 
 Чтобы получить информацию о пуле, вызовите get-методы `get_pool_data` и `list_nominators`.

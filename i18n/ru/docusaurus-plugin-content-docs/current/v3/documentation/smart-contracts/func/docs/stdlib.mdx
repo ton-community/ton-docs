@@ -629,7 +629,7 @@ int random() impure asm "RANDU256";
 
 Генерирует новое псевдослучайное целое число без знака длиной 256 бит `x`. The process works as follows:
 
-- Все перечисленные ниже примитивы сначала проверяют, достаточно ли места в `builder`, а затем диапазон сериализуемого значения.
+- Let `r` be the previous random seed, a 32-byte array constructed from the big-endian representation of a 256-bit unsigned integer.
 - Compute `sha512(r)`.
 - The first 32 bytes of the hash become the new seed `r'`.
 - The remaining 32 bytes are returned as the new random value `x`.
@@ -671,7 +671,7 @@ int set_seed(int seed) impure asm "SETRAND";
 
 Смешивает беззнаковое 256-битное целое число `x` со случайным начальным числом `r`, устанавливая для случайного начального значения значение sha256 для объединения двух 32-байтовых строк: первая с представлением старого начального значения числа `r`, а вторая с представлением значения в порядке возрастания `x`.
 
-Если не указано иное, примитивы загрузки и предзагрузки считывают данные из префикса фрагмента.
+Mixes a 256-bit unsigned integer `x` into the random seed `r` by updating`r` to `sha256(r || x)`, where:
 
 - `r` is the previous seed, represented as a 32-byte big-endian array.
 - `x` is also converted into a 32-byte big-endian array.
@@ -725,12 +725,11 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
 
 - `addr_none` is represented as `t = (0)`, a single-element tuple where the integer is zero.
 - `addr_extern` is represented as `t = (1, s)`, where `s` is a slice containing `external_address`. In other words, `t` is a pair with the first element being `1` and the second being `s`.
-- Внешнее сообщение не является обычным или включает флаг +16 или +32 или оба
-  :::
+- `addr_std` is represented as `t = (2, u, x, s)`, where:
   - `u` is `null` if `anycast` is absent or a slice `s'` containing `rewrite_pfx` if `anycast` is present.
   - `x` is the `workchain_id`.
   - `s` is a slice containing the address.
-- Аналоги конструктора
+- addr_var is represented as `t = (3, u, x, s)`, where `u`, `x,` and `s` follow the same structure as `addr_std`.
 
 #### load_msg_addr
 
@@ -1172,15 +1171,15 @@ A dictionary primitive interprets dictionary keys in one of three ways:
 The naming convention of dictionary primitives reflects these distinctions. For example:
 
 - Например, `udict_set` — это функция установки по ключу для словарей с беззнаковыми целочисленными ключами; `idict_set` — это соответствующая функция для словарей с целочисленными ключами со знаком; `dict_set` — это функция для словарей с ключами срезов.
-- Устанавливает значение, связанное с `index`, в `value` (если `value` равно `null`, то вместо этого удаляется ключ) и возвращает старое значение (или `null`, если значение отсутствовало).
-- В заголовках используется пустой префикс.
+- `idict_set` is the equivalent function for signed integer keys.
+- `dict_set` applies to dictionaries with slice keys.
 
 In function titles, an **empty prefix** indicates slice keys.
 Кроме того, некоторые примитивы имеют свои аналоги с префиксом `~`. Это позволяет использовать их как [модифицирующие методы](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods).
 
 ### Значения в словарях
 
-Говорят, что примитив _загружает_ некоторые данные, если он возвращает данные и остаток среза (поэтому его также можно использовать как [модифицирующий метод](/v3/documentation/smart-contracts/func/docs/statements#modifying-methods)).
+Values in a dictionary can be stored in two ways:
 
 1. As a **subslice** within an inner dictionary cell.
 2. As a **reference** to a separate cell.
@@ -1519,7 +1518,7 @@ int max(int x, int y) asm "MAX";
 (int, int) minmax(int x, int y) asm "MINMAX";
 ```
 
-Сортирует два целых числа.
+Returns `(min(x, y), max(x, y))`, sorting two integers.
 
 #### abs
 

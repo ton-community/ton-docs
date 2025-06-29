@@ -265,7 +265,7 @@ const [tonConnectUI] = useTonConnectUI();
 const transaction = {
     messages: [
         {
-            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA", // destination address
             amount: "20000000" //Toncoin in nanotons
         }
     ]
@@ -300,7 +300,7 @@ const tonConnectUI = new TonConnectUI({ //connect application
 const transaction = {
     messages: [
         {
-            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA", // destination address
             amount: "20000000" //Toncoin in nanotons
         }
     ]
@@ -320,7 +320,7 @@ const connector = new TonConnect();
 await connector.sendTransaction({
     messages: [
         {
-            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F", // destination address
+            address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA", // destination address
             amount: "20000000" //Toncoin in nanotons
         }
     ]
@@ -432,9 +432,9 @@ await connector.sendTransaction({
 </TabItem>
 </Tabs>
 
-### Отправка жетонов
+### Jetton transfer
 
-`body` для отправки жетона основано на стандарте ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)). Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
+`body` для отправки жетона основано на стандарте ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.mdx#1-transfer)). Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
 
 :::info
 Вы можете использовать библиотеку `assets-sdk` с методами из коробки (даже с `ton-connect`)
@@ -661,7 +661,7 @@ await jetton.send(
 <Tabs groupId="Отправка жетона с комментарием">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-`messageBody` для отправки жетона ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) с комментарием.  Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
+`messageBody` для отправки жетона ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.mdx#1-transfer)) с комментарием.  Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
 
 - 9 decimals: 1 TON = 1 × 10<sup>9</sup> typically for various jettons and always for Toncoin
 - 6 decimals: 1 USDT = 1 × 10<sup>6</sup> specific jettons, like USDT
@@ -865,10 +865,10 @@ jetton.send(sender, RECEIVER_ADDRESS, toNano(10), { notify: { payload: forwardPa
 <Tabs groupId="Сжигание жетонов">
 <TabItem value="@ton/ton" label="@ton/ton">
 
-`body` для сжигатие жетона основано на стандарте ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)). Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
+`body` для сжигатие жетона основано на стандарте ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.mdx#1-transfer)). Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
 
 - 9 decimals: 1 TON = 1 × 10<sup>9</sup> typically for various jettons and always for Toncoin
-- Обратите внимание, что количество десятичных знаков может различаться в разных токенах: например, USDT использует 6 десятичных знаков (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 десятичных знаков (1 TON = 1 \* 10 \*\* 9).
+- 6 decimals: 1 USDT = 1 × 10<sup>6</sup> specific jettons, like USDT
 
 ```js
     import { beginCell, Address } from '@ton/ton'
@@ -1530,7 +1530,7 @@ transaction = {
 Узнайте больше об [адресах смарт-контрактов TON](/v3/documentation/smart-contracts/addresses).
 :::
 
-### Перевод жетонов
+### Jetton transfer
 
 Пример функции для построения транзакции перевода жетонов. Обратите внимание, что количество знаков после запятой может различаться в разных токенах: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
 
@@ -1892,7 +1892,7 @@ if err != nil {
 }
 ```
 
-### Перевод жетонов
+### Jetton transfer
 
 Пример функции для сообщения о переводе жетонов. Обратите внимание, что количество знаков после запятой может различаться в зависимости от токена: например, USDT использует 6 знаков после запятой (1 USDT = 1 \* 10 \*\* 6), а TON использует 9 знаков после запятой (1 TON = 1 \* 10 \*\* 9).
 

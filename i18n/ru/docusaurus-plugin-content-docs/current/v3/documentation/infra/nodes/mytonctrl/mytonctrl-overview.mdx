@@ -5,7 +5,7 @@ import TabItem from '@theme/TabItem';
 
 # MyTonCtrl
 
-## Общие сведения
+## Overview
 
 Чтобы установить свой собственный узел и управлять им, используйте инструмент с открытым исходным кодом **MyTonCtrl**, разработанный TON Foundation. Большинство узлов TON надежны и протестированы в **MyTonCtrl**.
 
@@ -220,7 +220,8 @@ MyTonCtrl> add_custom_overlay <name> <path_to_config>
 Пример:
 
 ```bash
-add_custom_overlay custom /config.json # check link from above to know what config this command requires (/v3/guidelines/nodes/custom-overlays)
+add_custom_overlay custom /config.json
+# check link from above to know what config this command requires (/v3/guidelines/nodes/custom-overlays)
 ```
 
 ### list_custom_overlays
@@ -492,7 +493,8 @@ MyTonCtrl> dw <wallet-name>
 Чтобы проверить состояние аккаунта и историю его транзакций, используйте следующую команду:
 
 ```bash
-MyTonCtrl> vas <account-addr> # for example you can get address of validator wallet by wl command and use vas to get more information
+MyTonCtrl> vas <account-addr>
+# For example, you can get the address of the validator wallet by the wl command and use vas to get more information.
 ```
 
 ![](/img/docs/mytonctrl/vas.png)
@@ -502,7 +504,8 @@ MyTonCtrl> vas <account-addr> # for example you can get address of validator wal
 Чтобы проверить историю транзакций аккаунта, используйте следующую команду, указав объем списка операций в качестве `limit`:
 
 ```bash
-MyTonCtrl> vah <account-addr> <limit> # limit is just unsigned integer number
+MyTonCtrl> vah <account-addr> <limit>
+# limit is just unsigned integer number
 ```
 
 ![](/img/docs/mytonctrl/vah.png)
@@ -781,12 +784,12 @@ MyTonInstaller> update FN
 
 ```json
 {
-    "ip": 1111111111,
-    "port": 11111,
-    "id": {
-        "@type": "pub.ed25519",
-        "key": "UURGaaZZjsBbKHvnrBqslHerXYbMCVDKdswKNJvAHkc="
-    }
+  "ip": 1111111111,
+  "port": 11111,
+  "id": {
+    "@type": "pub.ed25519",
+    "key": "UURGaaZZjsBbKHvnrBqslHerXYbMCVDKdswKNJvAHkc="
+  }
 }
 ```
 

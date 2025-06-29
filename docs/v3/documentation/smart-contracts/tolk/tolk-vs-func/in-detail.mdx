@@ -385,9 +385,9 @@ Tolk removes the old FunC-style string postfixes (`"..."c`, etc.) in favor of a 
 ````
 
 These functions:
-* compile-time only
-* for constant strings only
-* can be used in constant initialization
+- compile-time only
+- for constant strings only
+- can be used in constant initialization
 
 ```tolk
 // type will be `address`
@@ -407,10 +407,10 @@ Remember that at runtime, there are no strings, only slices.
 
 
 Tolk now supports trailing commas in the following contexts:
-* tensors
-* tuples
-* function calls
-* function parameters
+- tensors
+- tuples
+- function calls
+- function parameters
 
 ```tolk
 var items = (
@@ -1208,9 +1208,9 @@ A reversed cast also is valid: `someAddr as slice` (why would you need it, is an
 **Different types of addresses**
 
 According to a standard, there are different types of addresses. The most frequently used is a **standard address** — just and address of a smart contract, like `EQ...`. But also, there are **external** and **none** addresses. In a binary TL-B representation,
-* `10` (**internal** prefix) + `0` (anycast, always 0) + workchain (8 bits) + hash (256 bits) — that's `EQ...`: it's 267 bits
-* `01` (**external** prefix) + len (9 bits) + len bits — external addresses
-* `00` (**none** prefix) — address **none**, 2 bits
+- `10` (**internal** prefix) + `0` (anycast, always 0) + workchain (8 bits) + hash (256 bits) — that's `EQ...`: it's 267 bits
+- `01` (**external** prefix) + len (9 bits) + len bits — external addresses
+- `00` (**none** prefix) — address **none**, 2 bits
 
 
 The `address` type can hold any of these. Most often, it's an internal address. But the type system does not restrict it exactly: this can't be done without heavy runtime checks.
@@ -1455,10 +1455,10 @@ fun getLast(tensor: Pair2 | Pair3) {
 ```
 
 Syntax details:
-* commas are optional with {} but required for expressions
-* a trailing comma is allowed
-* semicolon is not required after `match` used as a statement
-* for match-expressions, its arm can terminate, then its type is considered `never`:
+- commas are optional with {} but required for expressions
+- a trailing comma is allowed
+- semicolon is not required after `match` used as a statement
+- for match-expressions, its arm can terminate, then its type is considered `never`:
 ```tolk
 return match (msg) {
     ...
@@ -1484,9 +1484,9 @@ match (val v = getPair2Or3()) {
 ````
 
 Internally, at the TVM level, they are stored as tagged unions, like enums in Rust:
-* each type is assigned a unique type ID, which is stored alongside the value
-* the union occupies N + 1 stack slots, where N is the maximum size of any type in the union
-* a nullable type `T?` is just a union with null (type ID = 0); `int?` and other atomics still use 1 stack slot
+- each type is assigned a unique type ID, which is stored alongside the value
+- the union occupies N + 1 stack slots, where N is the maximum size of any type in the union
+- a nullable type `T?` is just a union with null (type ID = 0); `int?` and other atomics still use 1 stack slot
 
 ```tolk
 var v: int | slice;    // 2 stack slots: value and typeID
@@ -1546,9 +1546,9 @@ val nextValue = match (curValue) {
 ```
 
 Rules:
-* only constant expressions are allowed on the left-hand side (1, SOME_CONST, 2 + 3)
-* branches can contain `return` and `throw`
-* `else` is required for expression form but optional for statement form:
+- only constant expressions are allowed on the left-hand side (1, SOME_CONST, 2 + 3)
+- branches can contain `return` and `throw`
+- `else` is required for expression form but optional for statement form:
 ```tolk
 // statement form
 match (curValue) {
@@ -1592,9 +1592,9 @@ fun createPoint(x: int, y: int): Point {
 }
 ```
 
-* a struct is just **a named tensor**
-* `Point` is identical to `(int, int)` at the TVM level
-* field access `p.x` works like accessing tensor elements `t.0`, for reading and writing
+- a struct is just **a named tensor**
+- `Point` is identical to `(int, int)` at the TVM level
+- field access `p.x` works like accessing tensor elements `t.0`, for reading and writing
 
 This means **no bytecode overhead** — you can replace unreadable tensors with clean, structured types.
 

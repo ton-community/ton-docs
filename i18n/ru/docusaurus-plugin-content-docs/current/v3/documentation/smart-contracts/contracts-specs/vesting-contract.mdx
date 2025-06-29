@@ -8,19 +8,19 @@ The vesting contract is a smart contract implementation on the TON blockchain, e
 
 The contract is a secure escrow service that locks a specified amount of Toncoin for a defined period and gradually releases it according to configurable parameters. This mechanism ensures predictable token distribution while maintaining strict control over asset release schedules.
 
-## Этот контракт позволяет вам заблокировать определенное количество Toncoin на определенное время и постепенно разблокировать их.
+## Contract parameters
 
 During deployment, the system establishes the following parameters, which cannot be changed and remain fixed throughout the entire duration of the contract:
 
-| Параметры вестинга                                                                                 | Description                                                                               | Example values                                                                     |
-| -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `vesting_total_amount`                                                                             | `vesting_total_amount` - в nanoton, общее количество заблокированных Toncoin.             | 500 TON                                                                            |
-| `vesting_start_time`                                                                               | Unix timestamp marking vesting period beginning                                           | Current time + delay                                                               |
-| `vesting_total_duration`                                                                           | Total vesting period duration (seconds)                                                   | 31104000 (one year)                                                                |
-| `unlock_period` - период разблокировки в секундах (например, `2592000` один раз в месяц).          | Time interval between releases (seconds)                                                  | 2592000 (monthly)                                                                  |
-| `cliff_duration`                                                                                   | Initial lock period before first release                                                  | 5184000 (two months)                                                               |
-| `vesting_sender_address`                                                                           | Authorized address for locked funds management                                            | Параметры вестинга не изменяются и устанавливаются во время развертывания.         |
-| `owner_address`                                                                                    | Beneficiary address for Toncoin distribution                                              | Пополнение                                                                         |
+| Параметры вестинга                | Description                                                                               | Example values       |
+| --------------------------------- | ----------------------------------------------------------------------------------------- | -------------------- |
+| `vesting_total_amount`            | `vesting_total_amount` - в nanoton, общее количество заблокированных Toncoin.             | 500 TON              |
+| `vesting_start_time`              | Unix timestamp marking vesting period beginning                                           | Current time + delay |
+| `vesting_total_duration`          | Total vesting period duration (seconds)                                                   | 31104000 (one year)  |
+| `unlock_period`                   | Time interval between releases (seconds)                                                  | 2592000 (monthly)    |
+| `cliff_duration`                  | Initial lock period before first release                                                  | 5184000 (two months) |
+| `vesting_sender_address`          | Authorized address for locked funds management                                            | Configurable         |
+| `owner_address`                   | Beneficiary address for Toncoin distribution                                              | Configurable         |
 
 Вы можете получить эти параметры с помощью метода `get_vesting_data()` get-method.
 
@@ -90,11 +90,11 @@ System elector addresses accept only these operations:
 - `op::elector_new_stake`
 - `op::elector_recover_stake`
 - `op::vote_for_complaint`
-- разрешены только операции `op::elector_new_stake`, `op::elector_recover_stake`, `op::vote_for_complaint`, `op::vote_for_proposal`;
+- `op::vote_for_proposal`
 
 Если пункт назначения — адрес системной конфигурации:
 
-- разрешена только операция `op::vote_for_proposal`;
+- `op::vote_for_proposal`
 
 Для других пунктов назначения:
 
@@ -106,7 +106,7 @@ System elector addresses accept only these operations:
   - `op::ton_stakers_deposit`
   - `op::jetton_burn`
   - `op::ton_stakers_vote`
-  - разрешены операции `op::single_nominator_pool_withdraw`, `op::single_nominator_pool_change_validator`, `op::ton_stakers_deposit`, `op::jetton_burn`, `op::ton_stakers_vote`, `op::vote_for_proposal`, `op::vote_for_complaint`;
+  - `op::vote_for_proposal`
   - `op::vote_for_complaint`
 
 Нет ограничений на адреса, не включенные в белый список. Никаких ограничений не применяется при отправке разблокированных Toncoin, даже если мы отправляем в белый список или `vesting_sender_address`.
@@ -123,25 +123,25 @@ System elector addresses accept only these operations:
 ### Сборка
 
 ```bash
-`npx blueprint build` или `yarn blueprint build`.
+npx blueprint build` or `yarn blueprint build`
 ```
 
 ### Тестирование
 
 ```bash
-`npx blueprint test` или `yarn blueprint test`.
+npx blueprint test` or `yarn blueprint test`
 ```
 
 ### Развертывание или запуск другого скрипта
 
 ```bash
-`npx blueprint run` или `yarn blueprint run`.
+npx blueprint run` or `yarn blueprint run`
 ```
 
 ### Добавить новый контракт
 
 ```bash
-`npx blueprint create ContractName` или `yarn blueprint create ContractName`.
+npx blueprint create ContractName` or `yarn blueprint create ContractName`
 ```
 
 ## См. также

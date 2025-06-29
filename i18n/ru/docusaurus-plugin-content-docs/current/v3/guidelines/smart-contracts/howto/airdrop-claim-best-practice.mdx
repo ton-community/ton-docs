@@ -77,15 +77,14 @@ The initial design that comes to mind is as follows:
 
 Мы не можем контролировать адрес полученного jetton wallet напрямую. Однако, если мы контролируем адрес дистрибьютора, то можем подобрать его таким образом, чтобы jetton wallet для дистрибьютора оказался в том же шарде. Но как это сделать? Для этого существует [данная библиотека](https://github.com/Trinketer22/turbo-wallet)! В настоящее время она поддерживает только кошельки, но добавить поддержку произвольных контрактов достаточно просто. Посмотрите, как это сделано для [Highload-кошелька V3](https://github.com/Trinketer22/turbo-wallet/blob/44fe7ee4300e37e052871275be8dd41035d45c3a/src/lib/contracts/HighloadWalletV3.ts#L20).
 
-### Смарт-контракт двойное списание
+### Double spend contract
 
-Контракт двойного списания должен быть уникальным для каждого доказательства, поэтому сможем ли мы настроить его на шарде? Let's think about it. Если подумать, то это зависит от структуры доказательства. Первое, что приходит на ум, это та же структура, что и у [mintless jetton](https://github.com/tonkeeper/TEPs2/blob/mintles/text/0177-mintless-jetton-standard.md#handlers):
+Контракт двойного списания должен быть уникальным для каждого доказательства, поэтому сможем ли мы настроить его на шарде? Let's think about it. Если подумать, то это зависит от структуры доказательства. Первое, что приходит на ум, это та же структура, что и у [mintless jetton](https://github.com/tonkeeper/TEPs2/blob/mintles/text/0177-mintless-jetton-standard.mdx#handlers):
 
 ```
 _ amount:Coins start_from:uint48 expired_at:uint48 = AirdropItem;
 
 _ _(HashMap 267 AirdropItem) = Airdrop;
-
 ```
 
 К сожалению, такая настройка не подходит потому, что распределение адресов происходит случайным образом, а все поля будут иметь значимые данные. Но ничто не мешает нам попробовать такой вариант:
@@ -102,7 +101,6 @@ _ _(HashMap 267 AirdropItem) = Airdrop;
 _ amount:Coins start_from:uint48 expired_at:uint48 addr_hash: uint256 = AirdropItem;
 
 _ _(HashMap 64 AirdropItem) = Airdrop;
-
 ```
 
 где 64-битный индекс может быть использован в качестве nonce, а адрес становится частью данных для верификации. Таким образом, если данные смарт-контракта двойного списания строятся из `(distributor_address, index)`, где индекс является частью данных, мы по-прежнему имеем исходную надежность, но теперь шард адреса может настраиваться с помощью параметра index.
@@ -119,7 +117,7 @@ Here's the improved and more polished version of your text:
 
 ### Как же развернуть такую установку
 
-Давайте выполним по шагам: Давайте выполним по шагам: Давайте выполним по шагам: Одно из требований заключается в том, чтобы контракт _дистрибьютора_ имел обновляемый _merkle root_.
+Let's break it down step by step. Давайте выполним по шагам: Давайте выполним по шагам: Давайте выполним по шагам: Одно из требований заключается в том, чтобы контракт _дистрибьютора_ имел обновляемый _merkle root_.
 
 1. Разверните смарт-контракт дистрибьютора в каждом шарде (0-15) – в пределах тех же шардов, что и их jetton wallet, используя начальный `merkle_root` в качестве nonce
 2. Group users by their distributor shard.
@@ -138,9 +136,7 @@ Here's the improved and more polished version of your text:
 
 **More naive art**
 
-Is there anything wrong with this approach? Давайте посмотрим внимательно.\
-...\
-Давайте посмотрим внимательно.\
+Is there anything wrong with this approach? Let's take a closer look.\
 ...\
 Yes, there is! Существует только один кошелек для комиссии – таким образом сборы комиссий скапливаются в очередь на одном шарде. Это могло бы стать катастрофой! (Интересно, случалось ли такое в реальности?)
 

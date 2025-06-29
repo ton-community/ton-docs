@@ -94,7 +94,7 @@ Here, `one_bits` counts the number of `1`-bits in the mask. Lower-order bits cor
 
 Валидаторы решают разделить или объединить шарды, используя флаги `want_split` и `want_merge` и [параметры конфигурации воркчейна](/v3/documentation/network/configs/blockchain-configs#param-12).
 
-Валидаторы объединяют или разделяют шарды, используя эти флаги.
+Validators determine whether to split or merge shards based on the `want_split` and `want_merge` flags, along with [WorkChain configuration parameters](/v3/documentation/network/configs/blockchain-configs#param-12):
 
 - Если шард имеет глубину < `min_split`, то он разделится.
 - Если шард имеет глубину > `max_split`, то он объединится.
@@ -171,7 +171,7 @@ The non-split parts are vital in maintaining global consistency across the netwo
 
 #### Заголовок блока и подписи валидатора
 
-Если классификация блока равна 0 (недостаточная нагрузка), блок склонен к объединению со своим родственным блоком.
+The block header, part of the non-split section, includes metadata such as:
 
 - `workchain_id`
 - Binary prefix of `account_ids`

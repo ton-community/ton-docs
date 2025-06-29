@@ -80,7 +80,7 @@ User-friendly addresses also include special flags that define how the address s
 
 **Testnet example:**
 
-- Реализация
+- `kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP`
 - 0:25f2bf1ce8f83ed0c0fd73ea27aac77093cdcf900c750b071df7fb0288e019b2
 
 #### Your address in the following examples
@@ -105,7 +105,8 @@ async function main() {
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
 
-  const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'); // Replace with any address
+  // Replace with any address
+  const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-');
 
   // Calling method on http api
   const state = await tonClient.getContractState(accountAddress);
@@ -171,6 +172,8 @@ async function main() {
 
   // Building optional get method parameters list
   const builder = new TupleBuilder();
+
+  // Replace with your address
   builder.writeAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
 
   const accountAddress = Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy')
@@ -183,8 +186,11 @@ async function main() {
   );
 
   // Deserializing get method result
-  const address = result.stack.readAddress();
-  console.log(address.toRawString());
+  const rawAddress = result.stack.readAddress();
+
+  console.log("Raw address:", rawAddress.toRawString());
+  console.log("User-friendly address:", rawAddress.toString({ bounceable: true, urlSafe: true, testOnly: true}));
+
 }
 
 main();
@@ -238,7 +244,7 @@ async function main() {
   );
 
   // Calling get method through wrapper
-  const address = jettonMaster.getWalletAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
+  const address = await jettonMaster.getWalletAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
   console.log(address);
 }
 
@@ -271,9 +277,7 @@ main();
 
 ```json5
 {
-  "@type": "raw.transaction",
   "address": {
-    "@type": "accountAddress",
     "account_address": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx"
   },
   "utime": 1738588970,
@@ -308,14 +312,12 @@ main();
 
 ```json5
 {
-  "@type": "raw.message",
   "hash": "mcHdqltDAB8ODQHqtedtYQIS6MQL7x4ut+nf9tXWGqg=",
   "source": "EQAJTegD8OO-HksHfI4KVDqb7vW9Dlqi5C1FTcL1dECeosTf",
   "destination": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx",
   "value": "20000000",
   ...
   "msg_data": {
-    "@type": "msg.dataRaw",
     "body": "te6cckEBAQEAAgAAAEysuc0=",
     ...
   },
@@ -359,7 +361,8 @@ async function main() {
   // Calling method on http api
   // full api: https://testnet.toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get
   const transactions = await tonClient.getTransactions(
-    Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'), // Address to fetch transactions
+    // Replace with your Testnet address to fetch transactions
+    Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'),
     {
       limit: 10,      //maximum ammount of recieved transactions
       archival: true, //search in all history
@@ -372,7 +375,7 @@ async function main() {
   console.log('Timestamp:', firstTx.now);
   if (inMessage?.info?.type === 'internal') {
     console.log('Value:', inMessage.info.value.coins);
-    console.log('Sender:', inMessage.info.src);
+    console.log('Sender:', inMessage.info.src.toString({ testOnly: true }));
   }
 }
 
@@ -390,9 +393,9 @@ npx ts-node 3-fetch-account-transaction.ts
 #### Ожидаемый результат
 
 ```bash
-Timestamp: 1743516631
-Value: 100000000n
-Sender: EQBui16XCF61MSWauIDpVFbKAOJmjLHRxXvXeqiN9dYaIgjq
+Timestamp: 1748338158
+Value: 48526800n
+Sender: kQDhJ2Kx7dD6FLzAXcqiI4Xsu4ioY6JlE24m9Tx86eGkq0OF
 ```
 
 :::info

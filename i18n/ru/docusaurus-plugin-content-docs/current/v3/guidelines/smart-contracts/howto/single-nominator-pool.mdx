@@ -1,7 +1,11 @@
+```mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+```
 
+```mdx-code-block
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+```
 
 # Как использовать Single Nominator Pool
 
@@ -25,8 +29,8 @@ MyTonCtrl> enable_mode single-nominator
 
 ```bash
 MyTonCtrl> status_modes
-Name              Status             Description
-single-nominator  enabled   Orbs's single nominator pools.
+Name              Status   Description
+single-nominator  enabled  Orbs's single nominator pools.
 ```
 
 3. Создайте пул:
@@ -118,7 +122,7 @@ $ npm run test
 export OWNER_ADDRESS=<owner_address>
 export VALIDATOR_ADDRESS=<validator_wallet_address>
 export TON_ENDPOINT=https://toncenter.com/api/v2/jsonRPC
-export TON_API_KEY=<toncenter api key>
+export TON_API_KEY=<toncenter_api_key>
 ```
 
 3. Создайте адрес с которого будет происходить развертывание:
@@ -147,7 +151,7 @@ $ fift -s ./scripts/fift/str-to-addr.fif Ef-kC0..._WLqgs
 8. Скопируйте `single-nominator.addr` в `mytoncore/pools/single-nominator-1.addr`.
 9. Отправьте ставку с адреса владельца на адрес single nominator.
 
-### Вывод средств с Single Nominator
+### Withdrawals from the single nominator
 
 #### Using wallets to withdraw
 
@@ -169,7 +173,6 @@ $ fift -s wallet-v3.fif <my-wallet> <single_nominator_address> <sub_wallet_id> <
 
 ```bash
 $ lite-client -C global.config.json -c 'sendfile wallet-query.boc'
-tons
 ```
 
 **Tonkeeper:**
@@ -184,7 +187,6 @@ $ fift -s ./scripts/fift/withdraw.fif <withdraw_amount>
 
 ```bash
 $ tons wallet transfer <my-wallet> <single_nominator_address> <amount=1> --body withdraw.boc
-tonkeeper
 ```
 
 3. Link TypeScript:
@@ -234,61 +236,76 @@ MyTonCtrl> withdraw_from_pool <pool-addr> <amount>
 
 Или же создать и отправить транзакцию вручную:
 
-<Tabs groupId="Покупка NFT">
-<TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+```mdx-code-block
+<Tabs groupId="code-examples">
+<TabItem value="toncore" label="JS (@ton)">
+```
 
 ```js
-import { Address, beginCell, internal, storeMessageRelaxed, toNano } from "@ton/core";
+import {
+  Address,
+  beginCell,
+  internal,
+  storeMessageRelaxed,
+  toNano,
+} from "@ton/core";
 
 async function main() {
-    const single_nominator_address = Address.parse('single nominator address');
-    const WITHDRAW_OP = 0x1000
-    const amount = 50000
+  const single_nominator_address = Address.parse("single nominator address");
+  const WITHDRAW_OP = 0x1000;
+  const amount = 50000;
 
-    const messageBody = beginCell()
-        .storeUint(WITHDRAW_OP, 32) // op code for withdrawal
-        .storeUint(0, 64)           // query_id
-        .storeCoins(amount)         // amount to withdraw
-        .endCell();
+  const messageBody = beginCell()
+    .storeUint(WITHDRAW_OP, 32) // op code for withdrawal
+    .storeUint(0, 64) // query_id
+    .storeCoins(amount) // amount to withdraw
+    .endCell();
 
-    const internalMessage = internal({
-        to: single_nominator_address,
-        value: toNano('1'),
-        bounce: true,
-        body: messageBody
-    });
+  const internalMessage = internal({
+    to: single_nominator_address,
+    value: toNano("1"),
+    bounce: true,
+    body: messageBody,
+  });
 }
 ```
 
+```mdx-code-block
 </TabItem>
+```
 
+```mdx-code-block
 <TabItem value="tonconnect" label="Golang">
+```
 
 ```go
 func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, amount uint64) (*tonconnect.Message, error) {
 
-	const WITHDRAW_OP = 0x1000
+    const WITHDRAW_OP = 0x1000;
 
-	payload, _ := cell.BeginCell().
-		MustStoreUInt(WITHDRAW_OP, 32). // op code for withdrawal
-		MustStoreUInt(query_id, 64).    // query_id
-		MustStoreCoins(amount).         // amount to withdraw
-		EndCell().MarshalJSON()
+    payload, _ := cell.BeginCell().
+        MustStoreUInt(WITHDRAW_OP, 32). // op code for withdrawal
+        MustStoreUInt(query_id, 64).    // query_id
+        MustStoreCoins(amount).        // amount to withdraw
+        EndCell().MarshalJSON();
 
-	msg, err := tonconnect.NewMessage(
-		single_nominator_address,
-		tlb.MustFromTON("1").Nano().String(), // nanocoins to transfer/compute message
-		tonconnect.WithPayload(payload))
+    msg, err := tonconnect.NewMessage(
+        single_nominator_address,
+        tlb.MustFromTON("1").Nano().String(), // nanocoins to transfer/compute message
+        tonconnect.WithPayload(payload));
 
-	if err != nil {
-		return nil, err
-	}
+    if err != nil {
+        return nil, err;
+ }
 
-	return msg, nil
+    return msg, nil;
 }
 ```
+
+```mdx-code-block
 </TabItem>
 </Tabs>
+```
 
 ## Процесс выборов
 
@@ -349,7 +366,7 @@ Code hash
 c3b9bb03936742cfbb9dcdd3a5e1f3204837f613ef141f273952aa41235d289e
 
 Time                 Coins   From/To
-39 minutes ago  >>>  1.3     kf_hz3BIXrn5npis1cPX5gE9msp1nMTYKZ3l4obzc8phrBfF
+39 minutes ago >>>  1.3     kf_hz3BIXrn5npis1cPX5gE9msp1nMTYKZ3l4obzc8phrBfF
 ```
 
 Транзакция **ElectorNewStake** в контракте Single Nominator в истории Tonviewer:
@@ -454,4 +471,7 @@ MyTonCtrl> activate_single_pool my_s_pool
    - d. Откройте deeplink на телефоне владельца.
 8. Переведите необходимое количество TON из `vesting`-контракта в `single_nominator_pool` для обоих циклов.
 9. Дождитесь голосования валидаторов.
+
+```mdx-code-block
    <Feedback />
+```

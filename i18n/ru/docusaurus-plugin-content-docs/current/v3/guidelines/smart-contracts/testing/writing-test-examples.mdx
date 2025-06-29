@@ -14,17 +14,15 @@ import ThemedImage from "@theme/ThemedImage";
 import ...
 
 describe('Fireworks', () => {
-...
+ ...
 
-
-        expect(deployResult.transactions).toHaveTransaction({
-...
-        });
-
+    expect(deployResult.transactions).toHaveTransaction({
+ ...
+ });
 });
 
 it('should deploy', async () => {
-    // the check is done inside beforeEach
+    // The check is done inside beforeEach
     // blockchain and fireworks are ready to use
 });
 ```
@@ -39,12 +37,12 @@ npx blueprint test
 
 ```typescript
 blockchain.verbosity = {
-    ...blockchain.verbosity,
-    blockchainLogs: true,
-    vmLogs: 'vm_logs_full',
-    debugLogs: true,
-    print: false,
-}
+  ...blockchain.verbosity,
+  blockchainLogs: true,
+  vmLogs: "vm_logs_full",
+  debugLogs: true,
+  print: false,
+};
 ```
 
 ## Прямые модульные тесты
@@ -99,7 +97,16 @@ index - ID транзакции в массиве `launchResult`.
 [Этот тест](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L75) проверяет, успешно ли установлен firework, отправляя транзакцию со значением 2.5 TON.\
 Это простейший случай, основная цель здесь - утвердить результат свойства success транзакции в true.\
 Это простейший случай, основная цель здесь - утвердить результат свойства success транзакции в true.\
-Это простейший случай, основная цель здесь - утвердить результат свойства success транзакции в true.  
+Это простейший случай, основная цель здесь - утвердить результат свойства success транзакции в true.\
+This is the simplest case, in which the main goal is to confirm that the transaction result's `success` property is `true`.\
+This is the simplest case, in which the main goal is to confirm that the transaction result's `success` property is `true`.\
+This is the simplest case, in which the main goal is to confirm that the transaction result's `success` property is `true`.\
+This is the simplest case, in which the main goal is to confirm that the transaction result's `success` property is `true`.\
+This is the simplest case, in which the main goal is to confirm that the transaction result's `success` property is `true`.\
+This is the simplest case, in which the main goal is to confirm that the transaction result's `success` property is `true`.\
+This is the simplest case, in which the main goal is to confirm that the transaction result's `success` property is `true`.\
+This is the simplest case, in which the main goal is to confirm that the transaction result's `success` property is `true`.\
+This is the simplest case, in which the main goal is to confirm that the transaction result's `success` property is `true`.  
 
 Чтобы отфильтровать определенную транзакцию из массива `launhcResult.transactions`, мы можем использовать наиболее убедительные поля. С помощью
 `from` (адрес отправителя контракта), `to` (адрес получателя контракта), `op` (значение опкода) - мы получим только одну транзакцию для этой комбинации.
@@ -118,23 +125,20 @@ index - ID транзакции в массиве `launchResult`.
 `1` - Транзакция в контракте Fireworks setter вызвана с помощью `op::set_first` и выполнена с двумя исходящими сообщениями для Fireworks Launcher-1 и Fireworks Launcher-2
 
 ```typescript
+it("first transaction[ID:1] should set fireworks successfully", async () => {
+  const launcher = await blockchain.treasury("launcher");
+  const launchResult = await fireworks.sendDeployLaunch(
+    launcher.getSender(),
+    toNano("2.5")
+ );
 
-    it('first transaction[ID:1] should set fireworks successfully', async () => {
-
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(launcher.getSender(), toNano('2.5'));
-
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launcher.address,
-            to: fireworks.address,
-            success: true,
-            op: Opcodes.set_first
-        })
-
-    });
-
+  expect(launchResult.transactions).toHaveTransaction({
+    from: launcher.address,
+    to: fireworks.address,
+    success: true,
+    op: Opcodes.set_first,
+ });
+});
 ```
 
 ### Транзакция ID:2 Успешный тест
@@ -155,25 +159,25 @@ index - ID транзакции в массиве `launchResult`.
 `2` - Транзакция в Fireworks launcher 1 вызвана с помощью `op::launch_first`, и выполнена с четырьмя исходящими сообщениями в Launcher.
 
 ```typescript
-    it('should exist a transaction[ID:2] which launch first fireworks successfully', async () => {
+it("should exist a transaction[ID:2] which launches first fireworks successfully", async () => {
+  const launcher = await blockchain.treasury("launcher");
+  const launchResult = await fireworks.sendDeployLaunch(
+    launcher.getSender(),
+    toNano("2.5")
+ );
 
-        const launcher = await blockchain.treasury('launcher');
+  expect(launchResult.transactions).toHaveTransaction({
+    from: fireworks.address,
+    to: launched_f1.address,
+    success: true,
+    op: Opcodes.launch_first,
+    outMessagesCount: 4,
+    destroyed: true,
+    endStatus: "non-existing",
+ });
 
-        const launchResult = await fireworks.sendDeployLaunch(launcher.getSender(), toNano('2.5'));
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: fireworks.address,
-            to: launched_f1.address,
-            success: true,
-            op: Opcodes.launch_first,
-            outMessagesCount: 4,
-            destroyed: true,
-            endStatus: "non-existing",
-        })
-
-        printTransactionFees(launchResult.transactions);
-
-    });
+  printTransactionFees(launchResult.transactions);
+});
 ```
 
 В случаях, когда транзакция должна повлиять на состояние контракта, это можно указать с помощью полей `destroyed`, `endStatus`.
@@ -204,23 +208,23 @@ The transaction[ID:3] occurs in Fireworks Launcher-1, is invoked with `op::launc
 and executes four outbound messages to the launcher.
 
 ```typescript
- it('should exist a transaction[ID:4] with a comment send mode = 0', async() => {
+it("should exist a transaction[ID:3] which launches second fireworks successfully", async () => {
+  const launcher = await blockchain.treasury("launcher");
+  const launchResult = await fireworks.sendDeployLaunch(
+    launcher.getSender(),
+    toNano("2.5")
+ );
 
-        const launcher = await blockchain.treasury('launcher');
+  expect(launchResult.transactions).toHaveTransaction({
+    from: fireworks.address,
+    to: launched_f2.address,
+    success: true,
+    op: Opcodes.launch_second,
+    outMessagesCount: 1,
+ });
 
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('2.5'),
-        );
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1.address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send mode = 0").endCell() // 0x00000000 comment opcode and encoded comment
-
-        });
-    })
+  printTransactionFees(launchResult.transactions);
+});
 ```
 
 ### Транзакция ID:5 Успешный тест
@@ -241,28 +245,23 @@ and executes four outbound messages to the launcher.
 `4` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 0`.
 
 ```typescript
+it("should exist a transaction[ID:4] with a comment send mode = 0", async () => {
+  const launcher = await blockchain.treasury("launcher");
+  const launchResult = await fireworks.sendDeployLaunch(
+    launcher.getSender(),
+    toNano("2.5")
+ );
 
-    it('should exist a transaction[ID:3] which launch second fireworks successfully', async () => {
-
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(launcher.getSender(), toNano('2.5'));
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: fireworks.address,
-            to: launched_f2.address,
-            success: true,
-            op: Opcodes.launch_second,
-            outMessagesCount: 1
-        })
-
-        printTransactionFees(launchResult.transactions);
-
-    });
-
-
-
-
+  expect(launchResult.transactions).toHaveTransaction({
+    from: launched_f1.address,
+    to: launcher.address,
+    success: true,
+    body: beginCell()
+ .storeUint(0, 32)
+ .storeStringTail("send mode = 0")
+ .endCell(), // 0x00000000 comment opcode and encoded comment
+ });
+});
 ```
 
 ### Транзакция ID:4 Успешный тест
@@ -283,25 +282,23 @@ and executes four outbound messages to the launcher.
 `5` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 1`.
 
 ```typescript
-     it('should exist a transaction[ID:5] with a comment send mode = 1', async() => {
+it("should exist a transaction[ID:5] with a comment send mode = 1", async () => {
+  const launcher = await blockchain.treasury("launcher");
+  const launchResult = await fireworks.sendDeployLaunch(
+    launcher.getSender(),
+    toNano("2.5")
+ );
 
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('2.5'),
-        );
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1.address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send mode = 1").endCell() // 0x00000000 comment opcode and encoded comment
-        });
-
-    })
-
-
+  expect(launchResult.transactions).toHaveTransaction({
+    from: launched_f1.address,
+    to: launcher.address,
+    success: true,
+    body: beginCell()
+ .storeUint(0, 32)
+ .storeStringTail("send mode = 1")
+ .endCell(), // 0x00000000 comment opcode and encoded comment
+ });
+});
 ```
 
 ### Транзакция ID:6 Успешный тест
@@ -322,23 +319,23 @@ and executes four outbound messages to the launcher.
 `6` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 2`.
 
 ```typescript
-    it('should exist a transaction[ID:6] with a comment send mode = 2', async() => {
+it("should exist a transaction[ID:6] with a comment send mode = 2", async () => {
+  const launcher = await blockchain.treasury("launcher");
+  const launchResult = await fireworks.sendDeployLaunch(
+    launcher.getSender(),
+    toNano("2.5")
+ );
 
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('2.5'),
-        );
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1.address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send mode = 2").endCell() // 0x00000000 comment opcode and encoded comment
-        });
-
-    })
+  expect(launchResult.transactions).toHaveTransaction({
+    from: launched_f1.address,
+    to: launcher.address,
+    success: true,
+    body: beginCell()
+ .storeUint(0, 32)
+ .storeStringTail("send mode = 2")
+ .endCell(), // 0x00000000 comment opcode and encoded comment
+ });
+});
 ```
 
 ### Транзакция ID:7 Успешный тест
@@ -359,22 +356,23 @@ and executes four outbound messages to the launcher.
 `7` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 1. Это сообщение отправлено с `send mode = 128 + 32`.
 
 ```typescript
-     it('should exist a transaction[ID:7] with a comment send mode = 32 + 128', async() => {
+it("should exist a transaction[ID:7] with a comment send mode = 32 + 128", async () => {
+  const launcher = await blockchain.treasury("launcher");
+  const launchResult = await fireworks.sendDeployLaunch(
+    launcher.getSender(),
+    toNano("2.5")
+ );
 
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('2.5'),
-        );
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f1.address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send mode = 32 + 128").endCell() // 0x00000000 comment opcode and encoded comment
-        });
-    })
+  expect(launchResult.transactions).toHaveTransaction({
+    from: launched_f1.address,
+    to: launcher.address,
+    success: true,
+    body: beginCell()
+ .storeUint(0, 32)
+ .storeStringTail("send mode = 32 + 128")
+ .endCell(), // 0x00000000 comment opcode and encoded comment
+ });
+});
 ```
 
 ### Транзакция ID:8 Успешный тест
@@ -395,25 +393,23 @@ and executes four outbound messages to the launcher.
 `8` - Транзакция в Launcher с входящим сообщением от Fireworks launcher 2. Это сообщение отправлено с `send mode = 64`.
 
 ```typescript
-  it('should exist a transaction[ID:8] with a comment send mode = 64', async() => {
+it("should exist a transaction[ID:8] with a comment send mode = 64", async () => {
+  const launcher = await blockchain.treasury("launcher");
+  const launchResult = await fireworks.sendDeployLaunch(
+    launcher.getSender(),
+    toNano("2.5")
+ );
 
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('2.5'),
-        );
-
-        expect(launchResult.transactions).toHaveTransaction({
-            from: launched_f2.address,
-            to: launcher.address,
-            success: true,
-            body: beginCell().storeUint(0,32).storeStringTail("send_mode = 64").endCell() // 0x00000000 comment opcode and encoded comment
-
-        });
-
-    })
-
+  expect(launchResult.transactions).toHaveTransaction({
+    from: launched_f2.address,
+    to: launcher.address,
+    success: true,
+    body: beginCell()
+ .storeUint(0, 32)
+ .storeStringTail("send_mode = 64")
+ .endCell(), // 0x00000000 comment opcode and encoded comment
+ });
+});
 ```
 
 ## Сборы за транзакции при выводе и чтении
@@ -421,20 +417,15 @@ and executes four outbound messages to the launcher.
 Во время тестирования чтение информации о комиссионных может быть полезно для оптимизации контракта. Функция printTransactionFees печатает всю цепочку транзакций в удобном виде."
 
 ```typescript
+it("should execute and print fees", async () => {
+  const launcher = await blockchain.treasury("launcher");
+  const launchResult = await fireworks.sendDeployLaunch(
+    launcher.getSender(),
+    toNano("2.5")
+ );
 
-    it('should be executed and print fees', async() => {
-
-        const launcher = await blockchain.treasury('launcher');
-
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('2.5'),
-        );
-
-        console.log(printTransactionFees(launchResult.transactions));
-
-    });
-
+  console.log(printTransactionFees(launchResult.transactions));
+});
 ```
 
 Например, в случае `launchResult` будет выведена следующая таблица:
@@ -470,44 +461,39 @@ index - идентификатор транзакции в массиве `launc
 Этот тест проверяет, соответствуют ли ожиданиям комиссионные за запуск фейерверка (launching the fireworks). Можно определить свои проверки для различных частей комиссионных сборов.
 
 ```typescript
+it("should execute with expected fees", async () => {
+  const launcher = await blockchain.treasury("launcher");
+  const launchResult = await fireworks.sendDeployLaunch(
+    launcher.getSender(),
+    toNano("2.5")
+ );
 
-  it('should be executed with expected fees', async() => {
+  // Total fee
+  console.log("total fees = ", launchResult.transactions[1].totalFees);
 
-        const launcher = await blockchain.treasury('launcher');
+  const tx1 = launchResult.transactions[1];
+  if (tx1.description.type !== "generic") {
+    throw new Error("Generic transaction expected");
+ }
 
-        const launchResult = await fireworks.sendDeployLaunch(
-            launcher.getSender(),
-            toNano('2.5'),
-        );
+  // Compute fee
+  const computeFee =
+    tx1.description.computePhase.type === "vm"
+      ? tx1.description.computePhase.gasFees
+      : undefined;
+  console.log("computeFee = ", computeFee);
 
-        //totalFee
-        console.log('total fees = ', launchResult.transactions[1].totalFees);
+  // Action fee
+  const actionFee = tx1.description.actionPhase?.totalActionFees;
+  console.log("actionFee = ", actionFee);
 
-        const tx1 = launchResult.transactions[1];
-        if (tx1.description.type !== 'generic') {
-            throw new Error('Generic transaction expected');
-        }
+  if (computeFee == null || undefined || actionFee == null || undefined) {
+    throw new Error("undefined fees");
+ }
 
-        //computeFee
-        const computeFee = tx1.description.computePhase.type === 'vm' ? tx1.description.computePhase.gasFees : undefined;
-        console.log('computeFee = ', computeFee);
-
-        //actionFee
-        const actionFee = tx1.description.actionPhase?.totalActionFees;
-        console.log('actionFee = ', actionFee);
-
-
-        if ((computeFee == null || undefined) ||
-            (actionFee == null || undefined)) {
-            throw new Error('undefined fees');
-        }
-
-        //The check, if Compute Phase and Action Phase fees exceed 1 TON
-        expect(computeFee + actionFee).toBeLessThan(toNano('1'));
-
-
-    });
-
+  // Check if Compute Phase and Action Phase fees exceed 1 TON
+  expect(computeFee + actionFee).toBeLessThan(toNano("1"));
+});
 ```
 
 ## Тесты пограничных случаев
@@ -590,7 +576,7 @@ root_cell
 │   ├── value
 │   └── value - second reference for one key
 └── key
-    └── value
+ └── value
 ```
 
 Поэтому при попытке прочитать значение мы получаем код выхода 10.
@@ -658,7 +644,7 @@ Action Phase начинается после Compute Phase и обрабатыв
 Библиотека - это ячейка, которая хранится в [Мастерчейне](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) и может использоваться всеми смарт-контрактами, если она [публичная](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1844).
 
 :::info 
-Поскольку порядок строк может меняться при обновлении кода, некоторые ссылки становятся неактуальными. Поэтому все ссылки будут использовать состояние кодовой базы на момент фиксации [9728bc65b75defe4f9dcaaea0f62a22f198abe96](https://github.com/ton-blockchain/ton/tree/9728bc65b75defe4f9dcaaea0f62a22f198abe96).\\\
+Поскольку порядок строк может меняться при обновлении кода, некоторые ссылки становятся неактуальными. Поэтому все ссылки будут использовать состояние кодовой базы на момент фиксации [9728bc65b75defe4f9dcaaea0f62a22f198abe96](https://github.com/ton-blockchain/ton/tree/9728bc65b75defe4f9dcaaea0f62a22f198abe96).\\\\\\\\\\\\
 :::
 
 <Feedback />

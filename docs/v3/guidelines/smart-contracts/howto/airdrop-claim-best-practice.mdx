@@ -79,7 +79,7 @@ We can't directly control the resulting jetton wallet address. However, if we co
 
 ### Double spend contract
 
-The double-spend contract should be unique per proof, so can we shard-tune it? Let's think about it. If you consider the proof structure, it depends on how the data is organized. The first idea that comes to mind is a structure similar to [mintless jettons](https://github.com/tonkeeper/TEPs2/blob/mintles/text/0177-mintless-jetton-standard.md#handlers):
+The double-spend contract should be unique per proof, so can we shard-tune it? Let's think about it. If you consider the proof structure, it depends on how the data is organized. The first idea that comes to mind is a structure similar to [mintless jettons](https://github.com/tonkeeper/TEPs2/blob/mintles/text/0177-mintless-jetton-standard.mdx#handlers):
 
 ```
 _ amount:Coins start_from:uint48 expired_at:uint48 = AirdropItem;

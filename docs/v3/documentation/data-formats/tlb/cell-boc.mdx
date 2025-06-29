@@ -68,8 +68,8 @@ sources={{
 }
 ```
 In this case, we have a 0-bit root cell that references two other cells:
-* The first is a 24-bit cell.
-* The second is a 7-bit cell that itself references a 24-bit cell.
+- The first is a 24-bit cell.
+- The second is a 7-bit cell that itself references a 24-bit cell.
 
 To serialize this structure into a byte sequence, we first identify unique cells. In the example, we consider 3 unique cells out of 4 total.
 
@@ -198,8 +198,8 @@ We now concatenate the header and the serialized cell content:
 `b5ee9c7201010301000e000201c002010101ff0200060aaaaa`
 
 **BoC implementation examples**
-* [Serialization](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/serialize.go)
-* [Deserialization](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/parse.go)
+- [Serialization](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/serialize.go)
+- [Deserialization](https://github.com/xssnick/tonutils-go/blob/master/tvm/cell/parse.go)
 
 ## Special (exotic) cells
 In general, cells operating on TON are categorized into two main types: **ordinary cells** and **special (exotic) cells**.
@@ -330,9 +330,9 @@ Exotic cells follow separate rules for computing their higher hashes. These are 
 
 ## See also
 
-[//]: # (* [Original article on RU]&#40;https://github.com/xssnick/ton-deep-doc/blob/master/Cells-BoC.md&#41;)
-* [Exotic (special) cells](/v3/documentation/data-formats/tlb/exotic-cells)
-* [Merkle proofs verifying](/v3/documentation/data-formats/tlb/proofs)
+[//]: # (* [Original article on RU]&#40;https://github.com/xssnick/ton-deep-doc/blob/master/Cells-BoC.mdx&#41;)
+- [Exotic (special) cells](/v3/documentation/data-formats/tlb/exotic-cells)
+- [Merkle proofs verifying](/v3/documentation/data-formats/tlb/proofs)
 
 <Feedback />
 

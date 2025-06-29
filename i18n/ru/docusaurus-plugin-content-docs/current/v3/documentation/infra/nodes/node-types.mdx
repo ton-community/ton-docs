@@ -1,6 +1,10 @@
+```mdx-code-block
 import Feedback from '@site/src/components/Feedback';
+```
 
+```mdx-code-block
 import Button from '@site/src/components/button'
+```
 
 # Типы узлов TON
 
@@ -21,12 +25,16 @@ import Button from '@site/src/components/button'
 
 Чтобы позволить клиентским приложениям искать блоки и транзакции, а также отправлять новые транзакции в блокчейн TON, полные узлы оснащены функциональностью liteserver: см. [Взаимодействие с узлами TON](#interacting-with-ton-nodes) ниже.
 
+```mdx-code-block
 <Button href="/v3/guidelines/nodes/running-nodes/full-node#run-a-node-video"
-colorType="primary" sizeType={'sm'}>
+        colorType="primary" sizeType={'sm'}>
+```
 
   Запуск полного узла
 
+```mdx-code-block
 </Button>
+```
 
 ## Архивный узел
 
@@ -34,12 +42,16 @@ colorType="primary" sizeType={'sm'}>
 
 Архивные узлы не обрезают состояние блокчейна, что повышает их системные требования, особенно с точки зрения хранения. Согласно последним оценкам, в то время как полные узлы и узлы-валидаторы требуют около 1 ТБ дискового пространства, архивным узлам потребуется около 8 ТБ для хранения полной истории блоков.
 
+```mdx-code-block
 <Button href="/v3/guidelines/nodes/running-nodes/archive-node"
         colorType="primary" sizeType={'sm'}>
+```
 
-Запуск архивного узла.
+  Запуск архивного узла.
 
+```mdx-code-block
 </Button>
+```
 
 ## Validator node
 
@@ -49,14 +61,16 @@ colorType="primary" sizeType={'sm'}>
 
 Чтобы иметь право предлагать и проверять блоки, валидаторы выбираются другими участниками в соответствии с количеством TON, удерживаемых у них, — другими словами, их _стейком_: чем больше TON поставлено на валидатора, тем больше у него шансов быть избранным, проверять блоки для сети и получать вознаграждения. The more TON a validator stakes, the higher its chances of being elected, validating blocks for the network, and earning rewards. Как правило, операторы валидаторов мотивируют других держателей TON делать стейк с ними, чтобы получать пассивный доход от полученных вознаграждений. Таким образом валидаторы обеспечивают стабильность сети, безопасность и способствуют ее росту.
 
-Узел валидатора
-
+```mdx-code-block
 <Button href="/v3/guidelines/nodes/running-nodes/validator-node"
         colorType="primary" sizeType={'sm'}>
+```
 
   Running a validator node
 
+```mdx-code-block
 </Button>
+```
 
 ## Взаимодействие с узлами TON
 
@@ -77,7 +91,16 @@ Full and archive nodes typically enable liteserver mode because they store block
 Это может привести к нестабильности вашего клиентского приложения.
 :::
 
-Режим liteserver позволяет легким клиентам отправлять транзакции через узлы TON, а также получать информацию о блоках и транзакциях с ними — например, для извлечения и обновления балансов кошельков.
+```mdx-code-block
+<Button href="/v3/guidelines/nodes/running-nodes/liteserver-node"
+colorType="primary" sizeType={'sm'}>
+```
+
+Enable liteserver in your node
+
+```mdx-code-block
+</Button>
+```
 
 Для взаимодействия с Liteserver вы можете использовать следующие инструменты:
 
@@ -85,9 +108,17 @@ Full and archive nodes typically enable liteserver mode because they store block
 - TON [SDK](/v3/guidelines/dapps/apis-sdks/sdk) для различных языков программирования;
 - TON [API на основе HTTP](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton) предоставляющие промежуточное ПО REST API между вашим приложением и Liteserver.
 
+```mdx-code-block
 <Button href="/v3/guidelines/dapps/apis-sdks/sdk"
 colorType="primary" sizeType={'sm'}>
-Выберите TON SDK
-</Button>
+```
 
+Choose a TON SDK
+
+```mdx-code-block
+</Button>
+```
+
+```mdx-code-block
 <Feedback />
+```

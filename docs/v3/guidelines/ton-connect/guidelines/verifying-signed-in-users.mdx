@@ -282,14 +282,14 @@ signature = Ed25519Sign(privkey, sha256(0xffff ++ utf8_encode("ton-connect") ++ 
 
 where:
 
-* `Address` is the wallet address encoded as a sequence:
+- `Address` is the wallet address encoded as a sequence:
  * `workchain`: 32-bit signed integer big endian;
  * `hash`: 256-bit unsigned integer big endian;
-* `AppDomain` is Length ++ EncodedDomainName
+- `AppDomain` is Length ++ EncodedDomainName
 - `Length` is 32-bit value of utf-8 encoded app domain name length in bytes
 - `EncodedDomainName` id `Length`-byte  utf-8 encoded app domain name
-* `Timestamp` 64-bit unix epoch time of the signing operation
-* `Payload` is a variable-length binary string.
+- `Timestamp` 64-bit unix epoch time of the signing operation
+- `Payload` is a variable-length binary string.
 
 Note: payload is variable-length untrusted data. We put it last to avoid using unnecessary length prefixes.
 
@@ -308,18 +308,18 @@ The signature must be verified using the public key:
 
 ### Verification examples
 
-* [Go demo app](https://github.com/ton-connect/demo-dapp-backend)
-* [Rust demo app](https://github.com/liketurbo/demo-dapp-backend-rs)
-* [JS demo app](https://github.com/liketurbo/demo-dapp-backend-js)
-* [Python example](https://github.com/XaBbl4/pytonconnect/blob/main/examples/check_proof.py)
-* [PHP example](https://github.com/vladimirfokingithub/Ton-Connect-Proof-Php-Check)
-* [C# demo app](https://github.com/WinoGarcia/TonProof.NET)
+- [Go demo app](https://github.com/ton-connect/demo-dapp-backend)
+- [Rust demo app](https://github.com/liketurbo/demo-dapp-backend-rs)
+- [JS demo app](https://github.com/liketurbo/demo-dapp-backend-js)
+- [Python example](https://github.com/XaBbl4/pytonconnect/blob/main/examples/check_proof.py)
+- [PHP example](https://github.com/vladimirfokingithub/Ton-Connect-Proof-Php-Check)
+- [C# demo app](https://github.com/WinoGarcia/TonProof.NET)
 
 ## See also
 
-* [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
-* [Sending messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
-* [[YouTube] Check ton_proof for @tonconnect/react-ui [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=2971)
+- [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+- [Sending messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
+- [[YouTube] Check ton_proof for @tonconnect/react-ui [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=2971)
 
 <Feedback />
 

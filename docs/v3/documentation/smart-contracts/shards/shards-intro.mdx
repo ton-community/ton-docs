@@ -64,13 +64,13 @@ MasterChain block contains information about the state of all shards in its head
 
 **Real example**
 
-* MasterChain block `seqno=34607821` includes two shards:
+- MasterChain block `seqno=34607821` includes two shards:
   * `(0,4000000000000000,40485798)`
   * and `(0,c000000000000000,40485843)`
 
   [View source](https://toncenter.com/api/v2/shards?seqno=34607821)
 
-* The shard `4000000000000000` splits into two:
+- The shard `4000000000000000` splits into two:
 `shard=2000000000000000` and `shard=6000000000000000`
 In the following MasterChain block `seqno=34607822`, three shards are listed:
   * `(0,c000000000000000,40485844)`,
@@ -82,7 +82,7 @@ In the following MasterChain block `seqno=34607822`, three shards are listed:
 
   Note: The two new shards start with the same seqno but have different shard IDs.
 
-* After 100 more MasterChain blocks (at `seqno=34607921`), the shard states have diverged:
+- After 100 more MasterChain blocks (at `seqno=34607921`), the shard states have diverged:
   * `(0,2000000000000000,40485901)`
   * `(0,6000000000000000,40485897)`
 
@@ -92,9 +92,9 @@ In the following MasterChain block `seqno=34607822`, three shards are listed:
 ## Merging
 
 When the shard load decreases, they can merge into a single shard.
-* Two shards are eligible to merge if they share a common parent. In this case, their shard IDs will follow the format `<parent prefix>010...` and `<parent prefix>110...`. The resulting merged shard will have the ID `<parent prefix>10...`.
-* For example, `10010...` + `10110...` merge into `1010...`.
-* The first block of the merged shard will have `seqno = max(seqno1, seqno2) + 1`.
+- Two shards are eligible to merge if they share a common parent. In this case, their shard IDs will follow the format `<parent prefix>010...` and `<parent prefix>110...`. The resulting merged shard will have the ID `<parent prefix>10...`.
+- For example, `10010...` + `10110...` merge into `1010...`.
+- The first block of the merged shard will have `seqno = max(seqno1, seqno2) + 1`.
 
 **Simple example**
 
@@ -102,7 +102,7 @@ When the shard load decreases, they can merge into a single shard.
 
 **Actual example**
 
-* In Masterchain block `seqno=34626306`, two of the five shards with the latest blocks:
+- In Masterchain block `seqno=34626306`, two of the five shards with the latest blocks:
    `(0,a000000000000000,40492030)` and `(0,e000000000000000,40492216)`
     merged into a single shard with the block: `(0,c000000000000000,40492217)`
 
@@ -112,8 +112,8 @@ When the shard load decreases, they can merge into a single shard.
 
 ## See also
 
-* [Infinity sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm)
-* [Whitepapers](/v3/documentation/whitepapers/overview)
+- [Infinity sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm)
+- [Whitepapers](/v3/documentation/whitepapers/overview)
 
 <Feedback />
 
