@@ -430,19 +430,17 @@ To send an external-in message to a smart contract, you need to:
 
 For example, in **Blueprint**, there is a built-in helper that dynamically assembles this structure for the developer.
 
-```@ton/blueprint 0.36.1
-
-import {Address, beginCell} from "@ton/ton";
-import {NetworkProvider} from "@ton/blueprint";
+```typescript title="external-in.ts"
+//@ton/blueprint 0.36.1
+import { Address, beginCell } from '@ton/ton';
+import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider, args: string[]) {
-    
     //Mainnet address : 'EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2'
     const address = Address.parse('EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2');
-    
+
     //Switch address for the Testnet :
     //const address = Address.parse('kQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16z768');
-
 
     // Get current seqno using blueprint's provider
     const contractProvider = provider.provider(address);
@@ -450,9 +448,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     const currentSeqno = result.stack.readNumber();
 
     // Send external message with current seqno
-    return contractProvider.external(
-        beginCell().storeUint(currentSeqno, 32).endCell()
-    );
+    return contractProvider.external(beginCell().storeUint(currentSeqno, 32).endCell());
 }
 
 ```
@@ -515,23 +511,19 @@ The first thing a developer needs to specify is the amount of Toncoin attached t
 
 In this example, an external message is sent to the wallet contract with additional instructions for sending an internal message. As a result of processing the transaction, the wallet contract sends an outgoing internal message with the specified `value` and recipient `address`.
 
-```@ton/blueprint 0.36.1
-
-import {Address} from "@ton/ton";
-import {NetworkProvider} from "@ton/blueprint";
+```typescript title="internal.ts"
+//@ton/blueprint 0.36.1
+import { Address } from '@ton/ton';
+import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider, args: string[]) {
-
     const address = Address.parse('kQBUCuxgGsF6znHM_yNmnV_EwtlmdvmDzqTxiWHJip2ux6Wn');
     const contractProvider = provider.provider(address);
 
-    return contractProvider.internal(
-        provider.sender(),{
-        value: '0.01'
+    return contractProvider.internal(provider.sender(), {
+        value: '0.01',
     });
-
 }
-
 ```
 
 ### External outgoing
@@ -565,37 +557,42 @@ Smart contracts, in turn, must:
 * either ignore bounced messages (exit with `code = 0`)
 * or explicitly handle the error
 
-You can run this script in blueprint to get visual result of difference between bounceable and non-bounceable messages:
 
-```ts
+You can run the following script in Blueprint to compare the differences between bounceable and non-bounceable messages visually.
+
+Use one of the methods below to run the script:
+
+#### Option 1: using environment variables in the command line
+
+```bash
+WALLET_MNEMONIC="unfold your mnemonics ... is added here" \
+WALLET_VERSION="v4r2" \
+npx blueprint run sendBounceableMessages --testnet --mnemonic
+```
+
+#### Option 2: using a `.env` file
+
+Create a `.env` file in the source directory:
+
+```bash
+WALLET_MNEMONIC="unfold your mnemonics ... is added here"
+WALLET_VERSION="v4r2"
+```
+
+Then run:
+
+```
+npx blueprint run sendBounceableMessages --testnet --mnemonic
+```
+
+**Note**: TON Connect (e.g., the `--tonconnect` flag) cannot be used here because wallet extensions like Tonkeeper do not allow dApps to control the `bounce` flag for security reasons. They always send bounceable messages. To maintain this flag, you need to create and sign the message manually using a mnemonic.
+
+
+```typescript title="sendBounceableMessages.ts"
 import { Address, toNano, beginCell, internal } from '@ton/core';
 import { NetworkProvider } from '@ton/blueprint';
 import { mnemonicToWalletKey } from '@ton/crypto';
 import { WalletContractV3R2, WalletContractV4 } from '@ton/ton';
-
-// How to run this script:
-//
-// Option 1: With environment variables in the command line.
-// Use a backslash `\` to wrap the command on multiple lines for readability.
-//
-// WALLET_MNEMONIC="unfold sugar water ... other words" \
-// WALLET_VERSION="v4r2" \
-// npx blueprint run sendBounceableMessages --testnet --mnemonic
-//
-//
-// Option 2: Using a .env file.
-// Create a `.env` file in the `examples` directory with your mnemonic:
-//
-// WALLET_MNEMONIC="unfold sugar water ... other words"
-// WALLET_VERSION="v4r2"
-//
-// Then run the script without any variables:
-// npx blueprint run sendBounceableMessages --testnet --mnemonic
-//
-// NOTE: We can't use TonConnect (e.g. with the `--tonconnect` flag) for this script
-// because wallet extensions (like Tonkeeper) do not allow dApps to control the `bounce`
-// flag for security reasons. They always send bounceable messages.
-// To have full control, we must create and sign the message manually using a mnemonic.
 
 export async function run(provider: NetworkProvider): Promise<void> {
     // --- Get wallet data from environment variables ---
@@ -609,14 +606,16 @@ export async function run(provider: NetworkProvider): Promise<void> {
     // --- Initialize wallet from mnemonic ---
     const keyPair = await mnemonicToWalletKey(mnemonic.split(' '));
     const secretKey = keyPair.secretKey;
-    
+
     let wallet;
     if (versionStr === 'v3r1' || versionStr === 'v3r2') {
         wallet = WalletContractV3R2.create({ workchain: 0, publicKey: keyPair.publicKey });
     } else if (versionStr === 'v4r1' || versionStr === 'v4r2') {
         wallet = WalletContractV4.create({ workchain: 0, publicKey: keyPair.publicKey });
     } else {
-        throw new Error('Unsupported wallet version: ' + versionStr + '. Supported versions are v3r1, v3r2, v4r1, v4r2.');
+        throw new Error(
+            'Unsupported wallet version: ' + versionStr + '. Supported versions are v3r1, v3r2, v4r1, v4r2.',
+        );
     }
     const myAddress = wallet.address;
     console.log(`Using wallet ${versionStr} at address: ${myAddress.toString()}`);
@@ -639,7 +638,7 @@ export async function run(provider: NetworkProvider): Promise<void> {
     console.log(`   Current seqno: ${seqno}`);
 
     // --- Create messages ---
-    
+
     // This message is sent to a burn address, but it is marked as "bounceable".
     // The transaction will fail on the recipient's side (as it's just a blackhole),
     // and the value (minus fees) will be returned to the sender.
@@ -658,9 +657,9 @@ export async function run(provider: NetworkProvider): Promise<void> {
         body: beginCell().storeUint(0, 32).storeStringTail('non-bounceable test').endCell(),
         bounce: false,
     });
-    
+
     // --- Create a transfer with both messages ---
-    console.log("Sending one external message with two internal messages (one bounceable, one non-bounceable)...");
+    console.log('Sending one external message with two internal messages (one bounceable, one non-bounceable)...');
 
     const transfer = wallet.createTransfer({
         seqno: seqno,
@@ -670,7 +669,18 @@ export async function run(provider: NetworkProvider): Promise<void> {
 
     await walletProvider.external(transfer);
     console.log('External message sent successfully!');
-} 
+}
+
+```
+
+#### Expected output
+```
+Using file: sendBounceableMessages
+Connected to wallet at address: 0QD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxYkp
+Using wallet v4r2 at address: EQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxW9m
+   Current seqno: 36
+Sending one external message with two internal messages (one bounceable, one non-bounceable)...
+External message sent successfully!
 ```
 
 :::important
@@ -702,13 +712,12 @@ custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Ei
 
 The TON SDK provides predefined primitives for the most common structures, so complex ones are typically encoded using **built-in helpers**.
 
-```
-import {Address, beginCell, toNano} from "@ton/ton";
+```ts title="nft-item.ts"
+import { Address, beginCell, toNano } from '@ton/ton';
 /*
 `transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress
 custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;`
 */
-
 
 const messageBody = beginCell()
     .storeUint(0x5fcc3d14, 32) // opcode for NFT transfer
@@ -718,18 +727,18 @@ const messageBody = beginCell()
     .storeBit(0) // if 0, no custom payload
     .storeCoins(toNano('0.01')) // forward amount - if >0, will send additional message to destination as a wallet notification message
     .endCell();
+
 ```
 
 A preconfigured example is available for testing the sending process.
 To run it, you need to specify the wallet address and the NFT contract address.
 
-```@ton/blueprint 0.36.1
-import {Address, beginCell, toNano} from "@ton/ton";
-import {NetworkProvider} from "@ton/blueprint";
-
+```ts title="nft.ts"
+//@ton/blueprint 0.36.1
+import { Address, beginCell, toNano } from '@ton/ton';
+import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider, args: string[]) {
-
     // PREPARE INTERNAL MESSAGE TRANSFER
     const nftItemAddress = Address.parse('kQBUCuxgGsF6znHM_yNmnV_EwtlmdvmDzqTxiWHJip2ux6Wn');
     const destinationAddress = Address.parse('0QABa48hjKzg09hN_HjxOic7r8T1PleIy1dRd8NvZ3922CW7');
@@ -749,27 +758,24 @@ export async function run(provider: NetworkProvider, args: string[]) {
         .storeCoins(toNano('0.01')) // forward amount - if >0, will send additional message to destination as a wallet notification message
         .endCell();
 
-
-    return contractProvider.internal(
-        provider.sender(),{
+    return contractProvider.internal(provider.sender(), {
         value: toNano('0.5'),
-        body: messageBody
+        body: messageBody,
     });
-
 }
+
 ```
 
 ### Internal message serializer according to contract code
-//TODO
-  * Receivers in the code  (https://github.com/ton-blockchain/highload-wallet-contract-v3)
-  * Build message serializer example in blueprint according to source code 
 
-Imagine you have to compose a message for some contract, we will use jetton wallet and wallet v3 as example.
-There are two types of receiving functions:
+
+Suppose you need to compose a message for a smart contract. As an example, we'll use the Jetton wallet and wallet V3 contracts.
+There are two types of receiving functions commonly used:
 
 - [() recv_internal(cell in_msg_full, slice in_msg_body) impure](https://github.com/ton-blockchain/jetton-contract/blob/3d24b419f2ce49c09abf6b8703998187fe358ec9/contracts/jetton-wallet.fc#L187)
 
-To serialize an internal message which will be correct for this smart-contract we should check how it deserializes the message:
+To correctly serialize an internal message for this smart contract, we must examine how the contract deserializes incoming messages.
+
 
 ```func
 () send_jettons(slice in_msg_body, slice sender_address, int msg_value, int fwd_fee) impure inline_ref {
@@ -814,17 +820,20 @@ To serialize an internal message which will be correct for this smart-contract w
 }
 ```
 
-Now we must use it as a guidance to compose the correct message:
+Now, we need to use this function as a reference to construct a valid message:
 
-```ts
+To run the script and send an internal message, follow these steps:
+
+1. Request Testnet TON from https://t.me/testgiver_ton_bot
+2. Request Testnet USDT from https://t.me/testnet_usdt_giver_bot
+3. Replace the `jettonWalletAddress` in the script with your own Jetton wallet address.
+4. Run the script `npx blueprint run sendInternalMessage --testnet --tonconnect`
+
+
+```ts title="sendInternalMessage.ts"
 import { Address, toNano, beginCell } from '@ton/core';
 import { NetworkProvider } from '@ton/blueprint';
 
-// How to run this script:
-// 1. https://t.me/testgiver_ton_bot
-// 2. https://t.me/testnet_usdt_giver_bot
-// 3. replace jettonWalletAddress with your own jetton wallet
-// 4. npx blueprint run sendInternalMessage --testnet --tonconnect
 
 export async function run(provider: NetworkProvider): Promise<void> {
     const sender = provider.sender();
@@ -836,7 +845,7 @@ export async function run(provider: NetworkProvider): Promise<void> {
     console.log(`Sending internal message from wallet: ${myAddress.toString()}`);
 
     // Attention: Replace with your real Jetton Wallet address
-    const jettonWalletAddress = Address.parse('kQCQm4DAW2QXcwPeo54K1UWn5LVi_v5qTuB9akoTEhpH8y0o');
+    const jettonWalletAddress = Address.parse('0QD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxYkp');
 
     // --- Correct body for () send_jettons ---
     const jettonTransferBody = beginCell()
@@ -874,20 +883,21 @@ transfer#0f8a7ea5
   forward_payload:(Either Cell ^Cell)
   = JettonMsg;
 */
+
 ```
 
 
 - [() recv_external(slice msg_body) impure](https://github.com/aSpite/wallet-tutorial/blob/73c213add90ff115e45e58d0bcd9f1ea1fd44c89/JavaScript%20-%20TypeScript/src/wallet_v3.fc#L7)
 
-Although you can use `blueprint --tonconnect` to send internal message, you can't use it for external message.
+Although you can use `blueprint --tonconnect` to send internal messages, it does **not** support external messages.
+This limitation exists because TON Connect does **not** expose low-level signing capabilities due to the following reasons:
 
-It doesn't expose low-level signing capabilities because:
 
-1. **Security by design**: Wallets (like Tonkeeper) should not expose raw private keys to dApps
-2. **Ton Connect abstraction**: The provider abstracts away the underlying wallet implementation
-3. **Limited API surface**: Blueprint focuses on contract deployment and testing, not raw message crafting
+1. **Security by design**: wallets (e.g., Tonkeeper) do not expose raw private keys to dApps.
+2. **TON Connect abstraction**: the provider hides the wallet's internal implementation behind a unified interface.
+3. **Limited API surface**: blueprint is designed for contract deployment and testing, not for manual message signing.
 
-That is why we will use mnemonic method of the blueprint instead of tonconnect:
+That is why we use mnemonic method of the blueprint instead of TON Connect:
 
 ```func
 () recv_external(slice in_msg) impure {
@@ -910,33 +920,42 @@ That is why we will use mnemonic method of the blueprint instead of tonconnect:
 }
 ```
 
-```ts
+Use one of the methods below to run the following script:
+
+#### Option 1: using environment variables in the command line
+
+```bash
+WALLET_MNEMONIC="unfold your mnemonics ... is added here" \
+WALLET_VERSION="v4r2" \
+npx blueprint run sendExternalMessage --testnet --mnemonic
+```
+
+#### Option 2: using a `.env` file
+
+Create a `.env` file in the source directory:
+
+```bash
+WALLET_MNEMONIC="unfold your mnemonics ... is added here"
+WALLET_VERSION="v4r2"
+```
+
+Then run:
+
+```
+npx blueprint run sendExternalMessage --testnet --mnemonic
+```
+
+
+```ts title="sendExternalMessage.ts"
 import { NetworkProvider } from '@ton/blueprint';
 import { beginCell, toNano } from '@ton/core';
 import { sign, mnemonicToWalletKey } from '@ton/crypto';
 import { WalletContractV3R2, WalletContractV4 } from '@ton/ton';
 
-// How to run this script:
-//
-// Option 1: With environment variables in the command line.
-// Use a backslash `\` to wrap the command on multiple lines for readability.
-//
-// WALLET_MNEMONIC="unfold sugar water ... other words" \
-// WALLET_VERSION="v4r2" \
-// npx blueprint run sendExternalMessage --testnet --mnemonic
-//
-//
-// Option 2: Using a .env file.
-// Create a `.env` file in the `examples` directory with your mnemonic:
-//
-// WALLET_MNEMONIC="unfold sugar water ... other words"
-// WALLET_VERSION="v4r2"
-//
-// Then run the script without any variables:
-// npx blueprint run sendExternalMessage --testnet --mnemonic
 
 export async function run(provider: NetworkProvider): Promise<void> {
     // --- Get wallet data from environment variables ---
+
     const mnemonic = process.env.WALLET_MNEMONIC;
     const versionStr = process.env.WALLET_VERSION || 'v4r2';
 
@@ -947,14 +966,16 @@ export async function run(provider: NetworkProvider): Promise<void> {
     // --- Initialize wallet from mnemonic ---
     const keyPair = await mnemonicToWalletKey(mnemonic.split(' '));
     const secretKey = keyPair.secretKey;
-    
+
     let wallet;
     if (versionStr === 'v3r1' || versionStr === 'v3r2') {
         wallet = WalletContractV3R2.create({ workchain: 0, publicKey: keyPair.publicKey });
     } else if (versionStr === 'v4r1' || versionStr === 'v4r2') {
         wallet = WalletContractV4.create({ workchain: 0, publicKey: keyPair.publicKey });
     } else {
-        throw new Error('Unsupported wallet version: ' + versionStr + '. Supported versions are v3r1, v3r2, v4r1, v4r2.');
+        throw new Error(
+            'Unsupported wallet version: ' + versionStr + '. Supported versions are v3r1, v3r2, v4r1, v4r2.',
+        );
     }
     const myAddress = wallet.address;
 
@@ -983,19 +1004,17 @@ export async function run(provider: NetworkProvider): Promise<void> {
     const subwalletId = 698983191; // Standard subwallet ID
     const validUntil = Math.floor(Date.now() / 1000) + 60; // 60 seconds from now
 
-    const toSign = beginCell()
-        .storeUint(subwalletId, 32)
-        .storeUint(validUntil, 32)
-        .storeUint(seqno, 32);
-        // var (subwallet_id, valid_until, msg_seqno) from func
+    const toSign = beginCell().storeUint(subwalletId, 32).storeUint(validUntil, 32).storeUint(seqno, 32);
+    // var (subwallet_id, valid_until, msg_seqno) from func
 
     // Add 'op' field for v4 wallets
     if (versionStr.startsWith('v4')) {
         toSign.storeUint(0, 8); // op = 0 for simple transfer
     }
-    
-    toSign.storeUint(3, 8)            // var mode from func
-          .storeRef(internalMessage); // cs~load_ref() from func
+
+    toSign
+        .storeUint(3, 8) // var mode from func
+        .storeRef(internalMessage); // cs~load_ref() from func
 
     const toSignCell = toSign.endCell();
 
@@ -1005,23 +1024,27 @@ export async function run(provider: NetworkProvider): Promise<void> {
 
     // --- Create final external message body with signature ---
     const body = beginCell()
-        .storeBuffer(signature)       // var signature
-        .storeBuilder(toSign)         // in_msg
+        .storeBuffer(signature) // var signature
+        .storeBuilder(toSign) // in_msg
         .endCell();
 
     console.log(`  Sending external message...`);
-    
+
     // --- Send the external message to the network ---
     await provider.provider(myAddress).external(body);
-    
+
     console.log('  Message sent successfully!');
 }
+
 ```
 
 ### Internal messages serializer according disabled code
-In case developer hase no documentation with TL-B and contract code, the only way to analyze and find approach to contract reading disassmbled code.
-This approach have the worst effectivness but can be helpful for legacy contracts.
-Example: [Simplecontract](https://verifier.ton.org/EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2)
+
+If the developer does not have access to TL-B schemas or the original contract source code, the only available option is to analyze the disassembled contract code.
+
+This method is the least efficient and most error-prone but can be helpful when working with legacy or undocumented contracts.
+
+Example: [Simple contract](https://verifier.ton.org/EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2)
 
 
 ## Hashes in TON Blockchain
@@ -1090,11 +1113,11 @@ import { beginCell } from '@ton/core';
 
 // Create the message body to increment the counter
 const messageBody = beginCell()
-        .storeUint(0, 32) // op code
-        .storeStringTail("Hello TON!")
-        .endCell();
+    .storeUint(0, 32) // op code
+    .storeStringTail('Hello TON!')
+    .endCell();
 
-console.log("Message body hash:", messageBody.hash().toString("hex"));
+console.log('Message body hash:', messageBody.hash().toString('hex'));
 ```
 
 #### Expected output
@@ -1136,9 +1159,9 @@ import { toNano } from '@ton/core';
 
 // Create the message body to increment the counter
 const messageBody = beginCell()
-        .storeUint(0, 32) // op code
-        .storeStringTail("Hello TON!")
-        .endCell();
+    .storeUint(0, 32) // op code
+    .storeStringTail('Hello TON!')
+    .endCell();
 
 // Create a complete message object
 const message: Message = {
@@ -1147,24 +1170,23 @@ const message: Message = {
         dest: Address.parse('UQAi....'), // Insert recipient address
         value: { coins: toNano('0.1') },
         bounce: true,
-        src: Address.parse('UQA1....'),  // Insert sender address
+        src: Address.parse('UQA1....'), // Insert sender address
         ihrDisabled: true,
         bounced: false,
         ihrFee: 0n,
         forwardFee: 0n,
         createdAt: 0,
-        createdLt: 0n
+        createdLt: 0n,
     },
-    body: messageBody
+    body: messageBody,
 };
 
 // Get the complete message hash
-const messageCell = beginCell()
-    .store(storeMessage(message))
-    .endCell();
+const messageCell = beginCell().store(storeMessage(message)).endCell();
 
 const fullMessageHash = messageCell.hash();
 console.log('Full message hash:', fullMessageHash.toString('hex'));
+
 ```
 
 #### Expected output
@@ -1190,36 +1212,33 @@ This data becomes available only after the blockchain executes the transaction, 
 import { TonClient, beginCell, storeMessage } from '@ton/ton';
 import { Address } from '@ton/core';
 
-
 async function main() {
     const client = new TonClient({
-    // Testnet endpoint; if you're working on Mainnet, don't forget to update this
-    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
-    apiKey: 'insert your api key' // Get your API key via the toncenter.com bot
+        // Testnet endpoint; if you're working on Mainnet, don't forget to update this
+        endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+        apiKey: 'insert your api key', // Get your API key via the toncenter.com bot
     });
 
     const transactions = await client.getTransactions(
-    Address.parse('0QD3o...'), // Insert your wallet address here
-    {   archival: true,
-        limit: 10 }
+        Address.parse('0QD3o...'), // Insert your wallet address here
+        { archival: true, limit: 10 },
     );
 
     for (const tx of transactions) {
-    const txHash = tx.hash();
-    console.log('Transaction hash:', txHash.toString('hex'));
+        const txHash = tx.hash();
+        console.log('Transaction hash:', txHash.toString('hex'));
 
-    // You can also get the hash of the incoming message
-    if (tx.inMessage) {
-        const inMsgCell = beginCell()
-        .store(storeMessage(tx.inMessage))
-        .endCell();
-        const inMsgHash = inMsgCell.hash();
-        console.log('Incoming message hash:', inMsgHash.toString('hex'));
-            }
+        // You can also get the hash of the incoming message
+        if (tx.inMessage) {
+            const inMsgCell = beginCell().store(storeMessage(tx.inMessage)).endCell();
+            const inMsgHash = inMsgCell.hash();
+            console.log('Incoming message hash:', inMsgHash.toString('hex'));
         }
     }
+}
 
 main().catch(console.error);
+
 ```
 #### Expected output
 
@@ -1258,14 +1277,14 @@ The normalized hash is computed by applying the following standardization rules 
 **Practical example of calculating a normalized hash:**
 
 ```typescript title="norm_hash.ts"
-import { beginCell, Cell, Address } from "@ton/core";
+import { beginCell, Cell, Address } from '@ton/core';
 
 function normalizeExternalMessage(destAddress: Address, bodyCell: Cell): Cell {
     try {
         const normalizedExtMessage = beginCell()
             .storeUint(0b10, 2) // Set external message prefix (10 in binary)
             .storeUint(0, 2) // Set src to addr_none (normalization)
-            .storeAddress(destAddress)  // Set destination address
+            .storeAddress(destAddress) // Set destination address
             .storeCoins(0) // Set import_fee to 0 (normalization)
             .storeBit(false) // Set init to nothing$0 (normalization)
             .storeBit(true) //  Use right$1 to store body by reference (normalization)
@@ -1274,22 +1293,23 @@ function normalizeExternalMessage(destAddress: Address, bodyCell: Cell): Cell {
 
         return normalizedExtMessage;
     } catch (error: any) {
-        console.error("❌ Error in normalization:", error.message);
+        console.error('❌ Error in normalization:', error.message);
         throw error;
     }
 }
 
 // Example
 const messageBody = beginCell()
-  .storeUint(0, 32) // Set opcode for a simple transfer
-  .storeStringTail('Normalized hash example')
-  .endCell();
+    .storeUint(0, 32) // Set opcode for a simple transfer
+    .storeStringTail('Normalized hash example')
+    .endCell();
 
 const destinationAddress = Address.parse('EQB...');
 const normalizedExternalMessage = normalizeExternalMessage(destinationAddress, messageBody);
-const normalizedHash = normalizedExternalMessage.hash().toString("hex");
+const normalizedHash = normalizedExternalMessage.hash().toString('hex');
 
 console.log('Normalized message hash:', normalizedHash);
+
 ```
 
 #### Expected output
@@ -1308,55 +1328,57 @@ Below is an example of non-normalized message construction — avoid using this 
 <details>
   <summary> Avoid this approach </summary>
   ```typescript title="non_norm_hash.ts"
-import { mnemonicToWalletKey } from '@ton/crypto';
-import { WalletContractV4, TonClient, toNano, beginCell, Address, internal } from '@ton/ton';
+
+  import { mnemonicToWalletKey } from '@ton/crypto';
+  import { WalletContractV4, TonClient, toNano, beginCell, Address, internal } from '@ton/ton';
 
   // Create a client instance for accessing Testnet via TonCenter
-const client = new TonClient({
+  const client = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
-    apiKey: 'your api key' // Get your API key via the toncenter.com bot
+    apiKey: 'your api key', // Get your API key via the toncenter.com bot
 });
 
   // Construct the message body — arbitrary opcode and payload string
-const messageBody = beginCell()
+  const messageBody = beginCell()
     .storeUint(0, 32) // op-code — arbitrary, e.g., 0
-    .storeStringTail("Hello TON!") // Payload string in the message body
+    .storeStringTail('Hello TON!') // Payload string in the message body
     .endCell();
 
   // Wrap the body into an internal message
-const internalMessage = internal({
+  const internalMessage = internal({
     to: Address.parse('0QD3....'), // recipient
     value: toNano('0.1'), // 0.1 TON
-    body: messageBody
+    body: messageBody,
 });
 
-async function main() {
+  async function main() {
   // Derive wallet keys from the mnemonic phrase
-    const mnemonic = "your seed phrase";
+    const mnemonic = 'your seed phrase';
     const keyPair = await mnemonicToWalletKey(mnemonic.split(' ')); // Insert your seed phrase here
 
   // Create a WalletContractV4 instance from the public key
     const wallet = WalletContractV4.create({
-        publicKey: keyPair.publicKey,
-        workchain: 0
-    });
+      publicKey: keyPair.publicKey,
+      workchain: 0,
+});
 
     const contract = client.open(wallet);
     const seqno = await contract.getSeqno();
 
-  // Create an external message using the wallet contract
+    // Create an external message using the wallet contract
     const externalMessage = await wallet.createTransfer({
-        seqno,
-        secretKey: keyPair.secretKey,
-        messages: [internalMessage]
-    });
+      seqno,
+      secretKey: keyPair.secretKey,
+      messages: [internalMessage],
+});
 
-    console.log("Non-normalized external message hash:", externalMessage.hash().toString("hex"));
+    console.log('Non-normalized external message hash:', externalMessage.hash().toString('hex'));
 }
 
-main();
+  main();
 
-```
+
+  ```
 
 **Expected output**
 ```
@@ -1379,74 +1401,75 @@ import { internal, TonClient, Address, beginCell, WalletContractV4, SendMode } f
 import { mnemonicToPrivateKey } from '@ton/crypto';
 
 async function sendAndVerifyMessage() {
-  const client = new TonClient({
-    // Testnet endpoint; if you're working on Mainnet, don't forget to update this
-    endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
-    apiKey: 'insert your api key' // Get your API key via the toncenter.com bot
+    const client = new TonClient({
+        // Testnet endpoint; if you're working on Mainnet, don't forget to update this
+        endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+        apiKey: 'insert your api key', // Get your API key via the toncenter.com bot
     });
 
-  // Load wallet key pair from mnemonic
-  const mnemonic = "your mnemonic".split(" "); // Insert your seed phrase here
-  const keyPair = await mnemonicToPrivateKey(mnemonic);
+    // Load wallet key pair from mnemonic
+    const mnemonic = 'your mnemonic'.split(' '); // Insert your seed phrase here
+    const keyPair = await mnemonicToPrivateKey(mnemonic);
 
-  const wallet = client.open(WalletContractV4.create({
-    publicKey: keyPair.publicKey,
-    workchain: 0
-  }));
-
-  // Create message body with comment
-  const messageBody = beginCell()
-    .storeUint(0, 32)
-    .storeStringTail('Hello TON!')
-    .endCell();
-
-  // Get current seqno
-  const seqno = await wallet.getSeqno();
-
-  // Send transaction
-  await wallet.sendTransfer({
-    secretKey: keyPair.secretKey,
-    seqno,
-    messages: [internal({
-      to: Address.parse('0QD3o...'), // Insert the address here
-      value: '0.05',
-      body: messageBody
-    })],
-    sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS,
-  });
-
-  // Wait 10 seconds before checking seqno again
-  await new Promise(resolve => setTimeout(resolve, 10000));
-
-  // Check if the transaction was processed
-  const newSeqno = await wallet.getSeqno();
-
-  if (newSeqno > seqno) {
-    console.log('Transaction sent successfully!');
-
-    // Fetch recent transactions for this wallet
-    const transactions = await client.getTransactions(wallet.address, {
-      archival: true,
-      limit: 5
-    });
-    // Find the relevant external-in transaction
-    const ourTx = transactions.find(tx =>
-      tx.inMessage?.info.type === 'external-in' &&
-      tx.description.type === 'generic'
+    const wallet = client.open(
+        WalletContractV4.create({
+            publicKey: keyPair.publicKey,
+            workchain: 0,
+        }),
     );
 
-    if (ourTx) {
-      const txHash = ourTx.hash().toString('hex');
-      console.log('Transaction Hash:', txHash);
-      const viewerUrl = `https://testnet.tonviewer.com/transaction/${txHash}`;
-      console.log('Transaction link:', viewerUrl);
+    // Create message body with comment
+    const messageBody = beginCell().storeUint(0, 32).storeStringTail('Hello TON!').endCell();
+
+    // Get current seqno
+    const seqno = await wallet.getSeqno();
+
+    // Send transaction
+    await wallet.sendTransfer({
+        secretKey: keyPair.secretKey,
+        seqno,
+        messages: [
+            internal({
+                to: Address.parse('0QD3o...'), // Insert the address here
+                value: '0.05',
+                body: messageBody,
+            }),
+        ],
+        sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS,
+    });
+
+    // Wait 10 seconds before checking seqno again
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+
+    // Check if the transaction was processed
+    const newSeqno = await wallet.getSeqno();
+
+    if (newSeqno > seqno) {
+        console.log('Transaction sent successfully!');
+
+        // Fetch recent transactions for this wallet
+        const transactions = await client.getTransactions(wallet.address, {
+            archival: true,
+            limit: 5,
+        });
+        // Find the relevant external-in transaction
+        const ourTx = transactions.find(
+            (tx) => tx.inMessage?.info.type === 'external-in' && tx.description.type === 'generic',
+        );
+
+        if (ourTx) {
+            const txHash = ourTx.hash().toString('hex');
+            console.log('Transaction Hash:', txHash);
+            const viewerUrl = `https://testnet.tonviewer.com/transaction/${txHash}`;
+            console.log('Transaction link:', viewerUrl);
+        }
+    } else {
+        console.log('Transaction was not processed');
     }
-  } else {
-    console.log('Transaction was not processed');
-  }
 }
 
 sendAndVerifyMessage().catch(console.error);
+
 ```
 
 #### Expected output
@@ -1481,20 +1504,20 @@ In this project, navigate to `src/components/TxForm` and replace the contents of
   // to interact with an EchoContract — a contract that returns the sent value back to the sender.
   // This is useful for testing, as it prevents unintentional token loss.
   const defaultTx: SendTransactionRequest = {
-  // The transaction is valid for 10 minutes from the current time (in Unix epoch seconds).
-  validUntil: Math.floor(Date.now() / 1000) + 600,
-  messages: [
-{
-  // Insert the recipient address
-  address: 'your address',
-  // Amount to send in nanoTON. For example, 0.005 TON is 5000000 nanoTON.
-  amount: '5000',
-  // (Optional) State initialization in BOC (base64).
-  stateInit: 'te6cckEBBAEAOgACATQCAQAAART/APSkE/S88sgLAwBI0wHQ0wMBcbCRW+D6QDBwgBDIywVYzxYh+gLLagHPFsmAQPsAlxCarA==',
-},
+      // The transaction is valid for 10 minutes from the current time (in Unix epoch seconds).
+      validUntil: Math.floor(Date.now() / 1000) + 600,
+      messages: [
+          {
+              // Insert the recipient address
+              address: 'your address',
+              // Amount to send in nanoTON. For example, 0.005 TON is 5000000 nanoTON.
+              amount: '5000',
+              // (Optional) State initialization in BOC (base64).
+              stateInit: 'te6cckEBBAEAOgACATQCAQAAART/APSkE/S88sgLAwBI0wHQ0wMBcbCRW+D6QDBwgBDIywVYzxYh+gLLagHPFsmAQPsAlxCarA==',
+          },
 
-  ],
-};
+      ],
+  };
 
   /**
   * Normalize an external message according to TEP-467:
@@ -1508,97 +1531,98 @@ In this project, navigate to `src/components/TxForm` and replace the contents of
   */
 
   function normalizeExternalMessage(destAddress: Address, bodyCell: Cell): Cell {
-  return beginCell()
-  .storeUint(0b10, 2)
-  .storeUint(0, 2)
-  .storeAddress(destAddress)
-  .storeCoins(0)
-  .storeBit(false)
-  .storeBit(true)
-  .storeRef(bodyCell)
-  .endCell();
-}
+      return beginCell()
+          .storeUint(0b10, 2)
+          .storeUint(0, 2)
+          .storeAddress(destAddress)
+          .storeCoins(0)
+          .storeBit(false)
+          .storeBit(true)
+          .storeRef(bodyCell)
+          .endCell();
+  }
 
   export function TxForm() {
-  const [boc, setBoc] = useState<string | null>(null);
-  const [hash, setHash] = useState<string | null>(null);
-  const [normalizedHash, setNormalizedHash] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [isSending, setIsSending] = useState(false);
-  const [tonConnectUi] = useTonConnectUI();
+      const [boc, setBoc] = useState<string | null>(null);
+      const [hash, setHash] = useState<string | null>(null);
+      const [normalizedHash, setNormalizedHash] = useState<string | null>(null);
+      const [error, setError] = useState<string | null>(null);
+      const [isSending, setIsSending] = useState(false);
+      const [tonConnectUi] = useTonConnectUI();
 
-  const send = async () => {
-  setIsSending(true);
-  setError(null);
-  setBoc(null);
-  setHash(null);
-  setNormalizedHash(null);
-  try {
-  const result = await tonConnectUi.sendTransaction(defaultTx);
-  const receivedBoc = result.boc;
-  setBoc(receivedBoc);
-  const externalMessageCell = Cell.fromBoc(Buffer.from(receivedBoc, 'base64'))[0];
-  const originalHash = externalMessageCell.hash().toString('hex');
-  setHash(originalHash);
+      const send = async () => {
+          setIsSending(true);
+          setError(null);
+          setBoc(null);
+          setHash(null);
+          setNormalizedHash(null);
+          try {
+              const result = await tonConnectUi.sendTransaction(defaultTx);
+              const receivedBoc = result.boc;
+              setBoc(receivedBoc);
+              const externalMessageCell = Cell.fromBoc(Buffer.from(receivedBoc, 'base64'))[0];
+              const originalHash = externalMessageCell.hash().toString('hex');
+              setHash(originalHash);
 
-  const message = loadMessage(externalMessageCell.beginParse());
-  if (message.info.type !== 'external-in') throw new Error(`Expected an external-in message, got ${message.info.type}.`);
+              const message = loadMessage(externalMessageCell.beginParse());
+              if (message.info.type !== 'external-in')
+                  throw new Error(`Expected an external-in message, got ${message.info.type}.`);
 
-  const destAddress = message.info.dest;
-  if (!destAddress || !(destAddress instanceof Address)) {
-  throw new Error('Destination address not found in the parsed message.');
-}
+              const destAddress = message.info.dest;
+              if (!destAddress || !(destAddress instanceof Address)) {
+                  throw new Error('Destination address not found in the parsed message.');
+          }
 
-  const bodyCell = message.body;
-  const normalizedExtMessage = normalizeExternalMessage(destAddress, bodyCell);
-  setNormalizedHash(normalizedExtMessage.hash().toString('hex'));
-} catch (e) {
-  setError((e as Error).message);
-} finally {
-  setIsSending(false);
-}
-};
+              const bodyCell = message.body;
+              const normalizedExtMessage = normalizeExternalMessage(destAddress, bodyCell);
+              setNormalizedHash(normalizedExtMessage.hash().toString('hex'));
+          } catch (e) {
+              setError((e as Error).message);
+          } finally {
+              setIsSending(false);
+          }
+      };
 
-  return (
-  <div className="send-tx-form">
-  <button onClick={send} disabled={isSending}>
-  {isSending ? 'Sending...' : 'Send transaction'}
-</button>
+      return (
+          <div className="send-tx-form">
+              <button onClick={send} disabled={isSending}>
+              {isSending ? 'Sending...' : 'Send transaction'}
+              </button>
 
-{error && <p style={{ color: 'red' }}>Error: {error}</p>}
+              {error && <p style={{ color: 'red' }}>Error: {error}</p>}
 
-{boc && (
-  <div className="boc-hash-block">
-    <span className="boc-label">BOC (base64):</span>
-    <pre className="boc-pre">{boc}</pre>
+              {boc && (
+                  <div className="boc-hash-block">
+                      <span className="boc-label">BOC (base64):</span>
+                      <pre className="boc-pre">{boc}</pre>
 
-    <span className="hash-label">Original hash to find a transaction:</span>
-    <pre>{hash}</pre>
+                      <span className="hash-label">Original hash to find a transaction:</span>
+                      <pre>{hash}</pre>
 
-    <span className="hash-label">Normalized hash (TEP-467):</span>
-    <pre>{normalizedHash}</pre>
+                      <span className="hash-label">Normalized hash (TEP-467):</span>
+                      <pre>{normalizedHash}</pre>
 
-    {hash && normalizedHash && (
-      <div
-        style={{
-          marginTop: '10px',
-          padding: '10px',
-          backgroundColor: hash === normalizedHash ? '#d4edda' : '#f8d7da',
-          borderRadius: '5px',
-        }}
-      >
-        <strong>Hashes {hash === normalizedHash ? 'MATCH' : 'DO NOT MATCH'}</strong>
-        {hash !== normalizedHash && (
-          <div style={{ fontSize: '12px', marginTop: '5px' }}>
-            The original message is not normalized according to TEP-467.
-          </div>
-        )}
-      </div>
-    )}
-  </div>
-)}
-</div>
-);
+                      {hash && normalizedHash && (
+                          <div
+                              style={{
+                                  marginTop: '10px',
+                                  padding: '10px',
+                                  backgroundColor: hash === normalizedHash ? '#d4edda' : '#f8d7da',
+                                  borderRadius: '5px',
+                              }}
+                            >
+                              <strong>Hashes {hash === normalizedHash ? 'MATCH' : 'DO NOT MATCH'}</strong>
+                              {hash !== normalizedHash && (
+                                  <div style={{ fontSize: '12px', marginTop: '5px' }}>
+                                    The original message is not normalized according to TEP-467.
+                                  </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+              )}
+        </div>
+    );
 }
 ```
 
@@ -1621,36 +1645,37 @@ Once the transaction is sent, the UI displays the following fields:
   ```typescript title="trx_lookup_via_boc.ts"
   // Check transaction by its hash
   async function checkTransactionStatus(txHash: string, walletAddress: string) {
-  try {
-  const response = await fetch(
-  `https://testnet.toncenter.com/api/v2/getTransactions?` +
-  `address=${walletAddress}&hash=${txHash}`
-  );
-  const data = await response.json();
+    try {
+      const response = await fetch(
+        `https://testnet.toncenter.com/api/v2/getTransactions?` + `address=${walletAddress}&hash=${txHash}`,
+      );
+      const data = await response.json();
 
-  if (data.result.length > 0) {
-  console.log('Transaction found on the blockchain');
-  const viewerUrl = `https://testnet.tonviewer.com/transaction/${trxHash}`;
-  console.log('Transaction link:', viewerUrl);
-  return data.result[0];
-} else {
-  console.log('Transaction not found');
-  return null;
-}
-} catch (error) {
-  console.error('Error while checking transaction:', error);
-  return null;
-}
+      if (data.result.length > 0) {
+        console.log('Transaction found on the blockchain');
+        const viewerUrl = `https://testnet.tonviewer.com/transaction/${trxHash}`;
+        console.log('Transaction link:', viewerUrl);
+        return data.result[0];
+    } else {
+        console.log('Transaction not found');
+        return null;
+    }
+    } catch (error) {
+        console.error('Error while checking transaction:', error);
+        return null;
+    }
 }
 
   const walletAddress = 'insert your wallet address';
-  \\ Here you can insert the hash that you obtained from the react example
+  // Here you can insert the hash that you obtained from the react example
   const trxHash = 'insert the transaction hash';
 
   checkTransactionStatus(trxHash, walletAddress);
+
   ```
 
   **Expected output**
+
   ```
   Transaction found on the blockchain
   Transaction link: https://testnet.tonviewer.com/transaction/ad53eb8d1145b239d615dfd3bffb1b9cb7c8c5823530dc217d988fb89794f59a
@@ -1665,26 +1690,25 @@ Once the transaction is sent, the UI displays the following fields:
 ```typescript title="status_api.ts"
 // Check the transaction status by its hash
 async function checkTransactionStatus(txHash: string, walletAddress: string) {
-  try {
-    const response = await fetch(
-      `https://testnet.toncenter.com/api/v2/getTransactions?` +
-      `address=${walletAddress}&hash=${txHash}`
-    );
-    const data = await response.json();
+    try {
+        const response = await fetch(
+            `https://testnet.toncenter.com/api/v2/getTransactions?` + `address=${walletAddress}&hash=${txHash}`,
+        );
+        const data = await response.json();
 
-    if (data.result.length > 0) {
-      console.log('Transaction found on the blockchain');
-      const viewerUrl = `https://testnet.tonviewer.com/transaction/${trxHash}`;
-      console.log('Transaction link:', viewerUrl);
-      return data.result[0];
-    } else {
-      console.log('Transaction not found');
-      return null;
+        if (data.result.length > 0) {
+            console.log('Transaction found on the blockchain');
+            const viewerUrl = `https://testnet.tonviewer.com/transaction/${trxHash}`;
+            console.log('Transaction link:', viewerUrl);
+            return data.result[0];
+        } else {
+            console.log('Transaction not found');
+            return null;
+        }
+    } catch (error) {
+        console.error('Error while checking transaction status:', error);
+        return null;
     }
-  } catch (error) {
-    console.error('Error while checking transaction status:', error);
-    return null;
-  }
 }
 
 const walletAddress = 'your address';
@@ -1715,20 +1739,17 @@ import { mnemonicToPrivateKey } from '@ton/crypto';
 
 async function getStateInit() {
     try {
-        const mnemonic = "your mnemonic".split(" "); // Insert your seed phrase here
+        const mnemonic = 'your mnemonic'.split(' '); // Insert your seed phrase here
         const keyPair = await mnemonicToPrivateKey(mnemonic);
 
-         // Create a wallet V4
+        // Create a wallet V4
         const wallet = WalletContractV4.create({
             publicKey: keyPair.publicKey,
-            workchain: 0
+            workchain: 0,
         });
 
         // Generate the StateInit cell
-        const stateInitCell = beginCell()
-            .storeRef(wallet.init.code)
-            .storeRef(wallet.init.data)
-            .endCell();
+        const stateInitCell = beginCell().storeRef(wallet.init.code).storeRef(wallet.init.data).endCell();
 
         const stateInitBase64 = stateInitCell.toBoc().toString('base64');
 
@@ -1743,6 +1764,7 @@ async function getStateInit() {
 }
 
 getStateInit().catch(console.error);
+
 ```
 #### Expected output
 
@@ -1761,12 +1783,11 @@ import { Address, Cell, contractAddress } from '@ton/ton';
 const wantedAddress = Address.parse('your address');
 const stateInitBase64 = 'your state init'; // Insert your StateInit (base64) here
 
-
 const cell = Cell.fromBase64(stateInitBase64);
 // Typically, code = cell.refs[0], data = cell.refs[1]
 const stateInit = {
-  code: cell.refs[0],
-  data: cell.refs[1]
+    code: cell.refs[0],
+    data: cell.refs[1],
 };
 
 // Derive the address from WorkChain and StateInit
@@ -1776,10 +1797,11 @@ console.log('Expected address: ', wantedAddress.toString({ bounceable: false }))
 console.log('Calculated address:', calculatedAddress.toString({ bounceable: false }));
 
 if (calculatedAddress.equals(wantedAddress)) {
-  console.log('StateInit matches the address!');
+    console.log('StateInit matches the address!');
 } else {
-  console.log('StateInit does NOT match the address!');
+    console.log('StateInit does NOT match the address!');
 }
+
 ```
 
 #### Expected output
@@ -1797,48 +1819,49 @@ The example below shows how to set up a listener that receives transaction data 
 <details>
   <summary>Code</summary>
   ```typescript title="trxs_monitoring.ts"
-  import {Address, TonClient, beginCell, storeMessage} from '@ton/ton';
+
+  import { Address, TonClient, beginCell, storeMessage } from '@ton/ton';
 
   // Example function to monitor incoming transactions
   async function monitorIncomingTransactions(walletAddress: Address, client: TonClient) {
-  let lastLt = 0n;
+    let lastLt = 0n;
 
-  setInterval(async () => {
-  try {
-  const transactions = await client.getTransactions(walletAddress, {
-  limit: 10,
-  lt: lastLt.toString()
-});
+    setInterval(async () => {
+      try {
+        const transactions = await client.getTransactions(walletAddress, {
+          limit: 10,
+          lt: lastLt.toString(),
+    });
 
-  for (const tx of transactions) {
-  if (tx.lt > lastLt) {
-  const txHash = tx.hash();
-  console.log('New transaction:', txHash.toString('hex'));
-  const viewerUrl = `https://testnet.tonviewer.com/transaction/${txHash.toString('hex')}`;
-  console.log('Transaction link:', viewerUrl);
+        for (const tx of transactions) {
+          if (tx.lt > lastLt) {
+            const txHash = tx.hash();
+            console.log('New transaction:', txHash.toString('hex'));
+            const viewerUrl = `https://testnet.tonviewer.com/transaction/${txHash.toString('hex')}`;
+            console.log('Transaction link:', viewerUrl);
 
-  // Process incoming messages
-  if (tx.inMessage) {
-  const msgCell = beginCell()
-  .store(storeMessage(tx.inMessage))
-  .endCell();
-  const msgHash = msgCell.hash();
-  console.log('Message hash:', msgHash.toString('hex'));
-}
+            // Process incoming messages
+            if (tx.inMessage) {
+              const msgCell = beginCell().store(storeMessage(tx.inMessage)).endCell();
+              const msgHash = msgCell.hash();
+              console.log('Message hash:', msgHash.toString('hex'));
+          }
 
-  lastLt = tx.lt;
-}
-}
-} catch (error) {
-  console.error('Monitoring error:', error);
-}
-}, 5000); // Check every 5 seconds
-}
+            lastLt = tx.lt;
+        }
+      }
+    } catch (error) {
+        console.error('Monitoring error:', error);
+      }
+    }, 5000); // Check every 5 seconds
+  }
 
   const walletAddress = Address.parse('Insert your address here');
   const client = new TonClient({ endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC' });
 
   monitorIncomingTransactions(walletAddress, client);
+
+
   ```
 
   **Expected output**
@@ -1849,7 +1872,7 @@ The example below shows how to set up a listener that receives transaction data 
   Message hash: 8263a63380532154a3850aa1d2dca719bf768845738c8177d889af05826626c8
   ```
 
-</details>
+  </details>
 
 ### Recommendations
 
@@ -1859,55 +1882,17 @@ The example below shows how to set up a listener that receives transaction data 
 4. **Implement retry logic**: if a transaction is not visible on-chain within one minute, consider resubmitting the message.
 
 
-## Sending a Message
-
-There are two important and practical cases for sending a message to the blockchain:
-
-- You send a message from the backend, where you own the wallet and can sign and send it directly.
-- You use **TON Connect** on the frontend, where you prepare the message and let the user sign and send it themselves.
-
-### Sending from the Backend
-
-If you have a wallet with a seed phrase, the message is sent like this:
-Code [source](/v3/guidelines/dapps/cookbook/#how-to-transfer-ton-and-send-a-text-message-to-another-wallet)
-
-### Sending from the Frontend (TON Connect)
-
-In this case, you prompt the user to sign and send the message.
-
-```
-const myTransaction = {
-validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
-messages: [
-{
-address: destination, // Address of smart contract to send internal message to
-amount: amount, // Amount in nanotons to attach to the message
-payload: Base64.encode(messageBody.toBoc())
-}
-]
-}
-
-tonConnectUI.sendTransaction(myTransaction)
-
-```
-## Get методы
-Get methods
-Build get method wrapper
-Get balance
-Get jetton wallet address
-Get collection data
-
 ## Blockchain HTTP API
 
-This section consider how developer may access set of transaction from blockchain.
+This section explains how developers can access transaction data from the blockchain.
 
 ### TON HTTP API services
 
-_HTTP API service_ is a software solution that retrive RAW data from Liteserver node and encode this for other service to standard formats.
-The one how provide solution calls a HTTP API _provider_.
+An _HTTP API service_ is a software solution that retrieves raw data from a LiteServer node and encodes it into standard formats for other services.
+A provider that offers such a solution is referred to as an HTTP API _provider_.
 
-We will review services that build native infrastructure; regarding API providers most likely rely on one of these standard solutions.
-We recommend evaluating a provider's quality independently based on [historical performance](https://tonstat.us/) and suitability for your specific use case.
+In this section, we review services that are part of the native infrastructure. Most third-party API providers rely on one of these standard solutions.
+We recommend evaluating each provider independently based on its [historical performance](https://tonstat.us/) and suitability for your specific use case.
 
 
 #### TON Center
@@ -2046,7 +2031,7 @@ However, for greater security, it is always recommended to process transactions 
 
 #### Transaction response from API
 
-In the blockchain, a regular transaction is a structure described by a complete body and a unique header.
+In the blockchain, a regular transaction consists of a whole body and a unique header.
 
 ```tlb
 transaction$0111 account_addr:bits256 lt:uint64
@@ -2058,8 +2043,7 @@ transaction$0111 account_addr:bits256 lt:uint64
     description:^TransactionDescr = Transaction;
 ```
 
-The header TransactionDescr defines the nature of the transaction in the blockchain. All user transactions for service operations are of the regular type — Ordinary.
-
+The header `TransactionDescr` defines the nature of the transaction in the blockchain. All user-initiated service operations are represented as regular transactions of type **Ordinary**.
 
 ```tlb
 trans_ord$0000 credit_first:Bool
@@ -2070,14 +2054,14 @@ trans_ord$0000 credit_first:Bool
   destroyed:Bool
   = TransactionDescr;
 ```
+Each transaction returned in the API response (`Transaction[]`) reflects the structure defined in TL-B but often includes additional computed fields for convenience.
 
-Each transaction in API responses (`Transaction[]`) mirrors its TL-B-defined structure but often includes additional computed fields for convenience.
+* Native – present in the blockchain. The field names match those defined in the `block.tlb` TL-B schema.
+* Postprocessing – computed additionally by the API provider.
+* Native object with extended fields – the object exists on-chain, but the API provider extends its data. See the table below for details.
 
-- Native – present in the blockchain. The description refers to the field name defined in TL-B `block.tlb` schemas.
-- Postprocessing – calculated additionally by the API provider.
-- Native object extended inside – this object exists on-chain, but the data is extended on the API side. See a separate table for details.
 
-One of the **most important computed fields** is the **transaction hash**, which is not part of the blockchain but generated by the API provider.
+One of the **most important computed fields** is the **transaction hash**, which does not exist in the blockchain itself. It is generated by the API provider.
 
 ```json
 "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM="
@@ -2085,9 +2069,9 @@ One of the **most important computed fields** is the **transaction hash**, which
 
 ### Transaction body TON Center API/v2
 
+The https://toncenter.com/api/v2/getTransactions method returns raw transaction data based on the TL-B structure.
 
-Consider response for API/v2 transaction.
-Method https://toncenter.com/api/v2/getTransactions returns raw message data according to transaction TL-B.
+Example `curl` request:
 
 ```curl
 curl -X 'GET' \
@@ -2095,37 +2079,38 @@ curl -X 'GET' \
   -H 'accept: application/json'
 ```
 
-Briefly content of Transaction body consists of:
-* @fields - maintainence fields in TON Center API/v2
-* Header data - transaction metadata lt, now(unix time)
-* Incoming message data - message, that initiated transaction
-* Compute phase data - results of command executions
-* Action phase data  - results of actions done after computed
-* Block ref - data of the blockchain block belonging.
-* Account state before
-* Account state after
+The response includes the transaction body, which consists of the following components:
+
+* **@fields** - internal metadata used by the TON Center API/v2.
+* **Header data** – transaction metadata such as `lt` (logical time) and `now` (Unix timestamp).
+* **Incoming message data** – the message that initiated the transaction.
+* **Compute phase data** – execution results.
+* **Action phase data** – actions triggered after the compute phase.
+* **Block ref** – identifies the blockchain block containing the data transaction.
+* **Account state before** –the account state before the transaction.
+* **Account state after** – the account state after the transaction.
 
 
 
-| Field                  | Origin                        | Description                                                                                                  | Example                                                       |
-|------------------------|-------------------------------|--------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
-| `@type`                | Postprocessing                | type of object in API v2                                                                                     | `"raw.transaction"`               |
-| `address.@type`        | Postprocessing                | Postprocessed type of address by smartcontract                                                               | `accountAddress`               |
-| `account_address`      | Native                        | Account address where the transaction occurred; returned in userfriendly format                              | `"EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1"` |
-| `utime`                | Native                        | UNIX timestamp of the transaction. TL-B field name: `now`                                                    | `1736738146`                                                 |
-| `transaction_id.@type` | Postprocessing                | Parsed type of transaction                                                                                   | `"internal.transactionId"`                                     |
-| `transaction_id.hash`  | Postprocessing                | Hash of the current transaction                                                                              | `mkma+u5TOi12BSu6m6YhZaatY2b2ozdabOdBnVuWmWM=`               |
-| `transaction_id.lt`    | Native                        | Logical time of the transaction; unique per account. TL-B field name: `lt`                                   | `52863169000074`                                             |
-| `fee`                  | Native                        | Total amount of fees associated with the transaction. TL-B field: `total_fees`                               | `1207600`                                                   |
-| `storage_fee`          | Native                        | Storage fees. TL-B field: `Trans Descriptor` -> `Storage                                                     | `1207600`                                                   |
-| `other_fee`            | ?                             | ??                                                                                                           | `1207600`                                                   |
-| `mc_block_seqno`       | Postprocessing                | Masterchain block sequence number that includes this transaction. Not stored on-chain, added by HTTP service | `13353447`                                                   |
-| `trace_id`             | Postprocessing                | Hash of the root transaction in the trace chain. `trace` is an entity formed by TON Center API v3            | `13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=`               |
-| `prev_trans_hash`      | Native                        | Hash of the previous transaction for this account. TL-B field: `prev_trans_hash`                             | `6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=`               |
-| `prev_trans_lt`        | Native                        | Logical time of the previous transaction for this account. TL-B field: `prev_trans_lt`                       | `15371704000004`                                             |
-| `in_msg`               | Native object extended inside | Input message body object                                                                                    | `"in_msg": {...}`                                            |
-| `"in_msg.message":`    | Postprocessing | Input message body object                                                                                    | `"in_msg": {...}`                                            |
-| `out_msgs`             | Native object extended inside | Input message body object                                                                                    | `"in_msg": {...}`                                            |
+| Field                  | Origin                        | Description                                                                                                                | Example                                                       |
+|------------------------|-------------------------------|----------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
+| `@type`                | Postprocessing                | Object type identifier in API v2.                                                                                          | `"raw.transaction"`               |
+| `address.@type`        | Postprocessing                | Postprocessed type of smart contract address.                                                                              | `accountAddress`               |
+| `account_address`      | Native                        | Account address where the transaction occurred. Returned in user-friendly format.                                          | `"EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1"` |
+| `utime`                | Native                        | UNIX timestamp of the transaction. Corresponds to the TL-B field `now`.                                                    | `1736738146`                                                 |
+| `transaction_id.@type` | Postprocessing                | Parsed type of transaction.                                                                                                 | `"internal.transactionId"`                                     |
+| `transaction_id.hash`  | Postprocessing                | Hash of the current transaction.                                                                                            | `mkma+u5TOi12BSu6m6YhZaatY2b2ozdabOdBnVuWmWM=`               |
+| `transaction_id.lt`    | Native                        | Logical time of the transaction. Unique per account. TL-B field: `lt`.                                                | `52863169000074`                                             |
+| `fee`                  | Native                        | Total transaction fee. TL-B field: `total_fees`.                                      | `1207600`                                                   |
+| `storage_fee`          | Native                        | Storage fees. TL-B field: `Trans Descriptor` -> `Storage`.                                                                   | `1207600`                                                   |
+| `other_fee`            | ?                             | ??                                                                                                                         | `1207600`                                                   |
+| `mc_block_seqno`       | Postprocessing                | Sequence number of the MasterChain block containing this transaction. Not stored on-chain. Added by HTTP service.               | `13353447`                                                   |
+| `trace_id`             | Postprocessing                | Hash of the root transaction in a trace chain. `trace` is an entity generated by TON Center API v3.                | `13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=`               |
+| `prev_trans_hash`      | Native                        | Hash of the previous transaction for this account. TL-B field: `prev_trans_hash`.                                           | `6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=`               |
+| `prev_trans_lt`        | Native                        | Logical time of the previous transaction for this account. TL-B field: `prev_trans_lt`.                                     | `15371704000004`                                             |
+| `in_msg`               | Native object extended inside | Input message body object.                                                                                                  | `"in_msg": {...}`                                            |
+| `"in_msg.message":`    | Postprocessing | Input message body object.                                                                                                  | `"in_msg": {...}`                                            |
+| `out_msgs`             | Native object extended inside | Input message body object.                                                                                                  | `"in_msg": {...}`                                            |
 
 ```json
  "result": [
@@ -2222,9 +2207,14 @@ Briefly content of Transaction body consists of:
 
 ### Transaction body TON Center API/v3
 
-The API service deserializes the entire structure with precision down to string and numeric data types. As a result, the transaction body returned in JSON format:
+The API service deserializes the entire transaction structure with precise mapping to appropriate string and numeric types.
+As a result, the transaction body is returned in JSON format.
 
-Method https://toncenter.com/api/v3/transactions returns a huge structure extended with postprocessed data. 
+The https://toncenter.com/api/v3/transactions method returns a large structure enriched with additional computed data.
+
+Example request:
+
+
 
 ```curl
 curl -X 'GET' \
@@ -2232,16 +2222,16 @@ curl -X 'GET' \
   -H 'accept: application/json'
 ```
 
+The transaction object includes the following key sections:
 
+* **Header data** – transaction metadata such as `lt` (logical time) and `now` (Unix timestamp).
+* **Incoming message data** – the message that initiated the transaction.
+* **Compute phase data** – execution results.
+* **Action phase data** – actions triggered after the compute phase.
+* **Block ref** – identifies the blockchain block containing the data transaction.
+* **Account state before** –the account state before the transaction.
+* **Account state after** – the account state after the transaction.
 
-Briefly content of Transaction body consists of:
-* Header data - transaction metadata lt, now(unix time) 
-* Incoming message data - message, that initiated transaction
-* Compute phase data - results of command executions
-* Action phase data  - results of actions done after computed
-* Block ref - data of the blockchain block belonging.
-* Account state before
-* Account state after
 
 ```json
  {
@@ -2422,9 +2412,10 @@ Briefly content of Transaction body consists of:
   ```
 </details>
 
-Once developer fetched data set of transactions related to point of his interest: filtered by account or set of accounts, he may consider raw data to process events. Read in detail how transaction works and how parce this for various TON in Transaction section.
+Once a developer fetches a dataset of transactions filtered by a specific account or set of accounts, they can process the raw data to extract meaningful events.
+For a detailed explanation of how transactions work and how to parse them in different TON contexts, see the [Transactions section](/v3/guidelines/dapps/interact-with-transactions/transaction).
 
-## Transaction
+## Transaction {#transaction}
 
 In the TON blockchain, any change to an account's state is recorded via a **transaction**. Unlike messages, transactions do not *move*, *send*, or *receive* anything. These terms are often confused, but it's important to understand that a transaction is simply a **record** of all changes that occurred to a specific account.
 
@@ -2713,34 +2704,35 @@ Among the supported open-source APIs, we can use TON Center [APIv2](https://tonc
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
 
-    ```js
+    ```js title="api-v2-get-transaction.ts"
     import axios from 'axios';
 
     async function main() {
-    const client = axios.create({
-    baseURL: 'https://toncenter.com/api/v2',
-    'timeout': 5000,
-    headers: {
-    'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
-  }
-  });
+        const client = axios.create({
+            baseURL: 'https://toncenter.com/api/v2',
+            timeout: 5000,
+            headers: {
+                'X-Api-Key': 'put your api key', // you can get an api key from @tonapibot bot in Telegram
+            },
+        });
 
-    const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
-    const response = await client.get('/getTransactions', {
-    params: {
-    address: address,
-    limit: 1,
-    to_lt: 0,
-    archival: false
-  },
-    headers: {
-    'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
-  }
-  });
-    console.log(response.data)
-  }
+        const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
+        const response = await client.get('/getTransactions', {
+            params: {
+                address: address,
+                limit: 1,
+                to_lt: 0,
+                archival: false,
+            },
+            headers: {
+                'X-Api-Key': 'put your api key', // you can get an api key from @tonapibot bot in Telegram
+            },
+        });
+        console.log(response.data);
+    }
 
-    main().finally(() => console.log("Exiting..."));
+    main().finally(() => console.log('Exiting...'));
+
     ```
 
   </TabItem>
@@ -2752,23 +2744,24 @@ Among the supported open-source APIs, we can use TON Center [APIv2](https://tonc
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
 
-    ```js
+    ```js title="json-rpc-protocol.ts"
     import { Address, TonClient } from '@ton/ton';
 
     async function main() {
-    const client = new TonClient({
-    endpoint: "https://toncenter.com/api/v2/jsonRPC",
-    apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
-  });
+        const client = new TonClient({
+            endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+            apiKey: 'put your api key', // you can get an api key from @tonapibot bot in Telegram
+        });
 
-    const address = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
-    const response = await client.getTransactions(address, {
-    limit: 1,
-  });
-    console.log(response[0]);
-  }
+        const address = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
+        const response = await client.getTransactions(address, {
+            limit: 1,
+        });
+        console.log(response[0]);
+    }
 
-    main().finally(() => console.log("Exiting..."));
+    main().finally(() => console.log('Exiting...'));
+
     ```
 
   </TabItem>
@@ -2796,31 +2789,32 @@ In this guide, we focus only on the `transactions` endpoint, which returns *conf
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
 
-    ```js
+    ```js title="api-v3-get-transaction.ts"
     import axios from 'axios';
 
     async function main() {
-    const client = axios.create({
-    baseURL: 'https://toncenter.com/api/v3',
-    'timeout': 5000,
-    headers: {
-    'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
-  }
-  });
+        const client = axios.create({
+            baseURL: 'https://toncenter.com/api/v3',
+            timeout: 5000,
+            headers: {
+                'X-Api-Key': 'put your api key', // you can get an api key from @tonapibot bot in Telegram
+            },
+        });
 
-    const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
-    const response = await client.get('/transactions', {
-    params: {
-    account: address,
-    limit: 1,
-    to_lt: 0,
-    archival: false
-  }
-  });
-    console.log(response.data.transactions[0])
+        const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
+        const response = await client.get('/transactions', {
+            params: {
+                account: address,
+                limit: 1,
+                to_lt: 0,
+                archival: false,
+            },
+        });
+        console.log(response.data.transactions[0]);
   }
 
-    main().finally(() => console.log("Exiting..."));
+    main().finally(() => console.log('Exiting...'));
+
     ```
 
   </TabItem>
@@ -2867,24 +2861,24 @@ When inspecting the response returned via the JSON-RPC protocol in `@ton/ton@`, 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
 
-    ```js
+    ```js title="trx-fields-sdk.ts"
     import { Address, loadTransaction, TonClient } from '@ton/ton';
 
     async function main() {
-    const client = new TonClient({
-    endpoint: "https://toncenter.com/api/v2/jsonRPC",
-    apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
-  });
+        const client = new TonClient({
+            endpoint: "https://toncenter.com/api/v2/jsonRPC",
+            apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
+        });
 
-    const address = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
-    const response = await client.getTransactions(address, {
-    limit: 1,
-  });
+        const address = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
+        const response = await client.getTransactions(address, {
+            limit: 1,
+        });
 
-    const transaction = response[0];
-    console.log(loadTransaction(transaction.raw.beginParse()));
-    console.log(`Transaction hash: ${transaction.hash().toString('hex')}`);
-  }
+        const transaction = response[0];
+        console.log(loadTransaction(transaction.raw.beginParse()));
+        console.log(`Transaction hash: ${transaction.hash().toString('hex')}`);
+    }
 
     main().finally(() => console.log("Exiting..."));
     ```
@@ -2944,49 +2938,49 @@ For simplicity, we’ll use **APIv3** to fetch the latest 10 transactions for th
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
 
-    ```js
+    ```js title="ton-transfer.ts"
     import { fromNano } from '@ton/core';
     import axios from 'axios';
 
     async function main() {
-    const client = axios.create({
-    baseURL: 'https://toncenter.com/api/v3',
-    'timeout': 5000,
-    headers: {
-    'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
-  }
-  });
+        const client = axios.create({
+            baseURL: 'https://toncenter.com/api/v3',
+            timeout: 5000,
+            headers: {
+                'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+            },
+        });
 
-    const address = 'UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL';
-    const response = await client.get('/transactions', {
-    params: {
-    account: address,
-    limit: 10,
-    to_lt: 0,
-    archival: false
-  }
-  });
+        const address = 'UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL';
+        const response = await client.get('/transactions', {
+            params: {
+                account: address,
+                limit: 10,
+                to_lt: 0,
+                archival: false
+            },
+        });
 
-    for (const transaction of response.data.transactions) {
-    const description = transaction.description;
-    if (description.type !== 'ord') {
-    continue;
-  }
+        for (const transaction of response.data.transactions) {
+            const description = transaction.description;
+            if (description.type !== 'ord') {
+                continue;
+            }
 
-    const inMsg = transaction.in_msg;
-    if (inMsg.created_lt === null) {
-    continue; // Skip external messages
-  }
-    const bouncePhase = description.bounce;
+            const inMsg = transaction.in_msg;
+            if (inMsg.created_lt === null) {
+                continue; // Skip external messages
+            }
+            const bouncePhase = description.bounce;
 
-    if (bouncePhase && bouncePhase.type === 'ok') {
-    console.log(`Fake deposit detected: ${transaction.hash}`);
-    continue;
-  }
+            if (bouncePhase && bouncePhase.type === 'ok') {
+                console.log(`Fake deposit detected: ${transaction.hash}`);
+                continue;
+            }
 
-    console.log(`Deposit detected: ${transaction.hash}. Value: ${fromNano(inMsg.value)} TON.`);
-  }
-  }
+            console.log(`Deposit detected: ${transaction.hash}. Value: ${fromNano(inMsg.value)} TON.`);
+      }
+    }
 
     main().finally(() => console.log("Exiting..."));
     ```
@@ -3054,115 +3048,117 @@ To simplify the example, assume we want to track incoming Jettons for a specific
         Source code
       </summary>
 
-      ```js
-      import { Address, TonClient } from '@ton/ton';
+      ```js title="jetton-transfer.ts"
+    import { Address, TonClient } from '@ton/ton';
 
-      // Changed version of
-      // https://github.com/ton-org/ton-core/blob/b2e781f67b41958e4fde0440752a27c168602717/src/utils/convert.ts#L69C1-L96C2
-      export function fromMicro(src: bigint | number | string) {
-      let v = BigInt(src);
-      let neg = false;
-      if (v < 0) {
-      neg = true;
-      v = -v;
+    // Changed version of
+    // https://github.com/ton-org/ton-core/blob/b2e781f67b41958e4fde0440752a27c168602717/src/utils/convert.ts#L69C1-L96C2
+    export function fromMicro(src: bigint | number | string) {
+        let v = BigInt(src);
+        let neg = false;
+        if (v < 0) {
+            neg = true;
+            v = -v;
+        }
+
+        // Convert fraction
+        let frac = v % 1000000n;
+        let facStr = frac.toString();
+        while (facStr.length < 6) {
+            facStr = '0' + facStr;
+        }
+        facStr = facStr.match(/^([0-9]*[1-9]|0)(0*)/)![1];
+
+        // Convert whole
+        let whole = v / 1000000n;
+        let wholeStr = whole.toString();
+
+        // Value
+        let value = `${wholeStr}${facStr === '0' ? '' : `.${facStr}`}`;
+        if (neg) {
+            value = '-' + value;
+        }
+
+        return value;
     }
 
-      // Convert fraction
-      let frac = v % 1000000n;
-      let facStr = frac.toString();
-      while (facStr.length < 6) {
-      facStr = '0' + facStr;
-    }
-      facStr = facStr.match(/^([0-9]*[1-9]|0)(0*)/)![1];
+    async function main() {
+        const client = new TonClient({
+            endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+            apiKey: 'put your api key', // you can get an api key from @tonapibot bot in Telegram
+        });
 
-      // Convert whole
-      let whole = v / 1000000n;
-      let wholeStr = whole.toString();
+        const address = Address.parse('EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX');
+        const response = await client.getTransactions(address, {
+            limit: 10,
+            archival: true,
+        });
 
-      // Value
-      let value = `${wholeStr}${facStr === '0' ? '' : `.${facStr}`}`;
-      if (neg) {
-      value = '-' + value;
-    }
+        for (const transaction of response) {
+            if (transaction.description.type !== 'generic') {
+                continue;
+            }
 
-      return value;
-    }
+            // Check if the compute phase is present and successful
+            if (transaction.description.computePhase.type !== 'vm') {
+                continue;
+            }
+            if (transaction.description.computePhase.exitCode !== 0) {
+                continue;
+            }
 
-      async function main() {
-      const client = new TonClient({
-      endpoint: "https://toncenter.com/api/v2/jsonRPC",
-      apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
-    });
+            // Check if the action phase is present and successful
+            if (transaction.description.actionPhase && transaction.description.actionPhase.resultCode !== 0) {
+                continue;
+            }
 
-      const address = Address.parse('EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX');
-      const response = await client.getTransactions(address, {
-      limit: 10,
-      archival: true,
-    });
+            if (transaction.description.aborted === true) {
+                continue;
+            }
 
-      for (const transaction of response) {
-      if (transaction.description.type !== 'generic') {
-      continue;
-    }
+            if (!transaction.inMessage || transaction.inMessage.info.type !== 'internal') {
+                continue;
+            }
 
-      // Check if the compute phase is present and successful
-      if (transaction.description.computePhase.type !== 'vm') {
-      continue;
-    }
-      if (transaction.description.computePhase.exitCode !== 0) {
-      continue;
-    }
+            const body = transaction.inMessage.body.beginParse();
+            try {
+                /*
+                internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
+                         response_address:MsgAddress
+                         forward_ton_amount:(VarUInteger 16)
+                         forward_payload:(Either Cell ^Cell)
+                         = InternalMsgBody;
+                */
 
-      // Check if the action phase is present and successful
-      if (transaction.description.actionPhase && transaction.description.actionPhase.resultCode !== 0) {
-      continue;
-    }
+                const op = body.loadUint(32);
+                if (op !== 0x178d4519) {
+                    // op::internal_transfer
+                    continue;
+                }
+                const queryId = body.loadUintBig(64);
+                const amount = body.loadCoins();
+                const from = body.loadAddress();
+                const responseAddress = body.loadMaybeAddress();
+                const forwardTonAmount = body.loadCoins();
+                const eitherForwardPayload = body.loadBoolean();
+                const forwardPayload = eitherForwardPayload ? body.loadRef() : body.asCell();
 
-      if (transaction.description.aborted === true) {
-      continue;
-    }
-
-      if (!transaction.inMessage || transaction.inMessage.info.type !== 'internal') {
-      continue;
-    }x
-
-      const body = transaction.inMessage.body.beginParse();
-      try {
-      /*
-      internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
-               response_address:MsgAddress
-               forward_ton_amount:(VarUInteger 16)
-               forward_payload:(Either Cell ^Cell)
-               = InternalMsgBody;
-      */
-
-      const op = body.loadUint(32);
-      if (op !== 0x178d4519) { // op::internal_transfer
-      continue;
-    }
-      const queryId = body.loadUintBig(64);
-      const amount = body.loadCoins();
-      const from = body.loadAddress();
-      const responseAddress = body.loadMaybeAddress();
-      const forwardTonAmount = body.loadCoins();
-      const eitherForwardPayload = body.loadBoolean();
-      const forwardPayload = eitherForwardPayload ? body.loadRef() : body.asCell();
-
-      console.log(`Deposit detected:
-    Transaction hash: ${transaction.hash().toString('hex')}
-    Query ID: ${queryId}
-    Amount: ${fromMicro(amount)} USDT
-    From: ${from.toString({ testOnly: true })}
-    Response Address: ${responseAddress ? responseAddress.toString({ testOnly: true }) : 'None'}
-    Forward TON Amount: ${forwardTonAmount.toString()} TON
-    Forward Payload: ${forwardPayload.toBoc().toString('hex')}`);
-    } catch (e) {
-      console.error(`Error processing transaction ${transaction.hash().toString('hex')}:`, e);
-    }
-    }
+                console.log(`Deposit detected:
+        Transaction hash: ${transaction.hash().toString('hex')}
+        Query ID: ${queryId}
+        Amount: ${fromMicro(amount)} USDT
+        From: ${from.toString({ testOnly: true })}
+        Response Address: ${responseAddress ? responseAddress.toString({ testOnly: true }) : 'None'}
+        Forward TON Amount: ${forwardTonAmount.toString()} TON
+        Forward Payload: ${forwardPayload.toBoc().toString('hex')}`);
+            } catch (e) {
+                  console.error(`Error processing transaction ${transaction.hash().toString('hex')}:`, e);
+            }
+        }
     }
 
-      main().finally(() => console.log("Exiting..."));
+    main().finally(() => console.log('Exiting...'));
+
       ```
 
     </details>
@@ -3245,22 +3241,22 @@ We call the method and check the owner's address.
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
 
-    ```js
+    ```js title="nft-transfer.ts"
     import { Address } from '@ton/core';
     import { TonClient } from '@ton/ton';
 
     async function main() {
-    const client = new TonClient({
-    endpoint: "https://toncenter.com/api/v2/jsonRPC",
-    apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
-  });
+        const client = new TonClient({
+            endpoint: "https://toncenter.com/api/v2/jsonRPC",
+            apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
+        });
 
-    const nftAddress = Address.parse('EQB9Jp075VrO2IXDPEqdxGb_3lBOkKXpvRYV1zFvYp-UVMUY');
-    const result = await client.runMethod(nftAddress, 'get_nft_data', []);
-    result.stack.skip(3); // init?, index, collection_address
-    const nftOwner = result.stack.readAddress();
-    console.log(`NFT owner: ${nftOwner.toString()}`);
-  }
+        const nftAddress = Address.parse('EQB9Jp075VrO2IXDPEqdxGb_3lBOkKXpvRYV1zFvYp-UVMUY');
+        const result = await client.runMethod(nftAddress, 'get_nft_data', []);
+        result.stack.skip(3); // init?, index, collection_address
+        const nftOwner = result.stack.readAddress();
+        console.log(`NFT owner: ${nftOwner.toString()}`);
+    }
 
     main().finally(() => console.log("Exiting..."));
     ```
