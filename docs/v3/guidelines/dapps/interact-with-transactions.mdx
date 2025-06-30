@@ -2099,8 +2099,8 @@ Review the content of transaction body:
 | `fee`                     | Native          | Total amount of fees associated with the transaction. TL-B field: `total_fees`in Gas units. | `1207600`                                             |
 | `storage_fee`             | Native          | Storage fees. TL-B field: `Trans Descriptor` -> `TrStoragePhase` ->                                | `1207600`                                             |
 | `other_fee`               | Native          | `other_fee` = `fee` - `storage_fee`                                                         | `1207600`                                             |
-| `in_msg`                  | Message         | Incoming message body object. May be internal or external.                                  | `"in_msg": {...}`                                     |
-| `out_msgs`                | Message[]       | Array of outgoing messages                                                                  |  `"out_msgs": [{...}, {...}, ...,  {...}]` |
+| `in_msg`              | Native          | Inbound message `Message X` structure that triggered this transaction                       | `"in_msg": {...}`                                     |
+| `out_msgs`            | Native          | List of outbound messages represented by `Message X` structure                                                   |  `"out_msgs": [{...}, {...}, ...,  {...}]` |
 
 ```json
  "result": [
