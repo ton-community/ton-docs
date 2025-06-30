@@ -2212,15 +2212,38 @@ curl -X 'GET' \
   -H 'accept: application/json'
 ```
 
-The transaction object includes the following key sections:
 
-* **Header data** – transaction metadata such as `lt` (logical time) and `now` (Unix timestamp).
-* **Incoming message data** – the message that initiated the transaction.
-* **Compute phase data** – execution results.
-* **Action phase data** – actions triggered after the compute phase.
-* **Block ref** – identifies the blockchain block containing the data transaction.
-* **Account state before** –the account state before the transaction.
-* **Account state after** – the account state after the transaction.
+Review the content of transaction body:
+* Header data - transaction metadata lt, now(unix time)
+* Incoming message data - message, that initiated transaction
+* Compute phase data - results of command executions
+* Action phase data  - results of actions done after computed, sent messages
+* Block ref - data of the blockchain block belonging.
+* Account state before　and after
+
+
+
+| Field             | Origin          | Description                                                            | Example                                                                |
+|-------------------|-----------------|------------------------------------------------------------------------|------------------------------------------------------------------------|
+| `"account"`           | Native computed | Account address where the transaction occurred; returned in RAW format | `"0:C8F053E2CE.."`                                                     |
+| `hash`                | Postprocessed   | Hash of the current transaction                                        | `"/QesPZ+FW7Z.."`                                                      |
+| `utime` / `now`       | Native          | UNIX timestamp of the transaction. TL-B field name: `now`              | `1696238450`                                                           |
+| `lt`                  | Native          | Logical time of the transaction                                        | `"15371766000003"`                                                     |
+| `mc_block_seqno`      | Postprocessed   | Sequence number of the masterchain block containing this transaction   | `13353447`                                                             |
+| `trace_id`            | Postprocessed   | ID of traces in TON Center API/v3                                      | `"13b...dBjpfc="`                                                 |
+| `prev_trans_hash`     | Native          | Hash of the previous transaction on this account                       | `"6+AzO3...dwuI="`                                                     |
+| `prev_trans_lt`       | Native          | Logical time of the previous transaction                               | `"15371704000004"`                                                     |
+| `orig_status`         | Native          | Account status before the transaction, `AccountStatus` structure.      | `"active"`                                                             |
+| `end_status`          | Native          | Account status after the transaction, `AccountStatus` structure.       | `"active"`                                                             |
+| `total_fees`          | Native computed | Total fees charged for the transaction (in nanotons)                   | `"12446659"`                                                           |
+| `description`         | Native computed | Set of transaction descriptors `type`, `aborted`                       | `{ "type": "ord", "aborted": false, ... }`                             |
+| `compute_ph`          | Native          | Deserialized `TrComputePhase` structure                                | `{ "success": true, "gas_used": "8823", "exit_code": 0 }`              |
+| `action`              | Native          | Deserialized `TrActionPhase` structure                                 | `{ "success": true, "msgs_created": 1, "total_fwd_fees": "10871000" }` |
+| `block_ref`           | Computed        | Reference to the block this transaction belongs to                     | `{ "workchain": 0, "seqno": 14627985 }`                                |
+| `in_msg`              | Native          | Inbound message `Message X` structure that triggered this transaction  | `{ "source": "...", "value": "400000000", "opcode": "0x0f8a7ea5" }`    |
+| `out_msgs`            | Native          | List of outbound messages represented by `Message X` structure         | `[ { "destination": "...", "value": "380306000" }, ... ]`              |
+| `account_state_before`| Native          | Account state snapshot before this transaction                         | `{ "balance": "37821399", "status": "active" }`                        |
+| `account_state_after` | Native          | Account state snapshot after this transaction                          | `{ "balance": "37821351", "status": "active" }`                        |
 
 
 ```json
