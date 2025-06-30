@@ -192,6 +192,17 @@ module.exports = [
       'v3/guidelines/dapps/interact-with-transactions',
       {
         type: 'category',
+        label: 'Interact with transactions',
+        items: [
+          'v3/guidelines/dapps/transactions/fundamental-terms',
+          'v3/guidelines/dapps/transactions/messages',
+          'v3/guidelines/dapps/transactions/hashes',
+          'v3/guidelines/dapps/transactions/transactions-processing',
+          'v3/guidelines/dapps/transactions/transactions',
+        ],
+      },
+      {
+        type: 'category',
         label: 'APIs and SDKs',
         link: {
           type: 'generated-index',
