@@ -29,6 +29,7 @@
     "ADNL",
     "ASIC",
     "ASICS",
+    "Asynchrony",
     "Aiogram",
     "Altcoin",
     "Alefman",
@@ -198,6 +199,7 @@
     "iftop",
     "inclusivity",
     "inplace",
+    "inited",
     "int",
     "ints",
     "iotop",
@@ -206,6 +208,7 @@
     "jetton",
     "jettons",
     "jojo",
+    "katex",
     "keccak",
     "keyblocks",
     "keypair",
@@ -336,7 +339,8 @@
     "liteservers",
     "liteserver",
     "mytonctrl",
-    "mytoncore"
+    "mytoncore",
+    "unexist"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",
