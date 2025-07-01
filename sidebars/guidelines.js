@@ -198,7 +198,7 @@ module.exports = [
           'v3/guidelines/dapps/transactions/message-driven-execution',
           'v3/guidelines/dapps/transactions/hash-based-tracking',
           'v3/guidelines/dapps/transactions/api-based-retrieval',
-          'v3/guidelines/dapps/transactions/transactions',
+          'v3/guidelines/dapps/transactions/explore-transactions',
         ],
       },
       {
