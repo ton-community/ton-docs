@@ -4,13 +4,9 @@ import 'katex/dist/katex.min.css';
 import Button from '@site/src/components/button'
 import ThemedImage from '@theme/ThemedImage';
 
-# Foundations of transactions {#transaction_terms}
+# Foundations of blockchain {#transaction_terms}
 
-## What you'll learn
-
-* **Learn how TON applies the actor model to structure computation:** how accounts and smart contracts operate as isolated actors, how they communicate through messages, how each message triggers a transaction, and why asynchronous execution is essential to the system’s design.
-* **Understand how accounts and smart contracts are represented on-chain:** how accounts encapsulate code, data, and status; how their unique addresses are derived from the initialized state; and how their structure is defined using TL-B schemas.
-* **How TON scales: from single-account chains to a blockchain of blockchains:** you’ll explore the multi-layered hierarchy of AccountChains, ShardChains, WorkChains, and the MasterChain.
+This section covers the core concepts that underlie how transactions work in TON. You'll learn how accounts and smart contracts interact, how messages trigger asynchronous transactions, and how TON’s multi-chain layout records those transactions.
 
 ## Execution model
 
@@ -108,7 +104,7 @@ Each message triggers a transaction, which records the entire context: the trigg
 
 Transactions are processed **asynchronously**, meaning that each account’s updates and message handling occur independently over time.
 
-## On-chain representation
+## Data layout
 
 ### Account structure
 
@@ -312,7 +308,7 @@ All users and projects operating in production use the Mainnet.
 
 #### Testnet (the test network)
 
-The **Testnet** is a sandbox environment for developers — a copy of the main network but without risk. In Testnet:
+The **Testnet** is an independent blockchain network that replicates the functionality of the main network but uses valueless coins. In Testnet:
 
 * test coins are used, which have no real value
 * contracts, transactions, DApps, and errors can be safely tested
@@ -324,7 +320,7 @@ Testnet is essential for safe development and debugging before launching to the 
 
 You’ve covered the foundations of transactions — now let’s see **what makes them happen.**
 
-<Button href="/v3/guidelines/dapps/transactions/messages" colorType={'primary'} sizeType={'sm'}>
+<Button href="/v3/guidelines/dapps/transactions/message-driven-execution" colorType={'primary'} sizeType={'sm'}>
 
   Explore how messages drive transactions
 

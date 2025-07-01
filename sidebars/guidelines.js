@@ -189,15 +189,15 @@ module.exports = [
     items: [
       'v3/guidelines/dapps/overview',
       'v3/guidelines/dapps/cookbook',
-      'v3/guidelines/dapps/interact-with-transactions',
       {
         type: 'category',
-        label: 'Interact with transactions',
+        label: 'Mastering transactions',
         items: [
-          'v3/guidelines/dapps/transactions/fundamental-terms',
-          'v3/guidelines/dapps/transactions/messages',
-          'v3/guidelines/dapps/transactions/hashes',
-          'v3/guidelines/dapps/transactions/transactions-processing',
+          'v3/guidelines/dapps/transactions/overview',
+          'v3/guidelines/dapps/transactions/foundations-of-blockchain',
+          'v3/guidelines/dapps/transactions/message-driven-execution',
+          'v3/guidelines/dapps/transactions/hash-based-tracking',
+          'v3/guidelines/dapps/transactions/api-based-retrieval',
           'v3/guidelines/dapps/transactions/transactions',
         ],
       },

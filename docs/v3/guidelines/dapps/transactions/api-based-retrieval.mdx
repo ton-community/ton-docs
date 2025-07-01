@@ -1,9 +1,12 @@
+import Feedback from '@site/src/components/Feedback';
+import Button from '@site/src/components/button'
 
-# Processing transactions: API
+# API-based retrieval
 
-This section explains how developers can access transaction data from the blockchain.
+This section covers how to access transaction data from the blockchain using APIs. You'll learn about the available API services in TON and how to retrieve data by account, by message, or through a full blockchain scan.
 
-### TON HTTP API services
+
+## TON HTTP API services
 
 An _HTTP API service_ is a software solution that retrieves raw data from a LiteServer node and encodes it into standard formats for other services.
 A provider that offers such a solution is referred to as an HTTP API _provider_.
@@ -12,20 +15,20 @@ In this section, we review services that are part of the native infrastructure. 
 We recommend evaluating each provider independently based on its [historical performance](https://tonstat.us/) and suitability for your specific use case.
 
 
-#### TON Center
+### TON Center
 The TON Center was developed by the TON Core team using the Go stack. It consists of two separate services:
 * TON Center API V3: provides blockchain indexing functionality.
 * TON Center API V2: optimized for fast read and write operations to the blockchain.
 
-#### TON API
+### TON API
 A solution focused on business needs. It often provides ready-made implementations for common tasks in TON.
 
-#### Tonhub API
+### Tonhub API
 An alternative opensource HTTP API service with a unique structure different from TON API and TON Center. This interface may be helpful in some specific use cases.
 
 ---
 
-### API for transactions
+## API data levels
 
 HTTP services retrieve data from LiteServer nodes and deserialize it according to the TL-B schema.
 Data that undergoes minimal post-processing is often referred to as **raw data**. This format is typically used in solutions where architectural priorities favor security and precision over ease of integration or simplicity. These solutions offload the interpretation and analysis of raw data to the client side, allowing for greater control and reliability at the cost of additional local resource consumption.
@@ -56,26 +59,10 @@ custom:(Maybe ^McBlockExtra) = BlockExtra;
 
 Thus, when reading the blockchain, services iteratively process blocks, starting from the most recently read one and proceeding up to the latest finalizedz block. The extracted transactions are considered **raw data** and can be passed to downstream services for further use. Additionally, specialized services may analyze and enrich this data to strike a balance between the complexity and the trustless nature of the system.
 
-#### Account status
 
-Account status indicates the runtime state of an account as it relates to transaction execution, but it is not part of the account’s persistent storage. There are four possible `AccountStatus` values, each encoded as two bits in TL-B:
+## API methods for transaction access
 
-| Status      | TL-B code | Description                                                                                                                                 |
-|-------------|------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| `nonexist`  | `11`       | The account does not exist — no state and no balance.                                                                                       |
-| `uninit`    | `00`       | The account exists but is uninitialized — it contains no deployed code or data. It may hold a balance but has not yet been activated.       |
-| `frozen`    | `01`       | The account is frozen; only its state hash is retained. It cannot be used.                                                                           |
-| `active`    | `10`       | The account includes a `StateInit` with deployed code and data, making it an active smart contract.                                                                  |
-
-An account becomes executable—and is considered a smart contract—when its `StateInit` includes `code`.
-
-:::important
-Account status appears only in transactions (`orig_status` and `end_status`) and is **not** part of the account’s persistent data. The actual account state is stored in the `AccountState` structure.
-:::
-
-### Approaches to retrieving transactions from Blockchain API
-
-#### Key terms
+### Key terms
 
 * **Transaction**: a transaction represents a state change of an account in the blockchain. It is triggered by an incoming message and may optionally result in one or more outgoing messages. Analyzing the contents of a transaction is a fundamental method used across all services.
 
@@ -89,7 +76,7 @@ Actions are used exclusively for visualization and have no role in the actual ex
 
 ---
 
-#### High-Level data analysis
+### High-level access
 
 **How to fetch a list of transactions or a single transaction via API**
 
@@ -105,7 +92,7 @@ In addition to simple service-level checks, this approach can also be used in mo
 
 ---
 
-#### Transaction lookup by message payload
+### By message payload
 
 Use `getTransaction` by external or internal message. Available in [API v3](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_message) only.
 
@@ -119,14 +106,14 @@ For better performance in real-time scenarios, consider also monitoring the pend
 
 ---
 
-#### Transaction lookup by account address
+### By account address
 
 To query transactions for an account you are monitoring, use [API v2](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get).
 This method is broadly supported, including in LiteClient, and is suitable for tracking up to ~100 accounts.
 
 ---
 
-#### Scanning Blockchain for the full set of transactions
+### Full blockchain transaction scan
 
 When monitoring a large number of accounts (1,000 or more), you need to iterate through all transactions starting from the latest masterchain block.
 
@@ -146,7 +133,7 @@ However, for greater security, it is always recommended to process transactions 
 
 ---
 
-#### Transaction response from API
+### API response
 
 In the blockchain, a regular transaction consists of a whole body and a unique header.
 
@@ -541,4 +528,15 @@ The transaction object includes the following key sections:
 </details>
 
 Once a developer fetches a dataset of transactions filtered by a specific account or set of accounts, they can process the raw data to extract meaningful events.
-For a detailed explanation of how transactions work and how to parse them in different TON contexts, see the [Transactions section](/v3/guidelines/dapps/interact-with-transactions/transaction).
+
+## Next step
+
+To understand how transactions are structured, executed, and parsed across various TON contexts, continue here:
+
+<Button href="/v3/guidelines/dapps/transactions/transactions" colorType={'primary'} sizeType={'sm'}>
+
+Explore transactions
+
+</Button>
+
+<Feedback />

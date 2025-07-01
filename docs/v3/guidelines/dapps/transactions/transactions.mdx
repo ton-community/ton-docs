@@ -5,8 +5,12 @@ import TabItem from '@theme/TabItem';
 
 In the TON blockchain, any change to an account's state is recorded via a **transaction**. Unlike messages, transactions do not *move*, *send*, or *receive* anything. These terms are often confused, but it's important to understand that a transaction is simply a **record** of all changes that occurred to a specific account.
 
-### Transaction structure: TL-B
+In this section, you’ll explore how a transaction is structured—how it progresses through each phase, how to retrieve transaction data using APIs, and how to determine whether an on‑chain event is successful.
 
+
+## Transaction structure
+
+### TL-B
 Before diving into how transactions work in TON, we first need to understand their structure using **TL-B**(Type Language – Binary). It's worth noting that there are several types of transactions in TON; however, for this guide, we will focus solely on **ordinary transaction**. These are the transactions relevant for payment processing and the development of most applications built on TON.
 
 ```tlb
@@ -279,7 +283,7 @@ acc_state_frozen$01 = AccountStatus;
 acc_state_active$10 = AccountStatus;
 acc_state_nonexist$11 = AccountStatus;
 ```
-
+## How to access transaction data
 ### How to retrieve a transaction using api/v2
 
 Among the supported open-source APIs, we can use TON Center [APIv2](https://toncenter.com/api/v2/) and [APIv3](https://toncenter.com/api/v3/index.html#/).
@@ -294,31 +298,30 @@ Among the supported open-source APIs, we can use TON Center [APIv2](https://tonc
     import axios from 'axios';
 
     async function main() {
-    const client = axios.create({
-    baseURL: 'https://toncenter.com/api/v2',
-    timeout: 5000,
-    headers: {
-    'X-Api-Key': 'put your api key', // you can get an api key from @tonapibot bot in Telegram
-  },
-  });
+        const client = axios.create({
+            baseURL: 'https://toncenter.com/api/v2',
+            timeout: 5000,
+            headers: {
+                'X-Api-Key': 'put your api key', // you can get an api key from @tonapibot bot in Telegram
+            },
+        });
 
-    const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
-    const response = await client.get('/getTransactions', {
-    params: {
-    address: address,
-    limit: 1,
-    to_lt: 0,
-    archival: false,
-  },
-    headers: {
-    'X-Api-Key': 'put your api key', // you can get an api key from @tonapibot bot in Telegram
-  },
-  });
-    console.log(response.data);
-  }
+        const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
+        const response = await client.get('/getTransactions', {
+            params: {
+                address: address,
+                limit: 1,
+                to_lt: 0,
+                archival: false,
+            },
+            headers: {
+                'X-Api-Key': 'put your api key', // you can get an api key from @tonapibot bot in Telegram
+            },
+        });
+        console.log(response.data);
+    }
 
     main().finally(() => console.log('Exiting...'));
-
     ```
 
   </TabItem>
@@ -334,20 +337,19 @@ Among the supported open-source APIs, we can use TON Center [APIv2](https://tonc
     import { Address, TonClient } from '@ton/ton';
 
     async function main() {
-    const client = new TonClient({
-    endpoint: 'https://toncenter.com/api/v2/jsonRPC',
-    apiKey: 'put your api key', // you can get an api key from @tonapibot bot in Telegram
-  });
+        const client = new TonClient({
+            endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+            apiKey: 'put your api key', // you can get an api key from @tonapibot bot in Telegram
+        });
 
-    const address = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
-    const response = await client.getTransactions(address, {
-    limit: 1,
-  });
-    console.log(response[0]);
-  }
+        const address = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
+        const response = await client.getTransactions(address, {
+            limit: 1,
+        });
+        console.log(response[0]);
+    }
 
     main().finally(() => console.log('Exiting...'));
-
     ```
 
   </TabItem>
@@ -379,28 +381,27 @@ In this guide, we focus only on the `transactions` endpoint, which returns *conf
     import axios from 'axios';
 
     async function main() {
-    const client = axios.create({
-    baseURL: 'https://toncenter.com/api/v3',
-    timeout: 5000,
-    headers: {
-    'X-Api-Key': 'put your api key', // you can get an api key from @tonapibot bot in Telegram
-  },
-  });
+        const client = axios.create({
+            baseURL: 'https://toncenter.com/api/v3',
+            timeout: 5000,
+            headers: {
+                'X-Api-Key': 'put your api key', // you can get an api key from @tonapibot bot in Telegram
+            },
+        });
 
-    const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
-    const response = await client.get('/transactions', {
-    params: {
-    account: address,
-    limit: 1,
-    to_lt: 0,
-    archival: false,
-  },
-  });
-    console.log(response.data.transactions[0]);
-  }
+        const address = 'UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA';
+        const response = await client.get('/transactions', {
+            params: {
+                account: address,
+                limit: 1,
+                to_lt: 0,
+                archival: false,
+            },
+        });
+        console.log(response.data.transactions[0]);
+    }
 
     main().finally(() => console.log('Exiting...'));
-
     ```
 
   </TabItem>
@@ -451,20 +452,20 @@ When inspecting the response returned via the JSON-RPC protocol in `@ton/ton@`, 
     import { Address, loadTransaction, TonClient } from '@ton/ton';
 
     async function main() {
-    const client = new TonClient({
-    endpoint: "https://toncenter.com/api/v2/jsonRPC",
-    apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
-  });
+        const client = new TonClient({
+            endpoint: "https://toncenter.com/api/v2/jsonRPC",
+            apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
+        });
 
-    const address = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
-    const response = await client.getTransactions(address, {
-    limit: 1,
-  });
+        const address = Address.parse('UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA');
+        const response = await client.getTransactions(address, {
+            limit: 1,
+        });
 
-    const transaction = response[0];
-    console.log(loadTransaction(transaction.raw.beginParse()));
-    console.log(`Transaction hash: ${transaction.hash().toString('hex')}`);
-  }
+        const transaction = response[0];
+        console.log(loadTransaction(transaction.raw.beginParse()));
+        console.log(`Transaction hash: ${transaction.hash().toString('hex')}`);
+    }
 
     main().finally(() => console.log("Exiting..."));
     ```
@@ -479,7 +480,9 @@ As a general recommendation, you can use the `JSON-RPC` protocol from APIv2 sinc
 
 If this functionality does not cover all your requirements, you should consider a full or partial transition to API v3 or explore other APIs in the ecosystem that may offer more data.
 
-### Action: User Context (a.k.a. Event)
+
+## Transaction success criteria
+### Event (user-level action)
 
 Before moving on to user operations and their processing, let’s summarize what we’ve learned about transactions:
 
@@ -505,7 +508,7 @@ The classification depends heavily on how Jettons are used. API services typical
 This approach applies not only to Jettons but also to NFTs and other on-chain operations.
 :::
 
-### Event success in the ecosystem: ordinary TON transfer
+### Ordinary TON transfer: determining event success
 
 As discussed earlier, everything in TON happens asynchronously. This means that the success of a single transaction does not guarantee that the entire chain of related transactions has completed—or will complete—successfully. As a result, we need to rely on more abstract criteria for determining success.
 
@@ -529,44 +532,44 @@ For simplicity, we’ll use **APIv3** to fetch the latest 10 transactions for th
     import axios from 'axios';
 
     async function main() {
-    const client = axios.create({
-    baseURL: 'https://toncenter.com/api/v3',
-    timeout: 5000,
-    headers: {
-    'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
-  },
-  });
+        const client = axios.create({
+            baseURL: 'https://toncenter.com/api/v3',
+            timeout: 5000,
+            headers: {
+                'X-Api-Key': 'put your api key' // you can get an api key from @tonapibot bot in Telegram
+            },
+        });
 
-    const address = 'UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL';
-    const response = await client.get('/transactions', {
-    params: {
-    account: address,
-    limit: 10,
-    to_lt: 0,
-    archival: false
-  },
-  });
+        const address = 'UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL';
+        const response = await client.get('/transactions', {
+            params: {
+                account: address,
+                limit: 10,
+                to_lt: 0,
+                archival: false
+            },
+        });
 
-    for (const transaction of response.data.transactions) {
-    const description = transaction.description;
-    if (description.type !== 'ord') {
-    continue;
-  }
+        for (const transaction of response.data.transactions) {
+            const description = transaction.description;
+            if (description.type !== 'ord') {
+                continue;
+            }
 
-    const inMsg = transaction.in_msg;
-    if (inMsg.created_lt === null) {
-    continue; // Skip external messages
-  }
-    const bouncePhase = description.bounce;
+            const inMsg = transaction.in_msg;
+            if (inMsg.created_lt === null) {
+                continue; // Skip external messages
+            }
+            const bouncePhase = description.bounce;
 
-    if (bouncePhase && bouncePhase.type === 'ok') {
-    console.log(`Fake deposit detected: ${transaction.hash}`);
-    continue;
-  }
+            if (bouncePhase && bouncePhase.type === 'ok') {
+                console.log(`Fake deposit detected: ${transaction.hash}`);
+                continue;
+            }
 
-    console.log(`Deposit detected: ${transaction.hash}. Value: ${fromNano(inMsg.value)} TON.`);
-  }
-  }
+            console.log(`Deposit detected: ${transaction.hash}. Value: ${fromNano(inMsg.value)} TON.`);
+        }
+    }
 
     main().finally(() => console.log("Exiting..."));
     ```
@@ -606,7 +609,7 @@ If we query this account’s transactions using APIv2, we don’t see any transa
 Since the account has no state at all—not even a single balance top-up—there are no transactions formally associated with it. If there is at least one deposit, the state changes from `nonexist` to `uninit`, and APIv2 then returns the transaction.
 :::
 
-### Event success in the ecosystem: Jetton transfer
+### Jetton transfer: determining event success
 
 Now, let’s look at a more complex example involving a Jetton transfer. First, consider the typical structure of a Jetton Transfer:
 
@@ -744,7 +747,6 @@ To simplify the example, assume we want to track incoming Jettons for a specific
     }
 
       main().finally(() => console.log('Exiting...'));
-
       ```
 
     </details>
@@ -783,7 +785,7 @@ Real applications may implement different logic for handling deposits.
 For more details on how to process such events, refer to the [dedicated article](/v3/guidelines/dapps/asset-processing/jettons).
 :::
 
-### Event success in the ecosystem: NFT transfer
+### NFT transfer: determining event success
 
 An NFT is a smart contract that stores content.
 This can be either [the content itself or a link to it, such as a URL](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
@@ -832,17 +834,17 @@ We call the method and check the owner's address.
     import { TonClient } from '@ton/ton';
 
     async function main() {
-    const client = new TonClient({
-    endpoint: "https://toncenter.com/api/v2/jsonRPC",
-    apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
-  });
+        const client = new TonClient({
+            endpoint: "https://toncenter.com/api/v2/jsonRPC",
+            apiKey: "put your api key", // you can get an api key from @tonapibot bot in Telegram
+        });
 
-    const nftAddress = Address.parse('EQB9Jp075VrO2IXDPEqdxGb_3lBOkKXpvRYV1zFvYp-UVMUY');
-    const result = await client.runMethod(nftAddress, 'get_nft_data', []);
-    result.stack.skip(3); // init?, index, collection_address
-    const nftOwner = result.stack.readAddress();
-    console.log(`NFT owner: ${nftOwner.toString()}`);
-  }
+        const nftAddress = Address.parse('EQB9Jp075VrO2IXDPEqdxGb_3lBOkKXpvRYV1zFvYp-UVMUY');
+        const result = await client.runMethod(nftAddress, 'get_nft_data', []);
+        result.stack.skip(3); // init?, index, collection_address
+        const nftOwner = result.stack.readAddress();
+        console.log(`NFT owner: ${nftOwner.toString()}`);
+    }
 
     main().finally(() => console.log("Exiting..."));
     ```
@@ -855,7 +857,7 @@ We call the method and check the owner's address.
 As with the previous two examples, please note that this is a simplified scenario. In real-world applications, the system is more complex overall. For more detailed information, refer to the [dedicated article](/v3/guidelines/dapps/asset-processing/nft-processing/nfts).
 :::
 
-### How to analyze a contract and its TL-B schema to define success criteria
+### How to determine event success from contract code and TL‑B
 
 In this section, we utilize the [Jetton Wallet contract source code](https://github.com/ton-blockchain/token-contract/blob/main/ft/jetton-wallet.fc) and its [TL-B schema](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#tl-b-schema) to determine what needs to be verified to confirm that an operation has fully completed successfully.
 

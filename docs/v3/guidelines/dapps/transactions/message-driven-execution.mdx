@@ -3,11 +3,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Message-driven execution
 
-## What you'll learn
-
-* **Understand how messages drive computation in TON:** how messages act as the sole mechanism of interaction between smart contracts and what roles they play in triggering transactions.
-* **Explore the structure and types of messages:** how external-in, internal, and external-out messages differ in origin, behavior, and use cases within the blockchain.
-* **Learn how to compose and send messages:** how to construct messages using TL-B schemas, encode payloads, and interact with smart contracts using tools like Blueprint.
+This section covers how messages trigger transactions in TON. You'll learn how accounts communicate through messages, how message types differ, and how to construct and send messages to initiate on-chain execution.
 
 ## Messages
 
@@ -49,8 +45,7 @@ In the TON blockchain, a **message** is the fundamental unit of interaction betw
 
 #### Message structure: TL-B
 
-Now, let’s look at the data contained in the messages.
-As mentioned earlier, both external and internal messages can carry data — but how exactly is this data encoded?
+Now, let’s look at the data contained in the messages. TON distinguishes between external and internal messages, both of which are capable of carrying data.
 
 In TON, all data is represented using **cells**.
 To serialize data into a cell, TON relies on a well-established standard called **TL-B** (Type Language – Binary).
@@ -58,7 +53,7 @@ To serialize data into a cell, TON relies on a well-established standard called 
 
 ## Native message structure
 
-Все сообщения в TON are described using this schema
+In TON, all messages adhere to a unified schema that defines their structure and serialization.
 
 ```
 message$_ {X:Type} info:CommonMsgInfo
@@ -757,7 +752,7 @@ Now, let’s see how both messages and transactions are uniquely identified and 
 
 
 
-<Button href="/v3/guidelines/dapps/transactions/hashes" colorType={'primary'} sizeType={'sm'}>
+<Button href="/v3/guidelines/dapps/transactions/hash-based-tracking" colorType={'primary'} sizeType={'sm'}>
   Trace messages and transactions with hashes
 
 </Button>
