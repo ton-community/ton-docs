@@ -191,6 +191,18 @@ module.exports = [
       'v3/guidelines/dapps/cookbook',
       {
         type: 'category',
+        label: 'Mastering transactions',
+        items: [
+          'v3/guidelines/dapps/transactions/overview',
+          'v3/guidelines/dapps/transactions/foundations-of-blockchain',
+          'v3/guidelines/dapps/transactions/message-driven-execution',
+          'v3/guidelines/dapps/transactions/hash-based-tracking',
+          'v3/guidelines/dapps/transactions/api-based-retrieval',
+          'v3/guidelines/dapps/transactions/explore-transactions',
+        ],
+      },
+      {
+        type: 'category',
         label: 'APIs and SDKs',
         link: {
           type: 'generated-index',

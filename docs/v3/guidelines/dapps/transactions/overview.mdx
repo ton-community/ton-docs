@@ -1,0 +1,71 @@
+# Mastering transactions
+
+In TON, a transaction is not something you send or receive — it’s not a user action. It’s a **record** of all changes that occurred to an account.
+
+This guide helps you master TON transactions — from the core principles of what they are and how they work to defining what it means for a transaction to be successful. Use the sections below to explore the topic you need — whether you're starting from foundations or debugging real transaction data.
+
+<div style={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+  gap: '1.25rem',
+  marginTop: '1.5rem'
+}}>
+
+  {[
+    {
+      title: 'Foundations of blockchain',
+      desc: '<strong>Understand the foundations:</strong> how accounts and smart contracts act as independent actors, how messages trigger asynchronous transactions, and where those transactions are recorded within TON’s multi‑chain structure.',
+      link: '/v3/guidelines/dapps/transactions/foundations-of-blockchain',
+      btn: 'Start with foundations'
+    },
+    {
+      title: 'Message-driven execution',
+      desc: '<strong>Understand how every transaction starts with a message:</strong> explore message types and structure, their role in triggering smart contract execution, and how to construct messages to initiate on-chain activity.',
+      link: '/v3/guidelines/dapps/transactions/message-driven-execution',
+      btn: 'Build and send a message'
+    },
+    {
+      title: 'Hash-based tracking',
+      desc: '<strong>Understand how cryptographic hashes help trace transactions:</strong> learn the types of hashes, how they’re computed and normalized, and how to use them to follow messages and transactions across the blockchain.',
+      link: '/v3/guidelines/dapps/transactions/hash-based-tracking',
+      btn: 'Track using hashes'
+    },
+    {
+      title: 'API-based retrieval',
+      desc: '<strong>Learn how to access transaction data using APIs:</strong> explore available API services, compare access methods by account or message, and understand which option best fits your use case.',
+      link: '/v3/guidelines/dapps/transactions/api-based-retrieval',
+      btn: 'Access using API'
+    },
+    {
+      title: 'Transactions',
+      desc: '<strong>Understand how a transaction is structured and executed:</strong> explore each phase — credit, storage, compute, action, bounce — and how they form the full transaction body. Learn how to determine whether an on-chain event was successful.',
+      link: '/v3/guidelines/dapps/transactions/explore-transactions',
+      btn: 'Explore transaction'
+    }
+  ].map(({ title, desc, link, btn }) => (
+    <div style={{
+      border: '1px solid #e5e7eb',
+      borderRadius: '0.75rem',
+      padding: '0.9rem 1rem',
+      backgroundColor: 'white',
+      boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'start',
+      gap: '0.75rem',
+      height: '100%'
+    }} key={title}>
+      <h3 style={{ fontSize: '1rem', fontWeight: '600', margin: 0 }}>{title}</h3>
+      <p style={{ fontSize: '0.84rem', lineHeight: '1.45', margin: 0 }} dangerouslySetInnerHTML={{ __html: desc }} />
+      <a href={link} style={{
+        alignSelf: 'start',
+        padding: '0.4rem 0.75rem',
+        backgroundColor: '#f3f4f6',
+        borderRadius: '0.5rem',
+        fontSize: '0.8rem',
+        textDecoration: 'none',
+        marginTop: 'auto'
+      }}>{btn}</a>
+    </div>
+  ))}
+</div>
