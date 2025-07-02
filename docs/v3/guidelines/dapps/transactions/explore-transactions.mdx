@@ -1,7 +1,7 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import Tabs from '@theme/Tabs'
+import TabItem from '@theme/TabItem'
 
-# Transaction {#transaction}
+# Transaction \{#transactions}
 
 In the TON blockchain, any change to an account's state is recorded via a **transaction**. Unlike messages, transactions do not *move*, *send*, or *receive* anything. These terms are often confused, but it's important to understand that a transaction is simply a **record** of all changes that occurred to a specific account.
 
@@ -643,74 +643,74 @@ To simplify the example, assume we want to track incoming Jettons for a specific
       // Changed version of
       // https://github.com/ton-org/ton-core/blob/b2e781f67b41958e4fde0440752a27c168602717/src/utils/convert.ts#L69C1-L96C2
       export function fromMicro(src: bigint | number | string) {
-      let v = BigInt(src);
-      let neg = false;
-      if (v < 0) {
-      neg = true;
-      v = -v;
-    }
+          let v = BigInt(src);
+          let neg = false;
+          if (v < 0) {
+              neg = true;
+              v = -v;
+          }
 
-      // Convert fraction
-      let frac = v % 1000000n;
-      let facStr = frac.toString();
-      while (facStr.length < 6) {
-      facStr = '0' + facStr;
-    }
-      facStr = facStr.match(/^([0-9]*[1-9]|0)(0*)/)![1];
+          // Convert fraction
+          let frac = v % 1000000n;
+          let facStr = frac.toString();
+          while (facStr.length < 6) {
+              facStr = '0' + facStr;
+          }
+          facStr = facStr.match(/^([0-9]*[1-9]|0)(0*)/)![1];
 
-      // Convert whole
-      let whole = v / 1000000n;
-      let wholeStr = whole.toString();
+          // Convert whole
+          let whole = v / 1000000n;
+          let wholeStr = whole.toString();
 
-      // Value
-      let value = `${wholeStr}${facStr === '0' ? '' : `.${facStr}`}`;
-      if (neg) {
-      value = '-' + value;
-    }
+          // Value
+          let value = `${wholeStr}${facStr === '0' ? '' : `.${facStr}`}`;
+          if (neg) {
+              value = '-' + value;
+          }
 
-      return value;
-    }
+          return value;
+      }
 
       async function main() {
-      const client = new TonClient({
-      endpoint: 'https://toncenter.com/api/v2/jsonRPC',
-      apiKey: 'put your api key', // you can get an api key from @tonapibot bot in Telegram
-    });
+          const client = new TonClient({
+              endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+              apiKey: 'put your api key', // you can get an api key from @tonapibot bot in Telegram
+          });
 
-      const address = Address.parse('EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX');
-      const response = await client.getTransactions(address, {
-      limit: 10,
-      archival: true,
-    });
+          const address = Address.parse('EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX');
+          const response = await client.getTransactions(address, {
+              limit: 10,
+              archival: true,
+          });
 
-      for (const transaction of response) {
-      if (transaction.description.type !== 'generic') {
-      continue;
-    }
+          for (const transaction of response) {
+              if (transaction.description.type !== 'generic') {
+                  continue;
+              }
 
-      // Check if the compute phase is present and successful
-      if (transaction.description.computePhase.type !== 'vm') {
-      continue;
-    }
-      if (transaction.description.computePhase.exitCode !== 0) {
-      continue;
-    }
+              // Check if the compute phase is present and successful
+              if (transaction.description.computePhase.type !== 'vm') {
+                  continue;
+              }
+              if (transaction.description.computePhase.exitCode !== 0) {
+                  continue;
+              }
 
-      // Check if the action phase is present and successful
-      if (transaction.description.actionPhase && transaction.description.actionPhase.resultCode !== 0) {
-      continue;
-    }
+              // Check if the action phase is present and successful
+              if (transaction.description.actionPhase && transaction.description.actionPhase.resultCode !== 0) {
+                  continue;
+              }
 
-      if (transaction.description.aborted === true) {
-      continue;
-    }
+              if (transaction.description.aborted === true) {
+                  continue;
+              }
 
-      if (!transaction.inMessage || transaction.inMessage.info.type !== 'internal') {
-      continue;
-    }
+              if (!transaction.inMessage || transaction.inMessage.info.type !== 'internal') {
+                  continue;
+              }
 
-      const body = transaction.inMessage.body.beginParse();
-      try {
+              const body = transaction.inMessage.body.beginParse();
+              try {
       /*
       internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
                response_address:MsgAddress
@@ -719,20 +719,20 @@ To simplify the example, assume we want to track incoming Jettons for a specific
                = InternalMsgBody;
       */
 
-      const op = body.loadUint(32);
-      if (op !== 0x178d4519) {
-      // op::internal_transfer
-      continue;
-    }
-      const queryId = body.loadUintBig(64);
-      const amount = body.loadCoins();
-      const from = body.loadAddress();
-      const responseAddress = body.loadMaybeAddress();
-      const forwardTonAmount = body.loadCoins();
-      const eitherForwardPayload = body.loadBoolean();
-      const forwardPayload = eitherForwardPayload ? body.loadRef() : body.asCell();
+                  const op = body.loadUint(32);
+                  if (op !== 0x178d4519) {
+                      // op::internal_transfer
+                      continue;
+                  }
+                  const queryId = body.loadUintBig(64);
+                  const amount = body.loadCoins();
+                  const from = body.loadAddress();
+                  const responseAddress = body.loadMaybeAddress();
+                  const forwardTonAmount = body.loadCoins();
+                  const eitherForwardPayload = body.loadBoolean();
+                  const forwardPayload = eitherForwardPayload ? body.loadRef() : body.asCell();
 
-      console.log(`Deposit detected:
+                  console.log(`Deposit detected:
         Transaction hash: ${transaction.hash().toString('hex')}
         Query ID: ${queryId}
         Amount: ${fromMicro(amount)} USDT
@@ -740,11 +740,11 @@ To simplify the example, assume we want to track incoming Jettons for a specific
         Response Address: ${responseAddress ? responseAddress.toString({ testOnly: true }) : 'None'}
         Forward TON Amount: ${forwardTonAmount.toString()} TON
         Forward Payload: ${forwardPayload.toBoc().toString('hex')}`);
-    } catch (e) {
-      console.error(`Error processing transaction ${transaction.hash().toString('hex')}:`, e);
-    }
-    }
-    }
+              } catch (e) {
+                  console.error(`Error processing transaction ${transaction.hash().toString('hex')}:`, e);
+              }
+          }
+      }
 
       main().finally(() => console.log('Exiting...'));
       ```
