@@ -224,7 +224,9 @@ The `account_id` never does because it’s the hash of the very first `StateInit
 
 The address is defined as:
 
-<BlockMath math="{Address} := ({workchain\_id},{account\_id})" />, where <BlockMath math="{account\_id}:= {HASH(StateInit)}" />
+<BlockMath math="{Address} := ({workchain\_id},{account\_id})" />
+, where
+<BlockMath math="{account\_id}:= {HASH(StateInit)}" />
 
 An address corresponds to the first initialized state of a contract and can be calculated even **before** the contract is deployed.
 This allows you to use the address ahead of time — for example, to receive tokens or set up interactions.
