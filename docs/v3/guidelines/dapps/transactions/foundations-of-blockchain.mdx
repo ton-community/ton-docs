@@ -84,7 +84,7 @@ In TON, contracts or actors do not call each other directly. Instead, they commu
 This is different from synchronous models, where the flow is: call → wait for a response → continue.
 In TON, a result can only be received as a separate message — and only if it is explicitly sent.
 
-![](/img/docs/blockchain-fundamentals/asynchrony.svg)
+![](/img/docs/blockchain-fundamentals/asynchrony.gif)
 
 ### Message feature
 
@@ -215,7 +215,12 @@ It consists of the following components:
 
 
 * **WorkChain ID** — a 32-bit signed integer indicating the WorkChain to which the account belongs (e.g., -1 for the MasterChain, 0 for the BaseChain).
-* **Account ID** — a 256-bit hash of the `StateInit` structure, which includes the contract’s initialized `code`, `data`, and optionally a `library`, precisely as they were *at the time of deployment*. This hash is based solely on the original `StateInit`; later updates to the contract state do **not** affect the account_id.
+* **Account ID** — a 256-bit hash of the `StateInit` structure, which includes the contract’s initialized `code`, `data`, and, optionally, a `library`.
+
+:::important
+`StateInit` (short for _state initialized_) can change as the contract evolves.
+The `account_id` never does because it’s the hash of the very first `StateInit` recorded at deployment.
+:::
 
 The address is defined as:
 
@@ -224,11 +229,11 @@ The address is defined as:
 An address corresponds to the first initialized state of a contract and can be calculated even **before** the contract is deployed.
 This allows you to use the address ahead of time — for example, to receive tokens or set up interactions.
 
-:::important
+
 An address depends only on the `StateInit` used *at the moment of the contract's first deployment*. Even a small change to the `code`, `data`, or `library` in this initialized state results in a completely different `account_id` — and, therefore, a different **address**.
 
 In fact, during message processing, validators verify the sender’s address — if it’s incorrect, they silently replace it with the correct one.
-:::
+
 
 
 ## Blockchain structure
@@ -241,10 +246,9 @@ In fact, during message processing, validators verify the sender’s address —
 
 **AccountChain** is a chain of transactions executed on a single account in the TON blockchain.
 It forms a linear sequence: `Tx1 → Tx2 → Tx3 → …`, where each transaction references the previous one.
-For efficient processing and consensus, transactions are grouped into blocks — for example:
-`[Tx1 → Tx2] → [Tx3 → Tx4 → Tx5] → [] → [Tx6]`.
 
-These blocks also include incoming and outgoing message queues, recording all events and state changes for the account during that period.
+For efficient processing and consensus, transactions are grouped into blocks — for example:
+`[Tx1 → Tx2] → [Tx3 → Tx4 → Tx5] → [] → [Tx6]`. These blocks also include incoming and outgoing message queues, recording all events and state changes for the account during that block period.
 
 In other words, an AccountChain is a *micro-blockchain* scoped to a single account.
 Like a regular blockchain, it is a linear, append-only sequence of transactions — but dedicated to just one account.
@@ -257,21 +261,24 @@ The diagram below provides a graphical representation of an AccountChain and its
 
 ### ShardChain
 
-A **ShardChain** is a blockchain that aggregates multiple AccountChains.
-While an AccountChain represents the transaction history of a single account, a ShardChain processes and stores data for a group of accounts that share a common binary address prefix (e.g., all addresses starting with `0b00101`).
-Conceptually, a ShardChain can be seen as a **horizontal** blockchain composed of **ShardBlocks**, each of which contains AccountBlocks. ShardChains also facilitate message routing between accounts, ensuring both delivery and order: if one message is sent before another, it will arrive first.
+A **ShardChain** is a blockchain that groups multiple AccountChains.
 
-ShardChains are a fundamental unit of TON’s architecture, enabling parallel transaction processing within a scalable and deterministic system.
+While an AccountChain represents the transaction history of a single account, a ShardChain processes and stores data for a group of accounts that share a common binary address prefix (e.g., all addresses starting with `0b00101`).
+ShardChains also facilitate message routing between accounts, ensuring both delivery and order: if one message is sent before another, it will arrive first.
+
 Each validator is responsible for a specific ShardChain or a group of them, allowing the network to process transactions concurrently across different shards.
 
 ![](/img/docs/blockchain-fundamentals/shardchain.svg)
 
 ### WorkChain
 
-A **WorkChain** is an independent blockchain within TON that groups multiple ShardChains or shards.
-Unlike a ShardChain, a WorkChain may define its own protocol rules.
+A **WorkChain** is a higher‑level blockchain layer that groups multiple ShardChains into _a single working group_.
+
+While each ShardChain manages a set of accounts sharing a binary address prefix, a WorkChain defines the shared rules—such as gas pricing and sharding configuration—that every shard under it must follow. In other words, it serves as a policy domain governing its shards under the same protocol.
 
 TON supports up to 2³² WorkChains, each of which can be divided into up to 2⁶⁰ ShardChains.
+
+TON currently runs two WorkChains: the **BaseChain** and the **MasterChain**.
 
 ### MasterChain and BaseChain
 
