@@ -1,29 +1,50 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Collect contract gas metric
+# Collecting contract gas metrics
 
-When writing contracts for the TON blockchain, it's important to consider how efficiently [gas is consumed when executing](/v3/documentation/smart-contracts/transaction-fees/fees) the logic you implement, in addition, unlike other blockchains, in the TON blockchain you need to [pay for storing contract data](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee) and for [forward messages](/v3/documentation/smart-contracts/transaction-fees/forward-fees) between contracts
+## Gas consumption
 
-Therefore, when developing a contract, it's important to pay attention to how data size changes and how gas consumption changes after you modify the contract's behavior or add new functionality
+When developing smart contracts for TON, it's essential to consider
+how efficiently your logic consumes gas.
+Unlike many other blockchains, TON also requires you to pay for storing contract data and forwarding messages between contracts.
 
-To make it easier to track changes in gas consumption and data size, we added the ability to generate reports and compare these metrics between different implementation versions
+As you develop and iterate on a contract, even small changes to its logic can affect both gas usage and data size. Monitoring these changes helps ensure that your contract remains efficient and cost-effective.
 
-To make this possible, it's enough to write test scenarios that implement the main usage logic of the contract being developed and verify the correctness of the expected behavior, this will be sufficient to obtain relevant metrics and later compare how they change when you update the implementation
+:::tip
+For a deeper breakdown of how fees work in TON, refer to:
+* [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
+* [Storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee)
+* [Forward fees](/v3/documentation/smart-contracts/transaction-fees/forward-fees)
+:::
 
-Before running the tests, a store is created and metrics are collected from all transactions that generate the tests, upon completion, the metrics are supplemented with [information from the ABI in Snapshot](https://github.com/ton-org/sandbox/blob/feature/betch/docs/collect-metric-api.md#abi-auto-mapping), and a report is generated based on them, more [metrics are collected](https://github.com/ton-org/sandbox/blob/feature/betch/docs/collect-metric-api.md#snapshot-structure) than are used in the current report format - for the current report, only `compute.phase`, `state.code` and `state.data` are used
+## Gas metrics reporting
 
-## Let’s look at this process using an example
+To simplify tracking changes in gas usage and data size,
+we’ve introduced a reporting system that lets you collect and compare metrics across different versions of a contract.
 
-Create new project just use `npm create ton@latest`
+To enable this, write test scenarios that cover the contract’s primary usage patterns and verify that its behaviour is as expected. This approach is sufficient to gather relevant metrics, which you can later use to compare performance changes after updating the implementation.
+
+
+Before running the tests, a store is created to collect metrics from all transactions generated during the tests. After test execution, the collected metrics are supplemented with [ABI information from the snapshot](https://github.com/ton-org/sandbox/blob/feature/betch/docs/collect-metric-api.md#abi-auto-mapping), and a report is generated based on this data.
+
+While more [metrics are collected](https://github.com/ton-org/sandbox/blob/feature/betch/docs/collect-metric-api.md#snapshot-structure), the current report format includes only `compute.phase`, `state.code`, and `state.data`.
+
+
+## Metrics comparison example
+
+To see how gas metrics can be collected and compared in practice, let’s walk through a complete example.
+
+Start by creating a new project using `npm create ton@latest`:
 
 ```bash
 npm create ton@latest -y -- sample --type func-counter --contractName Sample
 cd sample
 ```
 
-A contract will be created `contracts/sample.fc`
+This command scaffolds a project with a basic counter contract at `contracts/sample.fc`.
+It defines a simple stateful contract that stores an `id` and a `counter` and supports an `increase` operation.
 
-```func
+```func title="sample.fc"
 #include "imports/stdlib.fc";
 
 const op::increase = "op::increase"c;
@@ -85,10 +106,19 @@ int get_id() method_id {
 }
 ```
 
-Getting current gas report
+### Generate a gas report
+
+Let’s now generate a gas usage report for the contract.
+
+Run the following command:
 
 ```bash
 npx blueprint test --gas-report
+```
+
+
+This runs your tests with gas tracking enabled and outputs a `gas-report.json` with transaction metrics.
+```
 ...
 PASS  Comparison metric mode: gas depth: 1
 Gas report write in 'gas-report.json'
@@ -107,7 +137,8 @@ Gas report write in 'gas-report.json'
 └───────────┴──────────────┴──────────┴────────┴───────┘
 ```
 
-Note that the `op::increase` method appears in the report as `0x7e8764ef`, this opcode can be assigned a more human-readable name by editing the `contract.abi.json` file that was generated along with the current report
+Note that the `op::increase` method appears in the report as the raw opcode `0x7e8764ef`.
+To display a human-readable name in the report, update the generated `contract.abi.json` by replacing the raw opcode with the name **increase** in both the `messages` and `types` sections:
 
 ```diff
 --- a/contract.abi.json
@@ -130,26 +161,48 @@ Note that the `op::increase` method appears in the report as `0x7e8764ef`, this 
      ],
 ```
 
-Repeated getting current gas report
+### Regenerate the gas report
+
+Once you've updated the `contract.abi.json` file, rerun the command to regenerate the gas report:
 
 ```bash
 npx blueprint test --gas-report
+```
+
+Now the method name appears in the report as `increase`, making it easier to read:
+
+```
 ...
 │           ├──────────────┼──────────┼────────┼───────┤
 │           │   increase   │   2681   │   11   │  900  │
 └───────────┴──────────────┴──────────┴────────┴───────┘
 ```
 
-To be able to make comparisons, it is necessary to make a snapshot
+### Save a snapshot for future comparison
+
+To track how gas usage evolves, you can create a named snapshot of the current metrics. This allows you to compare future versions of the contract against this baseline:
 
 ```bash
 npx blueprint snapshot --label "v1"
+```
+
+This creates a snapshot file in `.snapshot/`:
+
+```
 ...
 PASS  Collect metric mode: "gas"
 Report write in '.snapshot/1749821319408.json'
 ```
 
-Let's try to optimize this contract and add the [inline specifier](/v3/documentation/smart-contracts/func/docs/functions#inline-specifier) for methods
+### Optimize the contract and compare the metrics
+
+Let’s try a simple optimization — adding the `inline` specifier to some functions.
+
+:::note
+An [inline function](/v3/documentation/smart-contracts/func/docs/functions#inline-specifier) is directly substituted into the code wherever it’s called, which can help reduce gas usage by eliminating the overhead of a function call.
+:::
+
+Update your contract like this:
 
 ```diff
 --- a/contracts/sample.fc
@@ -165,10 +218,15 @@ Let's try to optimize this contract and add the [inline specifier](/v3/documenta
 +() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure inline {
 ```
 
-In order to understand how this change affected your contract performance indicators, we will again receive a gas report, this time we will receive a comparison with the previous version
+Now regenerate the gas report. Since we already created a snapshot labeled `v1`, this report will include a comparison with the previous version:
 
 ```bash
 npx blueprint test --gas-report
+```
+
+You see a side-by-side comparison of gas usage before and after the change:
+
+```
 ...
 PASS  Comparison metric mode: gas depth: 2
 Gas report write in 'gas-report.json'
@@ -187,12 +245,15 @@ Gas report write in 'gas-report.json'
 └───────────┴──────────────┴──────────────┴───────────┴──────────────┴──────────┴────────┴───────┘
 ```
 
-## Project exist
+## Project setup instructions
 
-If project exist, need setup jest config, for it ypr have tow approach
+If your project already exists, you need to configure **jest** to collect gas metrics.
+You can do this in one of two ways:
 
-**Common config update exist `jest.config.ts`:**
-```diff
+#### Option 1: update the existing `jest.config.ts`
+Add the necessary environment and reporter settings:
+
+```ts title="jest.config.ts"
 import type { Config } from 'jest';
 
 const config: Config = {
@@ -208,12 +269,16 @@ const config: Config = {
 export default config;
 ```
 
-> [!TIP]
-> see full list options in [Sandbox docs](https://github.com/ton-org/sandbox?tab=readme-ov-file#setup-in-jestconfigts)
+ :::tip
+ See the full list of options in the [Sandbox jest config docs](https://github.com/ton-org/sandbox?tab=readme-ov-file#setup-in-jestconfigts).
+:::
 
-**Or create separate config `gas-report.config.ts`:**
 
-```typescript
+
+#### Option 2: create a separate config `gas-report.config.ts`
+If you prefer not to modify your main `jest.config.ts`, you can create a dedicated config file:
+
+```ts title="gas-report.config.ts"
 import config from './jest.config';
 
 // use filter tests if need, see https://jestjs.io/docs/cli#--testnamepatternregex
@@ -226,14 +291,16 @@ config.reporters = [
 export default config;
 ```
 
-If a separate configuration is used, the path to this file must be specified as an option when executing the command
+When using this separate config, pass it using the `--config` option:
 
 ```bash
 npx blueprint test --gas-report -- --config gas-report.config.ts
 npx blueprint snapshot --label 'v2' -- --config gas-report.config.ts
 ```
 
-## Use this without testing
+## Collect metrics manually
+
+You can collect metrics manually using the low-level API from `@ton/sandbox`.
 
 ```typescript
 import {
@@ -262,9 +329,8 @@ main().catch((error) => {
     console.log(error.message);
 });
 ```
-See more details in [Collect contract gas metric API for low-level control](https://github.com/ton-org/sandbox/blob/develop/docs/collect-metric-api.md#example)
 
-check
+For more details, see the [Collect Metric API documentation](https://github.com/ton-org/sandbox/blob/develop/docs/collect-metric-api.md#example).
 
 <Feedback />
 
