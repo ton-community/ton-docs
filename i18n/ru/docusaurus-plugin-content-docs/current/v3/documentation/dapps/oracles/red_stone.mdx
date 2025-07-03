@@ -1,10 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ThemedImage from '@theme/ThemedImage';
 
 # Оракулы RedStone
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
 
 ## Как оракулы RedStone работают с TON
 
@@ -16,13 +14,13 @@ import ThemedImage from '@theme/ThemedImage';
 
 ## Ссылки на документацию
 
-- [Redstone TON Connector](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector)
+* [Redstone TON Connector](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector)
 
 ## Смарт-контракты
 
 ### price_manager.fc
 
-- Пример контракта оракула, который использует данные оракулов RedStone [price_manager.fc](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/contracts/price_manager.fc), написанный на
+* Sample oracle contract that consumes RedStone oracles data [price_manager.fc](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/contracts/price_manager.fc) written in
   FunC. Требуется [Обновление TVM 2023.07](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07).
 
 #### начальные данные
@@ -42,10 +40,11 @@ import ThemedImage from '@theme/ThemedImage';
   .end_cell();
 ```
 
-Значение `signers` должно быть передано как сериализованный `tuple` из `int`.См. [tuple](https://github.com/ton-core/ton-core/blob/main/src/tuple/tuple.ts).
+Значение `signers` должно быть передано как сериализованный `tuple` из `int`.См.
+[tuple](https://github.com/ton-core/ton-core/blob/main/src/tuple/tuple.ts).
 
-<!-- Чтобы определить начальные (хранимые) данные для контракта Prices, используйте предопределенный
-класс [PriceManagerInitData.ts](../src/price-manager/PriceManagerInitData.ts). -->
+{/* To define the initial (storage) data for the Prices contract, use the predefined
+class [PriceManagerInitData.ts](../src/price-manager/PriceManagerInitData.ts). */}
 
 В параметрах функции ниже каждый `feed_id` представляет собой строку, закодированную в `int`, что означает, что это значение,
 состоящее из шестнадцатеричных значений определенных букв в строке. Например:
@@ -56,6 +55,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 Значение `feed_ids` должно быть передано как сериализованный `tuple` из `int`.
 
+The value `payload` is packed from an array of bytes representing the serialized RedStone payload.
 Значение `payload` упаковывается из массива байтов, представляющих сериализованную полезную нагрузку RedStone.См. раздел [Упаковка полезной нагрузки TON RedStone](#ton-redstone-payload-packing) ниже, а также файл [constants.fc](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/contracts/redstone/constants.fc), содержащий все необходимые константы длины `int`.
 
 #### get_prices
@@ -78,10 +78,10 @@ import ThemedImage from '@theme/ThemedImage';
 
 Метод должен быть вызван как внутреннее сообщение TON. Аргументы сообщения:
 
-- `int`, представляющий имя RedStone_Write_Prices, хешированное keccak256, как определено
-  в [constants.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)
-- `cell` - ссылка, представляющая `data_feed_ids` как сериализованный `tuple` из `int`
-- `cell` - ссылка, представляющая упакованную полезную нагрузку RedStone
+* an `int` representing RedStone_Write_Prices name hashed by keccak256 as defined
+  in [constants.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)
+* `cell` - ссылка, представляющая `data_feed_ids` как сериализованный `tuple` из `int`
+* `cell` - ссылка, представляющая упакованную полезную нагрузку RedStone
 
 ```func
     int op = in_msg_body~load_uint(OP_NUMBER_BITS);
@@ -142,11 +142,11 @@ beginCell()
 существует возможность получения значения, хранящегося в контракте, для `feed_id` on-chain напрямую.
 Необходимо вызвать внутреннее сообщение `OP_REDSTONE_FETCH_DATA`. Аргументы сообщения:
 
-- `int`, представляющий имя `RedStone_Fetch_Data`, хешированное keccak256, как определено
-  в [constants.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)
-- `int`, представляющий значение `feed_id`.
-- `slice`, представляющий `initial_sender` сообщения, чтобы они могли перенести оставшийся баланс транзакции
-  при возврате транзакции.
+* an `int` representing `RedStone_Fetch_Data` name hashed by keccak256 as defined
+  in [constants.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)
+* `int`, представляющий значение `feed_id`.
+* a `slice` representing the `initial_sender` of the message, to allow they carried the remaining transaction balance
+  when the returning transaction goes.
 
 ```func
     int op = in_msg_body~load_uint(OP_NUMBER_BITS);
@@ -261,8 +261,8 @@ beginCell()
 Существует возможность извлечения значения, хранящегося в контракте для `feed_id` on-chain напрямую.
 Необходимо вызвать внутреннее сообщение `OP_REDSTONE_READ_DATA`. Аргументы сообщения:
 
-- `slice`, представляющий `initial_sender` сообщения, чтобы позволить им переносить оставшийся баланс транзакции,
-  когда возвращается транзакция.
+* a `slice` representing the `initial_sender` of the message, to allow they carried the remaining transaction balance
+  when the returning transaction goes.
 
 ```func
     int op = in_msg_body~load_uint(OP_NUMBER_BITS);
@@ -296,28 +296,28 @@ begin_cell()
 Имея полезную нагрузку RedStone, определенную [здесь](https://docs.redstone.finance/img/payload.png),
 данные должны быть переданы как ячейка, построенная следующим образом.
 
-1. Основная _полезная нагрузка_ `cell` состоит из:
+1. Основная *полезная нагрузка* `cell` состоит из:
 
    1. метаданных в **битах уровня данных**, состоящих из частей, как на изображении:
 
-     ![payload-metadata.png](/img/docs/oracles/red-stone/payload-metadata.png)
+   ![payload-metadata.png](/img/docs/oracles/red-stone/payload-metadata.png)
 
    1. **ref**, содержащий `udict`, индексированный последовательными натуральными числами (начиная с 0), содержащий список **data_package** `cell`.
-2. Каждая _data-package_ `cell` состоит из:
+2. Каждая *data-package* `cell` состоит из:
 
    1. подпись пакета данных в **битах уровня данных**:
 
-     ![payload-metadata.png](/img/docs/oracles/red-stone/payload-metadata.png)
+   ![payload-metadata.png](/img/docs/oracles/red-stone/payload-metadata.png)
 
    1. одной **ref** на `cell`, содержащей данные остальной части пакета данных на его **уровне данных**:
 
-     ![payload-metadata.png](/img/docs/oracles/red-stone/data-package-data.png)
+   ![payload-metadata.png](/img/docs/oracles/red-stone/data-package-data.png)
 
 #### Текущие ограничения реализации
 
-- Полезная нагрузка RedStone должна быть извлечена путем явного определения каналов данных,
-  что приводит к **одной точке данных**, принадлежащей **одному пакету данных**.
-- Размер неподписанных метаданных не должен превышать `127 - (2 + 3 + 9) = 113` байт.
+* The RedStone payload must be fetched by explicitly defining data feeds,
+  which leads to **one data point** belonging to **one data package**.
+* Размер неподписанных метаданных не должен превышать `127 - (2 + 3 + 9) = 113` байт.
 
 #### Помощник
 
@@ -331,18 +331,22 @@ begin_cell()
 
 ## Возможные ошибки транзакции
 
-- Количество подписантов, восстановленных из подписей, соответствующих `addresses`, переданным в инициализаторе,
-  должно быть больше или равно `signer_count_threshold` в конструкторе для каждого канала.
-  - В противном случае он выдает ошибку `300`, увеличенную на первый индекс переданного
-    канала, который нарушил проверку.
-- Метка времени пакетов данных должна быть не старше 15 минут относительно `block_timestamp`.
-  - В противном случае он выдает ошибку `200`, увеличенной на первый индекс пакета данных полезной нагрузки, который нарушил проверку, дополнительно увеличенной на `50`, если временная метка пакета слишком в будущем.
-- Внутренние сообщения потребляют газ и должны быть оплачены TON. Данные доступны на контракте
-  сразу после успешного завершения транзакции.
-- Другие коды ошибок определены [здесь](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)
+* The number of signers recovered from the signatures matched with `addresses` passed in the initializer
+  must be greater or equal that the `signer_count_threshold` in the constructor, for each feed.
+  * Otherwise, it panics then with the `300` error, increased by the first index of the passed
+    feed which has broken the validation.
+* Метка времени пакетов данных должна быть не старше 15 минут относительно `block_timestamp`.
+  * Otherwise, it panics then with the `200` error, increased by the first index of the payload's
+    data package which has broken the validation, increased additionally by `50` if the package's timestamp is too
+    future.
+* Внутренние сообщения потребляют газ и должны быть оплачены TON. The data are available on the contract
+  just after the transaction successes.
+* Другие коды ошибок определены [здесь](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)
 
 ## См. также
 
-- [Документация по внутренним сообщениям](/v3/documentation/smart-contracts/message-management/internal-messages)
-- [RedStone data-packing](https://docs.redstone.finance/docs/smart-contract-devs/how-it-works)
-- [RedStone oracles smart-contracts](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector/contracts)
+* [Документация по внутренним сообщениям](/v3/documentation/smart-contracts/message-management/internal-messages)
+* [RedStone data-packing](https://docs.redstone.finance/docs/smart-contract-devs/how-it-works)
+* [RedStone oracles smart-contracts](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector/contracts)
+
+<Feedback />
