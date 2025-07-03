@@ -1,23 +1,24 @@
 ---
-title: Общие сведения
+title: Overview
 ---
 
-import Button from '@site/src/components/button'
+import Feedback from "@site/src/components/Feedback";
+import Button from "@site/src/components/button";
 
 # Язык Tolk: общие сведения
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-**Tolk** — это новый язык для написания смарт-контрактов в TON. Представьте себе Tolk как «**следующее поколение FunC**».
-Компилятор Tolk — это буквально ответвление компилятора FunC, представляющее знакомый синтаксис, похожий на TypeScript, но оставляющее все низкоуровневые оптимизации нетронутыми.
+**Tolk** — это новый язык для написания смарт-контрактов в TON.
+Компилятор Tolk — это буквально ответвление компилятора FunC, представляющее знакомый синтаксис, похожий на TypeScript, но оставляющее все низкоуровневые оптимизации нетронутыми. Представьте себе Tolk как «**следующее поколение FunC**».
 
 ```tolk
-import "storage.tolk"
+import "utils.tolk"
 
-fun loadData() {
-    ctxCounter = getContractData().beginParse().loadUint(32);
+struct Storage {
+    counter: int32;
+}
+
+fun Storage.load() {
+    return Storage.fromCell(contract.getData());
 }
 
 fun onInternalMessage(msgValue: int, msgFull: cell, msgBody: slice) {
@@ -29,47 +30,50 @@ fun onInternalMessage(msgValue: int, msgFull: cell, msgBody: slice) {
     ...
 }
 
-get currentCounter(): int {
-    loadData(); // fills global variables
-    return ctxCounter;
+get currentCounter(): int32 {
+    val st = Storage.load();
+    return st.counter;
 }
 ```
 
 <details>
-  <summary><b>См. ту же логику, реализованную с помощью FunC</b></summary>
+  <summary><b>See same logic implemented with FunC</b></summary>
 
-```func
-#include "storage.fc";
+  ```func
+  #include "utils.fc";
 
-() load_data() impure {
-  slice cs = get_data().begin_parse();
-  ctx_counter = cs~load_uint(32);
-}
+  global int ctx_counter;
 
-() recv_internal(int msg_value, cell msg_full, slice msg_body) impure {
-  slice cs = msg_full.begin_parse();
-  int flags = cs.load_uint(4);
-  if (flags & 1) {
-    return ();
+  int load_data() impure {
+    slice cs = get_data().begin_parse();
+    ctx_counter = cs~load_uint(32);
   }
-  ...
-}
 
-int currentCounter() method_id {
-  load_data(); ;; fills global variables
-  return ctx_counter;
-}
-```
+  () recv_internal(int msg_value, cell msg_full, slice msg_body) impure {
+    slice cs = msg_full.begin_parse();
+    int flags = cs.load_uint(4);
+    if (flags & 1) {
+      return ();
+    }
+    ...
+  }
 
+  int currentCounter() method_id {
+    load_data(); ;; fills global variables
+    return ctx_counter;
+  }
+  ```
 </details>
 
-<Button href="https://github.com/ton-blockchain/convert-func-to-tolk" colorType={'primary'} sizeType={'sm'}>
-Попробуйте конвертер FunC → Tolk
+<Button href="https://github.com/ton-blockchain/convert-func-to-tolk" colorType={"primary"} sizeType={"sm"}>
+  Try a FunC → Tolk converter
 </Button>
-<Button href="/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short" colorType={'secondary'} sizeType={'sm'}>
-Прочитайте "Различия Tolk и FunC"
+
+<Button href="/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short" colorType={"secondary"} sizeType={"sm"}>
+  Tolk vs FunC differences
 </Button>
-<div style={{height: '2em'}}></div>
+
+<div style={{ height: "2em" }} />
 
 ## Мотивация, стоящая за Tolk
 
@@ -132,20 +136,16 @@ FunC — это "функциональный C", и он для ниндзя.
 
 Первая выпущенная версия Tolk — v0.6, подчеркивающая [отсутствие](/v3/documentation/smart-contracts/tolk/changelog#how-tolk-was-born) FunC v0.5.
 
-Вот некоторые (но не все и никак не упорядоченные) моменты, которые необходимо изучить:
+Here are some points to investigate:
 
-- улучшения системы типов: допустимость значений Null, целые числа фиксированного размера, типы объединений, словари
-- структуры и обобщения
-- автоматическая упаковка структур в/из ячеек, возможно, интегрированная с обработчиками сообщений
-- методы для структур, обобщенные для охвата встроенных типов
-- более простая отправка сообщений
-- лучший опыт для общих вариантов использования (жетонов, nft и т. д.)
-- оптимизация газа и стека, встраивание AST
-- расширение и поддержка stdlib
-- своего рода ABI (как проводники "видят" байт-код)
-- управление газом и сборами в целом
+* type system improvements
+* оптимизация газа и стека, встраивание AST
+* расширение и поддержка stdlib
+* своего рода ABI (как проводники "видят" байт-код)
+* управление газом и сборами в целом
 
 Следующей стратегической целью для **Tolk v1.0** являются **структуры с автоматической сериализацией в ячейки**.
+
 Это устранит необходимость ручных манипуляций с конструкторами и срезами, что позволит декларативно описывать данные и сообщения.
 С этим тесно связан **ABI (интерфейс) контрактов**.
 Хорошо спроектированные структуры на самом деле составляют большую часть ABI.
@@ -153,3 +153,9 @@ FunC — это "функциональный C", и он для ниндзя.
 ## Проблемы и контакты
 
 Если вы столкнулись с проблемой, свяжитесь с сообществом разработчиков в [TON Dev Chats](https://t.me/addlist/1r5Vcb8eljk5Yzcy) или создайте issues на GitHub.
+
+## See also
+
+* [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short)
+
+<Feedback />
