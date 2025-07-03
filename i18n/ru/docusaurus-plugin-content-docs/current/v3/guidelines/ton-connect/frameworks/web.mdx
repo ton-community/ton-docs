@@ -1,11 +1,9 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # TON Connect для JS
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
 
 Это руководство поможет вам интегрировать TON Connect в ваше Javascript приложение для аутентификации пользователей и подтверждения транзакций.
 
@@ -13,34 +11,36 @@ import TabItem from '@theme/TabItem';
 
 Если вы используете Vue для своего DApp, взгляните на [TON Connect UI Vue SDK](/v3/guidelines/ton-connect/frameworks/vue).
 
-## Реализация
+## Implementation
 
 ### Установка
 
-<Tabs groupId="Installation">
+<Tabs groupId="Установка">
   <TabItem value="CDN" label="CDN">
-Добавьте скрипт в элемент HEAD вашего веб-сайта:
-    <br/>
-    <br/>
+    Add the script to the `<HEAD>` element of your website:
 
-```html
-<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-```
+    <br />
 
-</TabItem>
+    <br />
+
+    ```html
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+    ```
+  </TabItem>
+
   <TabItem value="NPM" label="NPM">
-    Чтобы начать интеграцию TON Connect в ваше приложение, установите пакет @tonconnect/ui:
+    Install the [@tonconnect/ui](https://www.npmjs.com/package/@tonconnect/ui) package:
 
-```bash npm2yarn
-npm i @tonconnect/ui
-```
-
-</TabItem>
+    ```bash npm2yarn
+    npm i @tonconnect/ui
+    ```
+  </TabItem>
 </Tabs>
 
 ### Начало работы TON Connect
 
-После установки пакета создайте файл `manifest.json` для вашего приложения. Более подробную информацию о том, как создать файл manifest.json, можно найти [здесь](/v3/guidelines/ton-connect/guidelines/creating-manifest).
+После установки пакета создайте файл `manifest.json` для вашего приложения.
+Более подробную информацию о том, как создать файл manifest.json, можно найти [здесь](/v3/guidelines/ton-connect/guidelines/creating-manifest).
 
 Добавьте кнопку с идентификатором `ton-connect` для подключения к кошельку:
 
@@ -48,7 +48,7 @@ npm i @tonconnect/ui
 <div id="ton-connect"></div>
 ```
 
-_После этого тега_ добавьте скрипт для `tonConnectUI` в секцию `<body>` страницы вашего приложения:
+*После этого тега* добавьте скрипт для `tonConnectUI` в секцию `<body>` страницы вашего приложения:
 
 ```html
 <script>
@@ -102,12 +102,12 @@ tonConnectUI.uiOptions = {
 
 TonConnect UI предоставляет интерфейс, который должен быть знаком и узнаваем пользователю при использовании различных приложений. Однако разработчик приложения может изменить этот интерфейс, чтобы он соответствовал интерфейсу приложения.
 
-- [Документация TonConnect UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
+* [Документация TonConnect UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
 
 ## Документация SDK
 
-- [Документация SDK](https://github.com/ton-connect/sdk/blob/main/packages/ui/README.md)
-- [Последняя документация API](https://ton-connect.github.io/sdk/modules/_tonconnect_ui.html)
+* [SDK documentation](https://github.com/ton-connect/sdk/blob/main/packages/ui/README.md)
+* [Последняя документация API](https://ton-connect.github.io/sdk/modules/_tonconnect_ui.html)
 
 ## Использование
 
@@ -138,7 +138,9 @@ const transaction = {
 const result = await tonConnectUI.sendTransaction(transaction)
 ```
 
-- Подробнее о подготовке сообщений можно найти здесь: [Подготовка сообщений](/v3/guidelines/ton-connect/guidelines/preparing-messages).
+:::tip
+Подробнее о подготовке сообщений можно найти здесь: [Подготовка сообщений](/v3/guidelines/ton-connect/guidelines/preparing-messages).
+:::
 
 ### Понимание статуса транзакции по хэшу
 
@@ -148,8 +150,8 @@ const result = await tonConnectUI.sendTransaction(transaction)
 
 Узнайте, как подписывать и проверять сообщения с помощью TON Connect:
 
-- [Подпись и проверка](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
-- [Реализация пользовательского интерфейса TON Connect на GitHub](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-connect-request-parameters-ton_proof)
+* [Подпись и проверка](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
+* [Реализация пользовательского интерфейса TON Connect на GitHub](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-connect-request-parameters-ton_proof)
 
 ### Отключение кошелька
 
@@ -161,6 +163,8 @@ await tonConnectUI.disconnect();
 
 ## См. также
 
-- [Настройка пользовательского интерфейса](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
-- [[YouTube] TonConnect UI-React и авторизация через ton_proof](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=1747)
-- [[YouTube] Разбираемся с TON Connect, подключаем авторизацию к сайту](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
+* [Настройка пользовательского интерфейса](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
+* [[YouTube] TonConnect UI-React и авторизация через ton_proof](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_\&t=1747)
+* [[YouTube] Разбираемся с TON Connect, подключаем авторизацию к сайту](https://www.youtube.com/watch?v=HUQ1DPfFxG4\&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz\&index=4)
+
+<Feedback />
