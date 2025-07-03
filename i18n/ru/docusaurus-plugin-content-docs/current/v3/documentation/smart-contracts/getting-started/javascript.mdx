@@ -1,10 +1,8 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
-# SDK Blueprint
-
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Blueprint
 
 ![Blueprint](/img/blueprint/logo.svg)
 
@@ -19,43 +17,46 @@ npm create ton@latest
 ```
 
 <Button href="https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa" colorType={'secondary'} sizeType={'sm'}>
-
-Посмотреть видеоуроки
-
+  Посмотреть видеоуроки
 </Button>
 
 ### Основные функции
 
-- Упрощенный рабочий процесс для создания, тестирования и развертывания смарт-контрактов
-- Очень простое развертывание в основной сети/тестовой сети с использованием вашего любимого кошелька (например, Tonkeeper)
-- Невероятно быстрое тестирование нескольких смарт-контрактов в изолированном блокчейне, запущенном в процессе работы
+* Упрощенный рабочий процесс для создания, тестирования и развертывания смарт-контрактов
+* Очень простое развертывание в основной сети/тестовой сети с использованием вашего любимого кошелька (например, Tonkeeper)
+* Невероятно быстрое тестирование нескольких смарт-контрактов в изолированном блокчейне, запущенном в процессе работы
 
 ### Технический стек
 
-- Компиляция FunC с https://github.com/ton-community/func-js (без cli)
-- Тестирование смарт-контрактов с помощью https://github.com/ton-org/sandbox
-- Развертывание смарт-контрактов с помощью кошельков, совместимых с TON Connect 2.0 или deeplink `ton://`
+* Компиляция FunC с https://github.com/ton-community/func-js (без cli)
+* Compiling Tact with https://github.com/tact-lang/tact
+* Тестирование смарт-контрактов с помощью https://github.com/ton-org/sandbox
+* Развертывание смарт-контрактов с помощью кошельков, совместимых с TON Connect 2.0 или deeplink `ton://`
 
 ### Требования
 
-- [Node.js](https://nodejs.org/) с последней версией, например v18, проверьте версию с помощью `node -v`
-- IDE с поддержкой TypeScript и FunC, например [Visual Studio Code](https://code.visualstudio.com/) с [плагином FunC](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
+* [Node.js](https://nodejs.org/) с последней версией, например v18, проверьте версию с помощью `node -v`
+* IDE with TypeScript and TON support:
+  * IDE с поддержкой TypeScript и FunC, например [Visual Studio Code](https://code.visualstudio.com/) с [плагином FunC](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
+  * [IntelliJ IDEA](https://www.jetbrains.com/idea/) with the [TON Development plugin](https://plugins.jetbrains.com/plugin/23382-ton)
 
 ## Ссылки
 
 ### GitHub
 
-- https://github.com/ton-org/blueprint
+* https://github.com/ton-org/blueprint
 
 ### Материалы
 
-- [Использование Blueprint на стриме DoraHacks](https://www.youtube.com/watch?v=5ROXVM-Fojo)
-- [Создание нового проекта](https://github.com/ton-org/blueprint#create-a-new-project)
-- [Разработка нового смарт-контракта](https://github.com/ton-org/blueprint#develop-a-new-contract)
-- [[YouTube] Func with Blueprint EN](https://www.youtube.com/watch?v=7omBDfSqGfA&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa) ([RU версия](https://youtube.com/playlist?list=PLyDBPwv9EPsA5vcUM2vzjQOomf264IdUZ))
+* [Использование Blueprint на стриме DoraHacks](https://www.youtube.com/watch?v=5ROXVM-Fojo)
+* [Создание нового проекта](https://github.com/ton-org/blueprint#create-a-new-project)
+* [Разработка нового смарт-контракта](https://github.com/ton-org/blueprint#develop-a-new-contract)
+* [[YouTube] Func with Blueprint EN](https://www.youtube.com/watch?v=7omBDfSqGfA\&list=PLtUBO1QNEKwtO_zSyLj-axPzc9O9rkmYa) ([RU версия](https://youtube.com/playlist?list=PLyDBPwv9EPsA5vcUM2vzjQOomf264IdUZ))
 
 ## См. также
 
-- [Введение в разработку смарт-контракта](/v3/documentation/smart-contracts/overview)
-- [Как работать со смарт-контрактами кошелька](/v3/guidelines/smart-contracts/howto/wallet)
-- [SDK](/v3/guidelines/dapps/apis-sdks/sdk)
+* [Введение в разработку смарт-контракта](/v3/documentation/smart-contracts/overview)
+* [Как работать со смарт-контрактами кошелька](/v3/guidelines/smart-contracts/howto/wallet)
+* [SDK](/v3/guidelines/dapps/apis-sdks/sdk)
+
+<Feedback />
