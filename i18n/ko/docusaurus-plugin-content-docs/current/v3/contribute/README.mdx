@@ -1,48 +1,75 @@
-# 기여 방법
+# How to contribute
 
-## 기여할 영역 식별
+:::info
+Learn how to submit content to TON documentation here.
+:::
 
-TON Docs에 기여할 수 있는 영역을 식별하는 방법은 여러 가지가 있습니다:
+## Contribute rules
 
-- Telegram의 [TON Docs Club 채팅](https://t.me/+c-0fVO4XHQsyOWM8) 에 참여하여 유지 관리자에게서 최신 작업을 받습니다.
-- 구체적인 기여 사항이 있지만 확신이 서지 않는 경우, 직접 [Docs 유지 관리자](/contribute/maintainers) 에게 연락하여 해당 기여가 적절한지 확인하세요.
-- [TON Developers 채팅](https://t.me/tondev_eng) 채팅에서 자주 묻는 질문에 익숙해지세요.
-- GitHub 리포지토리에서 [issues](https://github.com/ton-community/ton-docs/issues)를 읽어보세요.
-- 사용 가능한 [footsteps](https://github.com/ton-society/ton-footsteps/issues?q=documentation) 문서를 참조하세요.
+### Documentation maintain community
 
-## 요약
+TON Documentation is entirely open source. Community enthusiasts and early TON contributors have played a key role in creating this open-source TON documentation by turning their notes into detailed pages.
 
-- TON Docs에 추가하거나 수정해야 할 사항이 있으면, main 브랜치를 대상으로 풀 리퀘스트를 생성하세요.
-- 문서 팀에서 풀 리퀘스트를 검토하거나 필요에 따라 연락을 드릴 것입니다.
-- Repository: https://github.com/ton-community/ton-docs
+It was initially written by TON [contributors](/v3/contribute/maintainers/) and supported by [TON Studio](https://tonstudio.io/).
+We aim to educate users about TON through explicit, easily searchable content that appeals to technical experts and casual readers.
 
-## 개발
+### How to contribute
 
-### 온라인 원클릭 기여 설정
+:::info
+This documentation is written in English. Please refer to [localization program](/v3/contribute/localization-program/how-to-contribute/) for other languages.
+:::
 
-Gitpod(무료 온라인 VS code와 유사한 IDE) 를 사용하여 기여할 수 있습니다. 한 번의 클릭으로 워크스페이스가 실행되며 자동으로 다음 작업이 이루어집니다:
+1. Clone a current version from the [ton-docs](https://github.com/ton-community/ton-docs) GitHub repository.
+2. Determine an area for contribution according to [Style guide](/v3/contribute/style-guide/) and open a related [issue](https://github.com/ton-community/ton-docs/issues).
+3. Familiarize yourself with [Content standardization](/v3/contribute/content-standardization/) and [Typography](/v3/contribute/typography/).
+4. Open a pull request against the `main` branch with a clear description and concise updates according to the template.
 
-[![깃팟에서 열기](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/ton-community/ton-docs)
+#### Pull request template
 
-### 코드 규칙
+```md
 
-- **가장 중요한 것**: 주변을 둘러보세요. 프로젝트의 전체 스타일을 맞추세요. 여기에는 서식 지정, 파일 이름 지정, 코드에서 객체 이름 지정, 문서에서 항목 이름 지정 등이 포함됩니다.
-- **문서용**: 문서를 편집할 때는 줄을 80자로 줄 바꿈하지 말고 소프트 줄 바꿈을 사용하도록 편집기를 구성하세요.
+## Description
 
-스타일에 대해 너무 걱정하지 마세요. 유지 관리자가 코드 검토 시 도움을 줄 것입니다.
+Brief description of the changes introduced in this pull request. Include any relevant issue numbers or links.
 
-### 풀 리퀘스트
+Closes [link to issue].
 
-코드를 업스트림으로 다시 기여하기 위해 풀 리퀘스트를 열기로 결정했습니다. 많은 노력을 기울인 것을 감사히 생각합니다. 우리는 최선을 다해 여러분과 협력하여 풀 리퀘스트를 검토하겠습니다.
+## Checklist
 
-풀 리퀘스트를 제출할 때는 다음 사항을 확인하세요:
+- [ ] I have created an issue.
+- [ ] I am working on content that aligns with the [Style guide](https://docs.ton.org/v3/contribute/style-guide/).
+- [ ] I have reviewed and formatted the content according to [Content standardization](https://docs.ton.org/v3/contribute/content-standardization/).
+- [ ] I have reviewed and formatted the text in the article according to [Typography](https://docs.ton.org/v3/contribute/typography/).
 
-1. **풀 리퀘스트를 작게 유지하세요**. 풀리퀘스트가 작을수록(~300줄 차이) 검토하기 쉽고 병합될 가능성이 높습니다. 풀 리퀘스트가 한 가지 일만 하는지 확인하고, 그렇지 않으면 분할하세요.
-2. **설명적인 제목을 사용하세요**. 커밋 메시지 스타일을 따르는 것이 좋습니다.
-3. **변경 사항을 테스트하세요**. 풀 리퀘스트 설명에 테스트 계획을 작성하세요.
+```
 
-모든 풀 리퀘스트는 `main` 브랜치에 대해 열어야 합니다.
+4. Before submitting your pull request, complete and verify each milestone in the description checklist.
 
-## 그 다음은 무엇인가요?
+:::info
+To avoid excessive rework, read the contribution guidelines in the [Style guide](/v3/contribute/style-guide/), [Content standardization](/v3/contribute/content-standardization/), and [Typography](/v3/contribute/typography/) before contributing. Don't worry about minor issues; maintainers will help you fix them during the review process.
+:::
 
-톤 문서 팀은 풀 리퀘스트를 모니터링할 것입니다. 위의 가이드를 따라 풀 리쉐스트가 일관성율 유지할 수 있도록 도와주세요.
+### Development
+
+* Learn the documentation development flow from a [ton-docs/README.md](https://github.com/ton-community/ton-docs?tab=readme-ov-file#set-up-your-environment-%EF%B8%8F) document.
+
+#### Best practices for pull requests
+
+1. **Keep your pull request small**. Minor pull requests (~300 lines of diff) are easier to review and more likely to get merged. Make sure the pull request does only one thing; otherwise, please split it.
+2. **Use descriptive titles**. It would be best to follow the commit message style.
+3. **Test your changes**. Run build locally, and make sure you have no crashes.
+4. **Use soft wrap**: Don't wrap lines at 80 characters; configure your editor to soft-wrap.
+
+## Communicate to other developers
+
+* [Ask questions related to TON documentation in the TON Docs Club chat in Telegram.](https://t.me/+c-0fVO4XHQsyOWM8)
+* [Get familiar with the most frequently asked questions in the TON Developers.](https://t.me/tondev_eng)
+* [Create an issue with your ideas on improvement.](https://github.com/ton-community/ton-docs/issues)
+* [Find and take available bounties for the documentation.](https://github.com/ton-society/ton-footsteps/issues?q=documentation)
+* [See docs-ton on GitHub.](https://github.com/ton-community/ton-docs)
+
+## See also
+
+* [Style guide](/v3/contribute/style-guide/)
+* [Typography](/v3/contribute/typography/)
+* [Localization program](/v3/contribute/localization-program/overview/)
