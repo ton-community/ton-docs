@@ -1,8 +1,6 @@
-# Советы и рекомендации
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Советы и рекомендации
 
 На этой странице Вы найдете список часто задаваемых вопросов, связанных с проблемами в TMA.
 
@@ -15,7 +13,7 @@
 ### Есть ли какие-то рекомендации по кэшированию заголовков для HTML-файлов?
 
 :::tip
-It's preferable to switch off cache in the HTML. To ensure your cache switched off, specify headers in your request according the following:
+It’s best to disable caching in HTML files. To ensure caching is turned off, specify the following headers in your request:
 
 ```curl
 Cache-Control: no-store, must-revalidate
@@ -36,9 +34,11 @@ Expires: 0
 Во многих веб-приложениях пользователи могут случайно закрыть приложение, во время прокрутки вверх. Это может произойти, если они перетянут секцию приложения слишком далеко, тем самым случайно вызвав его закрытие.
 
 <p align="center">
-    <br />
-    <img width="240" src="/img/docs/telegram-apps/closing-behaviour.svg" alt="closing_behaviour_durgerking" />
-    <br />
+  <br />
+
+  <img width="240" src="/img/docs/telegram-apps/closing-behaviour.svg" alt="closing_behaviour_durgerking" />
+
+  <br />
 </p>
 
 Чтобы предотвратить такое случайное закрытие, включите `closing_behavior` в TMA. Этот метод добавит диалог, в котором пользователь может либо подтвердить, либо отклонить закрытие веб-приложения.
@@ -50,9 +50,11 @@ window.Telegram.WebApp.enableClosingConfirmation()
 ## Как указать описание для конкретного языка в TMA?
 
 :::tip
-You can configure your description with following methods:
+Use the following methods to configure descriptions in different languages:
 
-- https://core.telegram.org/bots/api#setmydescription
-- https://core.telegram.org/bots/api#setmyshortdescription
+* https://core.telegram.org/bots/api#setmydescription
+* https://core.telegram.org/bots/api#setmyshortdescription
 
 :::
+
+<Feedback />
