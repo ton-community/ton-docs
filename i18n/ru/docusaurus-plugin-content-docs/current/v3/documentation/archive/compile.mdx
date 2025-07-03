@@ -1,15 +1,13 @@
-# Составляйте и создавайте смарт-контракты на TON
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Составляйте и создавайте смарт-контракты на TON
 
 Вот список библиотек и репозиториев для создания Вашего смарт-контракта.
 
 **TLDR:**
 
-- В большинстве случаев достаточно использовать Blueprint SDK.
-- Если Вам нужен более низкоуровневый подход, Вы можете использовать ton-compiler или func-js.
+* В большинстве случаев достаточно использовать Blueprint SDK.
+* Если Вам нужен более низкоуровневый подход, Вы можете использовать ton-compiler или func-js.
 
 ## Blueprint
 
@@ -29,9 +27,9 @@ npm create ton@latest
 
 ### Особенности
 
-- Оптимизированный рабочий процесс для создания, тестирования и развертывания смарт-контрактов
-- Очень простое развертывание в mainnet/testnet с помощью Вашего любимого кошелька (например, Tonkeeper)
-- Удивительно быстрое тестирование нескольких смарт-контрактов в изолированном блокчейне, работающем в процессе
+* Оптимизированный рабочий процесс для создания, тестирования и развертывания смарт-контрактов
+* Очень простое развертывание в mainnet/testnet с помощью Вашего любимого кошелька (например, Tonkeeper)
+* Удивительно быстрое тестирование нескольких смарт-контрактов в изолированном блокчейне, работающем в процессе
 
 ### Технологический стек
 
@@ -41,13 +39,13 @@ npm create ton@latest
 
 ### Требования
 
-- [Node.js](https://nodejs.org) последней версии, например, v18, проверьте версию с помощью `node -v`
-- IDE с поддержкой TypeScript и FunC, например [Visual Studio Code](https://code.visualstudio.com/) с [плагином FunC](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
+* [Node.js](https://nodejs.org) последней версии, например, v18, проверьте версию с помощью `node -v`
+* IDE с поддержкой TypeScript и FunC, например [Visual Studio Code](https://code.visualstudio.com/) с [плагином FunC](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
 
 ### Как использовать?
 
-- [Посмотрите презентацию DoraHacks с демонстрацией работы с blueprint](https://www.youtube.com/watch?v=5ROXVM-Fojo).
-- Прочитайте подробное объяснение в [репозитории Blueprint](https://github.com/ton-community/blueprint#create-a-new-project).
+* [Посмотрите презентацию DoraHacks с демонстрацией работы с blueprint](https://www.youtube.com/watch?v=5ROXVM-Fojo).
+* Прочитайте подробное объяснение в [репозитории Blueprint](https://github.com/ton-community/blueprint#create-a-new-project).
 
 ## ton-compiler
 
@@ -55,8 +53,8 @@ npm create ton@latest
 
 Упакованный компилятор FunC для смарт-контрактов TON:
 
-- GitHub: [ton-community/ton-compiler](https://github.com/ton-community/ton-compiler)
-- NPM: [ton-compiler](https://www.npmjs.com/package/ton-compiler)
+* GitHub: [ton-community/ton-compiler](https://github.com/ton-community/ton-compiler)
+* NPM: [ton-compiler](https://www.npmjs.com/package/ton-compiler)
 
 ### Установка
 
@@ -66,10 +64,10 @@ npm install ton-compiler
 
 ### Особенности
 
-- Несколько версий компилятора FunC
-- Не нужно устанавливать и компилировать TON
-- Программные и CLI-интерфейсы
-- Готовность к использованию в модульном тестировании
+* Несколько версий компилятора FunC
+* Не нужно устанавливать и компилировать TON
+* Программные и CLI-интерфейсы
+* Готовность к использованию в модульном тестировании
 
 ### Как использовать
 
@@ -119,8 +117,8 @@ if (result.ok) {
 
 Он более низкоуровневый, чем ton-compiler, поэтому используйте его только в том случае, если ton-compiler Вам не подходит.
 
-- GitHub: [ton-community/func-js](https://github.com/ton-community/func-js)
-- NPM: [@ton-community/func-js](https://www.npmjs.com/package/@ton-community/func-js)
+* GitHub: [ton-community/func-js](https://github.com/ton-community/func-js)
+* NPM: [@ton-community/func-js](https://www.npmjs.com/package/@ton-community/func-js)
 
 ### Установка
 
@@ -130,11 +128,11 @@ npm install @ton-community/func-js
 
 ### Особенности
 
-- Нет необходимости компилировать или загружать двоичные файлы FunC
-- Работает как в Node.js, так и в **WEB** (требуется поддержка WASM)
-- Компилируется прямо в BOC с кодом Cell
-- Сборка возвращается для отладки
-- Не зависит от файловой системы
+* Нет необходимости компилировать или загружать двоичные файлы FunC
+* Работает как в Node.js, так и в **WEB** (требуется поддержка WASM)
+* Компилируется прямо в BOC с кодом Cell
+* Сборка возвращается для отладки
+* Не зависит от файловой системы
 
 ### Как использовать
 
@@ -184,22 +182,24 @@ async function main() {
 
 Обратите внимание, что все содержимое исходных файлов FunC, используемое в Вашем проекте, должно быть передано в `sources`, включая:
 
-- точки входа
-- stdlib.fc (если Вы его используете)
-- все файлы, включенные в точки входа
+* точки входа
+* stdlib.fc (если Вы его используете)
+* все файлы, включенные в точки входа
 
 ### Проверено сообществом TON
 
-- [ton-community/ton-compiler](https://github.com/ton-community/ton-compiler) - готовый к использованию компилятор FunC для смарт-контрактов TON.
-- [ton-community/func-js](https://github.com/ton-community/func-js) - кроссплатформенные привязки для компилятора TON FunC.
+* [ton-community/ton-compiler](https://github.com/ton-community/ton-compiler) - готовый к использованию компилятор FunC для смарт-контрактов TON.
+* [ton-community/func-js](https://github.com/ton-community/func-js) - кроссплатформенные привязки для компилятора TON FunC.
 
-### Сторонние контрибьюторы
+### Third-party contributors
 
-- [grozzzny/ton-compiler-groz](https://github.com/grozzzny/ton-compiler-groz) - компилятор смарт-контрактов TON FunC.
-- [Termina1/tonc](https://github.com/Termina1/tonc) - TONC (компилятор TON). Использует WASM, поэтому идеально подходит для Linux.
+* [grozzzny/ton-compiler-groz](https://github.com/grozzzny/ton-compiler-groz) - компилятор смарт-контрактов TON FunC.
+* [Termina1/tonc](https://github.com/Termina1/tonc) - TONC (компилятор TON). Использует WASM, поэтому идеально подходит для Linux.
 
 ## Другие
 
-- [disintar/toncli](https://github.com/disintar/toncli) - один из самых популярных подходов. Вы даже можете использовать его с Docker.
-- [tonthemoon/ton](https://github.com/tonthemoon/ton) - *(закрытая бета)* однострочный установщик бинарных файлов TON.
-- [delab-team/tlbcrc](https://github.com/delab-team/tlbcrc) - Пакет и CLI для генерации опкодов по схеме TL-B
+* [disintar/toncli](https://github.com/disintar/toncli) - один из самых популярных подходов. Вы даже можете использовать его с Docker.
+* [tonthemoon/ton](https://github.com/tonthemoon/ton) - *(закрытая бета)* однострочный установщик бинарных файлов TON.
+* [delab-team/tlbcrc](https://github.com/delab-team/tlbcrc) - Пакет и CLI для генерации опкодов по схеме TL-B
+
+<Feedback />
