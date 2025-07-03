@@ -1,15 +1,12 @@
-# Обзор низкоуровневых комиссий
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Обзор низкоуровневых комиссий
 
 :::caution
 This section describes instructions and manuals for interacting with TON at a low level.
-
 Здесь вы найдете **сырые формулы** для расчета комиссий и сборов в TON.
-
-Однако большинство из них **уже реализованы через коды операций**! Поэтому вы **используете их вместо ручных вычислений**
+Однако большинство из них **уже реализованы через коды операций**!
+Поэтому вы **используете их вместо ручных вычислений**
 :::
 
 В этом документе дается общее представление о комиссиях за транзакции в TON и, в частности, о комиссиях за вычисления для кода FunC. Также есть [подробная спецификация в техническом документе TVM](https://ton.org/tvm.pdf).
@@ -47,22 +44,22 @@ storage_fee = ceil(
 
 Давайте рассмотрим каждое значение более подробно:
 
-- `storage_fee` — цена за хранение для `time_delta` секунд
-- `account.cells` — количество ячеек, используемых смарт-контрактом
-- `account.bits` — количество бит, используемых смарт-контрактом
-- `cell_price` — цена одной ячейки
-- `bit_price` — цена одного бита
+* `storage_fee` — цена за хранение для `time_delta` секунд
+* `account.cells` — количество ячеек, используемых смарт-контрактом
+* `account.bits` — количество бит, используемых смарт-контрактом
+* `cell_price` — цена одной ячейки
+* `bit_price` — цена одного бита
 
 И `cell_price`, и `bit_price` можно получить из конфигурации сети [параметр 18](/v3/documentation/network/configs/blockchain-configs#param-18).
 
 Текущие значения:
 
-- Воркчейн.
+* Workchain.
   ```cpp
   bit_price_ps:1
   cell_price_ps:500
   ```
-- Мастерчейн.
+* Мастерчейн.
   ```cpp
   mc_bit_price_ps:1000
   mc_cell_price_ps:500000
@@ -113,16 +110,16 @@ function storageFeeCalculator() {
 
 Помимо этих основных сборов, появляются следующие сборы:
 
-| Инструкция                  | Цена газа | Описание                                                                                                                                                                                                                |
-| --------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Создание ячейки             | **500**   | Операция преобразования строителя в ячейку.                                                                                                                                                             |
-| Анализ ячейки в первый раз  | **100**   | Операция преобразования ячеек в срезы первый раз в ходе текущей транзакции.                                                                                                                             |
-| Повторный анализ ячейки     | **25**    | Операция преобразования ячеек в срезы, которая уже была проанализирована в ходе той же транзакции.                                                                                                      |
-| Вызов исключения            | **50**    |                                                                                                                                                                                                                         |
-| Операция с кортежем         | **1**     | Эта цена будет умножена на количество элементов кортежа.                                                                                                                                                |
-| Неявный переход             | **10**    | Оплачивается, когда выполняются все инструкции в текущей ячейке продолжения. Однако в этой ячейке продолжения есть ссылки, и поток выполнения переходит к первой ссылке.                |
-| Неявный обратный переход    | **5**     | Он оплачивается, когда все инструкции в текущем продолжении выполнены, и поток выполнения возвращается к продолжению, из которого было вызвано только что завершенное продолжение.                      |
-| Перемещение элементов стека | **1**     | Цена за перемещение элементов стека между продолжениями. Будет взиматься соответствующая цена газа за каждый элемент. Однако перемещение первых 32 элементов бесплатно. |
+| Инструкция                  | Цена газа | Описание                                                                                                                                                                           |
+| --------------------------- | --------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Создание ячейки             | **500**   | Операция преобразования строителя в ячейку.                                                                                                                                        |
+| Анализ ячейки в первый раз  | **100**   | Операция преобразования ячеек в срезы первый раз в ходе текущей транзакции.                                                                                                        |
+| Повторный анализ ячейки     | **25**    | Операция преобразования ячеек в срезы, которая уже была проанализирована в ходе той же транзакции.                                                                                 |
+| Вызов исключения            | **50**    |                                                                                                                                                                                    |
+| Операции со стеком          | **1**     | Эта цена будет умножена на количество элементов кортежа.                                                                                                                           |
+| Implicit Jump               | **10**    | Оплачивается, когда выполняются все инструкции в текущей ячейке продолжения. Однако в этой ячейке продолжения есть ссылки, и поток выполнения переходит к первой ссылке.           |
+| Implicit Back Jump          | **5**     | Он оплачивается, когда все инструкции в текущем продолжении выполнены, и поток выполнения возвращается к продолжению, из которого было вызвано только что завершенное продолжение. |
+| Перемещение элементов стека | **1**     | Цена за перемещение элементов стека между продолжениями. Будет взиматься соответствующая цена газа за каждый элемент. Однако перемещение первых 32 элементов бесплатно.            |
 
 ### Плата за газ для FunC конструкций
 
@@ -200,11 +197,11 @@ builder payload_encoding(int a, int b, int c) {
 
 Словари в TON представлены как деревья (точнее, DAG) ячеек. Это означает, что если вы ищете, читаете или пишете в словарь, вам нужно разобрать все ячейки соответствующей ветви дерева. Это означает, что
 
-- а) операции со словарями не фиксированы в стоимости газа (так как размер и количество узлов в ветви зависят от данного словаря и ключа)
-- б) целесообразно оптимизировать использование словаря, используя специальные инструкции, такие как `replace` вместо `delete` и `add`
-- в) разработчик должен знать об операциях итерации (таких как next и prev), а также об операциях `min_key`/`max_key`, чтобы избежать ненужной итерации по всему словарю
+* а) операции со словарями не фиксированы в стоимости газа (так как размер и количество узлов в ветви зависят от данного словаря и ключа)
+* б) целесообразно оптимизировать использование словаря, используя специальные инструкции, такие как `replace` вместо `delete` и `add`
+* в) разработчик должен знать об операциях итерации (таких как next и prev), а также об операциях `min_key`/`max_key`, чтобы избежать ненужной итерации по всему словарю
 
-### Операции со стеком
+### Операция с кортежем
 
 Обратите внимание, что FunC манипулирует записями стека под капотом. Это означает, что код:
 
@@ -223,8 +220,15 @@ return (c, b, a);
 
 ### IHR
 
-:::tip
-На данный момент (ноябрь 2024 г.) [IHR](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) не реализован, и если вы установите `ihr_fee` на ненулевое значение, оно всегда будет добавлено к значению сообщения при получении. На данный момент нет практических причин делать это.
+:::info What is IHR?
+
+* **IHR is not implemented** and is not yet fully specified
+* **IHR would only be relevant** when the network has more than 16 shards and not all shards are neighbors to each other
+* **Current network settings forbid splitting deeper than 16 shards**, which means IHR is not relevant in any practical sense
+
+In the current TON network configuration, all message routing uses standard **Hypercube Routing (HR)**, which can handle message delivery efficiently with the current shard topology. The `ihr_fee` field exists in the message structure for future compatibility, but serves no functional purpose today.
+
+[IHR](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) не реализован, и если вы установите `ihr_fee` на ненулевое значение, оно всегда будет добавлено к значению сообщения при получении. На данный момент нет практических причин делать это.
 :::
 
 ### Формула
@@ -271,7 +275,7 @@ total_fees = sum(action_fee) + sum(total_fwd_fees);
 
 :::
 
-Начиная с четвертой [глобальной версии](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md) TON, если действие "отправить сообщение" не выполняется, аккаунт должен оплатить обработку ячеек сообщения, называемую `action_fine`.
+Starting from the fourth [global version](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md) of TON, if a "send message" action fails, the account is required to pay for processing the cells of the message, referred to as the `action_fine`.
 
 ```cpp
 fine_per_cell = floor((cell_price >> 16) / 4)
@@ -285,24 +289,26 @@ action_fine = fine_per_cell * min(max_cells, cells_in_msg);
 
 Все платы указаны в nanoton или nanoton, умноженных на 2^16, чтобы [сохранить точность при использовании целого числа](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) и могут быть изменены. Файл конфигурации отображает текущую стоимость платы.
 
-- storage_fees = [p18](https://tonviewer.com/config#18)
-- in_fwd_fees = [p24](https://tonviewer.com/config#24), [p25](https://tonviewer.com/config#25)
-- computation_fees = [p20](https://tonviewer.com/config#20), [p21](https://tonviewer.com/config#21)
-- action_fees = [p24](https://tonviewer.com/config#24), [p25](https://tonviewer.com/config#25)
-- out_fwd_fees = [p24](https://tonviewer.com/config#24), [p25](https://tonviewer.com/config#25)
+* storage_fees = [p18](https://tonviewer.com/config#18)
+* in_fwd_fees = [p24](https://tonviewer.com/config#24), [p25](https://tonviewer.com/config#25)
+* computation_fees = [p20](https://tonviewer.com/config#20), [p21](https://tonviewer.com/config#21)
+* action_fees = [p24](https://tonviewer.com/config#24), [p25](https://tonviewer.com/config#25)
+* out_fwd_fees = [p24](https://tonviewer.com/config#24), [p25](https://tonviewer.com/config#25)
 
 :::info
-[A direct link to the mainnet live config file](https://tonviewer.com/config)
+[A direct link to the mainnet live config file](https://tonviewer.com/config).
 
-В образовательных целях пример старого
+For educational purposes [example of the old one](https://explorer.toncoin.org/config?workchain=-1\&shard=8000000000000000\&seqno=22185244\&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382\&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05).
 :::
 
 ## Ссылки
 
-- На основе @thedailyton [статья](https://telegra.ph/Fees-calculation-on-the-TON-Blockchain-07-24) от 24.07\*
+* На основе @thedailyton [статья](https://telegra.ph/Fees-calculation-on-the-TON-Blockchain-07-24) от 24.07\*
 
 ## См. также
 
-- [Обзор комиссий TON](/v3/documentation/smart-contracts/transaction-fees/fees)
-- [Транзакции и фазы](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
-- [Расчет комиссий](/v3/guidelines/smart-contracts/fee-calculation)
+* [Обзор комиссий TON](/v3/documentation/smart-contracts/transaction-fees/fees)
+* [Транзакции и фазы](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
+* [Расчет комиссий](/v3/guidelines/smart-contracts/fee-calculation)
+
+<Feedback />
