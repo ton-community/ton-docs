@@ -22,7 +22,7 @@ For a deeper breakdown of how fees work in TON, refer to:
 To simplify tracking changes in gas usage and data size,
 we’ve introduced a reporting system that lets you collect and compare metrics across different versions of a contract.
 
-To enable this, write test scenarios that cover the contract’s primary usage patterns and verify that its behaviour is as expected. This approach is sufficient to gather relevant metrics, which you can later use to compare performance changes after updating the implementation.
+To enable this, write test scenarios that cover the contract’s primary usage patterns and verify that its behavior is as expected. This approach is sufficient to gather relevant metrics, which you can later use to compare performance changes after updating the implementation.
 
 
 Before running the tests, a store is created to collect metrics from all transactions generated during the tests. After test execution, the collected metrics are supplemented with [ABI information from the snapshot](https://github.com/ton-org/sandbox/blob/feature/betch/docs/collect-metric-api.md#abi-auto-mapping), and a report is generated based on this data.
