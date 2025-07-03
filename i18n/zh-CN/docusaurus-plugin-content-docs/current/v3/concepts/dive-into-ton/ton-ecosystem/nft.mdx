@@ -1,80 +1,90 @@
----
----
+import Feedback from '@site/src/components/Feedback';
 
-# NFT 用例
+# NFT use cases
 
-NFT，或非同质化代币，是一种独特的数字资产，无法被另一种相同的资产替代。本文描述了在TON区块链中已实现的NFT使用案例和方法。
+After reading this article, you'll understand why NFTs are helpful and how to use them in real life.
 
-阅读本文后，您将了解为什么NFT有用以及如何在您的项目中使用它们。
+## Introduction
 
-## 物品所有权
+**Non-fungible token (NFT)** is a type of unique digital asset that can't be replaced by another identical asset. This article describes the approaches and use cases of NFTs already implemented in TON Blockchain.
 
-非同质化代币主要被认为是您可以在OpenSea或[getgems.io](https://getgems.io)等NFT市场上买卖的酷炫图片。
+### Item ownership
 
-NFT图片和集合很有趣，帮助人们理解基于区块链的所有权概念。然而，从长远来看，NFT的关注点应该超越此，以展示它们的多种潜在用途。
+Non-fungible tokens are mostly known as cool pictures that can be bought and sold on NFT marketplaces like OpenSea or [getgems.io](https://getgems.io).
 
-## 支持艺术家
+NFT pictures and collections are funny and help people understand the concept of blockchain-based ownership. However, in the long term, the NFT focus should shift beyond this to illustrate its wide variety of potential use cases.
 
-开发NFT的最初动机之一是找到一种支持艺术家的方法，通过购买以NFT集合形式存储在区块链中的他们的作品。
+In 2024, Telegram introduced [gifts as NFT items](https://telegram.org/blog/wear-gifts-blockchain-and-more#move-gifts-to-the-blockchain).
 
-通过这种方式，艺术家可以通过出售新作品以及之后在市场上转售NFT时获得的版税来赚钱。
+### Support an artist
 
-这是getgems.io或OpenSea等市场成为如今任何区块链基本基础设施的最常见原因之一。
+One of the initial motivations behind the development of NFTs was finding a way to support artists by buying their works packed as collections of NFTs stored in the blockchain.
 
-## 将账户作为 NFT
+In this way, artists could make money by selling new works and receiving royalties from subsequent resales of the NFT on the market.
 
-11月，Telegram团队推出了[Fragment](https://fragment.com/)市场，任何人都可以在TON区块链上以NFT的形式购买和出售Telegram用户名或匿名号码。
+This use case is one of the most common reasons why marketplaces like getgems.io or OpenSea are part of the essential infrastructure of any blockchain nowadays.
 
-此外，12月Telegram团队发布了[无SIM卡注册](https://telegram.org/blog/ultimate-privacy-topics-2-0#sign-up-without-a-sim-card)。您可以购买**虚拟电话号码**作为NFT，在Telegram Messenger中注册，确保您的隐私由TON区块链保护。
+### Accounts as NFTs
 
-## 域名作为 NFT
+In November, the Telegram team launched the [Fragment](https://fragment.com/) marketplace. This marketplace allows anyone to buy and sell Telegram usernames or Anonymous Numbers backed by an NFT on the TON Blockchain.
 
-TON DNS服务完全基于链上运作。如果您想在TON支持的去中心化网络中拥有像`mystore.ton`这样的域名，您需要在[DNS市场](https://dns.ton.org/)为您的钱包购买NFT域名，并支付在区块链中存储和处理数据的租赁费。
+Moreover, in 2022, the Telegram team released [No-SIM sign-up](https://telegram.org/blog/ultimate-privacy-topics-2-0#sign-up-without-a-sim-card). You can buy a virtual phone number as an NFT to sign up in Telegram Messenger and ensure that your privacy is secured by the TON Blockchain.
 
-在Fragment上购买的NFT用户名也可以用于TON DNS，将其绑定到您的钱包，并使用您的username.t.me NFT作为钱包地址。
+### Domain as an NFT
 
-### NFT 作为您钱包的地址
+The TON DNS service works fully on-chain. If you want to own a domain in the decentralized web backed by TON like `mystore.ton` you need to buy the NFT domain on [DNS marketplace](https://dns.ton.org/) for your wallet and pay a rental fee for storing and processing data in the blockchain.
 
-每个加密领域的人都理解钱包的独特地址，如`Egbt...Ybgx`。
+You can also use the NFT usernames bought on Fragment for TON DNS to bind them to your wallet and use your `username.t.me` NFT as a wallet address.
 
-但如果您想从您的妈妈那里接收钱，这对于区块链大规模采用来说是一种无用的方法！
+### NFT as an address for your wallet
 
-这就是为什么使用`billy.ton`这样的域名支持的钱包对于非加密领域的用户来说效果更好。
+Everyone in crypto understands the idea of a unique wallet address like `Egbt...Ybgx`.
 
-[Tonkeeper](https://tonkeeper.com/)钱包已经实现了这种方法。您现在可以去查看。
+But if you want to receive money from your mom, it's a useless approach to blockchain mass adoption!
 
-## 票务作为 NFT
+That's why a wallet backed by the domain `billy.ton` would work better for users outside of crypto.
 
-NFT票提供了一种出色的解决方案，用于验证参加音乐会或会议等活动的准入。
+Various TON wallet apps, like [Tonkeeper](https://tonkeeper.com/) wallet, have already implemented this approach. You can go ahead and check it out now.
 
-拥有NFT票提供了几个独特的优势：
+### Ticket as an NFT
 
-首先，NFT票无法被伪造或复制，消除了假票的欺诈性销售的可能性。这确保了买家可以信任票的真实性和卖家的合法性，让他们对所支付的内容充满信心。
+NFT tickets provide an excellent solution for verifying access to events, like concerts or conferences.
 
-其次，NFT票为收藏打开了令人兴奋的机会。作为NFT票的所有者，您可以将其存储在您的数字钱包中，并拥有来自各种活动的整个票务集合。这为音乐和艺术爱好者创造了一种新的审美和财务满足感。
+Owning an NFT ticket offers several unique advantages:
 
-第三，NFT票提供了便利性和方便性。它们可以使用数字钱包轻松转移，使用户免于亲自接收或发送票的麻烦。与朋友交换票或在二级市场上购买它们的过程变得更简单、更方便。
+First and foremost, NFT tickets cannot be forged or copied, eliminating the possibility of fraudulently selling fake tickets. This NFT property ensures that buyers can trust the ticket's authenticity and the seller's legitimacy, giving them confidence in what they're paying for.
 
-此外，拥有NFT票可能会带来额外的好处和特殊特权。一些艺术家或组织者可能会提供NFT票持有者独家后台访问权、与艺术家见面会或其他奖励，为NFT票持有者增添独特的文化体验。
+Secondly, NFT tickets open up exciting opportunities for collecting. As the owner of an NFT ticket, you can store it in your digital wallet and have access to a whole collection of tickets from various events. This opportunity creates a new aesthetic and financial satisfaction for music and art lovers.
 
-## 授权令牌作为 NFT
+Thirdly, NFT tickets provide accessibility and convenience. Users can quickly transfer NFTs using digital wallets, which eliminates the hassle of physically receiving or sending tickets. The process of exchanging tickets with friends or purchasing them on the secondary market becomes simpler and more convenient.
 
-将NFT用作授权令牌引入了一种革命性的授权访问权和权限的方法。
+Additionally, owning an NFT ticket can include extra benefits and special privileges. Some artists or organizers may offer NFT ticket holders exclusive backstage access, meet-and-greets with artists, or other bonuses, adding to the unique cultural experience for NFT ticket holders.
 
-NFT代币确保了高级别的安全性，不容易被复制或伪造。这消除了未经授权的访问或假认证的风险，提供了可靠的认证。
+### Authorization token as an NFT
 
-此外，由于它们的透明性和可追踪性，NFT授权令牌的真实性和所有权可以轻松验证。这使得快速高效的验证成为可能，确保方便地访问各种平台、服务或受限内容。
+Using NFTs as authorization tokens introduces a revolutionary approach to granting access rights and permissions.
 
-还值得一提的是，NFT在管理权限方面提供了灵活性和适应性。由于NFT可以以编程方式编码特定的访问规则或属性，它们可以适应不同的授权要求。这种灵活性允许对访问级别进行细致的控制，根据需要授予或撤销权限，这在需要分层访问或临时授权限制的场景中尤为有价值。
+NFT tokens ensure elevated security and cannot be easily copied or forged. This eliminates the risk of unauthorized access or fake authentication and provides reliable authentication.
 
-目前提供NFT认证的服务之一是[Playmuse](https://playmuse.org/)，这是一个基于TON区块链的媒体服务。该服务旨在吸引Web3音乐家以及其他创作者。
+Furthermore, thanks to their transparency and traceability, the authenticity and ownership of an NFT authorization token unlock easy verification. This feature ensures convenient access to various platforms, services, or restricted content.
 
-Playmuse NFT的所有者可以进入持有者聊天室。作为这个聊天室的参与者，提供了影响服务发展方向的机会，对各种倡议进行投票，并提前接触到著名创作者的预售和NFT拍卖。
+It's also worth mentioning that NFTs provide flexibility and adaptability in managing permissions. Since you can programmatically encode NFTs with specific access rules or attributes, they can adapt to different authorization requirements. This flexibility allows for fine-grained control over access levels, granting or revoking permissions as needed, which can be particularly valuable in scenarios that require hierarchical access or temporary authorization restrictions.
 
-通过Telegram机器人进入聊天室，该机器人会验证用户钱包中是否有Playmuse NFT。
+One of the services currently offering NFT authentication is [Playmuse](https://playmuse.org/), a media service built on the TON blockchain. This service aims to attract Web3 musicians and other creators.
 
-值得注意的是，这只是一个例子，随着TON生态系统的发展，可能会出现新的服务和技术，用于通过NFT进行认证。跟上TON领域的最新发展可以帮助识别其他提供类似认证功能的平台或开源项目。
+Owners of NFTs from Playmuse gain access to the holders' chat. Participating in this chat allows you to influence the service's development direction, vote on various initiatives, and receive early access to presales and NFT auctions featuring renowned creators.
 
-## NFT 作为游戏中的虚拟资产
+A Telegram bot facilitates access to the chat by verifying the presence of a Playmuse NFT in the user's wallet.
 
-集成到游戏中的NFT允许玩家以可验证和安全的方式拥有和交易游戏内物品，这为游戏增添了额外的价值和兴奋感。
+It is important to note that this is just one example. As TON Ecosystem evolves, new services and technologies for authentication via NFTs may emerge. Keeping up with the latest developments in the TON space can help identify other platforms or open-source projects that provide similar authentication capabilities.
+
+### NFT as a virtual asset in games
+
+NFT integrated into a game allows players to own and trade in-game items in a verifiable and secure way, which adds an extra layer of value and excitement to the game.
+
+## See also
+
+* [TON wallet apps](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps)
+* [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton)
+
+<Feedback />
