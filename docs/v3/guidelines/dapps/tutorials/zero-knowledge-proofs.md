@@ -339,6 +339,7 @@ export const Opcodes = {
 ```
 
 Next, add the `sendVerify` function to the `ZkSimple` class. This function sends the proof to the contract for verification::
+
 ```ts
 async sendVerify(
   provider: ContractProvider,
