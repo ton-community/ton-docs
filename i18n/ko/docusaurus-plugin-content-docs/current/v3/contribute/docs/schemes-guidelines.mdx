@@ -1,87 +1,102 @@
+import Feedback from '@site/src/components/Feedback';
+
 import ConceptImage from '@site/src/components/conceptImage';
 import ThemedImage from '@theme/ThemedImage';
 
-# 그래픽 설명 가이드라인
+# Graphic Explanations Guidelines
 
-문서의 일관성을 유지하는 것은 매우 중요하며, 이를 위해 스마트 컨트랙트의 프로세스를 시각화하기 위한 특정 표준이 개발되었습니다.
+:::danger
+This page is outdated and will be deleted soon.
+See the [How to contribute](/v3/contribute/).
+:::
 
-## 그래픽 설명 표기법
+Maintaining consistency in documentation is crucial, and to achieve this, a specific standard for visualizing processes in smart contracts has been developed.
 
-### 메시지 처리 그래프
+## Graphic Explanation Notation
 
-메시지 처리를 설명하려면 트랜잭션과 메시지에 대한 레이블이 있는 스마트 컨트랙트 그래프와 유사한 그래픽 표현을 사용하는 것이 좋습니다.
+### Message Processing Graph
 
-트랜잭션 순서가 중요하지 않은 경우 레이블을 생략할 수 있습니다. 이는 다이어그램을 단순화하여 메시지 및 계약과 관련된 세부 정보를 더 쉽게 읽고 이해할 수 있도록 합니다.
+To depict message processing, it's advisable to utilize a graphical representation resembling a smart contract graph, complete with labels for transactions and messages.
 
-#### 주석 기본 요소
+If the order of transactions doesn't matter, you can omit their labels. This simplifies the diagram, making it easier to read and understand the details related to messages and contracts.
 
-| 그림                                                                                                         | 설명                                |
-| ---------------------------------------------------------------------------------------------------------- | --------------------------------- |
-| ![](/img/docs/scheme-templates/message-processing-graphs/circle_for_smart_contract.svg?raw=true)           | 원형 - 스마트 컨트랙트 엔티티                 |
-| ![](/img/docs/scheme-templates/message-processing-graphs/rectangle_for_regular_message.svg?raw=true)       | 직사각형 - 메시지 엔티티                    |
-| ![](/img/docs/scheme-templates/message-processing-graphs/dashed_rectgl_for_optional_message.svg?raw=true)  | 대시 직사각형 - 선택적 메시지 엔티티             |
-| ![](/img/docs/scheme-templates/message-processing-graphs/line_for_transaction.svg?raw=true)                | 트랜잭션(숫자 선택 사항) |
-| ![](/img/docs/scheme-templates/message-processing-graphs/person_figure_for_actor.svg?raw=true)             | 배우                                |
+#### Annotation Primitives
 
-- 다양하고 밝은 색상의 사용을 피하십시오.
-- 점선 테두리와 같은 도형의 변형을 사용하십시오.
-- 더 나은 이해를 위해 서로 다른 트랜잭션을 뚜렷한 선 스타일 (실선 및 점선) 로 표시할 수 있습니다.
-
-#### 메시지 처리 예제
-
-<br></br>
 <ThemedImage
   alt=""
   sources={{
-    light: '/img/docs/message-delivery/message_delivery_2.svg?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_2.svg?raw=true',
+   light: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1.png?raw=true',
+   dark: '/img/docs/scheme-templates/message-processing-graphs/Graphic-Explanations-Guidelines_1_dark.png?raw=true',
   }}
 />
-<br></br>
 
-Visio [message-processing.vsdx](/static/schemes-visio/message-processing.vsdx)에서 직접 참조를 학습하세요.
+<br />
 
-### 형식 및 색상
+* Avoid using big quantity different and bright colors.
+* Use the modification of figures, such as using a dashed border line.
+* For better comprehension, different transactions could be displayed with distinct line styles (solid and dashed).
 
-#### 폰트
+#### Message Processing Example
 
-- 다이어그램 내의 모든 텍스트에 **Inter** 폰트 패밀리를 사용합니다.
+<br />
 
-#### 색상 - 라이트 모드
+<ThemedImage
+  alt=""
+  sources={{
+   light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
+   dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
+  }}
+/>
 
-- 연필 손그림 (기본 테마)
+<br />
 
-#### 색상 - 다크 모드
+Learn references directly from Visio [message-processing.vsdx](/schemes-visio/message_processing.vsdx).
 
-- 폰트 `#e3e3e3`
-- 배경 `#232328`
-- 라이트 하이라이트 (화살표 및 구성표 테두리) `#058dd2`
-- 다크 하이라이트 (화살표 및 구성표 테두리) `#0088cc`
-- 내부 배경(중첩 블록용) `#333337`
+### Formats and Colors
 
-#### 버전 관리 정책
+#### Fonts
 
-- 다양한 기기에서 가독성을 보장하기 위해 문서의 다이어그램을 SVG 형식으로 설정하여 스키마에 맞게 구성하세요.
-- 향후 수정이 용이하도록 원본 파일을 프로젝트의 Git 리포지토리에 "/static/visio" 디렉토리에 저장하세요.
+* **Inter** fonts family  for all text within diagrams.
 
-### 시퀀스 다이어그램
+#### Colors - Light Mode
 
-2~3명의 액터 간의 복잡하고 반복적인 통신 체계의 경우, 시퀀스 다이어그램을 사용하는 것이 좋습니다. 메시지의 경우 일반적인 동기식 메시지 화살표 표기법을 사용합니다.
+* Pencil Hand Drawn(default theme)
 
-#### 예제
+#### Colors - Dark Mode
 
-<br></br>
+* Font `#e3e3e3`
+* Background `#232328`
+* Light Highlight(arrows and scheme borders) `#058dd2`
+* Dark Highlight(arrows and scheme borders) `#0088cc`
+* InnerBackGround(for nested blocks) `#333337`
+
+#### Version Control Policy
+
+* Set diagrams in the documentation by SVG format for schemes to ensure readability on various devices.
+* Store original files in the project's Git repository under the "/static/visio" directory, making them easier to modify in the future.
+
+### Sequence Diagram
+
+In the case of complex and repetitive communication schemes between 2-3 actors, it is advisable to use a sequence diagram. For messages, use the notation of a common synchronous message arrow.
+
+#### Example
+
+<br />
+
 <div class="text--center">
-<ThemedImage
-  alt=""
-  sources={{
-    light: '/img/docs/message-delivery/message_delivery_7.svg?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_7.svg?raw=true',
-  }}
-/>
+  <ThemedImage
+    alt=""
+    sources={{
+     light: '/img/docs/message-delivery/message_delivery_7.png?raw=true',
+     dark: '/img/docs/message-delivery/message_delivery_7_dark.png?raw=true',
+    }}
+  />
 </div>
-<br></br>
 
-### 스키마 참조
+<br />
 
-- [message-processing.vsdx](/schemes-visio/message_processing.vsdx)
+### Scheme References
+
+* [message-processing.vsdx](/schemes-visio/message_processing.vsdx)
+
+<Feedback />
