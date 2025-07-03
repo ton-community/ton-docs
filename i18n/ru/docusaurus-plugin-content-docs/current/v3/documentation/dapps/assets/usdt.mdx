@@ -1,14 +1,12 @@
+import Feedback from '@site/src/components/Feedback';
+
 import Button from '@site/src/components/button'
 
 # Обработка USDT
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
 ## Tether
 
-Стейблкоины — это тип криптовалюты, стоимость которой привязана 1:1 к другому активу, например, фиатной валюте или золоту, для поддержания стабильной цены. До недавнего времени существовал токен jUSDT, представляющий собой обернутый токен ERC-20 Ethereum, связанный с <a href="https://bridge.ton.org" target="_blank">bridge.ton.org</a>. Но 18.04.2023 состоялся публичный запуск **встроенного** токена USD₮, выпущенного компанией <a href="https://tether.to/en/" target="_blank">Tether</a>. После запуска USD₮, jUSDT перешел в статус второго приоритета, но по-прежнему используется в качестве альтернативы или дополнения к USD₮ в различных сервисах.
+Но 18.04.2023 состоялся публичный запуск **встроенного** токена USD₮, выпущенного компанией <a href="https://tether.to/en/" target="_blank">Tether</a>.
 
 В блокчейне TON USD₮ поддерживается как [жетон](/v3/guidelines/dapps/asset-processing/jettons).
 
@@ -34,8 +32,8 @@ import Button from '@site/src/components/button'
 transaction_fee = gas_used * gas_price
 ```
 
-- `gas_used` это количество газа, используемого при выполнении транзакции.
-- `gas_price` - это стоимость одной единицы газа в Gwei, рассчитываемая динамически.
+* `gas_used` это количество газа, используемого при выполнении транзакции.
+* `gas_price` - это стоимость одной единицы газа в Gwei, рассчитываемая динамически.
 
 С другой стороны, средняя комиссия за отправку любой суммы USD₮ в блокчейне TON в настоящее время составляет около 0,0145 TON. Даже если цена TON увеличится в 100 раз, транзакции [останутся сверхдешевыми](/v3/documentation/smart-contracts/transaction-fees/fees#average-transaction-cost). Основная команда разработчиков TON оптимизировала смарт-контракт Tether, сделав его в три раза дешевле любого другого жетона.
 
@@ -52,4 +50,6 @@ transaction_fee = gas_used * gas_price
 
 ## См. также
 
-- [Обработка платежей](/v3/guidelines/dapps/asset-processing/payments-processing)
+* [Обработка платежей](/v3/guidelines/dapps/asset-processing/payments-processing)
+
+<Feedback />
