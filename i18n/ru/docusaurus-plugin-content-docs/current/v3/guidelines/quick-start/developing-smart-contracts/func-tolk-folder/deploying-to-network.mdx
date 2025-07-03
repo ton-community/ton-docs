@@ -10,7 +10,7 @@ import Feedback from "@site/src/components/Feedback";
 
 Мы уже знаем, что [адрес](/ru/v3/documentation/smart-contracts/addresses/) — это уникальный идентификатор `смарт-контракта` в сети, используемый для отправки транзакций и верификации отправителя при получении. Однако мы пока что не обсуждали, как он возникает. Стандартная формула для адресов смарт-контрактов выглядит так:
 
-**_address = hash(state_init(code, data))_**
+***address = hash(state_init(code, data))***
 
 Адрес смарт-контракта — это хэш, вычисленный из первоначальных кода и данных смарт-контракта. Из этого простого механизма есть несколько важных следствий:
 
@@ -20,8 +20,8 @@ import Feedback from "@site/src/components/Feedback";
 
 Причина в том, что создание вашей пары ключей (**приватного** и **публичного**) с помощью **мнемонической фразы**, где второй ключ является частью первоначальных данных смарт-контракта, делает `state_init` этого контракта полностью детерминированным:
 
-- **code** будет одной из стандартных реализаций кошелька, таких как `v5r1`.
-- **data** — это `public_key` вместе с другими полями, инициализированными по умолчанию.
+* **code** будет одной из стандартных реализаций кошелька, таких как `v5r1`.
+* **data** — это `public_key` вместе с другими полями, инициализированными по умолчанию.
 
 Это позволяет рассчитать адрес смарт-контракта будущего кошелька.
 
@@ -31,9 +31,9 @@ import Feedback from "@site/src/components/Feedback";
 
 Вспомним, что нельзя развернуть много разных смарт-контрактов с одним и тем же `state_init` — получится одинаковый контракт с одним адресом. Поэтому единственный способ предоставить всем вам один и тот же исходный код и **"одинаковые"** исходные данные — добавить в `state_init` отдельное поле, обеспечивающее дополнительную уникальность. В случае кошелька это даёт вам возможность использовать одну и ту же пару ключей для нескольких смарт-контрактов кошелька.
 
-### Одно, чтоб править ими всеми
+{/*### One to rule them all
 
-Если вы уже предположили, что поле `ID` является обязательным для любого смарт-контракта, есть и другая возможность, которая может изменить ваше мнение. Рассмотрим раздел инициализации ранее разработанного контракта `CounterInternal`:
+If you've already considered that the `ID` field is a must-have for any smart contract, there is another opportunity that could change your mind. Let's examine the previously developed `CounterInternal` smart contract's init section:
 
 ```tact
 init(id: Int, owner: Address) {
@@ -43,13 +43,14 @@ init(id: Int, owner: Address) {
 }
 ```
 
-Если мы удалим поле `id` из его первоначального состояния хранилища, то сможем быть уверенными, что для определённого владельца может существовать **только один** смарт-контракт `CounterInternal`.
+If we remove the `id` field from its initial storage, we can ensure that **only one** `CounterInternal` smart contract can exist for a particular owner.
 
-:::info Токены
-Этот механизм играет ключевую роль в [обработке Jetton](/ru/v3/guidelines/dapps/asset-processing/jettons/). Каждый токен, не являющийся нативным (Jetton), требует наличия собственного `Jetton Wallet` для определённого владельца и, следовательно, предоставляет для него вычислимый адрес, создавая **схему звезды** с базовым кошельком в центре.
+:::info Tokens
+This mechanism plays a crucial role in [Jetton Processing](/v3/guidelines/dapps/asset-processing/jettons/). Each non-native (jetton) token requires its own `Jetton Wallet` for a particular owner and, therefore, provides a calculable address for it, creating a **star scheme** with the basic wallet in the center.
 :::
+*/}
 
-## Реализация
+## Implementation
 
 Теперь, когда наши контракты полностью протестированы, мы готовы развернуть их в TON. В `Blueprint` этот процесс выглядит одинаково для `мейннета` и `тестнета`, а также для любого из языков в этом гайде: `FunC` и `Tolk`.
 
@@ -135,7 +136,7 @@ Contract deployed at address EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 You can view it at https://testnet.tonscan.org/address/EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 ```
 
-**Поздравляем!** Ваш собственный `смарт-контракт` готов исполнять `get-методы` так же, как это делал ваш кошелёк в разделе [Как начать](/v3/guidelines/quick-start/getting-started#navigation-tabs/). И он может исполнять `транзакции` так же, как описано в разделе о [взаимодействии с блокчейном](/ru/v3/guidelines/quick-start/blockchain-interaction/reading-from-network) — если вы ещё его не читали, это полезно сделать, чтобы понять, как взаимодействовать со `смарт-контрактами` извне блокчейна.
+И он может исполнять `транзакции` так же, как описано в разделе о [взаимодействии с блокчейном](/ru/v3/guidelines/quick-start/blockchain-interaction/reading-from-network) — если вы ещё его не читали, это полезно сделать, чтобы понять, как взаимодействовать со `смарт-контрактами` извне блокчейна.
 
 :::tip
 Использование Blueprint и приложений кошельков — не единственный вариант. Вы можете создать сообщение со [state_init](/ru/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) самостоятельно. Более того, вы даже можете сделать это с помощью [внутреннего сообщения](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) от смарт-контракта.
