@@ -23,30 +23,33 @@ import Button from '@site/src/components/button'
 
 Поскольку TON реализует [модель акторов](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains/#single-actor/), довольно естественно думать об отношениях смарт-контрактов в контексте ролей, определяющих, кому можно обращаться к определённой функциональности смарт-контракта. Самые распространённые примеры ролей:
 
-- `кто угодно`: любой контракт без специально выделенной роли.
-- `владелец`: контракт, который обладает исключительным доступом к некоторым ключевым частям функциональности.
+* `кто угодно`: любой контракт без специально выделенной роли.
+* `владелец`: контракт, который обладает исключительным доступом к некоторым ключевым частям функциональности.
 
 Давайте рассмотрим сигнатуру функции `recv_internal` для понимания того, как мы можем использовать это:
 
 <Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func
-() recv_internal(int my_balance, int msg_value, cell in_msg_full, ломтик in_msg_body) нарушает
-```
- - `my_balance` - смарт-контрактный баланс при начале транзакции.
- - `msg_value` - средства, полученные с сообщением.
- - `in_msg_full` - `ячейка`, включающая "заголовочные" поля сообщения.
- - `in_msg_body` - [slice](/ru/v3/documentation/smart-contracts/func/docs/types#atomic-types) содержит тело сообщения.
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk
-fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice)
-```
- - `myBalance` - баланс смарт-контракта при попрошайничестве транзакции.
- - `msgValue` - средства, полученные с сообщением.
- - `msgFull` - `cell` с полями "header" сообщения.
- - `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) захват сообщения payload pf.
-</TabItem>
+  <TabItem value="FunC" label="FunC">
+    ```func
+    () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure
+    ```
+
+    * `my_balance` - smart-contract balance at the beginning of the transaction.
+    * `msg_value` - funds received with message.
+    * `in_msg_full` - `cell` containing "header" fields of the message.
+    * `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containing payload of the message.
+  </TabItem>
+
+  <TabItem value="Tolk" label="Tolk">
+    ```tolk
+    fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice)
+    ```
+
+    * `myBalance` - balance of smart contract at the beginning of the transaction.
+    * `msgValue` - funds received with message.
+    * `msgFull` - `cell` containing "header" fields of message.
+    * `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) захват сообщения payload pf.
+  </TabItem>
 </Tabs>
 
 :::info
@@ -56,127 +59,127 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 Из всего этого нам сейчас интересен исходный адрес сообщения, который мы можем извлечь из ячейки `msg_full`. Получив этот адрес и сравнив его с хранимым, мы при выполнении требуемого условия можем разрешить доступ к важнейшим частям функциональности нашего смарт-контракта. Обычный подход выглядит следующим образом:
 
 <Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func
-;; Это не часть проекта, просто пример.
-() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
-    ; Разобрать адрес отправителя из in_msg_full
-    см = in_msg_full. egin_parse();
-    int flags = cs~load_uint(4);
-    slice sender_address = cs~load_msg_addr();
+  <TabItem value="FunC" label="FunC">
+    ```func
+    ;; This is NOT a part of the project, just an example.
+    () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+        ;; Parse the sender address from in_msg_full
+        slice cs = in_msg_full.begin_parse();
+        int flags = cs~load_uint(4);
+        slice sender_address = cs~load_msg_addr();
 
-    ;; check if message was send by owner
-    if (equal_slices_bits(sender_address, owner_address)) {
-      ;;owner operations
-      return
-    } else if (equal_slices_bits(sender_address, other_role_address)){
-      ;;other role operations
-      return
-    } else {
-      ;;anyone else operations
-      return
+        ;; check if message was send by owner
+        if (equal_slices_bits(sender_address, owner_address)) {
+          ;;owner operations
+          return
+        } else if (equal_slices_bits(sender_address, other_role_address)){
+          ;;other role operations
+          return
+        } else {
+          ;;anyone else operations
+          return
+        }
+
+        ;;no known operation were obtained for presented role
+        ;;0xffff is not standard exit code, but is standard practice among TON developers
+        throw(0xffff);
     }
+    ```
+  </TabItem>
 
-;;no known operation were obtained for presented role
-;;0xffff is not standard exit code, but is standard practice among TON developers
-throw(0xffff);
-}
+  <TabItem value="Tolk" label="Tolk">
+    ```tolk
+    // This is NOT a part of the project, just an example.
+    fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
+        // Parse the sender address from in_msg_full
+        var cs: slice = msgFull.beginParse();
+        val flags = cs.loadMessageFlags();
+        var sender_address = cs~load_msg_address();
 
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk
-// This is NOT a part of the project, just an example.
-fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
-    // Parse the sender address from in_msg_full
-    var cs: slice = msgFull.beginParse();
-    val flags = cs.loadMessageFlags();
-    var sender_address = cs~load_msg_address();
+        if (isSliceBitsEqual(sender_address, owner_address)) {
+          // owner operations
+          return
+        } else if (isSliceBitsEqual(sender_address, other_role_address)){
+          // other role operations
+          return
+        } else {
+          // anyone else operations
+          return
+        }
 
-    if (isSliceBitsEqual(sender_address, owner_address)) {
-      // owner operations
-      return
-    } else if (isSliceBitsEqual(sender_address, other_role_address)){
-      // other role operations
-      return
-    } else {
-      // anyone else operations
-      return
+        throw 0xffff; // if the message contains an op that is not known to this contract, we throw
     }
-
-    throw 0xffff; // if the message contains an op that is not known to this contract, we throw
-}
-````
-
-</TabItem></Tabs>
+    ```
+  </TabItem>
+</Tabs>
 
 ### Операции
 
 Обычный шаблон контрактов в TON — включать **32-битный код операции** в тела сообщений, который сообщает вашему контракту, какие действия необходимо выполнить:
 
 <Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func
-;; Это не часть проекта, просто пример!
-const int op::increment = 1;
-const int op::decrement = 2;
+  <TabItem value="FunC" label="FunC">
+    ```func
+    ;; This is NOT a part of the project, just an example!
+    const int op::increment = 1;
+    const int op::decrement = 2;
 
-() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
-    ; Шаг 1: Проверим, является ли сообщение пустым
-    if (in_msg_body. lice_empty?()) {
-        return; ;; Ничего не делаем с пустыми сообщениями
+    () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+        ;; Step 1: Check if the message is empty
+        if (in_msg_body.slice_empty?()) {
+            return; ;; Nothing to do with empty messages
+        }
+
+        ;; Step 2: Extract the operation code
+        int op = in_msg_body~load_uint(32);
+
+        ;; Step 3-7: Handle the requested operation
+        if (op == op::increment) {
+            increment();   ;;call to specific operation handler
+            return;
+        } else if (op == op::decrement) {
+            decrement();
+            ;; Just accept the money
+            return;
+        }
+
+        ;; Unknown operation
+        throw(0xffff);
     }
+    ```
+  </TabItem>
 
-;; Step 2: Extract the operation code
-int op = in_msg_body~load_uint(32);
+  <TabItem value="Tolk" label="Tolk">
+    ```tolk
+    //This is NOT a part of the project, just an example!
+    const op::increment : int = 1;
+    const op::decrement : int = 2;
 
-;; Step 3-7: Handle the requested operation
-if (op == op::increment) {
-    increment();   ;;call to specific operation handler
-    return;
-} else if (op == op::decrement) {
-    decrement();
-    ;; Just accept the money
-    return;
-}
+    fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
+        // Step 1: Check if the message is empty
+        if (slice.isEndOfSlice()) {
+            return; // Nothing to do with empty messages
+        }
 
-;; Unknown operation
-throw(0xffff);
-}
+        // Step 2: Extract the operation code
+        var op = in_msg_body~load_uint(32);
 
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk
-//This is NOT a part of the project, just an example!
-const op::increment : int = 1;
-const op::decrement : int = 2;
+        // Step 3-7: Handle the requested operation
+        if (op == op::increment) {
+            increment();   //call to specific operation handler
+            return;
+        } else if (op == op::decrement) {
+            decrement();
+            // Just accept the money
+            return;
+        }
 
-fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
-    // Step 1: Check if the message is empty
-    if (slice.isEndOfSlice()) {
-        return; // Nothing to do with empty messages
+        // Unknown operation
+        throw(0xffff);
     }
-
-    // Step 2: Extract the operation code
-    var op = in_msg_body~load_uint(32);
-
-    // Step 3-7: Handle the requested operation
-    if (op == op::increment) {
-        increment();   //call to specific operation handler
-        return;
-    } else if (op == op::decrement) {
-        decrement();
-        // Just accept the money
-        return;
-    }
-
-    // Unknown operation
-    throw(0xffff);
-}
-````
-
-</TabItem></Tabs>
+    ```
+  </TabItem>
+</Tabs>
 
 Объединяя оба этих шаблона, вы можете добиться полного описания систем ваших смарт-контрактов, обеспечив безопасное взаимодействие между ними и раскрыв полностью потенциал модели акторов в TON.
 
@@ -190,7 +193,7 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 Эта реализация **небезопасна** и может привести к потере средств на вашем контракте. Не разворачивайте такой контракт в `мейннете`, особенно с крупной суммой средств на балансе.
 :::
 
-## Реализация
+## Implementation
 
 Давайте изменим наш смарт-контракт по стандартным шагам из раздела [Обзор Blueprint](/ru/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/blueprint-sdk-overview/), чтобы он мог получать внешние сообщения.
 
@@ -199,67 +202,68 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 Добавьте функцию `recv_external` в смарт-контракт `HelloWorld`:
 
 <Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func title="/contracts/hello_world.fc"
-() recv_external(slice in_msg) impure {
-    accept_message();
-    var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
+  <TabItem value="FunC" label="FunC">
+    ```func title="/contracts/hello_world.fc"
+    () recv_external(slice in_msg) impure {
+        accept_message();
 
-    var query_id = in_msg~load_uint(64);
-    var addr = in_msg~load_msg_addr();
-    var coins = in_msg~load_coins();
-    var increase_by = in_msg~load_uint(32);
+        var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
 
-    var msg = begin_cell()
-        .store_uint(0x18, 6)
-        .store_slice(addr)
-        .store_coins(coins)
-        .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-        .store_uint(op::increase, 32)
-        .store_uint(query_id, 64)
-        .store_uint(increase_by, 32);
-    send_raw_message(msg.end_cell(), 0);
+        var query_id = in_msg~load_uint(64);
+        var addr = in_msg~load_msg_addr();
+        var coins = in_msg~load_coins();
+        var increase_by = in_msg~load_uint(32);
 
-    ctx_counter_ext += increase_by;
-    save_data(ctx_id, ctx_counter, ctx_counter_ext);
+        var msg = begin_cell()
+            .store_uint(0x18, 6)
+            .store_slice(addr)
+            .store_coins(coins)
+            .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+            .store_uint(op::increase, 32)
+            .store_uint(query_id, 64)
+            .store_uint(increase_by, 32);
+        send_raw_message(msg.end_cell(), 0);
 
-    return ();
-}
+        ctx_counter_ext += increase_by;
+        save_data(ctx_id, ctx_counter, ctx_counter_ext);
 
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk title="/contracts/HelloWorld.tolk"
-fun acceptExternalMessage(): void
-    asm "ACCEPT";
+        return ();
+    }
+    ```
+  </TabItem>
 
-fun onExternalMessage(inMsg: slice) {
-    acceptExternalMessage();
-    var (ctxId, ctxCounter, ctxCounterExt) = loadData();
+  <TabItem value="Tolk" label="Tolk">
+    ```tolk title="/contracts/HelloWorld.tolk"
+    fun acceptExternalMessage(): void
+        asm "ACCEPT";
 
-    var queryId = inMsg.loadUint(64);
-    var addr = inMsg.loadAddress();
-    var coins = inMsg.loadCoins();
-    var increaseBy = inMsg.loadUint(32);
+    fun onExternalMessage(inMsg: slice) {
+        acceptExternalMessage();
+        var (ctxId, ctxCounter, ctxCounterExt) = loadData();
 
-    var msg = beginCell()
-        .storeUint(0x18, 6)
-        .storeSlice(addr)
-        .storeCoins(coins)
-        .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
-        .storeUint(OP_INCREASE, 32)
-        .storeUint(queryId, 64)
-        .storeUint(increaseBy, 32);
-    sendRawMessage(msg.endCell(), 0);
+        var queryId = inMsg.loadUint(64);
+        var addr = inMsg.loadAddress();
+        var coins = inMsg.loadCoins();
+        var increaseBy = inMsg.loadUint(32);
 
-    ctxCounterExt += increaseBy;
-    saveData(ctxId, ctxCounter, ctxCounterExt);
+        var msg = beginCell()
+            .storeUint(0x18, 6)
+            .storeSlice(addr)
+            .storeCoins(coins)
+            .storeUint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
+            .storeUint(OP_INCREASE, 32)
+            .storeUint(queryId, 64)
+            .storeUint(increaseBy, 32);
+        sendRawMessage(msg.endCell(), 0);
 
-    return ();
-}
-````
+        ctxCounterExt += increaseBy;
+        saveData(ctxId, ctxCounter, ctxCounterExt);
 
-</TabItem></Tabs>
+        return ();
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 Эта функция при получении внешнего сообщения увеличит нашу переменную `ctx_counter_ext` и отправит внутреннее сообщение на указанный адрес с операцией `increase`.
 
@@ -269,7 +273,7 @@ fun onExternalMessage(inMsg: slice) {
 npx blueprint build
 ```
 
-Ожидаемый вывод должен выглядеть следующим образом:
+Ожидаемый вывод должен выглядеть примерно так:
 
 ```bash
 ✅ Compiled successfully! Cell BOC result:
@@ -380,17 +384,16 @@ describe('HelloWorld', () => {
 });
 ```
 
-{/*Этот тест описывает стандартный поток транзакций любой `многоконтрактной` системы:
+{/*This test describes the common transaction flow of any `multi-contract` system:
+1. Send an external message to toggle the smart contract logic outside the blockchain.
+2. Trigger one or more internal messages to be sent to other contracts.  
+3. Upon receiving an internal message, change the contract state and repeat **step 2** if required.
 
-1. Отправьте внешнее сообщение для обращения к логике смарт-контракта извне блокчейна.
-2. Инициируйте отправку одного или нескольких внутренних сообщений другим контрактам.  
-3. После получения внутреннего сообщения измените состояние контракта и повторите **шаг 2**, если требуется.
-
-Поскольку результирующая последовательность транзакций может быть сложной для понимания, полезной практикой будет создать `диаграмму последовательности`, описывающую вашу систему. Вот пример нашего случая:
+Since the resulting sequence of transactions might be overwhelming for understanding, it's a good practice to create a `sequence diagram` describing your system. Here is an example of our case:
 
 <div style={{marginBottom: '30px'}} align="center">
   <img src="/img/tutorials/quick-start/multi-contract.png" alt="Multi-contract scheme"/>
-</div>*/}
+</div> */}
 
 Проверьте, что все примеры верны, запустив тестовый скрипт:
 
@@ -418,9 +421,7 @@ Ran all test suites.
 Теперь, когда вы понимаете, как смарт-контракты отправляют и получают сообщения, вы можете **развернуть свой контракт** в блокчейне TON.
 
 <Button href="/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/deploying-to-network" colorType={'primary'} sizeType={'sm'}>
-
   Развёртывание в сети
-
 </Button>
 
 <Feedback />
