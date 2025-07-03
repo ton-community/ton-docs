@@ -3,32 +3,53 @@ name: Deploy to Kubernetes
 on:
   push:
     branches:
-      - release-candidate-main
       - l10n-release-candidate-ru
-      - release-candidate-ru
       - l10n-release-candidate-en
-      - release-candidate-en
       - l10n-release-candidate-ja
-      - release-candidate-ja
       - l10n-release-candidate-ko
-      - release-candidate-ko
       - l10n-release-candidate-zh-cn
+      - release-candidate-ru
+      - release-candidate-en
+      - release-candidate-ja
+      - release-candidate-ko
       - release-candidate-zh-cn
 
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+      instance:
+        required: true
+        type: string
+
 
 jobs:
-  build:
-    if: ${{ startsWith(github.ref, 'refs/heads/release-candidate-') || startsWith(github.ref, 'refs/heads/l10n-release-candidate-') }}
+  params:
     runs-on: ubuntu-latest
-    environment: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/l10n-release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
+    steps:
+      - name: Define params
+        env:
+          JOB_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/l10n-release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
+          APP_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/l10n-release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', 'testing-', github.ref_name) || 'unknown' }}"
+          APP_DOMAIN: "${{ format('{0}-{1}', inputs.branch || github.ref_name, vars.APP_DOMAIN) }}"
+          APP_INSTANCE: ${{ inputs.branch || github.ref_name }}
+          REF: ${{ inputs.branch || github.ref_name }}
+        run: |
+          echo "JOB_ENV=${{ env.JOB_ENV }}" >> "$GITHUB_OUTPUT"
+          echo "APP_ENV=${{ env.APP_ENV }}" >> "$GITHUB_OUTPUT"
+          echo "APP_DOMAIN=${{ env.APP_DOMAIN }}" >> "$GITHUB_OUTPUT"
+          echo "REF=${{ env.REF }}" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: params
+    runs-on: ubuntu-latest
     env:
-      JOB_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/l10n-release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
-      APP_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/l10n-release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', 'testing-', github.ref_name) || 'unknown' }}"
-      APP_DOMAIN: "${{ format('{0}-{1}', github.ref_name, vars.APP_DOMAIN) }}"
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: false
+      JOB_ENV: ${{ needs.params.outputs.JOB_ENV }}
+      APP_ENV: ${{ needs.params.outputs.APP_ENV }}
+      APP_DOMAIN: ${{ needs.params.outputs.APP_DOMAIN }}
+      REF: ${{ needs.params.outputs.REF }}
 
     permissions:
       packages: write
@@ -40,13 +61,7 @@ jobs:
         with:
           fetch-depth: 0
           submodules: recursive
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}
+          ref: ${{ env.REF }}
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -69,41 +84,77 @@ jobs:
         with:
           images: ghcr.io/${{ steps.lower-repo.outputs.repository }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          context: 'git'
           tags: |
             type=sha
             type=sha,format=long
             type=ref,event=branch
 
-      - name: Build and push Docker image ${{ steps.lower-repo.outputs.repository }}:${{ env.APP_ENV }}
+      - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           file: "deployment/Docker/Dockerfile"
           push: true
-          tags: ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ env.GITHUB_SHA_SHORT }},ghcr.io/${{ steps.lower-repo.outputs.repository }}:${{ env.APP_ENV }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            sha=${{ github.sha }}
-            sha_short=${{ env.GITHUB_SHA_SHORT }}
-            app_env=${{ vars.APP_ENV }}
             REACT_APP_PROXY_KEY=${{ secrets.REACT_APP_PROXY_KEY }}
             REACT_APP_MIXPANEL_TOKEN=${{ secrets.REACT_APP_MIXPANEL_TOKEN }}
             REACT_APP_ANALYTICS_ENABLED=${{ secrets.REACT_APP_ANALYTICS_ENABLED }}
+
+      - name: Collect output
+        run: |
+          echo "imageRepo=${{ steps.lower-repo.outputs.repository }}" >> "$GITHUB_OUTPUT"
+          echo "imageTag=${{ env.GITHUB_SHA_SHORT }}" >> "$GITHUB_OUTPUT"
+
+  deploy:
+    needs:
+      - params
+      - build
+    runs-on: ubuntu-latest
+    environment: "${{  needs.params.outputs.APP_ENV }}"
+    env:
+      APP_ENV: ${{ needs.params.outputs.APP_ENV }}
+      APP_DOMAIN: ${{ needs.params.outputs.APP_DOMAIN }}
+      APP_INSTANCE: ${{ needs.params.outputs.APP_INSTANCE }}
+      REF: ${{ needs.params.outputs.REF }}
+    concurrency:
+      group: ${{ github.workflow }}-${{ inputs.branch || github.ref }}
+      cancel-in-progress: false
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.AWS_REGION }}
 
       - name: Apply AWS k8s config
         run: aws eks update-kubeconfig --name ${{ vars.AWS_CLUSTER }} --region ${{ vars.AWS_REGION }}
 
       - name: Create namespace
         run: |
-          kubectl create ns ${{ vars.APP_NAME }}-${{ github.ref_name }} || echo "Namespace already exists"
+          kubectl create ns ${{ vars.APP_NAME }}-${{ env.APP_INSTANCE }} || echo "Namespace already exists"
 
       - name: Deploy ${{ vars.APP_NAME }} to Kubernetes
         run: |
           helm upgrade --install ${{ vars.APP_NAME }} ./helm/app \
-          --namespace ${{ vars.APP_NAME }}-${{ github.ref_name }} \
+          --namespace ${{ vars.APP_NAME }}-${{ env.APP_INSTANCE }} \
           --values ./helm/app/values.yaml \
           --values ./helm/app/values-${{ env.JOB_ENV }}.yaml \
-          --set imageRepo="ghcr.io/${{ steps.lower-repo.outputs.repository }}" \
-          --set imageTag="${{ env.GITHUB_SHA_SHORT }}" \
+          --set imageRepo="ghcr.io/${{ needs.build.outputs.imageRepo }}" \
+          --set imageTag="${{ needs.build.outputs.imageTag }}" \
           --set host=${{ env.APP_DOMAIN }} \
           --set appName=${{ vars.APP_NAME }} \
           --set ghcrSecret=${{ secrets.GHCR_SECRET }}
