@@ -1,8 +1,6 @@
-# Метрики MyTonCtrl Prometheus
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Метрики MyTonCtrl Prometheus
 
 MyTonCtrl можно настроить для предоставления метрик Prometheus для мониторинга и оповещений.
 Это руководство проведет вас через процесс включения метрик Prometheus в MyTonCtrl.
@@ -77,8 +75,8 @@ MyTonCtrl можно настроить для предоставления ме
    MyTonCtrl> set prometheus_url http://<host>:9091/metrics/job/<jobname>
    ```
 
-   :::предупреждение
-   Обратите внимание, что очень важно использовать разные имена заданий для разных узлов, если вы хотите отслеживать несколько узлов с помощью одного и того же экземпляра Prometheus.
+   :::warning
+   Note that it is very important to use different job names for different nodes in case you want to monitor multiple nodes with the same Prometheus instance.
    :::
 
 5. Проверьте показатели
@@ -88,3 +86,5 @@ MyTonCtrl можно настроить для предоставления ме
    ```bash
    http://<host>:9090/targets
    ```
+
+<Feedback />
