@@ -16,38 +16,39 @@ import Button from '@site/src/components/button'
 :::
 
 <Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```ls title="Структура проекта"
-Example/
-├── contracts/           # Директория с кодом смарт-контрактов
-│   ├── imports/         # Импортируемые библиотеки для контрактов
-│   │   └── stdlib.fc    # Стандартная библиотека для FunC
-│   └── hello_world.fc   # Файл главного контракта
-├── scripts/             # Скрипты для развёртывания и взаимодействия в блокчейне
-│   ├── deployHelloWorld.ts     # Скрипт для развёртывания контракта
-│   └── incrementHelloWorld.ts  # Скрипт для взаимодействия с контрактом
-├── tests/               # Директория с тестами для локального тестирования контрактов
-│   └── HelloWorld.spec.ts      # Спецификации тестов для контракта
-└── wrappers/            # Обёртки на TypeScript для взаимодействия с контрактами
-    ├── HelloWorld.ts           # Класс-обёртка для смарт-контракта
-    └── HelloWorld.compile.ts   # Скрипт для компиляции контракта
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```ls title="Project structure"
-Example/
-├── contracts/           # Директория с кодом смарт-контрактов
-│   └── hello_world.tolk # Файл основного контракта
-├── scripts/             # Скрипты для развёртывания и взаимодействия в блокчейне
-│   ├── deployHelloWorld.ts     # Скрипт для развёртывания контракта
-│   └── incrementHelloWorld.ts  # Скрипт для взаимодействия с контрактом
-├── tests/               # Директория с тестами для локального тестирования контрактов
-│   └── HelloWorld.spec.ts      # Спецификации тестов для контракта
-└── wrappers/            # Обёртки на TypeScript для взаимодействия с контрактами
-    ├── HelloWorld.ts           # Класс-обёртка для смарт-контракта
-    └── HelloWorld.compile.ts   # Скрипт для компиляции контракта
-```
-</TabItem>
+  <TabItem value="FunC" label="FunC">
+    ```ls title="Project structure"
+    Example/
+    ├── contracts/           # Folder containing smart contracts code
+    │   ├── imports/         # Library imports for contracts
+    │   │   └── stdlib.fc    # Standard library for FunC
+    │   └── hello_world.fc   # Main contract file
+    ├── scripts/             # Deployment and on-chain interaction scripts
+    │   ├── deployHelloWorld.ts     # Script to deploy the contract
+    │   └── incrementHelloWorld.ts  # Script to interact with the contract
+    ├── tests/               # Test folder for local contract testing
+    │   └── HelloWorld.spec.ts      # Test specifications for the contract
+    └── wrappers/            # TypeScript wrappers for contract interaction
+        ├── HelloWorld.ts           # Wrapper class for smart contract
+        └── HelloWorld.compile.ts   # Script for contract compilation
+    ```
+  </TabItem>
+
+  <TabItem value="Tolk" label="Tolk">
+    ```ls title="Project structure"
+    Example/
+    ├── contracts/           # Folder containing smart contracts code
+    │   └── hello_world.tolk # Main contract file
+    ├── scripts/             # Deployment and on-chain interaction scripts
+    │   ├── deployHelloWorld.ts     # Script to deploy the contract
+    │   └── incrementHelloWorld.ts  # Script to interact with the contract
+    ├── tests/               # Test fo der for local contract testing
+    │   └── HelloWorld.spec.ts      # Test specifications for the contract
+    └── wrappers/            # TypeScript wrappers for contract interaction
+        ├── HelloWorld.ts           # Wrapper class for smart contract
+        └── HelloWorld.compile.ts   # Script for contract compilation
+    ```
+  </TabItem>
 </Tabs>
 
 ### `/contracts`
@@ -107,9 +108,7 @@ npx blueprint create PascalCase # Don't forget to name the contract in PascalCas
 Теперь всё готово: пришло время начать писать смарт-контракты. Мы начнём с базовых задач: **хранения данных** и **get-методов**.
 
 <Button href="/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/storage-and-get-methods" colorType={'primary'} sizeType={'sm'}>
-
   Хранение данных и get-методы
-
 </Button>
 
 <Feedback />
