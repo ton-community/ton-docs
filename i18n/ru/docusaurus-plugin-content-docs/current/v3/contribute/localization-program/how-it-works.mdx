@@ -1,8 +1,6 @@
-# Как это работает
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Как это работает
 
 ![how it works](/img/localizationProgramGuideline/localization-program.png)
 
@@ -10,10 +8,10 @@
 
 В этой системе мы интегрируем несколько приложений для бесперебойной работы в качестве единой программы:
 
-- **GitHub**: размещает документацию, синхронизирует документы из репозитория upstream и синхронизирует переводы с определенными ветками.
-- **Crowdin**: управляет процессами перевода, включая перевод, корректуру и настройку языковых предпочтений.
-- **Системы ИИ**: использует расширенный ИИ для помощи переводчикам, обеспечивая плавный рабочий процесс.
-- **Настраиваемый глоссарий**: направляет переводчиков и гарантирует, что ИИ генерирует точные переводы на основе контекста проекта. Пользователи также могут загружать свои глоссарии по мере необходимости.
+* **GitHub**: размещает документацию, синхронизирует документы из репозитория upstream и синхронизирует переводы с определенными ветками.
+* **Crowdin**: управляет процессами перевода, включая перевод, корректуру и настройку языковых предпочтений.
+* **Системы ИИ**: использует расширенный ИИ для помощи переводчикам, обеспечивая плавный рабочий процесс.
+* **Настраиваемый глоссарий**: направляет переводчиков и гарантирует, что ИИ генерирует точные переводы на основе контекста проекта. Пользователи также могут загружать свои глоссарии по мере необходимости.
 
 :::info
 Это руководство не будет подробно рассматривать весь процесс, но в нем будут выделены ключевые компоненты, которые делают программу локализации TownSquare Labs уникальной. Вы можете изучить программу более подробно самостоятельно.
@@ -25,22 +23,22 @@
 
 ### Обзор ветвей
 
-- **`dev`**\
+* **`dev`**\
   Ветка `dev` запускает GitHub Actions для обработки задач синхронизации. Конфигурации рабочих процессов можно найти в каталоге [**`.github/workflows`**](https://github.com/TownSquareXYZ/ton-docs/tree/dev/.github/workflows):
 
-  - **`sync-fork.yml`**: этот рабочий процесс синхронизирует документацию из вышестоящего репозитория. Он запускается ежедневно в 00:00.
-  - **`sync-translations.yml`**: этот рабочий процесс синхронизирует обновленные переводы с соответствующими языковыми ветвями для предварительного просмотра на соответствующих языковых веб-сайтах.
+  * **`sync-fork.yml`**: этот рабочий процесс синхронизирует документацию из вышестоящего репозитория. Он запускается ежедневно в 00:00.
+  * **`sync-translations.yml`**: этот рабочий процесс синхронизирует обновленные переводы с соответствующими языковыми ветвями для предварительного просмотра на соответствующих языковых веб-сайтах.
 
-- **`main`**\
+* **`main`**\
   Эта ветвь синхронизируется с вышестоящим репозиторием с помощью действий GitHub, запущенных в ветке `dev`. Также используется для обновления определённых кодов, которые мы хотим предложить оригинальному репозиторию.
 
-- **`l10n_main`**\
+* **`l10n_main`**\
   Эта ветвь включает все изменения из ветви `main` и переводы из Crowdin. Все изменения в этой ветке периодически фиксируются в вышестоящем репозитории с помощью новой подветки с именем `l10n_main_[some data]`.
 
-- **`l10n_feat` или `l10n_feat_[specific functions]`**\
+* **`l10n_feat` или `l10n_feat_[specific functions]`**\
   Эта ветка будет включать изменения в коде или документации, связанной с системой перевода. После завершения всего контента изменения в этой ветке будут объединены в `l10_main`.
 
-- **`[lang]_preview`**\
+* **`[lang]_preview`**\
   Эти ветки предназначены для определенных языковых предварительных просмотров, таких как `ko_preview` для корейского и `ja_preview` для японского. Они позволяют нам предварительно просматривать веб-сайт на разных языках.
 
 Поддерживая эти ветки и используя GitHub Actions, мы эффективно управляем синхронизацией нашей документации и обновлений переводов, гарантируя, что наш многоязычный контент всегда будет актуальным.
@@ -70,15 +68,18 @@
        translation: <Path of your translated files>
    ```
 
-   2. Введите правильные значения конфигурации:
-      - **project_id**: В проекте Crowdin перейдите на вкладку "Инструменты", выберите API и найдите там **project_id**.
+   2. Get the correct configuration values:
+      * **project_id**: In your Crowdin project, go to the Tools tab, select API, and find the **project_id** there.
         ![select-api-tool](/img/localizationProgramGuideline/howItWorked/select-api-tool.png)
         ![projectId](/img/localizationProgramGuideline/howItWorked/projectId.png)
-      - **preserve_hierarchy**: Поддерживает структуру каталогов GitHub на сервере Crowdin.
-      - **source** и **translation**: Укажите пути для файлов, которые нужно загрузить в Crowdin, и место, где должны быть переведенные файлы.
+      * **preserve_hierarchy**: Maintains the GitHub directory structure on the Crowdin server.
+      * **source** and **translation**: Specify the paths for the files to upload to Crowdin and where the translated files should be output.
 
-        Обратитесь к [**нашему официальному конфигурационному файлу**](https://github.com/TownSquareXYZ/ton-docs/blob/localization/crowdin.yml) для примера.\
-        Более подробную информацию можно найти в [**документации по конфигурации Crowdin**](https://developer.crowdin.com/configuration-file/).
+        For an example, refer to the [**config file**](https://github.com/TownSquareXYZ/ton-docs/blob/localization/crowdin.yml).\
+        Find more in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).\
+        Find more in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).\
+        Find more in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).\
+        Find more in the [**Crowdin configuration documentation**](https://developer.crowdin.com/configuration-file/).
 
 6. Настройте Crowdin для подключения к вашему репозиторию на GitHub:
    1. Нажмите `Добавить репозиторий` и выберите режим `Исходные файлы и файлы перевода`.
@@ -87,14 +88,14 @@
       ![search-repo](/img/localizationProgramGuideline/howItWorked/search-repo.png)
    3. Выберите ветку слева, которая создаст новую ветку, в которой Crowding будет публиковать переводы.
       ![setting-branch](/img/localizationProgramGuideline/howItWorked/setting-branch.png)
-   4. Выберите частоту обновления переводов в вашей ветке GitHub. Настройки по умолчанию можно сохранить для других конфигураций, затем нажмите "Сохранить", чтобы включить интеграцию.
-      ![frequency-save](/img/localizationProgramGuideline/howItWorked/frequency-save.png)
+   4. В репозитории нажмите "Предварительный перевод" и выберите "Машинный перевод".
+      ![pre-translation](/img/localizationProgramGuideline/howItWorked/pre-translation.png)
 
 Дополнительные сведения см. в [**документации по интеграции GitHub**](https://support.crowdin.com/github-integration/).
 
 7. Наконец, вы можете нажать кнопку "Синхронизировать сейчас", чтобы синхронизировать репозиторий и переводы при необходимости.
 
-## Глоссарий
+## Glossary
 
 ### Что такое глоссарий?
 
@@ -120,20 +121,23 @@
 1. Если английский термин уже есть в глоссарии, найдите соответствующую строку и столбец для языка, который вы хотите перевести, введите перевод и загрузите его.
 2. Чтобы загрузить новый глоссарий, клонируйте проект и запустите:
 
-   - `npm i`
-   - `npm run generate -- <glossary name you want>`
+```bash
+npm i
+```
+
+```bash
+npm run generate -- <glossary name you want>
+```
 
 Повторите шаг 1, чтобы добавить новый термин.
-
-**Просто и эффективно, не так ли?**
 
 ## Как воспользоваться преимуществами AI Translation Copilot?
 
 AI Translation Copilot помогает сломать языковые барьеры, имея несколько преимуществ:
 
-- **Повышенная согласованность**: переводы AI основаны на актуальной информации, предоставляя самые точные и актуальные переводы.
-- **Скорость и эффективность**: перевод AI выполняется мгновенно, обрабатывая большие объемы контента в режиме реального времени.
-- **Надежная масштабируемость**: системы AI постоянно обучаются и совершенствуются, повышая качество перевода с течением времени. С помощью предоставленного глоссария переводы AI можно адаптировать к конкретным потребностям различных репозиториев.
+* **Повышенная согласованность**: переводы AI основаны на актуальной информации, предоставляя самые точные и актуальные переводы.
+* **Скорость и эффективность**: перевод AI выполняется мгновенно, обрабатывая большие объемы контента в режиме реального времени.
+* **Robust Scalability**: AI systems continuously learn and improve, enhancing translation quality over time.
 
 Чтобы использовать AI перевод в Crowdin (мы используем DeepL в нашем проекте):
 
@@ -146,10 +150,12 @@ AI Translation Copilot помогает сломать языковые барь
 
 3. В нашей настройке DeepL используется настраиваемый глоссарий. Проверьте [**ton-i18n-glossary**](https://github.com/TownSquareXYZ/ton-i18n-glossary) для получения подробной информации о загрузке глоссария.
 
-4. В репозитории нажмите "Предварительный перевод" и выберите "Машинный перевод".
-   ![pre-translation](/img/localizationProgramGuideline/howItWorked/pre-translation.png)
+4. Choose DeepL as the Translation Engine, select the target languages, and select the translated files.
+   ![pre-translate-config](/img/localizationProgramGuideline/howItWorked/pre-translate-config.png)
 
 5. Выберите DeepL в качестве движка перевода, выберите целевые языки и выберите файлы для перевода.
    ![pre-translate-config](/img/localizationProgramGuideline/howItWorked/pre-translate-config.png)
 
 Вот и все! Теперь вы можете сделать перерыв и дождаться завершения предварительного перевода.
+
+<Feedback />
