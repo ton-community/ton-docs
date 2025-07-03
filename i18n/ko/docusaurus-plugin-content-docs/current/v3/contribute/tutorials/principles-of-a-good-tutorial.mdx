@@ -1,27 +1,36 @@
-# 좋은 튜토리얼의 원칙
+import Feedback from '@site/src/components/Feedback';
 
-이 원칙을 담은 [talkol](https://github.com/talkol)의 원본 댓글입니다:
+# Principles of a good tutorial
 
-- [TON 발자취 #7에 대한 원본 댓글](https://github.com/ton-society/ton-footsteps/issues/7#issuecomment-1187581181)
+:::danger
+This page is outdated and will be updated soon.
+See the [How to contribute](/v3/contribute/).
+:::
 
-다음은 신규 기여자를 위한 요점 정리입니다.
+Original comment with these principles by [talkol](https://github.com/talkol):
 
-## 원칙
+* [Original comment on TON Footstep #7](https://github.com/ton-society/ton-footsteps/issues/7#issuecomment-1187581181)
 
-1. 전체 흐름은 사용자의 클라이언트에서 실행되어야 합니다. 타사 서비스가 포함되지 않아야 합니다. 사용자가 리포지토리를 간단히 복제하고 즉시 실행할 수 있도록 모든 작업을 수행해야 합니다.
+Here is a summary of these points for new contributors.
 
-2. README는 매우 상세해야 합니다. 사용자가 아무것도 모른다고 가정하지 마세요. 튜토리얼에 필요한 경우 장치에 FunC 컴파일러나 Lite-client를 설치하는 방법도 설명해야 합니다. 이 문서의 다른 튜토리얼에서 이러한 부분을 복사할 수 있습니다.
+## Principles
 
-3. 저장소에는 사용된 컨트랙트의 전체 소스 코드가 포함되는 것이 좋습니다. 사용자들이 표준 코드를 약간 변경할 수 있도록 하기 위해서입니다. 예를 들어, Jetton 스마트 컨트랙트는 사용자들이 맞춤형 동작을 실험할 수 있도록 합니다.
+1. The full flow should run on the user's client. There shouldn't be any third-party services involved. You need to do everything so that the user can simply clone the repository and immediately run it.
 
-4. 가능하다면 사용자가 코드를 다운로드하거나 아무것도 구성하지 않고도 프로젝트를 배포하거나 실행할 수 있는 사용자 친화적인 인터페이스를 만들어야 합니다. 이 경우에도 독립형으로 GitHub Pages에서 제공되어 사용자의 장치에서 100% 클라이언트 측에서 실행되도록 해야 합니다. 예: https://minter.ton.org/
+2. The README should be VERY detailed. Do not assume the users know anything. If the tutorial requires it, it should also explain how to install the FunC compiler or Lite-client on your device. You can copy these parts from other tutorials in this documentation.
 
-5. 각 필드 선택이 무엇을 의미하는지 사용자에게 설명하고 모범 사례를 설명합니다.
+3. It would be good if the repository included the whole source code for the contracts used, so that users could make minor changes to the standard code. For example, the Jetton smart contract allows users to experiment with custom behavior.
 
-6. 보안에 대해 알아야 할 모든 것을 설명합니다. 작성자가 실수를 하지 않고 위험한 스마트 계약/봇/웹사이트를 만들지 않도록 충분히 설명해야 하며, 이는 최고의 보안 관행을 가르치는 것입니다.
+4. If it is possible, create a user-friendly interface that will allow users to deploy or run the project without having to download the code or configure anything. Notice that this should still be standalone and served from GitHub Pages to run 100% client-side on the user's device. Example: https://minter.ton.org/
 
-7. 이상적으로, 리포지토리에는 독자가 튜토리얼의 맥락에서 이를 구현하는 방법을 잘 보여주는 잘 작성된 테스트가 포함되어야 합니다.
+5. Explain to users what every field choice means and explain best practices.
 
-8. 저장소는 자체적으로 이해하기 쉬운 컴파일/배포 스크립트를 포함해야 합니다. 사용자가 단순히 `npm install` 을 하고 이를 사용할 수 있어야 합니다.
+6. Explain everything there is to know about security. You must explain enough that creators do not make mistakes and create dangerous smart contracts/bots/websites—you are teaching them the best security practices.
 
-9. 때로는 GitHub 리포지토리만으로 충분하고 전체 문서를 작성할 필요가 없습니다. 이 경우 README에 저장소의 모든 코드가 포함되어 있어야 합니다. 코드는 사용자가 쉽게 읽고 이해할 수 있도록 잘 주석이 달려 있어야 합니다.
+7. Ideally, the repository should include well-written tests that show the reader how to best implement them in the context of your tutorial.
+
+8. The repository should have its own easy-to-understand compilation/deployment scripts. A user should be able to just `npm install` and use them.
+
+9. Sometimes a GitHub repository is enough and there is no need to write a full article. Just a README with all the code you need in the repository. In this case, the code should be well-commented so that the user can easily read and understand it.
+
+<Feedback />
