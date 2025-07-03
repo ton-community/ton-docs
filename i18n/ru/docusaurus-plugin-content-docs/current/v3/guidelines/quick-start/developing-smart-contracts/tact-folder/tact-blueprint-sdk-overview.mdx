@@ -21,21 +21,20 @@ import Button from '@site/src/components/button'
 
 <Tabs groupId="language">
   <TabItem value="Tact" label="Tact">
-    ```ls title="Структура проекта"
+    ```ls title="Project structure"
     Example/
-    ├── contracts/           # Папка с кодом смарт-контрактов
-    │   ├── hello_world.tact   # Файл основного контракта
-    ├── scripts/             # Скрипты для развёртывания и взаимодействия в блокчейне 
-    │   ├── deployHelloWorld.ts      # Скрипт для развёртывания контракта
-    │   └── iincrementHelloWorld.ts  # Скрипт для взаимодействия с контрактом
-    ├── tests/               # Папка с тестами для локального тестирования контрактов
-    ├── HelloWorld.spec.ts      # Тестовые спецификации для контракта
-    └── wrappers/            # Обёртки TypeScript для взаимодействия с контрактами
-    ├── HelloWorld.ts            # Класс-обёртка для смарт-контракта
-    └── HelloWorld.compile.ts    # Скрипт для компиляции контракта
+    ├── contracts/           # Folder containing smart contracts code
+    │   ├── hello_world.tact   # Main contract file
+    ├── scripts/             # Deployment and on-chain interaction scripts
+    │   ├── deployHelloWorld.ts     # Script to deploy the contract
+    │   └── incrementHelloWorld.ts  # Script to interact with the contract
+    ├── tests/               # Test folder for local contract testing
+    │   └── HelloWorld.spec.ts      # Test specifications for the contract
+    └── wrappers/            # TypeScript wrappers for contract interaction
+    ├── HelloWorld.ts           # Wrapper class for smart contract
+    └── HelloWorld.compile.ts   # Script for contract compilation
     ```
   </TabItem>
-
 </Tabs>
 
 ### `/contracts`
@@ -95,9 +94,7 @@ npx blueprint create PascalCase # Don't forget to name the contract in PascalCas
 Теперь всё готово: пришло время начать писать смарт-контракты. Мы начнём с базовых задач: **хранения данных** и **get-методов**.
 
 <Button href="/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-storage-and-get-methods" colorType={'primary'} sizeType={'sm'}>
-
   Хранение данных и get-методы
-
 </Button>
 
 <Feedback />
