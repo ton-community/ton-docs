@@ -27,7 +27,7 @@ import Button from '@site/src/components/button'
     │   ├── hello_world.tact   # Файл основного контракта
     ├── scripts/             # Скрипты для развёртывания и взаимодействия в блокчейне 
     │   ├── deployHelloWorld.ts      # Скрипт для развёртывания контракта
-    │   └── iincrementHelloWorld.ts  # Скрипт для взаимодействия с контрактом
+    │   └── incrementHelloWorld.ts  # Скрипт для взаимодействия с контрактом
     ├── tests/               # Папка с тестами для локального тестирования контрактов
     ├── HelloWorld.spec.ts      # Тестовые спецификации для контракта
     └── wrappers/            # Обёртки TypeScript для взаимодействия с контрактами
@@ -90,11 +90,85 @@ npx blueprint run
 npx blueprint create PascalCase # Don't forget to name the contract in PascalCase
 ```
 
+## Использование blueprint.config.ts
+
+`blueprint.config.ts` – необязательный, но удобный файл, позволяющий заранее задать все сетевые и прочие параметры CLI.  
+Преимущества:
+* Запуск CLI без интерактивных вопросов (полезно в CI).
+* Единая точка правды для всей команды.
+* Лёгкое переопределение параметров через флаги, если нужно.
+
+### Структура файла
+
+```ts
+import { Config } from '@ton/blueprint';
+
+export const config: Config = {
+    // поля см. таблицу ниже
+};
+```
+
+После этого достаточно выполнить:
+
+```bash
+npx blueprint run          # или build / test и т.д.
+```
+
+CLI-флаги всё ещё имеют приоритет и могут временно переопределить настройки.
+
+### Справочник по полям
+
+<div className="doc-table">
+| Путь | Тип / Значения | По-умолчанию | Описание |
+|------|----------------|--------------|----------|
+| `plugins` | `Plugin[]` | `[]` | Подключение сторонних расширений Blueprint. Плагин должен реализовывать интерфейс `Plugin` и возвращать набор CLI-раннеров. |
+| `network` | `'mainnet' \| 'testnet'` или `CustomNetwork` | `undefined` | Сетевое окружение по-умолчанию. Если не указано, Blueprint спросит об этом при запуске. |
+| `network.endpoint` | `string` | — | URL RPC-узла. Обязательно для `custom`, для остальных используется TON Center по-умолчанию. |
+| `network.version` | `'v2' \| 'v4' \| 'tonapi' \| 'liteclient'` | `'v2'` | Версия API целевого узла. |
+| `network.key` | `string` | — | API-ключ, если потребуется (TON Center v2 / TonAPI). |
+| `network.type` | `'mainnet' \| 'testnet' \| 'custom'` | `'custom'` | Логический тип сети, отражается в ссылках на обозреватели и пр. |
+| `separateCompilables` | `boolean` | `false` | Если `true`, файлы `*.compile.ts` кладутся в каталог `compilables` (иначе в `wrappers`). |
+| `requestTimeout` | `number` (мс) | `undefined` | Переопределяет общий таймаут HTTP-запросов к API-узлу. |
+| `recursiveWrappers` | `boolean` | `false` | Рекурсивно обходить подпапки `wrappers` / `compilables` при поиске контрактов. |
+| `manifestUrl` | `string` | `'https://raw.githubusercontent.com/ton-org/blueprint/main/tonconnect/manifest.json'` | Ссылка на `manifest.json`, который TON Connect кошелёк покажет пользователю. |
+</div>
+
+> **Приоритет:** CLI-флаги (например `--custom …`) всегда перекрывают значения из конфига.
+
+### Полный пример
+
+```ts
+import { Config } from '@ton/blueprint';
+import { ScaffoldPlugin } from 'blueprint-scaffold';
+
+export const config: Config = {
+    plugins: [new ScaffoldPlugin()],   // подключаем плагин
+
+    network: {
+        endpoint: 'https://toncenter.com/api/v2/jsonRPC',
+        version:  'v2',
+        type:     'mainnet',
+        key:      process.env.TONCENTER_KEY, // секреты храните в env
+    },
+
+    separateCompilables: true,
+    recursiveWrappers:   true,
+    requestTimeout:      15_000, // 15 сек
+    manifestUrl:         'https://example.com/my-dapp/manifest.json',
+};
+```
+
+### Когда использовать
+
+1. **CI и автоматизация** – запуск `blueprint build` / `blueprint test` без интерактивных вопросов.  
+2. **Работа в команде** – единые сетевые настройки и таймауты у всех разработчиков.  
+3. **Сторонние плагины** – регистрируются через `plugins` и сразу доступны во всех CLI-командах.
+
 ## Следующий шаг
 
 Теперь всё готово: пришло время начать писать смарт-контракты. Мы начнём с базовых задач: **хранения данных** и **get-методов**.
 
-<Button href="/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-storage-and-get-methods" colorType={'primary'} sizeType={'sm'}>
+<Button href="/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-storage-and-get-methods/" colorType={'primary'} sizeType={'sm'}>
 
   Хранение данных и get-методы
 
