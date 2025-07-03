@@ -1,128 +1,142 @@
-# 샘플 튜토리얼 구조
+import Feedback from '@site/src/components/Feedback';
 
-## 소개
+# Sample tutorial structure
 
-소개 제목은 **반드시** H2로 해야 합니다: `## 소개`
+:::danger
+This page is outdated and will be updated soon.
+See the [How to contribute](/v3/contribute/).
+:::
 
-이 섹션에서는 이 튜토리얼의 배경과 중요성, 우리가 이 튜토리얼에서 만들고 배울 것들에 대해 설명합니다.
+## Introduction
 
-- 마치 5살 아이에게 설명하듯이 이 섹션을 설명하세요 (**[ELI5](https://www.dictionary.com/e/slang/eli5/)**).
-- 모든 내용을 최대 5~6줄로 설명하세요.
+The Introduction heading **must** be H2: `## Introduction`
 
-\*예시: \*
+This section is for you to explain the context of this tutorial and why it is important, what we're going to build and learn in this tutorial.
 
-> 스마트 컨트랙트는 TON 블록체인에서 실행되는 컴퓨터 프로그램입니다. 더 구체적으로 말하면, [TVM](/learn/tvm-instructions/tvm-overview)(*TON 가상 머신*) 에서 실행됩니다. 이 컨트랙트는 코드(*컴파일된 TVM 명령어*) 와 데이터(*영구 상태*) 로 구성되며, TON의 특정 주소에 저장됩니다.
+* Explain this section like you're explaining it to a 5-year-old (**[ELI5](https://www.dictionary.com/e/slang/eli5/)**)
+* Explain everything in 5–6 lines maximum.
 
-## 전제 조건
+*For example:*
 
-사전 준비 제목은 **반드시** H2로 해야 합니다: `## 사전 준비`
+> A smart contract is just a computer program that runs on TON Blockchain, or more specifically on its [TVM](/v3/documentation/tvm/tvm-overview) (*TON Virtual Machine*). The contract is made of code (*compiled TVM instructions*) and data (*persistent state*) that are stored at some address on TON.
 
-이 섹션에서는 필요한 사전 지식이나 먼저 완료해야 하는 기존 튜토리얼에 대해 설명합니다. 필요한 토큰도 이곳에 언급합니다.
+## Prerequisites
 
-\*예시: \*
+The Prerequisites heading **must** be H2: `## Prerequisites`
 
-> 이 튜토리얼에서는 테스트넷에서 Jetton을 발행할 것입니다. 계속하기 전에 [testnet](/develop/smart-contracts/environment/testnet) 지갑에 충분한 잔액이 있는지 확인하시기 바랍니다.
+This section is for you to explain any prior knowledge needed or any existing tutorials that need to be completed first. Any tokens that are needed—mention them here.
 
-## 요구 사항
+*For example:*
 
-요구 사항 제목은 **반드시** H2로 해야 합니다: ## 요구 사항
+> In this tutorial, we're going to mint Jetton on testnet. Before we continue, make sure that your [testnet](/v3/documentation/smart-contracts/getting-started/testnet) wallet has sufficient balance.
 
-**선택 사항 :** 튜토리얼에 동영상 콘텐츠가 있는 경우 이 섹션에 삽입하세요.
+## Requirements
 
-튜토리얼을 시작하기 **전에** 설치해야 하며 튜토리얼에서 다루지 않는 기술(`TON 월렛 확장`, `노드` 등) 을 설명합니다. 튜토리얼 동안 설치할 패키지는 나열하지 않습니다.
+The Requirements heading **must** be H2: `## Requirements`
 
-\*예시: \*
+**OPTIONAL :** Embed any video content in this section if your tutorial has any.
 
-- 이 튜토리얼에서는 TON 지갑 확장 프로그램이 필요하므로 [여기](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd)에서 설치하세요.
-- NodeJS 12.0.1+가 설치되어 있는지 확인하세요.
+Any technology that needs to be installed **prior** to starting the tutorial and that the tutorial will not cover (`TON Wallet Extension`, `node`, etc.). Do not list packages that will be installed during the tutorial.
 
-## 튜토리얼 본문
+*For example:*
 
-- "튜토리얼 본문"을 제목으로 사용하지 말고, 자료와 관련된 제목을 사용하세요.
-  - 다른 것이 생각나지 않으면 "시작하기"를 사용해도 됩니다 😉
-- 독자들이 튜토리얼을 따라갈 수 있도록 필요한 모든 텍스트 콘텐츠를 추가하고, 제출하기 전에 철자와 ***문법을 교정하는 것을 잊지 마세요.***
-  - [Grammarly](http://grammarly.com)는 문법 실수를 방지하는 데 도움이 되는 좋은 무료 프로그램입니다.
+* We'll need the TON Wallet extension in this tutorial; install it from [HERE](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd).
+* Make sure to have NodeJS 12.0.1+ installed.
 
-### 핵심 사항
+## Body of the Tutorial
 
-- "튜토리얼 본문"을 제목으로 사용하지 마세요!
+* Please do not use "Body of the Tutorial" as a heading, use your own heading that is relevant to the material.
+  * "Getting started" is acceptable if you can't think of anything else 😉
+* Add any text content necessary to guide readers through your tutorial, and ***remember to proofread your content*** for spelling and grammar before you submit your tutorial.
+  * [Grammarly](http://grammarly.com) is a good free program that can help you avoid grammar mistakes.
 
-- **모든 소제목은 H3로 유지하고**, H4 이하로는 사용하지 마세요.
-  - Markdown 문법에서는 H2 제목에 두 개의 해시마크가 사용됩니다: ##
-  - H3 제목에는 세 개의 해시마크가 사용됩니다: ###
+### Key points
 
-- 코드 블록에 필요한 주석만 추가하세요. ***터미널 입력 코드 블록에 # 스타일 주석을 추가하지 마세요.***
+* Do not use "Body of the Tutorial" as a heading!
 
-- 관련된 모든 코드 블록을 추가하세요:
-  - ## Markdown 문법에서 코드 블록은 코드 블록 시작과 끝에 세 개의 백틱을 사용합니다. 또한, 모든 코드 블록 앞뒤에 줄 바꿈이 있어야 합니다. *예시*:
-    \`js  
-          const testVariable = 'some string';  
-          someFunctionCall();  
-          \`
+* **Keep all subheadings at H3,** don't go for H4 or any lower.
+  * In Markdown syntax, two hashmarks are used for H2 headings: ##
+  * Three hashmarks are used for H3 headings: ###
 
-  - 모든 코드 블록은 구문 강조 유형을 ***반드시*** 가져야 합니다. 확실하지 않은 경우 \`\`\`text를 사용하세요.
+* Add only necessary comments to code blocks. ***Do not*** add # style comments to terminal input code blocks.
 
-  - 터미널 출력, 터미널 명령 및 일반 텍스트에는 \\`\`\`text를 사용해야 합니다.
+* Add all relevant code blocks:
+  * ## Markdown syntax for code blocks consists of three backticks at the beginning and end of the code block.  Also, make sure that there is a newline before and after the backticks in all code blocks. *For example*:
+    \`\`\`js\
+    const testVariable = 'some string';\
+    someFunctionCall();\
+    \`\`\`
 
-  - \`javascript *또는* `js는 JavaScript 코드에 사용합니다.
+  * ALL code blocks ***must*** have a syntax highlight type. Use \`\`\`text if you are not sure.
 
-  - \`typescript 또는 `ts는 TypeScript 코드에 사용합니다.
+  * \`\`\`text must be used for terminal output, terminal commands, and plaintext.
 
-  - \\`\`\`jsx는 ReactJS 코드에 사용합니다.
+  * \`\`\`javascript *or* \`\`\`js can be used for any JavaScript code.
 
-  - \\`\`\`cpp는 Func 코드에 사용합니다.
+  * \`\`\`typescript or \`\`\`ts can be used for any TypeScript code.
 
-  - GraphQL 구문 강조에는 \\`\`\`graphql을 사용하세요.
+  * \`\`\`jsx is for ReactJS code.
 
-  - 유효한 JSON을 강조할 때는 \`json을 사용합니다. (유효하지 않은 JSON 예제에는 대신 \`text를 사용하세요.)
+  * \`\`\`cpp is for Func code.
 
-  - \\`\`\`bash는 # 스타일 주석이 필요한 코드 블록에서만 사용해야 합니다. 이는 많은 상황에서 # 문자가 Markdown 제목으로 렌더링될 수 있기 때문에 신중히 사용해야 합니다. 일반적으로, 목차가 이로 인해 영향을 받습니다.
+  * Use \`\`\`graphql when highlighting GraphQL syntax.
 
-- 강조를 위해 `미리 서식을 지정한 텍스트`를 사용하지 말고, 대신 **굵은 글씨**나 *기울임꼴* 텍스트만 사용하세요.
+  * Use \`\`\`json when highlighting valid JSON. (For invalid JSON examples use \`\`\`text instead.)
 
-- 예상되는 터미널 출력을 반영하기 위해 이미지나 코드 블록을 추가하세요.
+  * \`\`\`bash should *only* be used in code blocks where you need to have # style comments. This must be done carefully because in many situations the # character will render as a markdown heading. Typically, the Table of Contents will be affected if this occurs.
 
-- 튜토리얼을 작성할 때는 오류 중심 접근 방식을 취하세요. 일반적인 오류와 문제 해결 단계를 추가하세요. *예시:*
+* Do not use `pre-formatted text` for emphasis; instead, use only **bold** or *italic* text.
 
-> **`node deploy:testnet` 명령을 실행할 때 발생하는 오류로 인해 테스트넷에 연결할 수 없습니다.**
+* Add images or code blocks to reflect the expected terminal output.
+
+* Take an error-driven approach when writing your tutorial. Add common errors and troubleshooting steps. *For example:*
+
+> **Unable to connect to Testnet due to an error when executing the
+> `node deploy:testnet` command.**
 >
-> 몇 가지 일반적인 원인을 살펴보겠습니다:
+> Let's look at some common causes:
 
-- `.env`에 생성된 테스트넷 지갑에 충분한 자금이 있는지 확인하세요. 그렇지 않으면, faucet 제공자에서 테스트넷 코인을 추가하세요.
-- 여전히 같은 문제가 발생하면 [개발자 채팅](https://t.me/TonDev_eng/)에서 개발자에게 도움을 요청하세요.
-
->
-
-## 결론
-
-결론 제목은 **반드시** H2로 해야 합니다: `## 결론`
-
-이 섹션에서는 튜토리얼에서 배운 내용을 요약하고, 핵심 사항을 강조하며, 학습자가 튜토리얼을 완료한 것을 축하해야 합니다. 최대 5–6줄로 작성합니다. *예시*:
-
-> 우리는 카운터 기능이 있는 새로운 간단한 FunC 컨트랙트를 만들었습니다. 그런 다음 이를 온체인에 구축하고 배포했으며, 마지막으로 getter를 호출하고 메시지를 보내 상호작용했습니다.
-
-이 코드는 프로덕션용이 아닙니다. 메인넷에 배포하려면 토큰이 시장에 상장된 경우 전송 메서드를 비활성화하는 등 고려해야 할 몇 가지 사항이 더 있다는 점을 기억하시기 바랍니다.
+* Make sure you have enough funds in your generated testnet wallet in `.env`. If not, please add some testnet coins from the faucet giver.
+* If you're still experiencing the same issue, reach out to the devs in the [Dev Chat](https://t.me/TonDev_eng/) for help.
 
 >
 
-## 더 보기
+## Conclusion
 
-더 보기 제목은 **반드시** H2로 해야 합니다: `## 더 보기`
+The Conclusion heading **must** be H2: `## Conclusion`
 
-이 섹션에서는 이 튜토리얼 후에 계속 학습할 수 있는 방법을 설명합니다. 이 튜토리얼과 관련된 프로젝트와 기사도 자유롭게 추천하세요. 진행 중인 다른 고급 튜토리얼이 있다면 간단히 언급할 수 있습니다. 일반적으로 docs.ton.org의 관련 페이지만 여기에 배치됩니다.
+This section should summarize what was learned in the tutorial, reinforce key points, and congratulate the learner on completing the tutorial. Use a maximum of 5–6 lines.
+*For example*:
 
-## 저자 소개 *(선택 사항)*
+> We created a simple new FunC contract with counter functionality. We then built and deployed it on-chain, and finally interacted with it by calling a getter and sending a message.
 
-저자 소개 제목은 **반드시** H2로 해야 합니다: `## 저자 소개`
+Please remember that this code is not meant for production; there are still a few other things to consider if you wanted to deploy this to mainnet, such as disabling the transfer method if the token is listed on the market, and so on.
 
-짧게 작성하세요. 한 두 줄 정도면 충분합니다. GitHub 프로필 + Telegram 프로필 링크를 포함할 수 있습니다. 여기에 LinkedIn이나 Twitter를 추가하지 마세요.
+>
 
-## 참조 *(선택 사항)*
+## See Also
 
-참조 제목은 **반드시** H2로 해야 합니다: `## 참조`
+The Next Steps heading **must** be H2: `## See Also`
 
-다른 문서, GitHub 리포지토리 또는 기존 튜토리얼에서 도움을 받은 경우 이 섹션을 추가해야 합니다.
+Use this section to explain what can be done next after this tutorial to continue learning.
+Feel free to add recommended projects and articles relating to this tutorial.
+If you're working on any other advanced tutorials, you can briefly mention them here.
+Typically, only related pages from docs.ton.org are placed here.
 
-가능한 경우 문서 이름과 링크를 추가하여 출처를 표시하세요.
+## About the Author *(Optional)*
 
-디지털 문서가 아닌 경우 ISBN 또는 다른 형태의 참고 자료를 포함하세요.
+The About the Author heading **must** be H2: `## About the Author`
+
+Keep it short. One or two lines at most. You can include a link to your GitHub profile + Telegram profile. Please refrain from adding your LinkedIn or Twitter here.
+
+## References *(Optional)*
+
+The References heading **must** be H2: `## References`
+
+This section ***must*** be present if you have taken any help in writing this tutorial from other documents, GitHub repos or pre-existing tutorials.
+
+Credit sources by adding their name and a link to the document when possible.
+
+If it is not a digital document, include an ISBN or other form of reference.
+
+<Feedback />
