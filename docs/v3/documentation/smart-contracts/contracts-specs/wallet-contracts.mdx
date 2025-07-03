@@ -55,7 +55,7 @@ For detailed specifications of each wallet contract, please refer further down t
 
 **Note:** These hashes can also be found in the explorers.
 
-### Wallet V1 {#wallet-v1}
+### Wallet V1 \{#wallet-v1}
 
 This is the simplest one. It only allows you to send four transactions at a time and doesn't check anything besides your signature and seqno.
 
@@ -118,7 +118,7 @@ Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standart exit codes](/v
 2. int get_public_key returns current stored public key.
 
 
-### Wallet V2 {#wallet-v2}
+### Wallet V2 \{#wallet-v2}
 
 Wallet source code:
 
@@ -145,7 +145,7 @@ All differences compared to the previous version are a consequence of adding the
 2. Up to 4 references to cells containing messages.
 
 
-### Wallet V3 {#wallet-v3}
+### Wallet V3 \{#wallet-v3}
 
 This version introduces the `subwallet_id` parameter, which allows you to create multiple wallets using the same public key (so you can have only one seed phrase and multiple wallets). As before, `V3R2` only adds the get-method for the public key.
 
@@ -191,7 +191,7 @@ Essentially, `subwallet_id` is just a number added to the contract state when it
 | 0x0       | Standard successful execution exit code.                                |
 
 
-### Wallet V4 {#wallet-v4}
+### Wallet V4 \{#wallet-v4}
 
 This version retains all the functionality of the previous versions but also introduces something very powerful: `plugins`.
 
@@ -285,7 +285,7 @@ If `state_init` doesn't make much sense from its name, take a look at the follow
 5. tuple get_plugin_list() returns list of plugins.
 
 
-### Wallet V5 {#wallet-v5}
+### Wallet V5 \{#wallet-v5}
 
 It is the most modern wallet version at the moment, developed by the Tonkeeper team, aimed at replacing V4 and allowing arbitrary extensions.
 <br></br>
