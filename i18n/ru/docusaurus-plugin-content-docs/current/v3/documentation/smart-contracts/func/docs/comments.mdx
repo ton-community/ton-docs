@@ -1,20 +1,22 @@
+import Feedback from '@site/src/components/Feedback';
+
 # Комментарии
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+FunC supports both single-line and multi-line comments.
 
 FunC имеет однострочные комментарии, которые начинаются с `;;` (двойной `;`). Например:
 
 ```func
-int x = 1; ;; assign 1 to x
+int x = 1; ;; assigns 1 to x
 ```
 
-Он также имеет многострочные комментарии, которые начинаются с `{-` и заканчиваются на `-}`. Обратите внимание, что в отличие от многих других языков, многострочные комментарии FunC могут быть вложенными. Например:
+Он также имеет многострочные комментарии, которые начинаются с `{-` и заканчиваются на `-}`.
+Обратите внимание, что в отличие от многих других языков, многострочные комментарии FunC могут быть вложенными.
+Например:
 
 ```func
 {- This is a multi-line comment
-    {- this is a comment in the comment -}
+    {- This is a comment inside a comment -}
 -}
 ```
 
@@ -24,13 +26,16 @@ int x = 1; ;; assign 1 to x
 {-
   Start of the comment
 
-;; this comment ending is itself commented -> -}
+;; This comment’s ending is itself commented out -> -}
 
 const a = 10;
-;; this comment begining is itself commented -> {-
+
+;; This comment’s beginning is itself commented out -> {-
 
   End of the comment
 -}
 ```
 
-`const a = 10;` находится внутри многострочного комментария и закомментирован.
+Here, `const a = 10;` is inside a multi-line comment and is effectively commented out.
+
+<Feedback />
