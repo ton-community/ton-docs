@@ -118,7 +118,8 @@ npx blueprint test --gas-report
 
 
 This runs your tests with gas tracking enabled and outputs a `gas-report.json` with transaction metrics.
-```
+
+```cpp
 ...
 PASS  Comparison metric mode: gas depth: 1
 Gas report write in 'gas-report.json'
@@ -136,6 +137,22 @@ Gas report write in 'gas-report.json'
 │           │  0x7e8764ef  │   2681   │   11   │  900  │
 └───────────┴──────────────┴──────────┴────────┴───────┘
 ```
+
+### Storage fee calculation
+
+You can use the `cells` and `bits` values from the report to estimate the **storage fee** for your contract.
+Here’s the formula:
+
+```cpp
+storage_fee = ceil(
+                  (account.bits * bit_price
+                  + account.cells * cell_price)
+               * time_delta / 2 ^ 16)
+```
+
+To try this in practice, use the [calculator example](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#calculator-example).
+
+### Regenerate the gas report
 
 Note that the `op::increase` method appears in the report as the raw opcode `0x7e8764ef`.
 To display a human-readable name in the report, update the generated `contract.abi.json` by replacing the raw opcode with the name **increase** in both the `messages` and `types` sections:
@@ -161,8 +178,6 @@ To display a human-readable name in the report, update the generated `contract.a
      ],
 ```
 
-### Regenerate the gas report
-
 Once you've updated the `contract.abi.json` file, rerun the command to regenerate the gas report:
 
 ```bash
@@ -171,7 +186,7 @@ npx blueprint test --gas-report
 
 Now the method name appears in the report as `increase`, making it easier to read:
 
-```
+```cpp
 ...
 │           ├──────────────┼──────────┼────────┼───────┤
 │           │   increase   │   2681   │   11   │  900  │
@@ -188,7 +203,7 @@ npx blueprint snapshot --label "v1"
 
 This creates a snapshot file in `.snapshot/`:
 
-```
+```cpp
 ...
 PASS  Collect metric mode: "gas"
 Report write in '.snapshot/1749821319408.json'
@@ -226,7 +241,7 @@ npx blueprint test --gas-report
 
 You see a side-by-side comparison of gas usage before and after the change:
 
-```
+```cpp
 ...
 PASS  Comparison metric mode: gas depth: 2
 Gas report write in 'gas-report.json'
@@ -302,7 +317,7 @@ npx blueprint snapshot --label 'v2' -- --config gas-report.config.ts
 
 You can collect metrics manually using the low-level API from `@ton/sandbox`.
 
-```typescript
+```typescript title=""
 import {
     Blockchain,
     createMetricStore,
