@@ -1,12 +1,27 @@
-name: Update main
+name: Translation - Start
 
 on:
-  schedule:
-    - cron: '0 0 1 * *'
   workflow_dispatch:
+    inputs:
+      language:
+        description: 'Target language'
+        required: true
+        default: ru
+        type: choice
+        options:
+          - ru
+          - ja
+          - ko
+          - zh-CN
+      origin_branch:
+        description: 'Branch to translate'
+        required: true
+        default: main
+        type: string
+
 
 jobs:
-  push-sources:
+  crowding-push:
     name: Push Source Strings to Crowdin
     runs-on: ubuntu-latest
 
