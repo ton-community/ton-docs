@@ -237,12 +237,8 @@ signature = Ed25519Sign(privkey, sha256(0xffff ++ utf8_encode("ton-connect") ++ 
 - `hash`：256 位无符号整数，大端位；
 - `AppDomain` 是 Length ++ EncodedDomainName
 
-<!---->
-
-- `Length` 是 utf-8 编码的应用域名长度，以字节为单位的 32 位值。
-- `EncodedDomainName` 是一个 `Length` 字节的 utf-8 编码应用域名。
-
-<!---->
+  - `Length` 是 utf-8 编码的应用域名长度，以字节为单位的 32 位值。
+  - `EncodedDomainName` 是一个 `Length` 字节的 utf-8 编码应用域名。
 
 - [GO 演示应用](https://github.com/ton-connect/demo-dapp-backend/blob/master/proof.go)
 - [TS 示例](https://gist.github.com/TrueCarry/cac00bfae051f7028085aa018c2a05c6)

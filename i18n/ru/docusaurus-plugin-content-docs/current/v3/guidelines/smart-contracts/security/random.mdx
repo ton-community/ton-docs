@@ -75,6 +75,6 @@ bool Transaction::prepare_rand_seed(td::BitArray<256>& rand_seed, const ComputeP
 
 Обычное использование PRNG (генератор псевдослучайных чисел) может включать `randomize_lt()`, но такой контракт можно обмануть, выбрав правильные блоки для отправки ему сообщений. Предлагаемое решение - отправлять сообщения в другой воркчейн, получать ответ, пропуская блоки, и т.д... но это только снижает степень уязвимости. На самом деле, любой валидатор (то есть 1/250 блокчейна TON) может выбрать правильное время для отправки запроса лотерейному контракту так, чтобы ответ от другого воркчейна пришел в сгенерированном им блоке, после чего он волен выбрать любое начальное значение блока по своему усмотрению. Опасность возрастет, как только коллаторы появятся в mainnet, так как они никогда не смогут быть оштрафованы по стандартным жалобам, потому что они не вкладывают никаких средств в контракт Elector.
 
-<!-- TODO: find an example contract using random without any additions, show how to find result of RANDU256 knowing block random seed (implies link on dton.io to show generated value) -->
+{/* TODO: find an example contract using random without any additions, show how to find result of RANDU256 knowing block random seed (implies link on dton.io to show generated value) */}
 
-<!-- TODO: next article. "Let's proceed to writing tool that will exploit this. It will be attached to validator and put proposed external messages in blocks satisfying some conditions - provided some fee is paid." -->
+{/* TODO: next article. "Let's proceed to writing tool that will exploit this. It will be attached to validator and put proposed external messages in blocks satisfying some conditions - provided some fee is paid." */}
