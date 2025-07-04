@@ -16,9 +16,11 @@ We recommend evaluating each provider independently based on its [historical per
 
 
 ### TON Center
-The TON Center was developed by the TON Core team using the Go stack. It consists of two separate services:
-* TON Center API V3: provides blockchain indexing functionality.
-* TON Center API V2: optimized for fast read and write operations to the blockchain.
+The TON Center was developed by the TON Core team. It offers two levels of API access:
+
+* **TON Center API V3:** delivers indexed and enriched blockchain data in a convenient format, with support for flexible filtering. Data is validated once at indexing time.
+* **TON Center API V2:** provides data directly from TON nodes. It supports limited filtering and validates data on every request.
+
 
 ### TON API
 A solution focused on business needs. It often provides ready-made implementations for common tasks in TON.
@@ -35,7 +37,7 @@ Data that undergoes minimal post-processing is often referred to as **raw data**
 
 In contrast, when working with event analytics that does **not** involve significant asset transfers, it is often more efficient to use **high-level interfaces** — such as APIs that apply post-processing before returning results. These interfaces provide simplified, structured data that is easier to work with in most application-level scenarios.
 
-In TON, transactions are bundled into blocks. Finalized BaseChain blocks are committed into MasterChain blocks. To extract transaction data, services must, therefore, read both the MasterChain and the corresponding BaseChain blocks. Additionally, since TON uses **sharding**, each MasterChain block includes references to relevant shard blocks, which must also be parsed. Each shard block contains all transactions associated with that MasterChain block.
+In TON, transactions are grouped into blocks. Because TON uses **sharding**, each Masterchain block includes references to the corresponding shard blocks. A shard block in the Basechain is considered finalized once a Masterchain block references that block. This also applies if any block built on top of it (its descendants) is referenced. To retrieve all transactions, services must, therefore, read both the Masterchain and the relevant Basechain shard blocks.
 
 All WorkChain blocks follow a consistent structure. For transaction analysis, the relevant section is the `block_extra` field.
 
@@ -57,10 +59,10 @@ created_by:bits256
 custom:(Maybe ^McBlockExtra) = BlockExtra;
 ```
 
-Thus, when reading the blockchain, services iteratively process blocks, starting from the most recently read one and proceeding up to the latest finalizedz block. The extracted transactions are considered **raw data** and can be passed to downstream services for further use. Additionally, specialized services may analyze and enrich this data to strike a balance between the complexity and the trustless nature of the system.
+Thus, when reading the blockchain, services iteratively process blocks, starting from the most recently processed block and proceeding up to the latest finalized block. The extracted transactions are considered **raw data** and can be passed to downstream services for further use. Additionally, specialized services may analyze and enrich this data to strike a balance between the complexity and the trustless nature of the system.
 
 
-## API methods for transaction access
+## API approaches for transaction access
 
 ### Key terms
 
@@ -82,7 +84,7 @@ Actions are used exclusively for visualization and have no role in the actual ex
 
 To fetch transaction data, you can use high-level interfaces such as:
 * `get /actions`
-* `get  /traces`
+* `get /traces`
 * `get /jetton/transfers` and `get /jetton/burns`
 * `get /nft`
 
@@ -94,13 +96,15 @@ In addition to simple service-level checks, this approach can also be used in mo
 
 ### By message payload
 
-Use `getTransaction` by external or internal message. Available in [API v3](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_message) only.
+To get transaction by external or internal message, use [/api/v3/transactionsByMessage](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_message).
+Available only in API v3.
 
-This method is beneficial when tracking a small number of accounts (up to ~10).
+
+This approach is beneficial when tracking a small number of accounts (up to ~10).
 It works well for wallet-v4 and wallet-v5 transfers and is primarily used to find transactions triggered by external messages.
 
 :::note
-There may be a delay of up to 10 seconds.
+There may be a delay of up to 10 seconds due to the time required to finalize the block.
 For better performance in real-time scenarios, consider also monitoring the pending pool.
 :::
 
@@ -108,14 +112,14 @@ For better performance in real-time scenarios, consider also monitoring the pend
 
 ### By account address
 
-To query transactions for an account you are monitoring, use [API v2](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get).
-This method is broadly supported, including in LiteClient, and is suitable for tracking up to ~100 accounts.
+To query transactions for an account you are monitoring, use either [/api/v2/getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get) or [/api/v3/transactions](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions) with `account` filter.
+This method is broadly supported, including LiteClient. It's suitable for tracking up to ~100 accounts.
 
 ---
 
 ### Full blockchain transaction scan
 
-When monitoring a large number of accounts (1,000 or more), you need to iterate through all transactions starting from the latest masterchain block.
+When monitoring a large number of accounts (1,000 or more), it's better to iterate through all transactions starting from the latest MasterChain block.
 
 - **API v2**:
 1. Fetch shard information for the MasterChain block
@@ -124,9 +128,11 @@ When monitoring a large number of accounts (1,000 or more), you need to iterate 
 See: TON Center cookbook: [How to scan blockchain](https://docs.toncenter.com/docs/ton-center-cookbook#how-to-scan-blockchain)
 
 - **API v3**:
-Do not reuse the API v2 logic.
-Instead, use the dedicated method:
-[GET /transactions/by-masterchain-block](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_masterchain_block)
+
+Do not reuse the API v2 logic. Instead, use the dedicated method:
+
+[GET /api/v3/transactionsByMasterchainBlock](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_masterchain_block)
+
 
 You have a choice: either a straightforward implementation that places a high level of trust in major providers or a more complex one that does not require trusting the provider.
 However, for greater security, it is always recommended to process transactions block by block independently.
