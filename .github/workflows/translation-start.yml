@@ -1,0 +1,46 @@
+name: Translation - Start
+
+on:
+  workflow_dispatch:
+    inputs:
+      language:
+        description: 'Target language'
+        required: true
+        default: ru
+        type: choice
+        options:
+          - ru
+          - ja
+          - ko
+          - zh-CN
+      origin_branch:
+        description: 'Branch to translate'
+        required: true
+        default: main
+        type: string
+
+
+jobs:
+  crowding-push:
+    name: Push Source Strings to Crowdin
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install Crowdin CLI
+        run: npm install -g @crowdin/cli
+
+      - name: Push source strings
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        run: |
+          crowdin push sources --branch main --config crowdin-oss.yml
