@@ -1,0 +1,351 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Collecting contract gas metrics
+
+## Gas consumption
+
+When developing smart contracts for TON, it's essential to consider
+how efficiently your logic consumes gas.
+Unlike many other blockchains, TON also requires you to pay for storing contract data and forwarding messages between contracts.
+
+As you develop and iterate on a contract, even small changes to its logic can affect both gas usage and data size. Monitoring these changes helps ensure that your contract remains efficient and cost-effective.
+
+:::tip
+For a deeper breakdown of how fees work in TON, refer to:
+* [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
+* [Storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee)
+* [Forward fees](/v3/documentation/smart-contracts/transaction-fees/forward-fees)
+:::
+
+## Gas metrics reporting
+
+To simplify tracking changes in gas usage and data size,
+we’ve introduced a reporting system that lets you collect and compare metrics across different versions of a contract.
+
+To enable this, write test scenarios that cover the contract’s primary usage patterns and verify that its behavior is as expected. This approach is sufficient to gather relevant metrics, which you can later use to compare performance changes after updating the implementation.
+
+
+Before running the tests, a store is created to collect metrics from all transactions generated during the tests. After test execution, the collected metrics are supplemented with [ABI information from the snapshot](https://github.com/ton-org/sandbox/blob/main/docs/collect-metric-api.md#abi-auto-mapping), and a report is generated based on this data.
+
+While more [metrics are collected](https://github.com/ton-org/sandbox/blob/main/docs/collect-metric-api.md#snapshot-structure), the current report format includes only `compute.phase`, `state.code`, and `state.data`.
+
+
+## Metrics comparison example
+
+To see how gas metrics can be collected and compared in practice, let’s walk through a complete example.
+
+Start by creating a new project using `npm create ton@latest`:
+
+```bash
+npm create ton@latest -y -- sample --type func-counter --contractName Sample
+cd sample
+```
+
+This command scaffolds a project with a basic counter contract at `contracts/sample.fc`.
+It defines a simple stateful contract that stores an `id` and a `counter` and supports an `increase` operation.
+
+```func title="sample.fc"
+#include "imports/stdlib.fc";
+
+const op::increase = "op::increase"c;
+global int ctx_id;
+global int ctx_counter;
+
+() load_data() impure {
+    var ds = get_data().begin_parse();
+
+    ctx_id = ds~load_uint(32);
+    ctx_counter = ds~load_uint(32);
+
+    ds.end_parse();
+}
+
+() save_data() impure {
+    set_data(
+        begin_cell()
+            .store_uint(ctx_id, 32)
+            .store_uint(ctx_counter, 32)
+            .end_cell()
+    );
+}
+
+() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+    if (in_msg_body.slice_empty?()) { ;; ignore all empty messages
+        return ();
+    }
+
+    slice cs = in_msg_full.begin_parse();
+    int flags = cs~load_uint(4);
+    if (flags & 1) { ;; ignore all bounced messages
+        return ();
+    }
+
+    load_data();
+
+    int op = in_msg_body~load_uint(32);
+    int query_id = in_msg_body~load_uint(64);
+
+    if (op == op::increase) {
+        int increase_by = in_msg_body~load_uint(32);
+        ctx_counter += increase_by;
+        save_data();
+        return ();
+    }
+
+    throw(0xffff);
+}
+
+int get_counter() method_id {
+    load_data();
+    return ctx_counter;
+}
+
+int get_id() method_id {
+    load_data();
+    return ctx_id;
+}
+```
+
+### Generate a gas report
+
+Let’s now generate a gas usage report for the contract.
+
+Run the following command:
+
+```bash
+npx blueprint test --gas-report
+```
+
+
+This runs your tests with gas tracking enabled and outputs a `gas-report.json` with transaction metrics.
+
+```cpp
+...
+PASS  Comparison metric mode: gas depth: 1
+Gas report write in 'gas-report.json'
+┌───────────┬──────────────┬───────────────────────────┐
+│           │              │          current          │
+│ Contract  │    Method    ├──────────┬────────┬───────┤
+│           │              │ gasUsed  │ cells  │ bits  │
+├───────────┼──────────────┼──────────┼────────┼───────┤
+│           │  sendDeploy  │   1937   │   11   │  900  │
+│           ├──────────────┼──────────┼────────┼───────┤
+│           │     send     │   515    │   11   │  900  │
+│  Sample   ├──────────────┼──────────┼────────┼───────┤
+│           │ sendIncrease │   1937   │   11   │  900  │
+│           ├──────────────┼──────────┼────────┼───────┤
+│           │  0x7e8764ef  │   2681   │   11   │  900  │
+└───────────┴──────────────┴──────────┴────────┴───────┘
+```
+
+### Storage fee calculation
+
+You can use the `cells` and `bits` values from the report to estimate the **storage fee** for your contract.
+Here’s the formula:
+
+```cpp
+storage_fee = ceil(
+                  (account.bits * bit_price
+                  + account.cells * cell_price)
+               * time_delta / 2 ^ 16)
+```
+
+To try this in practice, use the [calculator example](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#calculator-example).
+
+### Regenerate the gas report
+
+Note that the `op::increase` method appears in the report as the raw opcode `0x7e8764ef`.
+To display a human-readable name in the report, update the generated `contract.abi.json` by replacing the raw opcode with the name **increase** in both the `messages` and `types` sections:
+
+```diff
+--- a/contract.abi.json
++++ b/contract.abi.json
+@@ -6,13 +6,13 @@
+         "receiver": "internal",
+         "message": {
+           "kind": "typed",
+-          "type": "0x7e8764ef"
++          "type": "increase"
+         }
+       }
+     ],
+     "types": [
+       {
+-        "name": "0x7e8764ef",
++        "name": "increase",
+         "header": 2122802415
+       }
+     ],
+```
+
+Once you've updated the `contract.abi.json` file, rerun the command to regenerate the gas report:
+
+```bash
+npx blueprint test --gas-report
+```
+
+Now the method name appears in the report as `increase`, making it easier to read:
+
+```cpp
+...
+│           ├──────────────┼──────────┼────────┼───────┤
+│           │   increase   │   2681   │   11   │  900  │
+└───────────┴──────────────┴──────────┴────────┴───────┘
+```
+
+### Save a snapshot for future comparison
+
+To track how gas usage evolves, you can create a named snapshot of the current metrics. This allows you to compare future versions of the contract against this baseline:
+
+```bash
+npx blueprint snapshot --label "v1"
+```
+
+This creates a snapshot file in `.snapshot/`:
+
+```cpp
+...
+PASS  Collect metric mode: "gas"
+Report write in '.snapshot/1749821319408.json'
+```
+
+### Optimize the contract and compare the metrics
+
+Let’s try a simple optimization — adding the `inline` specifier to some functions.
+
+:::note
+An [inline function](/v3/documentation/smart-contracts/func/docs/functions#inline-specifier) is directly substituted into the code wherever it’s called, which can help reduce gas usage by eliminating the overhead of a function call.
+:::
+
+Update your contract like this:
+
+```diff
+--- a/contracts/sample.fc
++++ b/contracts/sample.fc
+
+-() load_data() impure {
++() load_data() impure inline {
+
+-() save_data() impure {
++() save_data() impure inline {
+
+-() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
++() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure inline {
+```
+
+Now regenerate the gas report. Since we already created a snapshot labeled `v1`, this report will include a comparison with the previous version:
+
+```bash
+npx blueprint test --gas-report
+```
+
+You see a side-by-side comparison of gas usage before and after the change:
+
+```cpp
+...
+PASS  Comparison metric mode: gas depth: 2
+Gas report write in 'gas-report.json'
+┌───────────┬──────────────┬─────────────────────────────────────────┬───────────────────────────┐
+│           │              │                 current                 │            v1             │
+│ Contract  │    Method    ├──────────────┬───────────┬──────────────┼──────────┬────────┬───────┤
+│           │              │   gasUsed    │   cells   │     bits     │ gasUsed  │ cells  │ bits  │
+├───────────┼──────────────┼──────────────┼───────────┼──────────────┼──────────┼────────┼───────┤
+│           │  sendDeploy  │  1937 same   │ 7 -36.36% │ 1066 +18.44% │   1937   │   11   │  900  │
+│           ├──────────────┼──────────────┼───────────┼──────────────┼──────────┼────────┼───────┤
+│           │     send     │ 446 -13.40%  │ 7 -36.36% │ 1066 +18.44% │   515    │   11   │  900  │
+│  Sample   ├──────────────┼──────────────┼───────────┼──────────────┼──────────┼────────┼───────┤
+│           │ sendIncrease │  1937 same   │ 7 -36.36% │ 1066 +18.44% │   1937   │   11   │  900  │
+│           ├──────────────┼──────────────┼───────────┼──────────────┼──────────┼────────┼───────┤
+│           │   increase   │ 1961 -26.86% │ 7 -36.36% │ 1066 +18.44% │   2681   │   11   │  900  │
+└───────────┴──────────────┴──────────────┴───────────┴──────────────┴──────────┴────────┴───────┘
+```
+
+## Project setup instructions
+
+If your project already exists, you need to configure **jest** to collect gas metrics.
+You can do this in one of two ways:
+
+#### Option 1: update the existing `jest.config.ts`
+Add the necessary environment and reporter settings:
+
+```ts title="jest.config.ts"
+import type { Config } from 'jest';
+
+const config: Config = {
+    preset: 'ts-jest',
++    testEnvironment: '@ton/sandbox/jest-environment',
+    testPathIgnorePatterns: ['/node_modules/', '/dist/'],
++    reporters: [
++        'default',
++        ['@ton/sandbox/jest-reporter', {}],
++    ]
+};
+
+export default config;
+```
+
+ :::tip
+ See the full list of options in the [Sandbox jest config docs](https://github.com/ton-org/sandbox?tab=readme-ov-file#setup-in-jestconfigts).
+:::
+
+
+
+#### Option 2: create a separate config `gas-report.config.ts`
+If you prefer not to modify your main `jest.config.ts`, you can create a dedicated config file:
+
+```ts title="gas-report.config.ts"
+import config from './jest.config';
+
+// use filter tests if need, see https://jestjs.io/docs/cli#--testnamepatternregex
+// config.testNamePattern = '^Foo should increase counter$'
+config.testEnvironment = '@ton/sandbox/jest-environment'
+config.reporters = [
+    ['@ton/sandbox/jest-reporter', {
+    }],
+]
+export default config;
+```
+
+When using this separate config, pass it using the `--config` option:
+
+```bash
+npx blueprint test --gas-report -- --config gas-report.config.ts
+npx blueprint snapshot --label 'v2' -- --config gas-report.config.ts
+```
+
+## Collect metrics manually
+
+You can collect metrics manually using the low-level API from `@ton/sandbox`.
+
+```typescript title=""
+import {
+    Blockchain,
+    createMetricStore,
+    makeSnapshotMetric,
+    resetMetricStore
+} from '@ton/sandbox';
+
+const store = createMetricStore();
+
+async function someDo() {
+    const blockchain = await Blockchain.create();
+    const [alice, bob] = await blockchain.createWallets(2);
+    await alice.send({ to: bob.address, value: 1 });
+}
+
+async function main() {
+    resetMetricStore();
+    await someDo();
+    const metric = makeSnapshotMetric(store);
+    console.log(metric);
+}
+
+main().catch((error) => {
+    console.log(error.message);
+});
+```
+
+For more details, see the [Collect Metric API documentation](https://github.com/ton-org/sandbox/blob/develop/docs/collect-metric-api.md#example).
+
+<Feedback />
+
