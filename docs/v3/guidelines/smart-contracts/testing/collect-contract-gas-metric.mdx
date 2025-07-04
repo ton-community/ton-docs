@@ -25,9 +25,9 @@ we’ve introduced a reporting system that lets you collect and compare metrics 
 To enable this, write test scenarios that cover the contract’s primary usage patterns and verify that its behavior is as expected. This approach is sufficient to gather relevant metrics, which you can later use to compare performance changes after updating the implementation.
 
 
-Before running the tests, a store is created to collect metrics from all transactions generated during the tests. After test execution, the collected metrics are supplemented with [ABI information from the snapshot](https://github.com/ton-org/sandbox/blob/feature/betch/docs/collect-metric-api.md#abi-auto-mapping), and a report is generated based on this data.
+Before running the tests, a store is created to collect metrics from all transactions generated during the tests. After test execution, the collected metrics are supplemented with [ABI information from the snapshot](https://github.com/ton-org/sandbox/blob/main/docs/collect-metric-api.md#abi-auto-mapping), and a report is generated based on this data.
 
-While more [metrics are collected](https://github.com/ton-org/sandbox/blob/feature/betch/docs/collect-metric-api.md#snapshot-structure), the current report format includes only `compute.phase`, `state.code`, and `state.data`.
+While more [metrics are collected](https://github.com/ton-org/sandbox/blob/main/docs/collect-metric-api.md#snapshot-structure), the current report format includes only `compute.phase`, `state.code`, and `state.data`.
 
 
 ## Metrics comparison example
