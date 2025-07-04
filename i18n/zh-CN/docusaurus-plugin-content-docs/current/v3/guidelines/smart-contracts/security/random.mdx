@@ -71,6 +71,6 @@ TON中没有随机是完全安全的，就不可预测性而言。这意味着**
 
 PRNG的典型用途可能包括`randomize_lt()`，但是可以通过选择正确的区块向它发送消息来欺骗这样的合约。提出的解决方案是向其他工作链发送消息，接收回答，从而跳过区块等...但这只是推迟了威胁。事实上，任何验证者（即TON区块链的1/250）都可以在正确的时间选择发送请求给彩票合约，以便来自其他工作链的回复在他生成的区块中到达，然后他可以选择他希望的任何区块seed。一旦协作者出现在主网，危险将会增加，因为他们永远不会因为标准投诉而被罚款，因为他们不会向Elector合约注入任何资金。
 
-<!-- TODO: find an example contract using random without any additions, show how to find result of RANDU256 knowing block random seed (implies link on dton.io to show generated value) -->
+{/* TODO: find an example contract using random without any additions, show how to find result of RANDU256 knowing block random seed (implies link on dton.io to show generated value) */}
 
-<!-- TODO: next article. "Let's proceed to writing tool that will exploit this. It will be attached to validator and put proposed external messages in blocks satisfying some conditions - provided some fee is paid." -->
+{/* TODO: next article. "Let's proceed to writing tool that will exploit this. It will be attached to validator and put proposed external messages in blocks satisfying some conditions - provided some fee is paid." */}
