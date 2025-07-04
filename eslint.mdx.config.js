@@ -41,7 +41,6 @@ module.exports = defineConfig([
   },
   globalIgnores([
     "./.docusaurus", "./build", "./node_modules",
-    "./i18n",
     "./src/components/MDXPage/index.js", // matched by *.mdx
   ]),
 ]);

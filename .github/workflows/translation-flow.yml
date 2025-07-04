@@ -1,0 +1,156 @@
+name: Translations - Pull from crowdin to github
+
+on:
+  issue_comment:
+    types: [ created ]
+
+jobs:
+  params:
+    name: Check if comment author has requested Crowdin synchronization
+    runs-on: ubuntu-latest
+    outputs:
+      command: ${{ steps.check.outputs.command }}
+      issue_number: ${{ github.event.issue.number }}
+    steps:
+      - id: check
+        run: |
+          if [[ "${{ github.event.comment.body }}" =~ ^/preview ]]
+          then
+            echo "command=preview" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.comment.body }}" =~ ^/previewdraft ]]
+          then
+            echo "command=preview" >> $GITHUB_OUTPUT
+          fi
+
+  pull-translations:
+    needs: params
+    if: needs.params.outputs.command == 'preview' || needs.params.outputs.command == 'previewdraft'
+
+    name: "Pull Translations for #${{ needs.params.outputs.issue_number }} from Crowdin to Github"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Env vars update
+        run: |
+          echo "language=ru" >> $GITHUB_ENV
+          echo "issueNumber=${{ needs.params.outputs.issue_number }}" >> $GITHUB_ENV
+          echo "crowdinBranch=${{ format('translation-{0}-{1}', needs.params.outputs.issue_number, 'ru') }}" >> $GITHUB_ENV
+          echo "gitBranch=${{ format('translation-{0}-{1}{2}', needs.params.outputs.issue_number, 'ru', needs.params.outputs.command == 'previewdraft' && '-draft' || '') }}" >> $GITHUB_ENV
+
+      - name: Create comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ env.issueNumber }}
+          body: |
+            Started workflow: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
+
+      - name: Setup / Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ env.gitBranch }}
+
+      - name: Setup / Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Setup / Crowdin CLI
+        run: npm install -g @crowdin/cli
+
+      - name: Setup / Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Pull translations (preview)
+        if: needs.params.outputs.command == 'preview'
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        run:
+          crowdin pull translations
+          -c crowdin-oss.yml
+          -b ${{ env.crowdinBranch }}
+          -l ${{ env.language }}
+          --skip-untranslated-files --export-only-approved
+
+      - name: Pull translations (preview draft)
+        if: needs.params.outputs.command == 'previewdraft'
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        run:
+          crowdin pull translations
+          -c crowdin-oss.yml
+          -b ${{ env.crowdinBranch }}
+          -l ${{ env.language }}
+
+      - name: Setup / Dev dependencies
+        run: npm ci
+
+      - name: Prepare commit
+        id: prepare-commit
+        run: |
+          git add i18n/
+          
+          if [ -z "$(git diff --cached --name-only)" ]; then
+            echo "staged_files=false" >> $GITHUB_OUTPUT
+          else
+            echo "staged_files=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create comment if no staged files
+        if: steps.prepare-commit.outputs.staged_files == 'false'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ env.issueNumber }}
+          body: |
+            There is nothing to commit, possible reasons:
+            
+              * there is no fully translated and approved files
+              * there is no difference with the current state of the branch
+
+      - name: Commit
+        if: steps.prepare-commit.outputs.staged_files == 'true'
+        run: |
+          ./node_modules/.bin/eslint -c eslint.mdx.config.js --fix $(git diff --cached --name-only)
+          git add i18n/
+          git commit -m "chore: update ${{ env.language }} translations #${{ env.issueNumber }}"
+          git push -u origin ${{ env.gitBranch }}
+
+      - name: Create PullRequest if needed
+        if: steps.prepare-commit.outputs.staged_files == 'true' && needs.params.outputs.command == 'preview'
+        id: ensure-pr
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: prs } = await github.rest.pulls.list({
+              owner: context.repo.owner, repo: context.repo.repo,
+              head: `main:${process.env.gitBranch}`,
+              state: 'open'
+            });
+            
+            if (prs.length == 0) {
+              const { data: newPR } = await github.rest.pulls.create({
+                owner: context.repo.owner, repo: context.repo.repo,
+                title: `New translations for ${process.env.language}`,
+                head: process.env.gitBranch,
+                base: 'main',
+                body: `New translations from Crowdin. Closes #${process.env.issueNumber}`,
+                draft: true
+              });
+            }
+
+      - name: Collect output
+        run: |
+          echo "gitBranch=${{ env.gitBranch }}" >> "$GITHUB_OUTPUT"
+
+  deploy-preview:
+    needs:
+      - params
+      - pull-translations
+    if: needs.params.outputs.command == 'preview' || needs.params.outputs.command == 'previewdraft'
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      instance: "release-candidate-ru"
+      branch: ${{ needs.pull-translations.outputs.gitBranch }}

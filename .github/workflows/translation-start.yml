@@ -1,0 +1,98 @@
+name: Translations - Start Translation
+
+on:
+  workflow_dispatch:
+    inputs:
+      language:
+        description: 'Target language'
+        required: true
+        default: ru
+        type: choice
+        options:
+          - ru
+          - ja
+          - ko
+          - zh-CN
+      originBranch:
+        description: 'Branch to translate'
+        required: true
+        default: main
+        type: string
+
+
+jobs:
+  crowding-push:
+    name: Push Source Strings to Crowdin
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup / Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.originBranch || 'main' }}
+
+      - name: Setup / Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Setup / Install Crowdin CLI
+        run: npm install -g @crowdin/cli
+
+      - name: Creating issue to track translation process
+        uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          originBranch: ${{ inputs.originBranch }}
+          language: ${{ inputs.language }}
+        with:
+          filename: .github/translation-work.issue-template.md
+        id: create-issue
+
+      - name: Env vars update
+        run: |
+          echo "translationBranch=${{ format('translation-{0}-{1}', steps.create-issue.outputs.number, inputs.language) }}" >> $GITHUB_ENV
+          echo "translationBranchPreview=${{ format('translation-{0}-{1}-draft', steps.create-issue.outputs.number, inputs.language) }}" >> $GITHUB_ENV
+          echo "startCommitSHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+
+      - name: Create git branches - result
+        uses: peterjgrainger/action-create-branch@v2.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: ${{ env.translationBranch }}
+          sha: ${{ env.startCommitSHA }}
+
+      - name: Create git branches - and preview
+        uses: peterjgrainger/action-create-branch@v2.2.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          branch: ${{ env.translationBranchPreview }}
+          sha: ${{ env.startCommitSHA }}
+
+      - name: Output issue link in summary
+        run: |
+          echo "## :earth_asia: Translation issue :earth_americas:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Use this issue to sync and preview translation result: [${{ steps.create-issue.outputs.url }}](${{ steps.create-issue.outputs.url }})" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## :arrow_up: :arrow_up: :arrow_up:" >> $GITHUB_STEP_SUMMARY
+
+      - name: Push source strings
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        run:
+          crowdin push sources
+            -c crowdin-oss.yml
+            -b ${{ env.translationBranch }}
+
+      - name: Push existing translations
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        run:
+          crowdin push translations
+            -c crowdin-oss.yml
+            -b ${{ env.translationBranch }}
+            -l ${{ inputs.language }} --no-import-eq-suggestions
