@@ -10,7 +10,7 @@ import exceptionOpcodes from './exceptions.json';
 import miscellaneousOpcodes from './miscellaneous.json';
 import stackManipulationOpcodes from './stack_manipulation.json';
 import tupleOpcodes from './tuple.json';
-import cp0 from '../../../3rd/tvm-spec/cp0.json';
+import cp0 from '../../../3rd/tvm-spec/cp0_new.json';
 
 type Opcode = {
   name: string;
