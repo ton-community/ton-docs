@@ -379,6 +379,7 @@
     "i18n",
     ".husky",
     "3rd/*",
-    ".github/*"
+    ".github/*",
+    "crowdin*.yml"
   ]
 }

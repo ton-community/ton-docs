@@ -280,6 +280,8 @@ npx blueprint run sendBounceableMessages --testnet --mnemonic
 
 <details>
   <summary> Send bounceable message </summary>
+
+````mdx-code-block
 ```typescript title="sendBounceableMessages.ts"
 import { Address, toNano, beginCell, internal } from '@ton/core';
 import { NetworkProvider } from '@ton/blueprint';
@@ -364,9 +366,12 @@ export async function run(provider: NetworkProvider): Promise<void> {
 }
 
 ```
+````
 
 #### Expected output
-```
+
+````mdx-code-block
+```text
 Using file: sendBounceableMessages
 Connected to wallet at address: 0QD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxYkp
 Using wallet v4r2 at address: EQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxW9m
@@ -374,7 +379,8 @@ Using wallet v4r2 at address: EQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxW9m
 Sending one external message with two internal messages (one bounceable, one non-bounceable)...
 External message sent successfully!
 ```
-  </details>
+````
+</details>
 
 :::important
 The contents of a bounce message **must not** be executed as a regular request; it is intended only for error signalling and refund processing.
@@ -528,6 +534,8 @@ To run the script and send an internal message, follow these steps:
 
 <details>
   <summary>Send internal message</summary>
+
+````mdx-code-block
 ```ts title="sendInternalMessage.ts"
 import { Address, toNano, beginCell } from '@ton/core';
 import { NetworkProvider } from '@ton/blueprint';
@@ -581,6 +589,7 @@ transfer#0f8a7ea5
 */
 
 ```
+````
 </details>
 
 - [() recv_external(slice msg_body) impure](https://github.com/aSpite/wallet-tutorial/blob/73c213add90ff115e45e58d0bcd9f1ea1fd44c89/JavaScript%20-%20TypeScript/src/wallet_v3.fc#L7)
@@ -643,6 +652,8 @@ npx blueprint run sendExternalMessage --testnet --mnemonic
 
 <details>
   <summary>Send external message</summary>
+
+````mdx-code-block
 ```ts title="sendExternalMessage.ts"
 import { NetworkProvider } from '@ton/blueprint';
 import { beginCell, toNano } from '@ton/core';
@@ -734,6 +745,7 @@ export async function run(provider: NetworkProvider): Promise<void> {
 }
 
 ```
+````
 </details>
 
 ### Internal messages serializer according to disassembled code

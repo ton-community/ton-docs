@@ -3,7 +3,7 @@
 STAGED=$(git diff --cached --name-only)
 
 echo "Running cspell on staged files..."
-echo "$STAGED" | xargs ./node_modules/.bin/cspell --show-suggestions
+echo "$STAGED" | xargs ./node_modules/.bin/cspell --show-suggestions --no-must-find-files
 
 if [ $? -ne 0 ]; then
     echo "❌ Commit failed: Spelling errors detected by cspell."

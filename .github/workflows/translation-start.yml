@@ -13,12 +13,7 @@ on:
           - ja
           - ko
           - zh-CN
-      crowdinBranch:
-        description: 'New Crowdin branch to create (without lang suffix)'
-        required: true
-        default: release-candidate
-        type: string
-      originBranch:
+      origin_branch:
         description: 'Branch to translate'
         required: true
         default: main
@@ -35,7 +30,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          ref: ${{ inputs.originBranch }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -49,4 +43,4 @@ jobs:
         env:
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         run: |
-          crowdin push sources --branch ${{ inputs.crowdinBranch }} --config crowdin-oss.yml
+          crowdin push sources --branch main --config crowdin-oss.yml
