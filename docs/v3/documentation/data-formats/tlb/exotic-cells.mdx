@@ -17,22 +17,18 @@ Currently, there are 4 exotic cell types:
 ### Pruned branch
 Pruned branches are cells that represent deleted subtrees of other cells.
 
-They can have a level `1 <= l <= 3` and contain exactly `8 + 8 + 256 * l + 16 * l` bits.
-
 The structure of a pruned branch cell is as follows:
 * The first byte is always `01`, indicating the cell type.
-* The second byte contains the pruned branch-level mask.
-* Next,  `l * 32` bytes represent hashes of the deleted subtrees.
-* Then, `l * 2` bytes represent the depths of the deleted subtrees.
+* The second byte contains the pruned branch level mask, `1 <= mask <= 7`. The number of hashes stored in the cell (`h`) is equal to the number of 1-bits in `mask`.
+* Next, `h * 32` bytes represent hashes of the deleted subtrees.
+* Then, `h * 2` bytes represent the depths of the deleted subtrees.
 
-The level `l` of a pruned branch cell is also called its De Bruijn index, as it determines the outer Merkle proof or Merkle update during the construction process in which the branch was pruned.
+The level `l` of a pruned branch is is the index of the most significant bit in `mask` (starting from zero) plus one. The level is also called its De Bruijn index, as it determines the outer Merkle proof or Merkle update during the construction process in which the branch was pruned.
 
-Higher-level hashes of pruned branches are stored within their data and can be obtained as follows:
-
-
-```cpp
-Hash_i = CellData[2 + (i * 32) : 2 + ((i + 1) * 32)]
-``` 
+Higher-level hashes `Hash[0]..Hash[l-1]` of a pruned branch are stored within its data and can be obtained as follows:
+* The `i`th hash stored in the cell is equal to `Hash[k]`, where `k` is the index of the `i`th one in `mask`.
+* If `k`th bit of `mask` is 0 then `Hash[k] = Hash[k + 1]`.
+* `Hash[l]` is the representation hash.
 
 ### Library reference
 
