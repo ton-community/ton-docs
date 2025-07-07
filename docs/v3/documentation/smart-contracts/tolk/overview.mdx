@@ -5,10 +5,18 @@ title: Overview
 import Feedback from "@site/src/components/Feedback";
 import Button from "@site/src/components/button";
 
-# Tolk language: overview
+# Tolk language: introduction
 
 **Tolk** is a next-generation language for smart contracts in TON.
 It replaces FunC with modern syntax, strong types, and built-in serialization — while generating even more efficient assembler code.
+
+## Tolk Features
+
+* Simple and readable syntax: as close as possible to familiar modern languages.
+* Language features exposing TON nature: auto-serialized structures, pattern matching, and convenient message management.
+* Advanced static type system: null safety, type aliases, union types, generics — everything you need to write safe and flexible code.
+* Maximum efficiency: smart contracts in Tolk are cheaper than smart contracts in FunC — benchmarks show up to 50% gas savings thanks to compiler optimizations and unique "lazy" functionality.
+* Deep control: when necessary, you're able to manipulate the stack or custom TVM instructions.
 
 ```tolk
 import "utils"
@@ -22,7 +30,7 @@ fun Storage.load() {
 }
 
 fun onInternalMessage(in: InMessage) {
-    ...
+    // ...
 }
 
 get fun currentCounter(): int {
@@ -93,8 +101,10 @@ Since Tolk has just been released, it lacks full-fledged documentation.
 If you are new to TON, your way is:
 
 1. Dig into [this documentation](/v3/documentation/smart-contracts/overview) to acquire basic development in TON. Get familiar with cells and TON asynchronous nature.
-2. Create a "Tolk counter" with blueprint: `npm create ton@latest`. Ensure it works.
-3. Continue reading documentation and doing some experience. Facing FunC/Tact snippets, keep in mind that being expressed with Tolk, they would look nicer.
+2. Create a "Tolk counter" with blueprint: `npm create ton@latest`. Learn more in [Setting up the environment](/v3/documentation/smart-contracts/tolk/environment-setup.mdx).
+3. Check step by step explanation of Counter contract in [Counter contract implementation in Tolk](/v3/documentation/smart-contracts/tolk/counter-smart-contract.mdx).
+4. Check out the [Tolk language guide](/v3/documentation/smart-contracts/tolk/language-guide.mdx) for a high-level overview of the language.
+5. Continue reading documentation and doing some experience. Facing FunC/Tact snippets, keep in mind that being expressed with Tolk, they would look nicer.
 
 In the upcoming months, the whole TON documentation will be adapted to onboard newcomers onto Tolk instead of FunC.
 
