@@ -1,0 +1,184 @@
+---
+title: Counter contract implementation in Tolk
+---
+
+import Feedback from "@site/src/components/Feedback";
+
+# Counter contract implementation in Tolk
+
+Let's look at an example of a simple Counter smart contract and comments on it.
+
+```tolk
+tolk 1.0
+
+// this struct defines storage layout of the contract
+struct Storage {
+    id: uint32  // required to allow multiple independent counter instances, since the contract address depends on its initial state
+    counter: uint32 // the current counter value
+}
+
+// load contract data from the persistent storage
+fun Storage.load() {
+    return Storage.fromCell(contract.getData())
+}
+
+// save contract data into the persistent storage
+fun Storage.save(self) {
+    contract.setData(self.toCell())
+}
+
+// the struct uses a 32-bit opcode prefix for message identification
+struct (0x7e8764ef) IncreaseCounter {
+    queryId: uint64  // query id, typically included in messages
+    increaseBy: uint32
+}
+
+struct (0x3a752f06) ResetCounter {
+    queryId: uint64
+}
+
+// using unions to represent available messages
+// this allows processing them with pattern matching
+type AllowedMessage = IncreaseCounter | ResetCounter
+
+// the main entrypoint: called when a contract receives an message from other contracts
+fun onInternalMessage(in: InMessage) {
+    // use `lazy` to defer loading fields until they are accessed
+    val msg = lazy AllowedMessage.fromSlice(in.body);
+
+    match (msg) {
+        IncreaseCounter => {
+            // load contract storage lazily (efficient for large or partial reads/updates)
+            var storage = lazy Storage.load();
+
+            storage.counter += msg.increaseBy;
+            storage.save();
+        }
+
+        ResetCounter => {
+            var storage = lazy Storage.load();
+
+            storage.counter = 0;
+            storage.save();
+        }
+
+        else => {
+            // ignore empty messages, "wrong opcode" for others
+            assert (in.body.isEmpty()) throw 0xFFFF
+        }
+    }
+}
+
+// a handler for bounced messages (not used here, may be ommited)
+fun onBouncedMessage(in: InMessageBounced) {
+}
+
+// get methods are a means to conveniently read contract data using, for example, HTTP APIs
+// note that unlike in many other smart contract VMs, get methods cannot be called by other contracts
+get fun currentCounter(): int {
+    val storage = lazy Storage.load();
+    return storage.counter;
+}
+
+get fun initialId(): int {
+    val storage = lazy Storage.load();
+    return storage.id;
+}
+```
+## Smart Contract Data
+
+```tolk
+// this struct defines storage layout of the contract
+struct Storage {
+    id: uint32  // required to allow multiple independent counter instances, since the contract address depends on its initial state
+    counter: uint32 // the current counter value
+}
+
+// load contract data from the persistent storage
+fun Storage.load() {
+    return Storage.fromCell(contract.getData())
+}
+
+// save contract data into the persistent storage
+fun Storage.save(self) {
+    contract.setData(self.toCell())
+}
+```
+
+## Handling Incoming Messages
+
+```tolk
+// the main entrypoint: called when a contract receives an message from other contracts
+fun onInternalMessage(in: InMessage) {
+    val msg = lazy AllowedMessage.fromSlice(in.body);
+
+    match (msg) {
+        IncreaseCounter => {
+            // ... handle IncreaseCounter
+        }
+
+        ResetCounter => {
+            // ... handle ResetCounter
+        }
+
+        else => {
+            // ... other messages
+        }
+    }
+}
+```
+
+### Handling Internal Bounced Messages
+
+```tolk
+// a handler for bounced messages (not used here, may be ommited)
+fun onBouncedMessage(in: InMessageBounced) {
+}
+```
+
+### Sending Messages
+
+In this contract we don't need to send any messages, to learn more, check out [Create message](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message.mdx) article:
+
+### Get-methods
+
+```tolk
+// get methods are a means to conveniently read contract data using, for example, HTTP APIs
+// note that unlike in many other smart contract VMs, get methods cannot be called by other contracts
+get fun currentCounter(): int {
+    val storage = lazy Storage.load();
+    return storage.counter;
+}
+
+get fun initialId(): int {
+    val storage = lazy Storage.load();
+    return storage.id;
+}
+```
+
+### Throwing and processing errors
+
+```tolk
+// Constants for error codes
+const ERROR_UNAUTHORIZED: int = 401;
+const ERROR_INSUFFICIENT_BALANCE: int = 402;
+const ERROR_INVALID_AMOUNT: int = 403;
+
+// Condition checking with exceptions
+fun validateTransfer(sender: address, amount: int, balance: int) {
+    assert(amount > 0, ERROR_INVALID_AMOUNT);
+    assert(balance >= amount, ERROR_INSUFFICIENT_BALANCE);
+}
+
+// Exception handling
+fun safeOperation() {
+    try {
+        riskyOperation();
+    } catch (excNo) {
+        debug.print(excNo);
+        handleError(excNo);
+    }
+}
+```
+
+<Feedback />

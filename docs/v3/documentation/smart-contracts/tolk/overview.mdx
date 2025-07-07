@@ -5,10 +5,22 @@ title: Overview
 import Feedback from "@site/src/components/Feedback";
 import Button from "@site/src/components/button";
 
-# Tolk language: overview
+# Tolk language: introduction
 
-**Tolk** is a next-generation language for smart contracts in TON.
-It replaces FunC with modern syntax, strong types, and built-in serialization — while generating even more efficient assembler code.
+Tolk is a modern programming language for creating smart contracts on the TON Blockchain. Designed to be more accessible than its predecessors FunC, Tolk features a syntax similar to TypeScript and Kotlin, making it approachable for developers familiar with popular programming languages. Tolk retains the power and flexibility needed to work with the TON Virtual Machine (TVM) while simplifying the process of writing and reading code.
+
+This guide is for those starting smart contract development from scratch. No prior knowledge of FunC or other TON languages is required—we’ll begin with the basics and gradually explore key concepts.
+
+If you are already familiar with FunC, please refer to the documentation on migrating from FunC to Tolk.
+
+## Tolk Features
+
+* Simple and readable syntax: as close as possible to familiar modern languages.
+* Language features for the TON asynchronous actor model: auto-serialized structures, pattern matching, smart casts, and convenient message management.
+* Advanced static type system: generics, Null Safety, Type Aliases, Union Types — everything you need to write safe and flexible code.
+* Maximum efficiency: smart contracts on Tolk are cheaper than smart contracts on FunC — benchmarks show up to 50% gas savings thanks to compiler optimizations and unique “lazy” functionality.
+* Deep control: ability to go down to the bits and manipulate the stack when necessary.
+* Convenient language and standard library versioning and delivery system.
 
 ```tolk
 import "utils"
@@ -22,7 +34,7 @@ fun Storage.load() {
 }
 
 fun onInternalMessage(in: InMessage) {
-    ...
+    // ...
 }
 
 get fun currentCounter(): int {
@@ -93,8 +105,10 @@ Since Tolk has just been released, it lacks full-fledged documentation.
 If you are new to TON, your way is:
 
 1. Dig into [this documentation](/v3/documentation/smart-contracts/overview) to acquire basic development in TON. Get familiar with cells and TON asynchronous nature.
-2. Create a "Tolk counter" with blueprint: `npm create ton@latest`. Ensure it works.
-3. Continue reading documentation and doing some experience. Facing FunC/Tact snippets, keep in mind that being expressed with Tolk, they would look nicer.
+2. Create a "Tolk counter" with blueprint: `npm create ton@latest`. Learn more in [Setting up the environment](/v3/documentation/smart-contracts/tolk/environment-setup.mdx) article.
+3. Check out the [Tolk language guide](/v3/documentation/smart-contracts/tolk/language-guide.mdx) for a high-level overview of the language.
+4. Check step by step explanation of Counter contract in [Counter contract implementation in Tolk](/v3/documentation/smart-contracts/tolk/counter-smart-contract.mdx).
+5. Continue reading documentation and doing some experience. Facing FunC/Tact snippets, keep in mind that being expressed with Tolk, they would look nicer.
 
 In the upcoming months, the whole TON documentation will be adapted to onboard newcomers onto Tolk instead of FunC.
 
