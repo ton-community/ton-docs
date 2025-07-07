@@ -238,10 +238,14 @@ if (maybeInt != null) {
 Union types allow multiple possible types:
 
 ```tolk
-fun processValue(value: int | slice): string {
+fun processValue(value: int | slice): slice {
     match (value) {
-        int => // Got integer
-        slice => // Got slice
+        int => {
+            // Got integer
+        }
+        slice => {
+            // Got slice
+        }
     }
 }
 ```
