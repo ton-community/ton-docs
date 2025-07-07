@@ -108,6 +108,7 @@ module.exports = [
         },
         items: [
           'v3/guidelines/smart-contracts/testing/overview',
+          'v3/guidelines/smart-contracts/testing/blueprint-config',
           'v3/guidelines/smart-contracts/testing/writing-test-examples',
         ],
       },
