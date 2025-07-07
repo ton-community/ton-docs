@@ -74,7 +74,7 @@ You can use backticks to surround an identifier, and then it can contain any sym
   <tbody>
   <tr>
     <td><code>{'const op::increase = 0x1234;'}</code></td>
-    <td><code>{'const OP_INCREASE = 0x1234;'}</code></td>
+    <td><code>{'const OP_INCREASE = 0x1234'}</code></td>
   </tr>
   <tr>
     <td><code dangerouslySetInnerHTML={{__html: ';; even 2%&!2 is valid<br>int 2+2 = 5;'}}></code></td>
@@ -145,7 +145,7 @@ Types of variables — also to the right:
   </tr>
   <tr>
     <td><code>{'global int stake_at;'}</code></td>
-    <td><code>{'global stake_at: int;'}</code></td>
+    <td><code>{'global stake_at: int'}</code></td>
   </tr>
   </tbody>
 </table>
@@ -170,7 +170,7 @@ Modifiers `inline` and others — with annotations:
   </tr>
   <tr>
     <td><code>{'global int stake_at;'}</code></td>
-    <td><code>{'global stake_at: int;'}</code></td>
+    <td><code>{'global stake_at: int'}</code></td>
   </tr>
   </tbody>
 </table>
@@ -196,15 +196,15 @@ Modifiers `inline` and others — with annotations:
 ```tolk
 @pure
 fun third<X>(t: tuple): X
-    asm "THIRD";
+    asm "THIRD"
 
 @pure
 fun iDictDeleteGet(dict: cell, keyLen: int, index: int): (cell, slice, int)
-    asm(index dict keyLen) "DICTIDELGET NULLSWAPIFNOT";
+    asm(index dict keyLen) "DICTIDELGET NULLSWAPIFNOT"
 
 @pure
 fun mulDivFloor(x: int, y: int, z: int): int
-    builtin;
+    builtin
 ```
 
 There is also a `@deprecated` attribute, not affecting compilation, but for a human and IDE.
@@ -225,12 +225,10 @@ In FunC, `method_id` (without arguments) declared a get method. In Tolk, you use
   <tbody>
   <tr>
     <td><code>{'int seqno() method_id { ... }'}</code></td>
-    <td><code>{'get seqno(): int { ... }'}</code></td>
+    <td><code>{'get fun seqno(): int { ... }'}</code></td>
   </tr>
   </tbody>
 </table>
-
-Both `get methodName()` and `get fun methodName()` are acceptable.
 
 For `method_id(xxx)` (uncommon in practice, but valid), there is an attribute:
 
@@ -367,7 +365,7 @@ These functions:
 
 ```tolk
 // type will be `address`
-const BASIC_ADDR = address("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF");
+const BASIC_ADDR = address("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF")
 
 // return type will be `int`
 fun minihashDemo() {
@@ -438,7 +436,7 @@ if (smth) {
     </tr>
     <tr>
         <td><code>{'const ONE_TON = 1000000000;'}</code></td>
-        <td><code>{'const ONE_TON = ton("1");'}</code></td>
+        <td><code>{'const ONE_TON = ton("1")'}</code></td>
     </tr>
     </tbody>
 </table>
@@ -576,7 +574,7 @@ fun callAnyFn2<TObj, TCallback>(f: TCallback, arg: TObj) {
 Note that while generic `T` is mostly detected from arguments, there are no such obvious corner cases when `T` does not depend on arguments:
 ```tolk
 fun tupleLast<T>(t: tuple): T
-    asm "LAST";
+    asm "LAST"
 
 var last = tupleLast(t);    // error, can not deduce T
 ```
@@ -594,18 +592,6 @@ return tupleLast(t);       // ok if function specifies return type
 Also note that `T` for asm functions must occupy one stack slot, whereas for a user-defined function, `T` could be of any shape. Otherwise, asm body is unable to handle it properly.
 
 
-### Another naming for recv_internal / recv_external
-
-```tolk
-fun onInternalMessage
-fun onExternalMessage
-fun onTickTock
-fun onSplitPrepare
-fun onSplitInstall
-```
-
-All parameter types and their order rename the same, only naming is changed. `fun main` is also available.
-
 
 ### #include → import. Strict imports
 
@@ -620,7 +606,7 @@ All parameter types and their order rename the same, only naming is changed. `fu
   <tbody>
   <tr>
     <td><code>{'#include "another.fc";'}</code></td>
-    <td><code>{'import "another.tolk"'}</code></td>
+    <td><code>{'import "another"'}</code></td>
   </tr>
   </tbody>
 </table>
@@ -1185,8 +1171,8 @@ Tolk supports type aliases, similar to TypeScript and Rust.
 An alias creates a new name for an existing type but **remains interchangeable with it**.
 
 ```tolk
-type UserId = int32;
-type MaybeOwnerHash = bytes32?;
+type UserId = int32
+type MaybeOwnerHash = bytes32?
 
 fun calcHash(id: UserId): MaybeOwnerHash { ... }
 
@@ -1298,7 +1284,7 @@ For now, working with dicts will require the `!` operator.
 // it returns either (slice, true) or (null, false)
 @pure
 fun dict.iDictGet(self, keyLen: int, key: int): (slice?, bool)
-    asm(key self keyLen) "DICTIGET" "NULLSWAPIFNOT";
+    asm(key self keyLen) "DICTIGET" "NULLSWAPIFNOT"
 
 var (cs, exists) = myDict.iDictGet(...);
 // if exists is true, cs is not null
@@ -1391,8 +1377,8 @@ match (result) {
 
 `match` must cover all union cases (should be *exhaustive*). It can also be **used as an expression**:
 ```tolk
-type Pair2 = (int, int);
-type Pair3 = (int, int, int);
+type Pair2 = (int, int)
+type Pair3 = (int, int, int)
 
 fun getLast(tensor: Pair2 | Pair3) {
     return match (tensor) {
@@ -1464,7 +1450,7 @@ fun f(v: cell | slice | builder) {
         v.cellHash();
     } else {
         // v is `slice | builder`
-        if (v !is builder) { return; }
+        if (v !is builder) { return }
         // v is `slice`
         v.sliceHash();
     }
@@ -1515,8 +1501,8 @@ val nextValue = match (curValue) {
 Looks like TypeScript — but works in TVM!
 ```tolk
 struct Point {
-    x: int;
-    y: int;
+    x: int
+    y: int
 }
 
 fun calcMaxCoord(p: Point) {
@@ -1532,7 +1518,7 @@ calcMaxCoord({ x: 10, y: 20 });
 
 // works with shorthand syntax
 fun createPoint(x: int, y: int): Point {
-    return { x, y };
+    return { x, y }
 }
 ```
 
@@ -1542,23 +1528,23 @@ fun createPoint(x: int, y: int): Point {
 
 This means **no bytecode overhead** — you can replace unreadable tensors with clean, structured types.
 
-Fields can be separated by `;` or `,` (both are valid, like in TypeScript). Trailing commas are allowed.
+Fields can be separated by newlines (recommended) or by `;` / `,` (both are valid, like in TypeScript).
 
-When creating a structure, you can specify `StructName { ... }` or simply `{ ... }` if the type is clear from the context (e.g., return type or assignment):
+When creating an object, you can specify `StructName { ... }` or simply `{ ... }` if the type is clear from the context (e.g., return type or assignment):
 ```tolk
 var s: StoredInfo = { counterValue, ... };
 var s: (int, StoredInfo) = (0, { counterValue, ... });
 
-// also valid, but not preferred
+// also valid
 var s = StoredInfo { counterValue, ... };
 ```
 
 Default values for fields are supported:
 ```tolk
 struct DefDemo {
-    f1: int = 0;
-    f2: int? = null;
-    f3: (int, coins) = (0, ton("0.05"));
+    f1: int = 0
+    f2: int? = null
+    f3: (int, coins) = (0, ton("0.05"))
 }
 
 var d: DefDemo = {};         // ok
@@ -1574,13 +1560,13 @@ Structs can have methods as extension functions, read below.
 They exist only at the type level (no runtime cost).
 ```tolk
 struct Container<T> {
-    isAllowed: bool;
-    element: T?;
+    isAllowed: bool
+    element: T?
 }
 
-struct Nothing {}
+struct Nothing
 
-type Wrapper<T> = Nothing | Container<T>;
+type Wrapper<T> = Nothing | Container<T>
 ```
 
 Example usage:
@@ -1615,15 +1601,15 @@ doSmth({ item: cellOrNull });  // T = cell?
 
 Demo: `Response<TResult, TError>`:
 ```tolk
-struct Ok<TResult> { result: TResult; }
-struct Err<TError> { err: TError; }
+struct Ok<TResult> { result: TResult }
+struct Err<TError> { err: TError }
 
-type Response<R, E> = Ok<R> | Err<E>;
+type Response<R, E> = Ok<R> | Err<E>
 
 fun tryLoadMore(slice: slice): Response<cell, int32> {
     return ...
         ? Ok { result: ... }
-        : Err { err: ErrorCodes.NO_MORE_REFS };
+        : Err { err: ErrorCodes.NO_MORE_REFS }
 }
 
 match (val r = tryLoadMore(inMsg)) {
@@ -1651,10 +1637,10 @@ fun Point.create(x: int, y: int): Point {
 Methods can be created **for any type**, including aliases, unions, and built-in types:
 ```tolk
 fun int.isZero(self) {
-    return self == 0;
+    return self == 0
 }
 
-type MyMessage = CounterIncrement | ...;
+type MyMessage = CounterIncrement | ...
 
 fun MyMessage.parse(self) { ... }
 // this is identical to
@@ -1665,7 +1651,7 @@ Methods perfectly work with `asm`, since `self` is just a regular variable:
 ```tolk
 @pure
 fun tuple.size(self): int
-    asm "TLEN";
+    asm "TLEN"
 ```
 
 By default, **`self` is immutable**. It means that you can't modify it or call mutating methods.
@@ -1684,7 +1670,7 @@ Methods for generic structs created seamlessly.
 Note, that no extra `<T>` is required: while parsing the receiver type, compiler treats unknown symbols as generic arguments.
 ```tolk
 struct Container<T> {
-    item: T;
+    item: T
 }
 
 // compiler treats T (unknown symbol) as a generic parameter
@@ -1701,8 +1687,8 @@ fun Container<int>.getItem(self) {
 Another example:
 ```tolk
 struct Pair<T1, T2> {
-    first: T1;
-    second: T2;
+    first: T1
+    second: T2
 }
 
 // both <T1,T2>, <A,B>, etc. work: any unknown symbols
@@ -1751,7 +1737,7 @@ fun T.copy(self) { ... }
 ```
 
 ```tolk
-type MyMessage = CounterIncrement | CounterReset;
+type MyMessage = CounterIncrement | CounterReset
 fun MyMessage.check() { ... }
 fun CounterIncrement.check() { ... }
 
@@ -1780,10 +1766,75 @@ callable2(someContainer32);   // pass it as self
 ```
 
 
+### Auto-detect and inline functions
+
+
+
+Tolk can inline functions at the compiler level, NOT via `PROCINLINE` by Fift.
+
+```tolk
+fun Point.create(x: int, y: int): Point {
+    return {x, y}
+}
+
+fun Point.getX(self) {
+    return self.x
+}
+
+fun sum(a: int, b: int) {
+    return a + b;
+}
+
+fun main() {
+    var p = Point.create(10, 20);
+    return sum(p.getX(), p.y);
+}
+```
+
+is compiled just to
+```fift
+main PROC:<{
+  30 PUSHINT
+}>
+```
+
+The compiler automatically detects what functions to inline. The attribute `@inline` also forces compiler inlining. The attribute `@noinline` forces a function to stay in a dict, `@inline_ref` remains "inline ref" (perfect for "unlikely" execution paths).
+
+Compiler inlining is efficient in terms of stack manipulations. It works with arguments of any stack width. It works with any functions and methods, except recursive or having `return` in the middle. It works with `mutate` and `self`.
+
+You should not worry that "simple getters" like `fun Point.getX(self) { return self.x }` will require stack reordering. You can extract small functions, they are absolutely zero-cost. You don't think about `@inline` and Fift, because no inlining is deferred to Fift: the compiler will handle everything in advance.
+
+**How does "auto-inline" work?**
+
+In two words,
+- "simple small functions" are inlined always
+- if a function is called only once, it's inlined
+
+Some details. For every function, the compiler calculates "weight" (a heuristic AST-based metric) and usages count. If "weight < THRESHOLD," it's inlined always. If "usages == 1," it's inlined always. Otherwise, there is some empiric formula.
+
+No one prevents you to force `@inline` annotation for "big functions" also. For example, if you know that all usages correspond to hot paths. Sometimes, on the contrary, you'd want to "prevent inlining" with `@inline_ref` for example, even if a function is called once — if it's an unlikely path. Anyway, if you are keen on optimization, cover your contract with gas benchmarks and experiment with inlining, branch reordering, etc.
+
+**What can NOT be auto-inlined?**
+
+A function will NOT be inlined (even marked as `@inline`) if:
+
+1) It has `return` in the middle. If a function has multiple return points, the compiler can't do anything with it, currently. In Tolk v1.x it will be partially resolved for some use cases.
+
+2) A function that appears in a recursive call chain (`f -> g -> f`). Very unlikely in practice.
+
+3) It's used as non-call. For example, you take a reference to it like `val callback = f`
+
+
 ### No tilda ~ methods, mutate keyword instead
 
 
-This change is so huge that it's described on a separate page: [Tolk mutability](/v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability).
+If FunC has `.methods()` and `~methods()`, Tolk has only a dot, and the only way to call a method is `.method()`. Basically, Tolk just works as expected:
+```tolk
+b.storeUint(x, 32);   // modifies a builder, can be chainable
+s.loadUint(32);       // modifies a slice, returns integer
+```
+
+Continue reading on a separate page: [Mutability in Tolk](/v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability).
 
 
 ### Auto-packing to/from cells/builders/slices
@@ -1792,11 +1843,11 @@ This change is so huge that it's described on a separate page: [Tolk mutability]
 Having any struct, you can unpack in from a cell or pack and object to a cell:
 ```tolk
 struct Point {
-    x: int8;
-    y: int8;
+    x: int8
+    y: int8
 }
 
-var value: Point = { x: 10, y: 20 };
+var value: Point = { x: 10, y: 20 }
 
 // makes a cell containing "0A14"
 var c = value.toCell();
@@ -1824,25 +1875,115 @@ reply.send(SEND_MODE_REGULAR);
 Continue reading on a separate page: [Universal createMessage](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message).
 
 
+
+### Modern onInternalMessage
+
+
+In Tolk, you don't need to manually parse `msg_cell` to retrieve `sender_address` or `fwd_fee`. Everything is pretty straightforward:
+```tolk
+fun onInternalMessage(in: InMessage) {
+    in.senderAddress
+    in.originalForwardFee
+    in.valueCoins   // typically called "msg value"
+
+    in.|   // IDE suggests you
+}
+```
+
+While an "old-fashioned way" with accepting 4 parameters like `recv_internal` still works, the above is preferred. Moreover, it's much more efficient: fields of `InMessage` are mapped onto new TVM-11 instructions.
+
+**The pattern**:
+
+1) describe every message in a struct (most likely, with 32-bit opcode)
+2) describe a union "allowed messages"
+3) `val msg = lazy MyUnion.fromSlice(in.body)`
+4) `match (msg)` for every branch, and probably `else`
+
+Do not follow an "old-fashioned way" to extract fwd_fee etc. at the beginning of the function, there is no need of it. Just use `in.smth` on demand.
+
+```tolk
+type AllowedMessageToMinter =
+    | MintNewJettons
+    | BurnNotificationForMinter
+    | RequestWalletAddress
+
+fun onInternalMessage(in: InMessage) {
+    val msg = lazy AllowedMessageToMinter.fromSlice(in.body);
+
+    match (msg) {
+        BurnNotificationForMinter => {
+            var storage = lazy MinterStorage.load();
+            ...
+            storage.save();    
+            ...
+        }
+        RequestWalletAddress => ...
+        MintNewJettons => ...
+        else => {
+            // for example:
+            // ignore empty messages, "wrong opcode" for others
+            assert (in.body.isEmpty()) throw 0xFFFF
+        }
+    }
+}
+```
+
+**A separate `onBouncedMessage`**
+
+In FunC, you parsed `msg_cell`, read 4-bit flags, and tested for `flags & 1` to check whether a message is bounced.
+
+In Tolk, if you want to handle bounces, you create a separate entrypoint:
+```tolk
+fun onBouncedMessage(in: InMessageBounced) {
+}
+```
+It's automatically called by the compiler, similarly to this:
+```tolk
+fun onInternalMessage(in: InMessage) {
+    // the compiler inserts this automatically:
+    if (MSG_IS_BOUNCED) { onBouncedMessage(...); return; }
+
+    ... // your code
+}
+```
+
+If you don't declare `onBouncedMessage`, all bounces will be just filtered out:
+```tolk
+fun onInternalMessage(in: InMessage) {
+    // the compiler inserts this automatically:
+    if (MSG_IS_BOUNCED) { return; }
+
+    ... // your code
+}
+```
+
+**Remember about 256 bits on bounces**
+
+Currently, TON Blockchain works in such a way that when a message is bounced, only the first 256 bits are present, starting with 0xFFFFFFFF ("bounced prefix"). That's why you manually control which fields you can read (they fit rest 224 bits), which not.
+
+```tolk
+fun onBouncedMessage(in: InMessageBounced) {
+    in.bouncedBody    // 256 bits
+
+    // typically, you'll do
+    in.bouncedBody.skipBouncedPrefix();   // skips 0xFFFFFFFF
+    // handle rest of body, probably with lazy match
+}
+```
+
+
+
 <hr />
 
-<h3>Tolk vs FunC gas consumption</h3>
+<h3>Where to go next?</h3>
 
-:::tip The same or slightly less
-If you transform FunC code line-by-line (for example, using a [converter](https://github.com/ton-blockchain/convert-func-to-tolk)),
-you'll have the same results or even a bit better.
-:::
+Explore the [Tolk vs FunC benchmarks](https://github.com/ton-blockchain/tolk-bench). 
+These are real-world contracts (Jetton, NFT, Wallet, etc.) migrated from FunC — same logic, but written in a cleaner, more expressive style.
 
-Since Tolk is a fork of FunC, part of its core remains unchanged — particularly the stack manipulation logic.
-Yes, Tolk is a completely different language, with its own syntax and semantics,
-but its low-level internal representation is exactly the same as FunC's.
-As a result, the syntax has no impact on gas consumption.
-In fact, it's even slightly lower, since the strict type system
-gives the compiler more room for optimizations.
+Try a [FunC-to-Tolk converter](https://github.com/ton-blockchain/convert-func-to-tolk). It's a great starting point for incremental migration.
 
-However, once Tolk v1.0 is released, it will be significantly more efficient.
-Auto-serialized structures, automatic message construction, and other features will be
-noticeably cheaper than manual work with builders and slices — almost always.
+Run `npm create ton@latest` and just start experimenting.
+
 
 <Feedback />
 

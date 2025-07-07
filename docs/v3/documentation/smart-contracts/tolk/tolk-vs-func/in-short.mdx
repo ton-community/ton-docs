@@ -5,7 +5,7 @@ import Feedback from '@site/src/components/Feedback';
 Tolk is much more similar to TypeScript and Kotlin than C and Lisp. 
 But it still gives you complete control over the TVM assembler since it has a FunC kernel inside.
 
-1. Functions are declared via `fun`, get methods via `get`, variables via `var`, immutable variables via `val`, putting types on the right; parameter types are mandatory; return type can be omitted (auto inferred), as well as for locals; specifiers `inline` and others are `@` attributes
+1. Functions are declared via `fun`, get methods via `get fun`, variables via `var`, immutable variables via `val`, putting types on the right; parameter types are mandatory; return type can be omitted (auto inferred), as well as for locals; specifiers `inline_ref` and others are `@` attributes
 ```tolk
 global storedV: int;
 
@@ -20,10 +20,10 @@ fun sum(a: int, b: int) {   // auto inferred int
     return both;
 }
 
-get currentCounter(): int { ... }
+get fun currentCounter(): int { ... }
 ```
 2. No `impure`, it's by default, the Tolk compiler won't drop user function calls
-3. Not `recv_internal` and `recv_external`, but `onInternalMessage` and `onExternalMessage`
+3. Not `recv_internal` and `recv_external`, but `onInternalMessage` / `onExternalMessage` / `onBouncedMessage`
 4. `2+2` is 4, not an identifier; identifiers are alpha-numeric; use naming `const OP_INCREASE` instead of `const op::increase`; `cell` and `slice` are valid identifiers (not keywords)
 5. Logical operators AND `&&`, OR `||`, NOT `!` are supported
 6. Syntax improvements:
@@ -61,12 +61,24 @@ get currentCounter(): int { ... }
 21. Fift output contains original .tolk lines as comments
 22. [Auto-packing](/v3/documentation/smart-contracts/tolk/tolk-vs-func/pack-to-from-cells) to/from cells — for any types
 23. [Universal createMessage](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message) to avoid manual cells composition
+24. Auto-detect and inline functions at the compiler level
+25. Various optimizations for gas efficiency
 
-#### Tooling around
-- JetBrains plugin exists
-- VS Code extension [exists](https://github.com/ton-blockchain/tolk-vscode)
+### Tooling around
+
+- JetBrains IDE plugin [exists](https://github.com/ton-blockchain/intellij-ton)
+- VS Code extension [exists](https://github.com/ton-blockchain/ton-language-server)
 - WASM wrapper for blueprint [exists](https://github.com/ton-blockchain/tolk-js)
-- And even a converter from FunC to Tolk [exists](https://github.com/ton-blockchain/convert-func-to-tolk)
+- And even a "FunC-to-Tolk converter" [exists](https://github.com/ton-blockchain/convert-func-to-tolk)
+
+### Tolk vs FunC gas benchmarks
+
+The [tolk-bench repository](https://github.com/ton-blockchain/tolk-bench) contains several contracts migrated from FunC to Tolk — preserving all logic and passing the same tests.
+
+As you see, not only the code becomes readable, but gas usage is noticeably reduced. And there are no tricks here. Just clean, consistent logic — whether it's a Jetton or a Wallet.
+
+The rule is simple: **if you write code the way the language encourages — gas will take care of itself**.
+
 
 ## See also
 

@@ -243,7 +243,7 @@ struct ProbablyLarge {
 val contents: ProbablyLarge = { ... };  // but you are sure: coins are small
 createMessage({                         // so, you take the risks
     body: UnsafeBodyNoRef {             // and force "no ref"
-        bodyForceNoRef: contents,
+        forceInline: contents,
     }
 
 // here TBody = UnsafeBodyNoRef<ProbablyLarge>

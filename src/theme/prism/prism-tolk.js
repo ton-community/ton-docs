@@ -22,7 +22,7 @@
 
     'boolean': /\b(false|true|null)\b/,
 
-    'keyword': /\b(do|if|as|is|try|else|while|break|throw|catch|return|assert|repeat|continue|asm|builtin|import|export|true|false|null|redef|mutate|tolk|global|const|var|val|fun|get|struct|match|type)\b/,
+    'keyword': /\b(do|if|as|is|try|else|while|break|throw|catch|return|assert|repeat|continue|asm|builtin|import|export|true|false|null|redef|mutate|tolk|global|const|var|val|fun|get|struct|match|type|lazy)\b/,
 
     'self': /\b(self)\b/,
 

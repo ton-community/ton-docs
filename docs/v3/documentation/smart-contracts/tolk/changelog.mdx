@@ -2,7 +2,16 @@ import Feedback from '@site/src/components/Feedback';
 
 # History of Tolk
 
-Once new versions of Tolk are released, they are mentioned here.
+Once new versions are released, they are mentioned here.
+
+
+## v1.0
+
+1. The magic `lazy` keyword — lazy loading, partial loading, partial updating
+2. Auto-detect and inline functions at the compiler level
+3. Various peephole optimizations for gas efficiency
+4. `onInternalMessage` and `onBouncedMessage`, TVM 11 support
+5. Custom pack/unpack serializers for custom types
 
 
 ## v0.99
@@ -78,30 +87,48 @@ Once new versions of Tolk are released, they are mentioned here.
 The first public release. Here are some notes about its origin: 
 
 
+## A brief history of Tolk
+
+When Tolk was first conceived, the idea was simple:
+What if we had a language for TON that was **low-level and efficient**, but **felt more familiar** to developers coming from TypeScript, Rust, or Go?
+
+FunC gave complete control over the TVM — and if you mastered it, it gave you power.
+But its Lisp-like syntax and functional style made onboarding difficult for many.
+
+Tolk started as an experiment: keep the efficiency, but change the interface.
+No parentheses, no prefix notation. Just clean types, structs, pattern matching, and a modern toolchain.
+
+Since then, Tolk has grown far beyond just being "easier FunC." It now offers:
+- a powerful type system,
+- automatic serialization,
+- idiomatic message composition,
+- and better performance — not in spite of abstraction, but thanks to it.
+
+Today, Tolk is not an experiment — it's a production-ready replacement for FunC.
+
 ## How Tolk was born
 
-In June 2024, I created a pull request [FunC v0.5.0](https://github.com/ton-blockchain/ton/pull/1026).
-Besides this PR, I've written a roadmap for what can be enhanced in FunC, syntactically and semantically.
+In June 2024, I submitted a pull request: [FunC v0.5.0](https://github.com/ton-blockchain/ton/pull/1026) — along with a roadmap for how FunC could be improved, syntactically and semantically.
 
-Instead of merging v0.5.0 and continuing to develop FunC, we decided to **fork** it.
-To leave FunC untouched as it is. As it always was. And to develop a new language driven by a fresh and new name.
+But instead of merging it, we made a decision: **To fork**.
+To leave FunC untouched. As it is. As it always was. And to create a new language driven by a fresh and new name.
 
-For several months, I have worked on Tolk privately. I have implemented a giant list of changes.
-And it's not only about the syntax. For instance, Tolk has an internal AST representation that is completely missed in FunC.
+Over the next several months, I worked on Tolk privately, implementing not just syntax changes,
+but a fully redesigned architecture — including an internal AST representation that FunC never had.
 
-On TON Gateway, from 1 to 2 November in Dubai, I gave a speech presenting Tolk to the public, and we released it the same day.
+On TON Gateway, in November 2024 in Dubai, I gave a speech presenting Tolk to the public.
 The video is available [on YouTube](https://www.youtube.com/watch?v=Frq-HUYGdbI).
 
-Here is the very first pull request: ["Tolk Language: next-generation FunC"](https://github.com/ton-blockchain/ton/pull/1345).
+The very first pull request: ["Tolk Language: next-generation FunC"](https://github.com/ton-blockchain/ton/pull/1345).
 
-The first version of the Tolk Language is v0.6, a metaphor of FunC v0.5 that missed a chance to occur.
+The first released version of Tolk was **v0.6** — a metaphor for the **FunC v0.5** that could have been, but never was.
 
 
 ## Meaning of the name "Tolk"
 
 **Tolk** is a wonderful word. 
 
-In English, it's consonant with *talk*. Because, generally, what do we need a language for? We need it *to talk* to computers. 
+In English, it sounds like *talk*. And after all, what do we use a language for? To talk. To talk to computers. 
 
 In all Slavic languages, the root *tolk* and the phrase *"to have tolk"* means "to make sense"; "to have deep internals".
 
@@ -109,8 +136,8 @@ But actually, **TOLK** is an abbreviation.
 You know, that TON is **The Open Network**.  
 By analogy, TOLK is **The Open Language K**.   
 
-What is K, will you ask? Probably, "kot" — the nick of Nikolay Durov? Or Kolya? Kitten? Kernel? Kit? Knowledge?  
-The right answer — none of this. This letter does not mean anything. It's open.  
+What is K, you might ask? Maybe, it's *kot* — the nickname of Nikolay Durov? Or Kolya? Kitten? Kernel? Kit? Knowledge?  
+The correct answer: none of these. The K stands for nothing. It's open.  
 *The Open Letter K*
 
 <Feedback />

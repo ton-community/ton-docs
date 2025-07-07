@@ -84,6 +84,7 @@ module.exports = [
           'v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib',
           'v3/documentation/smart-contracts/tolk/tolk-vs-func/pack-to-from-cells',
           'v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message',
+          'v3/documentation/smart-contracts/tolk/tolk-vs-func/lazy-loading',
           'v3/documentation/smart-contracts/tolk/changelog',
         ],
       },

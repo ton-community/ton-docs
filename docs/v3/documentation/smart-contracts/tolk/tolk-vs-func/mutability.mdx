@@ -198,7 +198,7 @@ If you look into stdlib, you'll notice that many functions actually **mutate sel
 ```tolk
 @pure
 fun tuple.push<X>(mutate self, value: X): void
-    asm "TPUSH";
+    asm "TPUSH"
 
 t.push(1);
 ```
@@ -253,13 +253,13 @@ So, an `asm` function should place `self'` onto a stack before its return value:
 // so, self' = tuple', and return an empty tensor
 // `void` is a synonym for an empty tensor
 fun tuple.push<X>(mutate self, value: X): void
-    asm "TPUSH";
+    asm "TPUSH"
 
 // "LDU" pops (slice) and pushes (int, slice')
 // with asm(-> 1 0), we make it (slice', int)
 // so, self' = slice', and return int
 fun slice.loadMessageFlags(mutate self): int
-    asm(-> 1 0) "4 LDU";
+    asm(-> 1 0) "4 LDU"
 ```
 
 Note, that to return self, you don't have to do anything special, just specify a return type. The compiler will do the rest.
@@ -269,31 +269,20 @@ Note, that to return self, you don't have to do anything special, just specify a
 // so, self' = builder', and return an empty tensor
 // but to make it chainable, `self` instead of `void`
 fun builder.storeMessageOp(mutate self, op: int): self
-    asm(op self) "32 STU";
+    asm(op self) "32 STU"
 ```
 
 It's doubtful you'll have to do such tricks. Most likely, you'll write wrappers around existing functions:
 ```tolk
 // just do it like this, without asm; it's the same effective
 
-@inline
 fun slice.myLoadMessageFlags(mutate self): int {
     return self.loadUint(4);
 }
 
-@inline
 fun builder.myStoreMessageOp(mutate self, flags: int): self {
     return self.storeUint(32, flags);
 }
 ```
-
-### Do I need @inline for simple functions/methods?
-
-
-For now, better do it, yes. In most examples above, `@inline` was omitted for clarity. Without `@inline`, it will be a separate TVM continuation with jumps in/out. With `@inline`, a function will be generated, but inlined by Fift, like the `inline` specifier in FunC.
-
-In the future, Tolk will automatically detect simple functions and perform true inlining on the AST level. Such functions won't be even generated to Fift. The compiler would decide, better than a human, whether to inline, to make a ref, etc. But it will take some time for Tolk to become so smart :)
-
-For now, please specify the `@inline` attribute.
 
 <Feedback />

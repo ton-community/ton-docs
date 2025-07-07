@@ -9,8 +9,8 @@ import Feedback from '@site/src/components/Feedback';
 A short demo of how it looks:
 ```tolk
 struct Point {
-    x: int8;
-    y: int8;
+    x: int8
+    y: int8
 }
 
 var value: Point = { x: 10, y: 20 };
@@ -46,8 +46,9 @@ For example, if you assign 256 to uint8, asm command "8 STU" will fail with code
 | Type                      | TL-B equivalent                          | Serialization notes                 |
 |---------------------------|------------------------------------------|-------------------------------------|
 | `int8`, `uint55`, etc.    | same as TL-B                             | `N STI` / `N STU`                   |
-| `coins`                   | TL-B varint16                            | `STGRAMS`                           |
-| `bytes8`, `bits123`, etc. | just N bits                              | runtime check + `STSLICE` (1)       |
+| `coins`                   | VarUInteger 16                           | `STGRAMS`                           |
+| `varint16`, 32, etc.      | Var(U)Integer 16/32                      | `STVARINT16` / `STVARUINT32` / etc. |
+| `bits8`, `bits123`, etc.  | just N bits                              | runtime check + `STSLICE` (1)       |
 | `address`                 | MsgAddress (internal/external/none)      | `STSLICE` (2)                       |
 | `bool`                    | one bit                                  | `1 STI`                             |
 | `cell`                    | untyped reference, TL-B `^Cell`          | `STREF`                             |
@@ -55,8 +56,8 @@ For example, if you assign 256 to uint8, asm command "8 STU" will fail with code
 | `Cell<T>`                 | typed reference, TL-B `^T`               | `STREF`                             |
 | `Cell<T>?`                | maybe typed reference, TL-B `(Maybe ^T)` | `STOPTREF`                          |
 | `RemainingBitsAndRefs`    | rest of slice                            | `STSLICE`                           |
-| `builder`                 | only for writing, not for reading        | `STBR`                              |
-| `slice`                   | only for writing, not for reading        | `STSLICE`                           |
+| `builder`                 | only for writing, not for reading (5)    | `STB`                               |
+| `slice`                   | only for writing, not for reading (5)    | `STSLICE`                           |
 | `T?`                      | TL-B `(Maybe T)`                         | `1 STI` + IF ...                    |
 | `T1 \| T2`                | TL-B `(Either T1 T2)`                    | `1 STI` + IF ... + ELSE ... (3)     |
 | `T1 \| T2 \| ...`         | TL-B multiple constructors               | IF ... + ELSE IF ... + ELSE ... (4) |
@@ -68,7 +69,7 @@ For example, if you assign 256 to uint8, asm command "8 STU" will fail with code
 * (1) By analogy with `intN`, there is are `bytesN` types. It's just a `slice` under the hood: the type shows how to serialize this slice. 
 By default, before `STSLICE`, the compiler inserts runtime checks (get bits/refs count + compare with N + compare with 0). 
 These checks ensure that serialized binary data will be correct, but they cost gas. 
-However, if you guarantee that a slice is valid (for example, it comes from trusted sources), pass an option `skipBitsNFieldsValidation` to disable runtime checks.
+However, if you guarantee that a slice is valid (for example, it comes from trusted sources), pass an option `skipBitsNValidation` to disable runtime checks.
 
 * (2) In TVM, all addresses are also plain slices. Type `address` indicates that it's a slice containing *some* valid address (internal/external/none). 
 It's packed with `STSLICE` (no runtime checks) and loaded with `LDMSGADDR`. 
@@ -83,34 +84,37 @@ However, if T1 and T2 are both structures with manual serialization prefixes, th
 (or the compiler will generate them right here). For primitives, like `int32 | int64 | int128 | int256`, the compiler generates a prefix tree 
 (00/01/10/11 in this case). Read **auto-generating serialization prefixes** below.
 
+* (5) Using raw `builder` and `slice` for writing is supported, but not recommended, since they do not tell anything about their internal structure.
+There will be auto-generated TypeScript wrappers in the future, but for a raw `slice`, a wrapper just cannot be generated, no way to predict how to read such a field back.
+Probably, this feature will be removed in the future.
 
 
 ## Some examples of valid types
 
 ```tolk
 struct A {
-    f1: int8;      // just int8
-    f2: int8?;     // maybe int8
-    f3: address;   // internal/external/none
-    f4: bool;      // TRUE (-1) serialized as bit '1'
-    f5: B;         // embed fields of struct B
-    f6: B?;        // maybe B
-    f7: coins;     // used for money amounts
+    f1: int8       // just int8
+    f2: int8?      // maybe int8
+    f3: address    // internal/external/none
+    f4: bool       // TRUE (-1) serialized as bit '1'
+    f5: B          // embed fields of struct B
+    f6: B?         // maybe B
+    f7: coins      // used for money amounts
 
-    r1: cell;         // always-existing untyped ref
-    r2: Cell<B>;      // typed ref
-    r3: Cell<int32>?; // optional ref that stores int32
+    r1: cell          // always-existing untyped ref
+    r2: Cell<B>       // typed ref
+    r3: Cell<int32>?  // optional ref that stores int32
 
-    u1: int32 | int64;  // Either
-    u2: B | C;          // also Either
-    u3: B | C | D;      // manual or autogenerated prefixes
-    u4: bits4 | bits8?; // autogenerated prefix tree
+    u1: int32 | int64   // Either
+    u2: B | C           // also Either
+    u3: B | C | D       // manual or autogenerated prefixes
+    u4: bits4 | bits8?  // Maybe<bits4 | bits8>
 
     // even this works
-    e: Point | Cell<Point>;
+    e: Point | Cell<Point>
 
     // rest of slice
-    rest: RemainingBitsAndRefs;  
+    rest: RemainingBitsAndRefs
 }
 ```
 
@@ -124,7 +128,7 @@ Typically, you'll use 32-bit prefixes for messages opcodes, or arbitrary prefixe
 
 ```tolk
 struct (0x7362d09c) TransferNotification {
-    queryId: uint64;
+    queryId: uint64
     ...
 }
 ```
@@ -148,19 +152,19 @@ asset_booking$1000 order_id:uint64 = Asset;
 You can express the same with structures and union types:
 ```tolk
 struct (0b001) AssetSimple {
-    workchain: int8;
-    ptr: bits32;
+    workchain: int8
+    ptr: bits32
 }
 
 struct (0b1000) AssetBooking {
-    orderId: uint64;
+    orderId: uint64
 }
 
-type Asset = AssetSimple | AssetBooking | ...;
+type Asset = AssetSimple | AssetBooking | ...
 
 struct ProvideAssetMessage {
     ...
-    asset: Asset;
+    asset: Asset
 }
 ```
 
@@ -235,13 +239,13 @@ fun invalidDemo(obj: A | B) {
 If you, by mistake, use unsupported types, Tolk compiler will fire a meaningful error. Example:
 ```tolk
 struct ExtraData {
-    owner: address;
-    lastTime: int;
+    owner: address
+    lastTime: int
 }
 
 struct Storage {
     ...
-    more: Cell<ExtraData>;
+    more: Cell<ExtraData>
 }
 
 Storage.fromSlice("");
@@ -268,17 +272,17 @@ There are two types of references: typed and untyped.
 
 ```tolk
 struct NftCollectionStorage {
-    ownerAddress: address;
-    nextItemIndex: uint64;
-    content: cell;                       // untyped
-    nftItemCode: cell;                   // untyped
-    royaltyParams: Cell<RoyaltyParams>;  // typed
+    ownerAddress: address
+    nextItemIndex: uint64
+    content: cell                        // untyped
+    nftItemCode: cell                    // untyped
+    royaltyParams: Cell<RoyaltyParams>   // typed
 }
 
 struct RoyaltyParams {
-    numerator: uint16;
-    denominator: uint16;
-    royaltyAddress: address;
+    numerator: uint16
+    denominator: uint16
+    royaltyAddress: address
 }
 ```
 
@@ -320,8 +324,8 @@ val p2 = c.load();   // Cell<Point> to Point
 With types cells, you can express snake data:
 ```tolk
 struct Snake {
-    data: bits1023;
-    next: Cell<Snake>?;
+    data: bits1023
+    next: Cell<Snake>?
 }
 ```
 
@@ -350,6 +354,41 @@ Point.fromSlice(s, {
 ```
 
 
+## Custom serializers for custom types
+
+Imagine that you have your own "variable-length string": you encode its len, and then data, like
+```
+len: (## 8)        // 8 bits of len
+data: (bits len)   // 0..255 bits of data
+```
+
+To express this, you can create your own type and **define a custom serializer**:
+```tolk
+type VariadicString = slice
+
+fun VariadicString.packToBuilder(self, mutate b: builder) {
+    val nBits = self.remainingBitsCount();
+    b.storeUint(nBits, 8);
+    b.storeSlice(self);
+}
+
+fun VariadicString.unpackFromSlice(mutate s: slice) {
+    val nBits = s.loadUint(8);
+    return s.loadBits(nBits);
+}
+```
+
+And just use `VariadicString` as a regular type — everywhere:
+```tolk
+tokenName: VariadicString
+fullDomain: Cell<VariadicString>
+```
+
+The compiler inlines your functions every time packing/unpacking takes place.
+
+Method names `packToBuilder` and `unpackFromSlice` are reserved for this purpose, their prototype must be exactly as showed.
+
+
 ## UnpackOptions and PackOptions
 
 They allow you to control behavior of `fromCell`, `toCell`, and similar functions:
@@ -375,9 +414,9 @@ For deserialization (`fromCell` and similar), there are now two available option
 
 For serialization (`toCell` and similar), there is now one option:
 
-| Field of PackOptions        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-|-----------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `skipBitsNFieldsValidation` | when a struct has a field of type `bits128` and similar (it's a slice under the hood), by default, compiler inserts runtime checks (get bits/refs count + compare with 128 + compare with 0); these checks ensure that serialized binary data will be correct, but they cost gas; however, if you guarantee that a slice is valid (for example, it comes from trusted sources), set this option to true to disable runtime checks; *note: `int32` and other are always validated for overflow without any extra gas, so this flag controls only rarely used `bytesN` / `bitsN` types;* **default: false**  |
+| Field of PackOptions        | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+|-----------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `skipBitsNValidation`       | when a struct has a field of type `bits128` and similar (it's a slice under the hood), by default, compiler inserts runtime checks (get bits/refs count + compare with 128 + compare with 0); these checks ensure that serialized binary data will be correct, but they cost gas; however, if you guarantee that a slice is valid (for example, it comes from trusted sources), set this option to true to disable runtime checks; *note: `int32` and other are always validated for overflow without any extra gas, so this flag controls only rarely used `bitsN` types;* **default: false**  |
 
 
 ## Full list of serialization functions
@@ -436,15 +475,13 @@ It's a built-in type to get "all the rest" slice tail on reading. Example:
 ```tolk
 struct JettonMessage {
      // ... some fields
-     forwardPayload: RemainingBitsAndRefs;
+     forwardPayload: RemainingBitsAndRefs
 }
 ```
 
 When you deserialize JettonMessage, forwardPayload contains _everything left after reading fields above_. Essentially, it's an alias to a slice which is handled specially while unpacking:
-
-
-```
-type RemainingBitsAndRefs = slice;
+```tolk
+type RemainingBitsAndRefs = slice
 ```
 
 
@@ -455,12 +492,16 @@ We've mentioned multiple times, that `T1 | T2` is encoded as TL-B Either: bit '0
 
 ```tolk
 struct WithUnion {
-    f: int8 | int16 | int32;
+    f: int8 | int16 | int32
 }
 ```
 
 In this case, **the compiler auto-generates a prefix tree**. This field will be packed as: '00' + int8 OR '01' + int16 OR '10' + int32. 
 On deserialization, the same format is expected (prefix '11' will throw an exception).
+
+The rules:
+* if `null` exists, it's 0, all others are 1+tree: A|B|C|D|null => 0 | 100+A | 101+B | 110+C | 111+D
+* if no `null`, just distributed sequentially: A|B|C => 00+A | 01+B | 10+C
 
 Same for structs without a manually specified prefix:
 ```tolk
@@ -470,11 +511,13 @@ struct C { ... }
 
 struct WithUnion {
     // simple either ('0' + A OR '1' + B)
-    e: A | B;
-    // auto-generated prefix tree
-    f: A | B | C;
+    e: A | B
+    // auto-generated prefix tree: 00/01/10
+    f: A | B | C
+    // with null, like Maybe<A|B>: 0/10/11
+    g: A | B | null
     // even this works, why not
-    g: A | int32 | C | bits128;
+    h: A | int32 | C | bits128
 }
 ```
 
@@ -486,9 +529,9 @@ struct (0b1100) WithPrefixLen4 { ... }
 
 struct WithUnion {
     // manual prefixes will be used, not 0/1
-    e: WithPrefixLen8 | WithPrefixLen16;
+    e: WithPrefixLen8 | WithPrefixLen16
     // also, no auto-generation
-    f: WithPrefixLen8 | WithPrefixLen16 | WithPrefixLen4;
+    f: WithPrefixLen8 | WithPrefixLen16 | WithPrefixLen4
 }
 ```
 
@@ -505,13 +548,13 @@ So, the rules are quite simple:
 * if you specify prefixes manually, they will be used (no matter within a union or not)
 * if you don't specify any prefixes, the compiler auto-generates a prefix tree
 * if you specify prefix for A, but forgot prefix for B, `A | B` can't be serialized
-* either (0/1) is just a prefix tree for two cases
+* either bit (0/1) is just a prefix tree for two cases
 
 **How can I specify a serialization prefix for non-struct?** Currently, there is no way to write something like `Prefixed<int32, 0b0011>`. 
 But you can just create a struct with a single field:
 ```tolk
 struct (0b0011) MyPrefixedInt {
-    value: int32;
+    value: int32
 }
 ```
 It will have no overhead against just `int32`, the same slot on a stack, just adding a prefix for (de)serialization.
@@ -532,9 +575,9 @@ Why do we say "potentially"? Because for many types, their size can vary:
 So, suppose you have:
 ```tolk
 struct MoneyInfo {
-    fixed: bits800;
-    wallet1: coins;
-    wallet2: coins;
+    fixed: bits800
+    wallet1: coins
+    wallet2: coins
 }
 ```
 
@@ -558,19 +601,19 @@ struct MoneyInfo {
 ```tolk
 // you can extract the first field
 struct MoneyInfo {
-    fixed: Cell<bits800>;
-    wallet1: coins;
-    wallet2: coins;
+    fixed: Cell<bits800>
+    wallet1: coins
+    wallet2: coins
 }
 
 // or extract other 2 fields
 struct WalletsBalances {
-    wallet1: coins;
-    wallet2: coins;
+    wallet1: coins
+    wallet2: coins
 }
 struct MoneyInfo {
-    fixed: bits800;
-    balances: Cell<WalletsBalances>;
+    fixed: bits800
+    balances: Cell<WalletsBalances>
 }
 ```
 
@@ -592,7 +635,7 @@ And you want to use this `addrB` (it's `builder`! not `address`) to write into a
 ```tolk
 struct MyStorage {
     ...
-    addr: address;
+    addr: address
 }
 
 var st: MyStorage;
@@ -604,44 +647,58 @@ The solution is: if you want `builder` for writing, and `address` for reading...
 ```tolk
 struct MyStorageData<T> {
     ...
-    addr: T;
+    addr: T
 }
 
-type MyStorage = MyStorageData<address>;
-type MyStorageForWrite = MyStorageData<builder>;
+type MyStorage = MyStorageData<address>
+type MyStorageForWrite = MyStorageData<builder>
 ```
 
 The same technique can be combined with `RemainingBitsAndRefs` and some more cases. 
 Moreover, for performance optimizations, you can create different "views" over the same data. Don't underestimate generics and the type system in general.
 
 
-### Integration with message sending and receiving
+## Integration with message sending
 
-Tolk v0.13 doesn't provide any helpers for composing and sending messages. It's the task for future releases.
+Auto-serialization is natively integrated with sending messages to other contracts.
+You just "send some object," and the compiler automatically serializes it, detects whether it fits into a message cell, etc.
 
-So, for now, you can declare outgoing messages with structures, but you still manually create a message cell. 
-Thanks to `builder.storeAny`, you can prepare message body and write it automatically:
 ```tolk
-struct (0x...) SomeOutgoingMessage {
-    ...
+val reply = createMessage({
+    bounce: true,
+    value: ton("0.05"),
+    dest: senderAddress,
+    body: RequestedInfo {     // auto-serialized
+        ...
+    }
+});
+reply.send(SEND_MODE_REGULAR);
+```
+
+Continue reading here: [Universal createMessage](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message).
+
+
+## Not "fromCell" but "lazy fromCell"
+
+Tolk has a special keyword `lazy` that is combined with auto-deserialization. The compiler will load not a whole struct, but only fields requested.
+```tolk
+struct Storage {
+    isSignatureAllowed: bool
+    seqno: uint32
+    subwalletId: uint32
+    publicKey: uint256
+    extensions: dict
 }
 
-val outBody: SomeOutgoingMessage = { 
-    ... 
-};
-
-// the same as you do now
-val out = beginCell()
-         .storeUint(0x18, 6)    // bounceable
-         ...                    // all the header
-         // but auto-serialize body (inline)
-         .storeAny(outBody)
-         // or — embed body as a ref
-         .storeRef(outBody.toCell());
-
-// same as before, but with auto-serialized body
-sendRawMessage(out.endCell(), mode);
+get fun getPublicKey() {
+    val st = lazy Storage.fromCell(contract.getData());
+    // <-- here "skip 65 bits, preload uint256" is inserted
+    return st.publicKey
+}
 ```
+
+Continue reading here: [lazy loading, partial loading](/v3/documentation/smart-contracts/tolk/tolk-vs-func/lazy-loading).
+
 
 
 <Feedback />
