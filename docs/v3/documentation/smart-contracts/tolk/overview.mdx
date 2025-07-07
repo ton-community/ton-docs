@@ -7,33 +7,27 @@ import Button from "@site/src/components/button";
 
 # Tolk language: overview
 
-**Tolk** is a new language for writing smart contracts in TON.
-Tolk compiler is a fork of FunC compiler, introducing familiar syntax similar to TypeScript
-but leaving all low-level optimizations untouched. Think of Tolk as the next‑generation FunC.
+**Tolk** is a next-generation language for smart contracts in TON.
+It replaces FunC with modern syntax, strong types, and built-in serialization — while generating even more efficient assembler code.
 
 ```tolk
-import "utils.tolk"
+import "utils"
 
 struct Storage {
-    counter: int32;
+    counter: int32
 }
 
 fun Storage.load() {
     return Storage.fromCell(contract.getData());
 }
 
-fun onInternalMessage(msgValue: int, msgFull: cell, msgBody: slice) {
-    var cs = msgFull.beginParse();
-    var flags = cs.loadMessageFlags();
-    if (isMessageBounced(flags)) {
-        return;
-    }
+fun onInternalMessage(in: InMessage) {
     ...
 }
 
-get currentCounter(): int32 {
-    val st = Storage.load();
-    return st.counter;
+get fun currentCounter(): int {
+    val storage = lazy Storage.load();
+    return storage.counter;
 }
 ```
 
@@ -83,81 +77,48 @@ int currentCounter() method_id {
 </Button>
 <div style={{ height: "2em" }}></div>
 
-## Motivation behind Tolk
-
-FunC is awesome.
-It is low-level and encourages a programmer to think about compiler internals.
-It gives complete control over TVM assembler, allowing a programmer to make his contract as effective as possible.
-If you get used to it, you love it.
-
-But there is a problem.
-FunC is **functional C**, and it's for ninja.
-If you are keen on Lisp and Haskell, you'll be happy.
-But if you are a JavaScript / Go / Kotlin developer, its syntax is peculiar for you, leading to occasional mistakes.
-A struggle with syntax may decrease your motivation for digging into TON.
-
-Imagine what if there was a language that was smart and low-level but not functional and not like C?
-Leaving all beauty and complexity inside, what if it would be more similar to popular languages at first glance?
-
-That's what Tolk is about.
-
 ## Migrating from FunC to Tolk
 
-If you know FunC and want to try a new syntax, your way is:
+If you are familiar with FunC and want to explore Tolk, here's your path:
 
-1. Read [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short).
-2. With a blueprint, create a new Tolk contract (for example, a counter) and experiment around it. Remember that almost all stdlib functions are renamed to ~~verbose~~ clear names. Here is [a mapping](/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib).
-3. Try a [converter](https://github.com/ton-blockchain/convert-func-to-tolk) for your existing contracts or one from [FunC contracts](/v3/documentation/smart-contracts/contracts-specs/examples). Remember that contracts written in Tolk from scratch look nicer than auto-converted ones. For instance, using logical operators instead of bitwise tremendously increases code readability.
+1. Create a fresh "Tolk counter" project: `npm create ton@latest`. You'll notice how different the code feels: structures, unions, matching, toCell(), etc.
+2. Explore the [Tolk vs FunC benchmarks](https://github.com/ton-blockchain/tolk-bench). These are real-world contracts (Jetton, NFT, Wallet, etc.) migrated from FunC — same logic, but written in a cleaner, more expressive style.
+3. Read the guide [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short). It highlights syntax differences — but remember, Tolk is more than just syntax. It encourages a shift in mindset toward data-driven, declarative logic.
+4. Try a [FunC-to-Tolk converter](https://github.com/ton-blockchain/convert-func-to-tolk). It's a great starting point for incremental migration.
 
 ## How to try Tolk if you don't know FunC
 
-:::tip Currently, this documentation assumes that you know FunC
-This section describes the **Tolk vs FunC** differences.
-Later, it will be adapted to land newcomers. Moreover, FunC will eventually become deprecated for onboarding,
-and all code snippets throughout the documentation will be rewritten for Tolk.
-:::
+Since Tolk has just been released, it lacks full-fledged documentation.
 
 If you are new to TON, your way is:
 
-1. Dig into [this documentation](/v3/documentation/smart-contracts/overview) to acquire basic on development in TON. No matter your language, you must be aware of cells, slices, and TON asynchronous nature.
-2. Facing FunC snippets, you can still use FunC or try to express the same in Tolk. If FunC syntax is peculiar to you, don't worry: the goal of Tolk is to fix this issue precisely.
-3. Once you understand what's happening, try using Tolk with [blueprint](https://github.com/ton-org/blueprint).
+1. Dig into [this documentation](/v3/documentation/smart-contracts/overview) to acquire basic development in TON. Get familiar with cells and TON asynchronous nature.
+2. Create a "Tolk counter" with blueprint: `npm create ton@latest`. Ensure it works.
+3. Continue reading documentation and doing some experience. Facing FunC/Tact snippets, keep in mind that being expressed with Tolk, they would look nicer.
 
-## Tooling around Tolk language
+In the upcoming months, the whole TON documentation will be adapted to onboard newcomers onto Tolk instead of FunC.
 
-Sources of the Tolk compiler are a part of the `ton-blockchain` [repo](https://github.com/ton-blockchain/ton).
-Besides the compiler, we have:
+## Tooling around Tolk
 
-1. [tolk-js](https://github.com/ton-blockchain/tolk-js) — a WASM wrapper for Tolk compiler.
-2. [JetBrains IDE plugin](https://github.com/ton-blockchain/intellij-ton) supports Tolk besides FunC, Fift, TL/B, and Tact.
-3. [VS Code Extension](https://github.com/ton-blockchain/tolk-vscode) enabling Tolk Language support.
-4. [Converter from FunC to Tolk](https://github.com/ton-blockchain/convert-func-to-tolk) — convert a `.fc` file to a `.tolk` file with a single `npx` command.
-5. Tolk Language is available in [blueprint](https://github.com/ton-org/blueprint).
+Tolk is supported across the ecosystem:
+
+1. [JetBrains IDE plugin](https://github.com/ton-blockchain/intellij-ton) supports Tolk, FunC, Fift, and TL/B
+2. [VS Code Extension](https://github.com/ton-blockchain/ton-language-server) with Tolk support
+3. [Language server](https://github.com/ton-blockchain/ton-language-server) for any LSP-compatible editor
+4. [FunC-to-Tolk converter](https://github.com/ton-blockchain/convert-func-to-tolk) — migrate a whole project with a single `npx` command
+5. [tolk-js](https://github.com/ton-blockchain/tolk-js) — WASM wrapper for Tolk compiler, integrated into blueprint
+
+The Tolk compiler itself is part of the `ton-blockchain` [repository](https://github.com/ton-blockchain/ton).
 
 ## Is Tolk production-ready?
 
-The Tolk compiler, a fork of the FunC compiler, is deemed production-ready, albeit somewhat experimental at the moment.
+All contracts in the [Tolk vs FunC benchmarks](https://github.com/ton-blockchain/tolk-bench)
+pass the same test suites as their FunC counterparts — with identical logic and behavior.
 
-Undiscovered bugs may exist, potentially inherited from FunC or attributable to TVM characteristics.
-Anyway, no matter your language, you should cover your contracts with tests to reach high reliability.
+Yes, the compiler is new, and some edge cases might still appear.
+But Tolk is already a **production-ready replacement for FunC** — and ready for real-world usage.
 
-## Roadmap
-
-The first released version of Tolk is v0.6, emphasizing [missing](/v3/documentation/smart-contracts/tolk/changelog#how-tolk-was-born) FunC v0.5.
-
-Here are some points to investigate:
-
-- type system improvements
-- gas and stack optimizations, AST inlining
-- extending and maintaining stdlib
-- some ABI (how explorers "see" bytecode)
-- gas and fee management in general
-
-The following strategic milestone for **Tolk v1.0** is structures with auto-serialization into cells (almost done).
-
-This milestone eliminates manual manipulations with builders and slices, allowing data and messages to be described declaratively.
-Closely related to this is the **ABI (interface) of contracts**.
-Well-designed structures make up the majority of an ABI.
+(And regardless of the language, well-tested code is the key to reliable smart contracts.)
 
 ## Issues and contacts
 
