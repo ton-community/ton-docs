@@ -14,10 +14,10 @@ jobs:
     steps:
       - id: check
         run: |
-          if [[ "${{ github.event.comment.body }}" =~ ^/preview ]]
+          if [[ "${{ github.event.comment.body }}" =~ ^/previewdraft ]]
           then
-            echo "command=preview" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.event.comment.body }}" =~ ^/previewdraft ]]
+            echo "command=previewdraft" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.comment.body }}" =~ ^/preview ]]
           then
             echo "command=preview" >> $GITHUB_OUTPUT
           fi
