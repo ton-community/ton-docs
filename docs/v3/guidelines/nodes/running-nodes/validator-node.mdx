@@ -6,11 +6,11 @@ Network validators confirm all user transactions. If all validators agree that a
 
 ## Minimal hardware requirements
 
-- 16-core CPU  
-- 128 GB RAM  
-- 1TB NVMe SSD or provisioned 64+k IOPS storage  
-- 1 Gbit/s network connectivity  
-- Public IP address (fixed IP address)  
+- 16-core CPU
+- 128 GB RAM
+- 1TB NVMe SSD or provisioned 64+k IOPS storage
+- 1 Gbit/s network connectivity
+- Public IP address (fixed IP address)
 - 100 TB/month traffic at peak load
 
 > Typically you'll need at least a 1 Gbit/s connection to reliably accommodate peak loads (the average load is expected to be approximately 100 Mbit/s).
@@ -34,7 +34,7 @@ To determine which UDP ports are open, use the `netstat -tulpn` command.
 If a validator processes less than 90% of the expected blocks during a validation round, they will be fined by 101 TON.
 
 Learn more about the [slashing policy](/v3/documentation/infra/nodes/validation/staking-incentives#decentralized-system-of-penalties).
-  
+
 ### Running a fullnode
 
 Launch the [Full Node](/v3/guidelines/nodes/running-nodes/full-node) before follow this article.
@@ -59,7 +59,7 @@ During the installation of `MyTonCtrl`, the installer creates a wallet named `va
 
 ## Activate the wallets
 
-1. Send the necessary number of coins to the wallet and activate it. The minimum stake is approximately __300K TON__, and the maximum is about __1M__ TON. To understand the required amount of coins, please check the current stakes at [tonscan.com](https://tonscan.com/validation). For  more information, see [how maximum and minimum stakes calculated](/v3/documentation/infra/nodes/validation/staking-incentives#values-of-stakes-max-effective-stake).
+1. Send the necessary number of coins to the wallet and activate it. The minimum stake is approximately **300K TON**, and the maximum is about **1M** TON. To understand the required amount of coins, please check the current stakes at [tonscan.com](https://tonscan.com/validation). For  more information, see [how maximum and minimum stakes calculated](/v3/documentation/infra/nodes/validation/staking-incentives#values-of-stakes-max-effective-stake).
 
 2. Use the `vas` command to view the history of transfers:
 
@@ -87,7 +87,7 @@ The command above sets the stake size to 50k Toncoins. If the bet is accepted an
 
 ![setting stake](/img/docs/nodes-validator/manual-ubuntu_mytonctrl-set_ru.png)
 
-## Adhere to rules  
+## Adhere to rules
 
 :::caution Slashing policy for underperforming validators
 If a validator processes less than 90% of the expected number of blocks during a validation round, that validator will incur a fine of 101 TON. For more information, read about the [slashing policy](/v3/documentation/infra/nodes/validation/staking-incentives#decentralized-system-of-penalties).
@@ -103,15 +103,15 @@ As a TON validator, make sure you follow these crucial steps to ensure network s
 
 3. We strongly urge you to utilize [MyTonCtrl](https://github.com/ton-blockchain/mytonctrl).
 
-	- In `MyTonCtrl`, ensure that updates are synchronized with notifications and enable telemetry by setting the option: `set sendTelemetry true`.
+   - In `MyTonCtrl`, ensure that updates are synchronized with notifications and enable telemetry by setting the option: `set sendTelemetry true`.
 
 4. Set up monitoring dashboards for RAM, disk, network, and CPU usage. For technical assistance, please contact [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot).
 
 5. Monitor the efficiency of your validator with dashboards.
 
-	- Please verify with `MyTonCtrl` using the `check_ef` command.
+   - Please verify with `MyTonCtrl` using the `check_ef` command.
 
-	- Check [Build dashboard with APIs](/v3/guidelines/nodes/running-nodes/validator-node#validation-effectiveness-apis).
+   - Check [Build dashboard with APIs](/v3/guidelines/nodes/running-nodes/validator-node#validation-effectiveness-apis).
 
 :::info
 `MyTonCtrl` enables you to evaluate the performance of validators using the command `check_ef`. This command provides efficiency data for both the last round and the current round. The data is retrieved by calling the `checkloadall` utility. Make sure that your efficiency is above 90% for the entire round period.
@@ -149,7 +149,7 @@ Unlike `checkloadall`, which only works on validation rounds, this API allows yo
 
 2. Retrieve the result. If your efficiency percentage is below 80%, your validator is malfunctioning.
 
-3. Your validator must actively participate in validation and use the same ADNL address throughout the specified time period. For example, if a validator contributes to validation every second round, you should only indicate the intervals during which they participated. Failing to do so may result in an inaccurate underestimate. This requirement applies not only to MasterChain validators (with an index < 100) but also to other validators (with an index > 100).
+3. Your validator must actively participate in validation and use the same ADNL address throughout the specified time period. For example, if a validator contributes to validation every second round, you should only indicate the intervals during which they participated. Failing to do so may result in an inaccurate underestimate. This requirement applies not only to MasterChain validators (with an index \< 100) but also to other validators (with an index > 100).
 
 ## Support
 
@@ -159,8 +159,8 @@ If you run a regular node, then contact the group: [@mytonctrl_help](https://t.m
 
 ## See also
 
-* [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
-* [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
-* [Staking incentives](/v3/documentation/infra/nodes/validation/staking-incentives)
-<Feedback />
+- [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
+- [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
+- [Staking incentives](/v3/documentation/infra/nodes/validation/staking-incentives)
 
+<Feedback />

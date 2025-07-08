@@ -16,7 +16,7 @@ Once the channel is established, further communication continues within it.
 
 ### First packets
 
-Let's analyze the connection initialization with the DHT node and obtain a signed list of its addresses to understand how the protocol functions. 
+Let's analyze the connection initialization with the DHT node and obtain a signed list of its addresses to understand how the protocol functions.
 
 Find a node you prefer in the [global config](https://ton-blockchain.github.io/global.config.json), specifically in the `dht.nodes` section.  For example:
 
@@ -68,7 +68,7 @@ d59d8e3991be20b54dde8b78b3af18b379a62fa30e64af361c75452f6af019d7 -- key
 555c8763                                                         -- date
 ```
 
-Next, let's proceed to our main query - [retrieve a list of addresses](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L198). 
+Next, let's proceed to our main query - [retrieve a list of addresses](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L198).
 
 To execute it, we first need to serialize its TL structure:
 
@@ -163,7 +163,7 @@ c6b41348                                                                  -- TL 
 0f 2b6a8c0509f85da9f3c7e11c86ba22                                      -- rand2, 15 (0f) random bytes
 ```
 
-After serialization, we need to sign the resulting byte array using our private client's key, specifically ed25519, which we generated and saved earlier. 
+After serialization, we need to sign the resulting byte array using our private client's key, specifically ed25519, which we generated and saved earlier.
 
 Once we have created the signature (which is 64 bytes in size), we must add it to the packet and serialize it again. This time, we will also set the 11th bit in the flag to indicate the presence of the signature:
 
@@ -209,7 +209,6 @@ Now, we will encrypt the contents of our packet using the AES-CTR cipher, utiliz
 
 We are almost ready to send the packet; we just need to [calculate the ID](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-key-id) of the ed25519 peer key and concatenate everything together:
 
-
 ```
 daa76538d99c79ea097a67086ec05acca12d1fefdbc9c96a76ab5a12e66c7ebb  -- server Key ID
 afc46336dd352049b366c7fd3fc1b143a518f0d02d9faef896cb0155488915d6  -- our public key
@@ -217,7 +216,7 @@ afc46336dd352049b366c7fd3fc1b143a518f0d02d9faef896cb0155488915d6  -- our public 
 ...                                                               -- encrypted content of the packet
 ```
 
-We can now send our constructed packet to the peer via UDP and await a response. 
+We can now send our constructed packet to the peer via UDP and await a response.
 
 In response, we will receive a packet with a similar structure, but containing different messages. It will consist of:
 
@@ -230,10 +229,10 @@ f32fa6286d8ae61c0588b5a03873a220a3163cad2293a5dace5f03f06681e88a  -- sha256 cont
 
 The process of deserializing the packet from the server is as follows:
 
-* We first check the ID of the key within the packet to confirm that the packet is intended for us.
-* Using the server's public key found in the packet along with our private key, we calculate a shared key to decrypt the packet's content.
-* We then compare the SHA-256 hash provided to us with the hash obtained from the decrypted data; they must match.
-* Finally, we begin deserializing the packet content using the `adnl.packetContents` TL schema.
+- We first check the ID of the key within the packet to confirm that the packet is intended for us.
+- Using the server's public key found in the packet along with our private key, we calculate a shared key to decrypt the packet's content.
+- We then compare the SHA-256 hash provided to us with the hash obtained from the decrypted data; they must match.
+- Finally, we begin deserializing the packet content using the `adnl.packetContents` TL schema.
 
 The content of the packet will look like this:
 
@@ -284,9 +283,9 @@ First key: AABB2233
 Second key: 3322BBAA
 ```
 
-We need to determine which key to use for specific purposes. To do this, we can compare the ID of our public key with the ID of the server's public key, converting both to a numerical format (uint256). 
+We need to determine which key to use for specific purposes. To do this, we can compare the ID of our public key with the ID of the server's public key, converting both to a numerical format (uint256).
 
-This method ensures that both the server and the client agree on which key is used for what function. If the server uses the first key for encryption, this approach guarantees that the client will always use it for decryption. 
+This method ensures that both the server and the client agree on which key is used for what function. If the server uses the first key for encryption, this approach guarantees that the client will always use it for decryption.
 
 The terms of use are:
 
@@ -304,7 +303,7 @@ Encryption: First Key
 Decryption: First Key
 ```
 
-[[Please see implementation example]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/adnl.go#L502).
+[\[Please see implementation example\]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/adnl.go#L502).
 
 ### Communication in a channel
 
@@ -327,7 +326,7 @@ fe3c0f39a89917b7f393533d1d06b605b673ffae8bbfab210150fe9d29083c35          -- que
 07 e4092842a8ae18                                                      -- rand2, 7 (07) random bytes
 ```
 
-The packets in a channel are quite straightforward and essentially consist of a sequence number (seqno) and the messages themselves. 
+The packets in a channel are quite straightforward and essentially consist of a sequence number (seqno) and the messages themselves.
 
 After serialization, as we did last time, we calculate the SHA256 hash of the packet. Next, we encrypt the packet using the designated key for outgoing packets in the channel.
 
@@ -360,8 +359,7 @@ data:bytes             -- piece of data of the original message
 
 To reconstruct the original message, we need to gather several parts and concatenate them into a single-byte array based on the specified offsets.
 
- We will then process this array as a message using the ID prefix contained within it.
-  
+We will then process this array as a message using the ID prefix contained within it.
 
 ### adnl.message.custom
 
@@ -378,5 +376,5 @@ Further communication occurs based on the logic outlined in this article, though
 ## References
 
 Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-UDP-Internal.md) - _[Oleg Baranov](https://github.com/xssnick)._
-<Feedback />
 
+<Feedback />

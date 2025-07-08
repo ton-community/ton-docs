@@ -4,10 +4,9 @@ import Feedback from '@site/src/components/Feedback';
 
 Please see the implementation:
 
-* [Overlay](https://github.com/ton-blockchain/ton/tree/master/overlay)
+- [Overlay](https://github.com/ton-blockchain/ton/tree/master/overlay)
 
 ## Overview
-
 
 The architecture of the TON is designed to support multiple chains that can operate simultaneously and independently, whether they are private or public. Nodes have the flexibility to choose which shards and chains they store and process.
 
@@ -41,7 +40,7 @@ After connecting to a sufficient number of nodes, we will be able to receive inf
 
 ### Find more neighbors
 
-To retrieve nodes in an overlay, send a request `overlay.getRandomPeers` to any known node. 
+To retrieve nodes in an overlay, send a request `overlay.getRandomPeers` to any known node.
 
 Make sure to serialize the TL schema:
 
@@ -70,9 +69,9 @@ We then wrap the resulting array in the `adnl.message.query` schema and send it 
 
 ### Functional requests
 
-Once the connection is established, we can access the overlay nodes using `tonNode.*` via the [requests](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L413). 
+Once the connection is established, we can access the overlay nodes using `tonNode.*` via the [requests](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L413).
 
-We utilize the RLDP protocol for these types of requests. It's crucial to remember that every query in the overlay must begin with the `overlay.query` prefix. 
+We utilize the RLDP protocol for these types of requests. It's crucial to remember that every query in the overlay must begin with the `overlay.query` prefix.
 
 The requests themselves are quite standard and resemble those we discussed in the article about ADNL TCP found [here](/v3/documentation/network/protocols/adnl/adnl-tcp#getmasterchaininfo).
 
@@ -99,4 +98,3 @@ This allows us to receive information directly from the nodes.
 Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/Overlay-Network.md) - _[Oleg Baranov](https://github.com/xssnick)._
 
 <Feedback />
-

@@ -12,10 +12,11 @@ As you develop and iterate on a contract, even small changes to its logic can af
 
 :::tip
 For a deeper breakdown of how fees work in TON, refer to:
-* [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
-* [Storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee)
-* [Forward fees](/v3/documentation/smart-contracts/transaction-fees/forward-fees)
-:::
+
+- [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
+- [Storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee)
+- [Forward fees](/v3/documentation/smart-contracts/transaction-fees/forward-fees)
+  :::
 
 ## Gas metrics reporting
 
@@ -24,11 +25,9 @@ we’ve introduced a reporting system that lets you collect and compare metrics 
 
 To enable this, write test scenarios that cover the contract’s primary usage patterns and verify that its behavior is as expected. This approach is sufficient to gather relevant metrics, which you can later use to compare performance changes after updating the implementation.
 
-
 Before running the tests, a store is created to collect metrics from all transactions generated during the tests. After test execution, the collected metrics are supplemented with [ABI information from the snapshot](https://github.com/ton-org/sandbox/blob/main/docs/collect-metric-api.md#abi-auto-mapping), and a report is generated based on this data.
 
 While more [metrics are collected](https://github.com/ton-org/sandbox/blob/main/docs/collect-metric-api.md#snapshot-structure), the current report format includes only `compute.phase`, `state.code`, and `state.data`.
-
 
 ## Metrics comparison example
 
@@ -115,7 +114,6 @@ Run the following command:
 ```bash
 npx blueprint test --gas-report
 ```
-
 
 This runs your tests with gas tracking enabled and outputs a `gas-report.json` with transaction metrics.
 
@@ -266,6 +264,7 @@ If your project already exists, you need to configure **jest** to collect gas me
 You can do this in one of two ways:
 
 #### Option 1: update the existing `jest.config.ts`
+
 Add the necessary environment and reporter settings:
 
 ```ts title="jest.config.ts"
@@ -284,13 +283,12 @@ const config: Config = {
 export default config;
 ```
 
- :::tip
- See the full list of options in the [Sandbox jest config docs](https://github.com/ton-org/sandbox?tab=readme-ov-file#setup-in-jestconfigts).
+:::tip
+See the full list of options in the [Sandbox jest config docs](https://github.com/ton-org/sandbox?tab=readme-ov-file#setup-in-jestconfigts).
 :::
 
-
-
 #### Option 2: create a separate config `gas-report.config.ts`
+
 If you prefer not to modify your main `jest.config.ts`, you can create a dedicated config file:
 
 ```ts title="gas-report.config.ts"
@@ -348,4 +346,3 @@ main().catch((error) => {
 For more details, see the [Collect Metric API documentation](https://github.com/ton-org/sandbox/blob/develop/docs/collect-metric-api.md#example).
 
 <Feedback />
-

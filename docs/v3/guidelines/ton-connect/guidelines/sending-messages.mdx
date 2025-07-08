@@ -5,6 +5,7 @@ import Feedback from '@site/src/components/Feedback';
 TON Connect has more powerful options than just authenticating users in the dApp; it also allows sending outgoing messages via connected wallets.
 
 You will understand:
+
 - how to send messages from the DApp to the blockchain
 - how to send multiple messages in one transaction
 - how to deploy a contract using TON Connect
@@ -43,6 +44,7 @@ Feel free to copy-paste it into your browser console and run it.
 We will send two messages in one transaction: one to your address, carrying 0.2 TON, and one to the other wallet address, carrying 0.1 TON.
 
 By the way, there is a limit to the number of messages sent in one transaction:
+
 - standard ([v3](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v3)/[v4](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)) wallets: 4 outgoing messages;
 - highload wallets: 255 outgoing messages (close to blockchain limitations).
 
@@ -69,7 +71,6 @@ console.log(await connector.sendTransaction({
 You'll notice that this command does not print anything into the console, `null` or `undefined`, as functions returning nothing do. This means that `connector.sendTransaction` does not exit immediately.
 
 Open your wallet application, and you'll see why. There is a request showing what you are sending and where the coins would go. Please, accept it.
-
 
 ### Getting the result
 
@@ -134,12 +135,12 @@ If you are using this for an informative display, this method should be sufficie
 
 Before we proceed, let's talk about the format of the messages we will send.
 
-* **payload** (string base64, optional): raw one-cell BoC encoded in Base64.
-  * We will use it to store text comments on transfer
-* **stateInit** (string base64, optional): raw one-cell BoC encoded in Base64.
-  * We will use it to deploy a smart contract
+- **payload** (string base64, optional): raw one-cell BoC encoded in Base64.
+  - We will use it to store text comments on transfer
+- **stateInit** (string base64, optional): raw one-cell BoC encoded in Base64.
+  - We will use it to deploy a smart contract
 
-After building a message, you can serialize it into BoC. 
+After building a message, you can serialize it into BoC.
 
 ```js
 TonWeb.utils.bytesToBase64(await payloadCell.toBoc())
@@ -210,7 +211,7 @@ After confirmation, we may see our transaction complete at [tonscan.org](https:/
 
 It's pretty easy to handle request rejection, but it's better to know what would happen in advance when you're developing some project.
 
-When a user clicks **Cancel** in the popup in the wallet application, an exception is thrown: 
+When a user clicks **Cancel** in the popup in the wallet application, an exception is thrown:
 
 ```ts
 Error: [TON_CONNECT_SDK_ERROR] The Wallet declined the request 
@@ -220,7 +221,6 @@ This error can be considered final (unlike connection cancellation) - if it has 
 
 ## See also
 
-* [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+- [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
 
 <Feedback />
-

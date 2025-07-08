@@ -45,8 +45,8 @@ Constructors define a combinator's type, including its state during serializatio
 transfer#5fcc3d14 <...> = InternalMsgBody;
 // ....
 ```
-* Constructor name: `transfer`
-* Constructor prefix code: `#5fcc3d14`
+- Constructor name: `transfer`
+- Constructor prefix code: `#5fcc3d14`
 
 Note that every constructor name is immediately followed by an optional constructor tag, such as `#_` or `$10`, which specifies the bitstring used to encode (serialize) the corresponding constructor.
 
@@ -112,8 +112,8 @@ A.val = 1
 
 All constructor names must be distinct, and constructor tags within the same type must form a **prefix code** to ensure unambiguous deserialization. In other words, no tag can be a prefix of another tag within the same type.
 
-* Maximum number of constructors per type: `64`.
-* Maximum number of bits for a tag: `63`.
+- Maximum number of constructors per type: `64`.
+- Maximum number of bits for a tag: `63`.
 
 
 <b>Binary example:</b>
@@ -189,8 +189,8 @@ The resulting tag is the 15-bit binary number `0b000000100000000`.
 ## Field definitions
 
 Field definitions follow each constructor and its optional tag. A field definition has the format `ident:type-expr`, where:
-* `ident` is the field's name (use `_` for anonymous fields).
-* `type-expr` is the field's type.
+- `ident` is the field's name (use `_` for anonymous fields).
+- `type-expr` is the field's type.
 
 The `type-expr` can be a simple type, a parameterized type with appropriate arguments, or a more complex expression.
 
@@ -214,7 +214,7 @@ The `type-expr` can be a simple type, a parameterized type with appropriate argu
 _ a:(##32) ^[ b:(## 32) c:(## 32) d:(## 32)] = A;
 ```
 
-* If needed, specific fields can be stored in a separate cell using the `^[ ... ]` syntax.
+- If needed, specific fields can be stored in a separate cell using the `^[ ... ]` syntax.
 For example, in the following structure, `A.a` / `A.b` / `A.c` / `A.d` are all 32-bit unsigned integers.
 However, `A.a` is stored in the primary cell, while `A.b` / `A.c` / `A.d` are stored in a referenced cell using 1 cell reference:
 
@@ -222,7 +222,7 @@ However, `A.a` is stored in the primary cell, while `A.b` / `A.c` / `A.d` are st
 ```tlb
 _ ^[ a:(## 32) ^[ b:(## 32) ^[ c:(## 32) ] ] ] = A;
 ```
-* Chains of references are also allowed. In the following example, each variable (`a`, `b`, `c`) is stored in a separate cell, resulting in a chain of three referenced cells:
+- Chains of references are also allowed. In the following example, each variable (`a`, `b`, `c`) is stored in a separate cell, resulting in a chain of three referenced cells:
 
 ### Parametrized types
 
@@ -240,7 +240,7 @@ _ a:(IntWithObj uint32) = IntWithUint32;
 
 ### Complex expressions
 
-* **Conditional fields (only for `Nat`)**
+- **Conditional fields (only for `Nat`)**
 
   The expression `E?T` means that if the condition `E` is true, then the field has the type `T`.
 
@@ -252,7 +252,7 @@ _ a:(IntWithObj uint32) = IntWithUint32;
     In `Example` type, the field `b` is serialized only if `a` is equal to `1`.
 
 
-* **Multiplicative expression for tuple creation**
+- **Multiplicative expression for tuple creation**
 
   The expression `x * T` creates a tuple of length `x`, where each element is of type `T`.
 
@@ -267,7 +267,7 @@ _ a:(IntWithObj uint32) = IntWithUint32;
      _ 2bits:(2 * Bit) = 2Bits;
      ```
 
-* **Bit selection (only for `Nat`)**
+- **Bit selection (only for `Nat`)**
 
   The expression `E . B` means to take bit `B` from the `Nat` value `E`.
 
@@ -279,7 +279,7 @@ _ a:(IntWithObj uint32) = IntWithUint32;
   In `Example` type, the variable `b` is serialized only if the second bit of `a` is `1`.
 
 
-* **Other `Nat` operators**
+- **Other `Nat` operators**
 
   Other operations on `Nat` types are also supported (refer to `Allowed constraints`).
 
