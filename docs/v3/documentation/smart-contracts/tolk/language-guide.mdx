@@ -1,5 +1,5 @@
 ---
-title: Language Guide
+title: Language guide
 ---
 
 import Feedback from "@site/src/components/Feedback";
@@ -8,24 +8,24 @@ import Feedback from "@site/src/components/Feedback";
 
 ## Table of contents
 
-1. [Basic Syntax](#basic-syntax)
+1. [Basic syntax](#basic-syntax)
 3. [Functions](#functions)
-4. [Variables and Types](#variables-and-types)
-5. [Control Flow](#control-flow)
-6. [Type System](#type-system)
+4. [Variables and types](#variables-and-types)
+5. [Control flow](#control-flow)
+6. [Type system](#type-system)
 7. [Collections](#collections)
-8. [Error Handling](#error-handling)
+8. [Error handling](#error-handling)
 9. [Structures](#structures)
 10. [Methods](#methods)
-11. [Imports and Modules](#imports-and-modules)
-12. [Advanced Features](#advanced-features)
-13. [Standard Library](#standard-library)
+11. [Imports and modules](#imports-and-modules)
+12. [Advanced features](#advanced-features)
+13. [Standard library](#standard-library)
 
 ## Basic syntax
 
 ### Comments
 
-Tolk uses traditional C-style comments:
+Tolk uses traditional C-style syntax for comments:
 
 ```tolk
 // Single-line comment
@@ -38,7 +38,9 @@ Tolk uses traditional C-style comments:
 
 ### Identifiers
 
-Identifiers can start with `[a-zA-Z$_]` and continue with `[a-zA-Z0-9$_]`, like in most languages, camelCase preferred. 
+Identifiers must start with `[a-zA-Z$_]` — that is, a letter, underscore, or dollar sign — and may continue with characters from `[a-zA-Z0-9$_]`.
+
+As in most programming languages, **camelCase** is the preferred naming convention.
 
 ```tolk
 var justSomeVariable = 123;
@@ -48,7 +50,7 @@ var justSomeVariable = 123;
 
 ### Function declaration
 
-`fun` keyword with TypeScript-like syntax:
+Use the `fun` keyword with TypeScript-like syntax:
 
 ```tolk
 fun functionName(param1: type1, param2: type2): returnType {
@@ -64,7 +66,7 @@ fun loadStorage(): (cell, int) { }
 fun main() { ... }
 ```
 
-When return type omitted, it's auto-inferred.
+If the return type is omitted, it's auto-inferred.
 
 ### Generic functions
 
@@ -78,7 +80,7 @@ fun swap<T1, T2>(a: T1, b: T2): (T2, T1) {
 
 ### Default parameters
 
-Parameters can have default values:
+Function parameters can have default values:
 
 ```tolk
 fun increment(x: int, by: int = 1): int {
@@ -88,7 +90,7 @@ fun increment(x: int, by: int = 1): int {
 
 ### GET methods
 
-Contract getters — with `get fun`:
+Contract getters use the `get fun` syntax:
 
 ```tolk
 get fun seqno(): int {
@@ -100,7 +102,7 @@ get fun seqno(): int {
 
 ### Variable declaration
 
-Variables are declared with `var` (mutable) or `val` (immutable):
+Declare variables with `var` for mutable variables and `val` for immutable ones:
 
 ```tolk
 var mutableVar: int = 10;
@@ -116,7 +118,7 @@ var b = beginCell(); // builder inferred
 
 ### Variable scope
 
-Variables cannot be redeclared in the same scope:
+Variables cannot be redeclared within the same scope:
 
 ```tolk
 var a = 10;
@@ -171,15 +173,15 @@ repeat (10) {
 
 ### Basic types
 
-- `int` - integer, you can also use fixed-width integers e.g. `int32`, `uint64`
-- `bool` - boolean (true/false) (caution! TRUE in TVM is -1, not 1)
-- `cell` - TVM cell
-- `slice` - TVM slice, you can also use `bitsN`. (e.g. `bits512` for storing signature)
-- `builder` - TVM builder
+- `int` -  integer; fixed-width variants like `int32` and `uint64` are also supported
+- `bool` - boolean (`true`/`false`). **Note:** in TVM, `true` is represented as `-1`, **not** `1`
+- `cell` - a TVM cell
+- `slice` - a TVM slice; you can also use `bitsN`. (e.g. `bits512` for storing a signature)
+- `builder` - a TVM builder
 - `address` - blockchain address
-- `coins` - Toncoin/coins amounts
+- `coins` - Toncoin or coin amounts
 - `void` - no return value
-- `never` - never returns (always throws)
+- `never` -  function never returns (always throws an exception)
 
 ### Fixed-width integers
 
@@ -190,7 +192,7 @@ var bigInt: uint64 = 1000000;
 
 ### Boolean type
 
-Boolean type is distinct from integers:
+The Boolean type is distinct from integers:
 
 ```tolk
 var valid: bool = true;
@@ -206,7 +208,7 @@ var intValue = valid as int; // -1 for true, 0 for false
 
 ### Nullable types
 
-Nullable types are denoted with `?`:
+Nullable types are denoted by `?`:
 
 ```tolk
 var maybeInt: int? = null;
@@ -220,7 +222,7 @@ if (maybeInt != null) {
 
 ### Union types
 
-Union types allow multiple possible types. They are typically handled with `match` by type:
+Union types allow a value to have multiple possible types. Typically, you handle them using `match` by type:
 
 ```tolk
 fun processValue(value: int | slice) {
@@ -235,7 +237,7 @@ fun processValue(value: int | slice) {
 }
 ```
 
-Alternatively, a union can be tested via `is` or `!is` operators:
+Alternatively, you can test a union value using the `is` or `!is` operators:
 
 ```tolk
 fun processValue(value: int | slice) {
@@ -250,7 +252,7 @@ fun processValue(value: int | slice) {
 
 ### Tuple types
 
-Typed tuples:
+Tuples with explicit types:
 
 ```tolk
 var data: [int, slice, bool] = [42, mySlice, true];
@@ -258,7 +260,7 @@ var data: [int, slice, bool] = [42, mySlice, true];
 
 ### Tensor types
 
-Tensors (like tuples but on stack):
+Tensors are similar to tuples but stored on the stack:
 
 ```tolk
 var coords: (int, int) = (10, 20);
@@ -268,7 +270,7 @@ var y = coords.1; // Access second element
 
 ### Type aliases
 
-Create type aliases for clarity:
+Create aliases to improve code clarity:
 
 ```tolk
 type UserId = int32
@@ -279,7 +281,7 @@ fun calcHash(id: UserId): MaybeOwnerHash { ... }
 
 ### Address type
 
-Dedicated type for blockchain addresses:
+A dedicated type for blockchain addresses:
 
 ```tolk
 val addr = address("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF");
@@ -293,7 +295,7 @@ if (addr.isInternal()) {
 
 ### Indexed access
 
-Access elements with dot notation:
+Access elements using dot `.` notation:
 
 ```tolk
 var t = (5, someSlice, someBuilder);
@@ -377,7 +379,7 @@ var intContainer: Container<int> = { value: 42, isEmpty: false };
 
 ### Instance methods
 
-Methods are extension functions accepting `self`:
+Methods are implemented as extension functions that accept `self`:
 
 ```tolk
 fun Point.distanceFromOrigin(self): int {
@@ -387,7 +389,7 @@ fun Point.distanceFromOrigin(self): int {
 
 ### Mutating methods
 
-Use `mutate` for methods that modify the receiver:
+Use the `mutate` keyword for methods that modify the receiver:
 
 ```tolk
 fun Point.moveBy(mutate self, dx: int, dy: int) {
@@ -410,7 +412,7 @@ fun T.copy(self): T {
 
 ### Chaining methods
 
-Methods can return `self` for chaining:
+Methods can return `self` to enable method chaining:
 
 ```tolk
 fun builder.storeInt32(mutate self, value: int32): self {
@@ -436,7 +438,8 @@ Common functions are available by default:
 var time = blockchain.logicalTime();
 ```
 
-While specific require importing some module (IDE suggests you):
+Some functions require importing specific modules (your IDE will suggest them):
+
 ```tolk
 import "@stdlib/tvm-dicts";
 
@@ -447,7 +450,7 @@ var dict = createEmptyDict();
 
 ### TVM assembler functions
 
-You can implement functions in TVM Assembler:
+You can implement functions directly in TVM assembler:
 
 ```tolk
 @pure
@@ -457,7 +460,7 @@ fun third<X>(t: tuple): X
 
 ### Function attributes
 
-Functions can have attributes using `@` syntax:
+Functions can have attributes using the `@` syntax:
 
 ```tolk
 @inline
@@ -496,23 +499,22 @@ fun f() {
 }
 ```
 
-Also, semicolons are optional for top-level declarations: constants, type aliases, struct fields.
-
+Semicolons are also optional for top-level declarations such as constants, type aliases, and struct fields.
 
 ### Compile-time functions
 
-String processing functions work at compile time:
+String-processing functions execute at compile time:
 
 ```tolk
 const BASIC_ADDR = address("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF");
 const HASH = stringSha256_32("transfer(slice, int)");
 ```
 
-Available compile-time functions: `stringCrc32`, `stringCrc16`, `stringSha256`, `stringSha256_32`, `stringHexToSlice`, `stringToBase256`.
+Available compile-time functions include: `stringCrc32`, `stringCrc16`, `stringSha256`, `stringSha256_32`, `stringHexToSlice`, and `stringToBase256`.
 
 ### Toncoin amounts
 
-Human-readable Toncoin amounts:
+Use human-readable Toncoin amounts:
 
 ```tolk
 val cost = ton("0.05"); // 50,000,000 nanotons
@@ -532,7 +534,7 @@ if (value != null) {
 
 ### Non-null assertion
 
-Use `!` when you're certain a value isn't null:
+Use `!` when you are sure a value is not null:
 
 ```tolk
 fun processCell(maybeCell: cell?) {
@@ -544,7 +546,7 @@ fun processCell(maybeCell: cell?) {
 
 ### Auto-packing
 
-Structures can be automatically packed to/from cells:
+Structures can be automatically packed to and unpacked from cells:
 
 ```tolk
 struct Point {
@@ -571,7 +573,7 @@ Deep dive: [Lazy loading](/v3/documentation/smart-contracts/tolk/tolk-vs-func/la
 
 ### Universal message composition
 
-Create messages with high-level syntax:
+Create messages using a high-level syntax:
 
 ```tolk
 val reply = createMessage({

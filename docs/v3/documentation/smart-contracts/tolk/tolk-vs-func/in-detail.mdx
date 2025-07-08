@@ -1768,9 +1768,7 @@ callable2(someContainer32);   // pass it as self
 
 ### Auto-detect and inline functions
 
-
-
-Tolk can inline functions at the compiler level, NOT via `PROCINLINE` by Fift.
+Tolk can inline functions at the compiler level without using `PROCINLINE` as defined by Fift.
 
 ```tolk
 fun Point.create(x: int, y: int): Point {
@@ -1791,38 +1789,44 @@ fun main() {
 }
 ```
 
-is compiled just to
+is compiled to:
+
 ```fift
 main PROC:<{
   30 PUSHINT
 }>
 ```
 
-The compiler automatically detects what functions to inline. The attribute `@inline` also forces compiler inlining. The attribute `@noinline` forces a function to stay in a dict, `@inline_ref` remains "inline ref" (perfect for "unlikely" execution paths).
+The compiler automatically detects what functions to inline. The attribute `@inline` also forces the compiler to inline. The attribute `@noinline` forces a function to stay in a dict, `@inline_ref` remains "inline ref" (perfect for "unlikely" execution paths).
 
-Compiler inlining is efficient in terms of stack manipulations. It works with arguments of any stack width. It works with any functions and methods, except recursive or having `return` in the middle. It works with `mutate` and `self`.
+Compiler inlining is efficient in terms of stack manipulations. It works with arguments of any stack width. It works with any functions and methods, except those that are recursive or contain `return` statements in the middle. It works with `mutate` and `self`.
 
-You should not worry that "simple getters" like `fun Point.getX(self) { return self.x }` will require stack reordering. You can extract small functions, they are absolutely zero-cost. You don't think about `@inline` and Fift, because no inlining is deferred to Fift: the compiler will handle everything in advance.
+You should not worry that "simple getters" like `fun Point.getX(self) { return self.x }` will require stack reordering. You can extract small functions; they are zero-cost. You don't think about `@inline` and Fift because no inlining is deferred to Fift; the compiler handles everything in advance.
 
-**How does "auto-inline" work?**
+**How does _auto-inline_ work?**
 
 In two words,
-- "simple small functions" are inlined always
+- **simple small functions** are inlined always
 - if a function is called only once, it's inlined
 
-Some details. For every function, the compiler calculates "weight" (a heuristic AST-based metric) and usages count. If "weight < THRESHOLD," it's inlined always. If "usages == 1," it's inlined always. Otherwise, there is some empiric formula.
+Some details.
 
-No one prevents you to force `@inline` annotation for "big functions" also. For example, if you know that all usages correspond to hot paths. Sometimes, on the contrary, you'd want to "prevent inlining" with `@inline_ref` for example, even if a function is called once — if it's an unlikely path. Anyway, if you are keen on optimization, cover your contract with gas benchmarks and experiment with inlining, branch reordering, etc.
+For every function, the compiler calculates a **weight** (a heuristic, AST-based metric) and the usage count.
+* If `weight < THRESHOLD`, it's inlined always.
+* If `usages == 1`, it's inlined always.
+* Otherwise, there is some empirical formula.
+
+No one prevents you from forcing `@inline` annotation for **big functions** also. For example, if you know that all usages correspond to hot paths. Sometimes, on the contrary, you'd want to _prevent inlining_ with `@inline_ref` for example, even if a function is called once — if it's an unlikely path. Anyway, if you are keen on optimization, consider covering your contract with gas benchmarks and experimenting with inlining, branch reordering, etc.
 
 **What can NOT be auto-inlined?**
 
 A function will NOT be inlined (even marked as `@inline`) if:
 
-1) It has `return` in the middle. If a function has multiple return points, the compiler can't do anything with it, currently. In Tolk v1.x it will be partially resolved for some use cases.
+1) It has `return` in the middle. If a function has multiple return points, the compiler can't currently do anything with it. In Tolk v1.x, it will be partially resolved for some use cases.
 
-2) A function that appears in a recursive call chain (`f -> g -> f`). Very unlikely in practice.
+2) A function that appears in a recursive call chain (`f -> g -> f`). It is not very confident in practice.
 
-3) It's used as non-call. For example, you take a reference to it like `val callback = f`
+3) It's used as a non-call. For example, you take a reference to it like `val callback = f.`
 
 
 ### No tilda ~ methods, mutate keyword instead
@@ -1880,6 +1884,7 @@ Continue reading on a separate page: [Universal createMessage](/v3/documentation
 
 
 In Tolk, you don't need to manually parse `msg_cell` to retrieve `sender_address` or `fwd_fee`. Everything is pretty straightforward:
+
 ```tolk
 fun onInternalMessage(in: InMessage) {
     in.senderAddress
@@ -1890,16 +1895,17 @@ fun onInternalMessage(in: InMessage) {
 }
 ```
 
-While an "old-fashioned way" with accepting 4 parameters like `recv_internal` still works, the above is preferred. Moreover, it's much more efficient: fields of `InMessage` are mapped onto new TVM-11 instructions.
 
-**The pattern**:
+While the _old-fashioned_ approach of accepting 4 parameters, like `recv_internal`, still works, the pattern above is preferred. It's also significantly more efficient: the fields of `InMessage` are now directly mapped to new TVM-11 instructions.
 
-1) describe every message in a struct (most likely, with 32-bit opcode)
-2) describe a union "allowed messages"
-3) `val msg = lazy MyUnion.fromSlice(in.body)`
-4) `match (msg)` for every branch, and probably `else`
+**Recommended pattern:**
 
-Do not follow an "old-fashioned way" to extract fwd_fee etc. at the beginning of the function, there is no need of it. Just use `in.smth` on demand.
+1. Define each message as a struct (typically with a 32-bit opcode).
+2. Define a union of all allowed messages.
+3. Use `val msg = lazy MyUnion.fromSlice(in.body)`.
+4. Match on `msg`, handling each branch—and possibly an `else`.
+
+Avoid the legacy approach of manually extracting `fwd_fee` and other fields at the start of the function. There's no need for it anymore—access them on demand via `in.smth`.
 
 ```tolk
 type AllowedMessageToMinter =
@@ -1932,7 +1938,7 @@ fun onInternalMessage(in: InMessage) {
 
 In FunC, you parsed `msg_cell`, read 4-bit flags, and tested for `flags & 1` to check whether a message is bounced.
 
-In Tolk, if you want to handle bounces, you create a separate entrypoint:
+In Tolk, if you want to handle bounces, you create a separate entry point:
 ```tolk
 fun onBouncedMessage(in: InMessageBounced) {
 }
@@ -1959,7 +1965,7 @@ fun onInternalMessage(in: InMessage) {
 
 **Remember about 256 bits on bounces**
 
-Currently, TON Blockchain works in such a way that when a message is bounced, only the first 256 bits are present, starting with 0xFFFFFFFF ("bounced prefix"). That's why you manually control which fields you can read (they fit rest 224 bits), which not.
+Currently, TON Blockchain works in such a way that when a message is bounced, only the first 256 bits are present, starting with 0xFFFFFFFF ("bounced prefix"). That's why you manually control which fields you can read (they fit the rest of the 224 bits) and which do not.
 
 ```tolk
 fun onBouncedMessage(in: InMessageBounced) {
