@@ -10,19 +10,5 @@ files:
   - source: src/pages/v3/**/*
     translation: i18n/%two_letters_code%/docusaurus-plugin-content-pages/v3/**/%original_file_name%
 
-# https://support.crowdin.com/developer/configuration-file/#configuration-file-for-vcs-integrations
-pull_request_labels:
-  - crowdin
-  - translation
-
-#"pull_request_title": "Custom PR title"
-#
-
-# "commit_message": "[ci skip]"
-#"commit_message": "Fix: New translations %original_file_name% from Crowdin"
-#"append_commit_message": false
-
 # Excluded front matter elements
-# <Highlight color="#186E8A">,<Highlight>,</Highlight>,Highlight,</Button>,Button,<div>,</div>,div,<Tabs>,</Tabs>,<TabItem>,</TabItem>,import Feedback,import Button,import Player,<Player,<details>,</details>,<summary>,<summary>,<Feedback />,:::,<
-# mdxv2
 # <Highlight color="#186E8A">,<Highlight>,</Highlight>,Highlight,</Button>,Button,<div>,</div>,div,<Tabs>,</Tabs>,<TabItem>,</TabItem>,import Feedback,import Button,import Player,<Player,<details>,</details>,<summary>,<summary>,<Feedback />,:::,<
