@@ -83,6 +83,7 @@ jobs:
           -c crowdin-oss.yml
           -b ${{ env.crowdinBranch }}
           -l ${{ env.language }}
+          --skip-untranslated-files
 
       - name: Setup / Dev dependencies
         run: npm ci
