@@ -1,16 +1,14 @@
-# TON Connect для React
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# TON Connect для React
 
 Рекомендуемый SDK для приложений на React — это [UI React SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-react). Это компонент React, который обеспечивает высокоуровневый способ взаимодействия с TON Connect.
 
-## Реализация
+## Implementation
 
 ### Установка
 
-Чтобы начать интеграцию TON Connect в ваш DApp, вам необходимо установить пакет `@tonconnect/ui-react`. Вы можете использовать npm или yarn для этого:
+Реализация
 
 ```bash npm2yarn
 npm i @tonconnect/ui-react
@@ -37,7 +35,7 @@ export function App() {
 
 ### Подключение кошелька
 
-Добавьте `TonConnectButton`. Кнопка TonConnect — это универсальный компонент пользовательского интерфейса для инициализации соединения. После подключения кошелька она преобразуется в меню кошелька. Рекомендуется разместить ее в правом верхнем углу вашего приложения.
+Добавьте `TonConnectButton`. 
 
 ```tsx
 export const Header = () => {
@@ -50,11 +48,15 @@ export const Header = () => {
 };
 ```
 
-Вы также можете добавить className и style props к кнопке. Обратите внимание, что вы не можете передать child в TonConnectButton:
+Кнопка TonConnect — это универсальный компонент пользовательского интерфейса для инициализации соединения. После подключения кошелька она преобразуется в меню кошелька. Prefer to place the **Connect** button in the top right corner of your app.
+
+Вы также можете добавить className и style props к кнопке.
 
 ```js
 <TonConnectButton className="my-button-class" style={{ float: "right" }}/>
 ```
+
+Обратите внимание, что вы не можете передать child в TonConnectButton:
 
 Более того, вы всегда можете инициировать соединение вручную с помощью хука `useTonConnectUI` и метода [openModal](https://github.com/ton-connect/sdk/tree/main/packages/ui#open-connect-modal).
 
@@ -154,7 +156,8 @@ export const ModalControl = () => {
 
 ### useTonWallet
 
-Используйте этот хук для извлечения текущего кошелька TON пользователя. Если кошелек не подключен, хук вернет `null`. Объект `wallet` предоставляет общие данные, такие как адрес пользователя, провайдер, [TON proof](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users) и другие атрибуты (см. интерфейс [Wallet](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)).
+Используйте этот хук для извлечения текущего кошелька TON пользователя.
+Если кошелек не подключен, хук вернет `null`. Объект `wallet` предоставляет общие данные, такие как адрес пользователя, провайдер, [TON proof](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users) и другие атрибуты (см. интерфейс [Wallet](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)).
 
 Кроме того, вы можете получить более конкретную информацию о подключенном кошельке, такую как его имя, изображение и другие атрибуты (см. интерфейс [WalletInfo](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html)).
 
@@ -215,7 +218,8 @@ export const Settings = () => {
 
 ### useIsConnectionRestored
 
-Показывает текущий статус процесса восстановления подключения. Вы можете использовать его для обнаружения завершения процесса восстановления подключения.
+Показывает текущий статус процесса восстановления подключения.
+Вы можете использовать его для обнаружения завершения процесса восстановления подключения.
 
 ```tsx
 import { useIsConnectionRestored } from '@tonconnect/ui-react';
@@ -267,7 +271,9 @@ export const Settings = () => {
 
 ```
 
-- Больше примеров здесь: [Подготовка сообщений](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+:::tip
+Больше примеров здесь: [Подготовка сообщений](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+:::
 
 ### Понимание статуса транзакции по хэшу
 
@@ -361,6 +367,10 @@ await tonConnectUI.disconnect();
 #### Развертывание контракта
 
 Развернуть контракт с использованием TonConnect довольно просто. Вам просто нужно получить код контракта и состояние init, сохранить его как ячейку и отправить транзакцию с предоставленным полем `stateInit`.
+
+- Obtain the contract `code` and `data`
+- Store them as a `stateInit` cell
+- Send a transaction using the `statement` field provided
 
 Обратите внимание, что `CONTRACT_CODE` и `CONTRACT_INIT_DATA` могут быть найдены в обертках.
 
@@ -653,3 +663,10 @@ export const Header = () => {
 - Пошаговое руководство [TON Hello World](https://helloworld.tonstudio.io/03-client/) для создания простого DApp с использованием React UI.
 - [Demo dApp](https://github.com/ton-connect/demo-dapp-with-react-ui) - Пример DApp с `@tonconnect/ui-react`.
 - [ton.vote](https://github.com/orbs-network/ton-vote) - Пример веб-сайта React с реализацией TON Connect.
+
+## See also
+
+- [TON Connect for Vue apps](/v3/guidelines/ton-connect/frameworks/vue)
+- [TON Connect for HTML/JS apps](/v3/guidelines/ton-connect/frameworks/web)
+
+<Feedback />

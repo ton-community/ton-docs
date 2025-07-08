@@ -1,8 +1,6 @@
-# Компиляция из исходного кода
+import Feedback from '@site/src/components/Feedback';
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Компиляция из исходного кода
 
 Вы можете скачать предварительно скомпилированные двоичные файлы [здесь](/v3/documentation/archive/precompiled-binaries#1-download).
 
@@ -111,8 +109,6 @@ cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. \
 -DLZ4_LIBRARIES=$lz4Path/lib/liblz4.a \
 -DLZ4_INCLUDE_DIRS=$lz4Path/lib
 ```
-
-:::
 
 :::tip
 Если вы компилируете на компьютере с небольшим объемом памяти (например, 1 Гб), не забудьте [создать раздел подкачки] (/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory).
@@ -265,12 +261,16 @@ cmake --build . --target func
 
 TON поддерживает Apple M1 с 11 июня 2022 года ([Добавить поддержку Apple M1 (#401)](https://github.com/ton-blockchain/ton/commit/c00302ced4bc4bf1ee0efd672e7c91e457652430)).
 
-Для компиляции старых ревизий TON на Apple M1:
+TON поддерживает Apple M1 с 11 июня 2022 года ([Добавить поддержку Apple M1 (#401)](https://github.com/ton-blockchain/ton/commit/c00302ced4bc4bf1ee0efd672e7c91e457652430)).
 
 1. Обновите субмодуль RocksDb до версии 6.27.3
-  ```bash
-  cd ton/third-party/rocksdb/
-  git checkout fcf3d75f3f022a6a55ff1222d6b06f8518d38c7c
-  ```
+
+   ```bash
+   cd ton/third-party/rocksdb/
+   git checkout fcf3d75f3f022a6a55ff1222d6b06f8518d38c7c
+   ```
 
 2. Замените `CMakeLists.txt` в корневом каталоге на https://github.com/ton-blockchain/ton/blob/c00302ced4bc4bf1ee0efd672e7c91e457652430/CMakeLists.txt
+
+<Feedback />
+

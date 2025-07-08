@@ -1,4 +1,5 @@
-import Player from '@site/src/components/player'
+import Feedback from "@site/src/components/Feedback";
+import Player from "@site/src/components/player";
 
 # Обозреватели в TON
 
@@ -20,149 +21,150 @@ import Player from '@site/src/components/player'
 
 Это разделение на категории во многом условно, и один обозреватель может относиться к нескольким категориям одновременно. Поэтому не будем уделять этому слишком много внимания.
 
+## Общая функциональность
+
+Blockchain explorers allow you to view and search the blockchain, similarly to how you might use a banking app to check transaction history and account balances. They provide a user-friendly interface to access real-time data about blockchain transactions, blocks, and addresses.
+
+Just as you use a banking app to track where your money goes, who sends you payments, and when transactions occur, blockchain explorers let you see this information for digital assets on the blockchain. They are essential for transparency, allowing anyone to verify transactions independently, see the flow of cryptocurrency, and analyze the activity on the blockchain.
+
+Typically, an explorer allows you to find a transaction or an account by its identifier. Some explorers also support DNS extensions or their own [address book](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton#address-alias-in-explorers), which adds a human-readable label to a specific account. Example: [TON Foundation](https://tonviewer.com/UQAFmjUoZUqKFEBGYFEMbv-m61sFStgAfUR8J6hJDwUU04VW).
+
+## Native explorers
+
+### TON Scan.org
+
+Хороший обозреватель для повседневного использования. Он обеспечивает комплексное представление блокчейна TON, позволяя пользователям искать транзакции, адреса, блоки и многое другое.
+
+- URL: https://tonscan.com/
+- URL Testnet: https://testnet.tonviewer.com/
+
+#### Ссылки
+
+- Удобен для разработчиков
+- Advanced jetton and nominator pools pages for users
+- Типы контрактов
+- User-friendly search uses DNS and [address book](https://github.com/catchain/address-book) labels.
+
+### Tonviewer Explorer
+
+It is a good explorer for everyday use with a balanced UI for users and developers.
+
+- URL: https://tonscan.org/
+- URL Testnet: https://testnet.tonscan.org/
+
+#### Функции
+
+- **Удобен для повседневного использования**
+- Advanced information for developers with traces
+- Типы контрактов
+- User-friendly search uses DNS and [tonkeeper/ton-assets](https://github.com/tonkeeper/ton-assets) labels.
+
+### Tonscan by Bastion
+
+- TON Scan.com
+
+#### Функции
+
+- Аналитика состояния транзакций
+- Отслеживание транзакций
+
+### DTON
+
+DTON – еще один обозреватель для разработчиков. Он предоставляет много информации о транзакциях в удобной форме.
+
+Кроме того, он имеет функцию, которая позволяет вам видеть фазу вычислений транзакции шаг за шагом.
+
+- URL: https://dton.io/
+
+#### Функции
+
+- Удобен для разработчиков
+- Расширенная информация о фазе вычислений
+- Типы контрактов
+
+### Ton Whales Explorer
+
+Explorer for developers.
+
+- URL: https://tonwhales.com/explorer
+
+#### Функции
+
+- Удобен для разработчиков
+- Дизассемблер контрактов
+- Simple and convenient validator details
+
+### TON NFT EXPLORER
+
+Этот обозреватель специализируется на NFT, однако его можно использовать и как обычный обозреватель.
+
+- URL: https://explorer.tonnft.tools/
+- URL Testnet: https://testnet.explorer.tonnft.tools/
+
+При просмотре адреса кошелька можно узнать какие NFT он хранит. В свою очередь при просмотре NFT, можно узнать метаданные, адрес коллекции, владельца, а также историю транзакций.
+
+#### Функции
+
+- Удобен для разработчиков
+- **Специализируется на NFT**.
+- Типы контрактов
+
+## Crosschain explorers
+
+### OKX TON explorer
+
+This explorer is designed to provide comprehensive and detailed data insights into TON. Whether you're tracking wallet addresses, exploring Jetton tokens, or delving into NFT collections, it offers a user-friendly experience tailored for both beginners and developers.
+
+- URL: https://tonviewer.com/
+
+#### Функции
+
+- Удобен для повседневного использования
+- Поддержка TON DNS
+- Jetton and NFT data
+
+### TON NFTscan
+
+Этот обозреватель специально разработан для невзаимозаменяемых токенов (NFT) в блокчейне TON. Он позволяет пользователям исследовать, отслеживать и проверять транзакции, контракты и метаданные NFT.
+
+- URL: https://ton.nftscan.com/
+
+#### Возможности
+
+- Удобен для обычных пользователей
+- Рейтинг коллекций NFT
+- Полезная информация для трейдеров, например, ежедневные объемы торгов
+
+## Analytics explorers
+
+### TonStat
+
+- URL: https://www.tonstat.com/
+
+Отображает различные статистические данные, такие как количество зарегистрированных сетевых адресов и кошельков, объем сжигаемых Toncoin, объем стейкинга Toncoin, объем выпущенных NFT, количество валидаторов и ряд других показателей.
+
+#### Функции
+
+- Удобен для постоянных пользователей
+- Информация о DeFi
+- Полезная информация для трейдеров, например, ежедневные объемы торгов
+
 ## Псевдоним адреса в обозревателях
 
 Сделайте адрес своего сервиса более удобным для пользователей, используя алиас адреса. Для этого создайте пул реквесты, PR, в соответствии с предоставленными ниже рекомендациями:
 
 - [tonkeeper/ton-assets](https://github.com/tonkeeper/ton-assets) - псевдонимы Tonviewer.com
 - [catchain/address-book](https://github.com/catchain/address-book)- псевдонимы Tonscan.org
-
-## Общая функциональность
-
-Давайте начнем с базовой функциональности, которая присутствует во всех обозревателях.
-
-Большинство обозревателей имеют возможность уточнять информацию о балансах, истории транзакций, а также информацию о самом смарт-контракте, если он развернут на адресе.
-
-Далее мы рассмотрим несколько обозревателей, которые можно отнести к каждой из описанных выше категорий.
-
-## TON Scan.org
-
-Хороший обозреватель для повседневного использования. Он обеспечивает комплексное представление блокчейна TON, позволяя пользователям искать транзакции, адреса, блоки и многое другое. Любой поиск выполняется по открытой [адресной книге](https://github.com/catchain/tonscan/blob/master/src/addrbook.json) (TON Foundation, OKX и др.)
-
-### Функции
-
-- **Удобен для повседневного использования**
-- Удобен для разработчиков
-- Поддержка TON DNS
-- Типы контрактов
-- Дизассемблер контрактов
-
-### Ссылки
-
-- URL: https://tonscan.org/
-- URL Testnet: https://testnet.tonscan.org/
-
-## TON Scan.com
-
-### Функции
-
-- Аналитика состояния транзакций
-- Отслеживание транзакций
-
-### Ссылки
-
-- URL: https://tonscan.com/
-
-## Ton Whales Explorer
-
-Этот обозреватель больше ориентирован на разработчиков, чем на обычных пользователей.
-
-### Возможности
-
-- **Удобен для разработчиков**
-- Типы контрактов
-- Дизассемблер контрактов
-
-### Ссылки
-
-- URL: https://tonwhales.com/explorer
-
-## Tonviewer Explorer
-
-Это самый новый обозреватель и поэтому он обладает уникальными функциями. Например, Trace. Эта функция позволяет вам видеть всю последовательность транзакций между смарт-контрактами, даже если последующие транзакции не содержат вашего адреса.
-
-Информация о транзакциях не такая подробная, как, например, на TON Whales.
-
-### Функции
-
-- Удобен для разработчиков
-- Удобен для повседневного использования
-- История транзакций жетонов
-- **Trace**
-- Поддержка TON DNS
-
-### Ссылки
-
-- URL: https://tonviewer.com/
-- URL Testnet: https://testnet.tonviewer.com/
-
-## TON NFT EXPLORER
-
-Этот обозреватель специализируется на NFT, однако его можно использовать и как обычный обозреватель.
-
-При просмотре адреса кошелька можно узнать какие NFT он хранит. В свою очередь при просмотре NFT, можно узнать метаданные, адрес коллекции, владельца, а также историю транзакций.
-
-### Функции
-
-- Удобен для разработчиков
-- Типы контрактов
-- **Специализируется на NFT**.
-
-### Ссылки
-
-- URL: https://explorer.tonnft.tools/
-- URL Testnet: https://testnet.explorer.tonnft.tools/
-
-## DTON
-
-DTON – еще один обозреватель для разработчиков. Он предоставляет много информации о транзакциях в удобной форме.
-
-Кроме того, он имеет функцию, которая позволяет вам видеть фазу вычислений транзакции шаг за шагом.
-
-### Функции
-
-- Удобен для разработчиков
-- Расширенная информация о фазе вычислений
-- Типы контрактов
-- Дизассемблер контрактов
-
-### Ссылки
-
-- URL: https://dton.io/
-
-## TON NFTscan
-
-Этот обозреватель специально разработан для невзаимозаменяемых токенов (NFT) в блокчейне TON. Он позволяет пользователям исследовать, отслеживать и проверять транзакции, контракты и метаданные NFT.
-
-### Функции
-
-- Удобен для обычных пользователей
-- Полезная информация для трейдеров, например, ежедневные объемы торгов
-- Рейтинг коллекций NFT
-
-### Ссылки
-
-- URL: https://ton.nftscan.com/
-
-## TonStat
-
-Отображает различные статистические данные, такие как количество зарегистрированных сетевых адресов и кошельков, объем сжигаемых Toncoin, объем стейкинга Toncoin, объем выпущенных NFT, количество валидаторов и ряд других показателей.
-
-### Функции
-
-- Удобен для постоянных пользователей
-- Полезная информация для трейдеров, например, ежедневные объемы торгов
-- Информация о DeFi
-
-### Ссылки
-
-- URL: https://www.tonstat.com/
+- [ton-labels](https://github.com/ton-studio/ton-labels) - Public dataset of labeled TON blockchain addresses
 
 ## Хотите попасть в этот список?
 
 Пожалуйста, напишите одному из [сопровождающих](/v3/contribute/maintainers).
 
-## Ссылки
+## See also
 
+- [TON wallet apps](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps)
 - [ton.app/explorers](https://ton.app/explorers)
 - [Awesome TON repository](https://github.com/ton-community/awesome-ton)
+
+<Feedback />

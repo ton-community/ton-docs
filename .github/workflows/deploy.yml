@@ -4,19 +4,27 @@ on:
   push:
     branches:
       - release-candidate-main
+      - l10n-release-candidate-ru
       - release-candidate-ru
+      - l10n-release-candidate-en
       - release-candidate-en
+      - l10n-release-candidate-ja
       - release-candidate-ja
+      - l10n-release-candidate-ko
       - release-candidate-ko
+      - l10n-release-candidate-zh-cn
       - release-candidate-zh-cn
+
+  workflow_dispatch:
 
 jobs:
   build:
+    if: ${{ startsWith(github.ref, 'refs/heads/release-candidate-') || startsWith(github.ref, 'refs/heads/l10n-release-candidate-') }}
     runs-on: ubuntu-latest
-    environment: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
+    environment: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/l10n-release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
     env:
-      JOB_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
-      APP_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', 'testing-', github.ref_name) || 'unknown' }}"
+      JOB_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/l10n-release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
+      APP_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/l10n-release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', 'testing-', github.ref_name) || 'unknown' }}"
       APP_DOMAIN: "${{ format('{0}-{1}', github.ref_name, vars.APP_DOMAIN) }}"
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
