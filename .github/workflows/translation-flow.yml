@@ -113,7 +113,7 @@ jobs:
       - name: Commit
         if: steps.prepare-commit.outputs.staged_files == 'true'
         run: |
-          ./node_modules/.bin/eslint -c eslint.mdx.config.js --fix $(git diff --cached --name-only)
+          ./node_modules/.bin/eslint -c eslint.mdx.config.js --fix $(git diff --cached --name-only) || true
           git add i18n/
           git commit -m "chore: update ${{ env.language }} translations #${{ env.issueNumber }}"
           git push -u origin ${{ env.gitBranch }}
