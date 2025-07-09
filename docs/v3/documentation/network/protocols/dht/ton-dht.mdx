@@ -4,8 +4,8 @@ import Feedback from '@site/src/components/Feedback';
 
 Please see the implementations:
 
-* [DHT](https://github.com/ton-blockchain/ton/tree/master/dht)
-* [DHT Server](https://github.com/ton-blockchain/ton/tree/master/dht-server)
+- [DHT](https://github.com/ton-blockchain/ton/tree/master/dht)
+- [DHT Server](https://github.com/ton-blockchain/ton/tree/master/dht-server)
 
 ## Overview
 
@@ -28,7 +28,7 @@ The value of key `K` is expected to be stored on the `S` Kademlia-nearest nodes 
 Kademlia distance is calculated by performing a 256-bit `XOR` operation between the key `X` and the 256-bit DHT node address. This distance does not relate to geographic location.
 
 `S` is a small parameter, for instance, `S = 7`, which helps improve the reliability of the DHT. If the key were stored only on a single node (the nearest one to `K`) the value of that key would be lost if that node were to go offline.
- 
+
 ## Kademlia routing table
 
 A node participating in a DHT typically maintains a Kademlia routing table.
@@ -50,5 +50,5 @@ The TON DHT is not only used to store the IP addresses of ADNL nodes; it also se
 :::info
 Learn more about TON DHT in [DHT](/v3/documentation/network/protocols/dht/dht-deep-dive) documentation, or in Chapter 3.2. of the [TON Whitepaper](https://docs.ton.org/ton.pdf).
 :::
-<Feedback />
 
+<Feedback />

@@ -25,37 +25,39 @@ Use TonConnectUIPlugin before mounting the app. You can specify UI options using
 
 <Tabs groupId="TonConnectUIPlugin">
   <TabItem value="For Vue@3" label="For Vue@3">
-  ```html
-  import { createApp } from 'vue'
-  import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
+    ```html
+    import { createApp } from 'vue'
+    import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
 
-  import App from './App.vue'
+    import App from './App.vue'
 
-  const app = createApp(App)
-  app
-    .use(TonConnectUIPlugin,{ manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json" })
-    .mount('#app')
-  ```
+    const app = createApp(App)
+    app
+      .use(TonConnectUIPlugin,{ manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json" })
+      .mount('#app')
+    ```
   </TabItem>
+
   <TabItem value="For Vue@2.7" label="For Vue@2.7">
-  ```html
-  import Vue from 'vue'
-  import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
+    ```html
+    import Vue from 'vue'
+    import { TonConnectUIPlugin } from '@townsquarelabs/ui-vue'
 
-  import App from './App.vue'
+    import App from './App.vue'
 
-  Vue.use(TonConnectUIPlugin, {
-    manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json"
-  });
+    Vue.use(TonConnectUIPlugin, {
+      manifestUrl: "https://<YOUR_APP_URL>/tonconnect-manifest.json"
+    });
 
-  new Vue({
-    render: (h) => h(App)
-  }).$mount('#app')
-  ```
+    new Vue({
+      render: (h) => h(App)
+    }).$mount('#app')
+    ```
   </TabItem>
 </Tabs>
 
 ### Connect to the wallet
+
 `TonConnectButton` is a universal UI component for initializing connection. After the wallet is connected, it transforms into a wallet menu.
 You should place it in the top right corner of your app.
 
@@ -78,7 +80,7 @@ export default {
 </script>
 ```
 
-You can add `buttonRootId` props to the button as well. 
+You can add `buttonRootId` props to the button as well.
 
 ```ts
 <TonConnectButton button-root-id="button-root-id" />
@@ -122,10 +124,10 @@ export default {
 
 To [customize UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) of the modal, you can use the `useTonConnectUI` hook and the `setOptions` function. See more about the `useTonConnectUI` hook in the [Hooks](#usetonconnectui) section.
 
-
 ## Hooks
 
 ### useTonAddress
+
 Use it to get the user's current ton wallet address. Pass the boolean parameter `isUserFriendly` to choose the address format. The hook will return an empty string if the wallet is not connected.
 
 ```html
@@ -154,6 +156,7 @@ export default {
 ```
 
 ### useTonWallet
+
 Use it to get the user's current ton wallet. If the wallet is not connected, the hook will return null.
 
 ```html
@@ -206,69 +209,69 @@ export default {
 ```
 
 ### useTonConnectUI
+
 Use it to get access to the `TonConnectUI` instance and UI options updating function.
 
 <details>
   <summary><b>Show the example</b></summary>
-```html
-<template>
-  <div>
-    <button @click="sendTransaction">Send transaction</button>
+
+  ```html
+  <template>
     <div>
-      <label>language</label>
-      <select @change="onLanguageChange($event.target.value)">
-        <option value="en">en</option>
-        <option value="ru">ru</option>
-        <option value="zh">zh</option>
-      </select>
+      <button @click="sendTransaction">Send transaction</button>
+      <div>
+        <label>language</label>
+        <select @change="onLanguageChange($event.target.value)">
+          <option value="en">en</option>
+          <option value="ru">ru</option>
+          <option value="zh">zh</option>
+        </select>
+      </div>
     </div>
-  </div>
-</template>
+  </template>
 
-<script>
-import { Locales, useTonConnectUI } from '@townsquarelabs/ui-vue';
+  <script>
+  import { Locales, useTonConnectUI } from '@townsquarelabs/ui-vue';
 
-export default {
-  name: 'Settings',
-  setup() {
-    const {tonConnectUI, setOptions} = useTonConnectUI();
+  export default {
+    name: 'Settings',
+    setup() {
+      const {tonConnectUI, setOptions} = useTonConnectUI();
 
-    const onLanguageChange = (lang) => {
-      setOptions({ language: lang as Locales });
-    };
+      const onLanguageChange = (lang) => {
+        setOptions({ language: lang as Locales });
+      };
 
-    const myTransaction = {
-      validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
-      messages: [
-        {
-          address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA",
-          amount: "20000000",
-          // stateInit: "base64bocblahblahblah==" // just for instance. Replace with your transaction initState or remove
-        },
-        {
-          address: "EQDmnxDMhId6v1Ofg_h5KR5coWlFG6e86Ro3pc7Tq4CA0-Jn",
-          amount: "60000000",
-          // payload: "base64bocblahblahblah==" // just for instance. Replace with your transaction payload or remove
-        }
-      ]
+      const myTransaction = {
+        validUntil: Math.floor(Date.now() / 1000) + 60, // 60 sec
+        messages: [
+          {
+            address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA",
+            amount: "20000000",
+            // stateInit: "base64bocblahblahblah==" // just for instance. Replace with your transaction initState or remove
+          },
+          {
+            address: "EQDmnxDMhId6v1Ofg_h5KR5coWlFG6e86Ro3pc7Tq4CA0-Jn",
+            amount: "60000000",
+            // payload: "base64bocblahblahblah==" // just for instance. Replace with your transaction payload or remove
+          }
+        ]
+      }
+
+      const sendTransaction = () => {
+        tonConnectUI.sendTransaction(myTransaction);
+      };
+
+      return { onLanguageChange, sendTransaction };
     }
-
-    const sendTransaction = () => {
-      tonConnectUI.sendTransaction(myTransaction);
-    };
-
-    return { onLanguageChange, sendTransaction };
-  }
-};
-</script>
-```
-
-
+  };
+  </script>
+  ```
 </details>
 
 or
 
-```ts 
+```ts
 <script lang="ts">
 import { TonConnectUI, useTonWallet, tonConnectUIKey } from "@townsquarexyz/ui-vue";
 const tonConnectUI = inject<TonConnectUI | null>(tonConnectUIKey, null);
@@ -279,8 +282,8 @@ const tonConnectUI = inject<TonConnectUI | null>(tonConnectUIKey, null);
 
 [See more about the `setOptions` function](https://github.com/ton-connect/sdk/tree/main/packages/ui#change-options-if-needed)
 
-
 ### useIsConnectionRestored
+
 `useIsConnectionRestored` indicates the current status of the connection restoring process.
 You can use it to detect when the connection restoring process is finished.
 
@@ -304,7 +307,6 @@ export default {
 };
 </script>
 ```
-
 
 ## Usage
 
@@ -354,6 +356,7 @@ export default {
 };
 </script>
 ```
+
 ### Understanding transaction status by hash
 
 Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions) using the tonweb library.
@@ -369,7 +372,9 @@ Use the `tonConnectUI.setConnectRequestParameters` function to pass your connect
 This function takes one parameter:
 
 #### loading
+
 Set state to `'loading'` while waiting for your backend's response. If a user opens the connect wallet modal, he will see a loader.
+
 ```ts
 import { ref } from 'vue';
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
@@ -401,7 +406,7 @@ tonConnectUI.setConnectRequestParameters({
 
 #### remove loading
 
-Remove the loader if enabled via `state: 'loading'`. For example, if you received an error instead of a response from your backend. 
+Remove the loader if enabled via `state: 'loading'`. For example, if you received an error instead of a response from your backend.
 
 Connect requests will be created without any additional parameters.
 
@@ -414,9 +419,7 @@ const { tonConnectUI } = useTonConnectUI();
 tonConnectUI.setConnectRequestParameters(null);
 ```
 
-
 You can call `tonConnectUI.setConnectRequestParameters` multiple times if your tonProof payload has a bounded lifetime. For instance, you can refresh connect request parameters every 10 minutes.
-
 
 ```ts
 import { ref } from 'vue';
@@ -443,7 +446,6 @@ if (!tonProofPayload) {
 
 ```
 
-
 You can find the `ton_proof` result in the `wallet` object when the wallet is connected:
 
 ```ts
@@ -463,6 +465,7 @@ onMounted(() =>
 ### Wallet disconnection
 
 Call to disconnect the wallet:
+
 ```js
 import { useTonConnectUI } from '@townsquarelabs/ui-vue';
 
@@ -503,7 +506,7 @@ Both methods will provide a fallback implementation of the Web Animations API an
 
 ## Examples
 
-* [Demo dApp](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui) - Example of a dApp with `@townsquarelabs/ui-vue`.
+- [Demo dApp](https://github.com/TownSquareXYZ/demo-dapp-with-vue-ui) - Example of a dApp with `@townsquarelabs/ui-vue`.
 
 ## See also
 
@@ -511,4 +514,3 @@ Both methods will provide a fallback implementation of the Web Animations API an
 - [TON Connect for HTML/JS apps](/v3/guidelines/ton-connect/frameworks/web/)
 
 <Feedback />
-

@@ -13,10 +13,11 @@ Here you can find a **short overview** on [how TON transfers work](/v3/documenta
 Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions) between smart contracts and/or the external world. Each transaction consists of one incoming message and up to 255 outgoing messages.
 
 There are 3 types of messages, that are fully described [here](/v3/documentation/smart-contracts/message-management/sending-messages#types-of-messages). To put it briefly:
-* [external message](/v3/documentation/smart-contracts/message-management/external-messages):
-  *  `external in message` (sometimes called just `external message`) is message that is sent from *outside* of the blockchain to a smart contract *inside* the blockchain.
-  *  `external out message` (usually called `logs message`) is sent from a *blockchain entity* to the *outer world*.
-* [internal message](/v3/documentation/smart-contracts/message-management/internal-messages) is sent from one *blockchain entity* to *another*, can carry some amount of digital assets and arbitrary portion of data.
+
+- [external message](/v3/documentation/smart-contracts/message-management/external-messages):
+  - `external in message` (sometimes called just `external message`) is message that is sent from _outside_ of the blockchain to a smart contract _inside_ the blockchain.
+  - `external out message` (usually called `logs message`) is sent from a _blockchain entity_ to the _outer world_.
+- [internal message](/v3/documentation/smart-contracts/message-management/internal-messages) is sent from one _blockchain entity_ to _another_, can carry some amount of digital assets and arbitrary portion of data.
 
 The common path of any interaction starts with an external message sent to a `wallet` smart contract, which authenticates the message sender using public-key cryptography, takes charge of fee payment, and sends internal blockchain messages. That messages queue form directional acyclic graph, or a tree.
 
@@ -24,9 +25,9 @@ For example:
 
 ![](/img/docs/asset-processing/alicemsgDAG.svg)
 
-* `Alice` use e.g [Tonkeeper](https://tonkeeper.com/) to send an `external message` to her wallet.
-* `external message` is the input message for `wallet A v4` contract with empty source (a message from nowhere, such as [Tonkeeper](https://tonkeeper.com/)).
-* `outgoing message` is the output message for `wallet A v4` contract and input message for `wallet B v4` contract with `wallet A v4` source and `wallet B v4` destination.
+- `Alice` use e.g [Tonkeeper](https://tonkeeper.com/) to send an `external message` to her wallet.
+- `external message` is the input message for `wallet A v4` contract with empty source (a message from nowhere, such as [Tonkeeper](https://tonkeeper.com/)).
+- `outgoing message` is the output message for `wallet A v4` contract and input message for `wallet B v4` contract with `wallet A v4` source and `wallet B v4` destination.
 
 As a result there are 2 transactions with their set of input and output messages.
 
@@ -45,19 +46,21 @@ Smart contracts pay several types of [fees](/v3/documentation/smart-contracts/tr
 ## Digital asset types on TON
 
 TON has three types of digital assets.
+
 - Toncoin, the main token of the network. It is used for all basic operations on the blockchain, for example, paying gas fees or staking for validation.
 - Contract assets, such as tokens and NFTs, which are analogous to the ERC-20/ERC-721 standards and are managed by arbitrary contracts and thus can require custom rules for processing. You can find more info on it's processing in [process NFTs](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) and [process Jettons](/v3/guidelines/dapps/asset-processing/jettons) articles.
 - Native token, which is special kind of assets that can be attached to any message on the network. But these asset is currently not in use since the functionality for issuing new native tokens is closed.
 
 ## Interaction with TON Blockchain
+
 Basic operations on TON Blockchain can be carried out via TonLib. It is a shared library which can be compiled along with a TON node and expose APIs for interaction with the blockchain via so-called lite servers (servers for lite clients). TonLib follows a trustless approach by checking proofs for all incoming data; thus, there is no necessity for a trusted data provider. Methods available to TonLib are listed [in the TL scheme](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L234). They can be used either as a shared library via [wrappers](/v3/guidelines/dapps/asset-processing/payments-processing/#sdks).
 
 ## Read next
 
 After reading this article you can check:
+
 1. [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing) to get how to work with `TON coins`
 2. [Jetton processing](/v3/guidelines/dapps/asset-processing/jettons) to get how to work with `jettons` (sometime called `tokens`)
 3. [NFT processing](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) to get how to work with `NFT` (that is the special type of `jetton`)
 
 <Feedback />
-

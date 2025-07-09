@@ -48,7 +48,7 @@ To efficiently back up your validator, it is essential to copy the key node conf
 
 3. **Node public keys**:  `/var/ton-work/keys`
 
-4. **MyTonCtrl configuration and wallets**:  
+4. **MyTonCtrl configuration and wallets**:
    - If you installed MyTonCtrl as a regular user: `$HOME/.local/share/myton*` (where `$HOME` is your home directory)
    - If you installed MyTonCtrl as root: `/usr/local/bin/mytoncore`
 
@@ -85,11 +85,11 @@ systemctl  stop  mytoncore
 
 #### Apply backed up node configuration files
 
-* Node configuration file: `/var/ton-work/db/config.json`
+- Node configuration file: `/var/ton-work/db/config.json`
 
-* Node private keyring: `/var/ton-work/db/keyring`
+- Node private keyring: `/var/ton-work/db/keyring`
 
-* Node public keys: `/var/ton-work/keys`
+- Node public keys: `/var/ton-work/keys`
 
 #### Set node IP address
 
@@ -100,6 +100,7 @@ If your new node has a different IP address, you need to update the node configu
 ```sh
 chown  -R  validator:validator  /var/ton-work/db
 ```
+
 #### Apply backed-up MyTonCtrl configuration files
 
 Replace `$HOME/.local/share/myton*` with `$ HOME/.local/share/myton*`, where $HOME is the home directory of the user who started the installation of MyTonCtrl with backed-up content. Make sure that the user is the owner of all files you copy.
@@ -162,6 +163,7 @@ Repeat the above command for each management network/address.
 ```sh
 sudo  ufw  allow  proto  udp  from  any  to  any  port  `sudo jq -r '.addrs[0].port' /var/ton-work/db/config.json`
 ```
+
 #### Doublecheck your management networks
 
 :::caution important
@@ -194,6 +196,7 @@ Status: active
 [ 3] <NODE_PORT>/udp            ALLOW IN    Anywhere
 [ 4] <NODE_PORT>/udp (v6)       ALLOW IN    Anywhere (v6)
 ```
+
 #### Expose liteserver port
 
 ```sh
@@ -215,4 +218,3 @@ Regardless of the approach you choose, be sure to [update your new IP address](#
 :::
 
 <Feedback />
-

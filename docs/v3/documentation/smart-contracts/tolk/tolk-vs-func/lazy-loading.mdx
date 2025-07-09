@@ -93,6 +93,7 @@ Both can be used with `lazy`.
 
 Similarly, when reading a union type such as an incoming message, you use `lazy`:
 
+
 ```tolk
 struct (0x12345678) CounterReset { ... }
 ...
@@ -161,7 +162,6 @@ Adding `else` allows you to override this behavior.
 Note that `else` in `match` by type is only allowed with `lazy` because it matches on prefixes.
 Without `lazy`, it's just a regular union, matched by a union tag (`typeid`) on a stack.
 
-
 ## Partial updating
 
 The magic doesn’t stop at reading. The `lazy` keyword also works seamlessly when **writing data back**.
@@ -216,14 +216,12 @@ However, there is another difference unrelated to gas consumption:
 struct Point { x: int8, y: int8 }
 ```
 
+
 If you use `lazy Point` and access only `p.x`, then an input of `FF` (8 bits) is acceptable even though `y` is missing.
 Similarly, `FFFF0000`, which includes 16 bits of extra data, is also fine, as `lazy` ignores any data that is not requested.
-
 
 In most cases, this isn’t an issue. For storage, you have guarantees regarding the data shape, as your contract controls it. For incoming messages, you typically use all fields (otherwise, why include them in the struct?). If there is extra data in the input—who cares? The message can still be deserialized correctly, and I don’t see any problem here.
 
 Perhaps someday, `lazy` will become the default. For now, it remains a distinct keyword highlighting the lazy-loading capability—a killer feature of Tolk.
 
-
 <Feedback />
-

@@ -18,7 +18,7 @@ Each ShardChain is validated by 23 validators, as defined by Network Parameter `
 
 ## Values of stakes: max effective stake
 
-The current `max_factor` in config is __3__, meaning the stake of the _smallest_ validator cannot be more than three times less than the stake of the **largest** one.
+The current `max_factor` in config is **3**, meaning the stake of the _smallest_ validator cannot be more than three times less than the stake of the **largest** one.
 
 The formula with the config parameters:
 
@@ -38,11 +38,11 @@ This algorithm, run by the [Elector smart contract](/v3/documentation/smart-cont
 
 - The Elector then evaluates each potential group of candidates, starting from the largest group and moving to smaller ones:
 
-	- It examines the top candidates in the ordered list, increasing the number one by one.
+  - It examines the top candidates in the ordered list, increasing the number one by one.
 
-	- For each candidate, Elector calculates their **effective stake**. If a candidate's stake is significantly higher than the minimum, it's adjusted down (e.g., if someone staked 310k and the minimum is 100k, but there's a rule capping at three times the minimum, their effective stake is considered as 300k).
+  - For each candidate, Elector calculates their **effective stake**. If a candidate's stake is significantly higher than the minimum, it's adjusted down (e.g., if someone staked 310k and the minimum is 100k, but there's a rule capping at three times the minimum, their effective stake is considered as 300k).
 
-	- It sums up the effective stakes of all candidates in this group.
+  - It sums up the effective stakes of all candidates in this group.
 
 4. **Final selection**: The elector chooses the group of candidates with the highest total effective stake as the validators.
 
@@ -56,13 +56,13 @@ Based on the available stakes of potential validators, optimal values for the mi
 
 3. If there are more participants than the [maximum number](https://tonviewer.com/config#16) of validators, Elector discards the tail of the list. Then Elector does the following:
 
-	* For each cycle __i__ from _1 to N_ (the remaining number of participants), it takes the first __i__ applications from the sorted list.
+   - For each cycle **i** from _1 to N_ (the remaining number of participants), it takes the first **i** applications from the sorted list.
 
-	* It calculates the effective stake, considering the `max_factor`. That is, if a person has put in 310k, but with a `max_factor` of 3, and the minimum stake in the list is 100k Toncoins, then the effective stake will be min(310k, 3*100k) = 300k. One validator node may use up to 600k TON (in this example) in two rounds (half in odd rounds, half in even rounds). To increase the stake, it is necessary to set up multiple validator nodes.
+   - It calculates the effective stake, considering the `max_factor`. That is, if a person has put in 310k, but with a `max_factor` of 3, and the minimum stake in the list is 100k Toncoins, then the effective stake will be min(310k, 3*100k) = 300k. One validator node may use up to 600k TON (in this example) in two rounds (half in odd rounds, half in even rounds). To increase the stake, it is necessary to set up multiple validator nodes.
 
-	* It calculates the total effective stake of all __i__ participants.
+   - It calculates the total effective stake of all **i** participants.
 
-Once Elector identifies such an __i__, where the total effective stake is maximized, we declare these __i__ participants as validators.
+Once Elector identifies such an **i**, where the total effective stake is maximized, we declare these **i** participants as validators.
 
 ## Positive incentives
 
@@ -92,7 +92,7 @@ On TON Blockchain, there are generally two ways validators can be penalized for 
 
 If a validator fails to participate in block creation and transaction signing for a significant period during a validation round, they may incur a fine based on the **Standard fine** parameter. As of April 2023, the Standard fine that can be accrued is 101 TON (Network Parameter `ConfigParam40:MisbehaviorPunishmentConfig`).
 
-On the TON network, slashing penalties—also known as fines imposed on validators—allow any participant to file a complaint if they suspect a validator is misbehaving. When submitting a complaint, the participant must provide cryptographic evidence of the alleged misbehavior for submission to the Electors. 
+On the TON network, slashing penalties—also known as fines imposed on validators—allow any participant to file a complaint if they suspect a validator is misbehaving. When submitting a complaint, the participant must provide cryptographic evidence of the alleged misbehavior for submission to the Electors.
 
 During the `stake_held_for` dispute resolution period, all validators on the network assess the validity of the complaints and vote on whether to pursue each complaint collectively. They also evaluate the legitimacy of the provided evidence and determine the appropriate penalties.
 
@@ -162,9 +162,8 @@ If you don't want to do this please consider [using staking services](https://to
 
 ## See also
 
-* [Running a validator](/v3/guidelines/nodes/running-nodes/validator-node)
-* [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
-* [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
+- [Running a validator](/v3/guidelines/nodes/running-nodes/validator-node)
+- [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
+- [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
 
 <Feedback />
-

@@ -24,7 +24,7 @@ To set up the MyTonCtrl Alerting Bot, follow these steps:
 
 3. The bot can send messages to either private messages or groups. If you want to receive messages from the bot in a group chat, make sure to add the bot to that group.
 
-4. Visit [@getmyid_bot]([https://t.me/getmyid_bot](https://t.me/getmyid_bot)) and press the **Start** button. The bot will reply with your `ChatId`; you can use this ID if you wish to receive messages directly to your Telegram account.
+4. Visit [@getmyid_bot](\[https://t.me/getmyid_bot]\(https://t.me/getmyid_bot\)) and press the **Start** button. The bot will reply with your `ChatId`; you can use this ID if you wish to receive messages directly to your Telegram account.
 
 If you want to receive messages in a group, add the bot to the group, and it will provide you with the group's `ChatId`.
 
@@ -32,15 +32,15 @@ If you want to receive messages in a group, add the bot to the group, and it wil
 
 1. Enable the `alert-bot` using the following command:
 
-	```bash
-	MyTonCtrl> enable_mode alert-bot
-	```
+   ```bash
+   MyTonCtrl> enable_mode alert-bot
+   ```
 
 2. Execute the command:
 
-	```bash
-	MyTonCtrl> setup_alert_bot <bot_token> <chat_id>
-	```
+   ```bash
+   MyTonCtrl> setup_alert_bot <bot_token> <chat_id>
+   ```
 
 If you configure everything correctly, you will receive a welcome message listing all available alerts.
 
@@ -49,7 +49,7 @@ If you configure everything correctly, you will receive a welcome message listin
 The MyTonCtrl Alert Bot supports the following alerts:
 
 - The validator's wallet balance is less than 10 Toncoins.
-  
+
 - The node's database usage exceeds 80%.
 
 - The node's database usage exceeds 95%.
@@ -75,30 +75,30 @@ The MyTonCtrl Alert Bot supports the following alerts:
 - The validator's stake has not been returned.
 
 - There is an active network proposal that has received more than 50% of the required votes, but the validator has not voted on it.
- 
+
 ## Enabling and disabling alerts
 
 To enable or disable alerts, use the following commands:
 
-*  To enable an alert, use the command 
-	```bash
-	MyTonCtrl> enable_alert <alert-name>
-	```
-*  To disable an alert, use the command :
-	```bash
-	MyTonCtrl> disable_alert <alert-name>
-	```
-*  To check the status of alerts, use the command:
- 	```bash
-	MyTonCtrl> list_alerts
-	```
-* To send a test message, use the command:
-	```bash
-	MyTonCtrl> test_alert
-	```
-* To disable the Alert Bot, use the command: 
-	```bash
-	MyTonCtrl> disable_mode  alert-bot
-	```
-<Feedback />
+- To enable an alert, use the command
+  ```bash
+  MyTonCtrl> enable_alert <alert-name>
+  ```
+- To disable an alert, use the command :
+  ```bash
+  MyTonCtrl> disable_alert <alert-name>
+  ```
+- To check the status of alerts, use the command:
+  ```bash
+  MyTonCtrl> list_alerts
+  ```
+- To send a test message, use the command:
+  ```bash
+  MyTonCtrl> test_alert
+  ```
+- To disable the Alert Bot, use the command:
+  ```bash
+  MyTonCtrl> disable_mode  alert-bot
+  ```
 
+<Feedback />

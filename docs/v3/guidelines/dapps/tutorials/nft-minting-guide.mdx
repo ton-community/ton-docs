@@ -2,29 +2,32 @@ import Feedback from '@site/src/components/Feedback';
 import { BlockMath, InlineMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
 
-# Step by step NFT collection minting 
+# Step by step NFT collection minting
 
 ## 👋 Introduction
+
 Non-fungible tokens (NFTs) have become one of the hottest topics in the world of digital art and collectibles. NFTs are unique digital assets that use blockchain technology to verify ownership and authenticity. They have opened new possibilities for creators and collectors to monetize and trade digital art, music, videos, and other forms of digital content. In recent years, the NFT market has exploded, with some high-profile sales reaching millions of dollars. In this article, we will build an NFT collection on TON step by step.
 
 **This is the beautiful collection of ducks you will create by the end of this tutorial:**
 
 ![](/img/tutorials/nft/collection.png)
 
-
 ## 🦄 What you will learn
+
 1. You will mint an NFT collection on TON.
 2. You will understand how NFTs on TON work.
 3. You will put an NFT on sale.
 4. You will upload metadata to [pinata.cloud](https://pinata.cloud).
 
 ## 💡 Prerequisites
+
 You must already have a testnet wallet with at least 2 TON. You can get testnet coins from [@testgiver_ton_bot](https://t.me/testgiver_ton_bot).
 
-:::info How to use the testnet on my Tonkeeper wallet?  
+:::info How to use the testnet on my Tonkeeper wallet?
+
 1. Open Wallets list.
 2. Create a new Testnet wallet: Add wallet → Add Testnet Account.
-:::
+   :::
 
 We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key and api_secret. The official Pinata [documentation](https://docs.pinata.cloud/account-management/api-keys) can help with that. Once you have these API tokens, I’ll be waiting for you here!
 
@@ -32,7 +35,7 @@ We will use Pinata as our IPFS storage system, so you also need to create an acc
 
 Before starting the main part of our tutorial, we need to understand how NFTs work on TON. Unexpectedly, we will first explain of how NFTs work on Ethereum (ETH), to highlight the uniqueness of NFT implementation on TON compared to other blockchains.
 
-### NFT implementation on ETH 
+### NFT implementation on ETH
 
 The implementation of the NFT in ETH is extremely simple. There is 1 main contract for the collection, which stores a simple hashmap containing the NFT data for that collection. All requests related to this collection (such as transferring an NFT, putting it up for sale, etc.) are sent directly to the single contract.
 
@@ -42,10 +45,9 @@ The implementation of the NFT in ETH is extremely simple. There is 1 main contra
 
 The [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) in TON describes the issues of using this model:
 
-* Unpredictable gas consumption. In TON, gas consumption for dictionary operations depends on exact set of keys. TON is an asynchronous blockchain, meaning you cannot predict how many messages from other users will reach a smart contract before yours. This uncertainty makes it difficult to determine gas costs, especially in smart contract chains like wallet → NFT smart contract → auction → NFT smart contract. If gas costs cannot be predicted, issues may arise where ownership of the NFT smart contract changes, but there are not enough Toncoins for the auction operation. Using smart contracts without dictionaries allows for deterministic gas consumption.
+- Unpredictable gas consumption. In TON, gas consumption for dictionary operations depends on exact set of keys. TON is an asynchronous blockchain, meaning you cannot predict how many messages from other users will reach a smart contract before yours. This uncertainty makes it difficult to determine gas costs, especially in smart contract chains like wallet → NFT smart contract → auction → NFT smart contract. If gas costs cannot be predicted, issues may arise where ownership of the NFT smart contract changes, but there are not enough Toncoins for the auction operation. Using smart contracts without dictionaries allows for deterministic gas consumption.
 
-* Scalability issues (becomes a bottleneck). TON scales through sharding, which partitions the network into shardchains under load. A single, large smart contract for a popular NFT contradicts this concept because many transactions would refer to one contract, creating a bottleneck. Although TON supports sharded smart contracts (see the whitepaper), they are not yet implemented.
-
+- Scalability issues (becomes a bottleneck). TON scales through sharding, which partitions the network into shardchains under load. A single, large smart contract for a popular NFT contradicts this concept because many transactions would refer to one contract, creating a bottleneck. Although TON supports sharded smart contracts (see the whitepaper), they are not yet implemented.
 
 **TL;DR**
 The ETH solution is not scalable and is unsuitable for an asynchronous blockchain like TON.
@@ -61,6 +63,7 @@ You can check out the article on [NFT processing on TON](/v3/guidelines/dapps/as
 :::
 
 ## ⚙ Setup development environment
+
 Let's start by creating an empty project:
 
 1. Create a new folder
@@ -130,21 +133,24 @@ yarn add @pinata/sdk dotenv @ton/ton @ton/crypto @ton/core buffer
 ```
 
 9. Create a `.env` file and add your own data based on this template
+
 ```
 PINATA_API_KEY=your_api_key
 PINATA_API_SECRET=your_secret_api_key
 MNEMONIC=word1 word2 word3 word4
 TONCENTER_API_KEY=aslfjaskdfjasasfas
 ```
+
 You can get a TON Center API key from [@tonapibot](https://t.me/tonapibot) and choose mainnet or testnet. Store the 24-word seed phrase of the collection owner’s wallet in the MNEMONIC variable.
 
 Great! Now we are ready to start writing code for our project.
 
 ### Write helper functions
 
-First, let's create the `openWallet` function in `src/utils.ts`. This function will open our wallet using a mnemonic and return its  publicKey/secretKey. 
+First, let's create the `openWallet` function in `src/utils.ts`. This function will open our wallet using a mnemonic and return its  publicKey/secretKey.
 
 We get a pair of keys based on 24 words (a seed phrase):
+
 ```ts
 import { KeyPair, mnemonicToPrivateKey } from "@ton/crypto";
 import { beginCell, Cell, OpenedContract} from "@ton/core";
@@ -160,6 +166,7 @@ export async function openWallet(mnemonic: string[], testnet: boolean) {
 ```
 
 Create a class instance to interact with toncenter:
+
 ```ts
   const toncenterBaseEndpoint: string = testnet
     ? "https://testnet.toncenter.com"
@@ -169,9 +176,10 @@ Create a class instance to interact with toncenter:
     endpoint: `${toncenterBaseEndpoint}/api/v2/jsonRPC`,
     apiKey: process.env.TONCENTER_API_KEY,
   });
-```  
+```
 
 Finally, open our wallet:
+
 ```ts
   const wallet = WalletContractV4.create({
       workchain: 0,
@@ -183,9 +191,10 @@ Finally, open our wallet:
 }
 ```
 
-Nice! After that, we'll create the main entry point for our project—`src/app.ts`. 
+Nice! After that, we'll create the main entry point for our project—`src/app.ts`.
 Here, we will use the newly created `openWallet` function and call our main function, `init`.
 Thats enough for now.
+
 ```ts
 import * as dotenv from "dotenv";
 
@@ -201,7 +210,8 @@ async function init() {
 void init();
 ```
 
-Next, let's create a `delay.ts` file in the `src` directory, which will contain a function that waits until `seqno` increases. 
+Next, let's create a `delay.ts` file in the `src` directory, which will contain a function that waits until `seqno` increases.
+
 ```ts
 import { OpenedWallet } from "./utils";
 
@@ -222,29 +232,28 @@ export function sleep(ms: number): Promise<void> {
 Simply put, seqno is a counter that tracks outgoing transactions from a wallet. It helps prevent Replay Attacks. hen a transaction is sent to a wallet smart contract, it compares the seqno field in the transaction with the one stored in the wallet. If they match, the transaction is accepted, and the stored seqno increments by one. If they don't match, the transaction is discarded. This is why we need to wait a bit after every outgoing transaction.
 :::
 
-
 ## 🖼 Prepare metadata
 
 Metadata is simple information that describes an NFT or an NFT collection (e.g., name, description, etc.).
 
-First, we need to store NFT images in /data/images/ and name them `0.png`, `1.png`, ... for photos, and `logo.png` for avatars of our collection. You can either [download pack](/img/tutorials/nft/ducks.zip) of ducks images or use your own images. Store metadata files in `/data/metadata/`. 
+First, we need to store NFT images in /data/images/ and name them `0.png`, `1.png`, ... for photos, and `logo.png` for avatars of our collection. You can either [download pack](/img/tutorials/nft/ducks.zip) of ducks images or use your own images. Store metadata files in `/data/metadata/`.
 
 ### NFT specifications
 
 Most projects on TON follow these metadata specifications for NFT collections:
 
-
-Name | Explanation 
----|---
-name | Collection name
-description |	Collection description
-image | Link to the avatar image. Supported formats: https, ipfs, TON Storage.
-cover_image	| Link to the collection cover image.
-social_links | List of up to 10 links to the project's social media profiles.
+| Name          | Explanation                                                            |
+| ------------- | ---------------------------------------------------------------------- |
+| name          | Collection name                                                        |
+| description   | Collection description                                                 |
+| image         | Link to the avatar image. Supported formats: https, ipfs, TON Storage. |
+| cover_image  | Link to the collection cover image.                                    |
+| social_links | List of up to 10 links to the project's social media profiles.         |
 
 ![image](/img/tutorials/nft/collection-metadata.png)
 
 Based on this, let's create our own metadata file, `collection.json`, to describe the NFT collection!
+
 ```json
 {
   "name": "Ducks on TON",
@@ -252,24 +261,24 @@ Based on this, let's create our own metadata file, `collection.json`, to describ
   "social_links": ["https://t.me/DucksOnTON"]
 }
 ```
+
 Note: We’re not adding the "image" parameter just yet—you’ll see why later!
 
 Once done, you can create as many NFT metadata files as you like.
 
 Each NFT item follows these metadata specifications:
 
-Name | Explanation 
----|---
-name | NFT name. Recommended length: 15-30 characters
-description | NFT description. Recommended length: Up to 500 characters
-image | Link to the NFT image. 
-attributes | List of NFT attributes, where a trait_type (attribute name) and value (a short description) are specified.
-lottie | Link to a JSON file with Lottie animation (if specified, the animation will play on the NFT’s page).
-content_url	| Link to additional content.
-content_type | Type of content from the content_url link (e.g., video/mp4).
+| Name          | Explanation                                                                                                 |
+| ------------- | ----------------------------------------------------------------------------------------------------------- |
+| name          | NFT name. Recommended length: 15-30 characters                                                              |
+| description   | NFT description. Recommended length: Up to 500 characters                                                   |
+| image         | Link to the NFT image.                                                                                      |
+| attributes    | List of NFT attributes, where a trait_type (attribute name) and value (a short description) are specified. |
+| lottie        | Link to a JSON file with Lottie animation (if specified, the animation will play on the NFT’s page).        |
+| content_url  | Link to additional content.                                                                                 |
+| content_type | Type of content from the content_url link (e.g., video/mp4).                                               |
 
 ![image](/img/tutorials/nft/item-metadata.png)
-
 
 ```json
 {
@@ -284,6 +293,7 @@ After that, you can create as many files of an NFT item with their metadata as y
 ### Upload metadata
 
 Now let's write some code, that will upload our metadata files to IPFS. Create a `metadata.ts` file in `src` directory and add all needed imports:
+
 ```ts
 import pinataSDK from "@pinata/sdk";
 import { readdirSync } from "fs";
@@ -292,6 +302,7 @@ import path from "path";
 ```
 
 After that, we need to create a function that will actually upload all files from our folder to IPFS:
+
 ```ts
 export async function uploadFolderToIPFS(folderPath: string): Promise<string> {
   const pinata = new pinataSDK({
@@ -324,12 +335,15 @@ export async function updateMetadataFiles(metadataFolderPath: string, imagesIpfs
   }));
 }
 ```
+
 Here we first read all of the files in the specified folder:
+
 ```ts
 const files = readdirSync(metadataFolderPath);
 ```
 
 Iterate over each file and get its content
+
 ```ts
 const filePath = path.join(metadataFolderPath, filename)
 const file = await readFile(filePath);
@@ -340,6 +354,7 @@ const metadata = JSON.parse(file.toString());
 After that, we assign the value `ipfs://{IpfsHash}/{index}.jpg` to the image field. If this file is mnot the last one in the folder, assign `ipfs://{imagesIpfsHash}/logo.jpg` and rewrite the file with new data.
 
 Full code of metadata.ts:
+
 ```ts
 import pinataSDK from "@pinata/sdk";
 import { readdirSync } from "fs";
@@ -376,11 +391,13 @@ export async function updateMetadataFiles(metadataFolderPath: string, imagesIpfs
 
 Great, let's call these methods in our app.ts file.
 Add the imports of our functions:
+
 ```ts
 import { updateMetadataFiles, uploadFolderToIPFS } from "./src/metadata";
 ```
 
 Save the variables with the path to the metadata/images folder and call our functions to load the metadata.
+
 ```ts
 async function init() {
   const metadataFolderPath = "./data/metadata/";
@@ -407,7 +424,7 @@ After that you can run `yarn start` and see the link to your deployed metadata!
 
 ### Encode offchain content
 
-How will our metadata files stored in the smart contract be referenced? This question can be fully answered by the [Token Data Standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md). 
+How will our metadata files stored in the smart contract be referenced? This question can be fully answered by the [Token Data Standart](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md).
 In some cases, it is not enough to simply provide the desired flag and the link as ASCII characters. That is why let's consider splitting our link into several parts using the snake format.
 
 First, create the function in `./src/utils.ts`. The function that will convert our buffer into chunks:
@@ -424,6 +441,7 @@ function bufferToChunks(buff: Buffer, chunkSize: number) {
 ```
 
 And create a function that will bind all the chunks into 1 snake-cell:
+
 ```ts
 function makeSnakeCell(data: Buffer): Cell {
   const chunks = bufferToChunks(data, 127);
@@ -455,6 +473,7 @@ function makeSnakeCell(data: Buffer): Cell {
 ```
 
 Finally, we need to create a function that will encode the offchain content into cells using this functions:
+
 ```ts
 export function encodeOffChainContent(content: string) {
   let data = Buffer.from(content);
@@ -465,9 +484,11 @@ export function encodeOffChainContent(content: string) {
 ```
 
 ## 🚢 Deploy NFT collection
+
 Once our metadata is ready and uploaded to IPFS, we can proceed with deploying our collection!
 
 We will create a file to store all logic related to our collection in `/contracts/NftCollection.ts`. As always, we start with imports:
+
 ```ts
 import {
   Address,
@@ -482,6 +503,7 @@ import { encodeOffChainContent, OpenedWallet } from "../utils";
 ```
 
 Next, we declare a type that describes the initial data required for our collection:
+
 ```ts
 export type collectionData = {
   ownerAddress: Address;
@@ -493,16 +515,17 @@ export type collectionData = {
 }
 ```
 
-Name | Explanation 
----|---
-ownerAddress |	The address set as the collection owner. Only the owner can mint new NFTs
-royaltyPercent | 	The percentage of each sale that goes to the specified address
-royaltyAddress | The wallet address that receives royalties from sales of this NFT collection
-nextItemIndex | The index assigned to the next NFT item
-collectionContentUrl | The URL of the collection metadata
-commonContentUrl | he base URL for NFT item metadata
+| Name                 | Explanation                                                                  |
+| -------------------- | ---------------------------------------------------------------------------- |
+| ownerAddress         | The address set as the collection owner. Only the owner can mint new NFTs    |
+| royaltyPercent       | The percentage of each sale that goes to the specified address               |
+| royaltyAddress       | The wallet address that receives royalties from sales of this NFT collection |
+| nextItemIndex        | The index assigned to the next NFT item                                      |
+| collectionContentUrl | The URL of the collection metadata                                           |
+| commonContentUrl     | he base URL for NFT item metadata                                            |
 
 First, let's write a private method that returns a cell containing our collection's code.
+
 ```ts
 export class NftCollection {
   private collectionData: collectionData;
@@ -518,6 +541,7 @@ export class NftCollection {
   }
 }
 ```
+
 In this method, we simply read the cell from the base64 representation of the collection smart contract.
 
 Now, we need to create the cell containing our collection’s initial data. Essentially, we must store collectionData correctly. First, we create an empty cell and store the collection owner's address and the index of the next item to be minted. Let’s define the next private method:
@@ -558,9 +582,6 @@ dataCell.storeRef(NftItemCodeCell);
 The smart contract stores royalty parameters using royaltyFactor, royaltyBase, and royaltyAddress. The royalty percentage is calculated using the formula: <InlineMath math="\left( \frac{\text{royaltyFactor}}{\text{royaltyBase}} \right) \times 100\%" />
 . If we know royaltyPercent, calculating royaltyFactor is straightforward.
 
-
-
-
 ```ts
 const royaltyBase = 1000;
 const royaltyFactor = Math.floor(data.royaltyPercent * royaltyBase);
@@ -579,8 +600,8 @@ return dataCell.endCell();
 }
 ```
 
-
 Now, let's write a getter that returns the `StateInit` of our collection.
+
 ```ts
 public get stateInit(): StateInit {
   const code = this.createCodeCell();
@@ -591,14 +612,15 @@ public get stateInit(): StateInit {
 ```
 
 We also need a getter that calculates the collection’s address. In TON, a smart contract’s address is simply the hash of its `StateInit`.
+
 ```ts
 public get address(): Address {
     return contractAddress(0, this.stateInit);
   }
 ```
 
-
 The final step is writing a method to deploy the smart contract to the blockchain!
+
 ```ts
 public async deploy(wallet: OpenedWallet) {
     const seqno = await wallet.contract.getSeqno();
@@ -617,8 +639,10 @@ public async deploy(wallet: OpenedWallet) {
     return seqno;
   }
 ```
+
 Deploying a new smart contract in our case means sending a message from our wallet to the collection address, which we can calculate if we have `StateInit`, along with its `StateInit`.
 When the owner mints a new NFT, the collection accepts the owner's message and sends a new message to the created NFT smart contract, which requires a fee. Let’s write a method to replenish the collection’s balance based on the number of NFTs to be minted:
+
 ```ts
 public async topUpBalance(
     wallet: OpenedWallet,
@@ -670,8 +694,8 @@ console.log(`Collection deployed: ${collection.address}`);
 await waitSeqno(seqno, wallet);
 ```
 
-
 ## 🚢 Deploy NFT items
+
 Once our collection is ready, we can start minting our NFTs! We will store the code in `src/contracts/NftItem.ts`
 
 Unexpectedly, we need to return to `NftCollection.ts `and add the following type near `collectionData` at the top of the file.
@@ -685,13 +709,13 @@ export type mintParams = {
   commonContentUrl: string
 }
 ```
-Name | Explanation 
----|---
-itemOwnerAddress |	The address set as the item's owner
-itemIndex | The index of the NFT item
-amount | The amount of TON sent to the NFT upon deployment
-commonContentUrl | The full link to the item URL, which is "commonContentUrl" of the collection + this commonContentUrl
 
+| Name             | Explanation                                                                                          |
+| ---------------- | ---------------------------------------------------------------------------------------------------- |
+| itemOwnerAddress | The address set as the item's owner                                                                  |
+| itemIndex        | The index of the NFT item                                                                            |
+| amount           | The amount of TON sent to the NFT upon deployment                                                    |
+| commonContentUrl | The full link to the item URL, which is "commonContentUrl" of the collection + this commonContentUrl |
 
 Next, we create a method in the NftCollection class to construct the body for deploying an NFT item. First, we store a bit to indicate to the collection smart contract that we want to create a new NFT. Then, we store the queryId and the index of the NFT item.
 
@@ -705,12 +729,14 @@ public createMintBody(params: mintParams): Cell {
 ```
 
 After that, we create an empty cell and store the owner's address:
+
 ```ts
     const nftItemContent = beginCell();
     nftItemContent.storeAddress(params.itemOwnerAddress);
 ```
 
 We store a reference in this cell (containing the NFT item content) to the item's metadata.
+
 ```ts
     const uriContent = beginCell();
     uriContent.storeBuffer(Buffer.from(params.commonContentUrl));
@@ -718,11 +744,13 @@ We store a reference in this cell (containing the NFT item content) to the item'
 ```
 
 We store a reference to the cell with the item content in our body cell.
+
 ```ts
     body.storeRef(nftItemContent.endCell());
     return body.endCell();
 }
 ```
+
 Now, we return to `NftItem.ts`. The only step left is to send a message to our collection contract with the body of our NFT.
 
 ```ts
@@ -776,6 +804,7 @@ static async getAddressByIndex(
 ```
 
 Call the get-method to return the NFT address based on its index.
+
 ```ts
   const response = await client.runMethod(
     collectionAddress,
@@ -785,13 +814,13 @@ Call the get-method to return the NFT address based on its index.
 ```
 
 Parse the returned address.
+
 ```ts
     return response.stack.readAddress();
 }
 ```
 
 Now, let's add some code to `app.ts` to automate the NFT minting process:
-
 
 ```ts
   import { NftItem } from "./contracts/NftItem";
@@ -807,11 +836,13 @@ let index = 0;
 ```
 
 Next, top up the collection’s balance.
+
 ```ts
 seqno = await collection.topUpBalance(wallet, files.length);
 await waitSeqno(seqno, wallet);
 console.log(`Balance top-upped`);
 ```
+
 Finally, iterate through each metadata file, create an `NftItem` instance, and call the deploy method. After that, wait until the seqno increases.
 
 ```ts
@@ -841,7 +872,9 @@ To list an NFT for sale, we need two smart contracts:
 - **Sale contract** - Manages the logic for buying and canceling sales.
 
 ### Deploy the marketplace
+
 Create a new file: `/contracts/NftMarketplace.ts`. Create a basic class that accepts the marketplace owner’s address and generates a cell with the smart contract code and initial data (we will use [basic version of NFT-Marketplace smart contract](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-marketplace.fc)).
+
 ```ts
 import {
   Address,
@@ -885,6 +918,7 @@ export class NftMarketplace {
 ```
 
 Implement a method to calculate the smart contract address based on `StateInit`.
+
 ```ts
 public get address(): Address {
     return contractAddress(0, this.stateInit);
@@ -934,7 +968,8 @@ console.log("Successfully deployed new marketplace");
 
 Now, we can deploy the NFT sale smart contract. How does it work?Transfer the NFT to the sale contract by changing its owner in the item data. In this tutorial, we will use [nft-fixprice-sale-v2](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v2.fc) smart contract.
 
-Create a new file: `/contracts/NftSale.ts`. Declare a type that describes the sale contract data. 
+Create a new file: `/contracts/NftSale.ts`. Declare a type that describes the sale contract data.
+
 ```ts
 import {
   Address,
@@ -976,6 +1011,7 @@ export class NftSale {
 ```
 
 We will begin with creating a cell with fee details:
+
 - The address receiving the marketplace fee.
 - The TON amount sent as a marketplace fee.
 - The address receiving the royalty from the sale.
@@ -994,6 +1030,7 @@ private createDataCell(): Cell {
 ```
 
 Following that we can create an empty cell and just store information from saleData in the correct order. Right after that, store the reference to the cell with the fees information:
+
 ```ts
   const dataCell = beginCell();
 
@@ -1042,12 +1079,12 @@ public async deploy(wallet: OpenedWallet): Promise<number> {
       .endCell();
 ```
 
-Create a cell with the message body. 
+Create a cell with the message body.
+
 - Set op-code = 1 to indicate a new sale contract deployment.
 - Store the coins sent to the new sale contract.
 - Store two references: StateInit of the new contract; the body sent to the new contract.
 - Send the message to deploy the contract.
-
 
 ```ts
   const payload = beginCell();
@@ -1080,6 +1117,7 @@ Finally, let's send our message:
 Once the sale contract is deployed, the only step left is to transfer ownership of the NFT item to the sale contract’s address.
 
 ### Transferring the item
+
 Transferring an item means sending a message from the owner’s wallet to the smart contract with the new owner's information.
 
 Go to `NftItem.ts` and create a new static method in NftItem class to construct the transfer message body:
@@ -1099,6 +1137,7 @@ static createTransferBody(params: {
 ```
 
 Include the following details:
+
 - Op-code, query-id, and the new owner's address.
 - The address where a confirmation response will be sent.
 - The remaining incoming message coins.
@@ -1187,6 +1226,7 @@ await waitSeqno(seqno, wallet);
 ```
 
 ... and transfer it!
+
 ```ts
 await NftItem.transfer(wallet, nftToSaleAddress, nftSaleContract.address);
 ```
@@ -1199,7 +1239,7 @@ yarn start
 
 Go to `https://testnet.getgems.io/collection/{YOUR_COLLECTION_ADDRESS_HERE}` and look to this perfect ducks!
 
-## Conclusion 
+## Conclusion
 
 Today, you learned a lot about TON and successfully created your own NFT collection on the testnet! If you have any questions or spot an error, feel free to contact the author: [@coalus](https://t.me/coalus)
 
@@ -1208,11 +1248,12 @@ Today, you learned a lot about TON and successfully created your own NFT collect
 - [GetGems NFT-contracts](https://github.com/getgems-io/nft-contracts)
 - [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
 
-## About the author 
+## About the author
+
 - _Coalus_ on [Telegram](https://t.me/coalus) or [GitHub](https://github.com/coalus)
 
 ## See also
- - [NFT use cases](/v3/documentation/dapps/defi/nft)
+
+- [NFT use cases](/v3/documentation/dapps/defi/nft)
 
 <Feedback />
-

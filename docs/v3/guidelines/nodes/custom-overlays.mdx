@@ -27,7 +27,7 @@ MyTonCtrl> delete_custom_overlay default
 
 ### Collect ADNL  addresses
 
-To add validators to a custom overlay, you can use either their `fullnode adnl id` available with `validator-console -c getconfig` or `validator adnl id`, which can be found in MyTonCtrl's status. 
+To add validators to a custom overlay, you can use either their `fullnode adnl id` available with `validator-console -c getconfig` or `validator adnl id`, which can be found in MyTonCtrl's status.
 
 To add liteservers to a custom overlay, you must use their `fullnode adnl id`.
 
@@ -88,28 +88,27 @@ To make sure that the node has deleted the custom overlay, check MyTonCtrl's `li
 
 List of validator-console commands for managing custom overlays:
 
-* `addcustomoverlay <path_to_config>`: Adds a custom overlay to the local node. Note that this configuration must be in a format different from the config used for MyTonCtrl:
+- `addcustomoverlay <path_to_config>`: Adds a custom overlay to the local node. Note that this configuration must be in a format different from the config used for MyTonCtrl:
 
-    ```json
-    {
-      "name": "OverlayName",
-      "nodes": [
-        {
-          "adnl_id": "adnl_address_b64_1",
-          "msg_sender": true,
-          "msg_sender_priority": 1
-        },
-        {
-          "adnl_id": "adnl_address_b64_2",
-          "msg_sender": false
-        }, ...
-      ]
-    }
-    ```
+  ```json
+  {
+    "name": "OverlayName",
+    "nodes": [
+      {
+        "adnl_id": "adnl_address_b64_1",
+        "msg_sender": true,
+        "msg_sender_priority": 1
+      },
+      {
+        "adnl_id": "adnl_address_b64_2",
+        "msg_sender": false
+      }, ...
+    ]
+  }
+  ```
 
-* `delcustomoverlay <name>`: Removes the custom overlay from the node.
+- `delcustomoverlay <name>`: Removes the custom overlay from the node.
 
-* `showcustomoverlays`: Displays a list of custom overlays known to the node.
+- `showcustomoverlays`: Displays a list of custom overlays known to the node.
 
 <Feedback />
-

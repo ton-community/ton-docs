@@ -16,11 +16,11 @@ This approach works well when the number of TON users is within the range of a f
 
 **Accelerator** is an upcoming update designed to improve blockchain scalability. Its main features are:
 
-*  **Partial nodes**: A node will be able to monitor specific shards of the blockchain instead of the entire set of shards.
+- **Partial nodes**: A node will be able to monitor specific shards of the blockchain instead of the entire set of shards.
 
-*  **Liteserver infrastructure**: Liteserver operators will be able to configure each LS to monitor a set of shards, and lite-clients will select a suitable LS for each request.
+- **Liteserver infrastructure**: Liteserver operators will be able to configure each LS to monitor a set of shards, and lite-clients will select a suitable LS for each request.
 
-*  **Collator/validator separation**: Validators will only monitor MasterChain, significantly reducing their load.
+- **Collator/validator separation**: Validators will only monitor MasterChain, significantly reducing their load.
 
 Validator will use new **collator nodes** to collate new shard blocks.
 
@@ -45,7 +45,7 @@ The BaseChain includes a parameter called `monitor_min_split` in `ConfigParam 12
 - Shards with the prefix `0:a000000000000000`
 - Shards with the prefix `0:e000000000000000`
 
-Nodes can only monitor an entire group of shards at once. For instance, a node can choose to monitor all shards with the prefix `0:2000000000000000` but cannot selectively monitor just `0:1000000000000000` without also including `0:3000000000000000`. 
+Nodes can only monitor an entire group of shards at once. For instance, a node can choose to monitor all shards with the prefix `0:2000000000000000` but cannot selectively monitor just `0:1000000000000000` without also including `0:3000000000000000`.
 
 It is guaranteed that shards from different groups will not merge. This guarantees that a monitored shard will not unexpectedly merge with a non-monitored shard.
 
@@ -53,15 +53,15 @@ It is guaranteed that shards from different groups will not merge. This guarante
 
 To update your node to the latest commit of the `testnet` branch, follow these instructions:
 
-* By default, a node monitors all shards. You can disable this behavior by adding the `-M` flag to the `validator-engine`.
+- By default, a node monitors all shards. You can disable this behavior by adding the `-M` flag to the `validator-engine`.
 
-* When you use the `-M` flag, the node will only monitor the MasterChain. If you want to monitor specific BaseChain shards, use the `--add-shard <wc:shard>` flag. For example:
+- When you use the `-M` flag, the node will only monitor the MasterChain. If you want to monitor specific BaseChain shards, use the `--add-shard <wc:shard>` flag. For example:
 
-	```
-	validator-engine ... -M --add-shard 0:2000000000000000 --add-shard 0:e000000000000000
-	```
+  ```
+  validator-engine ... -M --add-shard 0:2000000000000000 --add-shard 0:e000000000000000
+  ```
 
-* These flags will configure the node to monitor all shards with the prefixes `0:2000000000000000` and `0:e000000000000000`. You can either add these flags to an existing node or launch a new node with them included.
+- These flags will configure the node to monitor all shards with the prefixes `0:2000000000000000` and `0:e000000000000000`. You can either add these flags to an existing node or launch a new node with them included.
 
 #### Notes:
 
@@ -72,13 +72,16 @@ To update your node to the latest commit of the `testnet` branch, follow these i
 3. The command `--add-shard 0:0800000000000000` will add the entire shard group associated with the prefix `0:2000000000000000` due to the `monitor_min_split` configuration.
 
 ### Low-level configuration
+
 `--add-shard` flag is a shorthand for certain validator console commands.
 A node stores a list of shards to monitor in the config (see file `db/config.json`, section `shards_to_monitor`).
 This list can be modified using `validator-engine-console`:
+
 ```
 add-shard <wc>:<shard>
 del-shard <wc>:<shard>
 ```
+
 The `--add-shard X` flag is equivalent to the `add-shard X` command.
 
 ## Lite client configuration
@@ -86,6 +89,7 @@ The `--add-shard X` flag is equivalent to the `add-shard X` command.
 If you have multiple liteservers, each configured to monitor certain shards, you can list them in the `liteservers_v2` section of the global config.
 
 See the example:
+
 ```json
 {
   "liteservers_v2": [
@@ -122,16 +126,17 @@ See the example:
 ```
 
 This config includes two liteservers:
-* The first one monitors shards with prefixes `0:2000000000000000` and `0:a000000000000000`.
-* The second one monitors shards with prefixes `0:6000000000000000` and `0:e000000000000000`.
+
+- The first one monitors shards with prefixes `0:2000000000000000` and `0:a000000000000000`.
+- The second one monitors shards with prefixes `0:6000000000000000` and `0:e000000000000000`.
 
 Both liteservers monitor MasterChain, so it is not necessary to include MasterChain explicitly in the configuration.
 
 #### Note:
 
-* To obtain the value for `"shard": 6917529027641081856`, convert the shard ID in hexadecimal (`6000000000000000`) to decimal within the range of `[-2^63, 2^63)`.
+- To obtain the value for `"shard": 6917529027641081856`, convert the shard ID in hexadecimal (`6000000000000000`) to decimal within the range of `[-2^63, 2^63)`.
 
-* Both `lite-client` and `tonlib` support this new global configuration format. Clients select the appropriate liteserver for each request based on its shard.
+- Both `lite-client` and `tonlib` support this new global configuration format. Clients select the appropriate liteserver for each request based on its shard.
 
 ## Proxy liteserver
 
@@ -140,12 +145,15 @@ Both liteservers monitor MasterChain, so it is not necessary to include MasterCh
 Its main purpose is to create a single liteserver that functions as a liteserver (LS) for all shards while distributing incoming queries to the appropriate child liteservers behind the scenes. This setup eliminates the need for clients to maintain multiple TCP connections for different shards and enables older clients to interact with sharded liteservers through the proxy.
 
 **Usage:**
+
 ```
 proxy-liteserver -p <tcp-port> -C global-config.json --db db-dir/ --logname ls.log
 ```
+
 List all child liteservers in the global config. These can be partial liteservers, as shown in the example above.
 
 To use the proxy liteserver in clients, create a new global config with this proxy in `liteservers` section. See `db-dir/config.json`:
+
 ```json
 {
    "@type" : "proxyLiteserver.config",
@@ -168,7 +176,7 @@ If you need to use an existing private key, place the private key file in `db-di
 Currently, Testnet and Mainnet validators function as follows:
 
 - All validators monitor all shards.
-  
+
 - For each shard, a **validator group** is randomly selected to generate and validate new blocks.
 
 - Within this validator group, validators **collate** (generate) new block candidates one by one, while other validators **validate** and sign them.
@@ -218,13 +226,15 @@ Alternatively, you can launch a partial node that monitors and collates only a s
 Update your validator to [accelerator branch](https://github.com/ton-blockchain/ton/tree/accelerator).
 
 By default, validators collate all blocks themselves. To use collator nodes, create a **collators list** and provide it to the validator using `validator-engine-console`:
-* `set-collators-list <filename>` installs a new list of collators.
-* `clear-collators-list` resets the validator to the default behavior.
-* `show-collators-list` displays the current list.
+
+- `set-collators-list <filename>` installs a new list of collators.
+- `clear-collators-list` resets the validator to the default behavior.
+- `show-collators-list` displays the current list.
 
 The **collators list** is a JSON file. It contains a list of collator node ADNL ids for each shard.
 
 ### Example 1: collators for all shards
+
 ```json
 {
   "shards": [
@@ -240,6 +250,7 @@ The **collators list** is a JSON file. It contains a list of collator node ADNL 
   ]
 }
 ```
+
 This list contains two collators that can generate blocks in all shards in BaseChain (`shard_id` is `0:8000000000000000`).
 
 When the validator needs to generate a shard block, it randomly selects one of the collators to send the request.
@@ -247,6 +258,7 @@ When the validator needs to generate a shard block, it randomly selects one of t
 `"self_collate": true` means that if all collators are offline then the validator will collate the block on its own. It is recommended to use this option for testing, since validators are still able to generate shard blocks.
 
 ### Example 2: partial collators
+
 ```json
 {
   "shards": [
@@ -280,20 +292,22 @@ This list has one collator for prefix `0:4000000000000000`, one collator for pre
 
 ### Formal protocol for selecting the collator
 
-The **collators list** contains a list `shards`. Each entry has the following parameters: `shard_id`, `select_mode`, `self_collate`, `collators`. 
+The **collators list** contains a list `shards`. Each entry has the following parameters: `shard_id`, `select_mode`, `self_collate`, `collators`.
 
 To generate a block in shard `X`, the validator does the following:
-* If `X` is MasterChain then the validator generates the block itself.
-* Take the first entry from `shards` where `shard_id` intersects with `X`.
-* Validator periodically pings collators from the list to determine which ones are online and ready to respond.
-* Choose an online collator from the `collators` list. `select_mode` determines the selection method:
-  * `random`: random online collator.
-  * `ordered`: the first from the list (skipping offline collators).
-  * `round_robin`: select collators sequentially (skipping offline collators).
-* Send a request to the selected collator.
-* If all collators are offline and `self_collate` is `true` then the validator generates the block itself.
+
+- If `X` is MasterChain then the validator generates the block itself.
+- Take the first entry from `shards` where `shard_id` intersects with `X`.
+- Validator periodically pings collators from the list to determine which ones are online and ready to respond.
+- Choose an online collator from the `collators` list. `select_mode` determines the selection method:
+  - `random`: random online collator.
+  - `ordered`: the first from the list (skipping offline collators).
+  - `round_robin`: select collators sequentially (skipping offline collators).
+- Send a request to the selected collator.
+- If all collators are offline and `self_collate` is `true` then the validator generates the block itself.
 
 ### Collation manager stats
+
 Command `collation-manager-stats` in `validator-engine-console` displays the status of collators: which collators are currently used and which are online.
 
 ## Collator whitelist
@@ -301,12 +315,14 @@ Command `collation-manager-stats` in `validator-engine-console` displays the sta
 By default, the collator node accepts requests from any validator.
 
 You can enable whitelist to allow requests only from certain validators using `validator-engine-console`:
-* `collator-whitelist-enable 1` enables the whitelist.
-* `collator-whitelist-enable 0` disables the whitelist.
-* `collator-whitelist-add <validator-adnl-id-hex>` adds a validator to the whitelist.
-* `collator-whitelist-del <validator-adnl-id-hex>` removes a validator from the whitelist.
+
+- `collator-whitelist-enable 1` enables the whitelist.
+- `collator-whitelist-enable 0` disables the whitelist.
+- `collator-whitelist-add <validator-adnl-id-hex>` adds a validator to the whitelist.
+- `collator-whitelist-del <validator-adnl-id-hex>` removes a validator from the whitelist.
 
 # Full collated data
+
 By default validators proposing new block in validator set do not attach data that proves "prior to block" state. This data should be obtained by other validators from locally stored state. That way old (from master branch) and new nodes may reach consensus, but new validators should keep eye on all network state.
 
 Once [ton::capFullCollatedData](https://github.com/ton-blockchain/ton/blob/160b539eaad7bc97b7e238168756cca676a5f3be/validator/impl/collator-impl.h#L49) capabilities in network configuration parameter 8 will be enabled `collated_data` will be included into blocks and validators will be able to get rid of monitoring anything except masterchain: incoming data will be enough to fully check correctness of the block.
@@ -324,4 +340,3 @@ Developers are planning to implement the following features:
 - Provide support in MyTonCtrl for automatic payments for collation to establish a market for collation and enhance its durability.
 
 <Feedback />
-
