@@ -36,13 +36,14 @@ jobs:
           echo "issueNumber=${{ needs.params.outputs.issue_number }}" >> $GITHUB_ENV
           echo "crowdinBranch=${{ format('translation-{0}-{1}', needs.params.outputs.issue_number, 'ru') }}" >> $GITHUB_ENV
           echo "gitBranch=${{ format('translation-{0}-{1}{2}', needs.params.outputs.issue_number, 'ru', needs.params.outputs.command == 'previewdraft' && '-draft' || '') }}" >> $GITHUB_ENV
+          echo "thisWorkflowURL=${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}" >> $GITHUB_ENV
 
       - name: Create comment
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ env.issueNumber }}
           body: |
-            Started workflow: ${{ github.event.repository.html_url }}/actions/runs/${{ github.run_id }}
+            Started workflow: ${{ env.thisWorkflowURL }}
 
       - name: Setup / Checkout code
         uses: actions/checkout@v3
@@ -110,10 +111,24 @@ jobs:
               * there is no fully translated and approved files
               * there is no difference with the current state of the branch
 
+      - name: Lint translated files
+        if: steps.prepare-commit.outputs.staged_files == 'true'
+        continue-on-error: true
+        id: lint-translated
+        run: |
+          ./node_modules/.bin/eslint -c eslint.mdx.config.js --fix $(git diff --cached --name-only)
+
+      - name: Notify on failed linter
+        if: steps.lint-translated.outcome == 'failure'
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ env.issueNumber }}
+          body: |
+             ⚠️ Linting of the translated files failed, see ${{ env.thisWorkflowURL }}
+
       - name: Commit
         if: steps.prepare-commit.outputs.staged_files == 'true'
         run: |
-          ./node_modules/.bin/eslint -c eslint.mdx.config.js --fix $(git diff --cached --name-only)
           git add i18n/
           git commit -m "chore: update ${{ env.language }} translations #${{ env.issueNumber }}"
           git push -u origin ${{ env.gitBranch }}
