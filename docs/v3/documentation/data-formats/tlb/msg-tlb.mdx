@@ -21,9 +21,9 @@ body:(Either X ^X) = MessageRelaxed X;
 _ (Message Any) = MessageAny;
 ```
 
-* `Message X` refers to the standard message structure.
-* `MessageRelaxed X` is a variant that uses a `CommonMsgInfoRelaxed` body.
-* `Message Any` is a union of both structures.
+- `Message X` refers to the standard message structure.
+- `MessageRelaxed X` is a variant that uses a `CommonMsgInfoRelaxed` body.
+- `Message Any` is a union of both structures.
 
 The message structure is unified using X:Type, which in this context represents a cell.
 According to TL-B rules, all data can be stored within a single cell—if it fits within 1023 bits—or distributed across references using the caret symbol `^`.
@@ -68,7 +68,7 @@ right$1 {X:Type} {Y:Type} value:Y = Either X Y;
 
 Recall how `Maybe` and `Either` work—we can serialize different cases:
 
-* `[CommonMsgInfo][10][StateInit][0][X]` - a `Message X` fully serialized into a single cell.
+- `[CommonMsgInfo][10][StateInit][0][X]` - a `Message X` fully serialized into a single cell.
 
 
 <br></br>
@@ -81,7 +81,7 @@ dark: '/img/docs/data-formats/tl-b-docs-9-dark.png?raw=true',
 />
 <br></br>
 
-* `[CommonMsgInfo][11][^StateInit][1][^X]` - a `Message X` with references.
+- `[CommonMsgInfo][11][^StateInit][1][^X]` - a `Message X` with references.
 
 
 <br></br>
@@ -317,7 +317,7 @@ currencies$_ grams:Grams other:ExtraCurrencyCollection
 | grams        | (VarUInteger 16)        | Required | Represents the message value, expressed in nanoTons.                                                                                |
 | other        | ExtraCurrencyCollection | Optional | ExtraCurrencyCollection is a dictionary intended for additional, typically empty currencies.         |
 
-* ExtraCurrencyCollection is a complex type usually written as an empty dictionary in messages.
+- ExtraCurrencyCollection is a complex type usually written as an empty dictionary in messages.
 
 ### VarUInteger n
 

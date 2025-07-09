@@ -47,6 +47,7 @@ Cannot apply external message to current state : External message was not accept
 This error indicates that the contract did not accept the external messages. You need to look for the **exitcode** in the trace. An exitcode of -13 means that the account does not have enough TON to accept a message, or it requires more than the available **gas_credit**.
 
 For wallet contracts:
+
 - An exitcode of 33 indicates a wrong **seqno**, which likely means the **seqno** data you are using is outdated.
 - An exitcode of 34 indicates a wrong subwallet_id. For older wallet versions (v1/v2), this may mean an incorrect signature.
 - An exitcode of 35 means that the message is either expired or the signature is incorrect.
@@ -58,7 +59,7 @@ For wallet contracts:
 This process can sometimes take up to 24 hours. However, if you've been receiving this error for several days, that means that your node cannot synchronize via a current network connection.
 
 :::tip Solution
-You need to check the firewall settings, including any NAT settings if they exist. 
+You need to check the firewall settings, including any NAT settings if they exist.
 
 It should allow incoming connections on one specific port and outgoing connections from any port.
 :::
@@ -73,6 +74,7 @@ Run `MyTonCtrl` from [the user you've installed](/v3/guidelines/nodes/running-no
 ```bash
 mytonctrl
 ```
+
 :::
 
 ### Running MyTonCtrl as different user
@@ -87,15 +89,15 @@ To resolve this issue, you need to run MyTonCtrl as the user who installed it.
 
 ## What does "block is not applied" mean?
 
-**Q:** Sometimes we encounter messages like `block is not applied` or `block is not ready` for various requests. Is this normal?  
+**Q:** Sometimes we encounter messages like `block is not applied` or `block is not ready` for various requests. Is this normal?
 
-**A:** Yes, this is normal. Typically, it means that you tried to retrieve a block that has not yet reached the node you requested.  
+**A:** Yes, this is normal. Typically, it means that you tried to retrieve a block that has not yet reached the node you requested.
 
-**Q:** If comparative frequency appears, does it indicate there is a problem?  
+**Q:** If comparative frequency appears, does it indicate there is a problem?
 
-**A:** No, it does not. You should check the "Local validator out of sync" value in MyTonCtrl. If it is less than 20 seconds, then everything is functioning normally.  
+**A:** No, it does not. You should check the "Local validator out of sync" value in MyTonCtrl. If it is less than 20 seconds, then everything is functioning normally.
 
-**Keep in mind that the node is continuously synchronizing.** There may be times when you attempt to receive a block that has not yet reached the node you are querying. 
+**Keep in mind that the node is continuously synchronizing.** There may be times when you attempt to receive a block that has not yet reached the node you are querying.
 
 In such cases, you should repeat the request after a short delay.
 
@@ -150,6 +152,7 @@ The best way (while the penalty for temporary non-validation is small, it can be
 1. Perform a clean installation on the new server using `mytonctrl` command, and wait until everything is synchronized.
 
 2. Stop the `mytoncore` and validator `services` on both machines, and make backups on the source and on the new one:
+
 - 2.1 `/usr/local/bin/mytoncore/...`
 - 2.2 `/home/${user}/.local/share/mytoncore/...`
 - 2.3 `/var/ton-work/db/config.json`
@@ -158,6 +161,7 @@ The best way (while the penalty for temporary non-validation is small, it can be
 - 2.6 `/var/ton-work/keys`
 
 3. Transfer from the source to the new one (replace the contents):
+
 - 3.1 `/usr/local/bin/mytoncore/...`
 - 3.2 `/home/${user}/.local/share/mytoncore/...`
 - 3.3 `/var/ton-work/db/config.json`
@@ -171,6 +175,7 @@ The best way (while the penalty for temporary non-validation is small, it can be
 6. On the new one, start the `mytoncore` and `validator` services and check that the node synchronizes and then validates.
 
 7. On the new one, make a backup:
+
 ```bash
 cp  var/ton-work/db/config.json  var/ton-work/db/config.json.backup
 ```
@@ -205,9 +210,9 @@ There are two known cases when this error appears:
 
 ### Error after updating MytonCtrl
 
-* If MyTonCtrl was installed by the root user: Delete the file `/usr/local/bin/mytonctrl/VERSION.`
+- If MyTonCtrl was installed by the root user: Delete the file `/usr/local/bin/mytonctrl/VERSION.`
 
-* If MyTonCtrl was installed by a non-root user: Delete the file `~/.local/share/mytonctrl/VERSION.`
+- If MyTonCtrl was installed by a non-root user: Delete the file `~/.local/share/mytonctrl/VERSION.`
 
 ### Error during MytonCtrl installation
 
@@ -215,8 +220,7 @@ There are two known cases when this error appears:
 
 ## See also
 
-* [MyTonCtrl FAQ](/v3/guidelines/nodes/faq)
-* [MyTonCtrl errors](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-errors)
+- [MyTonCtrl FAQ](/v3/guidelines/nodes/faq)
+- [MyTonCtrl errors](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-errors)
 
 <Feedback />
-

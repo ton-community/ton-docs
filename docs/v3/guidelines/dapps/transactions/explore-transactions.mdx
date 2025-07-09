@@ -3,14 +3,14 @@ import TabItem from '@theme/TabItem'
 
 # Transaction
 
-In the TON blockchain, any change to an account's state is recorded via a **transaction**. Unlike messages, transactions do not *move*, *send*, or *receive* anything. These terms are often confused, but it's important to understand that a transaction is simply a **record** of all changes that occurred to a specific account.
+In the TON blockchain, any change to an account's state is recorded via a **transaction**. Unlike messages, transactions do not _move_, _send_, or _receive_ anything. These terms are often confused, but it's important to understand that a transaction is simply a **record** of all changes that occurred to a specific account.
 
 In this section, you’ll explore how a transaction is structured—how it progresses through each phase, how to retrieve transaction data using APIs, and how to determine whether an on‑chain event is successful.
-
 
 ## Transaction structure
 
 ### TL-B
+
 Before diving into how transactions work in TON, we first need to understand their structure using **TL-B**(Type Language – Binary). It's worth noting that there are several types of transactions in TON; however, for this guide, we will focus solely on **ordinary transaction**. These are the transactions relevant for payment processing and the development of most applications built on TON.
 
 ```tlb
@@ -25,16 +25,16 @@ trans_ord$0000 credit_first:Bool
 
 According to the TL-B schema, a transaction consists of the following fields:
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `credit_first` | `Bool` | Indicates whether the credit phase should be executed first. This depends on whether the [bounce flag](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/transaction.cpp#L3530) is set. This will be explained in more detail in a later section.  |
-| `storage_ph` | `Maybe TrStoragePhase` | The storage phase, responsible for handling fees related to the account's persistent storage.|
-| `credit_ph` | `Maybe TrCreditPhase` | The credit phase, responsible for processing the transfer of value delivered with the incoming message, if it's an internal message (types [#1](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2926) or [#2](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2935)). |
-| `compute_ph` | `TrComputePhase` | The compute phase, responsible for executing the smart contract code stored in the account's `code` cell. |
-| `action` | `Maybe ^TrActionPhase` | The action phase, responsible for handling any actions generated during the compute phase. |
-| `aborted` | `Bool` | Indicates whether the transaction was aborted during one of the phases. If `true`, the transaction was not executed, and changes from the `compute_ph` and `action` phases were not applied.|
-| `bounce` | `Maybe TrBouncePhase` | TrBouncePhase	The bounce phase, responsible for handling errors that occurred during the `compute_ph` or `action` phases. |
-| `destroyed` | `Bool` | Indicates whether the account was destroyed during the execution of the transaction. |
+| Field          | Type                   | Description                                                                                                                                                                                                                                                                                                                                                                                             |
+| -------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `credit_first` | `Bool`                 | Indicates whether the credit phase should be executed first. This depends on whether the [bounce flag](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/transaction.cpp#L3530) is set. This will be explained in more detail in a later section.                                                                                                        |
+| `storage_ph`   | `Maybe TrStoragePhase` | The storage phase, responsible for handling fees related to the account's persistent storage.                                                                                                                                                                                                                                                                                                           |
+| `credit_ph`    | `Maybe TrCreditPhase`  | The credit phase, responsible for processing the transfer of value delivered with the incoming message, if it's an internal message (types [#1](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2926) or [#2](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/validator/impl/collator.cpp#L2935)). |
+| `compute_ph`   | `TrComputePhase`       | The compute phase, responsible for executing the smart contract code stored in the account's `code` cell.                                                                                                                                                                                                                                                                                               |
+| `action`       | `Maybe ^TrActionPhase` | The action phase, responsible for handling any actions generated during the compute phase.                                                                                                                                                                                                                                                                                                              |
+| `aborted`      | `Bool`                 | Indicates whether the transaction was aborted during one of the phases. If `true`, the transaction was not executed, and changes from the `compute_ph` and `action` phases were not applied.                                                                                                                                                                                                            |
+| `bounce`       | `Maybe TrBouncePhase`  | TrBouncePhase	The bounce phase, responsible for handling errors that occurred during the `compute_ph` or `action` phases.                                                                                                                                                                                                                                                                               |
+| `destroyed`    | `Bool`                 | Indicates whether the account was destroyed during the execution of the transaction.                                                                                                                                                                                                                                                                                                                    |
 
 :::info
 
@@ -70,11 +70,10 @@ tr_phase_credit$_ due_fees_collected:(Maybe Grams)
 
 HThis phase consists of the following two fields:
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `due_fees_collected` | `Maybe Grams` | The amount of storage fees collected. This field is present if the account has no balance and has accumulated storage. |
-| `credit` | `CurrencyCollection` | The amount credited to the account as a result of receiving the incoming message.|
-
+| Field                | Type                 | Description                                                                                                            |
+| -------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `due_fees_collected` | `Maybe Grams`        | The amount of storage fees collected. This field is present if the account has no balance and has accumulated storage. |
+| `credit`             | `CurrencyCollection` | The amount credited to the account as a result of receiving the incoming message.                                      |
 
 ### Storage phase
 
@@ -89,19 +88,18 @@ tr_phase_storage$_ storage_fees_collected:Grams
 
 This phase contains the following fields:
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `storage_fees_collected` | `Grams` | The amount of storage fees collected from the account. |
-| `storage_fees_due` | `Maybe Grams` | The amount of storage fees that were charged but could not be collected due to insufficient balance. This represents accumulated debt.|
-| `status_change` | `AccStatusChange` | The change in the account's status after the transaction is executed. |
-
+| Field                    | Type              | Description                                                                                                                            |
+| ------------------------ | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `storage_fees_collected` | `Grams`           | The amount of storage fees collected from the account.                                                                                 |
+| `storage_fees_due`       | `Maybe Grams`     | The amount of storage fees that were charged but could not be collected due to insufficient balance. This represents accumulated debt. |
+| `status_change`          | `AccStatusChange` | The change in the account's status after the transaction is executed.                                                                  |
 
 The `storage_fees_due` field is of type `Maybe` because it is only present when the account has **insufficient balance** to cover the storage fees. When the account has enough funds, this field is omitted.
 
 The `AccStatusChange` field indicates whether the account's status changed during this phase. For example:
-* If the debt exceeds **0.1 TON**, the account becomes [frozen](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L949C11-L953C12).
-* If the debt exceeds **1 TON**, the account is [deleted](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L936C11-L946C12).
 
+- If the debt exceeds **0.1 TON**, the account becomes [frozen](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L949C11-L953C12).
+- If the debt exceeds **1 TON**, the account is [deleted](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L936C11-L946C12).
 
 ### Compute phase
 
@@ -128,12 +126,12 @@ cskip_suspended$110 = ComputeSkipReason;
 
 To start, note that the compute phase can be **skipped** entirely. In that case, the reason for skipping is explicitly recorded and can be one of the following:
 
-| Skip reason | Description |
-| --- | --- |
-| `cskip_no_state` | The smart contract has no state and, therefore, no code, so execution is not possible. |
-| `cskip_bad_state` | Raised in two cases: when the `fixed_prefix_length` [field has an invalid value]((https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1721)) or when the `StateInit` provided in the incoming message [does not match the account’s address](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1726).|
-| `cskip_no_gas` |The incoming message did not provide enough TON to cover the gas required to execute the smart contract. |
-| `cskip_suspended` | The account is frozen, so execution is disabled. This was used to freeze early miner accounts during the stabilization of TON’s tokenomics.|
+| Skip reason       | Description                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `cskip_no_state`  | The smart contract has no state and, therefore, no code, so execution is not possible.                                                                                                                                                                                                                                                                                                                                                |
+| `cskip_bad_state` | Raised in two cases: when the `fixed_prefix_length` [field has an invalid value](\(https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1721\)) or when the `StateInit` provided in the incoming message [does not match the account’s address](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1726). |
+| `cskip_no_gas`    | The incoming message did not provide enough TON to cover the gas required to execute the smart contract.                                                                                                                                                                                                                                                                                                                              |
+| `cskip_suspended` | The account is frozen, so execution is disabled. This was used to freeze early miner accounts during the stabilization of TON’s tokenomics.                                                                                                                                                                                                                                                                                           |
 
 :::tip
 The `fixed_prefix_length` field can be used to specify a fixed prefix for the account address, ensuring that the account resides in a specific shard. This topic is outside the scope of this guide, but more information is available [here](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md#anycast-addresses-and-address-rewrite).
@@ -141,16 +139,16 @@ The `fixed_prefix_length` field can be used to specify a fixed prefix for the ac
 
 Now that we've covered the reasons why the compute phase might be skipped, let's examine what happens when the smart contract code is **executed**. The following fields are used to describe the result:
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `success` | `Bool` | Indicates whether the compute phase was completed successfully. If `false`, any state changes made during this phase are discarded.|
-| `msg_state_used`, `account_activated`, `mode`, `vm_init_state_hash`, `vm_final_state_hash` | - | These fields are currently unused in the blockchain. They are always recorded as zero values. |
-| `gas_fees` | `Grams` | The amount of fees paid for executing the smart contract code. |
-| `gas_used`, `gas_limit` | `VarUInteger` | The actual amount of gas used and the maximum gas limit set for execution. |
-| `gas_credit` | `Maybe (VarUInteger 3)` | Used only in external messages. Since external messages cannot carry TON, a small gas credit is granted to allow the smart contract to start execution and decide whether it wants to continue using its balance. |
-| `exit_code` | `int32` | The virtual machine exit code. A value of `0` or `1` (alternative success) indicates successful execution. Any other value means the contract code exited with an error—except in cases where the `commit` instruction was used. **Note:** for convenience, developers often refer to this as the *smart contract exit code*, though this isn’t technically accurate. |
-| `exit_arg` | `Maybe int32` | The virtual machine threw an optional argument on failure. Useful for debugging smart contract errors. |
-| `vm_steps` | `uint32` | The number of steps executed by the virtual machine during code execution. |
+| Field                                                                                      | Type                    | Description                                                                                                                                                                                                                                                                                                                                                           |
+| ------------------------------------------------------------------------------------------ | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `success`                                                                                  | `Bool`                  | Indicates whether the compute phase was completed successfully. If `false`, any state changes made during this phase are discarded.                                                                                                                                                                                                                                   |
+| `msg_state_used`, `account_activated`, `mode`, `vm_init_state_hash`, `vm_final_state_hash` | -                       | These fields are currently unused in the blockchain. They are always recorded as zero values.                                                                                                                                                                                                                                                                         |
+| `gas_fees`                                                                                 | `Grams`                 | The amount of fees paid for executing the smart contract code.                                                                                                                                                                                                                                                                                                        |
+| `gas_used`, `gas_limit`                                                                    | `VarUInteger`           | The actual amount of gas used and the maximum gas limit set for execution.                                                                                                                                                                                                                                                                                            |
+| `gas_credit`                                                                               | `Maybe (VarUInteger 3)` | Used only in external messages. Since external messages cannot carry TON, a small gas credit is granted to allow the smart contract to start execution and decide whether it wants to continue using its balance.                                                                                                                                                     |
+| `exit_code`                                                                                | `int32`                 | The virtual machine exit code. A value of `0` or `1` (alternative success) indicates successful execution. Any other value means the contract code exited with an error—except in cases where the `commit` instruction was used. **Note:** for convenience, developers often refer to this as the _smart contract exit code_, though this isn’t technically accurate. |
+| `exit_arg`                                                                                 | `Maybe int32`           | The virtual machine threw an optional argument on failure. Useful for debugging smart contract errors.                                                                                                                                                                                                                                                                |
+| `vm_steps`                                                                                 | `uint32`                | The number of steps executed by the virtual machine during code execution.                                                                                                                                                                                                                                                                                            |
 
 :::tip
 The `commit` instruction is used to persist any changes made before it is called, even if an error occurs later in the same phase. These changes will only be rolled back if the **Action phase** fails.
@@ -161,7 +159,6 @@ The `commit` instruction is used to persist any changes made before it is called
 Once the smart contract code has finished executing, the **Action phase** begins. If any actions were created during the compute phase, they are processed at this stage.
 
 There are precisely 4 types of actions in TON:
-
 
 ```tlb
 action_send_msg#0ec3c86d mode:(## 8)
@@ -175,14 +172,14 @@ action_change_library#26fa1dd4 mode:(## 7)
   libref:LibRef = OutAction;
 ```
 
-| Type | Description |
-| --- | --- |
-| `action_send_msg` | Sends a message. |
-| `action_set_code` | Updates the smart contract’s code. |
+| Type                      | Description                                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------------ |
+| `action_send_msg`         | Sends a message.                                                                           |
+| `action_set_code`         | Updates the smart contract’s code.                                                         |
 | `action_reserve_currency` | Reserves a portion of the account’s balance. This is especially useful for gas management. |
-| `action_change_library` | Changes the library used by the smart contract.|
+| `action_change_library`   | Changes the library used by the smart contract.                                            |
 
-These actions are executed *in the order in which they were created* during code execution. A total of up to [255 actions](https://github.com/ton-blockchain/ton/blob/72056a1d139402ef343081810677d2582c3eff51/crypto/block/transaction.h#L165) can be made.
+These actions are executed _in the order in which they were created_ during code execution. A total of up to [255 actions](https://github.com/ton-blockchain/ton/blob/72056a1d139402ef343081810677d2582c3eff51/crypto/block/transaction.h#L165) can be made.
 
 Next, let’s examine the TL-B schema, which defines the structure of the action phase.
 
@@ -198,22 +195,22 @@ tr_phase_action$_ success:Bool valid:Bool no_funds:Bool
 
 The action phase includes the following fields:
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `success` | `Bool` | Indicates whether the action phase was successfully completed. If this value is `false`, all changes made during this phase are discarded. Changes made during the compute phase are also reverted. |
-| `valid` | `Bool` | Indicates whether the action phase was valid. If this value is `false`, it means that invalid actions were created during smart contract execution. Each action type has its validity criteria. |
-| `no_funds` | `Bool` | Indicates whether there were sufficient funds in the account to execute the actions. If `false`, the action phase was interrupted due to lack of funds. |
-| `status_change` | `AccStatusChange` | The change in account status after the action phase. Since account deletion happens through actions (via mode 32), this field may indicate whether the account was deleted. |
-| `total_fwd_fees` | `Maybe Grams` | The total amount of forwarding fees paid for messages created during the action phase. |
-| `total_action_fees` | `Maybe Grams` | The total amount of fees paid for executing actions. |
-| `result_code` | `int32` | The result code of the action execution. A value of `0` means all actions were successfully completed. |
-| `result_arg` | `Maybe int32` | An error message is returned in case of an error. Useful for debugging smart contract code.|
-| `tot_actions` | `uint16` | Total number of actions created during smart contract execution. |
-| `spec_actions` | `uint16` | A number of special actions (all except `action_send_msg`). |
-| `skipped_actions` | `uint16` | Number of actions skipped during smart contract execution. Refers to message sends that failed but had the `ignore_errors` flag (value 2) set. |
-| `msgs_created` | `uint16` | Number of messages created during action execution.|
-| `action_list_hash` | `bits256` | The hash of the action list. |
-| `tot_msg_size` | `StorageUsed` | Total size of the messages. |
+| Field               | Type              | Description                                                                                                                                                                                         |
+| ------------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `success`           | `Bool`            | Indicates whether the action phase was successfully completed. If this value is `false`, all changes made during this phase are discarded. Changes made during the compute phase are also reverted. |
+| `valid`             | `Bool`            | Indicates whether the action phase was valid. If this value is `false`, it means that invalid actions were created during smart contract execution. Each action type has its validity criteria.     |
+| `no_funds`          | `Bool`            | Indicates whether there were sufficient funds in the account to execute the actions. If `false`, the action phase was interrupted due to lack of funds.                                             |
+| `status_change`     | `AccStatusChange` | The change in account status after the action phase. Since account deletion happens through actions (via mode 32), this field may indicate whether the account was deleted.                         |
+| `total_fwd_fees`    | `Maybe Grams`     | The total amount of forwarding fees paid for messages created during the action phase.                                                                                                              |
+| `total_action_fees` | `Maybe Grams`     | The total amount of fees paid for executing actions.                                                                                                                                                |
+| `result_code`       | `int32`           | The result code of the action execution. A value of `0` means all actions were successfully completed.                                                                                              |
+| `result_arg`        | `Maybe int32`     | An error message is returned in case of an error. Useful for debugging smart contract code.                                                                                                         |
+| `tot_actions`       | `uint16`          | Total number of actions created during smart contract execution.                                                                                                                                    |
+| `spec_actions`      | `uint16`          | A number of special actions (all except `action_send_msg`).                                                                                                                                         |
+| `skipped_actions`   | `uint16`          | Number of actions skipped during smart contract execution. Refers to message sends that failed but had the `ignore_errors` flag (value 2) set.                                                      |
+| `msgs_created`      | `uint16`          | Number of messages created during action execution.                                                                                                                                                 |
+| `action_list_hash`  | `bits256`         | The hash of the action list.                                                                                                                                                                        |
+| `tot_msg_size`      | `StorageUsed`     | Total size of the messages.                                                                                                                                                                         |
 
 ### Bounce phase
 
@@ -233,14 +230,15 @@ tr_phase_bounce_ok$1 msg_size:StorageUsed
 
 The `tr_phase_bounce_negfunds` type is not used in the current version of the blockchain. The other two types function as follows:
 
-| Type | Description |
-| --- | --- |
+| Type                      | Description                                                                                                             |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `tr_phase_bounce_nofunds` | Indicates that the account does not have enough funds to process the message that should be bounced back to the sender. |
-| `tr_phase_bounce_ok` | Indicates that the system successfully processes the bounce and sends the message back to the sender. |
+| `tr_phase_bounce_ok`      | Indicates that the system successfully processes the bounce and sends the message back to the sender.                   |
 
 In this phase, `msg_fees` and `fwd_fees` are calculated based on the total forwarding fee `fwd_fees` for the message:
-* **One-third** of the fee goes into `msg_fees` and is charged immediately.
-* The remaining **two-thirds** go into `fwd_fees`.
+
+- **One-third** of the fee goes into `msg_fees` and is charged immediately.
+- The remaining **two-thirds** go into `fwd_fees`.
 
 ### Full transaction body
 
@@ -258,22 +256,21 @@ transaction$0111 account_addr:bits256 lt:uint64
 
 This schema shows that a transaction includes the following fields:
 
-| Field | Type | Description |
-| --- | --- | --- |
-| `account_addr` | `bits256` | The account's address to which the transaction belongs. |
-| `lt` | `uint64` | Logical time of the transaction.|
-| `prev_trans_hash` | `bits256` | The hash of the previous transaction executed on this account. |
-| `prev_trans_lt` | `uint64` | Logical time of the previous transaction on this account. |
-| `now` | `uint32` | Time the transaction is created, in Unix timestamp format.|
-| `outmsg_cnt` | `uint15` | Number of outbound messages generated during transaction execution. |
-| `orig_status` | `AccountStatus` | Account status before the transaction. |
-| `end_status` | `AccountStatus` | Account status after the transaction. |
-| `in_msg` | `Maybe ^(Message Any)` | Incoming message processed during the transaction. For ordinary transactions, this field is always present. |
-| `out_msgs` | `HashmapE 15 ^(Message Any)` | Outgoing messages generated during the transaction. |
-| `total_fees` | `CurrencyCollection` | Total fees paid for executing the transaction. |
-| `state_update` | `^(HASH_UPDATE Account)` | Contains the hash of the previous account state and the hash of the new state.|
-| `description` | `^TransactionDescr` | Transaction description containing execution phase details. We covered this earlier. |
-
+| Field             | Type                         | Description                                                                                                 |
+| ----------------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `account_addr`    | `bits256`                    | The account's address to which the transaction belongs.                                                     |
+| `lt`              | `uint64`                     | Logical time of the transaction.                                                                            |
+| `prev_trans_hash` | `bits256`                    | The hash of the previous transaction executed on this account.                                              |
+| `prev_trans_lt`   | `uint64`                     | Logical time of the previous transaction on this account.                                                   |
+| `now`             | `uint32`                     | Time the transaction is created, in Unix timestamp format.                                                  |
+| `outmsg_cnt`      | `uint15`                     | Number of outbound messages generated during transaction execution.                                         |
+| `orig_status`     | `AccountStatus`              | Account status before the transaction.                                                                      |
+| `end_status`      | `AccountStatus`              | Account status after the transaction.                                                                       |
+| `in_msg`          | `Maybe ^(Message Any)`       | Incoming message processed during the transaction. For ordinary transactions, this field is always present. |
+| `out_msgs`        | `HashmapE 15 ^(Message Any)` | Outgoing messages generated during the transaction.                                                         |
+| `total_fees`      | `CurrencyCollection`         | Total fees paid for executing the transaction.                                                              |
+| `state_update`    | `^(HASH_UPDATE Account)`     | Contains the hash of the previous account state and the hash of the new state.                              |
+| `description`     | `^TransactionDescr`          | Transaction description containing execution phase details. We covered this earlier.                        |
 
 The `orig_status` and `end_status` fields indicate how the account state changes as a result of the transaction. There are 4 possible statuses:
 
@@ -283,17 +280,18 @@ acc_state_frozen$01 = AccountStatus;
 acc_state_active$10 = AccountStatus;
 acc_state_nonexist$11 = AccountStatus;
 ```
+
 ## How to access transaction data
+
 ### How to retrieve a transaction using api/v2
 
 Among the supported open-source APIs, we can use TON Center [APIv2](https://toncenter.com/api/v2/) and [APIv3](https://toncenter.com/api/v3/index.html#/).
 **APIv2** is a more raw version and provides only basic access to blockchain data. To retrieve a transaction, there are two options:
 
-* Use the `/api/v2/getTransactions` endpoint:
+- Use the `/api/v2/getTransactions` endpoint:
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
-
     ```js title="api-v2-get-transaction.ts"
     import axios from 'axios';
 
@@ -323,16 +321,13 @@ Among the supported open-source APIs, we can use TON Center [APIv2](https://tonc
 
     main().finally(() => console.log('Exiting...'));
     ```
-
   </TabItem>
 </Tabs>
 
-
-* Use the `JSON-RPC` protocol:
+- Use the `JSON-RPC` protocol:
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
-
     ```js title="json-rpc-protocol.ts"
     import { Address, TonClient } from '@ton/ton';
 
@@ -351,10 +346,8 @@ Among the supported open-source APIs, we can use TON Center [APIv2](https://tonc
 
     main().finally(() => console.log('Exiting...'));
     ```
-
   </TabItem>
 </Tabs>
-
 
 The recommended approach is to use **JSON-RPC**, as it integrates with existing SDKs, where all fields are predefined and typed correctly. This removes the need to interpret each field manually.
 
@@ -369,14 +362,12 @@ This means the account’s transactions are old, and the blocks containing them 
 
 `APIv3` is more advanced and convenient for retrieving various events from the blockchain. For example, it allows you to fetch information about NFT transfers, token operations, and even transactions in `pending` status. In this tutorial, we'll focus only on the `transactions` endpoint, which returns finalized transactions:
 
-
 **APIv3** is more advanced and convenient for accessing various types of blockchain events. For example, it allows you to retrieve data on NFT transfers, token movements, and even transactions that are still in the **pending** state.
 
-In this guide, we focus only on the `transactions` endpoint, which returns *confirmed* transactions.
+In this guide, we focus only on the `transactions` endpoint, which returns _confirmed_ transactions.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
-
     ```js title="api-v3-get-transaction.ts"
     import axios from 'axios';
 
@@ -403,14 +394,12 @@ In this guide, we focus only on the `transactions` endpoint, which returns *conf
 
     main().finally(() => console.log('Exiting...'));
     ```
-
   </TabItem>
 </Tabs>
 
 If you examine the response, you’ll see that it differs significantly from the APIv2 output. The key difference is that APIv3 **indexes** transactions, while the previous version acts only as a wrapper around LiteServer. In API v3, all information comes directly from the server’s database.
 
 This allows the API to return preprocessed data. For example, if you examine the `account_state_before` and `account_state_after` fields, they include not only the account state hash but also complete data, such as the code, data, TON balance, and even the ExtraCurrency balance.
-
 
 ```json
 [
@@ -441,13 +430,11 @@ Additionally, the response includes an `address_book` field, which contains an a
 
 When inspecting the response returned via the JSON-RPC protocol in `@ton/ton@`, you may notice two additional fields — `hash` and `raw` — that are not part of the on-chain transaction data. The SDK adds these fields for convenience.
 
-* The `hash` field provides a function that lets you compute the transaction hash.
-* The `raw` field contains the transaction BOC, which you can parse yourself using either a built-in method from the SDK or manually.
-
+- The `hash` field provides a function that lets you compute the transaction hash.
+- The `raw` field contains the transaction BOC, which you can parse yourself using either a built-in method from the SDK or manually.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
-
     ```js title="trx-fields-sdk.ts"
     import { Address, loadTransaction, TonClient } from '@ton/ton';
 
@@ -472,7 +459,6 @@ When inspecting the response returned via the JSON-RPC protocol in `@ton/ton@`, 
   </TabItem>
 </Tabs>
 
-
 ### Which API to use?
 
 After reviewing both API v2 and API v3, a natural question is which one to choose, the answer depends entirely on your specific use case.
@@ -480,26 +466,24 @@ As a general recommendation, you can use the `JSON-RPC` protocol from APIv2 sinc
 
 If this functionality does not cover all your requirements, you should consider a full or partial transition to API v3 or explore other APIs in the ecosystem that may offer more data.
 
-
 ## Transaction success criteria
+
 ### Event (user-level action)
 
 Before moving on to user operations and their processing, let’s summarize what we’ve learned about transactions:
 
-* A **transaction** is a record that captures all changes applied to a specific account.
-* A transaction consists of multiple **phases** that handle incoming messages, execute smart contract code, and process generated actions.
-* Each phase has its description that contains information about what occurred during execution.
-* A transaction may complete successfully or fail, depending on whether all phases execute correctly and whether valid actions are created.
-* Regular transactions always include an incoming message but may not include any outgoing messages.
-* A transaction can be retrieved using **API v2** or **API v3**, both of which return transaction data in a convenient format.
-* In API v3, transactions are **indexed**, which allows access to preprocessed data, whereas API v2 acts only as a **wrapper** for communicating with LiteServer.
-* The SDK may include additional fields, such as `hash` and `raw`, for convenience. These fields allow you to obtain the transaction hash and BoC, respectively.
-
+- A **transaction** is a record that captures all changes applied to a specific account.
+- A transaction consists of multiple **phases** that handle incoming messages, execute smart contract code, and process generated actions.
+- Each phase has its description that contains information about what occurred during execution.
+- A transaction may complete successfully or fail, depending on whether all phases execute correctly and whether valid actions are created.
+- Regular transactions always include an incoming message but may not include any outgoing messages.
+- A transaction can be retrieved using **API v2** or **API v3**, both of which return transaction data in a convenient format.
+- In API v3, transactions are **indexed**, which allows access to preprocessed data, whereas API v2 acts only as a **wrapper** for communicating with LiteServer.
+- The SDK may include additional fields, such as `hash` and `raw`, for convenience. These fields allow you to obtain the transaction hash and BoC, respectively.
 
 Earlier, we discussed **actions** from a technical perspective. However, many API services use this term to refer to user-level operations. It's essential to note that TON is an asynchronous blockchain, meaning that a single operation can span multiple transactions. In this context, the overall sequence matters more than individual transactions.
 
 For example, transferring Jettons from one wallet to another typically involves at least three separate transactions. Different services refer to these sequences using terms like **action**, **event**, or **operation**. To avoid confusion with the previously defined technical term **action**, we use the term **Event** here.
-
 
 :::tip
 Note that not every Jetton transfer qualifies as a `Jetton Transfer Event`. For instance, sending Jettons to a DEX to receive other tokens is classified as a `Swap Event`.
@@ -523,10 +507,8 @@ Suppose we want to monitor deposits sent to our wallet:
 `UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL`
 For simplicity, we’ll use **APIv3** to fetch the latest 10 transactions for this account.
 
-
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
-
     ```js title="ton-transfer.ts"
     import { fromNano } from '@ton/core';
     import axios from 'axios';
@@ -573,10 +555,8 @@ For simplicity, we’ll use **APIv3** to fetch the latest 10 transactions for th
 
     main().finally(() => console.log("Exiting..."));
     ```
-
   </TabItem>
 </Tabs>
-
 
 After retrieving the transactions, we need to perform the following checks:
 
@@ -585,7 +565,6 @@ After retrieving the transactions, we need to perform the following checks:
 3. If the transaction description includes a `bounce` field (specific to the `transactions` endpoint in APIv3), it indicates that the **bounce phase** was triggered. In that case, we must check whether the bounce was completed successfully, which means the funds were returned to the sender.
 
 If all these conditions are met, we can consider the deposit successfully credited to the wallet.
-
 
 :::danger
 Please note that the provided code is a simplified example and does not constitute a complete deposit tracking solution.
@@ -621,17 +600,15 @@ internal (op::internal_transfer) → User_B_Jetton_Wallet
 
 As shown, this operation involves **three transactions**, and the actual Jetton transfer is completed only after the **third transaction** is successfully finished. After the third transaction, the following additional messages may be sent:
 
-* `internal (op::jetton_transfer_notification) → User_B` — if `forward_amount` is set
-* `internal (op::excesses) → response_destination` — if `response_destination` is set
+- `internal (op::jetton_transfer_notification) → User_B` — if `forward_amount` is set
+- `internal (op::excesses) → response_destination` — if `response_destination` is set
 
 However, to verify the transfer, we only need to check the third transaction.
 To simplify the example, assume we want to track incoming Jettons for a specific wallet:
 `EQBkR-F5h4F2sF-b4ZIE59unSvnqefxi2nWm7JBLGhV9FCPX` — for the USDT Jetton.
 
-
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
-
     <details>
       <summary>
         Source code
@@ -748,28 +725,32 @@ To simplify the example, assume we want to track incoming Jettons for a specific
 
       main().finally(() => console.log('Exiting...'));
       ```
-
     </details>
-
   </TabItem>
 </Tabs>
 
-
 First, we fetch the latest 10 transactions for the USDT Jetton Wallet smart contract. Then, we check the following conditions:
+
 1. The transaction must be **ordinary**, meaning `description.type` is equal to `generic`.
 2. The **compute phase** must be successful:
-* `description.computePhase.type` is `vm`
-* `description.computePhase.exitCode` is `0`
+
+- `description.computePhase.type` is `vm`
+- `description.computePhase.exitCode` is `0`
+
 3. If an **action phase** is present, it must also be successful:
-* `description.actionPhase.resultCode` is `0`
+
+- `description.actionPhase.resultCode` is `0`
+
 4. The **inbound message** must be internal:
-* `inMessage.info.type` is `internal`
+
+- `inMessage.info.type` is `internal`
+
 5. The **body** of the inbound message must contain an `internal_transfer` operation:
-* `body.loadUint(32)` returns `0x178d4519`
+
+- `body.loadUint(32)` returns `0x178d4519`
 
 If all checks pass, we consider the deposit successfully credited to the wallet.
 To parse the body of the inbound message, we use the TL-B schema defined in [TEP-0074](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md):
-
 
 ```tlb
 internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
@@ -828,7 +809,6 @@ We call the method and check the owner's address.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
-
     ```js title="nft-transfer.ts"
     import { Address } from '@ton/core';
     import { TonClient } from '@ton/ton';
@@ -848,10 +828,8 @@ We call the method and check the owner's address.
 
     main().finally(() => console.log("Exiting..."));
     ```
-
   </TabItem>
 </Tabs>
-
 
 :::note
 As with the previous two examples, please note that this is a simplified scenario. In real-world applications, the system is more complex overall. For more detailed information, refer to the [dedicated article](/v3/guidelines/dapps/asset-processing/nft-processing/nfts).
@@ -876,6 +854,7 @@ To do this, we first analyze the available operations in the contract at a high 
 ```
 
 In this code, we see two operations related to sending and receiving Jettons:
+
 1. `op::transfer` — the operation used when sending Jettons. It calls the `send_tokens` function, which handles transferring Jettons to another wallet.
 2. `op::internal_transfer` — the operation used when receiving Jettons. It calls the `receive_tokens` function, which handles accepting Jettons into the wallet.
 
@@ -894,9 +873,7 @@ Now let’s look at the `send_tokens` function, which handles sending Jettons:
 
 <details>
   <summary>
-
     `send_tokens` function
-
   </summary>
 
   ```func
@@ -948,13 +925,13 @@ Now let’s look at the `send_tokens` function, which handles sending Jettons:
 
   send_raw_message(msg.end_cell(), 64); ;; revert on errors
   save_data(balance, owner_address, jetton_master_address, jetton_wallet_code);
-}
+  }
 
   ```
-
 </details>
 
 Although the code may seem complex at first glance, its logic is straightforward:
+
 1. The required fields are read from `in_msg_body`, which represents the body of the inbound message.
 2. Based on these fields, the contract verifies that the sender is the token owner and that the balance is sufficient for the transfer.
 3. Using the recipient’s address, it computes the address of the recipient’s Jetton wallet.
@@ -966,9 +943,7 @@ Now, let’s examine the receiving side:
 
 <details>
   <summary>
-
     `receive_tokens` function
-
   </summary>
 
   ```func
@@ -1012,7 +987,7 @@ Now, let’s examine the receiving side:
   .store_ref(msg_body);
 
   send_raw_message(msg.end_cell(), 1);
-}
+  }
 
   if ((response_address.preload_uint(2) != 0) & (msg_value > 0)) {
   var msg = begin_cell()
@@ -1023,13 +998,12 @@ Now, let’s examine the receiving side:
   .store_uint(op::excesses(), 32)
   .store_uint(query_id, 64);
   send_raw_message(msg.end_cell(), 2);
-}
+  }
 
   save_data(balance, owner_address, jetton_master_address, jetton_wallet_code);
-}
+  }
 
   ```
-
 </details>
 
 In this function, we observe the following:
@@ -1045,7 +1019,6 @@ From this, we know that the recipient’s balance increases only if the transact
 If an error occurs, the contract generates a bounce message that is sent to the recipient’s Jetton wallet.
 
 Looking at the contract code, we can see that it explicitly handles such bounce messages:
-
 
 ```func
 slice cs = in_msg_full.begin_parse();

@@ -14,7 +14,7 @@ To learn more about RedStone oracles design go to the [RedStone docs](https://do
 
 ## Documentation links
 
-* [Redstone TON Connector](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector)
+- [Redstone TON Connector](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector)
 
 ## Smart contracts
 
@@ -145,10 +145,10 @@ Regardless of reading the values persisting in the contract's from outside the n
 there is a possibility for fetching the value stored in the contract for a `feed_id` on-chain directly.
 There must be invoked an internal message `OP_REDSTONE_FETCH_DATA`. The arguments of the message are:
 
-* an `int` representing `RedStone_Fetch_Data` name hashed by keccak256 as defined
+- an `int` representing `RedStone_Fetch_Data` name hashed by keccak256 as defined
   in [constants.ts](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)
-* an `int` representing the `feed_id` value.
-* a `slice` representing the `initial_sender` of the message, to allow they carried the remaining transaction balance
+- an `int` representing the `feed_id` value.
+- a `slice` representing the `initial_sender` of the message, to allow they carried the remaining transaction balance
   when the returning transaction goes.
 
 ```func
@@ -266,7 +266,7 @@ The contract calls the single feed.
 There is a possibility for fetching the value stored in the contract for a `feed_id` on-chain directly.
 There must be invoked an internal message `OP_REDSTONE_READ_DATA`. The arguments of the message are:
 
-* a `slice` representing the `initial_sender` of the message, to allow they carried the remaining transaction balance
+- a `slice` representing the `initial_sender` of the message, to allow they carried the remaining transaction balance
   when the returning transaction goes.
 
 ```func
@@ -318,9 +318,9 @@ the data should be passed as a Cell built as follows.
 
 #### Current implementation limitations
 
-* The RedStone payload must be fetched by explicitly defining data feeds,
+- The RedStone payload must be fetched by explicitly defining data feeds,
   which leads to **one data point** belonging to **one data package**.
-* The unsigned metadata size must not be exceeding `127 - (2 + 3 + 9) = 113` bytes.
+- The unsigned metadata size must not be exceeding `127 - (2 + 3 + 9) = 113` bytes.
 
 #### Helper
 
@@ -334,17 +334,17 @@ The image below contains data for `2` feeds times `2` unique signers:
 
 ## Possible transaction failures
 
-* The number of signers recovered from the signatures matched with ```addresses``` passed in the initializer
+- The number of signers recovered from the signatures matched with ```addresses``` passed in the initializer
   must be greater or equal that the ```signer_count_threshold``` in the constructor, for each feed.
-    * Otherwise, it panics then with the `300` error, increased by the first index of the passed
+    - Otherwise, it panics then with the `300` error, increased by the first index of the passed
       feed which has broken the validation.
-* The timestamp of data-packages must be not older than 15 minutes in relation to the ```block_timestamp```.
-    * Otherwise, it panics then with the `200` error, increased by the first index of the payload's
+- The timestamp of data-packages must be not older than 15 minutes in relation to the ```block_timestamp```.
+    - Otherwise, it panics then with the `200` error, increased by the first index of the payload's
       data package which has broken the validation, increased additionally by `50` if the package's timestamp is too
       future.
-* The internal messages consume gas and must be paid by TONs. The data are available on the contract
+- The internal messages consume gas and must be paid by TONs. The data are available on the contract
   just after the transaction successes.
-* The other error codes are defined [here](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)
+- The other error codes are defined [here](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/src/config/constants.ts)
 
 ## See also
 

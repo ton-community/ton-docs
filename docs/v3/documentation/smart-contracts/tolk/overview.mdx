@@ -12,11 +12,11 @@ It replaces FunC with modern syntax, strong types, and built-in serialization �
 
 ## Tolk Features
 
-* Simple and readable syntax, inspired by TypeScript and Rust.
-* Language features exposing TON nature: auto-serialized structures, pattern matching, and convenient message management.
-* Advanced static type system: null safety, type aliases, union types, generics — everything you need to write safe and flexible code.
-* Efficiency: smart contracts in Tolk are less expensive than FunC equivalents — up to 50% gas savings thanks to compiler optimizations and unique "lazy" functionality.
-* Deep control: when necessary, manipulate the stack or TVM instructions directly.
+- Simple and readable syntax, inspired by TypeScript and Rust.
+- Language features exposing TON nature: auto-serialized structures, pattern matching, and convenient message management.
+- Advanced static type system: null safety, type aliases, union types, generics — everything you need to write safe and flexible code.
+- Efficiency: smart contracts in Tolk are less expensive than FunC equivalents — up to 50% gas savings thanks to compiler optimizations and unique "lazy" functionality.
+- Deep control: when necessary, manipulate the stack or TVM instructions directly.
 
 ```tolk
 import "utils"
@@ -42,48 +42,41 @@ get fun currentCounter(): int {
 <details>
   <summary><b>See same logic implemented with FunC</b></summary>
 
-```func
-#include "utils.fc";
+  ```func
+  #include "utils.fc";
 
-global int ctx_counter;
+  global int ctx_counter;
 
-int load_data() impure {
-  slice cs = get_data().begin_parse();
-  ctx_counter = cs~load_uint(32);
-}
-
-() recv_internal(int msg_value, cell msg_full, slice msg_body) impure {
-  slice cs = msg_full.begin_parse();
-  int flags = cs.load_uint(4);
-  if (flags & 1) {
-    return ();
+  int load_data() impure {
+    slice cs = get_data().begin_parse();
+    ctx_counter = cs~load_uint(32);
   }
-  ...
-}
 
-int currentCounter() method_id {
-  load_data(); ;; fills global variables
-  return ctx_counter;
-}
-```
+  () recv_internal(int msg_value, cell msg_full, slice msg_body) impure {
+    slice cs = msg_full.begin_parse();
+    int flags = cs.load_uint(4);
+    if (flags & 1) {
+      return ();
+    }
+    ...
+  }
 
+  int currentCounter() method_id {
+    load_data(); ;; fills global variables
+    return ctx_counter;
+  }
+  ```
 </details>
 
-<Button
-  href="https://github.com/ton-blockchain/convert-func-to-tolk"
-  colorType={"primary"}
-  sizeType={"sm"}
->
+<Button href="https://github.com/ton-blockchain/convert-func-to-tolk" colorType={"primary"} sizeType={"sm"}>
   Try a FunC → Tolk converter
 </Button>
-<Button
-  href="/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short"
-  colorType={"secondary"}
-  sizeType={"sm"}
->
+
+<Button href="/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short" colorType={"secondary"} sizeType={"sm"}>
   Tolk vs FunC differences
 </Button>
-<div style={{ height: "2em" }}></div>
+
+<div style={{ height: "2em" }} />
 
 ## Migrating from FunC to Tolk
 

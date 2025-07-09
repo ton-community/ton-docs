@@ -39,7 +39,7 @@ By applying this schema, we get:
 00000000                                                           -- index 0 because there is only 1 key
 ```
 
-Next, retrieve the key ID and the SHA256 hash from the bytes serialized above. It will be `b30af0538916421b46df4ce580bf3a29316831e0c3323a7f156df0236c5b2f75`. 
+Next, retrieve the key ID and the SHA256 hash from the bytes serialized above. It will be `b30af0538916421b46df4ce580bf3a29316831e0c3323a7f156df0236c5b2f75`.
 
 Now we can begin our search. To do this, we need to execute a query that has [schema](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L197):
 
@@ -53,8 +53,8 @@ Now, let's populate this structure, serialize it, and send the request using the
 
 In response, we can get:
 
-* `dht.valueNotFound` - if the value is not found.
-* `dht.valueFound` - if the value is found on this node.
+- `dht.valueNotFound` - if the value is not found.
+- `dht.valueFound` - if the value is found on this node.
 
 ### dht.valueNotFound
 
@@ -80,7 +80,7 @@ Each node has an `id`, which serves as its public key, typically represented as 
 
 We need to verify the signature of each node. To do this, we first read the value of the `signature` field and then set it to zero, effectively making it an empty byte array. Next, we serialize the TL structure `dht.node` using this empty signature and check the `signature` field that we emptied earlier.
 
-We validate the serialized bytes using the public key from the `id` field. [[Please see implementation example]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/dht/client.go#L91).
+We validate the serialized bytes using the public key from the `id` field. [\[Please see implementation example\]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/dht/client.go#L91).
 
 From the list `addrs:(vector adnl.Address)`, we select an address and attempt to establish an ADNL UDP connection, using `id` (the public key) as the server key.
 
@@ -89,7 +89,6 @@ To determine the "distance" to this node, we retrieve the [key ID](/v3/documenta
 ### dht.valueFound
 
 The response will include the value itself, complete key information, and optionally a signature, depending on the value type.
-
 
 Let's analyze the response fields in more detail, the schemas used:
 
@@ -112,12 +111,12 @@ dht.valueFound value:dht.Value = dht.ValueResult;
 
 Let's determine `key:dht.keyDescription`. This provides a complete description of the key, including the key itself and information about who can update its value and how.
 
-* `key:dht.key` - the key must match the one from which we took the key ID for the search.
-* `id:PublicKey` - the public key of the record owner.
-* `update_rule:dht.UpdateRule` - record update rule.
-  * `dht.updateRule.signature` - only the owner of the private key can update the record, the `signature` of both the key and the value must be valid
-  * `dht.updateRule.anybody` - everyone can update the record, `signature` is empty and not checked
-  * `dht.updateRule.overlayNodes` - nodes from the same overlay can update the key, used to find nodes of the same overlay and add yourself
+- `key:dht.key` - the key must match the one from which we took the key ID for the search.
+- `id:PublicKey` - the public key of the record owner.
+- `update_rule:dht.UpdateRule` - record update rule.
+  - `dht.updateRule.signature` - only the owner of the private key can update the record, the `signature` of both the key and the value must be valid
+  - `dht.updateRule.anybody` - everyone can update the record, `signature` is empty and not checked
+  - `dht.updateRule.overlayNodes` - nodes from the same overlay can update the key, used to find nodes of the same overlay and add yourself
 
 ### dht.updateRule.signature
 
@@ -125,11 +124,11 @@ After reviewing the key's description, we proceed based on the `updateRule`. In 
 
 We verify the key signature in the same manner as before. First, we set the signature to an empty byte array, serialize it, and perform the necessary checks. Next, we repeat this process for the entire `dht.value` object while ensuring that the key signature is restored to its original state.
 
-[[Please see implementation example]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/dht/client.go#L331).
+[\[Please see implementation example\]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/dht/client.go#L331).
 
 ### dht.updateRule.overlayNodes
 
-Used for keys that contain information about other nodes, shards of the WorkChain in the network, the value always follows the TL structure `overlay.nodes`. 
+Used for keys that contain information about other nodes, shards of the WorkChain in the network, the value always follows the TL structure `overlay.nodes`.
 
 The value field must be empty.
 
@@ -154,7 +153,7 @@ There are no signatures required; anyone can make updates.
 
 ### Using a value
 
-Once everything has been verified and the `ttl:int` value has not expired, we can begin working with the value itself, specifically `value:bytes`. For an ADNL address, this will include an `adnl.addressList` structure. 
+Once everything has been verified and the `ttl:int` value has not expired, we can begin working with the value itself, specifically `value:bytes`. For an ADNL address, this will include an `adnl.addressList` structure.
 
 This structure will contain the IP addresses and ports of the servers corresponding to the requested ADNL address. In our case, we will most likely have one RLDP-HTTP address associated with the `foundation.ton` service.
 
@@ -205,5 +204,5 @@ These nodes will also provide us with all the information regarding the blocks.
 ## References
 
 Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/DHT.md) - _[Oleg Baranov](https://github.com/xssnick)._
-<Feedback />
 
+<Feedback />

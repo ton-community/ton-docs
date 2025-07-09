@@ -4,9 +4,9 @@ import Feedback from '@site/src/components/Feedback';
 
 Please see the implementations:
 
-* [RLDP Part 1](https://github.com/ton-blockchain/ton/tree/master/rldp)
-* [RLDP Part 2](https://github.com/ton-blockchain/ton/tree/master/rldp2)
-* [RLDP HTTP Proxy](https://github.com/ton-blockchain/ton/tree/master/rldp-http-proxy)
+- [RLDP Part 1](https://github.com/ton-blockchain/ton/tree/master/rldp)
+- [RLDP Part 2](https://github.com/ton-blockchain/ton/tree/master/rldp2)
+- [RLDP HTTP Proxy](https://github.com/ton-blockchain/ton/tree/master/rldp-http-proxy)
 
 ## Overview
 
@@ -44,7 +44,7 @@ Once the receiver has gathered the necessary `rldp.messagePart` pieces to recons
 
 ### FEC
 
-Valid Forward Error Correction (FEC) algorithms suitable for RLDP include RoundRobin, Online, and RaptorQ. 
+Valid Forward Error Correction (FEC) algorithms suitable for RLDP include RoundRobin, Online, and RaptorQ.
 
 Currently, [RaptorQ](https://www.qualcomm.com/media/documents/files/raptorq-technical-overview.pdf) is used for data encoding.
 
@@ -52,13 +52,13 @@ Currently, [RaptorQ](https://www.qualcomm.com/media/documents/files/raptorq-tech
 
 The core concept of RaptorQ is the division of data into symbols, which are blocks of a fixed, predetermined size.
 
-These blocks are organized into matrices, where discrete mathematical operations are performed. This process enables the creation of an almost limitless number of symbols from the same original data. 
+These blocks are organized into matrices, where discrete mathematical operations are performed. This process enables the creation of an almost limitless number of symbols from the same original data.
 
 All the generated symbols are combined and sent to the recipient, allowing for the recovery of lost packets without the need for additional requests to the server. This method uses fewer packets than would be required if the same pieces of data were sent repeatedly.
 
 The symbols are transmitted to the peer until they confirm that all data has been received and successfully restored (decoded) by applying the same discrete operations.
 
-[[Please see implementation example of RaptorQ in Golang]](https://github.com/xssnick/tonutils-go/tree/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/rldp/raptorq).
+[\[Please see implementation example of RaptorQ in Golang\]](https://github.com/xssnick/tonutils-go/tree/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/rldp/raptorq).
 
 ## RLDP-HTTP
 
@@ -82,17 +82,18 @@ http.getNextPayloadPart id:int256 seqno:int max_chunk_size:int = http.PayloadPar
 This is not pure HTTP in text form; everything is wrapped in a binary TL and unwrapped before being sent to the web server or browser by the proxy itself.
 
 The scheme of work is as follows:
-* Client sends `http.request`
-* The server checks the `Content-Length` header when receiving a request
-  * If not 0, sends a `http.getNextPayloadPart` request to the client
-  * When receiving a request, the client sends `http.payloadPart` - the requested body piece depending on `seqno` and `max_chunk_size`.
-  * The server repeats requests, incrementing `seqno`, until it receives all the chunks from the client, i.e. until the `last:Bool` field of the last chunk received is true.
-* After processing the request, the server sends `http.response`, the client checks the `Content-Length` header
-  * If it is not 0, then sends a `http.getNextPayloadPart` request to the server, and the operations are repeated, as in the case of the client but vice-versa.
+
+- Client sends `http.request`
+- The server checks the `Content-Length` header when receiving a request
+  - If not 0, sends a `http.getNextPayloadPart` request to the client
+  - When receiving a request, the client sends `http.payloadPart` - the requested body piece depending on `seqno` and `max_chunk_size`.
+  - The server repeats requests, incrementing `seqno`, until it receives all the chunks from the client, i.e. until the `last:Bool` field of the last chunk received is true.
+- After processing the request, the server sends `http.response`, the client checks the `Content-Length` header
+  - If it is not 0, then sends a `http.getNextPayloadPart` request to the server, and the operations are repeated, as in the case of the client but vice-versa.
 
 ## Request the TON site
 
-To understand how RLDP works, let's look at an example of getting data from the TON site `foundation.ton`. 
+To understand how RLDP works, let's look at an example of getting data from the TON site `foundation.ton`.
 
 Assuming say we have already got its ADNL address by calling the Get method of the NFT-DNS contract, [determined the address and port of the RLDP service using DHT](https://github.com/xssnick/ton-deep-doc/blob/master/DHT.md), and [connected to it over ADNL UDP](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-UDP-Internal.md).
 
@@ -144,8 +145,8 @@ Additionally, the constants chosen for the encoder depend on the data size and t
 
 Please see the examples:
 
-* [[Example of creating an encoder]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/rldp/raptorq/encoder.go#L15)  
-* [[Symbol encoding example]](https://github.com/xssnick/tonutils-go/blob/be3411cf412f23e6889bf0b648904306a15936e7/adnl/rldp/raptorq/solver.go#L26)
+- [\[Example of creating an encoder\]](https://github.com/xssnick/tonutils-go/blob/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/rldp/raptorq/encoder.go#L15)
+- [\[Symbol encoding example\]](https://github.com/xssnick/tonutils-go/blob/be3411cf412f23e6889bf0b648904306a15936e7/adnl/rldp/raptorq/solver.go#L26)
 
 Symbols are encoded and transmitted in a round-robin manner. We start with an initial sequence number, `seqno`, set to 0, and increment it by 1 for each subsequent encoded packet. For instance, if we have two symbols, we first encode and send the first symbol, then increase `seqno` by 1. Next, we encode and send the second symbol and again increase `seqno` by 1. After that, we return to the first symbol and increment `seqno` (which is now 2) by another 1.
 
@@ -159,15 +160,15 @@ fec.raptorQ data_size:int symbol_size:int symbols_count:int = fec.Type;
 rldp.messagePart transfer_id:int256 fec_type:fec.Type part:int total_size:long seqno:int data:bytes = rldp.MessagePart;
 ```
 
-* `transfer_id` - random int256, the same for all messageParts within the same data transfer.
-*  `fec_type` is `fec.raptorQ`.
-   * `data_size` = 156
-   * `symbol_size` = 768
-   * `symbols_count` = 1
-*  `part` in our case always 0, can be used for transfers that hit the size limit.
-*  `total_size` = 156. The size of our transfer data.
-*  `seqno` - for the first packet will be equal to 0, and for each subsequent packet it will increase by 1, will be used as parameter to decode and encode symbol.
-*  `data` - our encoded symbol, 768 bytes in size.
+- `transfer_id` - random int256, the same for all messageParts within the same data transfer.
+- `fec_type` is `fec.raptorQ`.
+  - `data_size` = 156
+  - `symbol_size` = 768
+  - `symbols_count` = 1
+- `part` in our case always 0, can be used for transfers that hit the size limit.
+- `total_size` = 156. The size of our transfer data.
+- `seqno` - for the first packet will be equal to 0, and for each subsequent packet it will increase by 1, will be used as parameter to decode and encode symbol.
+- `data` - our encoded symbol, 768 bytes in size.
 
 After serializing `rldp.messagePart`, wrap it in `adnl.message.custom` and send it over ADNL UDP.
 
@@ -175,7 +176,7 @@ We will send packets in a continuous loop, incrementing the `seqno` each time, u
 
 These extra packets are intended for recovery in case of data loss, as UDP is a fast but unreliable protocol.
 
-[[Please see implementation example]](https://github.com/xssnick/tonutils-go/blob/be3411cf412f23e6889bf0b648904306a15936e7/adnl/rldp/rldp.go#L249).
+[\[Please see implementation example\]](https://github.com/xssnick/tonutils-go/blob/be3411cf412f23e6889bf0b648904306a15936e7/adnl/rldp/rldp.go#L249).
 
 ### Processing the response from `foundation.ton`
 
@@ -187,9 +188,9 @@ We will receive `adnl.message.custom` messages that include `rldp.messagePart`.
 
 First, we need to extract FEC information from the initial message received during the transfer. Specifically, we are looking for the `data_size`, `symbol_size`, and `symbols_count` parameters from the `fec.raptorQ` messagePart structure.
 
-These parameters are essential for initializing the RaptorQ decoder. [[Please see the example]](https://github.com/xssnick/tonutils-go/blob/be3411cf412f23e6889bf0b648904306a15936e7/adnl/rldp/rldp.go#L137).
+These parameters are essential for initializing the RaptorQ decoder. [\[Please see the example\]](https://github.com/xssnick/tonutils-go/blob/be3411cf412f23e6889bf0b648904306a15936e7/adnl/rldp/rldp.go#L137).
 
-After initialization, we add the received symbols along with their `seqno` to our decoder. Once we have gathered the minimum required number of symbols, equal to `symbols_count`, we can attempt to decode the full message. If successful, we will send `rldp.complete`. [[Please see the example]](https://github.com/xssnick/tonutils-go/blob/be3411cf412f23e6889bf0b648904306a15936e7/adnl/rldp/rldp.go#L168).
+After initialization, we add the received symbols along with their `seqno` to our decoder. Once we have gathered the minimum required number of symbols, equal to `symbols_count`, we can attempt to decode the full message. If successful, we will send `rldp.complete`. [\[Please see the example\]](https://github.com/xssnick/tonutils-go/blob/be3411cf412f23e6889bf0b648904306a15936e7/adnl/rldp/rldp.go#L168).
 
 The result will be a `rldp.answer` message containing the same `query_id` as in the sent `rldp.query`. The data must include `http.response`.
 
@@ -207,7 +208,7 @@ If `no_payload` is false, this means there is content in the response, and we ne
 http.getNextPayloadPart id:int256 seqno:int max_chunk_size:int = http.PayloadPart;
 ```
 
-`id` must match the value sent in `http.request`, `seqno` should be 0, and increment by 1 for each subsequent part. The `max_chunk_size` indicates the largest chunk size we can accept, with a typical value of 128 KB (131072 bytes). 
+`id` must match the value sent in `http.request`, `seqno` should be 0, and increment by 1 for each subsequent part. The `max_chunk_size` indicates the largest chunk size we can accept, with a typical value of 128 KB (131072 bytes).
 
 In response, we will receive the following information:
 
@@ -222,4 +223,3 @@ If `last` is true, then we have reached the end. We can combine all the pieces t
 Here is the [link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/RLDP.md) - _[Oleg Baranov](https://github.com/xssnick)._
 
 <Feedback />
-

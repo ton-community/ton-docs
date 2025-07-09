@@ -15,7 +15,6 @@ Understanding how hashing works will help you effectively track transactions, va
 In TON, a **hash** is a unique cryptographic fingerprint of data computed using the **SHA-256** algorithm.
 Each cell, message, or transaction has its unique hash, which acts as a digital signature.
 
-
 ## Hash types
 
 :::info Important
@@ -59,9 +58,9 @@ Message body hash: d989794fa90c9817a63a22e00554574f3c4a347dcfd2e2886980a294de15f
 
 **When to use a message body hash:**
 
-* to verify data integrity
-* for debugging and logging operations
-* to deduplicate messages in your application
+- to verify data integrity
+- for debugging and logging operations
+- to deduplicate messages in your application
 
 ### Full message hash
 
@@ -119,15 +118,16 @@ console.log('Full message hash:', fullMessageHash.toString('hex'));
 ```
 
 #### Expected output
+
 ```
 Full message hash: 40b1477f90d702af223f15194724e0c12b51028bc622444959e155e77903b12c
 ```
 
 **When to use the complete message hash:**
 
-* to track specific messages on the blockchain
-* when using the TON Center API to search for transactions
-* to verify that no one modified the message
+- to track specific messages on the blockchain
+- when using the TON Center API to search for transactions
+- to verify that no one modified the message
 
 ### Transaction hash
 
@@ -168,6 +168,7 @@ async function main() {
 
 main().catch(console.error);
 ```
+
 #### Expected output
 
 Displays the last 10 transactions for the specified address.
@@ -244,7 +245,6 @@ console.log('Normalized message hash:', normalizedHash);
 Normalized message hash: ee53ccd1224c315597bdbafb2e722316d9471490b13dd9e1834903b094eb5964
 ```
 
-
 **Practical example of calculating a non-normalized hash:**
 
 Before April 2025, message hashes were not normalized across the ecosystem. If your code constructs messages without applying normalization, it may produce inconsistent hashes. In such cases, update the logic to follow the normalization rules described in [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467).
@@ -253,6 +253,7 @@ Below is an example of non-normalized message construction — avoid using this 
 
 <details>
   <summary> Avoid this approach </summary>
+
   ```typescript title="non_norm_hash.ts"
 
   import { mnemonicToWalletKey } from '@ton/crypto';
@@ -305,10 +306,10 @@ Below is an example of non-normalized message construction — avoid using this 
   ```
 
   **Expected output**
+
   ```
   Non-normalized external message hash: 8dd5c85be08e33341553cb1e5a2f08323e9ae9314d5ceac2e3a6c79f11151b5e
   ```
-
 </details>
 
 The algorithm may differ from the normalized version in any way.
@@ -320,88 +321,90 @@ One common scenario is sending a message and checking that the blockchain accept
 
 <details>
   <summary>Here is the step-by-step process</summary>
-```typescript title="send_and_verify_msg.ts"
-import { internal, TonClient, Address, beginCell, WalletContractV4, SendMode } from '@ton/ton';
-import { mnemonicToPrivateKey } from '@ton/crypto';
 
-async function sendAndVerifyMessage() {
-    const client = new TonClient({
-        // Testnet endpoint; if you're working on Mainnet, don't forget to update this
-        endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
-        apiKey: 'insert your api key', // Get your API key via the toncenter.com bot
-    });
+  ```typescript title="send_and_verify_msg.ts"
+  import { internal, TonClient, Address, beginCell, WalletContractV4, SendMode } from '@ton/ton';
+  import { mnemonicToPrivateKey } from '@ton/crypto';
 
-    // Load wallet key pair from mnemonic
-    const mnemonic = 'your mnemonic'.split(' '); // Insert your seed phrase here
-    const keyPair = await mnemonicToPrivateKey(mnemonic);
+  async function sendAndVerifyMessage() {
+      const client = new TonClient({
+          // Testnet endpoint; if you're working on Mainnet, don't forget to update this
+          endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
+          apiKey: 'insert your api key', // Get your API key via the toncenter.com bot
+      });
 
-    const wallet = client.open(
-        WalletContractV4.create({
-            publicKey: keyPair.publicKey,
-            workchain: 0,
-        }),
-    );
+      // Load wallet key pair from mnemonic
+      const mnemonic = 'your mnemonic'.split(' '); // Insert your seed phrase here
+      const keyPair = await mnemonicToPrivateKey(mnemonic);
 
-    // Create message body with comment
-    const messageBody = beginCell().storeUint(0, 32).storeStringTail('Hello TON!').endCell();
+      const wallet = client.open(
+          WalletContractV4.create({
+              publicKey: keyPair.publicKey,
+              workchain: 0,
+          }),
+      );
 
-    // Get current seqno
-    const seqno = await wallet.getSeqno();
+      // Create message body with comment
+      const messageBody = beginCell().storeUint(0, 32).storeStringTail('Hello TON!').endCell();
 
-    // Send transaction
-    await wallet.sendTransfer({
-        secretKey: keyPair.secretKey,
-        seqno,
-        messages: [
-            internal({
-                to: Address.parse('0QD3o...'), // Insert the address here
-                value: '0.05',
-                body: messageBody,
-            }),
-        ],
-        sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS,
-    });
+      // Get current seqno
+      const seqno = await wallet.getSeqno();
 
-    // Wait 10 seconds before checking seqno again
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+      // Send transaction
+      await wallet.sendTransfer({
+          secretKey: keyPair.secretKey,
+          seqno,
+          messages: [
+              internal({
+                  to: Address.parse('0QD3o...'), // Insert the address here
+                  value: '0.05',
+                  body: messageBody,
+              }),
+          ],
+          sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS,
+      });
 
-    // Check if the transaction was processed
-    const newSeqno = await wallet.getSeqno();
+      // Wait 10 seconds before checking seqno again
+      await new Promise((resolve) => setTimeout(resolve, 10000));
 
-    if (newSeqno > seqno) {
-        console.log('Transaction sent successfully!');
+      // Check if the transaction was processed
+      const newSeqno = await wallet.getSeqno();
 
-        // Fetch recent transactions for this wallet
-        const transactions = await client.getTransactions(wallet.address, {
-            archival: true,
-            limit: 5,
-        });
-        // Find the relevant external-in transaction
-        const ourTx = transactions.find(
-            (tx) => tx.inMessage?.info.type === 'external-in' && tx.description.type === 'generic',
-        );
+      if (newSeqno > seqno) {
+          console.log('Transaction sent successfully!');
 
-        if (ourTx) {
-            const txHash = ourTx.hash().toString('hex');
-            console.log('Transaction Hash:', txHash);
-            const viewerUrl = `https://testnet.tonviewer.com/transaction/${txHash}`;
-            console.log('Transaction link:', viewerUrl);
-        }
-    } else {
-        console.log('Transaction was not processed');
-    }
-}
+          // Fetch recent transactions for this wallet
+          const transactions = await client.getTransactions(wallet.address, {
+              archival: true,
+              limit: 5,
+          });
+          // Find the relevant external-in transaction
+          const ourTx = transactions.find(
+              (tx) => tx.inMessage?.info.type === 'external-in' && tx.description.type === 'generic',
+          );
 
-sendAndVerifyMessage().catch(console.error);
-```
-#### Expected output
-```
-Transaction sent successfully!
-Transaction hash: 285f8df8f968f63680f8efaff004369f4e7aeb8619293da035cb8ca3899232f3
-Transaction link: https://testnet.tonviewer.com/transaction/82ee8ee68d8b764105139b7b783b3d91d8344c6e44ee67a38ca5ee967615d31a
-```
+          if (ourTx) {
+              const txHash = ourTx.hash().toString('hex');
+              console.log('Transaction Hash:', txHash);
+              const viewerUrl = `https://testnet.tonviewer.com/transaction/${txHash}`;
+              console.log('Transaction link:', viewerUrl);
+          }
+      } else {
+          console.log('Transaction was not processed');
+      }
+  }
 
-  </details>
+  sendAndVerifyMessage().catch(console.error);
+  ```
+
+  #### Expected output
+
+  ```
+  Transaction sent successfully!
+  Transaction hash: 285f8df8f968f63680f8efaff004369f4e7aeb8619293da035cb8ca3899232f3
+  Transaction link: https://testnet.tonviewer.com/transaction/82ee8ee68d8b764105139b7b783b3d91d8344c6e44ee67a38ca5ee967615d31a
+  ```
+</details>
 
 ## Hashes for frontend validation
 
@@ -444,6 +447,7 @@ In this project, navigate to `src/components/TxForm` and replace the contents of
 
 <details>
   <summary>Obtaining BoC and hash using react example</summary>
+
   ```tsx title="TxForm.tsx"
   import React, { useState } from 'react';
   import './style.scss';
@@ -574,20 +578,21 @@ In this project, navigate to `src/components/TxForm` and replace the contents of
           </div>
       );
   }
-```
-
+  ```
 </details>
 
 After you run the code, the demo DApp launches.
 To proceed:
-* Connect your Tonkeeper wallet.
-* Click the **Send transaction** button.
-* Approve the transaction in your wallet.
+
+- Connect your Tonkeeper wallet.
+- Click the **Send transaction** button.
+- Approve the transaction in your wallet.
 
 Once the transaction is sent, the UI displays the following fields:
-* **BOC (base64)** – the raw external message in base64 format.
-* **Original hash** – the hash of the message as sent. You can use it to look up the transaction on-chain.
-* **Normalized hash (TEP-467)** – the hash computed after normalization, used for consistent message identification.
+
+- **BOC (base64)** – the raw external message in base64 format.
+- **Original hash** – the hash of the message as sent. You can use it to look up the transaction on-chain.
+- **Normalized hash (TEP-467)** – the hash computed after normalization, used for consistent message identification.
 
 <details>
   <summary>Transaction lookup via BoC</summary>
@@ -629,9 +634,7 @@ Once the transaction is sent, the UI displays the following fields:
   Transaction found on the blockchain
   Transaction link: https://testnet.tonviewer.com/transaction/ad53eb8d1145b239d615dfd3bffb1b9cb7c8c5823530dc217d988fb89794f59a
   ```
-
 </details>
-
 
 ## Transaction status check using hash
 
@@ -712,6 +715,7 @@ async function getStateInit() {
 
 getStateInit().catch(console.error);
 ```
+
 #### Expected output
 
 ```
@@ -763,6 +767,7 @@ The example below shows how to set up a listener that receives transaction data 
 
 <details>
   <summary>Code</summary>
+
   ```typescript title="trxs_monitoring.ts"
 
   import { Address, TonClient, beginCell, storeMessage } from '@ton/ton';
@@ -820,10 +825,9 @@ The example below shows how to set up a listener that receives transaction data 
 
 We covered how every message and transaction in TON is assigned a unique cryptographic fingerprint — a hash. These hashes enable us to verify content, detect duplicates, and track the entire execution flow across the blockchain.
 
-Now, let’s explore how to *retrieve and analyze transactions* using the API — turning hashes into actionable data.
+Now, let’s explore how to _retrieve and analyze transactions_ using the API — turning hashes into actionable data.
 
 <Button href="/v3/guidelines/dapps/transactions/api-based-retrieval" colorType={'primary'} sizeType={'sm'}>
-
   Process transactions with the API
 </Button>
 

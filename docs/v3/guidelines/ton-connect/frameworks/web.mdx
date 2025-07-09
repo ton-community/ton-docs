@@ -11,28 +11,29 @@ If using React for your DApp, look at the [TON Connect UI React SDK](/v3/guideli
 
 If you're using Vue for your DApp, look at the [TON Connect UI Vue SDK](/v3/guidelines/ton-connect/frameworks/vue).
 
-
 ## Implementation
 
 ### Installation
 
 <Tabs groupId="Installation">
   <TabItem value="CDN" label="CDN">
-Add the script to the `<HEAD>` element of your website:
-    <br/>
-    <br/>
+    Add the script to the `<HEAD>` element of your website:
 
+    <br />
 
-```html
-<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-```
+    <br />
+
+    ```html
+    <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
+    ```
   </TabItem>
-  <TabItem value="NPM" label="NPM">
-   Install the [@tonconnect/ui](https://www.npmjs.com/package/@tonconnect/ui) package:
 
-```bash npm2yarn
-npm i @tonconnect/ui
-```
+  <TabItem value="NPM" label="NPM">
+    Install the [@tonconnect/ui](https://www.npmjs.com/package/@tonconnect/ui) package:
+
+    ```bash npm2yarn
+    npm i @tonconnect/ui
+    ```
   </TabItem>
 </Tabs>
 
@@ -47,7 +48,7 @@ Add a button with a `ton-connect` id to connect to the wallet:
 <div id="ton-connect"></div>
 ```
 
-*After this tag*, add a script for `tonConnectUI` in the `<body>` part of the app page:
+_After this tag_, add a script for `tonConnectUI` in the `<body>` part of the app page:
 
 ```html
 <script>
@@ -103,7 +104,6 @@ TonConnect UI provides an interface that should be familiar and recognizable to 
 
 - [TonConnect UI documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
 
-
 ## SDK documentation
 
 - [SDK documentation](https://github.com/ton-connect/sdk/blob/main/packages/ui/README.md)
@@ -149,21 +149,22 @@ Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset
 ### Signing and verification
 
 Understand how to sign and verify messages using the TON Connect:
+
 - [Signing and verification](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
 - [TON Connect UI implementation on GitHub](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-connect-request-parameters-ton_proof)
 
 ### Wallet disconnection
 
 Call to disconnect the wallet:
+
 ```js
 await tonConnectUI.disconnect();
 ```
 
 ## See also
 
-* [UI customization](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
-* [[YouTube] TON Connect UI React [RU]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=1747)
-* [[YouTube] Connect TON Connect UI to site [RU]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
+- [UI customization](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
+- [\[YouTube\] TON Connect UI React \[RU\]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=1747)
+- [\[YouTube\] Connect TON Connect UI to site \[RU\]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
 
 <Feedback />
-
