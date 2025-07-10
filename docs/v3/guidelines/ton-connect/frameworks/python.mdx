@@ -1,0 +1,616 @@
+import Feedback from '@site/src/components/Feedback';
+
+# TON Connect for Python
+
+The recommended SDK for Python applications is [tonutils](https://docs.ton.org/v3/guidelines/ton-connect/guidelines/developers#ton-connect-python).
+It is a Python library that provides a high-level interface for interacting with the TON blockchain, including TON Connect.
+
+## Implementation
+
+### Installation
+
+```bash
+pip install tonutils
+```
+
+To store user wallet connection data, you need to implement a storage interface. An additional dependency is required for this. In this example, a file-based implementation using `aiofiles` is used:
+
+```bash
+pip install aiofiles
+```
+
+### Creating the Manifest
+
+Create the `manifest.json` file for your application according to the [guidelines](https://docs.ton.org/v3/guidelines/ton-connect/guidelines/creating-manifest), and host it at a publicly accessible URL.
+
+### Implementing Storage
+
+To store connection data with user wallets, a storage interface must be implemented.
+
+<details>
+  <summary><b>Example implementation</b></summary>
+
+```python
+import json
+import os
+from asyncio import Lock
+from typing import Dict, Optional
+
+import aiofiles
+
+from tonutils.tonconnect import IStorage
+
+
+class FileStorage(IStorage):
+
+    def __init__(self, file_path: str):
+        self.file_path = file_path
+        self.lock = Lock()
+
+        if not os.path.exists(self.file_path):
+            with open(self.file_path, "w") as f:
+                json.dump({}, f)  # type: ignore
+
+    async def _read_data(self) -> Dict[str, str]:
+        async with self.lock:
+            async with aiofiles.open(self.file_path, "r") as f:
+                content = await f.read()
+                if content:
+                    return json.loads(content)
+                return {}
+
+    async def _write_data(self, data: Dict[str, str]) -> None:
+        async with self.lock:
+            async with aiofiles.open(self.file_path, "w") as f:
+                await f.write(json.dumps(data, indent=4))
+
+    async def set_item(self, key: str, value: str) -> None:
+        data = await self._read_data()
+        data[key] = value
+        await self._write_data(data)
+
+    async def get_item(self, key: str, default_value: Optional[str] = None) -> Optional[str]:
+        data = await self._read_data()
+        return data.get(key, default_value)
+
+    async def remove_item(self, key: str) -> None:
+        data = await self._read_data()
+        if key in data:
+            del data[key]
+            await self._write_data(data)
+```
+
+</details>
+
+### Initializing TON Connect
+
+Create a `TonConnect` instance by specifying the manifest URL and the storage object:
+
+```python
+from storage import FileStorage
+from tonutils.tonconnect import TonConnect
+
+TC_MANIFEST_URL = "https://raw.githubusercontent.com/nessshon/tonutils/main/examples/tonconnect/tonconnect-manifest.json"
+TC_STORAGE = FileStorage("connection.json")
+
+tc = TonConnect(
+    storage=TC_STORAGE,
+    manifest_url=TC_MANIFEST_URL,
+    wallets_fallback_file_path="./wallets.json"
+)
+```
+
+The `wallets_fallback_file_path` parameter is used as a fallback source of wallet data (e.g., Tonkeeper, Wallet) in case the external API is unavailable.
+You can find all input parameters at the following [link](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/tonconnect.py#L40).
+
+### Initializing the Connector
+
+Create a `Connector` instance to work with a specific user:
+
+```python
+connector = await tc.init_connector(user_id)
+```
+
+* `user_id` can be an integer (`int`) or a string (`str`).
+* If not provided, an incremental ID will be assigned automatically.
+* You can store the user ID for future reference:
+
+  ```python
+  user_id = connector.user_id
+  ```
+
+## Connecting a Wallet
+
+### Retrieving the List of Wallets
+
+To display available wallets in the user interface, retrieve the list of supported wallets:
+
+```python
+wallets = await tc.get_wallets()
+```
+
+You can then display the list using each wallet’s name via `wallet.name`.
+
+### Connecting to a Wallet
+
+After the user selects a wallet from the list, initiate the connection (for example, selecting the wallet at index 1):
+
+```python
+selected_wallet = wallets[1]
+connect_url = await connector.connect_wallet(selected_wallet)
+```
+
+You should present the `connect_url` to the user in your application.
+
+#### With Redirect URL
+
+If you want to automatically redirect the user after a successful connection, pass the `redirect_url` parameter:
+
+```python
+redirect_url = "https://example.com/"
+connect_url = await connector.connect_wallet(selected_wallet, redirect_url=redirect_url)
+```
+
+#### With TON Proof
+
+To ensure that the user truly owns the specified address, you can enable address ownership verification using `ton_proof`.
+Generate the proof payload and pass it via the `ton_proof` parameter.
+More details on this mechanism and payload generation are available [here](https://docs.ton.org/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users).
+
+You can also use the built-in `generate_proof_payload` function from `tonutils`:
+
+```python
+from tonutils.tonconnect.utils import generate_proof_payload
+
+redirect_url = "https://example.com/"
+proof_payload = generate_proof_payload()
+connect_url = await connector.connect_wallet(
+    selected_wallet,
+    redirect_url=redirect_url,
+    ton_proof=proof_payload
+)
+```
+
+### Handling the Connection
+
+To handle the result of a wallet connection, use the `connect_wallet_context` context manager.
+
+**Example using the context manager:**
+
+```python
+from tonutils.tonconnect.utils.exceptions import TonConnectError, UserRejectsError
+
+async with connector.connect_wallet_context() as response:
+    if isinstance(response, TonConnectError):
+        if isinstance(response, UserRejectsError):
+            print("The user rejected the connection.")
+        else:
+            print(f"Connection error: {response.message}")
+    else:
+        print(f"Connected wallet: {response.account.address.to_str(is_bounceable=False)}")
+```
+
+**Example with `ton_proof` verification:**
+
+```python
+from tonutils.tonconnect.utils.exceptions import TonConnectError, UserRejectsError
+
+async with connector.connect_wallet_context() as response:
+    if isinstance(response, TonConnectError):
+        if isinstance(response, UserRejectsError):
+            print("The user rejected the connection.")
+        else:
+            print(f"Connection error: {response.message}")
+    else:
+        if connector.wallet.verify_proof_payload(proof_payload):
+            print(f"Connected wallet: {response.account.address.to_str(is_bounceable=False)}")
+        else:
+            await connector.disconnect_wallet()
+            print("Proof verification failed.")
+```
+
+The context manager will pause execution until:
+
+* the user connects a wallet;
+* a timeout occurs;
+* or an error is raised.
+
+On success, you will receive a [WalletInfo](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/models/wallet.py#L118) object containing the connected wallet's data.
+On failure, a `TonConnectError` instance will be returned, which you can handle as described in the [connection errors](#connection-errors) section.
+
+## Sending Requests
+
+### Sending a Transaction
+
+To send Toncoin to a specific address, use the `send_transaction` method:
+
+```python
+from tonutils.tonconnect.models import Transaction, Message
+
+rpc_request_id = await connector.send_transaction(
+    transaction=Transaction(
+        valid_until=int(time.time() + 5 * 60),
+        messages=[
+            Message(
+                address="UQCZq3_Vd21-4y4m7Wc-ej9NFOhh_qvdfAkAYAOHoQ__Ness",
+                amount=str(int(1 * 1e9)),
+            )
+        ]
+    )
+)
+```
+
+* `valid_until` – transaction expiration time in seconds
+* `address` – recipient in user-friendly format
+* `amount` – amount in nanotons
+
+The method returns `rpc_request_id`, a unique identifier for tracking the request.
+
+### Sending a Simplified Transfer
+
+The `tonutils` library also provides higher-level methods for sending transactions more conveniently.
+
+* The `valid_until` field is set to 5 minutes by default.
+* The `address` field is replaced with `destination` (a string or an `Address`).
+* The `amount` should be specified in **TON** instead of **nanotons**.
+* The `body` parameter can be one of the following:
+
+  * a `Cell` object — for passing a custom payload;
+  * a string — used as a comment or memo;
+
+#### Single Transfer
+
+```python
+rpc_request_id = await connector.send_transfer(
+    destination="UQCZq3_Vd21-4y4m7Wc-ej9NFOhh_qvdfAkAYAOHoQ__Ness",
+    amount=1,
+    body="Hello from tonutils!",
+)
+```
+
+#### Batch Transfer
+
+Before sending multiple messages in one transaction, ensure the wallet supports the required number of messages:
+
+```python
+max_messages = connector.device.get_max_supported_messages(connector.wallet)
+```
+
+The maximum number of messages supported in a single transaction depends on the wallet version.
+Use this limit to shape your transaction logic appropriately.
+
+```python
+from tonutils.tonconnect.models.transfer import TransferMessage
+
+rpc_request_id = await connector.send_batch_transfer(
+    messages=[
+        TransferMessage(
+            destination="UQCZq3_Vd21-4y4m7Wc-ej9NFOhh_qvdfAkAYAOHoQ__Ness",
+            amount=1,
+            body="Hello from tonutils!",
+        ),
+        TransferMessage(
+            destination="UQCZq3_Vd21-4y4m7Wc-ej9NFOhh_qvdfAkAYAOHoQ__Ness",
+            amount=2,
+            body="Hello from tonutils!",
+        ),
+    ]
+)
+```
+
+These methods also return an `rpc_request_id`.
+
+### Sending a Sign Data Request
+
+The `sign_data` method allows requesting a cryptographic signature from the user’s wallet for arbitrary content.
+This signature confirms explicit consent and can be verified off-chain or passed into a smart contract.
+
+TON Connect supports three data formats:
+
+#### Text
+
+Use when the content is human-readable.
+
+* Clear to the user.
+* Ideal for off-chain confirmations.
+
+```python
+from tonutils.tonconnect.models import SignDataPayloadText
+
+text = "I confirm deletion of my account and all associated data."
+payload = SignDataPayloadText(text=text)
+```
+
+#### Binary
+
+Use for hashes, files, or non-readable content.
+
+* Suitable for digital receipts, proofs, or opaque payloads.
+
+```python
+from tonutils.tonconnect.models import SignDataPayloadBinary
+
+data = "I confirm deletion of my account and all associated data.".encode("utf-8")
+payload = SignDataPayloadBinary(bytes=data)
+```
+
+#### Cell
+
+Use when the signature must be verifiable on-chain.
+
+* Supports TL-B schemas.
+* Enables smart contract validation.
+
+```python
+from pytoniq_core import begin_cell
+from tonutils.tonconnect.models import SignDataPayloadCell
+
+comment = "I confirm deletion of my account and all associated data."
+cell = begin_cell().store_uint(0, 32).store_snake_string(comment).end_cell()
+schema = "text_comment#00000000 text:Snakedata = InMsgBody;"
+
+payload = SignDataPayloadCell(cell=cell, schema=schema)
+```
+
+The last type in the provided TL-B schema is used as the root type for serialization.
+
+#### Sending the Request
+
+Before sending the request, you must ensure that the connected wallet supports the sign data feature.
+Use the following check:
+
+```python
+connector.device.verify_sign_data_feature(connector.wallet, payload)
+```
+
+If the feature is not supported, a `WalletNotSupportFeatureError` will be raised.
+You can handle it like this:
+
+```python
+from tonutils.tonconnect.utils.exceptions import WalletNotSupportFeatureError
+
+try:
+    connector.device.verify_sign_data_feature(connector.wallet, payload)
+except WalletNotSupportFeatureError:
+    print("Wallet does not support sign data feature!")
+    # Handle fallback logic or abort
+```
+
+If the feature is supported, proceed to send the request:
+
+```python
+rpc_request_id = await connector.sign_data(payload)
+```
+
+### Handling Request Results
+
+Use the `pending_request_context` context manager to wait for a user’s response to both transaction and signing requests.
+
+The context manager pauses execution until:
+
+* the user takes action in their wallet;
+* a timeout occurs;
+* or an error is raised.
+
+On success, it returns a response object specific to the request type:
+
+* [`SendTransactionResponse`](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/models/request.py#L245)
+* [`SignDataResponse`](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/models/request.py#L494)
+
+On failure, a `TonConnectError` is returned and can be handled as described in the [request errors](#request-errors) section.
+
+#### Handling Signed Data
+
+```python
+from tonutils.tonconnect.utils.exceptions import TonConnectError, UserRejectsError
+
+async with connector.pending_request_context(rpc_request_id) as response:
+    if isinstance(response, TonConnectError):
+        if isinstance(response, UserRejectsError):
+            print("The user rejected the signing request.")
+        else:
+            print(f"Sign data error: {response.message}")
+    else:
+        key = connector.wallet.account.public_key
+        if response.verify_sign_data(key):
+            print("Verified sign data!")
+        else:
+            print("Failed to verify sign data!")
+```
+
+#### Handling the Transaction
+
+```python
+from tonutils.tonconnect.utils.exceptions import TonConnectError, UserRejectsError
+
+async with connector.pending_request_context(rpc_request_id) as response:
+    if isinstance(response, TonConnectError):
+        if isinstance(response, UserRejectsError):
+            print("The user rejected the transaction.")
+        else:
+            print(f"Transaction error: {response.message}")
+    else:
+        print(f"Transaction sent successfully! Hash: {response.normalized_hash}")
+```
+
+### Checking Request Status
+
+To check whether a request is still waiting for user confirmation:
+
+```python
+is_pending = connector.is_request_pending(rpc_request_id)
+```
+
+This method returns `True` if the request has not yet been confirmed in the user's wallet; otherwise, it returns `False`.
+
+### Cancelling a Request
+
+If you need to cancel a request for any reason, use:
+
+```python
+connector.cancel_pending_request(rpc_request_id)
+```
+
+This completely stops processing the request at the application level, even if the user later confirms it in the wallet.
+
+## Disconnecting the Wallet
+
+To disconnect the user's wallet, call the `disconnect_wallet` method:
+
+```python
+await connector.disconnect_wallet()
+```
+
+## Event Handling
+
+In addition to context managers, **tonutils** provides a unified event-driven interface for reacting to wallet actions.
+This allows you to handle events such as wallet connection, disconnection, transaction execution, and data signing through registered handlers.
+
+### Event Types
+
+TON Connect emits two categories of events:
+
+#### Success Events
+
+These events are triggered when an action completes successfully:
+
+* `Event.CONNECT` — emitted when a wallet is successfully connected.
+  **Parameters:** `user_id: int`, `wallet: WalletInfo`
+
+* `Event.DISCONNECT` — emitted when a wallet is disconnected.
+  **Parameters:** `user_id: int`, `wallet: WalletInfo`
+
+* `Event.TRANSACTION` — emitted when a transaction is confirmed by the user.
+  **Parameters:** `user_id: int`, `transaction: SendTransactionResponse`, `rpc_request_id: int`
+
+* `Event.SIGN_DATA` — emitted when a sign data request is approved.
+  **Parameters:** `user_id: int`, `sign_data: SignDataResponse`, `rpc_request_id: int`
+
+#### Error Events
+
+These events are triggered **if the corresponding action fails** due to user rejection, timeout, or internal wallet/app errors:
+
+* `EventError.CONNECT` — error during wallet connection.
+* `EventError.DISCONNECT` — error during wallet disconnection.
+* `EventError.TRANSACTION` — error during transaction confirmation.
+* `EventError.SIGN_DATA` — error during sign data request.
+
+  **All error events receive:**
+
+  * `user_id: int`
+  * `error: TonConnectError`
+
+  **Note:** All error types are described in detail in the [error handling](#error-handling) section.
+
+You can handle these errors the same way as standard events using `register_event` or decorators.
+This separation allows you to keep success and failure logic cleanly isolated.
+
+### Handling Events
+
+You can register event handlers in two ways:
+
+#### Using method
+
+```python
+def on_transaction(user_id: int, transaction: SendTransactionResponse):
+    print(f"Transaction received for user {user_id}")
+
+tc.register_event(Event.TRANSACTION, on_transaction)
+```
+
+#### Using decorators
+
+```python
+@tc.on_event(Event.TRANSACTION)
+async def on_transaction(user_id: int, transaction: SendTransactionResponse):
+    print(f"Transaction confirmed for user {user_id}")
+```
+
+### Additional Parameters
+
+In addition to standard event arguments, you can pass custom parameters (e.g., database session, context objects, comments) to your event handlers.
+
+#### Attaching parameters to a specific event:
+
+Use `add_event_kwargs` before entering the context manager or triggering the request:
+
+```python
+connector.add_event_kwargs(
+    event=Event.CONNECT,
+    comment="Hello from tonutils!",
+    db_session=session,
+)
+```
+
+The extra keyword arguments will be passed directly to the corresponding handler:
+
+```python
+@tc.on_event(Event.CONNECT)
+async def on_connect(user_id: int, wallet: WalletInfo, comment: str, db_session: Session):
+    ...
+```
+
+#### Defining global parameters for all events:
+
+You can define default parameters for all events at the connector level:
+
+```python
+tc = TonConnect(
+    storage=TC_STORAGE,
+    manifest_url=TC_MANIFEST_URL,
+    wallets_fallback_file_path="./wallets.json"
+)
+tc["db_session"] = session
+tc["comment"] = "Shared message"
+```
+
+These parameters will be available in **all** event handlers:
+
+```python
+@tc.on_event(Event.SIGN_DATA)
+async def on_sign_data(user_id: int, sign_data: SignDataResponse, db_session: Session, comment: str):
+    ...
+```
+
+## Error Handling
+
+When working with TON Connect, errors may occur both during wallet connection and when sending requests.
+
+### Connection Errors
+
+These errors can occur during the wallet connection initialization process:
+
+| Code | Error                     | Description                                                               |
+|------|---------------------------|---------------------------------------------------------------------------|
+| 0    | `UnknownError`            | An unknown error occurred in the wallet during request processing.        |
+| 1    | `BadRequestError`         | The request is malformed or contains invalid parameters.                  |
+| 2    | `ManifestNotFoundError`   | The specified `manifest_url` is unreachable or does not exist.            |
+| 3    | `ManifestContentError`    | The manifest content has an invalid structure or is improperly formatted. |
+| 100  | `UnknownAppError`         | Application logic error while preparing the request data.                 |
+| 300  | `UserRejectsError`        | The user declined to connect their wallet to your application.            |
+| 400  | `MethodNotSupportedError` | The selected wallet does not support the requested operation or method.   |
+| 500  | `RequestTimeoutError`     | The user did not complete the connection within the allotted time.        |
+
+### Request Errors
+
+These errors may occur when processing requests.
+
+| Code | Error                     | Description                                                             |
+|------|---------------------------|-------------------------------------------------------------------------|
+| 0    | `UnknownError`            | An unknown error occurred in the wallet during request processing.      |
+| 1    | `BadRequestError`         | The request is malformed or contains invalid parameters.                |
+| 100  | `UnknownAppError`         | Application logic error while preparing the request data.               |
+| 300  | `UserRejectsError`        | The user rejected the request or refused to sign.                       |
+| 400  | `MethodNotSupportedError` | The selected wallet does not support the requested operation or method. |
+| 500  | `RequestTimeoutError`     | The user did not confirm the request within the allotted time.          |
+
+## Conclusion
+
+TON Connect provides a secure and user-friendly way to interact with wallets on the TON blockchain. With support for transaction signing, identity verification, and event handling, it enables seamless integration of wallet functionality into Python applications.
+
+## See also
+
+* [TON Connect usage examples](https://tonutils.ness.su/guide/examples/ton-connect-operations/)
+* [Telegram bot with TON Connect](https://tonutils.ness.su/cookbook/tonconnect-telegram/)
+
+<Feedback />
