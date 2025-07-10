@@ -17,6 +17,7 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
+    "update-opcodes": "node update-opcodes.js",
     "lint": "eslint -c eslint.config.js .",
     "lint-mdx": "eslint -c eslint.mdx.config.js docs/ src/pages/",
     "lint-mdx-fix": "eslint -c eslint.mdx.config.js docs/ src/pages/ --fix",
