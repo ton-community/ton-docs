@@ -50,7 +50,11 @@ const config = {
   baseUrl: '/',
   themes: [
     '@docusaurus/theme-live-codeblock',
-  ],
+    '@docusaurus/theme-mermaid',
+  ], 
+  markdown: {
+    mermaid: true,
+  },
   plugins: [
     ['docusaurus-plugin-sass', {}],
     [
@@ -70,9 +74,7 @@ const config = {
   favicon: 'img/favicon32x32.png',
 
   // GitHub pages deployment config.
-  markdown: { 
-    mermaid: true,
-  },  // If you aren't using GitHub pages, you don't need these.
+  // If you aren't using GitHub pages, you don't need these.
   organizationName: 'ton', // Usually your GitHub org/user name.
   projectName: 'ton-docs', // Usually your repo name.
 
@@ -176,6 +178,7 @@ const config = {
           'cpp',
           'c',
           'bash', // bash, sh, and shell code blocks
+          'mermaid',
         ],
       },
       docs: {
@@ -187,6 +190,9 @@ const config = {
         defaultMode: 'light',
         // respectPrefersColorScheme: true,
         // disableSwitch: true,
+      },
+      mermaid: {
+        theme: {light: 'neutral', dark: 'dark'},
       },
     }),
 };
