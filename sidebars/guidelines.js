@@ -456,11 +456,6 @@ module.exports = [
               },
               {
                 type: 'doc',
-                id: 'v3/guidelines/ton-connect/frameworks/vue',
-                label: 'Vue apps',
-              },
-              {
-                type: 'doc',
                 id: 'v3/guidelines/ton-connect/frameworks/web',
                 label: 'HTML/JS apps',
               },
@@ -471,9 +466,8 @@ module.exports = [
               },
             ],
           },
-          'v3/guidelines/ton-connect/guidelines/preparing-messages',
-          'v3/guidelines/ton-connect/guidelines/sending-messages',
           'v3/guidelines/ton-connect/guidelines/verifying-signed-in-users',
+          'v3/guidelines/ton-connect/guidelines/sending-messages',
         ],
       },
       {
