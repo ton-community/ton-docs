@@ -50,6 +50,7 @@ const config = {
   baseUrl: '/',
   themes: [
     '@docusaurus/theme-live-codeblock',
+    '@docusaurus/theme-mermaid',
   ],
   plugins: [
     ['docusaurus-plugin-sass', {}],
@@ -174,6 +175,7 @@ const config = {
           'cpp',
           'c',
           'bash', // bash, sh, and shell code blocks
+          'mermaid',
         ],
       },
       docs: {
@@ -185,6 +187,9 @@ const config = {
         defaultMode: 'light',
         // respectPrefersColorScheme: true,
         // disableSwitch: true,
+      },
+      mermaid: {
+        theme: {light: 'neutral', dark: 'dark'},
       },
     }),
 };
