@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Sending messages
 
-TON Connect has more powerful options than just authenticating users in the dApp; it also allows sending outgoing messages via connected wallets.
+After authenticating users with the mandatory `ton_proof` verification, TON Connect also allows sending outgoing messages via connected wallets.
 
 You will understand:
 
@@ -11,6 +11,11 @@ You will understand:
 - how to deploy a contract using TON Connect
 
 ## Playground page
+
+:::tip
+Before sending any transactions you must establish the connection using `ton_proof` (see [Verifying signed-in users](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)).
+The examples below assume that such a connection has already been created and successfully verified.
+:::
 
 We will use the low level [TON Connect SDK](https://github.com/ton-connect/sdk/tree/main/packages/sdk) for JavaScript. We'll experiment in the browser console on a page where the wallet is already connected. Here is the sample page:
 

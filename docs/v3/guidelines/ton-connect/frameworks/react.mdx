@@ -279,19 +279,19 @@ Get more examples on the [Preparing messages](/v3/guidelines/ton-connect/guideli
 
 Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions) using the tonweb library.
 
-### Optional check on the backend: ton_proof
+### Mandatory backend verification with ton_proof
 
 :::tip
 Understand how to sign and verify messages: [Signing and verification](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
 :::
 
-To ensure that the user truly owns the declared address, you can use `ton_proof`.
+To ensure that the user truly owns the declared address, you must use `ton_proof`.
 
 Use the `tonConnectUI.setConnectRequestParameters` function to set up your connection request parameters. You can use it for:
 
 - Loading State: Show a loading state while waiting for a response from your backend.
-- Ready State with tonProof: Set the state to 'ready' and include the tonProof value.
-- If an error occurs, remove the loader and create the connect request without additional parameters.
+- Ready State: After receiving the `tonProof` payload, set the state to 'ready' and include the payload.
+- Error State: If obtaining `tonProof` fails, display an error and do not proceed with the connection.
 
 ```ts
 const [tonConnectUI] = useTonConnectUI();
@@ -310,8 +310,8 @@ if (tonProofPayload) {
     value: { tonProof: tonProofPayload },
   });
 } else {
-  // Remove loader
-  tonConnectUI.setConnectRequestParameters(null);
+  // Handle error: tonProof is required for authentication
+  throw new Error('Unable to obtain tonProof payload. Connection aborted.');
 }
 ```
 

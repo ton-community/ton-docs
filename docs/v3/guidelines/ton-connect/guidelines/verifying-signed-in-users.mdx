@@ -4,11 +4,9 @@ import ThemedImage from '@theme/ThemedImage';
 
 # Verifying signed-in users on the backend
 
-This page describes a method for the backend to ensure that the user truly owns the declared address.
+This page explains the mandatory `ton_proof` flow that every dApp must implement to confirm that the connected wallet address really belongs to the user.
 
-Note that user verification is not required for all dApps.
-
-It is helpful if you want to verify a user by providing them with their personal information from the backend.
+Without this server-side verification step your application cannot safely bind on-chain addresses to personal data or grant privileged actions. Always validate `ton_proof` before trusting any address-specific request.
 
 ## How does it work?
 
