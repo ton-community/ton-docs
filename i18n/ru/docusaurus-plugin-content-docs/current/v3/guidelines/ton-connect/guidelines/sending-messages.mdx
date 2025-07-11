@@ -181,10 +181,6 @@ console.log(await connector.sendTransaction({
 }));
 ```
 
-:::info
-Получите больше примеров на странице [Подготовка сообщений](/v3/guidelines/ton-connect/guidelines/preparing-messages) для отпраки NFT и жетонов.
-:::
-
 После подтверждения мы можем увидеть нашу транзакцию завершенной на сайте [tonscan.org](https://tonscan.org/tx/pCA8LzWlCRTBc33E2y-MYC7rhUiXkhODIobrZVVGORg=).
 
 ## Что произойдет, если пользователь отклонит запрос транзакции?
@@ -192,7 +188,3 @@ console.log(await connector.sendTransaction({
 Обработать отклонение запроса довольно просто, но когда вы разрабатываете какой-то проект, лучше знать заранее, что произойдет.
 
 Когда пользователь нажимает «Cancel» во всплывающем окне в приложении кошелька, выдается исключение: `Error: [TON_CONNECT_SDK_ERROR] Wallet declined the request`. Эту ошибку можно считать окончательной (в отличие от отмены соединения) — если она была вызвана, то запрошенная транзакция точно не произойдет до следующего запроса.
-
-## См. также
-
-- [Подготовка сообщений](/v3/guidelines/ton-connect/guidelines/preparing-messages)

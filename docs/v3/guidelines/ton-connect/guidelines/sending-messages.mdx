@@ -206,10 +206,6 @@ console.log(await connector.sendTransaction({
 }));
 ```
 
-:::info
-Get more examples on the [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages) page for Transfer NFT and Jettons.
-:::
-
 After confirmation, we may see our transaction complete at [tonscan.org](https://tonscan.org/tx/pCA8LzWlCRTBc33E2y-MYC7rhUiXkhODIobrZVVGORg=).
 
 ## What happens if the user rejects a transaction request?
@@ -223,9 +219,5 @@ Error: [TON_CONNECT_SDK_ERROR] The Wallet declined the request
 ```
 
 This error can be considered final (unlike connection cancellation) - if it has been raised, then the requested transaction will definitely not happen until the next request is sent.
-
-## See also
-
-- [Preparing messages](/v3/guidelines/ton-connect/guidelines/preparing-messages)
 
 <Feedback />
