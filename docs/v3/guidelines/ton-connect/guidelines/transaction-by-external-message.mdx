@@ -1,0 +1,203 @@
+# Transaction Lookup Using External Message from TON Connect
+
+This article describes how to find a transaction associated with an external-in message in the TON Blockchain. The process includes message normalization, searching for the transaction by message hash, and waiting for transaction confirmation.
+
+## Message normalization
+
+In TON, messages may contain fields such as `init`, `src`, and `importFee`. These fields should be removed or zeroed out before calculating the message hash, as described in [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467).
+
+```ts
+export function getNormalizedExtMessageHash(message: Message) {
+    if (message.info.type !== 'external-in') {
+        throw new Error(`Message must be "external-in", got ${message.info.type}`);
+    }
+    const info = { 
+      ...message.info,
+      src: undefined, 
+      importFee: 0n 
+    };
+    const normalizedMessage = {
+        ...message,
+        init: null,
+        info: info,
+    };
+    return beginCell()
+        .store(storeMessage(normalizedMessage, { forceRef: true }))
+        .endCell()
+        .hash();
+}
+```
+
+## Retrying API calls
+
+API requests may fail due to rate limits or network issues. Use the `retry` function to handle such failures:
+
+```ts
+export async function retry<T>(fn: () => Promise<T>, options: { retries: number; delay: number }): Promise<T> {
+    let lastError: Error | undefined;
+    for (let i = 0; i < options.retries; i++) {
+        try {
+            return await fn();
+        } catch (e) {
+            if (e instanceof Error) {
+                lastError = e;
+            }
+            await new Promise((resolve) => setTimeout(resolve, options.delay));
+        }
+    }
+    throw lastError;
+}
+```
+
+## Finding a transaction by incoming message
+
+The `getTransactionByInMessage` function searches the account’s transaction history for a match by normalized external message hash:
+
+```ts
+async function getTransactionByInMessage(
+    inMessageBoc: string,
+    client: TonClient,
+): Promise<Transaction | undefined> {
+    const inMessage = loadMessage(Cell.fromBase64(inMessageBoc).beginParse());
+    if (inMessage.info.type !== 'external-in') {
+        throw new Error(`Message must be "external-in", got ${inMessage.info.type}`);
+    }
+    const account = inMessage.info.dest;
+    const targetInMessageHash = getNormalizedExtMessageHash(inMessage);
+    let lt: string | undefined = undefined;
+    let hash: string | undefined = undefined;
+    while (true) {
+        const transactions = await retry(
+            () =>
+                client.getTransactions(account, {
+                    hash,
+                    lt,
+                    limit: 10,
+                    archival: true,
+                }),
+            { delay: 1000, retries: 3 },
+        );
+        if (transactions.length === 0) {
+            return undefined;
+        }
+        for (const transaction of transactions) {
+            if (transaction.inMessage?.info.type !== 'external-in') {
+                continue;
+            }
+            const inMessageHash = getNormalizedExtMessageHash(transaction.inMessage);
+            if (inMessageHash.equals(targetInMessageHash)) {
+                return transaction;
+            }
+        }
+        const last = transactions.at(-1)!;
+        lt = last.lt.toString();
+        hash = last.hash().toString('base64');
+    }
+}
+```
+
+If found, the function returns a `Transaction` object. Otherwise, it returns `undefined`.
+
+## Waiting for transaction confirmation
+
+If a message has just been sent, it may take a few seconds before it appears on-chain. The `waitForTransaction` function polls the blockchain and waits for the corresponding transaction:
+
+```ts
+async function waitForTransaction(
+    inMessageBoc: string,
+    client: TonClient,
+    retries: number = 10,
+    timeout: number = 1000,
+): Promise<Transaction | undefined> {
+    const inMessage = loadMessage(Cell.fromBase64(inMessageBoc).beginParse());
+    if (inMessage.info.type !== 'external-in') {
+        throw new Error(`Message must be "external-in", got ${inMessage.info.type}`);
+    }
+    const account = inMessage.info.dest;
+    const targetInMessageHash = getNormalizedExtMessageHash(inMessage);
+    let attempt = 0;
+    while (attempt < retries) {
+        const transactions = await retry(
+            () =>
+                client.getTransactions(account, {
+                    limit: 10,
+                    archival: true,
+                }),
+            { delay: 1000, retries: 3 },
+        );
+        for (const transaction of transactions) {
+            if (transaction.inMessage?.info.type !== 'external-in') {
+                continue;
+            }
+            const inMessageHash = getNormalizedExtMessageHash(transaction.inMessage);
+            if (inMessageHash.equals(targetInMessageHash)) {
+                return transaction;
+            }
+        }
+        await new Promise((resolve) => setTimeout(resolve, timeout));
+        attempt++;
+    }
+    return undefined;
+}
+```
+
+## Examples
+
+### Find a transaction by incoming message
+
+```ts
+import { TonClient } from '@ton/ton';
+
+const client = new TonClient({ endpoint: 'https://toncenter.com/api/v2/jsonRPC' });
+
+const tx = await getTransactionByInMessage(
+  'te6ccgEBAQEA...your-base64-message...',
+  client
+);
+
+if (tx) {
+  console.log('Found transaction:', tx);
+} else {
+  console.log('Transaction not found');
+}
+```
+
+### Wait for transaction confirmation
+
+```ts
+import { TonClient } from '@ton/ton';
+
+const client = new TonClient({ endpoint: 'https://toncenter.com/api/v2/jsonRPC' });
+
+const [tonConnectUI, setOptions] = useTonConnectUI();
+
+// Obtain ExternalInMessage boc
+const { boc } = await tonConnectUI.sendTransaction({
+    messages: [
+        {
+            address: "UQBSzBN6cnxDwDjn_IQXqgU8OJXUMcol9pxyL-yLkpKzYpKR",
+            amount: "20000000"
+        }
+    ]
+});
+
+const tx = await waitForTransaction(
+    boc,
+    client,
+    10, // retries
+    1000, // timeout before each retry
+);
+
+if (tx) {
+    console.log('Found transaction:', tx);
+} else {
+    console.log('Transaction not found');
+}
+```
+
+## References
+
+- [TEP-467: Normalized Message Hash](https://github.com/ton-blockchain/TEPs/blob/8b3beda2d8611c90ec02a18bec946f5e33a80091/text/0467-normalized-message-hash.md)
+- [Messages and transactions](/v3/documentation/smart-contracts/message-management/messages-and-transactions)
+- [TON Connect: Sending messages](/v3/guidelines/ton-connect/guidelines/sending-messages)
+- [TON Cookbook: Basics of Message Processing](/v3/guidelines/dapps/cookbook#basics-of-message-processing)
