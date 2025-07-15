@@ -1,55 +1,20 @@
-name: Deploy to Kubernetes
+name: Deploy build
 
 on:
   push:
     branches:
-      - l10n-release-candidate-ru
-      - l10n-release-candidate-en
-      - l10n-release-candidate-ja
-      - l10n-release-candidate-ko
-      - l10n-release-candidate-zh-cn
-      - release-candidate-ru
-      - release-candidate-en
-      - release-candidate-ja
-      - release-candidate-ko
-      - release-candidate-zh-cn
+      - main
+      - staging
+    tags:
+      - staging-ru
+      - staging-zh-cn
 
   workflow_dispatch:
-  workflow_call:
-    inputs:
-      branch:
-        required: true
-        type: string
-      instance:
-        required: true
-        type: string
 
 
 jobs:
-  params:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Define params
-        env:
-          JOB_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/l10n-release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && 'testing' || 'unknown' }}"
-          APP_ENV: "${{ startsWith(github.ref, 'refs/heads/release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/l10n-release-candidate-') && 'staging' || startsWith(github.ref, 'refs/heads/td-') && format('{0}{1}', 'testing-', github.ref_name) || 'unknown' }}"
-          APP_DOMAIN: "${{ format('{0}-{1}', inputs.branch || github.ref_name, vars.APP_DOMAIN) }}"
-          APP_INSTANCE: ${{ inputs.branch || github.ref_name }}
-          REF: ${{ inputs.branch || github.ref_name }}
-        run: |
-          echo "JOB_ENV=${{ env.JOB_ENV }}" >> "$GITHUB_OUTPUT"
-          echo "APP_ENV=${{ env.APP_ENV }}" >> "$GITHUB_OUTPUT"
-          echo "APP_DOMAIN=${{ env.APP_DOMAIN }}" >> "$GITHUB_OUTPUT"
-          echo "REF=${{ env.REF }}" >> "$GITHUB_OUTPUT"
-
   build:
-    needs: params
     runs-on: ubuntu-latest
-    env:
-      JOB_ENV: ${{ needs.params.outputs.JOB_ENV }}
-      APP_ENV: ${{ needs.params.outputs.APP_ENV }}
-      APP_DOMAIN: ${{ needs.params.outputs.APP_DOMAIN }}
-      REF: ${{ needs.params.outputs.REF }}
 
     permissions:
       packages: write
@@ -61,7 +26,6 @@ jobs:
         with:
           fetch-depth: 0
           submodules: recursive
-          ref: ${{ env.REF }}
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -89,6 +53,7 @@ jobs:
             type=sha
             type=sha,format=long
             type=ref,event=branch
+            type=ref,event=tag
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
@@ -103,58 +68,18 @@ jobs:
             REACT_APP_MIXPANEL_TOKEN=${{ secrets.REACT_APP_MIXPANEL_TOKEN }}
             REACT_APP_ANALYTICS_ENABLED=${{ secrets.REACT_APP_ANALYTICS_ENABLED }}
 
-      - name: Collect output
-        run: |
-          echo "imageRepo=${{ steps.lower-repo.outputs.repository }}" >> "$GITHUB_OUTPUT"
-          echo "imageTag=${{ env.GITHUB_SHA_SHORT }}" >> "$GITHUB_OUTPUT"
-
   deploy:
-    needs:
-      - params
-      - build
+    needs: build
     runs-on: ubuntu-latest
-    environment: "${{  needs.params.outputs.APP_ENV }}"
-    env:
-      APP_ENV: ${{ needs.params.outputs.APP_ENV }}
-      APP_DOMAIN: ${{ needs.params.outputs.APP_DOMAIN }}
-      APP_INSTANCE: ${{ needs.params.outputs.APP_INSTANCE }}
-      REF: ${{ needs.params.outputs.REF }}
-    concurrency:
-      group: ${{ github.workflow }}-${{ inputs.branch || github.ref }}
-      cancel-in-progress: false
-
-    permissions:
-      contents: read
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Dispatch new build
+        uses: peter-evans/repository-dispatch@v3
         with:
-          fetch-depth: 0
-          submodules: recursive
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}
-
-      - name: Apply AWS k8s config
-        run: aws eks update-kubeconfig --name ${{ vars.AWS_CLUSTER }} --region ${{ vars.AWS_REGION }}
-
-      - name: Create namespace
-        run: |
-          kubectl create ns ${{ vars.APP_NAME }}-${{ env.APP_INSTANCE }} || echo "Namespace already exists"
-
-      - name: Deploy ${{ vars.APP_NAME }} to Kubernetes
-        run: |
-          helm upgrade --install ${{ vars.APP_NAME }} ./helm/app \
-          --namespace ${{ vars.APP_NAME }}-${{ env.APP_INSTANCE }} \
-          --values ./helm/app/values.yaml \
-          --values ./helm/app/values-${{ env.JOB_ENV }}.yaml \
-          --set imageRepo="ghcr.io/${{ needs.build.outputs.imageRepo }}" \
-          --set imageTag="${{ needs.build.outputs.imageTag }}" \
-          --set host=${{ env.APP_DOMAIN }} \
-          --set appName=${{ vars.APP_NAME }} \
-          --set ghcrSecret=${{ secrets.GHCR_SECRET }}
+          token: ${{ secrets.DEPLOY_REPO_TOKEN }}
+          repository: ${{ vars.DEPLOY_REPO }}
+          event-type: 'new-build'
+          client-payload: |
+            {
+              "app_name": "ton-docs",
+              "ref_name": "${{ github.ref_name }}",
+            }
