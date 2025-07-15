@@ -4,14 +4,18 @@ This article describes how to find a transaction associated with an external-in 
 
 ## Message normalization
 
-In TON, messages may contain fields such as `init`, `src`, and `importFee`. These fields should be removed or zeroed out before calculating the message hash, as described in TEP-467.
+In TON, messages may contain fields such as `init`, `src`, and `importFee`. These fields should be removed or zeroed out before calculating the message hash, as described in [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467).
 
 ```ts
 export function getNormalizedExtMessageHash(message: Message) {
     if (message.info.type !== 'external-in') {
         throw new Error(`Message must be "external-in", got ${message.info.type}`);
     }
-    const info = { ...message.info, src: undefined, importFee: 0n };
+    const info = { 
+      ...message.info,
+      src: undefined, 
+      importFee: 0n 
+    };
     const normalizedMessage = {
         ...message,
         init: null,
