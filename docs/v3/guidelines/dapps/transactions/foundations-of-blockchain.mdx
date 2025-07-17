@@ -82,7 +82,7 @@ In TON, contracts or actors do not call each other directly. Instead, they commu
 
 1. _No immediate response is guaranteed_. The receiver may delay responding or may not respond at all.
 2. _The sender does not wait for a reply_. After sending a message, an actor continues handling other messages or tasks without blocking or waiting for a response to the previous one—even if that response never arrives.
-3. _Message ordering is preserved_. All incoming messages are processed in the order they are received. However, if a message is malformed or incomplete, it is skipped, and the next message is processed without delay.
+3. _Message ordering is preserved per destination account_. Each account processes incoming messages in the order they are received. If a message is malformed or incomplete, it is skipped, and the following message is processed without delay.
 
 This is different from synchronous models, where the flow is: call → wait for a response → continue.
 In TON, a result can only be received as a separate message — and only if it is explicitly sent.
@@ -95,15 +95,16 @@ A message is a set of instructions intended for a single actor.
 
 ### Transaction feature
 
-A transaction represents an update to an account's state triggered by an incoming message.
-It may also produce one or more outgoing messages, depending on the contract logic.
+In TON, a transaction is a record of an account's state update caused by processing an incoming message.
+If the message does not result in an update — for example, due to an error in the Compute phase — no transaction is created.
 
-In TON, a transaction is required to update an account's state in response to an incoming message and, if necessary, to continue interacting with other accounts by sending outgoing messages.
+Depending on the contract logic, a transaction may also produce one or more outgoing messages.
 
 ### Asynchronous transactions
 
 In TON, accounts interact exclusively through messages — this is the core of actor-based communication.
-Each message triggers a transaction, which records the entire context: the triggering message, state updates, and any generated outbound messages.
+Each successfully processed message results in a transaction,
+which records the entire context: the triggering message, state updates, and any generated outbound messages.
 
 Transactions are processed **asynchronously**, meaning that each account’s updates and message handling occur independently over time.
 
