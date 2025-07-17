@@ -1,18 +1,6 @@
-import opcodes from './opcodes.json';
-import appSpecificOpcodes from './app_specific.json';
-import arithmeticOpcodes from './arithmetic.json';
-import cellManipulationOpcodes from './cell_manipulation.json';
-import comparisonOpcodes from './comparison.json';
-import constantOpcodes from './constant.json';
-import continuationOpcodes from './continuation.json';
-import dictionaryManipulationOpcodes from './dictionaries.json';
-import exceptionOpcodes from './exceptions.json';
-import miscellaneousOpcodes from './miscellaneous.json';
-import stackManipulationOpcodes from './stack_manipulation.json';
-import tupleOpcodes from './tuple.json';
-import cp0 from '../../../3rd/tvm-spec/cp0_new.json';
+import cp0 from '../../../3rd/tvm-spec/cp0.json';
 
-type Opcode = {
+export type Opcode = {
   name: string;
   alias_of: string;
   tlb: string;
@@ -20,23 +8,24 @@ type Opcode = {
   doc_opcode: string | number;
   doc_fift: string;
   doc_stack: string;
-  doc_gas: number;
+  doc_gas: number | string;
   doc_description: string;
-}
-
-export {
-  opcodes,
-  appSpecificOpcodes,
-  arithmeticOpcodes,
-  cellManipulationOpcodes,
-  comparisonOpcodes,
-  constantOpcodes,
-  continuationOpcodes,
-  dictionaryManipulationOpcodes,
-  exceptionOpcodes,
-  miscellaneousOpcodes,
-  stackManipulationOpcodes,
-  tupleOpcodes,
-  Opcode,
-  cp0
 };
+
+export const opcodes = cp0 as Opcode[];
+
+/* aliases so existing imports don’t crash */
+export const appSpecificOpcodes          = opcodes;
+export const arithmeticOpcodes           = opcodes;
+export const cellManipulationOpcodes     = opcodes;
+export const comparisonOpcodes           = opcodes;
+export const constantOpcodes             = opcodes;
+export const continuationOpcodes         = opcodes;
+export const dictionaryManipulationOpcodes = opcodes;
+export const exceptionOpcodes            = opcodes;
+export const stackManipulationOpcodes    = opcodes;
+export const tupleOpcodes                = opcodes;
+export const miscellaneousOpcodes        = opcodes;
+
+
+export { cp0 };

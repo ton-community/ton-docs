@@ -1987,3 +1987,77 @@ a img,button img {
     padding-right: 10px;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Docs helper: fixed-layout tables (class "doc-table") to prevent horizontal overflow.
+
+   HOW TO USE:
+   1. Wrap a Markdown/MDX table with a div that has className="doc-table", e.g.
+        <div className="doc-table">
+          | Col1 | Col2 | Col3 |
+          |------|------|------|
+          | ...  | ...  | ...  |
+        </div>
+
+      — or add className="doc-table" directly to the <table> tag.
+
+   2. To set custom column widths override, for example:
+        .doc-table td:nth-child(1) { width: 25%; }
+
+   Simply give new wide tables the "doc-table" class and they will auto-fit.
+--------------------------------------------------------------------------- */
+.doc-table,
+.doc-table table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.doc-table th,
+.doc-table td {
+  word-break: normal;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  /* removed horizontal scroll to prevent full-table overflow */
+}
+
+.doc-table code {
+  white-space: pre-wrap;   /* allow wrapping within code */
+  overflow-wrap: anywhere; /* wrap long identifiers/URLs */
+}
+
+/* Specific layout tuning for the "Option reference" table */
+.doc-table.blueprint-options,
+.doc-table.blueprint-options table {
+  table-layout: fixed; /* keep equal row behaviour */
+}
+
+/* Column widths: Path / Type / Default / Description */
+.doc-table.blueprint-options th:nth-child(1),
+.doc-table.blueprint-options td:nth-child(1) {
+  width: 30%;
+  min-width: 180px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.doc-table.blueprint-options th:nth-child(2),
+.doc-table.blueprint-options td:nth-child(2) {
+  width: 20%;
+  min-width: 160px;
+}
+
+.doc-table.blueprint-options th:nth-child(3),
+.doc-table.blueprint-options td:nth-child(3) {
+  width: 17%;
+  min-width: 80px;
+}
+
+.doc-table.blueprint-options th:nth-child(4),
+.doc-table.blueprint-options td:nth-child(4) {
+  width: 33%;
+}
+
+/* Avoid wrapping inside code tokens in the first (Path) column */
+.doc-table.blueprint-options td:nth-child(1) code {
+  white-space: nowrap;
+}
