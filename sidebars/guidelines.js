@@ -108,6 +108,7 @@ module.exports = [
         },
         items: [
           'v3/guidelines/smart-contracts/testing/overview',
+          'v3/guidelines/smart-contracts/testing/blueprint-config',
           'v3/guidelines/smart-contracts/testing/writing-test-examples',
           'v3/guidelines/smart-contracts/testing/collect-contract-gas-metric',
         ],
@@ -465,8 +466,9 @@ module.exports = [
               },
             ],
           },
-          'v3/guidelines/ton-connect/guidelines/verifying-signed-in-users',
           'v3/guidelines/ton-connect/guidelines/sending-messages',
+          'v3/guidelines/ton-connect/guidelines/transaction-by-external-message',
+          'v3/guidelines/ton-connect/guidelines/verifying-signed-in-users'
         ],
       },
       {
