@@ -37,7 +37,8 @@ jobs:
       REF_NAME: ${{ inputs.ref_name || github.ref_name }}
 
     outputs:
-      tag: ${{ steps.params.outputs.tag }}
+      image_tag: ${{ steps.params.outputs.tag }}
+      image_digest: ${{ steps.build.outputs.digest }}
 
     steps:
       - name: Compute params
@@ -83,6 +84,7 @@ jobs:
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
+        id: build
         with:
           context: .
           file: "deployment/Docker/Dockerfile"
@@ -107,5 +109,6 @@ jobs:
           client-payload: |
             {
               "app_name": "ton-docs",
-              "image_tag": "${{ needs.build.outputs.tag }}"
+              "image_tag": "${{ needs.build.outputs.image_tag }}"
+              "image_digest": "${{ needs.build.outputs.image_digest }}"
             }
