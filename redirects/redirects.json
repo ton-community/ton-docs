@@ -116,6 +116,10 @@
         "to": "/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users"
     },
     {
+        "from": "/develop/dapps/ton-connect/integration",
+        "to": "/v3/guidelines/ton-connect/frameworks/react"
+    },
+    {
         "from": "/develop/dapps/ton-connect/business",
         "to": "/v3/guidelines/ton-connect/business/ton-connect-for-business"
     },
