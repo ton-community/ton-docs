@@ -100,10 +100,6 @@
         "to": "/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy"
     },
     {
-        "from": "/develop/dapps/ton-connect/vue",
-        "to": "/v3/guidelines/ton-connect/frameworks/vue"
-    },
-    {
         "from": "/develop/dapps/ton-connect",
         "to": "/v3/guidelines/ton-connect/guidelines/how-ton-connect-works"
     },
@@ -125,7 +121,7 @@
     },
     {
         "from": "/develop/dapps/ton-connect/integration",
-        "to": "/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk"
+        "to": "/v3/guidelines/ton-connect/frameworks/react"
     },
     {
         "from": "/develop/dapps/ton-connect/business",
