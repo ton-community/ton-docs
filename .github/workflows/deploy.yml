@@ -109,6 +109,6 @@ jobs:
           client-payload: |
             {
               "app_name": "ton-docs",
-              "image_tag": "${{ needs.build.outputs.image_tag }}"
+              "image_tag": "${{ needs.build.outputs.image_tag }}",
               "image_digest": "${{ needs.build.outputs.image_digest }}"
             }
