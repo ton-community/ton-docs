@@ -88,11 +88,41 @@ jobs:
             -c crowdin-oss.yml
             -b ${{ env.translationBranch }}
 
-      - name: Push existing translations
+      - name: Remove all draft translations
+        run:
+          rm -rf i18n
+
+      - name: Pull approved translations
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        run:
+          crowdin pull translations
+          -c crowdin-oss.yml
+          -b main
+          -l ${{ inputs.language }}
+          --skip-untranslated-files --export-only-approved
+
+      - name: Push approved translations
         env:
           CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
         run:
           crowdin push translations
-            -c crowdin-oss.yml
-            -b ${{ env.translationBranch }}
-            -l ${{ inputs.language }} --no-import-eq-suggestions
+          -c crowdin-oss.yml
+          -b ${{ env.translationBranch }}
+          -l ${{ inputs.language }}
+          --auto-approve-imported
+
+      - name: Restore drafts
+        run:
+          git checkout i18n/
+
+      - name: Push draft translations
+        env:
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        run:
+          crowdin push translations
+          -c crowdin-oss.yml
+          -b ${{ env.translationBranch }}
+          -l ${{ inputs.language }}
+          --no-import-eq-suggestions
+
