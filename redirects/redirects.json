@@ -108,10 +108,6 @@
         "to": "/v3/guidelines/ton-connect/guidelines/creating-manifest"
     },
     {
-        "from": "/develop/dapps/ton-connect/message-builders",
-        "to": "/v3/guidelines/ton-connect/guidelines/preparing-messages"
-    },
-    {
         "from": "/develop/dapps/ton-connect/transactions",
         "to": "/v3/guidelines/ton-connect/guidelines/sending-messages"
     },
