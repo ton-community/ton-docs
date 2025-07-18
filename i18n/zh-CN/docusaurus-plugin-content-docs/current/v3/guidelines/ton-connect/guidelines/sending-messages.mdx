@@ -177,10 +177,6 @@ console.log(await connector.sendTransaction({
 }));
 ```
 
-:::info
-更多示例请参阅传输 NFT 和 Jettons 的 [准备信息](/v3/guidelines/ton-connect/guidelines/preparing-messages) 页面。
-:::
-
 处理请求拒绝相当简单，但当您正在开发某个项目时，最好提前知道会发生什么。
 
 ## 如果用户拒绝交易请求会发生什么情况？
@@ -188,7 +184,3 @@ console.log(await connector.sendTransaction({
 处理请求被拒绝的情况很容易，但在开发项目时，最好事先知道会发生什么。
 
 当用户点击钱包应用程序弹出窗口中的 "取消" 时，会出现一个异常：`Error: [TON_CONNECT_SDK_ERROR] Wallet declined the request`。该错误可视为最终错误（与取消连接不同）-- 如果该错误被触发，那么在下一个请求发送之前，请求的交易肯定不会发生。
-
-## 另请参见
-
-- [准备信息](/v3/guidelines/ton-connect/guidelines/preparing-messages)
