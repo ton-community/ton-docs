@@ -17,8 +17,10 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "spell": "cspell '**/*.md' '**/.mdx' --show-suggestions --exclude build",
+    "lint": "eslint -c eslint.config.js .",
+    "lint-mdx": "eslint -c eslint.mdx.config.js docs/ src/pages/",
+    "lint-mdx-fix": "eslint -c eslint.mdx.config.js docs/ src/pages/ --fix",
+    "spell": "cspell '**/*.md' '**/*.mdx' --show-suggestions --exclude build",
     "postinstall": "husky"
   },
   "dependencies": {
@@ -49,13 +51,23 @@
     "url": "^0.11.4"
   },
   "devDependencies": {
+    "@1stg/remark-preset": "^3.1.2",
     "@docusaurus/module-type-aliases": "^3.5.2",
     "@docusaurus/tsconfig": "^3.5.2",
     "@types/react": "^18.3.10",
-    "@typescript-eslint/parser": "^6.19.0",
+    "@typescript-eslint/parser": "^8.35.0",
+    "any-eslint-parser": "^1.0.1",
     "cspell": "^8.14.2",
-    "eslint": "^8.56.0",
+    "eslint": "^9.30.0",
+    "eslint-plugin-mdx": "^3.5.0",
+    "eslint-plugin-regex": "^1.10.0",
+    "globals": "^16.2.0",
     "husky": "^9.1.6",
+    "remark-frontmatter": "^5.0.0",
+    "remark-gfm": "^4.0.1",
+    "remark-lint": "^10.0.1",
+    "remark-lint-rule-style": "^4.0.1",
+    "remark-lint-unordered-list-marker-style": "^4.0.1",
     "typescript": "^5.8.3"
   },
   "browserslist": {

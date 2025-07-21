@@ -1,0 +1,76 @@
+# Mastering transactions
+
+In TON, a transaction is not something you send or receive — it’s not a user action. It’s a **record** of all changes that occurred to an account.
+
+This guide helps you master TON transactions — from the core principles of what they are and how they work to defining what it means for a transaction to be successful. Use the sections below to explore the topic you need — whether you're starting from foundations or debugging real transaction data.
+
+<div style={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+  gap: '1.25rem',
+  marginTop: '1.5rem'
+}}>
+
+  {[
+    {
+      title: 'Foundations of blockchain',
+      desc: 'Explore the actor model behind transactions.<br>Understand account and contract layout.<br>Learn how TON records transactions.',
+    link: '/v3/guidelines/dapps/transactions/foundations-of-blockchain',
+      btn: 'Start with foundations'
+    },
+    {
+      title: 'Message-driven execution',
+      desc: 'See how messages trigger transactions.<br>Explore message types and structure.<br>Learn how to craft messages.',
+      link: '/v3/guidelines/dapps/transactions/message-driven-execution',
+      btn: 'Build and send a message'
+    },
+    {
+      title: 'Hash-based tracking',
+      desc: 'Explore hashes and their types. <br> Learn how to validate data using hashes. <br> Trace transactions across the blockchain.',
+      link: '/v3/guidelines/dapps/transactions/hash-based-tracking',
+      btn: 'Track using hashes'
+    },
+    {
+      title: 'API-based retrieval',
+      desc: 'Explore APIs for transaction access. <br> Explore approaches to access transactions. <br> Compare TON Center API v2 and v3.',
+      link: '/v3/guidelines/dapps/transactions/api-based-retrieval',
+      btn: 'Access using API'
+    },
+    {
+      title: 'Transactions',
+      desc: 'Understand transaction structure and phases.<br>Learn how to access transaction data.<br>Determine transaction success.',
+      link: '/v3/guidelines/dapps/transactions/explore-transactions',
+      btn: 'Explore transaction'
+    }
+  ].map(({ title, desc, link, btn }) => (
+    <div
+      key={title}
+      style={{
+        border: '1px solid var(--border-color, #e5e7eb)',
+        borderRadius: '0.75rem',
+        padding: '0.9rem 1rem',
+        backgroundColor: 'var(--card-bg, white)',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'start',
+        gap: '0.75rem',
+        height: '100%',
+        color: 'var(--text-color, black)'
+      }}
+    >
+      <h3 style={{ fontSize: '1rem', fontWeight: '600', margin: 0 }}>{title}</h3>
+      <p style={{ fontSize: '0.84rem', lineHeight: '1.45', margin: 0 }} dangerouslySetInnerHTML={{ __html: desc }} />
+      <a href={link} style={{
+        alignSelf: 'start',
+        padding: '0.4rem 0.75rem',
+        backgroundColor: 'var(--btn-bg, #f3f4f6)',
+        color: 'var(--btn-text, #111827)',
+        borderRadius: '0.5rem',
+        fontSize: '0.8rem',
+        textDecoration: 'none',
+        marginTop: 'auto'
+      }}>{btn}</a>
+    </div>
+  ))}
+</div>

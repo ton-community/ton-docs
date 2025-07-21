@@ -29,6 +29,7 @@
     "ADNL",
     "ASIC",
     "ASICS",
+    "Asynchrony",
     "Aiogram",
     "Altcoin",
     "Alefman",
@@ -198,6 +199,7 @@
     "iftop",
     "inclusivity",
     "inplace",
+    "inited",
     "int",
     "ints",
     "iotop",
@@ -206,11 +208,13 @@
     "jetton",
     "jettons",
     "jojo",
+    "katex",
     "keccak",
     "keyblocks",
     "keypair",
     "keystream",
     "Kolya",
+    "lateinit",
     "leaderboard",
     "leaderboards",
     "libmicrohttpd",
@@ -273,6 +277,7 @@
     "shardblocks",
     "shardchain",
     "shardchains",
+    "skele",
     "skillset",
     "softstack",
     "stablecoin",
@@ -335,7 +340,8 @@
     "liteservers",
     "liteserver",
     "mytonctrl",
-    "mytoncore"
+    "mytoncore",
+    "unexist"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",
@@ -368,12 +374,13 @@
     "deployment",
     "docs/learn/tvm-instructions/instructions.csv",
     "docs/learn/tvm-instructions/generate_md.py",
-    "docs/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib.md",
+    "docs/v3/documentation/smart-contracts/tolk/tolk-vs-func/stdlib.mdx",
     "sidebars.js",
     "sidebars",
     "i18n",
     ".husky",
     "3rd/*",
-    ".github/*"
+    ".github/*",
+    "crowdin*.yml"
   ]
 }

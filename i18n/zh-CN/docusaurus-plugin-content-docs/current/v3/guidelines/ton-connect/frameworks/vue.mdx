@@ -16,14 +16,14 @@ npm i @townsquarelabs/ui-vue
 
 将 TonConnectUIProvider 添加到应用程序的根目录。您可以使用道具指定用户界面选项。
 
-<!-- [See all available options](https://github.com/TownSquareXYZ/tonconnect-ui-vue/blob/aa7439073dae5f7ccda3ab10291fc4658f5d3588/src/utils/UIProvider.ts#L11) -->
+{/* [See all available options](https://github.com/TownSquareXYZ/tonconnect-ui-vue/blob/aa7439073dae5f7ccda3ab10291fc4658f5d3588/src/utils/UIProvider.ts#L11) */}
 
 所有 TonConnect 用户界面钩子调用和 `<TonConnectButton />` 组件必须置于 `<TonConnectUIProvider>` 内。
 
 ```html
 <template>
   <TonConnectUIProvider :options="options">
-    <!-- Your app -->
+    {/* Your app */}
   </TonConnectUIProvider>
 </template>
 
@@ -84,7 +84,7 @@ export default {
 ```html
 <template>
   <TonConnectUIProvider :options="options">
-    <!-- Your app -->
+    {/* Your app */}
   </TonConnectUIProvider>
 </template>
 
@@ -151,9 +151,9 @@ export default {
 查看钱包的所有属性
 // todo
 
-<!-- [Wallet interface](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html) -->
+{/* [Wallet interface](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html) */}
 
-<!-- [WalletInfo interface](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html) -->
+{/* [WalletInfo interface](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html) */}
 
 ```html
 <template>

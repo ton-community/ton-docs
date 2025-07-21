@@ -1,0 +1,139 @@
+---
+title: Simple counter contract
+---
+
+import Feedback from "@site/src/components/Feedback";
+
+# Simple counter contract
+
+## Counter contract
+
+When you create a **counter contract** using `npm create ton@latest`, it generates the following file:
+```tolk title="counter.tolk"
+tolk 1.0
+
+struct Storage {
+    ...
+}
+
+fun Storage.load() ...
+fun Storage.save(self) ...
+
+struct (0x7e8764ef) IncreaseCounter {
+    ...
+}
+struct (0x3a752f06) ResetCounter {
+    ...
+}
+
+type AllowedMessage = IncreaseCounter | ResetCounter
+
+fun onInternalMessage(in: InMessage) {
+    val msg = lazy AllowedMessage.fromSlice(in.body);
+
+    match (msg) {
+        IncreaseCounter => {
+            ...
+        }
+        ResetCounter => {
+            ...
+        }
+        else => {
+            ...
+        }
+    }
+}
+
+fun onBouncedMessage(in: InMessageBounced) {
+}
+
+get fun currentCounter() ...
+get fun initialId() ...
+```
+
+Let’s explore what’s happening here.
+
+## Smart contract data
+
+First, we declare the storage structure. It corresponds exactly to the format used when deploying from the TypeScript client `wrappers/Counter.ts`.
+```tolk
+// In `Counter.ts`, the function `counterConfigToCell`
+// manually constructs two uint32 values — which correspond here:
+struct Storage {
+    id: uint32
+    counter: uint32
+}
+
+// Methods to load from and store to persistent storage
+
+fun Storage.load() {
+    return Storage.fromCell(contract.getData())
+}
+fun Storage.save(self) {
+    contract.setData(self.toCell())
+}
+```
+
+## Handling incoming messages
+
+When a client sends a message — for example, using the `sendIncrease` function in `wrappers/Counter.ts`— the contract processes it using this function:
+
+```tolk
+fun onInternalMessage(in: InMessage) {
+    val msg = lazy AllowedMessage.fromSlice(in.body);
+
+    match (msg) {
+        IncreaseCounter => {
+            // ...
+        }
+        ResetCounter => {
+            // ...
+        }
+        else => {
+            // ... unrecognized messages
+        }
+    }
+}
+```
+
+Take a look at the `sendIncrease` function in TypeScript, which constructs a message containing `OP_INCREASE`, `queryId`, and `increaseBy`.
+
+The corresponding struct in `counter.tolk` defines the format of this incoming message:
+
+```tolk
+struct (0x7e8764ef) IncreaseCounter {
+    queryId: uint64
+    increaseBy: uint32
+}
+```
+
+## Sending messages
+
+This contract doesn’t send any messages.
+To learn how message construction works in Tolk, see the [Create message](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message.mdx) article.
+
+## Handling internal bounced messages
+
+**Bounced messages** are messages that you _send_, but the receiver fails to process — so they are returned to you.
+
+```tolk
+fun onBouncedMessage(in: InMessageBounced) {
+}
+```
+
+Since this contract only accepts messages like `IncreaseCounter` and `ResetCounter` and doesn’t send any, you can leave this function empty or remove it entirely.
+
+## GET methods
+
+GET methods, also called _contract getters_, run **off-chain** and typically return data from the storage.
+
+```tolk
+get fun currentCounter(): int {
+    val storage = lazy Storage.load();
+    return storage.counter;
+}
+```
+
+The `getCounter` function in `wrappers/Counter.ts` calls this exact getter from `counter.tolk`.
+
+<Feedback />

@@ -1,0 +1,67 @@
+---
+title: Environment setup
+---
+
+import Feedback from "@site/src/components/Feedback";
+
+# Environment setup
+
+To start working with Tolk, you need a development environment.
+
+We recommend using **Blueprint**, a tool for writing, testing, and deploying smart contracts on TON.
+
+## Create a new TON project
+
+> **Prerequisite:** Node.js v16 or higher
+
+1. Create a new TON project:
+   ```bash
+   npm create ton@latest
+   ```
+2. Enter any project name and select **"A simple counter contract (Tolk)"** when prompted by Blueprint.
+
+## Project structure
+
+Here's a quick look at the typical project layout:
+
+   ```
+   my-first-contract/
+   ├── build/             # Compiled smart contract bytecode
+   ├── contracts/         # Smart contract sources (e.g., counter.tolk)
+   ├── scripts/           # TypeScript deployment scripts
+   ├── tests/             # TypeScript tests
+   ├── wrappers/          # TypeScript wrappers for contracts
+   ```
+
+## Build the project
+
+```bash
+npx blueprint build
+# or
+yarn blueprint build
+```
+Blueprint compiles the contract and displays the resulting bytecode, along with its hash. The output is saved in the `build/` directory.
+
+## Run tests
+
+```bash
+npx blueprint test
+# or
+yarn blueprint test
+```
+This runs unit tests from the `tests/` directory.
+
+## Deploy or run a script
+
+```bash
+npx blueprint run
+# or
+yarn blueprint run
+```
+Use this command to deploy your contract to Mainnet, Testnet, or MyLocalTon.
+
+## IDE support
+
+Tolk is supported in IntelliJ-based IDEs using the [TON plugin](https://github.com/ton-blockchain/intellij-ton) and in Visual Studio Code through the [TON extension](https://github.com/ton-blockchain/ton-language-server).
+
+<Feedback />

@@ -5,12 +5,6 @@ module.exports = [
   {
     type: 'category',
     label: `Quick start`,
-    link: {
-      type: 'generated-index',
-      title: 'Quick start',
-      slug: '/guidelines/quick-start',
-      keywords: ['quick start'],
-    },
     items: [
       'v3/guidelines/quick-start/getting-started',
       {
@@ -24,12 +18,6 @@ module.exports = [
       {
         type: 'category',
         label: 'Developing smart contracts',
-        link: {
-          type: 'generated-index',
-          title: 'Developing smart contracts',
-          slug: '/guidelines/developing-smart-contracts',
-          keywords: ['smart contracts developing'],
-        },
         items: [
           'v3/guidelines/quick-start/developing-smart-contracts/setup-environment',
 
@@ -120,7 +108,9 @@ module.exports = [
         },
         items: [
           'v3/guidelines/smart-contracts/testing/overview',
+          'v3/guidelines/smart-contracts/testing/blueprint-config',
           'v3/guidelines/smart-contracts/testing/writing-test-examples',
+          'v3/guidelines/smart-contracts/testing/collect-contract-gas-metric',
         ],
       },
       {
@@ -202,6 +192,18 @@ module.exports = [
     items: [
       'v3/guidelines/dapps/overview',
       'v3/guidelines/dapps/cookbook',
+      {
+        type: 'category',
+        label: 'Mastering transactions',
+        items: [
+          'v3/guidelines/dapps/transactions/overview',
+          'v3/guidelines/dapps/transactions/foundations-of-blockchain',
+          'v3/guidelines/dapps/transactions/message-driven-execution',
+          'v3/guidelines/dapps/transactions/hash-based-tracking',
+          'v3/guidelines/dapps/transactions/api-based-retrieval',
+          'v3/guidelines/dapps/transactions/explore-transactions',
+        ],
+      },
       {
         type: 'category',
         label: 'APIs and SDKs',
@@ -455,19 +457,19 @@ module.exports = [
               },
               {
                 type: 'doc',
-                id: 'v3/guidelines/ton-connect/frameworks/vue',
-                label: 'Vue apps',
-              },
-              {
-                type: 'doc',
                 id: 'v3/guidelines/ton-connect/frameworks/web',
                 label: 'HTML/JS apps',
               },
+              {
+                type: 'doc',
+                id: 'v3/guidelines/ton-connect/frameworks/python',
+                label: 'Python apps',
+              },
             ],
           },
-          'v3/guidelines/ton-connect/guidelines/preparing-messages',
           'v3/guidelines/ton-connect/guidelines/sending-messages',
-          'v3/guidelines/ton-connect/guidelines/verifying-signed-in-users',
+          'v3/guidelines/ton-connect/guidelines/transaction-by-external-message',
+          'v3/guidelines/ton-connect/guidelines/verifying-signed-in-users'
         ],
       },
       {

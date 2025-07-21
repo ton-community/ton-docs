@@ -9,6 +9,7 @@ TON Connect is a powerful open-source toolkit that serves as a universal **appli
 <div style={{width: '100%', textAlign:'center', margin: '10pt auto'}}>
   <video style={{width: '100%',maxWidth: '600px', borderRadius: '10pt'}} muted={true} autoPlay={true} loop={true}>
     <source src="/files/TonConnect.mp4" type="video/mp4" />
+
     Your browser does not support video tags.
   </video>
 </div>
@@ -16,15 +17,15 @@ TON Connect is a powerful open-source toolkit that serves as a universal **appli
 Feel free to use one of the following flows for integration of your apps:
 
 <Button href="/v3/guidelines/ton-connect/frameworks/react" colorType={'primary'} sizeType={'sm'}>
-React Apps
+  React Apps
 </Button>
-<Button href="/v3/guidelines/ton-connect/frameworks/web"
-        colorType="secondary" sizeType={'sm'}>
-HTML/JS Apps
+
+<Button href="/v3/guidelines/ton-connect/frameworks/web" colorType="secondary" sizeType={'sm'}>
+  HTML/JS Apps
 </Button>
-<Button href="https://github.com/ton-community/tma-usdt-payments-demo"
-        colorType="secondary" sizeType={'sm'}>
-TMA USDT Payments Demo
+
+<Button href="https://github.com/ton-community/tma-usdt-payments-demo" colorType="secondary" sizeType={'sm'}>
+  TMA USDT Payments Demo
 </Button>
 
 ## Overview
@@ -33,17 +34,17 @@ TON Connect enhances the TON ecosystem by allowing users to interact with variou
 
 ### Key features:
 
-* **Seamless Integration**. TON Connect is designed to integrate smoothly with TON wallets and DApps. It allows users to connect their wallets to DApps with a few clicks, offering a frictionless experience.
+- **Seamless Integration**. TON Connect is designed to integrate smoothly with TON wallets and DApps. It allows users to connect their wallets to DApps with a few clicks, offering a frictionless experience.
 
-* **Enhanced Security**. TON Connect employs secure communication methods to ensure that user data and transactions are always protected.
+- **Enhanced Security**. TON Connect employs secure communication methods to ensure that user data and transactions are always protected.
 
-* **User-Friendly Experience**. With a focus on simplicity, TON Connect makes it easy for users to interact with DApps without needing extensive technical knowledge. The protocol's intuitive interface ensures a smooth user journey from connection to transaction completion.
+- **User-Friendly Experience**. With a focus on simplicity, TON Connect makes it easy for users to interact with DApps without needing extensive technical knowledge. The protocol's intuitive interface ensures a smooth user journey from connection to transaction completion.
 
-* **Cross-Platform Compatibility**. TON Connect supports various platforms, including web, mobile, and desktop applications. This wide compatibility ensures that users can connect their wallets to DApps regardless of their preferred device.
+- **Cross-Platform Compatibility**. TON Connect supports various platforms, including web, mobile, and desktop applications. This wide compatibility ensures that users can connect their wallets to DApps regardless of their preferred device.
 
-* **Developer-Friendly Tools**. TON Connect provides developers with tools and APIs to integrate the protocol seamlessly into their DApps. These resources enable developers to offer a consistent and secure connection experience across different applications.
+- **Developer-Friendly Tools**. TON Connect provides developers with tools and APIs to integrate the protocol seamlessly into their DApps. These resources enable developers to offer a consistent and secure connection experience across different applications.
 
-* **Open-Source Development**. TON Connect is led by the TonTech team and is an open-source project. Thus, this project is always open to great minds who want to participate and improve this.
+- **Open-Source Development**. TON Connect is led by the TonTech team and is an open-source project. Thus, this project is always open to great minds who want to participate and improve this.
 
 ## Use cases for your DApp
 
@@ -67,30 +68,28 @@ If you are a wallet developer, you can connect your wallet to TON Connect and en
 <details>
   <summary><b>Show the entire list</b></summary>
 
-  * [getgems.io](https://getgems.io/)
-  * [fragment.com](https://fragment.com/) 
-  * [ston.fi](https://ston.fi/)
-  * [app.evaa.finance](https://app.evaa.finance/)
-  * [ton.diamonds](https://ton.diamonds/)
-  * [minter.ton.org](https://minter.ton.org/)
-  * [tonconsole.com/jetton/minter](https://tonconsole.com/jetton/minter)
-  * [dedust.io](https://dedust.io/swap)
-  * [vesting.ton.org](https://vesting.ton.org/)
-  * [tonverifier.live](https://verifier.ton.org/)
-  * [tonstarter.com](https://tonstarter.com/)
-  * [dns.ton.org](https://dns.ton.org/)
-  * [daolama.co](https://daolama.co/)
-  * [ton.vote](https://ton.vote/)
-
+  - [getgems.io](https://getgems.io/)
+  - [fragment.com](https://fragment.com/)
+  - [ston.fi](https://ston.fi/)
+  - [app.evaa.finance](https://app.evaa.finance/)
+  - [ton.diamonds](https://ton.diamonds/)
+  - [minter.ton.org](https://minter.ton.org/)
+  - [tonconsole.com/jetton/minter](https://tonconsole.com/jetton/minter)
+  - [dedust.io](https://dedust.io/swap)
+  - [vesting.ton.org](https://vesting.ton.org/)
+  - [tonverifier.live](https://verifier.ton.org/)
+  - [tonstarter.com](https://tonstarter.com/)
+  - [dns.ton.org](https://dns.ton.org/)
+  - [daolama.co](https://daolama.co/)
+  - [ton.vote](https://ton.vote/)
 </details>
 
-
 ## Join TON Ecosystem
+
 To connect your service with the TON Ecosystem, you need to implement the following:
 
 - **TON Connect**. Incorporate the TON Connect protocol within your application.
-- **Transactions**. Create specified transaction messages using TON libraries. Dive into the process of [sending messages](/v3/guidelines/ton-connect/guidelines/preparing-messages) with our comprehensive guide.
+- **Transactions**. Create specified transaction messages using TON libraries. Dive into the process of [sending messages](/v3/guidelines/ton-connect/guidelines/sending-messages) with our comprehensive guide.
 - **Payments**. Process payments via the public API ([tonapi](https://tonapi.io/)) or your own indexer, for instance, [gobycicle](http://github.com/gobicycle/bicycle). Learn more from our extensive guide on [asset processing](/v3/guidelines/DApps/asset-processing/payments-processing).
 
 <Feedback />
-
