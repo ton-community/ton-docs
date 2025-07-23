@@ -469,7 +469,8 @@ module.exports = [
           },
           'v3/guidelines/ton-connect/guidelines/sending-messages',
           'v3/guidelines/ton-connect/guidelines/transaction-by-external-message',
-          'v3/guidelines/ton-connect/guidelines/verifying-signed-in-users'
+          'v3/guidelines/ton-connect/guidelines/verifying-signed-in-users',
+          'v3/guidelines/ton-connect/guidelines/cookbook',
         ],
       },
       {

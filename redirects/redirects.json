@@ -898,5 +898,9 @@
     {
       "from":"/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk",
       "to":"/v3/guidelines/ton-connect/frameworks/web"
+    },
+    {
+      "from": "/v3/guidelines/ton-connect/guidelines/preparing-messages",
+      "to": "/v3/guidelines/ton-connect/overview"
     }
 ]
