@@ -1,0 +1,205 @@
+import Feedback from "@site/src/components/Feedback";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# TON transfer
+
+## Transaction template
+
+No matter what level of task a developer is solving, it is typically necessary to use the connector entity from `@tonconnect/ui-react` or `@tonconnect/ui`.
+
+Examples created based on `@tonconnect/ui-react` and `@tonconnect/ui`:
+
+<Tabs groupId="TON Connect template">
+  <TabItem value="tonconnect-react" label="@tonconnect/ui-react">
+
+    ```js
+    import { useTonConnectUI } from '@tonconnect/ui-react';
+
+    const transaction = {
+        //transaction body
+    }
+
+    export const Settings = () => {
+        const [tonConnectUI, setOptions] = useTonConnectUI();
+
+        return (
+            <div>
+                <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                    Send transaction
+                </button>
+            </div>
+        );
+    };
+    ```
+
+  </TabItem>
+
+  <TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+    ```js
+    import TonConnectUI from '@tonconnect/ui';
+
+    const tonConnectUI = new TonConnectUI({ //connect application
+        manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+        buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+    });
+
+    const transaction = {
+        //transaction body
+    }
+
+    const result = await tonConnectUI.sendTransaction(transaction)
+
+    ```
+
+  </TabItem>
+</Tabs>
+
+### Regular TON transfer
+
+TON Connect SDKs include wrappers for sending messages, making it easy to prepare regular transfers of Toncoins between two wallets as default transaction without payload.
+
+The `address` must be in a [user-friendly format](/v3/documentation/smart-contracts/addresses#user-friendly-address), not a raw. If the message is being sent to a smart contract, it must be bounceable; if the message is being sent to a wallet, it must be non-bounceable.
+
+A regular TON transfer using the TON Connect JS SDKs can be executed as follows:
+
+<Tabs groupId="Regular Transfer">
+  <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+    ```js
+    import { useTonConnectUI } from '@tonconnect/ui-react';
+    const [tonConnectUI] = useTonConnectUI();
+
+    const transaction = {
+        messages: [
+            {
+                address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA", // destination address
+                amount: "20000000" //Toncoin in nanotons
+            }
+        ]
+
+    }
+
+    export const Settings = () => {
+        const [tonConnectUI, setOptions] = useTonConnectUI();
+
+        return (
+            <div>
+                <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                    Send transaction
+                </button>
+            </div>
+        );
+    };
+    ```
+
+  </TabItem>
+
+  <TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+    ```js
+    import TonConnectUI from '@tonconnect/ui';
+
+    const tonConnectUI = new TonConnectUI({ //connect application
+        manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+        buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+    });
+
+    const transaction = {
+        messages: [
+            {
+                address: "EQBBJBB3HagsujBqVfqeDUPJ0kXjgTPLWPFFffuNXNiJL0aA", // destination address
+                amount: "20000000" //Toncoin in nanotons
+            }
+        ]
+    }
+
+    const result = await tonConnectUI.sendTransaction(transaction)
+    ```
+
+  </TabItem>
+</Tabs>
+
+:::tip
+Learn more about [TON smart contract addresses](/v3/documentation/smart-contracts/addresses).
+:::
+
+For specific custom transactions, a particular payload must be defined.
+
+### Transfer with a comment
+
+The simplest example involves adding a payload with a comment. 
+
+Before the transaction, it is necessary to prepare a body cell via the [@ton/ton](https://github.com/ton-org/ton).
+
+```js
+import { beginCell } from "@ton/ton";
+
+const body = beginCell()
+  .storeUint(0, 32) // write 32 zero bits to indicate that a text comment will follow
+  .storeStringTail("Hello, TON!") // write our text comment
+  .endCell();
+```
+
+See more details on [this page](/v3/documentation/smart-contracts/message-management/internal-messages#simple-message-with-a-comment).
+
+The transaction is created as follows:
+
+<Tabs groupId="Transfer With a Comment">
+  <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+    ```js
+    import { useTonConnectUI } from '@tonconnect/ui-react';
+    import { toNano } from '@ton/ton'
+
+    const myTransaction = {
+        validUntil: Math.floor(Date.now() / 1000) + 360,
+        messages: [
+            {
+                address: destination,
+                amount: toNano("0.05").toString(),
+                payload: body.toBoc().toString("base64") // payload with comment in body
+            }
+        ]
+    }
+
+    export const Settings = () => {
+        const [tonConnectUI, setOptions] = useTonConnectUI();
+
+        return (
+            <div>
+                <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                    Send transaction
+                </button>
+            </div>
+        );
+    };
+    ```
+
+  </TabItem>
+
+  <TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+    ```js
+    import TonConnectUI from '@tonconnect/ui'
+    import { toNano } from '@ton/ton'
+
+    const transaction = {
+        validUntil: Math.floor(Date.now() / 1000) + 360,
+        messages: [
+            {
+                address: destination,
+                amount: toNano("0.05").toString(),
+                payload: body.toBoc().toString("base64") // payload with comment in body
+            }
+        ]
+    }
+
+    const result = await tonConnectUI.sendTransaction(transaction)
+    ```
+
+  </TabItem>
+</Tabs>
+
+<Feedback />

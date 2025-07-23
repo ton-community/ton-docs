@@ -418,34 +418,40 @@ module.exports = [
     ]
   },
   {
-    label: 'Integrate with TON',
+    label: 'TON Connect',
     type: 'category',
     link: {
       type: 'generated-index',
-      title: 'Integrate with TON',
-      slug: '/guidelines/integrate-with-ton',
+      title: 'TON Connect',
+      slug: '/guidelines/ton-connect',
     },
 
     items: [
+      // 1. Overview
       'v3/guidelines/ton-connect/overview',
+
+      // 2. Quick-start
+      'v3/guidelines/ton-connect/quick-start',
+
+      // 3. DApp Guide
       {
         type: 'category',
-        label: 'Integrate a dApp',
+        label: 'DApp Guide',
         link: {
           type: 'generated-index',
-          title: 'Integrate a dApp',
-          slug: '/guidelines/integrate-dapp',
-          keywords: ['dapp'],
+          title: 'DApp Guide',
+          slug: '/guidelines/dapp-guide',
         },
         items: [
-          'v3/guidelines/ton-connect/guidelines/how-ton-connect-works',
-          'v3/guidelines/ton-connect/guidelines/creating-manifest',
+          'v3/guidelines/ton-connect/how-ton-connect-works',
+          'v3/guidelines/ton-connect/creating-manifest',
+          'v3/guidelines/ton-connect/verifying-signed-in-users',
           {
             type: 'category',
-            label: 'Install TON Connect',
+            label: 'Install SDK',
             link: {
               type: 'generated-index',
-              title: 'Install TON Connect',
+              title: 'Install SDK',
               slug: '/guidelines/install-ton-connect',
               keywords: ['TON Connect'],
             },
@@ -467,18 +473,38 @@ module.exports = [
               },
             ],
           },
-          'v3/guidelines/ton-connect/guidelines/sending-messages',
-          'v3/guidelines/ton-connect/guidelines/transaction-by-external-message',
-          'v3/guidelines/ton-connect/guidelines/verifying-signed-in-users',
-          'v3/guidelines/ton-connect/guidelines/cookbook',
         ],
       },
+
+      // 4. Payload Cookbook (temporary uses old cookbook file)
+      {
+        type: 'category',
+        label: 'Payload Cookbook',
+        link: {
+          type: 'generated-index',
+          title: 'Payload Cookbook',
+          slug: '/guidelines/cookbook',
+        },
+        items: [
+          'v3/guidelines/ton-connect/cookbook/cells',
+          'v3/guidelines/ton-connect/cookbook/ton-transfer',
+          'v3/guidelines/ton-connect/cookbook/jetton-transfer',
+          'v3/guidelines/ton-connect/cookbook/nft-transfer',
+          'v3/guidelines/ton-connect/guidelines/transaction-by-external-message',
+        ],
+      },
+
+      // 5. Wallet Integration
       {
         type: 'doc',
-        label: 'Integrate a wallet',
+        label: 'Wallet integration',
         id: 'v3/guidelines/ton-connect/wallet',
       },
+
+      // 6. Developers reference
       'v3/guidelines/ton-connect/guidelines/developers',
+
+      // 7. Advanced
       {
         type: 'category',
         label: 'Advanced',
@@ -500,6 +526,8 @@ module.exports = [
           },
         ],
       },
+
+      // 8. Business
       {
         type: 'category',
         label: 'Business',

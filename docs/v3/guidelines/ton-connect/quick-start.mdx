@@ -16,16 +16,18 @@ A TON Connect *manifest* is a small JSON file that lets wallets discover your DA
 }
 ```
 
-Place the file at `https://myapp.com/tonconnect-manifest.json` so that wallets can fetch it with a simple `GET` request (no CORS or auth).  
+Place the file at `https://myapp.com/tonconnect-manifest.json` so that wallets can fetch it with a simple *GET* request (no CORS or auth).  
 
 
-## Install the React UI kit
+## Install TON Connect UI (React)
+
+> Looking for plain JS or Python? See [JS SDK](/v3/guidelines/ton-connect/frameworks/web) / [Python SDK](/v3/guidelines/ton-connect/frameworks/python).
 
 ```bash
 npm i @tonconnect/ui-react
 ```
 
-### Minimal React example
+### Minimal react example
 
 ```tsx title="App.tsx"
 import { TonConnectUIProvider, ConnectButton } from '@tonconnect/ui-react';
@@ -33,8 +35,7 @@ import { TonConnectUIProvider, ConnectButton } from '@tonconnect/ui-react';
 export default function App() {
   return (
     <TonConnectUIProvider
-      manifestUrl="https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json">
-      {/* 1 — Connect wallet */}
+      manifestUrl="https://myapp.com/tonconnect-manifest.json">
       <ConnectButton />
     </TonConnectUIProvider>
   );
@@ -47,38 +48,37 @@ Once the user has connected you can build and send a transaction:
 await tonConnectUI.sendTransaction({
   validUntil: Math.floor(Date.now() / 1000) + 300,
   messages: [{
-    address: wallet.address,
+    address: wallet.account.address,
     amount: '1000000000' // 1 TON in nanoTON
   }]
 });
 ```
 
-## 3 — Run the full demo locally (optional)
+## Run the demo locally (optional)
 
-Clone the official **`demo-dapp-with-react-ui`** repository to see a complete implementation that includes signing data, Merkle proof demo and more.
+:::caution Testnet vs Mainnet
+Snippets below will send **real TON** from the connected wallet. Try it with a testnet wallet first or send 0.01 TON to avoid surprises.
+:::
+
+Clone the minimal **`react-ui-example`** repository:
 
 ```bash
-git clone https://github.com/ton-connect/demo-dapp-with-react-ui.git
-cd demo-dapp-with-react-ui
-npm install    # installs both client & server deps
-npm run dev    # Vite + Express, default on http://localhost:5173
+git clone https://github.com/memearchivarius/react-ui-example.git
+cd react-ui-example
+npm install
+npm run dev    # default on http://localhost:5173
 ```
-
-Directory highlights:
-
-| Path | What’s inside |
-|------|---------------|
-| `src/components/*` | Ready-to-use React widgets (TxForm, TonProofDemo, etc.) |
-| `src/server/api/*` | Minimal Express-style API that the demo calls when you click buttons |
 
 Open your browser at `http://localhost:5173`, connect a wallet and try the *Send 1 TON* button.
 
-## 4 — Pure HTML sandbox
+## HTML sandbox for quick testing
+
+For quick testing, you can use a single-file HTML example:
 
 <details>
   <summary>Click to view a single-file HTML example</summary>
 
-```html
+```html title="index.html"
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,12 +108,8 @@ Open your browser at `http://localhost:5173`, connect a wallet and try the *Send
 
 </details>
 
-:::caution Testnet vs Mainnet
-The snippet above will send **real TON** from the connected wallet. Try it with a testnet wallet first or send 0.01 TON to avoid surprises.
-:::
-
-### Next steps
-1. Learn *how the protocol works* → [/How TON Connect works](/v3/guidelines/ton-connect/guidelines/how-ton-connect-works)  
-2. Check the *Payload Cookbook* and craft custom transfers → [/Payload Cookbook](/v3/guidelines/ton-connect/cookbook/ton-transfer)
+## Next steps
+1. Learn *how the protocol works* → [How TON Connect works](/v3/guidelines/ton-connect/guidelines/how-ton-connect-works)  
+2. Check the *Payload Cookbook* and craft custom transfers → [Payload Cookbook](/v3/guidelines/ton-connect/cookbook/ton-transfer)
 
 <Feedback />

@@ -101,11 +101,11 @@
     },
     {
         "from": "/develop/dapps/ton-connect",
-        "to": "/v3/guidelines/ton-connect/guidelines/how-ton-connect-works"
+        "to": "/v3/guidelines/ton-connect/how-ton-connect-works"
     },
     {
         "from": "/develop/dapps/ton-connect/manifest",
-        "to": "/v3/guidelines/ton-connect/guidelines/creating-manifest"
+        "to": "/v3/guidelines/ton-connect/creating-manifest"
     },
     {
         "from": "/develop/dapps/ton-connect/transactions",
@@ -113,7 +113,7 @@
     },
     {
         "from": "/develop/dapps/ton-connect/sign",
-        "to": "/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users"
+        "to": "/v3/guidelines/ton-connect/verifying-signed-in-users"
     },
     {
         "from": "/develop/dapps/ton-connect/integration",
@@ -849,7 +849,7 @@
     },
     {
       "from": "/develop/dapps/ton-connect/overview",
-      "to": "/v3/guidelines/ton-connect/guidelines/how-ton-connect-works"
+      "to": "/v3/guidelines/ton-connect/how-ton-connect-works"
     },
     {
       "from": "/develop/dapps/ton-connect/react",
@@ -902,5 +902,13 @@
     {
       "from": "/v3/guidelines/ton-connect/guidelines/preparing-messages",
       "to": "/v3/guidelines/ton-connect/overview"
+    },
+    {
+      "from": "/guidelines/integrate-dapp",
+      "to": "/guidelines/dapp-guide"
+    },
+    {
+      "from": "/guidelines/integrate-with-ton",
+      "to": "/guidelines/ton-connect"
     }
 ]
