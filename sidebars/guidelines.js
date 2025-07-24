@@ -436,22 +436,21 @@ module.exports = [
       // 3. DApp Guide
       {
         type: 'category',
-        label: 'DApp Guide',
+        label: 'DApp guide',
         link: {
           type: 'generated-index',
-          title: 'DApp Guide',
+          title: 'DApp guide',
           slug: '/guidelines/dapp-guide',
         },
         items: [
           'v3/guidelines/ton-connect/how-ton-connect-works',
           'v3/guidelines/ton-connect/creating-manifest',
-          'v3/guidelines/ton-connect/verifying-signed-in-users',
           {
             type: 'category',
-            label: 'Install SDK',
+            label: 'SDK installation',
             link: {
               type: 'generated-index',
-              title: 'Install SDK',
+              title: 'SDK installation',
               slug: '/guidelines/install-ton-connect',
               keywords: ['TON Connect'],
             },
@@ -473,16 +472,17 @@ module.exports = [
               },
             ],
           },
+          'v3/guidelines/ton-connect/verifying-signed-in-users',
         ],
       },
 
-      // 4. Payload Cookbook (temporary uses old cookbook file)
+      // 4. Payload Cookbook
       {
         type: 'category',
-        label: 'Payload Cookbook',
+        label: 'Payload cookbook',
         link: {
           type: 'generated-index',
-          title: 'Payload Cookbook',
+          title: 'Payload cookbook',
           slug: '/guidelines/cookbook',
         },
         items: [
@@ -490,21 +490,27 @@ module.exports = [
           'v3/guidelines/ton-connect/cookbook/ton-transfer',
           'v3/guidelines/ton-connect/cookbook/jetton-transfer',
           'v3/guidelines/ton-connect/cookbook/nft-transfer',
-          'v3/guidelines/ton-connect/guidelines/transaction-by-external-message',
         ],
       },
 
-      // 5. Wallet Integration
+      // 5. Transaction lookup
+      {
+        type: 'doc',
+        label: 'Transaction lookup',
+        id: 'v3/guidelines/ton-connect/guidelines/transaction-by-external-message',
+      },
+
+      // 6. Wallet Integration
       {
         type: 'doc',
         label: 'Wallet integration',
         id: 'v3/guidelines/ton-connect/wallet',
       },
 
-      // 6. Developers reference
+      // 7. Developers reference
       'v3/guidelines/ton-connect/guidelines/developers',
 
-      // 7. Advanced
+      // 8. Advanced
       {
         type: 'category',
         label: 'Advanced',
@@ -527,7 +533,7 @@ module.exports = [
         ],
       },
 
-      // 8. Business
+      // 9. Business
       {
         type: 'category',
         label: 'Business',

@@ -15,66 +15,7 @@ Before sending any transactions you must establish the connection.
 The examples below assume that such a connection has already been created and successfully verified.
 :::
 
-In all the examples below we use `@tonconnect/react-ui` and the vanilla `@tonconnect/ui` libraries.
-Additionally, every snippet shows how to bootstrap [`assets-sdk`](https://github.com/ton-community/assets-sdk) so you can immediately work with jettons, NFTs and other on-chain assets.
-
-### Quick start
-
-Add Ton Connect UI to your project (React or plain JS) as described under the [Install TON Connect](/guidelines/install-ton-connect) section.
-
-Here is a minimal page you can paste into `.html` file and open in your browser to play with.
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>TON Connect UI — minimal demo</title>
-
-  <!-- TON Connect UI -->
-  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-  <!-- TON Core library -->
-  <script type="module">
-    import * as TonCore from 'https://esm.sh/@ton/core';
-    window.ton = TonCore;
-    // Buffer polyfill for browsers (needed for comment payload)
-    import { Buffer } from 'https://esm.sh/buffer';
-    window.Buffer = Buffer;
-  </script>
-
-  <style>
-    body {font-family: Arial, sans-serif; background:#10161F; color:#FFF; margin:0; padding:20px;}
-    button {margin:10px 0; padding:8px 14px; border:0; border-radius:8px; cursor:pointer;
-            background:#66AAEE; color:#FFF; font-size:15px;}
-    #log {white-space:pre-wrap; margin-top:20px; font-family:monospace;}
-  </style>
-</head>
-<body>
-  
-  <!-- The connect-wallet button will be injected here -->
-  <div id="ton-connect"></div>
-
-  <!-- Action buttons -->
-  <button id="btn-multi">Send 0.2 TON to self + 0.1 TON x2 to another address</button><br>
-  <button id="btn-comment">Send 0.2 TON with comment</button>
-
-  <div id="log"></div>
-
-  <script>
-    /***** 1. Initialise TON Connect UI *****/
-    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-      manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
-      buttonRootId: 'ton-connect' // the element where the wallet button is injected
-    });
-
-    const log = msg => document.getElementById('log').textContent = msg;
-    // additional code will be added here
-    // ...
-    // ...
-  </script>
-</body>
-</html>
-```
+In all the examples below we use `@tonconnect/react-ui` and `@tonconnect/ui` libraries.
 
 ## Sending multiple messages
 
