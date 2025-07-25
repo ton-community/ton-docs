@@ -109,7 +109,7 @@
     },
     {
         "from": "/develop/dapps/ton-connect/transactions",
-        "to": "/v3/guidelines/ton-connect/guidelines/sending-messages"
+        "to": "/v3/guidelines/ton-connect/cookbook/ton-transfer"
     },
     {
         "from": "/develop/dapps/ton-connect/sign",
@@ -910,5 +910,9 @@
     {
       "from": "/guidelines/integrate-with-ton",
       "to": "/guidelines/ton-connect"
+    },
+    {
+      "from": "/v3/guidelines/ton-connect/guidelines/sending-messages",
+      "to": "/v3/guidelines/ton-connect/cookbook/ton-transfer"
     }
 ]

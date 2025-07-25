@@ -21,7 +21,7 @@ pip install aiofiles
 
 ### Creating the Manifest
 
-Create the `manifest.json` file for your application according to the [guidelines](https://docs.ton.org/v3/guidelines/ton-connect/guidelines/creating-manifest), and host it at a publicly accessible URL.
+Create the `manifest.json` file for your application according to the [guidelines](https://docs.ton.org/v3/guidelines/ton-connect/creating-manifest), and host it at a publicly accessible URL.
 
 ### Implementing Storage
 
@@ -155,7 +155,7 @@ connect_url = await connector.connect_wallet(selected_wallet, redirect_url=redir
 
 To ensure that the user truly owns the specified address, you can enable address ownership verification using `ton_proof`.
 Generate the proof payload and pass it via the `ton_proof` parameter.
-More details on this mechanism and payload generation are available [here](https://docs.ton.org/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users).
+More details on this mechanism and payload generation are available [here](https://docs.ton.org/v3/guidelines/ton-connect/verifying-signed-in-users).
 
 You can also use the built-in `generate_proof_payload` function from `tonutils`:
 
