@@ -3,25 +3,28 @@ import Feedback from '@site/src/components/Feedback';
 # Blockchain of blockchains
 
 :::tip
-Terms '**smart contract**', '**account**', and '**actor**' are used interchangeably in this document to describe a blockchain entity.
+In this document, the terms **smart contract**, **account**, and **actor** are used interchangeably for simplicity.
+Technically, an **account** in TON is an **actor**, and a **smart contract** is an account with _deployed code and data_.
 :::
 
 ## Single actor
 
-Let's consider one smart contract.
+Let's consider a smart contract.
 
-In TON, it is a _thing_ with properties like `address`, `code`, `data`, `balance` and others. In other words, it is an object with some _storage_ and _behavior_.
-That behavior has the following pattern:
+In TON, it is a  _computational entity_ with properties such as `address`, `code`, `data`, and `balance`. In other words, it is an object with persistent storage and defined behavior.
 
-- contract receives a message
-- contract handles that event according to its properties by executing its `code` in TON Virtual Machine
-- contract modifies its properties consisting of `code`, `data`, and others
-- contract optionally generates outgoing messages
-- contract goes into standby mode until the next event occurs
+That behavior follows this pattern:
 
-A combination of these steps is called a **transaction**. Since it is essential to handle events one by one, transactions follow a strict order and cannot interrupt each other.
+- the contract receives a message
+- it handles the event according to its properties, possibly executing its `code` in the TON Virtual Machine
+- it may update its state, including `code`, `data`, and `balance`
+- it may generate outgoing messages
+- it becomes idle until the next message arrives
 
-This behavior pattern is well known and called **actor**.
+Successfully processing a message through these steps results in a **transaction**.
+Since accounts handle messages one at a time, messages are processed in strict order, producing transactions without overlap or interruption.
+
+This behavior follows the **actor model**, where each contract is an independent entity reacting to messages.
 
 ### The lowest level: AccountChain
 
