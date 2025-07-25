@@ -24,23 +24,25 @@ Welcome to the TON Quick Start guide! This guide will give you a starting point 
 
 ## Concept of smart contracts
 
-You can think of smart contracts in TON as programs running on the blockchain, following the well-known behavioral concept of the [actor](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor) model.
+A smart contract in TON is an account whose _code and data_ are already deployed to the blockchain, along with its general state.
+TON utilizes the [actor model]((/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor)) of computation, where each smart contract is an isolated entity that communicates with others by _exchanging messages_.
+
+Each successfully processed message results in a **transaction**, which may include the following effects:
+
+- sending further messages
+- changing internal data or even the code of the smart contract itself
+- changing its balance
 
 :::info
 In contrast to other blockchains, where you can call other contract code synchronously, a smart contract in TON is a standalone entity that communicates equally with other smart contracts. Smart contracts interact by sending messages to each other, and the processing of these messages happens asynchronously due to the asynchronous nature of transactions in TON.
 :::
-
-Each processing of a message by the receiving smart contract is considered a transaction, resulting in the following actions:
-- Sending further messages.
-- Changing internal data or even the code of the smart contract itself.
-- Changing its balance.
 
 The available interfaces of a smart contract are:
 - Receiving **internal messages** from another smart contract.
 - Receiving **external messages** from outside the blockchain.
 - Processing **get methods** requests from outside the blockchain.
 
-In contrast to `internal` and `external` messages, `get methods` are not considered **transactions**. They are special functions of the smart contract that cannot change the contract's internal state or perform any other action except querying specific data from the contract's state.
+Unlike internal or external messages, **get methods** do not result in a transaction. They are special functions of the smart contract that cannot change the contract's internal state or perform any other action except querying specific data from the contract's state.
 
 :::info
 Contrary to what might seem intuitive, invoking `get methods` from other contracts **is not possible**.
