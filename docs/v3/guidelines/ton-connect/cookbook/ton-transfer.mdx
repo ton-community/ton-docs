@@ -1,3 +1,19 @@
+---
+title: TON transfer
+description: How to send a simple TON transfer via TON Connect SDKs (React UI and core UI). Includes address rules, limits and error handling.
+keywords:
+  - ton connect
+  - ton connect sdk
+  - ton connect ui
+  - ton transfer
+  - send ton
+  - wallet transaction
+  - dapp integration
+  - react
+  - javascript
+  - tutorial
+---
+
 import Feedback from "@site/src/components/Feedback";
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
@@ -56,11 +72,11 @@ Examples created based on `@tonconnect/ui-react` and `@tonconnect/ui`:
   </TabItem>
 </Tabs>
 
-## Regular TON transfer
+## Simple TON transfer
 
 TON Connect SDKs include wrappers for sending messages, making it easy to prepare regular transfers of Toncoins between two wallets as default transaction without payload. For specific custom transactions, a particular payload must be defined.
 
-The `address` must be in a [user-friendly format](/v3/documentation/smart-contracts/addresses#user-friendly-address), not a raw. If the message is being sent to a smart contract, it must be bounceable; if the message is being sent to a wallet, it must be non-bounceable.
+Pass the `address` in a [user-friendly format](/v3/documentation/smart-contracts/addresses#user-friendly-address), not in raw form. When you send the message to a smart contract, use a bounceable address; when you send it to a wallet, use a non-bounceable address.
 
 By the way, there is a limit to the number of messages sent in one transaction:
 
@@ -294,25 +310,24 @@ The transaction is created as follows:
 As more complex example, we'll deploy an instance of the simple [chatbot Doge](https://github.com/LaDoger/doge.fc) smart contract, which is featured as one of the [smart-contract examples](/v3/documentation/smart-contracts/overview#examples-of-smart-contracts). To create our own unique instance, we'll load the contract code and store a unique value in the data section. Finally, we'll combine the code and data into a `stateInit` structure.
 
 ```ts
-document.getElementById('btn-generate-contract').onclick = async () => {
-  const { Cell, beginCell, contractAddress } = ton;
+import { Cell, beginCell, contractAddress } from "@ton/ton";
 
-  // Doge contract code
-  const code = Cell.fromBase64('te6cckEBAgEARAABFP8A9KQT9LzyyAsBAGrTMAGCCGlJILmRMODQ0wMx+kAwi0ZG9nZYcCCAGMjLBVAEzxaARfoCE8tqEssfAc8WyXP7AN4uuM8=');
+// Doge contract code
+const code = Cell.fromBase64('te6cckEBAgEARAABFP8A9KQT9LzyyAsBAGrTMAGCCGlJILmRMODQ0wMx+kAwi0ZG9nZYcCCAGMjLBVAEzxaARfoCE8tqEssfAc8WyXP7AN4uuM8=');
 
-  // Create unique data with current timestamp
-  const data = beginCell()
+// Create unique data with current timestamp
+const data = beginCell()
     .storeUint(Math.floor(Date.now() / 1000), 64)
     .endCell();
 
-  // Create state init
-  const stateInit = { code, data };
+// Create state init
+const stateInit = { code, data };
 
-  // Calculate contract address
-  const doge_address = contractAddress(0, stateInit).toString();
+// Calculate contract address
+const doge_address = contractAddress(0, stateInit).toString();
 
-  // Create state init BOC
-  const state_init_boc = beginCell()
+// Create state init BOC
+const state_init_boc = beginCell()
     .storeUint(6, 5)
     .storeRef(code)
     .storeRef(data)
@@ -320,469 +335,37 @@ document.getElementById('btn-generate-contract').onclick = async () => {
     .toBoc()
     .toString('base64');
 
-  // Store for deployment
-  contractData = {
+// Store for deployment
+const contractData = {
     address: doge_address,
     stateInit: state_init_boc
-  };
+};
 ```
 
 And now it's time to send our transaction:
 
 ```ts
-document.getElementById('btn-deploy-contract').onclick = async () => {
-    // Deploy transaction
-    const transaction = {
-      validUntil: Math.floor(Date.now() / 1000) + 360,
-      messages: [
+import TonConnectUI from '@tonconnect/ui'
+import { toNano } from '@ton/ton'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
         {
-          address: contractData.address,
-          amount: '69000000', // 0.069 TON
-          stateInit: contractData.stateInit
+            address: contractData.address,
+            amount: toNano("0.069").toString(),
+            payload: contractData.stateInit
         }
-      ]
-    };
+    ]
+}
 
-  try {
-    const result = await tonConnectUI.sendTransaction(transaction);
-    log('Doge contract deployed!\n' + JSON.stringify(result, null, 2));
-  } catch (e) {
-    log('Error: ' + e);
-  }
-};
+const result = await tonConnectUI.sendTransaction(transaction)
 ```
 
-<details>
-  <summary>See the quick demo .html file</summary>
-  <pre>
-    ```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Smart Contract Deployment Example</title>
+## Next steps
+1. Send tokens (jettons) → [Jetton transfer](/v3/guidelines/ton-connect/cookbook/jetton-transfer)
+2. Work with NFTs → [NFT transfer](/v3/guidelines/ton-connect/cookbook/nft-transfer)
+3. Search your transaction → [Transaction lookup](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message)
 
-  <!-- TON Connect UI -->
-  <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-  <!-- TON Core library -->
-  <script type="module">
-    import * as TonCore from 'https://esm.sh/@ton/core';
-    window.ton = TonCore;
-    import { Buffer } from 'https://esm.sh/buffer';
-    window.Buffer = Buffer;
-  </script>
-
-  <style>
-    body {
-      font-family: Arial, sans-serif; 
-      background: #10161F; 
-      color: #FFF; 
-      margin: 0; 
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    
-    button {
-      margin: 10px 0; 
-      padding: 12px 20px; 
-      border: 0; 
-      border-radius: 8px; 
-      cursor: pointer;
-      background: #66AAEE; 
-      color: #FFF; 
-      font-size: 15px;
-    }
-    
-    button:hover {
-      background: #5599DD;
-    }
-    
-    button:disabled {
-      background: #444;
-      cursor: not-allowed;
-    }
-    
-    .section {
-      margin: 20px 0;
-      padding: 20px;
-      background: #1A2332;
-      border-radius: 10px;
-    }
-    
-    .code-output {
-      background: #0F1419;
-      padding: 15px;
-      border-radius: 5px;
-      font-family: monospace;
-      white-space: pre-wrap;
-      margin: 10px 0;
-      overflow-x: auto;
-    }
-    
-    .status {
-      padding: 10px;
-      border-radius: 5px;
-      margin: 10px 0;
-    }
-    
-    .status.success {
-      background: #2D5A2D;
-      color: #90EE90;
-    }
-    
-    .status.error {
-      background: #5A2D2D;
-      color: #FF6B6B;
-    }
-    
-    .status.info {
-      background: #2D4A5A;
-      color: #87CEEB;
-    }
-
-    #log {
-      white-space: pre-wrap; 
-      margin-top: 20px; 
-      font-family: monospace;
-      background: #0F1419;
-      padding: 15px;
-      border-radius: 5px;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-  </style>
-</head>
-<body>
-  <h1>TON Connect Examples</h1>
-  <p>Complete examples of TON Connect functionality</p>
-
-  <!-- TON Connect -->
-  <div class="section">
-    <h2>1. Connect Wallet</h2>
-    <div id="ton-connect"></div>
-    <div id="wallet-info"></div>
-  </div>
-
-  <!-- Simple Transactions -->
-  <div class="section">
-    <h2>2. Simple Transactions</h2>
-    <button id="btn-multi">Send 0.2 TON to self + 0.1 TON x2 to another address</button>
-    <button id="btn-comment">Send 0.2 TON with comment</button>
-    
-    <h3>Address Converter</h3>
-    <input type="text" id="address-input" placeholder="Enter TON address in any format" style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #444; border-radius: 5px; background: #2A3441; color: #FFF; font-size: 14px;">
-    <button id="btn-convert-address">Convert Address</button>
-    <div id="conversion-result"></div>
-    
-    <div class="status info" style="margin-top: 15px;">
-      <strong>Address formats by network:</strong><br>
-      <strong>Mainnet (workchain 0):</strong><br>
-      - <strong>Bounceable (EQ...):</strong> Transaction bounces back if contract doesn't exist<br>
-      - <strong>Non-bounceable (UQ...):</strong> Transaction is final even if address doesn't exist<br>
-      <strong>Testnet (workchain 0):</strong><br>
-      - <strong>Bounceable (kQ...):</strong> At the moment, this does not work in testnet, use mainnet address<br>
-      - <strong>Non-bounceable (0Q...):</strong> Transaction is final even if address doesn't exist<br>
-    </div>
-  </div>
-
-  <!-- Contract Info -->
-  <div class="section">
-    <h2>3. Smart Contract Deployment</h2>
-    <button id="btn-generate-contract">Generate Contract Info</button>
-    <div id="contract-info"></div>
-    <button id="btn-deploy-contract" disabled>Deploy Doge Contract</button>
-    <div id="deploy-status"></div>
-  </div>
-
-  <!-- Transaction Log -->
-  <div class="section">
-    <h2>4. Transaction Log</h2>
-    <button id="btn-clear-log">Clear Log</button>
-    <div id="log"></div>
-  </div>
-
-  <script>
-    // Initialize TON Connect UI
-    const tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-      manifestUrl: 'https://ton-connect.github.io/demo-dapp-with-react-ui/tonconnect-manifest.json',
-      buttonRootId: 'ton-connect'
-    });
-
-    // Global variables for contract
-    let contractData = null;
-
-    // Logging function
-    const log = msg => {
-      const logElement = document.getElementById('log');
-      const timestamp = new Date().toLocaleTimeString();
-      logElement.textContent += `[${timestamp}] ${msg}\n`;
-      logElement.scrollTop = logElement.scrollHeight;
-    };
-
-    // Update UI when wallet connection changes
-    tonConnectUI.onStatusChange((wallet) => {
-      const walletInfo = document.getElementById('wallet-info');
-      const deployButton = document.getElementById('btn-deploy-contract');
-      
-      if (wallet) {
-        walletInfo.innerHTML = `
-          <div class="status success">
-            Connected: ${wallet.account.address}
-          </div>
-        `;
-        deployButton.disabled = !contractData;
-        log(`Wallet connected: ${wallet.account.address}`);
-      } else {
-        walletInfo.innerHTML = `
-          <div class="status error">
-            Wallet not connected
-          </div>
-        `;
-        deployButton.disabled = true;
-        log('Wallet disconnected');
-      }
-    });
-
-    // Multiple messages transaction
-    document.getElementById('btn-multi').onclick = async () => {
-      if (!tonConnectUI.account) {
-        alert('Please connect your wallet first!');
-        return;
-      }
-
-      const tx = {
-        validUntil: Math.floor(Date.now() / 1000) + 360,
-        messages: [
-          {
-            address: tonConnectUI.account.address,
-            amount: '200000000' // 0.2 TON (in nanotons)
-          },
-          {
-            address: 'EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c',
-            amount: '100000000'
-          },
-          {
-            address: 'UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ',
-            amount: '100000000'
-          }
-        ]
-      };
-
-      try {
-        const result = await tonConnectUI.sendTransaction(tx);
-        log('Multi-message tx sent!\n' + JSON.stringify(result, null, 2));
-      } catch (e) {
-        log('Error: ' + e);
-      }
-    };
-
-    // Transfer with comment
-    document.getElementById('btn-comment').onclick = async () => {
-      if (!tonConnectUI.account) {
-        alert('Please connect your wallet first!');
-        return;
-      }
-
-      const { beginCell } = ton;
-
-      const commentBody = beginCell()
-        .storeUint(0, 32)
-        .storeStringTail('Hello, TON!')
-        .endCell();
-
-      const tx = {
-        validUntil: Math.floor(Date.now() / 1000) + 360,
-        messages: [
-          {
-            address: tonConnectUI.account.address,
-            amount: '200000000',
-            payload: commentBody.toBoc().toString('base64')
-          }
-        ]
-      };
-
-      try {
-        const result = await tonConnectUI.sendTransaction(tx);
-        log('Comment tx sent!\n' + JSON.stringify(result, null, 2));
-      } catch (e) {
-        log('Error: ' + e);
-      }
-    };
-
-    // Convert address formats
-    document.getElementById('btn-convert-address').onclick = async () => {
-      const { Address } = ton;
-      
-      const addressInput = document.getElementById('address-input').value.trim();
-      const resultDiv = document.getElementById('conversion-result');
-      
-      if (!addressInput) {
-        resultDiv.innerHTML = `
-          <div class="status error">
-            Please enter an address to convert
-          </div>
-        `;
-        return;
-      }
-      
-      try {
-        const address = Address.parse(addressInput);
-        
-        const testnetBounceable = address.toString({ bounceable: true, testOnly: true });
-        const testnetNonBounceable = address.toString({ bounceable: false, testOnly: true });
-        const mainnetBounceable = address.toString({ bounceable: true, testOnly: false });
-        const mainnetNonBounceable = address.toString({ bounceable: false, testOnly: false });
-        
-        resultDiv.innerHTML = `
-          <div class="status info">
-            <strong>Address Conversion Results:</strong><br>
-            <div class="code-output">Original: ${addressInput}</div>
-            <div class="code-output">Raw format: ${address.toRawString()}</div>
-            <div class="code-output">Workchain: ${address.workChain}</div>
-            <br>
-            <strong>Testnet formats:</strong><br>
-            <div class="code-output">Bounceable (kQ...): ${testnetBounceable}</div>
-            <div class="code-output">Non-bounceable (0Q...): ${testnetNonBounceable}</div>
-            <br>
-            <strong>Mainnet formats:</strong><br>
-            <div class="code-output">Bounceable (EQ...): ${mainnetBounceable}</div>
-            <div class="code-output">Non-bounceable (UQ...): ${mainnetNonBounceable}</div>
-          </div>
-        `;
-        
-        log(`Address converted: ${addressInput}`);
-        log(`Testnet bounceable: ${testnetBounceable}`);
-        log(`Testnet non-bounceable: ${testnetNonBounceable}`);
-        log(`Mainnet bounceable: ${mainnetBounceable}`);
-        log(`Mainnet non-bounceable: ${mainnetNonBounceable}`);
-        
-      } catch (e) {
-        resultDiv.innerHTML = `
-          <div class="status error">
-            <strong>Invalid address format:</strong><br>
-            ${e.message}
-          </div>
-        `;
-        log('Error parsing address: ' + e.message);
-      }
-    };
-
-    // Generate contract information
-    document.getElementById('btn-generate-contract').onclick = async () => {
-      const { Cell, beginCell, contractAddress } = ton;
-
-      // Doge contract code
-      const code = Cell.fromBase64('te6cckEBAgEARAABFP8A9KQT9LzyyAsBAGrTMAGCCGlJILmRMODQ0wMx+kAwi0ZG9nZYcCCAGMjLBVAEzxaARfoCE8tqEssfAc8WyXP7AN4uuM8=');
-
-      // Create unique data with current timestamp
-      const data = beginCell()
-        .storeUint(Math.floor(Date.now() / 1000), 64)
-        .endCell();
-
-      // Create state init
-      const stateInit = { code, data };
-
-      // Calculate contract address
-      const doge_address = contractAddress(0, stateInit).toString();
-
-      // Create state init BOC
-      const state_init_boc = beginCell()
-        .storeUint(6, 5)
-        .storeRef(code)
-        .storeRef(data)
-        .endCell()
-        .toBoc()
-        .toString('base64');
-
-      // Store for deployment
-      contractData = {
-        address: doge_address,
-        stateInit: state_init_boc
-      };
-
-      // Display contract info
-      document.getElementById('contract-info').innerHTML = `
-        <div class="status info">
-          <strong>Contract Address:</strong><br>
-          <div class="code-output">${doge_address}</div>
-          
-          <strong>State Init BOC:</strong><br>
-          <div class="code-output">${state_init_boc}</div>
-        </div>
-      `;
-
-      // Enable deploy button if wallet is connected
-      const deployButton = document.getElementById('btn-deploy-contract');
-      deployButton.disabled = !tonConnectUI.wallet;
-      
-      log(`Contract generated: ${doge_address}`);
-    };
-
-    // Deploy contract
-    document.getElementById('btn-deploy-contract').onclick = async () => {
-      if (!tonConnectUI.account) {
-        alert('Please connect your wallet first!');
-        return;
-      }
-
-      try {
-        // Deploy transaction
-        const transaction = {
-          validUntil: Math.floor(Date.now() / 1000) + 360,
-          messages: [
-            {
-              address: contractData.address,
-              amount: '69000000', // 0.069 TON
-              stateInit: contractData.stateInit
-            }
-          ]
-        };
-
-        document.getElementById('deploy-status').innerHTML = `
-          <div class="status info">
-            Deploying contract...
-          </div>
-        `;
-
-        log('Deploying contract...');
-
-        // Use built-in TON Connect UI sendTransaction method
-        const result = await tonConnectUI.sendTransaction(transaction);
-
-        document.getElementById('deploy-status').innerHTML = `
-          <div class="status success">
-            <strong>Contract deployed successfully!</strong><br>
-            <div class="code-output">${JSON.stringify(result, null, 2)}</div>
-          </div>
-        `;
-
-        log('Contract deployed successfully!\n' + JSON.stringify(result, null, 2));
-
-      } catch (error) {
-        document.getElementById('deploy-status').innerHTML = `
-          <div class="status error">
-            <strong>Deployment failed:</strong><br>
-            ${error.message}
-          </div>
-        `;
-        
-        log('Deployment failed: ' + error.message);
-      }
-    };
-
-    // Clear log
-    document.getElementById('btn-clear-log').onclick = () => {
-      document.getElementById('log').textContent = '';
-    };
-
-    // Initial log message
-    log('TON Connect examples initialized. Please connect your wallet to start.');
-  </script>
-</body>
-</html>
-```
-  </pre>
-</details>
 
 <Feedback />

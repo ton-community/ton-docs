@@ -1,3 +1,16 @@
+---
+title: Quick-start
+description: A 5-minute guide to add TON Connect to your dApp: manifest, SDK install and first 1 TON transfer.
+keywords:
+  - ton connect
+  - quick start
+  - sdk install
+  - manifest
+  - react
+  - javascript
+  - tutorial
+---
+
 import Feedback from '@site/src/components/Feedback';
 
 # Quick-start
@@ -19,7 +32,7 @@ A TON Connect *manifest* is a small JSON file that lets wallets discover your DA
 Place the file at `https://myapp.com/tonconnect-manifest.json` so that wallets can fetch it with a simple *GET* request (no CORS or auth).  
 
 
-## Install TON Connect UI (React)
+## Install TON Connect
 
 > Looking for plain JS or Python? See [JS SDK](/v3/guidelines/ton-connect/frameworks/web) / [Python SDK](/v3/guidelines/ton-connect/frameworks/python).
 
@@ -57,7 +70,8 @@ await tonConnectUI.sendTransaction({
 ## Run the demo locally (optional)
 
 :::caution Testnet vs Mainnet
-Snippets below will send **real TON** from the connected wallet. Try it with a testnet wallet first or send 0.01 TON to avoid surprises.
+The demo below sends **real TON** from the connected wallet.<br/>
+Try it with a testnet wallet first or send 0.01 TON to avoid surprises.
 :::
 
 Clone the minimal **`react-ui-example`** repository:
@@ -73,7 +87,7 @@ Open your browser at `http://localhost:5173`, connect a wallet and try the *Send
 
 ## HTML sandbox for quick testing
 
-For quick testing, you can use a single-file HTML example:
+For quick testing, you can use a single-file HTML example (see [TON Connect demo](https://memearchivarius.github.io/ton-connect-demo/)).
 
 <details>
   <summary>Click to view a single-file HTML example</summary>
@@ -110,6 +124,6 @@ For quick testing, you can use a single-file HTML example:
 
 ## Next steps
 1. Learn *how the protocol works* → [How TON Connect works](/v3/guidelines/ton-connect/guidelines/how-ton-connect-works)  
-2. Check the *Payload Cookbook* and craft custom transfers → [Payload Cookbook](/v3/guidelines/ton-connect/cookbook/ton-transfer)
+2. Check the *Payload cookbook* and craft custom transfers → [Payload cookbook](/v3/guidelines/ton-connect/cookbook/ton-transfer)
 
 <Feedback />

@@ -1,10 +1,24 @@
+---
+title: Message body
+description: Learn the basics of building and parsing cell-based message bodies for TON Connect — the foundation for every custom payload beyond a plain TON transfer.
+keywords:
+  - ton connect
+  - message body
+  - cells
+  - cell serialization
+  - tl-b
+  - payload
+  - sdk
+  - tutorial
+---
+
 import Feedback from "@site/src/components/Feedback";
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # Message body
 
-While using TON Connect, you should construct the message body for the payload used in various operations. On this page, you can find the most relevant payload examples for use with the TON Connect SDKs.
+When working with TON Connect you’ll need to craft a message body — a payload encoded in cells — for any on-chain action other than a simple TON transfer. This page explains the cell–building basics; concrete payload recipes are given on the following Cookbook pages.
 
 ## Cells and message serialization
 
@@ -33,7 +47,8 @@ const cell = beginCell()
 ```
 
 :::info
-Examples were provided only for @ton/ton library. However, every version of [SDKs](/v3/guidelines/dapps/apis-sdks/sdk) implementation has similar functions.
+These examples use the `@ton/ton` library only. <br/>
+However, every [TON SDK](/v3/guidelines/dapps/apis-sdks/sdk) offers equivalent helper functions.
 :::
 
 ### Parsing a cell
@@ -84,7 +99,7 @@ const uint4 = innerSlice.loadUint(256);
 
 ### Optional references and values
 
-Cells can store optional values, which may be null. These are stored using the `storeMaybe...()` functions:
+You can store optional (nullable) values in cells by using the `storeMaybe...()` helpers:
 
 ```ts
 const cell = beginCell()
@@ -172,5 +187,9 @@ Using `@ton-community/assets-sdk` is more readable and less error-prone.
 
   </TabItem>
 </Tabs>
+
+## Next steps
+
+Check the [TON transfers](/v3/guidelines/ton-connect/cookbook/ton-transfer) examples and craft custom transfers.
 
 <Feedback />
