@@ -101,7 +101,7 @@
     },
     {
         "from": "/develop/dapps/ton-connect",
-        "to": "/v3/guidelines/ton-connect/how-ton-connect-works"
+        "to": "/v3/guidelines/ton-connect/overview"
     },
     {
         "from": "/develop/dapps/ton-connect/manifest",
@@ -849,7 +849,7 @@
     },
     {
       "from": "/develop/dapps/ton-connect/overview",
-      "to": "/v3/guidelines/ton-connect/how-ton-connect-works"
+      "to": "/v3/guidelines/ton-connect/overview"
     },
     {
       "from": "/develop/dapps/ton-connect/react",
