@@ -1,4 +1,4 @@
-# Transaction Lookup Using External Message from TON Connect
+# Transaction lookup using external message from TON Connect
 
 This article describes how to find a transaction associated with an external-in message in the TON Blockchain. The process includes message normalization, searching for the transaction by message hash, and waiting for transaction confirmation.
 
@@ -30,7 +30,8 @@ export function getNormalizedExtMessageHash(message: Message) {
 
 ## Retrying API calls
 
-API requests may fail due to rate limits or network issues. Use the `retry` function to handle such failures:
+API requests may fail due to rate limits or network issues. <br/>
+Use the `retry` function to handle such failures:
 
 ```ts
 export async function retry<T>(fn: () => Promise<T>, options: { retries: number; delay: number }): Promise<T> {
@@ -100,7 +101,8 @@ If found, the function returns a `Transaction` object. Otherwise, it returns `un
 
 ## Waiting for transaction confirmation
 
-If a message has just been sent, it may take a few seconds before it appears on-chain. The `waitForTransaction` function polls the blockchain and waits for the corresponding transaction:
+If a message has just been sent, it may take a few seconds before it appears on-chain.<br/>
+The `waitForTransaction` function polls the blockchain and waits for the corresponding transaction:
 
 ```ts
 async function waitForTransaction(

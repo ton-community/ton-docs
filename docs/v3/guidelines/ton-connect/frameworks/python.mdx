@@ -1,5 +1,7 @@
 import Feedback from '@site/src/components/Feedback';
 
+<!-- TODO: Talk with python sdk authors (pytoniq, tonutils, etc.) to update the sdk to user needs -->
+
 # TON Connect for Python
 
 The recommended SDK for Python applications is [tonutils](https://docs.ton.org/v3/guidelines/ton-connect/guidelines/developers#ton-connect-python).
@@ -154,6 +156,7 @@ connect_url = await connector.connect_wallet(selected_wallet, redirect_url=redir
 #### With TON Proof
 
 To ensure that the user truly owns the specified address, you can enable address ownership verification using `ton_proof`.
+This feature is particularly useful for verifying ownership of off-chain assets such as Telegram usernames or virtual phone numbers on platforms like Fragment.
 Generate the proof payload and pass it via the `ton_proof` parameter.
 More details on this mechanism and payload generation are available [here](https://docs.ton.org/v3/guidelines/ton-connect/verifying-signed-in-users).
 

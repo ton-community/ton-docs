@@ -164,57 +164,9 @@ Learn more about [TON smart contract addresses](/v3/documentation/smart-contract
 
 ### Getting the result
 
-The function will return a result object containing the BoC (Bag of Cells) of the external message. This BoC can be logged to the console or used elsewhere in your application for transaction tracking:
-
-```json
-{
-  boc: "te6ccgEBBAEA5QABRYgA0XgCE4CyoItLqaTNoE767Ld3ED2SWNt2oQ//+B+F5LgMAQKeRt7mE4Tv4WfY/kR062A1F7kTD2LdPWR7gp+Se/XEXjqSIY4V9iiFmakjtKGG7Tbk1iiQmtCnB+jvIMsFtL2nCCmpoxdoeRALAAAAcgADAwIDAGhiADReAITgLKgi0uppM2gTvrst3cQPZJY23ahD//4H4XkuIF9eEAAAAAAAAAAAAAAAAAAAAGhiAFlQ9nqqLwO2abVyi3U/XvmVdQBGVRXCV8wzX2WQRErWoC+vCAAAAAAAAAAAAAAAAAAA"
-}
-```
-
-BoC is a [bag of cells](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), the way data is stored in TON.
-
-Decode this BoC in the tool of your choice, for example [boc-printer](https://testnet.tonviewer.com/tools/boc), and you'll get the following tree of cells:
-
-```bash
-x{8800D178021380B2A08B4BA9A4CDA04EFAECB777103D9258DB76A10FFFF81F85E4B80C_}
- x{46DEE61384EFE167D8FE4474EB603517B9130F62DD3D647B829F927BF5C45E3A92218E15F6288599A923B4A186ED36E4D628909AD0A707E8EF20CB05B4BDA70829A9A3176879100B00000072000303}
-  x{6200345E0084E02CA822D2EA69336813BEBB2DDDC40F649636DDA843FFFE07E1792E205F5E100000000000000000000000000000}
-  x{62005950F67AAA2F03B669B5728B753F5EF9957500465515C257CC335F6590444AD6A02FAF080000000000000000000000000000}
-```
-
-This is a serialized external message containing an internal message with two references representing the outgoing messages.
-
-```bash
-x{88016543D9EAA8BC0ED9A6D5CA2DD4FD7BE655D401195457095F30CD7D964111...
-  $10       ext_in_msg_info
-  $00       src:MsgAddressExt (null address)
-  "EQ..."a  dest:MsgAddressInt (your wallet)
-  0         import_fee:Grams
-  $0        (no state_init)
-  $1        (body starts in ref cell)
-  ...
-```
-
-Using TL-B you can [convert the BoC](https://ton-cell-abi-viewer.vercel.app/) to a human-readable format:
-
-```bash
-kind: MessageAny
-anon0:
-  kind: Message
-  info:
-    kind: CommonMsgInfo_ext_in_msg_info
-    src: null
-    dest: EQBovAEJwFlQRaXU0mbQJ312W7uIHsksbbtQh__8D8LyXB77
-    import_fee: "0"
-  init:
-    kind: Maybe_nothing
-  body:
-    kind: Either_right
-    value: b5ee9c724101030100bf00029e46dee61384efe167d8fe4474eb603517b9130f62dd3d647b829f927bf5c45e3a92218e15f6288599a923b4a186ed36e4d628909ad0a707e8ef20cb05b4bda70829a9a3176879100b00000072000303010200686200345e0084e02ca822d2ea69336813bebb2dddc40f649636dda843fffe07e1792e205f5e100000000000000000000000000000006862005950f67aaa2f03b669b5728b753f5ef9957500465515c257cc335f6590444ad6a02faf0800000000000000000000000000002998243e
-```
-
-Returning the transaction's BoC allows developers to track the sent transaction.
+The function will return a result object containing the BoC (Bag of Cells) of the external message.
+This BoC can be logged to the console or used elsewhere in your application for transaction tracking.
+Check out the [Transaction lookup](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message) page for more details.
 
 ### What happens if the user rejects a transaction request?
 
@@ -310,7 +262,7 @@ The transaction is created as follows:
 As more complex example, we'll deploy an instance of the simple [chatbot Doge](https://github.com/LaDoger/doge.fc) smart contract, which is featured as one of the [smart-contract examples](/v3/documentation/smart-contracts/overview#examples-of-smart-contracts). To create our own unique instance, we'll load the contract code and store a unique value in the data section. Finally, we'll combine the code and data into a `stateInit` structure.
 
 ```ts
-import { Cell, beginCell, contractAddress } from "@ton/ton";
+import { Cell, beginCell, contractAddress, storeStateInit } from "@ton/ton";
 
 // Doge contract code
 const code = Cell.fromBase64('te6cckEBAgEARAABFP8A9KQT9LzyyAsBAGrTMAGCCGlJILmRMODQ0wMx+kAwi0ZG9nZYcCCAGMjLBVAEzxaARfoCE8tqEssfAc8WyXP7AN4uuM8=');
@@ -326,11 +278,9 @@ const stateInit = { code, data };
 // Calculate contract address
 const doge_address = contractAddress(0, stateInit).toString();
 
-// Create state init BOC
+// Create state init BOC (using helper from @ton/ton)
 const state_init_boc = beginCell()
-    .storeUint(6, 5)
-    .storeRef(code)
-    .storeRef(data)
+    .store(storeStateInit(stateInit))
     .endCell()
     .toBoc()
     .toString('base64');

@@ -443,7 +443,6 @@ module.exports = [
           slug: '/guidelines/dapp-guide',
         },
         items: [
-          'v3/guidelines/ton-connect/how-ton-connect-works',
           'v3/guidelines/ton-connect/creating-manifest',
           {
             type: 'category',
@@ -479,10 +478,10 @@ module.exports = [
       // 4. Payload Cookbook
       {
         type: 'category',
-        label: 'Payload cookbook',
+        label: 'Transaction cookbook',
         link: {
           type: 'generated-index',
-          title: 'Payload cookbook',
+          title: 'Transaction cookbook',
           slug: '/guidelines/cookbook',
         },
         items: [

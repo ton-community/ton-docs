@@ -273,7 +273,7 @@ export const Settings = () => {
 
 ### Understanding transaction status by hash
 
-Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions) using the tonweb library.
+Check out the [Transaction lookup](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message) page for more details.
 
 ### Optional check on the backend: ton_proof
 
@@ -282,11 +282,12 @@ Understand how to sign and verify messages: [Signing and verification](/v3/guide
 :::
 
 To ensure that the user truly owns the declared address, you can use `ton_proof`.
+This feature is particularly useful for verifying ownership of off-chain assets such as Telegram usernames or virtual phone numbers on platforms like Fragment.
 
 Use the `tonConnectUI.setConnectRequestParameters` function to set up your connection request parameters. You can use it for:
 
-- Loading State: Show a loading state while waiting for a response from your backend.
-- Ready State with tonProof: Set the state to 'ready' and include the tonProof value.
+- Loading state: Show a loading state while waiting for a response from your backend.
+- Ready state with `ton_proof`: Set the state to 'ready' and include the `ton_proof` value.
 - If an error occurs, remove the loader and create the connect request without additional parameters.
 
 ```ts
@@ -347,6 +348,33 @@ type TonProofItemReplySuccess = {
   }
 }
 ```
+
+<details>
+  <summary><b>How to verify the <code>ton_proof</code> signature by public key</b></summary>
+
+The signature must be verified by public key:
+
+1. **First, try to extract the public key from `walletStateInit`:**
+   - Use `TonAddressItemReply.walletStateInit` and attempt to parse as `StateInit` cell.
+   - Compare `walletStateInit.code` with the code of known standard wallet contracts. If a match is found, parse the `walletStateInit.data` according to the wallet version.
+   - Take `publicKey` from parsed `walletStateInit.data`
+
+2. **If `publicKey` cannot be taken:**
+   - Call the on-chain `get_public_key` get-method on the smart contract deployed at `TonAddressItemReply.address`.
+   - Extract the `publicKey` from the result of this method call.
+
+3. **Verify `publicKey` and all params:**
+   - Check that `TonAddressItemReply.publicKey` matches the extracted public key from `walletStateInit` or from on-chain method `get_public_key` call.
+   - Verify that `TonAddressItemReply.walletStateInit.hash()` equals `TonAddressItemReply.address.hash()` (`.hash()` refers to the BoC hash).
+
+4. After that, make sure that the `ton_proof` signature is signed by that `publicKey`:
+   - Create a message payload according specification in the [Address proof signature (ton_proof)](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#address-proof-signature-ton_proof) section and make a valid `hash`.
+   - Verify that the `ton_proof` signature matches with `hash` and `publicKey`.
+
+This approach **prioritizes local parsing of `stateInit`**, and uses the on-chain `get_public_key` method **only as a fallback**, if local parsing is not possible. This reduces unnecessary blockchain calls and improves efficiency.
+
+</details>
+
 
 You can find an example of authentication on this [page](/v3/guidelines/ton-connect/verifying-signed-in-users#react-example).
 

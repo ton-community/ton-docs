@@ -1,5 +1,5 @@
 import Feedback from '@site/src/components/Feedback';
-
+import ThemedImage from '@theme/ThemedImage';
 import Button from '@site/src/components/button'
 
 # About TON Connect
@@ -45,6 +45,30 @@ TON Connect enhances the TON ecosystem by allowing users to interact with variou
 - **Developer-Friendly Tools**. TON Connect provides developers with tools and APIs to integrate the protocol seamlessly into their DApps. These resources enable developers to offer a consistent and secure connection experience across different applications.
 
 - **Open-Source Development**. TON Connect is led by the TonTech team and is an open-source project. Thus, this project is always open to great minds who want to participate and improve this.
+
+## How TON Connect works
+
+TON Connect is a communication protocol between **wallets** and **apps** in TON.
+
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/ton-connect/ton-connect_1.svg?raw=true',
+        dark: '/img/docs/ton-connect/ton-connect_1-dark.svg?raw=true',
+    }}
+/>
+<br></br>
+
+### Bird's eye view
+
+**Apps** built on TON offer rich functionality and are designed to protect user funds through smart contracts. Since these apps use decentralized technologies like blockchain, they are typically called **decentralized applications (DApps)**.
+
+**Wallets** offer the user interface for approving transactions and securely store users' cryptographic keys on their devices.
+
+This separation of responsibilities allows for rapid innovation and a high level of security: wallets don't need to create closed ecosystems, and apps don't need to bear the risk of holding users' accounts.
+
+TON Connect is designed to provide a seamless user experience between wallets and apps.
 
 ## Use cases for your DApp
 
