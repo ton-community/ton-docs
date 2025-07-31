@@ -32,15 +32,15 @@ Toncoin is distributed by `PoW Givers`, which are smart contracts with specific 
 
 Mining profits are not gradual; they come in batches of 100 TON for each successfully solved giver challenge. This means that if your machine has a 10% chance to calculate a block within 24 hours (see step 4 of [Quick start](/v3/documentation/archive/mining#quick-start)) then you will probably need to wait for \~10 days before you will get a 100 TON reward.
 
-The process of mining is largely automated by `mytonctrl`. Detailed information about the mining process can be found in [PoW givers](https://www.ton.org/#/howto/pow-givers) document.
+The process of mining is largely automated by `mytonctrl`. Detailed information about the mining process can be found in the PoW givers documentation (archived).
 
 ## <a id="advanced" />Advanced
 
-If you're serious about mining and want to operate multiple machines or a mining farm, it's essential to learn about TON and how mining works. Refer to the [HOWTO](https://ton.org/#/howto/) section for detailed information. Here is some general advice:
+If you're serious about mining and want to operate multiple machines or a mining farm, it's essential to learn about TON and how mining works. Refer to the [TON documentation](/v3/documentation/ton-documentation) for detailed information. Here is some general advice:
 
 - **DO** run your own node / lite server on a separate machine; this will ensure that your mining farm does not depend on external lite servers that can go down or not process your queries in a timely fashion.
 - **DO NOT** bombard public lite servers with `get_pow_params` queries, if you have custom scripts that poll givers status in high frequency you **must** use your own lite server. Clients that violate this rule risk having their IPs blacklisted on public lite servers.
-- **DO** try to understand how [mining process](https://www.ton.org/#/howto/pow-givers) works; most larger miners use their own scripts that offer many advantages over `mytonctrl` in environments with multiple mining machines.
+- **DO** try to understand how the mining process works; most larger miners use their own scripts that offer many advantages over `mytonctrl` in environments with multiple mining machines.
 
 ## <a id="hardware" />Miner hardware
 
@@ -195,10 +195,10 @@ Calculation process by itself will not be faster, but you will gain some stabili
 
 #### <a id="faq-software-node2" />What do I need to / how can I operate a full node?
 
-This is out of scope of this guide, please consult [Full node howto](https://ton.org/#/howto/full-node) and/or [mytonctrl instructions](https://github.com/igroman787/mytonctrl).
+This is out of scope of this guide, please consult [Run a full node](/v3/guidelines/nodes/running-nodes/full-node) and/or [mytonctrl instructions](https://github.com/igroman787/mytonctrl).
 
 #### <a id="faq-software-build" />Can you help me to build software on my OS?
 
-This is out of scope of this guide, please consult [Full node howto](https://ton.org/#/howto/full-node) as well as [Mytonctrl installation scripts](https://github.com/igroman787/mytonctrl/blob/master/scripts/toninstaller.sh#L44) for information about dependencies and process.
+This is out of scope of this guide, please consult [Run a full node](/v3/guidelines/nodes/running-nodes/full-node) as well as [Mytonctrl installation scripts](https://github.com/igroman787/mytonctrl/blob/master/scripts/toninstaller.sh#L44) for information about dependencies and process.
 
 <Feedback />

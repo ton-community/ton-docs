@@ -29,15 +29,15 @@ Toncoin通过所谓的`PoW Givers`（工作量证明提供者）进行分发，�
 
 重要的是要理解，挖矿的收益不是随着机器工作而“逐渐增加”的，而是每成功解决一个giver挑战就以100 TON的批次形式出现。这意味着，如果您的机器有在24小时内计算出一个区块的10%机会（见[快速开始](#quickStart)的第4步），那么您可能需要等待大约10天时间才能获得100 TON的奖励。
 
-挖矿过程在很大程度上由`mytonctrl`自动化。关于挖矿过程的详细信息可以在[PoW givers](https://www.ton.org/#/howto/pow-givers)文档中找到。
+挖矿过程在很大程度上由`mytonctrl`自动化。关于挖矿过程的详细信息可以在PoW givers文档（已归档）中找到。
 
 ## <a id="advanced"></a>高级
 
-如果您认真对待挖矿并希望操作多台机器/矿场，那么您真的需要了解TON以及挖矿的工作原理；请参阅[HOWTO](https://ton.org/#/howto/)部分以获取深入信息。以下是一些通用建议：
+如果您认真对待挖矿并希望操作多台机器/矿场，那么您真的需要了解TON以及挖矿的工作原理；请参阅[TON文档](/v3/documentation/ton-documentation)以获取深入信息。以下是一些通用建议：
 
 - **应该**在单独的机器上运行您自己的节点/轻服务器；这将确保您的矿场不依赖于可能发生故障或无法及时处理您的查询的外部轻服务器。
 - **不要**用`get_pow_params`查询轰炸公共轻服务器，如果您有高频率轮询giver状态的自定义脚本，您**必须**使用您自己的轻服务器。违反此规则的客户端可能会导致其IP在公共轻服务器上被列入黑名单。
-- **应该**尝试了解[挖矿过程](https://www.ton.org/#/howto/pow-givers)的工作原理；大多数大型矿工使用自己的脚本，在多个挖矿机器的环境中提供比`mytonctrl`更多的优势。
+- **应该**尝试了解挖矿过程的工作原理；大多数大型矿工使用自己的脚本，在多个挖矿机器的环境中提供比`mytonctrl`更多的优势。
 
 ## <a id="hardware"></a>矿工硬件
 
@@ -192,8 +192,8 @@ TON在区块中是以每100进行开采的，你要么猜中一个区块并获�
 
 #### <a id="faq-software-node2"></a>我需要什么/如何操作一个完整节点？
 
-这超出了本指南的范围，请参阅[完整节点howto](https://ton.org/#/howto/full-node)和/或[mytonctrl说明](https://github.com/igroman787/mytonctrl)。
+这超出了本指南的范围，请参阅[运行完整节点](/v3/guidelines/nodes/running-nodes/full-node)和/或[mytonctrl说明](https://github.com/igroman787/mytonctrl)。
 
 #### <a id="faq-software-build"></a>你能帮我在我的操作系统上构建软件吗？
 
-这超出了本指南的范围，请参阅[完整节点操作指南](https://ton.org/#/howto/full-node)以及[Mytonctrl安装脚本](https://github.com/igroman787/mytonctrl/blob/master/scripts/toninstaller.sh#L44)，以获取有关依赖项和过程的信息。
+这超出了本指南的范围，请参阅[运行完整节点](/v3/guidelines/nodes/running-nodes/full-node)以及[Mytonctrl安装脚本](https://github.com/igroman787/mytonctrl/blob/master/scripts/toninstaller.sh#L44)，以获取有关依赖项和过程的信息。
