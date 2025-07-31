@@ -1,0 +1,35 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Address states
+
+This document outlines the four possible states of a smart contract address on the TON Blockchain. Understanding these states is critical for predicting transaction outcomes and ensuring correct contract deployment.
+
+## State definitions
+
+Every address exists in one of the following states:
+
+-   **`nonexist`**: The default state for any address that has not been involved in a transaction (or was deleted). It has no code, data, or balance. The blockchain does not store any information for addresses in this state. We can say that initially all 2<sup>256</sup> address are in this state.
+-   **`uninit`**: The address has a balance and metadata but no smart contract code or persistent data. An address transitions to this state when it receives funds from another account. It cannot execute logic but can hold a balance until contract code is deployed.
+-   **`active`**: The address contains code, data, and a balance. It is a fully deployed and operational smart contract capable of processing messages and executing its logic. An address becomes active when a message containing its `state_init` (code and initial data) is sent to its `uninit` address. Note, that to be able to deploy this address, hash of `state_init` must be equal to address.
+-   **`frozen`**: The address's storage costs have exceeded its balance, causing the network to freeze its state. This state contains only two hashes from the previous state (code and data cells respectively). While in this state, the contract remains dormant and cannot execute. To unfreeze it, you must send a message with the exact `state_init` and sufficient funds to cover storage fees. It can be difficult to recover it, so you should not allow this situation. There is a project to unfreeze the address, which you can find [here](https://unfreezer.ton.org/).
+
+## State transitions and implications
+
+The state of an address determines how incoming messages are processed by the network:
+
+**Sending to `uninit` address**:
+   -   **With `state_init`**: The contract is deployed and becomes `active` before processing the message.
+   -   **Without `state_init` (bounce: true)**: The message is returned to the sender, minus&nbsp;fees.
+   -   **Without `state_init` (bounce: false)**: The address balance is credited, but the contract remains `uninit`. The funds are held until deployment.
+
+**Deployment strategy**: The standard practice for deploying a wallet is to first send a non-bounceable message with TON coins to its address. This transitions the address to the `uninit` state. The wallet owner can then deploy the contract in a subsequent transaction, using the pre-funded balance.
+
+**Protection against errors**: Standard wallets and applications manage these complexities by automatically setting the `bounce` flag based on the destination address's state. Developers of custom applications must implement similar logic to prevent fund loss.
+
+## Summary
+
+-   An address state (`nonexist`, `uninit`, `active`, `frozen`) determines its behavior.
+-   The `uninit` state enables an address to receive funds before its contract is deployed.
+-   Correct handling of `state_init` and the `bounce` flag is crucial for successful deployment and avoiding unintended fund transfers.
+
+<Feedback />
