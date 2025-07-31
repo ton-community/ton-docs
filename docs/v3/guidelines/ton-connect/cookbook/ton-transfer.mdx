@@ -17,6 +17,7 @@ keywords:
 import Feedback from "@site/src/components/Feedback";
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Button from '@site/src/components/button'
 
 # TON transfer
 
@@ -313,9 +314,19 @@ const result = await tonConnectUI.sendTransaction(transaction)
 ```
 
 ## Next steps
-1. Send tokens (jettons) → [Jetton transfer](/v3/guidelines/ton-connect/cookbook/jetton-transfer)
-2. Work with NFTs → [NFT transfer](/v3/guidelines/ton-connect/cookbook/nft-transfer)
-3. Search your transaction → [Transaction lookup](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message)
 
+Continue exploring TON Connect features and workflows by choosing one of the following guides:
+
+<Button href="/v3/guidelines/ton-connect/cookbook/jetton-transfer" colorType={'primary'} sizeType={'sm'}>
+  Send tokens (jettons)
+</Button>
+
+<Button href="/v3/guidelines/ton-connect/cookbook/nft-transfer" colorType="secondary" sizeType={'sm'}>
+  Work with NFTs
+</Button>
+
+<Button href="/v3/guidelines/ton-connect/guidelines/transaction-by-external-message" colorType="secondary" sizeType={'sm'}>
+  Search your transaction
+</Button>
 
 <Feedback />
