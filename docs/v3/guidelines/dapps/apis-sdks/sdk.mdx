@@ -9,8 +9,8 @@ Easily navigate to your preferred programming language using the right sidebar.
 There are different ways to connect to the blockchain:
 
 1. RPC data provider or other API – Requires stability and security from a third-party service. However, if you use a self-hosted RPC, stability and security depend only on you.
-2. ADNL connection - Connects to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). While it may be inaccessible at times, it cannot provide false data due to built-in validation.
-3. Tonlib binary - Also connects to a liteserver, inheriting the same advantages and limitations. However, your application includes a dynamically loaded library compiled externally.
+2. ADNL connection - Connects to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). You can host your personal liteserver or rent one and use it directly. Public liteservers are often inaccessible because they are public and have finite resources. However, liteservers cannot provide false data due to built-in validation.
+3. Tonlib binary - Also connects to a liteserver, inheriting the same advantages and limitations. However, your application includes a dynamically loaded library compiled externally. Tonlib has to sync for the first time, which takes some time.
 4. Offchain-only - These SDKs allow you to create and serialize cells, which can then be sent to APIs.
 
 ### TypeScript / JavaScript
