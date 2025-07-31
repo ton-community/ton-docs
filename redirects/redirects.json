@@ -101,19 +101,19 @@
     },
     {
         "from": "/develop/dapps/ton-connect",
-        "to": "/v3/guidelines/ton-connect/guidelines/how-ton-connect-works"
+        "to": "/v3/guidelines/ton-connect/overview"
     },
     {
         "from": "/develop/dapps/ton-connect/manifest",
-        "to": "/v3/guidelines/ton-connect/guidelines/creating-manifest"
+        "to": "/v3/guidelines/ton-connect/creating-manifest"
     },
     {
         "from": "/develop/dapps/ton-connect/transactions",
-        "to": "/v3/guidelines/ton-connect/guidelines/sending-messages"
+        "to": "/v3/guidelines/ton-connect/cookbook/ton-transfer"
     },
     {
         "from": "/develop/dapps/ton-connect/sign",
-        "to": "/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users"
+        "to": "/v3/guidelines/ton-connect/verifying-signed-in-users"
     },
     {
         "from": "/develop/dapps/ton-connect/integration",
@@ -849,7 +849,7 @@
     },
     {
       "from": "/develop/dapps/ton-connect/overview",
-      "to": "/v3/guidelines/ton-connect/guidelines/how-ton-connect-works"
+      "to": "/v3/guidelines/ton-connect/overview"
     },
     {
       "from": "/develop/dapps/ton-connect/react",
@@ -898,5 +898,21 @@
     {
       "from":"/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk",
       "to":"/v3/guidelines/ton-connect/frameworks/web"
+    },
+    {
+      "from": "/v3/guidelines/ton-connect/guidelines/preparing-messages",
+      "to": "/v3/guidelines/ton-connect/overview"
+    },
+    {
+      "from": "/guidelines/integrate-dapp",
+      "to": "/guidelines/dapp-guide"
+    },
+    {
+      "from": "/guidelines/integrate-with-ton",
+      "to": "/guidelines/ton-connect"
+    },
+    {
+      "from": "/v3/guidelines/ton-connect/guidelines/sending-messages",
+      "to": "/v3/guidelines/ton-connect/cookbook/ton-transfer"
     }
 ]

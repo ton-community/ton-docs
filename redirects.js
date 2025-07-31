@@ -51,5 +51,13 @@ module.exports = [
     to: '/v3/guidelines/smart-contracts/testing/overview',
     from: '/v3/guidelines/smart-contracts/testing/tonstarter',
   },
+  {
+    to: '/v3/guidelines/ton-connect/overview',
+    from: '/v3/guidelines/ton-connect/how-ton-connect-works',
+  },
+  {
+    to: '/v3/guidelines/ton-connect/overview',
+    from: '/v3/guidelines/ton-connect/guidelines/how-ton-connect-works',
+  },
   ...v3Redirects,
 ];
