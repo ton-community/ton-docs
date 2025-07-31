@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Basic proofing concepts
 
-A proof is a cell-based structure that contains the necessary data and can be verified by a proof requester.
+A proof is a tree-based structure that contains the necessary data and can be verified by a proof requester.
 To prove something means to construct such a structure. The exact structure may differ depending on the use case. For example, if a proof is to be validated off-chain and requires multiple cell trees, the native TON approach is to construct a Bag of Cells (BoC) containing all the necessary cells. This is precisely what a lite server does when data is requested from the blockchain.
 
 :::info
