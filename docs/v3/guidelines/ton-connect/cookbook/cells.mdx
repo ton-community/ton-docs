@@ -1,0 +1,195 @@
+---
+title: Message body
+description: Learn the basics of building and parsing cell-based message bodies for TON Connect — the foundation for every custom payload beyond a plain TON transfer.
+keywords:
+  - ton connect
+  - message body
+  - cells
+  - cell serialization
+  - tl-b
+  - payload
+  - sdk
+  - tutorial
+---
+
+import Feedback from "@site/src/components/Feedback";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Message body
+
+When working with TON Connect you’ll need to craft a message body — a payload encoded in cells — for any on-chain action other than a simple TON transfer. This page explains the cell–building basics; concrete payload recipes are given on the following Cookbook pages.
+
+## Cells and message serialization
+
+Before diving into building messages, let's introduce the concept of cells, which message bodies are made from.
+
+### What is a cell?
+
+A cell is a basic data structure in the TON Blockchain. It can store up to `1023` bits and hold up to `4` references to other cells, which allows you to store more complex data structures.
+Libraries like `@ton/core` and `@ton-community/assets-sdk` provide efficient cell handling.
+
+You can read more about cells [here](/v3/documentation/data-formats/tlb/cell-boc).
+
+### Creating a cell
+
+To build a cell, you use the `beginCell()` function. While the cell is _open_, you can store various data types with `store...()` functions.
+When you're done, you close the cell with the `endCell()` function.
+
+```ts
+import { Address, beginCell } from "@ton/ton";
+
+const cell = beginCell()
+  .storeUint(99, 64) // Stores uint 99 in 64 bits
+  .storeAddress(Address.parse("[SOME_ADDR]")) // Stores an address
+  .storeCoins(123) // Stores 123 as coins
+  .endCell(); // Closes the cell
+```
+
+:::info
+These examples use the `@ton/ton` library only. <br/>
+However, every [TON SDK](/v3/guidelines/dapps/apis-sdks/sdk) offers equivalent helper functions.
+:::
+
+### Parsing a cell
+
+The `beginParse()` function is called to read or parse data from a cell. You read data in the same order it was stored using similar `load...()` functions:
+
+```ts
+const slice = cell.beginParse();
+const uint = slice.loadUint(64);
+const address = slice.loadAddress();
+const coins = slice.loadCoins();
+```
+
+### Larger amounts of data
+
+Each cell has a 1023-bit limit. If you exceed this, an error occurs:
+
+```ts
+// This will fail due to overflow
+const cell = beginCell()
+  .storeUint(1, 256)
+  .storeUint(2, 256)
+  .storeUint(3, 256)
+  .storeUint(4, 256) // Exceeds 1023-bit limit (256 + 256 + 256 + 256 = 1024)
+  .endCell();
+```
+
+To store more data, cells can reference up to four other cells. You can use the `storeRef()` function to create nested cells:
+
+```ts
+const cell = beginCell()
+  .storeUint(1, 256)
+  .storeUint(2, 256)
+  .storeRef(beginCell().storeUint(3, 256).storeUint(4, 256).endCell())
+  .endCell();
+```
+
+To load a referenced (nested) cell, use `loadRef()`:
+
+```ts
+const slice = cell.beginParse();
+const uint1 = slice.loadUint(256);
+const uint2 = slice.loadUint(256);
+const innerSlice = slice.loadRef().beginParse(); // Load and parse nested cell
+const uint3 = innerSlice.loadUint(256);
+const uint4 = innerSlice.loadUint(256);
+```
+
+### Optional references and values
+
+You can store optional (nullable) values in cells by using the `storeMaybe...()` helpers:
+
+```ts
+const cell = beginCell()
+  .storeMaybeInt(null, 64) // Optionally stores an int
+  .storeMaybeInt(1, 64)
+  .storeMaybeRef(null) // Optionally stores a reference
+  .storeMaybeRef(beginCell().storeCoins(123).endCell());
+```
+
+You can parse optional values using the corresponding `loadMaybe...()` functions. Returned values are nullable so do not forget to check them for null!
+
+```ts
+const slice = cell.beginParse();
+const maybeInt = slice.loadMaybeUint(64);
+const maybeInt1 = slice.loadMaybeUint(64);
+const maybeRef = slice.loadMaybeRef();
+const maybeRef1 = slice.loadMaybeRef();
+if (maybeRef1) {
+  const coins = maybeRef1.beginParse().loadCoins();
+}
+```
+
+## Using assets SDK
+
+Manually handling cells can be tedious, so the `@ton-community/assets-sdk` provides convenient methods for serializing and deserializing messages.
+
+Using `@ton-community/assets-sdk` is more readable and less error-prone.
+
+<Tabs groupId="Serialization/Deserialization">
+  <TabItem value="@ton-community/assets-sdk" label="@ton-community/assets-sdk">
+
+    ```ts
+    import {Address, beginCell} from "@ton/core";
+    import {storeJettonTransferMessage, loadJettonTransferMessage} from "@ton-community/assets-sdk";
+
+    // serialization
+    const cell = beginCell()
+      .store(storeJettonTransferMessage({
+        queryId: 42n,
+        amount: 100n,
+        destination: Address.parse('[DESTINATION]'),
+        responseDestination: Address.parse('[RESPONSE_DESTINATION]'),
+        customPayload: null,
+        forwardAmount: 1n,
+        forwardPayload: null,
+      }))
+      .endCell()
+
+    // deserialization
+    const transferMessage = loadJettonTransferMessage(cell.beginParse());
+    ```
+
+  </TabItem>
+
+  <TabItem value="@ton/ton" label="@ton/ton">
+
+    ```ts
+    import {Address, beginCell} from "@ton/core";
+
+    // serialization
+    const cell = beginCell()
+      .storeUint(260734629, 32)
+      .storeUint(42, 64)
+      .storeCoins(100)
+      .storeAddress(Address.parse('[DESTINATION]'))
+      .storeAddress(Address.parse('[RESPONSE_DESTINATION]'))
+      .storeMaybeRef(null)
+      .storeCoins(1)
+      .storeMaybeRef(null)
+      .endCell();
+
+    // deserialization
+    const slice = cell.beginParse();
+    const op = slice.loadUint(32);
+    const queryId = slice.loadUint(64);
+    const amount = slice.loadCoins();
+    const destination = slice.loadAddress();
+    const responseDestination = slice.loadAddress();
+    const customPayload = slice.loadMaybeRef();
+    const fwdAmount = slice.loadCoins();
+    const fwdPayload = slice.loadMaybeRef();
+
+    const transferMessage = { op, queryId, amount, destination, responseDestination, customPayload, fwdAmount, fwdPayload };
+    ```
+
+  </TabItem>
+</Tabs>
+
+## Next steps
+
+Check the [TON transfers](/v3/guidelines/ton-connect/cookbook/ton-transfer) examples and craft custom transfers.
+
+<Feedback />
