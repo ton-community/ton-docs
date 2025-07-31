@@ -320,6 +320,27 @@ module.exports = [
       },
       {
         type: 'category',
+        label: 'TVM continuations',
+        items: [
+          {
+            type: 'doc',
+            label: 'Basics: register c0, cc, save lists, IF instruction',
+            id: 'v3/documentation/tvm/continuations/basics/basics-register-c0-cc-savelist-if-instruction',
+          },
+          {
+            type: 'doc',
+            label: 'Diving deeper: exit points of continuations',
+            id: 'v3/documentation/tvm/continuations/basics/diving-deeper-exit-points-of-continuations',
+          },
+          {
+            type: 'doc',
+            label: 'Manual handling and JMP vs. EXECUTE',
+            id: 'v3/documentation/tvm/continuations/basics/manual-handling-and-jmp-vs-execute',
+          },
+        ]
+      },
+      {
+        type: 'category',
         label: 'TVM specification',
         items: [
           'v3/documentation/tvm/specification/runvm',
