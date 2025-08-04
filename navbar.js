@@ -40,11 +40,11 @@ module.exports = {
       items: [
         {
           to: '/v3/guidelines/quick-start/getting-started',
-          label: 'Quick Start',
+          label: 'Quick start',
         },
         {
           to: '/v3/guidelines/smart-contracts/guidelines',
-          label: 'Smart Contracts',
+          label: 'Smart contracts',
         },
         {
           to: '/v3/guidelines/dapps/overview',
@@ -73,7 +73,7 @@ module.exports = {
       items: [
         {
           to: 'v3/documentation/smart-contracts/overview',
-          label: 'Smart Contracts',
+          label: 'Smart contracts',
         },
         {
           to: 'v3/documentation/tvm/tvm-overview',
@@ -89,7 +89,7 @@ module.exports = {
         },
         {
           to: '/v3/documentation/data-formats/tlb/cell-boc',
-          label: 'Data Formats',
+          label: 'Data formats',
         },
         {
           to: 'v3/documentation/network/protocols/adnl/low-level-adnl',
