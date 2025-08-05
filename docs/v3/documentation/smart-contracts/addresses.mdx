@@ -122,8 +122,10 @@ The addition of these 4 main components means that: `1 + 1 + 32 + 2 = 36` bytes 
 
 To generate a user-friendly address, the developer must encode all 36 bytes using either:
 
-- _base64_ (i.e., with digits, upper and lowercase Latin letters, '/' and '+') (TODO: But above we said that all addresses now must be url-safe.........)
-- _base64url_ (with '\_' and '-' instead of '/' and '+')
+- _base64_ (using `+` and `/` characters)
+- _base64url_ (using `-` and `_` characters for URL safety)
+
+Both formats are valid and must be accepted by applications. The `base64url` format is preferred when addresses are used in URLs to avoid encoding issues.
 
 After this process is complete, the generation of a user-friendly address with a length of 48 non-spaced characters is finalized.
 
@@ -199,31 +201,32 @@ When interacting with the TON blockchain, it's crucial to understand the implica
 
 #### Transaction with `state_init` included
 
-If you include the `state_init` (which consists of the wallet or smart contract's code and data) with your transaction. The smart contract is deployed first using the provided `state_init`. After deployment, the incoming message is processed, similar to sending to an already initialized account.
+When a transaction includes the `state_init` (containing the smart contract's code and data), the smart contract is deployed first. After deployment, the incoming message is processed, just as it would be for an already initialized account.
 
 #### Transaction without `state_init` and `bounce` flag set
 
-The message cannot be delivered to the `uninit` smart contract, and it will be bounced back to the sender. After deducting the consumed gas fees, the remaining amount is returned to the sender's address.
+If a message is sent to an `uninit` address without a `state_init` and with the `bounce` flag set, it cannot be processed. The message is bounced back to the sender, and the transaction amount is returned after deducting gas fees.
 
 #### Transaction without `state_init` and `bounce` flag unset
 
-The message cannot be delivered, but it will not bounce back to the sender. Instead, the sent amount will be credited to the receiving address, increasing its balance even though the wallet is not yet initialized. They will be stored there until the address holder deploys a smart wallet contract and then they can access the balance.
+If the `bounce` flag is not set, the message still cannot be processed, but it's value won't be returned to the sender. Instead, the funds are credited to the `uninit` account. These funds will be accessible once the one deploys the smart contract on that address.
 
-#### How to do it right
+#### Recommended Deployment Practice
 
-The best way to deploy a wallet is to send some TON to its address (which is not yet initialized) with the `bounce` flag cleared. After this step, the owner can deploy and initialize the wallet using funds at the current uninitialized address. This step usually occurs on the first wallet operation.
+The recommended method for deploying a wallet is to first send some TON to its `uninit` address with the `bounce` flag unset. One can then use this balance to pay for the deployment and initialization of the wallet, which typically happens during the first transaction from that wallet.
 
-### The TON blockchain implements protection against erroneous transactions
+### Protecting Against Erroneous Transactions
 
-In the TON blockchain, standard wallets and apps automatically manage the complexities of transactions to uninitialized addresses by using bounceable and non-bounceable address, which are described [here](#bounceable-vs-non-bounceable-addresses). It is common practice for wallets, when sending coins to non-initialized addresses, to send coins to both bounceable and non-bounceable addresses without return.
+To prevent accidental fund loss, the TON ecosystem uses bounceable and non-bounceable address formats, which are described in detail [here](#bounceable-vs-non-bounceable-addresses). Standard wallets and applications handle these automatically.
 
-If you need to quickly get an address in bounceable/non-bounceable form, this can be done [here](https://ton.org/address/).
+It is common practice for wallets to use the non-bounceable format when sending funds to an uninitialized address to ensure the funds are delivered for future contract deployment.
 
-### Responsibility for custom products
+If you need to quickly convert an address to its bounceable or non-bounceable form, you can use a tool like [ton.org/address](https://ton.org/address/).
 
-If you are developing a custom product on the TON blockchain, it is essential to implement similar checks and logic:
+### Responsibility for Custom Products
 
-Ensure your application verifies whether the recipient address is initialized before sending funds.
-Based on the address state, use bounceable addresses for user smart contracts with custom application logic to ensure funds are returned. Use non-bounceable addresses for wallets.
+If you are developing a custom product on TON, it is crucial to implement similar logic:
 
+If the user provides the address to send TON to, you should use its format to determine the bounce flag.
+Otherwise, send unbounceable messages if you are sure that the address belongs to a user wallet; send bounceable messages otherwise.
 <Feedback />
