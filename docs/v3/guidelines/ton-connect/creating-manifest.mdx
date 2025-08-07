@@ -1,5 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 import Button from '@site/src/components/button'
+import '@site/src/components/Tables/manifest-table.css'
 
 # Manifest creation
 
@@ -19,101 +20,43 @@ The manifest is a JSON file named `tonconnect-manifest.json`, and it must follow
 }
 ```
 
-<table
-  style={{
-    width: '100%',
-    tableLayout: 'auto',
-    fontSize: '16px',
-    lineHeight: '1.4',
-    borderCollapse: 'collapse',
-  }}
->
+<table className="manifest-table">
   <thead>
   <tr>
-    <th style={{ padding: '10px 9px', textAlign: 'left', borderBottom: '1px solid #ccc' }}>Field</th>
-    <th style={{ padding: '10px 9px', textAlign: 'left', borderBottom: '1px solid #ccc' }}>Required</th>
-    <th style={{ padding: '10px 9px', textAlign: 'left', borderBottom: '1px solid #ccc' }}>Description</th>
+    <th>Field</th>
+    <th>Required</th>
+    <th>Description</th>
   </tr>
   </thead>
   <tbody>
   <tr>
-    <td style={{ padding: '8px', verticalAlign: 'center' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <code>url</code>
-      </div>
-    </td>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>Yes</div>
-    </td>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        Defines the DApp’s base URL. It is used to open the app when a user taps its icon in the wallet. The URL should not include a trailing slash — for example, use **https://mydapp.com** instead of **https://mydapp.com/**.
-      </div>
-    </td>
+    <td><code>url</code></td>
+    <td>Yes</td>
+    <td>Defines the DApp’s base URL. It is used to open the app when a user taps its icon in the wallet. The URL should not include a trailing slash — for example, use **https://mydapp.com** instead of **https://mydapp.com/**.</td>
   </tr>
 
   <tr>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <code>name</code>
-      </div>
-    </td>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>Yes</div>
-    </td>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        Defines the app name. Should be a simple word or phrase. Not used as a unique identifier.
-      </div>
-    </td>
+    <td><code>name</code></td>
+    <td>Yes</td>
+    <td>Defines the app name. Should be a simple word or phrase. Not used as a unique identifier.</td>
   </tr>
 
   <tr>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <code>iconUrl</code>
-      </div>
-    </td>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>Yes</div>
-    </td>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        Defines the URL to the app icon. Must be in **PNG** or **ICO** format. SVG is **not** supported. Ideally, use a **180x180px PNG**.
-      </div>
-    </td>
+    <td><code>iconUrl</code></td>
+    <td>Yes</td>
+    <td>Defines the URL to the app icon. Must be in **PNG** or **ICO** format. SVG is **not** supported. Ideally, use a **180x180px PNG**.</td>
   </tr>
 
   <tr>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <code>termsOfUseUrl</code>
-      </div>
-    </td>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>Optional</div>
-    </td>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        Optional for most apps, but mandatory for those listed in the Tonkeeper recommended apps list.
-      </div>
-    </td>
+    <td><code>termsOfUseUrl</code></td>
+    <td>Optional</td>
+    <td>Optional for most apps, but mandatory for those listed in the Tonkeeper recommended apps list.</td>
   </tr>
 
   <tr>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <code>privacyPolicyUrl</code>
-      </div>
-    </td>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>Optional</div>
-    </td>
-    <td style={{ padding: '8px' }}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        Optional for most apps, but mandatory for those listed in the Tonkeeper recommended apps list.
-      </div>
-    </td>
+    <td><code>privacyPolicyUrl</code></td>
+    <td>Optional</td>
+    <td>Optional for most apps, but mandatory for those listed in the Tonkeeper recommended apps list.</td>
   </tr>
   </tbody>
 </table>
@@ -136,7 +79,7 @@ For reference, see the [TON Connect specification](https://github.com/ton-blockc
 
 1. Place the manifest file in the root of your app and repository.
 
-  * For example: `https://myapp.com/tonconnect-manifest.json`. This helps wallets discover your app more reliably and enhances the overall user experience when users connect to it.
+> For example: `https://myapp.com/tonconnect-manifest.json`. This helps wallets discover your app more reliably and enhances the overall user experience when users connect to it.
 
 2. The fields `url`, `iconUrl`, `termsOfUseUrl`, and `privacyPolicyUrl` must be publicly accessible from any origin without CORS restrictions.
 3. Ensure the `manifest.json` is accessible and can be retrieved through a `GET` request to its URL.
