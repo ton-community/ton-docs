@@ -270,12 +270,12 @@ workchain_id:int8 address:bits256  = MsgAddressInt;
 ```
 
 
-| Structure    | Type        | Required | Description                                                                                                                                                                                                                                                |
-|--------------|-------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| addr_std$10  | Constructor | Required | The `$10` tag in serialization indicates that `MsgAddressInt` starts with `10` bits and describes an internal address.                                                                                                                                     |
-| anycast      | Anycast*    | Optional | Represents additional address data. Currently not used in ordinary internal messages.                                                                                                                                                                      |
-| workchain_id | int8        | Required | The WorkChain where the smart contract of the destination address is located. Currently, this value always equals zero.                                                                                                                                    |
-| address      | (bits256)   | Required | The smart contract account ID number.                                                                                                                                                                                                                      |
+| Structure    | Type        | Required | Description                                                                                                            |
+|--------------|-------------|----------|------------------------------------------------------------------------------------------------------------------------|
+| addr_std$10  | Constructor | Required | The `$10` tag in serialization indicates that `MsgAddressInt` starts with `10` bits and describes an internal address. |
+| anycast      | Anycast*    | Optional | Represents additional address data. Currently not used in ordinary internal messages.                                  |
+| workchain_id | int8        | Required | The WorkChain where the smart contract of the destination address is located.                                          |
+| address      | (bits256)   | Required | The smart contract account ID number.                                                                                  |
 
 
 
