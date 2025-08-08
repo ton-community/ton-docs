@@ -1,0 +1,77 @@
+# Полное руководство по транзакциям
+
+В TON транзакция — это не что-то, что вы отправляете или получаете: это не действие пользователя. Это **запись** всех изменений, которые произошли с аккаунтом.
+
+Это руководство поможет вам овладеть транзакциями TON — начиная с базовых принципов их сути и принципов работы, и вплоть до определения успешности транзакции. Обращайтесь к перечисленным ниже разделам, чтобы изучить нужную вам тему — будь то хоть начало с азов, хоть отладка реальных данных транзакций.
+
+<div
+  style={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+  gap: '1.25rem',
+  marginTop: '1.5rem'
+  }}
+>
+  {[
+    {
+      title: 'Основы блокчейна',
+      desc: 'Изучить акторную модель, стоящую за транзакциями.<br>Освоить структуру аккаунтов и контрактов.<br>Узнать, как TON сохраняет транзакции.',
+    link: '../foundations-of-blockchain',
+      btn: 'Начать с основ'
+    },
+    {
+      title: 'Исполнение на основе сообщений',
+      desc: 'Узнать, как сообщения запускают транзакции.<br>Изучить типы и структуру сообщений.<br>Научиться создавать сообщения.',
+      link: '../message-driven-execution',
+      btn: 'Создать и отправить сообщение'
+    },
+    {
+      title: 'Отслеживание на основе хешей',
+      desc: 'Изучить хеши и их типы. <br>Научиться валидировать данные с помощью хешей. <br> Отслеживать транзакции в блокчейне.',
+      link: '../hash-based-tracking',
+      btn: 'Отслеживать с помощью хешей'
+    },
+    {
+      title: 'Получение данных по API',
+      desc: 'Изучить разные API для доступа к транзакциям. <br>Исследовать разные подходы к доступу. <br> Сравнить TON Center API v2 и v3.',
+      link: '../api-based-retrieval',
+      btn: 'Получать доступ через API'
+    },
+    {
+      title: 'Транзакции',
+      desc: 'Понять структуру и фазы транзакций.<br>Научиться получать данные транзакций.<br>Определять успешность транзакций.',
+      link: '../explore-transactions',
+      btn: 'Изучить транзакции'
+    }
+  ].map(({ title, desc, link, btn }) => (
+    <div
+      key={title}
+      style={{
+        border: '1px solid var(--border-color, #e5e7eb)',
+        borderRadius: '0.75rem',
+        padding: '0.9rem 1rem',
+        backgroundColor: 'var(--card-bg, white)',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'start',
+        gap: '0.75rem',
+        height: '100%',
+        color: 'var(--text-color, black)'
+      }}
+    >
+      <h3 style={{ fontSize: '1rem', fontWeight: '600', margin: 0 }}>{title}</h3>
+      <p style={{ fontSize: '0.84rem', lineHeight: '1.45', margin: 0 }} dangerouslySetInnerHTML={{ __html: desc }} />
+      <a href={link} style={{
+        alignSelf: 'start',
+        padding: '0.4rem 0.75rem',
+        backgroundColor: 'var(--btn-bg, #f3f4f6)',
+        color: 'var(--btn-text, #111827)',
+        borderRadius: '0.5rem',
+        fontSize: '0.8rem',
+        textDecoration: 'none',
+        marginTop: 'auto'
+      }}>{btn}</a>
+    </div>
+  ))}
+</div>

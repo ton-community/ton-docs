@@ -1,0 +1,541 @@
+import Feedback from '@site/src/components/Feedback';
+import Button from '@site/src/components/button'
+
+# Получение данных по API
+
+В этом разделе рассмотрим, как получить данные о транзакциях из блокчейна с помощью различных API. Вы узнаете о доступных API-сервисах в TON и о том, как получать данные по конкретному аккаунту, сообщению, или через полное сканирование блокчейна.
+
+## Сервисы TON HTTP API
+
+*Сервис HTTP API* — это программное решение, которое извлекает необработанные данные из узла LiteServer и кодирует их в стандартные форматы для других сервисов.
+Поставщик, предлагающий такое решение, называется *поставщиком* HTTP API.
+
+В этом разделе мы рассматриваем сервисы из нативной инфраструктуры TON. Большинство сторонних поставщиков API полагаются на одно из этих стандартных решений.
+Мы рекомендуем оценивать каждого поставщика независимо на основе [исторических данных](https://tonstat.us/) о производительности и его пригодности для конкретно вашего сценария использования.
+
+### TON Center
+
+TON Center был разработан командой TON Core. Он предлагает два уровня доступа по API:
+
+- **TON Center API V3:** предоставляет проиндексированные и обогащённые данные блокчейна в удобном формате с поддержкой гибкой фильтрации. Данные валидируются один раз во время индексации.
+- **TON Center API V2:** предоставляет данные напрямую с узлов TON. Он поддерживает ограниченную фильтрацию и валидирует данные при каждом запросе.
+
+### TON API
+
+Решение, ориентированное на потребности бизнеса. Оно часто предоставляет готовые реализации для типичных задач в TON.
+
+### Tonhub API
+
+Альтернативный сервис HTTP API с открытым исходным кодом и уникальной структурой, отличающейся от TON API и TON Center. Этот интерфейс может быть полезен в некоторых конкретных случаях использования.
+
+---
+
+## Уровни данных API
+
+Сервисы HTTP извлекают данные из узлов LiteServer и десериализуют их в соответствии со схемой TL-B.
+Данные, которые подвергаются минимальной постобработке, часто называют **«сырыми»** или **«необработанными» данными** (raw data). Этот формат обычно используется в решениях, где приоритет в архитектуре отдан безопасности и точности, а не лёгкости интеграции или простоте. Эти решения переносят интерпретацию и анализ необработанных данных на сторону клиента, что позволяет повысить контроль и надёжность за счёт дополнительного потребления локальных ресурсов.
+
+А вот при работе с аналитикой событий, которая **не** связана со значительными переводами средств, зачастую эффективнее **высокоуровневые интерфейсы** — такие как API, которые применяют постобработку перед возвратом результатов. Они предоставляют упрощённые, структурированные данные, с которыми легче работать в большинстве сценариев при разработке приложений.
+
+В TON транзакции группируются в блоки. Поскольку TON использует **шардинг**, каждый блок мастерчейна включает ссылки на соответствующие блоки шардов. Блок шарда в бейсчейне считается финализированным, как только на него ссылается блок мастерчейна. Это также применимо, если ссылаются на любой блок, созданный «поверх него» (его «потомков»). Поэтому для получения всех транзакций сервисы должны считывать как мастерчейн, так и соответствующие блоки шардов бейсчейна.
+
+Все блоки воркчейна соответствуют определённой структуре. Для задачи анализа транзакций в этой структуре релевантно поле `block_extra`.
+
+```tlb
+block#11ef55aa global_id:int32
+info:^BlockInfo value_flow:^ValueFlow
+state_update:^(MERKLE_UPDATE ShardState)
+extra:^BlockExtra = Block;
+```
+
+Оно включает в себя структуру `account_blocks`,
+которая, в свою очередь, включает транзакции, обработанные всеми аккаунтами в соответствующем шарде.
+
+```tlb
+block_extra in_msg_descr:^InMsgDescr
+out_msg_descr:^OutMsgDescr
+account_blocks:^ShardAccountBlocks
+rand_seed:bits256
+created_by:bits256
+custom:(Maybe ^McBlockExtra) = BlockExtra;
+```
+
+Таким образом, при чтении блокчейна сервисы итеративно обрабатывают блоки, начиная с последнего обработанного блока и продвигаясь до самого свежего финализированного. Извлечённые транзакции считаются **необработанными данными** и могут быть переданы следующим сервисам для дальнейшего использования. Кроме того, специализированные сервисы могут анализировать и обогащать эти данные, стремясь достичь баланса между сложностью системы и её бездоверительным (trustless) подходом.
+
+## Подходы API для доступа к транзакциям
+
+### Ключевые термины
+
+- **Транзакция**: представляет собой изменение состояния аккаунта в блокчейне. Она инициируется входящим сообщением и опционально может приводить к одному или нескольким исходящим сообщениям. Анализ содержимого транзакции является фундаментальным методом, используемым во всех сервисах.
+
+- - **Трейс** (trace): детерминированный граф всех транзакций, инициированных одним внешним сообщением. Соответствующие интерфейсы позволяют получить полный граф, связанный с конкретной транзакцией, что упрощает анализ всех связанных взаимодействий.
+    Это особенно полезно биржам и аналитическим инструментам, чтобы проверять потоки средств или восстанавливать логику бизнес-операции.
+    Трейсы также позволяют замечать переводы Jetton даже при отсутствии уведомлений о них. Это особенно актуально, когда бизнес-операция охватывает несколько взаимозависимых транзакций.
+
+- **Действие**: агрегированная абстракция, представляющая собой полную бизнес-операцию, охватывающую одно или несколько изменений состояния аккаунта.
+  Например, перевод Jetton между двумя пользователями будет представлен как одно действие.
+  Действия используются исключительно для визуализации и не играют роли в фактическом выполнении или проверке переводов средств.
+
+---
+
+### Высокоуровневый доступ
+
+**Как получить список транзакций или одну транзакцию через API**
+
+Для данные о транзакциях можно использовать высокоуровневые интерфейсы:
+
+- `get /actions`
+- `get /traces`
+- `get /jetton/transfers` и `get /jetton/burns`
+- `get /nft`
+
+При таком подходе разработчику не нужно разбирать содержимое отдельных транзакций.
+Этот метод, не предусматривающий дополнительной проверки данных, подходит только в тех случаях, когда речь не о переводах средств.
+Помимо простых проверок на уровне сервиса, этот подход также можно использовать в более сложных сценариях. Например, с помощью метода **traces** вы можете определить все связанные транзакции для дальнейшего анализа.
+
+---
+
+### По полезной нагрузке (payload) сообщения
+
+Чтобы получить транзакцию по внешнему или внутреннему сообщению, используйте [/api/v3/transactionsByMessage](https://toncenter.com/api/v3/index.html#/ blockchain/api_v3_get_transactions_by_message).
+Доступно только в API v3.
+
+Этот подход полезен при отслеживании небольшого количества аккаунтов (до ~10).
+Он хорошо работает для переводов wallet-v4 и wallet-v5. В основном он используется для поиска транзакций, инициированных внешними сообщениями.
+
+:::note
+Возможна задержка до 10 секунд из-за времени, необходимого для финализации блока.
+Если требуется работа в реальном времени, для улучшения производительности рассмотрите также мониторинг пула транзакций, ожидающих обработки.
+:::
+
+---
+
+### По адресу аккаунта
+
+Чтобы запрашивать транзакции аккаунта, который отслеживаете, используйте либо [/api/v2/getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get), либо [/api/v3/transactions](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions) с фильтром `account`.
+Этот метод широко поддерживается, включая LiteClient. Он подходит для отслеживания до ~100 аккаунтов.
+
+---
+
+### Полное сканирование транзакций блокчейна
+
+При мониторинге большого количества аккаунтов (1000 и более) лучше перебирать все транзакции, начиная с последнего блока мастерчейна.
+
+- **API v2**:
+
+1. Получите информацию о шардах для блока мастерчейна
+2. Вычислите изменения для шардов
+3. Для каждого полученного блока вызовите `getBlockTransactionsExt`
+   См.: TON Center cookbook: [How to scan blockchain](https://docs.toncenter.com/docs/ton-center-cookbook#how-to-scan-blockchain)
+
+- **API v3**:
+
+Не используйте логику API v2. Вместо этого используйте специальный метод:
+
+[GET /api/v3/transactionsByMasterchainBlock](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_masterchain_block)
+
+У вас есть выбор: либо простая реализация, требующая высокий уровень доверия к крупным поставщикам данных, либо более сложная, но не требующая такого доверия.
+Для большей безопасности всегда рекомендуется обрабатывать транзакции блок за блоком независимо.
+
+---
+
+### Ответ API
+
+В блокчейне обычная транзакция состоит из целого тела и уникального заголовка.
+
+```tlb
+transaction$0111 account_addr:bits256 lt:uint64
+    prev_trans_hash:bits256 prev_trans_lt:uint64 now:uint32
+    outmsg_cnt:uint15
+    orig_status:AccountStatus end_status:AccountStatus
+    ^[ in_msg:(Maybe ^(Message Any)) out_msgs:(HashmapE 15 ^(Message Any)) ]
+    total_fees:CurrencyCollection state_update:^(HASH_UPDATE Account)
+    description:^TransactionDescr = Transaction;
+```
+
+Заголовок `TransactionDescr` определяет характер транзакции в блокчейне. Все иницируемые пользователем сервисные операции представлены как обычные транзакции типа **Ordinary**.
+
+```tlb
+trans_ord$0000 credit_first:Bool
+  storage_ph:(Maybe TrStoragePhase)
+  credit_ph:(Maybe TrCreditPhase)
+  compute_ph:TrComputePhase action:(Maybe ^TrActionPhase)
+  aborted:Bool bounce:(Maybe TrBouncePhase)
+  destroyed:Bool
+  = TransactionDescr;
+```
+
+Каждая транзакция, возвращаемая в ответе API (`Transaction[]`), отражает структуру, определённую в TL-B, но часто включает дополнительные вычисляемые поля для удобства.
+
+- Нативные данные — присутствуют в блокчейне. Это относится к названиям полей, определённых в схемах TL-B в файле `block.tlb`.
+- Нативные вычисляемые — основные данные существуют в блокчейне, но API расширяет их дополнительной информацией.
+- Постобработанные — данные, дополнительно вычисляемые поставщиком API на основе индексированной информации.
+
+Одним из **самых важных вычисляемых полей** является **хеш транзакции**, которого не существует в самом блокчейне. Он генерируется поставщиком API.
+
+```json
+"hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM="
+```
+
+## TON Center
+
+### Transaction API/v2
+
+Метод [https://toncenter.com/api/v2/getTransactions](https://toncenter.com/api/v2/getTransactions) возвращает необработанные данные транзакций на основе структуры TL-B.
+
+Пример запроса `curl`:
+
+```curl
+curl -X 'GET' \
+  'https://toncenter.com/api/v2/getTransactions?address=EQAFmjUoZUqKFEBGYFEMbv-m61sFStgAfUR8J6hJDwUU09iT&limit=10&to_lt=0&archival=true' \
+  -H 'accept: application/json'
+```
+
+Ответ включает тело транзакции, состоящее из следующих компонентов:
+
+- `@fields` — внутренние служебные поля TON Center API/v2.
+- Данные заголовка — метаданные транзакции `lt`, `now` (время Unix)
+- Комиссии — высокоуровневая информация
+- Данные входящего сообщения — внутреннее или внешнее входящее сообщение, инициировавшее транзакцию
+- Данные исходящего сообщения — массив, способный содержать от 0 до 255 сообщений, отправленных во время этой транзакции
+
+| Поле                      | Источник данных             | Описание                                                                                                     | Пример                                               |
+| ------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
+| `address.account_address` | Нативные вычисляемые данные | Адрес аккаунта, где произошла транзакция, в пользовательском формате                                         | `"EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1"` |
+| `utime`                   | Нативные данные             | Временная метка UNIX для транзакции. Название поля в TL-B: `now`                                             | `1736738146`                                         |
+| `transaction_id.hash`     | Постобработанные данные     | Хеш текущей транзакции                                                                                       | `mkma+u5TOi12BSu6m6YhZaatY2b2ozdabOdBnVuWmWM=`       |
+| `transaction_id.lt`       | Нативные данные             | Параметр транзакции logical time; уникален в рамках каждого аккаунта. Название поля в TL-B: `lt`             | `52863169000074`                                     |
+| `fee`                     | Нативные данные             | Общая сумма всех комиссий, связанных с транзакцией. Названия поля в TL-B — `lt`, измеряется в единицах газа. | `1207600`                                            |
+| `storage_fee`             | Нативные данные             | Комиссии за хранение данных. Название поля в TL-B: `Trans Descriptor` -> `TrStoragePhase` ->                 | `1207600`                                            |
+| `other_fee`               | Нативные данные             | `other_fee` = `fee` - `storage_fee`                                                                          | `1207600`                                            |
+| `in_msg`                  | Нативные данные             | Структура `Message X` для входящего сообщения, инициировавшего транзакцию                                    | `"in_msg": {...}`                                    |
+| `out_msgs`                | Нативные данные             | Список исходящих сообщений, представленный с помощью структуры `Message X`                                   | `"out_msgs": [{...}, {...}, ...,  {...}]`            |
+
+```json
+ "result": [
+    {
+      "@type": "raw.transaction",
+      "address": {
+        "@type": "accountAddress",
+        "account_address": "EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1"
+      },
+      "utime": 1736738146,
+      "data": "te6cckECCAEAAc0AA7V9w3z0KEwtB7gb6nlOqTmqEf8+lj2VuFGNc1qCYIayD/AAAwFCpo8orDf2vdoH1n96C0l9c0Xbxq/7Vyj+b1Bsw/jTohWiegygAAMBQqaPKIZ4SFYgADRhy3BoAQIDAgHgBAUAgnJhXUy/QLYxeNcfvOGwlIsucuES8LwAmAcs26m1y9/nJvAc82jOBRqD108rByoN3QmaIBq8NLslDBcjC0wpnrEuASUECTEsgEAQYYpWDgGBBGmYII1qBwCxaAEV97IJPAV1L6qto8QId19JS886Gi89o8RV8ChfpEGhdwA3DfPQoTC0HuBvqeU6pOaoR/z6WPZW4UY1zWoJghrIP9MSyAQABggjWgAAYChUdlcIzwkKtEABAd8GALlYAbhvnoUJhaD3A31PKdUnNUI/59LHsrcKMa5rUEwQ1kH/ACK+9kEngK6l9VW0eIEO6+kpeedDRee0eIq+BQv0iDQu0xJ+T0AGCCNaAABgKFTR5RbPCQrEf////8AAnkD8bD0JAAAAAAMoAAAAQwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACgpUle",
+      "transaction_id": {
+        "@type": "internal.transactionId",
+        "lt": "52863169000074",
+        "hash": "mkma+u5TOi12BSu6m6YhZaatY2b2ozdabOdBnVuWmWM="
+      },
+      "fee": "1207600",
+      "storage_fee": "0",
+      "other_fee": "1207600",
+      "in_msg": {
+        ...
+      },
+      "out_msgs": [
+        {...}
+      ]
+    },
+
+]
+```
+
+<details>
+  ```json
+  "result": [
+  {
+    "@type": "raw.transaction",
+    "address": {
+    "@type": "accountAddress",
+    "account_address": "EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1"
+  },
+    "utime": 1736738146,
+    "data": "te6cckECCAEAAc0AA7V9w3z0KEwtB7gb6nlOqTmqEf8+lj2VuFGNc1qCYIayD/AAAwFCpo8orDf2vdoH1n96C0l9c0Xbxq/7Vyj+b1Bsw/jTohWiegygAAMBQqaPKIZ4SFYgADRhy3BoAQIDAgHgBAUAgnJhXUy/QLYxeNcfvOGwlIsucuES8LwAmAcs26m1y9/nJvAc82jOBRqD108rByoN3QmaIBq8NLslDBcjC0wpnrEuASUECTEsgEAQYYpWDgGBBGmYII1qBwCxaAEV97IJPAV1L6qto8QId19JS886Gi89o8RV8ChfpEGhdwA3DfPQoTC0HuBvqeU6pOaoR/z6WPZW4UY1zWoJghrIP9MSyAQABggjWgAAYChUdlcIzwkKtEABAd8GALlYAbhvnoUJhaD3A31PKdUnNUI/59LHsrcKMa5rUEwQ1kH/ACK+9kEngK6l9VW0eIEO6+kpeedDRee0eIq+BQv0iDQu0xJ+T0AGCCNaAABgKFTR5RbPCQrEf////8AAnkD8bD0JAAAAAAMoAAAAQwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACgpUle",
+    "transaction_id": {
+    "@type": "internal.transactionId",
+    "lt": "52863169000074",
+    "hash": "mkma+u5TOi12BSu6m6YhZaatY2b2ozdabOdBnVuWmWM="
+  },
+    "fee": "1207600",
+    "storage_fee": "0",
+    "other_fee": "1207600",
+    "in_msg": {
+    "@type": "raw.message",
+    "hash": "wY9HZG8iPissn4t3/nc8bxYqc5kxo+gd7MdkqdrUt0Y=",
+    "source": "EQCK-9kEngK6l9VW0eIEO6-kpeedDRee0eIq-BQv0iDQu_Rb",
+    "destination": "EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1",
+    "value": "3300000000",
+    "extra_currencies": [],
+    "fwd_fee": "266669",
+    "ihr_fee": "0",
+    "created_lt": "52863166000004",
+    "body_hash": "lqKW0iTyhcZ77pPDD4owkVfw2qNdxbh+QQt4YwoJz8c=",
+    "msg_data": {
+    "@type": "msg.dataRaw",
+    "body": "te6cckEBAQEAAgAAAEysuc0=",
+    "init_state": ""
+  },
+    "message": ""
+  },
+    "out_msgs": [
+  {
+    "@type": "raw.message",
+    "hash": "n/CmWFQsCB0MZr4RYzpUyxe9khLCCNV1HhNYgh25RlA=",
+    "source": "EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1",
+    "destination": "EQCK-9kEngK6l9VW0eIEO6-kpeedDRee0eIq-BQv0iDQu_Rb",
+    "value": "3298792400",
+    "extra_currencies": [],
+    "fwd_fee": "266669",
+    "ihr_fee": "0",
+    "created_lt": "52863169000075",
+    "body_hash": "2kgTJil7CKGfT/jw1tLMcQJ5ngwOSgK6iXnDY6CA2IY=",
+    "msg_data": {
+    "@type": "msg.dataRaw",
+    "body": "te6cckEBAQEABgAACP/////btDe4",
+    "init_state": ""
+  },
+    "message": "/////w==\n"
+  }
+    ]
+  },
+
+  ]
+  ```
+</details>
+
+### Transaction API/v3
+
+Сервис API десериализует всю структуру транзакции с точным сопоставлением соответствующим строковым и числовым типам.
+В результате тело транзакции возвращается в формате JSON.
+
+Метод [https://toncenter.com/api/v3/transactions](https://toncenter.com/api/v3/transactions) возвращает большую структуру, обогащённую дополнительными вычисленными данными.
+
+Пример запроса:
+
+```curl
+curl -X 'GET' \
+  'https://toncenter.com/api/v3/transactions?limit=10&offset=0&sort=desc' \
+  -H 'accept: application/json'
+```
+
+Объект транзакции включает следующие ключевые разделы:
+
+- Данные заголовка — метаданные транзакции `lt`, `now` (время Unix)
+- Данные входящего сообщения — сообщение, инициировавшее транзакцию
+- Данные фазы вычислений — результаты выполнения команд
+- Данные фазы действий — результаты действий, выполненных после вычислений, отправленные сообщения
+- Ссылка на блок — данные о принадлежности к блоку в блокчейне.
+- Состояние аккаунта до и после
+
+| Поле                   | Источник данных             | Описание                                                                  | Пример                                                                 |
+| ---------------------- | --------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `"account"`            | Нативные вычисляемые данные | Адрес аккаунта, где произошла транзакция, в необработанном формате (raw)  | `"0:C8F053E2CE.."`                                                     |
+| `hash`                 | Постобработанные данные     | Хеш текущей транзакции                                                    | `"/QesPZ+FW7Z.."`                                                      |
+| `utime` / `now`        | Нативные данные             | Временная метка UNIX для сообщения. Название поля TL-B: `now`             | `1696238450`                                                           |
+| `lt`                   | Нативные данные             | Параметр транзакции logical time                                          | `"15371766000003"`                                                     |
+| `mc_block_seqno`       | Постобработанные данные     | Порядковый номер блока в мастерчейне с транзакцией                        | `13353447`                                                             |
+| `trace_id`             | Постобработанные данные     | Идентификатор трейсов в TON Center API/v3                                 | `"13b...dBjpfc="`                                                      |
+| `prev_trans_hash`      | Нативные данные             | Хеш предыдущей транзакции в этом аккаунте                                 | `"6+AzO3...dwuI="`                                                     |
+| `prev_trans_lt`        | Нативные данные             | Параметр logical time предыдущей транзакции                               | `"15371704000004"`                                                     |
+| `orig_status`          | Нативные данные             | Статус аккаунта до транзакции, представлен структурой `AccountStatus`.    | `"active"`                                                             |
+| `end_status`           | Нативные данные             | Статус аккаунта после транзакции, представлен структурой `AccountStatus`. | `"active"`                                                             |
+| `total_fees`           | Нативные вычисляемые данные | Сумма всех комиссий транзакции (в нанотонах)                              | `"12446659"`                                                           |
+| `description`          | Нативные вычисляемые данные | Набор дескрипторов транзакции: `type`, `aborted`                          | `{ "type": "ord", "aborted": false, ... }`                             |
+| `compute_ph`           | Нативные данные             | Десериализованная структура `TrComputePhase`                              | `{ "success": true, "gas_used": "8823", "exit_code": 0 }`              |
+| `action`               | Нативные данные             | Десериализованная структура `TrActionPhase`                               | `{ "success": true, "msgs_created": 1, "total_fwd_fees": "10871000" }` |
+| `block_ref`            | Вычисляемые данные          | Ссылка на блок, к которому относится транзакция                           | `{ "workchain": 0, "seqno": 14627985 }`                                |
+| `in_msg`               | Нативные данные             | Входящее сообщение, инициировавшее эту транзакцию, в формате `Message X`  | `{ "source": "...", "value": "400000000", "opcode": "0x0f8a7ea5" }`    |
+| `out_msgs`             | Нативные данные             | Список исходящих сообщений, представленных структурой `Message X`         | `[ { "destination": "...", "value": "380306000" }, ... ]`              |
+| `account_state_before` | Нативные данные             | Снэпшот состояния аккаунта до транзакции                                  | `{ "balance": "37821399", "status": "active" }`                        |
+| `account_state_after`  | Нативные данные             | Снэпшот состояния аккаунта после транзакции                               | `{ "balance": "37821351", "status": "active" }`                        |
+
+```json
+ {
+  "account": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF",
+  "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=",
+  "lt": "15371766000003",
+  "now": 1696238450,
+  "mc_block_seqno": 13353447,
+  "trace_id": "13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=",
+  "prev_trans_hash": "6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=",
+  "prev_trans_lt": "15371704000004",
+  "orig_status": "active",
+  "end_status": "active",
+  "total_fees": "12446659",
+  "description": {
+  ...
+  },
+  "compute_ph": {
+   ....
+  },
+  "action": {
+    ...
+  },
+  "block_ref": {
+    ...
+  },
+  "in_msg": {
+  ...
+  },
+  "out_msgs": [
+   ...
+  ],
+
+  "account_state_before": {
+    ...
+  },
+
+  "account_state_after": {
+  ...
+  }
+}
+
+```
+
+<details>
+  ```json
+  {
+    "account": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account of transcation
+    "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=",
+    "lt": "15371766000003", # logical time, may have same values for txs on different accounts but every transaction on a given account will have unique lt
+    "now": 1696238450, # unix timestamp
+    "mc_block_seqno": 13353447, # seqno of masterchain block
+    "trace_id": "13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=", # tx_hash of the root transaction of the trace
+    "prev_trans_hash": "6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=", # hash of previous transaction on this account
+    "prev_trans_lt": "15371704000004", # lt of prev. transaction
+    "orig_status": "active", # account status before transaction
+    "end_status": "active", # ... after transaction
+    "total_fees": "12446659", # ... sum of fees from description
+    "description": {
+    "type": "ord",
+    "aborted": false,
+    "destroyed": false,
+    "credit_first": false,
+    "storage_ph": {
+    "storage_fees_collected": "48",
+    "status_change": "unchanged"
+  },
+    "compute_ph": {
+    "skipped": false,
+    "success": true,
+    "msg_state_used": false,
+    "account_activated": false,
+    "gas_fees": "8823000",
+    "gas_used": "8823",
+    "gas_limit": "400000",
+    "mode": 0,
+    "exit_code": 0,
+    "vm_steps": 178,
+    "vm_init_state_hash": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+    "vm_final_state_hash": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+  },
+    "action": {
+    "success": true,
+    "valid": true,
+    "no_funds": false,
+    "status_change": "unchanged",
+    "total_fwd_fees": "10871000",
+    "total_action_fees": "3623611",
+    "result_code": 0,
+    "tot_actions": 1,
+    "spec_actions": 0,
+    "skipped_actions": 0,
+    "msgs_created": 1,
+    "action_list_hash": "9XTNK6e1Fmmhd3cdzI0XcNDYRAoP5f5L4bWPUD3KNIE=",
+    "tot_msg_size": {
+    "cells": "23",
+    "bits": "8377"
+  }
+  }
+  },
+    # reference for the block of the transaction
+    "block_ref": {
+    "workchain": 0,
+    "shard": "8000000000000000",
+    "seqno": 14627985
+  },
+    # in message
+    "in_msg": {
+    "hash": "O9XCuICyXBWOs4hHMOYA0k6o4GPBsWbAkjFi2qbttQE=", # hash of whole message
+    "source": "0:F0C9C78F021AC65839B4006321A68BBB32DE5025F84C853CB9D75EB4894D0848", # account who has sended this message
+    "destination": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account who received this message (for in_msg should be same as account of transaction)
+    "value": "400000000", # attached TONS
+    "fwd_fee": "1494679", # fee for forwarding the message using Hypercube Routing
+    "ihr_fee": "0", # fee for forwarding the message throught Instant Hypercube Routing (now IHR is not implemented so this should be added to value)
+    "created_lt": "15371766000002", # logical time of creation (usually slightly differs from transaction lt, where this message appears as an out_msg)
+    "created_at": "1696238450", # unix timestamp
+    "opcode": "0x0f8a7ea5", # opcode
+    "ihr_disabled": true,
+    "bounce": true, # if bounce should be perfomed on failure
+    "bounced": false, # if bounce has happened
+    "import_fee": null,
+    "message_content": { # message body
+    "hash": "tWjTyEL/sabOLNt97uyCj5na740lW54GUcVa0UrSDao=", # hash of the message body
+    # message body in base64 format
+    "body": "te6cckEBAgEAiAABbQ+KfqUAAAAAdJizmkC/A/doAc9ztfOy5YIoBWjnofpWHchoFtAb/s4FvzXctxUu0Cf0ED8uUQMBAJclk4VhgB3j1vChEcRNFz9a4PfQWGcds91PdwGR6Jm4o4muESRZKAJfTMEAPDJx48CGsZYObQAYyGmi7sy3lAl+EyFPLnXXrSJTQhIQIjm5Xw==",
+    "decoded": null # text comment if it could be decoded
+  },
+    "init_state": null
+  },
+    "out_msgs": [
+  {
+    "hash": "FuV4JPR/uZZOCzZxWQ473bASToqChvKDLmnf5BiCspI=",
+    "source": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # should coinside with transaction account for out_msg
+    "destination": "0:794760D36E657A27CDB8D3D65F243D6B468CAD2C34AF413E7709390E4DBE9907",
+    "value": "380306000",
+    "fwd_fee": "7247389",
+    "ihr_fee": "0",
+    "created_lt": "15371766000004",
+    "created_at": "1696238450",
+    "opcode": "0x178d4519",
+    "ihr_disabled": true,
+    "bounce": true,
+    "bounced": false,
+    "import_fee": null,
+    "message_content": {
+    "hash": "o+VOluS6wdyl44k2AIFTcRBvdxZD/98275dunIWcVIA=",
+    "body": "te6cckEBAgEAiAABbReNRRkAAAAAdJizmkC/A/doAeGTjx4ENYywc2gAxkNNF3ZlvKBL8JkKeXOuvWkSmhCQIH5cogYBAJclk4VhgB3j1vChEcRNFz9a4PfQWGcds91PdwGR6Jm4o4muESRZKAJfTMEAPDJx48CGsZYObQAYyGmi7sy3lAl+EyFPLnXXrSJTQhIQPzgXtA==",
+    "decoded": null
+  },
+    # init state in same format as message body
+    # needed to deploy a new contract
+    "init_state": {
+    "hash": "eUdg025leifNuNPWXyQ9a0aMrSw0r0E+dwk5Dk2+mQc=",
+    "body": "te6cckECFAEAA4AAAgE0AgEBhwgBz3O187LlgigFaOeh+lYdyGgW0Bv+zgW/Ndy3FS7QJ/UAN1wXvOOOdJfwh7sHnzxnFjjhTeJ04Bmd10caY4RPyrggAgEU/wD0pBP0vPLICwMCAWIEBQICywYHABug9gXaiaH0AfSB9IGoYQIBIAgJAIPSAINch7UTQ+gD6QPpA1DAE0x+CEBeNRRlSILqCEHvdl94TuhKx8uLF0z8x+gAwE6BQI8hQBPoCWM8WAc8WzMntVICAUgKCwIBWAwNAMNCDHAJJfBOAB0NMDAXGwlRNfA/AQ4PpA+kAx+gAxcdch+gAx+gAwc6m0AALTH4IQD4p+pVIgupUxNFnwDeCCEBeNRRlSILqWMUREA/AO4DWCEFlfB7y6k1nwD+BfBIQX8vCAART6RDBwuvLhTYAfFQPTP/oA+kAh8ALtRND6APpA+kDUMFE2oVIqxwXy4sEowv/y4sJUNEJwVCATVBQDyFAE+gJYzxYBzxbMySLIywES9AD0AMsAySD5AHB0yMsCygfL/8nQBPpA9AQx+gAg10nCAPLixHeAGMjLBVAIzxZw+gIXy2sTzIDgIBIA8QAK6CEBeNRRnIyx8Zyz9QB/oCIs8WUAbPFiX6AlADzxbJUAXMI5FykXHiUAioE6CCCOThwKoAggiYloCgoBS88uLFBMmAQPsAECPIUAT6AljPFgHPFszJ7VQD9ztRND6APpA+kDUMAjTP/oAUVGgBfpA+kBTW8cFVHNtcFQgE1QUA8hQBPoCWM8WAc8WzMkiyMsBEvQA9ADLAMn5AHB0yMsCygfL/8nQUA3HBRyx8uLDCvoAUaihggiYloCCCJiWgBK2CKGCCOThwKAYoSfjDyXXCwHDACOAREhMA2ztRND6APpA+kDUMAfTP/oA+kAwUVGhUknHBfLiwSfC//LiwoII5OHAqgAWoBa88uLDghB73ZfeyMsfFcs/UAP6AiLPFgHPFslxgBjIywUkzxZw+gLLaszJgED7AEATyFAE+gJYzxYBzxbMye1UgAHBSeaAYoYIQc2LQnMjLH1Iwyz9Y+gJQB88WUAfPFslxgBDIywUkzxZQBvoCFctqFMzJcfsAECQQIwAOEEkQODdfBAB2wgCwjiGCENUydttwgBDIywVQCM8WUAT6AhbLahLLHxLLP8ly+wCTNWwh4gPIUAT6AljPFgHPFszJ7VTOKoYI",
+    "decoded": null
+  }
+  }
+    ],
+    # account state before the transaction
+    "account_state_before": {
+    "hash": "ICpM+dm0PYhxtwS/EnIwMAvOQbtDhVWMnPtMAlw5Dog=", # hash of whole account state
+    "balance": "37821399", # balance
+    "account_status": "active", # status of account (active, nonexist = deleted, frozen, uninitialized)
+    "frozen_hash": null, # hash of state when it became frozen
+    "data_hash": "XeSmBiLWvwn00CWu5oq/q9Q6d4luPKxnOWC4NgEeugU=", # hash of data
+    "code_hash": "ITmGtOPGMSaMQ8fGUTxczC5zEmkqfhV7VEQchrqjpGc=" # hash of code
+  },
+    # account state after the transaction
+    "account_state_after": {
+    "hash": "7vvsHBjy5KoM/rIs6U8nHZt0pYOW5I3oTbBirxVK+Go=",
+    "balance": "37821351",
+    "account_status": "active",
+    "frozen_hash": null,
+    "data_hash": "aD0LD2LpPQYYR81n5b/EBHCPYmhBo4soNdvPoTL+xIk=",
+    "code_hash": "ITmGtOPGMSaMQ8fGUTxczC5zEmkqfhV7VEQchrqjpGc="
+  }
+  }
+  ```
+</details>
+
+Когда разработчик получает набор данных о транзакциях, отфильтрованный по определённому аккаунту или набору аккаунтов, он может обработать «сырые данные» для извлечения значимых событий.
+
+## Следующий шаг
+
+Чтобы понять, как транзакции оказываются структурированы, выполнены и проанализированы в различных контекстах TON, переходите дальше:
+
+<Button href="/v3/guidelines/dapps/transactions/explore-transactions" colorType={'primary'} sizeType={'sm'}>
+  Исследуйте транзакции
+</Button>
+
+<Feedback />
