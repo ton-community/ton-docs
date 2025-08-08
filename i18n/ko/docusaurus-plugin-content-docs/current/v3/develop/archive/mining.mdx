@@ -29,15 +29,15 @@ Toncoin은 특정 양의 TON이 할당된 스마트 계약인 이른바 `PoW 기
 
 채굴로 인한 수익은 기계가 작업을 수행하는 동안 `조금씩` 들어오는 것이 아니라, giver 문제를 성공적으로 해결할 때마다 100 TON 단위로 들어옵니다. 따라서 기계가 24시간 내에 블록을 계산할 확률이 10%라면 ([빠른 시작](#quickStart) 4단계 참조) 100 TON 보상을 받기까지 최대 10일을 기다려야 할 수도 있습니다.
 
-채굴 과정은 대부분 `mytonctrl`에 의해 자동화되어 있습니다. 채굴 과정에 대한 자세한 정보는 [PoW Giver](https://www.ton.org/#/howto/pow-givers) 문서에서 확인할 수 있습니다.
+채굴 과정은 대부분 `mytonctrl`에 의해 자동화되어 있습니다. 채굴 과정에 대한 자세한 정보는 PoW Giver 문서(아카이브)에서 확인할 수 있습니다.
 
 ## <a id="advanced"></a>고급
 
-채굴에 진지하게 관심이 있고 두 대 이상의 기계/채굴장을 운영하고자 하는 경우, TON과 채굴 작동 방식을 배워야 하며 자세한 내용은 [HOWTO](https://ton.org/#/howto/) 섹션에서 심도 있는 정보를 확인하세요. 여기 몇 가지 일반적인 조언이 있습니다:
+채굴에 진지하게 관심이 있고 두 대 이상의 기계/채굴장을 운영하고자 하는 경우, TON과 채굴 작동 방식을 배워야 하며 자세한 내용은 [TON 문서](/v3/documentation/ton-documentation)에서 심도 있는 정보를 확인하세요. 여기 몇 가지 일반적인 조언이 있습니다:
 
 - 자체 노드/라이트 서버를 별도의 컴퓨터에서 **실행하세요.** 이렇게 하면 마이닝 팜이 다운되거나 쿼리를 적시에 처리하지 못할 수 있는 외부 라이트 서버에 의존하지 않도록 할 수 있습니다.
 - 퍼블릭 라이트 서버에 `get_pow_params` 쿼리를 **퍼붓지 마세요.** 제공자 상태를 자주 폴링하는 사용자 지정 스크립트가 있는 경우 반드시 자체 라이트 서버를 사용해야 합니다. 이 규칙을 위반하는 클라이언트는 퍼블릭 라이트 서버에서 IP가 블랙리스트에 오를 위험이 있습니다.
-- [마이닝 프로세스](https://www.ton.org/#/howto/pow-givers)가 어떻게 작동하는지 이해하려고 노력하세요. 대부분의 대규모 마이너는 여러 대의 마이닝 머신이 있는 환경에서 `mytonctrl`보다 많은 이점을 제공하는 자체 스크립트를 사용합니다.
+- 마이닝 프로세스가 어떻게 작동하는지 이해하려고 노력하세요. 대부분의 대규모 마이너는 여러 대의 마이닝 머신이 있는 환경에서 `mytonctrl`보다 많은 이점을 제공하는 자체 스크립트를 사용합니다.
 
 ## <a id="hardware"></a>채굴 하드웨어
 
@@ -191,8 +191,8 @@ CPU에 따라 다릅니다. AWS Graviton2 인스턴스는 매우 강력한 채�
 
 #### <a id="faq-software-node2"></a>풀 노드를 운영하려면 무엇이 필요하며, 어떻게 운영하나요?
 
-이는 이 가이드의 범위를 벗어납니다. [풀 노드 사용법](https://ton.org/#/howto/full-node) 및 [mytonctrl 지침](https://github.com/igroman787/mytonctrl) 을 참조하세요.
+이는 이 가이드의 범위를 벗어납니다. [풀 노드 실행](/v3/guidelines/nodes/running-nodes/full-node) 및 [mytonctrl 지침](https://github.com/igroman787/mytonctrl) 을 참조하세요.
 
 #### <a id="faq-software-build"></a>내 OS에서 소프트웨어를 빌드하는 데 도움을 줄 수 있나요?
 
-이는 이 가이드의 범위를 벗어납니다. [풀 노드 가이드](https://ton.org/#/howto/full-node) 및 [Mytonctrl 설치 스크립트](https://github.com/igroman787/mytonctrl/blob/master/scripts/toninstaller.sh#L44) 를 참조하여 종속성 및 프로세스에 대한 정보를 확인하세요.
+이는 이 가이드의 범위를 벗어납니다. [풀 노드 실행](/v3/guidelines/nodes/running-nodes/full-node) 및 [Mytonctrl 설치 스크립트](https://github.com/igroman787/mytonctrl/blob/master/scripts/toninstaller.sh#L44) 를 참조하여 종속성 및 프로세스에 대한 정보를 확인하세요.

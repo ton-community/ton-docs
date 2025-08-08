@@ -12,15 +12,25 @@ Understanding how hashing works will help you effectively track transactions, va
 
 ## What is a hash?
 
-In TON, a **hash** is a unique cryptographic fingerprint of data computed using the **SHA-256** algorithm.
-Each cell, message, or transaction has its unique hash, which acts as a digital signature.
+In TON, a **hash** is a cryptographic fingerprint of data based on the **SHA-256** algorithm. However, the hashing process is not a direct application of SHA-256 to raw data;
+it involves serialization and internal formatting steps, and in some cases, may rely on alternative algorithms.
 
-## Hash types
+Each cell, message, or transaction has its unique hash, which acts as a digital signature.
 
 :::info Important
 Hashes in TON are irreversible — the original data cannot be reconstructed from the hash.
 However, they are deterministic — the same input always produces the same hash.
 :::
+
+TON uses the _Merkle–Damgård construction_ for hashing, a method of building collision-resistant hash functions from one-way compression functions.
+This design makes it vulnerable to **length extension attacks**.
+:::warning
+If you use hashes for authentication or message integrity, be aware that the Merkle–Damgård construction is susceptible to length extension attacks.
+
+Avoid relying solely on raw hashes in security-critical contexts.
+:::
+
+## Hashes of structures
 
 ### Message body hash
 
@@ -677,7 +687,7 @@ Transaction link: https://testnet.tonviewer.com/transaction/df51860233d75...
 
 ## StateInit hash for address validation
 
-In [TON Connect](v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#backend-example), you often need to verify that a wallet address corresponds to its `StateInit`.
+In [TON Connect](/v3/guidelines/ton-connect/verifying-signed-in-users#backend-example), you often need to verify that a wallet address corresponds to its `StateInit`.
 The `StateInit` hash must match the hash portion of the address.
 
 **Practical example of address verification:**

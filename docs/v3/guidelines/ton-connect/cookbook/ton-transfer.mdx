@@ -1,0 +1,332 @@
+---
+title: TON transfer
+description: How to send a simple TON transfer via TON Connect SDKs (React UI and core UI). Includes address rules, limits and error handling.
+keywords:
+  - ton connect
+  - ton connect sdk
+  - ton connect ui
+  - ton transfer
+  - send ton
+  - wallet transaction
+  - dapp integration
+  - react
+  - javascript
+  - tutorial
+---
+
+import Feedback from "@site/src/components/Feedback";
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Button from '@site/src/components/button'
+
+# TON transfer
+
+## Transaction template
+
+No matter what level of task a developer is solving, it is typically necessary to use the connector entity from `@tonconnect/ui-react` or `@tonconnect/ui`.
+
+Examples created based on `@tonconnect/ui-react` and `@tonconnect/ui`:
+
+<Tabs groupId="TON Connect template">
+  <TabItem value="tonconnect-react" label="@tonconnect/ui-react">
+
+    ```js
+    import { useTonConnectUI } from '@tonconnect/ui-react';
+
+    const transaction = {
+        //transaction body
+    }
+
+    export const Settings = () => {
+        const [tonConnectUI, setOptions] = useTonConnectUI();
+
+        return (
+            <div>
+                <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                    Send transaction
+                </button>
+            </div>
+        );
+    };
+    ```
+
+  </TabItem>
+
+  <TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+    ```js
+    import TonConnectUI from '@tonconnect/ui';
+
+    const tonConnectUI = new TonConnectUI({ //connect application
+        manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+        buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+    });
+
+    const transaction = {
+        //transaction body
+    }
+
+    const result = await tonConnectUI.sendTransaction(transaction)
+
+    ```
+
+  </TabItem>
+</Tabs>
+
+## Simple TON transfer
+
+TON Connect SDKs include wrappers for sending messages, making it easy to prepare regular transfers of Toncoins between two wallets as default transaction without payload. For specific custom transactions, a particular payload must be defined.
+
+Pass the `address` in a [user-friendly format](/v3/documentation/smart-contracts/addresses#user-friendly-address), not in raw form. When you send the message to a smart contract, use a bounceable address; when you send it to a wallet, use a non-bounceable address.
+
+By the way, there is a limit to the number of messages sent in one transaction:
+
+- standard ([v3](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v3)/[v4](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)) wallets: 4 outgoing messages;
+- highload wallets: 255 outgoing messages (close to blockchain limitations).
+
+A regular TON transfer using the TON Connect JS SDKs can be executed as follows:
+
+<Tabs groupId="Regular Transfer">
+  <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+    ```js
+    import { useTonConnectUI } from '@tonconnect/ui-react';
+    const [tonConnectUI] = useTonConnectUI();
+
+    const transaction = {
+        messages: [
+            {
+                address: tonConnectUI.account.address,
+                amount: '200000000' // 0.2 TON (in nanotons)
+            },
+            {            // Bounceable address
+                address: 'EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c',
+                amount: '100000000'
+            },
+            {            // Non-bounceable address
+                address: 'UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ',
+                amount: '100000000'
+            }
+        ]
+
+    }
+
+    export const Settings = () => {
+        const [tonConnectUI, setOptions] = useTonConnectUI();
+
+        return (
+            <div>
+                <button onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                    Send transaction
+                </button>
+            </div>
+        );
+    };
+    ```
+
+  </TabItem>
+
+  <TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+    ```js
+    import TonConnectUI from '@tonconnect/ui';
+
+    const tonConnectUI = new TonConnectUI({ //connect application
+        manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
+        buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
+    });
+
+    const transaction = {
+        messages: [
+            {
+                address: tonConnectUI.account.address,
+                amount: '200000000' // 0.2 TON (in nanotons)
+            },
+            {            // Bounceable address
+                address: 'EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c',
+                amount: '100000000'
+            },
+            {            // Non-bounceable address
+                address: 'UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ',
+                amount: '100000000'
+            }
+        ]
+    }
+
+    const result = await tonConnectUI.sendTransaction(transaction)
+    ```
+
+  </TabItem>
+</Tabs>
+
+:::tip
+Learn more about [TON smart contract addresses](/v3/documentation/smart-contracts/addresses).
+:::
+
+### Getting the result
+
+The function will return a result object containing the BoC (Bag of Cells) of the external message.
+This BoC can be logged to the console or used elsewhere in your application for transaction tracking.
+Check out the [Transaction lookup](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message) page for more details.
+
+### What happens if the user rejects a transaction request?
+
+It's pretty easy to handle request rejection, but it's better to know what would happen in advance when you're developing some project.
+
+When a user clicks **Cancel** in the popup in the wallet application, an exception is thrown:
+
+```ts
+Error: [TON_CONNECT_SDK_ERROR] The Wallet declined the request 
+```
+
+This error can be considered final (unlike connection cancellation) — if it has been raised, the requested transaction will definitely not happen until the next request is sent.
+
+## Transfer with a comment
+
+The simplest example involves adding a payload with a comment. 
+
+First, prepare a body cell using a general-purpose library like [@ton/ton](https://github.com/ton-org/ton):
+
+```ts
+import { beginCell } from "@ton/ton";
+
+const body = beginCell()
+  .storeUint(0, 32)                 // indicates text comment follows
+  .storeStringTail("Hello, TON!")   // write our text comment
+  .endCell();
+```
+
+See more details on [this page](/v3/documentation/smart-contracts/message-management/internal-messages#simple-message-with-a-comment).
+
+The transaction is created as follows:
+
+<Tabs groupId="Transfer With a Comment">
+  <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+
+    ```js
+    import { useTonConnectUI } from '@tonconnect/ui-react';
+    import { toNano } from '@ton/ton'
+
+    const myTransaction = {
+        validUntil: Math.floor(Date.now() / 1000) + 360,
+        messages: [
+            {
+                address: destination,
+                amount: toNano("0.05").toString(),
+                payload: body.toBoc().toString("base64")
+                // payload with the comment in body
+            }
+        ]
+    }
+
+    export const Settings = () => {
+        const [tonConnectUI, setOptions] = useTonConnectUI();
+
+        return (
+            <div>
+                <button onClick={() => tonConnectUI.sendTransaction(myTransaction)}>
+                    Send transaction
+                </button>
+            </div>
+        );
+    };
+    ```
+
+  </TabItem>
+
+  <TabItem value="tonconnect-ui" label="@tonconnect/ui">
+
+    ```js
+    import TonConnectUI from '@tonconnect/ui'
+    import { toNano } from '@ton/ton'
+
+    const transaction = {
+        validUntil: Math.floor(Date.now() / 1000) + 360,
+        messages: [
+            {
+                address: destination,
+                amount: toNano("0.05").toString(),
+                payload: body.toBoc().toString("base64")
+                // payload with the comment in body
+            }
+        ]
+    }
+
+    const result = await tonConnectUI.sendTransaction(transaction)
+    ```
+
+  </TabItem>
+</Tabs>
+
+### Smart contract deployment
+
+As more complex example, we'll deploy an instance of the simple [chatbot Doge](https://github.com/LaDoger/doge.fc) smart contract, which is featured as one of the [smart-contract examples](/v3/documentation/smart-contracts/overview#examples-of-smart-contracts). To create our own unique instance, we'll load the contract code and store a unique value in the data section. Finally, we'll combine the code and data into a `stateInit` structure.
+
+```ts
+import { Cell, beginCell, contractAddress, storeStateInit } from "@ton/ton";
+
+// Doge contract code
+const code = Cell.fromBase64('te6cckEBAgEARAABFP8A9KQT9LzyyAsBAGrTMAGCCGlJILmRMODQ0wMx+kAwi0ZG9nZYcCCAGMjLBVAEzxaARfoCE8tqEssfAc8WyXP7AN4uuM8=');
+
+// Create unique data with current timestamp
+const data = beginCell()
+    .storeUint(Math.floor(Date.now() / 1000), 64)
+    .endCell();
+
+// Create state init
+const stateInit = { code, data };
+
+// Calculate contract address
+const doge_address = contractAddress(0, stateInit).toString();
+
+// Create state init BOC (using helper from @ton/ton)
+const state_init_boc = beginCell()
+    .store(storeStateInit(stateInit))
+    .endCell()
+    .toBoc()
+    .toString('base64');
+
+// Store for deployment
+const contractData = {
+    address: doge_address,
+    stateInit: state_init_boc
+};
+```
+
+And now it's time to send our transaction:
+
+```ts
+import TonConnectUI from '@tonconnect/ui'
+import { toNano } from '@ton/ton'
+
+const transaction = {
+    validUntil: Math.floor(Date.now() / 1000) + 360,
+    messages: [
+        {
+            address: contractData.address,
+            amount: toNano("0.069").toString(),
+            payload: contractData.stateInit
+        }
+    ]
+}
+
+const result = await tonConnectUI.sendTransaction(transaction)
+```
+
+## Next steps
+
+Continue exploring TON Connect features and workflows by choosing one of the following guides:
+
+<Button href="/v3/guidelines/ton-connect/cookbook/jetton-transfer" colorType={'primary'} sizeType={'sm'}>
+  Send tokens (jettons)
+</Button>
+
+<Button href="/v3/guidelines/ton-connect/cookbook/nft-transfer" colorType="secondary" sizeType={'sm'}>
+  Work with NFTs
+</Button>
+
+<Button href="/v3/guidelines/ton-connect/guidelines/transaction-by-external-message" colorType="secondary" sizeType={'sm'}>
+  Search your transaction
+</Button>
+
+<Feedback />

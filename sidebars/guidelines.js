@@ -124,6 +124,7 @@ module.exports = [
         },
         items: [
           'v3/guidelines/smart-contracts/security/overview',
+          'v3/guidelines/smart-contracts/security/common-vulnerabilities',
           'v3/guidelines/smart-contracts/security/secure-programming',
           'v3/guidelines/smart-contracts/security/things-to-focus',
           'v3/guidelines/smart-contracts/security/ton-hack-challenge-1',
@@ -417,34 +418,38 @@ module.exports = [
     ]
   },
   {
-    label: 'Integrate with TON',
+    label: 'TON Connect',
     type: 'category',
     link: {
       type: 'generated-index',
-      title: 'Integrate with TON',
-      slug: '/guidelines/integrate-with-ton',
+      title: 'TON Connect',
+      slug: '/guidelines/ton-connect',
     },
 
     items: [
+      // 1. Overview
       'v3/guidelines/ton-connect/overview',
+
+      // 2. Quick-start
+      'v3/guidelines/ton-connect/quick-start',
+
+      // 3. DApp Guide
       {
         type: 'category',
-        label: 'Integrate a dApp',
+        label: 'DApp guide',
         link: {
           type: 'generated-index',
-          title: 'Integrate a dApp',
-          slug: '/guidelines/integrate-dapp',
-          keywords: ['dapp'],
+          title: 'DApp guide',
+          slug: '/guidelines/dapp-guide',
         },
         items: [
-          'v3/guidelines/ton-connect/guidelines/how-ton-connect-works',
-          'v3/guidelines/ton-connect/guidelines/creating-manifest',
+          'v3/guidelines/ton-connect/creating-manifest',
           {
             type: 'category',
-            label: 'Install TON Connect',
+            label: 'SDK installation',
             link: {
               type: 'generated-index',
-              title: 'Install TON Connect',
+              title: 'SDK installation',
               slug: '/guidelines/install-ton-connect',
               keywords: ['TON Connect'],
             },
@@ -466,17 +471,45 @@ module.exports = [
               },
             ],
           },
-          'v3/guidelines/ton-connect/guidelines/sending-messages',
-          'v3/guidelines/ton-connect/guidelines/transaction-by-external-message',
-          'v3/guidelines/ton-connect/guidelines/verifying-signed-in-users'
+          'v3/guidelines/ton-connect/verifying-signed-in-users',
         ],
       },
+
+      // 4. Payload Cookbook
+      {
+        type: 'category',
+        label: 'Transaction cookbook',
+        link: {
+          type: 'generated-index',
+          title: 'Transaction cookbook',
+          slug: '/guidelines/cookbook',
+        },
+        items: [
+          'v3/guidelines/ton-connect/cookbook/cells',
+          'v3/guidelines/ton-connect/cookbook/ton-transfer',
+          'v3/guidelines/ton-connect/cookbook/jetton-transfer',
+          'v3/guidelines/ton-connect/cookbook/nft-transfer',
+        ],
+      },
+
+      // 5. Transaction lookup
       {
         type: 'doc',
-        label: 'Integrate a wallet',
+        label: 'Transaction lookup',
+        id: 'v3/guidelines/ton-connect/guidelines/transaction-by-external-message',
+      },
+
+      // 6. Wallet Integration
+      {
+        type: 'doc',
+        label: 'Wallet integration',
         id: 'v3/guidelines/ton-connect/wallet',
       },
+
+      // 7. Developers reference
       'v3/guidelines/ton-connect/guidelines/developers',
+
+      // 8. Advanced
       {
         type: 'category',
         label: 'Advanced',
@@ -498,6 +531,8 @@ module.exports = [
           },
         ],
       },
+
+      // 9. Business
       {
         type: 'category',
         label: 'Business',

@@ -1,55 +1,70 @@
 import Feedback from '@site/src/components/Feedback';
+import Button from '@site/src/components/button'
 
-# Understanding Testnet
+# TON Testnet
 
-Use the TON test network for development and testing purposes.
+TON Testnet is an independent blockchain network that replicates the Mainnet’s functionality, using valueless tokens.
+
+Use TON Testnet to safely develop and debug before deploying to Mainnet.
 
 :::info
 Coins in the test network have no value, and the network can be reset at any time.
 :::
 
-- Testnet global configuration: [https://ton.org/testnet-global.config.json](https://ton.org/testnet-global.config.json)
-- Get free test coins from the [@test_giver_ton_bot](https://t.me/testgiver_ton_bot)
-- Check the testnet status in the Telegram channel: [@testnetstatus](https://t.me/testnetstatus)
+#### Key resources for getting started with TON Testnet
 
-### Core services
+<Button href="https://ton.org/testnet-global.config.json" colorType="primary" sizeType={'sm'}>
+  Testnet global config
+</Button>
 
-For convenience, nearly the entire mainnet infrastructure (wallets, APIs, bridges, etc.) has been replicated in the test network.
+<Button href="https://t.me/testgiver_ton_bot" colorType={'secondary'} sizeType={'sm'}>
+  Get free test coins
+</Button>
 
-- Explorer: [https://testnet.tonscan.org](https://testnet.tonscan.org)
-- Web wallet: [https://wallet.ton.org/?testnet=true](https://wallet.ton.org/?testnet=true)
-- Browser extension: use [mainnet browser extension](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) and [do this](https://github.com/toncenter/ton-wallet#switch-between-mainnettestnet-in-extension).
-- Testnet TON Center API: [https://testnet.toncenter.com](https://testnet.toncenter.com)
-- Testnet HTTP API: [https://testnet.tonapi.io/](https://testnet.tonapi.io/)
-- Testnet bridge: [https://bridge.ton.org/?testnet=true](https://bridge.ton.org/?testnet=true)
-- Testnet dTON GraphQL: [https://testnet.dton.io/](https://testnet.dton.io/)
+<Button href="https://t.me/testnetstatus" colorType={'secondary'} sizeType={'sm'}>
+  Testnet status channel
+</Button>
 
-## TON Ecosystem services Testnet
+
+#### Core services
+
+Testnet mirrors the Mainnet infrastructure, including wallets, APIs, bridges, and more:
+
+
+| Service               | Link |
+|-----------------------|------|
+| Explorer            | [testnet.tonscan.org](https://testnet.tonscan.org) |
+| Web wallet          | [wallet.ton.org](https://wallet.ton.org/?testnet=true) |
+| Browser extension   | [install](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) and [switch to Testnet](https://github.com/toncenter/ton-wallet?tab=readme-ov-file#switch-between-mainnet-and-testnet) |
+| TON Center API      | [testnet.toncenter.com](https://testnet.toncenter.com) |
+| TON HTTP API        | [testnet.tonapi.io](https://testnet.tonapi.io/) |
+| Bridge              | [bridge.ton.org](https://bridge.ton.org/?testnet=true) |
+
+## Testnet ecosystem services
 
 ### Wallets
 
-- To use [Tonkeeper's testnet](https://tonkeeper.com/), tap the Wallets list and then Add Wallet, then use Testnet Account button.
-
-- Testnet CryptoBot: [https://t.me/CryptoTestnetBot](https://t.me/CryptoTestnetBot)
-- Special link for TON Space Testnet: [https://t.me/wallet/start?startapp=tonspace_settings](https://t.me/wallet/start?startapp=tonspace_settings)
-- [https://multisig.ton.org/?testnet=true](https://multisig.ton.org/?testnet=true)
+- [Tonkeeper Testnet](https://tonkeeper.com/)
+- [Crypto Testnet Bot](https://t.me/CryptoTestnetBot)
+- [TON Space Testnet](https://t.me/wallet/start?startapp=tonspace_settings)
+- [Multisig wallet Testnet](https://multisig.ton.org/?testnet=true)
 
 ### Explorers
 
-- [https://testnet.tonscan.org](https://testnet.tonscan.org)
-- [https://testnet.tonviewer.com](https://testnet.tonviewer.com)
-- [https://test-explorer.toncoin.org](https://test-explorer.toncoin.org)
-- [https://tonsandbox.com/explorer](https://tonsandbox.com/explorer)
-- [https://testnet.ton.cx](https://testnet.ton.cx)
+- [Tonscan Testnet](https://testnet.tonscan.org)
+- [Tonviewer Testnet](https://testnet.tonviewer.com)
+- [Test explorer](https://test-explorer.toncoin.org)
+- [TON Explorer Testnet](https://tonsandbox.com/explorer)
 
 ### Other services
 
-- [https://minter.ton.org/?testnet=true](https://minter.ton.org/?testnet=true)
-- [https://dns.ton.org/?testnet=true](https://dns.ton.org/?testnet=true)
-- [https://vesting.ton.org/?testnet=true](https://vesting.ton.org/?testnet=true)
-- [https://teststaking.xyz](https://teststaking.xyz)
-- [https://testnet.getgems.io](https://testnet.getgems.io)
-- [https://app.hipo.finance/#/network=testnet/](https://app.hipo.finance/#/network=testnet/)
-- [https://testnet-elections.toncenter.com/getValidationCycles?limit=2&return_participants=true](https://testnet-elections.toncenter.com/getValidationCycles?limit=2&return_participants=true)
+- [Minter Testnet](https://minter.ton.org/?testnet=true)
+- [DNS Testnet](https://dns.ton.org/?testnet=true)
+- [Vesting Testnet](https://vesting.ton.org/?testnet=true)
+- [Test staking](https://teststaking.xyz)
+- [Getgems Testnet](https://testnet.getgems.io)
+- [Hipo Testnet](https://app.hipo.finance/#/network=testnet/)
+- [Elections Testnet](https://testnet-elections.toncenter.com/getValidationCycles?limit=2&return_participants=true)
+
 
 <Feedback />

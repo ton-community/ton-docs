@@ -1,0 +1,103 @@
+import Feedback from '@site/src/components/Feedback';
+import Button from '@site/src/components/button'
+import '@site/src/components/Tables/manifest-table.css'
+
+# Manifest creation
+
+## Manifest definition
+
+To integrate with wallets through TON Connect, every app must include a manifest file that provides essential metadata.
+
+The manifest is a JSON file named `tonconnect-manifest.json`, and it must follow the format below:
+
+```json
+{
+    "url": "<app-url>",                        // required
+    "name": "<app-name>",                      // required
+    "iconUrl": "<app-icon-url>",               // required
+    "termsOfUseUrl": "<terms-of-use-url>",     // optional
+    "privacyPolicyUrl": "<privacy-policy-url>" // optional
+}
+```
+
+<table className="manifest-table">
+  <thead>
+  <tr>
+    <th>Field</th>
+    <th>Required</th>
+    <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td><code>url</code></td>
+    <td>Yes</td>
+    <td>Defines the DApp’s base URL. It is used to open the app when a user taps its icon in the wallet. The URL should not include a trailing slash — for example, use **https://mydapp.com** instead of **https://mydapp.com/**.</td>
+  </tr>
+
+  <tr>
+    <td><code>name</code></td>
+    <td>Yes</td>
+    <td>Defines the app name. Should be a simple word or phrase. Not used as a unique identifier.</td>
+  </tr>
+
+  <tr>
+    <td><code>iconUrl</code></td>
+    <td>Yes</td>
+    <td>Defines the URL to the app icon. Must be in **PNG** or **ICO** format. SVG is **not** supported. Ideally, use a **180x180px PNG**.</td>
+  </tr>
+
+  <tr>
+    <td><code>termsOfUseUrl</code></td>
+    <td>Optional</td>
+    <td>Optional for most apps, but mandatory for those listed in the Tonkeeper recommended apps list.</td>
+  </tr>
+
+  <tr>
+    <td><code>privacyPolicyUrl</code></td>
+    <td>Optional</td>
+    <td>Optional for most apps, but mandatory for those listed in the Tonkeeper recommended apps list.</td>
+  </tr>
+  </tbody>
+</table>
+
+
+:::info
+For reference, see the [TON Connect specification](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#app-manifest).
+:::
+
+#### Example
+
+```json
+{
+    "url": "https://ton.vote",
+    "name": "TON Vote",
+    "iconUrl": "https://ton.vote/logo.png"
+}
+```
+## Best practices
+
+1. Place the manifest file in the root of your app and repository.
+
+> For example: `https://myapp.com/tonconnect-manifest.json`. This helps wallets discover your app more reliably and enhances the overall user experience when users connect to it.
+
+2. The fields `url`, `iconUrl`, `termsOfUseUrl`, and `privacyPolicyUrl` must be publicly accessible from any origin without CORS restrictions.
+3. Ensure the `manifest.json` is accessible and can be retrieved through a `GET` request to its URL.
+
+## See also
+- [TON Connect GitHub - App manifest](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#app-manifest)
+
+## Next steps
+Add the SDK to the project and explore the payload cookbook to start building with TON Connect.
+
+<Button href="/guidelines/install-ton-connect" colorType="primary" sizeType={'sm'}>
+  Install SDK
+</Button>
+
+
+<Button href="/v3/guidelines/ton-connect/cookbook/ton-transfer" colorType="secondary" sizeType={'sm'}>
+  Check payload cookbook
+</Button>
+
+<Feedback />
+

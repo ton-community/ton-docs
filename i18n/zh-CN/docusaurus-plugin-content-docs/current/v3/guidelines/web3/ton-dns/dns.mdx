@@ -8,7 +8,7 @@ TON DNS是一项服务，用于将易于人类阅读的域名（如`test.ton`或
 
 ## SDK
 
-在JavaScript SDK [TonWeb](https://github.com/toncenter/tonweb) 和 [TonLib](https://ton.org/#/apis/?id=_2-ton-api)中实现了与TON DNS的交互。
+在JavaScript SDK [TonWeb](https://github.com/toncenter/tonweb) 和 [TonLib](/v3/guidelines/dapps/apis-sdks/ton-adnl-apis)中实现了与TON DNS的交互。
 
 ```js
 const address: Address = await tonweb.dns.getWalletAddress('test.ton');
@@ -26,7 +26,7 @@ const address: Address = await tonweb.dns.resolve('test.ton', TonWeb.dns.DNS_CAT
 
 根DNS智能合约源代码 - https://github.com/ton-blockchain/dns-contract/blob/main/func/root-dns.fc。
 
-将来这可能会改变。添加新的一级域名将需要新的根智能合约和改变[网络配置#4](https://ton.org/#/smart-contracts/governance?id=config)的通用投票。
+将来这可能会改变。添加新的一级域名将需要新的根智能合约和改变[网络配置#4](/v3/documentation/smart-contracts/contracts-specs/governance)的通用投票。
 
 ## \*.ton域名
 
