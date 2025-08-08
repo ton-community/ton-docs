@@ -74,7 +74,7 @@ You can learn more about the issues and prospects in the [relevant documentation
 
 ## Param 7
 
-This parameter stores the volume of each additional currency in circulation. The data is organized as a dictionary (also referred to as a **hashmap**, although this name may be a typo during the TON Blockchain's development). The structure uses the format `extracurrency_id -> amount`, where the amount is represented as a `VarUint 32`, which is an integer ranging from `0` to `2^248`.
+This parameter stores the volume of each additional currency in circulation. The data is organized as a dictionary (also referred to as a **hashmap**, although this name may be a typo during the TON Blockchain's development). The structure uses the format `extracurrency_id -> amount`, where the amount is represented as a `VarUint 32`, which is an integer ranging from `0` to `2^248-1`.
 
 ## Param 8
 
@@ -228,7 +228,7 @@ Scheme:
 Let `election_id = validation_start = 160002400`. Then:
 
 ```python
-election_start = election_id - constants['elections_start_before'] = 160002400 - 2400 = 1600000000
+election_start = election_id - constants['elections_start_before'] = 160002400 - 2400 = 160000000
 election_end = delay_start = election_id - constants['elections_end_before'] = 160002400 - 180 = 160002220
 hold_start = validation_end = election_id + constants['validators_elected_for'] = 160002400 + 7200 = 160009600
 hold_end = hold_start + constants['stake_held_for'] = 160009600 + 900 = 160010500

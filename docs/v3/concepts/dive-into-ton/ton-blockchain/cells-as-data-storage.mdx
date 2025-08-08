@@ -47,7 +47,7 @@ A cell is an opaque object optimized for compact storage.
 It deduplicates data: it only stores the content of several equivalent sub-cells referenced in different branches once. However, one cannot modify or read a cell directly because of its opacity. Thus, there are two additional flavors of the cells:
 
 - **Builder** is a flavor for constructing cells
-- **Slice** for a flavor for reading cells
+- **Slice** is a flavor for reading cells
 
 Another unique cell flavor in TVM:
 
