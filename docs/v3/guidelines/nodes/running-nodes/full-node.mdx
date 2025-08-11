@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 ## OS requirements
 
-We highly recommend installing MyTonCtrl using the supported operating systems:
+We highly recommend installing MyTonCtrl on the following supported operating systems:
 
 - Ubuntu 20.04
 - Ubuntu 22.04
@@ -23,10 +23,10 @@ You shouldn't run any type of node on your personal local machine for extended p
 
 - 16 cores CPU
 - 128 GB RAM
-- 1TB NVME SSD _OR_ Provisioned 64+k IOPS storage
+- 1TB NVMe SSD _OR_ Provisioned 64+k IOPS storage
 - 1 Gbit/s network connectivity
 - Public IP address (_fixed IP address_)
-- 64 TB/month traffic (100 TB/month on peak load)
+- 64 TB/month traffic (100 TB/month at peak load)
 
 :::info Be ready for peak loads
 To reliably handle peak loads, a connection of at least 1 Gbit/s is typically required, while the average load is expected to be around 100 Mbit/s.
@@ -34,17 +34,17 @@ To reliably handle peak loads, a connection of at least 1 Gbit/s is typically re
 
 ### Port forwarding
 
-All types of nodes require a static external IP address, one UDP port forwarded for incoming connections, and all outgoing connections to be open—the node uses random ports for new outgoing connections. The node must also be visible to the outside world over the NAT.
+All types of nodes require a static external IP address, one UDP port forwarded for incoming connections, and all outgoing connections to be open—the node uses random ports for new outgoing connections. The node must also be reachable from the public internet when it is behind a NAT.
 
 You can accomplish this by contacting your network provider or [renting a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
 
 :::info
-You can find out which UDP port is open using the `netstat -tulpn` command.
+You can find out which UDP ports are open using the `netstat -tulpn` command.
 :::
 
 ### Recommended providers
 
-The TON Foundation recommends the following providers for running a Validator:
+The TON Foundation recommends the following providers for running a validator:
 
 | Cloud Provider | Instance Type                   | CPU                     | RAM     | Storage                           | Network         | Public IP                               | Traffic       |
 | -------------- | ------------------------------- | ----------------------- | ------- | --------------------------------- | --------------- | --------------------------------------- | ------------- |
@@ -60,11 +60,11 @@ The TON Foundation recommends the following providers for running a Validator:
 **Note:** Prices, configurations, and availability can change. It is recommended to always refer to the official documentation and pricing pages of the respective cloud provider before making any decisions.
 :::
 
-## Run a Node (video)
+## Run a node (video)
 
 [//]: # "<ReactPlayer controls={true} style={{borderRadius:'10pt', margin:'15pt auto', maxWidth: '100%'}} url='/docs/files/TON_nodes.mp4' />"
 
-Please, check this video step-by-step tutorial to start promptly:
+Please check this step-by-step video tutorial to get started quickly:
 
 <video
   style={{
@@ -88,7 +88,7 @@ This step is required to successfully install and use MyTonCtrl—don't ignore n
 
 If you don't have a non-root user, you can create one with the following steps (otherwise, skip the first two steps and go to the third).
 
-1. Login as root and create new user:
+1. Log in as root and create a new user:
 
 ```bash
 sudo adduser <username>
@@ -100,13 +100,13 @@ sudo adduser <username>
 sudo usermod -aG sudo <username>
 ```
 
-3. Log into the new user (if you are using ssh, **you will need to stop current session and reconnect with correct user**)
+3. Log in as the new user (if you are using ssh, **you will need to stop current session and reconnect with correct user**)
 
 ```bash
 ssh <username>@<server-ip-address>
 ```
 
-### Install the MyTonCtrl
+### Install MyTonCtrl
 
 Download and run the installation script from the **non-root** user account with **sudo** privileges:
 
@@ -131,14 +131,14 @@ su root -c 'bash install.sh'
 
 - `-d` - **mytonctrl** will download a [dump](https://dump.ton.org/) of the latest blockchain state.
   This will reduce synchronization time by several times.
-- `-c <path>` - If you want to use not public liteservers for synchronization. _(not required)_
-- `-i` - Ignore minimum requirements, use it only if you want to check compilation process without real node usage.
+- `-c <path>` - If you want to use a non-public liteserver for synchronization. _(not required)_
+- `-i` - Ignore the minimum requirements, use it only if you want to check the compilation process without real node usage.
 - `-m` - Mode, can be `validator` or `liteserver`.
 - `-t` - Disable telemetry.
 
-**To use testnet**, `-c` flag should be provided with `https://ton.org/testnet-global.config.json` value.
+**To use Testnet**, `-c` flag should be provided with `https://ton.org/testnet-global.config.json` value.
 
-Default `-c` flag value is `https://ton-blockchain.github.io/global.config.json`, which is default mainnet config.
+Default `-c` flag value is `https://ton-blockchain.github.io/global.config.json`, which is default Mainnet config.
 
 ### Running the MyTonCtrl
 
@@ -166,7 +166,7 @@ Example of the **status** command output:
 
 ![status](/img/docs/nodes-validator/mytonctrl-status.png)
 
-:::caution Make sure you have same output for status
+:::caution Make sure you have the same output for status
 For all nodes type **Local Validator status** section should appear.
 Otherwise, [check troubleshooting section](/v3/guidelines/nodes/nodes-troubleshooting#status-command-displays-without-local-node-section) and [check node logs](/v3/guidelines/nodes/running-nodes/full-node#check-the-node-logs).
 :::
@@ -175,7 +175,7 @@ Please wait until the `Local validator out of sync` status is less than 20 secon
 
 When a new node is started, even from a dump, it is important to wait up to 3 hours before the _out of sync_ number begins to decrease. This delay occurs because the node must establish its place in the network and propagate its addresses through the DHT tables, among other processes.
 
-### Uninstall mytonctrl
+### Uninstall MyTonCtrl
 
 Download script and run it:
 
@@ -183,7 +183,7 @@ Download script and run it:
 sudo bash /usr/src/mytonctrl/scripts/uninstall.sh
 ```
 
-### Check mytonctrl owner
+### Check MyTonCtrl owner
 
 Run:
 

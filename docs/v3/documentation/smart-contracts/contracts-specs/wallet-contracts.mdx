@@ -21,18 +21,17 @@ Before we start, there are some terms and concepts that you should be familiar w
 To break the tension, we should first understand that wallets are not a specific entity in the TON ecosystem. They are still just smart contracts consisting of code and data, and, in that sense, are equal to any other actor (i.e., smart contract) in TON.
 
 Like your own custom smart contract, or any other one, wallets can receive external and internal messages, send internal messages and logs, and provide `get methods`.
-So the question is: what functionality do they provide and how it differs between versions?
+So the question is: what functionality do they provide and how do they differ between versions?
 
-You can consider each wallet version as a smart-contract implementation providing a standard external interface, allowing different external clients to interact with the wallets in the same way. You can find these implementations in FunC and Fift languages in the main TON monorepo:
+You can consider each wallet version as a smart contract implementation providing a standard external interface, allowing different external clients to interact with the wallets in the same way. You can find these implementations in FunC and Fift languages in the main TON monorepo:
 
 - [ton/crypto/smartcont/](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/)
 
 ## Basic wallets
 
-### Wallet contracts hashes
+### Wallet contract hashes
 
-Here, you can find the current hashes of the wallet contract code versions.  
-For detailed specifications of each wallet contract, please refer to the page.
+Here, you can find the current hashes of the wallet contract code versions.
 For detailed specifications of each wallet contract, please refer further down the page or check the [ContractSources.md](https://github.com/toncenter/tonweb/blob/update_contracts/src/contract/ContractSources.md).
 
 <details>
@@ -61,14 +60,14 @@ This is the simplest one. It only allows you to send four transactions at a time
 
 Wallet source code:
 
-- [ton/crypto/smartcont/wallet-code.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet.fif)
+- [ton/crypto/smartcont/wallet-code.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet.fif)
 
 This version isn’t even used in regular apps because it has some major issues:
 
 - No easy way to retrieve the seqno and public key from the contract.
 - No `valid_until` check, so you can't be sure that the transaction won't be confirmed too late.
 
-The first issue was fixed in `V1R2` and `V1R3`. The `R` stands for **revision**. Usually, revisions are just small updates that only add get methods; you can find all of those in the changes history of `new-wallet.fif`. Hereinafter, we will consider only the latest revisions.
+The first issue was fixed in `V1R2` and `V1R3`. The `R` stands for **revision**. Usually, revisions are just small updates that only add get methods; you can find all of those in the changes history of [new-wallet.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-wallet.fif). Hereinafter, we will consider only the latest revisions.
 
 Nevertheless, because each subsequent version inherits the functionality of the previous one, we should still stick to it, as this will help us with later versions.
 
@@ -91,10 +90,10 @@ Nevertheless, because each subsequent version inherits the functionality of the 
 1. Data:
    - <b>signature</b>: 512-bit long ed25519 signature.
    - <b>msg-seqno</b>: 32-bit long sequence number.
-   - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
-2. Up to 4 references to cells containing messages.
+   - <b>(0-4) mode</b>: up to four 8-bit long integers defining sending mode for each message.
+2. Up to 4 references to cells containing messages:
 
-As you can see, the main functionality of the wallet is to provide a safe way to communicate with the TON blockchain from the outside world. The `seqno` mechanism protects against replay attacks, and the `Ed25519 signature` provides authorized access to wallet functionality. We will not dwell in detail on each of these mechanisms, as they are described in detail in the [external message](/v3/documentation/smart-contracts/message-management/external-messages) documentation page and are quite common among smart contracts receiving external messages. The payload data consists of up to 4 references to cells and the corresponding number of modes, which will be directly transferred to the [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
+As you can see, the main functionality of the wallet is to provide a safe way to communicate with TON Blockchain from the outside world. The `seqno` mechanism protects against replay attacks, and the `Ed25519 signature` provides authorized access to wallet functionality. We will not dwell in detail on each of these mechanisms, as they are described in detail in the [external message](/v3/documentation/smart-contracts/message-management/external-messages) documentation page and are quite common among smart contracts receiving external messages. The payload data consists of up to 4 references to cells and the corresponding number of modes, which will be directly transferred to the [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
 
 :::caution
 Note that the wallet doesn't provide any validation for internal messages you send through it. It is the programmer's (i.e., the external client’s) responsibility to serialize the data according to the [internal message layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
@@ -104,12 +103,12 @@ Note that the wallet doesn't provide any validation for internal messages you se
 
 | Exit code | Description                                    |
 | --------- | ---------------------------------------------- |
-| 0x21      | `seqno` check failed, reply protection accured |
+| 0x21      | `seqno` check failed, reply protection occured |
 | 0x22      | `Ed25519 signature` check failed               |
-| 0x0       | Standard successful execution exit code.       |
+| 0x0       | Standard successful execution exit code       |
 
 :::info
-Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standart exit codes](/v3/documentation/tvm/tvm-exit-codes) (`0x0` - is one of them), so you can get one of them too, if you run out of [gas](/v3/documentation/smart-contracts/transaction-fees/fees), for example, you will get `0xD` code.
+Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standard exit codes](/v3/documentation/tvm/tvm-exit-codes) (`0x0` - is one of them), so you can get one of them too, if you run out of [gas](/v3/documentation/smart-contracts/transaction-fees/fees), for example, you will get `0xD` code.
 :::
 
 #### Get methods
@@ -124,7 +123,7 @@ Wallet source code:
 
 - [ton/crypto/smartcont/wallet-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-code.fc)
 
-This version introduces the `valid_until` parameter, which is used to set a time limit for a transaction in case you don't want it to be confirmed too late. This version also does not have the get-method for the public key, which was added in `V2R2`.
+This version introduces the `valid_until` parameter, which is used to set a time limit for a transaction in case you don't want it to be confirmed too late. This version also does not have a get-method for the public key, which was added in `V2R2`.
 
 All differences compared to the previous version are a consequence of adding the `valid_until` functionality. A new exit code was added: `0x23`, marking the failure of the valid_until check. Additionally, a new UNIX-time field has been added to the external message body layout, setting the time limit for the transaction. All get methods remain the same.
 
@@ -177,7 +176,7 @@ Essentially, `subwallet_id` is just a number added to the contract state when it
    - <b>subwallet-id</b>: 32-bit subwallet ID.
    - <b>msg-seqno</b>: 32-bit sequence number.
    - <b>valid-until</b>: 32-bit UNIX time integer.
-   - <b>(0-4)mode</b>: Up to four 8-bit integers defining the sending mode for each message.
+   - <b>(0-4) mode</b>: Up to four 8-bit integers defining the sending mode for each message.
 2. Up to 4 references to cells containing messages.
 
 #### Exit codes
@@ -223,7 +222,7 @@ Plugins are essentially other smart contracts on TON that developers are free to
 
 All previous versions of wallets had a straightforward implementation for receiving internal messages. They simply accepted incoming funds from any sender, ignoring the internal message body if present, or in other words, they had an empty recv_internal method. However, as mentioned earlier, the fourth version of the wallet introduces two additional available operations. Let's take a look at the internal message body layout:
 
-- <b>op-code?</b>: 32-bit long operation code. This is an optional field; any message containing less than 32 bits in the message body, an incorrect op-code, or a sender address that isn't registered as a plugin will be considered as simple transfer, similar to previous wallet versions.
+- <b>op-code?</b>: 32-bit long operation code. This is an optional field. Any message containing less than 32 bits in the message body, an incorrect opcode, or a sender address that isn't registered as a plugin will be considered a simple transfer, similar to previous wallet versions.
 - <b>query-id</b>: 64-bit long integer. This field has no effect on the smart contract's behavior; it is used to track chains of messages between contracts.
 
 1. op-code = 0x706c7567, request funds operation code.
@@ -260,7 +259,7 @@ If `state_init` doesn't make much sense from its name, take a look at the follow
 - [addresses-in-ton-blockchain](/v3/documentation/smart-contracts/addresses#workchain-id-and-account-id)
 - [send-a-deploy-message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-deploy-message-with-stateinit-only-with-stateinit-and-body)
 - [internal-message-layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout)
-  :::
+:::
 
 #### Exit codes
 
@@ -329,7 +328,7 @@ contract_state$_
 
 As you can see, the `ContractState`, compared to previous versions, hasn't undergone major changes. The main difference is the new `is_signature_allowed` 1-bit flag, which restricts or allows access through the signature and stored public key. We will describe the importance of this change in later topics.
 
-#### Authentification process
+#### Authentication process
 
 ```
 signed_request$_             // 32 (opcode from outer)

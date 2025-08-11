@@ -2,23 +2,23 @@ import Feedback from '@site/src/components/Feedback';
 
 # TON Connect for React
 
-The recommended SDK for React Apps is a [UI React SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-react). It is a React component that provides a high-level way to interact with TON Connect.
+The recommended SDK for React apps is the [UI React SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-react). It provides a high-level React component to interact with TON Connect.
 
 ## Implementation
 
 ### Installation
 
-To start integrating TON Connect into your dApp, you need to install the `@tonconnect/ui-react` package:
+To start integrating TON Connect into your DApp, you need to install the `@tonconnect/ui-react` package:
 
 ```bash npm2yarn
 npm i @tonconnect/ui-react
 ```
 
-### TON Connect initiation
+### Set up TON Connect
 
 After installing the package, you should create a `manifest.json` file for your application. More information on creating a manifest.json file can be found [here](/v3/guidelines/ton-connect/creating-manifest).
 
-After creating the manifest file, import TonConnectUIProvider to the root of your Mini App and pass the manifest URL:
+After creating the manifest file, import `TonConnectUIProvider` into the root of your Mini App and pass the manifest URL:
 
 ```tsx
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
@@ -38,6 +38,8 @@ export function App() {
 Add the `TonConnectButton`.
 
 ```tsx
+import { TonConnectButton } from '@tonconnect/ui-react';
+
 export const Header = () => {
   return (
     <header>
@@ -48,7 +50,7 @@ export const Header = () => {
 };
 ```
 
-The `TonConnectButton` is a universal UI component for initializing a connection. After the wallet is connected, it transforms into a wallet menu. Prefer to place the **Connect** button in the top right corner of your app.
+The `TonConnectButton` is a universal UI component for initializing a connection. After the wallet is connected, it transforms into a wallet menu. Place the **Connect** button in the top right corner of your app.
 
 You can add the `className` and style props to the button:
 
@@ -56,11 +58,13 @@ You can add the `className` and style props to the button:
 <TonConnectButton className="my-button-class" style={{ float: "right" }}/>
 ```
 
-Note that you cannot pass a child to the `TonConnectButton`.
+Note that you cannot pass children to the `TonConnectButton`.
 
-You can always initiate the connection manually using the  `useTonConnectUI` hook and [openModal](https://github.com/ton-connect/sdk/tree/main/packages/ui#open-connect-modal) method.
+You can always initiate the connection manually using the `useTonConnectUI` hook and [openModal](https://github.com/ton-connect/sdk/tree/main/packages/ui#open-connect-modal) method.
 
 ```tsx
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
 export const Header = () => {
   const [tonConnectUI, setOptions] = useTonConnectUI();
   return (
@@ -106,7 +110,7 @@ If you want to redirect the user to a [Telegram Mini App](/v3/guidelines/dapps/t
 
 ### UI customization
 
-To [customize UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) of the modal, you can use the `useTonConnectUI` hook and the `setOptions` function. See more about the `useTonConnectUI` hook in the [Hooks](#hooks) section.
+To [customize the UI](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation) of the modal, you can use the `useTonConnectUI` hook and the `setOptions` function. See more about the `useTonConnectUI` hook in the [Hooks](#hooks) section.
 
 ## Hooks
 
@@ -173,7 +177,7 @@ export const Wallet = () => {
         <span>Connected wallet address: {wallet.account.address}</span>
         <span>Device: {wallet.device.appName}</span>
         <span>Connected via: {wallet.provider}</span>
-        {wallet.connectItems?.tonProof?.proof && <span>Ton proof: {wallet.connectItems.tonProof.proof}</span>}
+        {wallet.connectItems?.tonProof?.proof && <span>TON proof: {wallet.connectItems.tonProof.proof}</span>}
 
         <div>Connected wallet info:</div>
         <div>
@@ -241,7 +245,7 @@ Let's look at how to use the React UI SDK in practice.
 
 ### Sending transactions
 
-Send Toncoins to a specific address:
+Send Toncoin to a specific address:
 
 ```js
 import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -435,7 +439,7 @@ Wrappers are classes that simplify interaction with the contract, allowing you t
 - When using the [Tact language](https://docs.tact-lang.org), wrappers are automatically generated for you.
 
 :::tip
-Check out the [Blueprint](https://github.com/ton-org/blueprint) documentation how to develop and deploy contracts
+Check out the [Blueprint](https://github.com/ton-org/blueprint) documentation on how to develop and deploy contracts.
 :::
 
 Let's take a look at the default `Blueprint` counter wrapper example and how we can use it:
@@ -683,8 +687,8 @@ This SDK provides wrappers that simplify interaction with these assets. Please c
 
 ## Examples
 
-- Step-by-step [TON Hello World guide](https://helloworld.tonstudio.io/03-client/) to create a simple dApp with React UI.
-- [Demo dApp](https://github.com/ton-connect/demo-dapp-with-react-ui) - Example of a dApp with `@tonconnect/ui-react`.
+- Step-by-step [TON Hello World guide](https://helloworld.tonstudio.io/03-client/) to create a simple DApp with React UI.
+- [Demo DApp](https://github.com/ton-connect/demo-dapp-with-react-ui) - Example of a DApp with `@tonconnect/ui-react`.
 - [ton.vote](https://github.com/orbs-network/ton-vote) - Example of React website with TON Connect implementation.
 
 ## See also

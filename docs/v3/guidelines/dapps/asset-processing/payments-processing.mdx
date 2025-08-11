@@ -54,13 +54,13 @@ Most SDKs automatically verify a wallet address during creation or transaction p
 <Tabs groupId="address-examples">
   <TabItem value="Tonweb" label="JS (Tonweb)">
     ```js
-      const TonWeb = require("tonweb")
-      TonWeb.utils.Address.isValid('...')
+    const TonWeb = require("tonweb")
+    TonWeb.utils.Address.isValid('...')
     ```
   </TabItem>
 
   <TabItem value="GO" label="tonutils-go">
-    ```python
+    ```go
     package main
 
     import (
@@ -75,7 +75,7 @@ Most SDKs automatically verify a wallet address during creation or transaction p
   </TabItem>
 
   <TabItem value="Java" label="Ton4j">
-    ```javascript
+    ```java
     try {
       Address.of("...");
       } catch (e) {
@@ -85,12 +85,12 @@ Most SDKs automatically verify a wallet address during creation or transaction p
   </TabItem>
 
   <TabItem value="Kotlin" label="ton-kotlin">
-    ```javascript
-      try {
-        AddrStd("...")
-      } catch(e: IllegalArgumentException) {
-          // not valid address
-      }
+    ```kotlin
+    try {
+      AddrStd("...")
+    } catch(e: IllegalArgumentException) {
+        // not valid address
+    }
     ```
   </TabItem>
 </Tabs>

@@ -21,7 +21,7 @@ While exit codes are 32-bit signed integers in the TON, attempting to throw an e
 The following table lists exit codes with an origin (where it can occur) and a short description. The table doesn't list the exit codes from contracts. To see such exit codes, refer to the source code of the specific contract.
 
 | Exit code | Origin                                 | Brief description                                                                                      |
-| :-------- | :------------------------------------- | :----------------------------------------------------------------------------------------------------- |
+| :-------- | :------------------------------------- |:-------------------------------------------------------------------------------------------------------|
 | 0         | [Compute][c] and [action][a] phases    | Standard successful execution exit code.                                                               |
 | 1         | [Compute phase][c]                     | Alternative successful execution exit code. Reserved, but doesn't occur.                               |
 | 2         | [Compute phase][c]                     | Stack underflow.                                                                                       |
@@ -36,7 +36,7 @@ The following table lists exit codes with an origin (where it can occur) and a s
 | 11        | [Compute phase][c]                     | As described in [TVM][tvm] documentation: "Unknown error, may be thrown by user programs"              |
 | 12        | [Compute phase][c]                     | Fatal error thrown by [TVM][tvm] in unexpected situations                                              |
 | 13        | [Compute phase][c]                     | Out of gas error.                                                                                      |
-| -14       | [Compute phase][c]                     | Equivalent to code 13. A negative value prevents [imitation](#13)                                      |
+| -14       | [Compute phase][c]                     | Equivalent to code 13. A negative value prevents [emulation](#13)                                      |
 | 14        | [Compute phase][c]                     | VM virtualization error (reserved but unused)                                                          |
 | 32        | [Action phase][a]                      | Action list is invalid.                                                                                |
 | 33        | [Action phase][a]                      | Action list is too long.                                                                               |
