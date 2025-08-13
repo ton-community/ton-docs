@@ -3,7 +3,7 @@ export const firstRow = [
     title: "What is TON?",
     linkUrl: "/v3/concepts/dive-into-ton/introduction",
     imageUrl: "img/mainPageCards/what_is_ton.svg",
-    description: "Learn about the basics of blockchain and TON and how to get started."
+    description: "Learn TON fundamentals and get started."
   },
   {
     title: "Documents",
@@ -15,7 +15,7 @@ export const firstRow = [
     title: "Guidelines",
     linkUrl: "/v3/guidelines/quick-start/getting-started",
     imageUrl: "img/mainPageCards/participate.svg",
-    description: "Build smart contracts, web applications or bots using TON."
+    description: "Build smart contracts, web applications, or bots using TON."
   },
   // {
   //   title: "Participate",

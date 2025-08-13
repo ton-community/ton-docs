@@ -173,10 +173,10 @@ Essentially, `subwallet_id` is just a number added to the contract state when it
 
 1. Data:
    - <b>signature</b>: 512-bit ed25519 signature.
-   - <b>subwallet-id</b>: 32-bit subwallet ID.
+   - <b>subwallet_id</b>: 32-bit subwallet ID.
    - <b>msg-seqno</b>: 32-bit sequence number.
    - <b>valid-until</b>: 32-bit UNIX time integer.
-   - <b>(0-4) mode</b>: Up to four 8-bit integers defining the sending mode for each message.
+   - <b>(0-4) mode</b>: up to four 8-bit integers defining the sending mode for each message.
 2. Up to 4 references to cells containing messages.
 
 #### Exit codes
@@ -186,7 +186,7 @@ Essentially, `subwallet_id` is just a number added to the contract state when it
 | 0x23      | `valid_until` check failed; transaction confirmation attempted too late |
 | 0x23      | `Ed25519 signature` check failed                                        |
 | 0x21      | `seqno` check failed; reply protection triggered                        |
-| 0x22      | `subwallet-id` does not match the stored one                            |
+| 0x22      | `subwallet_id` does not match the stored one                            |
 | 0x0       | Standard successful execution exit code.                                |
 
 
@@ -214,44 +214,44 @@ Plugins are essentially other smart contracts on TON that developers are free to
 #### Persistent memory layout
 
 - <b>seqno</b>: 32-bit long sequence number.
-- <b>subwallet-id</b>: 32-bit long subwallet-id.
+- <b>subwallet_id</b>: 32-bit long subwallet_id.
 - <b>public-key</b>: 256-bit long public key.
 - <b>plugins</b>: dictionary containing plugins(may be empty)
 
 #### Receiving internal messages
 
-All previous versions of wallets had a straightforward implementation for receiving internal messages. They simply accepted incoming funds from any sender, ignoring the internal message body if present, or in other words, they had an empty recv_internal method. However, as mentioned earlier, the fourth version of the wallet introduces two additional available operations. Let's take a look at the internal message body layout:
+All previous versions of wallets had a straightforward implementation for receiving internal messages. They simply accepted incoming funds from any sender, ignoring the internal message body if present, or in other words, they had an empty `recv_internal` method. However, as mentioned earlier, the fourth version of the wallet introduces two additional available operations. Let's take a look at the internal message body layout:
 
 - <b>op-code?</b>: 32-bit long operation code. This is an optional field. Any message containing less than 32 bits in the message body, an incorrect opcode, or a sender address that isn't registered as a plugin will be considered a simple transfer, similar to previous wallet versions.
 - <b>query-id</b>: 64-bit long integer. This field has no effect on the smart contract's behavior; it is used to track chains of messages between contracts.
 
 1. op-code = 0x706c7567, request funds operation code.
    - <b>toncoins</b>: VARUINT16 amount of requested toncoins.
-   - <b>extra_currencies</b>: Dictionary containing the amount of requested extra currencies (may be empty).
+   - <b>extra_currencies</b>: dictionary containing the amount of requested extra currencies (may be empty).
 2. op-code = 0x64737472, request removal of plugin-sender from the "allowed list".
 
 #### External message body layout
 
 - <b>signature</b>: 512-bit long ed25519 signature.
-- <b>subwallet-id</b>: 32-bit long subwallet ID.
+- <b>subwallet_id</b>: 32-bit long subwallet ID.
 - <b>valid-until</b>: 32-bit long Unix-time integer.
 - <b>msg-seqno</b>: 32-bit long sequence integer.
 - <b>op-code</b>: 32-bit long operation code.
 
 1. op-code = 0x0, simple send.
    - <b>(0-4)mode</b>: up to four 8-bit long integer's defining sending mode for each message.
-   - <b>(0-4)messages</b>:Up to four references to cells containing messages.
+   - <b>(0-4)messages</b>: up to four references to cells containing messages.
 2. op-code = 0x1, deploy and install plugin.
    - <b>workchain</b>: 8-bit long integer.
    - <b>balance</b>: VARUINT16 toncoins amount of initial balance.
-   - <b>state-init</b>: Cell reference containing plugin initial state.
-   - <b>body</b>: Cell reference containing body.
+   - <b>state_init</b>: cell reference containing plugin initial state.
+   - <b>body</b>: cell reference containing body.
 3. op-code = 0x2/0x3, install plugin/remove plugin.
    - <b>wc_n_address</b>: 8-bit long workchain_id + 256-bit long plugin address.
    - <b>balance</b>: VARUINT16 toncoins amount of initial balance.
    - <b>query-id</b>: 64-bit long integer.
 
-As you can see, the fourth version still provides standard functionality through the `0x0` op-code, similar to previous versions. The `0x2` and `0x3` operations allow manipulation of the plugins dictionary. Note that in the case of `0x2`, you need to deploy the plugin with that address yourself. In contrast, the `0x1` op-code also handles the deployment process with the state_init field.
+As you can see, the fourth version still provides standard functionality through the `0x0` op-code, similar to previous versions. The `0x2` and `0x3` operations allow manipulation of the plugin dictionary. Note that in the case of `0x2`, you need to deploy the plugin with that address yourself. In contrast, the `0x1` op-code also handles the deployment process with the `state_init` field.
 
 :::tip
 If `state_init` doesn't make much sense from its name, take a look at the following references:
@@ -268,7 +268,7 @@ If `state_init` doesn't make much sense from its name, take a look at the follow
 | 0x24      | `valid_until` check failed, transaction confirmation attempted too late |
 | 0x23      | `Ed25519 signature` check failed                                        |
 | 0x21      | `seqno` check failed, reply protection triggered                        |
-| 0x22      | `subwallet-id` does not match the stored one                            |
+| 0x22      | `subwallet_id` does not match the stored one                            |
 | 0x27      | Plugins dictionary manipulation failed (0x1-0x3 recv_external op-codes) |
 | 0x50      | Not enough funds for the funds request                                  |
 | 0x0       | Standard successful execution exit code.                                |
@@ -431,10 +431,10 @@ Consequently, there will be services (such as [Tonkeeper's Battery](https://blog
 
 1. When sending USDt, the user signs one message containing two outgoing USDt transfers:
    1. USDt transfer to the recipient's address.
-   2. Transfer of a small amount of USDt in favor of the Service.
-2. This signed message is sent off-chain by HTTPS to the Service backend. The Service backend sends it to the TON blockchain, paying Toncoins for network fees.
+   2. Transfer of a small amount of USDt in favor of the service.
+2. This signed message is sent off-chain by HTTPS to the service backend. The service backend sends it to the TON blockchain, paying Toncoin for network fees.
 
-Beta version of the gasless backend API is available on [tonapi.io/api-v2](https://tonapi.io/api-v2). If you are developing any wallet app and have feedback about these methods please share it ton [@tonapitech](https://t.me/tonapitech) chat.
+The beta version of the gasless backend API is available at [tonapi.io/api-v2](https://tonapi.io/api-v2). If you are developing a wallet app and have feedback about these methods, please share it in [@tonapitech](https://t.me/tonapitech) chat.
 
 Wallet source code:
 

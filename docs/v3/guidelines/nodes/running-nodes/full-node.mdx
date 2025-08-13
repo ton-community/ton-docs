@@ -26,7 +26,7 @@ You shouldn't run any type of node on your personal local machine for extended p
 - 1TB NVMe SSD _OR_ Provisioned 64+k IOPS storage
 - 1 Gbit/s network connectivity
 - Public IP address (_fixed IP address_)
-- 64 TB/month traffic (100 TB/month at peak load)
+- 64 TB/month traffic (100 TB/month at a peak load)
 
 :::info Be ready for peak loads
 To reliably handle peak loads, a connection of at least 1 Gbit/s is typically required, while the average load is expected to be around 100 Mbit/s.
@@ -160,7 +160,7 @@ The following statuses should be displayed:
 
 - **mytoncore status**: should display in green.
 - **local validator status**: should also display in green.
-- **local validator out of sync**: initially, a `n/a` string is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20, the validator is synchronized.
+- **local validator out of sync**: initially, a `n/a` string is displayed. As soon as the newly created validator connects with other validators, the number will be around 250k. As synchronization progresses, this number decreases. When it falls below 20 seconds, the validator is synchronized.
 
 Example of the **status** command output:
 
