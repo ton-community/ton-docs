@@ -9,9 +9,15 @@ module.exports = [
     label: 'Smart contracts',
     items: [
       'v3/documentation/smart-contracts/overview',
-      'v3/documentation/smart-contracts/addresses',
-      'v3/documentation/smart-contracts/address-formats',
-      'v3/documentation/smart-contracts/address-states',
+      {
+        type: 'category',
+        label: 'Addresses',
+        items: [
+          'v3/documentation/smart-contracts/addresses/addresses',
+          'v3/documentation/smart-contracts/addresses/address-formats',
+          'v3/documentation/smart-contracts/addresses/address-states',
+        ],
+      },
       {
         type: 'category',
         label: 'Getting started',
