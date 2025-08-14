@@ -180,11 +180,11 @@ Create a file named `index.js` and include the following content:
   ```js
   import { LiteSingleEngine } from 'ton-lite-client/dist/engines/single.js'
   import { LiteRoundRobinEngine } from 'ton-lite-client/dist/engines/roundRobin.js'
-  import { Lite } from 'ton-lite-client/dist/.js'
+  import { Lite } from 'ton-lite-client/dist.js'
   import config from './config.json' assert {type: 'json'};
 
 
-  function intToIP(int ) {
+  function intToIP(int) {
       var part1 = int & 255;
       var part2 = ((int >> 8) & 255);
       var part3 = ((int >> 16) & 255);
@@ -203,14 +203,13 @@ Create a file named `index.js` and include the following content:
       }));
 
       const engine = new LiteRoundRobinEngine(engines);
-      const  = new Lite({ engine });
-      const master = await .getMasterchainInfo()
+      const client = new Lite({engine});
+      const master = await client.getMasterchainInfo()
       console.log('master', master)
 
   }
 
   main()
-
   ```
 
   </TabItem>

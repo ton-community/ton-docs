@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Transaction fees
 
-Every TON user should keep in mind that _commission depends on many factors_.
+Every TON user should keep in mind that _fees depend on many factors_.
 
 ## Gas
 
@@ -12,13 +12,13 @@ The price of gas units is determined by the [chain configuration](https://tonvie
 
 Current settings in basechain are as follows: 1 unit of gas costs 400 nanotons.
 
-```cpp
+```
 1 gas = 26214400 / 2^16 nanotons = 0.000 000 4 TON
 ```
 
 Current settings in masterchain are as follows: 1 unit of gas costs 10000 nanotons.
 
-```cpp
+```
 1 gas = 655360000 / 2^16 nanotons = 0.000 01 TON
 ```
 
@@ -152,7 +152,7 @@ Saving 1 MB of data for one year on TON will cost 6.01 TON. Note that you usuall
 
 ### Is it possible to send a gasless transaction?
 
-In TON, gasless transactions are possible using [wallet v5](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#preparing-for-gasless-transactions) a relayer that pays the gas fee for transaction.
+In TON, gasless transactions are possible using [wallet v5](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#preparing-for-gasless-transactions) with a relayer that pays the gas fee for transaction.
 
 ### How to calculate fees?
 

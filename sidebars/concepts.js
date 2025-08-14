@@ -27,7 +27,7 @@ module.exports = [
   },
   {
     type: 'category',
-    label: 'Ethereum to TON',
+    label: 'TON vs Ethereum',
     items: [
       'v3/concepts/dive-into-ton/go-from-ethereum/blockchain-services',
       'v3/concepts/dive-into-ton/go-from-ethereum/difference-of-blockchains',
