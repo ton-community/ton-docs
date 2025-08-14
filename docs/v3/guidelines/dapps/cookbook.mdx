@@ -10,11 +10,11 @@ import 'katex/dist/katex.min.css';
 
 During product development, various questions often arise regarding interactions with different contracts on TON. This document aims to gather the best practices from developers and share them with the community.
 
-## Working with contracts' addresses
+## Working with contract addresses
 
-### How to convert (user-friendly \<-> raw), assemble, and extract addresses from strings?
+### How to convert between user-friendly and raw addresses, assemble, and extract them from strings?
 
-TON addresses uniquely identify contracts on the blockchain, indicating their workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/address-formats) are: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
+TON addresses uniquely identify contracts on TON Blockchain, indicating their workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses) are: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
 
 ```
 User-friendly: EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
@@ -33,7 +33,7 @@ To obtain a TON address object from a string in your SDK, you can use the follow
     const address2 = Address.parse('0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e');
 
     // toStrings arguments: urlSafe, bounceable, testOnly
-    // defaults values: true, true, false
+    // default values: true, true, false
 
     console.log(address1.toString()); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
     console.log(address1.toRawString()); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
@@ -117,10 +117,10 @@ There are two flags in user-friendly addresses: **bounceable**/**non-bounceable*
 |        0...       |  110100.01  |     no     |      yes     |
 
 :::tip
-The testnet-only flag does not appear in the blockchain. The non-bounceable flag only affects message transfers: when used as a destination, it prevents the message from being bounced.
+The Testnet-only flag does not appear in the blockchain. The non-bounceable flag only affects message transfers: when used as a destination, it prevents the message from being bounced.
 :::
 
-Also, in some libraries, you may notice a serialization parameter called `urlSafe`. Тhe base64 format is not URL safe, which means that some characters (namely, `+` and `/`) can cause issues when transmitting an address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
+Also, in some libraries, you may notice a serialization parameter called `urlSafe`. The base64 format is not URL safe, which means that some characters (namely, `+` and `/`) can cause issues when transmitting an address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
 
 <Tabs groupId="code-examples">
   <TabItem value="js-ton" label="JS (@ton)">
@@ -132,7 +132,7 @@ Also, in some libraries, you may notice a serialization parameter called `urlSaf
     // toStrings arguments: urlSafe, bounceable, testOnly
     // defaults values: true, true, false
 
-    console.log(address.toString()); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHFэ
+    console.log(address.toString()); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
     console.log(address.toString({urlSafe: false})) // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff+W72r5gqPrHF
     console.log(address.toString({bounceable: false})) // UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA
     console.log(address.toString({testOnly: true})) // kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP
@@ -312,7 +312,7 @@ Most SDKs follow a similar process for sending messages from your wallet:
     let keyPair = await mnemonicToPrivateKey(mnemonics);
 
     // Create wallet contract
-    let workchain = 0; // Usually you need a workchain 0
+    let workchain = 0; // Usually you need a WorkChain 0
     let wallet = WalletContractV4.create({ workchain, publicKey: keyPair.publicKey });
     let contract = client.open(wallet);
 
@@ -347,7 +347,7 @@ Most SDKs follow a similar process for sending messages from your wallet:
     // Create wallet contract
     let wallet = WalletContractV5R1.create({
       publicKey: keyPair.publicKey,
-      workChain: 0, // Usually you need a workchain 0
+      workchain: 0, // Usually you need a WorkChain 0
     });
     let contract = client.open(wallet);
 
@@ -389,7 +389,7 @@ Most SDKs follow a similar process for sending messages from your wallet:
         wallet.transfer(pk, WalletTransfer {
             destination = AddrStd("EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N")
             bounceable = true
-            coins = Coins(100000000) // 1 ton in nanotons
+            coins = Coins(100000000) // 1 TON (in nanotons)
             messageData = org.ton.contract.wallet.MessageData.raw(
                 body = buildCell {
                     storeUInt(0, 32)
@@ -1271,7 +1271,7 @@ Changing the owner of a collection is simple. Specify the `opcode = 3`, any `que
 
 The content of an NFT collection contract is stored in a single cell, which includes two parts:
 
-- сollection metadata
+- collection metadata
 - NFT common content (base URL for metadata)
 
 The first cell contains the collection's metadata, while the second one contains the base URL for the NFT metadata.
