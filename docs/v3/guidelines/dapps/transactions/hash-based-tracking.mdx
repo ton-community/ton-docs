@@ -329,7 +329,7 @@ If the absence of normalization causes issues in an existing project, the correc
 One common scenario is sending a message and checking that the blockchain accepts and processes it.
 
 <details>
-  <summary>Here is the step-by-step process</summary>
+  <summary>Here is an example of how to send a message and verify that it was processed</summary>
 
   ```typescript title="send_and_verify_msg.ts"
 import { mnemonicToPrivateKey } from "@ton/crypto";
@@ -470,17 +470,19 @@ async function sendAndVerifyMessage() {
     workchain: 0,
     //walletId: { networkGlobalId: -3 }, // testnet
   });
+
   const wallet = client.open(walletContract);
 
-  // Log on-chain state before to be sure that the wallet is deployed
+  // Log on-chain state to be sure that the wallet has funds to send a message
   console.log(
-    "Wallet address (bounceable):   ",
+    "Wallet address (bounceable):    ",
     wallet.address.toString({ testOnly: false, bounceable: true })
   );
   console.log(
     "Wallet address (non-bounceable):",
     wallet.address.toString({ testOnly: false, bounceable: false })
   );
+
   const onchainState = await retry(
     () => client.getContractState(wallet.address),
     {
@@ -509,7 +511,10 @@ async function sendAndVerifyMessage() {
     progress: true,
     progressLabel: "getSeqno",
   });
-  const transfer = await wallet.createTransfer({
+
+  const timeoutSec = Math.floor(Date.now() / 1e3) + 300; // fixed timeout to keep hashes stable
+  
+  const transferArgs = {
     secretKey: keyPair.secretKey,
     seqno,
     messages: [
@@ -519,10 +524,13 @@ async function sendAndVerifyMessage() {
         body: messageBody,
       }),
     ],
+    timeout: timeoutSec,
     sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS,
-  });
+  };
 
-  // Build external-in message and compute hashes
+  const transfer = await wallet.createTransfer(transferArgs);
+
+  // Build external-in message
   const message: Message = {
     info: {
       type: "external-in",
@@ -533,16 +541,20 @@ async function sendAndVerifyMessage() {
     init: null,
     body: transfer,
   };
+
+  // Build a cell with the external-in message
   const externalMessageCell = beginCell()
     .store(storeMessage(message, { forceRef: true }))
     .endCell();
+
+  // Calculate hashes if you need to store them, prefer normalized hash
   const fullHash = externalMessageCell.hash();
   const normalizedHash = getNormalizedExtMessageHash(message);
   console.log("Full message hash:      ", fullHash.toString("hex"));
   console.log("Normalized message hash:", normalizedHash.toString("hex"));
 
-  // Send the external message using high-level helper with the prebuilt body (with retry)
-  await retry(() => client.sendExternalMessage(walletContract, transfer), {
+  // Send using wallet.sendTransfer so StateInit is attached automatically if needed
+  await retry(() => wallet.sendTransfer(transferArgs), {
     retries: 6,
     delay: 1500,
     progress: true,
@@ -559,7 +571,7 @@ async function sendAndVerifyMessage() {
     { retries: 60, delay: 1500, progress: true, progressLabel: "waitSeqno" }
   );
 
-  // Wait until the transaction with matching normalized incoming message appears (using retry)
+  // Wait until the transaction with matching normalized incoming message appears
   const tx = await retry(
     async () => {
       const found = await getTransactionByInMessage(
