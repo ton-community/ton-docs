@@ -1,0 +1,65 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Smart contract addresses
+
+Every interaction on TON Blockchain occurs between smart contracts, each identified by a unique address. This section explains how these addresses are structured and why they are fundamental to the TON architecture.
+
+## Everything is a smart contract
+
+TON implements the [actor model](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor), where all entities, including wallets, are smart contracts. Each actor:
+
+- processes incoming messages
+- updates its internal state
+- generates outgoing messages
+
+As a result, every actor must have a unique address to ensure the correct message routing.
+
+:::info For Ethereum developers
+Unlike the EVM, where addresses and contracts are separate, TON unifies them: every address points to a contract. Learn more in the article: ["Six unique aspects of TON Blockchain that will surprise Solidity developers"](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers) - _Tal Kol_.
+:::
+
+## Smart contract address
+
+Smart contract addresses on TON consist of two main components:
+
+- **workchain_id**: the WorkChain ID (signed 32-bit integer).
+- **account_id**: the address of the account (64-512 bits, depending on the WorkChain).
+
+### WorkChain ID
+
+TON Blockchain supports up to `2^32` unique WorkChains, each with its own rules. The 32-bit `workchain_id` prefix in smart contract addresses ensures interoperability, allowing contracts to send and receive messages across different WorkChains.
+
+Currently, two WorkChains are active:
+- **MasterChain** (`workchain_id = -1`): the central coordinating chain.
+- **BaseChain** (`workchain_id = 0`): the default WorkChain for most operations.
+
+Both use **256-bit addresses** for accounts.
+
+### Account ID
+
+All account IDs on TON use 256-bit addresses on the MasterChain and BaseChain (also referred to as the basic WorkChain).
+
+An account ID (**account_id**) is defined as the result of applying a hash function to a smart contract object. Every smart contract operating on TON Blockchain stores two main components:
+
+1. _Compiled code_. The contract logic in bytecode.
+2. _Initial data_. The contract's values at the moment it is deployed on-chain.
+
+The contract’s address is derived by calculating the hash of the **(initial code, initial data)** pair:
+
+**account_id = hash(initial code, initial data)**
+
+## Summary
+
+- **Every actor is a smart contract**, each with a unique address for message routing.
+- **Address structure**:  
+  - `workchain_id` (32-bit): identifies the WorkChain.
+  - `account_id` (256-bit): a hash of the contract’s initial code and state.
+- **Active WorkChains**: MasterChain and BaseChain, both using 256-bit IDs.
+- **Flexibility**: TON supports up to `2^32` WorkChains, allowing future chains to customize address lengths (64–512 bits).
+
+## Next steps
+For more technical details, refer to:
+- [Address formats](/v3/documentation/smart-contracts/addresses/address-formats): encoding rules and practical examples.
+- [Address states](/v3/documentation/smart-contracts/addresses/address-states): how addresses evolve (active, frozen, etc.).
+
+<Feedback />
