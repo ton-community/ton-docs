@@ -63,24 +63,21 @@ git clone https://github.com/Telegram-Mini-Apps-Dev/vanilla-js-boilerplate.git
 cd vanilla-js-boilerplate
 ```
 
-Open `index.html` in your preferred code editor or IDE.
-
 ### Usage
-1. Open index.html in your preferred code editor or IDE.
+1. Open `index.html` in your preferred code editor or IDE.
 2. Make any necessary modifications.
 3. Create your own GitHub repository, commit, and push your updates.
 4. In GitHub, navigate to Settings > Pages > Build and Deployment.
 5. If GitHub Actions is enabled, your assets will deploy automatically, and you'll receive a public URL like:`https://<username>.github.io/vanilla-js-boilerplate/`.
-6. Use this URL with [@BotFather](https://t.me/BotFather) to create your own Telegram Web App (TWA).
+6. Use this URL with [@BotFather](https://t.me/BotFather) to create your own Telegram Mini App (TMA).
 
 ## Modern TMA example
-
 
 ### Introduction
 
 Vite is a front-end build tool and development server designed to improve development speed and efficiency. This example shows how to use Vite to create a modern Telegram Mini App.
 
-You can find the example project here [https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate](https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate) or you follow the following instructions.
+You can find the example project here [https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate](https://github.com/Telegram-Mini-Apps-Dev/vite-boilerplate) or follow these instructions.
 
 ### Prerequisites
 
@@ -128,7 +125,7 @@ yarn
 yarn dev --host
 ```
 
-The `--host` option provides a URL with an IP address, which can be used for testing during development. In development mode, a self-signed SSL certificate is used. This allows testing with hot reload only in the web version of Telegram [https://web.telegram.org](https://web.telegram.org/a/#6549734463)/ due to platform restrictions on iOS, Android, and macOS.
+The `--host` option provides a URL with an IP address, which can be used for testing during development. In development mode, a self-signed SSL certificate is used. This allows testing with hot reload only in the web version of Telegram [https://web.telegram.org](https://web.telegram.org/a/#6549734463) due to platform restrictions on iOS, Android, and macOS.
 
 ```bash npm2yarn
 npm install @vitejs/plugin-basic-ssl
@@ -245,7 +242,7 @@ Telegram provides an SDK via a direct [link](https://core.telegram.org/bots/weba
 npm install @twa-dev/sdk
 ```
 
-Open `/src/main.tsx` file and add following:
+Open the `/src/main.tsx` file and add the following:
 
 ```tsx
 import WebApp from '@twa-dev/sdk'
@@ -307,10 +304,9 @@ To launch the Telegram Mini App within the messenger, you need to create a bot a
 
 <Button href="/v3/guidelines/dapps/tma/tutorials/step-by-step-guide#setting-up-a-bot-for-the-mini-app" colorType={'primary'} sizeType={'sm'}>
 
-Setup a bot
+Set up a bot
 
 </Button>
-
 
 ### Hints
 

@@ -2309,9 +2309,9 @@ In two words,
 Some details.
 
 For every function, the compiler calculates a **weight** (a heuristic, AST-based metric) and the usage count.
-* If `weight < THRESHOLD`, it's inlined always.
-* If `usages == 1`, it's inlined always.
-* Otherwise, there is some empirical formula.
+- If `weight < THRESHOLD`, it's inlined always.
+- If `usages == 1`, it's inlined always.
+- Otherwise, there is some empirical formula.
 
 No one prevents you from forcing `@inline` annotation for **big functions** also. For example, if you know that all usages correspond to hot paths. Sometimes, on the contrary, you'd want to _prevent inlining_ with `@inline_ref` for example, even if a function is called once — if it's an unlikely path. Anyway, if you are keen on optimization, consider covering your contract with gas benchmarks and experimenting with inlining, branch reordering, etc.
 

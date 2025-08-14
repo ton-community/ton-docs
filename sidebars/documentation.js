@@ -301,6 +301,7 @@ module.exports = [
           'v3/documentation/data-formats/tlb/exotic-cells',
           'v3/documentation/data-formats/tlb/library-cells',
           'v3/documentation/data-formats/tlb/proofs',
+          'v3/documentation/data-formats/tlb/basic-proofing-concepts',
           'v3/documentation/data-formats/tlb/tl-b-types',
           'v3/documentation/data-formats/tlb/canonical-cell-serialization',
           'v3/documentation/data-formats/tlb/msg-tlb',

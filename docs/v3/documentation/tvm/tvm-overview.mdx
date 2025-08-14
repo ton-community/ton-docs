@@ -51,7 +51,7 @@ Each transaction consists of up to five phases:
 1. **Storage phase**: calculates storage fees for the contract based on the space it occupies in the blockchain state. Learn more in [storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee).
 2. **Credit phase**: updates the contract's balance by accounting for incoming message values and storage fees.
 3. **Compute phase**: executes the contract code on TVM. The result includes `exit_code`, `actions`, `gas_details`, `new_storage`, and other data.
-4. **Action phase**: processes actions from the compute phase if it succeeds. Actions may include sending messages, updating contract code, or modifying libraries. If an action fails, for example, due to lack of funds, the transaction may revert or skip the action, depending on its mode (`send-or-revert` or `try-send-if-no-ignore`).
+4. **Action phase**: processes actions from the compute phase if it succeeds. Actions may include sending messages, updating contract code, or modifying libraries. Suppose an action fails, for example, due to a lack of funds. In that case, the transaction may revert or skip the action, depending on its [mode](/v3/documentation/smart-contracts/message-management/message-modes-cookbook). For example, `mode = 0, flag = 2` means that any errors arising while processing this message during the action phase are ignored.
 5. **Bounce phase**: if the compute phase fails (`exit_code >= 2`), this phase generates a bounce message for transactions initiated by an incoming message.
 
 ## Compute phase

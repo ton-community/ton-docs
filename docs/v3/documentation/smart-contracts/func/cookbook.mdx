@@ -103,7 +103,7 @@ slice_with_bits_only.slice_empty?();
 
 ;; Creating slice which contains refs only
 slice slice_with_refs_only = begin_cell()
-    .store_ref(null())
+    .store_maybe_ref
     .end_cell()
     .begin_parse();
 ;; `slice_empty?()` returns `false` because the slice has `refs`.
@@ -342,7 +342,7 @@ The contract state can be determined as empty by verifying whether the [cell is 
 - [`get_data()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#get_data)
 - [`begin_parse()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#begin_parse)
 - [`slice_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#slice_empty)
-- [`set_data?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#set_data)
+- [`set_data()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#set_data)
 
 ### How to build an internal message cell
 
@@ -859,7 +859,7 @@ int are_cells_equal? (cell a, cell b) {
         var v1 = t1~tpop();
         var v2 = t2~tpop();
         
-        if (is_null(t1) & is_null(t2)) {
+        if (is_null(v1) & is_null(v2)) {
             ;; nulls are always equal
         }
         elseif (is_int(v1) & is_int(v2)) {
@@ -1317,7 +1317,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 ```func
 () deploy_with_stateinit(cell message_header, cell state_init) impure {
   var msg = begin_cell()
-    .store_slice(begin_parse(msg_header))
+    .store_slice(begin_parse(message_header))
     .store_uint(2 + 1, 2) ;; init:(Maybe (Either StateInit ^StateInit))
     .store_uint(0, 1) ;; body:(Either X ^X)
     .store_ref(state_init)
@@ -1329,7 +1329,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
 () deploy_with_stateinit_body(cell message_header, cell state_init, cell body) impure {
   var msg = begin_cell()
-    .store_slice(begin_parse(msg_header))
+    .store_slice(begin_parse(message_header))
     .store_uint(2 + 1, 2) ;; init:(Maybe (Either StateInit ^StateInit))
     .store_uint(1, 1) ;; body:(Either X ^X)
     .store_ref(state_init)
@@ -1407,7 +1407,7 @@ After interacting with the contract, you may realize that the functionality for 
 
     if (op == op::decrease) {
         int decrease_by = in_msg_body~load_uint(32);
-        ctx_counter -= increase_by;
+        ctx_counter -= decrease_by;
         save_data();
         return ();
     }

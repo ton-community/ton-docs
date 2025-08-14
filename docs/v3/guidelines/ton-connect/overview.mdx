@@ -1,68 +1,69 @@
 import Feedback from '@site/src/components/Feedback';
-
+import ThemedImage from '@theme/ThemedImage';
 import Button from '@site/src/components/button'
 
 # About TON Connect
 
-TON Connect is a powerful open-source toolkit that serves as a universal **application (apps)** authorization standard within the [TON](/v3/concepts/dive-into-ton/introduction) ecosystem, enabling users to securely and conveniently log into applications and services using their TON wallets instead of traditional logins and passwords.
+**TON Connect** is an open-source protocol that enables users to access TON-based apps securely, seamlessly, and without passwords by connecting their wallets.
 
 <div style={{width: '100%', textAlign:'center', margin: '10pt auto'}}>
   <video style={{width: '100%',maxWidth: '600px', borderRadius: '10pt'}} muted={true} autoPlay={true} loop={true}>
     <source src="/files/TonConnect.mp4" type="video/mp4" />
-
-    Your browser does not support video tags.
+    Your browser does not support video tag.
   </video>
 </div>
 
-Feel free to use one of the following flows for integration of your apps:
 
-<Button href="/v3/guidelines/ton-connect/frameworks/react" colorType={'primary'} sizeType={'sm'}>
-  React Apps
-</Button>
+## How TON Connect works
 
-<Button href="/v3/guidelines/ton-connect/frameworks/web" colorType="secondary" sizeType={'sm'}>
-  HTML/JS Apps
-</Button>
+TON Connect enables communication between **wallets** and **DApps** (Decentralized Applications) within the TON ecosystem.
 
-<Button href="https://github.com/ton-community/tma-usdt-payments-demo" colorType="secondary" sizeType={'sm'}>
-  TMA USDT Payments Demo
-</Button>
+<br></br>
+<ThemedImage
+    alt=""
+    sources={{
+        light: '/img/docs/ton-connect/ton-connect_1.svg?raw=true',
+        dark: '/img/docs/ton-connect/ton-connect_1-dark.svg?raw=true',
+    }}
+/>
+<br></br>
 
-## Overview
+### Interaction model
 
-TON Connect enhances the TON ecosystem by allowing users to interact with various DApps using their wallets effortlessly. This protocol aims to provide a secure, user-friendly, and efficient connection method, fostering greater adoption of TON-based applications and services.
+* **Wallets** provide user interfaces for approving transactions and securely store cryptographic keys on users’ devices.
+* **DApps** built on TON offer rich functionality and secure user funds through the use of smart contracts.
 
-### Key features:
+This separation of responsibilities enables rapid innovation and enhances security: _wallets are not tied to closed ecosystems, and DApps do not hold users’ accounts_.
 
-- **Seamless Integration**. TON Connect is designed to integrate smoothly with TON wallets and DApps. It allows users to connect their wallets to DApps with a few clicks, offering a frictionless experience.
+* **TON Connect** bridges wallets and apps, providing users with a seamless and secure connection experience.
 
-- **Enhanced Security**. TON Connect employs secure communication methods to ensure that user data and transactions are always protected.
+## Why use TON Connect
 
-- **User-Friendly Experience**. With a focus on simplicity, TON Connect makes it easy for users to interact with DApps without needing extensive technical knowledge. The protocol's intuitive interface ensures a smooth user journey from connection to transaction completion.
+- **Seamless integration**: quickly connects TON wallets to DApps with minimal setup and no user friction.
+- **Robust security**: uses secure communication to protect user data and transactions.
+- **User-friendly experience**: no extra logins required—users interact with DApps directly through their wallets.
+- **Cross-platform compatibility**: supports web, mobile, and desktop environments.
+- **Developer-friendly tools**: provide APIs and tooling for secure, consistent integration.
+- **Open-source development**: maintained by the TonTech team and open to community contributions.
 
-- **Cross-Platform Compatibility**. TON Connect supports various platforms, including web, mobile, and desktop applications. This wide compatibility ensures that users can connect their wallets to DApps regardless of their preferred device.
+### For DApp developers
 
-- **Developer-Friendly Tools**. TON Connect provides developers with tools and APIs to integrate the protocol seamlessly into their DApps. These resources enable developers to offer a consistent and secure connection experience across different applications.
+TON Connect enables tighter integration and better user engagement:
 
-- **Open-Source Development**. TON Connect is led by the TonTech team and is an open-source project. Thus, this project is always open to great minds who want to participate and improve this.
+- **Traffic**: attract more users via wallets that support TON Connect.
+- **Built-in authentication**: use wallets as user identities—no registration flows needed.
+- **Payments**: process Toncoin and USD₮ payments securely through TON Blockchain.
+- **Retention**: let users save and revisit recently opened or favorite apps.
 
-## Use cases for your DApp
+### For wallet developers
 
-Explore these deliverables that the TON Ecosystem provides for superior DApp integration.
+Connect your wallet to TON Connect to enable secure and seamless interaction with TON DApps.
+See how to [integrate TON Connect into your wallet](/v3/guidelines/ton-connect/wallet).
 
-- **Traffic**. Drive additional user visits via crypto wallets that support TON Connect.
-- **Authenticity**. Leverage TON users' wallets as ready-made accounts, removing the need for additional authentication steps and thus boosting user experience.
-- **Payments**. Process transactions swiftly and securely through TON Blockchain using Toncoin or USD₮.
-- **Retention**. Enhance user retention through the in-app list-saving feature, which allows users to keep track of recently opened and favorite apps.
+## Projects using TON Connect
 
-## For wallet developers
-
-If you are a wallet developer, you can connect your wallet to TON Connect and enable your users to interact with TON apps securely and conveniently; read how to [integrate TON Connect into your wallet](/v3/guidelines/ton-connect/wallet/).
-
-## Success stories
-
-- [GetGems — The Open Network Marketplace](https://getgems.io/)
-- [STON.fi — AMM DEX for TON blockchain](https://ston.fi/)
+- [Getgems — The Open Network marketplace](https://getgems.io/)
+- [STON.fi — AMM DEX for TON Blockchain](https://ston.fi/)
 - [TON Society](https://society.ton.org/activities/active)
 
 <details>
@@ -86,10 +87,27 @@ If you are a wallet developer, you can connect your wallet to TON Connect and en
 
 ## Join TON Ecosystem
 
-To connect your service with the TON Ecosystem, you need to implement the following:
+To integrate your service with TON Ecosystem, complete the following steps:
 
-- **TON Connect**. Incorporate the TON Connect protocol within your application.
-- **Transactions**. Create specified transaction messages using TON libraries. Dive into the process of [sending messages](/v3/guidelines/ton-connect/guidelines/sending-messages) with our comprehensive guide.
-- **Payments**. Process payments via the public API ([tonapi](https://tonapi.io/)) or your own indexer, for instance, [gobycicle](http://github.com/gobicycle/bicycle). Learn more from our extensive guide on [asset processing](/v3/guidelines/DApps/asset-processing/payments-processing).
+* **Implement TON Connect**: integrate the TON Connect protocol into your application.
+* **Make a transfer**: use TON libraries to create and send messages. See [Sending messages](/v3/guidelines/ton-connect/cookbook/ton-transfer) for implementation details.
+* **Enable payments**: process payments using [TON API](https://tonapi.io/) or a custom indexer (e.g., [gobicycle](https://github.com/gobicycle/bicycle)). See the [Payments processing guide](/v3/guidelines/DApps/asset-processing/payments-processing) for more details.
+
+
+### Start with a template
+
+Select the integration path that matches your development environment to set up TON Connect in your DApp.
+
+<Button href="/v3/guidelines/ton-connect/frameworks/react" colorType={'primary'} sizeType={'sm'}>
+  React Apps
+</Button>
+
+<Button href="/v3/guidelines/ton-connect/frameworks/web" colorType="secondary" sizeType={'sm'}>
+  HTML/JS Apps
+</Button>
+
+<Button href="https://github.com/ton-community/tma-usdt-payments-demo" colorType="secondary" sizeType={'sm'}>
+  TMA USD₮ Payments Demo
+</Button>
 
 <Feedback />
