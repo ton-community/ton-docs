@@ -24,9 +24,9 @@ An address state determines how the network handles incoming messages:
    -   **Without `state_init` (bounce: true)**: The message is returned to the sender, minus&nbsp;fees.
    -   **Without `state_init` (bounce: false)**: The address balance is credited, but the contract remains `uninit`. The funds are held until deployment.
 
-**Deployment strategy**: The standard practice for deploying a wallet is to first send a non-bounceable message with Toncoin to its address. This transitions the address to the `uninit` state. The wallet owner can then deploy the contract in a subsequent transaction, using the pre-funded balance.
+**Deployment strategy**: the standard practice for deploying a wallet is to first send a non-bounceable message with Toncoin to its address. This transitions the address to the `uninit` state. The wallet owner can then deploy the contract in a subsequent transaction, using the pre-funded balance.
 
-**Protection against errors**: Standard wallets and applications manage these complexities by automatically setting the `bounce` flag based on the state of the destination address. Developers of custom applications must implement similar logic to prevent fund loss.
+**Protection against errors**: standard wallets and applications manage these complexities by automatically setting the `bounce` flag based on the state of the destination address. Developers of custom applications must implement similar logic to prevent fund loss.
 
 ## Summary
 

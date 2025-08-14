@@ -40,7 +40,7 @@ Due to these limitations, raw addresses should **not** be exposed to end-users.
 
 ## User-friendly address
 
-The user-friendly address format is a secure, Base64-encoded wrapper around the raw address. It adds metadata flags and a checksum to prevent common errors and provide greater control over message routing.
+The user-friendly address format is a secure, base64-encoded wrapper around the raw address. It adds metadata flags and a checksum to prevent common errors and provide greater control over message routing.
 
 ### Structure  
 
@@ -71,11 +71,11 @@ The first 6 bits of the address encode its type, as defined in [TEP-2](https://g
   - `true` (`0x80`): address is valid only on the testnet.<br/>
   Mainnet applications must reject such addresses.
 
-Learn more about [non-bounceable messages](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) and their use cases in TON.
+Learn more about [non-bounceable messages](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) and their use cases.
 
 ### Encoding
 
-The 36-byte structure is encoded into a 48-character string using either standard Base64 or URL-safe Base64. Both encodings are valid and must be supported by applications.
+The 36-byte structure is encoded into a 48-character string using either standard base64 or URL-safe base64. Both encodings are valid and must be supported by applications.
 
 **Examples:**
 
@@ -102,8 +102,8 @@ Tools for converting between raw and user-friendly formats are essential for dev
 -   **APIs**:
     -   [dton.io](https://dton.io/api/address/0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e)
     -   [toncenter.com](https://toncenter.com/api/v2/packAddress?address=0%3Aca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e)
--   **SDKs**: See `Address.spec.ts` in the [ton-core](https://github.com/ton-org/ton/tree/master/ton-core) library for conversion examples.<br/>
-It's also possible to make use of similar mechanisms using other [SDKs](/v3/guidelines/dapps/apis-sdks/sdk).
+-   **SDKs**: see `Address.spec.ts` in the [ton-core](https://github.com/ton-org/ton/tree/master/ton-core) library for the conversion examples.<br/>
+It's also possible to make use of similar mechanisms through other [SDKs](/v3/guidelines/dapps/apis-sdks/sdk).
 
 ## Armored base64 representations
 
@@ -126,7 +126,7 @@ The resulting 36-byte sequence is converted into a 48-character base64 or base64
 -   Always use appropriate tools for **address conversion**.
 
 ## Next steps
-For deeper technical details, refer to:
-- [Address states](/v3/documentation/smart-contracts/addresses/address-states): How addresses evolve (active, frozen, etc.).
+For more technical details, refer to:
+- [Address states](/v3/documentation/smart-contracts/addresses/address-states): how addresses evolve (active, frozen, etc.).
 
 <Feedback />

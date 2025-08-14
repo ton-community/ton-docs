@@ -6,7 +6,7 @@ Every interaction on TON Blockchain occurs between smart contracts, each identif
 
 ## Everything is a smart contract
 
-TON implements the [Actor model](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor), where all entities, including wallets, are smart contracts. Each actor:
+TON implements the [actor model](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#single-actor), where all entities, including wallets, are smart contracts. Each actor:
 
 - processes incoming messages
 - updates its internal state
@@ -44,7 +44,7 @@ An account ID (**account_id**) is defined as the result of applying a hash funct
 1. _Compiled code_. The contract logic in bytecode.
 2. _Initial data_. The contract's values at the moment it is deployed on-chain.
 
-The contract’s address is derived by calculating the hash of the **(Initial code, Initial data)** pair:
+The contract’s address is derived by calculating the hash of the **(initial code, initial data)** pair:
 
 **account_id = hash(initial code, initial data)**
 
@@ -58,7 +58,7 @@ The contract’s address is derived by calculating the hash of the **(Initial co
 - **Flexibility**: TON supports up to `2^32` WorkChains, allowing future chains to customize address lengths (64–512 bits).
 
 ## Next steps
-For deeper technical details, refer to:
+For more technical details, refer to:
 - [Address formats](/v3/documentation/smart-contracts/addresses/address-formats): encoding rules and practical examples.
 - [Address states](/v3/documentation/smart-contracts/addresses/address-states): how addresses evolve (active, frozen, etc.).
 
