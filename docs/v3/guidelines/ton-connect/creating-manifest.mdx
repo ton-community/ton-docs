@@ -10,7 +10,7 @@ To integrate with wallets through TON Connect, every app must include a manifest
 
 The manifest is a JSON file named `tonconnect-manifest.json`, and it must follow the format below:
 
-```json
+```jsonc
 {
     "url": "<app-url>",                        // required
     "name": "<app-name>",                      // required
@@ -66,7 +66,7 @@ The manifest is a JSON file named `tonconnect-manifest.json`, and it must follow
 For reference, see the [TON Connect specification](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#app-manifest).
 :::
 
-#### Example
+**Example**
 
 ```json
 {
@@ -82,7 +82,7 @@ For reference, see the [TON Connect specification](https://github.com/ton-blockc
 > For example: `https://myapp.com/tonconnect-manifest.json`. This helps wallets discover your app more reliably and enhances the overall user experience when users connect to it.
 
 2. The fields `url`, `iconUrl`, `termsOfUseUrl`, and `privacyPolicyUrl` must be publicly accessible from any origin without CORS restrictions.
-3. Ensure the `manifest.json` is accessible and can be retrieved through a `GET` request to its URL.
+3. Ensure the `tonconnect-manifest.json` is accessible and can be retrieved through a `GET` request to its URL.
 
 ## See also
 - [TON Connect GitHub - App manifest](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#app-manifest)
@@ -90,7 +90,7 @@ For reference, see the [TON Connect specification](https://github.com/ton-blockc
 ## Next steps
 Add the SDK to the project and explore the payload cookbook to start building with TON Connect.
 
-<Button href="/guidelines/install-ton-connect" colorType="primary" sizeType={'sm'}>
+<Button href="/v3/guidelines/ton-connect/frameworks/react" colorType="primary" sizeType={'sm'}>
   Install SDK
 </Button>
 
