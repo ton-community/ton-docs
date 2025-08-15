@@ -5,41 +5,41 @@ import Button from '@site/src/components/button'
 
 # Хранение данных и get-методы
 
-> **Резюме:** На предыдущих этапах мы узнали, как использовать `Blueprint` и его структуру проекта.
+> **Резюме:** Ранее мы узнали, как использовать `Blueprint` и как выглядит его структура проекта.
 
 :::tip
-Если вы застрянете на любом из примеров, вы можете найти исходный шаблон проекта со всеми изменениями, сделанными в этом руководстве, [здесь](https://github.com/ton-community/onboarding-sandbox/tree/main/quick-start/smart-contracts/Example/contracts).
+Если вы застрянете на любом из примеров, вы можете найти [здесь](https://github.com/ton-community/onboarding-sandbox/tree/main/quick-start/smart-contracts/Example/contracts) исходный шаблон проекта со всеми изменениями, сделанными в этом руководстве.
 :::
 
-Почти все смарт-контракты должны хранить свои `данные` между транзакциями. В этом руководстве объясняются стандартные способы управления `хранилищем` для смарт-контрактов и как использовать `get-методы` для доступа к нему извне блокчейна.
+Почти всем смарт-контрактам требуется хранить свои `данные` между транзакциями. В этом руководстве объясняются стандартные способы управления `хранилищем` для смарт-контрактов и использование `get-методов` для доступа к нему извне блокчейна.
 
 ## Операции хранения в смарт-контрактах
 
 <Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-Есть две основные инструкции, обеспечивающие доступ к хранилищу смарт-контракта:
+  <TabItem value="FunC" label="FunC">
+    Есть две основные инструкции, обеспечивающие доступ к хранилищу смарт-контракта:
 
-- `get_data()` возвращает текущую ячейку хранения.
-- `set_data()` записывает ячейку хранения.
+    - `get_data()` возвращает текущую ячейку хранения.
+    - `set_data()` записывает ячейку хранения.
+  </TabItem>
 
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-Есть две основные инструкции, обеспечивающие доступ к хранилищу смарт-контракта:
+  <TabItem value="Tolk" label="Tolk">
+    Есть две основные инструкции, обеспечивающие доступ к хранилищу смарт-контракта:
 
-- `getContractData()` возвращает текущую \`ячейку\`\`	 хранения.
-- `setContractData()` записывает `ячейку` хранения.
+    - `getContractData()` возвращает текущую \`ячейку\` хранения.
+    - `setContractData()` записывает `ячейку` хранения.
+  </TabItem>
+</Tabs>
 
-</TabItem></Tabs>
-
-Давайте изучим структуру [ячейки](/ru/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), чтобы понимать, как управлять хранилищем контракта:
+Давайте изучим структуру [ячейки](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), чтобы понимать, как управлять хранилищем контракта:
 
 ## Структура ячейки
 
-Блокчейн TON использует структуру данных **Ячейка** в качестве фундаментальной единицы для хранения данных. Ячейки являются «строительными блоками» данных смарт-контрактов и обладают следующими характеристиками:
+Блокчейн TON использует структуру данных под названием **«Ячейка»** в качестве фундаментальной единицы хранения данных. Ячейки являются «строительными блоками» данных смарт-контрактов и обладают следующими характеристиками:
 
 - Ячейка может хранить до 1023 бит (примерно 128 байт) данных.
 - Ячейка может содержать ссылки на дочерние ячейки количеством до 4 штук.
-- После своего создания Ячейка неизменяема.
+- После своего создания ячейка становится неизменяемой.
 
 Вы можете рассматривать Ячейку как следующую структуру:
 
@@ -53,69 +53,70 @@ interface Cell {
 
 ## Реализация
 
-Давайте изменим наш смарт-контракт в соответствии со стандартными шагами, описанными в разделе [Обзор Blueprint](/ru/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/blueprint-sdk-overview/).
+Давайте изменим наш смарт-контракт в соответствии со стандартными шагами, описанными в разделе [Обзор Blueprint](/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/blueprint-sdk-overview/).
 
 ### Шаг 1: редактирование кода смарт-контракта
 
-Если ручная сериализация и десериализация ячейки хранения становятся неудобны, стандартная практика заключается в создании двух методов-«обёрток», которые обрабатывают эту логику. Если вы не меняли код смарт-контракта, он должен включать следующие строки в `/contracts/hello_world.fc`:
+Если ручная сериализация и десериализация ячейки хранения становятся неудобны, стандартная практика заключается в создании двух методов-«обёрток», которые обрабатывают эту логику. Если вы не меняли код смарт-контракта, то в файле `/contracts/hello_world.fc` должны быть следующие строки:
 
 <Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func title="/contracts/hello_world.fc"
-global int ctx_id;
-global int ctx_counter;
+  <TabItem value="FunC" label="FunC">
+    ```func title="/contracts/hello_world.fc"
+    global int ctx_id;
+    global int ctx_counter;
 
-;; load_data присваивает значения переменным хранения, используя хранимые данные
-() load_data() impure {
-    var ds = get_data().begin_parse();
-    ctx_id = ds~load_uint(32);
-    ctx_counter = ds~load_uint(32);
-    ds.end_parse();
-}
+    ;; load_data populates storage variables using stored data
+    () load_data() impure {
+        var ds = get_data().begin_parse();
 
-;; save_data сохраняет значения переменных хранения в постоянное хранилище в формате ячейки 
-() save_data() impure {
-    set_data(
-        begin_cell()
-            . tore_uint(ctx_id, 32)
-            . tore_uint(ctx_counter, 32)
-            .end_cell()
-    );
-}
+        ctx_id = ds~load_uint(32);
+        ctx_counter = ds~load_uint(32);
 
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk title="/contracts/hello_world.tolk"
-global ctxID: int;
-global ctxCounter: int;
+        ds.end_parse();
+    }
 
-// loadData populates storage variables from persistent storage
-fun loadData() {
-    var ds = getContractData().beginParse();
+    ;; save_data stores storage variables as a cell into persistent storage
+    () save_data() impure {
+        set_data(
+            begin_cell()
+                .store_uint(ctx_id, 32)
+                .store_uint(ctx_counter, 32)
+                .end_cell()
+        );
+    }
+    ```
+  </TabItem>
 
-    ctxID = ds.loadUint(32);
-    ctxCounter = ds.loadUint(32);
+  <TabItem value="Tolk" label="Tolk">
+    ```tolk title="/contracts/hello_world.tolk"
+    global ctxID: int;
+    global ctxCounter: int;
 
-    ds.assertEndOfSlice();
-}
+    // loadData populates storage variables from persistent storage
+    fun loadData() {
+        var ds = getContractData().beginParse();
 
-// saveData stores storage variables as a cell into persistent storage
-fun saveData() {
-    setContractData(
-        beginCell()
-        .storeUint(ctxID, 32)
-        .storeUint(ctxCounter, 32)
-        .endCell());
-}
-```
+        ctxID = ds.loadUint(32);
+        ctxCounter = ds.loadUint(32);
 
-</TabItem>
+        ds.assertEndOfSlice();
+    }
+
+    // saveData stores storage variables as a cell into persistent storage
+    fun saveData() {
+        setContractData(
+            beginCell()
+            .storeUint(ctxID, 32)
+            .storeUint(ctxCounter, 32)
+            .endCell());
+    }
+    ```
+  </TabItem>
 </Tabs>
 
 #### Управление хранилищем
 
-Давайте немного изменим наш пример, использовав другой распространённый подход к управлению хранением данных при разработке смарт-контрактов:
+Давайте немного изменим пример, применив другой популярный подход к управлению хранением данных при разработке смарт-контрактов:
 
 Вместо инициализации глобальных переменных мы:
 
@@ -123,65 +124,66 @@ fun saveData() {
 2. Будем получать их с помощью `(members...) = get_data()`.
 3. Переместим глобальные переменные `ctx_id` и `ctx_counter` в тело метода.
 
-Также давайте добавим еще **256-битное целое число** в наше хранилище как глобальную переменную `ctx_counter_ext`. Изменённая реализация должна выглядеть следующим образом:
+Также давайте добавим в наше хранилище ещё и **256-битное целое число** как глобальную переменную `ctx_counter_ext`. Изменённая реализация должна выглядеть следующим образом:
 
 <Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func title="/contracts/hello_world.fc"
-(int, int, int) load_data() {
-    var ds = get_data().begin_parse();
-    int ctx_id = ds~load_uint(32);
-    int ctx_counter = ds~load_uint(32);
-    int ctx_counter_ext = ds~load_uint(256);
+  <TabItem value="FunC" label="FunC">
+    ```func title="/contracts/hello_world.fc"
+    (int, int, int) load_data() {
+        var ds = get_data().begin_parse();
 
-    ds.end_parse();
+        int ctx_id = ds~load_uint(32);
+        int ctx_counter = ds~load_uint(32);
+        int ctx_counter_ext = ds~load_uint(256);
 
-    return (ctx_id, ctx_counter, ctx_counter_ext);
-}
+        ds.end_parse();
 
-() save_data(int ctx_id, int ctx_counter, int ctx_counter_ext) impure {
-    set_data(
-        begin_cell()
-            . tore_uint(ctx_id, 32)
-            . tore_uint(ctx_counter, 32)
-            . tore_uint(ctx_counter_ext, 256)
-        .end_cell()
-    );
-}
+        return (ctx_id, ctx_counter, ctx_counter_ext);
+    }
 
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk title="/contracts/hello_world.tolk"
-// load_data retrieves variables from TVM storage cell
-// impure because of writting into global variables
-fun loadData(): (int, int, int) {
-    var ds = getContractData().beginParse();
+    () save_data(int ctx_id, int ctx_counter, int ctx_counter_ext) impure {
+        set_data(
+            begin_cell()
+                .store_uint(ctx_id, 32)
+                .store_uint(ctx_counter, 32)
+                .store_uint(ctx_counter_ext, 256)
+            .end_cell()
+        );
+    }
+    ```
+  </TabItem>
 
-    // id is required to be able to create different instances of counters
-    // since addresses in TON depend on the initial state of the contract
-    var ctxID = ds.loadUint(32);
-    var ctxCounter = ds.loadUint(32);
-    var ctxCounterExt = ds.loadUint(256);
+  <TabItem value="Tolk" label="Tolk">
+    ```tolk title="/contracts/hello_world.tolk"
+    // load_data retrieves variables from TVM storage cell
+    // impure because of writting into global variables
+    fun loadData(): (int, int, int) {
+        var ds = getContractData().beginParse();
 
-    ds.assertEndOfSlice();
+        // id is required to be able to create different instances of counters
+        // since addresses in TON depend on the initial state of the contract
+        var ctxID = ds.loadUint(32);
+        var ctxCounter = ds.loadUint(32);
+        var ctxCounterExt = ds.loadUint(256);
 
-    return (ctxID, ctxCounter, ctxCounterExt);
-}
+        ds.assertEndOfSlice();
 
-// saveData stores storage variables as a cell into persistent storage
-fun saveData(ctxID: int, ctxCounter: int, ctxCounterExt: int) {
-    setContractData(
-        beginCell()
-        .storeUint(ctxID, 32)
-        .storeUint(ctxCounter, 32)
-        .storeUint(ctxCounterExt, 256)
-        .endCell()
-    );
-}
-````
+        return (ctxID, ctxCounter, ctxCounterExt);
+    }
 
-</TabItem></Tabs>
+    // saveData stores storage variables as a cell into persistent storage
+    fun saveData(ctxID: int, ctxCounter: int, ctxCounterExt: int) {
+        setContractData(
+            beginCell()
+            .storeUint(ctxID, 32)
+            .storeUint(ctxCounter, 32)
+            .storeUint(ctxCounterExt, 256)
+            .endCell()
+        );
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 Не забудьте:
 
@@ -189,52 +191,53 @@ fun saveData(ctxID: int, ctxCounter: int, ctxCounterExt: int) {
 2. Обновить использование функции, скопировав членов хранилища локально, как показано здесь:
 
 <Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func title="/contracts/hello_world.fc"
-;; load_data() on:
-var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
+  <TabItem value="FunC" label="FunC">
+    ```func title="/contracts/hello_world.fc"
+    ;; load_data() on:
+    var (ctx_id, ctx_counter, ctx_counter_ext) = load_data();
 
-;; save_data() on:
-save_data(ctx_id, ctx_counter, ctx_counter_ext);
+    ;; save_data() on:
+    save_data(ctx_id, ctx_counter, ctx_counter_ext);
+    ```
+  </TabItem>
 
-````
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk title="/contracts/hello_world.tolk"
-// loadData() on:
-var (ctxID, ctxCounter, ctxCounterExt) = loadData();
+  <TabItem value="Tolk" label="Tolk">
+    ```tolk title="/contracts/hello_world.tolk"
+    // loadData() on:
+    var (ctxID, ctxCounter, ctxCounterExt) = loadData();
 
-// saveData() on:
-saveData(ctxID, ctxCounter, ctxCounterExt);
-````
-
-</TabItem></Tabs>
+    // saveData() on:
+    saveData(ctxID, ctxCounter, ctxCounterExt);
+    ```
+  </TabItem>
+</Tabs>
 
 #### Get-методы
 
-Главная цель `get-методов` — предоставить внешний доступ для чтения данных хранилища с помощью удобного интерфейса. Главным образом для того, чтобы извлечь информацию, необходимую для подготовки **транзакций**.
+Главная цель `get-методов` — предоставить внешний доступ для чтения данных хранилища через удобный интерфейс. В первую очередь для извлечения информации, необходимой для подготовки **транзакций**.
 Давайте добавим getter-функцию, которая возвращает оба значения счётчиков, сохранённые в смарт-контракте.
 
 <Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func title="/contracts/hello_world. c"
-(int, int) get_counters() method_id {
-    var (_, ctx_counter, ctx_counter_ext) = load_data();
-    return (ctx_counter, ctx_counter_ext);
-}
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk title="/contracts/hello_world. olk"
-get get_counters(): (int, int) {
-    var (_, ctxCounter, ctxCounterExt) = loadData();
-    return (ctxCounter, ctxCounterExt);
-}
-```
-</TabItem>
+  <TabItem value="FunC" label="FunC">
+    ```func title="/contracts/hello_world.fc"
+    (int, int) get_counters() method_id {
+        var (_, ctx_counter, ctx_counter_ext) = load_data();
+        return (ctx_counter, ctx_counter_ext);
+    }
+    ```
+  </TabItem>
+
+  <TabItem value="Tolk" label="Tolk">
+    ```tolk title="/contracts/hello_world.tolk"
+    get get_counters(): (int, int) {
+        var (_, ctxCounter, ctxCounterExt) = loadData();
+        return (ctxCounter, ctxCounterExt);
+    }
+    ```
+  </TabItem>
 </Tabs>
 
-И не забудьте обновить переменные в get-методах, чтобы они совпадали с распаковкой из `load_data()`.
+И не забудьте обновить переменные в уже существующих get-методах, чтобы они совпадали с распаковкой из `load_data()`.
 
 <Tabs groupId="language">
   <TabItem value="FunC" label="FunC">
@@ -242,173 +245,175 @@ get get_counters(): (int, int) {
     int get_counter() method_id {
     var (_, ctx_counter, _) = load_data();
     return ctx_counter;
-  }
+    }
 
     int get_id() method_id {
     var (ctx_id, _, _) = load_data();
     return ctx_id;
-  }
+    }
     ```
   </TabItem>
+
   <TabItem value="Tolk" label="Tolk">
     ```tolk title="/contracts/hello_world.tolk"
     get currentCounter(): int {
     var (ctxID, ctxCounter, ctxCounterExt) = loadData();
     return ctxCounter;
-  }
+    }
 
     get initialId(): int {
     var (ctxID, ctxCounter, ctxCounterExt) = loadData();
     return ctxID;
-  }
+    }
     ```
   </TabItem>
 </Tabs>
 
-И это все! На практике все **get-методы** следуют этому прямолинейному паттерну и не требуют дополнительной сложности. Помните, что вы можете проигнорировать возвращаемые значения, используя синтаксис заглушки `_`.
+И это всё! На практике все **get-методы** следуют этому прямолинейному паттерну и не требуют дополнительной сложности. Помните, что вы можете проигнорировать возвращаемые значения, используя синтаксис заглушки `_`.
 
 Окончательная реализация смарт-контракта:
 
 <Tabs groupId="language">
-<TabItem value="FunC" label="FunC">
-```func title="/contracts/hello_world.fc"
-#include "imports/stdlib.fc";
+  <TabItem value="FunC" label="FunC">
+    ```func title="/contracts/hello_world.fc"
+    #include "imports/stdlib.fc";
 
-const op::increase = "op::increase"c; ;; создайте opcode из строки, используя префикс "c", в данном случае это приводит к opcode 0x7e8764ef
+    const op::increase = "op::increase"c; ;; create an opcode from string using the "c" prefix, this results in 0x7e8764ef opcode in this case
 
-(int, int, int) load_data() {
-    var ds = get_data().begin_parse();
+    (int, int, int) load_data() {
+        var ds = get_data().begin_parse();
 
-    int ctx_id = ds~load_uint(32);
-    int ctx_counter = ds~load_uint(32);
-    int ctx_counter_ext = ds~load_uint(256);
+        int ctx_id = ds~load_uint(32);
+        int ctx_counter = ds~load_uint(32);
+        int ctx_counter_ext = ds~load_uint(256);
 
-    ds.end_parse();
+        ds.end_parse();
 
-    return (ctx_id, ctx_counter, ctx_counter_ext);
-}
-
-() save_data(int ctx_id, int ctx_counter, int ctx_counter_ext) impure {
-    set_data(
-        begin_cell()
-            . tore_uint(ctx_id, 32)
-            . tore_uint(ctx_counter, 32)
-            . tore_uint(ctx_counter_ext, 256)
-        .end_cell()
-    );
-}
-
-() recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
-    if (in_msg_body.slice_empty?()) { ;; ignore all empty messages
-        return ();
+        return (ctx_id, ctx_counter, ctx_counter_ext);
     }
 
-    slice cs = in_msg_full.begin_parse();
-    int flags = cs~load_uint(4);
-    if (flags & 1) { ;; ignore all bounced messages
-        return ();
+    () save_data(int ctx_id, int ctx_counter, int ctx_counter_ext) impure {
+        set_data(
+            begin_cell()
+                .store_uint(ctx_id, 32)
+                .store_uint(ctx_counter, 32)
+                .store_uint(ctx_counter_ext, 256)
+            .end_cell()
+        );
     }
 
-    var (ctx_id, ctx_counter, ctx_counter_ext) = load_data(); ;; here we populate the storage variables
+    () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure {
+        if (in_msg_body.slice_empty?()) { ;; ignore all empty messages
+            return ();
+        }
 
-    int op = in_msg_body~load_uint(32); ;; by convention, the first 32 bits of incoming message is the op
-    int query_id = in_msg_body~load_uint(64); ;; also by convention, the next 64 bits contain the "query id", although this is not always the case
+        slice cs = in_msg_full.begin_parse();
+        int flags = cs~load_uint(4);
+        if (flags & 1) { ;; ignore all bounced messages
+            return ();
+        }
 
-    if (op == op::increase) {
-        int increase_by = in_msg_body~load_uint(32);
-        ctx_counter += increase_by;
-        save_data(ctx_id, ctx_counter, ctx_counter_ext);
-        return ();
+        var (ctx_id, ctx_counter, ctx_counter_ext) = load_data(); ;; here we populate the storage variables
+
+        int op = in_msg_body~load_uint(32); ;; by convention, the first 32 bits of incoming message is the op
+        int query_id = in_msg_body~load_uint(64); ;; also by convention, the next 64 bits contain the "query id", although this is not always the case
+
+        if (op == op::increase) {
+            int increase_by = in_msg_body~load_uint(32);
+            ctx_counter += increase_by;
+            save_data(ctx_id, ctx_counter, ctx_counter_ext);
+            return ();
+        }
+
+        throw(0xffff); ;; if the message contains an op that is not known to this contract, we throw
     }
 
-    throw(0xffff); ;; if the message contains an op that is not known to this contract, we throw
-}
-
-int get_counter() method_id {
-    var (_, ctx_counter, _) = load_data();
-    return ctx_counter;
-}
-
-int get_id() method_id {
-    var (ctx_id, _, _) = load_data();
-    return ctx_id;
-}
-
-(int, int) get_counters() method_id {
-    var (_, ctx_counter, ctx_counter_ext) = load_data();
-    return (ctx_counter, ctx_counter_ext);
-}
-```
-</TabItem>
-<TabItem value="Tolk" label="Tolk">
-```tolk title="/contracts/hello_world.tolk"
-const OP_INCREASE = 0x7e8764ef;  // arbitrary 32-bit number, equal to OP_INCREASE in wrappers/CounterContract.ts
-
-fun loadData(): (int, int, int) {
-    var ds = getContractData().beginParse();
-
-    var ctxID = ds.loadUint(32);
-    var ctxCounter = ds.loadUint(32);
-    var ctxCounterExt = ds.loadUint(256);
-
-    ds.assertEndOfSlice();
-
-    return (ctxID, ctxCounter, ctxCounterExt);
-}
-
-fun saveData(ctxID: int, ctxCounter: int, ctxCounterExt: int) {
-    setContractData(
-        beginCell()
-        .storeUint(ctxID, 32)
-        .storeUint(ctxCounter, 32)
-        .storeUint(ctxCounterExt, 256)
-        .endCell()
-    );
-}
-
-fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
-    if (msgBody.isEndOfSlice()) { // ignore all empty messages
-        return;
+    int get_counter() method_id {
+        var (_, ctx_counter, _) = load_data();
+        return ctx_counter;
     }
 
-    var cs: slice = msgFull.beginParse();
-    val flags = cs.loadMessageFlags();
-    if (isMessageBounced(flags)) { // ignore all bounced messages
-        return;
+    int get_id() method_id {
+        var (ctx_id, _, _) = load_data();
+        return ctx_id;
     }
 
-    var (ctxID, ctxCounter, ctxCounterExt) = loadData(); // here we populate the storage variables
+    (int, int) get_counters() method_id {
+        var (_, ctx_counter, ctx_counter_ext) = load_data();
+        return (ctx_counter, ctx_counter_ext);
+    }
+    ```
+  </TabItem>
 
-    val op = msgBody.loadMessageOp(); // by convention, the first 32 bits of incoming message is the op
-    val queryID = msgBody.loadMessageQueryId(); // also by convention, the next 64 bits contain the "query id", although this is not always the case
+  <TabItem value="Tolk" label="Tolk">
+    ```tolk title="/contracts/hello_world.tolk"
+    const OP_INCREASE = 0x7e8764ef;  // arbitrary 32-bit number, equal to OP_INCREASE in wrappers/CounterContract.ts
 
-    if (op == OP_INCREASE) {
-        val increaseBy = msgBody.loadUint(32);
-        ctxCounter += increaseBy;
-        saveData(ctxID, ctxCounter, ctxCounterExt);
-        return;
+    fun loadData(): (int, int, int) {
+        var ds = getContractData().beginParse();
+
+        var ctxID = ds.loadUint(32);
+        var ctxCounter = ds.loadUint(32);
+        var ctxCounterExt = ds.loadUint(256);
+
+        ds.assertEndOfSlice();
+
+        return (ctxID, ctxCounter, ctxCounterExt);
     }
 
-    throw 0xffff; // if the message contains an op that is not known to this contract, we throw
-}
+    fun saveData(ctxID: int, ctxCounter: int, ctxCounterExt: int) {
+        setContractData(
+            beginCell()
+            .storeUint(ctxID, 32)
+            .storeUint(ctxCounter, 32)
+            .storeUint(ctxCounterExt, 256)
+            .endCell()
+        );
+    }
 
-get currentCounter(): int {
-    var (ctxID, ctxCounter, ctxCounterExt) = loadData();
-    return ctxCounter;
-}
+    fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
+        if (msgBody.isEndOfSlice()) { // ignore all empty messages
+            return;
+        }
 
-get initialId(): int {
-    var (ctxID, ctxCounter, ctxCounterExt) = loadData();
-    return ctxID;
-}
+        var cs: slice = msgFull.beginParse();
+        val flags = cs.loadMessageFlags();
+        if (isMessageBounced(flags)) { // ignore all bounced messages
+            return;
+        }
 
-get get_counters(): (int, int) {
-    var (_, ctxCounter, ctxCounterExt) = loadData();
-    return (ctxCounter, ctxCounterExt);
-}
-````
+        var (ctxID, ctxCounter, ctxCounterExt) = loadData(); // here we populate the storage variables
 
-</TabItem></Tabs>
+        val op = msgBody.loadMessageOp(); // by convention, the first 32 bits of incoming message is the op
+        val queryID = msgBody.loadMessageQueryId(); // also by convention, the next 64 bits contain the "query id", although this is not always the case
+
+        if (op == OP_INCREASE) {
+            val increaseBy = msgBody.loadUint(32);
+            ctxCounter += increaseBy;
+            saveData(ctxID, ctxCounter, ctxCounterExt);
+            return;
+        }
+
+        throw 0xffff; // if the message contains an op that is not known to this contract, we throw
+    }
+
+    get currentCounter(): int {
+        var (ctxID, ctxCounter, ctxCounterExt) = loadData();
+        return ctxCounter;
+    }
+
+    get initialId(): int {
+        var (ctxID, ctxCounter, ctxCounterExt) = loadData();
+        return ctxID;
+    }
+
+    get get_counters(): (int, int) {
+        var (_, ctxCounter, ctxCounterExt) = loadData();
+        return (ctxCounter, ctxCounterExt);
+    }
+    ```
+  </TabItem>
+</Tabs>
 
 Прежде чем продолжить, проверьте ваши изменения, скомпилировав смарт-контракт:
 
@@ -432,9 +437,9 @@ Build script running, compiling HelloWorld
 ✅ Wrote compilation artifact to build/HelloWorld.compiled.json
 ```
 
-Это означает, что HelloWorld был успешно скомпилирован. Был создан хэш и скомпилированный код был сохранён в файле `build/HelloWorld.compiled.json`.
+Это означает, что HelloWorld был успешно скомпилирован. Был создан хеш, а скомпилированный код был сохранён в файле `build/HelloWorld.compiled.json`.
 
-### Шаг 2: обновить обёртку
+### Шаг 2: обновление обёртки
 
 Далее мы обновим наш класс-обёртку, чтобы он соответствовал новому подходу к хранилищу и `get-методу`. Нам необходимо:
 
@@ -462,7 +467,7 @@ export function helloWorldConfigToCell(config: HelloWorldConfig): Cell {
 }
 ```
 
-Затем реализуйте метод для вызова нового гет-метода `get_counters`, который получает значения обоих счётчиков в одном запросе:
+Затем реализуйте метод для вызова нового get-метода `get_counters`, который получает значения обоих счётчиков в одном запросе:
 
 ```typescript title="/HelloWorld.ts"
 async getCounters(provider: ContractProvider) : Promise<[number, bigint]> {
@@ -474,13 +479,13 @@ async getCounters(provider: ContractProvider) : Promise<[number, bigint]> {
 }
 ```
 
-### Шаг 3: обновить тесты
+### Шаг 3: обновление тестов
 
 Наконец, давайте протестируем новую функциональность, используя нашу обновлённую обёртку:
 
 1. Инициализируйте хранилище контракта, создав `helloWorldConfig` с тестовыми значениями.
-2. Выполнить каждый `get-метод` для извлечения сохранённых данных.
-3. Проверить, что значения соответствуют изначальной конфигурации.
+2. Исполните каждый `get-метод` для извлечения сохранённых данных.
+3. Проверьте, что значения соответствуют изначальной конфигурации.
 
 Пример реализации:
 
@@ -564,7 +569,7 @@ describe('HelloWorld', () => {
 });
 ```
 
-Теперь вы можете запустить новый тестовый скрипт с помощью этой команды:
+Теперь вы можете запустить обновлённый тестовый скрипт с помощью этой команды:
 
 ```bash
 npx blueprint test
@@ -587,14 +592,12 @@ Time:        3.591 s, estimated 6 s
 
 ## Следующий шаг
 
-Вы написали свой первый смарт-контракт с помощью FunC или Tolk, протестировали его и изучили, как работают хранение данных и get-методы.
+Вы написали свой первый смарт-контракт с помощью Tolk или FunC, протестировали его и изучили, как работают хранение данных и get-методы.
 
 Теперь пришло время перейти к одной из самых важных частей смарт-контрактов – **обработке сообщений:** их отправке и получению.
 
 <Button href="/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/processing-messages" colorType={'primary'} sizeType={'sm'}>
-
   Обработка сообщений
-
 </Button>
 
 <Feedback />
