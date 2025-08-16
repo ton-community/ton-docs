@@ -344,7 +344,8 @@
     "liteserver",
     "mytonctrl",
     "mytoncore",
-    "unexist"
+    "unexist",
+    "Groth16"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",
