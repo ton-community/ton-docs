@@ -7,8 +7,6 @@ This article describes how to find a transaction associated with an external-in 
 In TON, messages may contain fields such as `init`, `src`, and `importFee`. These fields should be removed or zeroed out before calculating the message hash, as described in [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467).
 
 ```ts
-import { beginCell, Cell, loadMessage, storeMessage, Message } from '@ton/ton';
-
 export function getNormalizedExtMessageHash(message: Message) {
     if (message.info.type !== 'external-in') {
         throw new Error(`Message must be "external-in", got ${message.info.type}`);
@@ -28,20 +26,6 @@ export function getNormalizedExtMessageHash(message: Message) {
         .endCell()
         .hash();
 }
-
-// Helper function to get normalized hash from BOC
-export function normalizedExtHashFromBoc(bocBase64: string): string {
-    const msg = loadMessage(Cell.fromBase64(bocBase64).beginParse());
-    return getNormalizedExtMessageHash(msg).toString('hex');
-}
-
-// Minimal usage example: compute normalized hash from provided BOC
-(() => {
-    const boc = 'te6ccgEBBAEAtwABRYgBvVXMoxQj+kmDtTinWnFdumvpTNo33p48YQKOWyTtUkAMAQGcMZ6id5dkoDZImQ4UC5SqZSN04h/xNpKaEsESJQivKW01aMcWW4qeUUjKm/iZ2nszwBj3uFVcsIr9xFomQvY3DCmpoxdkQjldAAAAcAADAgFkQgAoPvU+sDeRbPQrPGn3bxzd8JnUNGlQcfA/qoFluFxSiRE4gAAAAAAAAAAAAAAAAAEDABIAAAAAaGVsbG8=';
-    const extmsghash = Cell.fromBase64(boc).hash();
-    console.log('Full message hash:', extmsghash.toString('hex'));
-    console.log('Normalized hash:', normalizedExtHashFromBoc(boc));
-})();
 ```
 
 ## Retrying API calls
@@ -160,6 +144,26 @@ async function waitForTransaction(
 ```
 
 ## Examples
+
+### Hash normalization
+
+```ts
+import { beginCell, Cell, loadMessage, storeMessage, Message } from '@ton/ton';
+
+// Helper function to get normalized hash from BOC
+export function normalizedExtHashFromBoc(bocBase64: string): string {
+    const msg = loadMessage(Cell.fromBase64(bocBase64).beginParse());
+    return getNormalizedExtMessageHash(msg).toString('hex');
+}
+
+// Minimal usage example: compute normalized hash from provided BOC
+(() => {
+    const boc = 'te6ccgEBBAEAtwABRYgBvVXMoxQj+kmDtTinWnFdumvpTNo33p48YQKOWyTtUkAMAQGcMZ6id5dkoDZImQ4UC5SqZSN04h/xNpKaEsESJQivKW01aMcWW4qeUUjKm/iZ2nszwBj3uFVcsIr9xFomQvY3DCmpoxdkQjldAAAAcAADAgFkQgAoPvU+sDeRbPQrPGn3bxzd8JnUNGlQcfA/qoFluFxSiRE4gAAAAAAAAAAAAAAAAAEDABIAAAAAaGVsbG8=';
+    const extmsghash = Cell.fromBase64(boc).hash();
+    console.log('Full message hash:', extmsghash.toString('hex'));
+    console.log('Normalized hash:', normalizedExtHashFromBoc(boc));
+})();
+```
 
 ### Find a transaction by incoming message
 
