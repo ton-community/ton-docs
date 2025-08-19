@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: Tolk language overview
 ---
 
 import Feedback from "@site/src/components/Feedback";
@@ -7,16 +7,16 @@ import Button from "@site/src/components/button";
 
 # Tolk language overview
 
-**Tolk** is a next-generation language for developing smart contracts on TON. It replaces FunC with an expressive syntax, a robust type system, and built-in serialization—while generating highly optimized assembly code.
+**Tolk** is a next-generation language for developing smart contracts on TON. It replaces FunC with an expressive syntax, a robust type system, and built-in serialization — while generating highly optimized assembly code.
 
-This page introduces Tolk’s _core features, explains how it compares to FunC, and outlines how to get started with the language_— whether you're migrating from FunC or writing smart contracts from scratch.
+This page introduces Tolk’s _core features, explains how it compares to FunC, and outlines how to get started with the language_ — whether you’re migrating from FunC or writing smart contracts from scratch.
 
 ## Why choose Tolk
 
 1. Clean, expressive syntax inspired by TypeScript and Rust.
 2. Built-in primitives for TON, including _auto-serialized structs, pattern matching, and first-class message handling_.
 3. Strong static type system with _null safety, type aliases, union types, and generics_ for safer, clearer code.
-4. Gas-efficient by design — contracts can cost up to **50% less** than FunC equivalents thanks to compiler optimizations and **lazy** functionality.
+4. Gas-efficient by design — contracts can cost up to **50% less** than FunC equivalents thanks to compiler optimizations and **[lazy](/v3/documentation/smart-contracts/tolk/tolk-vs-func/lazy-loading)** functionality.
 5. Low-level control is available when needed, with direct access to the TVM stack and instructions.
 
 ## Getting started with Tolk
@@ -26,9 +26,9 @@ If you're starting with Tolk, follow these steps:
 1. Explore the [TON smart contract documentation](/v3/documentation/smart-contracts/overview) to learn the fundamentals.
 2. [Set up](/v3/documentation/smart-contracts/tolk/environment-setup.mdx) the first Tolk counter project using
 `npm create ton@latest`.
-3. Follow the [step-by-step guide](/v3/documentation/smart-contracts/tolk/counter-smart-contract.mdx) to build a counter-contract.
+3. Follow the [step-by-step guide](/v3/documentation/smart-contracts/tolk/counter-smart-contract.mdx) to build a counter contract.
 4. Read the [Tolk language guide](/v3/documentation/smart-contracts/tolk/language-guide.mdx) for a high-level overview of the language.
-5. Continue exploring the documentation. When you come across FunC or Tact code, compare it to its Tolk equivalent — you'll often find it's cleaner and more declarative.
+5. Continue exploring the documentation. When you come across FunC or Tact code, compare it to its Tolk equivalent — you’ll often find it’s cleaner and more declarative.
 
 The TON documentation will continue evolving to support Tolk as the primary smart contract language.
 
@@ -43,7 +43,7 @@ If you’ve written contracts in FunC, migrating to Tolk is straightforward — 
 
 #### Example of a basic Tolk smart contract:
 
-```tolk
+```text
 import "utils"
 
 struct Storage {
@@ -67,7 +67,7 @@ get fun currentCounter(): int {
 <details>
   <summary><b>Equivalent implementation in FunC</b></summary>
 
-  ```func
+  ```text
   #include "utils.fc";
 
   global int ctx_counter;
@@ -79,7 +79,7 @@ get fun currentCounter(): int {
 
   () recv_internal(int msg_value, cell msg_full, slice msg_body) impure {
     slice cs = msg_full.begin_parse();
-    int flags = cs.load_uint(4);
+    int flags = cs~load_uint(4);
     if (flags & 1) {
       return ();
     }
@@ -137,7 +137,7 @@ A set of tools is available to support development with Tolk — including IDE s
   </tbody>
 </table>
 
-The Tolk compiler itself lives in the `ton-blockchain` [repository](https://github.com/ton-blockchain/ton).
+The Tolk compiler itself lives in the `ton` [repository](https://github.com/ton-blockchain/ton).
 
 
 ## Is Tolk production-ready?

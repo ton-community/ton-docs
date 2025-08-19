@@ -21,16 +21,16 @@ export default function Home(): JSX.Element {
 
         <div className="container">
 
-          <div id="Get Started" className="row">
+          <div id="get-started" className="row">
             {firstRow &&
                                   firstRow.length &&
                                   firstRow.map((props, idx) => (
                                     <ContentBlock key={idx} {...props} />
-                                  ))}{" "}
+                                  ))}
           </div>
 
           <br/>
-          <p style={{ fontWeight: '300', textAlign:'center', padding: '10px 0', fontSize:'16px' }}>Tip: search everywhere with <code>Ctrl+K</code> hotkey</p>
+          <p style={{ fontWeight: '300', textAlign:'center', padding: '10px 0', fontSize:'16px' }}>Tip: search everywhere with <code>Ctrl+K</code> (or <code>Cmd+K</code> on macOS) hotkey</p>
         </div>
       </div>
     </Layout>
