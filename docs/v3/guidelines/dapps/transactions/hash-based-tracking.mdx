@@ -147,6 +147,30 @@ A **transaction hash** is a unique identifier for an entire transaction.
 It derives from all the data involved in the transaction, including incoming and outgoing messages, state changes, and fees.
 This data becomes available only after the blockchain executes the transaction, so the hash is calculated once the transaction is recorded.
 
+#### TL-B
+
+The transaction structure is defined in TL‑B as follows.<br/>
+See the full explanation in [Transaction layout](/v3/documentation/data-formats/tlb/transaction-layout):
+
+```tlb
+transaction$0111 account_addr:bits256 lt:uint64
+    prev_trans_hash:bits256 prev_trans_lt:uint64 now:uint32
+    outmsg_cnt:uint15
+    orig_status:AccountStatus end_status:AccountStatus
+    ^[ in_msg:(Maybe ^(Message Any)) out_msgs:(HashmapE 15 ^(Message Any)) ]
+    total_fees:CurrencyCollection state_update:^(HASH_UPDATE Account)
+    description:^TransactionDescr = Transaction;
+```
+
+For how a hash is computed from this structure, see:
+
+- **Cell hash** and **Standard representation hash calculation** on the [Cells & BoC](/v3/documentation/data-formats/tlb/cell-boc#cell-hash) page.
+- A practical section on retrieving hashes in the [DApp cookbook](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
+
+:::info
+A transaction hash is the representation hash (SHA‑256) of the root `Transaction` cell serialized per TL‑B exactly as it appears in the block, so any change to messages, fees, or state update alters the hash.
+:::
+
 **Obtaining a transaction hash:**
 
 ```typescript title="trx_hash.ts"
