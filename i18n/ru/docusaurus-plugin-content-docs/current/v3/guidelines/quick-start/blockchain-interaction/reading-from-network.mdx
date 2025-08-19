@@ -291,7 +291,7 @@ main();
 
 - `address`: Адрес аккаунта, где осуществлялась транзакция.
 - `utime`: [UNIX-время](https://www.unixtimestamp.com/) транзакции.
-- `in_msg`: Входящее [сообщение](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/), которое инициировало транзакцию.
+- `in_msg`: Входящее [сообщение](/v3/documentation/smart-contracts/message-management/messages-and-transactions/), которое инициировало транзакцию.
 - `out_msgs`: Исходящие сообщения, отправленные в ходе транзакции.
 
 ### Что такое сообщение?
@@ -325,7 +325,7 @@ main();
 }
 ```
 
-- `hash` (хеш): криптографический идентификатор сообщение, который вычисляется после того, как сообщение включено в транзакцию и получило значение [logical time (lt)](/v3/documentation/smart-contracts/message-management/messages-and-transactions/#what-is-a-logical-time), которое определяет, в каком порядке оно будет обработано. Хеш не является частью исходного сообщения, и он позволяет уникально идентифицировать финализированное сообщение для проверки целостности.
+- `hash` (хеш): криптографический идентификатор сообщение, который вычисляется после того, как сообщение включено в транзакцию и получило значение [logical time (lt)](/v3/documentation/smart-contracts/message-management/messages-and-transactions/), которое определяет, в каком порядке оно будет обработано. Хеш не является частью исходного сообщения, и он позволяет уникально идентифицировать финализированное сообщение для проверки целостности.
 - `source` (источник): Адрес отправителя (аккаунт, который инициировал сообщение).
 - `destination`: Адрес получателя (аккаунт, который будет обрабатывать сообщение).
 - `value`: Количество TON (указывается в nanoTON), прикреплённое к сообщению.
@@ -337,7 +337,7 @@ main();
 
 До исполнения этого кода:
 
-- Откройте в [Tonviewer](https://testnet.tonviewer.com) адрес своего кошелька в тестнете, который мы ранее создали в секции [Getting Started](/v3/guidelines/quick-start/getting-started#interacting-with-ton-ecosystem).
+- Откройте в [Tonviewer](https://testnet.tonviewer.com) адрес своего кошелька в тестнете, который мы ранее создали в секции [Getting Started](/v3/guidelines/quick-start/getting-started).
 - Отправьте себе тестовые TON с помощью [Testgiver Ton Bot](https://t.me/testgiver_ton_bot/).
 - Подождите несколько секунд и убедитесь, что транзакция отобразилась в Tonviewer.
 
@@ -399,7 +399,7 @@ Sender: kQDhJ2Kx7dD6FLzAXcqiI4Xsu4ioY6JlE24m9Tx86eGkq0OF
 ```
 
 :::info
-Более сложный пример обхода графа транзакций можно увидеть [здесь](/v3/guidelines/dapps/asset-processing/payments-processing/#retrieve-incomingoutgoing-transactions).
+Более сложный пример обхода графа транзакций можно увидеть [здесь](/v3/guidelines/dapps/asset-processing/payments-processing/).
 :::
 
 ## Следующий шаг
