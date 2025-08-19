@@ -166,7 +166,6 @@ module.exports = [
         type: 'category',
         label: 'Assets',
         items: [
-          'v3/documentation/dapps/assets/check',
           'v3/documentation/dapps/assets/overview',
           'v3/documentation/dapps/assets/usdt',
         ],
