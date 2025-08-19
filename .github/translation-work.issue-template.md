@@ -20,4 +20,4 @@ Two commands `/preview` and `/previewdraft` are handled as comments in this issu
 
 2. Deploys the updated branch to staging environment (same for preview or previewdraft):
 
-   `https://release-candidate-{{ env.language }}-tondocs.tapps.ninja/`
+   `https://staging-{{ env.language }}-tondocs.tapps.ninja/`
