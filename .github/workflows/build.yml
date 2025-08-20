@@ -1,0 +1,87 @@
+name: Build
+
+on:
+  workflow_call:
+    inputs:
+      ref_name:
+        required: true
+        type: string
+    outputs:
+      image_repo:
+        value: ${{ jobs.build.outputs.image_repo }}
+      image_tag:
+        value: ${{ jobs.build.outputs.image_tag }}
+      image_digest:
+         value: ${{ jobs.build.outputs.image_digest }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      packages: write
+      contents: read
+
+    env:
+      REF_NAME: ${{ inputs.ref_name || github.ref_name }}
+
+    outputs:
+      image_repo: ghcr.io/${{ steps.params.outputs.repository }}
+      image_tag: ${{ steps.params.outputs.tag }}
+      image_digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+      - name: Compute params
+        uses: actions/github-script@v7
+        id: params
+        with:
+          script:
+            let tag = process.env.REF_NAME;
+            
+            const trBranchRegexp = /^translation-(\d+)-([\w-]{2,6})(-draft)?$/;
+            const trBrMatch = process.env.REF_NAME.match(trBranchRegexp);
+            if (trBrMatch) {
+            tag = `staging-${trBrMatch[2]}`;
+            }
+            core.setOutput('tag', tag);
+            core.setOutput('repository', process.env.GITHUB_REPOSITORY.toLowerCase());
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+          ref: ${{ env.REF_NAME }}
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ steps.params.outputs.repository }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          context: 'git'
+          tags: |
+            type=sha
+            type=sha,format=long
+            type=raw,value=${{ steps.params.outputs.tag }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        id: build
+        with:
+          context: .
+          file: "deployment/Docker/Dockerfile"
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            REACT_APP_PROXY_KEY=${{ secrets.REACT_APP_PROXY_KEY }}
+            REACT_APP_MIXPANEL_TOKEN=${{ secrets.REACT_APP_MIXPANEL_TOKEN }}
+            REACT_APP_ANALYTICS_ENABLED=${{ secrets.REACT_APP_ANALYTICS_ENABLED }}
