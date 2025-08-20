@@ -2576,6 +2576,10 @@ await wallet.sendBatch(
 );
 ```
 
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
+
 </TabItem>
 </Tabs>
 
