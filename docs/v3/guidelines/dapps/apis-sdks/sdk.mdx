@@ -8,7 +8,7 @@ Use the right sidebar to jump to your preferred language.
 ## Overview
 
 
-You can connect to the blockchain in four main ways:
+You can connect to the TON Blockchain in four main ways:
 
 1. **RPC data provider or other API** – relies on a third-party service for stability and security. If you run a self-hosted RPC, however, stability and security are **entirely under your control**.
 2. **ADNL connection** – connects to a [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node). You can operate your liteserver or rent one for direct use. Public liteservers are often unreliable due to limited resources and high demand. However, built-in validation prevents them from serving false data.
@@ -35,8 +35,8 @@ You can connect to the blockchain in four main ways:
 
 | Library                                           | Blockchain connection                                                                                                                                              | Description                                                                   |
 | ------------------------------------------------- |--------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| [pytoniq](https://github.com/yungwine/pytoniq)    | Native ADNL                                                                                                                                                        | Python SDK with native LiteClient and other ADNL-based protocols.             |
-| [tonutils](https://github.com/nessshon/tonutils)  | RPC through ([TON API](https://tonapi.io/api-v2) / [TON Center](https://toncenter.com/api/v3/)) or Native ADNL ([pytoniq](https://github.com/yungwine/pytoniq))      | High-level, object-oriented library for interacting with TON Blockchain.      |
+| [pytoniq](https://github.com/yungwine/pytoniq)    | Native ADNL                                                                                                                                                        | Python SDK with native lite-client and other ADNL-based protocols.            |
+| [tonutils](https://github.com/nessshon/tonutils)  | via HTTP indexer APIs ([TonAPI](https://tonapi.io/api-v2) / [TON Center v3](https://toncenter.com/api/v3/)) or Native ADNL ([pytoniq](https://github.com/yungwine/pytoniq)) | High-level, object-oriented library for interacting with TON Blockchain.      |
 | [pytonlib](https://github.com/toncenter/pytonlib) | Tonlib binary                                                                                                                                                      | Standalone Python library built on `libtonlibjson`.                        |
 
 ### C#
@@ -71,7 +71,7 @@ You can connect to the blockchain in four main ways:
 | [Java Tonlib](https://github.com/ton-blockchain/tonlib-java)                | Java       | Tonlib binary                                                                                                               | Official Java examples from the TON monorepo.                                                                                                                             |
 | [labraburn/SwiftyTON](https://github.com/labraburn/SwiftyTON)               | Swift      | Tonlib binary                                                                                                               | Native Swift wrapper for tonlib with async/await support.                                                                                                                 |
 | [tonlib-xcframework](https://github.com/labraburn/tonlib-xcframework)       | Swift      | Tonlib binary                                                                                                               | Tonlib build helper for iOS, supporting all architectures.                                                                                                                |
-| [labraburn/node-tonlib](https://github.com/labraburn/node-tonlib)           | NodeJS     | Tonlib binary                                                                                                               | Node.js C++ addon for working with `libtonlibjson`.                                                                                                                       |
+| [labraburn/node-tonlib](https://github.com/labraburn/node-tonlib)           | Node.js    | Tonlib binary                                                                                                               | Node.js C++ addon for working with `libtonlibjson`.                                                                                                                       |
 | [olifanton/ton](https://github.com/olifanton/ton)                           | PHP        | RPC through ([Orbs](https://www.orbs.com/ton-access/) / [TON Center](https://toncenter.com/api/v2/))                        | PHP SDK with TON primitives and smart contract tools.                                                                                                                     |
 | [mytonlib](https://github.com/igroman787/mytonlib)                          | Python     | Native ADNL                                                                                                                 | Python SDK for interacting with TON.                                                                                                                                      |
 | [TonTools](https://github.com/yungwine/TonTools)                            | Python     | RPC through ([Orbs](https://www.orbs.com/ton-access/) / [TON Center](https://toncenter.com/api/v2/))                        | High-level, object-oriented Python library for interacting with TON.                                                                                                      |
@@ -87,4 +87,3 @@ You can connect to the blockchain in four main ways:
 
 
 <Feedback />
-
