@@ -1,0 +1,51 @@
+# Asynchrony
+
+**Asynchrony** is the property of a system where events, actions, or processes happen independently, without waiting for other operations to complete.
+
+_Asynchrony is the opposite of synchrony_, which means that operations occur one after another in a fixed order, and each step must wait for the previous one to complete before proceeding.
+
+## Synchronous vs asynchronous
+
+<table style={{ width: '100%' }}>
+  <thead>
+  <tr>
+    <th style={{ width: '50%' }}>Synchronous</th>
+    <th style={{ width: '50%' }}>Asynchronous</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+      <strong>A traffic light at an intersection:</strong> cars from one direction must wait
+      for the green light before they can move, and only then can cars from
+      the other direction proceed.
+    </td>
+    <td>
+    <strong>Food delivery app:</strong> you and your friend place orders simultaneously.
+      Each restaurant processes its orders independently, and delivery
+      times may differ.
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+
+## Asynchrony in TON
+
+In TON, **each account works independently**. Think of an account as a small worker that handles only its tasks.
+
+- An account receives messages instructing it how to act.
+- Each account processes its messages one by one, in order, at its own pace.
+- **Accounts do not wait for each other** — one account can finish its work while others are still busy.
+- On a single account, the result of each task is recorded as a *transaction*, showing precisely what changes were made to that account.
+
+### Real-life analogy
+
+Imagine a city where every resident (account) has a mailbox.
+1. A resident takes a letter (task) and takes time to complete it.
+2. While they are busy, new letters can arrive, but they don’t process them yet.
+3. After finishing, they pick up the next letter.
+4. Meanwhile, other residents are doing the same _independently_, so letters are being processed at different speeds by different residents (accounts).
+
+
+The key idea is that each account operates _independently of the others_, processing its tasks sequentially. Since accounts operate independently, the overall order in which tasks are completed across accounts is not predetermined. This independence between accounts is what makes TON **asynchronous**.
