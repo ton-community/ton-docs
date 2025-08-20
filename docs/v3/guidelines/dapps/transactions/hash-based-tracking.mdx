@@ -3,8 +3,8 @@ import Feedback from "@site/src/components/Feedback";
 
 # Hash-based tracking
 
-This article describes how to find a transaction associated with an external-in message in the TON Blockchain.
-The process includes message normalization, searching for the transaction by message hash, and waiting for transaction confirmation.
+This article explains how to find a transaction linked to an external-in message in TON Blockchain.
+The process involves normalizing the message, searching for the transaction by message hash, and waiting for transaction confirmation.
 
 ## Hashes
 
@@ -149,8 +149,7 @@ This data becomes available only after the blockchain executes the transaction, 
 
 #### TL-B
 
-The transaction structure is defined in TL‑B as follows.<br/>
-See the full explanation in [Transaction layout](/v3/documentation/data-formats/tlb/transaction-layout):
+The transaction structure is defined in TL-B as follows:
 
 ```tlb
 transaction$0111 account_addr:bits256 lt:uint64
@@ -161,14 +160,15 @@ transaction$0111 account_addr:bits256 lt:uint64
     total_fees:CurrencyCollection state_update:^(HASH_UPDATE Account)
     description:^TransactionDescr = Transaction;
 ```
+See the full explanation in [Transaction layout](/v3/documentation/data-formats/tlb/transaction-layout).
 
-For how a hash is computed from this structure, see:
+For details on how a hash is computed from the structure above, see:
 
 - **Cell hash** and **Standard representation hash calculation** on the [Cells & BoC](/v3/documentation/data-formats/tlb/cell-boc#cell-hash) page.
-- A practical section on retrieving hashes in the [DApp cookbook](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
+- The practical section on retrieving hashes in the [DApp cookbook](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
 
 :::info
-A transaction hash is the representation hash (SHA‑256) of the root `Transaction` cell serialized per TL‑B exactly as it appears in the block, so any change to messages, fees, or state update alters the hash.
+A transaction hash is the representation hash (SHA‑256) of the root `Transaction` cell serialized per TL‑B, precisely as it appears in the block. Any change to messages, fees, or the state update alters the hash.
 :::
 
 **Obtaining a transaction hash:**
@@ -285,7 +285,7 @@ Normalized message hash: ce70ed4db0fd40aee2bd62b7d92707e8860762737872245687cc238
 ```
 
 :::info
-This example demonstrates a low‑level construction of the message. For a higher‑level, SDK‑guided approach, refer to the example in [TON Connect](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message#message-normalization).
+This example shows a low-level construction of the message. For a higher-level, SDK-based approach, see the example in [TON Connect](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message#message-normalization).
 :::
 
 **Practical example of calculating a non-normalized hash:**
@@ -308,7 +308,7 @@ import {
   internal,
 } from "@ton/ton";
 
-// Create a client instance for accessing Testnet via TonCenter
+// Create a client instance for accessing Testnet via TON Center
 const client = new TonClient({
   endpoint: "https://testnet.toncenter.com/api/v2/jsonRPC",
   apiKey: "your api key", // Get your API key via the toncenter.com bot
@@ -367,7 +367,7 @@ If the absence of normalization causes issues in an existing project, the correc
 One common scenario is sending a message and checking that the blockchain accepts and processes it.
 
 <details>
-  <summary>Here is an example of how to send a message and verify that it was processed</summary>
+  <summary>This example shows how to send a message and verify that it was processed.</summary>
 
 ```typescript title="send_and_verify_msg.ts"
 import { mnemonicToPrivateKey } from "@ton/crypto";
