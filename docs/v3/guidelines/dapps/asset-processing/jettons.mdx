@@ -46,7 +46,7 @@ Each service in the ecosystem is expected to set `forward_ton_amount` to 0.00000
 ## Content list
 
 :::tip
-The following documents provide details on jetton architecture and core TON concepts, which differ from EVM-like and other blockchains. Understanding these concepts is crucial and will greatly aid in grasping TON's functionality.
+The following documents provide details on jetton architecture and core TON concepts, which differ from EVM-like blockchains and other blockchain systems. Understanding these concepts is crucial and will significantly aid in grasping TON's functionality.
 :::
 
 This document covers the following topics in order:
@@ -122,7 +122,7 @@ Anyone can create a counterfeit version of a valuable jetton by using an arbitra
 
 Jettons with the symbol TON or those containing system notification messages such as ERROR or SYSTEM should be displayed in a way that prevents confusion with TON transfers or system notifications. Sometimes, scammers design the `symbol`, `name`, and `image` to mimic the original and mislead users.
 
-To prevent fraud, verify the **original jetton address** (jetton master contract) for specific jetton types. Alternatively, **check the project's official social media** or website for **accurate information**. Use [Tonkeeper ton-assets list](https://github.com/tonkeeper/ton-assets) ton-assets list to verify assets.
+To prevent fraud, verify the **original jetton address** (jetton master contract) for specific jetton types. Alternatively, **check the project's official social media channels** or website for **accurate information**. Use [Tonkeeper ton-assets list](https://github.com/tonkeeper/ton-assets) ton-assets list to verify assets.
 
 
 ### Retrieving jetton data
@@ -631,7 +631,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
       ```
     </details>
     :::info
-    `sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+    `sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [Message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
     :::
   </TabItem>
 
