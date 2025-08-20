@@ -100,13 +100,14 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Dispatch new build
-        uses: peter-evans/repository-dispatch@v3
+      - name: Run deployment wf
+        uses: the-actions-org/workflow-dispatch@v4
         with:
+          workflow: deploy-v2.yml
+          ref: main
+          repo: ${{ vars.DEPLOY_REPO }}
           token: ${{ secrets.DEPLOY_REPO_TOKEN }}
-          repository: ${{ vars.DEPLOY_REPO }}
-          event-type: 'new-build'
-          client-payload: |
+          inputs: |
             {
               "app_name": "ton-docs",
               "image_tag": "${{ needs.build.outputs.image_tag }}",
