@@ -239,9 +239,9 @@ created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ## Bounce of messages
 
 A **bounce message** is automatically returned to the sender — but only if the following conditions are met:
-* the message is **internal**,
-* the message is **bounceable** (`bounce = true`), and
-* the recipient contract **does not exist** or the **compute phase** ends with a **non-zero exit code**.
+- the message is **internal**,
+- the message is **bounceable** (`bounce = true`), and
+- the recipient contract **does not exist** or the **compute phase** ends with a **non-zero exit code**.
 
 If these requirements are met, the message is bounced back to the sender.
 This mechanism not only signals the failure but also allows the sender to respond appropriately, such as by refunding tokens or displaying an error message to the user.

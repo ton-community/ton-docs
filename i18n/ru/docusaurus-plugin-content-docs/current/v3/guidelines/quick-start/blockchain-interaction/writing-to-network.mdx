@@ -8,9 +8,9 @@ import Button from '@site/src/components/button'
 
 ## Введение
 
-Это руководство разъяснит вам запись данных в блокчейн TON. Вы научитесь:
+Это руководство покажет вам, как можно записать данные в блокчейн TON. Вы научитесь:
 
-- Делать транзакции
+- Совершать транзакции
 - Переводить TON и NFT
 
 ## Настройка окружения
@@ -54,25 +54,27 @@ npx ts-node script.ts
 
 Обычная передача будет выглядеть следующим образом:
 
-<br></br>
+<br />
+
 <div class="text--center">
   <ThemedImage
     alt=""
     sources={{
-      light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1.svg?raw=true',
-      dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1_dark.svg?raw=true',
+     light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1.svg?raw=true',
+     dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1_dark.svg?raw=true',
     }}
   />
 </div>
-<br></br>
+
+<br />
 
 :::caution
-В отличие от раздела [Чтение из сети](/ru/v3/guidelines/quick-start/blockchain-interaction/reading-from-network/), в следующих примерах понадобится ключ Toncenter API. Его можно получить с помощью [следующего руководства](/ru/v3/guidelines/dapps/apis-sdks/api-keys/).
+В отличие от раздела [Чтение из сети](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network), в следующих примерах понадобится ключ Toncenter API. Его можно получить с помощью [следующего руководства](/v3/guidelines/dapps/apis-sdks/api-keys).
 :::
 
 #### Реализация
 
-Создать новый файл `1-send-ton.ts`:
+Создайте новый файл `1-send-ton.ts`:
 
 ```typescript title="1-send-ton.ts"
 import { mnemonicToWalletKey } from "@ton/crypto";
@@ -118,10 +120,10 @@ async function main() {
 main();
 ```
 
-Использование `API_KEY` в данном случае позволяет получить доступ к функциональности TON через `endpoint`. Запустив этот скрипт, мы аутентифицируемся в нашем кошельке через пару `публичный/приватный ключ`, созданную из `мнемонической фразы`. После подготовки транзакции мы отправили её в TON, в результате чего кошелёк посылает самому себе сообщение с текстом _'Hello from wallet!'_.
+Использование `API_KEY` здесь позволяет получить доступ к функциональности TON через `эндпоинт`. Запустив этот скрипт, мы аутентифицируемся в нашем кошельке через пару `публичный/приватный ключ`, созданную из `мнемонической фразы`. После подготовки транзакции мы отправляем её в TON, в результате чего кошелёк посылает самому себе сообщение с текстом *'Hello from wallet!'*.
 
 :::caution Продвинутый уровень
-В большинстве сценариев `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS` будет работать, но если вы хотите понять глубже, продолжите чтение на странице [Рецепты режимов сообщений](/ru/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
+В большинстве сценариев `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS` будет работать, но если вы хотите понять глубже, прочитайте больше на странице [Рецепты режимов сообщений](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
 :::
 
 Выполните этот пример, используя следующую команду:
@@ -132,26 +134,28 @@ npx ts-node 1-send-ton.ts
 
 #### Ожидаемый результат
 
-Перейдите в [Tonviewer](https://testnet.tonviewer.com/) и вставьте свой адрес в строку поиска. Вы должны увидеть перевод TON с комментарием _'Hello from wallet!'_.
+Перейдите в [Tonviewer](https://testnet.tonviewer.com/) и вставьте свой адрес в строку поиска. Вы должны увидеть перевод TON с комментарием *'Hello from wallet!'*.
 
 ## Отправка NFT
 
-[Невзаимозаменяемые токены](/v3/guidelines/dapps/asset-processing/nft-processing/nfts/) (NFT) — это активы вроде произведения искусства, цифрового контента или видео, которые были токенизированы с помощью блокчейна. В TON NFT представлены набором смарт-контрактов:
+[Невзаимозаменяемые токены](/v3/guidelines/dapps/asset-processing/nft-processing/nfts/) (NFT) — это активы вроде произведений искусства, цифрового контента или видеозаписей, которые были токенизированы с помощью блокчейна. В TON NFT представлены набором смарт-контрактов:
 
 - **NFT Collection**: хранит информацию о коллекции NFT.
 - **NFT Item**: хранит информацию о конкретном NFT, которым владеет пользователь.
 
-Чтобы отправить NFT, мы должны сначала обзавестись им. Самый простой способ это сделать — создать и развернуть свой собственный NFT с помощью [TON Tools](https://ton-collection-edit.vercel.app/deploy-nft-single). Обратите внимание, что адрес `владельца` NFT должен быть адресом вашего кошелька, чтобы вы могли выполнять операции над ним.
+Чтобы отправить NFT, мы должны сначала обзавестись им. Самый простой способ это сделать — создать и развернуть в блокчейне свой собственный NFT с помощью [TON Tools](https://ton-collection-edit.vercel.app/deploy-nft-single). Обратите внимание, что адрес `владельца` NFT должен быть адресом вашего кошелька, чтобы вы могли выполнять операции над ним.
 
 Основная операция [стандарта NFT](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) в TON — `передача`. На самом деле это изменение адреса `владельца` в хранимых данных NFT на `нового владельца`: адрес другого контракта, который после этого сможет осуществлять операции с этим `экземпляром NFT`.
 
 :::tip
-Смотрите раздел «[Акторы и роли](/ru/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/processing-messages#actors-and-roles)» для более концептуального описания.
+
+Смотрите раздел [Акторы и роли](/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/processing-messages) для более концептуального описания.
+
 :::
 
 #### Реализация
 
-Создать новый файл `2-send-nft.ts`:
+Создайте новый файл `2-send-nft.ts`:
 
 ```typescript title="2-send-nft.ts"
 import { mnemonicToWalletKey } from "@ton/crypto";
@@ -202,7 +206,7 @@ async function main() {
 main();
 ```
 
-Запустить этот пример, используя следующую команду:
+Запустите этот пример, используя следующую команду:
 
 ```bash
 npx ts-node 2-send-nft.ts
@@ -210,7 +214,7 @@ npx ts-node 2-send-nft.ts
 
 #### Ожидаемый результат
 
-Перейдите в [Tonviewer](https://testnet.tonviewer.com/) и вставьте свой адрес в строку поиска. Вы должны увидеть передачу NFT с комментарием _'Hello from NFT!'_.
+Перейдите в [Tonviewer](https://testnet.tonviewer.com/) и вставьте свой адрес в строку поиска. Вы должны увидеть передачу NFT с комментарием *'Hello from NFT!'*.
 
 ## Следующий шаг
 
@@ -219,9 +223,7 @@ npx ts-node 2-send-nft.ts
 Нажмите на кнопку ниже, чтобы начать:
 
 <Button href="/v3/guidelines/quick-start/developing-smart-contracts/setup-environment" colorType={'primary'} sizeType={'sm'}>
-
   Настройка среды разработки
-
 </Button>
 
 <Feedback />

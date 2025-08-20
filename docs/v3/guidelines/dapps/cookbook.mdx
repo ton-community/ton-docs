@@ -368,6 +368,10 @@ Most SDKs follow a similar process for sending messages from your wallet:
       ],
     });
     ```
+
+:::info
+`sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
   </TabItem>
 
   <TabItem value="ton-kotlin" label="ton-kotlin">
@@ -1017,6 +1021,10 @@ Of course, one can always do calculation in indivisible units.
 
     main().finally(() => console.log("Exiting..."));
     ```
+
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
   </TabItem>
 
   <TabItem value="py" label="Python">
@@ -1195,7 +1203,8 @@ Next, we need to correctly calculate the total transaction cost. The value of `0
 
 ### How to change the owner of a collection's smart contract?
 
-Changing the owner of a collection is simple. Specify the `opcode = 3`, any `query_id`, and the new owner’s address.
+Changing the owner of a collection is simple. Specify the `opcode = 3`, any `query_id`, and the new owner's address.
+
 
 <Tabs groupId="code-examples">
   <TabItem value="js-ton" label="JS (@ton)">
@@ -1266,6 +1275,10 @@ Changing the owner of a collection is simple. Specify the `opcode = 3`, any `que
 
     main().finally(() => console.log("Exiting..."));
     ```
+
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
   </TabItem>
 </Tabs>
 
@@ -1392,6 +1405,10 @@ Often, the collection's metadata is stored in a format similar to `0.json` and c
 
     main().finally(() => console.log("Exiting..."));
     ```
+
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
   </TabItem>
 </Tabs>
 
@@ -1749,6 +1766,10 @@ swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
     ```
   </TabItem>
 </Tabs>
+
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
 
 ## Basics of message processing
 
