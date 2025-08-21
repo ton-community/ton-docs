@@ -30,22 +30,31 @@ _Asynchrony is the opposite of synchrony_, which means that operations occur one
 </table>
 
 
+## Real-life example
+
+Imagine TON as a bustling **food delivery platform**. Customers place orders by **sending requests to the platform**.
+
+Each restaurant operates independently with **its kitchen**.
+Each restaurant processes _one order at a time_.
+While preparing an order, incoming new orders wait their turn — they are _not processed immediately_, ensuring the kitchen focuses entirely on the current order.
+
+Some orders may be impossible to fulfil, for example, if ingredients are missing or if the request fails to arrive due to system issues.
+In such cases, the restaurant skips the order and moves on.
+
+Once an order is completed, the restaurant records the result in a **log**, which documents the changes,
+noting exactly what was received, what was done, and the time of the order.
+
+The key idea is that all restaurants operate _independently and asynchronously of each other_.
+Some may be faster, while others may be slower; they do not wait for each other, and customers can continue placing orders without blocking the system.
+Within each restaurant, orders are processed in sequence, but there’s no global order across all restaurants.
+
+
 ## Asynchrony in TON
 
-In TON, **each account works independently**. Think of an account as a small worker that handles only its tasks.
+In TON, the same principle applies. Instead of a food delivery platform, we have **TON Blockchain**. Instead of restaurants with kitchens, there are **accounts**. Instead of customer orders, accounts interact through **messages**. And instead of a kitchen log, each account records **transactions** that track every change in its state.
 
-- An account receives messages instructing it how to act.
-- Each account processes its messages one by one, in order, at its own pace.
-- **Accounts do not wait for each other** — one account can finish its work while others are still busy.
-- On a single account, the result of each task is recorded as a *transaction*, showing precisely what changes were made to that account.
+Using this analogy, we can highlight the main properties of asynchronous communication in TON:
 
-### Real-life analogy
-
-Imagine a city where every resident (account) has a mailbox.
-1. A resident takes a letter (task) and takes time to complete it.
-2. While they are busy, new letters can arrive, but they don’t process them yet.
-3. After finishing, they pick up the next letter.
-4. Meanwhile, other residents are doing the same _independently_, so letters are being processed at different speeds by different residents (accounts).
-
-
-The key idea is that each account operates _independently of the others_, processing its tasks sequentially. Since accounts operate independently, the overall order in which tasks are completed across accounts is not predetermined. This independence between accounts is what makes TON **asynchronous**.
+1. **Immediate responses are not guaranteed.** A sender cannot assume a message will be answered instantly, much like a customer cannot expect their food order to arrive immediately.
+2. **Senders remain non-blocking.** After sending a message, an account continues processing other messages or tasks without waiting for a reply, even if no response ever arrives — akin to a customer placing additional orders while waiting.
+3. **Message order is preserved per account.** Each account processes messages in the order they are received. If a message is malformed or incomplete, it is skipped, and processing immediately continues with the following message — just as a kitchen prepares orders sequentially but moves on if an order cannot be fulfilled.
