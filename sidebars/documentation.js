@@ -167,6 +167,7 @@ module.exports = [
         label: 'Assets',
         items: [
           'v3/documentation/dapps/assets/overview',
+          'v3/documentation/dapps/assets/nft-2.0',
           'v3/documentation/dapps/assets/usdt',
         ],
       },
