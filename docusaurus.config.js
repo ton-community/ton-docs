@@ -145,6 +145,16 @@ const config = {
       //   textColor: '#F3F3F7',
       //   isCloseable: false,
       // },
+      metadata: [
+        {
+          name: 'keywords',
+          content: 'TON Blockchain, TON, The Open Network, TON smart contracts, TON wallets, TON transactions, TON SDK, TON API, TON documentation, TON developers, TON DApps, DeFi on TON, TON NFTs'
+        },
+        {
+          name: 'description',
+          content: 'Official TON documentation: learn about TON Blockchain, smart contracts, transactions, APIs, SDKs, wallets, DApps, NFTs, DeFi and development tools.'
+        }
+      ],
       algolia: {
         // The application ID provided by Algolia
         appId: '3HQ0XHWRM0',
