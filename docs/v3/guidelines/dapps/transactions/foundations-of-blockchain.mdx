@@ -50,9 +50,13 @@ The general state fully defines all account types in TON. Examples:
 
 - `(ID1, 0 TON, unexist)`
 - `(ID2, 10 TON, uninit, last_tx)`
-- `(ID3, -0.5 TON, frozen)`
+- `(ID3, 0 TON, frozen)`
 
 ![](/img/docs/blockchain-fundamentals/account_eng.svg)
+
+::::note
+Account balances in TON never become negative. If storage fees exceed the available balance, the balance is set to zero and the unpaid remainder is recorded as debt — `due_payment` in `StorageInfo` (account state) and `storage_fees_due` in transactions.
+::::
 
 ### Smart contract
 
@@ -181,7 +185,7 @@ TON defines account states `AccountState` as follows:
 | Status   | TL-B code | Description                                                                                                                                                                                                                                  |
 | -------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `uninit` | `00`      | The account exists but contains no code or data. It may hold a non-zero balance but is not initialized yet.                                                                                                                                  |
-| `frozen` | `01`      | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. The account has zero or negative balance, or doesn't meet the workchain’s minimum requirement. |
+| `frozen` | `01`      | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. The account has zero balance; any unpaid storage fees are tracked as debt (`StorageInfo.due_payment`) It can't be used, but it can be restored. |
 | `active` | `10`      | The account includes a `StateInit`, which stands for State Initialized, with deployed code and data. It means that it's already initialized. It is an active smart contract, ready to process incoming messages.                             |
 
 ```tlb
