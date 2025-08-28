@@ -275,7 +275,7 @@ Each validator is responsible for a specific ShardChain or a group of them, allo
 
 ![](/img/docs/blockchain-fundamentals/shardchain.svg)
 
-### WorkChain
+### WorkChain and BaseChain
 
 A **WorkChain** is a higher‑level blockchain layer that groups multiple ShardChains into _a single working group_.
 
@@ -283,14 +283,12 @@ While each ShardChain manages a set of accounts sharing a binary address prefix,
 
 TON supports up to 2³² WorkChains, each of which can be divided into up to 2⁶⁰ ShardChains.
 
-TON currently runs two WorkChains: the **BaseChain** and the **MasterChain**.
-
-### MasterChain and BaseChain
-
-**BaseChain** is the primary execution chain used for everyday transactions and smart contracts.
+Currently, TON operates with only one WorkChain, known as the **BaseChain**. It's the primary execution chain used for everyday transactions and smart contracts. The BaseChain is the _WorkChain with an ID of `0`_.
 It is optimized for low fees, making it suitable for regular users and developers.
 
 ![](/img/docs/blockchain-fundamentals/basechain.svg)
+
+### MasterChain
 
 **MasterChain** is the main coordinating blockchain, including one ShardChain. It contains:
 

@@ -17,7 +17,6 @@ module.exports = [
     label: 'TON Blockchain',
     items: [
       'v3/concepts/dive-into-ton/ton-blockchain/asynchrony',
-      'v3/concepts/dive-into-ton/ton-blockchain/blockchain',
       'v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains',
       'v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses',
       'v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage',
