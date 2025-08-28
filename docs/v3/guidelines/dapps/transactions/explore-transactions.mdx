@@ -1,7 +1,30 @@
+---
+title: "Transactions"
+description: "Understand the structure and phases of TON transactions: credit, storage, compute, action, and bounce. Learn how to analyze and retrieve them via APIs."
+keywords:
+  - TON transaction
+  - TON transaction phases
+  - TON credit phase
+  - TON storage phase
+  - TON compute phase
+  - TON action phase
+  - TON bounce phase
+  - TON transaction analysis
+  - TON transaction API
+  - TON TL-B
+  - TON events
+faq:
+  - "What is a transaction in TON?"
+  - "How to access transaction data?"
+  - "Why does the transaction seem to have failed, while the transfer seems executed successfully?"
+  - "How to determine if a transaction was successful or not?"
+  - "How to detect if a message bounced or failed?"
+---
+
 import Tabs from '@theme/Tabs'
 import TabItem from '@theme/TabItem'
 
-# Transaction
+# Transactions
 
 In the TON blockchain, any change to an account’s state is recorded as a **transaction**. However, a transaction does not occur independently — it is the result of _a successfully processed message_. Each transaction captures the full execution context, including the inbound message that triggered it, the resulting state changes, and any outbound messages generated during execution.
 
