@@ -9,3 +9,22 @@ The following key properties characterize a blockchain:
 - **Transparent** – all data is openly accessible, enabling anyone to verify the integrity and history of the chain.
 
 ## TON Blockchain
+
+Building on these principles, TON Blockchain introduces its own architecture design.
+
+TON Blockchain is a distributed ledger built on the core principles of blockchain technology. Unlike traditional single-chain systems, TON uses a multi-chain architecture. A MasterChain coordinating multiple WorkChains, each of which can be further split into ShardChains. This structure allows the network to process millions of transactions per second, far beyond the limits of conventional blockchains.
+
+## Structure
+
+### MasterChain
+
+MasterChain is the primary chain of TON Blockchain. It contains general information about the protocol and its current parameters, the set of validators and their stakes, the list of active WorkChains and their shards, and, most importantly, the hashes of the most recent blocks of all WorkChains and ShardChains.
+
+### WorkChain
+
+
+
+### BaseChain
+### ShardChain
+### AccountChain
+
