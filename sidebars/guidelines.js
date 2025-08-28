@@ -386,6 +386,7 @@ module.exports = [
           'v3/guidelines/nodes/running-nodes/full-node',
           'v3/guidelines/nodes/running-nodes/liteserver-node',
           'v3/guidelines/nodes/running-nodes/validator-node',
+          'v3/guidelines/nodes/running-nodes/collators-validators',
           'v3/guidelines/nodes/running-nodes/staking-with-nominator-pools',
           'v3/guidelines/nodes/running-nodes/run-mytonctrl-docker',
           'v3/guidelines/nodes/running-nodes/running-a-local-ton',
