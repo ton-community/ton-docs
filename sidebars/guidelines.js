@@ -324,8 +324,6 @@ module.exports = [
               'v3/guidelines/dapps/tma/tutorials/design-guidelines',
             ],
           },
-          'v3/guidelines/dapps/tma/notcoin',
-          'v3/guidelines/dapps/tma/grants',
         ],
       },
       {
