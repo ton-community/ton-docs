@@ -1,3 +1,24 @@
+---
+title: "Message-driven execution"
+description: "Learn how TON executes smart contracts through message passing, actor-based processing, and how messages trigger transactions."
+keywords:
+  - TON messages
+  - TON internal messages
+  - TON external incoming messages
+  - TON external-in messages
+  - TON external outgoing messages
+  - Bounce messages
+  - Serializing messages
+faq:
+  - "Why does my contract not answer right away?"
+  - "Why do transactions show up later than I expect?"
+  - "What’s the difference between an internal message and an external one?"
+  - "What happens if a message never gets answered?"
+  - "Can I make my contract return a value instantly?"
+  - "How to detect if a message bounced or failed?"
+---
+
+
 import Button from '@site/src/components/button'
 import Feedback from '@site/src/components/Feedback'
 
@@ -239,9 +260,9 @@ created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ## Bounce of messages
 
 A **bounce message** is automatically returned to the sender — but only if the following conditions are met:
-* the message is **internal**,
-* the message is **bounceable** (`bounce = true`), and
-* the recipient contract **does not exist** or the **compute phase** ends with a **non-zero exit code**.
+- the message is **internal**,
+- the message is **bounceable** (`bounce = true`), and
+- the recipient contract **does not exist** or the **compute phase** ends with a **non-zero exit code**.
 
 If these requirements are met, the message is bounced back to the sender.
 This mechanism not only signals the failure but also allows the sender to respond appropriately, such as by refunding tokens or displaying an error message to the user.

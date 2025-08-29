@@ -155,14 +155,14 @@ contract ItsSoOver {
 
 ### 4: Integer overflow \{#4}
 
-If the value in calculation goes beyond the range from `-2^{256} to 2^{256} - 1` inclusive, or there's an attempt to divide or modulo by zero, an error with exit code 4 is thrown: `Integer overflow`.
+If the value in calculation goes beyond the range from `-2^256 to 2^256 - 1` inclusive, or there's an attempt to divide or modulo by zero, an error with exit code 4 is thrown: `Integer overflow`.
 
 ```tact
-let x = -pow(2, 255) - pow(2, 255); // -2^{256}
+let x = -pow(2, 255) - pow(2, 255); // -2^256
 
 try {
  -x; // integer overflow by negation
- // since the max positive value is 2^{256} - 1
+ // since the max positive value is 2^256 - 1
 } catch (exitCode) {
  // exitCode is 4
 }
@@ -193,7 +193,7 @@ Examples of specifying an out-of-bounds value:
 
 ```tact
 try {
- // Repeat only operates on an inclusive range from 1 to 2^{31} - 1
+// Repeat only operates on an inclusive range from 1 to 2^31 - 1
  // and any valid integer value greater than that causes an error with exit code 5
  repeat (pow(2, 55)) {
  dump("smash. logs. I. must.");
@@ -475,6 +475,7 @@ If the account state (contract storage, essentially) exceeds any of the limits s
 
 If the configuration is absent, the default values are:
 
+
 - `max_msg_bits` equals 2<sup>21</sup> — maximum message size in bits.
 - `max_msg_cells` equals 2<sup>13</sup> — maximum number of cells a message can occupy.
 - `max_library_cells` equals `1000` — maximum number of cells that can be used as [library reference cells][lib].
@@ -485,6 +486,7 @@ If the configuration is absent, the default values are:
 - `max_acc_state_bits` equals 2<sup>16</sup> x 1023 — maximum account state size in bits.
 - `max_acc_public_libraries` equals 2<sup>8</sup> — maximum number of [library reference cells][lib] that an account state can use on the masterchain.
 - `defer_out_queue_size_limit` equals 2<sup>8</sup> — maximum number of outbound messages to be queued (regards validators and collators).
+
 
 ## Tact compiler
 

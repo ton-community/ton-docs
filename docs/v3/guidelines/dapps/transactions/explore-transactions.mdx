@@ -1,11 +1,36 @@
+---
+title: "Transactions"
+description: "Understand the structure and phases of TON transactions: credit, storage, compute, action, and bounce. Learn how to analyze and retrieve them via APIs."
+keywords:
+  - TON transaction
+  - TON transaction phases
+  - TON credit phase
+  - TON storage phase
+  - TON compute phase
+  - TON action phase
+  - TON bounce phase
+  - TON transaction analysis
+  - TON transaction API
+  - TON TL-B
+  - TON events
+faq:
+  - "What is a transaction in TON?"
+  - "How to access transaction data?"
+  - "Why does the transaction seem to have failed, while the transfer seems executed successfully?"
+  - "How to determine if a transaction was successful or not?"
+  - "How to detect if a message bounced or failed?"
+---
+
 import Tabs from '@theme/Tabs'
 import TabItem from '@theme/TabItem'
 
-# Transaction
+# Transactions
 
-In the TON blockchain, any change to an account's state is recorded via a **transaction**. Unlike messages, transactions do not _move_, _send_, or _receive_ anything. These terms are often confused, but it's important to understand that a transaction is simply a **record** of all changes that occurred to a specific account.
+In the TON blockchain, any change to an account’s state is recorded as a **transaction**. However, a transaction does not occur independently — it is the result of _a successfully processed message_. Each transaction captures the full execution context, including the inbound message that triggered it, the resulting state changes, and any outbound messages generated during execution.
 
-In this section, you’ll explore how a transaction is structured—how it progresses through each phase, how to retrieve transaction data using APIs, and how to determine whether an on‑chain event is successful.
+Unlike messages, transactions do not _move, send, or receive_ anything. These terms are often confused, but it’s essential to understand that a transaction is a **record** of what happened to a specific account.
+
+In this section, you’ll explore how a transaction is structured — how it progresses through each phase, how to retrieve transaction data using APIs, and how to determine whether an on‑chain event is successful.
 
 ## Transaction structure
 

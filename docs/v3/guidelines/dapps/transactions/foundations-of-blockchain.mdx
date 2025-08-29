@@ -1,7 +1,24 @@
+---
+title: "Foundations of blockchain"
+description: "Understand the fundamental principles of TON Blockchain: actor model, accounts, smart contracts, asynchronous message execution, and blockchain structure."
+keywords:
+  - TON blockchain
+  - TON accounts
+  - TON smart contracts
+  - TON actor model
+  - TON asynchronous execution
+  - TON state
+faq:
+  - "What is an account in TON?"
+  - "What is a smart contract"
+  - "Why TON blockchain is asynchronous?"
+---
+
 import Feedback from '@site/src/components/Feedback';
 import { BlockMath} from 'react-katex';
 import 'katex/dist/katex.min.css';
 import Button from '@site/src/components/button';
+
 
 # Foundations of blockchain
 
@@ -58,7 +75,7 @@ The general state fully defines all account types in TON. Examples:
 
 A **smart contract** is an account whose _code_ and _data_ are already deployed to the blockchain in addition to its general state.
 
-![](/img/docs/blockchain-fundamentals/smart_contract_eng.svg)
+![](/img/docs/blockchain-fundamentals/smart-contract.svg)
 
 #### Difference between an account and a smart contract
 
@@ -96,7 +113,7 @@ A message is a set of instructions intended for a single actor. In TON Blockchai
 ### Transaction feature
 
 In TON, a transaction is a record of an account's state update caused by processing an incoming message.
-If the message does not result in an update — for example, due to an error in the Compute phase — no transaction is created.
+If the message does not result in an update — for example, due to an error in the compute phase — no transaction is created.
 
 Depending on the contract logic, a transaction may also produce one or more outgoing messages.
 
@@ -208,6 +225,10 @@ In technical terms, a smart contract in TON is an `Account` in the active state 
 - an initialized `code` field in `StateInit` — containing the executable logic
 - an initialized `data` field in `StateInit` — storing the persistent contract state
 
+:::note
+An account may be in the `active` state with `state_init.code = None`. For example, immediately after a `SetCode` action in the VM. This is an edge case: such a state is not valid for execution but is technically possible.
+:::
+
 ### Address
 
 An address in TON is a unique identifier for a smart contract required for interaction between network participants.
@@ -215,20 +236,20 @@ The account itself has an address, but we define the address entirely for arbitr
 It consists of the following components:
 
 - **WorkChain ID** — a 32-bit signed integer indicating the WorkChain to which the account belongs (e.g., -1 for the MasterChain, 0 for the BaseChain).
-- **Account ID** — a 256-bit hash of the `StateInit` structure, which includes the contract’s initialized `code`, `data`, and, optionally, a `library`.
+- **Account ID** — a 256-bit hash of the `StateInit` structure, which includes the contract’s initialized `code`, `data`, and, optionally, a `library`. It is stored as an arbitrary `SliceData` and may not exactly match the hash of `StateInit`.
 
 :::important
 `StateInit` (short for _state initialized_) can change as the contract evolves.
-The `account_id` never does because it’s the hash of the very first `StateInit` recorded at deployment.
+The `account_id` never changes, as it’s based on the very first `StateInit` recorded at deployment.
 :::
 
 The address is defined as:
 
-<BlockMath math="{Address} := ({workchain_id},{account_id})" />
+<BlockMath math="\text{Address} := (\text{workchain\_id}, \text{account\_id})" />
 
 , where
 
-<BlockMath math="{account_id}:= {HASH(StateInit)}" />
+<BlockMath math="\text{account\_id}:= \text{HASH(StateInit)}" />
 
 An address corresponds to the first initialized state of a contract and can be calculated even **before** the contract is deployed.
 This allows you to use the address ahead of time — for example, to receive tokens or set up interactions.

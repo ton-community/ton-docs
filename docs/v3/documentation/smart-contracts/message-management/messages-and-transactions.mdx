@@ -9,7 +9,7 @@ TON is an asynchronous blockchain with a complex structure that is very differen
 
 ## What is a message?
 
-A message is a packet of data exchanged between actors (users, applications, or smart contracts). It typically contains information instructing the receiver on what action to perform, such as updating storage or sending a new message.
+A message is a set of instructions intended for a single actor. In TON Blockchain, it serves as the fundamental unit of interaction between accounts. All logic execution, state changes, and contract-to-contract communication are initiated by messages.
 
 <br></br>
 <div class="text--center">
@@ -27,11 +27,11 @@ Working with this type of communication is reminiscent of launching a satellite 
 
 ## What is a transaction?
 
-A transaction in TON consists of the following:
+A transaction in TON is the **result** of a smart contract successfully processing an incoming message. It consists of:
 
-- The incoming message that initially triggers the contract (special ways to trigger exist)
-- Contract actions caused by the incoming message, such as an update to the contract's storage (optional)
-- Outgoing messages generated and sent to other actors (optional)
+* the **incoming message** that triggered the contract
+* the **state changes** performed by the contract during message processing (e.g. storage or balance updates)
+* any **outgoing messages** sent to other contracts (if applicable)
 
 > Technically, a contract can be triggered through special functions such as [Tick-tock](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock). Still, this function is more used for internal TON Blockchain core contracts.
 

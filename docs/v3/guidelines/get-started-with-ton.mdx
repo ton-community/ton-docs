@@ -87,9 +87,9 @@ With a non-custodial wallet, the user owns the wallet and holds the private key 
 To download and create a TON wallet, follow these simple steps:
 
 1. Install the Tonkeeper app on your smartphone. It can be downloaded [here](https://tonkeeper.com/).
-2. Next, you need to [enable test mode](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#wallets-for-everyday-users) within Tonkeeper.
+2. Next, you need to [enable test mode](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#tonkeeper-test-environment) within Tonkeeper.
 
-Let's move on to development!
+Let's start development now.
 
 ### Project setup
 
@@ -141,7 +141,7 @@ Ensure you have opened the repository in your GitHub profile generated from the 
 
 - However, if you're familiar with Node.js and Git and know how to work with `npm`, you may find it more comfortable to use a **local environment**.
 
-#### Cloud codespaces
+#### GitHub Codespaces
 
 If you choose the cloud development environment, it's easy to get started by first selecting the _Code_ tab and then by clicking on the _Create codespace on master_ button within the GitHub repository shown below:
 
@@ -173,9 +173,9 @@ To get started, you need to clone your GitHub repository boilerplate and open th
 
 #### Running scripts
 
-In this guide, you'll need to run TypeScript scripts. All commands, such as running scripts or installing modules, are executed through the command line located in the IDE's Terminal workspace, which is typically found at the bottom of the IDE.
+In this guide, you'll need to run TypeScript scripts. All commands, such as running scripts or installing modules, are executed through the command line located in the IDE's Terminal workspace, typically found at the bottom of the IDE.
 
-For example, in the Cloud codespaces, you should open the Terminal workspace if it is not already open:
+For example, in GitHub Codespaces, you should open the Terminal workspace if it is not already open:
 
 <br />
 
@@ -251,6 +251,7 @@ Later, when creating a TON NFT Miner, several requests will be executed to the p
 #### Address parsing
 
 On TON, smart contract addresses come in different forms that employ numerous flag types. In this context specifically, we use the _user-friendly address form_. If you are curious to learn more about the different smart contract address types, feel free to check out this additional [resource](/v3/documentation/smart-contracts/addresses) in our documentation.
+
 
 The `Address.parse()` method located in the `@ton/ton` SDK allows the developer to create an address object to convert addresses from one form to another in a simplified manner.
 
