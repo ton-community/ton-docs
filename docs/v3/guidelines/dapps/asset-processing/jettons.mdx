@@ -37,7 +37,7 @@ It is recommended to set up multiple memo deposit wallets for better performance
 Each service in the ecosystem is expected to set `forward_ton_amount` to 0.000000001 TON (1 nanoton) when withdrawing a token to send a jetton Notify on [successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be compliant. It will not be able to be processed by other CEXs and services.
 :::
 
-- Refer to the official JS library from TON Foundation, [tonweb](https://github.com/toncenter/tonweb), for a JS lib example.
+- Refer to the official JS library [tonweb](https://github.com/toncenter/tonweb) for the examples.
 
 - For Java, consider [ton4j](https://github.com/neodix42/ton4j/tree/main).
 
@@ -99,7 +99,7 @@ Standardized tokens on TON are implemented using a set of smart contracts, inclu
 <br />
 
 <ThemedImage
-  alt=""
+  alt="Jetton contract workflow"
   sources={{
       light: '/img/docs/asset-processing/jetton_contracts.png?raw=true',
       dark: '/img/docs/asset-processing/jetton_contracts_dark.png?raw=true',
@@ -122,9 +122,7 @@ Anyone can create a counterfeit version of a valuable jetton by using an arbitra
 
 Jettons with the symbol TON or those containing system notification messages such as ERROR or SYSTEM should be displayed in a way that prevents confusion with TON transfers or system notifications. Sometimes, scammers design the `symbol`, `name`, and `image` to mimic the original and mislead users.
 
-
 To prevent fraud, verify the **original jetton address** (jetton master contract) for specific jetton types. Alternatively, **check the project’s official social media** or website for **accurate information**. Use [Tonkeeper ton-assets list](https://github.com/tonkeeper/ton-assets) to verify assets.
-
 
 ### Retrieving jetton data
 
@@ -194,13 +192,14 @@ To get the `address` of a `jetton wallet` using the `owner address` (the TON wal
     const JettonMinter = new TonWeb.token.jetton.JettonMinter(tonweb.provider, { address: '<jetton_MASTER_ADDRESS>' });
     const jettonWalletAddress = await JettonMinter.getJettonWalletAddress(new TonWeb.utils.Address('<OWNER_WALLET_ADDRESS>'));
 
+
     // It is important to verify that the Jetton Master recognizes this wallet:
     const jettonWallet = new TonWeb.token.jetton.JettonWallet(tonweb.provider, {
       address: jettonWalletAddress
     });
     const jettonData = await jettonWallet.getData();
     if (jettonData.JettonMinterAddress.toString(false) !== JettonMinter.address.toString(false)) {
-      throw new Error("jetton minter address from jetton wallet doesn't match config");
+      throw new Error('jetton minter address from jetton wallet does not match config');
     }
 
     console.log('jetton wallet address:', jettonWalletAddress.toString(true, true, true));
@@ -239,6 +238,7 @@ This method returns the following data:
     const data = await jettonWallet.getData();
     console.log('jetton balance:', data.balance.toString());
     console.log('jetton owner address:', data.ownerAddress.toString(true, true, true));
+
     // It is important to verify that the Jetton Master recognizes the wallet
     const JettonMinter = new TonWeb.token.jetton.JettonMinter(tonweb.provider, {address: data.JettonMinterAddress.toString(false)});
     const expectedjettonWalletAddress = await JettonMinter.getJettonWalletAddress(data.ownerAddress.toString(false));
@@ -262,7 +262,7 @@ Communication between jetton wallets and TON wallets follows this sequence:
 <br />
 
 <ThemedImage
-  alt=""
+  alt="Jetton wallets and TON wallets communication"
   sources={{
       light: '/img/docs/asset-processing/jetton_transfer.png?raw=true',
       dark: '/img/docs/asset-processing/jetton_transfer_dark.png?raw=true',
@@ -276,9 +276,9 @@ Communication between jetton wallets and TON wallets follows this sequence:
 `Sender -> sender's jetton wallet`. _Transfer_ message contains the following data:
 
 | Name                   | Type       | Description                                                                                                                                                            |
-| ---------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ---------------------- | ---------- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `query_id`             | uint64     | Links the three messaging types—transfer, transfer notification, and excesses—to each other. To ensure this process works correctly, **always use a unique query ID**. |
-| `amount`               | coins      | The total `ton coin` amount sent with the message.                                                                                                                    |
+| `amount`               | coins      | The total amount of jettons being transferred (in jetton units).                                                                                                                         |
 | `destination`          | address    | The address of the new owner of the jettons                                                                                                                            |
 | `response_destination` | address    | The wallet address used to return remaining Toncoin through the excesses message.                                                                                      |
 | `custom_payload`       | maybe cell | Always at least 1 bit in size. Custom data used by either the sender or receiver jetton wallet for internal logic.                                                     |
@@ -388,7 +388,7 @@ Tonweb examples:
 1. [Accepting jetton deposits to an individual HOT wallet with comments (memo)](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
 2. [Jettons withdrawals example](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
 
-#### Preparations
+#### Preparation
 
 1. [Prepare a list of accepted jettons](/v3/guidelines/dapps/asset-processing/jettons#adding-new-jettons-for-asset-processing-and-initial-verification) (jetton master addresses).
 2. Deploy hot wallet (using v3R2 if no jetton withdrawals are expected; highload v3 - if jetton withdrawals are expected). [Wallet deployment](/v3/guidelines/dapps/asset-processing/payments-processing#wallet-deployment).
@@ -449,7 +449,7 @@ const wallet = new WalletClass(tonweb.provider, {
 TON transactions are irreversible after one confirmation. To enhance user experience, avoid waiting for additional blocks once transactions are finalized on TON Blockchain. Read more in [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
 :::
 
-It is not always possible to determine the exact amount of jettons received from a message, as jetton wallets cannot send `transfer notification`, `excesses` and `internal transfer` messages. They are not standardized. This means that there is no guarantee that an `internal transfer` message can be decoded.
+It is not always possible to determine the exact amount of jettons received from a message, as `transfer notification` messages depend on the `forward_ton_amount`. `excesses` and `internal transfer` messages are not standardized and may not be decodable.
 
 Therefore, to determine the amount received in a wallet, it is necessary to query balances using the get method. To obtain key data when querying balances, blocks are used according to the account state for a specific block in the chain.
 
@@ -992,7 +992,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
 
       const (
       	MainnetConfig   = "https://ton.org/global.config.json"
-      	TestnetConfig   = "https://ton.org/global.config.json"
+      	TestnetConfig   = "https://ton.org/testnet-global.config.json"
       	MyWalletAddress = "INSERT-YOUR-HOT-WALLET-ADDRESS"
       )
 
@@ -1017,8 +1017,8 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
       	jettons := make(map[string]jettons)
 
       	for name, info := range jettonsInfo {
-      		jettonMaster := jetton.NewjettonMasterClient(api, address.MustParseAddr(info.address))
-      		jettonWallet, err := jettonMaster.GetjettonWallet(context.Background(), userAddress)
+      		jettonMaster := jetton.NewJettonMasterClient(api, address.MustParseAddr(info.address))
+      		jettonWallet, err := jettonMaster.GetJettonWallet(context.Background(), userAddress)
       		if err != nil {
       			return nil, err
       		}
@@ -1036,6 +1036,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
       		adminAddress := slice.MustLoadAddr()
 
       		if adminAddress.String() != info.address {
+
 			return nil, fmt.Errorf("jetton minter address from jetton wallet doesn't match config")
       		}
 
@@ -1141,7 +1142,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
 
       		payload := msgBodySlice.MustLoadMaybeRef()
       		payloadOp := payload.MustLoadUInt(32)
-      		if payloadOp == 0 {
+      		if payloadOp != 0 {
       			log.Println("no text comment in transfer_notification")
       			continue
       		}
@@ -1160,7 +1161,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
     </details>
   </TabItem>
 
-  <TabItem value="pythoniq" label="Python">
+  <TabItem value="pytoniq" label="Python">
     <details>
       <summary>
         Source code

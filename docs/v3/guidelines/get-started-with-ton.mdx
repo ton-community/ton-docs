@@ -6,7 +6,7 @@ import Player from '@site/src/components/player'
 
 # Get started with TON
 
-Discover the speed, reliability, and core principles of asynchronous thinking by building your first application on the TON Blockchain — from scratch.
+Discover the speed, reliability, and core principles of asynchronous thinking by building your first application on TON Blockchain — from scratch.
 
 :::tip newcomer-friendly guide
 This is the perfect place to start if you're entirely new to programming.
@@ -16,14 +16,14 @@ This learning path is split into **5** beginner-friendly modules and takes appro
 
 ## What you will learn
 
-In this step-by-step guide, you'll learn how to create and interact with the TON Blockchain applications using JavaScript. While it's possible to figure it out independently, this path offers a faster, smoother experience — especially if you're starting.
+In this step-by-step guide, you'll learn how to create and interact with TON Blockchain applications using JavaScript. While it's possible to figure it out independently, this path offers a faster, smoother experience — especially if you're starting.
 
 Here's what you'll do:
 
 1. Create your TON wallet using Tonkeeper.
 2. Use a Testnet faucet to top up your wallet with test tokens.
 3. Learn key smart contract concepts like **addresses** and **cells**.
-4. Interact with the TON Blockchain using the TypeScript SDK and an API provider.
+4. Interact with TON Blockchain using the TypeScript SDK and an API provider.
 5. Compile and send your first transaction using the NFT Miner console app.
 
 _You're about to mine your first NFT rocket achievement!_
@@ -39,7 +39,7 @@ As one of the first TON explorers, you'll complete a proof-of-work smart contrac
 
 Our goal for today is to mine an NFT! This achievement will stay with you _forever_.
 
-Finally, you can mine this NFT achievement even on Mainnet. (_It costs only 0.05 TON!_)
+Finally, you can mine this NFT achievement even on Mainnet. (_The mining fee is about 0.05 TON, but make sure your wallet holds at least 0.1 TON to cover fees._)
 
 ### Video tutorial
 
@@ -77,8 +77,8 @@ To get started, all developers will make use of the following components:
 
 ### Download and create a wallet
 
-First, you need a non-custodial wallet to receive and store your TON. For this guide, we are using Tonkeeper.
-You need to enable Testnet mode within the wallet to receive Testnet TON coins. These tokens will be used later to send a final minting transaction to the smart contract.
+First, you need a non-custodial wallet to receive and store your Toncoin. For this guide, we are using Tonkeeper.
+You need to enable Testnet mode within the wallet to receive Testnet Toncoin. These tokens will be used later to send a final minting transaction to the smart contract.
 
 :::info
 With a non-custodial wallet, the user owns the wallet and holds the private key themselves.
@@ -104,7 +104,7 @@ Please use the [ton-onboarding-challenge](https://github.com/ton-community/ton-o
 <br />
 
 <ThemedImage
-  alt=""
+  alt="Creating a new repository"
   sources={{
       light: '/img/tutorials/onboarding/1.png?raw=true',
       dark: '/img/tutorials/onboarding/1-dark.png?raw=true',
@@ -126,7 +126,7 @@ Ensure you have opened the repository in your GitHub profile generated from the 
 <br />
 
 <ThemedImage
-  alt=""
+  alt="A GitHub repository"
   sources={{
       light: '/img/tutorials/onboarding/3.png?raw=true',
       dark: '/img/tutorials/onboarding/3-dark.png?raw=true',
@@ -148,7 +148,7 @@ If you choose the cloud development environment, it's easy to get started by fir
 <br />
 
 <ThemedImage
-  alt=""
+  alt="A cloud development environment"
   sources={{
       light: '/img/tutorials/onboarding/2.png?raw=true',
       dark: '/img/tutorials/onboarding/2-dark.png?raw=true',
@@ -180,7 +180,7 @@ For example, in GitHub Codespaces, you should open the Terminal workspace if it 
 <br />
 
 <ThemedImage
-  alt=""
+  alt="Running scripts"
   sources={{
       light: '/img/tutorials/onboarding/6.png?raw=true',
       dark: '/img/tutorials/onboarding/6-dark.png?raw=true',
@@ -196,7 +196,7 @@ Enter commands in this window and execute them with _Enter_:
 <br />
 
 <ThemedImage
-  alt=""
+  alt="The command line"
   sources={{
       light: '/img/tutorials/onboarding/4.png?raw=true',
       dark: '/img/tutorials/onboarding/4-dark.png?raw=true',
@@ -253,7 +253,6 @@ Later, when creating a TON NFT Miner, several requests will be executed to the p
 On TON, smart contract addresses come in different forms that employ numerous flag types. In this context specifically, we use the _user-friendly address form_. If you are curious to learn more about the different smart contract address types, feel free to check out this additional [resource](/v3/documentation/smart-contracts/addresses) in our documentation.
 
 
-
 The `Address.parse()` method located in the `@ton/ton` SDK allows the developer to create an address object to convert addresses from one form to another in a simplified manner.
 
 ### Connect to an API provider
@@ -265,7 +264,7 @@ The simplest way to do it is by specifying the Testnet endpoint `https://testnet
 <br />
 
 <ThemedImage
-  alt=""
+  alt="Connect to an API provider"
   sources={{
       light: '/img/tutorials/onboarding/5.png?raw=true',
       dark: '/img/tutorials/onboarding/5-dark.png?raw=true',
@@ -289,7 +288,7 @@ const client = new TonClient({ endpoint });
 ```
 
 :::info what to do in production?
-Using an RPC node provider or running your own ton-http-api instance is better for that. Read more at the [TON Center API page](/v3/guidelines/dapps/apis-sdks/ton-http-apis).
+Using an RPC node provider or running your own ton-http-api instance is better for that. Read more at the [TON HTTP-based APIs page](/v3/guidelines/dapps/apis-sdks/ton-http-apis).
 :::
 
 ### Receiving mining data from TON Blockchain
@@ -355,7 +354,7 @@ TupleReader {
 
 The output above shows data on executing a process with a collection of numerical (_int_) values. The current focus is to convert this numerical output into a more practical format.
 
-We need to convert the hex output to something _useful_.
+We need to convert the stack output into a more _useful form_.
 
 :::info GAS PARAMETERS ON TON
 **Warning**: Though this information is highly complex and **not necessary for this tutorial** if you're interested in understanding the complex technical aspects of TON, consider using these resources:
@@ -438,7 +437,7 @@ Thankfully, the [README file](https://github.com/ton-community/ton-onboarding-ch
 Cells are data storage structures on TON that fulfill numerous purposes, including increasing network scalability and smart contract transaction speeds. We won't get into specifics here, but if you're interested in understanding the complexity of cells and how they work, consider diving into [this](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) section of our documentation.
 :::
 
-Fortunately, all the data structures used in this tutorial are already written in TypeScript. Use the `MineMessageParams` object from _NftGiver.data.ts_ to build a transaction with _Queries_:
+Fortunately, all the data structures used in this tutorial are already written in TypeScript. Use the `MineMessageParams` object from _NftGiver.ts_ to build a transaction with _Queries_:
 
 ```ts title="./scripts/mine.ts"
 import { unixNow } from '../lib/utils';
@@ -500,9 +499,9 @@ Though the miner will work properly after completing the above steps, it will ha
 
 #### Improving TON miner appearance
 
-We want to make the miner look sexy now! How do we do it?
+Let's improve the miner's output formatting to make it more straightforward.
 
-Just follow me, my friend, follow me.
+Follow the steps below.
 
 To achieve our goal, we’ll add these commands:
 
@@ -513,6 +512,8 @@ let progress = 0;
 const bufferToBigint = (buffer: Buffer) => BigInt('0x' + buffer.toString('hex'));
 
 while (bufferToBigint(msg.hash()) > complexity) {
+    progress += 1;
+
     console.clear()
     console.log(`Mining started: please, wait for 30-60 seconds to mine your NFT!`)
     console.log()
@@ -542,7 +543,7 @@ npm run start:script
 <br />
 
 <ThemedImage
-  alt=""
+  alt="Results"
   sources={{
       light: '/img/tutorials/onboarding/7.png?raw=true',
       dark: '/img/tutorials/onboarding/7-dark.png?raw=true',
@@ -551,9 +552,9 @@ npm run start:script
 
 <br />
 
-_Cool, isn't it?_
+_Now the output is more readable._
 
-After executing these commands correctly, we'll have a visually appealing NFT miner. In the next section, we'll focus on connecting a wallet to the miner to create a payment channel that accepts and receives transactions from TON Blockchain.
+After executing these commands correctly, we'll have a visually appealing NFT miner. In the next section, we'll focus on connecting a wallet to the miner to send a transaction.
 
 ## Prepare a transaction
 
@@ -562,7 +563,7 @@ The upcoming steps will guide you in completing the process of **mining an NFT**
 
 #### Top up wallet balance via the token faucet
 
-We need to acquire some TON Testnet tokens to proceed to the next step. This can be achieved using the Testnet [faucet found here](https://t.me/testgiver_ton_bot).
+We need to acquire some Testnet Toncoin to proceed to the next step. This can be achieved using the Testnet [faucet found here](https://t.me/testgiver_ton_bot).
 
 ### Leverage Blueprint transaction opportunities
 
@@ -625,7 +626,7 @@ There are two main ways to mine an NFT on TON:
 
 Below are the steps needed to initiate your first Testnet transaction to mine your NFT:
 
-1. Activate [Testnet mode within your Tonkeeper wallet](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#tonkeeper-test-environment)
+1. Activate [Testnet mode within your Tonkeeper wallet](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#wallets-for-everyday-users)
 2. Input your Testnet wallet address from Tonkeeper into the `walletAddress` variable in the `./scripts/mine.ts`.
 3. Input address of the [NFT collection from Testnet](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX) into `collectionAddress` variable in the `./scripts/mine.ts`.
 
@@ -633,7 +634,7 @@ Below are the steps needed to initiate your first Testnet transaction to mine yo
 
 To successfully mine an NFT rocket on Testnet, it is necessary to follow these steps:
 
-1. _Open_ the Tonkeeper wallet on your phone (it should hold some newly received TON Testnet tokens).
+1. _Open_ the Tonkeeper wallet on your phone (it should hold some newly received Testnet Toncoin).
 2. _Select_ scan mode in the wallet to scan the QR code.
 3. _Run_ your miner to acquire the correct hash (this process takes between 30 and 60 seconds).
 4. _Follow_ the steps in the Blueprint dialogue.
@@ -668,7 +669,7 @@ const endpoint = "https://toncenter.com/api/v2/jsonRPC"
 
 As we outlined in the Testnet NFT rocket mining process, to successfully mine an NFT rocket on the Mainnet, it is necessary to follow these steps:
 
-1. _Open_ the Tonkeeper wallet on your phone (remember, it should hold some TON tokens).
+1. _Open_ the Tonkeeper wallet on your phone (remember, it should hold some Toncoin).
 2. _Select_ scan mode in the wallet to scan the QR code.
 3. _Run_ your miner to acquire the correct hash (this process takes between 30 and 60 seconds).
 4. _Follow_ the steps in the Blueprint dialogue.
