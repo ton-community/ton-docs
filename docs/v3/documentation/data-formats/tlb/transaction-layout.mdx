@@ -100,7 +100,7 @@ trans_ord$0000 credit_first:Bool
 | `destroyed`    | Bool           | Yes      | Indicates whether the account was destroyed during the execution.                                                                        |
 
 ## Storage
-Validators can add transactions of this type as they see fit. They do not handle incoming messages or trigger codes. Their sole purpose is to collect storage fees from an account, impacting its storage statistics and balance. If the resulting _TON coin_ balance of the account falls below a specified threshold, the account may be frozen, and its code and data will be replaced with their combined hash.
+Validators can add transactions of this type as they see fit. They do not handle incoming messages or trigger codes. Their sole purpose is to collect storage fees from an account, impacting its storage statistics and balance. If the resulting _TON coin_ balance of the account falls below a specified threshold, the account may be frozen, and its code and data will be replaced with their combined hash. When storage fees cannot be fully collected due to insufficient balance, the balance is set to zero and the unpaid remainder is tracked as debt (`StorageInfo.due_payment` in account state; `storage_fees_due` in transactions).
 
 ```tlb
 trans_storage$0001 storage_ph:TrStoragePhase
