@@ -228,14 +228,6 @@
         "to": "/v3/guidelines/dapps/tma/tutorials/design-guidelines"
     },
     {
-        "from": "/develop/dapps/telegram-apps/notcoin",
-        "to": "/v3/guidelines/dapps/tma/notcoin"
-    },
-    {
-        "from": "/develop/dapps/telegram-apps/grants",
-        "to": "/v3/guidelines/dapps/tma/grants"
-    },
-    {
         "from": "/develop/dapps/asset-processing/",
         "to": "/v3/guidelines/dapps/asset-processing/payments-processing"
     },
