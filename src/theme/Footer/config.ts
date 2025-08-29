@@ -111,7 +111,6 @@ export const FOOTER_COLUMN_LINKS_EN = [
       { langKey: "Getting Started", url: PAGE_DEV },
       { langKey: "Documentation", url: FOOTER_DOCUMENTATION_URL },
       { langKey: "Telegram Mini Apps", url: PAGE_TELEGRAM_MINI_APPS },
-      { langKey: "Dev Forum", url: FOOTER_TON_FORUM_URL },
       { langKey: "Dev Chats", url: FOOTER_DEV_COMMUNITY_URL },
       { langKey: "Bug Bounty", url: FOOTER_BUG_BOUNTY_URL },
       { langKey: "Find a Job", url: FOOTER_CAREERS_URL },
