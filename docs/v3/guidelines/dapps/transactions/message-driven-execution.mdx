@@ -285,7 +285,7 @@ Then run:
 npx blueprint run sendBounceableMessages --testnet --mnemonic
 ```
 
-**Note**: TON Connect (e.g., the `--tonconnect` flag) cannot be used here because wallet extensions like Tonkeeper do not allow dApps to control the `bounce` flag for security reasons. They always send bounceable messages. To maintain this flag, you need to create and sign the message manually using a mnemonic.
+**Note**: TON Connect (e.g., the `--tonconnect` flag) cannot be used here because wallet extensions like Tonkeeper do not allow DApps to control the `bounce` flag for security reasons. They always send bounceable messages. To maintain this flag, you need to create and sign the message manually using a mnemonic.
 
 <details>
   <summary> Send bounceable message </summary>
@@ -605,7 +605,7 @@ To run the script and send an internal message, follow these steps:
 Although you can use `blueprint --tonconnect` to send internal messages, it does **not** support external messages.
 This limitation exists because TON Connect does **not** expose low-level signing capabilities due to the following reasons:
 
-1. **Security by design**: wallets (e.g., Tonkeeper) do not expose raw private keys to dApps.
+1. **Security by design**: wallets (e.g., Tonkeeper) do not expose raw private keys to DApps.
 2. **TON Connect abstraction**: the provider hides the wallet's internal implementation behind a unified interface.
 3. **Limited API surface**: blueprint is designed for contract deployment and testing, not for manual message signing.
 
@@ -762,6 +762,27 @@ If the developer does not have access to TL-B schemas or the original contract s
 This method is the least efficient and most error-prone but can be helpful when working with legacy or undocumented contracts.
 
 Example: [Simple contract](https://verifier.ton.org/EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2)
+
+## Sending messages
+
+In TON, transactions are triggered by messages. How you construct and send them depends on where the signing key resides:
+
+### For frontend
+
+- No private key
+- Prepare the **message body (payload)** for an internal or external message.
+- The user's wallet (through TON Connect) **signs the message** and submits it to the blockchain.
+- The DApp never accesses the private key directly.
+
+**Summary:** prepares `InternalMsgBody` or external message payload → wallet signs → message submitted.
+
+### For backend
+
+- Has the private key
+- Build and **sign the message** directly on the server.
+- Send it to the blockchain without involving an external wallet.
+
+**Summary:** prepares `InternalMsgBody` → server signs → message submitted.
 
 ## Next step
 
