@@ -97,8 +97,8 @@ In TON, contracts or actors do not call each other directly. Instead, they commu
 
 **Asynchrony** is a property of communication, meaning that a message does not need to be processed immediately. This implies the following:
 
-1. _No immediate response is guaranteed_. The receiver may delay responding or may not respond at all.
-2. _The sender does not wait for a reply_. After sending a message, an actor continues handling other messages or tasks without blocking or waiting for a response to the previous one—even if that response never arrives.
+1. _Immediate responses are not guaranteed_. The receiver may delay responding or may not respond at all.
+2. _Senders remain non-blocking_. After sending a message, an actor continues handling other messages or tasks without blocking or waiting for a response to the previous one—even if that response never arrives.
 3. _Message ordering is preserved per destination account_. Each account processes incoming messages in the order they are received. If a message is malformed or incomplete, it is skipped, and the following message is processed without delay.
 
 This is different from synchronous models, where the flow is: call → wait for a response → continue.
@@ -292,7 +292,7 @@ Each validator is responsible for a specific ShardChain or a group of them, allo
 
 ![](/img/docs/blockchain-fundamentals/shardchain.svg)
 
-### WorkChain
+### WorkChain and BaseChain
 
 A **WorkChain** is a higher‑level blockchain layer that groups multiple ShardChains into _a single working group_.
 
@@ -300,14 +300,12 @@ While each ShardChain manages a set of accounts sharing a binary address prefix,
 
 TON supports up to 2³² WorkChains, each of which can be divided into up to 2⁶⁰ ShardChains.
 
-TON currently runs two WorkChains: the **BaseChain** and the **MasterChain**.
-
-### MasterChain and BaseChain
-
-**BaseChain** is the primary execution chain used for everyday transactions and smart contracts.
+Currently, TON operates with only one WorkChain, known as the **BaseChain**. It's the primary execution chain used for everyday transactions and smart contracts. The BaseChain is the _WorkChain with an ID of `0`_.
 It is optimized for low fees, making it suitable for regular users and developers.
 
 ![](/img/docs/blockchain-fundamentals/basechain.svg)
+
+### MasterChain
 
 **MasterChain** is the main coordinating blockchain, including one ShardChain. It contains:
 
