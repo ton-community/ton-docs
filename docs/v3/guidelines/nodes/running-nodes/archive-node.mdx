@@ -8,11 +8,11 @@ Before this article, read about [Full node](/v3/guidelines/nodes/running-nodes/f
 
 ## Overview
 
-An archive node is a type of full node that stores extended historical data from a blockchain. If you are creating a blockchain explorer or a similar application that requires access to historical data, it is recommended that you use an archive node as an indexer.
+An archive node is a type of full node that stores the entire block history of the TON blockchain. If you are creating a blockchain explorer or a similar application that requires access to historical data, it is recommended that you use an archive node as an indexer.
 
 ## OS requirements
 
-We highly recommend installing mytonctrl using the supported operating systems:
+We highly recommend installing MyTonCtrl on the following supported operating systems:
 
 - Ubuntu 20.04
 - Ubuntu 22.04
@@ -21,7 +21,7 @@ We highly recommend installing mytonctrl using the supported operating systems:
 ## Minimal hardware requirements
 
 - 16-core CPU
-- 128 GB ECC Memory
+- 128 GB RAM
 - 12 TB SSD _OR_ Provisioned 64+k IOPS storage
 - 1 Gbit/s network connectivity, both inbound and outbound
 - 16 TB/month traffic on peak load
@@ -29,14 +29,14 @@ We highly recommend installing mytonctrl using the supported operating systems:
 - A public IP address (fixed IP address)
 
 :::info Data compression
-Uncompressed data requires 12 TB of storage. A ZFS volume with compression reduces this to 11 TB. As of February 2025, the data volume is growing by approximately 0.1 to 1 TB per month, depending on the load.
+Uncompressed data requires 12 TB of storage. A ZFS volume with compression reduces this to 11 TB. Archive size grows over time; check the dump index for current size.
 :::
 
 ## Installation
 
 ### Install ZFS and prepare volume
 
-Dumps come in the form of ZFS snapshots compressed using plzip. You need to install ZFS on your host and restore the dump. See [Oracle Documentation](https://docs.oracle.com/cd/E23824_01/html/821-1448/gavvx.html#scrolltoc) for more details.
+Dumps come in the form of ZFS snapshots compressed using zstd or plzip (varies by dump). You need to install ZFS on your host and restore the dump. See [Oracle Documentation](https://docs.oracle.com/cd/E23824_01/html/821-1448/gavvx.html#scrolltoc) for more details.
 
 Usually, it's a good idea to create a separate ZFS pool for your node on a _dedicated SSD drive_. This will allow you to manage storage space and back up your node easily.
 
@@ -46,7 +46,7 @@ Usually, it's a good idea to create a separate ZFS pool for your node on a _dedi
 sudo apt install zfsutils-linux
 ```
 
-2. [Create a pool](https://ubuntu.com/tutorials/setup-zfs-storage-pool#3-creating-a-zfs-pool) on your dedicated 4 TB `<disk>` and name it `data`:
+2. [Create a pool](https://ubuntu.com/tutorials/setup-zfs-storage-pool#3-creating-a-zfs-pool) on your dedicated ≥12 TB `<disk>` (or large enough to hold the restored dataset) and name it `data`:
 
 ```shell
 sudo zpool create data <disk>
@@ -60,7 +60,7 @@ sudo zfs set compression=lz4 data
 
 ### Install MyTonCtrl
 
-Please use the [Running Full Node](/v3/guidelines/nodes/running-nodes/full-node) guide to **install** and **run** mytonctrl.
+Please use the [Running Full Node](/v3/guidelines/nodes/running-nodes/full-node) guide to **install** and **run** MyTonCtrl.
 
 ### Run an archive node
 
@@ -81,24 +81,24 @@ mv /var/ton-work /var/ton-work.bak
 
 #### Download the dump
 
-Here is an example command to download & restore the **mainnet** dump from the ton.org server:
+Here is an example command to download & restore the **mainnet** dump from the archival-dump.ton.org server:
 
 ```shell
 curl -L -s https://archival-dump.ton.org/dumps/mainnet_full_44888096.zfs.zstd | pv | zstd -d -T16 | zfs recv mypool/ton-db
 ```
 
-To install the **testnet** dump, use:
+To install the **testnet** dump (from dump.ton.org), use:
 
 ```shell
 wget -c https://dump.ton.org/dumps/latest_testnet_archival.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
 ```
 
-The mainnet dump size is approximately 9 TB, so it may take several days to download and restore. The dump size will increase as the network grows.
+The compressed mainnet dump is approximately 9 TB, so it may take several days to download and restore. The dump size will increase as the network grows.
 
 Prepare and run the command:
 
 1. Install the necessary tools (`pv`, `plzip`, `zstd`).
-2. Tell `plzip` to use as many cores as your machine allows to speed up extraction (`-n`).
+2. Tell `plzip` to use as many cores as your machine allows to speed up extraction (`-n`); for `zstd`, use the threading flag `-T<threads>`.
 
 #### Mount the dump
 
@@ -116,7 +116,7 @@ cp -r /var/ton-work.bak/keys /var/ton-work/keys
 cp -r /var/ton-work.bak/db/keyring /var/ton-work/db/keyring
 ```
 
-3. Set the permissions for the `/var/ton-work` and `/var/ton-work/keys` directories correctly:
+3. Set the ownership for the `/var/ton-work` and `/var/ton-work/keys` directories correctly:
 
 - The owner of the `/var/ton-work/db` directory should be the `validator` user:
 
@@ -124,10 +124,10 @@ cp -r /var/ton-work.bak/db/keyring /var/ton-work/db/keyring
 chown -R validator:validator /var/ton-work/db
 ```
 
-- The owner of the `/var/ton-work/keys` directory should be the `ubuntu` user:
+- The owner of the `/var/ton-work/keys` directory should be the `<install_user>` user:
 
 ```shell
-chown -R ubuntu:ubuntu /var/ton-work/keys
+chown -R <install_user>:<install_user> /var/ton-work/keys
 ```
 
 #### Update configuration
@@ -266,4 +266,3 @@ Contact technical support at [@ton_node_help](https://t.me/ton_node_help).
 - [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
 
 <Feedback />
-
