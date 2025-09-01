@@ -27,10 +27,10 @@ Working with this type of communication is reminiscent of launching a satellite 
 
 ## What is a transaction?
 
-A transaction in TON is the **result** of a smart contract successfully processing an incoming message. It consists of:
+A transaction in TON is an account event. Most transactions are the **result** of a smart contract successfully processing an incoming message, but some system transactions (e.g., Storage or Tick‑tock) are not triggered by an incoming message. It consists of:
 
 * the **incoming message** that triggered the contract
-* the **state changes** performed by the contract during message processing (e.g. storage or balance updates)
+* the **state changes** performed by the contract during message processing (e.g., storage or balance updates)
 * any **outgoing messages** sent to other contracts (if applicable)
 
 > Technically, a contract can be triggered through special functions such as [Tick-tock](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock). Still, this function is more used for internal TON Blockchain core contracts.
@@ -52,7 +52,7 @@ If we look at Ethereum or almost any other synchronous blockchain, each transact
 
 In an asynchronous system, you can't get a response from the destination smart contract in the same transaction. Depending on the length of the route between source and destination, a contract call may take a few blocks to process.
 
-Achieving the infinite sharding paradigm requires full parallelization, ensuring that each transaction executes independently of others. Therefore, instead of transactions that affect and change the state of many contracts simultaneously, each transaction in TON is only executed on a single smart contract, and smart contracts communicate through messages. That way, smart contracts can only interact with each other by calling their functions with special messages and getting a response to them via other messages later.
+Achieving the Infinity Sharding Paradigm (ISP) requires full parallelization, ensuring that each transaction executes independently of others. Therefore, instead of transactions that affect and change the state of many contracts simultaneously, each transaction in TON is only executed on a single smart contract, and smart contracts communicate through messages. That way, smart contracts can only interact with each other by calling their functions with special messages and getting a response to them via other messages later.
 
 :::info
 See [transaction layout](/v3/documentation/data-formats/tlb/transaction-layout) for complete transaction details.
@@ -60,29 +60,18 @@ See [transaction layout](/v3/documentation/data-formats/tlb/transaction-layout) 
 
 ### Transaction outcome
 
-There is a [TVM exit code](/v3/documentation/tvm/tvm-exit-codes) for a transaction that had a compute phase. If it is not 0 or 1, then there was an error.
-Also, TVM [compute phase may be skipped](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped) for reasons like lack of funds or state.
+There is a [TVM exit code](/v3/documentation/tvm/tvm-exit-codes) for a transaction that had a compute phase. Success requires a compute‑phase exit code of 0 or 1 and, if an action phase executed, an action result code of 0. Also, TVM [compute phase may be skipped](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped) for reasons like lack of funds or state.
 
 :::info for toncenter api v3
-One should use `tx.description.action` to determine a successful `transaction.success  && tx.description.compute_ph.success`:
+Use API v3 top‑level fields to determine success: check `description.aborted === false`, `compute_ph.success === true`, and, if present, `action.success === true`.
 :::
 
 ```json
-"transactions": [
-    {
-      "description": {
-        . . . . . . . .
-        "action": {
-          "valid": true,
-          "success": true,
-         . . . . . . . .
-          },
-. . . . . . . .
-        "destroyed": false,
-        "compute_ph": {
-          "mode": 0,
-          "type": "vm",
-          "success": true,
+{
+  "description": { "aborted": false },
+  "compute_ph": { "success": true },
+  "action": { "success": true }
+}
 ```
 
 The transaction may have one of three results:
@@ -92,7 +81,7 @@ The transaction may have one of three results:
 - Fail, [exit code](/v3/documentation/tvm/tvm-exit-codes), `aborted: true`
 
 :::info for toncenter api v3
-`aborted: true` is a TON Center field. Transaction has no such field.
+`aborted` is a TL‑B field of `TransactionDescr`, exposed as `description.aborted` in API v3; it is not a top‑level field of the Transaction cell.
 :::
 
 ## What is a logical time?
@@ -171,8 +160,8 @@ Consider three contracts - _A_, _B_, and _C_. When contract _A_ sends two intern
 
 While the sending order is preserved at the source, TON's decentralized sharded architecture means the receiving order can't be predetermined.
 
-For better clarity, suppose our contracts send back messages `msg1'` and `msg2'` after `msg1` and `msg2` executed by `B` and `C` contracts. As a result, it will apply `tx2'` and `tx1'` to contract `A`.
-We have two possible traces for these transactions,
+For better clarity, suppose our contracts send back messages `msg1'` and `msg2'` after `msg1` and `msg2` are executed by contracts `B` and `C`. As a result, it will apply `tx2'` and `tx1'` to contract `A`.
+We have two possible traces for these transactions:
 
 1. The first possible order is `tx1'_lt < tx2'_lt`:
 
@@ -259,4 +248,3 @@ There can be many scenarios of smart contract interactions, and in any scenario 
 The TON blockchain's asynchronous structure creates challenges for message delivery guarantees. Logical time helps to establish event and transaction order but doesn't guarantee message delivery order between multiple smart contracts due to varying routes in shard chains. Despite these complexities, TON ensures internal message delivery, maintaining network reliability. Developers must adapt to these nuances to harness TON's full potential in building innovative decentralized applications.
 
 <Feedback />
-
