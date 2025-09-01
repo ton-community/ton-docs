@@ -12,6 +12,7 @@ Within this system, we integrate several applications to function seamlessly as 
 - **Crowdin**: Manages translation processes, including translating, proofreading, and setting language preferences.
 - **AI Systems**: Utilizes advanced AI to assist translators, ensuring smooth workflow.
 - **Customized Glossary**: This glossary guides translators and ensures AI generates accurate translations based on the project’s context. Users can also upload their glossaries as needed.
+- **Customized Glossary**: This glossary guides translators and ensures AI generates accurate translations based on the project’s context. Contributors can also upload their glossaries as needed.
 
 :::info
 This guide won't cover the entire process but will highlight the key components that make the TownSquare Labs Localization Program unique. You can explore the program further on your own.
@@ -35,8 +36,8 @@ Our repository utilizes several branches to manage documentation and translation
 - **`l10n_main`**  
   This branch includes all changes from the `main` branch and translations from Crowdin. All modifications in this branch are periodically committed to the upstream repository using a new sub-branch named `l10n_main_[some data]`.
 
-- **`l10n_feat` or `l10n_feat_[specific functions]`**  
-  This branch will include changes to code or documentation related to the translation system. Once you finalize all content, the changes in this branch will be merged into `l10_main`.
+- **`i18n_feat` or `i18n_feat_[specific functions]`**  
+  This branch will include changes to code or documentation related to the translation system. Once you finalize all content, the changes in this branch will be merged into `l10n_main`.
 
 - **`[lang]_preview`**  
   These branches are designated for specific language previews, such as `ko_preview` for Korean and `ja_preview` for Japanese. They allow us to preview the website in different languages.
@@ -148,4 +149,3 @@ We use DeepL for AI translation in our Crowdin project:
 That's it! Now, you can take a break and wait for the pre-translation to complete.
 
 <Feedback />
-
