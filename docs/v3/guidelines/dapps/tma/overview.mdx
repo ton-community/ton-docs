@@ -1,5 +1,5 @@
 ---
-description: Telegram Mini Apps (or TMAs) are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript.
+description: Telegram Mini Apps (TMAs) are web applications that run inside the Telegram messenger. They are built using web technologies — HTML, CSS, and JavaScript.
 ---
 
 import Feedback from "@site/src/components/Feedback";
@@ -18,20 +18,20 @@ Telegram Mini Apps (TMAs) are web applications that run within the Telegram mess
   </video>
 </div>
 
-Mini Apps run through Telegram and are instantly accessible to its 900+ million users — without the need for installs or redirects.
+Mini Apps run within Telegram and are instantly accessible — without the need for installation or redirects.
 
 
 ## Key features
 
-- **Telegram integration**: Mini Apps run directly within Telegram, with support for launching from chats, groups, or inline queries — no installation required.
+- **Telegram integration**: Mini Apps run directly within Telegram, with support for launching from chats, groups, or inline mode — no installation required.
 - **Cross-platform support**: Works consistently across Android, iOS, Windows, macOS, and Linux.
 - **Push notifications**: Bots can send updates and alerts to users at any time, even when the Mini App is not active.
 - **User authentication**: Securely authenticate users using Telegram’s built-in login mechanism, with signed user data passed to the app.
 - **Bot interaction**: Bots handle backend processing, user interaction, session state, and real-time messaging.
-- **Web-based development**: Built with HTML, CSS, JavaScript, leveraging Telegram’s APIs to create feature-rich applications.
-- **Integrated payments**: Supports over 20 providers, including Google Pay and Apple Pay.
-- **Monetization**: subscriptions, in-app purchases, and advertising models are supported.
-- **Web3 & TON support**: Featuring TON SDK, TON Connect, and token-based transactions, allowing seamless integration with blockchain-powered applications.
+- **Web-based development**: Built with HTML, CSS, and JavaScript, leveraging Telegram’s APIs to create feature-rich applications.
+- **Integrated payments**: Use Wallet Pay for crypto and fiat payments.
+- **Monetization**: Wallet Pay and on-chain subscriptions.
+- **Web3 and TON support**: Featuring TON SDK, TON Connect, and token-based transactions, allowing seamless integration with blockchain-powered applications.
 - **Community development**: Telegram has a strong developer ecosystem, where third-party developers actively create and share TMAs, fostering innovation and diversity.
 
 ## Developer resources
@@ -43,7 +43,7 @@ Mini Apps run through Telegram and are instantly accessible to its 900+ million 
 
 ### Telegram developer community
 
-Join the Telegram developers’ chat to discuss Mini Apps development and get support:
+Join the Telegram developers’ chat to discuss Mini App development and get support:
 
 <Button href="https://t.me/+1mQMqTopB1FkNjIy" colorType={'primary'} sizeType={'sm'}>
 
@@ -57,11 +57,11 @@ Join chat
 |------------|-----------------------------------------------------------------------------|
 | [twa-dev/sdk](https://github.com/twa-dev/sdk) | npm package for the TMA SDK                                                 |
 | [twa-dev/boilerplate](https://github.com/twa-dev/Boilerplate) | a boilerplate for a new TMA                                         |
-| [twa-dev/Mark42](https://github.com/twa-dev/Mark42) | a simple, lightweight, tree-shakeable UI library for TMA                |
+| [twa-dev/Mark42](https://github.com/twa-dev/Mark42) | a simple, lightweight, tree-shakeable UI library for TMA development                |
 | [ton-defi-org/tonstarter-twa](https://github.com/ton-defi-org/tonstarter-twa) | a template for a new TMA interacting with TON               |
 
 :::tip
-Since TMAs are web pages and use JavaScript, you need to choose [JS/TS-based SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript).
+If your Mini App interacts with the TON Blockchain, choose a [JavaScript/TypeScript SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript).
 :::
 
 
