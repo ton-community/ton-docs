@@ -66,7 +66,12 @@ Examples created based on `@tonconnect/ui-react` and `@tonconnect/ui`:
         //transaction body
     }
 
-    const result = await tonConnectUI.sendTransaction(transaction)
+    async function sendTransaction() {
+        const result = await tonConnectUI.sendTransaction(transaction);
+        return result;
+    }
+
+    sendTransaction();
 
     ```
 
@@ -82,6 +87,7 @@ Pass the `address` in a [user-friendly format](/v3/documentation/smart-contracts
 By the way, there is a limit to the number of messages sent in one transaction:
 
 - standard ([v3](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v3)/[v4](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)) wallets: 4 outgoing messages;
+- wallet v5: up to 255 messages;
 - highload wallets: 255 outgoing messages (close to blockchain limitations).
 
 A regular TON transfer using the TON Connect JS SDKs can be executed as follows:
@@ -153,7 +159,12 @@ A regular TON transfer using the TON Connect JS SDKs can be executed as follows:
         ]
     }
 
-    const result = await tonConnectUI.sendTransaction(transaction)
+    async function sendTransaction() {
+        const result = await tonConnectUI.sendTransaction(transaction);
+        return result;
+    }
+
+    sendTransaction();
     ```
 
   </TabItem>
@@ -173,7 +184,7 @@ Check out the [Transaction lookup](/v3/guidelines/ton-connect/guidelines/transac
 
 It's pretty easy to handle request rejection, but it's better to know what would happen in advance when you're developing some project.
 
-When a user clicks **Cancel** in the popup in the wallet application, an exception is thrown:
+When a user clicks **Cancel** in the popup in the wallet application, an exception is thrown. Example error (message may vary):
 
 ```ts
 Error: [TON_CONNECT_SDK_ERROR] The Wallet declined the request 
@@ -203,6 +214,8 @@ The transaction is created as follows:
 <Tabs groupId="Transfer With a Comment">
   <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
+    Note: replace the placeholder with the destination address in a user-friendly format (see /v3/documentation/smart-contracts/addresses/address-formats#user-friendly-address).
+
     ```js
     import { useTonConnectUI } from '@tonconnect/ui-react';
     import { toNano } from '@ton/ton'
@@ -211,7 +224,7 @@ The transaction is created as follows:
         validUntil: Math.floor(Date.now() / 1000) + 360,
         messages: [
             {
-                address: destination,
+                address: '<DESTINATION_ADDRESS>',
                 amount: toNano("0.05").toString(),
                 payload: body.toBoc().toString("base64")
                 // payload with the comment in body
@@ -236,6 +249,8 @@ The transaction is created as follows:
 
   <TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
+    Note: replace the placeholder with the destination address in a user-friendly format (see /v3/documentation/smart-contracts/addresses/address-formats#user-friendly-address).
+
     ```js
     import TonConnectUI from '@tonconnect/ui'
     import { toNano } from '@ton/ton'
@@ -244,7 +259,7 @@ The transaction is created as follows:
         validUntil: Math.floor(Date.now() / 1000) + 360,
         messages: [
             {
-                address: destination,
+                address: '<DESTINATION_ADDRESS>',
                 amount: toNano("0.05").toString(),
                 payload: body.toBoc().toString("base64")
                 // payload with the comment in body
@@ -252,8 +267,13 @@ The transaction is created as follows:
         ]
     }
 
-    const result = await tonConnectUI.sendTransaction(transaction)
-    ```
+    async function sendTransaction() {
+        const result = await tonConnectUI.sendTransaction(transaction);
+        return result;
+    }
+
+    sendTransaction();
+```
 
   </TabItem>
 </Tabs>
