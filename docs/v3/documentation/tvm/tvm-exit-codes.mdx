@@ -88,8 +88,8 @@ it('tests something, you name it', async () => {
  && tx.description.computePhase.type === "vm") {
     // Finally, we're able to peek into the transaction for general details freely,
     // such as printing out the exit code of the compute phase if we so desire
- console.log(tx.description.computePhase.exitCode);
- }
+    console.log(tx.description.computePhase.exitCode);
+  }
 
   // ...
 });
@@ -478,8 +478,8 @@ If the configuration is absent, the default values are:
 - `max_msg_cells` equals `2^13` — maximum number of cells a message can occupy.
 - `max_library_cells` equals `1000` — maximum number of cells that can be used as [library reference cells][lib].
 - `max_vm_data_depth` equals `2^9` — maximum cells depth in messages and account state.
-- `ext_msg_limits.max_size` equals `65535` — maximum external message size in bits.
-- `ext_msg_limits.max_depth` equals `2^9` — maximum external message depth.
+- `max_ext_msg_size` — maximum external message size in bits (default `max_size = 65535` bytes).
+- `max_ext_msg_depth` — maximum external message depth (default `max_depth = 512`).
 - `max_acc_state_cells` equals `2^16` — maximum number of cells an account state can occupy.
 - `max_acc_state_bits` equals `2^16 * 1023` — maximum account state size in bits.
 - `max_acc_public_libraries` equals `2^8` — maximum number of [library reference cells][lib] that an account state can use on the masterchain.
