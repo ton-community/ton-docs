@@ -57,7 +57,7 @@ Let’s explore what’s happening here.
 
 First, we declare the storage structure. It corresponds exactly to the format used when deploying from the TypeScript client `wrappers/Counter.ts`.
 ```tolk
-// In `Counter.ts`, the function `counterConfigToCell`
+// In `wrappers/Counter.ts`, the function `counterConfigToCell`
 // manually constructs two uint32 values — which correspond here:
 struct Storage {
     id: uint32
@@ -67,10 +67,10 @@ struct Storage {
 // Methods to load from and store to persistent storage
 
 fun Storage.load() {
-    return Storage.fromCell(contract.getData())
+    return Storage.fromCell(contract.getData());
 }
 fun Storage.save(self) {
-    contract.setData(self.toCell())
+    contract.setData(self.toCell());
 }
 ```
 
