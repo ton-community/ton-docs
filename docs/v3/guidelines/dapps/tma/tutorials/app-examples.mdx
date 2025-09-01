@@ -131,7 +131,7 @@ The `--host` option provides a URL with an IP address, which can be used for tes
 npm install @vitejs/plugin-basic-ssl
 ```
 
-Then change `vite.config.ts`. Add import:
+Then update `vite.config.ts`: add the import:
 
 ```ts
 import basicSsl from '@vitejs/plugin-basic-ssl';
@@ -152,7 +152,7 @@ You can use `ngrok` to expose your local server to the internet with an SSL cert
 ngrok http 5173
 ```
 
-Also, we are going to prepare our project for deployment:
+Prepare the project for deployment:
 
 ```ts
 export default defineConfig({
@@ -184,7 +184,7 @@ name: Deploy static content to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ['master']
+    branches: ['main']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -232,8 +232,8 @@ jobs:
         uses: actions/deploy-pages@v1
 ```
 
-In GitHub repository settings, go to Settings → Pages and choose GitHub Actions for Build and Deployment. After each push to master, GitHub Pages will automatically deploy your code.
-![Screenshot 2023-09-11 at 22.07.44.png](/img/docs/telegram-apps/modern-1.png)
+In GitHub repository settings, go to Settings → Pages and choose GitHub Actions for Build and Deployment. After each push to the default branch, GitHub Pages will automatically deploy your code.
+![GitHub Pages build and deployment settings](/img/docs/telegram-apps/modern-1.png)
 
 Telegram provides an SDK via a direct [link](https://core.telegram.org/bots/webapps#initializing-web-apps), but using `@twa-dev/sdk` offers TypeScript support and better integration.
 
@@ -242,7 +242,7 @@ Telegram provides an SDK via a direct [link](https://core.telegram.org/bots/weba
 npm install @twa-dev/sdk
 ```
 
-Open the `/src/main.tsx` file and add the following:
+Open the `src/main.tsx` file and add the following:
 
 ```tsx
 import WebApp from '@twa-dev/sdk'
@@ -296,13 +296,13 @@ function App() {
 export default App
 ```
 
-And now we need to create a Telegram Bot so that we can launch Telegram Mini App within the messenger application.
+Now create a Telegram bot so you can launch the Mini App within the Telegram app.
 
 ### Setting up a bot for the app
 
 To launch the Telegram Mini App within the messenger, you need to create a bot and configure it. Follow these steps:
 
-<Button href="/v3/guidelines/dapps/tma/tutorials/step-by-step-guide#setting-up-a-bot-for-the-mini-app" colorType={'primary'} sizeType={'sm'}>
+<Button href="/v3/guidelines/dapps/tma/tutorials/step-by-step-guide/#setting-up-a-bot-for-the-mini-app" colorType={'primary'} sizeType={'sm'}>
 
 Set up a bot
 
@@ -314,6 +314,6 @@ When using a self-signed SSL certificate, you may see security warnings.
 
 **Fix:** Click **Advanced** and then **Proceed to `<local dev server address>`** to continue debugging in the web version of Telegram.
 
-![Screenshot 2023-09-11 at 18.58.24.png](/img/docs/telegram-apps/modern-2.png)
+![Browser SSL warning for self‑signed certificate](/img/docs/telegram-apps/modern-2.png)
 
 <Feedback />
