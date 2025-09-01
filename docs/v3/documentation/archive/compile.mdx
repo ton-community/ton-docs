@@ -1,51 +1,50 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Compile and Build smart contracts on TON
+# Compile and build smart contracts on TON
 
-Here is a list of libraries and repos to build your smart contract.
+Here is a list of libraries and repositories to build smart contracts.
 
-**TLDR:**
+**TL;DR:**
 
-- In most cases, it's enough to use Blueprint SDK.
-- If you need more low-level approach, you can use ton-compiler or func-js.
+In most cases, using Blueprint is sufficient. If you need a more low-level approach, you can use ton-compiler or func-js.
 
 ## Blueprint
 
 ### Overview
 
-A development environment for TON blockchain for writing, testing, and deploying smart contracts. Read more in [Blueprint git repository](https://github.com/ton-community/blueprint).
+A development environment for the TON Blockchain for writing, testing, and deploying smart contracts. Read more in the [Blueprint repository](https://github.com/ton-org/blueprint).
 
 ### Installation
 
-Run the following in terminal to create a new project and follow the on-screen instructions:
+Run the following in the terminal to create a new project and follow the on-screen instructions:
 
 ```bash
 npm create ton@latest
 ```
 
-&nbsp;
+
 
 ### Features
 
-- Streamlined workflow for building, testing and deploying smart contracts
-- Dead simple deployment to mainnet/testnet using your favorite wallet (eg. Tonkeeper)
-- Blazing fast testing of multiple smart contracts in an isolated blockchain running in-process
+- Streamlined workflow for building, testing, and deploying smart contracts
+- Dead simple deployment to mainnet/testnet using your favorite wallet (e.g., Tonkeeper)
+- Blazing-fast testing of multiple smart contracts in an isolated in-process blockchain
 
 ### Tech stack
 
-1. Compiling FunC with https://github.com/ton-community/func-js (no CLI)
-2. Testing smart contracts with https://github.com/ton-community/sandbox
-3. Deploying smart contracts with [TON Connect 2](https://github.com/ton-connect), [Tonhub wallet](https://tonhub.com/) or a `ton://` deeplink
+1. Compiling FunC with [func-js](https://github.com/ton-community/func-js) (no CLI required)
+2. Testing smart contracts with [Sandbox](https://github.com/ton-org/sandbox)
+3. Deploying smart contracts with [TON Connect 2.0](https://github.com/ton-connect), [Tonhub wallet](https://tonhub.com/), or a `ton://` deeplink
 
 ### Requirements
 
 - [Node.js](https://nodejs.org) with a recent version like v18, verify version with `node -v`
 - IDE with TypeScript and FunC support like [Visual Studio Code](https://code.visualstudio.com/) with the [FunC plugin](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
 
-### How to use?
+### How to use
 
-- [Watch DoraHacks presentation with demo of working with blueprint](https://www.youtube.com/watch?v=5ROXVM-Fojo).
-- Read well detailed explanation in [Blueprint repo](https://github.com/ton-community/blueprint#create-a-new-project).
+- [Watch the DoraHacks presentation with a demo of working with Blueprint.](https://www.youtube.com/watch?v=5ROXVM-Fojo)
+- Read a detailed explanation in the [Blueprint repository](https://github.com/ton-org/blueprint#create-a-new-project).
 
 ## ton-compiler
 
@@ -71,11 +70,11 @@ npm install ton-compiler
 
 ### How to use
 
-This packages adds `ton-compiler` binary to a project.
+This package adds the `ton-compiler` binary to your project.
 
-FunC compilation is a multi-stage process. One is compiling Func to Fift code that is then compiled to a binary representation. Fift compiler already has Asm.fif bundled.
+FunC compilation is a multi-stage process. One is compiling FunC to Fift code that is then compiled to a binary representation. The Fift compiler already has `Asm.fif` bundled.
 
-FunC stdlib is bundled but could be disabled at runtime.
+FunC stdlib is bundled but can be disabled at runtime.
 
 #### Console Use
 
@@ -128,23 +127,23 @@ npm install @ton-community/func-js
 
 ### Features
 
-- No need to compile of download FunC binaries
-- Works both in Node.js & **WEB** (WASM support is required)
-- Compiles straight to BOC with code Cell
-- Assembly is returned fot debugging purposes
-- Does not depend on file-system
+- No need to compile or download FunC binaries
+- Works in both Node.js and the web (WASM support required)
+- Compiles straight to BOC with code cell
+- Assembly is returned for debugging purposes
+- Does not depend on the file system
 
 ### How to use
 
-Internally, this package uses both FunC compiler and Fift interpreter combined to single lib compiled to WASM.
+Internally, this package uses both the FunC compiler and the Fift interpreter, combined into a single library compiled to WASM.
 
 Simple schema:
 
-```bash
+```text
 (your code) -> WASM(FunC -> Fift -> BOC)
 ```
 
-Sources to the internal lib could be found [here](https://github.com/ton-blockchain/ton/tree/testnet/crypto/funcfiftlib).
+Sources for the internal library can be found [here](https://github.com/ton-blockchain/ton/tree/master/crypto/funcfiftlib).
 
 ### Usage example
 
@@ -194,11 +193,11 @@ Note that all FunC source file contents used in your project should be passed to
 ### Third-party contributors
 
 - [grozzzny/ton-compiler-groz](https://github.com/grozzzny/ton-compiler-groz) — TON FunC smart contract compiler.
-- [Termina1/tonc](https://github.com/Termina1/tonc) — TONC (TON Compiler). Uses WASM, so perfect for Linux.
+- [Termina1/tonc](https://github.com/Termina1/tonc) — TONC (TON Compiler). Uses WASM; works well on Linux.
 
 ## Other
 
-- [disintar/toncli](https://github.com/disintar/toncli) — one of the most popular approaches. You even can use it with Docker.
+- [disintar/toncli](https://github.com/disintar/toncli) — one of the most popular approaches. You can even use it with Docker.
 - [tonthemoon/ton](https://github.com/tonthemoon/ton) — _(closed beta)_ one-line TON binaries installer.
 - [delab-team/tlbcrc](https://github.com/delab-team/tlbcrc) — Package & CLI to generate opcodes by TL-B scheme
 
