@@ -49,8 +49,8 @@ To efficiently back up your validator, it is essential to copy the key node conf
 3. **Node public keys**:  `/var/ton-work/keys`
 
 4. **MyTonCtrl configuration and wallets**:
-   - If you installed MyTonCtrl as a regular user: `$HOME/.local/share/myton*` (where `$HOME` is your home directory)
-   - If you installed MyTonCtrl as root: `/usr/local/bin/mytoncore`
+   - If you installed MyTonCtrl as a regular user: `~/.local/share/mytoncore/` (where `$HOME` is your home directory)
+   - If you installed MyTonCtrl as root: `/usr/local/bin/mytoncore/`
 
 Backing up this set of files will provide everything you need to recover your node from scratch.
 
@@ -60,7 +60,7 @@ Modern file systems such as ZFS offer snapshot functionality. Most cloud provide
 
 The problem with both methods is that you must stop the node before performing a snapshot. Failure to do so will most likely result in a corrupt database with unexpected consequences. Many cloud providers also require you to power down the machine before performing a snapshot.
 
-Such stops should not be performed often. If you snapshot your node once a week, then in the worst case scenario after recovery, you will have a node with a week-old database, and it will take your node more time to catch up with the network than to perform a new installation using the MyTonCtrl **install from dump** feature (`-d` flag added during invocation of `install.sh` script).
+Such stops should not be performed often. If you snapshot your node once a week, then in the worst-case scenario after recovery, you will have a node with a week-old database, and it will take your node more time to catch up with the network than to perform a new installation using the MyTonCtrl **install from dump** feature (`-d` flag added during invocation of `install.sh` script).
 
 ### Disaster recovery
 
@@ -83,7 +83,7 @@ systemctl  stop  validator
 systemctl  stop  mytoncore
 ```
 
-#### Apply backed up node configuration files
+#### Apply backed-up node configuration files
 
 - Node configuration file: `/var/ton-work/db/config.json`
 
@@ -103,7 +103,7 @@ chown  -R  validator:validator  /var/ton-work/db
 
 #### Apply backed-up MyTonCtrl configuration files
 
-Replace `$HOME/.local/share/myton*` with `$ HOME/.local/share/myton*`, where $HOME is the home directory of the user who started the installation of MyTonCtrl with backed-up content. Make sure that the user is the owner of all files you copy.
+Restore your backup into `~/.local/share/mytoncore/` (or `/usr/local/bin/mytoncore/` if installed as root), where `$HOME` is the home directory of the user who installed MyTonCtrl. Make sure that the installing user owns all files you copy.
 
 #### Start mytoncore and validator processes
 
