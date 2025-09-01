@@ -10,7 +10,7 @@ Here you can find a **short overview** on [how TON transfers work](/v3/documenta
 
 ## Overview on messages and transactions
 
-Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions) between smart contracts and/or the external world. Each transaction consists of one incoming message and up to 255 outgoing messages.
+Embodying a fully asynchronous approach, TON Blockchain involves a few concepts which are uncommon to traditional blockchains. Particularly, each interaction of any actor with the blockchain consists of a graph of asynchronously transferred [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions) between smart contracts and/or the external world. Each transaction consists of one incoming message and up to 255 outgoing messages (see [action list limit](/v3/documentation/smart-contracts/transaction-fees/fees-low-level) and [Wallet v5](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)).
 
 There are 3 types of messages, that are fully described [here](/v3/documentation/smart-contracts/message-management/sending-messages#types-of-messages). To put it briefly:
 
@@ -23,7 +23,7 @@ The common path of any interaction starts with an external message sent to a `wa
 
 For example:
 
-![](/img/docs/asset-processing/alicemsgDAG.svg)
+![Message flow DAG from Alice to wallet A v4 to wallet B v4](/img/docs/asset-processing/alicemsgDAG.svg)
 
 - `Alice` use e.g [Tonkeeper](https://tonkeeper.com/) to send an `external message` to her wallet.
 - `external message` is the input message for `wallet A v4` contract with empty source (a message from nowhere, such as [Tonkeeper](https://tonkeeper.com/)).
