@@ -76,7 +76,7 @@ fun Storage.save(self) {
 
 ## Handling incoming messages
 
-When a client sends a message — for example, using the `sendIncrease` function in `wrappers/Counter.ts`— the contract processes it using this function:
+When a client sends a message — for example, using the `sendIncrease` function in `wrappers/Counter.ts` — the contract processes it using this function:
 
 ```tolk
 fun onInternalMessage(in: InMessage) {
@@ -110,9 +110,9 @@ struct (0x7e8764ef) IncreaseCounter {
 ## Sending messages
 
 This contract doesn’t send any messages.
-To learn how message construction works in Tolk, see the [Create message](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message.mdx) article.
+To learn how message construction works in Tolk, see the [Universal createMessage](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message) article.
 
-## Handling internal bounced messages
+## Handling bounced messages
 
 **Bounced messages** are messages that you _send_, but the receiver fails to process — so they are returned to you.
 
@@ -135,5 +135,7 @@ get fun currentCounter(): int {
 ```
 
 The `getCounter` function in `wrappers/Counter.ts` calls this exact getter from `counter.tolk`.
+
+Note: The initial scaffold also includes an `initialId()` getter that returns the storage `id`.
 
 <Feedback />
