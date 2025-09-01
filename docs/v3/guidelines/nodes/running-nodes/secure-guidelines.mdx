@@ -1,14 +1,14 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Secure guidelines for nodes
+# Security Guidelines for Nodes
 
-Ensuring the security of nodes, particularly in decentralized networks such as blockchain or distributed systems, is essential for maintaining data integrity, confidentiality, and availability. The guidelines for securing nodes should cover several layers, including network communication, hardware, and software configurations. Below are a set of guidelines to enhance node security:
+Ensuring the security of nodes, particularly in decentralized networks such as blockchain or distributed systems, is essential for maintaining data integrity, confidentiality, and availability. The guidelines for securing nodes should cover several layers, including network communication, hardware, and software configurations. Below is a set of guidelines to enhance node security:
 
-### 1. Use the server exclusively to operate the TON node:
+### 1. Use the server exclusively to operate the node
 
 - Using the server for additional tasks presents a potential security risk.
 
-### 2. Update and patch regularly:
+### 2. Update and patch regularly
 
 - Keep your system updated with the latest security patches.
 
@@ -27,7 +27,7 @@ Ensuring the security of nodes, particularly in decentralized networks such as b
 
 - Consider automating security updates by enabling unattended upgrades for your system.
 
-### 3. Ensure a robust SSH configuration:
+### 3. Ensure a robust SSH configuration
 
 - **Disable root login:** Prevent root access through SSH by editing the `/etc/ssh/sshd_config` file.
 
@@ -55,6 +55,8 @@ Ensuring the security of nodes, particularly in decentralized networks such as b
   sudo ufw allow 443/tcp # Allow HTTPS
   sudo ufw enable # Enable firewall
   ```
+
+Note: Replace `22` with your configured SSH port (e.g., `2222`).
 
 ### 5. Monitor logs
 
