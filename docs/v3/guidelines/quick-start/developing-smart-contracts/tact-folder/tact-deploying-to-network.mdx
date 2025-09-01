@@ -2,9 +2,9 @@ import Feedback from "@site/src/components/Feedback";
 
 # Deploying to network
 
-> **Summary:** In previous steps, we developed and tested our smart contracts, ensuring their correctness.
+> **Summary:** In previous steps, we developed and tested our smart contract, ensuring its correctness.
 
-In this part of the guide, we will proceed with the deployment of previously developed smart contracts and cover interaction with them on-chain.
+In this part of the guide, we will proceed with the deployment of the previously developed smart contract and cover interaction with it on-chain.
 
 ## Address and initial state
 
@@ -16,7 +16,11 @@ The address of a smart contract is a hash of the aggregated initial code and dat
 
 ### You already know the address
 
-In TON, any address that doesn't have any data is considered in the `nonexist` state (meaning it has no code, data, or balance). Nevertheless, when we created a wallet using the wallet app in the [Getting started](/v3/guidelines/quick-start/getting-started) section, we were still able to get the address of our **future** wallet smart contract from the wallet app before its deployment and examine it in the explorer.
+<<<<<<< HEAD
+In TON, any address that doesn't have any data is considered in the `nonexist` state. Nevertheless, when we created a wallet using the wallet app in the [Getting started](/v3/guidelines/quick-start/getting-started) section, we were still able to get the address of our **future** wallet smart contract from the wallet app before its deployment and examine it in the explorer.
+=======
+In TON, any address that doesn't have any data is considered in the `nonexist` state. Nevertheless, when we created a wallet using the wallet app in the [Getting started](/v3/guidelines/quick-start/getting-started) section, we were still able to get the address of our **future** wallet smart contract from the wallet app before its deployment and examine it in the explorer.
+>>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k590c6bda
 
 The reason behind this is that creating your **private** and **public** key pair through a **mnemonic phrase**, where the second key is part of the initial data of the smart contract, makes the `state_init` of our contract fully determined:
 - **code** is one of the standard wallet implementations, like `v5r1`.
@@ -35,17 +39,16 @@ Since we can't deploy a smart contract with the same `state_init`, the only way 
 If you've already considered that the `id` field is a must-have for any smart contract, there is another opportunity that could change your mind. Let's examine the previously developed `HelloWorld` smart contract's init section:
 
 ```tact
-init(id: Int, owner: Address) {
+init(id: Int) {
     self.id = id;
     self.counter = 0;
-    self.owner = owner;
 }
 ```
 
 If we remove the `id` field from its initial storage, we can ensure that **only one** `HelloWorld` smart contract can exist for a particular owner.
 
 :::info Tokens
-This mechanism plays a crucial role in [Jetton processing](/v3/guidelines/dapps/asset-processing/jettons). Each non-native (jetton) token requires its own `Jetton Wallet` for a particular owner and, therefore, provides a calculable address for it, creating a **star scheme** with the basic wallet in the center.
+This mechanism plays a crucial role in [Jetton processing](/v3/guidelines/dapps/asset-processing/jettons/). Each non-native (jetton) token requires its own `Jetton Wallet` for a particular owner and, therefore, provides a calculable address for it, creating a **star scheme** with the basic wallet in the center.
 :::
 
 ## Implementation
@@ -54,22 +57,23 @@ Now that our smart contracts are fully tested, we are ready to deploy them to TO
 
 ### Step 1: update the deployment script
 
-Deployment scripts rely on the same wrappers that you have used in testing scripts. We will use one script to deploy the previously developed `HelloWorld` smart contract. Update `deployHelloWorld.ts` with this code:
+<<<<<<< HEAD
+Deployment scripts rely on the same wrappers that you have used in testing scripts. We will use one script to deploy the previously developed smart contract. Update `deployHelloWorld.ts` with this code:
+=======
+Deployment scripts rely on the same wrappers that you have used in testing scripts. We will use one script to deploy the previously developed smart contract. Update `deployHelloWorld.ts` with this code:
+>>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k590c6bda
 
 ```typescript title="/scripts/deployHelloWorld.ts"
 // @version TypeScript 5.8.3
 import { toNano } from '@ton/core';
 import { HelloWorld } from '../wrappers/HelloWorld';
-import { compile, NetworkProvider } from '@ton/blueprint';
+import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider) {
     const sender = provider.sender();
-    if (!sender.address) {
-        throw new Error('Sender address is required');
-    }
 
     const helloWorld = provider.open(
-        await HelloWorld.fromInit(0n, sender.address)
+        await HelloWorld.fromInit(0n)
     );
 
     await helloWorld.send(
@@ -104,7 +108,7 @@ After that, you will see an interactive menu allowing you to choose a network:
 ```
 
 :::danger
-Before deployment to the `Mainnet`, ensure that your smart contracts correspond to [Security measures](/v3/guidelines/smart-contracts/security/overview). As we said before, the `HelloWorld` smart contract **doesn't**.
+Before deployment to the `Mainnet`, ensure that your smart contracts correspond to [Security measures](/v3/guidelines/smart-contracts/security/overview/). As we said before, the `HelloWorld` smart contract **doesn't**.
 :::
 
 ### Step 4: choose wallet app
@@ -136,7 +140,11 @@ Contract deployed at address EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 You can view it at https://testnet.tonscan.org/address/EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 ```
 
-**Congratulations!** Your custom `smart contract` is ready to execute `get methods` the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs) section and execute `transactions` the same as in the [Blockchain interaction](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network) section — consider reading those sections to understand how to interact with `smart contracts` off-chain if you haven't already.
+<<<<<<< HEAD
+**Congratulations!** Your custom `smart contract` is ready to execute `get methods` the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs) section and execute `transactions` the same as in the [Blockchain interaction](/v3/guidelines/quick-start/blockchain-interaction/writing-to-network) section — consider reading it to understand how to interact with `smart contracts` off-chain if you haven't already.
+=======
+**Congratulations!** Your custom `smart contract` is ready to execute `get methods` the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs) section and execute `transactions` the same as in the [Blockchain interaction](/v3/guidelines/quick-start/blockchain-interaction/writing-to-network) section — consider reading it to understand how to interact with `smart contracts` off-chain if you haven't already.
+>>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k590c6bda
 
 :::tip
 Using `Blueprint` and wallet apps is not the only option. You can create a message with [state_init](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) by yourself. Moreover, you can do it even through a smart contract's [internal message](/v3/documentation/smart-contracts/message-management/sending-messages#types-of-messages).
@@ -149,7 +157,11 @@ Now, it’s time to dive deeper and keep building. Here are some helpful resourc
 - [Official website](https://tact-lang.org) - overview, news, and ecosystem links
 - [Tact documentation](https://docs.tact-lang.org) — the go-to reference for language features
 - [Tact GitHub repo](https://github.com/tact-lang) — source code, issues, and contributions
-- [Tact by Example](https://tact-by-example.org/all) — hands-on smart contract examples
+<<<<<<< HEAD
+- [Tact By Example](https://tact-by-example.org/all) — hands-on smart contract examples
+=======
+- [Tact By Example](https://tact-by-example.org/all) — hands-on smart contract examples
+>>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k590c6bda
 - [Tact smart battle](https://github.com/ton-studio/tact-smart-battle) — coding challenges to sharpen your skills
 - [@tact_kitchen](https://t.me/tact_kitchen) — channel with the latest Tact updates
 - [@tactlang](https://t.me/tactlang) — chat for dev discussions and help
