@@ -208,15 +208,15 @@ MyData.fromSlice(s)  // expected to be "1234..." (hex)
 data.toCell()        // "1234..."
 ```
 
-That's why, when you declare outgoing messages with 32-bit opcodes and just serialize them, that opcodes are included in binary data.
+That's why, when you declare outgoing messages with 32-bit opcodes and just serialize them, those opcodes are included in the binary data.
 
 ## What can NOT be serialized
 
 - `int` can't be serialized, it does not define binary width; use `int32`, `uint64`, etc.
 - `slice`, for the same reason; use `address` or `bitsN`
 - tuples, not implemented
-- `A | B` (and `A|B|C|...` in general) if A has manual serialization prefix, B not (because it seems like a bug in your code)
-- `int32 | A` (and `primitives|...|structs` in general) if A has manual serialization prefix (because it's not definite what prefixes to use for primitives)
+- `A | B` (and `A|B|C|...` in general) if A has a manual serialization prefix and B does not (because it seems like a bug in your code)
+- `int32 | A` (and `primitives|...|structs` in general) if A has a manual serialization prefix (because it's not definite what prefixes to use for primitives)
 
 Example of invalid:
 
@@ -263,7 +263,7 @@ hint: replace `int` with `int32` / `uint64` / `coins` / etc.
 
 Tolk gives you full control over how your data is placed in cells and how cells reference each other.
 When you declare fields in a struct, there is no compiler magic of reordering fields, making any implicit references, etc.
-As follows, whenever you need to place data in a ref, you do it manually. As well as you manually control, when contents of that ref is loaded.
+Accordingly, whenever you need to place data in a ref, you do it manually; you also manually control when the contents of that ref are loaded.
 
 There are two types of references: typed and untyped.
 
@@ -286,10 +286,10 @@ struct RoyaltyParams {
 When you call `NftCollectionStorage.fromSlice` (or fromCell), the process is as follows:
 
 1. read address (slice.loadAddress)
-2. read uint64 (slice.loadUint 64)
+2. read uint64 (slice.loadUint(64))
 3. read three refs (slice.loadRef); do not unpack them: we just have pointers to cells
 
-Note, that `royaltyParams` is `Cell<T>`, not `T` itself. You can NOT access `numerator`, etc. To load those fields, you should manually unpack that ref:
+Note that `royaltyParams` is `Cell<T>`, not `T` itself. You can NOT access `numerator`, etc. To load those fields, you should manually unpack that ref:
 
 ```tolk
 // error: field does not exist in type `Cell<RoyaltyParams>`
@@ -322,7 +322,7 @@ val c = p.toCell();  // Point to Cell<Point>
 val p2 = c.load();   // Cell<Point> to Point
 ```
 
-With types cells, you can express snake data:
+With typed cells, you can express snake cells:
 
 ```tolk
 struct Snake {
@@ -336,14 +336,14 @@ Note that `Cell<address>` or even `Cell<int32 | int64>` is also okay, you are no
 
 When it comes to untyped cells — just `cell` — they also denote references, but don't denote their inner contents, don't have the `.load()` method.
 
-It's just _some cell_, like code/data of a contract or an untyped nft content.
+It's just _some cell_, like code/data of a contract or untyped NFT content.
 
 ## Remaining data after reading
 
 Suppose you have struct Point (x int8, y int8), and read from a slice with contents "0102FF".
 Byte "01" for x, byte "02" for y, and the remaining "FF" — is it correct?
 
-**By default, this is incorrect**. By default, functions `fromCell` and `fromSlice` ensure the slice end after reading.
+**By default, this is incorrect**. By default, functions `fromCell` and `fromSlice` ensure the slice ends after reading.
 In this case, exception 9 ("cell underflow") is thrown.
 
 But you can override this behavior with an option:
@@ -389,7 +389,7 @@ fullDomain: Cell<VariadicString>
 
 The compiler inlines your functions every time packing/unpacking takes place.
 
-Method names `packToBuilder` and `unpackFromSlice` are reserved for this purpose, their prototype must be exactly as showed.
+Method names `packToBuilder` and `unpackFromSlice` are reserved for this purpose, their prototype must be exactly as shown.
 
 ## UnpackOptions and PackOptions
 
@@ -401,7 +401,7 @@ MyMsg.fromSlice(s, {
 })
 ```
 
-Serialization functions have the second optional parameter, actually:
+Deserialization functions have a second optional parameter:
 
 ```tolk
 fun T.fromSlice(rawSlice: slice, options: UnpackOptions = {}): T;
@@ -413,7 +413,7 @@ For deserialization (`fromCell` and similar), there are now two available option
 
 | Field of UnpackOptions      | Description                                                                                                                                                                                                                                                                                               |
 | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `assertEndAfterReading`     | after finished reading all fields from a cell/slice, call `slice.assertEnd` to ensure no remaining data left; it's the default behavior, it ensures that you've fully described data you're reading with a struct; for struct `Point`, input "0102" is ok, "0102FF" will throw excno 9; **default: true** |
+| `assertEndAfterReading`     | after finished reading all fields from a cell/slice, call `slice.assertEnd` to ensure no remaining data left; it's the default behavior, it ensures that you've fully described data you're reading with a struct; for struct `Point`, input "0102" is ok, "0102FF" will throw exit code 9 (Cell underflow); **default: true** |
 | `throwIfOpcodeDoesNotMatch` | this excNo is thrown if opcode doesn't match, e.g. for `struct (0x01) A` given input "88..."; similarly, for a union type, this is thrown when none of the opcodes match; **default: 63**                                                                                                                 |
 
 For serialization (`toCell` and similar), there is now one option:
@@ -438,7 +438,7 @@ Internally, a builder is created, all fields are serialized one by one, and a bu
 
 ```tolk
 var b = beginCell()
-       .storeUint(32)
+       .storeUint(32, 32)
        .storeAny(msgBody)  // T=MyMsg here
        .endCell();
 ```
@@ -461,7 +461,7 @@ Internally, a cell is unpacked to a slice, and that slice is parsed (c.beginPars
 var msg = CounterIncrement.fromSlice(cs);
 ```
 
-All fields are read from a slice immediately. If a slice is corrupted, an exception is thrown (most likely, excode 9 "cell underflow"). Note, that a passed slice is NOT mutated, its internal pointer is NOT shifted. If you need to mutate it, like `cs.loadInt()`, consider calling `cs.loadAny<Increment>()`.
+All fields are read from a slice immediately. If a slice is corrupted, an exception is thrown (most likely, exit code 9 (Cell underflow)). Note that a passed slice is NOT mutated, its internal pointer is NOT shifted. If you need to mutate it, like `cs.loadInt()`, consider calling `cs.loadAny<CounterIncrement>()`.
 
 3. `slice.loadAny<T>` — parse anything from a slice, shifting its internal pointer. Similar to `slice.loadUint()` and others, but allows loading structures. Example:
 
@@ -499,7 +499,7 @@ type RemainingBitsAndRefs = slice
 
 ## Auto-generating prefixes for unions
 
-We've mentioned multiple times, that `T1 | T2` is encoded as TL-B Either: bit '0' + T1 OR bit '1' + T2. But what about wider unions? Say,
+We've mentioned multiple times that `T1 | T2` is encoded as TL-B Either: bit '0' + T1 OR bit '1' + T2. But what about wider unions? Say,
 
 ```tolk
 struct WithUnion {
@@ -651,7 +651,7 @@ Since Tolk remains low-level whenever you need, it allows doing tricky things. S
 
 ```tolk
 var addrB = beginCell()
-           .storeUint(0b01)   // addr_extern
+           .storeUint(0b01, 2)   // addr_extern
            ...;
 ```
 
@@ -664,7 +664,7 @@ struct MyStorage {
 }
 
 var st: MyStorage;
-st.addr = addrB;   // error, can not assign `builder` to `address`
+st.addr = addrB;   // error, cannot assign `builder` to `address`
 ```
 
 Of course, you can do `addrB.endCell().beginParse() as address`, but creating a cell is expensive. How can you write `addrB` directly?
