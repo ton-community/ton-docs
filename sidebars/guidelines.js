@@ -206,7 +206,7 @@ module.exports = [
       },
       {
         type: 'category',
-        label: 'Blockchain APIs',
+        label: 'APIs and SDKs',
         link: {
           type: 'generated-index',
           title: 'APIs and SDKs',
@@ -215,8 +215,8 @@ module.exports = [
         },
         items: [
           'v3/guidelines/dapps/apis-sdks/overview',
-          'v3/guidelines/dapps/apis-sdks/api-types',
           'v3/guidelines/dapps/apis-sdks/sdk',
+          'v3/guidelines/dapps/apis-sdks/api-types',
           'v3/guidelines/dapps/apis-sdks/ton-adnl-apis',
         ],
       },
