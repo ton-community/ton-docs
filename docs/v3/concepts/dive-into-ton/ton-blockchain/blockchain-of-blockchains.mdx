@@ -1,13 +1,13 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Blockchain of blockchains
+# Blockchain of Blockchains
 
 :::tip
 In this document, the terms **smart contract**, **account**, and **actor** are used interchangeably for simplicity.
 Technically, an **account** in TON is an **actor**, and a **smart contract** is an account with _deployed code and data_.
 :::
 
-## Single actor
+## Single Actor
 
 In TON, a smart contract is a _computational entity_ with properties such as `address`, `code`, `data`, and `balance`. In other words, it is an object with persistent storage and defined behavior.
 
@@ -24,7 +24,7 @@ Since accounts handle messages one at a time, messages are processed in strict o
 
 This behavior follows the **actor model**, where each contract is an independent entity reacting to messages.
 
-### The lowest level: AccountChain
+### The Lowest Level: AccountChain
 
 A **chain** can be viewed as a sequence of transactions, such as `Tx1 → Tx2 → Tx3 → …`. When this transaction sequence pertains to a single account, it is specifically termed an **AccountChain**.
 
@@ -42,7 +42,7 @@ Additionally, each block can contain queues of incoming and outgoing messages. I
 
 Now let's consider many accounts. We can get a few AccountChains and store them together; such a set of AccountChains is called a **ShardChain**. In the same way, we can cut a ShardChain into **ShardBlocks**, which are an aggregation of individual AccountBlocks.
 
-### Dynamic splitting and merging of ShardChains
+### Dynamic Splitting and Merging of ShardChains
 
 Note that since a ShardChain consists of easily distinguished AccountChains, we can easily split it. That way, if we have one ShardChain that describes events that happen with one million accounts and there are too many transactions per second to be processed by a single node, we **split** that chain into two smaller ShardChains, with each chain accounting for half a million accounts and each processed on a separate subset of nodes.
 
@@ -65,7 +65,7 @@ An aggregation of all shards, which contains all accounts that behave according 
 
 In TON, there can be many sets of rules, and thus, many WorkChains operate simultaneously and can interact with each other by sending messages cross-chain in the same way that accounts of one chain can interact with each other.
 
-### WorkChain: a blockchain with your own rules
+### WorkChain: A Blockchain With Your Own Rules
 
 If you want to customize the rules of the ShardChains group, you could create a **WorkChain**. For example, it's theoretically possible to create a WorkChain that supports EVM to run Solidity smart contracts, but this would be a complex undertaking due to the differences between TVM and EVM.
 
