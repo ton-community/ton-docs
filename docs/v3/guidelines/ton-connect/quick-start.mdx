@@ -1,6 +1,6 @@
 ---
 title: Quick start
-description: "A 5-minute guide to add TON Connect to your dApp: manifest, SDK install and first 1 TON transfer."
+description: "A 5-minute guide to add TON Connect to your DApp: manifest, SDK install and first 1 TON transfer."
 keywords:
   - ton connect
   - quick start
@@ -19,7 +19,7 @@ import Feedback from '@site/src/components/Feedback';
 
 A TON Connect *manifest* is a small JSON file that lets wallets discover your DApp:
 
-```json
+```jsonc
 {
   "url": "<app-url>",                        // required
   "name": "<app-name>",                      // required
@@ -40,7 +40,7 @@ Place the file at `https://myapp.com/tonconnect-manifest.json` so that wallets c
 npm i @tonconnect/ui-react
 ```
 
-### Minimal react example
+### Minimal React example
 
 ```tsx title="App.tsx"
 import { TonConnectUIProvider, ConnectButton } from '@tonconnect/ui-react';
@@ -55,7 +55,7 @@ export default function App() {
 }
 ```
 
-Once the user has connected you can build and send a transaction:
+Once the user has connected, you can build and send a transaction:
 
 ```ts
 await tonConnectUI.sendTransaction({
@@ -87,7 +87,7 @@ Open your browser at `http://localhost:5173`, connect a wallet and try the *Send
 
 ## HTML sandbox for quick testing
 
-For quick testing, you can use a single-file HTML example (see [TON Connect demo](https://memearchivarius.github.io/ton-connect-demo/)).
+For quick testing, you can use a single-file HTML example (see [TON Connect demo](https://ton-connect.github.io/demo-dapp-with-react-ui/)).
 
 <details>
   <summary>Click to view a single-file HTML example</summary>
@@ -123,7 +123,7 @@ For quick testing, you can use a single-file HTML example (see [TON Connect demo
 </details>
 
 ## Next steps
-1. Learn *how the protocol works* → [How TON Connect works](/v3/guidelines/ton-connect/how-ton-connect-works)  
+1. Learn *how the protocol works* → [How TON Connect works](/v3/guidelines/ton-connect/overview#how-ton-connect-works)  
 2. Check the *Payload cookbook* and craft custom transfers → [Payload cookbook](/v3/guidelines/ton-connect/cookbook/ton-transfer)
 
 <Feedback />
