@@ -56,7 +56,7 @@ A common transfer would look like this:
 <br></br>
 <div class="text--center">
   <ThemedImage
-    alt=""
+    alt="TON transfer diagram"
     sources={{
       light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1.svg?raw=true',
       dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1_dark.svg?raw=true',
@@ -117,7 +117,7 @@ async function main() {
 main();
 ```
 
-Using `API_KEY` in this case, allows you to access TON functionality through the `endpoint`. By running this script, we authenticate to our wallet through a `public/private key` pair generated from the `mnemonic phrase`. After preparing a transaction, we send it to TON, resulting in a message that the wallet sends to itself with the *'Hello from wallet!'* message.
+Using an API key in this case allows you to access TON functionality through the `endpoint`. By running this script, we authenticate to our wallet through a `public/private key` pair generated from the `mnemonic phrase`. After preparing a transaction, we send it to TON, resulting in a message that the wallet sends to itself with the *'Hello from wallet!'* message.
 
 :::caution Advanced Level
 In most scenarios, `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS` will work, but if you want a deeper understanding, continue reading in the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
@@ -225,7 +225,7 @@ Click the button below to get started:
 
 <Button href="/v3/guidelines/quick-start/developing-smart-contracts/setup-environment" colorType={'primary'} sizeType={'sm'}>
 
-  Setup development environment
+  Set up development environment
 
 </Button>
 
