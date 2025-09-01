@@ -235,7 +235,7 @@ Before exploring wallets in more detail, let’s examine how wallets accept exte
 
 Now, let’s take a closer look.
 
-### Replay protection - seqno
+### Replay protection - `seqno`
 
 Message replay protection in the wallet smart contract relies on the `seqno` (Sequence Number), which tracks the order of sent messages. Preventing message repetition is critical, as duplicate messages can compromise the system’s integrity. When analyzing wallet smart contract code, the `seqno` is typically managed as follows:
 
@@ -246,7 +246,7 @@ throw_unless(33, msg_seqno == stored_seqno);
 The code above compares the `seqno` from the incoming message with the `seqno` stored in the smart contract. If the values do not match, the contract returns an error with the `33 exit code`. This ensures that if the sender provides an invalid `seqno`, indicating a mistake in the message sequence, the contract prevents further processing and safeguards against such errors.
 
 :::note
-It's also essential to consider that anyone can send external messages. If you send 1 TON to someone, someone else can repeat this message. However, when the seqno increases, the previous external message becomes invalid, and no one will be able to repeat it, thus preventing the possibility of stealing your funds.
+It's also essential to consider that anyone can send external messages. If you send 1 TON to someone, someone else can repeat this message. However, when the `seqno` increases, the previous external message becomes invalid, and no one will be able to repeat it, thus preventing the possibility of stealing your funds.
 :::
 
 ### Signature
@@ -655,7 +655,7 @@ body := cell.BeginCell().
 Note that no `.endCell()` was used in defining the `toSign` here. In this case, it is necessary **to transfer toSign content directly to the message body**. If writing a cell was required, it would have to be stored as a reference.
 
 :::tip Wallet V4
-In addition to the basic verification process we learned above for the Wallet V3, Wallet V4 smart contracts [extract the opcode to determine whether a simple translation or a message associated with the plugin](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L94-L100) is required. To match this version, it is necessary to add the `storeUint(0, 8).` (JS/TS), `MustStoreUInt(0, 8).` (Golang) functions after writing the **sequence number (seqno)** and before specifying the transaction mode.
+In addition to the basic verification process we learned above for the Wallet V3, Wallet V4 smart contracts [extract the opcode to determine whether a simple translation or a message associated with the plugin](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L94-L100) is required. To match this version, it is necessary to add the `storeUint(0, 8).` (JS/TS), `MustStoreUInt(0, 8).` (Golang) functions after writing the **sequence number (`seqno`)** and before specifying the transaction mode.
 :::
 
 ### External message creation
