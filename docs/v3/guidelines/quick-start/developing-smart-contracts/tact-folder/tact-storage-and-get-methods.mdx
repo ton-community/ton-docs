@@ -5,7 +5,7 @@ import Button from '@site/src/components/button'
 
 # Storage and get methods
 
-> **Summary:** In the previous steps, we learned how to use the `Blueprint SDK` and its project structure.
+> **Summary:** In the previous steps, we learned how to use `Blueprint` and its project structure.
 
 :::info
 For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#start/) and [Tact By Example](https://tact-by-example.org/00-hello-world/).
@@ -63,7 +63,7 @@ message(0x7e8764ef) Add {
 
 
 
-#### Defining the contract
+### Defining the contract
 
 The [contract](https://docs.tact-lang.org/book/contracts/) definition in Tact follows an object-oriented programming style:
 
@@ -73,9 +73,9 @@ contract HelloWorld {
 }
 ```
 
-#### Contract storage
+### Contract storage
 
-A contract may store its state variables as follows. They may be accessed with [`Self reference`](https://docs.tact-lang.org/book/contracts/#self)
+A contract may store its state variables as follows. They may be accessed using the ['self' reference](https://docs.tact-lang.org/book/contracts/#self).
 
 ```tact
 id: Int as uint32;
@@ -85,7 +85,7 @@ These fields are serialized similarly to structures and stored in the contract's
 
 Use `self.id` and `self.counter` to access them within contract functions.
 
-#### Initializing the contract
+### Initializing the contract
 
 Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function/) function to set initial values:
 
@@ -96,7 +96,7 @@ init(id: Int) {
 }
 ```
 
-#### Handling messages
+### Handling messages
 
 To accept messages from other contracts, use a [receiver](https://docs.tact-lang.org/book/functions/#receiver-functions) function. Receiver functions automatically match the message's opcode and invoke the corresponding function:
 
@@ -115,12 +115,12 @@ receive() {
 }
 ```
 
-#### Getter functions
+### Getter functions
 
 Tact supports [getter functions](https://docs.tact-lang.org/book/functions/#getter-functions) for retrieving contract state off-chain:
 
 :::note
-Get function cannot be called from another contract.
+Getter functions cannot be called from another contract.
 :::
 
 ```tact title="/contracts/hello_world.tact"
@@ -129,7 +129,7 @@ get fun counter(): Int {
 }
 ```
 
-#### Complete contract
+### Complete contract
 
 ```tact title="/contracts/hello_world.tact"
 // message with opcode
@@ -197,7 +197,7 @@ Expected output should look like this:
 
 ## Step 2: update wrapper
 
-After building your contract, Tact automatically generates a special wrapper file. This [wrapper]((https://docs.tact-lang.org/book/compile/#wrap-ts)) simplifies interaction with your contract from TypeScript, such as calling its methods or sending messages.
+After building your contract, Tact automatically generates a special wrapper file. This [wrapper](https://docs.tact-lang.org/book/compile/#wrap-ts) simplifies interaction with your contract from TypeScript, such as calling its methods or sending messages.
 
 In the wrapper file, you'll find this line of code:
 
@@ -207,7 +207,7 @@ export * from '../build/HelloWorld/tact_HelloWorld';
 
 This code exports everything inside the `tact_HelloWorld.ts` file in the build folder, making it available for use in other files.
 
-## Step 3: updating tests
+## Step 3: update tests
 
 
 <details>
