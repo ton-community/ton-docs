@@ -2,13 +2,23 @@ import Feedback from '@site/src/components/Feedback';
 
 # Overview
 
-This page helps you choose the right tools to integrate TON Blockchain into your dApp.
+This article helps you choose the right tools for application development in TON Ecosystem.
 
-## Interaction with TON Blockchain
+## TMA development
 
-To interact with TON Blockchain and process its data, choose one of the listed [APIs](/v3/guidelines/dapps/apis-sdks/api-types) and a suitable [SDK](/v3/guidelines/dapps/apis-sdks/sdk).
+- Use [Mini Apps SDKs](/v3/guidelines/dapps/tma/overview#mini-apps-sdks) for [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview) development.
+- Choose [JS/TS-based SDK](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript) to interact with TON Blockchain.
 
-## Analytics data
+## DApps development
+
+- Use Tolk, FunC, or Tact [programming languages](/v3/documentation/smart-contracts/overview#programming-languages) to develop TON Blockchain smart contracts for your [DApp](/v3/guidelines/dapps/overview).
+- To interacts with TON Blockchain and process its data, choose one of the listed [SDKs](/v3/guidelines/dapps/apis-sdks/sdk). One of the most popular languages for this purpose include:
+  - [JavaScript/TypeScript](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript)
+  - [Go](/v3/guidelines/dapps/apis-sdks/sdk#go)
+  - [Python](/v3/guidelines/dapps/apis-sdks/sdk#python)
+- To integrate user authentication and payments processing via with their TON wallets, use [TON Connect](/v3/guidelines/ton-connect/overview).
+
+## TON data analytics
 
 Developers often need to run analytical queries on top of on-chain data—for example, to track historical changes and aggregate data from multiple accounts.
 Since blockchains are not designed for analytical workloads, you need to build an indexing pipeline and run off-chain analytical queries. Creating such pipelines
@@ -19,13 +29,10 @@ from scratch can be resource-consuming, so you can use one of these alternatives
 - If you need real-time on-chain data tracking, you can run your own [TON node](/v3/documentation/infra/nodes/node-types) and launch [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/README.md) or [ton-index-worker](https://github.com/toncenter/ton-index-worker).
 - [Chainbase](https://docs.chainbase.com/catalog/Ton/Overview) offers a set of raw and decoded tables with TON data. It allows you to run SQL queries and fetch results via API.
 
-## Health status
+## Infrastructure status
 
-| Resource | Description |
-|----------|--------------|
-| [Blockchain Status](https://status.toncenter.com/) | Displays uptime, node availability, transaction statistics, and overall network health for Mainnet and Testnet. |
-| [Tonstat.us](https://tonstat.us/) | Real-time dashboard tracking performance and reliability of RPC/API providers in the TON ecosystem. |
-| [TON Status](https://t.me/tonstatus) | Technical notifications and up-to-date requests for action for TON validators, developers, and integrators. |
+- [status.toncenter](https://status.toncenter.com/) - Displays various node activity statistics from the last hour.
+- [Tonstat.us](https://tonstat.us/) - A real-time Grafana dashboard, updated every 5 minutes.
 
 ## See also
 
