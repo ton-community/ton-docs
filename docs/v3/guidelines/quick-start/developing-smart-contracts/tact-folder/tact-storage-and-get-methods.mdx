@@ -8,7 +8,7 @@ import Button from '@site/src/components/button'
 > **Summary:** In the previous steps, we learned how to use the `Blueprint SDK` and its project structure.
 
 :::info
-For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#start/) and [Tact By Example](https://tact-by-example.org/00-hello-world/).
+For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#start/) and [Tact by example](https://tact-by-example.org/00-hello-world/).
 :::
 
 
@@ -107,7 +107,7 @@ receive(msg: Add) {
 }
 ```
 
-For accepting messages with empty body you can add `receive` function with no arguments:
+To accept messages with an empty body, add a `receive` function with no arguments:
 
 ```tact title="/contracts/hello_world.tact"
 receive() {
@@ -175,7 +175,7 @@ contract HelloWorld {
 }
 ```
 
-Verify that smart contract code is correct by running build script:
+Verify that the smart contract code is correct by running the build script:
 
 ```bash
 npx blueprint build
@@ -288,7 +288,7 @@ This code exports everything inside the `tact_HelloWorld.ts` file in the build f
 
   ```
 
-  Don't forget to verify the example is correct by running test script:
+  Don't forget to verify the example is correct by running the test script:
 
   ```bash
   npx blueprint test
@@ -320,7 +320,7 @@ You've written your first smart contract using Tact, tested it, and explored how
 
 Now, it's time to **deploy the contract** to TON Blockchain.
 
-<Button href="/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-deploying-to-network" colorType={'primary'} sizeType={'sm'}>
+<Button href="/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-deploying-to-network/" colorType={'primary'} sizeType={'sm'}>
 
   Deploy to the network
 
