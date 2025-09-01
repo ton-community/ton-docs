@@ -59,15 +59,15 @@ The model is used to precisely describe and analyze distributed systems. For exa
 
 An **account** in TON is an actor characterized by the following components:
 
-- **Account properties** — common properties of any account: _ID, balance, status, and last transaction (`last_tx`)_
+- **Account properties** — common properties of any account: _ID, balance, status, and last transaction logical time (`last_trans_lt`)_
 - **Data** — user defined data
 - **Code** — custom logic defining the account's behavior
 
 The general state fully defines all account types in TON. Examples:
 
 - `(ID1, 0 TON, unexist)`
-- `(ID2, 10 TON, uninit, last_tx)`
-- `(ID3, -0.5 TON, frozen)`
+- `(ID2, 10 TON, uninit, last_trans_lt)`
+ - `(ID3, 0 TON, frozen)`
 
 ![](/img/docs/blockchain-fundamentals/account_eng.svg)
 
@@ -81,7 +81,7 @@ A **smart contract** is an account whose _code_ and _data_ are already deployed 
 
 - An **account** is an actor that has a general state — such as balance, address, and status — and may optionally include code and data.
 
-Example: `(ID1, 0 TON, unexist)` or `(ID2, 2 TON, inited, last_tx, data, code)`
+Example: `(ID1, 0 TON, unexist)` or `(ID2, 2 TON, inited, last_trans_lt, data, code)`
 
 - A **smart contract** is an actor with **deployed** code and data that define its specific behavior.
 
@@ -97,9 +97,9 @@ In TON, contracts or actors do not call each other directly. Instead, they commu
 
 **Asynchrony** is a property of communication, meaning that a message does not need to be processed immediately. This implies the following:
 
-1. _Immediate responses are not guaranteed_. The receiver may delay responding or may not respond at all.
-2. _Senders remain non-blocking_. After sending a message, an actor continues handling other messages or tasks without blocking or waiting for a response to the previous one—even if that response never arrives.
-3. _Message ordering is preserved per destination account_. Each account processes incoming messages in the order they are received. If a message is malformed or incomplete, it is skipped, and the following message is processed without delay.
+1. _No immediate response is guaranteed_. The receiver may delay responding or may not respond at all.
+2. _The sender does not wait for a reply_. After sending a message, an actor continues handling other messages or tasks without blocking or waiting for a response to the previous one—even if that response never arrives.
+3. _Messages are processed sequentially per destination account_. Each account processes incoming messages one at a time. If a message is malformed or incomplete, it may be skipped.
 
 This is different from synchronous models, where the flow is: call → wait for a response → continue.
 In TON, a result can only be received as a separate message — and only if it is explicitly sent.
@@ -131,7 +131,7 @@ Transactions are processed **asynchronously**, meaning that each account’s upd
 
 Earlier, we mentioned that an account is an actor defined by the following components:
 
-- Account properties (ID, balance, status, `last_tx`)
+- Account properties (ID, balance, status, `last_trans_lt`)
 - Data
 - Code
 
@@ -153,31 +153,32 @@ account$1 addr:MsgAddressInt storage_stat:StorageInfo
 - Storage statistics — `StorageInfo`
 
 <details>
-  ```tlb
+  <summary>Full TL‑B account schema</summary>
 
-  account_none$0 = Account;
-  account$1 addr:MsgAddressInt storage_stat:StorageInfo
-  storage:AccountStorage = Account;
+```tlb
+account_none$0 = Account;
+account$1 addr:MsgAddressInt storage_stat:StorageInfo
+storage:AccountStorage = Account;
 
-  account_storage$_ last_trans_lt:uint64
-  balance:CurrencyCollection state:AccountState
-  = AccountStorage;
+account_storage$_ last_trans_lt:uint64
+balance:CurrencyCollection state:AccountState
+= AccountStorage;
 
-  account_uninit$00 = AccountState;
-  account_active$1 _:StateInit = AccountState;
-  account_frozen$01 state_hash:bits256 = AccountState;
+account_uninit$00 = AccountState;
+account_active$1 _:StateInit = AccountState;
+account_frozen$01 state_hash:bits256 = AccountState;
 
-  acc_state_uninit$00 = AccountStatus;
-  acc_state_frozen$01 = AccountStatus;
-  acc_state_active$10 = AccountStatus;
-  acc_state_nonexist$11 = AccountStatus;
+acc_state_uninit$00 = AccountStatus;
+acc_state_frozen$01 = AccountStatus;
+acc_state_active$10 = AccountStatus;
+acc_state_nonexist$11 = AccountStatus;
 
 
-  _ fixed_prefix_length:(Maybe (## 5)) special:(Maybe TickTock)
-  code:(Maybe ^Cell) data:(Maybe ^Cell)
-  library:(Maybe ^Cell) = StateInit;
+_ fixed_prefix_length:(Maybe (## 5)) special:(Maybe TickTock)
+code:(Maybe ^Cell) data:(Maybe ^Cell)
+library:(Maybe ^Cell) = StateInit;
 
-  ```
+```
 </details>
 
 Let’s clarify which properties are part of the **account properties**, according to the TL-B schema:
@@ -187,9 +188,9 @@ Let’s clarify which properties are part of the **account properties**, accordi
 - Status → `AccountState`
 - Last transaction logical time (`last_trans_lt`) — also part of the general state
 
-Meanwhile, the data and code are defined within the state:` AccountState` field.
+Meanwhile, the data and code are defined within the state: `AccountState` field.
 
-Now, let’s take a closer look at the account properties and how it’s represented in the data layout.
+Now, let’s take a closer look at the account properties and how they’re represented in the data layout.
 
 ### Account status
 
@@ -198,8 +199,9 @@ TON defines account states `AccountState` as follows:
 | Status   | TL-B code | Description                                                                                                                                                                                                                                  |
 | -------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `uninit` | `00`      | The account exists but contains no code or data. It may hold a non-zero balance but is not initialized yet.                                                                                                                                  |
-| `frozen` | `01`      | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. The account has zero or negative balance, or doesn't meet the workchain’s minimum requirement. |
-| `active` | `10`      | The account includes a `StateInit`, which stands for State Initialized, with deployed code and data. It means that it's already initialized. It is an active smart contract, ready to process incoming messages.                             |
+| `frozen` | `01`      | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. This occurs when storage‑fee debt exceeds network limits.                                   |
+| `active` | `10`      | The account includes a `StateInit` (initial code and data) with deployed code and data. It means that it's already initialized. It is an active smart contract, ready to process incoming messages.                                        |
+| `nonexist` | `11`   | The account does not exist. It has no balance, code, or data, and can be created on first initialization or incoming transfer.                                                                                                              |
 
 ```tlb
 account_uninit$00 = AccountState;
@@ -215,10 +217,10 @@ The diagram below illustrates the lifecycle of an account in the TON blockchain,
 
 Smart contracts are a set of promises in digital form, including protocols that govern how the parties fulfil these promises.
 
-In TON, typically by smart contract recognize:
+In TON, a smart contract typically refers to:
 
-- The program code executed, as described in FunC, Tact, or Tolk, in the blockchain.
-- The account that implements business logic and content code.
+- Program code executed on the blockchain, written in FunC, Tact, or Tolk.
+- The account that contains the contract code and implements the business logic.
 
 In technical terms, a smart contract in TON is an `Account` in the active state (`AccountState = active`) with:
 
@@ -226,13 +228,12 @@ In technical terms, a smart contract in TON is an `Account` in the active state 
 - an initialized `data` field in `StateInit` — storing the persistent contract state
 
 :::note
-An account may be in the `active` state with `state_init.code = None`. For example, immediately after a `SetCode` action in the VM. This is an edge case: such a state is not valid for execution but is technically possible.
+An account may be in the `active` state with `state_init.code = None`. For example, immediately after a `SetCode` action in the VM. This is an edge case: such a state is not valid for execution but is technically possible and implementation‑specific.
 :::
 
 ### Address
 
-An address in TON is a unique identifier for a smart contract required for interaction between network participants.
-The account itself has an address, but we define the address entirely for arbitrary use only through a smart contract.
+Every account has an address. In practice, addresses are primarily used for smart contracts and can be determined from the initial StateInit even before deployment.
 It consists of the following components:
 
 - **WorkChain ID** — a 32-bit signed integer indicating the WorkChain to which the account belongs (e.g., -1 for the MasterChain, 0 for the BaseChain).
@@ -276,7 +277,7 @@ In other words, an AccountChain is a _micro-blockchain_ scoped to a single accou
 Like a regular blockchain, it is a linear, append-only sequence of transactions — but dedicated to just one account.
 It stores and orders the entire history of that account’s operations and interactions, ensuring transparency and traceability.
 
-At the network level, many such chains are grouped into a **ShardChain** or simply **shard**, which manages a collection of accounts. This abstraction supports logical grouping _AccountChains_ across physical infrastructure _ShardChain ↔ Validator_.
+At the network level, many such chains are grouped into a **ShardChain** or simply **shard**, which manages a collection of accounts. This abstraction supports logical grouping of AccountChains across the physical infrastructure (ShardChain ↔ Validator).
 
 The diagram below provides a graphical representation of an AccountChain and its structure.
 ![](/img/docs/blockchain-fundamentals/accountchain.svg)
