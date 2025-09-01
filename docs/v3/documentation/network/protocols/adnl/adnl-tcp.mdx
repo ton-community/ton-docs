@@ -12,10 +12,10 @@ In the TCP version of ADNL, network nodes utilize public keys (ed25519) as their
 
 Each ADNL TCP packet, except for the handshake, has the following structure:
 
-- 4 bytes of packet size in little-endian (N)
-- 32 bytes nonce (random bytes to protect against checksum attacks)
+- 4-byte packet size in little-endian (N)
+- 32-byte nonce (random bytes to protect against checksum attacks)
 - (N - 64) payload bytes
-- 32 bytes SHA256 checksum from nonce and payload
+- 32-byte SHA-256 checksum of nonce and payload
 
 The entire packet, including its size, is encrypted using **AES-CTR**.
 
@@ -27,14 +27,14 @@ The handshake packet is an exception; it is transmitted partially unencrypted an
 
 To establish a connection, we need to know the server's IP, port, and public key and generate our own private and public key, ed25519.
 
-Public server data such as IP, port, and key can be obtained from the [global config](https://ton-blockchain.github.io/global.config.json). The IP in the config, which is numerical, can be converted to normal form using,(for example) [this tool](https://www.browserling.com/tools/dec-to-ip). The public key in the config is in base64 format.
+Public server data such as IP, port, and key can be obtained from the [global config](https://ton-blockchain.github.io/global.config.json). The IP in the config (a decimal integer) can be converted to dotted-decimal IPv4 form using (for example) [this tool](https://www.browserling.com/tools/dec-to-ip). The public key in the config is in base64 format.
 
 The client generates 160 random bytes, some of which will be used by the parties as the basis for AES encryption.
 
 Two permanent AES-CTR ciphers are created, which the parties will use to encrypt/decrypt messages after the handshake.
 
-- Cipher A - key 0 - 31 bytes, iv 64 - 79 bytes
-- Cipher B - key 32 - 63 bytes, iv 80 - 95 bytes
+- Cipher A - key 0–31 bytes, IV 64–79 bytes
+- Cipher B - key 32–63 bytes, IV 80–95 bytes
 
 The ciphers are utilized in the following order:
 
@@ -46,21 +46,21 @@ The ciphers are utilized in the following order:
 To establish a connection, the client must send a handshake packet containing:
 
 - \[32 bytes] **Server key ID** [\[see details here\]](#getting-key-id)
-- \[32 bytes] **Our public key is ed25519**
-- \[32 bytes] **SHA256 hash from our 160 bytes**
+- \[32 bytes] **Our Ed25519 public key (32 bytes)**
+- \[32 bytes] **SHA-256 hash of our 160 bytes**
 - \[160 bytes] **Our 160 bytes encrypted** [\[see details here\]](#handshake-packet-data-encryption)
 
-When receiving a handshake packet, the server will do the same actions: receive an ECDH key, decrypt 160 bytes, and create 2 permanent keys. If everything works out, the server will respond with an empty ADNL packet, without payload, to decrypt which (as well as subsequent ones) we need to use one of the permanent ciphers.
+When receiving a handshake packet, the server will do the same actions: derive the ECDH shared key, decrypt the 160 bytes, and create two persistent ciphers. If everything works out, the server will respond with an empty ADNL packet, without payload, to decrypt which (as well as subsequent ones) we need to use one of the permanent ciphers.
 
 From this point on, the connection can be considered established.
 
-After we have established a connection, we can start receiving information; the TL language serializes data.
+After establishing a connection, you can start receiving information. Data is serialized using TL.
 
 [Learn more about TL here](/v3/documentation/data-formats/tl).
 
 ## Ping and pong
 
-It is optimal to send a ping packet once every 5 seconds. This is necessary to maintain the connection while no data is being transmitted, otherwise the server may terminate the connection.
+It is optimal to send a ping packet once every 5 seconds. This is necessary to maintain the connection while no data is being transmitted; otherwise, the server may terminate the connection.
 
 Like all the others, the ping packet is built according to the standard schema described [above](#packet-structure) and carries the request ID and ping ID as payload data.
 
@@ -68,13 +68,13 @@ Let's find the desired schema for the ping request [here](https://github.com/ton
 
 Therefore, our ADNL ping packet will look like this:
 
-- 4 bytes of packet size in little-endian -> 64 + (4+8) = **76**
-- 32 bytes nonce -> random 32 bytes
-- 4 bytes of ID TL schema -> **9a2b084d**
-- 8 bytes of request-id -> random uint64 number
-- 32 bytes of SHA256 checksum from nonce and payload
+- 4-byte packet size in little-endian -> 64 + (4+8) = **76**
+- 32-byte nonce -> random 32 bytes
+- 4-byte schema ID -> **9a2b084d**
+- 8 bytes of the request ID -> random uint64 number
+- 32-byte SHA-256 checksum of nonce and payload
 
-We send our packet and wait for [tcp.pong](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L23), `random_id` will be equal to the one we sent in ping packet.
+Send the packet and wait for [tcp.pong](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L23), where `random_id` equals the one sent in the ping packet.
 
 ## Receiving information from a liteserver
 
@@ -97,17 +97,17 @@ The MasterChain block is used in many further requests as an input parameter to 
 
 We are looking for the [TL schema we require](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/lite_api.tl#L60), calculate its ID and build the packet:
 
-- 4 bytes of packet size in little endian -> 64 + (4+32+(1+4+(1+4+3)+3)) = **116**
-- 32 bytes nonce -> random 32 bytes
-- 4 bytes of ID ADNLQuery schema -> **7af98bb4**
+- 4-byte packet size in little endian -> 64 + (4+32+(1+4+(1+4+3)+3)) = **116**
+- 32-byte nonce -> random 32 bytes
+- 4-byte ADNLQuery schema ID -> **7af98bb4**
 - 32 bytes `query_id:int256` -> random 32 bytes
   - 1 byte array size -> **12**
-  - 4 byte of ID LiteQuery schema -> **df068c79**
+  - 4-byte LiteQuery schema ID -> **df068c79**
     - 1 byte array size -> **4**
-    - 4 bytes of ID getMasterchainInfo schema -> **2ee6b589**
+    - 4-byte getMasterchainInfo schema ID -> **2ee6b589**
     - 3 zero bytes of padding (alignment to 8)
   - 3 zero bytes of padding (alignment to 16)
-- 32 bytes of checksum SHA256 from nonce and payload
+- 32-byte SHA-256 checksum of nonce and payload
 
 Packet example in hex:
 
@@ -527,7 +527,7 @@ pub.unenc data:bytes = PublicKey   -- ID 0a451fb6
 pk.aes key:int256 = PrivateKey     -- ID 3751e8a5
 ```
 
-As an example, for keys of type ed25519 that are used for handshake, the key ID will be the SHA256 hash from **\[0xC6, 0xB4, 0x13, 0x48]** and **public key**, (36 byte array, prefix + key).
+As an example, for keys of type ed25519 that are used for handshake, the key ID will be the SHA-256 hash of **[0xC6, 0xB4, 0x13, 0x48]** and the **public key** (36-byte array, prefix + key).
 
 [Please see code example](https://github.com/xssnick/tonutils-go/blob/2b5e5a0e6ceaf3f28309b0833cb45de81c580acc/liteclient/crypto.go#L16).
 
@@ -535,7 +535,7 @@ As an example, for keys of type ed25519 that are used for handshake, the key ID 
 
 The handshake packet is sent in a semi-open form, only 160 bytes are encrypted, containing information about permanent ciphers.
 
-To encrypt them, we need an AES-CTR cipher, to get it we need a SHA256 hash of 160 bytes and [ECDH shared key](#getting-a-shared-key-using-ecdh).
+To encrypt them, we need an AES-CTR cipher, to get it we need a SHA-256 hash of 160 bytes and [ECDH shared key](#getting-a-shared-key-using-ecdh).
 
 The cipher is built like this:
 
