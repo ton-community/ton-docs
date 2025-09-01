@@ -34,7 +34,7 @@ rldp.query query_id:int256 max_answer_size:long timeout:int data:bytes = rldp.Me
 rldp.answer query_id:int256 data:bytes = rldp.Message;
 ```
 
-The serialized structure is encapsulated in the `adnl.message.custom` TL schema and transmitted over ADNL UDP.
+The serialized structure is encapsulated in the [`adnl.message.custom`](/v3/documentation/network/protocols/adnl/adnl-udp#adnlmessagecustom) TL schema and transmitted over ADNL UDP.
 
 RLDP transfers are utilized for sending large amounts of data. A random `transfer_id` is generated, and the data is then processed using the FEC algorithm.
 
@@ -68,6 +68,8 @@ All incoming requests from the TON network are directed to the proxy via the RLD
 
 On the user's side, they launch a proxy, such as [Tonutils Proxy](https://github.com/xssnick/TonUtils-Proxy), to access the .ton sites. All traffic is wrapped in the reverse order: requests are sent to the local HTTP proxy, which then forwards them via RLDP to the remote TON site.
 
+See also: [Run your own TON Proxy to connect to TON Sites](/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy).
+
 HTTP communication within RLDP is structured using TL formats:
 
 ```tlb
@@ -88,14 +90,14 @@ The scheme of work is as follows:
   - If not 0, sends a `http.getNextPayloadPart` request to the client
   - When receiving a request, the client sends `http.payloadPart` - the requested body piece depending on `seqno` and `max_chunk_size`.
   - The server repeats requests, incrementing `seqno`, until it receives all the chunks from the client, i.e. until the `last:Bool` field of the last chunk received is true.
-- After processing the request, the server sends `http.response`, the client checks the `Content-Length` header
-  - If it is not 0, then sends a `http.getNextPayloadPart` request to the server, and the operations are repeated, as in the case of the client but vice-versa.
+- After processing the request, the server sends `http.response`. The client checks the `no_payload:Bool` flag in the response.
+  - If `no_payload` is false, it sends a `http.getNextPayloadPart` request to the server, and the operations are repeated (mirroring the request flow) until the `last:Bool` field is true.
 
 ## Request the TON site
 
 To understand how RLDP works, let's look at an example of getting data from the TON site `foundation.ton`.
 
-Assuming say we have already got its ADNL address by calling the Get method of the NFT-DNS contract, [determined the address and port of the RLDP service using DHT](https://github.com/xssnick/ton-deep-doc/blob/master/DHT.md), and [connected to it over ADNL UDP](https://github.com/xssnick/ton-deep-doc/blob/master/ADNL-UDP-Internal.md).
+Assume we have already obtained its ADNL address by calling the get method of the DNS contract, [determined the address and port of the RLDP service using DHT](/v3/documentation/network/protocols/dht/dht-deep-dive), and [connected to it over ADNL UDP](/v3/documentation/network/protocols/adnl/adnl-udp).
 
 ### Send a GET request to `foundation.ton`
 
@@ -170,7 +172,7 @@ rldp.messagePart transfer_id:int256 fec_type:fec.Type part:int total_size:long s
 - `seqno` - for the first packet will be equal to 0, and for each subsequent packet it will increase by 1, will be used as parameter to decode and encode symbol.
 - `data` - our encoded symbol, 768 bytes in size.
 
-After serializing `rldp.messagePart`, wrap it in `adnl.message.custom` and send it over ADNL UDP.
+After serializing `rldp.messagePart`, wrap it in [`adnl.message.custom`](/v3/documentation/network/protocols/adnl/adnl-udp#adnlmessagecustom) and send it over ADNL UDP.
 
 We will send packets in a continuous loop, incrementing the `seqno` each time, until we either receive the `rldp.complete` message from the peer or reach a timeout. Once we have sent a number of packets equal to the number of our symbols, we can slow down the transmission and send additional packets, for example, once every 10 milliseconds or even less frequently.
 
@@ -182,9 +184,7 @@ These extra packets are intended for recovery in case of data loss, as UDP is a 
 
 During the sending process, we can expect a response from the server. In our case, we are waiting for `rldp.answer` containing `http.response`.
 
-The response will arrive in the same format as it was sent during the request, but the `transfer_id` will be inverted (each byte will undergo an `XOR` operation with `0xFF`).
-
-We will receive `adnl.message.custom` messages that include `rldp.messagePart`.
+We will receive [`adnl.message.custom`](/v3/documentation/network/protocols/adnl/adnl-udp#adnlmessagecustom) messages that include `rldp.messagePart`.
 
 First, we need to extract FEC information from the initial message received during the transfer. Specifically, we are looking for the `data_size`, `symbol_size`, and `symbols_count` parameters from the `fec.raptorQ` messagePart structure.
 
@@ -200,7 +200,7 @@ http.response http_version:string status_code:int reason:string headers:(vector 
 
 The main fields are generally straightforward, as they function similarly to those in HTTP.
 
-One notable flag is `no_payload`. If this flag is set to true, it indicates that there is no body in the response, meaning `Content-Length` is 0. In this case, the response from the server can be considered received.
+One notable flag is `no_payload`. If this flag is set to true, it indicates that there is no body in the response. In this case, the response from the server can be considered received.
 
 If `no_payload` is false, this means there is content in the response, and we need to retrieve it. To do this, we should send a request using the TL schema `http.getNextPayloadPart`, which should be wrapped in `rldp.query`.
 
