@@ -1,12 +1,12 @@
 import Feedback from '@site/src/components/Feedback';
 
-# The differences of blockchains
+# Differences between TON and Ethereum
 
 ## Introduction
 
-In this chapter, we will examine the key differences between the Ethereum blockchain and the TON blockchain. The analysis will include an overview of the network architectures, highlight their unique features, and evaluate the advantages and disadvantages of each.
+In this chapter, we examine the key differences between the Ethereum blockchain and the TON blockchain, including an overview of the network architectures, highlighting their unique features, and evaluating the advantages and disadvantages of each.
 
-Starting with an overview of the Ethereum and TON ecosystems, we can note that both platforms offer a similar structure of participants and services, including users who hold assets and make transactions, validators who keep the network up and running and secure, and application developers who use the blockchain as the basis for their products and services. Both ecosystems include custodial and non-custodial services that give users different control over their assets.
+Starting with an overview of the Ethereum and TON ecosystems, we can note that both platforms offer a similar structure of participants and services, including users who hold assets and make transactions, validators who keep the network running and secure, and application developers who use the blockchain as the basis for their products and services. Both ecosystems include custodial and non-custodial services that give users different control over their assets.
 
 Additionally, it is worth highlighting that both platforms facilitate the creation of **decentralized applications (DApps)**, offering developers powerful tools and standards for development.
 
@@ -14,24 +14,24 @@ However, despite the similarities in overall structure and features offered, the
 
 ## Differences between TON and Ethereum
 
-### Account
+### Accounts
 
-In the first subsection, we compared Ethereum and TON, highlighting their key architectural differences and the main challenges faced by Ethereum. Of particular note are the different approaches to organizing interactions in these blockchains and using models. These differences come from the unique architectural choices of each platform. For developers accustomed to Ethereum, it is essential to deeply understand these differences to effectively transition to developing on TON. This understanding will allow the architecture to adapt and optimize the interaction of smart contracts in the new environment.
+This section compares Ethereum and TON account models and interaction patterns.
 
 #### Ethereum
 
-Ethereum uses an account-based model to track balances. An account stores information about different coin balances, like a regular bank account. There are two types of accounts:
+Ethereum uses an account-based model to track balances. An account stores its balance and state, like a regular bank account. There are two types of accounts:
 
-- **Externally-owned accounts (EOAs)** - externally managed accounts are controlled by the user using public and private key pairs. The public key allows others to send payments to the account.
-- Contract accounts are controlled by smart contract code rather than private keys. Contract accounts cannot initiate transactions independently because they do not have a private key.
+- **Externally-owned accounts (EOAs)** - externally managed accounts are controlled by the user using public and private key pairs. The address allows others to send funds to the account (the address is derived from the public key).
+- **Contract accounts** - controlled by smart contract code rather than private keys. Contract accounts cannot initiate transactions independently because they do not have a private key.
 
-When an Ethereum user creates a wallet, an EOA is added to the global state on all nodes in the decentralized network. Deploying a smart contract creates a contract account capable of storing and distributing funds programmatically based on certain conditions. All account types have balances and storage and can trigger transactions by calling functions in other accounts. This structure provides Ethereum's ability to serve as programmable money.
+When an Ethereum user creates a wallet, an EOA is added to the global state on all nodes in the decentralized network. Deploying a smart contract creates a contract account capable of storing and distributing funds programmatically based on certain conditions. EOAs initiate transactions; contract accounts execute code and perform internal calls when invoked. This structure provides Ethereum's ability to serve as programmable money.
 
-Ethereum has synchronous transaction processing, where each transaction is processed sequentially and in strict order. Synchronous processing ensures that the state of the blockchain always remains consistent and predictable for all participants in the network. All transactions are atomic; they either complete successfully or unsuccessfully without partial or incomplete execution. Moreover, when a smart contract invokes another smart contract, the invocation occurs instantaneously within the same transaction. But here again, there are disadvantages — a transaction can grow as much as it can. A negative effect of synchronicity is still overloading, as computations cannot run in parallel. The number of contracts and users grows, and the inability to parallelize computations becomes a major limiting factor in the growth of the network.
+Ethereum has synchronous transaction processing, where each transaction is processed sequentially and in strict order. Synchronous processing ensures that the state of the blockchain always remains consistent and predictable for all participants in the network. All transactions are atomic; they either complete successfully or unsuccessfully without partial or incomplete execution. Moreover, when a smart contract invokes another smart contract, the invocation occurs instantaneously within the same transaction. Transactions can become large, and synchronous execution limits parallelism, leading to congestion as usage grows.
 
 #### TON
 
-The actor model is an approach to parallel and distributed computing where the main element is an actor - an independent executable block of code. Initially developed for cluster computing, this model is widely used in micro-server architectures to meet the needs of modern distributed systems due to its ability to scale, parallelism, and fault tolerance. Actors receive and process messages, depending on the logic of the message, respond by accepting local changes or performing actions in response, and can create other actors or send messages onward. They are thread-safe and reentrant, eliminating the need for locks and simplifying parallel processing of tasks. This model is ideal for building scalable and reliable server solutions, providing efficient concurrent access control and support for synchronous and asynchronous messaging.
+The actor model is an approach to parallel and distributed computing where the main element is an actor - an independent executable block of code. Initially developed for cluster computing, this model is widely used in microservice architectures to meet the needs of modern distributed systems due to its ability to scale, parallelism, and fault tolerance. Actors receive and process messages, depending on the logic of the message, respond by accepting local changes or performing actions in response, and can create other actors or send messages onward. They are thread-safe, eliminating the need for locks and simplifying parallel processing of tasks. This model is ideal for building scalable and reliable server solutions, providing efficient concurrent access control and support for synchronous and asynchronous messaging.
 
 In TON, smart contracts represent everything and are called actors within the actor model context. A smart contract is an object with address, code, data, and balance properties. It can store data and behaves according to instructions received from other smart contracts. After a contract receives a message and processes it by executing its code in the TVM, various scenarios can occur:
 
