@@ -12,25 +12,22 @@ MyTonCtrl will create a backup package in the user's home directory. The package
 
 The backup will include the following components:
 
-- Node configuration file located at (`/var/ton-work/db/config.json`)
-
-- Node keyring found in (`/var/ton-work/db/keyring`)
-
-- Node liteserver and console keys stored in (`/var/ton-work/keys`)
-
-- MyTonCtrl configuration database and related files located at (`~/.local/share/mytoncore`)
-
-- Wallet and pool data
+- Node configuration file located at `/var/ton-work/db/config.json`
+- Node keyring found in `/var/ton-work/db/keyring`
+- Node liteserver and console keys stored in `/var/ton-work/keys`
+- MyTonCtrl configuration database and related files located at `~/.local/share/mytoncore`
+- Wallets located at `~/.local/share/mytoncore/wallets/`
+- Pools located at `~/.local/share/mytoncore/pools/`
 
 ## Automated backup package creation
 
-If your node is involved in validation, you can set up automated backups of the node configuration. These backups will be performed immediately after your node participates in the elections, ensuring that all data needed for the upcoming validation cycle is preserved.
+If your node is involved in validation, you can set up automated backups of the node configuration. These backups will be performed after election-related operations, ensuring that all data needed for the upcoming validation cycle is preserved.
 
-To enable automated backups, set the parameter: `auto_backup` to `true` by issuing the command `set auto_backup true` on the MyTonCtrl console.
+To enable automated backups, set the `auto_backup` parameter to `true` by running `set auto_backup true` in the MyTonCtrl console.
 
 ### Automated backup location and lifecycle
 
-By default, automated backups are saved in the directory `/tmp/mytoncore/auto_backups/` located in the home folder of the user under which the **mytoncore** process is running. You can change this location by adjusting the `auto_backup_path` parameter in the MyTonCtrl console.
+By default, automated backups are saved under `/tmp/mytoncore/auto_backups/`. You can change this location by adjusting the `auto_backup_path` parameter in the MyTonCtrl console.
 
 **Note that automated backups that are older than 7 days will be automatically deleted.**
 

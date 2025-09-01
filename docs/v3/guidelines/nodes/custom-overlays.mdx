@@ -14,7 +14,7 @@ If you have multiple nodes under your control, it is expedient to unite them int
 
 ## Default custom overlays
 
-MyTonCtrl utilizes default custom overlays, which can be found [here](https://ton-blockchain.github.io/fallback_custom_overlays.json). These overlays are typically not in use and are meant for emergency situations when there are connectivity issues with the public overlay.
+MyTonCtrl uses default custom overlays, which can be found [here](https://ton-blockchain.github.io/fallback_custom_overlays.json). These overlays are typically not in use and are meant for emergency situations when there are connectivity issues with the public overlay.
 
 If you wish to stop participating in default custom overlays, please run the following commands:
 
@@ -58,7 +58,7 @@ Create a config file in the following format:
 All nodes listed in the configuration **must** participate in the overlay; if they do not add an overlay with the exact same configuration, connectivity will be poor and broadcasts may fail.
 :::
 
-There is a special word `@validators` to create a dynamic custom overlay that MyTonCtrl will generate automatically each round adding all current validators.
+There is a special keyword `@validators` that MyTonCtrl generates automatically each round, adding all current validators.
 
 ### Add custom overlay
 
