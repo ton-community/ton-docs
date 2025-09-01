@@ -12,26 +12,34 @@ We recommend using **Blueprint**, a tool for writing, testing, and deploying sma
 
 ## Create a new TON project
 
-> **Prerequisite:** Node.js v16 or higher
+> **Prerequisite:** Node.js 18+ (22+ recommended)
 
 1. Create a new TON project:
    ```bash
    npm create ton@latest
    ```
-2. Enter any project name and select **"A simple counter contract (Tolk)"** when prompted by Blueprint.
+2. Enter any project name and select the simple counter contract template in Tolk when prompted by Blueprint.
+3. Change into the project directory:
+   ```bash
+   cd ./<project-name>
+   ```
+4. Install dependencies:
+   ```bash
+   npm install
+   ```
 
 ## Project structure
 
 Here's a quick look at the typical project layout:
 
-   ```
-   my-first-contract/
-   ├── build/             # Compiled smart contract bytecode
-   ├── contracts/         # Smart contract sources (e.g., counter.tolk)
-   ├── scripts/           # TypeScript deployment scripts
-   ├── tests/             # TypeScript tests
-   ├── wrappers/          # TypeScript wrappers for contracts
-   ```
+```text
+my-first-contract/
+├── build/             # Compiled smart contract bytecode
+├── contracts/         # Smart contract sources (e.g., counter.tolk)
+├── scripts/           # TypeScript deployment scripts
+├── tests/             # TypeScript tests
+├── wrappers/          # TypeScript wrappers for contracts
+```
 
 ## Build the project
 
@@ -58,7 +66,9 @@ npx blueprint run
 # or
 yarn blueprint run
 ```
-Use this command to deploy your contract to Mainnet, Testnet, or MyLocalTon.
+Use this command to deploy your contract to Mainnet or Testnet.
+
+Note: To target a local node, configure a local network endpoint in `blueprint.config.ts`.
 
 ## IDE support
 
