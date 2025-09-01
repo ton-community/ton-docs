@@ -5,10 +5,10 @@ import Button from '@site/src/components/button'
 # TON Connect for Telegram Bots - Python
 
 :::warning deprecated
-This guide explains an outdated method of integrating TON Connect with Telegram bots. For a more secure and modern approach, consider using [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview for a more modern and secure integration.
+This guide explains an outdated method of integrating TON Connect with Telegram bots. For a more secure and modern approach, consider using [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview) for a more modern and secure integration.
 :::
 
-In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication using Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect).
+In this tutorial, we’ll create a sample Telegram bot that supports TON Connect 2.0 authentication using Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect).
 We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
 
  
@@ -30,9 +30,9 @@ Check out GitHub
 
 ### Install libraries
 
-To make bot we are going to use `aiogram` 3.0 Python library.
+To build the bot, we use the aiogram 3.0 Python library.
 To start integrating TON Connect into your Telegram bot, you need to install the `pytonconnect` package.
-And to use TON primitives and parse user address we need `pytoniq-core`.
+To use TON primitives and parse the user address, install `pytoniq-core`.
 You can use pip for this purpose:
 
 ```bash
@@ -581,4 +581,3 @@ What is next?
 - [Sending messages](/v3/guidelines/ton-connect/cookbook/ton-transfer)
 
 <Feedback />
-
