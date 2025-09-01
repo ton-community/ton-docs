@@ -1,5 +1,5 @@
 ---
-title: Обзор
+title: "Язык Tolk: общие сведения"
 ---
 
 import Feedback from "@site/src/components/Feedback";
@@ -42,7 +42,7 @@ import Button from "@site/src/components/button";
 
 #### Пример простого контракта на Tolk:
 
-```tolk
+```text
 import "utils"
 
 struct Storage {
@@ -66,7 +66,7 @@ get fun currentCounter(): int {
 <details>
   <summary><b>Аналогичная реализация на FunC</b></summary>
 
-  ```func
+  ```text
   #include "utils.fc";
 
   global int ctx_counter;
@@ -78,7 +78,7 @@ get fun currentCounter(): int {
 
   () recv_internal(int msg_value, cell msg_full, slice msg_body) impure {
     slice cs = msg_full.begin_parse();
-    int flags = cs.load_uint(4);
+    int flags = cs~load_uint(4);
     if (flags & 1) {
       return ();
     }
