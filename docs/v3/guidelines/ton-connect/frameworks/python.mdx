@@ -21,7 +21,7 @@ pip install aiofiles
 
 ### Creating the Manifest
 
-Create the `manifest.json` file for your application according to the [guidelines](https://docs.ton.org/v3/guidelines/ton-connect/creating-manifest), and host it at a publicly accessible URL.
+Create the `tonconnect-manifest.json` file for your application according to the [guidelines](https://docs.ton.org/v3/guidelines/ton-connect/creating-manifest), and host it at a publicly accessible URL.
 
 ### Implementing Storage
 
@@ -241,9 +241,9 @@ rpc_request_id = await connector.send_transaction(
 )
 ```
 
-- `valid_until` – transaction expiration time in seconds
-- `address` – recipient in user-friendly format
-- `amount` – amount in nanotons
+- `valid_until` – transaction expiration time in seconds.
+- `address` – recipient in user-friendly format.
+- `amount` – amount in nanotons.
 
 The method returns `rpc_request_id`, a unique identifier for tracking the request.
 
@@ -444,7 +444,7 @@ is_pending = connector.is_request_pending(rpc_request_id)
 
 This method returns `True` if the request has not yet been confirmed in the user's wallet; otherwise, it returns `False`.
 
-### Cancelling a Request
+### Canceling a Request
 
 If you need to cancel a request for any reason, use:
 
@@ -510,7 +510,7 @@ This separation allows you to keep success and failure logic cleanly isolated.
 
 You can register event handlers in two ways:
 
-#### Using method
+#### Using a method
 
 ```python
 def on_transaction(user_id: int, transaction: SendTransactionResponse):
@@ -553,7 +553,7 @@ async def on_connect(user_id: int, wallet: WalletInfo, comment: str, db_session:
 
 #### Defining global parameters for all events:
 
-You can define default parameters for all events at the connector level:
+You can define default parameters for all events at the TonConnect instance level:
 
 ```python
 tc = TonConnect(
