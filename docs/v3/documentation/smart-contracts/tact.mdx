@@ -50,7 +50,7 @@ The most prominent and distinctive features of Tact are:
 - Reusable behaviors through [traits].
 - Support for low-level programming with [`asm` functions][asmfun].
 - Generation of [single-file TypeScript wrappers] for convenient interactions with compiled contracts, which include:
-  - Type definitions for [Structs] and [Messages] observable in the [compilation report].
+  - Type definitions for [Structs] and [Messages] as shown in the [compilation report].
   - Corresponding `storeStructureName()` and `loadStructureName()` functions for (de)serialization.
   - All global and contract-level constants.
   - Bi-directional records of exit codes: from their names to numbers and vice versa.
@@ -84,12 +84,12 @@ The most prominent and distinctive features of Tact are:
 
 Some selected software and applications based on contracts written in Tact, deployed in production, and consumed by end users:
 
-###### Open source or source available
+#### Open source or source available
 
 - [Proof-of-capital](https://github.com/proof-of-capital/TON) - [proof-of-capital](https://proofofcapital.org/) is a market-making smart contract that protects interests of all holders.
   - See the [security audit report](https://raw.githubusercontent.com/nowarp/public-reports/master/2025-01-proof-of-capital.pdf) by [Nowarp](https://nowarp.io).
 
-###### Closed source
+#### Closed source
 
 - [Tradoor](https://tradoor.io) - Fast and social DEX on TON.
   - See the [security audit report](https://www.tonbit.xyz/reports/Tradoor-Smart-Contract-Audit-Report-Summary.pdf) by TonBit.
@@ -103,14 +103,14 @@ See [Tact in production](https://github.com/tact-lang/awesome-tact#tact-in-produ
 
 ### Compiler
 
-The Tact compiler is distributed as an [NPM package](https://www.npmjs.com/package/@tact-lang/compiler) bundled with the [Tact standard library](https://docs.tact-lang.org/ref/).
+The Tact compiler is distributed as an [npm package](https://www.npmjs.com/package/@tact-lang/compiler) bundled with the [Tact standard library](https://docs.tact-lang.org/ref/).
 
 The recommended Node.js version is 22 or higher, while the minimum version is 18.
 
 Use your favorite package manager to install it into a Node.js project:
 
 ```bash
-# yarn is recommended, but not required
+# Example with yarn (others work too)
 yarn add @tact-lang/compiler
 
 # you can also use npm
@@ -136,26 +136,26 @@ It will make the `tact` compiler available on your PATH, as well as:
 
 ### Tooling
 
-###### Extensions and plugins
+#### Extensions and plugins
 
 - [VS Code extension](https://marketplace.visualstudio.com/items?itemName=tonstudio.vscode-tact) - powerful and feature-rich extension for Visual Studio Code (VSCode) and VSCode-based editors like VSCodium, Cursor, Windsurf, and others.
   - Get it on the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=tonstudio.vscode-tact).
   - Get it on the [Open VSX Registry](https://open-vsx.org/extension/tonstudio/vscode-tact).
   - Or install from the [`.vsix` files in nightly releases](https://github.com/tact-lang/tact-language-server/releases).
 - [JetBrains IDEs plugin](https://plugins.jetbrains.com/plugin/27290-tact#) - provides syntax highlighting, code navigation, and more.
-- [Language Server (LSP Server)](https://github.com/tact-lang/tact-language-server) - supports Sublime Text, (Neo)Vim, Helix, and other editors with LSP support.
+- [Language Server (LSP)](https://github.com/tact-lang/tact-language-server) - supports Sublime Text, (Neo)Vim, Helix, and other editors with LSP support.
 - [tact.vim](https://github.com/tact-lang/tact.vim) - Vim 8+ plugin.
 - [tact-sublime](https://github.com/tact-lang/tact-sublime) - Sublime Text 4 package.
-  - Get it on the [Package Control](https://packagecontrol.io/packages/Tact).
+  - Get it on [Package Control](https://packagecontrol.io/packages/Tact).
 
-###### Security
+#### Security
 
 - [Misti](https://github.com/nowarp/misti) - Static smart contract analyzer.
 - [TON Symbolic Analyzer (TSA)](https://github.com/espritoxyz/tsa) - Static smart contract analysis tool based on symbolic execution.
 
-###### Utility
+#### Utility
 
-- Formatter (`tact-fmt`) — The official formatter. It ships with the Tact Language Server, VS Code extension, and as a standalone binary with the compiler. You can invoke it by running `npx tact-fmt` in your Tact projects.
+- Formatter (`tact-fmt`) — the official formatter. It ships with the Tact Language Server, VS Code extension, and as a standalone binary with the compiler. You can invoke it by running `npx tact-fmt` in your Tact projects.
 - BoC Disassembler (`unboc`) — Disassembler for [`.boc`](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells) files. Ships as a standalone binary with the compiler. You can invoke it by running `npx unboc` in your Tact projects.
 
 ### Getting started
