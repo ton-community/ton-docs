@@ -21,7 +21,7 @@ import Feedback from "@site/src/components/Feedback";
 
 # Hash-based tracking
 
-This article explains how to find a transaction linked to an external-in message in TON Blockchain.
+This article explains how to find a transaction linked to an external-in message in the TON blockchain.
 The process involves normalizing the message, searching for the transaction by message hash, and waiting for transaction confirmation.
 
 ## Hashes
@@ -32,9 +32,9 @@ Understanding how hashing works will help you effectively track transactions, va
 ## What is a hash?
 
 In TON, a **hash** is a cryptographic fingerprint of data based on the **SHA-256** algorithm. However, the hashing process is not a direct application of SHA-256 to raw data;
-it involves serialization and internal formatting steps, and in some cases, may rely on alternative algorithms.
+it involves serialization and internal formatting steps.
 
-Each cell, message, or transaction has its unique hash, which acts as a digital signature.
+Each cell, message, or transaction has its unique hash, which acts as a cryptographic fingerprint or identifier.
 
 :::info Important
 Hashes in TON are irreversible — the original data cannot be reconstructed from the hash.
@@ -66,14 +66,14 @@ message$_ {X:Type} info:CommonMsgInfo
 
 ```
 
-Let’s walk through an example using a message body with the comment "Hello, TON!" and compute its hash.
+Let’s walk through an example using a message body with the comment "Hello TON!" and compute its hash.
 
 ```typescript title="msg_body_hash.ts"
 import { beginCell } from "@ton/core";
 
 // Standard body with text comment
 const messageBody = beginCell()
-  .storeUint(0, 32) // op code
+  .storeUint(0, 32) // opcode
   .storeStringTail("Hello TON!")
   .endCell();
 
@@ -118,7 +118,7 @@ import { storeMessage, beginCell, Address, Message } from "@ton/ton";
 import { toNano } from "@ton/core";
 
 const messageBody = beginCell()
-  .storeUint(0, 32) // op code
+  .storeUint(0, 32) // opcode
   .storeStringTail("Hello TON!")
   .endCell();
 
@@ -334,7 +334,7 @@ const client = new TonClient({
 
 // Construct the message body — arbitrary opcode and payload string
 const messageBody = beginCell()
-  .storeUint(0, 32) // op-code — arbitrary, e.g., 0
+  .storeUint(0, 32) // opcode — arbitrary, e.g., 0
   .storeStringTail("Hello TON!") // Payload string in the message body
   .endCell();
 
