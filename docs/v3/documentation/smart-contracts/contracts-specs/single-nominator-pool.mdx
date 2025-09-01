@@ -29,7 +29,7 @@ For a complete feature comparison, see:
 
 ## Official code hash
 
-Check this in https://verifier.ton.org before sending funds to a live contract.
+Verify this on [TON Verifier](https://verifier.ton.org) before sending funds to a live contract.
 
 Single nominator v1.0
 
@@ -45,14 +45,14 @@ zA05WJ6ywM/g/eKEVmV6O909lTlVrj+Y8lZkqzyQT70=
 
 ## Architecture
 
-The architecture is nearly identical to the [nominator pool](https://github.com/ton-blockchain/nominator-pool) contract:
+The architecture is nearly identical to the [nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) contract:
 
 ![image](/img/nominator-pool/single-nominator-architecture.png)
 
 ### Separation to two roles
 
 - _Owner_ - cold wallet (private key that is not connected to the Internet) that owns the funds used for staking and acts as the single nominator
-- _Validator_ - the wallet whose private key is on the validator node (can sign blocks but can't steal the funds used for stake)
+- _Validator_ - the wallet whose private key is on the validator node (can sign blocks but can't steal the funds used for staking)
 
 ### Workflow
 
@@ -121,14 +121,14 @@ This is the setup implemented in this repo. It's a very simplified version of th
 
 ![image](/img/nominator-pool/single-nominator-architecture.png)
 
-If you have a single nominator who holds all stakes for validation, this is the most secure setup you can use. In addition to its simplicity, this contract provides the owner multiple emergency safeguards to recover stakes even in extreme scenarios like _Elector_ upgrades that break the recover stake interface.
+If you have a single nominator who holds all stakes for validation, this is the most secure setup you can use. In addition to its simplicity, this contract provides the owner with multiple emergency safeguards to recover stakes even in extreme scenarios like _Elector_ upgrades that break the recover stake interface.
 
 ## Owner only messages
 
 The nominator owner can perform 4 operations:
 
-#### 1. Withdraw
-Used to withdraw funds to the owner's wallet. To withdraw the funds the owner should send a message with a body that includes: opcode=0x1000 (32 bits), query_id (64 bits) and withdraw amount (stored as coin variable). The nominator contract will send the funds with BOUNCEABLE flag and mode=64. <br/><br/>
+### 1. Withdraw
+Used to withdraw funds to the owner's wallet. To withdraw the funds the owner should send a message with a body that includes: opcode=0x1000 (32 bits), query_id (64 bits) and withdraw amount (stored as coin variable). The nominator contract will send the funds in bounceable mode (`mode=64`). <br/><br/>
 In case the owner is using a **hot wallet** (not recommended), [withdraw-deeplink.ts](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/ts/withdraw-deeplink.ts) can be used to generate a deeplink to initiate a withdrawal from tonkeeper wallet. <br/>
 
 Command line: `ts-node scripts/ts/withdraw-deeplink.ts single-nominator-addr withdraw-amount` where:
@@ -151,14 +151,14 @@ From the black computer, the owner should run the following:
 
 ### 2. Change validator
 
-Used to change the validator address. The validator can only send NEW_STAKE and RECOVER_STAKE to the elector. If the validator's private key is compromised, the validator's address can be changed. The funds are safe in this case, as only the owner can withdraw them.
+Used to change the validator address. The validator can only send `NEW_STAKE` and `RECOVER_STAKE` to the elector. If the validator's private key is compromised, the validator's address can be changed. The funds are safe in this case, as only the owner can withdraw them.
 
 In case the owner is using a **hot wallet** (not recommended), [change-validator-deeplink.ts](https://github.com/ton-blockchain/single-nominator/blob/main/scripts/ts/change-validator-deeplink.ts) can be used to generate a deeplink to change the validator address.
 
 Command line: `ts-node scripts/ts/change-validator-deeplink.ts single-nominator-addr new-validator-address` where:
 
 - single-nominator-addr is the single nominator address.
-- new-validator-address (defaults to ZERO address) is the address of the new validator. If you want to disable the validator immediately and only later set a new validator, it might be convenient to set the validator address to the ZERO address.
+- new-validator-address (defaults to zero address) is the address of the new validator. If you want to disable the validator immediately and only later set a new validator, it might be convenient to set the validator address to the zero address.
 
 The owner should run the deeplink from a phone with a tonkeeper wallet.
 
@@ -172,7 +172,7 @@ From the black computer, the owner should run the following:
 - create and sign the tx: `fift -s wallet-v3.fif my-wallet single_nominator_address sub_wallet_id seqno amount -B change-validator.boc` where my-wallet is the owner's pk file (without extension). The amount of 1 TON should be enough to pay fees (the remaining amount will be returned to the owner). The change-validator.boc is the boc generated above.
 - from a computer with access to the internet, run: `lite-client -C global.config.json -c 'sendfile wallet-query.boc'` to send the boc file (wallet-query.boc) generated in the previous step.
 
-### 3. Send raw msg
+### 3. Send raw message
 
 This opcode is not expected to be used under normal conditions.
 
@@ -186,7 +186,7 @@ Use this opcode to recover funds from a changed Elector contract address where s
 
 ### 4. Upgrade
 
-This emergency opcode (0x9903) should only be used to upgrade the nominator contract in critical situations. The message must include:
+This emergency opcode (`0x9903`) should only be used to upgrade the nominator contract in critical situations. The message must include:
 - `opcode=0x9903` (32 bits)
 - `query_id` (64 bits)
 - New contract code cell reference
@@ -195,7 +195,6 @@ This emergency opcode (0x9903) should only be used to upgrade the nominator cont
 
 - [Single nominator pool](https://github.com/ton-blockchain/single-nominator)
 - [How to use single nominator pool](/v3/guidelines/smart-contracts/howto/single-nominator-pool)
-- [Orbs single nominator pool contract(legacy)](https://github.com/orbs-network/single-nominator)
+- [Orbs single nominator pool contract (legacy)](https://github.com/orbs-network/single-nominator)
 
 <Feedback />
-
