@@ -114,11 +114,13 @@ You can use backticks to surround an identifier, and then it can contain any sym
 
     <tr>
       <td>
-        <code dangerouslySetInnerHTML={{__html: ';; even 2%&!2 is valid<br>int 2+2 = 5;'}} />
+        <code>{';; even 2%&!2 is valid'}</code><br/>
+        <code>{'int 2+2 = 5;'}</code>
       </td>
 
       <td>
-        <code dangerouslySetInnerHTML={{__html: '// don\'t do like this :)<br>var \`2+2\` = 5;'}} />
+        <code>{"// don't do like this :)"}</code><br/>
+        <code>{'var `2+2` = 5;'}</code>
       </td>
     </tr>
   </tbody>
@@ -259,21 +261,23 @@ Modifiers `inline` and others — with annotations:
   <tbody>
     <tr>
       <td>
-        <code dangerouslySetInnerHTML={{__html: '<br>int f(cell s) inline {'}} />
+        <code>{'int f(cell s) inline {'}</code>
       </td>
 
       <td>
-        <code dangerouslySetInnerHTML={{__html: '@inline<br>fun f(s: cell): int {'}} />
+        <code>{'@inline'}</code><br/>
+        <code>{'fun f(s: cell): int {'}</code>
       </td>
     </tr>
 
     <tr>
       <td>
-        <code dangerouslySetInnerHTML={{__html: '<br>() load_data() impure inline_ref {'}} />
+        <code>{'() load_data() impure inline_ref {'}</code>
       </td>
 
       <td>
-        <code dangerouslySetInnerHTML={{__html: '@inline_ref<br>fun load_data() {'}} />
+        <code>{'@inline_ref'}</code><br/>
+        <code>{'fun load_data() {'}</code>
       </td>
     </tr>
 
@@ -312,7 +316,7 @@ Modifiers `inline` and others — with annotations:
       </td>
 
       <td>
-        <code dangerouslySetInnerHTML={{__html: 'fun cons&lt;X&gt;(head: X, tail: tuple): tuple'}} />
+        <code>{'fun cons<X>(head: X, tail: tuple): tuple'}</code>
       </td>
     </tr>
   </tbody>
@@ -336,7 +340,7 @@ fun mulDivFloor(x: int, y: int, z: int): int
 
 There is also a `@deprecated` attribute, not affecting compilation, but for a human and IDE.
 
-### get instead of method_id
+### `get` instead of `method_id`
 
 In FunC, `method_id` (without arguments) declared a get method. In Tolk, you use a straightforward syntax:
 
@@ -378,15 +382,18 @@ For `method_id(xxx)` (uncommon in practice, but valid), there is an attribute:
   <tbody>
     <tr>
       <td>
-        <code dangerouslySetInnerHTML={{__html: '<br>() after_code_upgrade(cont old_code) impure method_id(1666)'}} />
+        <code>{'() after_code_upgrade(cont old_code) impure method_id(1666)'}</code>
       </td>
 
       <td>
-        <code dangerouslySetInnerHTML={{__html: '@method_id(1666)<br>fun afterCodeUpgrade(oldCode: continuation)'}} />
+        <code>{'@method_id(1666)'}</code><br/>
+        <code>{'fun afterCodeUpgrade(oldCode: continuation)'}</code>
       </td>
     </tr>
   </tbody>
 </table>
+
+Note: FunC `cont` corresponds to Tolk `continuation`.
 
 ### It's essential to declare types of parameters (though optional for locals)
 
@@ -600,7 +607,7 @@ var items = (
 ```
 
 Note that `(5)` is not a tensor. It's just the integer `5` in parentheses.
-With a trailing comma `(5,)` it's still `(5)`.
+With a trailing comma, `(5,)` denotes a one-element tensor.
 
 ### Optional semicolon for the last statement in a block
 
@@ -1288,7 +1295,7 @@ Mind the rule **import what you use**, it's applied to `@stdlib/...` files also 
 
 JetBrains IDE plugin automatically discovers stdlib folder and inserts necessary imports as you type.
 
-### Logical operators && ||, logical not !
+### Logical operators `&&` `||`, logical not `!`
 
 In FunC, there are only bitwise operators `~ & | ^`. Developers making first steps, thinking "okay, no logical, I'll use bitwise in the same manner", often do errors, since operator behavior is completely different:
 
@@ -1301,7 +1308,7 @@ In FunC, there are only bitwise operators `~ & | ^`. Developers making first ste
   </thead>
 
   <tbody>
-    <tr><td colSpan={2}>sometimes, identical:</td></tr>
+    <tr><td colSpan={2}>sometimes identical:</td></tr>
 
     <tr>
       <td>
@@ -1358,7 +1365,7 @@ In FunC, there are only bitwise operators `~ & | ^`. Developers making first ste
   </thead>
 
   <tbody>
-    <tr><td colSpan={2}>sometimes, identical:</td></tr>
+    <tr><td colSpan={2}>sometimes identical:</td></tr>
 
     <tr>
       <td>
