@@ -8,11 +8,11 @@ This document serves as a general guide and is not specific to any language.
 
 ## Capturing the essence of the message
 
-When translating TON docs content, avoid literal translations.
+When translating TON Docs content, avoid literal translations.
 
 The translations must capture the essence of the message. This approach means rephrasing specific phrases or using descriptive translations instead of translating the content word for word.
 
-Different languages have different grammar rules, conventions, and word order. When translating, please be mindful of structuring sentences in the target languages, and avoid word-for-word translation of the English source, as this can lead to poor sentence structure and readability.
+Different languages have different grammar rules, conventions, and word order. When translating, please be mindful of structuring sentences in the target language, and avoid word-for-word translation of the English source, as this can lead to poor sentence structure and readability.
 
 Instead of translating the source text word for word, you should read the entire sentence and adapt it to fit the conventions of the target language.
 
@@ -32,24 +32,22 @@ In most cases, contributors can achieve this result by using short and simple wo
 
 ## Writing system
 
-All of the content should be translated using the correct writing system for your language and should not include any words written using Latin characters.
+Translate using your language’s writing system, except for standard acronyms, brand names, ISO codes, and proper names defined in the [Glossary](/v3/concepts/glossary).
 
-When translating the content, you should ensure that the translations are consistent and do not include any Latin characters.
-
-**Do not translate proper names defined by glossary**
+**Do not translate proper names defined in the [Glossary](/v3/concepts/glossary).**
 
 ## Translating page metadata
 
-Some pages contain metadata, such as 'title', 'lang', 'description', 'sidebar', etc.
+Some pages contain metadata, such as `title`, `lang`, `description`, `sidebar`, etc.
 
-When uploading new pages to Crowdin, we hide content that translators should never translate. This feature makes visible to translators in Crowdin only the text that should be translated.
+When uploading new pages to Crowdin, we hide content that translators should never translate. This feature makes only the text that should be translated visible to translators in Crowdin.
 
-Please be especially careful when translating strings where the source text is 'en'. This represents the language page, which is available and should be translated to the [ISO language code for your language](https://www.andiamo.co.uk/resources/iso-language-codes/). These strings should always be translated using Latin characters, not the writing script, native to the target language.
+Please be especially careful when translating strings where the source text is 'en'. This represents the language page, which is available and should be translated to the [ISO language code for your language](https://www.andiamo.co.uk/resources/iso-language-codes/). These strings should always be entered using Latin characters, not the writing system native to the target language.
 
 Some examples of language codes for the most widely spoken languages:
 
 - English - en
-- Chinese Simplified - zh-CN
+- Simplified Chinese - zh-CN
 - Russian - ru
 - Korean - ko
 - Polish - pl
@@ -83,7 +81,7 @@ Example of how to translate DApps:
 
 Some terms might not have established translations in other languages but are widely known by their original English names. Such terms include newer concepts, like proof-of-work, proof-of-stake, Beacon Chain, staking, etc.
 
-While translating these terms can sound unnatural, since the English version is a basis for other languages, it is highly recommended that they be translated.
+While translating these terms can sound unnatural, since the English version serves as the basis for other languages, it is highly recommended that they be translated.
 
 Feel free to get creative, use descriptive translations, or translate them literally.
 
@@ -91,15 +89,15 @@ Most terms should be translated instead of leaving some in English, as this new 
 
 ## Buttons & CTAs
 
-Do not translate the website's contents, such as buttons.
+Translate the website’s UI text, including buttons.
 
-You may identify button text by viewing the context screenshots connected with most strings or by checking the context in the editor, which includes the phrase ‘’button’’.
+You may identify button text by viewing the context screenshots connected with most strings or by checking the context in the editor, which includes the phrase `button`.
 
 Button translations should be as short as possible to prevent formatting mismatches. Additionally, button translations, i.e., presenting a command or request, should be imperative.
 
 ## Translating for inclusivity
 
-TON docs visitors come from all over the world and from different backgrounds. Therefore, the language on the website should be neutral, welcoming to everyone, and not exclusive.
+TON Docs visitors come from all over the world and from different backgrounds. Therefore, the language on the website should be neutral, welcoming to everyone, and not exclusive.
 
 Gender neutrality is an essential aspect of this. Use the formal address form and avoid gender-specific words in the translations.
 
@@ -111,11 +109,11 @@ Finally, the language should be suitable for all audiences and ages.
 
 When translating, it is crucial to follow the grammar rules, conventions, and formatting used in your language instead of copying from the source. The source text follows English grammar rules and conventions, which do not apply to many other languages.
 
-You should be aware of the rules for your language and translate accordingly. If you need help, contact us; we will help you with resources on translating elements for your language.
+You should be aware of the rules for your language and translate accordingly. If you need help, [contact us](https://t.me/+c-0fVO4XHQsyOWM8); we will help you with resources on translating elements for your language.
 
 Some examples of what to be particularly mindful of:
 
-### Punctuation, formatting
+### Punctuation and formatting
 
 #### Capitalization
 
@@ -126,11 +124,7 @@ Some examples of what to be particularly mindful of:
 #### Spacing
 
 - Orthography rules define the use of spaces for each language. Because spaces are used everywhere, these rules are some of the most distinct, and spaces are some of the most mistranslated elements.
-- Some common differences in spacing between English and other languages:
-  - Space before units of measure and currencies. Example: USD, EUR, kB, MB
-  - Space before degree signs. Example: °C, ℉
-  - Space before some punctuation marks, especially the ellipsis. Example: Then… in summary
-  - Space before and after slashes. Example: if / else
+You should be aware that spacing rules vary by language. Spacing before units, degree signs, certain punctuation (e.g., the ellipsis), and around slashes differs across languages. Follow your language’s orthographic rules.
 
 #### Lists
 
@@ -151,8 +145,8 @@ Some examples of what to be particularly mindful of:
 
 #### Hyphens and dashes
 
-- In English, a hyphen `-` is used to join words or different parts of a word, while a dash `—` indicates a range or a pause.
-  - Example: TON — is ... proof-of-stake.
+- In English, use an en dash (–) for ranges and an em dash (—) for pauses.
+  - Example: Use an em dash—like this—to indicate a pause.
 - Many languages have different rules for using hyphens and dashes that should be observed.
 
 ### Formats
@@ -166,7 +160,7 @@ Some examples of what to be particularly mindful of:
     - French – **1 000,50**
 - The percent sign is another critical consideration when translating numbers. Write numbers in the typical format for the corresponding language.
   - Example: **100%**, **100 %**, or **%100**.
-- Finally, negative numbers can be displayed differently, depending on the language
+- Finally, negative numbers can be displayed differently, depending on the language.
   - Example: -100, 100-, (100) or [100].
 
 #### Dates
