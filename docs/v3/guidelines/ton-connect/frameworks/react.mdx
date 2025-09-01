@@ -465,7 +465,7 @@ Let's take a look at the default `Blueprint` counter wrapper example and how we 
       increase: 0x7e8764ef,
   };
 
-  export class Counter implements contract {
+  export class Counter implements Contract {
       constructor(
           readonly address: Address,
           readonly init?: { code: Cell; data: Cell },
@@ -607,7 +607,6 @@ Let's take a look at the default `Blueprint` counter wrapper example and how we 
       // Use the TonConnect UI to send the message and wait for the sending
       await this.provider.sendTransaction({
         validUntil: validUntil,
-        from: from,
         messages: [
           {
             address: address,
@@ -688,7 +687,7 @@ This SDK provides wrappers that simplify interaction with these assets. Please c
 
 ## API documentation
 
-[Latest API documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui_react.html)
+[Latest API documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui-react.html)
 
 ## Examples
 
