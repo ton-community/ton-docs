@@ -1,62 +1,67 @@
-# Понимание тестовой сети
+import Feedback from '@site/src/components/Feedback';
+import Button from '@site/src/components/button'
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
+# Тестнет TON
 
-Используйте тестовую сеть TON для разработки и тестирования.
+Тестнет (testnet) в TON — это независимая блокчейн-сеть, которая копирует функциональность мейннета (основной сети), но использует токены без ценности.
+
+Используйте тестнет для безопасной разработки и отладки перед развёртыванием в мейннете.
 
 :::info
-Монеты в тестовой сети не имеют ценности, и сеть может быть сброшена в любое время.
+Монеты в тестовой сети не имеют ценности, а сама она может быть сброшена в любой момент.
 :::
 
-- Глобальная конфигурация тестовой сети: https://ton.org/testnet-global.config.json
-- Получите бесплатные тестовые монеты от [@test_giver_ton_bot](https://t.me/testgiver_ton_bot)
-- Проверьте статус тестовой сети в Telegram канале: [@testnetstatus](https://t.me/testnetstatus)
+## Ключевые ресурсы для начала работы с тестнетом
 
-### Основные сервисы
+<Button href="https://ton.org/testnet-global.config.json" colorType="primary" sizeType={'sm'}>
+  Глобальная конфигурация
+</Button>
 
-Для удобства почти вся инфраструктура основной сети (кошельки, API, мосты и т. д.) была воспроизведена в тестовой сети.
+<Button href="https://t.me/testgiver_ton_bot" colorType={'secondary'} sizeType={'sm'}>
+  Тестовые монеты
+</Button>
 
-- Проводник: https://testnet.tonscan.org
-- Веб-кошелек: https://wallet.ton.org/?testnet=true
-- Расширение браузера: используйте [расширение браузера основной сети](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) и [сделайте это](https://github.com/toncenter/ton-wallet#switch-between-mainnettestnet-in-extension).
-- TON Center AP тестовой сети: https://testnet.toncenter.com
-- HTTP API тестовой сети: https://testnet.tonapi.io/
-- Мост тестовой сети: https://bridge.ton.org/?testnet=true
-- GraphQL dTON тестовой сети: https://testnet.dton.io/
+<Button href="https://t.me/testnetstatus" colorType={'secondary'} sizeType={'sm'}>
+  Канал статуса
+</Button>
 
-## Сервисы тестовой сети экосистемы TON
+## Основные сервисы
+
+Инфраструктура тестнета соответствует мейннету, включая кошельки, API, мосты и многое другое:
+
+| Сервис                | Ссылка                                                                                                                                                                                                                          |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Эксплорер             | [testnet.tonscan.org](https://testnet.tonscan.org)                                                                                                                                                                              |
+| Веб-кошелёк           | [wallet.ton.org](https://wallet.ton.org/?testnet=true)                                                                                                                                                                          |
+| Браузерное расширение | [установить](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) и [переключиться на Testnet](https://github.com/toncenter/ton-wallet?tab=readme-ov-file#switch-between-mainnet-and-testnet) |
+| TON Center API        | [testnet.toncenter.com](https://testnet.toncenter.com)                                                                                                                                                                          |
+| TON HTTP API          | [testnet.tonapi.io](https://testnet.tonapi.io/)                                                                                                                                                                                 |
+| Мост                  | [bridge.ton.org](https://bridge.ton.org/?testnet=true)                                                                                                                                                                          |
+
+## Сервисы экосистемы тестнета
 
 ### Кошельки
 
-- Чтобы переключиться на [тестовую сеть Tonkeeper](https://tonkeeper.com/), нажмите на версию 5 раз в настройках.
-- Тестовая сеть CryptoBot: https://t.me/CryptoTestnetBot
-- Специальная ссылка для тестовой сети TON Space: https://t.me/wallet/start?startapp=tonspace_settings
-- https://multisig.ton.org/?testnet=true
+- [Tonkeeper Testnet](https://tonkeeper.com/)
+- [Crypto Testnet Bot](https://t.me/CryptoTestnetBot)
+- [TON Space Testnet](https://t.me/wallet/start?startapp=tonspace_settings)
+- [Кошелёк с мультиподписью](https://multisig.ton.org/?testnet=true)
 
-### Обозреватели
+### Эксплореры
 
-- https://testnet.tonscan.org
-- https://testnet.tonviewer.com
-- https://test-explorer.toncoin.org
-- https://tonsandbox.com/explorer
-- https://testnet.ton.cx
+- [Tonscan Testnet](https://testnet.tonscan.org)
+- [Tonviewer Testnet](https://testnet.tonviewer.com)
+- [Test explorer](https://test-explorer.toncoin.org)
+- [TON Explorer Testnet](https://tonsandbox.com/explorer)
 
 ### Другие сервисы
 
-- https://minter.ton.org/?testnet=true
+- [Minter Testnet](https://minter.ton.org/?testnet=true)
+- [DNS Testnet](https://dns.ton.org/?testnet=true)
+- [Vesting Testnet](https://vesting.ton.org/?testnet=true)
+- [Test staking](https://teststaking.xyz)
+- [Getgems Testnet](https://testnet.getgems.io)
+- [Hipo Testnet](https://app.hipo.finance/#/network=testnet/)
+- [Elections Testnet](https://testnet-elections.toncenter.com/getValidationCycles?limit=2\&return_participants=true)
 
-- https://dns.ton.org/?testnet=true
-
-- https://vesting.ton.org/?testnet=true
-
-- https://teststaking.xyz
-
-- https://testnet.getgems.io
-
-- https://app.hipo.finance/#/network=testnet/
-
-- https://testnet-elections.toncenter.com/getValidationCycles?limit=2&return_participants=true
-
-
+<Feedback />
