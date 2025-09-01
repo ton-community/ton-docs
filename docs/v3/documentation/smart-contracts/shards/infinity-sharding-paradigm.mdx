@@ -1,10 +1,10 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Infinity Sharding Paradigm
+# Infinite Sharding Paradigm
 
-## Understanding split merge in TON Blockchain
+## Understanding split-merge in the TON Blockchain
 
-The TON (The Open Network) blockchain introduces innovative mechanisms for scalability and efficiency. One of the key features is **split-merge**, a fundamental component of its architecture. This article outlines the core principles of split-merge within the Infinite Sharding Paradigm (ISP) framework.
+The TON (The Open Network) Blockchain introduces innovative mechanisms for scalability and efficiency. One of the key features is **split-merge**, a fundamental component of its architecture. This article outlines the core principles of split-merge within the Infinite Sharding Paradigm (ISP) framework.
 
 #### ISP and its application
 
@@ -22,7 +22,7 @@ The decision to split or merge shards proceeds as follows:
 1. Each block is evaluated using key metrics, such as block size, gas consumption, and logical time (LT) delta.
 2. These metrics are used to determine whether the block is **overloaded** or **underloaded**.
 3. Each shard maintains a history of overload and underload events. Based on recent trends, it sets `want_split` or `want_merge` flags.
-4. Validators make split or merge decisions using these flags by configuration parameters.
+4. Validators make split or merge decisions using these flags and configuration parameters.
 
 ### 1. Evaluating the current block state
 
@@ -55,9 +55,9 @@ Each parameter is classified as follows:
 - `3` - medium limit is exceeded.
 - `4` - hard limit is exceeded.
 
-The block classification is the maximum of the three individual classifications (`Classification of size`, `Classification of gas`, `Classification of lt delta`).
+The block classification is the maximum of the three individual classifications (`Classification of size`, `Classification of gas`, `Classification of LT delta`).
 
-Example: size = 2, gas = 3, lt = 1 → block classification = 3.
+Example: size = 2, gas = 3, LT = 1 → block classification = 3.
 
 Based on classification:
 
@@ -70,11 +70,11 @@ Based on classification:
 Additional heuristics are applied beyond classification based on the message queue status:
 
 - A block is **overloaded** if:
-  - Classification ≥ `2` (soft) and message queue size ≤ `SPLIT_MAX_QUEUE_SIZE = 100000`
-  - Dispatch queue limit is reached, and message queue size ≤ `SPLIT_MAX_QUEUE_SIZE = 100000`
-  - Message queue size is  ≥ `FORCE_SPLIT_QUEUE_SIZE = 4096`, and ≤ `SPLIT_MAX_QUEUE_SIZE = 100000`
+  - Classification ≥ `2` (soft) and message queue size ≤ e.g., `SPLIT_MAX_QUEUE_SIZE = 100000`
+  - Message dispatch queue limit is reached, and message queue size ≤ e.g., `SPLIT_MAX_QUEUE_SIZE = 100000`
+  - Message queue size is ≥ e.g., `FORCE_SPLIT_QUEUE_SIZE = 4096`, and ≤ e.g., `SPLIT_MAX_QUEUE_SIZE = 100000`
 - A block is **underloaded** if:
-  - Classification = `0` (underload) and message queue size ≤ `MERGE_MAX_QUEUE_SIZE = 2047`
+  - Classification = `0` (underload) and message queue size ≤ e.g., `MERGE_MAX_QUEUE_SIZE = 2047`
 
 ### 4. Deciding whether to split or merge
 
@@ -106,7 +106,7 @@ Shards perform the split or merge after a delay of `split_merge_delay = 100` sec
 
 In the infinite sharding paradigm, each account or smart contract is treated as if it were a part of its own ShardChain.
 Interactions between accounts occur exclusively through message passing, following the **actor model**, where accounts act as actors.
-An efficient messaging system between ShardChains is essential for the operation of the TON blockchain. A key feature supporting this is **Instant Hypercube Routing**, which enables near-instantaneous message delivery and processing across ShardChains. Messages created in one ShardChain block are processed in the next block of the target ShardChain — regardless of how many messages are in the system.
+An efficient messaging system between ShardChains is essential for the operation of the TON Blockchain. A key feature supporting this is **Instant Hypercube Routing**, which enables near-instantaneous message delivery and processing across ShardChains. Messages created in one ShardChain block are processed in the next block of the target ShardChain — regardless of how many messages are in the system.
 
 ### Current Status of IHR
 
@@ -122,7 +122,7 @@ Currently, TON uses standard **Hypercube Routing (HR)** for message delivery bet
 
 ### Message Routing Mechanisms
 
-TON blockchain supports two conceptual message routing mechanisms:
+TON Blockchain supports two conceptual message routing mechanisms:
 
 1. **Hypercube Routing (HR)** - Currently implemented mechanism that routes messages between shards through intermediate hops when necessary
 2. **Instant Hypercube Routing (IHR)** - Alternative mechanism (not implemented) that would allow direct message delivery without intermediate hops
@@ -139,7 +139,7 @@ In the diagram above:
 - Blocks 222, 223, and 224 correspond to MasterChain block `seqno = 102`. Block 222 belongs to one shard, while blocks 223 and 224 belong to another.
 - If a split or merge event occurs, the affected shards pause operations until the next MasterChain block is produced.
 
-In summary, **split-merge** in the TON blockchain is a sophisticated yet efficient mechanism that enhances scalability and inter-shard communication. It exemplifies TON's approach to solving core blockchain challenges by prioritizing efficiency and global consistency.
+In summary, **split-merge** in the TON Blockchain is a sophisticated yet efficient mechanism that enhances scalability and inter-shard communication. It exemplifies TON's approach to solving core blockchain challenges by prioritizing efficiency and global consistency.
 
 ## Sharding details
 
@@ -147,7 +147,7 @@ In summary, **split-merge** in the TON blockchain is a sophisticated yet efficie
 
 A ShardChain block and its corresponding state are divided into two components:
 
-1. **Split part:** conforms to the ISP (Independent State Part) form and contains account-specific data.
+1. **Split part:** conforms to the ISP form and contains account-specific data.
 2. **Non-split part:** contains data related to interactions with other blocks and external systems.
 
 #### Interaction with other blocks
