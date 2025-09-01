@@ -15,14 +15,14 @@ Ensuring the security of nodes, particularly in decentralized networks such as b
 - Regularly use package management tools like apt (Debian/Ubuntu) or yum/dnf (CentOS/Fedora) to perform updates.
 
   ```bash
-  #Debian/Ubuntu
-  sudo apt update && sudo  apt  upgrade  -y
+  # Debian/Ubuntu
+  sudo apt update && sudo apt upgrade -y
 
-  #CentOS
-  sudo yum update && sudo yum upgrade -y
+  # CentOS
+  sudo yum update -y
 
-  #Fedora
-  sudo dnf update && sudo dnf upgrade -y
+  # Fedora
+  sudo dnf upgrade -y
   ```
 
 - Consider automating security updates by enabling unattended upgrades for your system.
@@ -31,18 +31,23 @@ Ensuring the security of nodes, particularly in decentralized networks such as b
 
 - **Disable root login:** Prevent root access through SSH by editing the `/etc/ssh/sshd_config` file.
 
-  ```bash
+  ```conf
   PermitRootLogin no
   ```
 - **Use SSH keys:** For a more secure connection, opt for SSH keys instead of password authentication.
-  ```bash
+  ```conf
   PasswordAuthentication no
   ```
 - **Modify the default SSH port:** Changing the default SSH port can help reduce automated brute-force attacks:
 
-  ```bash
+  ```conf
   Port 2222
   ```
+- After editing `/etc/ssh/sshd_config`, apply changes with `sudo systemctl reload ssh` (Debian/Ubuntu) or `sudo systemctl reload sshd` (RHEL/CentOS/Fedora).
+
+:::caution
+Before disabling password authentication or changing the SSH port, ensure you can sign in with SSH keys and that firewall rules allow the new port to avoid lockout.
+:::
 - **Restrict SSH access:** Allow SSH connections only from trusted IP addresses by implementing firewall rules.
 
 ### 4. Implement a firewall
@@ -53,41 +58,52 @@ Ensuring the security of nodes, particularly in decentralized networks such as b
   sudo ufw allow 22/tcp # Allow SSH
   sudo ufw allow 80/tcp # Allow HTTP
   sudo ufw allow 443/tcp # Allow HTTPS
+  sudo ufw default deny incoming
+  sudo ufw default allow outgoing
   sudo ufw enable # Enable firewall
   ```
+
+- If running a full node, ensure the required UDP port is allowed/forwarded in your firewall. See docs/v3/guidelines/nodes/running-nodes/full-node.mdx#port-forwarding.
 
 ### 5. Monitor logs
 
 - Regularly monitor system logs to detect suspicious activities:
-  - `/var/log/auth.log` (for authentication attempts)
+  - `/var/log/auth.log` (authentication attempts on Debian/Ubuntu)
+  - `/var/log/secure` (authentication attempts on RHEL/CentOS)
   - `/var/log/syslog` or `/var/log/messages`
 - Consider implementing centralized logging.
 
 ### 6. Limit user privileges
 
-- Grant root or sudo privileges only to trusted users. Use the sudo command carefully and audit the `/etc/sudoers` file to limit access.
+- Grant root or sudo privileges only to trusted users. Use the sudo command carefully and use `visudo` to audit/edit the `/etc/sudoers` file to limit access.
 
 - Regularly review user accounts and remove any unnecessary or inactive users.
 
 ### 7. Utilize SELinux or AppArmor
 
-- **SELinux** (on RHEL/CentOS) and **AppArmor** (on Ubuntu/Debian) provide mandatory access control, adding an extra layer of security by restricting programs from accessing specific system resources.
+- **SELinux** (on RHEL/CentOS/Fedora) and **AppArmor** (on Ubuntu/Debian) provide mandatory access control, adding an extra layer of security by restricting programs from accessing specific system resources.
 
 ### 8. Install security tools
 
 - Utilize tools such as **Lynis** to conduct regular security audits and identify potential vulnerabilities:
 
   ```bash
-  sudo apt install lynis
+  # Debian/Ubuntu
+  sudo apt install lynis -y
+
+  # RHEL/CentOS/Fedora
+  sudo dnf install lynis -y
+
+  # Run audit
   sudo lynis audit system
   ```
 
 ### 9. Disable unnecessary services
 
-- To minimize the attack surface, disable or remove any unused services. For instance, if FTP or mail services are not needed, ensure to disable them:
+- To minimize the attack surface, disable or remove any unused services. For instance, if FTP or mail services are not needed, ensure you disable them:
 
   ```bash
-  sudo systemctl disable service_name
+  sudo systemctl disable <service_name>
   ```
 
 ### 10. Implement intrusion detection and prevention systems (IDS/IPS)
@@ -95,10 +111,19 @@ Ensuring the security of nodes, particularly in decentralized networks such as b
 - Use tools like **Fail2ban** to block IP addresses after multiple failed login attempts:
 
   ```bash
-  sudo apt install fail2ban
+  # Debian/Ubuntu
+  sudo apt install fail2ban -y
+
+  # RHEL/CentOS/Fedora
+  sudo dnf install fail2ban -y
   ```
 
 - Utilize **AIDE (Advanced Intrusion Detection Environment)** to monitor file integrity and identify any unauthorized changes.
+
+### Unattended updates
+
+- Debian/Ubuntu: `sudo apt install unattended-upgrades`
+- RHEL/Fedora: `sudo dnf install dnf-automatic -y && sudo systemctl enable --now dnf-automatic.timer`
 
 :::caution
 Please remain vigilant and ensure that your node is secure at all times.
