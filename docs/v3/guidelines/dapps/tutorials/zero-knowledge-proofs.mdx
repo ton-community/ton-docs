@@ -7,7 +7,9 @@ import Feedback from '@site/src/components/Feedback';
 **Zero-knowledge (ZK)** proofs are a fundamental cryptographic concept that allows **the prover** to prove to **the verifier** that a statement is true without revealing any additional information. ZK proofs are a powerful tool for building privacy-preserving systems and are widely used in applications such as anonymous payments, private messaging, and trustless bridges.
 
 :::tip TVM upgrade 2023.07
+
 Before June 2023, verifying cryptographic proofs on TON was not possible. Due to the complex computations required for the pairing algorithm, the TON Virtual Machine (TVM) needed to be upgraded with new opcodes to support proof verification. This functionality was added in the [June 2023 update](https://docs.ton.org/learn/tvm-instructions/tvm-upgrade#bls12-381).
+
 :::
 
 ## 🦄 This tutorial will cover
@@ -132,6 +134,7 @@ node ../../../snarkjs/build/cli.cjs powersoftau verify pot14_final.ptau
 Once the process is complete, a file named pot14_final.ptau will be created inside the build/circuits folder. This file can be reused for generating future circuits.
 
 :::caution Constraint size
+
 If you plan to write a more complex circuit with additional constraints, you’ll need to generate a Powers of Tau (PTAU) setup using a larger parameter.
 
 You can remove the unnecessary files:
@@ -151,7 +154,9 @@ circom ../../circuits/test.circom --r1cs circuit.r1cs --wasm circuit.wasm --prim
 After running this command, the compiled circuit will be available in `build/circuits/circuit.sym`, `build/circuits/circuit.r1cs`, and `build/circuits/circuit.wasm`.
 
 :::info altbn-128 and bls12-381 curves
+
 The altbn-128 and bls12-381 elliptic curves are currently supported by snarkjs. However, the [altbn-128](https://eips.ethereum.org/EIPS/eip-197) curve is only supported on Ethereum, whereas TON exclusively supports the bls12-381 curve.
+
 :::
 
 To check the constraint size of the circuit, run:

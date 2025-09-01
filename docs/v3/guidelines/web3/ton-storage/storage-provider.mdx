@@ -34,7 +34,9 @@ The process works as follows:
 6. If the contract's funds are depleted, it becomes inactive, and the provider is no longer obligated to store the bag. The client can either refill the contract or retrieve their files.
 
 :::info
+
 Clients can retrieve their files anytime by providing proof of ownership to the storage contract. Once validated, the contract releases the files and deactivates itself.
+
 :::
 
 ## Smart contract
@@ -94,7 +96,9 @@ The storage contract maintains a client balance, which consists of the funds tra
 ### Contract closure
 
 :::info
+
 If the storage contract is closed, the client receives a message with the remaining balance and [`op=0xb6236d63`](https://github.com/ton-blockchain/ton/tree/testnet/storage/storage-daemon/smartcont/constants.fc#L6).
+
 :::
 
 A storage contract may be closed under the following conditions:
@@ -117,7 +121,9 @@ deploy-provider
 ```
 
 :::info IMPORTANT!
+
 During deployment, you’ll be prompted to send a non-bounceable message with 1 TON to the specified address to initialize the provider. You can verify successful deployment with the `get-provider-info` command.
+
 :::
 
 By default, the contract does not accept new storage contracts. Before activating it, you must configure the provider configuration, which is stored in  `storage-daemon`, and contract parameters stored on-chain.
@@ -205,7 +211,9 @@ send-coins <address> <amount> --message "Some message"
 ```
 
 :::info
+
 All _bags_ stored by the provider are available with the command `list` and can be used as usual. To prevent disrupting the provider's operations, do not delete them or use this storage daemon to work with any other _bags_.
+
 :::
 
 <Feedback />

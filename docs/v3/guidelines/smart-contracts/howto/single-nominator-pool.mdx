@@ -6,13 +6,17 @@ import TabItem from '@theme/TabItem';
 # How to use a single nominator pool
 
 :::tip
+
 Before proceeding with this tutorial, we recommend familiarizing yourself with the [single nominator pool specification](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool).
+
 :::
 
 ### Set up single nominator mode
 
 :::caution
+
 Before starting, ensure you have topped up and [activated](/v3/guidelines/nodes/running-nodes/validator-node#activate-the-wallets) the validator's wallet.
+
 :::
 
 1. Enable single nominator mode:
@@ -66,7 +70,9 @@ test-pool  active  0.99389  spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjA
 You can manage this pool via MyTonCtrl like a standard nominator pool.
 
 :::info
+
 If the pool's balance is sufficient to participate in both rounds (`balance > min_stake_amount * 2`), MyTonCtrl will automatically participate in both rounds using `stake = balance / 2`, unless you manually set the stake using the `set stake` command. This behavior differs from using a nominator pool but resembles staking with a validator wallet.
+
 :::
 
 ## Start without MyTonCtrl
@@ -421,7 +427,9 @@ Initially, the owner of the vesting contract manages it with their wallet contra
 - `owner_wallet` – The TON wallet that owns the `vesting`.
 
 :::caution
+
 Ensure you have backed up the vesting `owner_wallet` recovery phrase. If you lose access to the `owner_wallet`, you will also lose access to managing the `vesting` funds, and recovery will be impossible.
+
 :::
 
 1. Run a full node and wait for it to sync.

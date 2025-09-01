@@ -37,17 +37,21 @@ it involves serialization and internal formatting steps, and in some cases, may 
 Each cell, message, or transaction has its unique hash, which acts as a digital signature.
 
 :::info Important
+
 Hashes in TON are irreversible — the original data cannot be reconstructed from the hash.
 However, they are deterministic — the same input always produces the same hash.
+
 :::
 
 TON uses the _Merkle–Damgård construction_ for hashing, a method of building collision-resistant hash functions from one-way compression functions.
 This design makes it vulnerable to **length extension attacks**.
 
 :::warning
+
 If you use hashes for authentication or message integrity, be aware that the Merkle–Damgård construction is susceptible to length extension attacks.
 
 Avoid relying solely on raw hashes in security-critical contexts.
+
 :::
 
 ## Hashes of structures
@@ -186,7 +190,9 @@ For details on how a hash is computed from the structure above, see:
 - The practical section on retrieving hashes in the [DApp cookbook](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
 
 :::info
+
 A transaction hash is the representation hash (SHA‑256) of the root `Transaction` cell serialized per TL‑B, precisely as it appears in the block. Any change to messages, fees, or the state update alters the hash.
+
 :::
 
 **Obtaining a transaction hash:**
@@ -303,7 +309,9 @@ Normalized message hash: ce70ed4db0fd40aee2bd62b7d92707e8860762737872245687cc238
 ```
 
 :::info
+
 This example shows a low-level construction of the message. For a higher-level, SDK-based approach, see the example in [TON Connect](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message#message-normalization).
+
 :::
 
 **Practical example of calculating a non-normalized hash:**

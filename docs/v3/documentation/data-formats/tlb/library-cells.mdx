@@ -11,7 +11,9 @@ As a result, many data structures in TON are rich in information and optimized f
 Library cells extend this deduplication mechanism on-chain, enabling the incorporation of the same efficiency into custom smart contracts.
 
 :::info
+
 For instance, If you store the `jetton-wallet` code as a library cell (1 cell with 256 + 8 bits, instead of ~20 cells and ~6000 bits), the forwarding fees for a message that includes `init_code` can be reduced from 0.011 TON to 0.003 TON.
+
 :::
 
 ## General info
@@ -23,7 +25,9 @@ In earlier-generation blockchains, this typically means tracking only the most r
 In scenarios involving families of similar contracts, e.g., `jetton-wallets`, the node stores duplicated data—such as identical contract codes—only once. Library cells leverage this deduplication mechanism, reducing storage costs and forwarding fees for such contracts.
 
 :::info Highlevel analogy
+
 You can think of a library cell as a C++ pointer: a small cell that references a larger one, which may include many references. The referenced cell must exist and be registered publicly, i.e., _"published"_.
+
 :::
 
 ## Library cells structure
@@ -113,8 +117,10 @@ To test how contracts that use library cells work in Blueprint, manually add the
 An example implementation can be found [here](https://github.com/ton-blockchain/stablecoin-contract/blob/de08b905214eb253d27009db6a124fd1feadbf72/sandbox_tests/JettonWallet.spec.ts#L100C9-L103C32).
 
 :::info
+
 As of version `@ton/blueprint:0.19.0`, Blueprint does not automatically update the library context if a contract publishes a new library during emulation. You must update it manually.
 This behavior is current as of April 2024 and is expected to be improved in a future release.
+
 :::
 
 ### Get methods for library cell-based contracts

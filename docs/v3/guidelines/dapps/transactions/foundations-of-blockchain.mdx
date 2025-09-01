@@ -226,7 +226,9 @@ In technical terms, a smart contract in TON is an `Account` in the active state 
 - an initialized `data` field in `StateInit` — storing the persistent contract state
 
 :::note
+
 An account may be in the `active` state with `state_init.code = None`. For example, immediately after a `SetCode` action in the VM. This is an edge case: such a state is not valid for execution but is technically possible.
+
 :::
 
 ### Address
@@ -239,8 +241,10 @@ It consists of the following components:
 - **Account ID** — a 256-bit hash of the `StateInit` structure, which includes the contract’s initialized `code`, `data`, and, optionally, a `library`. It is stored as an arbitrary `SliceData` and may not exactly match the hash of `StateInit`.
 
 :::important
+
 `StateInit` (short for _state initialized_) can change as the contract evolves.
 The `account_id` never changes, as it’s based on the very first `StateInit` recorded at deployment.
+
 :::
 
 The address is defined as:

@@ -16,7 +16,9 @@ We highly recommend installing MyTonCtrl on the following supported operating sy
 ## Hardware requirements
 
 :::caution Node usage on personal local machine
+
 You shouldn't run any type of node on your personal local machine for extended periods, even if it meets the requirements. Nodes actively use disks, which can lead to rapid wear and potential damage.
+
 :::
 
 ### With validator
@@ -29,7 +31,9 @@ You shouldn't run any type of node on your personal local machine for extended p
 - 64 TB/month traffic (100 TB/month at a peak load)
 
 :::info Be ready for peak loads
+
 To reliably handle peak loads, a connection of at least 1 Gbit/s is typically required, while the average load is expected to be around 100 Mbit/s.
+
 :::
 
 ### Port forwarding
@@ -39,7 +43,9 @@ All types of nodes require a static external IP address, one UDP port forwarded 
 You can accomplish this by contacting your network provider or [renting a server](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers) to run a node.
 
 :::info
+
 You can find out which UDP ports are open using the `netstat -tulpn` command.
+
 :::
 
 ### Recommended providers
@@ -57,7 +63,9 @@ The TON Foundation recommends the following providers for running a validator:
 | AWS            | `i4i.8xlarge`                   | `32 vCPUs`              | `256GB` | `2 x 3,750 AWS Nitro SSD (fixed)` | `Up to 25 Gbps` | Bind an Elastic IP                      | `64 TB/month` |
 
 :::info
+
 **Note:** Prices, configurations, and availability can change. It is recommended to always refer to the official documentation and pricing pages of the respective cloud provider before making any decisions.
+
 :::
 
 ## Run a node (video)
@@ -83,7 +91,9 @@ Please check this step-by-step video tutorial to get started quickly:
 ### Switch to non-root user
 
 :::warning
+
 This step is required to successfully install and use MyTonCtrl—don't ignore non-root user creation. Without this step, there will be no errors during installation, but MyTonCtrl will not work properly.
+
 :::
 
 If you don't have a non-root user, you can create one with the following steps (otherwise, skip the first two steps and go to the third).
@@ -167,8 +177,10 @@ Example of the **status** command output:
 ![status](/img/docs/nodes-validator/mytonctrl-status.png)
 
 :::caution Make sure you have the same output for status
+
 For all nodes type **Local Validator status** section should appear.
 Otherwise, [check troubleshooting section](/v3/guidelines/nodes/nodes-troubleshooting#status-command-displays-without-local-node-section) and [check node logs](/v3/guidelines/nodes/running-nodes/full-node#check-the-node-logs).
+
 :::
 
 Please wait until the `Local validator out of sync` status is less than 20 seconds.

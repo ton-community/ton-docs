@@ -283,7 +283,9 @@ Check out the [Transaction lookup](/v3/guidelines/ton-connect/guidelines/transac
 ### Optional check on the backend: ton_proof
 
 :::tip
+
 Understand how to sign and verify messages: [Signing and verification](/v3/guidelines/ton-connect/verifying-signed-in-users)
+
 :::
 
 To ensure that the user truly owns the declared address, you can use `ton_proof`.
@@ -440,7 +442,9 @@ Wrappers are classes that simplify interaction with the contract, allowing you t
 - When using the [Tact language](https://docs.tact-lang.org), wrappers are automatically generated for you.
 
 :::tip
+
 Check out the [Blueprint](https://github.com/ton-org/blueprint) documentation on how to develop and deploy contracts.
+
 :::
 
 Let's take a look at the default `Blueprint` counter wrapper example and how we can use it:
@@ -523,7 +527,9 @@ Let's take a look at the default `Blueprint` counter wrapper example and how we 
 ```
 
 :::info
+
 `sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+
 :::
 
   Then you can use this class in your react component:

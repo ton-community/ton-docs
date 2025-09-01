@@ -13,7 +13,9 @@ So it should be used with the [Prometheus Pushgateway](https://github.com/promet
 ## Setup
 
 :::caution
+
 For validators it's highly recommended to run Prometheus and Pushgateway on a separate server.
+
 :::
 
 1. Install Pushgateway
@@ -74,8 +76,11 @@ For validators it's highly recommended to run Prometheus and Pushgateway on a se
     ```bash
     MyTonCtrl> set prometheus_url http://<host>:9091/metrics/job/<jobname>
     ```
+
     :::warning
+
     Note that it is very important to use different job names for different nodes in case you want to monitor multiple nodes with the same Prometheus instance.
+
     :::
 
 5. Check the metrics

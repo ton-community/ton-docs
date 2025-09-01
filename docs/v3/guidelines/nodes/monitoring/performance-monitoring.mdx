@@ -9,7 +9,9 @@ Tools such as `htop`, `iotop`, `iftop`, `dstat`, and `nmon` are effective for me
 This guide recommends using the Linux SAR (System Activity Report) utility for monitoring the performance of TON servers, and it provides an explanation of how to use it effectively.
 
 :::tip
+
 This guideline helps to identify whether your server experiences a resource shortage, not whether the validator engine performs badly.
+
 :::
 
 ### Installation
@@ -124,7 +126,9 @@ cat /sys/class/net/<interface>/speed
 ```
 
 :::info
+
 The speed you're experiencing is not what your provider promised you.
+
 :::
 
 Consider upgrading your link speed if `%ifutil` shows above 70% usage or columns `rxkB/s` and `txkB/s` reporting values close to a bandwidth provided by your provider.

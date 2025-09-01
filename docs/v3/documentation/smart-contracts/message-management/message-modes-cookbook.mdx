@@ -8,7 +8,9 @@ import ThemedImage from "@theme/ThemedImage";
 Understanding the modes and flags for sending messages ensures your smart contracts behave as intended. This section illustrates their practical application through specific examples.
 
 :::info IMPORTANT
+
 You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726e4fe994b7fd6dbf953a2ac24ecd77753858abeda9d6755c664a537a) as a real-world validation.
+
 :::
 
 #### Message value and account balance
@@ -76,9 +78,11 @@ Storage → Credit → Compute → Action → Bounce
 | [IHR fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#ihr) (each msg)           | 0.0006      | cost of ihr fwd of in_msg       |
 
 :::info IMPORTANT
+
 The table is populated using [this example transaction](https://tonviewer.com/transaction/b5e14a9c4a4e982fda42d6079c3f84fa48e76497a8f3fca872f9a3737f1f6262).
 
 For live calculations, refer to the [**fee calculator**](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula).
+
 :::
 
 The transaction fees used in these examples are hypothetical and for illustrative purposes only. Any fees other than message forwarding are outside the scope of this article.
@@ -108,7 +112,9 @@ State after the transaction: Account A has 0.9 TON, Account B has 1.096 TON
 ## 2. (Mode 0, flag 2) error‐silent message \{#mode2}
 
 :::info
+
 Please note that omitting the `+2` flag may be unsafe. For more information, refer to [this section](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+
 :::
 
 State before transaction: Account A has 1 TON, Account B has 1 TON
@@ -119,7 +125,9 @@ In case of an error during [action phase](/v3/documentation/smart-contracts/mess
 State after the transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
 :::info tip
+
 If no errors occur, the result is the same as [mode = 0](#mode0).
+
 :::
 
 <br></br>
@@ -158,13 +166,15 @@ State after the transaction with error: Account A has 1 - ([total_fee](/v3/docum
 <br></br>
 
 :::info tip
+
 If no errors occur, the result is the same as [mode = 0](#mode0).
 
 The key difference is that `flag 16` creates bounces for [action phase errors](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes). In contrast, the message's [built‐in bounce flag](/v3/guidelines/smart-contracts/howto/wallet#internal-message-creation) handles protocol‐level failures like:
 
 - The destination contract does not exist.
 - The destination contract throws an unhandled exception.
-  :::
+
+:::
 
 <br></br>
 <div class="text--center">
@@ -182,7 +192,9 @@ The key difference is that `flag 16` creates bounces for [action phase errors](/
 ## 4. (Mode 0, flag 1) separate fees \{#mode1}
 
 :::info
+
 Please note that using only this flag is unsafe, for more information refer to [this section](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+
 :::
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON
@@ -227,7 +239,9 @@ State after the transaction with an error: Account A has 1 - ([total_fee](/v3/do
 <br></br>
 
 :::info tip
+
 If no errors occur, the result is the same as [mode = 0, flag = 1](#mode1).
+
 :::
 
 <br></br>
@@ -252,14 +266,18 @@ State before the transaction: Account A has 1 TON, Account B has 1 TON, Account 
 State after the transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account C has 1.6 - (total_fee + `fwd_fee`) TON
 
 :::info
+
 You might check [this example](https://testnet.tonviewer.com/transaction/f63ab35f34e342cdd249f13018d5034ce3d80c488628d5a4db0a43163fa50adb).
 Please note that `storage_fee` is included in `total_fee` but is always paid from the contract `balance`.
+
 :::
 
 :::warning
+
 Please note that `SENDRAWMSG` doesn't update the balance.
 
 If you try to send multiple messages (e.g., mode 0 **and** mode 64), you'll get exit code 37.
+
 :::
 
 <br></br>
@@ -284,8 +302,10 @@ State before the transaction: Account A has 1 TON, Account B has 1 TON, Account 
 State after the transaction: Account A has 0.896 TON, Account B has 0.5 - (total_fee + `fwd_fee`) TON, Account C has 1.6 TON
 
 :::info
+
 You might check [this example](https://testnet.tonviewer.com/transaction/ad93e784453b573d737d9d928b4377ff3779177753e05629e54f6629556568ad).
 Please note that `storage_fee` is included in `total_fee` but is always paid from the contract `balance`.
+
 :::
 
 <br></br>
@@ -324,7 +344,9 @@ State after the transaction with an error: Account A has 1 - (total_fee + `fwd_f
 <br></br>
 
 :::info tip
+
 If no errors occur, the result is the same as [mode = 64, flag 0](#mode64). This mode is widely used in TON for jetton transfers. You can [check it in the C5 action list](https://retracer.ton.org/?tx=6489d60d9197c0be7ee64b0812139d82221e8f94c6e378c356acc10f9067310c) of the jetton wallet.
+
 :::
 
 <br></br>
@@ -363,7 +385,9 @@ State after the transaction with an error: Account A has 1 - (total_fee + `fwd_f
 <br></br>
 
 :::info tip
+
 If no errors occur, the result is the same as [mode = 65](#mode65).
+
 :::
 
 <br></br>
@@ -422,7 +446,9 @@ State after the transaction with an error: Account A has 1 - (total_fee + `fwd_f
 <br></br>
 
 :::info tip
+
 If no errors occur, the result is the same as [mode = 128](#mode128). This mode is widely used in TON for jetton transfers. You can [check it in the C5 action list](https://retracer.ton.org/?tx=e4f31e37eec74a8cfcecdad9246a6bbf3da20c4edb3635150cb0fa54b9def558) of the jetton wallet.
+
 :::
 
 <br></br>

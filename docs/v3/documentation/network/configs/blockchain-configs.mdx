@@ -3,7 +3,9 @@ import Feedback from '@site/src/components/Feedback';
 # Config parameters
 
 :::info
+
 You can view live values by using [Tonviewer](https://tonviewer.com/config).
+
 :::
 
 ## Introduction
@@ -19,7 +21,9 @@ This material should be read alongside the parameter list.
 You can view the parameter values in the [current configuration](https://explorer.toncoin.org/config), and the method of writing them into [cells](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) is outlined in the [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) file in [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) format.
 
 :::info
+
 The binary encoding found at the end of the TON Blockchain parameter represents a serialized binary format of its configuration. This allows for efficient storage and transmission of the configuration data. The specific details of the serialization process vary depending on the encoding scheme utilized by the TON Blockchain.
+
 :::
 
 All parameters are in place, and you won't get lost. For your convenience, please use the right sidebar for quick navigation.
@@ -29,7 +33,9 @@ All parameters are in place, and you won't get lost. For your convenience, pleas
 This parameter is the address of a special smart contract that stores the blockchain's configuration. The configuration is stored in the contract to simplify its loading and modification during validator voting.
 
 :::info
+
 In the configuration parameter, only the hash portion of the address is recorded, as the contract always resides in the [MasterChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain) (WorkChain -1). Therefore, the full address of the contract will be written as `-1:<value of the configuration parameter>`.
+
 :::
 
 ## Param 1
@@ -41,7 +47,9 @@ This parameter is the address of the [elector smart contract](/v3/documentation/
 This parameter represents the address of the system, on behalf of which new Toncoins are minted and sent as rewards for validating the blockchain.
 
 :::info
+
 If the parameter 2 is missing, the parameter 0 is used instead (newly minted Toncoins come from the configuration smart contract).
+
 :::
 
 ## Param 3
@@ -49,7 +57,9 @@ If the parameter 2 is missing, the parameter 0 is used instead (newly minted Ton
 This parameter is the address of the transaction fee collector.
 
 :::info
+
 If the this parameter is missing (for the time being), transaction fees are directed to the elector smart contract (parameter 1).
+
 :::
 
 ## Param 4
@@ -57,9 +67,11 @@ If the this parameter is missing (for the time being), transaction fees are dire
 This parameter is the address of the root DNS contract of the TON network.
 
 :::info
+
 More detailed information, please see the [TON DNS & Domains](/v3/guidelines/web3/ton-dns/dns) documentation and in a more detailed original description [here](https://github.com/ton-blockchain/TEPs/blob/master/text/0081-dns-standard.md).
 
 This contract is not responsible for selling **.ton** domains.
+
 :::
 
 ## Param 6
@@ -67,9 +79,11 @@ This contract is not responsible for selling **.ton** domains.
 This parameter is responsible for minting fees of new currencies.
 
 :::info
+
 Currently, the minting of additional currency is not implemented and does not function. The implementation and launch of the minter are planned for the future.
 
 You can learn more about the issues and prospects in the [relevant documentation](/v3/documentation/infra/minter-flow).
+
 :::
 
 ## Param 7
@@ -81,7 +95,9 @@ This parameter stores the volume of each additional currency in circulation. The
 This parameter indicates the network version and additional capabilities supported by the validators.
 
 :::info
+
 Validators are nodes in the TON Blockchain network that are responsible for creating new blocks and verifying transactions.
+
 :::
 
 - `version`: This field specifies the version.
@@ -169,7 +185,9 @@ You can get the current `election_id` (if elections are ongoing) or the past one
 - `stake_held_for`: The period for which a validator's stake is held (for handling complaints) after the round expires.
 
 :::info
+
 Each value in the arguments is determined by the `uint32` data type.
+
 :::
 
 ### Examples
@@ -271,7 +289,9 @@ This parameter represents the stake parameters configuration in the TON Blockcha
 - `max_stake_factor`: This parameter is a multiplier indicating how many times the maximum effective stake (pledge) can exceed the minimum stake sent by any other validator.
 
 :::info
+
 Each value in the arguments is determined by the `uint32` data type.
+
 :::
 
 ## Param 18
@@ -287,9 +307,11 @@ This parameter represents the configuration for determining the prices for data 
 - `mc_bit_price_ps` and `mc_cell_price_ps`: These parameters represent the prices for computational resources specifically in the TON MasterChain for 65536 seconds
 
 :::info
+
 `utime_since` accepts values in the `uint32` data type.
 
 The rest accept values in the `uint64` data type.
+
 :::
 
 ## Param 20 and 21
@@ -311,7 +333,9 @@ These parameters define the cost of computations in the TON network. The complex
 - `freeze_due_limit` and `delete_due_limit`: Limits of accumulated storage fees (in nanoToncoin) at which a contract is frozen and deleted, respectively.
 
 :::info
+
 You can find more about `gas_credit` and other parameters in the section of external messages [here](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects#external-messages).
+
 :::
 
 ## Param 22 and 23
@@ -333,7 +357,9 @@ These parameters set limits on the block, upon reaching which the block is final
 - `lt_delta`: This section sets the limits on the difference in logical time between the first and last transaction. Logical time is a concept used in the TON Blockchain for ordering events. The limits on underload, soft and hard limits, work the same as for size in bytes and gas.
 
 :::info
+
 If a shard has insufficient load and there is an intention to merge with a neighboring shard, the `soft_limit` indicates a threshold. When this threshold is exceeded, internal messages will stop being processed, while external messages will still be handled. External messages will continue to be processed until the total reaches a limit that is equal to half the sum of the `soft_limit` and `hard_limit`, or `(soft_limit + hard_limit) / 2`.
+
 :::
 
 ## Param 24 and 25
@@ -353,7 +379,9 @@ Parameter 25 represents the configuration for the cost of sending messages in al
 - `ihr_price_factor`: This is a factor used to calculate the cost of immediate hypercube routing (IHR).
 
 :::info
+
 IHR is a method of message delivery in the TON Blockchain network, where messages are sent directly to the recipient's ShardChain.
+
 :::
 
 - `first_frac`: This parameter defines the fraction of the remaining remainder that will be used for the first transition along the message route.
@@ -493,7 +521,9 @@ If absent, the default parameters are taken:
 - `max_acc_state_bits` = (1 \<\< 16) \* 1023
 
 :::info
+
 You can view more details about the standard parameters [here](https://github.com/ton-blockchain/ton/blob/fc9542f5e223140fcca833c189f77b1a5ae2e184/crypto/block/mc-config.h#L379) in the source code.
+
 :::
 
 ## Param 44
@@ -501,7 +531,9 @@ You can view more details about the standard parameters [here](https://github.co
 This parameter defines the list of suspended addresses, which cannot be initialized until `suspended_until`. It only applies to yet uninitiated accounts. This is a measure for stabilizing the tokenomics (limiting early miners). If not set - there are no limitations. Each address is represented as an end node in this tree, and the tree-like structure allows to effectively check the presence or absence of an address in the list.
 
 :::info
+
 The stabilization of the tokenomics is further described in the [official report](https://t.me/tonblockchain/178) of the **@tonblockchain** Telegram channel.
+
 :::
 
 ## Param 45
@@ -561,7 +593,9 @@ This parameter relates to bridges for wrapping tokens from other networks into t
 ## Negative parameters
 
 :::info
+
 The distinction between negative and positive parameters lies in the necessity for validators to verify them; negative parameters typically lack a specific assigned role.
+
 :::
 
 ## Next steps

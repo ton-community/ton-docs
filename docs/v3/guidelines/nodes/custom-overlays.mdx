@@ -55,7 +55,9 @@ Create a config file in the following format:
 `msg_sender_priority` determines the order of external message inclusion in blocks: messages from higher-priority sources are first processed. Messages from the public overlay and local LS have priority 0.
 
 :::caution
+
 All nodes listed in the configuration **must** participate in the overlay; if they do not add an overlay with the exact same configuration, connectivity will be poor and broadcasts may fail.
+
 :::
 
 There is a special word `@validators` to create a dynamic custom overlay that MyTonCtrl will generate automatically each round adding all current validators.
@@ -69,7 +71,9 @@ MyTonCtrl> add_custom_overlay <name> <path_to_config>
 ```
 
 :::caution
+
 The name and config file **must** be the same on all overlay members. Check that the overlay has been created using MyTonCtrl's `list_custom_overlays` command.
+
 :::
 
 ### Debug

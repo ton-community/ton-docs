@@ -12,7 +12,9 @@ Source code and contest rules were hosted on GitHub [here](https://github.com/to
 ### 1. Mutual fund
 
 :::note SECURITY RULE
+
 Always check functions for [`impure`](/v3/documentation/smart-contracts/func/docs/functions#impure-specifier) modifier.
+
 :::
 
 The first task was very simple. The attacker could find that `authorize` function was not `impure`. The absence of this modifier allows a compiler to skip calls to that function if it returns nothing or the return value is unused.
@@ -26,7 +28,9 @@ The first task was very simple. The attacker could find that `authorize` functio
 ### 2. Bank
 
 :::note SECURITY RULE
+
 Always check for [modifying/non-modifying](/v3/documentation/smart-contracts/func/docs/statements#methods-calls) methods.
+
 :::
 
 `udict_delete_get?` was called with `.` instead `~`, so the real dict was untouched.
@@ -38,7 +42,9 @@ Always check for [modifying/non-modifying](/v3/documentation/smart-contracts/fun
 ### 3. DAO
 
 :::note SECURITY RULE
+
 Use signed integers if you really need it.
+
 :::
 
 Voting power was stored in message as an integer. So the attacker could send a negative value during power transfer and get infinite voting power.
@@ -63,7 +69,9 @@ Voting power was stored in message as an integer. So the attacker could send a n
 ### 4. Lottery
 
 :::note SECURITY RULE
+
 Always randomize seed before doing [`rand()`](/v3/documentation/smart-contracts/func/docs/stdlib#rand)
+
 :::
 
 Seed was brought from logical time of the transaction, and a hacker can win by bruteforcing the logical time in the current block (cause lt is sequential in the borders of one block).
@@ -87,7 +95,9 @@ if(rand(10000) == 7777) { ...send reward... }
 ### 5. Wallet
 
 :::note SECURITY RULE
+
 Remember that everything is stored in the blockchain.
+
 :::
 
 The wallet was protected with password, it's hash was stored in contract data. However, the blockchain remembers everything—the password was in the transaction history.
@@ -95,9 +105,11 @@ The wallet was protected with password, it's hash was stored in contract data. H
 ### 6. Vault
 
 :::note SECURITY RULE
+
 Always check for [bounced](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) messages.
 Don't forget about errors caused by [standard](/v3/documentation/smart-contracts/func/docs/stdlib) functions.
 Make your conditions as strict as possible.
+
 :::
 
 The vault has the following code in the database message handler:
@@ -118,10 +130,12 @@ Vault does not have a bounce handler or proxy message to the database if the use
 ### 7. Better bank
 
 :::note SECURITY RULE
+
 Never destroy account for fun.
 Make [`raw_reserve`](/v3/documentation/smart-contracts/func/docs/stdlib#raw_reserve) instead of sending money to yourself.
 Think about possible race conditions.
 Be careful with hashmap gas consumption.
+
 :::
 
 There were race conditions in the contract: you could deposit money, then try to withdraw it twice in concurrent messages. There is no guarantee that a message with reserved money will be processed, so the bank can shut down after a second withdrawal. After that, the contract could be redeployed and anybody could withdraw unclaimed money.
@@ -129,7 +143,9 @@ There were race conditions in the contract: you could deposit money, then try to
 ### 8. Dehasher
 
 :::note SECURITY RULE
+
 Avoid executing third-party code in your contract.
+
 :::
 
 ```func

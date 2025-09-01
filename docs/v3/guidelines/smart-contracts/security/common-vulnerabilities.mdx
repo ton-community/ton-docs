@@ -7,7 +7,9 @@ import Button from '@site/src/components/button'
 This comprehensive guide covers the most critical security vulnerabilities found in TON smart contracts, based on real-world audits and security research. Understanding these pitfalls is essential for developing secure smart contracts on TON Blockchain.
 
 :::caution Critical
+
 Many of these vulnerabilities can lead to complete loss of funds. Always conduct thorough security audits before deploying contracts to mainnet.
+
 :::
 
 ## Critical
@@ -33,7 +35,9 @@ The absence of the `impure` modifier allows the compiler to skip function calls 
 ```
 
 :::tip Best practice
+
 Always add the `impure` modifier to functions that perform state changes or critical validations.
+
 :::
 
 ### Incorrect use of modifying/non-modifying methods
@@ -56,8 +60,10 @@ if(found?) {
 ```
 
 :::info Key difference
+
 - **Non-modifying (`.`)**: Returns modified copy, original unchanged
 - **Modifying (`~`)**: Modifies the original variable in place
+
 :::
 
 ### Signed/unsigned integer vulnerabilities
@@ -119,7 +125,9 @@ if(rand(10000) == 7777) {
 ```
 
 :::warning
+
 Never rely on on-chain randomness for critical operations. Validators can influence or predict random values. Consider using commit-reveal schemes or external oracles for true randomness.
+
 :::
 
 ### Missing bounced message handling
@@ -169,7 +177,9 @@ cell private_data = begin_cell()
 ```
 
 :::warning
+
 Everything on blockchain is public. Transaction history, contract storage, and message contents are permanently visible to everyone.
+
 :::
 
 ### Account destruction race conditions
@@ -430,11 +440,13 @@ receiver_balance += received_amount;
 Not understanding TON's 5-phase transaction model can lead to unexpected behavior.
 
 :::info Transaction phases
+
 1. **Storage phase**: Account state loading
 2. **Credit phase**: Value crediting
 3. **Compute phase**: Contract execution
 4. **Action phase**: Message sending
 5. **Bounce phase**: Error handling
+
 :::
 
 ### Cross-contract data access
@@ -499,10 +511,12 @@ Before deploying your smart contract, ensure you've addressed:
 ## Testing and auditing
 
 :::tip Security first
+
 - Use [Blueprint testing framework](/v3/guidelines/smart-contracts/testing/overview/) for comprehensive testing
 - Conduct formal security audits before mainnet deployment
 - Test edge cases and failure scenarios
 - Verify bounced message handling
+
 :::
 
 ## See also

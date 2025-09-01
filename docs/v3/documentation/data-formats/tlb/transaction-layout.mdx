@@ -3,7 +3,9 @@ import Feedback from '@site/src/components/Feedback';
 # Transaction layout
 
 :::info
+
 It's highly recommended that you familiarize yourself with the [TL-B language](/v3/documentation/data-formats/tlb/cell-boc) to better understand this page.
+
 :::
 
 The TON blockchain functions through three main components: accounts, messages, and transactions. This section outlines the structure and organization of transactions.
@@ -133,7 +135,9 @@ trans_tick_tock$001 is_tock:Bool storage_ph:TrStoragePhase
 ## Split prepare
 
 :::note
+
 This type of transaction is currently not in use, and details about its implementation are limited.
+
 :::
 
 Split transactions are designed for large smart contracts that must be divided due to high load. The contract must support this transaction type and manage the splitting process to distribute the load effectively.
@@ -161,7 +165,9 @@ trans_split_prepare$0100 split_info:SplitMergeInfo
 ## Split install
 
 :::note
+
 This transaction type is currently unavailable, and available information is limited.
+
 :::
 
 **Split install** transactions are used to deploy new instances of large smart contracts. A [split prepare](#split-prepare) transaction generates the state for the new contract.
@@ -181,7 +187,9 @@ trans_split_install$0101 split_info:SplitMergeInfo
 ## Merge prepare
 
 :::note
+
 This transaction type is currently unavailable, and available information is limited.
+
 :::
 
 Merge transactions are triggered for large smart contracts that need to recombine after being split under high load. The contract must support this transaction type and handle the merging process to help balance system resources.
@@ -204,7 +212,9 @@ trans_merge_prepare$0110 split_info:SplitMergeInfo
 ## Merge install
 
 :::note
+
 This transaction type is currently unavailable, and available information is limited.
+
 :::
 
 **Merge install** transactions are used to merge instances of large smart contracts. A [merge prepare](#merge-prepare) transaction generates a special message that facilitates the merge.

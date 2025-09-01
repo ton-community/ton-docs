@@ -7,6 +7,7 @@ import Feedback from '@site/src/components/Feedback';
 # Mutability in Tolk vs tilda functions in FunC
 
 :::tip TLDR
+
 - no `~` tilda methods
 - `cs.loadInt(32)` modifies a slice and returns an integer
 - `b.storeInt(x, 32)` modifies a builder
@@ -16,6 +17,7 @@ import Feedback from '@site/src/components/Feedback';
 - no runtime overhead, the same Fift instructions
 - custom methods are created with ease
 - tilda `~` does not exist in Tolk at all
+
 :::
 
 This is a drastic change. If FunC has `.methods()` and `~methods()`, Tolk has only a dot, and the only way to call a method is `.method()`. The method may or may not *mutate* an object. Also, there is a behavioral and semantic difference between FunC and the list.

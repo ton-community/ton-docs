@@ -3,7 +3,9 @@ import Feedback from '@site/src/components/Feedback';
 # Archive node
 
 :::info
+
 Before this article, read about [Full node](/v3/guidelines/nodes/running-nodes/full-node).
+
 :::
 
 ## Overview
@@ -29,7 +31,9 @@ We highly recommend installing mytonctrl using the supported operating systems:
 - A public IP address (fixed IP address)
 
 :::info Data compression
+
 Uncompressed data requires 12 TB of storage. A ZFS volume with compression reduces this to 11 TB. As of February 2025, the data volume is growing by approximately 0.1 to 1 TB per month, depending on the load.
+
 :::
 
 ## Installation
@@ -147,17 +151,21 @@ nano /etc/systemd/system/validator.service
 ```
 
 :::info
+
 Please remain patient after starting the node and monitor the logs closely.
 The dump files lack DHT caches, requiring your node to discover other nodes and synchronize with them.
 Depending on the snapshot's age and your network bandwidth,
 your node might need **anywhere from several hours to multiple days** to synchronize with the network.
 **The synchronization process typically takes up to 5 days when using minimum hardware specifications.**
 This is expected behavior.
+
 :::
 
 :::caution
+
 If the node sync process has already taken 5 days, but the node is still out of sync, you should check the
 [troubleshooting section](/v3/guidelines/nodes/nodes-troubleshooting#archive-node-is-out-of-sync-even-after-5-days-of-the-syncing-process).
+
 :::
 
 #### Start the node
@@ -225,13 +233,17 @@ zfs rollback data/ton-work@dumpstate
 If your node operates properly, you may remove this snapshot to reclaim storage space. However, we recommend creating regular filesystem snapshots for rollback capability since the validator node may occasionally corrupt data and `config.json`. For automated snapshot management, [zfsnap](https://www.zfsnap.org/docs.html) handles rotation effectively.
 
 :::tip Need help?
+
 Have a question or need help? Please ask in the [TON dev chat](https://t.me/tondev_eng) to get help from the community. MyTonCtrl developers also hang out there.
+
 :::
 
 ## Tips & tricks
 
 :::info
+
 Basic info about archival dumps is present at https://archival-dump.ton.org/
+
 :::
 
 ### Remove dump snapshot

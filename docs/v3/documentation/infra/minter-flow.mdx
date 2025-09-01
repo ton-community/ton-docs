@@ -54,11 +54,15 @@ where key - `currency_id` and `std_addr` is _admin_ of this currency (can be in 
 An example of this flow is as follows: [minting 2'000'000'000 units of `currency_id=100`](https://testnet.tonviewer.com/transaction/20fe328c04b4896acecb6e96aaebfe6fef90dcc1441e27049302f29770904ef0)
 
 :::danger
+
 Each minting of new extracurrency or an increase in the supply of existing currency necessitates a change to `ConfigParam7`, which in turn alters the configuration and creation of keyblocks. Frequent keyblock generation can slow down shard performance since each key block causes a rotation of validator groups and affects the synchronization of liteclients. Therefore, contracts like `swap.tolk` should not be utilized in production environments. Instead, it is advisable to use schemes that involve reserves to minimize minting events.
+
 :::
 
 :::info
+
 Sending of extracurrency to blackhole has the following effect: extracurrency amount is burnt, but since `ConfigParam7` is not changed, on the next block, **minter** will receive the burnt amount on its balance.
+
 :::
 
 

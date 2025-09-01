@@ -7,7 +7,9 @@ import Feedback from '@site/src/components/Feedback';
 # Make a simple multisig contract with fift
 
 :::caution advanced level
+
 This information is **very low-level**. It could be hard for newcomers and designed for advanced people who want to understand [fift](/v3/documentation/smart-contracts/fift/overview). The use of fift is not required in everyday tasks.
+
 :::
 
 ## 💡 Overview
@@ -21,7 +23,9 @@ Based on the original multisig contract code and updates by akifoq:
 - [akifoq/multisig](https://github.com/akifoq/multisig) with fift libraries to work with multisig.
 
 :::tip starter tip
+
 For anyone new to multisig: [What is Multisig Technology? (video)](https://www.youtube.com/watch?v=yeLqe_gg2u0)
+
 :::
 
 ## 📖 What you'll learn
@@ -112,7 +116,9 @@ fift -s new-multisig.fif 0 $WALLET_ID$ wallet $KEYS_COUNT$ ./keys.txt
 - `$KEYS_COUNT$` - the number of keys needed for confirmation, usually equal to the number of public keys.
 
 :::info wallet_id explained
+
 It is possible to create many wallets with the same keys (Alice key, Bob key). What should we do if Alice and Bob already have a treasure? That's why `$WALLET_ID$` is crucial here.
+
 :::
 
 The script will output something like:
@@ -130,11 +136,15 @@ Bounceable address (for later access): kQBLuyZgCX21xy3V6QhhFQEPD4yFAeC4_vH-MY2d5
 ```
 
 :::info
+
 If you have a "public key must be 48 characters long" error, please make sure your `keys.txt` has a Unix-type word wrap - LF. For example, word wrap can be changed via the Sublime text editor.
+
 :::
 
 :::tip
+
 A bounceable address is better to keep - this is the wallet's address.
+
 :::
 
 #### Activate your contract
@@ -148,7 +158,9 @@ lite-client -C global.config.json
 ```
 
 :::info Where to get `global.config.json`?
+
 You can get a fresh config file `global.config.json` for [mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json).
+
 :::
 
 After starting lite-client, it's best to run the `time` command in the lite-client console to make sure the connection was successful:
@@ -188,7 +200,9 @@ fift -s create-msg.fif EQApAj3rEnJJSxEjEHVKrH3QZgto_MQMOmk8l72azaXlY1zB 0.1 mess
 ```
 
 :::tip
+
 Use the `-C comment` attribute to add a comment for your transaction. To get more information, run the _create-msg.fif_ file without parameters.
+
 :::
 
 #### Choose a wallet
@@ -206,7 +220,9 @@ Where
 - `$MESSAGE$` — here is the name of the message boc-file created in the previous step.
 
 :::info
+
 The request expires if the time equals `$AWAIT_TIME$` passed before the request signs. As usual, `$AWAIT_TIME$` equals a couple of hours (7200 seconds).
+
 :::
 
 For example:
@@ -218,7 +234,9 @@ fift -s create-order.fif 0 message -t 7200
 The ready file will be saved in `order.boc`.
 
 :::info
+
 `order.boc` must be shared with key holders; they must sign it.
+
 :::
 
 #### Sign your part

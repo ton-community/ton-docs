@@ -2,7 +2,9 @@
 
 
 :::caution
+
 Please be aware that collator nodes used by validators should be treated as mission-critical assets, especially if more than one validator utilizes a collator machine. Great care should be taken to ensure the flawless operation and failover of these nodes. Any configuration changes to collators must be thoroughly tested and reviewed before being implemented.
+
 :::
 
 ## Collators
@@ -42,9 +44,11 @@ setup_collator --adnl 5889072E81219A0E656F31E8784EA09C93A562AA74308E1B25364EE87E
 ```
 
 :::caution
+
 Adding new shards to monitor on an existing node that is already monitoring other shards is not recommended, as it may cause performance issues or unexpected behavior.
 When using `setup_collator`, MyTonCtrl checks if the provided shards are already included in the nodes already monitored and raises an error if they are not.
 However, it's entirely ok to add new ADNL addresses to the collator to collate blocks for already monitored shards and broadcast them with a different ADNL address.
+
 :::
 
 ### Collator actions
@@ -68,7 +72,9 @@ add_validator_to_collation_wl <adnl> [adnl2] ...
 ```
 
 :::note
+
 The `adnl` argument here is the ADNL address of the remote validator, in line with the output of the `status` command on the validator that shows the address in the `ADNL address of local validator` field.
+
 :::
 
 This will enable collation wl and add specified validators to it.
@@ -103,9 +109,11 @@ This command displays the current state of the collation whitelist, showing all 
 ### Stopping collator
 
 :::caution
+
 It is highly not recommended to reuse a collator node as a validator after it was used as a collator, as it may
 not sync the whole blockchain and miss the creation of blocks for some shards. So it is recommended to uninstall MyTonCtrl
 and then install it again in `validator` mode.
+
 :::
 
 To stop the collator, you can use the command:
@@ -154,8 +162,10 @@ Where:
 - `round_robin` - Cycle through collators sequentially
 
 :::note
+
 The `--self-collate` and `--select-mode` options apply to all collators for the specified shard.
 If these options are already configured for that shard, they will be overridden.
+
 :::
 
 ### Managing validator collators

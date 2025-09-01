@@ -66,7 +66,9 @@ A common transfer would look like this:
 <br></br>
 
 :::caution
+
 Unlike in the [Reading from network](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network) section, a Toncenter API key is mandatory in the following examples. It may be retrieved using [the following guide](/v3/guidelines/dapps/apis-sdks/api-keys).
+
 :::
 
 #### Implementation
@@ -120,7 +122,9 @@ main();
 Using `API_KEY` in this case, allows you to access TON functionality through the `endpoint`. By running this script, we authenticate to our wallet through a `public/private key` pair generated from the `mnemonic phrase`. After preparing a transaction, we send it to TON, resulting in a message that the wallet sends to itself with the *'Hello from wallet!'* message.
 
 :::caution Advanced Level
+
 In most scenarios, `SendMode.PAY_GAS_SEPARATELY | SendMode.IGNORE_ERRORS` will work, but if you want a deeper understanding, continue reading in the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook/).
+
 :::
 
 
@@ -204,7 +208,9 @@ main();
 ```
 
 :::info
+
 `sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+
 :::
 
 Run this example using the following command:

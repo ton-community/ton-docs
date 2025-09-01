@@ -12,6 +12,7 @@ Telegram Mini Apps (TMA) are web applications that run inside the Telegram messe
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 ```
 :::tip
+
 It's best to disable caching using HTTP response headers. To ensure caching is turned off, configure these headers in your server responses:
 
 ```text
@@ -19,6 +20,7 @@ Cache-Control: no-store, must-revalidate
 Pragma: no-cache
 Expires: 0
 ```
+
 :::
 
 2. Once the script is connected, the **[window.Telegram.WebApp](https://core.telegram.org/bots/webapps#initializing-web-apps)** object becomes available. Learn more about creating a Mini App using [`telegram-web-app.js`](/v3/guidelines/dapps/tma/tutorials/app-examples#basic-tma-example) here.

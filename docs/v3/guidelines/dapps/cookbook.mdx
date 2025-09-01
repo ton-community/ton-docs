@@ -117,7 +117,9 @@ There are two flags in user-friendly addresses: **bounceable**/**non-bounceable*
 |        0...       |  110100.01  |     no     |      yes     |
 
 :::tip
+
 The Testnet-only flag does not appear in the blockchain. The non-bounceable flag only affects message transfers: when used as a destination, it prevents the message from being bounced.
+
 :::
 
 Also, in some libraries, you may notice a serialization parameter called `urlSafe`. The base64 format is not URL safe, which means that some characters (namely, `+` and `/`) can cause issues when transmitting an address in a link. When `urlSafe = true`, all `+` symbols are replaced with `-`, and all `/` symbols are replaced with `_`. You can obtain these address formats using the following code:
@@ -370,8 +372,11 @@ Most SDKs follow a similar process for sending messages from your wallet:
     ```
 
 :::info
+
 `sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+
 :::
+
   </TabItem>
 
   <TabItem value="ton-kotlin" label="ton-kotlin">
@@ -486,7 +491,9 @@ Don't forget that the comment message in a snake cell has 32 zero bits (i.e., it
 To calculate a user's jetton wallet address, use the `get_wallet_address` method from the jetton master contract with the user's address. You can also call the master contract directly or use the `getWalletAddress` method provided in the JettonMaster SDK.
 
 :::info
+
 The `JettonMaster` in `@ton/ton` provides this functionality, although it lacks other features.
+
 :::
 
 <Tabs groupId="code-examples">
@@ -916,9 +923,11 @@ When constructing a message for a jetton transfer, refer to [TEP-74](https://git
 <br />
 
 :::warning
+
 When displaying token amounts, they are usually divided by `10^decimals` (often `9 decimals`). This allows for the use of the `toNano` function. If the number of decimals is different (e.g., 6), you will need to adjust accordingly.
 
 Of course, one can always do calculation in indivisible units.
+
 :::
 
 <Tabs groupId="code-examples">
@@ -1023,8 +1032,11 @@ Of course, one can always do calculation in indivisible units.
     ```
 
 :::info
+
 `sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+
 :::
+
   </TabItem>
 
   <TabItem value="py" label="Python">
@@ -1073,18 +1085,25 @@ Of course, one can always do calculation in indivisible units.
 If the `forward_amount` is nonzero, a notification about the Jetton reception will be sent to the destination contract. Additionally, if the `response_destination` address is non-null, excess Toncoin (called "excesses") will be sent to that address.
 
 :::tip
+
 Explorers support comments in Jetton notifications, similar to regular TON transfers. Comments are formatted as 32 zero bits followed by UTF-8 text.
+
 :::
 
 :::tip
+
 Be careful when calculating fees and amounts for jetton transfer messages. For instance, transferring 0.2 TON with no excess may prevent you from receiving 0.1 TON in a response.
+
 :::
 
 ## TEP-62 (NFT standard)
 
 NFT collections on TON are highly customizable. The NFT contract can be defined as any contract that provides a valid get-method to return metadata. The transfer operation is standardized similarly to [Jettons](/v3/guidelines/dapps/cookbook#how-to-construct-a-message-for-a-jetton-transfer-with-a-comment).
+
 :::warning
+
 Reminder: all methods about NFT below are not bound by TEP-62 to work. Before trying them, check if your NFT or collection process those messages in an expected way. The wallet app emulation may be useful in this case.
+
 :::
 
 ### How to use NFT batch deployment?
@@ -1094,7 +1113,9 @@ NFT collection smart contracts allow batch deployment of up to 250 NFTs in a sin
 #### Batch mint NFT
 
 :::info
+
 Not specified by the NFT standard (ton-blockchain/token-contract).
+
 :::
 
 <br />
@@ -1277,7 +1298,9 @@ Changing the owner of a collection is simple. Specify the `opcode = 3`, any `que
     ```
 
 :::info
+
 `sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+
 :::
   </TabItem>
 </Tabs>
@@ -1407,7 +1430,9 @@ Often, the collection's metadata is stored in a format similar to `0.json` and c
     ```
 
 :::info
+
 `sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+
 :::
   </TabItem>
 </Tabs>
@@ -1768,7 +1793,9 @@ swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
 </Tabs>
 
 :::info
+
 `sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+
 :::
 
 ## Basics of message processing
@@ -2048,8 +2075,11 @@ This topic is explored in depth in the [Payments processing](/v3/guidelines/dapp
 ### How to find a transaction for a certain TON Connect result?
 
 TON Connect 2 only returns the cell sent to the blockchain, not the transaction hash itself, as the transaction may not be confirmed. To track a transaction from TON Connect, you can search for it in your account history using an indexer.
+
 :::tip
+
 You can use an indexer to make the search easier. The provided implementation is for `TonClient` connected to an RPC.
+
 :::
 
 Prepare `retry` function for attempts on listening blockchain:
@@ -2138,7 +2168,9 @@ Create a listener function that will assert specific transaction on certain acco
 ### How to find a transaction or message hash?
 
 :::info
+
 Be careful with the hash definition. It can be either a transaction hash or a message hash.
+
 :::
 
 To get transaction hash you need to use a `hash` method of a transaction. To get external message hash you need

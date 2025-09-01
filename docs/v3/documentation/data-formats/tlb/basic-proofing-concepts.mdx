@@ -6,7 +6,9 @@ A **proof** is a tree-based structure that contains the necessary data and can b
 To prove something means to construct such a structure. The exact structure may differ depending on the use case. For example, suppose a proof is to be validated off-chain and requires multiple cell trees; the native TON approach is to construct a Bag of Cells (BoC) containing all the necessary cells. This is precisely what a lite server does when data is requested from the blockchain.
 
 :::info
+
 It is highly recommended to familiarize yourself with [Cells](/v3/documentation/data-formats/tlb/cell-boc) and [Exotic cells](/v3/documentation/data-formats/tlb/cell-boc) first. This article primarily covers situations where you want to verify a proof in a smart contract. However, the same techniques can be used to validate proofs off-chain.
+
 :::
 
 There are several key points to consider when proving anything on-chain.
@@ -99,7 +101,9 @@ Sometimes, data is not in block diffs but within the ShardState itself. To prove
 2. The user provides a ShardState that must be validated against the hash obtained in *step 1*.
 
 :::info
+
 You can only prove the state at block boundaries (not intermediate states).
+
 :::
 ## Understanding pruned branch cells
 
@@ -124,7 +128,9 @@ graph TD
 - **reprHash(cell)** accounts for everything. Matching *reprHashes* ensures cell path equivalency.
 
 :::note
+
 Use `HASHCU` for reprHash and `CHASHI`/`CHASHIX` for different-level hashes.
+
 :::
 
 ## Composing proofs
@@ -156,9 +162,11 @@ graph TD
 ```
 
 :::info
+
 - Trusted data hashes may be separated from cells (e.g., `PREVMCBLOCKS`).
 - Replacing pruned cells with actual cells changes the `MERKLE_UPDATE` cell hash.
 Always manually validate proofs against trusted hashes in these cases.
+
 :::
 
 ## Real-world example

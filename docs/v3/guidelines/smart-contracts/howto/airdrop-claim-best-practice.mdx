@@ -7,7 +7,9 @@ In this article, we'll explore an imaginary claim solution, identify its perform
 ## Claim machine
 
 :::info
+
 How does a typical claim solution work? Let's break it down.
+
 :::
 
 The user submits some form of proof to demonstrate eligibility for the claim. The solution verifies the proof and sends jettons to the user. In this case, `proof` refers to a [merkle proof](/v3/documentation/data-formats/tlb/exotic-cells#merkle-proof), but it could also be signed data or any other authorization method. To send jettons, we'll need a jetton wallet and minter. Additionally, we must prevent users from claiming twice—this requires a double-spend protection contract. And, of course, we'd like to monetize this, right? So, we'll need at least one claim wallet. Let's summarize:

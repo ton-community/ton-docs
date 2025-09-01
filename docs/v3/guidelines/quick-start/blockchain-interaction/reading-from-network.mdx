@@ -259,9 +259,9 @@ Interaction within an account on the blockchain happens due to [messages and tra
 
 A transaction in TON is the **result** of a smart contract successfully processing an incoming message. It consists of:
 
-* the **incoming message** that triggered the contract
-* the **state changes** performed by the contract during message processing (e.g. storage or balance updates)
-* any **outgoing messages** sent to other contracts (if applicable)
+- the **incoming message** that triggered the contract
+- the **state changes** performed by the contract during message processing (e.g. storage or balance updates)
+- any **outgoing messages** sent to other contracts (if applicable)
 
 <ThemedImage
   alt=""
@@ -342,9 +342,11 @@ Before running this code:
 - Wait a few seconds and make sure the transaction appears in Tonviewer.
 
 :::important
+
 Make sure you're working in the Testnet, not the Mainnet.
 
 Also, please note that the Testnet API may update data with some delay, so your transaction might not appear immediately when querying through the API.
+
 :::
 
 - Then, create a new file `3-fetch-account-transaction.ts`:
@@ -399,7 +401,9 @@ Sender: kQDhJ2Kx7dD6FLzAXcqiI4Xsu4ioY6JlE24m9Tx86eGkq0OF
 ```
 
 :::info
+
 A more complex example of traversing transactions graph may be found [here](/v3/guidelines/dapps/asset-processing/payments-processing/#retrieve-incomingoutgoing-transactions).
+
 :::
 
 ## Next step
