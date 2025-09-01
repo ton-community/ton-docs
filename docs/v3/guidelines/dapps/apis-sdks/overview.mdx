@@ -8,7 +8,16 @@ This page helps you choose the right tools to integrate TON Blockchain into your
 
 To interact with TON Blockchain and process its data, choose one of the listed [APIs](/v3/guidelines/dapps/apis-sdks/api-types) and a suitable [SDK](/v3/guidelines/dapps/apis-sdks/sdk).
 
-## Analytics data
+## DApps development
+
+- Use Tolk, FunC, or Tact [programming languages](/v3/documentation/smart-contracts/overview#programming-languages) to develop TON Blockchain smart contracts for your [DApp](/v3/guidelines/dapps/overview).
+- To interact with TON Blockchain and process its data, choose one of the listed [SDKs](/v3/guidelines/dapps/apis-sdks/sdk). The most popular languages for this purpose include:
+  - [JavaScript/TypeScript](/v3/guidelines/dapps/apis-sdks/sdk#typescript--javascript)
+  - [Go](/v3/guidelines/dapps/apis-sdks/sdk#go)
+  - [Python](/v3/guidelines/dapps/apis-sdks/sdk#python)
+- To integrate user authentication and payments processing via with their TON wallets, use [TON Connect](/v3/guidelines/ton-connect/overview).
+
+## TON data analytics
 
 Developers often need to run analytical queries on top of on-chain data—for example, to track historical changes and aggregate data from multiple accounts.
 Since blockchains are not designed for analytical workloads, you need to build an indexing pipeline and run off-chain analytical queries. Creating such pipelines
@@ -31,7 +40,7 @@ from scratch can be resource-consuming, so you can use one of these alternatives
 
 - [SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
 - [TMA tutorials](/v3/guidelines/dapps/tma/tutorials/step-by-step-guide)
-- [TON Connect tutorials](/v3/guidelines/ton-connect/how-ton-connect-works)
+- [TON Connect tutorials](/v3/guidelines/ton-connect/overview#how-ton-connect-works)
 - [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing)
 
 <Feedback />
