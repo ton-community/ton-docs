@@ -31,8 +31,8 @@ If you didn't choose the proposed names in the previous steps, source code file 
     ├── tests/               # Test folder for local contract testing
     │   └── HelloWorld.spec.ts      # Test specifications for the contract
     └── wrappers/            # TypeScript wrappers for contract interaction
-    ├── HelloWorld.ts           # Wrapper class for smart contract
-    └── HelloWorld.compile.ts   # Script for contract compilation
+        ├── HelloWorld.ts           # Wrapper class for smart contract
+        └── HelloWorld.compile.ts   # Script for contract compilation
     ```
   </TabItem>
 
@@ -78,7 +78,7 @@ npx blueprint test
 5. Update the deployment script in the `/scripts` folder and run it using this command:
 
 ```bash
-npx blueprint run
+npx blueprint run deployHelloWorld
 ```
 
 :::tip
@@ -95,9 +95,9 @@ npx blueprint create PascalCase # Don't forget to name the contract in PascalCas
 
 Now you're all set — it's time to start writing smart contracts. We'll begin with the basics: **storage** and **get methods**.
 
-<Button href="/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-storage-and-get-methods/" colorType={'primary'} sizeType={'sm'}>
+<Button href="/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-storage-and-get-methods" colorType={'primary'} sizeType={'sm'}>
 
-  Storage & get methods
+  Storage and get methods
 
 </Button>
 
