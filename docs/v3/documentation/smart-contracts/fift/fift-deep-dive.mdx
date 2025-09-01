@@ -133,12 +133,12 @@ x{00} @Defop NOP
 { rot >= -rot <= and } : 2x<=
 ...
 ```
-> Asm.fif (lines order reversed)
+> Asm.fif (lines in reverse order)
 
 ### How @Defop works
 `@Defop` checks available space for the opcode using `@havebitrefs`. If space is insufficient, it writes to another builder via `@|` (implicit jump). 
 
-**Important:** Always use `x{A988} @addop` instead of `x{A988} s,` to avoid compilation failures when space is limited.
+Prefer `x{A988} @addop` instead of `x{A988} s,` when space may be limited.
 
 ### Including cells in contracts
 You can embed large bag-of-cells into contracts:
@@ -149,28 +149,27 @@ You can embed large bag-of-cells into contracts:
 This defines an opcode that:
 1. Writes `x{88}` (`PUSHREF`) when included in the program
 2. Adds a reference to the specified bag-of-cells
-3. Pushes the cell to TVM stack when executing `LDBLOB`
+3. Pushes the cell onto the TVM stack when executing `LDBLOB`
 
 ## Special features
 
 ### Ed25519 cryptography
 Fift provides built-in support for Ed25519 cryptographic operations:
-- **`newkeypair`** - Generates a private-public key pair  
+- **`newkeypair`** - Generates a private/public key pair  
 - **`priv>pub`** - Derives a public key from a private key  
 - **`ed25519_sign[_uint]`** - Creates a signature for given data using a private key  
 - **`ed25519_chksign`** - Verifies an Ed25519 signature  
 
 ### TVM interaction
-- **`runvmcode` and similar commands** - Executes TVM with a code slice taken from the stack  
+- **`runvmcode` and similar words** - Executes TVM code from a slice taken from the stack  
 
 ### File operations
 - **Save BoC to file**:  
   ```fift
-  boc>B ".../contract.boc" B>file
+  boc>B "<path/to/contract.boc>" B>file
   ```
 
-## Continue learning  
-- [Fift: A Brief Introduction](https://docs.ton.org/fiftbase.pdf) - _Nikolai Durov_  
+## Continue learning
+- [Fift: A Brief Introduction](https://ton.org/fiftbase.pdf) - _Nikolai Durov_  
 
 <Feedback />
-

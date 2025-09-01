@@ -9,8 +9,6 @@ Unlike the official [FunC documentation](/v3/documentation/smart-contracts/func/
 
 ### How to write an if statement
 
-Let's say we want to check if any event is relevant. To do this, we use the flag variable. Remember that in FunC `true` is `-1` and `false` is `0`.
-
 To check whether an event is relevant, use a flag variable. In FunC, `true` is represented by `-1`, and `false` is `0`.
 
 ```func
@@ -25,7 +23,7 @@ else {
 ```
 **Note:** The `==` operator is unnecessary, as `0` already evaluates to `false`, and any nonzero value is considered `true`.
 
-**Reference:** [`If statement` in docs](/v3/documentation/smart-contracts/func/docs/statements#if-statements)
+**Reference:** [`If statements` in docs](/v3/documentation/smart-contracts/func/docs/statements#if-statements)
 
 ### How to write a repeat loop
 A repeat loop helps execute an action a fixed number of times. The example below demonstrates exponentiation:
@@ -45,7 +43,7 @@ repeat(degree - 1) {
 
 ### How to write a while loop
 
-A while loop is useful when the number of iterations is unknown. The following example processes a `cell` which can store up to four references to other cells:
+A while loop is useful when the number of iterations is unknown. The following example processes a `cell`, which can store up to four references to other cells:
 
 ```func
 cell inner_cell = begin_cell() ;; Create a new empty builder
@@ -58,7 +56,7 @@ cell message = begin_cell()
         .end_cell();
 
 slice msg = message.begin_parse(); ;; Convert cell to slice
-while (msg.slice_refs_empty?() != -1) { ;; We should remind that -1 is true
+while (~ msg.slice_refs_empty?()) {
     cell inner_cell = msg~load_ref(); ;; Load cell from slice msg
     ;; do something
 }
@@ -81,7 +79,7 @@ int flag = 0;
 
 do {
     ;; do something even flag is false (0) 
-} until (flag == -1); ;; -1 is true
+} until (flag);
 ```
 
 **Reference:** [`Until loop` in docs](/v3/documentation/smart-contracts/func/docs/statements#until-loop)
@@ -1440,4 +1438,3 @@ await contractV1.sendUpgrade(provider.sender(), {
 
 
 <Feedback />
-
