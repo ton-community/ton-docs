@@ -723,13 +723,13 @@ Available arguments:
 
 | Node argument name | Description                                                                                  | Default value                                                                       |
 | ------------------ | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `threads`          | count of threads                                                                             | `cpus count - 1`                                                                    |
+| `threads`          | count of threads                                                                             | `CPU count - 1`                                                                     |
 | `daemonize`        |                                                                                              | No value                                                                            |
 | `global-config`    | path to global config                                                                        | `/usr/bin/ton/global.config.json`                                                   |
 | `db`               | path to database                                                                             | `/var/ton-work/db/`                                                                 |
 | `logname`          | path to logs                                                                                 | `/var/ton-work/log`                                                                 |
-| `state-ttl`        | ttl of blockchain states that node keep                                                      | 3600                                                                                |
-| `archive-ttl`      | ttl of blocks node stores. _To force node not to store archive blocks use the value `86400`_ | 2592000 if liteserver mode was enabled during installation process, otherwise 86400 |
+| `state-ttl`        | TTL of blockchain states that the node keeps                                                 | 3600                                                                                |
+| `archive-ttl`      | TTL of blocks that the node stores. _To force node not to store archive blocks use the value `86400`_ | 2592000 if liteserver mode was enabled during installation process, otherwise 86400 |
 
 Example:
 
@@ -745,7 +745,7 @@ Enables one of the modes for `ton-http-api` and creates the necessary configurat
 MyTonInstaller> enable <MODE_NAME>
 ```
 
-Modes can have following names:
+Modes can have the following names:
 
 - `FN` - Full Node
 - `VC` - Validator Console
@@ -753,8 +753,8 @@ Modes can have following names:
 - `DS` - DHT Server
 - `JR` - JSON RPC
 - `THA` - TON HTTP API
-- `LSP` - ls proxy
-- `TSP` - TON storage + TON storage provider
+- `LSP` - LS Proxy
+- `TSP` - TON Storage + TON Storage Provider
 
 Example:
 
@@ -764,7 +764,7 @@ MyTonInstaller> enable FN
 
 ### update
 
-Same as `enable` of `mytoninstaller`
+Performs the same action as `enable` in `mytoninstaller`.
 
 ```bash
 MyTonInstaller> update FN
@@ -772,7 +772,7 @@ MyTonInstaller> update FN
 
 ### plsc
 
-Displays liteserver config.
+Displays Lite Server config.
 
 Example:
 
@@ -793,7 +793,7 @@ Creates a local config file (by default at `/usr/bin/ton/local.config.json`)
 
 ### print_ls_proxy_config
 
-Displays ls proxy config.
+Displays LS Proxy config.
 
 ### create_ls_proxy_config_file
 
