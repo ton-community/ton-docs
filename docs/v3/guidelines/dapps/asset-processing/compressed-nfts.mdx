@@ -14,7 +14,7 @@ Compressed NFT (cNFT) is a specialized digital asset format that optimizes data 
 - **Enhanced security**: Merkle trees enable fast data integrity checks and robust asset protection.
 - **Cost reduction**: Shift minting costs to end users and create “virtual” on-chain items only when needed.
 
-## Supporting compressed NFT in wallets and marketplaces
+## Supporting compressed NFTs in wallets and marketplaces
 
 **Current limitations**\
 Most popular wallets and marketplaces do not display unclaimed cNFTs or NFTs from collections that are not official partners. For example, the Telegram wallet and the Getgems marketplace index only the first 200 items for unofficial collections, which poses challenges for larger collections.
@@ -106,6 +106,8 @@ Set up a server to host your API and the interface for claiming NFTs. Also, obta
    git clone https://github.com/nessshon/cnft-toolbox 
    ```
 
+   Then change to the project directory: `cd cnft-toolbox`.
+
 2. **Install dependencies**
 
    Install Docker, Docker Compose, and ngrok, and ensure they are properly configured on your machine.
@@ -122,14 +124,14 @@ Set up a server to host your API and the interface for claiming NFTs. Also, obta
    ngrok http 8080 
    ```
 
-   **For production:** Set up a custom domain and configure Nginx to proxy requests to your API on port 8080. This involves:
+   **For production:** Set up a custom domain and configure NGINX to proxy requests to your API on port 8080. This involves:
 
    - Registering a domain and pointing it to your server.
-   - Configuring Nginx to proxy requests to your API on port 8080.
+   - Configuring NGINX to proxy requests to your API on port 8080.
 
 5. **Create a `.env` file**
 
-   Duplicate the `env.example` file to `.env` and update it with your specific configuration. The table below describes each key:
+   In the repository root (same directory as `docker-compose.yml`), duplicate the `env.example` file to `.env` and update it with your specific configuration. The table below describes each key:
 
    | **Key**                   | **Description**                                                                 | **Example**                                      | **Notes**                                          |
    | ------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------------------- |
