@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Tolk vs FunC: in detail
 
-A huge list is below. Will anyone have enough patience to read it up to the end?..
+This page provides a comprehensive, detailed comparison.
 
 :::tip There is a compact version
 Here: [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short)
@@ -118,7 +118,7 @@ You can use backticks to surround an identifier, and then it can contain any sym
       </td>
 
       <td>
-        <code dangerouslySetInnerHTML={{__html: '// don\'t do like this :)<br>var \`2+2\` = 5;'}} />
+        <code dangerouslySetInnerHTML={{__html: '// Avoid this pattern.<br>var \`2+2\` = 5;'}} />
       </td>
     </tr>
   </tbody>
@@ -336,7 +336,7 @@ fun mulDivFloor(x: int, y: int, z: int): int
 
 There is also a `@deprecated` attribute, not affecting compilation, but for a human and IDE.
 
-### get instead of method_id
+### `get` instead of `method_id`
 
 In FunC, `method_id` (without arguments) declared a get method. In Tolk, you use a straightforward syntax:
 
@@ -442,7 +442,7 @@ var a = 10;
 var (a, b) = (20, 30);  // error, releclaration of a
 ```
 
-Note, that it's not a problem for `loadUint()` and other methods. In FunC, they returned a modified object, so a pattern `var (cs, int value) = cs.load_int(32)` was quite common. In Tolk, such methods mutate an object: `var value = cs.loadInt(32)`, so redeclaration is unlikely to be needed.
+Note that it's not a problem for `loadUint()` and other methods. In FunC, they returned a modified object, so a pattern `var (cs, int value) = cs.load_int(32)` was quite common. In Tolk, such methods mutate an object: `var value = cs.loadInt(32)`, so redeclaration is unlikely to be needed.
 
 ```tolk
 fun send(msg: cell) {
@@ -745,7 +745,11 @@ valid + end;     // error
 8 & valid;       // error, int & bool not allowed
 ```
 
+<<<<<<< HEAD
 Note that logical operators `&&` and `||` (absent in FunC) always compile to IF/ELSE.
+=======
+Note that logical operators `&& ||` (missed in FunC) use IF/ELSE asm representation always.
+>>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k25061104
 In the future, for optimization, they could be automatically replaced by `& |` when it's safe (example: `a > 0 && a < 10`).
 To manually optimize gas consumption, you can still use `& |` (allowed for bools), but remember, that they are not short-circuit.
 
@@ -816,7 +820,7 @@ return tupleLast(t);       // ok if function specifies return type
 
 Also note that `T` for asm functions must occupy one stack slot, whereas for a user-defined function, `T` could be of any shape. Otherwise, asm body is unable to handle it properly.
 
-### #include → import. Strict imports
+### `#include` → `import`. Strict imports
 
 <table className="cmp-func-tolk-table">
   <thead>
@@ -878,7 +882,7 @@ Tolk compiler separates these two steps. At first, it does parsing, and then it 
 
 It sounds simple, but internally, it's a very huge job. To make this available, I've introduced an intermediate AST representation, which was completely missed in FunC. That's an essential point for future modifications and performing semantic code analysis.
 
-### null keyword
+### `null` keyword
 
 Creating null values and checking variables on null looks very pretty now.
 
@@ -1127,7 +1131,7 @@ Also, Tolk swaps `catch` arguments: it's `catch (excNo, arg)`, both optional (si
   </tbody>
 </table>
 
-Note, that `!condition` is possible since logical NOT is available, see below.
+Note that `!condition` is possible since logical NOT is available, see below.
 
 ### Operator precedence became identical to C++ / JavaScript
 
@@ -2155,7 +2159,7 @@ fun builder.storeInt32(mutate self, v: int32): self {
 ```
 
 Methods for generic structs created seamlessly.
-Note, that no extra `<T>` is required: while parsing the receiver type, compiler treats unknown symbols as generic arguments.
+Note that no extra `<T>` is required: while parsing the receiver type, compiler treats unknown symbols as generic arguments.
 
 ```tolk
 struct Container<T> {
