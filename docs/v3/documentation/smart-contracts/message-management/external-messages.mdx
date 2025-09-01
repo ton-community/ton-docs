@@ -16,9 +16,24 @@ import Feedback from '@site/src/components/Feedback';
 - Common sources include wallet users, validators, and DApp services.
 - Wallet contracts often receive external-in messages and relay instructions internally through _internal messages_.
 
-**TL-B:**
 
+### External incoming message structure
+
+All messages in TON commonly defined with the following structure: 
+
+```tlb
+message$_ {X:Type} info:CommonMsgInfo
+init:(Maybe (Either StateInit ^StateInit))
+body:(Either X ^X) = Message X;
 ```
+
+- `info: CommonMsgInfo` — contains metadata about the message.
+- `init: (Maybe (Either StateInit ^StateInit))` — optional field used to initialize a new account or update the existing one.
+- `body: (Either X ^X)` —  the main payload of the message; can be embedded directly or stored as a reference.
+
+An **external incoming message** is a message whose `CommonMsgInfo` header organized as the `ext_in_msg_info$10` structure.
+
+```tlb
 //external incoming message
 ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
 import_fee:Grams = CommonMsgInfo;
@@ -45,9 +60,24 @@ The sender is always an **external actor**— either a wallet or custom code int
   - Indexing and monitoring blockchain state,
   - Triggering off-chain processes like notifying external services or updating UIs.
 
-**TL-B:**
 
+### External outgoing message structure
+
+All messages in TON commonly defined with the following structure:
+
+```tlb
+message$_ {X:Type} info:CommonMsgInfo
+init:(Maybe (Either StateInit ^StateInit))
+body:(Either X ^X) = Message X;
 ```
+
+- `info: CommonMsgInfo` — contains metadata about the message.
+- `init: (Maybe (Either StateInit ^StateInit))` — optional field used to initialize a new account or update the existing one.
+- `body: (Either X ^X)` —  the main payload of the message; can be embedded directly or stored as a reference.
+
+An **external outgoing message** is a message whose `CommonMsgInfo` header organized as the `ext_out_msg_info$11`
+
+```tlb
 //external outgoing message
 ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
 created_lt:uint64 created_at:uint32 = CommonMsgInfo;
@@ -78,6 +108,9 @@ And one could also include an `expire-at` field in the external message, and acc
 :::note  
 In general, an external message begins with a 256-bit signature (if needed), a 32-bit `req-seqno` (if needed), a 32-bit `expire-at` (if needed), and possibly a 32-bit `op` and other required parameters depending on `op`. The layout of external messages does not need to be as standardized as that of internal messages because external messages are not used for interaction between different smart contracts (written by different developers and managed by different owners).  
 :::
+
+### See also
+- [Message-driven execution](/v3/guidelines/dapps/transactions/message-driven-execution)
 
 <Feedback />
 
