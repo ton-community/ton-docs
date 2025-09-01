@@ -14,7 +14,7 @@ which provides standard functions for FunC.
 
 The FunC standard library serves as a wrapper around the most commonly used TVM assembly commands that aren’t built-in.
 For detailed descriptions of these commands, refer to the [TVM documentation](/v3/documentation/tvm/tvm-overview).
-Some explanations in this document adapted from there.
+Some explanations in this document are adapted from there.
 
 Some functions in the library are commented out, meaning they have already been optimized and integrated as built-in operations.
 However, their type signatures and behaviors remain unchanged.
@@ -26,7 +26,7 @@ Additionally, some less frequently used TVM commands are not yet included in the
 Most function names and types in this section are self-explanatory.
 For more details on polymorphic functions, refer to the [Polymorphism with forall](/v3/documentation/smart-contracts/func/docs/functions#polymorphism-with-forall) section.
 
-**Note:** Currently, values of atomic type `tuple` cannot be converted into composite tuple types (e.g.,`[int, cell]`) and vice versa.
+**Note:** Currently, values of atomic type `tuple` cannot be converted into composite tuple types (e.g., `[int, cell]`) and vice versa.
 
 ### Lisp-style lists
 
@@ -57,7 +57,7 @@ Extracts the head and tail of a lisp-style list.
 forall X -> (tuple, X) list_next(tuple list) asm( -> 1 0) "UNCONS";
 ```
 
-Extracts the head and tail of a lisp-style list. It can be used as a [(non-)modifying method](/v3/documentation/smart-contracts/func/docs/statements#methods-calls).
+Extracts the head and tail of a lisp-style list. It can be used as a [(non-)modifying method](/v3/documentation/smart-contracts/func/docs/statements#method-calls).
 
 **Example**
 
