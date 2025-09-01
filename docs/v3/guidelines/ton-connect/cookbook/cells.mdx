@@ -41,7 +41,7 @@ import { Address, beginCell } from "@ton/ton";
 
 const cell = beginCell()
   .storeUint(99, 64) // Stores uint 99 in 64 bits
-  .storeAddress(Address.parse("[SOME_ADDR]")) // Stores an address
+  .storeAddress(Address.parse("EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c")) // Stores an address
   .storeCoins(123) // Stores 123 as coins
   .endCell(); // Closes the cell
 ```
@@ -122,18 +122,18 @@ if (maybeRef1) {
 }
 ```
 
-## Using assets SDK
+## Using the Assets SDK
 
 Manually handling cells can be tedious, so the `@ton-community/assets-sdk` provides convenient methods for serializing and deserializing messages.
 
 Using `@ton-community/assets-sdk` is more readable and less error-prone.
 
-<Tabs groupId="Serialization/Deserialization">
+<Tabs groupId="serialization-deserialization">
   <TabItem value="@ton-community/assets-sdk" label="@ton-community/assets-sdk">
 
     ```ts
-    import {Address, beginCell} from "@ton/core";
-    import {storeJettonTransferMessage, loadJettonTransferMessage} from "@ton-community/assets-sdk";
+    import { Address, beginCell } from "@ton/core";
+    import { storeJettonTransferMessage, loadJettonTransferMessage } from "@ton-community/assets-sdk";
 
     // serialization
     const cell = beginCell()
@@ -146,7 +146,7 @@ Using `@ton-community/assets-sdk` is more readable and less error-prone.
         forwardAmount: 1n,
         forwardPayload: null,
       }))
-      .endCell()
+      .endCell();
 
     // deserialization
     const transferMessage = loadJettonTransferMessage(cell.beginParse());
@@ -157,7 +157,7 @@ Using `@ton-community/assets-sdk` is more readable and less error-prone.
   <TabItem value="@ton/ton" label="@ton/ton">
 
     ```ts
-    import {Address, beginCell} from "@ton/core";
+    import { Address, beginCell } from "@ton/core";
 
     // serialization
     const cell = beginCell()
