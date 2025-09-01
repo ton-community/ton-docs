@@ -46,6 +46,8 @@ The `assets-sdk` library works out of the box with `ton-connect`.
         .endCell();
     ```
 
+    Note: `toNano` assumes 9 decimals. For jettons with a different number of decimals (for example, 6), compute the amount using the token’s `decimals` value, such as `BigInt(value) * 10n ** BigInt(jettonDecimals)`.
+
     Next, sending the transaction with this body to sender's `jettonWalletContract` executed:
 
     <Tabs groupId="JettonTransferUI">
@@ -106,7 +108,7 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
     - `validUntil` - UNIX-time until message valid
     - `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
-    - `balance` - Integer, the amount of Toncoin used for gas payments in nanotons.
+    - `amount` - Integer, the amount of Toncoin used for gas payments in nanotons.
     - `body` - payload for the `jettonContract`
 
     <details>
@@ -157,6 +159,8 @@ The `assets-sdk` library works out of the box with `ton-connect`.
     :::
 
     For more examples, check [documentation](https://github.com/ton-community/assets-sdk)
+
+    Note: `tonConnectUi` refers to an existing `TonConnectUI` instance created earlier (for example, `const provider = new TonConnectUI({...})`).
 
     ```js
     const NETWORK = "testnet";
@@ -320,7 +324,7 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
     - `validUntil` - UNIX-time until message valid
     - `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
-    - `balance` - Integer, the amount of Toncoin used for gas payments in nanotons.
+    - `amount` - Integer, the amount of Toncoin used for gas payments in nanotons.
     - `body` - payload for the `jettonContract`
 
     <details>
@@ -371,6 +375,8 @@ The `assets-sdk` library works out of the box with `ton-connect`.
     :::
 
     For more examples, check [documentation](https://github.com/ton-community/assets-sdk)
+
+    Note: `tonConnectUi` refers to an existing `TonConnectUI` instance created earlier (for example, `const provider = new TonConnectUI({...})`).
 
     ```js
     const NETWORK = "testnet";
@@ -428,7 +434,7 @@ The `assets-sdk` library works out of the box with `ton-connect`.
         .endCell();
     ```
 
-    Message places into the following request:
+    Place the message body into the following transaction:
 
     <Tabs groupId="JettonBurnUI">
       <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
@@ -564,6 +570,6 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 ## Next steps
 
 1. Work with NFTs → [NFT transfer](/v3/guidelines/ton-connect/cookbook/nft-transfer)  
-2. Search your transaction → [Transaction lookup](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message)
+2. Search for your transaction → [Transaction lookup](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message)
 
 <Feedback />
