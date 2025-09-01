@@ -11,7 +11,7 @@ extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) = ExtraCurrencyCollection
 currencies$_ grams:Grams other:ExtraCurrencyCollection = CurrencyCollection;
 ```
 
-## Extracurrency config
+## Extra currency config
 
 A dictionary, specifically `ExtraCurrencyCollection`, containing all currencies to be minted is stored in `ConfigParam7`:
 
@@ -37,7 +37,7 @@ The problem here is that the minting message includes only additional currencies
 
 ## High-level minting flow
 
-One possible high-level minting flow, which is implemented [here](https://github.com/ton-blockchain/governance-contract/tree/50ed2ecacc9e3cff4c77cbcc69aa07b39f5c46a2) (check `*.tolk` files) is as follows:
+One possible high-level minting flow, which is implemented [here](https://github.com/ton-blockchain/governance-contract/tree/50ed2ecacc9e3cff4c77cbcc69aa07b39f5c46a2) (see the .tolk files under `contracts/` in that repository) is as follows:
   
 1. There is `ExtraCurrencyAuthorizationConfig`: the config contains information on which contracts (addresses) have authorization to request minter to mint new extracurrencies. This config has the following scheme:
 
@@ -72,4 +72,3 @@ Sending of extracurrency to blackhole has the following effect: extracurrency am
 
 4. Send a `mint` request from the **currency admin contract** to the **minter**. Wait for the **minter** to return the extra currency.
 <Feedback />
-
