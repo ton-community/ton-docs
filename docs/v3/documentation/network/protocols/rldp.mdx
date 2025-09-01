@@ -10,7 +10,7 @@ Please see the implementations:
 
 ## Overview
 
-The Reliable Large Datagram Protocol (RLDP) operates on top of the ADNL UDP protocol and is designed for transferring large data blocks. It incorporates Forward Error Correction (FEC) algorithms, which allow it to replace acknowledgment packets typically sent from the receiver back to the sender.
+The Reliable Large Datagram Protocol (RLDP) operates on top of ADNL over UDP and is designed for transferring large data blocks. It incorporates Forward Error Correction (FEC) algorithms, which allow it to replace acknowledgment packets typically sent from the receiver back to the sender.
 
 This capability enables more efficient data transfer between network components, although it results in increased traffic consumption.
 
@@ -40,7 +40,7 @@ RLDP transfers are utilized for sending large amounts of data. A random `transfe
 
 The resulting segments are wrapped in a `rldp.messagePart` structure and sent to the peer until the peer responds with `rldp.complete` or a timeout occurs.
 
-Once the receiver has gathered the necessary `rldp.messagePart` pieces to reconstruct the complete message, it concatenates them, decodes them using FEC, and then deserializes the resulting byte array into either an `rldp.query` or `rldp.answer` structure, depending on the type indicated by the `tl prefix id`.
+Once the receiver has gathered the necessary `rldp.messagePart` pieces to reconstruct the complete message, it concatenates them, decodes them using FEC, and then deserializes the resulting byte array into either an `rldp.query` or `rldp.answer` structure, depending on the type indicated by the TL schema ID (constructor ID prefix).
 
 ### FEC
 
@@ -58,13 +58,13 @@ All the generated symbols are combined and sent to the recipient, allowing for t
 
 The symbols are transmitted to the peer until they confirm that all data has been received and successfully restored (decoded) by applying the same discrete operations.
 
-[\[Please see implementation example of RaptorQ in Golang\]](https://github.com/xssnick/tonutils-go/tree/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/rldp/raptorq).
+[\[Please see implementation example of RaptorQ in Go\]](https://github.com/xssnick/tonutils-go/tree/46dbf5f820af066ab10c5639a508b4295e5aa0fb/adnl/rldp/raptorq).
 
 ## RLDP-HTTP
 
-To interact with TON Sites, the RLDP (Reverse Lightweight Data Protocol) is used to wrap HTTP requests. The host sets up their site on any standard HTTP web server and runs `rldp-http-proxy` alongside it.
+To interact with TON Sites, RLDP (Reliable Large Datagram Protocol) is used to wrap HTTP requests. The host sets up their site on any standard HTTP web server and runs `rldp-http-proxy` alongside it.
 
-All incoming requests from the TON network are directed to the proxy via the RLDP protocol. The proxy then converts these requests into standard HTTP format and calls the original web server locally.
+All incoming requests from the TON network are directed to the proxy via RLDP. The proxy then converts these requests into standard HTTP format and calls the original web server locally.
 
 On the user's side, they launch a proxy, such as [Tonutils Proxy](https://github.com/xssnick/TonUtils-Proxy), to access the .ton sites. All traffic is wrapped in the reverse order: requests are sent to the local HTTP proxy, which then forwards them via RLDP to the remote TON site.
 
@@ -81,7 +81,7 @@ http.getNextPayloadPart id:int256 seqno:int max_chunk_size:int = http.PayloadPar
 
 This is not pure HTTP in text form; everything is wrapped in a binary TL and unwrapped before being sent to the web server or browser by the proxy itself.
 
-The scheme of work is as follows:
+The workflow is as follows:
 
 - Client sends `http.request`
 - The server checks the `Content-Length` header when receiving a request
@@ -89,7 +89,7 @@ The scheme of work is as follows:
   - When receiving a request, the client sends `http.payloadPart` - the requested body piece depending on `seqno` and `max_chunk_size`.
   - The server repeats requests, incrementing `seqno`, until it receives all the chunks from the client, i.e. until the `last:Bool` field of the last chunk received is true.
 - After processing the request, the server sends `http.response`, the client checks the `Content-Length` header
-  - If it is not 0, then sends a `http.getNextPayloadPart` request to the server, and the operations are repeated, as in the case of the client but vice-versa.
+  - If it is not 0, then sends a `http.getNextPayloadPart` request to the server, and the operations are repeated, as in the case of the client but vice versa.
 
 ## Request the TON site
 
