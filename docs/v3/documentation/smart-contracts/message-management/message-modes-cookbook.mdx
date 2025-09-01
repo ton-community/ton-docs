@@ -1,6 +1,5 @@
 import Feedback from '@site/src/components/Feedback';
 
-import ConceptImage from "@site/src/components/conceptImage";
 import ThemedImage from "@theme/ThemedImage";
 
 # Message modes cookbook
@@ -13,20 +12,18 @@ You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726
 
 #### Message value and account balance
 
-The contract reflects all TON tokens it holds in its `balance`. Some of these tokens are also assigned to the currently processed incoming `message`. This mechanism is effective because any TON transaction involving a [non-system contract](/v3/documentation/smart-contracts/contracts-specs/governance) processes exactly one incoming message at a time.
+The contract reflects all TON tokens it holds in its `balance`. Some of these tokens are also assigned to the currently processed incoming `message`. Transactions process one incoming message and up to 255 outgoing messages (see [overview on messages and transactions](/v3/documentation/dapps/assets/overview#overview-on-messages-and-transactions)).
 
 > To better understand the `balance` inside the TVM, refer to how the [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) function operates.
 
 Therefore, any blockchain payment may come either:
 
-- From the incoming message's `value`.
-  Contracts pay computation fees this way unless they call [accept_message](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects), which prevents malicious actors from spending the contract's balance to process their data
-- From the contract's `balance`, which leaves the incoming TON amount untouched during the transaction
-  This approach currently applies to storage fees in workchains 0 and -1 and for the most common actions
+- From the incoming message's `value`. See [accept_message effects](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects).
+- From the contract's `balance`. Storage fees are paid from the contract balance.
 
 #### Fees
 
-Actual transaction fees will vary depending on the blockchain configuration, the smart contract code, and other factors. When a message is received, storage and gas fees will consume part of the contract `balance` if the message `value` [is above a certain amount](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped).
+Actual transaction fees will vary depending on the blockchain configuration, the smart contract code, and other factors. Storage fees are deducted from the contract balance; for internal messages, gas is covered by the incoming message value by default, and if funds are insufficient the compute phase may be skipped.
 
 According to the [transaction flow](/v3/documentation/tvm/tvm-overview#transactions-and-phases), each transaction consists of five distinct phases:
 
@@ -53,7 +50,7 @@ Credit → Storage → Compute → Action → Bounce
 For bounceable messages:
 Storage → Credit → Compute → Action → Bounce
 
-> Compute, Action and Bounce phases may be skipped
+> Compute, Action, and Bounce phases may be skipped
 
 #### Fee deduction sequence
 
@@ -67,12 +64,12 @@ Storage → Credit → Compute → Action → Bounce
 | Fee in explorer                                                                                       | Value       | How it's obtained               |
 | :---------------------------------------------------------------------------------------------------- | :---------- | :------------------------------ |
 | Total fee                                                                                             | 0.001982134 | gas + storage + action + import |
-| Fwd. fee                                                                                              | 0.001       | fwd_fee + action_fee + ihr_fee  |
+| Outbound fees (per message)                                                                            | 0.001       | fwd_fee + action_fee + ihr_fee  |
 | Gas fee                                                                                               | 0.0011976   | compute phase, gas used         |
 | Storage fee                                                                                           | 0.000000003 | storage phase, account only     |
 | Action fee                                                                                            | 0.000133331 | action phase, cost per action   |
 | Import fee (hidden)                                                                                   | 0.0006512   | cost of import of in_ext_msg    |
-| [Forward fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#formula-1) (each msg) | 0.000266669 | cost of fwd of in_msg           |
+| [Forward fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) (each msg) | 0.000266669 | cost of fwd of in_msg           |
 | [IHR fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#ihr) (each msg)           | 0.0006      | cost of ihr fwd of in_msg       |
 
 :::info Important
@@ -82,7 +79,7 @@ For live calculations, refer to the [**fee calculator**](/v3/documentation/smart
 :::
 
 The transaction fees used in these examples are hypothetical and for illustrative purposes only. Any fees other than message forwarding are outside the scope of this article.
-Funds included with an ignored message will still be [credited to the receiving address](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557).
+For internal messages using `+2` (ignore action-phase errors), the inbound value remains credited in the credit phase even if the action phase is ignored. See this [example transaction](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557).
 
 ## 1. (Mode 0, flag 0) basic message \{#mode0}
 
