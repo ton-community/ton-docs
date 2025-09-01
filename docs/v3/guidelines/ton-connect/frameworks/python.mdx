@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # TON Connect for Python
 
-The recommended SDK for Python applications is [tonutils](https://docs.ton.org/v3/guidelines/ton-connect/guidelines/developers#ton-connect-python).
+The recommended SDK for Python applications is [tonutils](https://github.com/nessshon/tonutils).
 It is a Python library that provides a high-level interface for interacting with the TON blockchain, including TON Connect.
 
 ## Implementation
@@ -26,6 +26,8 @@ Create the `manifest.json` file for your application according to the [guideline
 ### Implementing Storage
 
 To store connection data with user wallets, a storage interface must be implemented.
+
+Save the following example as `storage.py` so that `from storage import FileStorage` works as shown below.
 
 <details>
   <summary><b>Example implementation</b></summary>
@@ -101,7 +103,7 @@ tc = TonConnect(
 ```
 
 The `wallets_fallback_file_path` parameter is used as a fallback source of wallet data (e.g., Tonkeeper, Wallet) in case the external API is unavailable.
-You can find all input parameters at the following [link](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/tonconnect.py#L40).
+You can find all input parameters at the following [link](https://github.com/nessshon/tonutils/blob/064a58f32c0c872feed37f49a6af7113268bbc7b/tonutils/tonconnect/tonconnect.py#L40).
 
 ### Initializing the Connector
 
@@ -216,7 +218,7 @@ The context manager will pause execution until:
 - a timeout occurs;
 - or an error is raised.
 
-On success, you will receive a [WalletInfo](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/models/wallet.py#L118) object containing the connected wallet's data.
+On success, you will receive a [WalletInfo](https://github.com/nessshon/tonutils/blob/064a58f32c0c872feed37f49a6af7113268bbc7b/tonutils/tonconnect/models/wallet.py#L118) object containing the connected wallet's data.
 On failure, a `TonConnectError` instance will be returned, which you can handle as described in the [connection errors](#connection-errors) section.
 
 ## Sending Requests
@@ -226,6 +228,7 @@ On failure, a `TonConnectError` instance will be returned, which you can handle 
 To send Toncoin to a specific address, use the `send_transaction` method:
 
 ```python
+import time
 from tonutils.tonconnect.models import Transaction, Message
 
 rpc_request_id = await connector.send_transaction(
@@ -256,8 +259,8 @@ The `tonutils` library also provides higher-level methods for sending transactio
 - The `amount` should be specified in **TON** instead of **nanotons**.
 - The `body` parameter can be one of the following:
 
-  - a `Cell` object — for passing a custom payload;
-  - a string — used as a comment or memo;
+  - a `Cell` object — for passing a custom payload.
+  - a string — used as a comment or memo.
 
 #### Single Transfer
 
@@ -348,7 +351,7 @@ from tonutils.tonconnect.models import SignDataPayloadCell
 
 comment = "I confirm deletion of my account and all associated data."
 cell = begin_cell().store_uint(0, 32).store_snake_string(comment).end_cell()
-schema = "text_comment#00000000 text:Snakedata = InMsgBody;"
+schema = "text_comment#00000000 text:SnakeData = InMsgBody;"
 
 payload = SignDataPayloadCell(cell=cell, schema=schema)
 ```
@@ -373,7 +376,7 @@ from tonutils.tonconnect.utils.exceptions import WalletNotSupportFeatureError
 try:
     connector.device.verify_sign_data_feature(connector.wallet, payload)
 except WalletNotSupportFeatureError:
-    print("Wallet does not support sign data feature!")
+    print("Wallet does not support the sign data feature!")
     # Handle fallback logic or abort
 ```
 
@@ -395,8 +398,8 @@ The context manager pauses execution until:
 
 On success, it returns a response object specific to the request type:
 
-- [`SendTransactionResponse`](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/models/request.py#L245)
-- [`SignDataResponse`](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/models/request.py#L494)
+- [`SendTransactionResponse`](https://github.com/nessshon/tonutils/blob/064a58f32c0c872feed37f49a6af7113268bbc7b/tonutils/tonconnect/models/request.py#L245)
+- [`SignDataResponse`](https://github.com/nessshon/tonutils/blob/064a58f32c0c872feed37f49a6af7113268bbc7b/tonutils/tonconnect/models/request.py#L494)
 
 On failure, a `TonConnectError` is returned and can be handled as described in the [request errors](#request-errors) section.
 
