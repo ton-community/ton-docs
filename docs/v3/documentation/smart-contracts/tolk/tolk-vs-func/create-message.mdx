@@ -36,7 +36,7 @@ reply.send(SEND_MODE_REGULAR);
 3. Supports different WorkChains
 4. Supports sharding (formerly splitDepth)
 5. Integrated with auto-serialization of `body`
-6. Automatically detects **body ref or not**
+6. Automatically decides whether to inline the body or store it by reference
 7. More efficient than handwritten code
 
 ## The concept is based on union types
@@ -47,9 +47,9 @@ There is a huge variety of interacting between contracts. When you explore FunC 
 - ... but sometimes, you "build the address (builder) manually"
 - sometimes, you compose `StateInit` from code+data
 - ... but sometimes, you already have `StateInit` as a ready cell
-- sometimes, you send a message to basechain
+- sometimes, you send a message to BaseChain
 - ... but sometimes, you have the `MY_WORKCHAIN` constant and use it everywhere
-- sometimes, you just attach tons (**msg value**)
+- sometimes, you just attach Toncoin (**msg value**)
 - ... but sometimes, you also need extra currencies
 - etc.
 
@@ -59,13 +59,13 @@ Let's start exploring this idea by looking at how extra currencies are supported
 
 ## Extra currencies: union
 
-When you don't need them, you just attach **msg value** as tons:
+When you don't need them, you just attach **msg value** as Toncoin:
 
 ```tolk
 value: someTonAmount
 ```
 
-When you need them, you attach tons AND extra currencies dict:
+When you need them, you attach Toncoin AND an extra currencies dict:
 
 ```tolk
 value: (someTonAmount, extraDict)
@@ -83,7 +83,7 @@ struct CreateMessageOptions<TBody> {
     value: coins | (coins, ExtraCurrenciesDict)
 ```
 
-That's it! You just attach tons OR tons with extra, and the compiler takes care of composing this into a cell.
+That's it! You just attach Toncoin or Toncoin with extra, and the compiler takes care of composing this into a cell.
 
 ## Destination: union
 
@@ -120,7 +120,7 @@ val walletInitialState: ContractState = {
 };
 ```
 
-Now, from a minter, you want to send a message to a wallet. But since you are not sure whether the wallet already exists onchain, you attach its code+data:
+Now, from a minter, you want to send a message to a wallet. But since you are not sure whether the wallet already exists on-chain, you attach its code+data:
 if a wallet doesn't exist, it's immediately initialized with that code.
 So, where should you send a message to? What is **destination**? The answer is: **destination is the wallet's StateInit**.
 You need to send a message to a `walletInitialState` because, in TON, the address of a contract is — by definition — a hash of its initial state:
@@ -164,7 +164,7 @@ In other words, your intention is:
 
 Let's illustrate it with numbers for `shard depth` = 8:
 
-| Title                | Addr hash (256 bits) | Comment                              |
+| Title                | Address hash (256 bits) | Comment                              |
 | -------------------- | -------------------- | ------------------------------------ |
 | closeTo (owner addr) | `01010101...xxx`     | owner's wallet                       |
 | shardPrefix          | `01010101`           | first 8 bits of closeTo              |
@@ -183,7 +183,7 @@ dest: {
 }
 ```
 
-Technically, **shard depth** must be a part of `StateInit` (besides code+data) — for correct initialization inside the blockchain.
+Technically, **shard depth** must be part of `StateInit` (besides code+data) — for correct initialization inside the blockchain.
 The compiler automatically embeds it.
 
 But semantically, **shard depth** alone makes no sense. That's why **shard depth + closeTo** is a single entity:
@@ -218,8 +218,8 @@ createMessage({
 
 The rules are the following:
 
-1. if `body` is small, it's embedded directly into a message cell
-2. if `body` is large or unpredictable, it's wrapped into a ref
+1. If `body` is small, it's embedded directly into a message cell
+2. If `body` is large or unpredictable, it's wrapped into a ref
 
 Why not make a ref always? Because creating cells is expensive. Avoiding cells for small bodies is crucial for gas consumption.
 
@@ -356,7 +356,7 @@ struct ContractState {
 And that's why a field `stateInit: ContractState | cell` is named **stateInit**,
 emphasizing that `StateInit` can be initialized automatically from `ContractState` (or can be a well-formed **rich** cell).
 
-## Why not send, but createMessage?
+## Why createMessage instead of send()?
 
 You might ask: "why do we follow the pattern `val msg = createMessage(...); msg.send(mode)` instead of just `send(... + mode)` ?"
 
@@ -372,7 +372,7 @@ But there are also advanced use cases:
 So, composing a message cell and THEN doing some action with it is a more flexible pattern.
 
 Moreover, following this pattern requires you to give **a name** to a variable.
-Advice is not to name it "m" or "msg," but to give a descriptive name like "excessesMsg" or "transferMsg":
+Do not name it "m" or "msg"; use a descriptive name like "excessesMsg" or "transferMsg":
 
 ```tolk
 val excessesMsg = createMessage({
@@ -390,7 +390,7 @@ As opposed to a potential `send(...)` function, you have to dig into what body i
 
 You might also ask: why do we join `stateInit` as a **destination** for other use cases? Why not make a `deploy()` function that accepts code+data and drops stateInit from a **regular** createMessage?
 
-The answer lies in terminology. Yes, **attaching stateInit** is often referred to as **deployment**, but it's an inaccurate term. **TON Blockchain doesn't have a dedicated deployment mechanism.** You send a message to some _void_  — and if this _void_ doesn't exist, but you've attached a way to initialize it (code+data) — it's initialized immediately and accepts your message.
+The answer lies in terminology. Yes, **attaching stateInit** is often referred to as **deployment**, but it's an inaccurate term. **TON Blockchain doesn't have a dedicated deployment mechanism.** You send a message to some _void_ — and if this _void_ doesn't exist, but you've attached a way to initialize it (code+data) — it's initialized immediately and accepts your message.
 
 If you wish to emphasize the deployment, give it _a name_:
 
@@ -403,7 +403,7 @@ deployMsg.send(mode);
 
 ## Universal createExternalLogMessage
 
-The philosophy is similar to `createMessage`. But **external outs** don't have **bounce**; you don't attach tons, etc. So, options for creating are different.
+The philosophy is similar to `createMessage`. But **external outs** don't have **bounce**; you don't attach Toncoin, etc. So, options for creating are different.
 
 **Currently, external messages are used only for emitting logs (for viewing them in indexers).**
 But theoretically, they can be extended to **send messages to the offchain**.
