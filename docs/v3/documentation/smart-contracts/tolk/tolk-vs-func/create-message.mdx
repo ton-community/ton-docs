@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Universal createMessage
 
-In FunC, you had to compose message cells manually and regularly face code like:
+In FunC, you had to compose message cells manually and would regularly face code like this:
 
 ```func
 cell m = begin_cell()
@@ -17,7 +17,7 @@ cell m = begin_cell()
 send_raw_message(m, 0);
 ```
 
-In Tolk, you use a high-level function — and it's even more gas-effective:
+In Tolk, you use a high-level function — and it's even more gas-efficient:
 
 ```tolk
 val reply = createMessage({
@@ -94,7 +94,7 @@ dest: someAddress,
 dest: (workchain, hash)
 ```
 
-It's either an address, OR a OR (WorkChain + hash), OR ...:
+It's either an address, a builder, a pair (workchain, hash), or an AutoDeployAddress:
 
 ```tolk
 struct CreateMessageOptions<TBody> {
