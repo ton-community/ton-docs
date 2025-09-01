@@ -49,7 +49,7 @@ Here: [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-fu
   </tbody>
 </table>
 
-### 2+2 is 4, not an identifier. Identifiers can only be alpha-numeric
+### 2+2 is 4, not an identifier. Identifiers can only be alphanumeric
 
 In FunC, almost any character can be a part of the identifier.
 For example, `2+2` (without a space) is an identifier.
@@ -82,10 +82,10 @@ In Tolk, spaces are not mandatory. `2+2` is 4, as expected. `3+~x` is `3 + (~ x)
   </tbody>
 </table>
 
-More precisely, an identifier can start from <code style={{display: 'inline-block'}}>{'[a-zA-Z$_]'}</code>
-and be continued with <code style={{display: 'inline-block'}}>{'[a-zA-Z0-9$_]'}</code>. Note that `?`, `:`, and others are not valid symbols, and `found?` and `op::increase` are invalid identifiers.
+More precisely, an identifier can start with <code style={{display: 'inline-block'}}>{'[a-zA-Z$_]'}</code>
+and be continued by <code style={{display: 'inline-block'}}>{'[a-zA-Z0-9$_]'}</code>. Note that `?`, `:`, and others are not valid symbols, and `found?` and `op::increase` are invalid identifiers.
 
-Note, that `cell`, `slice`, etc. are valid identifiers: `var cell = ...` or even `var cell: cell = ...` is okay. (like in TypeScript, `number` is a valid identifier)
+Note that `cell`, `slice`, etc. are valid identifiers: `var cell = ...` or even `var cell: cell = ...` is okay (like in TypeScript — `number` is a valid identifier).
 
 You can use backticks to surround an identifier, and then it can contain any symbols (similar to Kotlin and some other languages). This potential usage is to allow keywords to be used as identifiers in case of code generation by a scheme, for example.
 
@@ -684,7 +684,7 @@ We have the following types:
 - union types `T1 | T2 | ...`, handled with pattern matching
 - `coins` and function `ton("0.05")`
 - `int32`, `uint64`, and other fixed-width integers (just int at TVM) [details](https://github.com/ton-blockchain/ton/pull/1559)
-- `bytesN` and `bitsN`, similar to `intN` (backed by slices at TVM)
+- `bytesN` and `bitsN`, similar to `intN` (backed by slices in TVM)
 - `address` (internal/external/none, still a slice at TVM)
 - `void` (more canonical to be named `unit`, but `void` is more reliable)
 - `self`, to make chainable methods, described below; actually it's not a type, it can only occur instead of return type of a function
@@ -745,7 +745,7 @@ valid + end;     // error
 8 & valid;       // error, int & bool not allowed
 ```
 
-Note, that logical operators `&& ||` (missed in FunC) use IF/ELSE asm representation always.
+Note that logical operators `&&` and `||` (absent in FunC) always compile to IF/ELSE.
 In the future, for optimization, they could be automatically replaced by `& |` when it's safe (example: `a > 0 && a < 10`).
 To manually optimize gas consumption, you can still use `& |` (allowed for bools), but remember, that they are not short-circuit.
 
@@ -782,7 +782,7 @@ duplicate([1, cs]);   // duplicate<[int, slice]>
 duplicate((1, 2));    // duplicate<(int, int)>
 ```
 
-Or even functions, it also works:
+Even functions work:
 
 ```tolk
 fun callAnyFn<TObj, TResult>(f: TObj -> TResult, arg: TObj) {
@@ -794,13 +794,13 @@ fun callAnyFn2<TObj, TCallback>(f: TCallback, arg: TObj) {
 }
 ```
 
-Note that while generic `T` is mostly detected from arguments, there are no such obvious corner cases when `T` does not depend on arguments:
+In corner cases, `T` does not depend on arguments:
 
 ```tolk
 fun tupleLast<T>(t: tuple): T
     asm "LAST"
 
-var last = tupleLast(t);    // error, can not deduce T
+var last = tupleLast(t);    // error, cannot deduce T
 ```
 
 To make this valid, `T` should be provided externally:
@@ -847,7 +847,7 @@ In Tolk, you can not use a symbol from `a.tolk` without importing this file. In 
 
 All stdlib functions are available out of the box. Downloading stdlib and `#include "stdlib.fc"` is unnecessary. See below about embedded stdlib.
 
-There is still a global scope of naming. If `f` is declared in two different files, it's an error. We `import` a whole file with no per-file visibility, and the `export` keyword is now supported but probably will be in the future.
+There is still a global scope of naming. If `f` is declared in two different files, it's an error. We `import` a whole file with no per-file visibility. The `export` keyword is not currently supported and may be added in the future. You import whole files; per-file visibility is not implemented.
 
 ### #pragma → compiler options
 
@@ -857,17 +857,17 @@ In Tolk, all pragmas were removed. `allow-post-modification` and `compute-asm-lt
 
 As for now, there is one experimental option introduced — `remove-unused-functions`, which doesn't include unused symbols to Fift output.
 
-`#pragma version xxx` was replaced by `tolk xxx` (no >=, just a strict version). It's good practice to annotate the compiler version you are using. If it doesn't match, Tolk will show a warning.
+`#pragma version xxx` was replaced by a standalone directive line: `tolk xxx` (no >=, just a strict version). It's good practice to annotate the compiler version you are using. If it doesn't match, Tolk will show a warning.
 
 ```tolk
 tolk 0.12
 ```
 
-### Late symbols resolving. AST representation
+### Late Symbol Resolution. AST representation
 
-In FunC, like in С, you can not access a function declared below:
+In FunC, like in C, you cannot access a function declared below:
 
-```func
+```text
 int b() { a(); }   ;; error
 int a() { ... }    ;; since it's declared below
 ```
@@ -1022,7 +1022,7 @@ If FunC has `throw()`, `throw_if()`, `throw_arg_if()`, and the same for unless, 
   </tbody>
 </table>
 
-Note, that `!condition` is possible since logical NOT is available, see below.
+Note that `!condition` is possible since logical NOT is available, see below.
 
 There is a long (verbose) syntax of `assert(condition, excNo)`:
 
@@ -1144,7 +1144,7 @@ if (flags & 0xFF != 0)
 will lead to a compilation error (similar to gcc/clang):
 
 ```
-& has lower precedence than ==, probably this code won't work as you expected.  Use parenthesis: either (... & ...) to evaluate it first, or (... == ...) to suppress this error.
+& has lower precedence than ==, probably this code won't work as you expected.  Use parentheses: either (... & ...) to evaluate it first, or (... == ...) to suppress this error.
 ```
 
 Hence, you should rewrite the code:
@@ -1161,7 +1161,7 @@ I've also added a diagnostic for a common mistake in bitshift operators: `a << 8
 ```
 int result = a << 8 + low_mask;
 
-error: << has lower precedence than +, probably this code won't work as you expected.  Use parenthesis: either (... << ...) to evaluate it first, or (... + ...) to suppress this error.
+error: << has lower precedence than +, probably this code won't work as you expected.  Use parentheses: either (... << ...) to evaluate it first, or (... + ...) to suppress this error.
 ```
 
 Operators `~% ^% /% ~/= ^/= ~%= ^%= ~>>= ^>>=` no longer exist.
@@ -1197,7 +1197,7 @@ fun processOpIncrease(msgBody: slice) {
 processOpIncrease(msgBody);  // by value, not modified
 ```
 
-In Tolk, a function can declare `mutate` parameters. It's a generalization of FunC `~` tilda functions, read below.
+In Tolk, a function can declare `mutate` parameters. It's a generalization of FunC `~` tilde functions, read below.
 
 ### Deprecated command-line options removed
 
@@ -1505,7 +1505,7 @@ Tolk supports logical operators. They behave exactly as you get used to (right c
 
 Keywords `ifnot` and `elseifnot` were removed, since now we have logical not (for optimization, Tolk compiler generates `IFNOTJMP`, btw). The `elseif` keyword  was replaced by the traditional `else if`.
 
-Remember that a boolean `true`, transformed `as int`, is -1, not 1. It's a TVM representation.
+Remember: `true as int` is -1 (TVM representation), not 1. This cast inserts no runtime instructions.
 
 ### Indexed access tensorVar.0 and tupleVar.0
 
@@ -1604,7 +1604,7 @@ var s = b.endCell().beginParse();
 return s as address;   // `slice` as `address`
 ```
 
-A reversed cast also is valid: `someAddr as slice` (why would you need it, is an open question, though).
+The reverse cast is also valid: `someAddr as slice`.
 
 **Different types of addresses**
 
@@ -1787,7 +1787,7 @@ var v = 0;
 // prints a warning
 if (v == null) {
     // v is `never`
-    v + 10;   // error, can not apply `+` `never` and `int`
+    v + 10;   // error, cannot apply `+` `never` and `int`
 }
 // v is `int` again
 ```
@@ -2326,7 +2326,7 @@ A function will NOT be inlined (even marked as `@inline`) if:
 3) It's used as a non-call. For example, you take a reference to it like `val callback = f.`
 
 
-### No tilda \~ methods, mutate keyword instead
+### No tilde \~ methods, mutate keyword instead
 
 If FunC has `.methods()` and `~methods()`, Tolk has only a dot, and the only way to call a method is `.method()`. Basically, Tolk just works as expected:
 
@@ -2339,7 +2339,7 @@ Continue reading on a separate page: [Mutability in Tolk](/v3/documentation/smar
 
 ### Auto-packing to/from cells/builders/slices
 
-Having any struct, you can unpack in from a cell or pack and object to a cell:
+Having any struct, you can unpack it from a cell or pack an object (into a cell, where relevant):
 
 ```tolk
 struct Point {
