@@ -1,6 +1,4 @@
 import Feedback from "@site/src/components/Feedback";
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import Button from '@site/src/components/button'
 
 # Storage and get methods
@@ -75,7 +73,7 @@ contract HelloWorld {
 
 #### Contract storage
 
-A contract may store its state variables as follows. They may be accessed with [`Self reference`](https://docs.tact-lang.org/book/contracts/#self)
+A contract may store its state variables as follows. They may be accessed with the [`self` reference](https://docs.tact-lang.org/book/contracts/#self)
 
 ```tact
 id: Int as uint32;
@@ -107,7 +105,7 @@ receive(msg: Add) {
 }
 ```
 
-For accepting messages with empty body you can add `receive` function with no arguments:
+For messages with an empty body, you can add a `receive` function with no arguments:
 
 ```tact title="/contracts/hello_world.tact"
 receive() {
@@ -120,7 +118,7 @@ receive() {
 Tact supports [getter functions](https://docs.tact-lang.org/book/functions/#getter-functions) for retrieving contract state off-chain:
 
 :::note
-Get function cannot be called from another contract.
+Getter functions cannot be called from another contract.
 :::
 
 ```tact title="/contracts/hello_world.tact"
