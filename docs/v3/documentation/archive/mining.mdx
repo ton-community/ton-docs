@@ -7,30 +7,30 @@ This information may be outdated and no longer relevant. You can skip it.
 :::
 
 
-## <a id="introduction"></a>Introduction
+## <a id="introduction" />Introduction
 
 This document provides an introduction to the process of mining Toncoin using PoW givers. Please visit [ton.org/mining](https://ton.org/mining) for up-to-date status of TON mining.
 
-## <a id="quick-start"></a>Quick start
+## <a id="quick-start" />Quick start
 
 To start mining right away:
 
 1. Get a [computer suitable for mining](#hardware).
 2. Install [Ubuntu](https://ubuntu.com) 20.04 desktop or server distribution.
 3. Install [mytonctrl](https://github.com/igroman787/mytonctrl#installation-ubuntu) in `lite` mode.
-4. Check your hardware and [expected mining income](/v3/documentation/archive/mining#income-estimates) by running `emi` command within `mytonctrl`.
-5. If you do not yet have one, create `wallet address` using one of the [wallets](https://www.ton.org/wallets).
-6. Define your `wallet address` as a mining target by executing `set minerAddr "..."` in `mytonctrl`.
-7. Chose a giver contract from the list available on [ton.org/mining](https://ton.org/mining) and set your miner to mine it by executing `set powAddr "..."` in `mytonctrl`.
-8. Start mining by executing `mon` in `mytonctrl`
+4. Check your hardware and [expected mining income](/v3/documentation/archive/mining#income-estimates) by running the `emi` command within `mytonctrl`.
+5. If you do not yet have one, create a wallet address using one of the [wallets](https://www.ton.org/wallets).
+6. Define your wallet address as a mining target by executing `set minerAddr "..."` in `mytonctrl`.
+7. Choose a giver contract from the list available on [ton.org/mining](https://ton.org/mining) and set your miner to mine it by executing `set powAddr "..."` in `mytonctrl`.
+8. Start mining by executing `mon` in `mytonctrl`.
 9. Check the CPU load on your computer; the process called `pow-miner` should use most of your CPU.
 10. Wait to get lucky; the output of step 4 should have told you approximately what your chances are to mine a block.
 
 ## <a id="basics" />Basics
 
-Toncoin is distributed by `PoW Givers`, which are smart contracts with specific amounts of Toncoin assigned to them. Currently, there are 10 active PoW givers on the TON Network. Each giver distributes coins in blocks of 100 TON. To earn one of these blocks, your computer must solve a complex mathematical challenge faster than other miners. If another miner solves the problem before you, your machine's work is discarded, and a new round begins.
+Toncoin is distributed by PoW givers, which are smart contracts with specific amounts of Toncoin assigned to them. Currently, there are 10 active PoW givers on the TON Network. Each giver distributes coins in blocks of 100 TON. To earn one of these blocks, your computer must solve a complex mathematical challenge faster than other miners. If another miner solves the problem before you, your machine's work is discarded, and a new round begins.
 
-Mining profits are not gradual; they come in batches of 100 TON for each successfully solved giver challenge. This means that if your machine has a 10% chance to calculate a block within 24 hours (see step 4 of [Quick start](/v3/documentation/archive/mining#quick-start)) then you will probably need to wait for \~10 days before you will get a 100 TON reward.
+Mining profits are not gradual; they come in batches of 100 TON for each successfully solved giver challenge. This means that if your machine has a 10% chance to calculate a block within 24 hours (see step 4 of [Quick start](/v3/documentation/archive/mining#quick-start)) then you will probably need to wait for \~10 days before you get a 100 TON reward.
 
 The process of mining is largely automated by `mytonctrl`. Detailed information about the mining process can be found in the PoW givers documentation (archived).
 
@@ -38,8 +38,8 @@ The process of mining is largely automated by `mytonctrl`. Detailed information 
 
 If you're serious about mining and want to operate multiple machines or a mining farm, it's essential to learn about TON and how mining works. Refer to the [TON documentation](/v3/documentation/ton-documentation) for detailed information. Here is some general advice:
 
-- **DO** run your own node / lite server on a separate machine; this will ensure that your mining farm does not depend on external lite servers that can go down or not process your queries in a timely fashion.
-- **DO NOT** bombard public lite servers with `get_pow_params` queries, if you have custom scripts that poll givers status in high frequency you **must** use your own lite server. Clients that violate this rule risk having their IPs blacklisted on public lite servers.
+- **DO** run your own node/lite server on a separate machine; this will ensure that your mining farm does not depend on external lite servers that can go down or not process your queries in a timely fashion.
+- **DO NOT** bombard public lite servers with `get_pow_params` queries. If you have custom scripts that poll givers' status at a high frequency, you **must** use your own lite server. Clients that violate this rule risk having their IP addresses blacklisted on public lite servers.
 - **DO** try to understand how the mining process works; most larger miners use their own scripts that offer many advantages over `mytonctrl` in environments with multiple mining machines.
 
 ## <a id="hardware" />Miner hardware
