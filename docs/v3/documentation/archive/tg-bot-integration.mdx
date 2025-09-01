@@ -410,8 +410,13 @@ bot.onText(/\/connect/, async msg => {
 });
 ```
 
+<<<<<<< HEAD
 We need to wrap the TON Connect deep link as https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(link)} because Telegram inline keyboard buttons accept only HTTP/HTTPS URLs and do not support custom schemes like `tc://`.
 The site https://ton-connect.github.io/open-tc redirects the user to the link passed in the `connect` query parameter, so it's a workaround to open a `tc://` link in Telegram.
+=======
+We need to wrap TonConnect deeplink as https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(link)} because only `http` links are allowed in the Telegram inline keyboard.
+https://ton-connect.github.io/open-tc redirects the user to the link passed in the `connect` query parameter; it is a workaround to open a `tc://` link in Telegram.
+>>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kba7299d2
 
 Note that we replaced `connector.connect` call arguments. Now we are generating a unified link for all wallets.
 
@@ -1028,7 +1033,11 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 
 Here we check if user's wallet is connected and process sending transaction.
 Then we send a message to the user with a button that opens user's wallet (wallet universal link without additional parameters).
+<<<<<<< HEAD
 Note that this button contains an empty deep link. It means that the send transaction request data goes through the HTTP bridge, and the transaction will appear in the user's wallet even if they just open the wallet app without clicking this button.
+=======
+Note that this button contains an empty deep link. It means that the send-transaction request data goes through the http-bridge, and the transaction will appear in the user's wallet, even if they simply open the wallet app without clicking this button.
+>>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kba7299d2
 
 Let's register this handler:
 ```ts
@@ -1568,7 +1577,11 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
 That's it! Compile and run the bot and try to call `/connect` twice.
 
 ### Improve interaction with @wallet
+<<<<<<< HEAD
 Starting from v3, TON Connect supports connection to TWA wallets like @wallet. At the moment in the tutorial, the bot could be connected to @wallet.
+=======
+Starting with v3, TON Connect supports connections to Telegram Web App wallets like @wallet; in this tutorial, the bot can connect to @wallet.
+>>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kba7299d2
 However, we should improve redirection strategy to provide better UX. Moreover, let's add `Connect @wallet` button to the first ("Universal QR") screen.
 
 First, let's create some utility functions:
@@ -1769,7 +1782,7 @@ export async function handleConnectCommand(msg: TelegramBot.Message): Promise<vo
 </details>
 
 
-Now we are going to handle TG links properly when user clicks to a wallet button on the second Screen (Choosing a wallet):
+Now we are going to handle Telegram links properly when the user clicks a wallet button on the second screen (Choosing a wallet):
 
 <details>
 <summary>src/connect-wallet-menu.ts code</summary>
@@ -1834,7 +1847,7 @@ Note that we place different links to the QR and button-link (`qrLink` and `butt
 because we don't need redirection when user scans QR by @wallet, and at the same time we need redirect back to the bot when user connects @wallet using button-link.
 
 
-Now let's add return strategy for TG links in `send transaction` handler:
+Now let's add a return strategy for Telegram links in the `send transaction` handler:
 
 <details>
 <summary>src/commands-handlers.ts code</summary>
@@ -1922,7 +1935,7 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 
 </details>
 
-That is it. Now user is able to connect @wallet using special button on the main screen, also we have provided proper return strategy for TG links.
+That is it. Now the user can connect @wallet using a special button on the main screen, and we have provided the proper return strategy for Telegram links.
 
 ## Add a permanent storage
 At this moment we store TonConnect sessions in the Map object. But you may want to store it to the database or other permanent storage to save the sessions when you restart the server.
