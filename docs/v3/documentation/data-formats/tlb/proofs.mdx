@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 import ThemedImage from '@theme/ThemedImage';
 
-# Proofs verifying (low-level)
+# Proof verification (low-level)
 
 ## Overview
 :::caution
@@ -96,9 +96,10 @@ We should deserialize the cell according to the block [TLB scheme](https://githu
 ```
 
 
-Next, we need to verify that the `seqno` in the deserialized block matches the `seqno` of the block we know. After that, we compute `hash_1` for the single Merkle proof reference and compare it to our block hash.
+Next, we need to verify that the `seqno` in the deserialized block matches the `seqno` of the block we know. After that, compute the representation hash (`get_hash(0)`) of the referenced cell from the Merkle proof and compare it to the block hash.
 
 ```python
+h_proof = Cell.from_boc(header_proof)[0]
 assert h_proof.refs[0].get_hash(0) == block_id.root_hash
 ```
 Now, we can trust all other data in the cell.
@@ -158,7 +159,7 @@ After deserializing the shard proof BoC, 2 root cells are obtained:
 [<Cell 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> 1 refs>, <Cell 280[0332BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F] -> 1 refs>]
 ```
 
-The first root is a MasterChain block Merkle proof, which must be verified using the `check_block_header` function:
+The first root is a MasterChain block Merkle proof, which must be verified using the `check_block_header_proof` function:
 
 ```json
 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
@@ -220,7 +221,7 @@ The Merkle proof reference in this cell has the prefix `9023AFE2`, corresponding
 ```python
 """
 Here mc_block_cell is the first shard proof root and mc_state_root is the second one.
-The check_block_header_proof function returns new hash of the ShardState Merkle Update.
+The check_block_header_proof function returns the new hash of the ShardState Merkle Update.
 """
 
 mc_state_hash = mc_state_root[0].get_hash(0)
@@ -337,7 +338,7 @@ The first `root` is a Merkle proof for the shard block, whose hash we have alrea
 }
 ```
 
-As in the `shard_proof` verification, the `check_block_header` function must validate the block cell and record the new `StateUpdate` hash.
+As in the `shard_proof` verification, the `check_block_header_proof` function must validate the block cell and record the new `StateUpdate` hash.
 
 Next, deserialize the second root (`state_cell`) and verify that its `Hash_1` matches the previously recorded hash:
 
@@ -850,7 +851,7 @@ Next, deserialize the `config_proof` cell:
 ```
 
 </details>
-Compare the `Hash_1` from the Merkle proof (reference only) with the hash obtained from the `check_block_header` function above. If they match, the cell can be trusted:
+Compare the `Hash_1` from the Merkle proof (reference only) with the hash obtained from the `check_block_header_proof` function above. If they match, the cell can be trusted:
 
 ```python
 state_hash = check_block_header_proof(state_proof[0], block.root_hash, True)
@@ -938,4 +939,3 @@ After deserializing all parameters, we obtain:
 - [Exotic cells](/v3/documentation/data-formats/tlb/exotic-cells)
 
 <Feedback />
-
