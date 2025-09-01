@@ -1,21 +1,20 @@
 import Feedback from '@site/src/components/Feedback';
 
-# API on TON
+# APIs
 
-## Types of APIs
+## Types of API
 
 TON provides several ways to interact with the blockchain, depending on your use case:
 
-- **RPC** — low-level access to TON nodes for queries and transactions.
+- **HTTP API** — basic access to blockchain data for queries and transactions.
 - **Indexed API** — high-level access to structured blockchain data.
 - **ADNL** — raw network-level protocol for advanced and custom integrations.
 
-## RPC
-
-Provides direct communication with TON nodes. Suitable for sending transactions and reading the blockchain state.
+## HTTP API
+The HTTP API allows you to interact with the TON blockchain through both REST and JSON-RPC interfaces: fetch account and wallet information, explore blocks and transactions, send messages, call smart contract methods, and more.
 
 :::info
-We recommend integrating at least 2 RPC providers for fault tolerance.
+We recommend integrating at least 2 providers for production environment.
 :::
 
 ### Providers
@@ -25,13 +24,13 @@ We recommend integrating at least 2 RPC providers for fault tolerance.
 - [Ankr](https://www.ankr.com/rpc/ton/)
 - [QuickNode](https://www.quicknode.com/chains/ton)
 - [Tatum](https://tatum.io/)
-- [GetBlock](https://getblock.io/nodes/ton/)
+- [GetBlock](https://getblock.io/nodes/ton/) (see a [tutorial](/v3/guidelines/dapps/apis-sdks/getblock-ton-api))
 - [Chainbase](https://chainbase.com/)
 - [NowNodes](https://nownodes.io/nodes/ton)
 
 ### Own instance
 
-See the [RPC setup guide](https://github.com/toncenter/ton-http-api) for instructions on running your own instance.
+See the [API setup guide](https://github.com/toncenter/ton-http-api) for instructions on running your own instance.
 
 ### SDKs
 
@@ -57,19 +56,25 @@ ADNL (Abstract Datagram Network Layer) is TON’s peer-to-peer protocol. It allo
 
 Learn more in the [ADNL overview](/v3/documentation/network/protocols/adnl/overview).
 
-## Health status
+:::info
+We recommend running your own lite servers or using trusted providers for production environment.
+:::
 
-| Resource | Description |
-|----------|--------------|
-| [Blockchain Status](https://status.toncenter.com/) | Displays uptime, node availability, transaction statistics, and overall network health for Mainnet and Testnet. |
-| [Tonstat.us](https://tonstat.us/) | Real-time dashboard tracking performance and reliability of RPC/API providers in the TON ecosystem. |
-| [TON Status](https://t.me/tonstatus) | Technical notifications and up-to-date requests for action for TON validators, developers, and integrators. |
+### Providers
 
+- [dTON](https://t.me/dtontech_bot)
+- Public lite servers from the [global config](/v3/documentation/network/configs/network-configs).
 
+### Own instance
+
+See the [lite server setup guide](/v3/guidelines/nodes/running-nodes/liteserver-node) for instructions on running your own instance.
+
+### Usage
+
+See a dedicated page about [ADNL API](/v3/guidelines/dapps/apis-sdks/ton-adnl-apis).
 
 ## See also
 
-- [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis)
 - [List of SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
 
 <Feedback />
