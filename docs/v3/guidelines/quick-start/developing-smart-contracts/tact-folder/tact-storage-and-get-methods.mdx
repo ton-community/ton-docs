@@ -158,11 +158,11 @@ contract HelloWorld {
     receive(msg: Add) {
         self.counter += msg.amount;
 
-        // Notify the caller that the receiver was executed and forward remaining value back
+        // Notify the caller that the receiver was executed
         self.notify("Cashback".asComment());
     }
 
-    // getter function to be called offchain
+    // getter function to be called off-chain
     get fun counter(): Int {
         return self.counter;
     }
@@ -173,7 +173,7 @@ contract HelloWorld {
 }
 ```
 
-Verify that smart contract code is correct by running build script:
+Verify that the smart contract code is correct by running the build script:
 
 ```bash
 npx blueprint build
@@ -195,7 +195,7 @@ Expected output should look like this:
 
 ## Step 2: update wrapper
 
-After building your contract, Tact automatically generates a special wrapper file. This [wrapper]((https://docs.tact-lang.org/book/compile/#wrap-ts)) simplifies interaction with your contract from TypeScript, such as calling its methods or sending messages.
+After building your contract, Tact automatically generates a special wrapper file. This [wrapper](https://docs.tact-lang.org/book/compile/#wrap-ts) simplifies interaction with your contract from TypeScript, such as calling its methods or sending messages.
 
 In the wrapper file, you'll find this line of code:
 
@@ -205,7 +205,7 @@ export * from '../build/HelloWorld/tact_HelloWorld';
 
 This code exports everything inside the `tact_HelloWorld.ts` file in the build folder, making it available for use in other files.
 
-## Step 3: updating tests
+## Step 3: update tests
 
 
 <details>
@@ -286,7 +286,7 @@ This code exports everything inside the `tact_HelloWorld.ts` file in the build f
 
   ```
 
-  Don't forget to verify the example is correct by running test script:
+  Don't forget to verify the example is correct by running the test script:
 
   ```bash
   npx blueprint test
