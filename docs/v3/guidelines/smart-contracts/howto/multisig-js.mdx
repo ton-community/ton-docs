@@ -243,7 +243,7 @@ You can access public properties from `MultisigWallet`, `MultisigOrderBuilder`, 
 
 - **MultisigWallet**:
 
-  - `owners`: `Dictionary<number, Buffer>` of signatures (`ownerId => signature`).
+  - `owners`: `Dictionary<number, Buffer>` of owner public keys (`ownerId => publicKey`).
   - `workchain`: Workchain where the wallet is deployed.
   - `walletId`: Wallet ID.
   - `k`: Number of signatures required to confirm a transaction.
@@ -264,8 +264,7 @@ You can access public properties from `MultisigWallet`, `MultisigOrderBuilder`, 
 ## References
 
 - [Low-level multisig guide](/v3/guidelines/smart-contracts/howto/multisig)
-- [ton.js Documentation](https://ton-community.github.io/ton/)
-- [Multisig contract sources](https://github.com/ton-blockchain/multisig-contract)
+ - [ton.js Documentation](https://ton-community.github.io/ton/)
+ - [Multisig contract sources](https://github.com/ton-blockchain/multisig-contract-v2)
 
 <Feedback />
-
