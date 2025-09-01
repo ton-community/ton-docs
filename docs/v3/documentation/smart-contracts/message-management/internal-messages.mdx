@@ -12,9 +12,9 @@ In particular, the processing transaction can create one or several outbound int
 
 This approach requires distinguishing whether an internal message is a:
 
-1. **Query** - initiating an action/request
-2. **Response** - replying to a query
-3. **Simple transfer** - requiring no processing (like basic value transfers)
+1. **Query**—initiating an action/request
+2. **Response**—replying to a query
+3. **Simple transfer**—requiring no processing (like basic value transfers)
 
 Additionally, when receiving responses, there must be a clear way to match them to their original queries.
 
@@ -40,15 +40,13 @@ The message body typically begins with the following fields:
 
 ### Simple message with a comment
 
-If `op` is zero, the message is a "simple transfer message with the comment". The comment is contained in the remainder of the message body (without any `query_id` field, i.e., starting from the fifth byte). If it does not begin with the byte `0xff`, the comment is a text one; it can be displayed "as is" to the end user of a wallet (after filtering out invalid and control characters and checking that it is a valid UTF-8 string).
+If `op` is zero, the message is a "simple transfer message with a comment". The comment is contained in the remainder of the message body (without any `query_id` field, i.e., starting from the fifth byte). If it does not begin with the byte `0xff`, the comment is a text one; it can be displayed "as is" to the end user of a wallet (after filtering out invalid and control characters and checking that it is a valid UTF-8 string).
 
 When a comment is long enough that it doesn’t fit in a cell, the non-fitting end of the line is put to the first reference of the cell. This process continues recursively to describe comments that don’t fit in two or more cells:
 
 ```
-root_cell("0x00000000" - 32 bit, "string" up to 123 bytes)
- ↳1st_ref("string continuation" up to 127 bytes)
- ↳1st_ref("string continuation" up to 127 bytes)
- ↳....
+root_cell("0x00000000" - 32-bit, "string" up to 123 bytes)
+ ↳1st_ref("string continuation" up to 127 bytes → 1st_ref → 1st_ref → ...)
 ```
 
 The same format is used for comments for NFT and [jetton](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#forward_payload-format) transfers.
