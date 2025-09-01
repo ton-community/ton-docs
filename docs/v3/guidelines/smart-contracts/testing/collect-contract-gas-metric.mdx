@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Collecting contract gas metrics
+# Collect contract gas metric
 
 ## Gas consumption
 
@@ -16,7 +16,7 @@ For a deeper breakdown of how fees work in TON, refer to:
 - [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
 - [Storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee)
 - [Forward fees](/v3/documentation/smart-contracts/transaction-fees/forward-fees)
-  :::
+:::
 
 ## Gas metrics reporting
 
@@ -272,12 +272,7 @@ import type { Config } from 'jest';
 
 const config: Config = {
     preset: 'ts-jest',
-+    testEnvironment: '@ton/sandbox/jest-environment',
     testPathIgnorePatterns: ['/node_modules/', '/dist/'],
-+    reporters: [
-+        'default',
-+        ['@ton/sandbox/jest-reporter', {}],
-+    ]
 };
 
 export default config;
