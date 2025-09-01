@@ -168,10 +168,6 @@
         "to": "/v3/guidelines/nodes/faq"
     },
     {
-        "from": "/develop/dapps/apis/toncenter",
-        "to": "/v3/guidelines/dapps/apis-sdks/ton-http-apis"
-    },
-    {
         "from": "/develop/dapps/apis/adnl",
         "to": "/v3/guidelines/dapps/apis-sdks/ton-adnl-apis"
     },
@@ -226,14 +222,6 @@
     {
         "from": "/develop/dapps/telegram-apps/design-guidelines",
         "to": "/v3/guidelines/dapps/tma/tutorials/design-guidelines"
-    },
-    {
-        "from": "/develop/dapps/telegram-apps/notcoin",
-        "to": "/v3/guidelines/dapps/tma/notcoin"
-    },
-    {
-        "from": "/develop/dapps/telegram-apps/grants",
-        "to": "/v3/guidelines/dapps/tma/grants"
     },
     {
         "from": "/develop/dapps/asset-processing/",
@@ -898,5 +886,9 @@
     {
       "from": "/v3/guidelines/ton-connect/guidelines/sending-messages",
       "to": "/v3/guidelines/ton-connect/cookbook/ton-transfer"
+    },
+    {
+      "from": "/develop/dapps/apis/toncenter",
+      "to": "/v3/guidelines/dapps/apis-sdks/api-types"
     }
 ]

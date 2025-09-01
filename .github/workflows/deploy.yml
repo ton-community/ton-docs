@@ -5,11 +5,7 @@ on:
     branches:
       - main
       - staging
-    # staging-{lang} are tags to suggest, they should not have any commits on their own
-    # because they will be force-pushed by translation-flow.yml
-    tags:
-      - staging-ru
-      - staging-zh-cn
+      - canary
 
   workflow_dispatch:
     inputs:
@@ -23,7 +19,6 @@ on:
       ref_name:
         required: true
         type: string
-
 
 jobs:
   build:
@@ -48,7 +43,7 @@ jobs:
           token: ${{ secrets.DEPLOY_REPO_TOKEN }}
           inputs: |
             {
-              "app_name": "ton-docs",
+              "app_name": "${{ vars.APP_NAME }}",
               "image_tag": "${{ needs.build.outputs.image_tag }}",
               "image_digest": "${{ needs.build.outputs.image_digest }}"
             }
