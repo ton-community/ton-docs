@@ -7,7 +7,7 @@ import Feedback from '@site/src/components/Feedback';
 Smart contract development involves using predefined languages such as Solidity for Ethereum and FunC for TON.
 Solidity is an object-oriented, high-level, strictly typed language influenced by C++, Python, and JavaScript. It is designed explicitly to write smart contracts on Ethereum blockchain platforms.
 
-FunC is a high-level language used to program smart contracts on TON Blockchain. It is a domain-specific, C-like, statically typed language.
+FunC is a high-level language used to program smart contracts on TON blockchain. It is a domain-specific, C-like, statically typed language.
 
 The sections below will analyze briefly the following aspects of these languages: data types, storage, functions, flow control structures, and dictionaries (hashmaps).
 
@@ -18,7 +18,7 @@ The sections below will analyze briefly the following aspects of these languages
 Solidity uses a flat storage model, meaning it stores all state variables in a single, continuous block of memory called storage. The storage is a key-value store where each key is a 256-bit integer representing the storage slot number, and each value is the 256-bit word stored at that slot. Ethereum numbers the slots sequentially, starting from zero, and each slot can store a single word. Solidity allows the programmer to specify the storage layout using the storage keyword to define state variables. The order in which you define the variables determines their position in the storage.
 
 #### FunC
-Permanent storage data in TON Blockchain is stored as a cell. Cells play the role of memory in the stack-based TVM. To read data from a cell, you need to transform a cell into a slice and then obtain the data bits and references to other cells by loading them from the slice. To write data, you must store data bits and references to other cells in a builder and cast the builder into a new cell.
+Permanent storage data in TON blockchain is stored as a cell. Cells play the role of memory in the stack-based TVM. To read data from a cell, you need to transform a cell into a slice and then obtain the data bits and references to other cells by loading them from the slice. To write data, you must store data bits and references to other cells in a builder and cast the builder into a new cell.
 
 ### Data types
 
@@ -231,14 +231,14 @@ send_raw_message(msg, mode);
 3. To attach the body that will come in `recv_internal` in the message,  we reference the collected cell in the message itself with `store_ref`.
 4. Sending a message.
 
-This example presented how smart contracts can communicate with each other. 
+This example shows how smart contracts can communicate with each other. 
 
-Read more on the [Internal messages](/v3/documentation/smart-contracts/overview/) page.
+Read more on the [Internal messages](/v3/documentation/smart-contracts/message-management/internal-messages/) page.
 
 ## See also 
 
 - [TON documentation](/v3/documentation/ton-documentation/)
 - [FunC overview](/v3/documentation/smart-contracts/func/overview/)
-- [Six unique aspects of TON Blockchain that will surprise Solidity developers](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers)
+- [Six unique aspects of TON blockchain that will surprise Solidity developers](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers)
 
 <Feedback />
