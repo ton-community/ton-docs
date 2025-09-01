@@ -44,8 +44,8 @@ Refer to the [Mint Platform API](https://api.getgems.io/mint-platform/docs) for 
 **2. NFT store integration:** NFT stores integrate solely through the mint API and do not interact with smart contracts directly.
 
 Stores can:
-* Query available packs and their metadata (e.g., price, available supply)
-* Request NFT minting by attaching Toncoin on behalf of a user
+- Query available packs and their metadata (e.g., price, available supply)
+- Request NFT minting by attaching Toncoin on behalf of a user
 
 **3. Enforcing a mutable field:** specific field in the off-chain metadata, such as `royalty_violation`, is updated to reflect policy changes.
 
@@ -123,8 +123,8 @@ Not all NFT-related operations are subject to royalty fees. Some actions — suc
 
 #### List of royalty-free operations:
 
-* Ownership transfer without commercial intent
-* NFT item donation
+- Ownership transfer without commercial intent
+- NFT item donation
 
 ### Royalty-bearing operations
 
@@ -139,9 +139,9 @@ For example, if `numerator = 11` and `denominator = 1000`, the royalty share is 
 
 #### Marketplaces responsibilities
 
-* Marketplaces that comply with the NFT 2.0 specification are expected to send `muldiv(price, numerator, denominator)` to the destination address after an NFT sale or any other successful commercial operation.
-* Marketplaces **SHOULD NOT** send royalty payments when the calculated amount is zero.
-* Marketplaces **MAY** deduct gas and message fees required to send the royalty from the royalty amount.
+- Marketplaces that comply with the NFT 2.0 specification are expected to send `muldiv(price, numerator, denominator)` to the destination address after an NFT sale or any other successful commercial operation.
+- Marketplaces **SHOULD NOT** send royalty payments when the calculated amount is zero.
+- Marketplaces **MAY** deduct gas and message fees required to send the royalty from the royalty amount.
 
 
 #### Royalty message format
@@ -201,22 +201,22 @@ To comply with the NFT 2.0 specification, ecosystem products should restrict use
 
 #### Wallets
 
-* Check for the `royalty_violation` field in the metadata.
-* If `royalty_violation: true`, restrict all interactions with the item, including transfers, sales and burns.
+- Check for the `royalty_violation` field in the metadata.
+- If `royalty_violation: true`, restrict all interactions with the item, including transfers, sales and burns.
 
 #### Explorers
 
-* Display the `royalty_violation` flag alongside other metadata fields.
-* If `royalty_violation: true`, display a warning or status label indicating that the NFT violates royalty policy.
+- Display the `royalty_violation` flag alongside other metadata fields.
+- If `royalty_violation: true`, display a warning or status label indicating that the NFT violates royalty policy.
 
 #### Marketplaces
-* Exclude NFTs with `royalty_violation: true` from search results.
-* Disable trading functionality for NFTs that violate the royalty policy.
+- Exclude NFTs with `royalty_violation: true` from search results.
+- Disable trading functionality for NFTs that violate the royalty policy.
 
 
 #### Indexers/APIs
-* Include the `royalty_violation` flag in your metadata response schema.
-* Provide endpoints or filters that return only NFTs with `royalty_violation: false`.
+- Include the `royalty_violation` flag in your metadata response schema.
+- Provide endpoints or filters that return only NFTs with `royalty_violation: false`.
 
 ## Appendix
 
