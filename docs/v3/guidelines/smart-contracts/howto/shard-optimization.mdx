@@ -121,7 +121,7 @@ In general networking, the endpoint is a physical device; in blockchain, the end
 In this analogy, a shard functions like a subnet. The key difference lies in the addressing scheme: IPv4 uses a 32-bit system, while TON employs a 256-bit one.  
 The shard prefix of a contract address identifies the group of validators responsible for computing the results of its incoming messages. From a networking perspective, a request within the same network segment processes faster than one routed elsewhere. This principle resembles using a CDN to host content closer to end users; in TON, we deploy contracts closer to the users.
 
-When the load on a shard surpasses a [certain threshold](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#algorithm-for-deciding-whether-to-split-or-merge), the system splits the shard. This split allocates dedicated computational resources to the overloaded contract and isolates its impact on the broader network. Currently, the maximum shard prefix length is 4 bits, allowing the blockchain to split into a maximum of 16 shards, ranging from prefix 0 to 15.
+When the load on a shard surpasses a [certain threshold](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#algorithm-for-deciding-whether-to-split-or-merge), the system splits the shard. This split allocates dedicated computational resources to the overloaded contract and isolates its impact on the broader network. Currently, the maximum shard prefix length is 4 bits (see [Wallet creation for different shards](/v3/guidelines/dapps/asset-processing/payments-processing/#wallet-creation-for-different-shards)), allowing the blockchain to split into a maximum of 16 shards, ranging from prefix 0 to 15.
 
 
 ### Problems during shard optimizations
@@ -173,4 +173,3 @@ If you need to distribute jettons to tens or hundreds of thousands - or even mil
 - **[TokenTable solution](https://docs.tokentable.xyz/) for decentralized claim:** This approach lets users claim jettons from specific claim transactions (users cover the fees). Tested by Avacoin and DOGS (millions of transfers), it maximizes throughput while managing costs.
 
 <Feedback />
-
