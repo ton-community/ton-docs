@@ -602,13 +602,13 @@ However, the `+2` flag does not ignore errors in the following cases:
 2. Both `64` and `128` modes are used simultaneously.
 3. The outbound message contains invalid libraries in `StateInit`.
 4. The external message is not ordinary or includes the `+16` or `+32` flag.
-   :::
+:::
 
 :::warning
 
 1. **+16 flag** should not be used in external messages (e.g., to wallets), as there is no sender to receive the bounced message.
 2. **+2 flag** is important in external messages (e.g., to wallets).
-   :::
+:::
 
 You can view a detailed example [here](/v3/documentation/smart-contracts/message-management/sending-messages#example-jetton-transfer-pitfall).
 
