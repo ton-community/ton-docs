@@ -34,7 +34,7 @@ For anyone new to multisig: [What is Multisig Technology? (video)](https://www.y
 
 Before we begin our journey, check and prepare your environment.
 
-- Install `func`, `fift`, `lite-client` binaries, and `fiftlib` from the [Installation](/v3/documentation/archive/precompiled-binaries) section.
+- Install `func`, `fift`, `lite-client` binaries, and `fiftlib` from the [Precompiled binaries](/v3/documentation/archive/precompiled-binaries) section.
 - Clone the [repository](https://github.com/akifoq/multisig) and open its directory in CLI.
 
 ```bash
@@ -178,7 +178,7 @@ fift -s create-msg.fif $ADDRESS$ $AMOUNT$ $MESSAGE$
 ```
 
 - `$ADDRESS$` - address where to send coins.
-- `$AMOUNT$` - number of coins.
+- `$AMOUNT$` - number of coins (in TON).
 - `$MESSAGE$` - the file name for the compiled message.
 
 For example:
@@ -203,7 +203,7 @@ Where
 
 - `$WALLET_ID$` — is an ID of the wallet backed by this multisig contract.
 - `$AWAIT_TIME$` — Time in seconds that the smart contract will await signs from multisig wallet's owners for the request.
-- `$MESSAGE$` — here is the name of the message boc-file created in the previous step.
+- `$MESSAGE$` — here is the name of the message BoC file created in the previous step.
 
 :::info
 The request expires if the time equals `$AWAIT_TIME$` passed before the request signs. As usual, `$AWAIT_TIME$` equals a couple of hours (7200 seconds).
@@ -270,11 +270,11 @@ sendfile wallet-query.boc
 
 If everyone else signed the request, it will be completed!
 
-You did it, ha-ha! 🚀🚀🚀
+You did it!
 
 ## See also
 
-- [Read more about multisig wallets in TON](https://github.com/akifoq/multisig) — _[@akifoq](https://t.me/aqifoq)_
+- [Read more about multisig wallets in TON](https://github.com/akifoq/multisig) — _[@akifoq](https://t.me/akifoq)_
 - [Multisig wallet v2](https://github.com/ton-blockchain/multisig-contract-v2)
 
 <Feedback />
