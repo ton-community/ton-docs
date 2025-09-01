@@ -5,7 +5,7 @@ import Feedback from '@site/src/components/Feedback';
 This document briefly introduces TON Sites — websites accessed through the TON Network. TON Sites can serve as convenient entry points to other TON Services. For instance, HTML pages loaded from TON Sites may contain `ton://...` URIs, such as payment links. When clicked, these links can trigger actions like making a payment, provided the user has a TON Wallet installed on their device.
 
 From a technical standpoint, TON Sites function similarly to standard websites. Still, they are accessed via the [TON Network](/v3/concepts/dive-into-ton/ton-blockchain/ton-networking) — an overlay network that operates within the Internet — rather than directly through the Internet itself. Instead of using standard IPv4 or IPv6 addresses, TON Sites are addressed via [ADNL](/v3/documentation/network/protocols/adnl/overview) addresses. They receive HTTP queries over the [RLDP](/v3/documentation/network/protocols/rldp) protocol, a high-level RPC protocol built on top of ADNL, the TON Network's primary protocol, instead of the usual TCP/IP.
-Since encryption is handled at the ADNL level, there’s no need for HTTPS (TLS), mainly when the entry proxy is hosted locally on the user's device.
+Since encryption is handled at the ADNL level, there’s no need for HTTPS (TLS), especially when the entry proxy is hosted locally on the user's device.
 
 A gateway between the "ordinary" Internet and the TON Network is required to access existing sites or create new TON Sites. In practice, this involves:
 - A HTTP → RLDP proxy running locally on the client's machine to access TON Sites. 
@@ -90,6 +90,7 @@ You can either:
    - `8080`: TCP port to listen for incoming HTTP queries on localhost. 
    - `3333`: UDP port used for RLDP/ADNL activity — connecting to TON Sites via the TON Network. 
    - `global.config.json`: Path to the global TON configuration file. 
+   - `-A <your_adnl_address>`: specifies the persistent ADNL address generated earlier.
 
 The proxy will stay running in the terminal if everything is configured correctly. You can now access TON Sites through: `http://<your_public_ip>:8080`.
 
@@ -121,7 +122,7 @@ This command attempts to download the main page of the TON Site `just-for-test.t
 
 ```
 
-You can also use the ADNL address directly with a fake `.adnl` domain. For example:
+You can also use the ADNL address with the `.adnl` suffix. For example:
 
 ```bash
 curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h72gllt.adnl/
@@ -260,9 +261,8 @@ In this case, your regular web server must be accessible at `http://333.333.333.
 
 
 ### Recommendations
-Since anonymity features will only be introduced in TON Proxy 2.0, if you'd prefer to keep your web server's IP address private, you have two options:
+TON Proxy currently lacks anonymity features, so if you'd prefer to keep your web server's IP address private, you have two options:
 - Set up a reverse proxy on a different server using the `-R` flag. 
 - Create a duplicate server containing a copy of your website and run the reverse proxy locally.
 
 <Feedback />
-
