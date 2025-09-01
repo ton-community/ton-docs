@@ -28,26 +28,26 @@ To achieve this, we first need to get the ID of the DHT key. We will begin by po
 dht.key id:int256 name:bytes idx:int = dht.Key
 ```
 
-The term `name` refers to the type of key. For ADNL addresses, the term `address` is used. For instance, when searching for ShardChain nodes, the term `nodes` is used. However, the key type can vary and may consist of any array of bytes, depending on the specific value you are seeking.
+The term `name` refers to the type of key. For ADNL addresses, the term `address` is used. For instance, when searching for shard nodes, the term `nodes` is used. However, the key type can vary and may consist of any array of bytes, depending on the specific value you are seeking.
 
 By applying this schema, we get:
 
 ```
 8fde67f6                                                           -- TL ID dht.key
 516618cf6cbe9004f6883e742c9a2e3ca53ed02e3e36f4cef62a98ee1e449174   -- the ADNL address being searched
-07 61646472657373                                                  -- key type, the word "address" as an TL array of bytes
+07 61646472657373                                                  -- key type, the word "address" as a TL array of bytes
 00000000                                                           -- index 0 because there is only 1 key
 ```
 
-Next, retrieve the key ID and the SHA256 hash from the bytes serialized above. It will be `b30af0538916421b46df4ce580bf3a29316831e0c3323a7f156df0236c5b2f75`.
+Next, retrieve the key ID and the SHA-256 hash from the bytes serialized above. It will be `b30af0538916421b46df4ce580bf3a29316831e0c3323a7f156df0236c5b2f75`.
 
-Now we can begin our search. To do this, we need to execute a query that has [schema](https://github.com/ton-blockchain/ton/blob/ee42357f5954f777d7ebd937b2683096da3699bf/tl/generate/scheme/ton_api.tl#L202):
+Now we can begin our search. To do this, we need to execute a query that uses the following [schema](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L197):
 
 ```tlb
 dht.findValue key:int256 k:int = dht.ValueResult
 ```
 
-The `key` represents the ID of our DHT key, while `k` indicates the "width" of the search. A smaller value for `k` results in a more accurate search but limits the number of potential nodes to query. In a TON, the maximum value for `k` is 10, although 6 is typically used.
+The `key` represents the ID of our DHT key, while `k` indicates the "width" of the search. A smaller value for `k` results in a more accurate search but limits the number of potential nodes to query. In TON, the specific value of `k` depends on the implementation.
 
 Now, let's populate this structure, serialize it, and send the request using the `adnl.message.query` schema. For more details, please refer to the documentation [here](/v3/documentation/network/protocols/adnl/adnl-udp#packet-structure-and-communication).
 
