@@ -2,29 +2,28 @@ import Feedback from '@site/src/components/Feedback';
 
 # MyTonCtrl remote controller
 
-MyTonCtrl and TON Node can be used on separate machines. There are some advantages of using that:
+MyTonCtrl and TON node can be used on separate machines. There are several advantages to this setup:
 
-- To participate in elections, the validator wallet's private key is required by MyTonCtrl. If the Node server
+- To participate in elections, the validator wallet's private key is required by MyTonCtrl. If the node server
   is compromised, it could lead to unauthorized access to the wallet funds. As a security measure, MyTonCtrl can be hosted on a separate server.
-- MyTonCtrl continually expands its functionality, which may consume resources crucial for the Node.
-- Probably in future big validators will be able to host several instances of MyTonCtrl controlling several nodes on one server.
+- MyTonCtrl continually expands its functionality, which may consume resources crucial for the node.
 
 ## Setting up
 
-Prepare 2 servers: one is for running TON Node that meets the requirements and one is for running MyTonCtrl which does not require a lot of resources.
+Prepare two servers: one for running the TON node (meeting the [OS requirements](/v3/guidelines/nodes/running-nodes/full-node#os-requirements) and [hardware requirements](/v3/guidelines/nodes/running-nodes/full-node#hardware-requirements)) and one for running MyTonCtrl, which does not require many resources.
 
-1. Node server:
+1. node server:
 
 Install MyTonCtrl in `only-node` mode:
 
-```
+```bash
 wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
 sudo bash install.sh -m validator -l
 ```
 
-It will install TON Node and create a backup file which you need to download and transfer to the Controller server:
+It will install the TON node and create a backup file which you need to download and transfer to the controller server:
 
-```log
+```text
 ...
 [debug]   01.01.2025, 00:00:00.000 (UTC)  <MainThread>  start CreateSymlinks fuction
 Local DB path: /home/user/.local/share/mytoncore/mytoncore.db
@@ -38,27 +37,30 @@ If you wish to use archive package to migrate node to different machine please m
 [5/5] Mytonctrl installation completed
 ```
 
-Note, that you still got access to MyTonCtrl console on this server, which you need to update the Node, watch Node metrics, etc.
+Note that you still have access to the MyTonCtrl console on this server, which you can use to update the node and monitor node metrics, etc.
 Also, it creates a `mytoncore` service which is used to send telemetry (if it was not disabled).
-If you want to return control of the node to this server, use command
+If you want to return control of the node to this server, use the following commands:
+
+```text
+MyTonCtrl> set onlyNode false
+```
 
 ```bash
-MyTonCtrl> set onlyNode false
 systemctl restart mytoncore
 ```
 
-2. Controller server
+2. controller server
 
 Install MyTonCtrl in `only-mtc` mode:
 
-```
+```bash
 wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
 sudo bash install.sh -p /home/user/mytonctrl_backup_hostname_timestamp.tar.gz -o
 ```
 
 Check the `status` command, there should appear `Node IP address` field:
 
-```log
+```text
 MyTonCtrl> status
 [debug]   01.01.2025, 00:00:00.000 (UTC)  <MainThread>  start GetValidatorWallet function
 [debug]   01.01.2025, 00:00:00.000 (UTC)  <MainThread>  start GetLocalWallet function
@@ -73,6 +75,6 @@ Validator index: n/a
 
 ## Notes
 
-On updates, you need to `update` and `upgrade` both Node server and Controller server
+On updates, you need to `update` and `upgrade` both the node server and the controller server
 
 <Feedback />

@@ -18,7 +18,7 @@ The current TTL values are in the node's service file, which is typically locate
 
 ### `archive-ttl`
 
-`archive-ttl` is a parameter that defines the TTL for the blocks. The default value is 604800 seconds (7 days). You can decrease this value to reduce the database size.
+`archive-ttl` is a parameter that defines the TTL for the blocks. The default value is 604800 seconds (7 days). You can decrease this value to reduce the database size. Note that these are validator-engine defaults and may be overridden by MyTonCtrl; check current values via MyTonCtrl.
 
 ```bash
 MyTonCtrl> installer  set_node_argument  --archive-ttl <value>
@@ -28,7 +28,7 @@ If you don't use MyTonCtrl, you can edit the node service file.
 
 ### `state-ttl`
 
-`state-ttl` is a parameter defining the block states' TTL. The default value is 86400 seconds (24 hours). You can decrease this value to reduce the database size, but for validators, it's highly recommended that the default value be used (keep the flag unset).
+`state-ttl` is a parameter defining the block states' TTL. The default value is 86400 seconds (24 hours). You can decrease this value to reduce the database size, but for validators, it's highly recommended that the default value be used (keep the flag unset). Note that these are validator-engine defaults and may be overridden by MyTonCtrl; check current values via MyTonCtrl.
 
 Also, this value should be more than the length of the validation period (check the value in [15th config param](/v3/documentation/network/configs/blockchain-configs#param-15)).
 
@@ -49,8 +49,8 @@ To efficiently back up your validator, it is essential to copy the key node conf
 3. **Node public keys**:  `/var/ton-work/keys`
 
 4. **MyTonCtrl configuration and wallets**:
-   - If you installed MyTonCtrl as a regular user: `$HOME/.local/share/myton*` (where `$HOME` is your home directory)
-   - If you installed MyTonCtrl as root: `/usr/local/bin/mytoncore`
+   - If you installed MyTonCtrl as a regular user: `~/.local/share/mytoncore/` (where `$HOME` is your home directory)
+   - If you installed MyTonCtrl as root: `/usr/local/bin/mytoncore/`
 
 Backing up this set of files will provide everything you need to recover your node from scratch.
 
@@ -60,7 +60,7 @@ Modern file systems such as ZFS offer snapshot functionality. Most cloud provide
 
 The problem with both methods is that you must stop the node before performing a snapshot. Failure to do so will most likely result in a corrupt database with unexpected consequences. Many cloud providers also require you to power down the machine before performing a snapshot.
 
-Such stops should not be performed often. If you snapshot your node once a week, then in the worst case scenario after recovery, you will have a node with a week-old database, and it will take your node more time to catch up with the network than to perform a new installation using the MyTonCtrl **install from dump** feature (`-d` flag added during invocation of `install.sh` script).
+Such stops should not be performed often. If you snapshot your node once a week, then in the worst-case scenario after recovery, you will have a node with a week-old database, and it will take your node more time to catch up with the network than to perform a new installation using the MyTonCtrl **install from dump** feature (`-d` flag added during invocation of `install.sh` script).
 
 ### Disaster recovery
 
@@ -83,7 +83,7 @@ systemctl  stop  validator
 systemctl  stop  mytoncore
 ```
 
-#### Apply backed up node configuration files
+#### Apply backed-up node configuration files
 
 - Node configuration file: `/var/ton-work/db/config.json`
 
@@ -93,7 +93,7 @@ systemctl  stop  mytoncore
 
 #### Set node IP address
 
-If your new node has a different IP address, you need to update the node configuration file located at `/var/ton-work/db/config.json`. Change the value of `leaf.addrs[0].ip` to reflect the new IP address in decimal format. You can use **[this](https://github.com/sonofmom/ton-tools/blob/master/node/ip2dec.py)** Python script to convert your IP address to decimal.
+If your new node has a different IP address, you need to update the node configuration file located at `/var/ton-work/db/config.json`. Change the value of `addrs[0].ip` to reflect the new IP address, which is stored as a signed integer (decimal). You can use **[this](https://github.com/sonofmom/ton-tools/blob/master/node/ip2dec.py)** Python script to convert your IP address to decimal.
 
 #### Ensure proper database permissions
 
@@ -103,7 +103,7 @@ chown  -R  validator:validator  /var/ton-work/db
 
 #### Apply backed-up MyTonCtrl configuration files
 
-Replace `$HOME/.local/share/myton*` with `$ HOME/.local/share/myton*`, where $HOME is the home directory of the user who started the installation of MyTonCtrl with backed-up content. Make sure that the user is the owner of all files you copy.
+Restore your backup into `~/.local/share/mytoncore/` (or `/usr/local/bin/mytoncore/` if installed as root), where `$HOME` is the home directory of the user who installed MyTonCtrl. Make sure that the installing user owns all files you copy.
 
 #### Start mytoncore and validator processes
 
@@ -116,21 +116,21 @@ systemctl  start  mytoncore
 
 ### Host-level security
 
-Host-level security is a huge topic that is outside the scope of this document; however, we advise that you never install MyTonCtrl under the root user and use a service account to ensure privilege separation.
+Host-level security is a huge topic that is outside the scope of this document; however, never install MyTonCtrl as the root user; use a dedicated service account to ensure privilege separation.
 
 ### Network-level security
 
-TON validators are high-value assets that should be protected against external threats. One of the first steps is to make your node as invisible as possible, which means locking down all network connections. On a validator node, only a UDP Port used for node operations should be exposed to the internet.
+TON validators are high-value assets that should be protected against external threats. One of the first steps is to make your node as invisible as possible, which means locking down all network connections. On a validator node, only a UDP port used for node operations should be exposed to the internet.
 
 #### Tools
 
-We will utilize the **[ufw](https://help.ubuntu.com/community/UFW)** firewall interface along with the **[jq](https://github.com/stedolan/jq)** JSON command-line processor.
+We will utilize the **[ufw](https://help.ubuntu.com/community/UFW)** firewall interface along with the **[jq](https://github.com/jqlang/jq)** JSON command-line processor.
 
 #### Management networks
 
 As a node operator, you need to retain full control and access to the machine. To do this, you need at least one fixed IP address or range.
 
-We also advise you to set up a small **jumpstation** VPS with a fixed IP Address that can be used to access your locked-down machine(s) if you do not have a fixed IP at your home or office or to add an alternative way to access secured machines should you lose your primary IP address.
+We also advise you to set up a small **jump host (bastion)** VPS with a fixed IP address that can be used to access your locked-down machine(s) if you do not have a fixed IP at your home or office or to add an alternative way to access secured machines should you lose your primary IP address.
 
 #### Install ufw and jq
 
@@ -150,6 +150,8 @@ sudo  ufw  default  deny  incoming; sudo  ufw  default  allow  outgoing
 sudo  sed  -i  's/-A ufw-before-input -p icmp --icmp-type echo-request -j ACCEPT/#-A ufw-before-input -p icmp --icmp-type echo-request -j ACCEPT/g'  /etc/ufw/before.rules
 ```
 
+If UFW is already enabled, run `sudo ufw reload` so the changes take effect.
+
 #### Enable all access from management network(s)
 
 ```sh
@@ -158,15 +160,15 @@ sudo  ufw  insert  1  allow  from <MANAGEMENT_NETWORK>
 
 Repeat the above command for each management network/address.
 
-#### Expose node/validator UDP port to public
+#### Expose node/validator UDP port to the public
 
 ```sh
 sudo  ufw  allow  proto  udp  from  any  to  any  port  `sudo jq -r '.addrs[0].port' /var/ton-work/db/config.json`
 ```
 
-#### Doublecheck your management networks
+#### Double-check your management networks
 
-:::caution important
+:::caution Important
 **Before enabling a firewall,  double-check that you added the correct management addresses!**
 :::
 
@@ -178,7 +180,7 @@ sudo  ufw  enable
 
 #### Checking status
 
-To check the firewall status use the following command:
+To check the firewall status, use the following command:
 
 ```sh
 sudo  ufw  status  numbered
@@ -203,11 +205,11 @@ Status: active
 sudo  ufw  allow  proto  tcp  from  any  to  any  port  `sudo jq -r '.liteservers[0].port' /var/ton-work/db/config.json`
 ```
 
-Note that the liteserver port should not be exposed publicly on a validator.
+Note that the liteserver port should not be exposed publicly on a validator. Allow access only from trusted management networks, and only if a liteserver is enabled.
 
 #### More information on UFW
 
-See this excellent **[ufw tutorial](https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands)** from the Digital Ocean for more ufw magic.
+See this **[UFW tutorial](https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands)** from DigitalOcean for additional UFW examples.
 
 ### IP switch
 

@@ -1,21 +1,21 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Tips and tricks
+# Tips and Tricks
 
 On this page, you'll find a list of frequently asked questions about issues in TMA.
 
-### How to solve the cache overflow issue in TMA?
+### How do I resolve the cache overflow issue in a TMA?
 
 :::tip
-Reinstalling the Telegram application is the only effective solution.
+Reinstalling the Telegram application is a reliable solution.
 :::
 
-### Are there any recommendations on caching headers for HTML files?
+### Are there recommended caching headers for HTML files?
 
 :::tip
-It’s best to disable caching in HTML files. To ensure caching is turned off, specify the following headers in your request:
+It’s best to disable caching in HTML files. To ensure caching is turned off, specify the following headers in the response:
 
-```curl
+```http
 Cache-Control: no-store, must-revalidate
 Pragma: no-cache
 Expires: 0
@@ -23,11 +23,11 @@ Expires: 0
 
 :::
 
-### What is suggested IDE for development TMA?
+### What is the suggested browser for TMA development?
 
 Developing in Google Chrome is more convenient due to its familiar developer tools.
 
-To retrieve the mini-app's launch parameters and open this link in Chrome, use the web version of Telegram: [https://web.telegram.org/](https://web.telegram.org/)
+To retrieve the Mini App's initialization data, open the Mini App link in Chrome via Telegram Web (https://web.telegram.org/).
 
 ### Closing behavior
 
@@ -41,16 +41,16 @@ In many web applications, users may accidentally close the app while scrolling t
   <br />
 </p>
 
-To prevent accidental closures, enable `closing_behavior` in TMA. This method adds a confirmation dialog, where the user can either approve or decline closing of the Web App.
+To prevent accidental closures, enable closing confirmation in TMA with `window.Telegram.WebApp.enableClosingConfirmation()`. This method adds a confirmation dialog where the user can either approve or cancel closing the Mini App.
 
 ```typescript
 window.Telegram.WebApp.enableClosingConfirmation()
 ```
 
-## How to specify a description for a certain language in the TMA?
+### How do I specify a description for a specific language for my TMA?
 
 :::tip
-Use the following methods to configure descriptions in different languages:
+Use the following methods to set the bot’s description in clients for different languages:
 
 - [https://core.telegram.org/bots/api#setmydescription](https://core.telegram.org/bots/api#setmydescription)
 - [https://core.telegram.org/bots/api#setmyshortdescription](https://core.telegram.org/bots/api#setmyshortdescription)

@@ -2,41 +2,43 @@ import Feedback from '@site/src/components/Feedback';
 
 # Cross-chain bridges
 
-Decentralized cross-chain bridges function on TON Blockchain, allowing asset transfers between this blockchain and the others.
+Decentralized cross-chain bridges operate on the TON blockchain, enabling asset transfers between TON and other blockchains.
 
 ## Toncoin bridge
 
-The Toncoin bridge enables transfers of Toncoin between TON and Ethereum Blockchain and between TON and the BSC (BNB Smart Chain).
+The Toncoin bridge enables Toncoin transfers between TON and Ethereum, and between TON and BNB Smart Chain (BSC).
 
-This bridge is managed by [decentralized oracles](/v3/documentation/infra/crosschain/bridge-addresses).
+This bridge is managed by a decentralized set of [oracles](/v3/documentation/infra/crosschain/bridge-addresses).
 
 ### How to use it
 
-The bridge frontend is hosted [here](https://ton.org/bridge).
+The bridge frontend is available at [ton.org/bridge](https://ton.org/bridge).
 
 :::info
 [Bridge frontend source code](https://github.com/ton-blockchain/bridge)
 :::
 
-### Smart contract source codes
+### Smart contract source code
 
-#### TON-Ethereum
+#### ETH-TON
 
 - [FunC (TON side)](https://github.com/ton-blockchain/bridge-func)
 - [Solidity (Ethereum side)](https://github.com/ton-blockchain/bridge-solidity/tree/eth_mainnet)
 
-#### TON-BSC (BNB Smart Chain)
+#### BSC-TON (BNB Smart Chain)
 
 - [FunC (TON side)](https://github.com/ton-blockchain/bridge-func/tree/bsc)
 - [Solidity (BSC side)](https://github.com/ton-blockchain/bridge-solidity/tree/bsc_mainnet)
 
 ### Blockchain configurations
 
-You can find the current bridge smart contract addresses and oracle addresses by checking the corresponding configuration:
+You can find the current bridge smart contract and oracle addresses by checking the corresponding configuration:
 
-- TON-Ethereum: [#71](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5781ebf26e4ee98e56c1e50/crypto/block/block.tlb#L738)
-- TON-BSC: [#72](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5781ebf26e4ee98e56c1e50/crypto/block/block.tlb#L739)
-- TON-Polygon: [#73](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5781ebf26e4ee98e56c1e50/crypto/block/block.tlb#L740)
+- ETH-TON: [#71](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5781ebf26e4ee98e56c1e50/crypto/block/block.tlb#L738)
+- BSC-TON: [#72](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5781ebf26e4ee98e56c1e50/crypto/block/block.tlb#L739)
+- Polygon-TON: [#73](https://github.com/ton-blockchain/ton/blob/35d17249e6b54d67a5781ebf26e4ee98e56c1e50/crypto/block/block.tlb#L740)
+
+See also parameters 71–73: [/v3/documentation/network/configs/blockchain-configs#param-71-73](/v3/documentation/network/configs/blockchain-configs#param-71-73).
 
 ### Documentation
 

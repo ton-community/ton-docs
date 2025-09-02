@@ -4,21 +4,21 @@ title: "Tolk vs FunC: mutability"
 
 import Feedback from '@site/src/components/Feedback';
 
-# Mutability in Tolk vs tilda functions in FunC
+# Mutability in Tolk vs tilde functions in FunC
 
 :::tip TLDR
-- no `~` tilda methods
+- no `~` tilde methods
 - `cs.loadInt(32)` modifies a slice and returns an integer
 - `b.storeInt(x, 32)` modifies a builder
-- `b = b.storeInt()` also works since it not only modifies but returns
+- `b = b.storeInt(x, 32)` also works, since it modifies and returns `self`
 - chained methods work identically to JS; they return `self`
 - everything works exactly as expected, similar to JS
 - no runtime overhead, the same Fift instructions
 - custom methods are created with ease
-- tilda `~` does not exist in Tolk at all
+- tilde `~` does not exist in Tolk at all
 :::
 
-This is a drastic change. If FunC has `.methods()` and `~methods()`, Tolk has only a dot, and the only way to call a method is `.method()`. The method may or may not *mutate* an object. Also, there is a behavioral and semantic difference between FunC and the list.
+This is a drastic change. If FunC has `.methods()` and `~methods()`, Tolk has only a dot, and the only way to call a method is `.method()`. The method may or may not *mutate* an object. Also, there is a behavioral and semantic difference between FunC and Tolk.
 
 The goal is to have calls identical to JS and other languages:
 
@@ -65,10 +65,10 @@ The goal is to have calls identical to JS and other languages:
   </tbody>
 </table>
 
-Tolk offers a mutability conception to make this available, a generalization of what a `~` tilda means in FunC.
+Tolk offers a mutability concept to make this available, a generalization of what `~` means in FunC.
 
 
-###  By default, all arguments are copied by value (identical to FunC)
+### By default, all arguments are copied by value (identical to FunC)
 
 
 ```tolk
@@ -79,7 +79,7 @@ fun someFn(x: int) {
 var origX = 0;
 someFn(origX);  // origX remains 0
 someFn(10);     // ok, just int
-origX.someFn(); // still allowed (but not recommended), origX remains 0
+origX.someFn(); // error: functions cannot be called via dot
 ```
 
 The same goes for cells, slices, whatever:
@@ -94,10 +94,10 @@ var flags = readFlags(msgBody);  // msgBody is not modified
 
 This means that when you call a function, you are sure that the original data has not been modified.
 
-### mutate keyword and mutating functions
+### Mutate keyword and mutating functions
 
 
-But if you add the `mutate` keyword to a parameter, it will make a passed argument mutable. To avoid unexpected mutations, you must specify `mutate` when calling it, also:
+But if you add the `mutate` keyword to a parameter, it will make a passed argument mutable. To avoid unexpected mutations, you must also specify `mutate` when calling it:
 ```tolk
 fun increment(mutate x: int) {
     x += 1;
@@ -109,7 +109,7 @@ increment(mutate origX);  // origX becomes 1
 
 // these are compiler errors
 increment(origX);         // error, unexpected mutation
-increment(10);            // error, not lvalue
+increment(10);            // error, not an lvalue
 origX.increment();        // error, not a method, unexpected mutation
 val constX = getSome();
 increment(mutate constX); // error, it's immutable since `val`
@@ -166,7 +166,7 @@ fun slice.preloadInt32(self) {
 
 Combining `mutate` and `self`, we get mutating methods.
 
-### mutate self is a method, called via dot, mutating an object
+### Mutate self is a method, called via dot, mutating an object
 
 
 As follows:
@@ -175,7 +175,7 @@ fun slice.readFlags(mutate self) {
     return self.loadInt(32);
 }
 
-val flags = msgBody.readFlags(); // pretty obvious
+val flags = msgBody.readFlags();
 
 fun int.increment(mutate self) {
     self += 1;
@@ -184,6 +184,7 @@ fun int.increment(mutate self) {
 var origX = 10;
 origX.increment();    // 11
 10.increment();       // error, not lvalue
+10.increment();       // error, not an lvalue
 
 // even this is possible
 fun int.incrementWithY(mutate self, mutate y: int, byValue: int) {
@@ -194,7 +195,7 @@ fun int.incrementWithY(mutate self, mutate y: int, byValue: int) {
 origX.incrementWithY(mutate origY, 10);   // both += 10
 ```
 
-If you look into stdlib, you'll notice that many functions actually **mutate self**, meaning they are methods of modifying an object. Tuples, dictionaries, and so on. In FunC, they were usually called via tilda.
+If you look into stdlib, you'll notice that many functions actually **mutate self**, meaning they are methods of modifying an object. Tuples, dictionaries, and so on. In FunC, they were usually called via tilde.
 ```tolk
 @pure
 fun tuple.push<X>(mutate self, value: X): void
@@ -203,7 +204,7 @@ fun tuple.push<X>(mutate self, value: X): void
 t.push(1);
 ```
 
-### return self makes a method chainable
+### Return self makes a method chainable
 
 
 It is precisely like `return self` in Python or `return this` in JavaScript. That makes methods like `storeInt()` and others chainable.
@@ -221,9 +222,9 @@ b.storeInt32(4);     // works without assignment, since mutates b
 b = b.storeInt32(5); // and works with assignment, since also returns
 ```
 
-Pay attention to the return type, it's `self`. You should specify it; otherwise, the compilation will fail if left empty. Probably, in the future, it will be correct.
+The return type is `self`. You must specify it; otherwise the compilation fails.
 
-### mutate self and asm functions
+### Mutate self and asm functions
 
 
 While it's evident for user-defined functions, one could be interested in how to make an `asm` function with such behavior. To answer this question, we should look under the hood at how mutation works inside the compiler.
@@ -247,7 +248,7 @@ someF(f2(mutate x, mutate y));
 flags = cs.loadInt(32);
 ```
 
-So, an `asm` function should place `self'` onto a stack before its return value:
+So, an `asm` function should place `self'` onto the stack before its return value:
 ```tolk
 // "TPUSH" pops (tuple) and pushes (tuple')
 // so, self' = tuple', and return an empty tensor
@@ -262,10 +263,10 @@ fun slice.loadMessageFlags(mutate self): int
     asm(-> 1 0) "4 LDU"
 ```
 
-Note, that to return self, you don't have to do anything special, just specify a return type. The compiler will do the rest.
+Note that to return self, you don't have to do anything special, just specify a return type. The compiler will do the rest.
 ```tolk
 // "STU" pops (int, builder) and pushes (builder')
-// with asm(op self), we put arguments to correct order
+// with asm(op self), we put the arguments in the correct order
 // so, self' = builder', and return an empty tensor
 // but to make it chainable, `self` instead of `void`
 fun builder.storeMessageOp(mutate self, op: int): self
@@ -274,14 +275,14 @@ fun builder.storeMessageOp(mutate self, op: int): self
 
 It's doubtful you'll have to do such tricks. Most likely, you'll write wrappers around existing functions:
 ```tolk
-// just do it like this, without asm; it's the same effective
+// just do it like this, without asm; it has the same effect
 
 fun slice.myLoadMessageFlags(mutate self): int {
     return self.loadUint(4);
 }
 
-fun builder.myStoreMessageOp(mutate self, flags: int): self {
-    return self.storeUint(32, flags);
+fun builder.myStoreMessageOp(mutate self, op: int): self {
+    return self.storeUint(op, 32);
 }
 ```
 

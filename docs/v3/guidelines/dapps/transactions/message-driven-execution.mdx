@@ -46,8 +46,8 @@ In the TON blockchain, a **message** is the fundamental unit of interaction betw
 
   If the task is successful, the person, as specified in the original message:
 
-  - send new messages to other residents, or
-  - store the resulting items safely in their home.
+  - sends new messages to other residents, or
+  - stores the resulting items safely in their home.
 
   After finishing, they return to their mailbox and retrieve the **next** incoming message.
 
@@ -62,7 +62,7 @@ In the TON blockchain, a **message** is the fundamental unit of interaction betw
   Messages delivered via the postal system between residents are called **internal messages**.
   Messages from the outside world also reach the city. These have a specified recipient, but their sender is unknown — they are known as **external incoming** or **external-in messages**.
 
-  While external-in and internal messages fulfil a similar role from the actor’s perspective, each actor may handle them differently. Some may process them normally, while others might completely ignore messages from the outside world — like someone who refuses to open letters from strangers.
+  While external-in and internal messages fulfill a similar role from the actor’s perspective, each actor may handle them differently. Some may process them normally, while others might completely ignore messages from the outside world — like someone who refuses to open letters from strangers.
 </details>
 
 #### Message structure: TL-B
@@ -76,7 +76,7 @@ To serialize data into a cell, TON relies on a well-established standard called 
 
 In TON, all messages adhere to a unified schema that defines their structure and serialization.
 
-```
+```tlb
 message$_ {X:Type} info:CommonMsgInfo
 init:(Maybe (Either StateInit ^StateInit))
 body:(Either X ^X) = Message X;
@@ -119,7 +119,7 @@ The term **message** is closely related to a **transaction**, but they serve dif
 
 An **external-in message** is a message whose `CommonMsgInfo` header uses the `ext_in_msg_info$10` structure.
 
-```
+```tlb
 message$_ {X:Type} info:CommonMsgInfo
 init:(Maybe (Either StateInit ^StateInit))
 body:(Either X ^X) = Message X;
@@ -127,7 +127,7 @@ body:(Either X ^X) = Message X;
 
 **TL-B:**
 
-```
+```tlb
 //external incoming message
 ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
 import_fee:Grams = CommonMsgInfo;
@@ -148,13 +148,13 @@ import { Address, beginCell } from '@ton/ton';
 import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider, args: string[]) {
-    //Mainnet address : 'EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2'
+    // Mainnet address: 'EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2'
     const address = Address.parse('EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2');
 
-    //Switch address for the Testnet :
+    // Switch to Testnet address:
     //const address = Address.parse('kQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16z768');
 
-    // Get current seqno using blueprint's provider
+    // Get current seqno using Blueprint's provider
     const contractProvider = provider.provider(address);
     const result = await contractProvider.get('seqno', []);
     const currentSeqno = result.stack.readNumber();
@@ -184,10 +184,10 @@ export async function run(provider: NetworkProvider, args: string[]) {
 An **internal message** is a message sent from one smart contract to another within the TON blockchain.
 When a contract receives an internal message, it can reliably determine:
 
-- how many TON coins are attached
+- how much Toncoin is attached
 - which contracts are the sender and the recipient
 
-The blockchain ensures the integrity of this information, allowing the contract to be trusted and used safely.
+The blockchain ensures the integrity of this information, allowing this information to be trusted and used safely.
 
 **TL-B:**
 
@@ -196,7 +196,7 @@ In other words, as the name implies, the sender of an internal message is always
 
 The most common way to send an internal message is by first sending an external message to a contract that contains the logic to forward the internal message to another contract.
 
-```
+```tlb
 //internal message
 int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 src:MsgAddressInt dest:MsgAddressInt
@@ -218,13 +218,13 @@ created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 | `created_lt`     | Logical time at which the message was created, used for ordering contract actions.          |
 | `created_at`     | Unix timestamp of when the message was created.                                             |
 
-The first thing a developer needs to specify is the amount of Toncoin attached to the internal message `value` and the destination address `dest`.
+The first thing a developer specifies is the amount of Toncoin attached to the internal message `value` and the destination address `dest`.
 
 In this example, an external message is sent to the wallet contract with additional instructions for sending an internal message. As a result of processing the transaction, the wallet contract sends an outgoing internal message with the specified `value` and recipient `address`.
 
 ```typescript title="internal.ts"
 //@ton/blueprint 0.36.1
-import { Address } from '@ton/ton';
+import { Address, toNano } from '@ton/ton';
 import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider, args: string[]) {
@@ -232,7 +232,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     const contractProvider = provider.provider(address);
 
     return contractProvider.internal(provider.sender(), {
-        value: '0.01',
+        value: toNano('0.01'),
     });
 }
 ```
@@ -252,13 +252,13 @@ For example, a decentralized exchange (DEX) contract might emit an external outg
 
 **TL-B:**
 
-```
+```tlb
 //external outgoing message
 ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
 created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ```
 
-## Bounce of messages
+## Message bounces
 
 A **bounce message** is automatically returned to the sender — but only if the following conditions are met:
 - the message is **internal**,

@@ -6,26 +6,26 @@ import Feedback from '@site/src/components/Feedback';
 This section provides low-level instructions for working with TON.
 :::
 
-To compile TON on systems with limited memory (< 1 GB), you need to create swap partitions.
+To compile TON on systems with limited memory (< 1 GiB), you need to create swap space (using a swap file).
 
-## Prerequisites
+## Symptoms
 
 When compiling C++ components on Linux, you may encounter memory-related failures:
 
-```
-C++: fatal error: Killed signal terminated program cc1plus
+```text
+fatal error: Killed signal terminated program cc1plus
 compilation terminated.
 ```
 
 ## Solution
 
-Follow these steps to create a 4GB swap partition:
+Follow these steps to create a 4 GiB swap file:
 
 ```bash
-# Create swap partition
+# Create swap directory
 sudo mkdir -p /var/cache/swap/
 
-# Allocate 4GB swap space (64MB blocks × 64)
+# Allocate 4 GiB swap space (64 MiB blocks × 64)
 sudo dd if=/dev/zero of=/var/cache/swap/swap0 bs=64M count=64
 
 # Set secure permissions
@@ -43,7 +43,7 @@ sudo swapon -s
 
 ### Swap management commands
 
-**Remove swap partition:**
+**Remove swap file:**
 
 ```bash
 sudo swapoff /var/cache/swap/swap0
@@ -54,8 +54,21 @@ sudo rm /var/cache/swap/swap0
 
 ```bash
 sudo swapoff -a
-# Check memory: free -m
+free -m
+```
+
+### Make swap persistent (optional)
+
+To enable the swap file on boot, add the following line to `/etc/fstab`:
+
+```text
+/var/cache/swap/swap0 none swap sw 0 0
+```
+
+After reboot, verify with:
+
+```bash
+sudo swapon --show
 ```
 
 <Feedback />
-

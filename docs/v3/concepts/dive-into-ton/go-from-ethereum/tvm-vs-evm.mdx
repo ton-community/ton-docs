@@ -5,9 +5,9 @@ import Feedback from '@site/src/components/Feedback';
 ## Introduction
 **Ethereum Virtual Machine (EVM)** and **TON Virtual Machine (TVM)** are stack-based virtual machines developed for running smart contract code. Although they have standard features, there are notable distinctions between them.
 
-## Differences of TVM and EVM
+## Differences between TVM and EVM
 
-### Data presentation
+### Data representation
 
 #### EVM
 
@@ -108,7 +108,7 @@ It’s essential to note that the EVM supports complex data structures by levera
 
 #### TVM
 
-- TVM supports 256-bit Elliptic Curve Cryptography (ECC) for predefined curves, like Curve25519. It also supports Weil pairings on some elliptic curves, which are helpful for the fast implementation of zk-SNARKs (zero-knowledge proofs). Popular hash functions like sha256 are also supported, providing more cryptographic operation options. In addition, TVM can work with Merkle proofs, providing additional cryptographic features that can be beneficial for specific use cases, such as verifying the inclusion of a transaction in a block.
+- TVM supports 256-bit Elliptic Curve Cryptography (ECC) for predefined curves, like Curve25519. It also supports Weil pairings on some elliptic curves, which are helpful for the fast implementation of zk-SNARKs (zero-knowledge proofs). Popular hash functions like SHA-256 are also supported, providing more cryptographic operation options. In addition, TVM can work with Merkle proofs, providing additional cryptographic features that can be beneficial for specific use cases, such as verifying the inclusion of a transaction in a block.
 
 ### High-level languages
 
@@ -132,4 +132,3 @@ TVM’s support for sharding-aware smart contracts and its unique data represent
 - [TVM overview](/v3/documentation/tvm/tvm-overview/)
 
 <Feedback />
-

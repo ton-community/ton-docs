@@ -5,10 +5,10 @@ import Button from '@site/src/components/button'
 # TON Connect for Telegram Bots - Python
 
 :::warning deprecated
-This guide explains an outdated method of integrating TON Connect with Telegram bots. For a more secure and modern approach, consider using [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview for a more modern and secure integration.
+This guide explains an outdated method of integrating TON Connect with Telegram bots. For a more secure and modern approach, consider using [Telegram Mini Apps](/v3/guidelines/dapps/tma/overview) for a more modern and secure integration.
 :::
 
-In this tutorial, we’ll create a sample telegram bot that supports TON Connect 2.0 authentication using Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect).
+In this tutorial, we’ll create a sample Telegram bot that supports TON Connect 2.0 authentication using Python TON Connect SDK [pytonconnect](https://github.com/XaBbl4/pytonconnect).
 We will analyze connecting a wallet, sending a transaction, getting data about the connected wallet, and disconnecting a wallet.
 
  
@@ -30,9 +30,9 @@ Check out GitHub
 
 ### Install libraries
 
-To make bot we are going to use `aiogram` 3.0 Python library.
+To build the bot, we use the aiogram 3.0 Python library.
 To start integrating TON Connect into your Telegram bot, you need to install the `pytonconnect` package.
-And to use TON primitives and parse user address we need `pytoniq-core`.
+To use TON primitives and parse the user address, install `pytoniq-core`.
 You can use pip for this purpose:
 
 ```bash
@@ -41,7 +41,7 @@ pip install pytonconnect
 ```
 
 ### Set up config
-Specify in `.env` file [bot token](https://t.me/BotFather) and link to the TON Connect [manifest file](https://github.com/ton-connect/sdk/tree/main/packages/sdk#add-the-tonconnect-manifest). After load them in `config.py`:
+Specify in `.env` file the [bot token](https://t.me/BotFather) and a link to the TON Connect [manifest file](/v3/guidelines/ton-connect/creating-manifest) (for example, `https://<YOUR_APP_URL>/tonconnect-manifest.json`). Then load them into `config.py`:
 
 ```dotenv
 # .env
@@ -62,7 +62,7 @@ TOKEN = env['TOKEN']
 MANIFEST_URL = env['MANIFEST_URL']
 ```
 
-## Create simple bot
+## Create a simple bot
 
 Create `main.py` file which will contain the main bot code:
 
@@ -106,7 +106,7 @@ if __name__ == "__main__":
 
 ### TON Connect Storage
 
-Let's create simple storage for TON Connect
+Let's create a simple storage class for TON Connect.
 
 ```python
 # tc_storage.py
@@ -138,7 +138,7 @@ class TcStorage(IStorage):
 
 ### Connection handler
 
-Firstly, we need function which returns different instances for each user:
+First, we need a function that returns a different instance for each user:
 
 ```python
 # connector.py
@@ -153,7 +153,9 @@ def get_connector(chat_id: int):
     return TonConnect(config.MANIFEST_URL, storage=TcStorage(chat_id))
 
 ```
-Secondary, let's add connection handler in `command_start_handler()`:
+Secondly, add a connection handler in `command_start_handler()`:
+
+Note: Some imports used in the snippets below appear in the full `main.py` listing at the end.
 
 ```python
 # main.py
@@ -179,7 +181,7 @@ async def command_start_handler(message: Message):
 ```
 
 Now, for a user who has not yet connected a wallet, the bot sends a message with buttons for all available wallets.
-So we need to write function to handle `connect:{wallet["name"]}` callbacks:
+So we need to write a function to handle `connect:{wallet["name"]}` callbacks:
 
 ```python
 # main.py
@@ -237,11 +239,11 @@ async def main_callback_handler(call: CallbackQuery):
             await connect_wallet(message, data[1])
 ```
 
-Bot gives user 3 minutes to connect a wallet, after which it reports a timeout error. 
+The bot gives the user 3 minutes to connect a wallet, after which it reports a timeout.
 
-## Implement Transaction requesting
+## Request a transaction
 
-Let's take one of examples from the [Sending messages](/v3/guidelines/ton-connect/cookbook/ton-transfer) article:
+Let's take one of the examples from the [Sending messages](/v3/guidelines/ton-connect/cookbook/ton-transfer) article:
 
 ```python
 # messages.py
@@ -300,7 +302,7 @@ async def send_transaction(message: Message):
     )
 ```
 
-But we also should handle possible errors, so we wrap the `send_transaction` method into `try - except` statement:
+We should also handle possible errors, so wrap the `send_transaction` method in a try–except statement:
 
 ```python
 @dp.message(Command('transaction'))
@@ -321,7 +323,7 @@ async def send_transaction(message: Message):
 
 ## Add disconnect handler
 
-This function implementation is simple enough:
+The implementation of this function is simple:
 
 ```python
 async def disconnect_wallet(message: Message):
@@ -505,10 +507,10 @@ if __name__ == "__main__":
 
 ### Add permanent storage - Redis
 
-Currently, our TON Connect Storage uses dict which causes to lost sessions after bot restart. 
+Currently, our TON Connect Storage uses a dict, which causes sessions to be lost after a bot restart.
 Let's add permanent database storage with Redis:
 
-After you launched Redis database install python library to interact with it:
+After launching a Redis server, install the Python client library:
 
 ```bash
 pip install redis
@@ -541,15 +543,15 @@ class TcStorage(IStorage):
         await client.delete(self._get_key(key))
 ```
 
-### Add QR Code
+### Add QR code
 
-Install python `qrcode` package to generate them:
+Install the Python `qrcode` package:
 
 ```bash
 pip install qrcode
 ```
 
-Change `connect_wallet()` function so it generates qrcode and sends it as a photo to the user:
+Change the `connect_wallet()` function so it generates a QR code and sends it as a photo to the user:
 
 ```python
 from io import BytesIO
@@ -572,13 +574,12 @@ async def connect_wallet(message: Message, wallet_name: str):
 
 ## Summary
 
-What is next?
-- You can add better errors handling in the bot.
-- You can add start text and something like `/connect_wallet` command.
+What's next?
+- You can add better error handling in the bot.
+- You can add start text and something like a /connect_wallet command.
 
 ## See Also
 - [Full bot code](https://github.com/yungwine/ton-connect-bot)
 - [Sending messages](/v3/guidelines/ton-connect/cookbook/ton-transfer)
 
 <Feedback />
-
