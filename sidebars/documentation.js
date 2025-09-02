@@ -20,7 +20,7 @@ module.exports = [
       },
       {
         type: 'category',
-        label: 'Getting started',
+        label: 'Development Environment',
         items: [
           'v3/documentation/smart-contracts/getting-started/javascript',
           'v3/documentation/smart-contracts/getting-started/ide-plugins',
