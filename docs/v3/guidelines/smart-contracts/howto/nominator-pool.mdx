@@ -10,13 +10,14 @@ Before reading this tutorial, you should familiarize yourself with [nominator po
 
 1. Set up the hardware for the validator — you will need 16 cores CPU, 128 GB RAM, 1 TB NVMe SSD (or ≥64k IOPS), 1 Gbit/s network connectivity, Public IP.
 
-   To maintain network stability, distribute validator nodes across different geographical locations worldwide rather than concentrating them in a single data center. Use [this site](https://status.toncenter.com/) to assess the load of various locations. The map indicates high data center utilization in Europe, especially in Finland, Germany, and Paris. Therefore, avoid using providers such as Hetzner and OVH.
+   To maintain network stability, distribute validator nodes across different geographical locations worldwide rather than concentrating them in a single data center. See [recommended providers](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers).
 
-   > Ensure your hardware meets or exceeds the specifications above. Running the validator on insufficient hardware negatively impacts the network and could result in penalties.
-
-   > Note that as of May 2021, Hetzner has prohibited mining on its servers. This ban includes both PoW and PoS algorithms. Even installing a regular node may violate their terms of service.
-
-   > **Recommended providers include:** [AWS](https://aws.amazon.com/), [DigitalOcean](https://www.digitalocean.com/), [Linode](https://www.linode.com/), [Alibaba Cloud](https://alibabacloud.com/), [Latitude](https://www.latitude.sh/).
+   :::caution
+   Ensure your hardware meets or exceeds the specifications above. Running the validator on insufficient hardware negatively impacts the network and could result in penalties.
+   :::
+   :::caution
+   Ensure your hardware meets or exceeds the specifications above. Running the validator on insufficient hardware negatively impacts the network and could result in penalties.
+   :::
 
 2. Install and synchronize **MyTonCtrl** as described in the guide [here](/v3/guidelines/nodes/running-nodes/full-node#install-mytonctrl).
 
@@ -52,9 +53,13 @@ Before reading this tutorial, you should familiarize yourself with [nominator po
    - `1000` TON is the minimum validator stake (should be >= 1K TON);
    - `300000` TON is the minimum nominator stake (should be >= 10K TON);
 
-   > (!) Pool configurations do not have to be identical. You can add 1 to the minimum stake of one pool to make them different.
+   :::note
+   Pool configurations do not have to be identical. You can add 1 to the minimum stake of one pool to make them different.
+   :::
 
-   > (!) Use https://tonmon.xyz/ to determine the current minimum validator stake.
+   :::tip
+   Use https://tonmon.xyz/ to determine the current minimum validator stake.
+   :::
 
 7. Type `pools_list` to display pool addresses:
 
@@ -66,6 +71,10 @@ Before reading this tutorial, you should familiarize yourself with [nominator po
    p1    empty   0        0f98YhXA9wnr0d5XRXT-I2yH54nyQzn0tuAYC4FunT780qIT
    p2    empty   0        0f9qtmnzs2-PumMisKDmv6KNjNfOMDQG70mQdp-BcAhnV5jL
    ```
+
+   :::info
+   Addresses may appear in raw form (starting with `0f…`) or user-friendly form (starting with `kf…`). Both represent the same address in different formats.
+   :::
 
 8. Send 1 TON to each pool and activate the pools:
 
@@ -100,7 +109,7 @@ Before reading this tutorial, you should familiarize yourself with [nominator po
     deposit_to_pool validator_wallet_001 <address_of_pool_2> 1005
     ```
 
-In these commands, `1005` TON is the deposit amount. The pool will deduct 1 TON to process the deposit.
+In these commands, `1005` TON is the deposit amount. Ensure you attach sufficient fees as required; see the [nominator pool specification](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) for details.
 
 12. Make a nominator deposit to each pool.
 
@@ -114,31 +123,37 @@ In these commands, `1005` TON is the deposit amount. The pool will deduct 1 TON 
     mg nominator_wallet_001 <address_of_pool_2> 300001 -C d
     ```
 
-> (!) The nominator wallet must be initialized in the basechain (workchain 0).
+:::info
+The nominator wallet must be initialized in the basechain (workchain 0).
+:::
 
-> (!) Remember that the validator and nominator wallets must be stored separately! Store the validator wallet on the server with the validator node to ensure the processing of all system transactions. Meanwhile, store the nominator wallet in your cold cryptocurrency wallet.
+:::caution
+Remember that the validator and nominator wallets must be stored separately! Store the validator wallet on the server with the validator node to ensure the processing of all system transactions. Meanwhile, store the nominator wallet in your cold cryptocurrency wallet.
+:::
 
-> To withdraw a nominator deposit, send a transaction with the comment `w` to the pool address (attach 1 TON to process the transaction). You can also perform this action using **mytonctrl**.
+:::note
+To withdraw a nominator deposit, send a transaction with the comment `w` to the pool address (attach 1 TON to process the transaction). You can also perform this action using **mytonctrl**.
+:::
 
 13. Invite nominators to deposit into your pools. Participation in validation will commence automatically.
 
+:::note
+Ensure you have at least 200 TON/month in your validator wallet for operation fees.
 
-> (!) Ensure you have at least 200 TON/month in your validator wallet for operation fees.
+In the TON blockchain, the validator cycle is approximately 18 hours, and there are roughly 40.5 validation rounds per month (assuming a 30-day month).
 
-  > In the TON blockchain, the validator cycle is approximately 18 hours, and there are roughly 40.5 validation rounds per month (assuming a 30-day month).
-  
-  > Here's the breakdown of costs based on participation:
-    >
-    > - **Participating in only odd or even cycles (half of the rounds):**
-    >
-    >   - Rounds per month: ~20.25
-    >   - Cost per round: ~5 Toncoins
-    >   - `total cost = 20.25 * 5 -> ~101.25 Toncoins`
-    >
-    > - **Participating in both odd and even cycles (all rounds):**
-    >   - Rounds per month: ~40.5
-    >   - Cost per round: ~5 Toncoins
-    >   - `total cost = 40.5 * 5 -> ~202.50 Toncoins`
+Here's the breakdown of costs based on participation:
+
+- **Participating in only odd or even cycles (half of the rounds):**
+  - Rounds per month: ~20.25
+  - Cost per round: ~5 Toncoins
+  - `total cost = 20.25 * 5 -> ~101.25 Toncoins`
+
+- **Participating in both odd and even cycles (all rounds):**
+  - Rounds per month: ~40.5
+  - Cost per round : ~ 5 Toncoins
+  - `total cost = 40.5 * 5 -> ~202.50 Toncoins`
+:::
 
 
 ## Pool configuration
