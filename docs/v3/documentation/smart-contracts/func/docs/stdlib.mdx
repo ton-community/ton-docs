@@ -30,8 +30,6 @@ For more details on polymorphic functions, refer to the [Polymorphism with foral
 
 ### Lisp-style lists
 
-Lists can be represented as nested 2-element tuples. Empty list is conventionally represented as TVM `null` value (it can be obtained by calling `null()`). For example, the tuple `(1, (2, (3, null)))` represents the list `[1, 2, 3]`. Elements of a list can be of different types.
-
 Lists in FunC are represented as nested two-element tuples. An empty list is conventionally represented by the TVM `null` value, which can be obtained using `null()`.
 For example, the tuple `(1, (2, (3, null)))` corresponds to the list `[1, 2, 3]`. Lists in FunC can contain elements of different types.
 
@@ -57,7 +55,7 @@ Extracts the head and tail of a lisp-style list.
 forall X -> (tuple, X) list_next(tuple list) asm( -> 1 0) "UNCONS";
 ```
 
-Extracts the head and tail of a lisp-style list. It can be used as a [(non-)modifying method](/v3/documentation/smart-contracts/func/docs/statements#method-calls).
+Returns the tail and then the head of a lisp-style list (in that order). It can be used as a [(non-)modifying method](/v3/documentation/smart-contracts/func/docs/statements#method-calls).
 
 **Example**
 
@@ -111,7 +109,7 @@ or a type check exception is thrown.
 forall X -> [X] single(X x) asm "SINGLE";
 ```
 
-Creates a tuple with a single element—singleton
+Creates a tuple with a single element—a singleton.
 
 #### unsingle
 
@@ -266,7 +264,7 @@ Returns the current Unix timestamp as an integer.
 slice my_address() asm "MYADDR";
 ```
 
-Retrieves the smart contract’s internal address as a Slice containing `MsgAddressInt`. If needed, it can be further processed using functions like `parse_std_addr`.
+Retrieves the smart contract’s internal address as a `slice` containing `MsgAddressInt`. If needed, it can be further processed using functions like `parse_std_addr`.
 
 #### get_balance
 
@@ -276,7 +274,7 @@ Retrieves the smart contract’s internal address as a Slice containing `MsgAddr
 
 Returns the smart contract's balance as a `tuple`:
 
-- `int`: The remaining balance in nanotoncoins.
+- `int`: The remaining balance in nanotons.
 - `cell`: A dictionary (with 32-bit keys) containing balances of extra currencies.
 
 Since this is retrieved during the compute phase, the balance reflects the incoming message `value`, with `storage_fee` and `import_fee` already subtracted.
@@ -307,7 +305,7 @@ Returns the logical time at the beginning of the current block.
 cell config_param(int x) asm "CONFIGOPTPARAM";
 ```
 
-Returns the value of the global configuration parameter with integer index `i` as `cell` or `null` value.
+Returns the value of the global configuration parameter with integer index `x` as `cell` or `null` value.
 
 #### my_code
 
@@ -319,7 +317,7 @@ Retrieves the smart contract's code from `c7`.
 
 :::warning
 This function is not included in the standard library, but is often sought by developers.
-You need to manually add initialization it to your contract system, with the `asm` word specified as shown in the snippet above.
+You need to manually add it to your contract, with the `asm` word specified as shown above.
 :::
 
 ### Hashes
@@ -394,7 +392,7 @@ The following functions help calculate storage fees for user-provided data.
 Returns `(x, y, z, -1)` or `(null, null, null, 0)`. It recursively calculates the number of unique cells `x`, data bits `y`, and cell references `z` in the **directed acyclic graph (DAG)** at `cell c`. This provides the total storage used by the DAG while recognizing identical cells.
 
 The computation uses a depth-first traversal with a hash table to track visited cells, preventing redundant visits.
-If the total amount of visited cells `x` exceeds `max_cells`, the process stops before visiting the `(max_cells + 1)` -th cell, and the function returns `0` to indicate failure. If `c` is `null`, the function returns `x = y = z = 0`.
+If the total number of visited cells `x` exceeds `max_cells`, the process stops before visiting the `(max_cells + 1)`-th cell, and the function returns `(null, null, null, 0)` to indicate failure. If `c` is `null`, the function returns `(0, 0, 0, -1)`.
 
 #### slice_compute_data_size?
 
@@ -410,7 +408,7 @@ It works similarly to `compute_data_size?` but takes a `slice s` instead of a `c
 (int, int, int) compute_data_size(cell c, int max_cells) impure asm "CDATASIZE";
 ```
 
-A strict version of `compute_data_size?` that throws a cell overflow exception (8) if the computation fails.
+A strict version of `compute_data_size?` that throws an exception if the computation fails.
 
 #### slice_compute_data_size
 
@@ -418,7 +416,7 @@ A strict version of `compute_data_size?` that throws a cell overflow exception (
 (int, int, int) slice_compute_data_size(slice s, int max_cells) impure asm "SDATASIZE";
 ```
 
-A strict version of `slice_compute_data_size?` that throws a cell overflow exception (8) if the computation fails.
+A strict version of `slice_compute_data_size?` that throws an exception if the computation fails.
 
 ### Persistent storage save and load
 
@@ -464,7 +462,7 @@ Updates the `c3` value to modify the contract’s execution code at runtime. The
 cont bless(slice s) impure asm "BLESS";
 ```
 
-Converts a `slice s` into a basic continuation `c`, where `c.code = s`, an empty stack and a savelist.
+Converts a `slice s` into a basic continuation `c`, where `c.code = s`, with an empty stack and a savelist.
 
 ### Gas related primitives
 
@@ -515,10 +513,10 @@ even if an exception occurs later.
 The `BUYGAS` opcode is currently not implemented.
 :::
 
-This function calculates how much gas can be purchased for the `gram` nanotoncoins and updates the gas limit `gl` accordingly,
+This function calculates how much gas can be purchased for the amount `gram` (in nanotons) and updates the gas limit `gl` accordingly,
 similar to `set_gas_limit`.
 
-### Actions primitives
+### Action primitives
 
 #### raw_reserve
 
@@ -527,14 +525,14 @@ similar to `set_gas_limit`.
 ```
 
 The `raw_reserve` function creates an output action
-that reserves a specific amount of nanotoncoins from the account’s remaining balance.
+that reserves a specific amount of nanotons from the account’s remaining balance.
 The behavior depends on the `mode` parameter:
 
-- If `mode = 0`, exactly the `amount` of nanotoncoins is reserved.
-- If `mode = 2`, up to the `amount` of nanotoncoins is reserved.
-- If `mode = 1` or `mode = 3`, all but the `amount` of nanotoncoins is reserved.
+- If `mode = 0`, exactly the `amount` of nanotons is reserved.
+- If `mode = 2`, up to the `amount` of nanotons is reserved.
+- If `mode = 1` or `mode = 3`, all but the `amount` of nanotons is reserved.
 
-This process is equivalent to generating an outbound message that transfers the `amount` of nanotoncoins or `b − amount` nanotoncoins,
+This process is equivalent to generating an outbound message that transfers the `amount` of nanotons or `b − amount` nanotons,
 where `b` represents the remaining balance, to the sender. This ensures that subsequent output actions cannot exceed the remaining funds.
 
 **Mode Flags**
@@ -602,13 +600,13 @@ However, the `+2` flag does not ignore errors in the following cases:
 2. Both `64` and `128` modes are used simultaneously.
 3. The outbound message contains invalid libraries in `StateInit`.
 4. The external message is not ordinary or includes the `+16` or `+32` flag.
-   :::
+:::
 
 :::warning
 
 1. **+16 flag** should not be used in external messages (e.g., to wallets), as there is no sender to receive the bounced message.
 2. **+2 flag** is important in external messages (e.g., to wallets).
-   :::
+:::
 
 You can view a detailed example [here](/v3/documentation/smart-contracts/message-management/sending-messages#example-jetton-transfer-pitfall).
 
@@ -653,9 +651,6 @@ Generates a new pseudo-random 256-bit unsigned integer `x`. The process works as
 int rand(int range) impure asm "RAND";
 ```
 
-Generates a new pseudo-random integer `z` in the range `0..range−1` (or `range..−1` if `range < 0`). More precisely, an unsigned random value `x` is generated as in `random`; then `z := x * range / 2^256` is
-computed.
-
 Produces a pseudo-random integer `z` within the range `0..range−1` (or `range..−1` if `range < 0`).
 
 - First, an unsigned random value `x` is generated using `random()`.
@@ -683,13 +678,11 @@ Sets the random seed to a specified 256-bit unsigned integer `seed`.
 () randomize(int x) impure asm "ADDRAND";
 ```
 
-Mixes an unsigned 256-bit integer `x` into a random seed `r` by setting the random seed to sha256 of the concatenation of two 32-byte strings: the first with a big-endian representation of the old seed `r`, and the second with a big-endian representation of `x`.
-
-Mixes a 256-bit unsigned integer `x` into the random seed `r` by updating`r` to `sha256(r || x)`, where:
+Mixes a 256-bit unsigned integer `x` into the random seed `r` by updating `r` to `sha256(r || x)`, where:
 
 - `r` is the previous seed, represented as a 32-byte big-endian array.
 - `x` is also converted into a 32-byte big-endian array.
-  T- he new seed is the SHA-256 hash of their concatenation.
+  The new seed is the SHA-256 hash of their concatenation.
 
 #### randomize_lt
 
@@ -697,13 +690,13 @@ Mixes a 256-bit unsigned integer `x` into the random seed `r` by updating`r` to 
 () randomize_lt() impure asm "LTIME" "ADDRAND";
 ```
 
-Equivalent to calling `randomize(cur_lt());`.
+Call `randomize_lt` before using the pseudo‑random number generator for the first time.
 
 ### Address manipulation primitives
 
 The functions below handle the serialization and deserialization of values based on the following TL-B scheme.
 
-```func
+```tlb
 addr_none$00 = MsgAddressExt;
 
 addr_extern$01 len:(## 8) external_address:(bits len)
@@ -729,14 +722,7 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
   created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
 ```
 
-- `addr_none` is represented by `t = (0)`, i.e., a tuple containing exactly
-  one integer that equals zero
-- `addr_extern` is represented by `t = (1, s)`, where slice `s` contains the
-  field `external_address`. In other words, `t` is a pair (a tuple consisting of two entries), containing an integer equal to one and slice `s`
-- `addr_std` is represented by `t = (2, u, x, s)`, where `u` is either `null` (if `anycast` is absent) or a slice `s'` containing `rewrite_pfx` (if `anycast` is present). Next, integer `x` is the `workchain_id`, and slice `s` contains the address
-- `addr_var` is represented by `t = (3, u, x, s)`, where `u`, `x`, and `s` have the same meaning as for `addr_std`
-
-A deserialized `MsgAddress`cis represented as a tuple `t` with the following structure:
+A deserialized `MsgAddress` is represented as a tuple `t` with the following structure:
 
 - `addr_none` is represented as `t = (0)`, a single-element tuple where the integer is zero.
 - `addr_extern` is represented as `t = (1, s)`, where `s` is a slice containing `external_address`. In other words, `t` is a pair with the first element being `1` and the second being `s`.
@@ -744,7 +730,7 @@ A deserialized `MsgAddress`cis represented as a tuple `t` with the following str
   - `u` is `null` if `anycast` is absent or a slice `s'` containing `rewrite_pfx` if `anycast` is present.
   - `x` is the `workchain_id`.
   - `s` is a slice containing the address.
-- addr_var is represented as `t = (3, u, x, s)`, where `u`, `x,` and `s` follow the same structure as `addr_std`.
+- `addr_var` is represented as `t = (3, u, x, s)`, where `u`, `x,` and `s` follow the same structure as `addr_std`.
 
 #### load_msg_addr
 
@@ -790,7 +776,7 @@ Debug primitives help inspect the state of various variables while running tests
 forall X -> () ~dump(X value) impure asm "s0 DUMP";
 ```
 
-Prints the given value. Multiple values can be output as a tuple, e.g.,`~dump([v1, v2, v3])`.
+Prints the given value. Multiple values can be output as a tuple, e.g., `~dump([v1, v2, v3])`.
 
 #### ~strdump
 
@@ -860,7 +846,7 @@ Loads a signed `len`-bit integer from a slice.
 #### load_uint
 
 ```func
-;; (slice, int) ~load_uint(slice s, int len) asm( -> 1 0) "LDUX";
+;; (slice, int) ~load_uint(slice s, int len) asm(s len -> 1 0) "LDUX";
 ```
 
 Loads an unsigned `len`-bit integer from a slice.
@@ -903,7 +889,7 @@ Preloads the first `0 ≤ len ≤ 1023` bits from `slice s` into a new slice `s'
 (slice, int) load_coins(slice s) asm( -> 1 0) "LDGRAMS";
 ```
 
-Loads serialized amount of Toncoins, which is an unsigned integer up to `2^120 - 1`.
+Loads a serialized amount of Toncoin, which is an unsigned integer up to `2^120 - 1`.
 
 #### skip_bits
 
@@ -1462,7 +1448,7 @@ Checks whether a dictionary is empty. Equivalent to `cell_null?`.
 ## Prefix dictionaries primitives
 
 TVM supports dictionaries with non-fixed length keys that follow a prefix code structure, meaning no key is a prefix of another key.
-Learn more in the [TVM instruction](/v3/documentation/tvm/tvm-overview) section.
+Learn more in the [TVM overview](/v3/documentation/tvm/tvm-overview) section.
 
 #### pfxdict_get?
 
