@@ -322,17 +322,10 @@ The `assets-sdk` library works out of the box with `ton-connect`.
         </TabItem>
     </Tabs>
 
-<<<<<<< HEAD
-    - `validUntil` - UNIX-time until message valid
-    - `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
-    - `amount` - Integer, the amount of Toncoin used for gas payments in nanotons.
-    - `body` - payload for the `jettonContract`
-=======
     - `validUntil` - UNIX timestamp until the message is valid
     - `jettonWalletAddress` - Address, Jetton wallet address that is defined based on JettonMaster and wallet contracts
     - `amount` - Integer, the amount of Toncoin used for gas payments in nanotons.
     - `body` - payload for the jetton wallet contract
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k723106de
 
     <details>
         <summary>Jetton wallet state init and address preparation example</summary>
@@ -383,13 +376,9 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
     For more examples, check [documentation](https://github.com/ton-community/assets-sdk)
 
-<<<<<<< HEAD
-    Note: `tonConnectUi` refers to an existing `TonConnectUI` instance created earlier (for example, `const provider = new TonConnectUI({...})`).
+    Note: `tonConnectUI` refers to an existing `TonConnectUI` instance created earlier (for example, `const provider = new TonConnectUI({...})`).
 
-    ```js
-=======
     ```ts
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k723106de
     const NETWORK = "testnet";
     const api = await createApi(NETWORK);
     const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react

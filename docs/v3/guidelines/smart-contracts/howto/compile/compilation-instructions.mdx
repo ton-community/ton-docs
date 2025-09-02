@@ -113,35 +113,25 @@ cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. \
 -DLZ4_INCLUDE_DIRS=$lz4Path/lib
 ```
 
-<<<<<<< HEAD
+Before invoking CMake, create and enter a build directory (for example, `mkdir -p ~/ton-build && cd ~/ton-build`) and point CMake to the TON sources with `../ton`.
+
+Note: On Intel Macs, Homebrew may be installed under `/usr/local` instead of `/opt/homebrew`. Adjust paths like `/opt/homebrew/opt/llvm@16/...` accordingly.
+
 Build the project:
 
 ```zsh
 cmake --build . -j$(sysctl -n hw.ncpu)
 ```
-=======
-Before invoking CMake, create and enter a build directory (for example, `mkdir -p ~/ton-build && cd ~/ton-build`) and point CMake to the TON sources with `../ton`.
-
-Note: On Intel Macs, Homebrew may be installed under `/usr/local` instead of `/opt/homebrew`. Adjust paths like `/opt/homebrew/opt/llvm@16/...` accordingly.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kf7c316e8
 
 
 
 :::tip
-<<<<<<< HEAD
-If you are compiling on a computer with low memory (e.g., 1 GB), don't forget to [create a swap partition](/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory).
-=======
 If you are compiling on a computer with low memory (e.g., 1 GiB), don't forget to [create swap space](/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory).
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kf7c316e8
 :::
 
 ## Download global config
 
-<<<<<<< HEAD
-For tools like the Lite Client you need to download the global network config.
-=======
 For tools like the Lite Client, download the global network config.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kf7c316e8
 
 Download the newest configuration file from [https://ton.org/global-config.json](https://ton.org/global-config.json) for mainnet:
 

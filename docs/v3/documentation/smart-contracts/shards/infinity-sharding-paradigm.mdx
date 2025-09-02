@@ -104,11 +104,7 @@ Shards perform the split or merge after a protocol-defined delay from the decisi
 
 In the infinite sharding paradigm, each account or smart contract is treated as if it were a part of its own ShardChain.
 Interactions between accounts occur exclusively through message passing, following the **actor model**, where accounts act as actors.
-<<<<<<< HEAD
 An efficient messaging system between ShardChains is essential for the operation of the TON blockchain. A proposed mechanism called **Instant Hypercube Routing** would enable direct message delivery across ShardChains without intermediate hops. For related fee parameters, see [configuration parameters 24 and 25](/v3/documentation/network/configs/blockchain-configs#param-24-and-25).
-=======
-An efficient messaging system between ShardChains is essential for the operation of the TON Blockchain. A key feature supporting this is **Instant Hypercube Routing**, which enables near-instantaneous message delivery and processing across ShardChains. Messages created in one ShardChain block are processed in the next block of the target ShardChain — regardless of how many messages are in the system.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kb11d3688
 
 ### Current Status of IHR
 

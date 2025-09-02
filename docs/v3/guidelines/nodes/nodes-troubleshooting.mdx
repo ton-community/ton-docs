@@ -28,11 +28,7 @@ Try to perform the following checks:
 
 2. Is there a firewall between the node and the internet? If so, will it pass incoming UDP traffic to the port specified in the field `leaf.addrs[0].port` of the `/var/ton-work/db/config.json` file?
 
-<<<<<<< HEAD
 3. Is there a NAT between the machine and the internet? If so, ensure that the IP address defined in the `leaf.addrs[0].ip` field of the `/var/ton-work/db/config.json` file corresponds to the real public IP of the machine. Note that the value of this field is stored in decimal (signed 32-bit integer for IPv4). You can use the `ip2dec.py` (and `dec2ip`) scripts from [ton-tools/node](https://github.com/sonofmom/ton-tools/tree/master/node) to perform conversions.
-=======
-3. Is there a NAT between the machine and the internet? If so, ensure that the IP address defined in the `leaf.addrs[0].ip` field of the `/var/ton-work/db/config.json` file corresponds to the real public IP of the machine. Note that the value of this field is specified as a signed INT. The `ip2dec` and `dec2ip` scripts located in [ton-tools/node](https://github.com/sonofmom/ton-tools/tree/master/node) can be used to perform conversions.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k548648f2
 
 ## Archive node is out of sync even after 5 days of the syncing process
 

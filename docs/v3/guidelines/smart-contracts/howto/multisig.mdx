@@ -176,15 +176,9 @@ First, you need to create a message request:
 fift -s create-msg.fif $ADDRESS$ $AMOUNT$ $MESSAGE$
 ```
 
-<<<<<<< HEAD
 - `$ADDRESS$` - address where to send coins.
 - `$AMOUNT$` - number of coins (in TON).
 - `$MESSAGE$` - the file name for the compiled message.
-=======
-- `$ADDRESS$` - address where to send coins.
-- `$AMOUNT$` - number of coins (in TON).
-- `$MESSAGE$` - the file name for the compiled message.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k7eaca5c6
 
 For example:
 
@@ -206,15 +200,9 @@ fift -s create-order.fif $WALLET_ID$ $MESSAGE$ -t $AWAIT_TIME$
 
 Where
 
-<<<<<<< HEAD
 - `$WALLET_ID$` — ID of the wallet backed by this multisig contract.
 - `$AWAIT_TIME$` — time in seconds the smart contract will await signatures from the multisig wallet owners for the request.
 - `$MESSAGE$` — name of the message BoC file created in the previous step.
-=======
-- `$WALLET_ID$` — is an ID of the wallet backed by this multisig contract.
-- `$AWAIT_TIME$` — Time in seconds that the smart contract will await signs from multisig wallet's owners for the request.
-- `$MESSAGE$` — here is the name of the message BoC file created in the previous step.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k7eaca5c6
 
 :::info
 The request expires if `$AWAIT_TIME$` elapses before the request is signed. As usual, `$AWAIT_TIME$` equals a couple of hours (7200 seconds).

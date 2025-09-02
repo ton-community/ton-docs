@@ -90,13 +90,8 @@ The workflow is as follows:
   - If not 0, sends a `http.getNextPayloadPart` request to the client
   - When receiving a request, the client sends `http.payloadPart` - the requested body piece depending on `seqno` and `max_chunk_size`.
   - The server repeats requests, incrementing `seqno`, until it receives all the chunks from the client, i.e. until the `last:Bool` field of the last chunk received is true.
-<<<<<<< HEAD
 - After processing the request, the server sends `http.response`. The client checks the `no_payload:Bool` flag in the response.
   - If `no_payload` is false, it sends a `http.getNextPayloadPart` request to the server, and the operations are repeated (mirroring the request flow) until the `last:Bool` field is true.
-=======
-- After processing the request, the server sends `http.response`. The client checks the `no_payload:Bool` flag in the response.
-  - If `no_payload` is false, it sends a `http.getNextPayloadPart` request to the server, and the operations are repeated (mirroring the request flow) until the `last:Bool` field is true.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k8c2a7e49
 
 ## Request the TON site
 

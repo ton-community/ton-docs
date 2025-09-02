@@ -752,11 +752,7 @@ valid + end;     // error
 8 & valid;       // error, int & bool not allowed
 ```
 
-<<<<<<< HEAD
 Note that logical operators `&&` and `||` (absent in FunC) always compile to IF/ELSE.
-=======
-Note that logical operators `&& ||` (missed in FunC) use IF/ELSE asm representation always.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k25061104
 In the future, for optimization, they could be automatically replaced by `& |` when it's safe (example: `a > 0 && a < 10`).
 To manually optimize gas consumption, you can still use `& |` (allowed for bools), but remember, that they are not short-circuit.
 

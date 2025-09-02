@@ -526,11 +526,7 @@ pub.unenc data:bytes = PublicKey   -- ID 0a451fb6
 pk.aes key:int256 = PrivateKey     -- ID 3751e8a5
 ```
 
-<<<<<<< HEAD
-As an example, for keys of type ed25519 that are used for handshake, the key ID will be the SHA-256 hash of **[0xC6, 0xB4, 0x13, 0x48]** and the **public key** (36-byte array, prefix + key).
-=======
-As an example, for keys of type ed25519 that are used for handshake, the key ID will be the SHA-256 hash from **\[0xC6, 0xB4, 0x13, 0x48]** and **public key**, (36 byte array, prefix + key).
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kcc0cbf5d
+As an example, for keys of type ed25519 that are used for handshake, the key ID is the SHA-256 hash of [0xC6, 0xB4, 0x13, 0x48] and the public key (36-byte array, prefix + key).
 
 [Please see code example](https://github.com/xssnick/tonutils-go/blob/2b5e5a0e6ceaf3f28309b0833cb45de81c580acc/liteclient/crypto.go#L16).
 

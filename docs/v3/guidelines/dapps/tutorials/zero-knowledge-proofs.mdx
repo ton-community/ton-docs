@@ -83,11 +83,7 @@ We now have two main folders in our ZK project:
 
 ## Circom circuit
 
-<<<<<<< HEAD
-First, let’s create a folder named `simple-zk/circuits`. Inside this folder, create a new file and add the following code:
-=======
-First let's create a folder named `simple-zk/circuits`. Inside this folder, create a new file `simple-zk/circuits/test.circom` and add the following code:
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kb6219427
+First, let’s create a folder named `simple-zk/circuits`. Inside this folder, create a new file `simple-zk/circuits/test.circom` and add the following code:
 
 ```circom
 template Multiplier() {
@@ -341,7 +337,7 @@ The last part is the `groth16Verify` function that verifies the validity of the 
 ```
 
 <<<<<<< HEAD
-Next, we need to edit two files inside the `wrappers` folder. The first file that needs our attention is the `ZkSimple.compile.ts` file (If a different contract name was chosen in Step 1, update the filename accordingly.). We need to add `verifier.fc` to the list of contracts that must be compiled.
+Next, we need to edit two files inside the `wrappers` folder. The first file that needs our attention is the `ZkSimple.compile.ts` file (if a different contract name was chosen in Step 1, update the filename accordingly). We need to add `verifier.fc` to the list of contracts that must be compiled.
 =======
 Next, we need to edit two files inside the `wrappers` folder. The first file that needs our attention is the `ZkSimple.compile.ts` file (If a different contract name was chosen in Step 1, update the filename accordingly). We need to add `verifier.fc` to the list of contracts that must be compiled.
 >>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kb6219427
@@ -601,13 +597,8 @@ In this tutorial, you have learned:
 
 - The fundamentals of zero-knowledge proofs, specifically ZK-SNARKs.
 - How to write and compile circom circuits.
-<<<<<<< HEAD
-- How to use MPC and the Powers of TAU to generate verification keys.
-- How to work with snarkjs to export a FunC verifier.
-=======
 - How to use MPC and the Powers of Tau (PTAU) to generate verification keys.
-- How to work with Snarkjs to export a FunC verifier.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kb6219427
+- How to work with snarkjs to export a FunC verifier.
 - How to use Blueprint for deploying a verifier and writing tests.
 
 Note: This tutorial covered a basic ZK use case, but zero-knowledge proofs can power many advanced applications across different industries, including:
@@ -621,15 +612,9 @@ If you have any questions or run into any errors, feel free to reach out to the 
 
 ## 📌 References
 
-<<<<<<< HEAD
-- [TVM June 2023 upgrade](https://docs.ton.org/learn/tvm-instructions/tvm-upgrade)
+- [TVM upgrade Jul 2023](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07)
 - [snarkjs](https://github.com/iden3/snarkjs)
 - [snarkjs FunC fork](https://github.com/kroist/snarkjs)
-=======
-- [TVM upgrade Jul 2023](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07)
-- [SnarkJs](https://github.com/iden3/snarkjs)
-- [SnarkJs FunC fork](https://github.com/kroist/snarkjs)
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kb6219427
 - [Sample ZK on TON](https://github.com/SaberDoTcodeR/ton-zk-verifier)
 - [Blueprint](https://github.com/ton-org/blueprint)
 

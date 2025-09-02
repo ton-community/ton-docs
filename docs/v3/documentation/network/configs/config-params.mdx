@@ -191,11 +191,7 @@ B5EE9C7241010301002C0001216E5650525E838CB0000000085E9455904001010BF300000008A002
 (Saved to file config-msg-body.boc)
 ```
 
-<<<<<<< HEAD
-We have acquired the content of an internal message intended for the configuration smart contract, and we will send it from a MasterChain wallet smart contract with an appropriate amount of Toncoin. To find the address of the configuration smart contract, you can enter the `getconfig 0` command in the Lite Client:
-=======
-We have acquired the content of an internal message intended for the configuration smart contract, along with an appropriate amount of Toncoin from any wallet smart contract located in the MasterChain. To find the address of the configuration smart contract, you can enter the `getconfig 0` command in the Lite Client:
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k750931a7
+We have acquired the content of an internal message intended for the configuration smart contract, and we will send it from a MasterChain wallet smart contract with an appropriate amount of Toncoin. To find the address of the configuration smart contract, enter the `getconfig 0` command in the Lite Client:
 
 ```
 > getconfig 0
@@ -326,11 +322,7 @@ Voting for a configuration proposal is limited to the current validators listed 
 
 - This process generates a file named `vote-msg-body.boc`, which contains the body of an internal message carrying a signed vote for this configuration proposal.
 
-<<<<<<< HEAD
-- After that, `vote-msg-body.boc` must be sent in an internal message from any smart contract residing in the masterchain (typically from the controlling smart contract of the validator) along with a small amount of Toncoins for processing (usually, 1.5 Toncoins are sufficient). This step follows the same procedure used during validator elections. The command is typically structured as follows:
-=======
 - After that, `vote-msg-body.boc` must be sent in an internal message from any smart contract residing in the MasterChain (typically from the controlling smart contract of the validator) along with a small amount of Toncoin for processing (usually, 1.5 Toncoin is sufficient). This step follows the same procedure used during validator elections. The command is typically structured as follows:
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k750931a7
 
   ```
   $ fift -s wallet.fif my_wallet_id -1:5555555555555555555555555555555555555555555555555555555555555555 1 1.5 -B vote-msg-body.boc

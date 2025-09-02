@@ -116,11 +116,7 @@ Create a `tsconfig.json`:
 [Read more about tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
 
 ### Add simple bot code
-<<<<<<< HEAD
-Create a `.env` file and add your bot token, DApp manifest, and wallet list cache time to live there:
-=======
-Create a `.env` file and add your bot token, DApp manifest, and wallets list cache time to live there:
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kc122a56b
+Create a `.env` file and add your bot token, DApp manifest, and wallet list cache time-to-live there:
 
 [See more about tonconnect-manifest.json](https://github.com/ton-connect/sdk/tree/main/packages/sdk#add-the-tonconnect-manifest)
 
@@ -1032,11 +1028,7 @@ export async function handleSendTXCommand(msg: TelegramBot.Message): Promise<voi
 
 Here we check if user's wallet is connected and process sending transaction.
 Then we send a message to the user with a button that opens user's wallet (wallet universal link without additional parameters).
-<<<<<<< HEAD
-Note that this button contains an empty deep link. It means that the send transaction request data goes through the HTTP bridge, and the transaction will appear in the user's wallet even if they just open the wallet app without clicking this button.
-=======
-Note that this button contains an empty deep link. It means that the send-transaction request data goes through the http-bridge, and the transaction will appear in the user's wallet, even if they simply open the wallet app without clicking this button.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kba7299d2
+Note that this button contains an empty deep link. It means the send transaction request data goes through the HTTP bridge, and the transaction will appear in the user's wallet even if they just open the wallet app without clicking this button.
 
 Let's register this handler:
 ```ts
@@ -1576,11 +1568,7 @@ async function onWalletClick(query: CallbackQuery, data: string): Promise<void> 
 That's it! Compile and run the bot and try to call `/connect` twice.
 
 ### Improve interaction with @wallet
-<<<<<<< HEAD
-Starting from v3, TON Connect supports connection to TWA wallets like @wallet. At the moment in the tutorial, the bot could be connected to @wallet.
-=======
 Starting with v3, TON Connect supports connections to Telegram Web App wallets like @wallet; in this tutorial, the bot can connect to @wallet.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kba7299d2
 However, we should improve redirection strategy to provide better UX. Moreover, let's add `Connect @wallet` button to the first ("Universal QR") screen.
 
 First, let's create some utility functions:

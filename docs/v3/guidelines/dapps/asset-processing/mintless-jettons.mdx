@@ -85,13 +85,8 @@ By following these steps, you can deploy a mintless jetton that users can seamle
 
 Auditing the airdrop and verifying the total supply involves a few steps.
 
-<<<<<<< HEAD
-### Accessing the merkle dump
-- Download the Merkle tree data from the `mintless_merkle_dump_uri` in the metadata. It can be stored in TON Storage, IPFS, a web 2.0 resource, or other formats. This file contains `HashMap{address -> airdrop_data}` as a BoC file. The `airdrop_data` includes the amount, Unix timestamp from which the claim is available (`start_from`), and Unix timestamp when the claim expires (`expired_at`).
-=======
 ### Accessing the merkle dump
 - Download the merkle tree data from the `mintless_merkle_dump_uri` in the metadata. It can be stored in TON Storage, IPFS, a Web 2.0 resource, or other formats. This file contains `HashMap{address -> airdrop_data}` as a BoC file. The `airdrop_data` includes the amount, Unix timestamp from which the claim is available (`start_from`), and Unix timestamp when the claim expires (`expired_at`).
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k95f608d2
 
 ### Checking integrity
 - Compare the mintless Merkle dump cell hash with the hash stored in the jetton minter. You can retrieve the latter on-chain using the `get_mintless_airdrop_hashmap_root` get-method of the minter contract.

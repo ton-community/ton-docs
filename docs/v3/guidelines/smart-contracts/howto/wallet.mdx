@@ -655,11 +655,7 @@ body := cell.BeginCell().
 Note that no `.endCell()` was used in defining the `toSign` here. In this case, it is necessary **to transfer toSign content directly to the message body**. If writing a cell was required, it would have to be stored as a reference.
 
 :::tip Wallet V4
-<<<<<<< HEAD
-In addition to the basic verification process we learned above for the Wallet V3, Wallet V4 smart contracts [extract the opcode to determine whether a simple translation or a message associated with the plugin](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L94-L100) is required. To match this version, it is necessary to add the `storeUint(0, 8).` (JS/TS), `MustStoreUInt(0, 8).` (Golang) functions after writing the **sequence number (`seqno`)** and before specifying the transaction mode.
-=======
 In addition to the basic verification process we learned above for the Wallet V3, Wallet V4 smart contracts [extract the opcode to determine whether a simple transaction or a message associated with the plugin](https://github.com/ton-blockchain/wallet-contract/blob/4111fd9e3313ec17d99ca9b5b1656445b5b49d8f/func/wallet-v4-code.fc#L94-L100) is required. To match this version, it is necessary to add the `storeUint(0, 8)` (JS/TS), `MustStoreUInt(0, 8)` (Go) functions after writing the **sequence number (seqno)** and before specifying the transaction mode.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k455c5414
 :::
 
 ### External message creation

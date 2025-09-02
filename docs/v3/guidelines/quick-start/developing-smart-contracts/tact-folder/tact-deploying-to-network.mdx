@@ -16,11 +16,7 @@ The address of a smart contract is a hash of the aggregated initial code and dat
 
 ### You already know the address
 
-<<<<<<< HEAD
 In TON, any address that doesn't have any data is considered in the `nonexist` state. Nevertheless, when we created a wallet using the wallet app in the [Getting started](/v3/guidelines/quick-start/getting-started) section, we were still able to get the address of our **future** wallet smart contract from the wallet app before its deployment and examine it in the explorer.
-=======
-In TON, any address that doesn't have any data is considered in the `nonexist` state. Nevertheless, when we created a wallet using the wallet app in the [Getting started](/v3/guidelines/quick-start/getting-started) section, we were still able to get the address of our **future** wallet smart contract from the wallet app before its deployment and examine it in the explorer.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k590c6bda
 
 The reason behind this is that creating your **private** and **public** key pair through a **mnemonic phrase**, where the second key is part of the initial data of the smart contract, makes the `state_init` of our contract fully determined:
 - **code** is one of the standard wallet implementations, like `v5r1`.
@@ -57,11 +53,7 @@ Now that our smart contracts are fully tested, we are ready to deploy them to TO
 
 ### Step 1: update the deployment script
 
-<<<<<<< HEAD
 Deployment scripts rely on the same wrappers that you have used in testing scripts. We will use one script to deploy the previously developed smart contract. Update `deployHelloWorld.ts` with this code:
-=======
-Deployment scripts rely on the same wrappers that you have used in testing scripts. We will use one script to deploy the previously developed smart contract. Update `deployHelloWorld.ts` with this code:
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k590c6bda
 
 ```typescript title="/scripts/deployHelloWorld.ts"
 // @version TypeScript 5.8.3
@@ -140,11 +132,7 @@ Contract deployed at address EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 You can view it at https://testnet.tonscan.org/address/EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 ```
 
-<<<<<<< HEAD
 **Congratulations!** Your custom `smart contract` is ready to execute `get methods` the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs) section and execute `transactions` the same as in the [Blockchain interaction](/v3/guidelines/quick-start/blockchain-interaction/writing-to-network) section — consider reading it to understand how to interact with `smart contracts` off-chain if you haven't already.
-=======
-**Congratulations!** Your custom `smart contract` is ready to execute `get methods` the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs) section and execute `transactions` the same as in the [Blockchain interaction](/v3/guidelines/quick-start/blockchain-interaction/writing-to-network) section — consider reading it to understand how to interact with `smart contracts` off-chain if you haven't already.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k590c6bda
 
 :::tip
 Using `Blueprint` and wallet apps is not the only option. You can create a message with [state_init](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) by yourself. Moreover, you can do it even through a smart contract's [internal message](/v3/documentation/smart-contracts/message-management/sending-messages#types-of-messages).
@@ -157,11 +145,7 @@ Now, it’s time to dive deeper and keep building. Here are some helpful resourc
 - [Official website](https://tact-lang.org) - overview, news, and ecosystem links
 - [Tact documentation](https://docs.tact-lang.org) — the go-to reference for language features
 - [Tact GitHub repo](https://github.com/tact-lang) — source code, issues, and contributions
-<<<<<<< HEAD
 - [Tact By Example](https://tact-by-example.org/all) — hands-on smart contract examples
-=======
-- [Tact By Example](https://tact-by-example.org/all) — hands-on smart contract examples
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/k590c6bda
 - [Tact smart battle](https://github.com/ton-studio/tact-smart-battle) — coding challenges to sharpen your skills
 - [@tact_kitchen](https://t.me/tact_kitchen) — channel with the latest Tact updates
 - [@tactlang](https://t.me/tactlang) — chat for dev discussions and help
