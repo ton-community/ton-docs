@@ -23,7 +23,7 @@ For a deeper breakdown of how fees work in TON, refer to:
 To simplify tracking changes in gas usage and data size,
 we’ve introduced a reporting system that lets you collect and compare metrics across different versions of a contract.
 
-To enable this, write test scenarios that cover the contract’s primary usage patterns and verify that its behavior is as expected. This approach is sufficient to gather relevant metrics, which you can later use to compare performance changes after updating the implementation.
+To enable this, write test scenarios that cover the contract’s primary usage patterns and verify expected behavior. This approach is sufficient to gather relevant metrics, which you can later use to compare performance changes after updating the implementation.
 
 Before running the tests, a store is created to collect metrics from all transactions generated during the tests. After test execution, the collected metrics are supplemented with [ABI information from the snapshot](https://github.com/ton-org/sandbox/blob/main/docs/collect-metric-api.md#abi-auto-mapping), and a report is generated based on this data.
 
@@ -117,7 +117,7 @@ npx blueprint test --gas-report
 
 This runs your tests with gas tracking enabled and outputs a `gas-report.json` with transaction metrics.
 
-```cpp
+```text
 ...
 PASS  Comparison metric mode: gas depth: 1
 Gas report write in 'gas-report.json'
@@ -141,7 +141,7 @@ Gas report write in 'gas-report.json'
 You can use the `cells` and `bits` values from the report to estimate the **storage fee** for your contract.
 Here’s the formula:
 
-```cpp
+```text
 storage_fee = ceil(
                   (account.bits * bit_price
                   + account.cells * cell_price)
@@ -184,7 +184,7 @@ npx blueprint test --gas-report
 
 Now the method name appears in the report as `increase`, making it easier to read:
 
-```cpp
+```text
 ...
 │           ├──────────────┼──────────┼────────┼───────┤
 │           │   increase   │   2681   │   11   │  900  │
@@ -201,7 +201,7 @@ npx blueprint snapshot --label "v1"
 
 This creates a snapshot file in `.snapshot/`:
 
-```cpp
+```text
 ...
 PASS  Collect metric mode: "gas"
 Report write in '.snapshot/1749821319408.json'
@@ -239,7 +239,7 @@ npx blueprint test --gas-report
 
 You see a side-by-side comparison of gas usage before and after the change:
 
-```cpp
+```text
 ...
 PASS  Comparison metric mode: gas depth: 2
 Gas report write in 'gas-report.json'
@@ -267,7 +267,7 @@ You can do this in one of two ways:
 
 Add the necessary environment and reporter settings:
 
-```ts title="jest.config.ts"
+```diff title="jest.config.ts"
 import type { Config } from 'jest';
 
 const config: Config = {
@@ -279,7 +279,7 @@ export default config;
 ```
 
 :::tip
-See the full list of options in the [Sandbox jest config docs](https://github.com/ton-org/sandbox?tab=readme-ov-file#setup-in-jestconfigts).
+See the full list of options in the [Sandbox Jest config docs](https://github.com/ton-org/sandbox/blob/main/README.md#setup-in-jestconfigts).
 :::
 
 #### Option 2: create a separate config `gas-report.config.ts`
@@ -310,7 +310,7 @@ npx blueprint snapshot --label 'v2' -- --config gas-report.config.ts
 
 You can collect metrics manually using the low-level API from `@ton/sandbox`.
 
-```typescript title=""
+```typescript title="collect-metrics.ts"
 import {
     Blockchain,
     createMetricStore,
@@ -338,6 +338,6 @@ main().catch((error) => {
 });
 ```
 
-For more details, see the [Collect Metric API documentation](https://github.com/ton-org/sandbox/blob/develop/docs/collect-metric-api.md#example).
+For more details, see the [Collect Metric API documentation](https://github.com/ton-org/sandbox/blob/main/docs/collect-metric-api.md#example).
 
 <Feedback />

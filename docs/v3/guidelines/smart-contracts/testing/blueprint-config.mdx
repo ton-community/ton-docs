@@ -8,7 +8,7 @@
 - Keep a single source of truth every team member shares.
 - Still freely override any option with a CLI flag when you need to.
 
-### File skeleton
+## File skeleton
 
 ```ts
 import { Config } from '@ton/blueprint';
@@ -18,34 +18,37 @@ export const config: Config = {
 };
 ```
 
+Blueprint loads the named export `config` from `blueprint.config.ts`.
+
 After that, you can simply call:
 
 ```bash
 npx blueprint run          # or build / test / etc.
 ```
 
-CLI flags always have higher priority and can temporarily override the settings from the config.
+ 
 
-### Option reference
+## Option reference
 
 <div className="doc-table blueprint-options">
 | Path | Type / Values | Default | Description |
 |------|---------------|---------|-------------|
-| `plugins` | `Plugin[]` | `[]` | Connect external Blueprint extensions. A plugin must implement the `Plugin` interface and return a set of CLI runners. |
+| `plugins` | `Plugin[]` | `[]` | Connect external Blueprint extensions. A plugin must implement the `Plugin` interface. |
 | `network` | `'mainnet' \| 'testnet'` or `CustomNetwork` | `undefined` | Default network environment. If omitted, Blueprint will ask at runtime. |
+| _Note (CustomNetwork):_ |  |  | When using the object form (`CustomNetwork`), the following fields apply. Defaults mentioned below apply only within `CustomNetwork`. |
 | `network.endpoint` | `string` | — | RPC node URL. Required for `custom`; for other types, the built-in [TON Center](/v3/guidelines/dapps/apis-sdks/ton-http-apis#rpc-nodes) endpoint is used. |
-| `network.version` | `'v2' \| 'v4' \| 'tonapi' \| 'liteclient'` | `'v2'` | API version of the target node. |
+| `network.version` | `'v2' \| 'v4' \| 'tonapi' \| 'liteclient'` | `'v2'` | API backend/mode — `v2`/`v4`: TON Center; `tonapi`: TonAPI; `liteclient`: lite-client. See [TON HTTP APIs](/v3/guidelines/dapps/apis-sdks/ton-http-apis). |
 | `network.key` | `string` | — | API key if required (e.g., TON Center v2 / TonAPI). |
 | `network.type` | `'mainnet' \| 'testnet' \| 'custom'` | `'custom'` | Logical network type that will be reflected in explorer links, etc. |
 | `separateCompilables` | `boolean` | `false` | When `true`, `*.compile.ts` files are placed into `compilables` folder (otherwise into `wrappers`). |
 | `requestTimeout` | `number` (ms) | `undefined` | Overrides the global HTTP timeout for API requests. |
-| `recursiveWrappers` | `boolean` | `false` | Recursively walk through sub-folders of `wrappers` / `compilables` when searching for contracts. |
+| `recursiveWrappers` | `boolean` | `false` | Recursively walk through subfolders of `wrappers/compilables` when searching for contracts. |
 | `manifestUrl` | `string` | `'https://raw.githubusercontent.com/ton-org/blueprint/main/tonconnect/manifest.json'` | URL of the `manifest.json` file that a TON Connect wallet shows to the user. |
 </div>
 
-> **Priority:** CLI flags (e.g. `--custom …`) always override values from the config.
+> **Priority:** CLI flags (e.g. `--testnet ...`) always override values from the config.
 
-### Full example
+## Full example
 
 ```ts
 import { Config } from '@ton/blueprint';
@@ -68,7 +71,9 @@ export const config: Config = {
 };
 ```
 
-### When to use
+Note: `blueprint-scaffold` is shown only as an example plugin; replace it with your own plugin as needed.
+
+## When to use
 
 1. **CI & automation** – run `blueprint build`, `blueprint test`, etc. without any interactive questions.  
 2. **Team projects** – share the same network parameters and timeouts across all developers.  
