@@ -6,15 +6,14 @@ import ThemedImage from '@theme/ThemedImage';
 
 ## How RedStone oracles work with TON
 
-RedStone oracles use an alternative design of providing oracle data to smart contracts. Instead of constantly persisting data on the contract's storage (by data providers), the information is brought on-chain only when needed (by end users). Until that moment data remains in the decentralized cache layer, which is powered by RedStone light cache gateways and
-streams data broadcasting protocol. Data is transferred to the contract by end users, who should attach signed data
+RedStone oracles use an alternative design of providing oracle data to smart contracts. Instead of constantly persisting data on the contract's storage (by data providers), the information is brought on-chain only when needed (by end users). Until that moment, data remains in the decentralized cache layer, powered by RedStone light cache gateways and a stream-based data broadcasting protocol. Data is transferred to the contract by end users, who should attach signed data
 packages to their function invocations. The information integrity is verified on-chain through signature checking.
 
-To learn more about RedStone oracles design go to the [RedStone docs](https://docs.redstone.finance/docs/introduction).
+To learn more about the RedStone oracle design, see the [RedStone docs](https://docs.redstone.finance/docs/introduction).
 
 ## Documentation links
 
-- [Redstone TON Connector](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector)
+- [RedStone TON Connector](https://github.com/redstone-finance/redstone-oracles-monorepo/tree/main/packages/ton-connector)
 
 ## Smart contracts
 
@@ -23,7 +22,7 @@ To learn more about RedStone oracles design go to the [RedStone docs](https://do
 - Sample oracle contract that consumes RedStone oracles data [price_manager.fc](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/contracts/price_manager.fc) written in
   FunC. It requires [TVM Upgrade 2023.07](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07).
 
-#### initial data
+#### Initial Data
 
 As mentioned above, the data packages transferred to the contract are being verified by signature checking.
 To be counted to achieve the `signer_count_threshold`, the signer signing the passed data
