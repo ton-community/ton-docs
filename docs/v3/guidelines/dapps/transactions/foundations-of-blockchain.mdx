@@ -42,13 +42,13 @@ The model is used to precisely describe and analyze distributed systems. For exa
 
 An **account** in TON is an actor characterized by the following components:
 
-- **Account properties** — common properties of any account: _ID, balance, status, and last transaction (`last_tx`)_
+- **Account properties** — common properties of any account: _ID, balance, state, and last transaction (`last_tx`)_
 - **Data** — user defined data
 - **Code** — custom logic defining the account's behavior
 
 The general state fully defines all account types in TON. Examples:
 
-- `(ID1, 0 TON, unexist)`
+- `(ID1, 0 TON, nonexist)`
 - `(ID2, 10 TON, uninit, last_tx)`
 - `(ID3, 0 TON, frozen)`
 
@@ -68,7 +68,7 @@ A **smart contract** is an account whose _code_ and _data_ are already deployed 
 
 - An **account** is an actor that has a general state — such as balance, address, and status — and may optionally include code and data.
 
-Example: `(ID1, 0 TON, unexist)` or `(ID2, 2 TON, inited, last_tx, data, code)`
+Example: `(ID1, 0 TON, nonexist)` or `(ID2, 2 TON, inited, last_tx, data, code)`
 
 - A **smart contract** is an actor with **deployed** code and data that define its specific behavior.
 
@@ -171,14 +171,14 @@ Let’s clarify which properties are part of the **account properties**, accordi
 
 - ID → `MsgAddressInt`
 - Balance → `CurrencyCollection`
-- Status → `AccountState`
+- State → `AccountState`
 - Last transaction logical time (`last_trans_lt`) — also part of the general state
 
 Meanwhile, the data and code are defined within the state:` AccountState` field.
 
 Now, let’s take a closer look at the account properties and how it’s represented in the data layout.
 
-### Account status
+### Account state
 
 TON defines account states `AccountState` as follows:
 
@@ -197,6 +197,15 @@ account_frozen$01 state_hash:bits256 = AccountState;
 The diagram below illustrates the lifecycle of an account in the TON blockchain, showing how its state changes under different conditions.
 
 ![](/img/docs/blockchain-fundamentals/account_states.svg)
+
+#### Account state vs transaction status
+
+- On-chain storage keeps an `Account` in one of two container forms:
+  - `account_none$0 = Account` — the account is absent on-chain (often called "nonexist").
+  - `account$1 ... storage:AccountStorage = Account` — the account exists and its `AccountStorage.state` is one of the `AccountState` variants (`uninit`, `active`, `frozen`).
+- Transactions use a separate tag `AccountStatus` to record the status before and after a transaction: `orig_status` and `end_status`.
+  - TL‑B: `acc_state_uninit$00`, `acc_state_frozen$01`, `acc_state_active$10`, `acc_state_nonexist$11`.
+  - Note: `AccountStatus` is part of the transaction record, not `AccountStorage`. `nonexist` corresponds to `account_none$0` (account absence), not to an `AccountState` variant.
 
 ### Smart contract structure
 
