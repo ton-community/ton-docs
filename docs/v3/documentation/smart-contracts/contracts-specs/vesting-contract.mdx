@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Vesting contract
 
-The vesting contract is a smart contract implementation on the TON blockchain, enabling secure, scheduled distribution of Toncoin assets. This contract provides a robust framework for token management, ensuring the controlled release of funds based on predetermined schedules and conditions.
+The vesting contract is a smart contract implementation on the TON Blockchain, enabling secure, scheduled distribution of Toncoin assets. This contract provides a robust framework for token management, ensuring the controlled release of funds based on predetermined schedules and conditions.
 
 ## Core functionality
 
@@ -22,7 +22,7 @@ During deployment, the system establishes the following parameters, which cannot
 | `vesting_sender_address` | Authorized address for locked funds management  | Configurable         |
 | `owner_address`          | Beneficiary address for Toncoin distribution    | Configurable         |
 
-You can acquire these specific parameters using the `get_vesting_data()` method.
+You can retrieve these specific parameters using the `get_vesting_data()` method.
 
 The parameters must satisfy these conditions:
 
@@ -53,7 +53,7 @@ You can use the `get_locked_amount(int at_time)` method to calculate how much wi
 
 A whitelist contains addresses to which you can send Toncoin, even if the coins remain locked.
 
-The `get_whitelist()` method retrieves all whitelist addresses as a list of (wc, hash_part) tuples. You can use the `is_whitelisted(slice address)` method to check if a specific address is on the whitelist.
+The `get_whitelist()` method retrieves all whitelist addresses as a list of (workchain_id, hash_part) tuples. You can use the `is_whitelisted(slice address)` method to check if a specific address is on the whitelist.
 
 The `vesting_sender_address` can add new addresses to the whitelist at any time using the `op::add_whitelist` message, but no addresses can be removed from the whitelist. You can always send locked coins to the `vesting_sender_address` without adding it to the whitelist.
 

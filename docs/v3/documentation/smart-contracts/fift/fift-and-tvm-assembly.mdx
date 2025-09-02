@@ -122,5 +122,5 @@ int mul_mod_better(int a, int b, int m) inline_ref {        ;; 1110 gas units
 int mul_mod_best(int a, int b, int m) asm "x{A988} s,";     ;; 65 gas units
 ```
 
-The `x{A988}` opcode implements an optimized division operation with built-in multiplication (as specified in [section 5.2 Division](/v3/documentation/tvm/instructions#A988)). This specialized instruction directly computes just the modulo remainder of the operation, skipping unnecessary computation steps. The `s,` suffix then handles the result storage - it takes the resulting slice from the stack's top and efficiently writes it into the target builder. Together, this combination delivers substantial gas savings compared to conventional approaches.
+The `x{A988}` opcode implements an optimized division operation with built-in multiplication (as specified in [TVM instructions](/v3/documentation/tvm/tvm-overview#tvm-instructions)). This specialized instruction directly computes just the modulo remainder of the operation, skipping unnecessary computation steps. The `s,` suffix then handles the result storage - it takes the resulting slice from the stack's top and efficiently writes it into the target builder. Together, this combination delivers substantial gas savings compared to conventional approaches.
 <Feedback />
