@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-import Button from '@site/src/components/button'
+import Button from '@site/src/components/button';
 
 # TON node types
 
@@ -8,16 +8,16 @@ import Button from '@site/src/components/button'
 
 Nodes perform different functions within the TON protocol:
 
-- **Full** and **archive nodes** maintain the blockchain block and transaction history, enable users and client applications to look for blocks and transactions, and send new transactions into the blockchain;
+- **Full nodes** and **archive nodes** maintain the blockchain block and transaction history, enable users and client applications to look for blocks and transactions, and send new transactions into the blockchain.
 - **Validator nodes** verify transactions, ensuring blockchain security.
 
-Below, you find more detailed information about each node type and the interaction of full and archive nodes with client applications.
+Below, you will find more detailed information about each node type and the interaction of full and archive nodes with client applications.
 
 ## Full node
 
-**The full node** is a basic node type within the TON blockchain. It serves as the backbone of the TON blockchain by keeping its block history—in other words, its _current state_.
+**A full node** is a basic node type within the TON blockchain. It serves as the backbone of the TON blockchain by keeping the current state of the blockchain (with recent history).
 
-Compared to **archive nodes**, full nodes keep only the latest part of the blockchain state, which is vital for ensuring client applications' network stability and operation. Full nodes _prune_ the state of the TON blockchain they keep. This means the full node automatically removes earlier blocks that become unnecessary for the network to manage its data volume effectively.
+Compared to **archive nodes**, full nodes keep only the latest part of the blockchain state, which is vital for the stability and operation of client applications on the network; full nodes prune the blockchain state they keep, automatically removing older data that is no longer required.
 
 Full nodes can run in liteserver mode to let client applications query blocks and transactions and submit new ones—see [Interacting with TON nodes](#interacting-with-ton-nodes) below.
 
