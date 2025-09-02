@@ -116,7 +116,11 @@ Create a `tsconfig.json`:
 [Read more about tsconfig.json](https://www.typescriptlang.org/docs/handbook/tsconfig-json.html)
 
 ### Add simple bot code
+<<<<<<< HEAD
 Create a `.env` file and add your bot token, DApp manifest, and wallet list cache time to live there:
+=======
+Create a `.env` file and add your bot token, DApp manifest, and wallets list cache time to live there:
+>>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kc122a56b
 
 [See more about tonconnect-manifest.json](https://github.com/ton-connect/sdk/tree/main/packages/sdk#add-the-tonconnect-manifest)
 
@@ -410,13 +414,8 @@ bot.onText(/\/connect/, async msg => {
 });
 ```
 
-<<<<<<< HEAD
 We need to wrap the TON Connect deep link as https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(link)} because Telegram inline keyboard buttons accept only HTTP/HTTPS URLs and do not support custom schemes like `tc://`.
-The site https://ton-connect.github.io/open-tc redirects the user to the link passed in the `connect` query parameter, so it's a workaround to open a `tc://` link in Telegram.
-=======
-We need to wrap TonConnect deeplink as https://ton-connect.github.io/open-tc?connect=${encodeURIComponent(link)} because only `http` links are allowed in the Telegram inline keyboard.
-https://ton-connect.github.io/open-tc redirects the user to the link passed in the `connect` query parameter; it is a workaround to open a `tc://` link in Telegram.
->>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kba7299d2
+https://ton-connect.github.io/open-tc redirects the user to the link passed in the `connect` query parameter; it’s a workaround to open a `tc://` link in Telegram.
 
 Note that we replaced `connector.connect` call arguments. Now we are generating a unified link for all wallets.
 
