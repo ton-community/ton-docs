@@ -11,20 +11,20 @@ module.exports = [
       'v3/documentation/smart-contracts/overview',
       {
         type: 'category',
+        label: 'Development environment',
+        items: [
+          'v3/documentation/smart-contracts/getting-started/javascript',
+          'v3/documentation/smart-contracts/getting-started/ide-plugins',
+          'v3/documentation/smart-contracts/getting-started/testnet',
+        ],
+      },
+      {
+        type: 'category',
         label: 'Addresses',
         items: [
           'v3/documentation/smart-contracts/addresses/address',
           'v3/documentation/smart-contracts/addresses/address-formats',
           'v3/documentation/smart-contracts/addresses/address-states',
-        ],
-      },
-      {
-        type: 'category',
-        label: 'Getting started',
-        items: [
-          'v3/documentation/smart-contracts/getting-started/javascript',
-          'v3/documentation/smart-contracts/getting-started/ide-plugins',
-          'v3/documentation/smart-contracts/getting-started/testnet',
         ],
       },
       {
