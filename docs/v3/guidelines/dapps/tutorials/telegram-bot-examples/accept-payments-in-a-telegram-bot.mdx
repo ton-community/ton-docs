@@ -531,7 +531,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters.state import State, StatesGroup
 ```
 
-`json` is needed to work with json files. `logging` is needed to log errors.
+`json` is used to work with JSON files. `logging` is used to log messages and errors.
 
 ```python
 import json
@@ -606,7 +606,7 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 
 ### States
 
-States allow us to devide the bot workflow into stages, each designated for a specific task.
+States allow us to divide the bot workflow into stages, each designated for a specific task.
 
 ```python
 class DataInput (StatesGroup):
@@ -631,7 +631,7 @@ If we want to handle a message from the user, we will use `message_handler` by p
 
 In the decorator, we can specify the conditions under which the function will be called. For example, if we want the function to be called only when the user sends a message with the text `/start`, then we will write the following:
 
-```
+```python
 @dp.message_handler(commands=['start'])
 ```
 
@@ -695,9 +695,9 @@ async def cmd_buy(message: types.Message):
 
 So, when a user sends `/buy` command, the bot sends him a reply keyboard with air types. After the user chooses the type of air, the bot will set the state to `secondState`.
 
-This handler will work only when `secondState` is set and will be waiting for a message from the user with the air type.  In this case, we need to store the air type that the user choses, so we pass FSMContext as an argument to the function.
+This handler will work only when `secondState` is set and will be waiting for a message from the user with the air type. In this case, we need to store the air type that the user chooses, so we pass FSMContext as an argument to the function.
 
-FSMContext is used to store data in the bot's memory. We can store any data in it but this memory is not persistent, so if the bot is restarted, the data will be lost. But it's good to store temporary data in it.
+FSMContext is used to store data in the bot's memory. We can store any data in it, but this memory is not persistent, so if the bot is restarted, the data will be lost. It's good to store temporary data in it.
 
 ```python
 # handle air type
@@ -737,15 +737,15 @@ Now we have all the data required for the payment process. We just need to gener
 
 The bot provides three payment buttons:
 
-- TON wallet,
+- TON Wallet,
 - Tonhub,
 - Tonkeeper.
 
-These buttons are advantageous of special buttons because they guide users to install a wallet if they don't have one
+These buttons are convenient because they guide users to install a wallet if they don't have one
 
 You are free to use whatever you want.
 
-And we need a button that the user will press after tmaking a transaction, allowing the bot to verify the payment.
+And we need a button that the user will press after making a transaction, allowing the bot to verify the payment.
 
 ```python
 @dp.message_handler(state=DataInput.WalletState)
@@ -838,7 +838,7 @@ if __name__ == '__main__':
 ```
 
 This part is needed to start the bot.
-In `skip_updates=True` we specify that we do not want to process old messages. But if you want to process all messages, you can set it to `False`.
+In `skip_updates=True`, we specify that we do not want to process old messages. But if you want to process all messages, you can set it to `False`.
 
 :::info
 
@@ -857,7 +857,7 @@ Steps to run the bot:
 
 All files must be in the same folder. To start the bot, you need to run the `main.py` file. You can do it in your IDE or in the terminal like this:
 
-```
+```bash
 python main.py
 ```
 
@@ -865,7 +865,7 @@ If errors occur, check them in the terminal. Maybe you have missed something in 
 
 Example of a working bot [@AirDealerBot](https://t.me/AirDealerBot)
 
-![bot](/img/tutorials/apiatb-bot.png)
+![Storefront bot screenshot](/img/tutorials/apiatb-bot.png)
 
 ## References
 

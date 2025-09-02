@@ -30,9 +30,9 @@ You will be asked a few questions during the setup.
 Field | Hint
 :----- | :-----
 Network | Select `testnet` since this is a test game.
-Type | Select `highload-v2`wallet type, as it offers the best performance for use as a master wallet.
-Storage | Storage is used to hold `NFT`/`SB`T files. You can choose between `Amazon S3` (centralized) or `Pinata` (decentralized).  For this tutorial, we'll use Pinata since decentralized storage is more illustrative for a Web3 game.
-IPFS gateway | This service loads asset metadata from  `pinata`, `ipfs.io,  or a custom service URL.
+Type | Select `highload-v2` wallet type to use as a master wallet.
+Storage | Storage is used to hold `NFT`/`SBT` files. You can choose between `Amazon S3` (centralized) or `Pinata` (decentralized). For this tutorial, we'll use Pinata since decentralized storage is more illustrative for a Web3 game.
+IPFS gateway | This service loads asset metadata from `pinata`, `ipfs.io`, or a custom service URL.
 
 The script will output a link where you can view the created wallet's state.
 
@@ -41,7 +41,7 @@ The script will output a link where you can view the created wallet's state.
 As you can see, the wallet has not actually been created yet. To finalize the creation, we need to deposit funds into it. In a real-world scenario, you can fund the wallet however you prefer using its address. In our case, we will use the [Testgiver TON Bot](https://t.me/testgiver_ton_bot). Open it to claim 5 test Toncoin.
 
 A little later, you should see 5 TON in the wallet, and its status will change to uninit. The wallet is now ready. After the first transaction, its status will change to active.
-![Wallet status after top-up](/img/tutorials/gamefi-flappy/wallet-nonexist-status.png)
+![Wallet status after top-up](/img/tutorials/gamefi-flappy/wallet-uninit-status.png)
 
 ### Mint in-game currency
 We are going to create an in-game currency to reward users.
@@ -52,11 +52,11 @@ You will be asked a few questions during the setup:
 
 Field | Hint
 :----- | :-----
-Name | Token name, for example ` Flappy Jetton `.
+Name | Token name, for example `Flappy Jetton`.
 Description | Token description, for instance: A vibrant digital token from the Flappy Bird universe.
 Image | Download the prepared [jetton logo](https://raw.githubusercontent.com/ton-community/flappy-bird/ca4b6335879312a9b94f0e89384b04cea91246b1/scripts/tokens/flap/image.png) and specify the file path. Of course, you can use any image.
 Symbol | `FLAP` or enter any abbreviation you want to use.
-Decimals | How many zeros after the dot your currency will have. Let’ it be `0` in our case.
+Decimals | How many zeros after the dot your currency will have. Let it be `0` in our case.
 
 The script will output a link where you can view the created jetton's state. It will have an active status. The wallet’s status will change from uninit to active.
 
@@ -162,7 +162,7 @@ const unsubscribe = gameFi.onWalletChange(onWalletChange)
 
 > To learn about more complex scenarios please check out the full implementation of [wallet connect flow](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/index.ts#L16).
 
-Read how [game UI managing](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/index.ts#L50) can be implemented.
+Learn how to manage the [game UI](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/index.ts#L50).
 
 Now that we have the user's wallet connected, we can move forward.
 
@@ -175,7 +175,7 @@ Now that we have the user's wallet connected, we can move forward.
 To implement the achievements and reward system, we need to set up an endpoint that will be triggered each time a user plays.
 
 ### `/played` endpoint
-We need to create an endpoint `/played ` which does the following:
+We need to create an endpoint `/played` which does the following:
 - receives a request body containing the user’s wallet address and Telegram initial data, which is passed to the Mini App during launch. The initial data must be parsed to extract authentication details and verify that the user is sending the request on their own behalf.
 - tracks and stores the number of games a user has played.
 - checks whether this is the user’s first or fifth game. If so, it rewards the user with the corresponding SBT.
@@ -205,7 +205,7 @@ const playedInfo = await submitPlayed('http://localhost:3001', wallet.account.ad
 > Note: The examples use different localhost ports for separate services—`/played` on `3001` and `/purchases` on `3000`.
 > Note: The `/played` endpoint expects Telegram initial data in the request body as `tg_data`, while `/purchases` expects it as an `auth` query parameter.
 
-> Read [submitPlayer function](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/game-scene.ts#L10) code.
+> Read [submitPlayed function](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/game-scene.ts#L10) code.
 
 Let’s play for the first time and ensure we receive a FLAP token and an SBT. Click the Play button, fly through a pipe or two, then crash into a pipe. Everything works!
 
@@ -219,13 +219,13 @@ To set up an in-game shop, we need two components. The first is an endpoint that
 
 ### `/purchases` endpoint
 The endpoint does the following:
-- receive `auth` query parameter containing Telegram Mini App initial data.
+- receives the `auth` query parameter containing Telegram Mini App initial data.
 - retrieves the items a user has purchased and responds with a list of those items.
 
 > Read [/purchases](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/server/src/index.ts#L303) endpoint code.
 
 ### Purchases loop
-o track user payments, we need to monitor transactions in the master wallet. Each transaction must include a message in the format `userId`:`itemId`. We will store the last processed transaction, retrieve only new ones, assign purchased properties to users based on `userId` and `itemId`, and update the last transaction hash. This process will run in an infinite loop.
+To track user payments, we need to monitor transactions in the master wallet. Each transaction must include a message in the format `userId`:`itemId`. We will store the last processed transaction, retrieve only new ones, assign purchased properties to users based on `userId` and `itemId`, and update the last transaction hash. This process will run in an infinite loop.
 
 > Read the [purchase loop](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/server/src/index.ts#L110) code.
 
