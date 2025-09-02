@@ -9,13 +9,13 @@ Solidity is an object-oriented, high-level, strictly typed language influenced b
 
 FunC is a high-level language used to program smart contracts on TON blockchain. It is a domain-specific, C-like, statically typed language.
 
-The sections below will analyze briefly the following aspects of these languages: data types, storage, functions, flow control structures, and dictionaries (hashmaps).
+Below, we briefly analyze data types, storage, functions, flow control, and dictionaries (hashmaps).
 
-## Differences of Solidity and FunC
+## Differences between Solidity and FunC
 ### Storage layout
 
 #### Solidity
-Solidity uses a flat storage model, meaning it stores all state variables in a single, continuous block of memory called storage. The storage is a key-value store where each key is a 256-bit integer representing the storage slot number, and each value is the 256-bit word stored at that slot. Ethereum numbers the slots sequentially, starting from zero, and each slot can store a single word. Solidity allows the programmer to specify the storage layout using the storage keyword to define state variables. The order in which you define the variables determines their position in the storage.
+Solidity stores state variables in a flat key-value storage where each slot is a 256-bit word. Slots are numbered sequentially starting from zero, and declaration order (with packing rules) determines slot assignment. The `storage` keyword sets data location for reference types; it does not define layout.
 
 #### FunC
 Permanent storage data in TON blockchain is stored as a cell. Cells play the role of memory in the stack-based TVM. To read data from a cell, you need to transform a cell into a slice and then obtain the data bits and references to other cells by loading them from the slice. To write data, you must store data bits and references to other cells in a builder and cast the builder into a new cell.
@@ -26,22 +26,22 @@ Permanent storage data in TON blockchain is stored as a cell. Cells play the rol
 Solidity includes the following basic data types:
 - **Signed** and **Unsigned** integers
 - **Boolean**
-- **Addresses**, typically around 20 bytes, are used to store Ethereum wallet or smart contract addresses. If the address type contains the suffix keyword `payable,` it restricts it from storing only wallet addresses and using the transfer and send crypto functions.
-- **Byte arrays** — declared with the keyword **bytes**, is a fixed-size array used to store a predefined number of bytes up to 32, usually declared along with the keyword.
-- **Literals** — Immutable values such as addresses, rationals and integers, strings, Unicode, and hexadecimal can be stored in a variable.
+- **Addresses**, typically around 20 bytes, are used to store Ethereum wallet or smart contract addresses. If the type is `address payable`, the address can receive Ether via `.transfer` and `.send`.
+- **Byte arrays** — `bytes` is a dynamically sized byte array; fixed-size byte arrays are `bytes1` … `bytes32`.
+- **Literals** — integer, string, hex, and address literals.
 - **Enums**
-- **Arrays** fixed or dynamic
+- **Arrays** — fixed or dynamic
 - **Structs**
 - **Mappings**
 
 #### FunC
 In the case of FunC, the main data types are:
 - **Integers**
-- **Cell** — basic for TON opaque data structure, which contains up to 1,023 bits and up to 4 references to other cells
-- **Slice** and **Builder** — special flavors of the cell to read from and write to cells,
-- **Continuation** — another flavour of cell that contains ready-to-execute TVM byte-code
-- **Tuples** — is an ordered collection of up to 255 components, having arbitrary value types, possibly distinct.
-- **Tensors** — is an ordered collection ready for mass assigning like: `(int, int) a = (2, 4)`. A special case of tensor type is the unit type `()`. It represents that a function doesn’t return any value or has no arguments.
+- **Cell** — the basic opaque data structure in TON, containing up to 1023 bits and up to 4 references to other cells
+- **Slice** and **Builder** — specialized views for reading from and writing to cells.
+- **Continuation** — a TVM continuation used to manage execution flow.
+- **Tuples** — are an ordered collection of up to 255 components, having arbitrary value types, possibly distinct.
+- **Tensors** — are an ordered collection ready for mass assigning like: `(int, int) a = (2, 4)`. A special case of tensor type is the unit type `()`. It represents that a function doesn’t return any value or has no arguments.
 
 Currently, FunC does not support defining custom types. Read more about types in the [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
 
@@ -50,18 +50,18 @@ Currently, FunC does not support defining custom types. Read more about types in
 #### Solidity
 Solidity is a statically typed language, meaning each variable's type must be specified when declared.
 
-```js
+```solidity
 uint test = 1; // Declaring an unsigned variable of integer type
 bool isActive = true; // Logical variable
 string name = "Alice"; // String variable
 ```
 
 #### FunC
-FunC is a more abstract and function-oriented language. It supports dynamic typing and functional programming styles.
+FunC is a more abstract and function-oriented language. It is statically typed and supports type inference (e.g., `var`).
 
 ```func
 (int x, int y) = (1, 2); // A tuple containing two integer variables
-var z = x + y; // Dynamic variable declaration 
+var z = x + y; // Type‑inferred variable declaration 
 ```
 
 Read more on the [Statements](/v3/documentation/smart-contracts/func/docs/statements/) page.
@@ -73,7 +73,7 @@ Solidity supports `for`, `while`, and `do { ... } while` loops.
 
 If you want to do something 10 times, you can do it this way:
 
-```js
+```solidity
 uint x = 1;
 
 for (uint i; i < 10; i++) {
@@ -84,7 +84,7 @@ for (uint i; i < 10; i++) {
 ```
 
 #### FunC
-FunC, in turn, supports `repeat`, `while`, and `do { ... } until` loops. The `for` loop is not supported. If you want to execute the same code as in the example above on Func, you can use `repeat`
+FunC, in turn, supports `repeat`, `while`, and `do { ... } until` loops. The `for` loop is not supported. If you want to execute the same code as in the example above on FunC, you can use `repeat`
 
 ```func
 int x = 1;
@@ -103,7 +103,7 @@ Solidity approaches function declarations with a blend of clarity and control. I
 
 What sets Solidity apart is its categorization of function visibility—you can designate functions as `public`, `private`, `internal`, or `external`. These definitions dictate the conditions under which developers can access and call other parts of the contract or external entities. Below is an example in which we set the global variable `num` in the Solidity language: 
 
-```js
+```solidity
 function set(uint256 _num) public returns (bool) {
     num = _num;
     return true;
@@ -113,7 +113,7 @@ function set(uint256 _num) public returns (bool) {
 #### FunC
 Transitioning to FunC, the FunC program is essentially a list of function declarations/definitions and global variable declarations. A FunC function declaration typically starts with an optional declarator, followed by the return type and the function name. 
 
-Parameters are listed next, and the declaration ends with a selection of specifiers—such as `impure`, `inline/inline_ref`, and `method_id`. These specifiers adjust the function's visibility, ability to modify contract storage, and inlining behavior. Below is an example in which we store a storage variable as a cell in persistent storage in the Func language: 
+Parameters are listed next, and the declaration ends with a selection of specifiers—such as `impure`, `inline/inline_ref`, and `method_id`. These specifiers control purity (ability to modify storage), inlining behavior, and the ABI method ID; they do not control visibility. Below is an example in which we store a storage variable as a cell in persistent storage in the FunC language: 
 
 ```func
 () save_data(int num) impure inline {
@@ -143,11 +143,11 @@ Dictionary or hashmap data structure is essential for Solidity and FunC contract
 
 Mapping is a hash table in Solidity that stores data as key-value pairs, where the key can be any of the built-in data types, excluding reference types, and the data type's value can be any type. In Solidity and on the Ethereum blockchain, mappings typically connect a unique Ethereum address to a corresponding value type. In any other programming language, a mapping is equivalent to a dictionary.
 
-In Solidity, mappings don't have a length or the concept of setting a key or a value. Mappings are only applicable to state variables that serve as store reference types. When you initialize mappings, they include every possible key and map to values whose byte representations are all zeros.
+In Solidity, mappings don't have a length or the concept of setting a key or a value. Mappings can only be declared in storage (state variables); they are not allowed in memory. When you initialize mappings, they include every possible key and map to values whose byte representations are all zeros.
 
 #### FunC 
 
-An analogy of mappings in FunC is dictionaries or TON hashmaps. In the context of TON, a hashmap is a data structure represented by a tree of cells. Hashmap maps keys to values ​​of arbitrary type so that quick lookup and modification are possible. The abstract representation of a hashmap in TVM is a Patricia tree or a compact binary trie. 
+The analog of mappings in FunC is dictionaries (TON hashmaps). In the context of TON, a hashmap is a data structure represented by a tree of cells. A hashmap maps keys to values of arbitrary types so that quick lookup and modification are possible. The abstract representation of a hashmap in TVM is a Patricia tree or a compact binary trie. 
 
 Working with potentially large cell trees can create several problems. Each update operation builds an appreciable number of cells (each cell built costs 500 gas), meaning these operations can run out of resources if used carelessly. To avoid exceeding the gas limit, limit the number of dictionary updates in a single transaction. 
 
@@ -161,9 +161,9 @@ Solidity and FunC provide different approaches to interacting with smart contrac
 
 #### Solidity
 
-Solidity uses object-orienteered contracts that interact with each other through method calls. This design is similar to method calls in traditional object-oriented programming languages.
+Solidity uses object-oriented contracts that interact with each other through method calls. This design is similar to method calls in traditional object-oriented programming languages.
 
-```js
+```solidity
 // External contract interface
 interface IReceiver {
     function receiveData(uint x) external;
@@ -202,14 +202,14 @@ Initially, the smart contract recipient must describe how it will receive messag
 ```
 
 **Receiving message flow:**
-1. `recv_internal()` function is executed when a contract is accessed directly within the blockchain. For example, when a contract accesses our contract.
-2. The function accepts the amount of the contract balance, the amount of the incoming message, the cell with the original message, and the `in_msg_body` slice, which stores only the body of the received message. 
+1. `recv_internal()` is invoked when the contract receives an inbound internal message.
+2. Parameters: contract balance, message value, original message cell, and the `in_msg_body` slice (the body of the received message).
 3. Our message body will store two integer numbers. The first number is a 32-bit unsigned integer `op` defining the smart contract's operation. You can draw some analogy with Solidity and think of `op` as a function signature. 
-4. We use `load_uint ()` to read `op` as a number from the resulting slice.
+4. We use `load_uint()` to read `op` as a number from the resulting slice.
 5. Next, we execute business logic for a given operation. Note that we omitted this functionality in this example.
 
 
-Next, the sender's smart contract is to send the message correctly. This is accomplished with`send_raw_message`, which expects a serialized message as an argument.
+Next, the sender's smart contract is to send the message correctly. This is accomplished with `send_raw_message`, which expects a serialized message as an argument.
 
 ```func
 int num = 10;
@@ -217,7 +217,7 @@ cell msg_body_cell = begin_cell().store_uint(1,32).store_uint(num,32).end_cell()
 
 var msg = begin_cell()
             .store_uint(0x18, 6)
-            .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; in the example, we hardcode the recipient's address
+            .store_slice(addr) ;; in the example, we hardcode the recipient's address
             .store_coins(0)
             .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
             .store_ref(msg_body_cell)
@@ -227,8 +227,8 @@ send_raw_message(msg, mode);
 ```
 **Sending message flow:**
 1. Initially, we need to build our message. The complete structure of the send can be found [here](/v3/documentation/smart-contracts/message-management/sending-messages/). 
-2. The body of the message represents a cell. In `msg_body_cell` we do: `begin_cell()` - creates `Builder` for the future cell, first `store_uint` - stores the first uint into `Builder` (1 - this is our `op`), second `store_uint` - stores the second uint into `Builder` (num - this is our number that we will manipulate in the receiving contract), `end_cell()` - creates the cell.
-3. To attach the body that will come in `recv_internal` in the message,  we reference the collected cell in the message itself with `store_ref`.
+2. The body of the message represents a cell. In `msg_body_cell` we do: `begin_cell()` - creates `builder` for the future cell, first `store_uint` - stores the first uint into `builder` (1 - this is our `op`), second `store_uint` - stores the second uint into `builder` (num - this is our number that we will manipulate in the receiving contract), `end_cell()` - creates the cell.
+3. To attach the body that will come in `recv_internal` in the message, we reference the collected cell in the message itself with `store_ref`.
 4. Sending a message.
 
 This example shows how smart contracts can communicate with each other. 
