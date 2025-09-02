@@ -176,9 +176,9 @@ URL contents (from directly above):
 
 If the metadata byte string starts with `0x00`, it indicates on-chain or semi-chain NFT metadata.
 
-The metadata is stored in a dictionary where the key is the SHA256 hash of the attribute name, and the value is the data stored using the Snake or Chunked format.
+The metadata is stored in a dictionary where the key is the SHA-256 hash of the attribute name, and the value is the data stored using the Snake or Chunked format.
 
-To determine the NFT type, a developer must read known NFT attributes such as `uri`, `name`, `image`, `description`, and `image_data`. If the `uri` field is present within the metadata, it indicates a semi-chain layout, requiring the off-chain content specified in uri to be downloaded and merged with the dictionary values.
+To determine the NFT type, a developer must read known NFT attributes such as `uri`, `name`, `image`, `description`, and `image_data`. If the `uri` field is present within the metadata, it indicates a semi-chain layout, requiring the off-chain content specified in `uri` to be downloaded and merged with the dictionary values.
 
 Examples:
 
@@ -192,9 +192,9 @@ On-chain NFT parser: [stackblitz/ton-onchain-nft-parser](https://stackblitz.com/
 
 ## Important notes on NFT metadata
 
-1. For NFT metadata, the `name`, `description`, and `image`(or `image_data`) fields are required to display the NFT.
-2. For jetton metadata, the `name`, `symbol`, `decimals` and `image`(or `image_data`) fields are primary.
-3. Anyone can create an NFT or Jetton using any `name`, `description`, or `image`. To prevent scams and confusion, apps should clearly distinguish NFTs from other assets.
+1. For NFT metadata, the `name`, `description`, and `image` (or `image_data`) fields are commonly used to display the NFT.
+2. For jetton metadata, the `name`, `symbol`, `decimals` and `image` (or `image_data`) fields are commonly used.
+3. Anyone can create an NFT or jetton using any `name`, `description`, or `image`. To prevent scams and confusion, apps should clearly distinguish NFTs from other assets.
 4. Some items may include a `video` field linking to video content associated with the NFT or jetton.
 
 ## References

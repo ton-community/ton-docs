@@ -10,16 +10,16 @@ The following information assumes familiarity with our previous [section on Tonc
 
 ## Understanding the basics of NFTs
 
-NFTs operating on TON Blockchain are represented by the  [TEP-62](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) and [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md) standards.
+NFTs operating on TON Blockchain are represented by the [TEP-62](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) and [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md) standards.
 
 TON is designed for high performance, incorporating automatic sharding based on contract addresses to optimize NFT provisioning. To maintain efficiency, each NFT operates under its own smart contract. This enables collections of any size while minimizing development costs and performance bottlenecks. However, this structure introduces new considerations for NFT collection development.
 
 Since each NFT has its own smart contract, it is not possible to retrieve details of all NFTs in a collection through a single contract. Instead, querying both the collection contract and each individual NFT contract is required to gather complete collection data. Similarly, tracking NFT transfers necessitates monitoring all transactions related to each NFT within a collection.
 
 ### NFT collections
-An NFT Collection contract serves as an index and storage for NFT content. It should implement the following interfaces:
+An NFT collection contract serves as an index and storage for NFT content. It should implement the following interfaces:
 #### Get method `get_collection_data`
-```
+```func
 (int next_item_index, cell collection_content, slice owner_address) get_collection_data()
 ```
 General collection information retrieval, including:
@@ -29,17 +29,17 @@ General collection information retrieval, including:
   3. `owner_address` - A slice containing the collection owner’s address (can be empty).
 
 #### Get method `get_nft_address_by_index`
-```
+```func
 (slice nft_address) get_nft_address_by_index(int index)
 ```
 This method can be used to verify an NFT’s authenticity and confirm its membership in a specific collection. Additionally, it allows users to retrieve an NFT’s address by providing its collection index.
 
 
 #### Get method `get_nft_content`
-```
+```func
 (cell full_content) get_nft_content(int index, cell individual_content)
 ```
-Retrieving full NFT content
+Retrieving full NFT content:
 1. First, obtain the individual_content using the `get_nft_data()` method.
 2. Then, call `get_nft_content()` with the NFT index and `individual_content`.
 3. The method returns a TEP-64 cell containing the NFT’s full content.
@@ -49,25 +49,25 @@ Retrieving full NFT content
 Basic NFTs should implement:
 
 #### Get method `get_nft_data()`
-```
+```func
 (int init?, int index, slice collection_address, slice owner_address, cell individual_content) get_nft_data()
 ```
 
 #### Inline message handler for `transfer`
-```
+```tlb
 transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody
 ```
 To facilitate an NFT transfer, a transfer message containing specific parameters is required:
 1. `OP` - `0x5fcc3d14` - A constant defined in the TEP-62 standard.
-2. `queryId` - `uint64` - A unique identifier to track the message.
-3. `newOwnerAddress` - `MsgAddress` - The recipient’s smart contract address.
-4. `responseAddress` - `MsgAddress` - Address for returning unused funds (e.g., when sending extra TON to cover fees).
-5. `forwardAmount` - `VarUInteger 16` - The amount of TON forwarded with the message (typically 0.01 TON). This funds an internal notification message to the `newOwnerAddress` upon successful receipt of the NFT.
-6. `forwardPayload` - `Either Cell ^Cell` - Optional data included in the ownership_assigned notification message.
+2. `query_id` - `uint64` - A unique identifier to track the message.
+3. `new_owner` - `MsgAddress` - The recipient’s smart contract address.
+4. `response_destination` - `MsgAddress` - Address for returning unused funds (e.g., when sending extra TON to cover fees).
+5. `forward_amount` - `VarUInteger 16` - The amount of TON forwarded with the message (typically 0.01 TON). This funds an internal notification message to the `new_owner` upon successful receipt of the NFT.
+6. `forward_payload` - `Either Cell ^Cell` - Optional data included in the ownership_assigned notification message.
 
-This message (as explained above) is the primary way to interact with an NFT that changes ownership after receiving a notification as a result of the above message.
+This transfer message is the standard way to change NFT ownership and trigger the ownership_assigned notification.
 
-For example, wallets use this message to transfer an NFT item. When the NFT smart contract receives this message and executes it, the NFT contract storage (internal contract data) is updated along with the owner ID. In this way, the NFT item (contract) changes owners correctly. This process details a standard NFT transfer.
+For example, wallets use this message to transfer an NFT item. When the NFT smart contract receives this message and executes it, the NFT contract storage (internal contract data) is updated along with the owner address. In this way, the NFT item (contract) changes owners correctly. This process details a standard NFT transfer.
 
 In this case, the transfer amount should be set to an appropriate value (0.01 TON for a regular wallet, or more if you want to execute the contract by transferring the NFT) to ensure that the new owner receives a notice of the ownership transfer. This is important because the new owner will not be notified that they have received the NFT without this notice.
 
@@ -75,10 +75,10 @@ In this case, the transfer amount should be set to an appropriate value (0.01 TO
 
 Most SDKs provide built-in methods to retrieve NFT data, including: [tonweb(js)](https://github.com/toncenter/tonweb/blob/b550969d960235314974008d2c04d3d4e5d1f546/src/contract/token/nft/NftItem.js#L38), [tonutils-go](https://github.com/xssnick/tonutils-go/blob/fb9b3fa7fcd734eee73e1a73ab0b76d2fb69bf04/ton/nft/item.go#L132), [pytonlib](https://github.com/toncenter/pytonlib/blob/d96276ec8a46546638cb939dea23612876a62881/pytonlib/client.py#L771), and more.
 
-To fetch NFT details, the `get_nft_data()` method is used. For example, to verify the NFT at `EQB43-VCmf17O7YMd51fAvOjcMkCw46N_3JMCoegH_ZDo40e`(also known as [foundation.ton](https://tonscan.org/address/EQB43-VCmf17O7YMd51fAvOjcMkCw46N_3JMCoegH_ZDo40e) domain).
+To fetch NFT details, the `get_nft_data()` method is used. For example, to verify the NFT at `EQB43-VCmf17O7YMd51fAvOjcMkCw46N_3JMCoegH_ZDo40e` (also known as [foundation.ton](https://tonscan.org/address/EQB43-VCmf17O7YMd51fAvOjcMkCw46N_3JMCoegH_ZDo40e) domain).
 
-First, it is necessary to execute the get method by using the toncenter.com API:
-```
+First, it is necessary to execute the get method using the TON Center API (toncenter.com):
+```bash
 curl -X 'POST' \
   'https://toncenter.com/api/v2/runGetMethod' \
   -H 'accept: application/json' \
@@ -90,7 +90,7 @@ curl -X 'POST' \
 }'
 ```
 The response is generally something similar to the following:
-```json
+```js
 {
   "ok": true,
   "result": {
@@ -114,10 +114,10 @@ The response is generally something similar to the following:
 }
 ```
 Return parameters:
-- `init` - `boolean` - -1 if the NFT is initialized.
+- `init` - `int (boolean)` — -1 if initialized, 0 if not.
 - `index` - `uint256` - NFT’s position in the collection.
-- `collection_address` - `Cell` - Address of the collection contract.
-- `owner_address` - `Cell` - Current NFT owner’s address.
+- `collection_address` - `slice` - Address of the collection contract.
+- `owner_address` - `slice` - Current NFT owner’s address.
 - `content` - `Cell` - NFT content (parsed according to TEP-64).
 
 ## Retrieving all NFTs within a collection
@@ -125,7 +125,7 @@ The process varies based on whether the collection is ordered or unordered.
 
 ### Ordered collections
 Retrieving all NFTs in an ordered collection is relatively simple, since the number of NFTs to retrieve is already known and their addresses are easy to obtain. To complete this process, you need to perform the following steps in this order:
-1. Call the `get_collection_data` method using the Ton Center API on the collection contract and retrieve the `next_item_index` value from the response.
+1. Call the `get_collection_data` method using the TON Center API (toncenter.com) on the collection contract and retrieve the `next_item_index` value from the response.
 2. Use the `get_nft_address_by_index` method, passing in the `i` index value (initially set to 0) to retrieve the address of the first NFT in the collection.
 3. Retrieve the NFT item data using the address obtained in the previous step. Then check that the initial NFT collection smart contract matches the NFT collection smart contract reported by the NFT item itself (to ensure that the collection has not appropriated another user's NFT smart contract).
 4. Call the `get_nft_content` method with `i` and `individual_content` from the previous step.
@@ -138,16 +138,20 @@ Retrieving a list of NFTs in an unordered collection is more difficult because t
 
 To do this, it is necessary to extract the NFT data and call the `get_nft_address_by_index` method on the collection with the ID returned by the NFT. If the NFT contract address and the address returned by the `get_nft_address_by_index` method match, it means that the NFT belongs to the current collection. However, parsing all the messages in the collection can be a lengthy process and may require archive nodes.
 
+<<<<<<< HEAD
 ## Working with NFTs via wallets and deeplinks
+=======
+## Working with NFTs outside of TON
+>>>>>>> pitaya/doc-fix/run_20250901_144329_2bdedc55/kfc7a8af0
 
 ### Sending NFTs
 
-To transfer an NFT ownership, it is necessary to send an internal message from the NFT owner’s wallet to the NFT contract by creating a cell that contains a transfer message. This can be accomplished using libraries (such as [tonweb(js)](https://github.com/toncenter/tonweb/blob/b550969d960235314974008d2c04d3d4e5d1f546/src/contract/token/nft/NftItem.js#L65), [ton(js)](https://github.com/getgems-io/nft-contracts/blob/debcd8516b91320fa9b23bff6636002d639e3f26/packages/contracts/nft-item/NftItem.data.ts#L102), [tonutils-go(go)](https://github.com/xssnick/tonutils-go/blob/fb9b3fa7fcd734eee73e1a73ab0b76d2fb69bf04/ton/nft/item.go#L132)) for the specific language.
+To transfer an NFT’s ownership, it is necessary to send an internal message from the NFT owner’s wallet to the NFT contract by creating a cell that contains a transfer message. This can be accomplished using libraries (such as [tonweb(js)](https://github.com/toncenter/tonweb/blob/b550969d960235314974008d2c04d3d4e5d1f546/src/contract/token/nft/NftItem.js#L65), [ton(js)](https://github.com/getgems-io/nft-contracts/blob/debcd8516b91320fa9b23bff6636002d639e3f26/packages/contracts/nft-item/NftItem.data.ts#L102), [tonutils-go(go)](https://github.com/xssnick/tonutils-go/blob/fb9b3fa7fcd734eee73e1a73ab0b76d2fb69bf04/ton/nft/item.go#L132)) for the specific language.
 
 Once a transfer message has been created, it must be sent to the NFT item's contract address from the owner's wallet contract, specifying a sufficient amount of TON to cover the corresponding transaction fee.
 
 To transfer an NFT from another user to yourself, it is necessary to use TON Connect 2.0 or a simple QR code that contains a ton:// link. For example:
-`ton://transfer/{nft_address}?amount={message_value}&bin={base_64_url(transfer_message)}`
+`ton://transfer/{nft_address}?amount={message_value}&bin={base64url(transfer_message)}`
 
 ### Receiving NFTs
 The process of tracking NFTs sent to a certain smart contract address (i.e. a user's wallet) is similar to the mechanism used to track payments. This is completed by listening to all new transactions in your wallet and parsing them. 
@@ -156,15 +160,15 @@ The next steps may vary depending on the specific use case. Let’s examine seve
 
 #### Service waiting for known NFT address transfers:
 - Check for new transactions sent from the NFT item's smart contract address.
-- Read the first 32 bits of the message body using the `uint` type and check that it is equal to `op::ownership_assigned()`(`0x05138d91`)
+- Read 32 bits from the message body as an unsigned integer (e.g., `load_uint(32)`) and check it equals `op::ownership_assigned()` (`0x05138d91`).
 - Read the next 64 bits from the message body as `query_id`.
 - Read the address from the message body as `prev_owner_address`.
 - Now you can manage your new NFT.
   
 #### Service listening to all types of NFT transfer:
-- Verify all new transactions and ignore those with a body length less than 363 bits (OP - 32, QueryID - 64, Address - 267; internal addresses are 267 bits).
+- Verify all new transactions and ignore those with a body length less than 363 bits (OP - 32, `query_id` - 64, Address - 267; internal addresses are 267 bits).
 - Repeat the steps detailed in the previous list above.
-- If the process works correctly, you need to verify the authenticity of the NFT by analyzing it and the collection it belongs to. Next, you need to verify that the NFT belongs to the specified collection. More information on this process can be found in the section "Getting All NFTs of a Collection". This process can be simplified by using a whitelist of NFTs or collections.
+- If the process works correctly, you need to verify the authenticity of the NFT by analyzing it and the collection it belongs to. Next, you need to verify that the NFT belongs to the specified collection. More information on this process can be found in the section [Retrieving all NFTs within a collection](#retrieving-all-nfts-within-a-collection). This process can be simplified by using a whitelist of NFTs or collections.
 - Now you can manage your new NFT.
 
 #### Tying NFT transfers to internal transactions:
@@ -172,9 +176,7 @@ The next steps may vary depending on the specific use case. Let’s examine seve
 When receiving a transaction of this type, you must repeat the steps in the previous list.
 
 #### NFTs sent without a notification message:
-All of the strategies outlined above rely on the services correctly creating a forward message with the NFT transfer. If they don't do this, we won't know that they transferred the NFT to us. However, there are a few workarounds:
-
-All of the strategies outlined above rely on the service correctly creating a forward message within the NFT transfer. If this process is not carried out, it won’t be clear whether the NFT was transferred to the correct party. However, there are a several workarounds that are possible in this scenario:
+All of the strategies outlined above rely on the service correctly creating a forward message within the NFT transfer. If this process is not carried out, it won’t be clear whether the NFT was transferred to the correct party. Several workarounds are possible in this scenario:
 
 - If a small number of NFTs is expected, it is possible to periodically parse them and verify if the owner has changed to the corresponding contract type.
 - If a large number of NFTs is expected, it is possible to parse all new blocks and verify if there were any calls sent to the NFT destination using the `op::transfer` method. If a transaction like this is initiated, it is possible to verify the NFT owner and receive the transfer.
@@ -188,7 +190,7 @@ Now that we’ve covered the basics of sending and receiving NFTs, let’s explo
 
 In this example, the NFT transfer message is found on [line 67](https://github.com/ton-blockchain/token-contract/blob/1ad314a98d20b41241d5329e1786fc894ad811de/nft/nft-sale.fc#L67):
 
-```
+```func
 var nft_msg = begin_cell()
   .store_uint(0x18, 6)
   .store_slice(nft_address)
@@ -221,7 +223,7 @@ Let's examine each line of code:
 ### Receiving NFTs
 Once we've sent the NFT, it is critical to determine when it has been received by the new owner. A good example of how to do this can be found in the same NFT sale smart contract:
 
-```
+```func
 slice cs = in_msg_full.begin_parse();
 int flags = cs~load_uint(4);
 
