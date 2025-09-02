@@ -13,7 +13,7 @@ To start using GetBlock’s endpoints, users need to log in to their accounts an
 
 ### 1. Create a GetBlock account
 
-Visit the GetBlock [website](https://getblock.io/) and click on the "Get Started for Free" button. Sign up using your email address or by connecting your MetaMask wallet.
+Visit the GetBlock [website](https://getblock.io/) and click on the "Get Started for Free" button. Sign up using your email address or by connecting a supported wallet (e.g., MetaMask) for GetBlock account authentication; this is unrelated to TON interactions.
 
 ![GetBlock homepage](/img/docs/getblock-img/unnamed-2.png)
 
@@ -78,26 +78,26 @@ This will output the balance in nanotons.
 
 ![Sample getAddressBalance response](/img/docs/getblock-img/unnamed-5.png)
 
-Some other available methods to query the TON Blockchain:
+Some other available GetBlock methods to query the TON Blockchain:
 
-| # | HTTP method | Path             | Description                                                                          |
-| - | ----------- | ---------------- | ------------------------------------------------------------------------------------ |
-| 1 | GET         | /getAddressState | Returns the current state of a specified address (uninitialized, active, or frozen). |
-| 2 | GET         | /getMasterchainInfo | Fetches the state of the masterchain.                                             |
-| 3 | GET         | /getTokenData    | Retrieves details about an NFT or jetton associated with the address.                |
-| 4 | GET         | /packAddress     | Converts a TON address from raw format to human-readable format.                     |
-| 5 | POST        | /sendBoc         | Sends serialized BOC files with external messages for blockchain execution.          |
+| # | Method | Path               | Description                                                                          |
+| - | ------ | ------------------ | ------------------------------------------------------------------------------------ |
+| 1 | GET    | `/getAddressState`    | Returns the current state of a specified address (uninitialized, active, or frozen). |
+| 2 | GET    | `/getMasterchainInfo` | Fetches the state of the masterchain.                                                |
+| 3 | GET    | `/getTokenData`       | Retrieves details about an NFT or jetton associated with the address.                |
+| 4 | GET    | `/packAddress`        | Converts a TON address from raw format to human-readable format.                     |
+| 5 | POST   | `/sendBoc`            | Sends serialized BOC files with external messages for blockchain execution.          |
 
-For a comprehensive list of methods and detailed API documentation, please refer to GetBlock's [documentation](https://getblock.io/docs/ton/json-rpc/ton_jsonrpc/).
+For the official method list and detailed API documentation, see GetBlock’s [TON JSON-RPC reference](https://getblock.io/docs/ton/json-rpc/ton_jsonrpc/).
 
 ### Deploying smart contracts
 
-Developers can utilize the TON library to deploy and interact with contracts. The library will initialize a client to connect to the network via the GetBlock HTTP API endpoints.
+Developers can use an SDK to deploy and interact with contracts. The SDK will initialize a client to connect to the network via the GetBlock HTTP API endpoints. See the [SDK list](/v3/guidelines/dapps/apis-sdks/sdk).
 
 ![Deploying via TON Blueprint IDE](/img/docs/getblock-img/unnamed-6.png)
 
-By following this guide, developers can easily access TON Blockchain using GetBlock's infrastructure. Whether you're working on decentralized applications (dApps) or simply querying data, GetBlock simplifies the process by offering ready-to-use HTTP API endpoints with various features.
+By following this guide, developers can easily access TON Blockchain using GetBlock's infrastructure. Whether you're working on decentralized applications (DApps) or simply querying data, GetBlock simplifies the process by offering ready-to-use HTTP API endpoints with various features.
 
-Feel free to learn more at the [website](https://getblock.io/) or drop a line to GetBlock’s support via live chat, [Telegram](https://t.me/GetBlock_Support_Bot), or a website form.
+Feel free to learn more at the [website](https://getblock.io/) or drop a line to GetBlock’s support via live chat, [Telegram](https://t.me/GetBlock_Support_Bot), or a [website form](https://getblock.io/contact/).
 
 <Feedback />
