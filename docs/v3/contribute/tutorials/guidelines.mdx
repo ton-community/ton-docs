@@ -54,7 +54,7 @@ Regarding other word combinations like "TON + noun" (e.g., "the TON world," "the
 - **Display sample outputs** in the form of terminal snippets or screenshots to help learners understand what to expect. Trim long outputs.
 - **Take an error-driven approach** where you bump into errors on purpose to teach learners how to debug them. For example, if you need to fund an account to be able to deploy a contract, first try to deploy without funding, observe the error that is returned, then fix the error (by funding the account) and try again.
 - **Add potential errors and troubleshooting.** Of course, the tutorial shouldn't list every possible error, but it should make an effort to catch the important or most common ones.
-- **Use React or Vue** for the client-side.
+- React or Vue are common choices, but use what best fits the tutorial.
 - **Before making the PR, run the code by yourself first** to avoid any obvious errors and make sure it works as expected.
 - **Avoid including external/cross-links** to different sources between tutorials. If your tutorial is longer, we can discuss how to turn it into a longer course or Pathway.
 - Provide pictures or screenshots to illustrate complex processes where needed.
@@ -127,7 +127,7 @@ import { useEffect, useState } from 'react';
 
 - Web3 projects will typically include several existing code libraries. Be sure to account for this when writing your tutorial. Where possible, provide a GitHub repository as a starting point to make it easier for learners to get started.
 - If you are *not* using a GitHub repo to contain the code used in your tutorial, remember to explain to readers how to create a folder to keep the code organized. 
-*For example*: `mkdir example && cd example`
+  *For example*: `mkdir example && cd example`
 - If you use `npm init` to initialize a project directory, explain the prompts or use the `-y` flag.
 - If you use `npm install`, dependencies are saved by default (npm v5+); no flag is needed.
 
