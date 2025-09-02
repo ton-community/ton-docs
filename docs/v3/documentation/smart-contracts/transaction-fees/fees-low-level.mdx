@@ -3,25 +3,22 @@ import Feedback from '@site/src/components/Feedback';
 # Low-level fees overview
 
 :::caution
-This section describes instructions and manuals for interacting with TON at a low level.
-Here you will find the **raw formulas** for calculating commissions and fees on TON.
-However, most of them are **already implemented through opcodes**!
-So, you **use them instead of manual calculations**.
+This section provides low-level instructions for interacting with TON; it includes raw formulas for calculating commissions and fees; however, most of these are already implemented as opcodes, so you should use those instead of manual calculations.
 :::
 
 This document provides a general idea of transaction fees on TON and particularly computation fees for the FunC code. There is also a [detailed specification in the TVM whitepaper](https://ton.org/tvm.pdf).
 
 ## Transactions and phases
 
-As was described in the [TVM overview](/v3/documentation/tvm/tvm-overview), transaction execution consists of a few phases. During those phases, the corresponding fees may be deducted. There is a [high-level fees overview](/v3/documentation/smart-contracts/transaction-fees/fees).
+As described in the [TVM overview](/v3/documentation/tvm/tvm-overview), transaction execution consists of a few phases. During those phases, the corresponding fees may be deducted. There is a [high-level fees overview](/v3/documentation/smart-contracts/transaction-fees/fees).
 
 ## Storage fee
 
 TON validators collect storage fees from smart contracts.
 
-Storage fees are collected from the smart contract `balance` at the **Storage phase** of **any** transaction due to storage payments for the account state (including smart-contract code and data, if present) up to the present time. Even if a contract receives 1 nanoton, it will pay all the debt since the last payment. The smart contract may be frozen as a result. **Only unique hash cells are counted for storage and forward fees i.e. 3 identical hash cells are counted as one**. In particular, it [deduplicates](/v3/documentation/data-formats/tlb/library-cells) data: if there are several equivalent sub-cells referenced in different branches, their content is only stored once.
+Storage fees are collected from the smart contract `balance` at the **Storage phase** of **any** transaction due to storage payments for the account state (including smart-contract code and data, if present) up to the present time. Even if a contract receives 1 nanoton, it will pay all the debt since the last payment. The smart contract may be frozen as a result. Only unique cells (by hash) are counted for storage and forward fees, i.e., three identical hash cells are counted as one. In particular, it [deduplicates](/v3/documentation/data-formats/tlb/library-cells) data: if there are several equivalent sub-cells referenced in different branches, their content is only stored once.
 
-It's important to keep in mind that on TON you pay for both the execution of a smart contract and for the **used storage** (check [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22)), `storage_fee` depends on your contract size: number of cells and sum of bits from that cells. It means you have to pay a storage fee for having a TON wallet (even if it's very-very small).
+On TON, you pay for both smart-contract execution and used storage (see the [@thedailyton article](https://telegra.ph/Commissions-on-TON-07-22)); the `storage_fee` depends on your contract size—the number of cells and the total number of bits across those cells—so you even pay a storage fee for having a TON wallet (even if it’s very small).
 
 If you have not used your TON wallet for a long time, _you will pay a larger fee than usual because the wallet pays fees on both sending and receiving transactions_.
 

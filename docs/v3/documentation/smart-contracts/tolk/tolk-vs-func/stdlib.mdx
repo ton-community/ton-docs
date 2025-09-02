@@ -39,8 +39,8 @@ someTuple.tuple_size();
 ```
 
 **Tolk separates functions and methods** like it's done in most languages:
-1) functions can NOT be called via dot, only methods can
-2) methods can have short names, they don't conflict
+1) functions can NOT be called via dot, only methods can.
+2) methods can have short names, they don't conflict.
 
 ```tolk
 // FunC
@@ -61,6 +61,8 @@ Note that some functions were deleted because they either can be expressed synta
 or they were very uncommon in practice.
 
 The table is "sorted" in a way how functions are declared in stdlib.fc:
+
+Note: FunC uses snake_case names (for example, `begin_cell`), while Tolk methods use camelCase (for example, `beginCell`).
 
 | FunC name                         | Tolk name                          | Required import |
 |-----------------------------------|------------------------------------|-----------------|
@@ -247,6 +249,11 @@ The table is "sorted" in a way how functions are declared in stdlib.fc:
 | pfxdict_get?                      | prefixDictGet                      | tvm-dicts       |
 | pfxdict_set?                      | prefixDictSet                      | tvm-dicts       |
 | pfxdict_delete?                   | prefixDictDelete                   | tvm-dicts       |
+
+
+See also for `accept_message` → `acceptExternalMessage`:
+- Effects and nuances: /v3/documentation/smart-contracts/transaction-fees/accept-message-effects.
+- FunC stdlib reference: /v3/documentation/smart-contracts/func/docs/stdlib#accept_message.
 
 
 ## A list of added functions
