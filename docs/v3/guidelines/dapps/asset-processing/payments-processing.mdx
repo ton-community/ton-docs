@@ -65,11 +65,14 @@ Most SDKs automatically verify a wallet address during creation or transaction p
 
     import (
       "fmt"
+      "errors"
       "github.com/xssnick/tonutils-go/address"
     )
 
-    if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
-      return errors.New("invalid address")
+    func main() {
+      if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
+        _ = errors.New("invalid address")
+      }
     }
     ```
   </TabItem>
@@ -203,7 +206,7 @@ To understand the required pipeline, carefully read [Send payments](/v3/guidelin
 To accept payments based on attached comments, the service should:
 
 1. Deploy the `wallet` contract.
-2. Generate a unique `invoice` for each user. A uuid32 string is sufficient for invoice identification.
+2. Generate a unique `invoice` for each user. Generate a unique invoice identifier per user (for example, a UUID).
 3. Users should send payments to the service’s `wallet` contract with the `invoice` as a comment.
 4. Service should regularly poll the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method for the `wallet` contract.
 5. For each new transaction extract the incoming message, match the comment against stored invoice data, and deposit the Toncoin value into the user's account.
@@ -565,7 +568,7 @@ This way, you can provide the best user experience regardless of the current net
     from pytoniq.liteclient.balancer import LiteBalancer
 
 
-    MY_MNEMONICS = "one two tree ..."
+    MY_MNEMONICS = "one two three ..."
     DESTINATION_WALLET = Address("Destination wallet address")
 
 
