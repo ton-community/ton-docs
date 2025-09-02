@@ -50,13 +50,13 @@ The general state fully defines all account types in TON. Examples:
 
 - `(ID1, 0 TON, nonexist)`
 - `(ID2, 10 TON, uninit, last_tx)`
-- `(ID3, 0 TON, frozen)`
+- `(ID3, -0.5 TON, frozen)`
 
 ![](/img/docs/blockchain-fundamentals/account_eng.svg)
 
-::::note
-Account balances in TON never become negative. If storage fees exceed the available balance, the balance is set to zero and the unpaid remainder is recorded as debt — `due_payment` in `StorageInfo` (account state) and `storage_fees_due` in transactions.
-::::
+:::note
+Account balances in TON never become negative. [If storage fees exceed the available balance](https://toncenter.com/api/v3/transactions?hash=f3e8c9c48dd055a533e7c5d0735b2e305eaf18e571d842d607e0fc5ef0eb45ef&limit=1&offset=0&sort=desc), the balance is set to zero and the unpaid remainder is recorded as debt — `due_payment` in `StorageInfo` (account state) and `storage_fees_due` in transactions.
+:::
 
 ### Smart contract
 
@@ -68,11 +68,11 @@ A **smart contract** is an account whose _code_ and _data_ are already deployed 
 
 - An **account** is an actor that has a general state — such as balance, address, and status — and may optionally include code and data.
 
-Example: `(ID1, 0 TON, nonexist)` or `(ID2, 2 TON, inited, last_tx, data, code)`
+Example: `(ID1, 0 TON, nonexist)` or `(ID2, 2 TON, active, last_tx, data, code)`
 
 - A **smart contract** is an actor with **deployed** code and data that define its specific behavior.
 
-Example: `(ID2, 2 TON, inited, data, code)`
+Example: `(ID2, 2 TON, active, data, code)`
 
 #### Entity structure in TON Blockchain
 
@@ -118,7 +118,7 @@ Transactions are processed **asynchronously**, meaning that each account’s upd
 
 Earlier, we mentioned that an account is an actor defined by the following components:
 
-- Account properties (ID, balance, status, `last_tx`)
+- Account properties (ID, balance, state, `last_tx`)
 - Data
 - Code
 
@@ -209,12 +209,12 @@ The diagram below illustrates the lifecycle of an account in the TON blockchain,
 
 ### Smart contract structure
 
-Smart contracts are a set of promises in digital form, including protocols that govern how the parties fulfil these promises.
+Smart contracts are a set of promises in digital form, including protocols that govern how the parties fulfill these promises.
 
-In TON, typically by smart contract recognize:
+In TON, a smart contract is typically recognized as:
 
-- The program code executed, as described in FunC, Tact, or Tolk, in the blockchain.
-- The account that implements business logic and content code.
+- The program code executed, as described in FunC, Tact, or Tolk, on the blockchain.
+- The account that implements business logic and contains code.
 
 In technical terms, a smart contract in TON is an `Account` in the active state (`AccountState = active`) with:
 
@@ -232,7 +232,7 @@ The account itself has an address, but we define the address entirely for arbitr
 It consists of the following components:
 
 - **WorkChain ID** — a 32-bit signed integer indicating the WorkChain to which the account belongs (e.g., -1 for the MasterChain, 0 for the BaseChain).
-- **Account ID** — a 256-bit hash of the `StateInit` structure, which includes the contract’s initialized `code`, `data`, and, optionally, a `library`. It is stored as an arbitrary `SliceData` and may not exactly match the hash of `StateInit`.
+- **Account ID** — a 256-bit hash of the `StateInit` structure, which includes the contract’s initialized `code`, `data`, and, optionally, a `library`. It is stored as an arbitrary `SliceData` and match the hash of the first deployed `StateInit`.
 
 :::important
 `StateInit` (short for _state initialized_) can change as the contract evolves.
