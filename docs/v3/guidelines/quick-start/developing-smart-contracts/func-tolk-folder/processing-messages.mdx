@@ -10,7 +10,9 @@ import Button from '@site/src/components/button'
 Now, we are ready to move on to the main functionality of smart contracts — **sending and receiving messages**. In TON, messages are used not only for sending currency but also as a data-exchange mechanism between smart contracts, making them crucial for smart contract development.
 
 :::tip
+
 If you are stuck on some of the examples, you can find the original template project with all modifications performed during this guide [here](https://github.com/ton-community/onboarding-sandbox/tree/main/quick-start/smart-contracts/Example/contracts).
+
 :::
 
 ---
@@ -50,7 +52,9 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 </Tabs>
 
 :::info  
+
 You can find a comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
+
 :::
 
 What we are specifically interested in is the source address of the message, which we can extract from the `msg_full` cell. By obtaining that address and comparing it to a stored one — we can conditionally allow access to crucial parts of our smart contract functionality. A common approach looks like this:
@@ -186,7 +190,9 @@ By combining both of these patterns, you can achieve a comprehensive description
 Developing external endpoints includes several standard [approaches](/v3/documentation/smart-contracts/message-management/external-messages) and [security measures](/v3/guidelines/smart-contracts/security/overview) that might be overwhelming at this point. Therefore, in this guide, we will implement incrementing the previously added `ctx_counter_ext` number.
 
 :::danger
+
 This implementation is **unsafe** and may lead to losing your contract funds. Don't deploy it to `Mainnet`, especially with a high smart contract balance.
+
 :::
 
 ## Implementation

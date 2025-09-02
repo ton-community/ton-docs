@@ -68,6 +68,7 @@
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
     "remark-lint": "^10.0.1",
+    "remark-lint-docusaurus-empty-lines-around-admonition-content": "^0.2.0",
     "remark-lint-rule-style": "^4.0.1",
     "remark-lint-unordered-list-marker-style": "^4.0.1",
     "typescript": "^5.8.3"

@@ -10,11 +10,13 @@ You may have heard about different versions of wallets on TON Blockchain. But wh
 In this article, we’ll explore the various versions and modifications of TON wallets.
 
 :::info
+
 Before we start, there are some terms and concepts that you should be familiar with to fully understand the article:
 
 - [Message management](/v3/documentation/smart-contracts/message-management/messages-and-transactions), because this is the main functionality of the wallets.
 - [FunC language](/v3/documentation/smart-contracts/func/overview), because we will heavily rely on implementations made using it.
-  :::
+
+:::
 
 ## Common concept
 
@@ -96,7 +98,9 @@ Nevertheless, because each subsequent version inherits the functionality of the 
 As you can see, the main functionality of the wallet is to provide a safe way to communicate with TON Blockchain from the outside world. The `seqno` mechanism protects against replay attacks, and the `Ed25519 signature` provides authorized access to wallet functionality. We will not dwell in detail on each of these mechanisms, as they are described in detail in the [external message](/v3/documentation/smart-contracts/message-management/external-messages) documentation page and are quite common among smart contracts receiving external messages. The payload data consists of up to 4 references to cells and the corresponding number of modes, which will be directly transferred to the [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
 
 :::caution
+
 Note that the wallet doesn't provide any validation for internal messages you send through it. It is the programmer's (i.e., the external client’s) responsibility to serialize the data according to the [internal message layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
+
 :::
 
 #### Exit codes
@@ -108,7 +112,9 @@ Note that the wallet doesn't provide any validation for internal messages you se
 | 0x0       | Standard successful execution exit code.      |
 
 :::info
+
 Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standard exit codes](/v3/documentation/tvm/tvm-exit-codes) (`0x0` - is one of them), so you can get one of them too, if you run out of [gas](/v3/documentation/smart-contracts/transaction-fees/fees), for example, you will get `0xD` code.
+
 :::
 
 #### Get methods
@@ -254,11 +260,13 @@ All previous versions of wallets had a straightforward implementation for receiv
 As you can see, the fourth version still provides standard functionality through the `0x0` opcode, similar to previous versions. The `0x2` and `0x3` operations allow manipulation of the plugin dictionary. Note that in the case of `0x2`, you need to deploy the plugin with that address yourself. In contrast, the `0x1` opcode also handles the deployment process with the `state_init` field.
 
 :::tip
+
 If `state_init` doesn't make much sense from its name, take a look at the following references:
 
 - [addresses-in-ton-blockchain](/v3/documentation/smart-contracts/addresses#workchain-id-and-account-id)
 - [send-a-deploy-message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-deploy-message-with-stateinit-only-with-stateinit-and-body)
 - [internal-message-layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout)
+
 :::
 
 #### Exit codes
@@ -305,7 +313,9 @@ TL-B scheme:
 - [ton-blockchain/wallet-contract-v5/types.tlb](https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb)
 
 :::caution
+
 In contrast to the specifications of previous wallet versions, we will rely on the [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) scheme, due to the relative complexity of this wallet version's interface implementation. We will provide a brief description for each. Nevertheless, a basic understanding is still required; in combination with the wallet source code, it should be enough.
+
 :::
 
 #### Official code hash
@@ -380,7 +390,9 @@ actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other
 We can consider `InnerRequest` as two lists of actions: the first, `OutList`, is an optional chain of cell references, each containing a send message request led by the message mode. The second, `ActionList,` is led by a one-bit flag, `has_other_actions`, which marks the presence of extended actions, starting from the first cell and continuing as a chain of cell references. We are already familiar with the first two extended actions, `action_add_ext` and `action_delete_ext`, followed by the internal address that we want to add or delete from the extensions dictionary. The third, `action_set_signature_auth_allowed`, restricts or allows authentication through the public key, leaving the only way to interact with the wallet through extensions. This functionality might be extremely important in the case of a lost or compromised private key.
 
 :::info
+
 Note that the maximum number of actions is 255; this is a consequence of the realization through the [c5](/v3/documentation/tvm/tvm-overview#results-of-tvm-execution) TVM register. Technically, you can make a request with empty `OutAction` and `ExtendedAction`, but in that case, it will be similar to just receiving funds.
+
 :::
 
 #### Exit codes
@@ -406,7 +418,9 @@ Note that the maximum number of actions is 255; this is a consequence of the rea
 | 0x0       | Standard successful execution exit code.                                          |
 
 :::danger
+
 Note that the `0x8E`, `0x90`, and `0x92` wallet exit codes are designed to prevent you from losing access to wallet functionality. Nevertheless, you should still remember that the wallet doesn't check whether the stored extension addresses actually exist in TON. You can also deploy a wallet with initial data consisting of an empty extensions dictionary and restricted signature mode. In that case, you will still be able to access the wallet through the public key until you add your first extension. So, be careful with these scenarios.
+
 :::
 
 #### Get methods
@@ -424,7 +438,9 @@ As was said, before v5, the wallet smart contract allowed the processing of inte
 ![image](/img/gasless.jpg)
 
 :::tip
+
 Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens.
+
 :::
 
 #### Flow

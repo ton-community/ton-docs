@@ -27,7 +27,8 @@ You must already have a testnet wallet with at least 2 TON. You can get testnet 
 
 1. Open Wallets list.
 2. Create a new Testnet wallet: Add wallet → Add Testnet Account.
-   :::
+
+:::
 
 We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key and api_secret. The official Pinata [documentation](https://docs.pinata.cloud/account-management/api-keys) can help with that. Once you have these API tokens, I'll be waiting for you here!
 
@@ -59,7 +60,9 @@ On TON, there is one master contract—the collection's smart contract—which s
 ![](/img/tutorials/nft/ton-collection.png)
 
 :::info
+
 You can check out the article on [NFT processing on TON](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) or read the [NFT standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) for a deeper understanding.
+
 :::
 
 ## ⚙ Setup development environment
@@ -229,7 +232,9 @@ export function sleep(ms: number): Promise<void> {
 ```
 
 :::info What is it - seqno?
+
 Simply put, seqno is a counter that tracks outgoing transactions from a wallet. It helps prevent Replay Attacks. hen a transaction is sent to a wallet smart contract, it compares the seqno field in the transaction with the one stored in the wallet. If they match, the transaction is accepted, and the stored seqno increments by one. If they don't match, the transaction is discarded. This is why we need to wait a bit after every outgoing transaction.
+
 :::
 
 ## 🖼 Prepare metadata
@@ -641,7 +646,9 @@ public async deploy(wallet: OpenedWallet) {
 ```
 
 :::info
+
 `sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+
 :::
 
 Deploying a new smart contract in our case means sending a message from our wallet to the collection address, which we can calculate if we have `StateInit`, along with its `StateInit`.
@@ -793,7 +800,9 @@ export class NftItem {
 ```
 
 :::info
+
 `sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+
 :::
 
 At the end, we write a short method to retrieve an NFT's address by its index:
@@ -1123,7 +1132,9 @@ Finally, let's send our message:
 ```
 
 :::info
+
 `sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+
 :::
 
 Once the sale contract is deployed, the only step left is to transfer ownership of the NFT item to the sale contract's address.

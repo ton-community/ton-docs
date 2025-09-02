@@ -11,12 +11,14 @@ Unlike many other blockchains, TON also requires you to pay for storing contract
 As you develop and iterate on a contract, even small changes to its logic can affect both gas usage and data size. Monitoring these changes helps ensure that your contract remains efficient and cost-effective.
 
 :::tip
+
 For a deeper breakdown of how fees work in TON, refer to:
 
 - [Transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees)
 - [Storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee)
 - [Forward fees](/v3/documentation/smart-contracts/transaction-fees/forward-fees)
-  :::
+
+:::
 
 ## Gas metrics reporting
 
@@ -212,7 +214,9 @@ Report write in '.snapshot/1749821319408.json'
 Let’s try a simple optimization — adding the `inline` specifier to some functions.
 
 :::note
+
 An [inline function](/v3/documentation/smart-contracts/func/docs/functions#inline-specifier) is directly substituted into the code wherever it’s called, which can help reduce gas usage by eliminating the overhead of a function call.
+
 :::
 
 Update your contract like this:
@@ -284,7 +288,9 @@ export default config;
 ```
 
 :::tip
+
 See the full list of options in the [Sandbox jest config docs](https://github.com/ton-org/sandbox?tab=readme-ov-file#setup-in-jestconfigts).
+
 :::
 
 #### Option 2: create a separate config `gas-report.config.ts`

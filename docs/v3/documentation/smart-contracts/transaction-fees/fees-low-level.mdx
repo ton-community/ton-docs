@@ -3,10 +3,12 @@ import Feedback from '@site/src/components/Feedback';
 # Low-level fees overview
 
 :::caution
+
 This section describes instructions and manuals for interacting with TON at a low level.
 Here you will find the **raw formulas** for calculating commissions and fees on TON.
 However, most of them are **already implemented through opcodes**!
 So, you **use them instead of manual calculations**.
+
 :::
 
 This document provides a general idea of transaction fees on TON and particularly computation fees for the FunC code. There is also a [detailed specification in the TVM whitepaper](https://ton.org/tvm.pdf).
@@ -26,7 +28,9 @@ It's important to keep in mind that on TON you pay for both the execution of a s
 If you have not used your TON Wallet for a significant period of time (1 year), _you will have to pay a significantly larger commission than usual because the wallet pays commission on sending and receiving transactions_.
 
 :::info **Note**:
+
 When a message is bounced from the contract, the contract will pay its current `storage_fee`
+
 :::
 
 ### Formula
@@ -221,6 +225,7 @@ Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the 
 ### IHR
 
 :::info What is IHR?
+
 [**Instant Hypercube Routing (IHR)**](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm#messages-and-instant-hypercube-routing-instant-hypercube-routing) is an alternative mechanism for message delivery without intermediate hops between shards. To understand why IHR is not currently relevant:
 
 - **IHR is not implemented** and is not yet fully specified
@@ -230,6 +235,7 @@ Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the 
 In the current TON network configuration, all message routing uses standard **Hypercube Routing (HR)**, which can handle message delivery efficiently with the current shard topology. The `ihr_fee` field exists in the message structure for future compatibility, but serves no functional purpose today. 
 
 If you set the `ihr_fee` to a non-zero value, it will always be added to the message value upon receipt. For now, there are no practical reasons to do this.
+
 :::
 
 ### Formula
@@ -251,9 +257,11 @@ total_fwd_fees = msg_fwd_fees + ihr_fwd_fees; // ihr_fwd_fees - is 0 for externa
 ```
 
 :::info IMPORTANT
+
 Please note that `msg_fwd_fees` above includes `action_fee` below. For a basic message this fee = lump_price = 400000 nanotons, action_fee = (400000 \* 21845) / 65536 = 133331. Or approximately a third of the `msg_fwd_fees`.
 
 `fwd_fee` = `msg_fwd_fees` - `action_fee` = 266669 nanotons = 0,000266669 TON
+
 :::
 
 ## Action fee
@@ -269,6 +277,7 @@ action_fee = msg_fwd_fees;  //external
 [`first_frac`](/v3/documentation/network/configs/blockchain-configs#param-24-and-25) is part of the 24 and 25 parameters (for master chain and work chain) of the TON Blockchain. Currently, both are set to a value of 21845, which means that the `action_fee` is approximately a third of the `msg_fwd_fees`. In the case of an external message action, `SENDRAWMSG`, the `action_fee` is equal to the `msg_fwd_fees`.
 
 :::tip
+
 Remember that an action register can contain up to 255 actions, which means that all formulas related to `fwd_fee` and `action_fee` will be computed for each `SENDRAWMSG` action, resulting in the following sum:
 
 ```cpp
@@ -298,9 +307,11 @@ All fees are nominated in nanotons or nanotons multiplied by 2^16 to [maintain a
 - out_fwd_fees = [p24](https://tonviewer.com/config#24), [p25](https://tonviewer.com/config#25)
 
 :::info
+
 [A direct link to the mainnet live config file](https://tonviewer.com/config).
 
 For educational purposes [example of the old one](https://explorer.toncoin.org/config?workchain=-1&shard=8000000000000000&seqno=22185244&roothash=165D55B3CFFC4043BFC43F81C1A3F2C41B69B33D6615D46FBFD2036256756382&filehash=69C43394D872B02C334B75F59464B2848CD4E23031C03CA7F3B1F98E8A13EE05).
+
 :::
 
 ## References

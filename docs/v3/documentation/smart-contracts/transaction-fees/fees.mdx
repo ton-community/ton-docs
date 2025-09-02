@@ -29,7 +29,9 @@ Current settings in masterchain are as follows: 1 unit of gas costs 10000 nanoto
 Even if Toncoin price increases 100 times, transactions will remain ultra-cheap — about $0.01. Moreover, validators may lower this value if they see commissions have become expensive [read why they're interested](#gas-price-voting-process).
 
 :::info
+
 The current gas price is defined in the Network Config [param 20](https://tonviewer.com/config#20) and [param 21](https://tonviewer.com/config#21) for the masterchain and basechain, respectively.
+
 :::
 
 ### Gas price voting process
@@ -53,9 +55,11 @@ Fees on TON are difficult to calculate in advance, as their amount depends on tr
 That is why NFT marketplaces typically require an extra amount of TON (~1 TON) and refund the remaining amount (1 - transaction_fee) after the transaction.
 
 :::info
+
 Each contract should check incoming messages for the amount of TON attached to ensure it is enough to cover the fees.
 
 Check the [low-level fees overview](/v3/documentation/smart-contracts/transaction-fees/fees-low-level) to learn more about the formulas for calculating commissions and [fees calculation](/v3/guidelines/smart-contracts/fee-calculation) to learn how to calculate fees in FunC contracts using the new TVM opcodes.
+
 :::
 
 However, let's read more about how fees are supposed to function on TON.

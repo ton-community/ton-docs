@@ -14,11 +14,13 @@ When a smart contract sends a query to another smart contract, it must pay for:
 ## Standard message handling
 
 :::note
+
 In most cases, the sender:
 1. Attaches a small amount of Toncoin (typically one Toncoin) to the internal message
 2. Sets the "bounce" flag (sends a bounceable internal message)
 
 The receiver then returns the unused portion of the received value with the answer, deducting message forwarding fees. This is typically done using `SENDRAWMSG` with `mode = 64`.
+
 :::
 
 ## Message bouncing
@@ -40,7 +42,9 @@ If the "bounced" flag is set:
 - Alternatively, terminate with zero exit code to ignore bounced messages
 
 :::note
+
 The "bounced" flag cannot be forged because it's rewritten during sending. If a message has the "bounced" flag set, it's definitely a result of a bounced message from the receiver.
+
 :::
 
 ## Error handling

@@ -59,9 +59,11 @@ For wallet contracts:
 This process can sometimes take up to 24 hours. However, if you've been receiving this error for several days, that means that your node cannot synchronize via a current network connection.
 
 :::tip Solution
+
 You need to check the firewall settings, including any NAT settings if they exist.
 
 It should allow incoming connections on one specific port and outgoing connections from any port.
+
 :::
 
 ## Validator console is not settings
@@ -69,6 +71,7 @@ It should allow incoming connections on one specific port and outgoing connectio
 If you encounter the `Validator console is not settings` error, it indicates that you are running `MyTonCtrl` from a user other than the one you used for the installation.
 
 :::tip Solution
+
 Run `MyTonCtrl` from [the user you've installed](/v3/guidelines/nodes/running-nodes/full-node#switch-to-non-root-user) it (non-root sudo user).
 
 ```bash
@@ -106,7 +109,9 @@ In such cases, you should repeat the request after a short delay.
 If you encounter an issue where the `out of sync` equals the timestamp after downloading `MyTonCtrl` with the `-d` flag, it's possible that the dump wasn't installed correctly (or it's already outdated).
 
 :::tip Solution
+
 The recommended solution is to reinstall `MyTonCtrl` again with the new dump.
+
 :::
 
 If synchronization takes an unusually long time, there may be issues with the dump. Please [contact us](https://t.me/SwiftAdviser) for assistance.
@@ -118,7 +123,9 @@ Execute the `mytonctrl` command using the user account under which it was instal
 This error indicates that the local node is not yet synchronized, has been out of sync for less than 20 seconds, and that public nodes are being utilized. Public nodes do not always respond, which can result in a timeout error.
 
 :::tip Solution
+
 The solution to the problem is to wait for the local node to synchronize or to execute the same command multiple times before proceeding.
+
 :::
 
 ## Status command displays without local node section
@@ -144,7 +151,9 @@ MyTonCtrl> set  validatorWalletName  validator_wallet_001
 ## Transfer a validator on the new server
 
 :::info
+
 Transfer all keys and configs from the old to the working node and start it. In case something goes wrong on the new one, the source where everything is set up is still available.
+
 :::
 
 The best way (while the penalty for temporary non-validation is small, it can be done without interruption):

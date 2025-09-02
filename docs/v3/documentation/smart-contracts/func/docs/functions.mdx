@@ -119,7 +119,9 @@ However, for convenience, the individual components of this tensor are conventio
 #### Non-modifying methods
 
 :::info
+
 A non-modifying function supports a shorthand method call syntax using `.`
+
 :::
 
 ```func
@@ -158,7 +160,9 @@ builder b = begin_cell().store_uint(239, 8)
 
 #### Modifying functions
 :::info
+
 A modifying function supports a short form using the `~` and `.` operators.
+
 :::
 
 
@@ -308,6 +312,7 @@ If no ID is specified, the default is calculated as `(crc16(<function_name>) & 0
 If a function has the `method_id` specifier, it can be invoked by its name as a get-method in lite client or TON explorer.
 
 :::warning Important limitations and recommendations
+
 **19-bit limitation**: Method IDs are limited to 19 bits by the TVM assembler, meaning the valid range is **0 to 524,287** (2^19 - 1).
 
 **Reserved ranges**:
@@ -316,6 +321,7 @@ If a function has the `method_id` specifier, it can be invoked by its name as a 
 - **65536+**: Default range for user functions when using automatic generation `(crc16() & 0xffff) | 0x10000`
 
 **Best practice**: It's recommended to **avoid setting method IDs manually** and rely on automatic generation instead. Manual assignment can lead to conflicts and unexpected behavior.
+
 :::
 
 <details>
@@ -405,14 +411,18 @@ int inc_then_negate'(int x) asm "INC NEGATE";
 Here, `INC NEGATE` is treated as a single assembler command by FunC, but the Fift assembler correctly interprets it as two separate commands.
 
 :::info
+
 The list of assembler commands can be found here: [TVM instructions](/v3/documentation/tvm/instructions).
+
 :::
 
 ### Rearranging stack entries
 Sometimes, the order in which function arguments are passed may not match the expected order of an assembler command. Similarly, the returned values may need to be arranged differently. While this can be done manually using stack manipulation primitives, FunC automatically handles it.
 
 :::info
+
 When manually rearranging arguments, they are computed in the new order. To overwrite this behavior use `#pragma compute-asm-ltr`: [compute-asm-ltr](/v3/documentation/smart-contracts/func/docs/compiler_directives#pragma-compute-asm-ltr)
+
 :::
 
 For instance, the assembler command `STUXQ` takes an integer, a builder, and another integer as input. It then returns the builder and an integer flag indicating whether the operation succeeded. We can define the corresponding function as follows:

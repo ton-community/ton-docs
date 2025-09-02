@@ -163,7 +163,9 @@ The entire scheme of the message layout and the layout of all constituting field
 ## Message size
 
 :::info cell size
+
 Note that any [Cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) may contain up to `1023` bits. If you need to store more data, you should split it into chunks and store it in reference cells.
+
 :::
 
 For example, if your message body is 900 bits long, you can't store it in the same cell as the message header. Including the message header fields would make the total cell size exceed 1023 bits, triggering a `cell overflow` exception during serialization.
@@ -192,16 +194,20 @@ That way:
   (where `0b1000` specifies 8 bytes length followed by the 8-byte value)
 
 :::info message size
+
 Note that the message has general size limits and cell count limits, too,
 e.g., the maximum message size must not exceed `max_msg_bits`, and the number of cells per message must not exceed `max_msg_cells`.
 
 More configuration parameters and their values can be found [here](/v3/documentation/network/configs/blockchain-configs#param-43).
+
 :::
 
 ## Message modes
 
 :::info
+
 For the latest information, refer to the [message modes cookbook](/v3/documentation/smart-contracts/message-management/message-modes-cookbook).
+
 :::
 
 As you may have noticed, we send messages using `send_raw_message`, which also accepts a mode parameter and consumes the message. This mode determines how the message is sent, including whether to pay for gas separately and how to handle errors. The TON Virtual Machine (TVM) processes messages differently depending on the mode value. It’s important to note that the mode parameter consists of two components, **mode** and **flag**, which serve different purposes:
@@ -225,9 +231,11 @@ When using the `send_raw_message` function, choosing the appropriate combination
 | `+32` | Destroy the current account if its resulting balance is zero (often used with Mode 128) |
 
 :::info +16 Flag
+
 If a contract receives a bounceable message, it processes the `storage` phase **before** the `credit` phase. Otherwise, it processes the `credit` phase **before** the `storage` phase.
 
 For more details, check the [source code with checks for the `bounce-enable` flag](https://github.com/ton-blockchain/ton/blob/master/validator/impl/collator.cpp#L2810).
+
 :::
 
 :::warning

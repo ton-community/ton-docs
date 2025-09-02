@@ -9,7 +9,9 @@ import TabItem from '@theme/TabItem';
 This page **explains how to process** (send and accept) digital assets on TON Blockchain. While it primarily focuses on handling Toncoin, the **theoretical concepts** are also relevant for processing `jettons`.
 
 :::tip
+
 It's recommended to review the [Asset processing overview](/v3/documentation/dapps/assets/overview) before reading this tutorial.
+
 :::
 
 ## Wallet smart contract
@@ -44,7 +46,9 @@ To deploy a wallet via TonLib, follow these steps:
 6. Check the contract’s status after a few seconds using the [getAccountState](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L288) method.
 
 :::tip
+
 Read more on the [Wallet tutorial](/v3/guidelines/smart-contracts/howto/wallet#-deploying-a-wallet).
+
 :::
 
 ### Checking wallet address validity
@@ -96,7 +100,9 @@ Most SDKs automatically verify a wallet address during creation or transaction p
 </Tabs>
 
 :::tip
+
 Full Address description on the [Smart contract addresses](/v3/documentation/smart-contracts/addresses) page.
+
 :::
 
 ## Working with transfers
@@ -176,7 +182,9 @@ It is possible to track message flows during transaction processing. Since the m
 ### Send payments
 
 :::tip
+
 Learn the basics of payment processing from the [TMA USDT Payments demo](https://github.com/ton-community/tma-usdt-payments-demo).
+
 :::
 
 1. The service must deploy a `wallet` and keep it funded to prevent contract destruction due to storage fees. Storage fees are typically less than 1 Toncoin per year.
@@ -189,7 +197,9 @@ Learn the basics of payment processing from the [TMA USDT Payments demo](https:/
 8. Requests sent to `v3` of `high-load` have a 60-second expiration time by default. After expiration, unprocessed requests can be safely resent following steps 3-6.
 
 :::caution
+
 If the attached `value` is too small, the transaction may fail with the error `cskip_no_gas`. In this case, Toncoin will be transferred, but no logic will be executed on the recipient's side (the TVM will not launch). Read more [here](/v3/documentation/network/configs/blockchain-configs#param-20-and-21).
+
 :::
 
 ### Get the transaction ID
@@ -235,7 +245,9 @@ Best for dApps that require multiple transactions within a session or a persiste
 ### Invoices with ton:// link
 
 :::warning
+
 The TON link is deprecated. Avoid using it.
+
 :::
 
 If you need an easy integration for a simple user flow, it is suitable to use the ton:// link.

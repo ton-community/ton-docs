@@ -89,7 +89,9 @@ To serialize this structure into a byte sequence, we first identify unique cells
 ```
 
 :::note
+
 To filter out duplicates, cells must be compared by their [hashes](#cell-hash).
+
 :::
 
 Next, we arrange the cells in a specific order so that parent cells never reference cells that come before them in the list. In other words, any referenced cell must appear after the cells that reference it. We get:

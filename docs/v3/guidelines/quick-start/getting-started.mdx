@@ -13,7 +13,9 @@ Welcome to the TON Quick Start guide! This guide will give you a starting point 
 - Around __30 minutes__ of your time.
 
 :::note
+
 We will provide a short explanation of core concepts during the guide, but if you prefer a more theoretical approach, you can check out the core concepts of [TON Blockchain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains) first.
+
 :::
 
 ## What you'll learn
@@ -36,7 +38,9 @@ Each successfully processed message results in a **transaction**, which may incl
 - changing its balance
 
 :::info
+
 In contrast to other blockchains, where you can call other contract code synchronously, a smart contract in TON is a standalone entity that communicates equally with other smart contracts. Smart contracts interact by sending messages to each other, and the processing of these messages happens asynchronously due to the asynchronous nature of transactions in TON.
+
 :::
 
 The available interfaces of a smart contract are:
@@ -47,7 +51,9 @@ The available interfaces of a smart contract are:
 Unlike internal or external messages, **get methods** do not result in transactions. They are special functions of the smart contract that cannot change the contract's internal state or perform any other action except querying specific data from the contract's state.
 
 :::info
+
 Contrary to what might seem intuitive, invoking `get methods` from other contracts **is not possible**.
+
 :::
 
 ## Interacting with the TON ecosystem
@@ -73,7 +79,9 @@ TON basic transactions are very cheap—about 1 cent per transaction. Getting th
 - For **Mainnet**, you can get Toncoin by simply pressing the buy button in the user interface or asking someone to send them to your **address**. You can copy the address from the wallet app, which is usually located near your balance.
 
 :::info
+
 Don't worry, sharing your address is **totally safe**, unless you don't want it to be associated with you.
+
 :::
 
 - For the **Testnet** version, you can request funds from the [Testgiver Ton Bot](https://t.me/testgiver_ton_bot/) **completely for free**! After a short wait, you will receive 2 Toncoin that will appear in your wallet app.
@@ -114,7 +122,9 @@ Congratulations! We’ve created our first wallet and received some funds in it.
 An **explorer** is a tool that allows you to query data from the chain, investigate TON **smart contracts**, and view transactions. For our examples, we are going to use [Tonviewer](https://tonviewer.com/).
 
 :::tip
+
 Note that when using the **Testnet**, you should manually change the explorer mode to the **Testnet** version. Don't forget that these are different networks that do not share any transactions or smart contracts. Therefore, your **Testnet** wallet will not be visible in **Mainnet** mode and vice versa.
+
 :::
 
 Let's take a look at our newly created wallet using the `explorer`: copy your wallet address from the app and insert it into the search bar of the explorer like this:
@@ -140,10 +150,12 @@ First, let's examine the common [address state](/v3/documentation/smart-contract
 </div>
 
 :::info
+
 This might seem unintuitive: why is your wallet in the `uninit` state when you’ve already created it? There is a small difference between the `wallet app` and the `wallet smart contract`:
 
 - The `wallet app` is your off-chain client for the `wallet smart contract`.
 - The `wallet smart contract` is the contract itself. Since its deployment requires some fees, most `wallet apps` don’t actually deploy the wallet `smart contract` until you receive funds to your address and try to make your first transaction.
+
 :::
 
 - `Active`: the state of a _deployed_ smart contract that contains code, data, and balance.
@@ -155,7 +167,9 @@ To deploy our wallet, let's send the first transaction to someone special—**ou
 </div>
 
 :::info
+
 There is also a fourth state called [frozen](/v3/documentation/smart-contracts/addresses/address-states), which stands for a smart contract with a [storage charge](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee) that exceeds its balance. In this state, the smart contract cannot perform any operations.
+
 :::
 
 And here we are — our wallet contract is deployed and ready to use. Let's examine the provided user interface:

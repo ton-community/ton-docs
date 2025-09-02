@@ -34,7 +34,9 @@ Most internal messages between contracts should be bounceable (with the "bounce"
    - Never execute the bounced message's original query
 
 :::info
+
 The query contained in the body of a bounced message <Highlight color="#186E8A">should never be executed</Highlight>.
+
 :::
 
 Non-bounceable messages are essential for account initialization. A new account cannot be created without receiving at least one non-bounceable internal message containing its `StateInit` (with contract code and initial data).

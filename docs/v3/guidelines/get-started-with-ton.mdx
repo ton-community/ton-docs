@@ -9,7 +9,9 @@ import Player from '@site/src/components/player'
 Discover the speed, reliability, and core principles of asynchronous thinking by building your first application on TON Blockchain — from scratch.
 
 :::tip newcomer-friendly guide
+
 This is the perfect place to start if you're entirely new to programming.
+
 :::
 
 This learning path is split into **5** beginner-friendly modules and takes approximately **45 minutes**.
@@ -81,7 +83,9 @@ First, you need a non-custodial wallet to receive and store your Toncoin. For th
 You need to enable Testnet mode within the wallet to receive Testnet Toncoin. These tokens will be used later to send a final minting transaction to the smart contract.
 
 :::info
+
 With a non-custodial wallet, the user owns the wallet and holds the private key themselves.
+
 :::
 
 To download and create a TON wallet, follow these simple steps:
@@ -96,7 +100,9 @@ Let's start development now.
 We use a boilerplate to simplify your life and skip routine low-level tasks.
 
 :::tip
+
 Note that you need to [sign in](https://github.com/login) to GitHub for further work.
+
 :::
 
 Please use the [ton-onboarding-challenge](https://github.com/ton-community/ton-onboarding-challenge) template to create your project by clicking the “Use this template” button and selecting the “Create a new repository” tab as shown below:
@@ -120,7 +126,9 @@ After completing this step, you'll have access to a highly performant repository
 The next step is to choose which developer environment best suits your needs, experience level, and overall skill set. As you can see, this process can be carried out using either a cloud-based or local environment. Developing on the cloud is often considered simpler and easier to get started. Below, we’ll outline the steps required for both approaches.
 
 :::tip
+
 Ensure you have opened the repository in your GitHub profile generated from the template in the previous step.
+
 :::
 
 <br />
@@ -288,7 +296,9 @@ const client = new TonClient({ endpoint });
 ```
 
 :::info what to do in production?
+
 Using an RPC node provider or running your own ton-http-api instance is better for that. Read more at the [TON HTTP-based APIs page](/v3/guidelines/dapps/apis-sdks/ton-http-apis).
+
 :::
 
 ### Receiving mining data from TON Blockchain
@@ -330,7 +340,9 @@ npm run start:script
 ```
 
 :::tip
+
 To avoid unexpected issues, ensure you have finalized all previous steps, including inputting contract addresses.
+
 :::
 
 Good! As long as the above processes are executed correctly, a successful connection to the API will be achieved, and the necessary data will be displayed in the console. The correct console output should be initiated as follows:
@@ -357,12 +369,14 @@ The output above shows data on executing a process with a collection of numerica
 We need to convert the stack output into a more _useful form_.
 
 :::info GAS PARAMETERS ON TON
+
 **Warning**: Though this information is highly complex and **not necessary for this tutorial** if you're interested in understanding the complex technical aspects of TON, consider using these resources:
 
 1. To better understand how TON Virtual Machine (TVM) operates and _how TON processes transactions_, check out [TVM overview section](/v3/documentation/tvm/tvm-overview).
 2. Secondly, if you want to learn more about how transaction and gas fees work on TON, consider diving into [this section](/v3/documentation/smart-contracts/transaction-fees/fees) of our documentation.
 3. Finally, to better understand the exact gas values needed to carry out TVM instructions, see [this section](/v3/documentation/tvm/instructions#gas-prices) of our documentation.
-   :::
+
+:::
 
 Now, let's return to the tutorial!
 
@@ -434,7 +448,9 @@ First, we must prepare a mining message by ensuring the correct parameters to en
 Thankfully, the [README file](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive) allows us to retrieve the correct guidelines to achieve this goal. As you can see, the above README file comprises a table with specific fields and cell types (titled "Layout of proof of work cell') to help achieve our desired result.
 
 :::info What are cells?
+
 Cells are data storage structures on TON that fulfill numerous purposes, including increasing network scalability and smart contract transaction speeds. We won't get into specifics here, but if you're interested in understanding the complexity of cells and how they work, consider diving into [this](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) section of our documentation.
+
 :::
 
 Fortunately, all the data structures used in this tutorial are already written in TypeScript. Use the `MineMessageParams` object from _NftGiver.ts_ to build a transaction with _Queries_:
@@ -461,7 +477,9 @@ Probably you have a question: where are the _op_ and _data2_ from the [table](ht
 - Because the `op` classification is always constant, it is already implemented in transaction builder _Queries_ and in _OpCodes_. You can find the opcode by going to the source code of the `mine()` method.
 
 :::tip
+
 Though it may be interesting to check out the source code (`../wrappers/NftGiver.ts`), but it is unnecessary.
+
 :::
 
 ### Creating TON NFT miners
@@ -642,7 +660,9 @@ To successfully mine an NFT rocket on Testnet, it is necessary to follow these s
 6. _Confirm_ the transaction in your Tonkeeper wallet.
 
 :::tip final tip
+
 Because other developers may be carrying out the same process in an attempt to mine their own NFT, you may need to try the process a couple of times to succeed, as another user could mine the next NFT available right before you.
+
 :::
 
 Soon after initiating this process, you will have successfully mined your first NFT on TON, and it should appear in your Tonkeeper wallet.
@@ -677,7 +697,9 @@ As we outlined in the Testnet NFT rocket mining process, to successfully mine an
 6. _Confirm_ the transaction in your Tonkeeper wallet.
 
 :::tip final tip
+
 Because other developers may be carrying out the same process to mine their own NFT, you may have to try the process a couple of times to be successful (as another user could mine the next NFT available right before you).
+
 :::
 
 After some time, you will have **mined your NFT** and become a TON Developer in TON Blockchain. The ritual is complete. Look at your NFT in Tonkeeper.
@@ -712,7 +734,9 @@ After finishing the TON onboarding challenge, where we successfully mined an NFT
 - [How to run TON Site](/v3/guidelines/web3/ton-proxy-sites/how-to-run-ton-site)
 
 :::info have some feedback?
+
 You are one of the first explorers here. If you find any mistakes or feel stacked, please send feedback to [@SwiftAdviser](https://t.me/SwiftAdviser). I will fix it ASAP! :)
+
 :::
 
 <Feedback />

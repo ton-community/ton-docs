@@ -167,7 +167,9 @@ sudo  ufw  allow  proto  udp  from  any  to  any  port  `sudo jq -r '.addrs[0].p
 #### Doublecheck your management networks
 
 :::caution important
+
 **Before enabling a firewall,  double-check that you added the correct management addresses!**
+
 :::
 
 #### Enable ufw firewall
@@ -214,7 +216,9 @@ See this excellent **[ufw tutorial](https://www.digitalocean.com/community/tutor
 If you suspect that your node is under attack, consider changing your IP address. The method for switching will depend on your hosting provider. You may need to pre-order a second IP address, clone your **stopped** virtual machine (VM) to create a new instance or set up a fresh instance through a [disaster recovery](#disaster-recovery) process.
 
 :::warning
+
 Regardless of the approach you choose, be sure to [update your new IP address](#set-node-ip-address) in the node configuration file!
+
 :::
 
 <Feedback />

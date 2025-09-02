@@ -67,6 +67,7 @@ According to the TL-B schema, a transaction consists of the following fields:
 Other types of transactions—such as [trans_storage](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L352-L353), [trans_tick_tock](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L355-L357), [trans_split_prepare](https://github.com/ton-blockchain/ton/blob/26761a1d139402ef343081810677d2582c3eff51/crypto/block/block.tlb#L362-L366),  and others—are used for internal events that are invisible to end users. These include shard splitting and merging, tick-tock transactions, etc.
 
 Since they are not relevant to DApp development, we will not cover them in this tutorial.
+
 :::
 
 ### Credit phase
@@ -160,7 +161,9 @@ To start, note that the compute phase can be **skipped** entirely. In that case,
 | `cskip_suspended` | The account is frozen, so execution is disabled. This was used to freeze early miner accounts during the stabilization of TON’s tokenomics.                                                                                                                                                                                                                                                                                           |
 
 :::tip
+
 The `fixed_prefix_length` field can be used to specify a fixed prefix for the account address, ensuring that the account resides in a specific shard. This topic is outside the scope of this guide, but more information is available [here](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md#anycast-addresses-and-address-rewrite).
+
 :::
 
 Now that we've covered the reasons why the compute phase might be skipped, let's examine what happens when the smart contract code is **executed**. The following fields are used to describe the result:
@@ -177,7 +180,9 @@ Now that we've covered the reasons why the compute phase might be skipped, let's
 | `vm_steps`                                                                                 | `uint32`                | The number of steps executed by the virtual machine during code execution.                                                                                                                                                                                                                                                                                            |
 
 :::tip
+
 The `commit` instruction is used to persist any changes made before it is called, even if an error occurs later in the same phase. These changes will only be rolled back if the **Action phase** fails.
+
 :::
 
 ### Action phase
@@ -243,7 +248,9 @@ The action phase includes the following fields:
 If the **Compute phase** or **Action phase** ends with an error, and the incoming message has the `bounce` flag set, the system triggers the **Bounce phase**.
 
 :::note
+
 For the bounce phase to trigger due to an error in the action phase, the failed action must have **flag 16** set, which enables bounce on error.
+
 :::
 
 ```tlb
@@ -378,10 +385,12 @@ Among the supported open-source APIs, we can use TON Center [APIv2](https://tonc
 The recommended approach is to use **JSON-RPC**, as it integrates with existing SDKs, where all fields are predefined and typed correctly. This removes the need to interpret each field manually.
 
 :::note
+
 When retrieving transactions, you might encounter the following error:
 `LITE_SERVER_UNKNOWN: cannot compute block with specified transaction: cannot find block (0,ca6e321c7cce9ece) lt=57674065000003: lt not in db.`
 
 This means the account’s transactions are old, and the blocks containing them are no longer stored on the LiteServer. In this case, you can use the option `archival: true` to fetch data from an archival node.
+
 :::
 
 ### How to retrieve a transaction using api/v3
@@ -512,10 +521,12 @@ Earlier, we discussed **actions** from a technical perspective. However, many AP
 For example, transferring Jettons from one wallet to another typically involves at least three separate transactions. Different services refer to these sequences using terms like **action**, **event**, or **operation**. To avoid confusion with the previously defined technical term **action**, we use the term **Event** here.
 
 :::tip
+
 Note that not every Jetton transfer qualifies as a `Jetton Transfer Event`. For instance, sending Jettons to a DEX to receive other tokens is classified as a `Swap Event`.
 
 The classification depends heavily on how Jettons are used. API services typically parse the `forward_payload` and check additional parameters to determine the exact type of operation, then present it in a user-friendly format.
 This approach applies not only to Jettons but also to NFTs and other on-chain operations.
+
 :::
 
 ### Ordinary TON transfer: determining event success
@@ -593,11 +604,13 @@ After retrieving the transactions, we need to perform the following checks:
 If all these conditions are met, we can consider the deposit successfully credited to the wallet.
 
 :::danger
+
 Please note that the provided code is a simplified example and does not constitute a complete deposit tracking solution.
 In real applications, you should not limit the check to just the latest 10 transactions.
 Instead, you must process all transactions that occurred since the last check.
 
 Additionally, note that field values for fake deposits may vary depending on the API service used. This example only reflects the APIv3 response from the TON Center `transactions` endpoint.
+
 :::
 
 If we run this code, the expected output is:
@@ -609,9 +622,11 @@ Fake deposit detected: 4vXGhdvtfgFx8tkkaL17POhOwrUZq3sQDVSdNpW+Duk=
 By inspecting this transaction in the [explorer](https://tonviewer.com/transaction/e2f5c685dbed7e0171f2d92468bd7b3ce84ec2b519ab7b100d549d3695be0ee9), we see that the funds return to the sender.
 
 :::note
+
 If we query this account’s transactions using APIv2, we don’t see any transactions. This happens because the transaction data exists only in the block, and only the APIv3 indexer captures it.
 
 Since the account has no state at all—not even a single balance top-up—there are no transactions formally associated with it. If there is at least one deposit, the state changes from `nonexist` to `uninit`, and APIv2 then returns the transaction.
+
 :::
 
 ### Jetton transfer: determining event success
@@ -787,9 +802,11 @@ internal_transfer  query_id:uint64 amount:(VarUInteger 16) from:MsgAddress
 ```
 
 :::note
+
 Note that this is a highly simplified example.
 Real applications may implement different logic for handling deposits.
 For more details on how to process such events, refer to the [dedicated article](/v3/guidelines/dapps/asset-processing/jettons).
+
 :::
 
 ### NFT transfer: determining event success
@@ -858,7 +875,9 @@ We call the method and check the owner's address.
 </Tabs>
 
 :::note
+
 As with the previous two examples, please note that this is a simplified scenario. In real-world applications, the system is more complex overall. For more detailed information, refer to the [dedicated article](/v3/guidelines/dapps/asset-processing/nft-processing/nfts).
+
 :::
 
 ### How to determine event success from contract code and TL‑B
