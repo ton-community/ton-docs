@@ -1,8 +1,8 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Fift deep dive
+# Deep dive
 
-Fift is a high-level stack-based language used for local manipulation of cells and other TVM primitives. Its primary purpose is to compile TVM assembly code into contract code as a bag-of-cells (BoC).
+Fift is a stack-based language used for local manipulation of cells and other TVM primitives. Its primary purpose is to compile TVM assembly code into contract code as a bag-of-cells (BoC).
 
 :::caution
 **Advanced topic notice**
@@ -36,38 +36,38 @@ grey text ok
 ```
 
 - `emit` prints the Unicode character corresponding to the number on top of the stack
-- `."..."` outputs a constant string  
+- `."..."` outputs a constant string
 
 ## Defining functions (Fift words)
 
-To define a word, follow these steps:  
+To define a word, follow these steps:
 
-1. **Enclose the word's effects** in curly braces `{}`.  
-2. **Add a colon `:`** after the closing brace.  
+1. **Enclose the word's effects** in curly braces `{}`.
+2. **Add a colon `:`** after the closing brace.
 3. **Specify the word's name** after the colon.
 
 First line defines a word `increment` that increases `x` by `1`.
 
-**Examples:**  
-```  
+**Examples:**
+```
 { x 1 + } : increment
 { minmax drop } : min
 { minmax nip } : max
-```  
+```
 > Fift.fif
 
-In TON, multiple **defining words** exist, not just `:`. They differ in behavior:  
+In TON, multiple **defining words** exist, not just `:`. They differ in behavior:
 
 - **Active words** – Operate inside curly braces `{}`.
 - **Prefix words** – Do not require a trailing space .
 
-```  
-{ bl word 1 2 ' (create) } "::" 1 (create)  
-{ bl word 0 2 ' (create) } :: :  
-{ bl word 2 2 ' (create) } :: :_  
-{ bl word 3 2 ' (create) } :: ::_  
-{ bl word 0 (create) } : create  
-``` 
+```
+{ bl word 1 2 ' (create) } "::" 1 (create)
+{ bl word 0 2 ' (create) } :: :
+{ bl word 2 2 ' (create) } :: :_
+{ bl word 3 2 ' (create) } :: ::_
+{ bl word 0 (create) } : create
+```
 
 > Fift.fif
 
@@ -136,7 +136,7 @@ x{00} @Defop NOP
 > Asm.fif (lines order reversed)
 
 ### How @Defop works
-`@Defop` checks available space for the opcode using `@havebitrefs`. If space is insufficient, it writes to another builder via `@|` (implicit jump). 
+`@Defop` checks available space for the opcode using `@havebitrefs`. If space is insufficient, it writes to another builder via `@|` (implicit jump).
 
 **Important:** Always use `x{A988} @addop` instead of `x{A988} s,` to avoid compilation failures when space is limited.
 
@@ -155,22 +155,22 @@ This defines an opcode that:
 
 ### Ed25519 cryptography
 Fift provides built-in support for Ed25519 cryptographic operations:
-- **`newkeypair`** - Generates a private-public key pair  
-- **`priv>pub`** - Derives a public key from a private key  
-- **`ed25519_sign[_uint]`** - Creates a signature for given data using a private key  
-- **`ed25519_chksign`** - Verifies an Ed25519 signature  
+- **`newkeypair`** - Generates a private-public key pair
+- **`priv>pub`** - Derives a public key from a private key
+- **`ed25519_sign[_uint]`** - Creates a signature for given data using a private key
+- **`ed25519_chksign`** - Verifies an Ed25519 signature
 
 ### TVM interaction
-- **`runvmcode` and similar commands** - Executes TVM with a code slice taken from the stack  
+- **`runvmcode` and similar commands** - Executes TVM with a code slice taken from the stack
 
 ### File operations
-- **Save BoC to file**:  
+- **Save BoC to file**:
   ```fift
   boc>B ".../contract.boc" B>file
   ```
 
-## Continue learning  
-- [Fift: A Brief Introduction](https://docs.ton.org/fiftbase.pdf) - _Nikolai Durov_  
+## Continue learning
+- [Fift: A Brief Introduction](https://docs.ton.org/fiftbase.pdf) - _Nikolai Durov_
 
 <Feedback />
 
