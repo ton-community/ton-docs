@@ -2,11 +2,11 @@ import Feedback from '@site/src/components/Feedback';
 
 # Governance contracts
 
-In TON, a set of special smart contracts controls consensus parameters for node operation - including TVM, catchain, fees, and chain topology - and how these parameters are stored and updated. Unlike older blockchains that hardcode these parameters, TON enables transparent on-chain governance. The current governance contracts include the **Elector**, **Config**, and **DNS** contracts, with expansion plans (e.g., extra-currency **Minter**).
+In TON, a set of special smart contracts controls consensus parameters for node operation — including TVM, Catchain, fees, and chain topology — and how these parameters are stored and updated. Unlike older blockchains that hardcode these parameters, TON enables transparent on-chain governance. The current governance contracts include the **Elector** and **Config** contracts; **DNS** is a related system contract (not governing consensus). Future expansion may include a **Minter for extra-currencies**.
 
 ## Elector
 
-The **Elector** smart contract manages validator elections, validation rounds, and reward distribution. To become a validator and interact with the Elector, follow the [validator instructions](https://ton.org/validator).
+The **Elector** smart contract manages validator elections, validation rounds, and reward distribution. To become a validator and interact with the Elector, follow the [validator instructions](https://ton.org/validators) and the [internal guide](/v3/guidelines/nodes/running-nodes/validator-node).
 
 ### Data storage
 
@@ -27,13 +27,12 @@ The Elector stores:
 
 To apply, a validator must:
 
-1. Send a message to the Elector with their ADNL address, public key, `max_factor`, and stake (TON amount).
-2. The Elector validates the parameters and either registers the application or refunds the stake.  
-   _Note:_ Only masterchain addresses can apply.
+1. Send a message to the Elector with their ADNL address, public key, `max_factor`, and stake (Toncoin amount).
+2. The Elector validates the parameters and either registers the application or refunds the stake.
 
 ### Conducting elections
 
-The Elector is a special smart contract that triggers **Tick and Tock transactions** (forced executions at the start and end of each block). It checks whether it’s time to conduct a new election during each block.
+The Elector is a special smart contract that receives protocol-delivered **tick‑tock transactions** at the start and end of each MasterChain block. It checks whether it’s time to conduct a new election during each block.
 
 **Process details:**
 
@@ -42,10 +41,10 @@ The Elector is a special smart contract that triggers **Tick and Tock transactio
 - If applicants exceed `max_validators` (**ConfigParam 16**), discard the lowest-staked candidates.
 - For each subset size `i` (from 1 to remaining candidates):
   - Assume the `i`-th candidate (lowest in the subset) defines the baseline.
-  - Calculate effective stake (`true_stake`) for each `j`-th candidate (`j < i`) as:
+  - Calculate effective stake (`true_stake`) for each candidate as:
 
-```
-min(stake[i] * max_factor[j], stake[j])
+```text
+min(stake, max_factor * min_stake_in_subset)
 ```
 
 - Track the subset with the highest **total effective stake (TES)**.
@@ -54,7 +53,7 @@ min(stake[i] * max_factor[j], stake[j])
 
 **Example breakdown**:
 
-- **Case 1**: 9 candidates stake 100,000 TON (`max_factor=2.7`), 1 candidate stakes 10,000.
+- **Case 1**: 9 candidates stake 100,000 Toncoin (`max_factor=2.7`), 1 candidate stakes 10,000.
 
   - _Without the 10k candidate_: TES = 900,000.
   - _With the 10k candidate_: TES = 9 \* 27,000 + 10,000 = 253,000.
@@ -69,10 +68,10 @@ min(stake[i] * max_factor[j], stake[j])
 
 - `min_validators` ≤ participants ≤ `max_validators` (**ConfigParam 16**).
 - Stakes must satisfy:
-  - `min_stake` ≤ stake ≤ `max_stake`
-  - `min_total_stake` ≤ total stake ≤ `max_total_stake`
+- `min_stake` ≤ stake ≤ `max_stake`
+  - `min_total_stake` ≤ total stake
   - Stake ratios ≤ `max_stake_factor` (**ConfigParam 17**).
-- If conditions aren’t met, elections **postponed**.
+- If conditions aren’t met, elections are **postponed**.
 
 ### Process of reporting validator misbehavior
 
@@ -80,13 +79,12 @@ Each validator is periodically assigned the duty to create new blocks, with the 
 
 To report misbehavior, a user must:
 
-1. Generate a **Merkle proof** demonstrating the validator's failure to produce the expected blocks.
-2. Propose a fine proportional to the severity of the offense.
-3. Submit the proof and fine proposal to the Elector contract, covering the associated storage costs.
+1. Provide cryptographic proof demonstrating the validator's failure to produce the expected blocks.
+2. Submit the proof to the Elector contract, covering the associated storage costs.
 
-The Elector registers the complaint in the `past_elections` hashmap. Current round validators then verify the complaint. If the proof is valid and the proposed fine aligns with the severity of the misbehavior, validators vote on the complaint. Approval requires agreement from over **two-thirds of the total validator weight** (not just a majority of participants).
+The Elector registers the complaint in the `past_elections` hashmap. Current round validators then verify the complaint. If the proof is valid, validators vote on the complaint. Approval requires agreement from more than **three-quarters of the total validator weight** and follows the wins/losses limits defined in **ConfigParam 11** (not just a majority of participants).
 
-The fine is deducted from the validator's `frozen` stake in the relevant `past_elections` record if approved. These funds stay locked for the period defined by **ConfigParam 15** (`stake_held_for`).
+If approved, the fine (as determined by **ConfigParam 40** — MisbehaviourPunishmentConfig) is deducted from the validator's `frozen` stake in the relevant `past_elections` record. These funds stay locked for the period defined by **ConfigParam 15** (`stake_held_for`).
 
 #### Distributing rewards
 
@@ -94,7 +92,7 @@ The Elector releases `frozen` stakes and rewards (gas fees + block rewards) prop
 
 ### Current Elector state
 
-Track live data (elections, stakes, complaints) via this [dapp](https://1ixi1.github.io/elector/).
+Track live data (elections, stakes, complaints) via this [dApp](https://1ixi1.github.io/elector/). This is a community tool; use at your own risk.
 
 ## Config
 
@@ -119,19 +117,10 @@ The **Config** contract manages TON’s configuration parameters, validator set 
 
 #### Emergency updates
 
-- Reserved indexes (`-999`, `-1000`, `-1001`) allow urgent updates to **Config**/**Elector** code.
-- A temporary emergency key (assigned to the TON Foundation in 2021) accelerated fixes but couldn't alter contracts.
-- **Key retired** on Nov 22, 2023 (**block 34312810**), replaced with zeros.
-- Later patched to a fixed byte sequence (`sha256("Not a valid curve point")`) to prevent exploits.
-
-**Historical uses**:
-
-- **Apr 2022**: Increased gas limits (**blocks 19880281/19880300**) to unblock elections.
-- **Mar 2023**: Raised `special_gas_limit` to 25M (**block 27747086**) for election throughput.
+Code upgrades are proposed via special configuration parameters: **-1000** (Config) and **-1001** (Elector).
 
 ## See also
 
 - [Precompiled contracts](/v3/documentation/smart-contracts/contracts-specs/precompiled-contracts)
 
 <Feedback />
-
