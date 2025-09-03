@@ -52,7 +52,7 @@ The core of the verification process is to reconstruct the message that was sign
 The message signed by the wallet follows a strict format. Your backend must assemble an identical message to reproduce the hash that was signed.
 
 The message is a concatenation of several fields:
-```
+```text
 message = utf8_encode("ton-proof-item-v2/") ++
           Address ++
           AppDomain ++
@@ -93,14 +93,16 @@ The recommended approach is to extract the public key directly from the `walletS
 
 If the public key cannot be extracted from `walletStateInit` (e.g., for older or non-standard wallets), the fallback is to query the blockchain.
 
-1.  **Call get-method**: Invoke the `get_public_key` get-method on the smart contract at the user's address.
+1.  **Call get method**: Invoke the `get_public_key` get method on the smart contract at the user's address.
 2.  **Extract Public Key**: The result of this call will be the public key.
 
 ### Final checks
 
 Regardless of the method used, two final checks are mandatory:
 1.  **Public Key Consistency**: The extracted public key must match the `publicKey` field in the `TonAddressItemReply`.
-2.  **Address Integrity**: The hash of the `walletStateInit` must match the user's `address`.
+2.  **Address Integrity**: Derive the address as `contractAddress(workchain, walletStateInit)` and ensure it equals the user's address.
+
+Note: The helper used in the example to extract a public key from `stateInit` is simplified; replace it with version‑aware parsing after determining the wallet type (for example, via code hash) as described above.
 
 ## React example
 
@@ -198,7 +200,7 @@ The following example is adapted from the [demo dApp with React UI](https://gith
 
 You can review our example showcasing the key methods:
 - [generatePayload](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/api/generate-payload.ts): Generates a payload for `ton_proof`.
-- [checkProof](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/api/check-proof.ts): Checks the proof and returns an access token.
+- [checkProof](https://github.com/ton-connect/demo-dapp-with-react-ui/blob/master/src/server/api/check-proof.ts): Checks the proof and returns `Promise<boolean>`.
 
 <details>
   <summary>Full backend verification example</summary>
