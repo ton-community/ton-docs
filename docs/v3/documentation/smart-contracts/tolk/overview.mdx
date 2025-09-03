@@ -14,9 +14,9 @@ This page introduces Tolk’s _core features, explains how it compares to FunC, 
 ## Why choose Tolk
 
 1. Clean, expressive syntax inspired by TypeScript and Rust.
-2. Built-in primitives for TON, including _auto-serialized structs, pattern matching, and first-class message handling_.
+2. Built-in primitives for TON, including [_auto‑packed structs_](/v3/documentation/smart-contracts/tolk/language-guide#auto-packing) [(to/from cells)](/v3/documentation/smart-contracts/tolk/tolk-vs-func/pack-to-from-cells), pattern matching, and first-class message handling.
 3. Strong static type system with _null safety, type aliases, union types, and generics_ for safer, clearer code.
-4. Gas-efficient by design — contracts can cost up to **50% less** than FunC equivalents thanks to compiler optimizations and **[lazy](/v3/documentation/smart-contracts/tolk/tolk-vs-func/lazy-loading)** functionality.
+4. Gas‑efficient by design — see [benchmarks](https://github.com/ton-blockchain/tolk-bench) and [comparison](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short); features like **[Lazy loading](/v3/documentation/smart-contracts/tolk/tolk-vs-func/lazy-loading)** can reduce costs.
 5. Low-level control is available when needed, with direct access to the TVM stack and instructions.
 
 ## Getting started with Tolk
@@ -24,10 +24,13 @@ This page introduces Tolk’s _core features, explains how it compares to FunC, 
 If you're starting with Tolk, follow these steps:
 
 1. Explore the [TON smart contract documentation](/v3/documentation/smart-contracts/overview) to learn the fundamentals.
-2. [Set up](/v3/documentation/smart-contracts/tolk/environment-setup.mdx) the first Tolk counter project using
-`npm create ton@latest`.
-3. Follow the [step-by-step guide](/v3/documentation/smart-contracts/tolk/counter-smart-contract.mdx) to build a counter contract.
-4. Read the [Tolk language guide](/v3/documentation/smart-contracts/tolk/language-guide.mdx) for a high-level overview of the language.
+2. [Set up](/v3/documentation/smart-contracts/tolk/environment-setup) your first Tolk counter project:
+
+   ```bash
+   npm create ton@latest
+   ```
+3. Follow the [step-by-step guide](/v3/documentation/smart-contracts/tolk/counter-smart-contract) to build a counter contract.
+4. Read the [Tolk language guide](/v3/documentation/smart-contracts/tolk/language-guide) for a high-level overview of the language.
 5. Continue exploring the documentation. When you come across FunC or Tact code, compare it to its Tolk equivalent — you’ll often find it’s cleaner and more declarative.
 
 The TON documentation will continue evolving to support Tolk as the primary smart contract language.
@@ -41,9 +44,9 @@ If you’ve written contracts in FunC, migrating to Tolk is straightforward — 
 3. Read [Tolk vs FunC: in short](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-short) for a quick comparison of syntax and concepts.
 4. Use the [FunC-to-Tolk converter](https://github.com/ton-blockchain/convert-func-to-tolk) to migrate existing codebases incrementally.
 
-#### Example of a basic Tolk smart contract:
+### Example of a basic Tolk smart contract:
 
-```text
+```tolk
 import "utils"
 
 struct Storage {
@@ -67,7 +70,7 @@ get fun currentCounter(): int {
 <details>
   <summary><b>Equivalent implementation in FunC</b></summary>
 
-  ```text
+  ```func
   #include "utils.fc";
 
   global int ctx_counter;
@@ -119,7 +122,7 @@ A set of tools is available to support development with Tolk — including IDE s
     <td>Adds support for Tolk, FunC, Fift, and TL-B.</td>
   </tr>
   <tr>
-    <td><a href="https://github.com/ton-blockchain/ton-language-server">VS Code extension</a></td>
+    <td><a href="https://marketplace.visualstudio.com/items?itemName=ton-core.vscode-ton">VS Code extension</a></td>
     <td>Provides Tolk support and language features.</td>
   </tr>
   <tr>
@@ -144,7 +147,7 @@ The Tolk compiler itself lives in the `ton` [repository](https://github.com/ton-
 
 All contracts in the [Tolk vs FunC benchmarks](https://github.com/ton-blockchain/tolk-bench) pass the same test suites as their FunC counterparts — with identical logic and behavior.
 
-The compiler is new, so some edge cases may still occur. However, Tolk already serves as a **production-ready replacement for FunC**, suitable for real-world use.
+Tolk is under active development, and some edge cases may still occur. Evaluate it for your use case and ensure thorough testing before production deployment.
 
 Regardless of the language, well-tested code is the key to building reliable smart contracts.
 
