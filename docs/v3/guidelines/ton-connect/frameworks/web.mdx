@@ -15,9 +15,7 @@ If using React for your DApp, look at the [TON Connect UI React SDK](/v3/guideli
 
 <Tabs groupId="Installation">
   <TabItem value="CDN" label="CDN">
-    Add the script to the `<HEAD>` element of your website:
-
-    <br />
+    Add the script to the `<head>` element of your website:
 
     <br />
 
@@ -35,13 +33,12 @@ If using React for your DApp, look at the [TON Connect UI React SDK](/v3/guideli
   </TabItem>
 </Tabs>
 
-### TON Connect initiation
+### Set up TON Connect
 
-After installing the package, create a `manifest.json` file for your app.
-See [how to create a `manifest.json`](/v3/guidelines/ton-connect/creating-manifest) for more details.
+After installing the package, create a `tonconnect-manifest.json` file for your app.
+See the [manifest creation guide](/v3/guidelines/ton-connect/creating-manifest) for details.
 
-
-Add a button with a `ton-connect` id to connect to the wallet:
+Add a container element with the id `ton-connect` to host the connect button:
 
 ```html
 <div id="ton-connect"></div>
@@ -60,17 +57,23 @@ _After this tag_, add a script for `tonConnectUI` in the `<body>` part of the ap
 
 ### Connect to the wallet
 
-The `ton-connect` button in `buttonRootId` will automatically manage clicks.
+The element specified by `buttonRootId` renders the connect button and handles clicks automatically.
 
-But you can open the **connect modal** programmatically, for example, after clicking on a custom button:
+You can also open the connect modal programmatically; for example, from a custom button’s click handler:
 
 ```html
 <button onclick="openTonConnectModal()">Connect Wallet</button>
 
 <script>
-  function openTonConnectModal() {
-    tonConnectUI.openModal();
-  }
+    async function connectToWallet() {
+        // Open the connect modal programmatically
+        await tonConnectUI.openModal();
+    }
+
+    // Call the function
+    connectToWallet().catch(error => {
+        console.error("Error connecting to wallet:", error);
+    });
 </script>
 ```
 
@@ -87,7 +90,7 @@ To redirect the user to a [Telegram Mini App](/v3/guidelines/dapps/tma/overview)
 ```js
 tonConnectUI.uiOptions = {
   actionsConfiguration: {
-      twaReturnUrl: 'https://t.me/YOUR_APP_NAME'
+    twaReturnUrl: 'https://t.me/YOUR_APP_NAME'
   }
 };
 ```
@@ -172,6 +175,6 @@ await tonConnectUI.disconnect();
 
 - [UI customization](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
 - [\[YouTube\] TON Connect UI React \[RU\]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=1747)
-- [\[YouTube\] Connect TON Connect UI to site \[RU\]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
+- [\[YouTube\] Connect TON Connect UI to a site \[RU\]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
 
 <Feedback />

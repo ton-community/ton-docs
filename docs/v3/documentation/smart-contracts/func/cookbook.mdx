@@ -1,9 +1,9 @@
 import Feedback from '@site/src/components/Feedback';
 
-# FunC cookbook
+# Cookbook
 The FunC cookbook was created to consolidate all the knowledge and best practices from experienced FunC developers in one place. The goal is to make it easier for future developers to build smart contracts efficiently.
 
-Unlike the official [FunC documentation](/v3/documentation/smart-contracts/func/docs/types), this guide focuses on solving everyday challenges that FunC developers encounter during smart contract development.
+Unlike the [FunC documentation](/v3/documentation/smart-contracts/func/docs/types), this guide focuses on solving everyday challenges that FunC developers encounter during smart contract development.
 
 ## Basics
 
@@ -16,7 +16,7 @@ To check whether an event is relevant, use a flag variable. In FunC, `true` is r
 ```func
 int flag = 0; ;; false
 
-if (flag) { 
+if (flag) {
     ;; do something
 }
 else {
@@ -76,11 +76,11 @@ while (msg.slice_refs_empty?() != -1) { ;; We should remind that -1 is true
 ### How to write a do until loop
 Use a `do-until` loop when the loop must execute at least once.
 
-```func 
+```func
 int flag = 0;
 
 do {
-    ;; do something even flag is false (0) 
+    ;; do something even flag is false (0)
 } until (flag == -1); ;; -1 is true
 ```
 
@@ -131,7 +131,7 @@ slice_with_bits_and_refs.slice_empty?();
 
 If only the presence of `bits` matters and `refs` in `slice` can be ignored, use the `slice_data_empty?()`.
 
-```func 
+```func
 ;; Creating empty slice
 slice empty_slice = "";
 ;; `slice_data_empty?()` returns `true` because the slice doesn't have any `bits`.
@@ -175,7 +175,7 @@ In case we are only interested in `refs`, we should check their presence using `
 
 If only `refs` are of interest, their presence can be checked using the `slice_refs_empty?()`.
 
-```func 
+```func
 ;; Creating empty slice
 slice empty_slice = "";
 ;; `slice_refs_empty?()` returns `true` because the slice doesn't have any `refs`.
@@ -287,7 +287,7 @@ When working with `tuples`, checking for existing values before extracting them 
     }
 }
 ```
-**Note:** 
+**Note:**
 We are defining the `tlen` assembly function. You can find more details [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) and a see a [list of assembler commands](/v3/documentation/tvm/instructions).
 
 **References:**
@@ -312,7 +312,7 @@ if (numbers.null?()) {
 ```
 
 ### How to determine a state of the contract is empty
-Consider a smart contract with a `counter` that tracks the number of transactions. This variable does not exist in the contract state during the first transaction because it is empty. 
+Consider a smart contract with a `counter` that tracks the number of transactions. This variable does not exist in the contract state during the first transaction because it is empty.
 It is important to handle this scenario by checking if the state is empty and initializing the `counter` accordingly.
 
 ```func
@@ -349,7 +349,7 @@ The contract state can be determined as empty by verifying whether the [cell is 
 When a smart contract needs to send an internal message, it must first construct the message as a `cell`. This includes specifying technical flags, the recipient's address, and additional data.
 
 ```func
-;; We use literal `a` to get valid address inside slice from string containing address 
+;; We use literal `a` to get valid address inside slice from string containing address
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
 ;; we use `op` for identifying operations
@@ -363,10 +363,10 @@ cell msg = begin_cell()
     .store_uint(op, 32)
 .end_cell();
 
-send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
+send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 ```
 **Note:**
-- In this example, we use the literal `a` to obtain an address. More details on string literals can be found in the [documentation](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals). 
+- In this example, we use the literal `a` to obtain an address. More details on string literals can be found in the [documentation](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals).
 - You can find more details in the [documentation](/v3/documentation/smart-contracts/message-management/sending-messages). A direct link to the [layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) is also available.
 
 **References:**
@@ -384,7 +384,7 @@ The message body can contain `int`, `slices`, or `cells` following flags and oth
 Alternatively, if there is sufficient space, the message body can be stored in the same `cell` as the header. In this case, the bit should be set to `0`.
 
 ```func
-;; We use literal `a` to get valid address inside slice from string containing address 
+;; We use literal `a` to get valid address inside slice from string containing address
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
 int op = 0;
@@ -392,7 +392,7 @@ cell message_body = begin_cell() ;; Creating a cell with message
     .store_uint(op, 32)
     .store_slice("❤")
 .end_cell();
-    
+
 cell msg = begin_cell()
     .store_uint(0x18, 6)
     .store_slice(addr)
@@ -402,7 +402,7 @@ cell msg = begin_cell()
     .store_ref(message_body)
 .end_cell();
 
-send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
+send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 ```
 
 **Note:**
@@ -411,7 +411,7 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
   - `mode 64` returns all received tokens, subtracting the commission.
   - `mode 128` transfers the entire balance.
 - The [message](/v3/documentation/smart-contracts/func/cookbook#how-to-build-an-internal-message-cell) is constructed with the body added separately.
-  
+
 
 **References:**
 - [`begin_cell()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#begin_cell)
@@ -425,12 +425,12 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 
 A message body can be sent as either a `cell` or a `slice`. In this example, the body is sent inside a `slice`.
 
-```func 
-;; We use literal `a` to get valid address inside slice from string containing address 
+```func
+;; We use literal `a` to get valid address inside slice from string containing address
 slice addr = "EQArzP5prfRJtDM5WrMNWyr9yUTAi0c9o6PfR4hkWy9UQXHx"a;
 int amount = 1000000000;
 int op = 0;
-slice message_body = "❤"; 
+slice message_body = "❤";
 
 cell msg = begin_cell()
     .store_uint(0x18, 6)
@@ -441,7 +441,7 @@ cell msg = begin_cell()
     .store_slice(message_body)
 .end_cell();
 
-send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors 
+send_raw_message(msg, 3); ;; mode 3 - pay fees separately and ignore errors
 ```
 **Note:**
 - The literal `a` is used to obtain an address. See the [documentation](/v3/documentation/smart-contracts/func/docs/literals_identifiers#string-literals) for details on string literals.
@@ -459,7 +459,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 () main () {
     tuple t = to_tuple([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     int len = t.tlen();
-    
+
     int i = 0;
     while (i < len) {
         int x = t.at(i);
@@ -491,7 +491,7 @@ For example, while `tpush`, which adds an element to a `tuple`, exists, there is
 
 ```func
 ;; ~ means it is modifying method
-forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP"; 
+forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 ```
 We must determine its length if we want to iterate over a `tuple`. We can achieve this by writing a new function using the `TLEN` asm instruction.
 
@@ -556,7 +556,7 @@ global int max_value;
 **References:**
 - [`global variables` in docs](/v3/documentation/smart-contracts/func/docs/global_variables)
 - [`~dump` in docs](/v3/documentation/smart-contracts/func/docs/builtins#dump-variable)
-- [`TVM instructions` in docs](/v3/documentation/tvm/instructions) 
+- [`TVM instructions` in docs](/v3/documentation/tvm/instructions)
 
 
 ### Basic operations with tuples
@@ -567,14 +567,14 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
 () main () {
     ;; creating an empty tuple
-    tuple names = empty_tuple(); 
-    
+    tuple names = empty_tuple();
+
     ;; push new items
     names~tpush("Naito Narihira");
     names~tpush("Shiraki Shinichi");
     names~tpush("Akamatsu Hachemon");
     names~tpush("Takaki Yuichi");
-    
+
     ;; pop last item
     slice last_name = names~tpop();
 
@@ -584,7 +584,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
     ;; get an item by index
     slice best_name = names.at(2);
 
-    ;; getting the length of the list 
+    ;; getting the length of the list
     int number_names = names.tlen();
 }
 ```
@@ -607,7 +607,7 @@ forall X -> (tuple, X) ~tpop (tuple t) asm "TPOP";
 
 forall X -> () resolve_type (X value) impure {
     ;; Value here is of type X, since we dont know what is the exact value - we would need to check what is the value and then cast it
-    
+
     if (is_null(value)) {
         ;; do something with the null
     }
@@ -641,16 +641,16 @@ forall X -> () resolve_type (X value) impure {
 }
 ```
 
-**Reference:** [`TVM instructions` in docs](/v3/documentation/tvm/instructions) 
+**Reference:** [`TVM instructions` in docs](/v3/documentation/tvm/instructions)
 
 
 ### How to get current time
 
 ```func
 int current_time = now();
-  
+
 if (current_time > 1672080143) {
-    ;; do some stuff 
+    ;; do some stuff
 }
 ```
 
@@ -672,7 +672,7 @@ int c = random();
 
 ### Modulo operations
 
-As an example, let’s say we need to perform the following calculation for all 256 numbers: 
+As an example, let’s say we need to perform the following calculation for all 256 numbers:
 
 `(xp + zp) * (xp - zp)`.
 
@@ -682,9 +682,9 @@ Since these operations are commonly used in cryptography, we utilize the modulo 
 Variable names like `xp+zp` are valid as long as there are no spaces between the operators.
 
 ```func
-(int) modulo_operations (int xp, int zp) {  
+(int) modulo_operations (int xp, int zp) {
    ;; 2^255 - 19 is a prime number for montgomery curves, meaning all operations should be done against its prime
-   int prime = 57896044618658097711785492504343953926634992332820282019728792003956564819949; 
+   int prime = 57896044618658097711785492504343953926634992332820282019728792003956564819949;
 
    ;; muldivmod handles the next two lines itself
    ;; int xp+zp = (xp + zp) % prime;
@@ -752,7 +752,7 @@ int tlen (tuple t) asm "TLEN";
         if (i != place) {
             new_tuple~tpush(el);
         }
-        i += 1;  
+        i += 1;
     }
     return (new_tuple, ());
 }
@@ -766,7 +766,7 @@ int tlen (tuple t) asm "TLEN";
 
     ~dump(numbers); ;; [19 999 54]
 
-    numbers~remove_item(1); 
+    numbers~remove_item(1);
 
     ~dump(numbers); ;; [19 54]
 }
@@ -847,18 +847,18 @@ int are_cells_equal? (cell a, cell b) {
 
 (int) are_tuples_equal? (tuple t1, tuple t2) {
     int equal? = -1; ;; initial value to true
-    
+
     if (t1.tuple_length() != t2.tuple_length()) {
         ;; if tuples are differ in length they cannot be equal
         return 0;
     }
 
     int i = t1.tuple_length();
-    
+
     while (i > 0 & equal?) {
         var v1 = t1~tpop();
         var v2 = t2~tpop();
-        
+
         if (is_null(v1) & is_null(v2)) {
             ;; nulls are always equal
         }
@@ -897,7 +897,7 @@ int are_cells_equal? (cell a, cell b) {
     tuple t1 = cast_to_tuple([[2, 6], [1, [3, [3, 5]]], 3]);
     tuple t2 = cast_to_tuple([[2, 6], [1, [3, [3, 5]]], 3]);
 
-    ~dump(are_tuples_equal?(t1, t2)); ;; -1 
+    ~dump(are_tuples_equal?(t1, t2)); ;; -1
 }
 ```
 
@@ -941,9 +941,9 @@ We use the TL-B scheme from [block.tlb](https://github.com/ton-blockchain/ton/bl
 
 slice generate_external_address (int address) {
     ;; addr_extern$01 len:(## 9) external_address:(bits len) = MsgAddressExt;
-    
+
     int address_length = ubitsize(address);
-    
+
     return begin_cell()
         .store_uint(1, 2) ;; addr_extern$01
         .store_uint(address_length, 9)
@@ -1050,7 +1050,7 @@ send_raw_message(msg, 128); ;; mode = 128 is used for messages that are to carry
 
 ### How to send a message with a long text comment
 
-A `cell` can store up to 127 characters (`<1023 bits`). 
+A `cell` can store up to 127 characters (`<1023 bits`).
 A sequence of linked cells ("snake cells") must be used if more space is required.
 
 ```func
@@ -1073,7 +1073,7 @@ cell body = begin_cell()
 
 cell msg = begin_cell()
     .store_uint(0x18, 6) ;; flags
-    ;; We use literal `a` to get valid address inside slice from string containing address 
+    ;; We use literal `a` to get valid address inside slice from string containing address
     .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
     .store_coins(100) ;; amount of nanoTons to send
     .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; default message headers (see sending messages page)
@@ -1207,7 +1207,7 @@ d~udict_set(256, 12, "value 3");
 (int key, slice val, int flag) = d.udict_get_min?(256);
 while (flag) {
     ;; do something with pair key->val
-    
+
     (key, val, flag) = d.udict_get_next?(256, key);
 }
 ```
@@ -1324,7 +1324,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
     .end_cell();
 
   ;; mode 64 - carry the remaining value in the new message
-  send_raw_message(msg, 64); 
+  send_raw_message(msg, 64);
 }
 
 () deploy_with_stateinit_body(cell message_header, cell state_init, cell body) impure {
@@ -1337,7 +1337,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
     .end_cell();
 
   ;; mode 64 - carry the remaining value in the new message
-  send_raw_message(msg, 64); 
+  send_raw_message(msg, 64);
 }
 ```
 
@@ -1361,7 +1361,7 @@ forall X -> (tuple, (X)) pop_back (tuple t) asm "UNCONS";
 
 ```func
 () calc_address(cell state_init) {
-  var future_address = begin_cell() 
+  var future_address = begin_cell()
     .store_uint(2, 2) ;; addr_std$10
     .store_uint(0, 1) ;; anycast:(Maybe Anycast)
     .store_uint(0, 8) ;; workchain_id:int8
@@ -1376,7 +1376,7 @@ Below is an example of a simple `CounterV1` smart contract that allows the count
 ```func
 () recv_internal (slice in_msg_body) {
     int op = in_msg_body~load_uint(32);
-    
+
     if (op == op::increase) {
         int increase_by = in_msg_body~load_uint(32);
         ctx_counter += increase_by;
@@ -1397,7 +1397,7 @@ After interacting with the contract, you may realize that the functionality for 
 ```func
 () recv_internal (slice in_msg_body) {
     int op = in_msg_body~load_uint(32);
-    
+
     if (op == op::increase) {
         int increase_by = in_msg_body~load_uint(32);
         ctx_counter += increase_by;

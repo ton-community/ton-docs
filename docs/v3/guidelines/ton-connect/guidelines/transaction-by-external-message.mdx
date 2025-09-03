@@ -145,6 +145,26 @@ async function waitForTransaction(
 
 ## Examples
 
+### Hash normalization
+
+```ts
+import { beginCell, Cell, loadMessage, storeMessage, Message } from '@ton/ton';
+
+// The helper function to get a normalized hash from BoC
+export function normalizedExtHashFromBoc(bocBase64: string): string {
+    const msg = loadMessage(Cell.fromBase64(bocBase64).beginParse());
+    return getNormalizedExtMessageHash(msg).toString('hex');
+}
+
+// Minimal usage example: compute normalized hash from the provided BoC
+(() => {
+    const boc = 'te6ccgEBBAEAtwABRYgBvVXMoxQj+kmDtTinWnFdumvpTNo33p48YQKOWyTtUkAMAQGcMZ6id5dkoDZImQ4UC5SqZSN04h/xNpKaEsESJQivKW01aMcWW4qeUUjKm/iZ2nszwBj3uFVcsIr9xFomQvY3DCmpoxdkQjldAAAAcAADAgFkQgAoPvU+sDeRbPQrPGn3bxzd8JnUNGlQcfA/qoFluFxSiRE4gAAAAAAAAAAAAAAAAAEDABIAAAAAaGVsbG8=';
+    const extmsghash = Cell.fromBase64(boc).hash();
+    console.log('Full message hash:', extmsghash.toString('hex'));
+    console.log('Normalized hash:', normalizedExtHashFromBoc(boc));
+})();
+```
+
 ### Find a transaction by incoming message
 
 ```ts

@@ -1,4 +1,5 @@
 import Feedback from '@site/src/components/Feedback';
+import ZoomableImage from '@site/src/components/ZoomableImage';
 
 # Address states
 
@@ -9,20 +10,84 @@ Understanding these states is crucial for accurately predicting transaction outc
 
 Each address exists in one of the following states:
 
--   **nonexist**: the default state for addresses with no transaction history or that were deleted. Contains no code, data, or balance. All 2<sup>256</sup> addresses start in this state.
--   **uninit**: holds a balance and metadata, but no code and persistent data. An address enters this state when it receives funds. It cannot execute logic but retains funds until the contract code is deployed.
--   **active**: contains code, data, and a balance. Fully deployed and operational, capable of processing messages. An address becomes _active_ when a message with its `state_init` is sent to an `uninit` address. Note, that the hash of `state_init` must match the address for deployment.
--   **frozen**: occurs when storage costs exceed the balance. Only the hashes of the previous code and data cells are preserved. While frozen, the contract cannot execute. To unfreeze, send a message with the exact `state_init` and sufficient funds for storage fees. Recovery is complex; avoid reaching this state. A project to unfreeze addresses is available [here](https://unfreezer.ton.org/).
+-   **nonexist**: the default state for addresses with no transaction history or that were deleted. Contains no code, data, or balance. All 2<sup>256</sup> addresses start in this state. An address returns to this initial state when its `storage_fees_due` exceeds 1 TON or the outgoing message flag is set to 32.
+-   **uninit**: holds a balance and metadata, but no code and persistent data. An address enters this state when it receives funds. It cannot execute logic but retains funds until the contract code is deployed. An address becomes _uninit_ when a no-bounce message with a nonzero `balance` but without `state_init` is sent to a `nonexist` address.
+-   **active**: contains code, data, and a balance. Fully deployed and operational, capable of processing messages. An address becomes _active_ when a message with its `state_init` is sent to an `uninit` or `nonexist` address. Note that the hash of `state_init` must match the address for deployment.
+-   **frozen**: occurs when `storage_fees_due` exceeds 0.1 TON. Only the hashes of the previous code and data cells are preserved. While frozen, the contract cannot execute. To unfreeze, send a message with the valid `state_init` and sufficient funds for storage fees. Recovery is complex; avoid reaching this state. A project to unfreeze addresses is available [here](https://unfreezer.ton.org/).
 
 
 ## State transitions
 
-An address state determines how the network handles incoming messages:
+An address state determines how the network handles incoming messages. We present here a diagram that describes all potential changes in the account state during the receipt of internal or external messages.
+
+### Diagram
+In the diagram below, there are four nodes representing the four different address states. Each arrow and loop corresponds to a change in the address state at the end of a given transaction. The parameters in the blocks above the arrows (and loops) briefly describe what caused the transaction and also contain some fields that affect the change in the address state.
+
+
+<ZoomableImage src="/img/docs/state-changes-diagram.svg" />
+
+
+So, let's look at what changes can occur to a `nonexist` address depending on the messages that come to it.
+   - **Receiving external messages**: no changes.
+   - **Receiving internal messages**:
+      - **With valid `state_init`**: the contract is deployed on its address that becomes `active` before processing the message. If there is no `value` in the message, the computation phase is skipped due to the `cskip_no_gas` reason.
+      - **Without `state_init` or with an invalid one**: if the message is **bounceable**, then it returns to the sender, and the address state isn't changed. Otherwise, with no `value` in the message, the address state isn't changed. Finally, with some TONs it becomes `uninit`.
+
+With the diagram **Legend** below, you can inspect all possible changes in the address state when receiving messages with different parameters.
+
+### Legend
+ - **type**: message type.
+   - any;
+   - internal;
+   - external;
+ - **bounce**: `bounce` flag of an internal message.
+   - any;
+   - true;
+   - false;
+ - **value**: an amount of TON in a message.
+   - any;
+   - 0;
+   -  \> 0.
+ - **StateInit**: StateInit structure.
+   - any;
+   - none;
+   - invalid: the address computed from a given `state_init` does not match the recipient address;
+   - valid: the computed address matches a recipient address;
+   - valid last state: must be `state_init` of the last successful transaction before the address change to frozen.
+ - **storage_fees_due**: the number of storage fees that were charged but could not be conducted. In the diagram this field indicates `storage_fees_due` after **Storage phase**.
+   - < 0.1;
+   - [0.1, 1); 
+   - < 1;
+   - \>= 1.
+ - **send_dest_if_zero**: is there any out-going message with flag 32 in the action phase?
+   - any;
+   - false;
+   - true;
+   - invalid: there was no **Action phase**.
+ - **zero_bal_after_dest_act**: did the account balance become zero when sending some of the messages with flag 32? This field is meaningful only if there's at least one such message during **Action phase**.
+   - any;
+   - false;
+   - true.
+ - **action_phase_is_successful**: was **Action phase** successful?
+   - false;
+   - true.
+
+### Key points
+
+ We additionally review some important points regarding the states except `nonexist`.
 
 **Sending to `uninit` address**:
-   -   **With `state_init`**: The contract is deployed and becomes `active` before processing the message.
-   -   **Without `state_init` (bounce: true)**: The message is returned to the sender, minus&nbsp;fees.
-   -   **Without `state_init` (bounce: false)**: The address balance is credited, but the contract remains `uninit`. The funds are held until deployment.
+   - **Messages of any type without `state_init`**: changes to `nonexist` if its storage_fees_due exceeds 1 TON. Although such a case is really rare, you need to keep this in mind.
+   - **Internal message with valid `state_init`**: changes to `active`.
+
+**Sending to `frozen` address**:
+   - **Messages of any type**: changes to `nonexist` if its `storage_fees_due` exceeds 1 TON.
+   - **Internal message with valid `state_init`**: changes to `active` if its `storage_fees_due` becomes less then 0.1 TON.
+
+**Sending to `active` address**:
+   - **Messages of any type**: changes to `nonexist` if its `storage_fees_due` exceeds 1 TON. It also changes to `frozen` if its `storage_fees_due` exceeds 0.1 TON.
+   - **Messages of any type**: if in the action list there is an outgoing message with the flag 32 but the action phase was unsuccessful or the balance after this action is positive, the address state doesn't change.
+   - **Internal message with any `state_init`**: New `state_init` will be ignored and therefore doesn't change the address state.
 
 **Deployment strategy**: the standard practice for deploying a wallet is to first send a non-bounceable message with Toncoin to its address. This transitions the address to the `uninit` state. The wallet owner can then deploy the contract in a subsequent transaction, using the pre-funded balance.
 
@@ -30,8 +95,9 @@ An address state determines how the network handles incoming messages:
 
 ## Summary
 
--   The address state (`nonexist`, `uninit`, `active`, `frozen`) defines behavior.
--   The `uninit` state enables an address to receive funds before its contract is deployed.
--   Correct handling of `state_init` and the `bounce` flag is crucial for successful deployment and avoiding unintended fund transfers.
+- The address state (`nonexist`, `uninit`, `active`, `frozen`) defines behavior.
+- Correct handling of `state_init` and the `bounce` flag is crucial for successful deployment and avoiding unintended fund transfers.
+- There are many cases when the address state can become `nonexist` or `frozen`. Keep track of the amount of TON on the account balance!  
+- Each new `state_init` is ignored when the address state is active.
 
 <Feedback />

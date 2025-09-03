@@ -111,9 +111,9 @@ Create a `Connector` instance to work with a specific user:
 connector = await tc.init_connector(user_id)
 ```
 
-* `user_id` can be an integer (`int`) or a string (`str`).
-* If not provided, an incremental ID will be assigned automatically.
-* You can store the user ID for future reference:
+- `user_id` can be an integer (`int`) or a string (`str`).
+- If not provided, an incremental ID will be assigned automatically.
+- You can store the user ID for future reference:
 
   ```python
   user_id = connector.user_id
@@ -212,9 +212,9 @@ async with connector.connect_wallet_context() as response:
 
 The context manager will pause execution until:
 
-* the user connects a wallet;
-* a timeout occurs;
-* or an error is raised.
+- the user connects a wallet;
+- a timeout occurs;
+- or an error is raised.
 
 On success, you will receive a [WalletInfo](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/models/wallet.py#L118) object containing the connected wallet's data.
 On failure, a `TonConnectError` instance will be returned, which you can handle as described in the [connection errors](#connection-errors) section.
@@ -241,9 +241,9 @@ rpc_request_id = await connector.send_transaction(
 )
 ```
 
-* `valid_until` – transaction expiration time in seconds
-* `address` – recipient in user-friendly format
-* `amount` – amount in nanotons
+- `valid_until` – transaction expiration time in seconds
+- `address` – recipient in user-friendly format
+- `amount` – amount in nanotons
 
 The method returns `rpc_request_id`, a unique identifier for tracking the request.
 
@@ -251,13 +251,13 @@ The method returns `rpc_request_id`, a unique identifier for tracking the reques
 
 The `tonutils` library also provides higher-level methods for sending transactions more conveniently.
 
-* The `valid_until` field is set to 5 minutes by default.
-* The `address` field is replaced with `destination` (a string or an `Address`).
-* The `amount` should be specified in **TON** instead of **nanotons**.
-* The `body` parameter can be one of the following:
+- The `valid_until` field is set to 5 minutes by default.
+- The `address` field is replaced with `destination` (a string or an `Address`).
+- The `amount` should be specified in **TON** instead of **nanotons**.
+- The `body` parameter can be one of the following:
 
-  * a `Cell` object — for passing a custom payload;
-  * a string — used as a comment or memo;
+  - a `Cell` object — for passing a custom payload;
+  - a string — used as a comment or memo;
 
 #### Single Transfer
 
@@ -312,8 +312,8 @@ TON Connect supports three data formats:
 
 Use when the content is human-readable.
 
-* Clear to the user.
-* Ideal for off-chain confirmations.
+- Clear to the user.
+- Ideal for off-chain confirmations.
 
 ```python
 from tonutils.tonconnect.models import SignDataPayloadText
@@ -326,7 +326,7 @@ payload = SignDataPayloadText(text=text)
 
 Use for hashes, files, or non-readable content.
 
-* Suitable for digital receipts, proofs, or opaque payloads.
+- Suitable for digital receipts, proofs, or opaque payloads.
 
 ```python
 from tonutils.tonconnect.models import SignDataPayloadBinary
@@ -339,8 +339,8 @@ payload = SignDataPayloadBinary(bytes=data)
 
 Use when the signature must be verifiable on-chain.
 
-* Supports TL-B schemas.
-* Enables smart contract validation.
+- Supports TL-B schemas.
+- Enables smart contract validation.
 
 ```python
 from pytoniq_core import begin_cell
@@ -389,14 +389,14 @@ Use the `pending_request_context` context manager to wait for a user’s respons
 
 The context manager pauses execution until:
 
-* the user takes action in their wallet;
-* a timeout occurs;
-* or an error is raised.
+- the user takes action in their wallet;
+- a timeout occurs;
+- or an error is raised.
 
 On success, it returns a response object specific to the request type:
 
-* [`SendTransactionResponse`](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/models/request.py#L245)
-* [`SignDataResponse`](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/models/request.py#L494)
+- [`SendTransactionResponse`](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/models/request.py#L245)
+- [`SignDataResponse`](https://github.com/nessshon/tonutils/blob/main/tonutils/tonconnect/models/request.py#L494)
 
 On failure, a `TonConnectError` is returned and can be handled as described in the [request errors](#request-errors) section.
 
@@ -491,15 +491,15 @@ These events are triggered when an action completes successfully:
 
 These events are triggered **if the corresponding action fails** due to user rejection, timeout, or internal wallet/app errors:
 
-* `EventError.CONNECT` — error during wallet connection.
-* `EventError.DISCONNECT` — error during wallet disconnection.
-* `EventError.TRANSACTION` — error during transaction confirmation.
-* `EventError.SIGN_DATA` — error during sign data request.
+- `EventError.CONNECT` — error during wallet connection.
+- `EventError.DISCONNECT` — error during wallet disconnection.
+- `EventError.TRANSACTION` — error during transaction confirmation.
+- `EventError.SIGN_DATA` — error during sign data request.
 
   **All error events receive:**
 
-  * `user_id: int`
-  * `error: TonConnectError`
+  - `user_id: int`
+  - `error: TonConnectError`
 
   **Note:** All error types are described in detail in the [error handling](#error-handling) section.
 
@@ -611,7 +611,7 @@ TON Connect provides a secure and user-friendly way to interact with wallets on 
 
 ## See also
 
-* [TON Connect usage examples](https://tonutils.ness.su/guide/examples/ton-connect-operations/)
-* [Telegram bot with TON Connect](https://tonutils.ness.su/cookbook/tonconnect-telegram/)
+- [TON Connect usage examples](https://tonutils.ness.su/guide/examples/ton-connect-operations/)
+- [Telegram bot with TON Connect](https://tonutils.ness.su/cookbook/tonconnect-telegram/)
 
 <Feedback />

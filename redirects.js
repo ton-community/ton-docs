@@ -59,5 +59,9 @@ module.exports = [
     to: '/v3/guidelines/ton-connect/overview',
     from: '/v3/guidelines/ton-connect/guidelines/how-ton-connect-works',
   },
+  {
+    to:  '/v3/guidelines/dapps/apis-sdks/api-types',
+    from:'/v3/guidelines/dapps/apis-sdks/ton-http-apis',
+  },
   ...v3Redirects,
 ];

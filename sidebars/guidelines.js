@@ -206,7 +206,7 @@ module.exports = [
       },
       {
         type: 'category',
-        label: 'APIs and SDKs',
+        label: 'Blockchain APIs',
         link: {
           type: 'generated-index',
           title: 'APIs and SDKs',
@@ -215,9 +215,8 @@ module.exports = [
         },
         items: [
           'v3/guidelines/dapps/apis-sdks/overview',
-          'v3/guidelines/dapps/apis-sdks/sdk',
           'v3/guidelines/dapps/apis-sdks/api-types',
-          'v3/guidelines/dapps/apis-sdks/ton-http-apis',
+          'v3/guidelines/dapps/apis-sdks/sdk',
           'v3/guidelines/dapps/apis-sdks/ton-adnl-apis',
         ],
       },
@@ -324,8 +323,6 @@ module.exports = [
               'v3/guidelines/dapps/tma/tutorials/design-guidelines',
             ],
           },
-          'v3/guidelines/dapps/tma/notcoin',
-          'v3/guidelines/dapps/tma/grants',
         ],
       },
       {
@@ -386,6 +383,7 @@ module.exports = [
           'v3/guidelines/nodes/running-nodes/full-node',
           'v3/guidelines/nodes/running-nodes/liteserver-node',
           'v3/guidelines/nodes/running-nodes/validator-node',
+          'v3/guidelines/nodes/running-nodes/collators-validators',
           'v3/guidelines/nodes/running-nodes/staking-with-nominator-pools',
           'v3/guidelines/nodes/running-nodes/run-mytonctrl-docker',
           'v3/guidelines/nodes/running-nodes/running-a-local-ton',

@@ -1,108 +1,114 @@
+import Feedback from '@site/src/components/Feedback';
+import ThemedImage from '@theme/ThemedImage';
 import Button from '@site/src/components/button'
 
 # О TON Connect
 
-:::warning
-Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
-:::
-
-TON Connect — это мощный набор инструментов с открытым исходным кодом, который служит универсальным стандартом авторизации приложений в экосистеме [TON](/v3/concepts/dive-into-ton/introduction), позволяя пользователям безопасно и удобно входить в приложения и сервисы, используя свои кошельки TON вместо традиционных логинов и паролей.
+**TON Connect** — это протокол с открытым исходным кодом, который пользователям безопасно и удобно входить в TON-приложения, используя свои кошельки вместо традиционных паролей.
 
 <div style={{width: '100%', textAlign:'center', margin: '10pt auto'}}>
   <video style={{width: '100%',maxWidth: '600px', borderRadius: '10pt'}} muted={true} autoPlay={true} loop={true}>
     <source src="/files/TonConnect.mp4" type="video/mp4" />
-    Ваш браузер не поддерживает тег видео.
+
+    Ваш браузер не поддерживает тег video.
   </video>
 </div>
 
-Вы можете свободно использовать один из следующих потоков для интеграции вашего приложения:
+## Как работает TON Connect
 
-<Button href="/v3/guidelines/ton-connect/frameworks/react" colorType={'primary'} sizeType={'sm'}>
-React Apps
-</Button>
-<Button href="/v3/guidelines/ton-connect/frameworks/web"
-        colorType="secondary" sizeType={'sm'}>
-HTML/JS Apps
-</Button>
-<Button href="https://github.com/ton-community/tma-usdt-payments-demo"
-        colorType="secondary" sizeType={'sm'}>
-TMA USDT Payments Demo
-</Button>
+TON Connect позволяет **кошелькам** и **DApps** (децентрализованным приложениям) в экосистеме взаимодействовать.
 
-## Обзор
+<br />
 
-TonConnect расширяет экосистему TON, позволяя пользователям легко взаимодействовать с различными dApps, используя свои кошельки. Этот протокол направлен на обеспечение безопасного, удобного для пользователя и эффективного метода подключения, способствующего более широкому внедрению приложений и сервисов на основе TON.
+<ThemedImage
+  alt=""
+  sources={{
+      light: '/img/docs/ton-connect/ton-connect_1.svg?raw=true',
+      dark: '/img/docs/ton-connect/ton-connect_1-dark.svg?raw=true',
+  }}
+/>
 
-### Основные функции TonConnect:
+<br />
 
-- **Бесшовная интеграция**. TonConnect проектирован для гладкой интеграции с кошельками TON и dApps. Он позволяет пользователям подключить свои кошельки к dApps всего за несколько кликов, предлагая беспрепятственный опыт.
+### Модель взаимодействия
 
-- **Повышенная безопасность**. Безопасность является первостепенной задачей в экосистеме TON. TonConnect использует надежное шифрование и безопасные методы связи, чтобы гарантировать, что пользовательские данные и транзакции остаются защищенными в любое время.
+- **Кошельки** предоставляют пользовательские интерфейсы для одобрения транзакций и надёжно хранят криптографические ключи на пользовательских устройствах.
+- **DApps** в экосистеме TON предлагают богатую функциональность и надёжно хранят пользовательские средства с помощью смарт-контрактов.
 
-- **Удобный для пользователя опыт**. Сосредоточившись на простоте, TonConnect упрощает взаимодействие пользователей с dApps без необходимости в обширных технических знаниях. Интуитивно понятный интерфейс протокола обеспечивает плавный путь пользователя от подключения до завершения транзакции.
+Это разделение ответственности способствует стремительным инновациям и надёжности: *кошельки не привязаны к закрытым экосистемам, а DApps не хранят пользовательские аккаунты*.
 
-- **Кросс-платформенность**. TonConnect поддерживает различные платформы, включая веб, мобильные и настольные приложения. Такая широкая совместимость гарантирует, что пользователи могут подключать свои кошельки к dApps независимо от предпочитаемого ими устройства.
+**TON Connect** связывает кошельки и приложения, делая соединение бесшовным и надёжным для пользователей.
 
-- **Инструменты для разработчиков**. TonConnect предоставляет разработчикам набор инструментов и API для бесшовной интеграции протокола в их dApps. Эти ресурсы позволяют разработчикам предлагать согласованный и безопасный метод подключения на различных платформах.
+## Причины использовать TON Connect
 
-- **Разработка, управляемая сообществом**. Экосистема TON выигрывает от активного сообщества разработчиков. TonConnect использует этот подход, управляемый сообществом, поощряя разработчиков вносить вклад и делиться своими инновациями, тем самым обогащая общую экосистему.
+- **Бесшовная интеграция**: позволяет подключить кошельки к DApps с минимальными сложностями.
+- **Надёжная защита**: использует защищённую коммуникацию для защиты пользовательских данных и транзакций.
+- **Удобство для пользователя**: не требуется дополнительных логинов, пользователи взаимодействуют с DApps прямо с помощью их кошельков.
+- **Кроссплатформенность**: поддерживает веб, мобильные и десктопные приложения.
+- **Инструменты для разработчиков**: предоставляет разработчикам набор инструментов и API для надёжной, консистентной интеграции.
+- **Открытый исходный код**: разработка контролируется командой TonTech и открыта к участию со стороны.
 
-## Примеры использования для вашего DApp
+### Для разработчиков DApp
 
-Изучите эти результаты, которые экосистема TON предоставляет для превосходной интеграции DApp.
+TON Connect позволяет добиться более тесной интеграции и лучшего отклика от пользователей:
 
-- **Трафик**. Привлекайте дополнительных пользователей через криптокошельки, которые поддерживают TON Connect.
-- **Аутентификация**. Используйте кошельки пользователей TON как готовые учетные записи, устраняя необходимость в дополнительных этапах аутентификации и, таким образом, улучшая пользовательский опыт.
-- **Платежи**. Быстро и безопасно обрабатывайте транзакции через блокчейн TON с использованием Toncoin или USD₮.
-- **Сохранение**. Улучшайте удержание пользователей с помощью функции сохранения списка в приложении, которая позволяет пользователям отслеживать недавно открытые и избранные приложения.
+- **Трафик**. Привлекайте больше пользователей с помощью кошельков, поддерживающих TON Connect.
+- **Встроенная аутентификация**. Используйте кошельки пользователей как готовые учётные записи, не требуя регистрации.
+- **Платежи**. Быстро и безопасно обрабатывайте платежи в Toncoin или USD₮ с помощью блокчейна TON.
+- **Удержание**. Пользователям удобно снова посещать недавно открытые и избранные приложения.
 
-## Для разработчиков кошельков
+### Для разработчиков кошельков
 
-Если вы разработчик кошелька, вы можете подключить свой кошелек к TON Connect и позволить вашим пользователям взаимодействовать с приложениями TON безопасным и удобным способом, прочитайте, как [интегрировать TON Connect в ваш кошелек](/v3/guidelines/ton-connect/wallet/).
+Подключите ваше приложение кошелька к TON Connect, чтобы обеспечить его надёжную и бесшовную интеграцию с DApps в TON.
+Прочитайте, как [интегрировать TON Connect в ваш кошелек](/v3/guidelines/ton-connect/wallet/).
 
-## Истории успеха
+## Проекты, использующие TON Connect
 
-- [GetGems - Маркетплейс The Open Network](https://getgems.io/)
-- [STON.fi - AMM DEX для блокчейна TON](https://ston.fi/)
-- [Tonstarter](http://tonstarter.com/)
+- [GetGems — Маркетплейс NFT](https://getgems.io/)
+- [STON.fi — AMM DEX](https://ston.fi/)
+- [TON Society](https://society.ton.org/activities/active)
 
 <details>
   <summary><b>Показать весь список</b></summary>
 
-- [getgems.io](https://getgems.io/)
-- [fragment.com](https://fragment.com/) (Ton Connect v.1)
-- [ston.fi](https://ston.fi/)
-- [ton.diamonds](https://ton.diamonds/)
-- [tegro.finance](https://tegro.finance/liquidity)
-- [minter.ton.org](https://minter.ton.org/)
-- [libermall.com](https://libermall.com/)
-- [dedust.io](https://dedust.io/swap)
-- [toncap.net](https://toncap.net/)
-- [cryptomus.com](https://cryptomus.com/)
-- [avanchange.com](https://avanchange.com/)
-- [wton.dev](https://wton.dev/)
-- [vk.com/vk_nft_hub](https://vk.com/vk_nft_hub)
-- [tonverifier.live](https://verifier.ton.org/)
-- [tonstarter.com](https://tonstarter.com/)
-- [megaton.fi](https://megaton.fi/)
-- [dns.ton.org](https://dns.ton.org/)
-- [coinpaymaster.com](https://coinpaymaster.com/)
-- [daolama.co](https://daolama.co/)
-- [ton.vote](https://ton.vote/)
-- [business.thetonpay.app](https://business.thetonpay.app/)
-- [bridge.orbitchain.io](https://bridge.orbitchain.io/)
-- [app.fanz.ee/staking](https://app.fanz.ee/staking)
-- [testnet.pton.fi](https://testnet.pton.fi/)
-- [cardify.casino](https://cardify.casino/)
-- [soquest.xyz](https://soquest.xyz/)
-- [app.evaa.finance](https://app.evaa.finance/)
-
+  - [getgems.io](https://getgems.io/)
+  - [fragment.com](https://fragment.com/)
+  - [ston.fi](https://ston.fi/)
+  - [app.evaa.finance](https://app.evaa.finance/)
+  - [ton.diamonds](https://ton.diamonds/)
+  - [minter.ton.org](https://minter.ton.org/)
+  - [tonconsole.com/jetton/minter](https://tonconsole.com/jetton/minter)
+  - [dedust.io](https://dedust.io/swap)
+  - [vesting.ton.org](https://vesting.ton.org/)
+  - [tonverifier.live](https://verifier.ton.org/)
+  - [tonstarter.com](https://tonstarter.com/)
+  - [dns.ton.org](https://dns.ton.org/)
+  - [daolama.co](https://daolama.co/)
+  - [ton.vote](https://ton.vote/)
 </details>
 
 ## Присоединяйтесь к экосистеме TON
 
-Чтобы подключить свой сервис к экосистеме TON, вам необходимо реализовать следующее:
+Чтобы интегрировать свой сервис с экосистемой TON, вам необходимо сделать следующее:
 
-- **TON Connect**. Включите протокол TON Connect в свое приложение.
-- **Транзакции**. Создавайте определенные сообщения транзакций с помощью библиотек TON. Погрузитесь в процесс [отправки сообщений](/v3/guidelines/ton-connect/guidelines/sending-messages) с нашим полным руководством.
-- **Платежи**. Обрабатывайте платежи через публичный API ([tonapi](https://tonapi.io/)) или собственный индексатор, например, [gobycicle](http://github.com/gobicycle/bicycle). Узнайте больше из нашего обширного руководства по [обработке активов](/v3/guidelines/dapps/asset-processing/payments-processing).
+- **Реализовать TON Connect**: включите протокол TON Connect в своё приложение.
+- **Совершить перевод**: создавайте и отправляйте сообщения с помощью библиотек TON. Детали реализации можете увидеть на странице [Отправка сообщений](/v3/guidelines/ton-connect/cookbook/ton-transfer).
+- **Подключение платежей**: обрабатывайте платежи через ([TON API](https://tonapi.io/)) или собственный индексатор, например, [gobycicle](http://github.com/gobicycle/bicycle). Узнайте больше из нашего [руководства по обработке платежей](/v3/guidelines/dapps/asset-processing/payments-processing).
+
+### Начните с шаблона
+
+Выберите путь интеграции, который соответствует вашему разработческому окружению, чтобы подключить TON Connect в вашем DApp.
+
+<Button href="/v3/guidelines/ton-connect/frameworks/react" colorType={'primary'} sizeType={'sm'}>
+  Приложения на React
+</Button>
+
+<Button href="/v3/guidelines/ton-connect/frameworks/web" colorType="secondary" sizeType={'sm'}>
+  Приложения на HTML/JS
+</Button>
+
+<Button href="https://github.com/ton-community/tma-usdt-payments-demo" colorType="secondary" sizeType={'sm'}>
+  Демо TMA
+</Button>
+
+<Feedback />

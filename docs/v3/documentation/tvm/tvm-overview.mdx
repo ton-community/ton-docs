@@ -98,7 +98,7 @@ TVM operates as a stack machine, supporting seven variable types:
 - `c0`: stores the next or return continuation, similar to a return address.
 - `c1`: stores the alternative continuation.
 - `c2`: contains the exception handler. Continuation.
-- `c3`: holds the current dictionary like a hashmap of functions codes. Continuation.
+- `c3`: holds the smart contract code. Cell.
 - `c4`: stores the persistent data (contract's `data` section). Cell.
 - `c5`: contains output actions. Cell.
 - `c7`: stores temporary data. Tuple.
@@ -131,4 +131,3 @@ To send more than 255 messages, a contract can send a message to itself with a r
 - [TON TVM concepts](https://ton.org/tvm.pdf) (may include outdated information)
 
 <Feedback />
-

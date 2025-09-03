@@ -14,7 +14,7 @@ It's recommended to review the [Asset processing overview](/v3/documentation/dap
 
 ## Wallet smart contract
 
-Wallet smart contracts on TON Blockchain allow external actors to interact with the blockchain entities. They serve the following purposes:
+Wallet smart contracts on the TON Blockchain allow external actors to interact with blockchain entities. They serve the following purposes:
 
 - Authenticating the owner: Rejects requests that attempt to process transactions or pay fees on behalf of unauthorized users.
 - Providing replay protection: Prevents the repeated execution of the same request, such as sending assets to another smart contract multiple times.
@@ -237,7 +237,7 @@ Best for dApps that require multiple transactions within a session or a persiste
 
 **Disadvantages**
 
-- ❌ If only one payment is needed, users must connect the wallet and confirm the transaction
+- ❌ If only one payment is needed, users must connect the wallet and confirm the transaction.
 - ❌ More complex integration than a ton:// link.
 
 <Button href="/v3/guidelines/ton-connect/overview/" colorType="primary" sizeType={'lg'}>
@@ -247,13 +247,13 @@ Best for dApps that require multiple transactions within a session or a persiste
 ### Invoices with ton:// link
 
 :::warning
-The Ton link is deprecated. Avoid using it.
+The TON link is deprecated. Avoid using it.
 :::
 
 If you need an easy integration for a simple user flow, it is suitable to use the ton:// link.
 It is best suited for one-time payments and invoices.
 
-```bash
+```text
 ton://transfer/<destination-address>?
     [nft=<nft-address>&]
     [fee-amount=<nanocoins>&]
@@ -286,7 +286,7 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 
 `https://explorer.toncoin.org/transaction?account={account address}&lt={lt as int}&hash={txhash as base64url}`
 
-Note: tonviewer and tonscan also support external-in message hashes instead of transaction hashes for explorer links. This is useful when generating an external message and needing an instant transaction link. Learn more about transactions and messages hashes [here](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
+Note: tonviewer and tonscan also support external-in message hashes instead of transaction hashes for explorer links. This is useful when generating an external message and needing an instant transaction link. Learn more about transaction and message hashes [here](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
 
 ## Best practices
 
@@ -307,7 +307,7 @@ Note: tonviewer and tonscan also support external-in message hashes instead of t
   </TabItem>
 
   <TabItem value="Python" label="Python">
-    - **psylopunk/pythonlib:**
+    - **psylopunk/pytonlib:**
       - [Wallet creation + get wallet address](https://github.com/psylopunk/pytonlib/blob/main/examples/generate_wallet.py)
 
     - **yungwine/pytoniq:**
@@ -337,7 +337,7 @@ Note: tonviewer and tonscan also support external-in message hashes instead of t
 
 ### Wallet creation for different shards
 
-When under heavy load, TON Blockchain may split into [shards](/v3/documentation/smart-contracts/shards/shards-intro)to distribute network activity. A shard is similar to a network segment in Web3.
+When under heavy load, TON Blockchain may split into [shards](/v3/documentation/smart-contracts/shards/shards-intro) to distribute network activity. A shard is similar to a network segment in Web3.
 
 Just as we distribute service infrastructure in the Web2 world to be as close to the end user as possible, in TON we can deploy contracts that will reside in the same shard as the user's wallet or any other contract that interacts with it.
 
@@ -556,11 +556,11 @@ This way, you can provide the best user experience regardless of the current net
 <Tabs groupId="example-toncoin_withdrawals">
   <TabItem value="JS" label="JS">
     - **toncenter:**
-      - [Withdraw Toncoins from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-highload-batch.js)
-      - [Withdraw Toncoins from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-highload.js)
+      - [Withdraw Toncoin from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-highload-batch.js)
+      - [Withdraw Toncoin from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-highload.js)
 
     - **ton-community/ton:**
-      - [Withdraw Toncoins from a wallet](https://github.com/ton-community/ton#usage)
+      - [Withdraw Toncoin from a wallet](https://github.com/ton-community/ton#usage)
   </TabItem>
 
   <TabItem value="Go" label="Go">

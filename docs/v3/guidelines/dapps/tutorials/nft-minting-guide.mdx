@@ -29,7 +29,7 @@ You must already have a testnet wallet with at least 2 TON. You can get testnet 
 2. Create a new Testnet wallet: Add wallet → Add Testnet Account.
    :::
 
-We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key and api_secret. The official Pinata [documentation](https://docs.pinata.cloud/account-management/api-keys) can help with that. Once you have these API tokens, I’ll be waiting for you here!
+We will use Pinata as our IPFS storage system, so you also need to create an account on [pinata.cloud](https://pinata.cloud) and get api_key and api_secret. The official Pinata [documentation](https://docs.pinata.cloud/account-management/api-keys) can help with that. Once you have these API tokens, I'll be waiting for you here!
 
 ## 💎 What is an NFT on TON?
 
@@ -54,7 +54,7 @@ The ETH solution is not scalable and is unsuitable for an asynchronous blockchai
 
 ### TON NFT implementation
 
-On TON, there is one master contract—the collection’s smart contract—which stores its metadata, the owner's address, and, most importantly, the logic for minting new NFTs. To create ("mint") a new NFT, you simply send a message to the collection contract. This contract then deploys a new NFT item contract using the data you provide.
+On TON, there is one master contract—the collection's smart contract—which stores its metadata, the owner's address, and, most importantly, the logic for minting new NFTs. To create ("mint") a new NFT, you simply send a message to the collection contract. This contract then deploys a new NFT item contract using the data you provide.
 
 ![](/img/tutorials/nft/ton-collection.png)
 
@@ -141,7 +141,7 @@ MNEMONIC=word1 word2 word3 word4
 TONCENTER_API_KEY=aslfjaskdfjasasfas
 ```
 
-You can get a TON Center API key from [@tonapibot](https://t.me/tonapibot) and choose mainnet or testnet. Store the 24-word seed phrase of the collection owner’s wallet in the MNEMONIC variable.
+You can get a TON Center API key from [@tonapibot](https://t.me/tonapibot) and choose mainnet or testnet. Store the 24-word seed phrase of the collection owner's wallet in the MNEMONIC variable.
 
 Great! Now we are ready to start writing code for our project.
 
@@ -262,7 +262,7 @@ Based on this, let's create our own metadata file, `collection.json`, to describ
 }
 ```
 
-Note: We’re not adding the "image" parameter just yet—you’ll see why later!
+Note: We're not adding the "image" parameter just yet—you'll see why later!
 
 Once done, you can create as many NFT metadata files as you like.
 
@@ -274,7 +274,7 @@ Each NFT item follows these metadata specifications:
 | description   | NFT description. Recommended length: Up to 500 characters                                                   |
 | image         | Link to the NFT image.                                                                                      |
 | attributes    | List of NFT attributes, where a trait_type (attribute name) and value (a short description) are specified. |
-| lottie        | Link to a JSON file with Lottie animation (if specified, the animation will play on the NFT’s page).        |
+| lottie        | Link to a JSON file with Lottie animation (if specified, the animation will play on the NFT's page).        |
 | content_url  | Link to additional content.                                                                                 |
 | content_type | Type of content from the content_url link (e.g., video/mp4).                                               |
 
@@ -544,7 +544,7 @@ export class NftCollection {
 
 In this method, we simply read the cell from the base64 representation of the collection smart contract.
 
-Now, we need to create the cell containing our collection’s initial data. Essentially, we must store collectionData correctly. First, we create an empty cell and store the collection owner's address and the index of the next item to be minted. Let’s define the next private method:
+Now, we need to create the cell containing our collection's initial data. Essentially, we must store collectionData correctly. First, we create an empty cell and store the collection owner's address and the index of the next item to be minted. Let's define the next private method:
 
 ```ts
 private createDataCell(): Cell {
@@ -555,7 +555,7 @@ private createDataCell(): Cell {
   dataCell.storeUint(data.nextItemIndex, 64);
 ```
 
-Next, we create an empty cell to store the collection’s content. We then store a reference to the encoded content cell within our main data cell.
+Next, we create an empty cell to store the collection's content. We then store a reference to the encoded content cell within our main data cell.
 
 ```ts
 const contentCell = beginCell();
@@ -611,7 +611,7 @@ public get stateInit(): StateInit {
 }
 ```
 
-We also need a getter that calculates the collection’s address. In TON, a smart contract’s address is simply the hash of its `StateInit`.
+We also need a getter that calculates the collection's address. In TON, a smart contract's address is simply the hash of its `StateInit`.
 
 ```ts
 public get address(): Address {
@@ -640,8 +640,12 @@ public async deploy(wallet: OpenedWallet) {
   }
 ```
 
+:::info
+`sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
+
 Deploying a new smart contract in our case means sending a message from our wallet to the collection address, which we can calculate if we have `StateInit`, along with its `StateInit`.
-When the owner mints a new NFT, the collection accepts the owner's message and sends a new message to the created NFT smart contract, which requires a fee. Let’s write a method to replenish the collection’s balance based on the number of NFTs to be minted:
+When the owner mints a new NFT, the collection accepts the owner's message and sends a new message to the created NFT smart contract, which requires a fee. Let's write a method to replenish the collection's balance based on the number of NFTs to be minted:
 
 ```ts
 public async topUpBalance(
@@ -669,7 +673,7 @@ public async topUpBalance(
   }
 ```
 
-Now, let’s add a few include statements to `app.ts`:
+Now, let's add a few include statements to `app.ts`:
 
 ```ts
 import { waitSeqno } from "./delay";
@@ -788,9 +792,13 @@ export class NftItem {
 }
 ```
 
-At the end, we write a short method to retrieve an NFT’s address by its index:
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
 
-Create a client variable to call the collection’s get-method.
+At the end, we write a short method to retrieve an NFT's address by its index:
+
+Create a client variable to call the collection's get-method.
 
 ```ts
 static async getAddressByIndex(
@@ -835,7 +843,7 @@ files.pop();
 let index = 0;
 ```
 
-Next, top up the collection’s balance.
+Next, top up the collection's balance.
 
 ```ts
 seqno = await collection.topUpBalance(wallet, files.length);
@@ -873,7 +881,7 @@ To list an NFT for sale, we need two smart contracts:
 
 ### Deploy the marketplace
 
-Create a new file: `/contracts/NftMarketplace.ts`. Create a basic class that accepts the marketplace owner’s address and generates a cell with the smart contract code and initial data (we will use [basic version of NFT-Marketplace smart contract](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-marketplace.fc)).
+Create a new file: `/contracts/NftMarketplace.ts`. Create a basic class that accepts the marketplace owner's address and generates a cell with the smart contract code and initial data (we will use [basic version of NFT-Marketplace smart contract](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-marketplace.fc)).
 
 ```ts
 import {
@@ -1114,11 +1122,15 @@ Finally, let's send our message:
 }
 ```
 
-Once the sale contract is deployed, the only step left is to transfer ownership of the NFT item to the sale contract’s address.
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
+
+Once the sale contract is deployed, the only step left is to transfer ownership of the NFT item to the sale contract's address.
 
 ### Transferring the item
 
-Transferring an item means sending a message from the owner’s wallet to the smart contract with the new owner's information.
+Transferring an item means sending a message from the owner's wallet to the smart contract with the new owner's information.
 
 Go to `NftItem.ts` and create a new static method in NftItem class to construct the transfer message body:
 

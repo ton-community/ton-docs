@@ -1,3 +1,24 @@
+---
+title: "Message-driven execution"
+description: "Learn how TON executes smart contracts through message passing, actor-based processing, and how messages trigger transactions."
+keywords:
+  - TON messages
+  - TON internal messages
+  - TON external incoming messages
+  - TON external-in messages
+  - TON external outgoing messages
+  - Bounce messages
+  - Serializing messages
+faq:
+  - "Why does my contract not answer right away?"
+  - "Why do transactions show up later than I expect?"
+  - "What’s the difference between an internal message and an external one?"
+  - "What happens if a message never gets answered?"
+  - "Can I make my contract return a value instantly?"
+  - "How to detect if a message bounced or failed?"
+---
+
+
 import Button from '@site/src/components/button'
 import Feedback from '@site/src/components/Feedback'
 
@@ -167,6 +188,7 @@ When a contract receives an internal message, it can reliably determine:
 - which contracts are the sender and the recipient
 
 The blockchain ensures the integrity of this information, allowing the contract to be trusted and used safely.
+
 **TL-B:**
 
 A contract always initiates internal messages — they are the result of a transaction’s execution.
@@ -239,9 +261,9 @@ created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ## Bounce of messages
 
 A **bounce message** is automatically returned to the sender — but only if the following conditions are met:
-* the message is **internal**,
-* the message is **bounceable** (`bounce = true`), and
-* the recipient contract **does not exist** or the **compute phase** ends with a **non-zero exit code**.
+- the message is **internal**,
+- the message is **bounceable** (`bounce = true`), and
+- the recipient contract **does not exist** or the **compute phase** ends with a **non-zero exit code**.
 
 If these requirements are met, the message is bounced back to the sender.
 This mechanism not only signals the failure but also allows the sender to respond appropriately, such as by refunding tokens or displaying an error message to the user.
@@ -284,7 +306,7 @@ Then run:
 npx blueprint run sendBounceableMessages --testnet --mnemonic
 ```
 
-**Note**: TON Connect (e.g., the `--tonconnect` flag) cannot be used here because wallet extensions like Tonkeeper do not allow dApps to control the `bounce` flag for security reasons. They always send bounceable messages. To maintain this flag, you need to create and sign the message manually using a mnemonic.
+**Note**: TON Connect (e.g., the `--tonconnect` flag) cannot be used here because wallet extensions like Tonkeeper do not allow DApps to control the `bounce` flag for security reasons. They always send bounceable messages. To maintain this flag, you need to create and sign the message manually using a mnemonic.
 
 <details>
   <summary> Send bounceable message </summary>
@@ -604,7 +626,7 @@ To run the script and send an internal message, follow these steps:
 Although you can use `blueprint --tonconnect` to send internal messages, it does **not** support external messages.
 This limitation exists because TON Connect does **not** expose low-level signing capabilities due to the following reasons:
 
-1. **Security by design**: wallets (e.g., Tonkeeper) do not expose raw private keys to dApps.
+1. **Security by design**: wallets (e.g., Tonkeeper) do not expose raw private keys to DApps.
 2. **TON Connect abstraction**: the provider hides the wallet's internal implementation behind a unified interface.
 3. **Limited API surface**: blueprint is designed for contract deployment and testing, not for manual message signing.
 
@@ -761,6 +783,37 @@ If the developer does not have access to TL-B schemas or the original contract s
 This method is the least efficient and most error-prone but can be helpful when working with legacy or undocumented contracts.
 
 Example: [Simple contract](https://verifier.ton.org/EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2)
+
+## Sending messages
+
+In TON, typically, transactions are triggered by messages. The approach of preparing and sending messages depends on which side the signing key is used:
+
+### For frontend
+
+In this case, the service doesn't use its own private key to sign an external message in the blockchain; instead, it provides the user with a prepared payload that should be sent. These services never access the users' private key directly.
+
+1. User confirms some business event in a service.
+2. A service prepares the **external message body (payload)**.
+3. A user's wallet app receives a prepared payload through TON Connect.
+4. User **signs the message** in the wallet app and submits it to the blockchain.
+5. Service track blockchain state and perform further steps for this business process.
+
+In this approach, the service doesn't sign messages, but rather its users do.
+
+Example:NFT market DApp - NFT sale.
+
+### For backend
+
+The service sends external messages signed by its own private key.
+
+1. A user or event triggers a specific business event.
+2. A service prepares and signs an external message according to the inner business logic.
+3. A service sends a signed external message to the blockchain.
+4. A service tracks blockchain state and reports on completed business events.
+
+In this approach, the service signs its external messages without the involvement of a third party.
+
+Example:Centralized exchange - deposit and withdrawals.
 
 ## Next step
 

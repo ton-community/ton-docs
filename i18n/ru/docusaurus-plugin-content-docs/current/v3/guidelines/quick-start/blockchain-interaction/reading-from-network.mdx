@@ -6,13 +6,13 @@ import Button from '@site/src/components/button'
 
 ## Введение
 
-Это руководство демонстрирует, как читать данные из блокчейна TON. Вы узнаете, как:
+Это руководство показывает, как читать данные из блокчейна TON. Вы научитесь:
 
 - Получать информацию об аккаунте
 - Вызывать `get-методы`
 - Получать данные о транзакциях аккаунта
 
-В итоге вы поймёте, как взаимодействовать с [TON  API на основе HTTP](/ru/v3/guidelines/dapps/apis-sdks/ton-http-apis/). В этом руководстве используется [TON Center](https://toncenter.com/) — быстрый и надежный HTTP API для TON.
+В итоге вы поймёте, как взаимодействовать с [TON API на основе HTTP](/v3/guidelines/dapps/apis-sdks/ton-http-apis). В этом руководстве используется [TON Center](https://toncenter.com/) — быстрый и надёжный HTTP API для TON.
 
 ## Настройка окружения
 
@@ -43,7 +43,7 @@ npm install typescript ts-node @ton/ton @ton/core @ton/crypto
 npx tsc --init
 ```
 
-Для запуска скрипта на TypeScript, сохранённого как `script.ts` в вашей текущей директории, можно выполнить такую команду:
+Для запуска скрипта на TypeScript в вашей текущей директории можно выполнить такую команду (если, например, он называется `script.ts`):
 
 ```bash
 npx ts-node script.ts
@@ -60,9 +60,37 @@ npx ts-node script.ts
   - **Active**: Адрес уже активен, у него есть и код, и баланс.
   - **Frozen**: Адрес заблокирован, поскольку баланс оказался недостаточным для расходов на хранение данных.
 - `code`: Код контракта в «сыром формате».
-- `data`: Сериализованные данные контракта, хранящиеся в [_ячейке_](/ru/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage/).
+- `data`: Сериализованные данные контракта, хранящиеся в [*ячейке*](/ru/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage/).
 
 Состояние аккаунта может быть получено с помощью метода [`getContractState`](https://testnet.toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get/).
+
+#### Адрес аккаунта
+
+Чтобы получить информацию об аккаунте, необходимо знать его адрес. В TON мы можем использовать формат «user-friendly address» — строку с форматом кодирования base64url, которая представляет аккаунт в блокчейне в человекочитаемом виде с защитой от ошибок.
+
+Такие адреса также включают специальные флаги, определяющие, как этот адрес следует использовать. Например, некоторые адреса будут валидными только в тестнете, в то время как другие подходят любой сети. Эти флаги закодированы в первых нескольких битах, поэтому от них зависит первая буква адреса:
+
+- Адреса, которые начинаются с **E** или **U**, используются в **мейннете**
+- Адреса, которые начинаются с **k** или **0**, используются в **тестнете**
+
+**Пример для мейннета:**
+
+- `EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF`
+- `UQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPuwA`
+
+**Пример для тестнета:**
+
+- `kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP`
+- `0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK`
+
+#### Ваш адрес в последующих примерах
+
+В приведённых примерах кода можете смело заменять используемый адрес на адрес вашего тестового кошелька.
+
+```typescript
+ // Replace with any address
+const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-');
+```
 
 #### Реализация
 
@@ -77,7 +105,8 @@ async function main() {
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
 
-  const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'); // Replace with any address
+  // Replace with any address
+  const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-');
 
   // Calling method on http api
   const state = await tonClient.getContractState(accountAddress);
@@ -92,7 +121,7 @@ async function main() {
 main();
 ```
 
-Запустите этот пример, используя следующую команду:
+Выполните этот пример, используя следующую команду:
 
 ```bash
 npx ts-node 1-get-account-state.ts
@@ -107,11 +136,26 @@ Data:  b5ee9c7241010101002...fd1e976824402aa67b98
 Code:  b5ee9c7241021401000...c9ed54696225e5
 ```
 
+**Обратите внимание:** баланс может отличаться от приведённого здесь, потому что кто угодно может отправить средства на кошелёк, изменив эту сумму.
+
 ## Вызов get-методов
 
-Get-методы — это специальные функции в смарт-контрактах, позволяющие наблюдать текущее состояние смарт-контракта. Их выполнение не требует оплаты комиссий и не может изменить данные смарт-контракта.
+Get-методы — это специальные функции в смарт-контрактах, позволяющие наблюдать текущее состояние смарт-контракта, сообщая лишь нужные вам **конкретные данные** — без необходимости читать полностью состояние аккаунта, как мы сделали в первом примере. Чтение аккаунта целиком предоставляет вам сразу всю информацию, включая баланс, код, данные и не только, а get-методы позволяют запрашивать **точечную информацию**, делая процесс эффективнее и проще для разработчика.
 
-Результат вызова get-метода через TON HTTP API приходит в _стековом_ формате, и его можно десериализировать один элемент за другим с помощью `readNumber()` или схожей функции.
+Их исполнение:
+
+- Не требует оплаты контрактами каких-либо комиссий.
+- Не может менять данные или состояние смарт-контракта.
+
+Результат вызова get-метода через TON HTTP API приходит в *стековом* формате, и его можно десериализировать пошагово с помощью `readNumber()` или схожей функции, в зависимости от ожидаемого типа данных.
+
+#### Зачем это требуется?
+
+В TON управление токенами (также называемыми jettons) осуществляется с помощью отдельных контрактов, которые называются **Jetton wallets** и связаны с адресами основных кошельков пользователей. Чтобы взаимодействовать с токенами пользователя, сначала надо узнать адрес соответствующего контракта Jetton wallet.
+
+В контракте Jetton master есть get-метод `get_wallet_address`, позволяющий нам получить **верифицированный адрес контракта Jetton wallet** для определённого адреса основного пользовательского кошелька.
+
+В этом примере мы покажем, как вызвать метод, чтобы получить адрес Jetton wallet пользователя.
 
 #### Реализация
 
@@ -128,6 +172,8 @@ async function main() {
 
   // Building optional get method parameters list
   const builder = new TupleBuilder();
+
+  // Replace with your address
   builder.writeAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
 
   const accountAddress = Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy')
@@ -140,8 +186,11 @@ async function main() {
   );
 
   // Deserializing get method result
-  const address = result.stack.readAddress();
-  console.log(address.toRawString());
+  const rawAddress = result.stack.readAddress();
+
+  console.log("Raw address:", rawAddress.toRawString());
+  console.log("User-friendly address:", rawAddress.toString({ bounceable: true, urlSafe: true, testOnly: true}));
+
 }
 
 main();
@@ -156,14 +205,22 @@ npx ts-node 2-call-get-method.ts
 #### Ожидаемый результат
 
 ```bash
-0:25f2bf1ce8f83ed0c0fd73ea27aac77093cdcf900c750b071df7fb0288e019b2
+Raw address: 0:25f2bf1ce8f83ed0c0fd73ea27aac77093cdcf900c750b071df7fb0288e019b2
+User-friendly address: kQB11H0oDahylXlASZjiDtINlrS0PevVMsvtsbmKmvN5l9np
 ```
+
+Вы можете увидеть адрес контракта, который вернул get-метод, в двух форматах:
+
+- «Сырой» формат *raw address* (шестнадцатеричный) — это то, как адреса представлены внутри блокчейна TON. Он точен, но не очень удобен для людей.
+- «Дружелюбный» формат *user-friendly address* — читаемый, более безопасный, разработан для его отправки другим людям и повседневного использования. С ним удобнее работать в кошельках и приложениях.
+
+Оба адреса указывают на один и тот же контракт — в данном случае, **контракт Jetton wallet**, связанный с адресом кошелька пользователя.
 
 Get-методы можно также вызвать с помощью Tonviewer:
 
-1. Перейдите в раздел [get-методов](https://testnet.tonviewer.com/kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy?section=method).
+1. Перейдите в [раздел get-методов](https://testnet.tonviewer.com/kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy?section=method).
 2. Выберите `get_wallet_address`.
-3. Вставьте адрес из примера _0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-_ в поле Slice.
+3. Вставьте адрес из примера *0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-* в поле Slice.
 4. Нажмите **Выполнить**.
 
 Вы получите тот же адрес, который вы получили из консоли.
@@ -187,7 +244,7 @@ async function main() {
   );
 
   // Calling get method through wrapper
-  const address = jettonMaster.getWalletAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
+  const address = await jettonMaster.getWalletAddress(Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'));
   console.log(address);
 }
 
@@ -200,17 +257,17 @@ main();
 
 ### Что такое транзакция?
 
-Транзакция в TON состоит из следующего:
+Транзакция в TON состоит из таких вещей:
 
 - Входящее сообщение, которое изначально обращается к контракту (существуют специальные способы обратиться)
-- Действия контракта, вызванные входящим сообщением, такие как обновление хранимых  контрактом данных (опционально)
+- Действия контракта, вызванные входящим сообщением, такие как обновление хранимых им данных (опционально)
 - Исходящие сообщения, которые генерируются и отправляются другим акторам (опционально)
 
 <ThemedImage
   alt=""
   sources={{
-    light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
-    dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
+   light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
+   dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
   }}
 />
 
@@ -220,9 +277,7 @@ main();
 
 ```json5
 {
-  "@type": "raw.transaction",
   "address": {
-    "@type": "accountAddress",
     "account_address": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx"
   },
   "utime": 1738588970,
@@ -236,19 +291,19 @@ main();
 
 - `address`: Адрес аккаунта, где осуществлялась транзакция.
 - `utime`: [UNIX-время](https://www.unixtimestamp.com/) транзакции.
-- `in_msg`: Входящее [сообщение](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message/), которое инициировало транзакцию.
+- `in_msg`: Входящее [сообщение](/v3/documentation/smart-contracts/message-management/messages-and-transactions/), которое инициировало транзакцию.
 - `out_msgs`: Исходящие сообщения, отправленные в ходе транзакции.
 
 ### Что такое сообщение?
 
-Сообщение представляет собой пакет данных, отправляемых между акторами (пользователями, приложениями или смарт-контрактами). Обычно оно содержит информацию, указывающую получателю на то, какие действия выполнять: например, обновление сохранённых данных или отправка нового сообщения.
+Сообщение представляет собой пакет данных, отправляемых между акторами (пользователями, приложениями или смарт-контрактами). Обычно оно содержит информацию, указывающую получателю на то, какие действия выполнять: например, обновить сохранённые данные или отправить новое сообщение.
 
 <div class="text--center">
   <ThemedImage
     alt=""
     sources={{
-      light: '/img/docs/message-delivery/message_delivery_1.png?raw=true',
-      dark: '/img/docs/message-delivery/message_delivery_1_dark.png?raw=true',
+     light: '/img/docs/message-delivery/message_delivery_1.png?raw=true',
+     dark: '/img/docs/message-delivery/message_delivery_1_dark.png?raw=true',
     }}
   />
 </div>
@@ -257,14 +312,12 @@ main();
 
 ```json5
 {
-  "@type": "raw.message",
   "hash": "mcHdqltDAB8ODQHqtedtYQIS6MQL7x4ut+nf9tXWGqg=",
   "source": "EQAJTegD8OO-HksHfI4KVDqb7vW9Dlqi5C1FTcL1dECeosTf",
   "destination": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx",
   "value": "20000000",
   ...
   "msg_data": {
-    "@type": "msg.dataRaw",
     "body": "te6cckEBAQEAAgAAAEysuc0=",
     ...
   },
@@ -272,14 +325,29 @@ main();
 }
 ```
 
-- `source`: Адрес отправителя (аккаунт, который инициировал сообщение).
+- `hash` (хеш): криптографический идентификатор сообщение, который вычисляется после того, как сообщение включено в транзакцию и получило значение [logical time (lt)](/v3/documentation/smart-contracts/message-management/messages-and-transactions/), которое определяет, в каком порядке оно будет обработано. Хеш не является частью исходного сообщения, и он позволяет уникально идентифицировать финализированное сообщение для проверки целостности.
+- `source` (источник): Адрес отправителя (аккаунт, который инициировал сообщение).
 - `destination`: Адрес получателя (аккаунт, который будет обрабатывать сообщение).
 - `value`: Количество TON (указывается в nanoTON), прикреплённое к сообщению.
 - `msg_data`: Содержит тело сообщения и состояние инициализации.
 
 #### Реализация
 
-Создайте новый файл `3-fetch-account-transaction.ts`:
+Давайте попробуем получить транзакции принадлежащего нам аккаунта.
+
+До исполнения этого кода:
+
+- Откройте в [Tonviewer](https://testnet.tonviewer.com) адрес своего кошелька в тестнете, который мы ранее создали в секции [Getting Started](/v3/guidelines/quick-start/getting-started).
+- Отправьте себе тестовые TON с помощью [Testgiver Ton Bot](https://t.me/testgiver_ton_bot/).
+- Подождите несколько секунд и убедитесь, что транзакция отобразилась в Tonviewer.
+
+:::important
+Make sure you're working in the Testnet, not the Mainnet.
+
+Также обратите внимание, что Testnet API может обновлять данные с задержкой, так что ваша транзакция может не сразу отображаться при запросах по API.
+:::
+
+- Затем создайте новый файл `3-fetch-account-transaction.ts`:
 
 ```typescript title="3-fetch-account-transaction.ts"
 import { Address, TonClient } from "@ton/ton";
@@ -293,7 +361,8 @@ async function main() {
   // Calling method on http api
   // full api: https://testnet.toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get
   const transactions = await tonClient.getTransactions(
-    Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'), // Address to fetch transactions
+    // Replace with your Testnet address to fetch transactions
+    Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'),
     {
       limit: 10,      //maximum ammount of recieved transactions
       archival: true, //search in all history
@@ -306,14 +375,16 @@ async function main() {
   console.log('Timestamp:', firstTx.now);
   if (inMessage?.info?.type === 'internal') {
     console.log('Value:', inMessage.info.value.coins);
-    console.log('Sender:', inMessage.info.src);
+    console.log('Sender:', inMessage.info.src.toString({ testOnly: true }));
   }
 }
 
 main();
 ```
 
-Выполните этот пример, используя следующую команду:
+- В строке `Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-')` замените предложенный адрес на свой в тестнете.
+
+Запустите этот пример, используя следующую команду:
 
 ```bash
 npx ts-node 3-fetch-account-transaction.ts
@@ -322,25 +393,23 @@ npx ts-node 3-fetch-account-transaction.ts
 #### Ожидаемый результат
 
 ```bash
-Timestamp: 1743516631
-Value: 100000000n
-Sender: EQBui16XCF61MSWauIDpVFbKAOJmjLHRxXvXeqiN9dYaIgjq
+Timestamp: 1748338158
+Value: 48526800n
+Sender: kQDhJ2Kx7dD6FLzAXcqiI4Xsu4ioY6JlE24m9Tx86eGkq0OF
 ```
 
 :::info
-Более сложный пример обхода графа транзакций можно увидеть [здесь](/ru/v3/guidelines/dapps/asset-processing/payments-processing/#retrieve-incomingoutgoing-transactions).
+Более сложный пример обхода графа транзакций можно увидеть [здесь](/v3/guidelines/dapps/asset-processing/payments-processing/).
 :::
 
 ## Следующий шаг
 
-Теперь, когда вы научились читать данные из блокчейна TON, пришло время изучить **писать данные в сеть**.
+Теперь, когда вы научились читать данные из блокчейна TON, пришло время изучить, как **писать данные в сеть**.
 
-Нажмите кнопку ниже, чтобы продолжить:
+Нажмите кнопку ниже для продолжения:
 
 <Button href="/v3/guidelines/quick-start/blockchain-interaction/writing-to-network" colorType={'primary'} sizeType={'sm'}>
-
   Запись в сеть
-
 </Button>
 
 <Feedback />
