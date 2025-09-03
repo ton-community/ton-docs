@@ -2,20 +2,20 @@ import Feedback from '@site/src/components/Feedback';
 
 # Drawing conclusions from TON Hack Challenge
 
-The TON Hack Challenge was held on October 23.
-There were several smart contracts deployed to the TON mainnet with synthetic security breaches. Every contract had a balance of 3000 or 5000 TON, allowing participant to hack it and get rewards immediately.
+The TON Hack Challenge was held on October 23, 2022.
+Several smart contracts were deployed to the TON mainnet with synthetic security breaches. Every contract had a balance of 3000 or 5000 TON, allowing participants to hack them and get rewards immediately.
 
-Source code and contest rules were hosted on GitHub [here](https://github.com/ton-blockchain/hack-challenge-1).
+Source code and contest rules were hosted on GitHub in [ton-blockchain/hack-challenge-1](https://github.com/ton-blockchain/hack-challenge-1).
 
 ## Contracts
 
 ### 1. Mutual fund
 
 :::note SECURITY RULE
-Always check functions for [`impure`](/v3/documentation/smart-contracts/func/docs/functions#impure-specifier) modifier.
+Always check functions for the [`impure`](/v3/documentation/smart-contracts/func/docs/functions#impure-specifier) modifier.
 :::
 
-The first task was very simple. The attacker could find that `authorize` function was not `impure`. The absence of this modifier allows a compiler to skip calls to that function if it returns nothing or the return value is unused.
+The first task was very simple. The attacker could find that `authorize` function was not `impure`. The absence of this modifier allows the compiler to skip calls to that function if its result is unused.
 
 ```func
 () authorize (sender) inline {
@@ -29,7 +29,7 @@ The first task was very simple. The attacker could find that `authorize` functio
 Always check for [modifying/non-modifying](/v3/documentation/smart-contracts/func/docs/statements#methods-calls) methods.
 :::
 
-`udict_delete_get?` was called with `.` instead `~`, so the real dict was untouched.
+`udict_delete_get?` was called with `.` instead of `~`, so the real dict was untouched.
 
 ```func
 (_, slice old_balance_slice, int found?) = accounts.udict_delete_get?(256, sender);
@@ -38,10 +38,10 @@ Always check for [modifying/non-modifying](/v3/documentation/smart-contracts/fun
 ### 3. DAO
 
 :::note SECURITY RULE
-Use signed integers if you really need it.
+Use signed integers only if you really need them.
 :::
 
-Voting power was stored in message as an integer. So the attacker could send a negative value during power transfer and get infinite voting power.
+Voting power was stored in the message as an integer. So the attacker could send a negative value during power transfer and get arbitrarily large voting power.
 
 ```func
 (cell,()) transfer_voting_power (cell votes, slice from, slice to, int amount) impure {
@@ -63,10 +63,10 @@ Voting power was stored in message as an integer. So the attacker could send a n
 ### 4. Lottery
 
 :::note SECURITY RULE
-Always randomize seed before doing [`rand()`](/v3/documentation/smart-contracts/func/docs/stdlib#rand)
+Always randomize the seed before calling [`rand()`](/v3/documentation/smart-contracts/func/docs/stdlib#rand).
 :::
 
-Seed was brought from logical time of the transaction, and a hacker can win by bruteforcing the logical time in the current block (cause lt is sequential in the borders of one block).
+The seed was derived from the transaction's logical time, and a hacker can win by brute-forcing the logical time in the current block.
 
 ```func
 int seed = cur_lt();
@@ -90,14 +90,12 @@ if(rand(10000) == 7777) { ...send reward... }
 Remember that everything is stored in the blockchain.
 :::
 
-The wallet was protected with password, it's hash was stored in contract data. However, the blockchain remembers everything—the password was in the transaction history.
+The wallet was protected with a password; its hash was stored in contract data. However, the blockchain remembers everything—the password was in the transaction history.
 
 ### 6. Vault
 
 :::note SECURITY RULE
-Always check for [bounced](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) messages.
-Don't forget about errors caused by [standard](/v3/documentation/smart-contracts/func/docs/stdlib) functions.
-Make your conditions as strict as possible.
+Always check for [bounced](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) messages. Don't forget about errors caused by [standard](/v3/documentation/smart-contracts/func/docs/stdlib) functions; make your conditions as strict as possible.
 :::
 
 The vault has the following code in the database message handler:
@@ -113,15 +111,12 @@ if (op == op_not_winner) {
 }
 ```
 
-Vault does not have a bounce handler or proxy message to the database if the user sends “check”. In the database we can set `msg_addr_none` as an award address because `load_msg_address` allows it. We are requesting a check from the vault, database tries to parse `msg_addr_none` using [`parse_std_addr`](/v3/documentation/smart-contracts/func/docs/stdlib#parse_std_addr), and fails. Message bounces to the vault from the database and op is not `op_not_winner`.
+The vault does not have a bounce handler and does not proxy the 'check' message to the database. In the database, we can set `msg_addr_none` as an award address because `load_msg_address` allows it. We request a check from the vault; the database tries to parse `msg_addr_none` using [`parse_std_addr`](/v3/documentation/smart-contracts/func/docs/stdlib#parse_std_addr) and fails. The message bounces to the vault from the database, and `op` is not `op_not_winner`.
 
 ### 7. Better bank
 
 :::note SECURITY RULE
-Never destroy account for fun.
-Make [`raw_reserve`](/v3/documentation/smart-contracts/func/docs/stdlib#raw_reserve) instead of sending money to yourself.
-Think about possible race conditions.
-Be careful with hashmap gas consumption.
+Never destroy an account unnecessarily. Use [`raw_reserve`](/v3/documentation/smart-contracts/func/docs/stdlib#raw_reserve) instead of sending money to yourself. Think about possible race conditions. Be careful with hashmap gas consumption.
 :::
 
 There were race conditions in the contract: you could deposit money, then try to withdraw it twice in concurrent messages. There is no guarantee that a message with reserved money will be processed, so the bank can shut down after a second withdrawal. After that, the contract could be redeployed and anybody could withdraw unclaimed money.
@@ -149,11 +144,11 @@ slice safe_execute(int image, (int -> slice) dehasher) inline {
 }
 ```
 
-There is no way to safe execute a third-party code in the contract, because [`out of gas`](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes) exception cannot be handled by `CATCH`. The attacker simply can [`COMMIT`](/v3/documentation/tvm/instructions#F80F) any state of contract and raise `out of gas`.
+There is no way to safely execute third-party code in the contract. The attacker can [`COMMIT`](/v3/documentation/smart-contracts/func/docs/stdlib#commit) any state of the contract and raise `out of gas`.
 
 ## Conclusion
 
-Hope this article has shed some light on the non-obvious rules for FunC developers.
+We hope this article sheds some light on the non-obvious rules for FunC developers.
 
 ## References
 
@@ -161,4 +156,3 @@ Hope this article has shed some light on the non-obvious rules for FunC develope
 - [Original article](https://dev.to/dvlkv/drawing-conclusions-from-ton-hack-challenge-1aep) - _Dan Volkov_
 
 <Feedback />
-
