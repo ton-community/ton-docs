@@ -2,41 +2,39 @@ import Feedback from '@site/src/components/Feedback';
 
 # Content subscriptions
 
-Due to the fact that transactions in TON Blockchain are fast and the network fees are low, you can process recurring payments on-chain via smart contracts.
+Because transactions on the TON blockchain are fast and network fees are low, you can process recurring payments on-chain via smart contracts.
 
-For example, users can subscribe to digital content (or anything else) and be charged a monthly fee of 1 TON.
+For example, users can subscribe to digital content (or anything else) and be charged a monthly fee of 1 Toncoin (TON).
 
 :::tip
-This content is specific for wallets of version v4. Older wallets don't have this functionality; it is eligible to change in future versions as well.
+This feature requires Wallet v4. Older wallets don’t support plugins; behavior is subject to change in future versions.
 :::
 
 :::warning
-Subscription contract requires authorization exactly once, on installation; then it can withdraw TON as it pleases. Do your own research before attaching unknown subscriptions.
-
-On the other hand, user can't get subscription installed without their knowledge.
+A subscription plugin requires authorization exactly once, upon installation; after that, it can transfer Toncoin without further user confirmation. Do your own research before authorizing unknown subscriptions. Users cannot have a subscription installed without their knowledge.
 :::
 
 ## Example flow
 
-- Users use a v4 wallet. It allows additional smart contracts, known as plugins, to extend its functionality.
+- Users with [Wallet v4](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4) can install additional smart contracts (plugins) to extend wallet functionality.
 
-  After ensuring their functionality, the user can approve the addresses of trusted smart contracts (plugins) for his wallet. Following that, the trusted smart contracts can withdraw Toncoin from the wallet. This is similar to "Infinite Approval" in some other blockchains.
+After reviewing plugin functionality, users can approve trusted smart contract (plugin) addresses for their wallet. After approval, trusted smart contracts can withdraw Toncoin from the wallet. This is similar to infinite approval in some other blockchains.
 
-- An intermediate subscription smart contract is used between each user and service as a wallet plugin.
+- An intermediate subscription smart contract, deployed as a wallet plugin, sits between each user and the service.
 
-  This smart contract guarantees that a specified amount of Toncoin will be debited from a user's wallet no more than once within a specified period.
+This smart contract guarantees that a specified amount of Toncoin will be debited from a user's wallet at most once per specified period.
 
-- The service's backend initiates payments on a regular basis by sending an external message to subscription smart contracts.
+- The backend initiates a charge by sending an external message to the user’s subscription smart contract.
 
-- Either user or service can decide they no longer need a subscription and terminate it.
+- Either the user or the service can decide they no longer need a subscription and terminate it.
 
 ## Smart contract examples
 
-- [Wallet v4 smart contract source code](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc)
-- [Subscription smart contract source code](https://github.com/ton-blockchain/wallet-contract/blob/main/func/simple-subscription-plugin.fc)
+- [Wallet v4 smart contract source code](https://github.com/ton-blockchain/wallet-contract/blob/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f/func/wallet-v4-code.fc)
+- [Subscription smart contract source code](https://github.com/ton-blockchain/wallet-contract/blob/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f/func/simple-subscription-plugin.fc)
 
 ## Implementation
 
-A good example of implementation is decentralized subscriptions for Toncoin to private channels in Telegram by the [@donate](https://t.me/donate) bot and the [Tonkeeper wallet](https://tonkeeper.com).
+A good example is Toncoin-powered subscriptions to private Telegram channels via the [@donate](https://t.me/donate) bot and the [Tonkeeper wallet](https://tonkeeper.com).
 
 <Feedback />
