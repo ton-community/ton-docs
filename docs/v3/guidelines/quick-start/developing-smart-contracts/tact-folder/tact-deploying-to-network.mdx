@@ -35,10 +35,9 @@ Since we can't deploy a smart contract with the same `state_init`, the only way 
 If you've already considered that the `ID` field is a must-have for any smart contract, there is another opportunity that could change your mind. Let's examine the previously developed `HelloWorld` smart contract's init section:
 
 ```tact
-init(id: Int, owner: Address) {
+init(id: Int) {
     self.id = id;
     self.counter = 0;
-    self.owner = owner;
 }
 ```
 
