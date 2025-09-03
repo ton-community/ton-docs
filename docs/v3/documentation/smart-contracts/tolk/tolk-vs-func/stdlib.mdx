@@ -3,10 +3,10 @@ import Feedback from '@site/src/components/Feedback';
 # Tolk vs FunC: standard library
 
 FunC has a rich [standard library](/v3/documentation/smart-contracts/func/docs/stdlib),
-known as *"stdlib.fc"* file. It's quite low-level and contains many `asm` functions
+known as the "stdlib.fc" file. It's quite low-level and contains many `asm` functions
 closely related to [TVM instructions](/v3/documentation/tvm/instructions/).
 
-Tolk also has a standard library based on a FunC one. Three main differences:
+Tolk also has a standard library based on the FunC one. Three main differences:
 1. It's split into multiple files: `common.tolk`, `tvm-dicts.tolk`, and others. Functions from `common.tolk` are always available. Functions from other files are available after import:
 ```tolk
 import "@stdlib/tvm-dicts"
@@ -14,14 +14,14 @@ import "@stdlib/tvm-dicts"
 beginCell()          // available always
 createEmptyDict()    // available due to import
 ```
-2. You don't need to download it from GitHub; it's a part of Tolk distribution. 
-3. Tolk has functions and methods (called via dot), lots of global FunC functions became methods of builder/slice/etc. (and can't be called as functions)
+2. You don't need to download it from GitHub; it's part of the Tolk distribution. 
+3. Tolk has functions and methods (called via the dot operator). Many global FunC functions became methods of builders/slices/etc. and can no longer be called as functions.
 
 
 ## Functions vs methods
 
-In FunC, there are no methods, actually. All functions are global-scoped.  
-You just call any function via dot:
+In FunC, there are no methods, actually. All functions are globally scoped.  
+You can call any function using the dot operator:
 ```func
 ;; FunC
 cell config_param(int x) asm "CONFIGOPTPARAM";
@@ -31,7 +31,7 @@ config_param(16);   ;; ok
 ```
 
 So, when you call `b.end_cell()`, you actually call a global function `end_cell`. 
-Since all functions are global-scoped, there are no "short methods."
+Since all functions are globally scoped, there are no "short methods."
 ```func
 someTuple.tuple_size();
 ;; why not someTuple.size()? because it's a global function:
@@ -39,8 +39,8 @@ someTuple.tuple_size();
 ```
 
 **Tolk separates functions and methods** like it's done in most languages:
-1) functions can NOT be called via dot, only methods can
-2) methods can have short names, they don't conflict
+1) functions can NOT be called via dot, only methods can.
+2) methods can have short names, they don't conflict.
 
 ```tolk
 // FunC
@@ -61,6 +61,8 @@ Note that some functions were deleted because they either can be expressed synta
 or they were very uncommon in practice.
 
 The table is "sorted" in a way how functions are declared in stdlib.fc:
+
+Note: FunC uses snake_case names (for example, `begin_cell`), while Tolk methods use camelCase (for example, `beginCell`).
 
 | FunC name                         | Tolk name                          | Required import |
 |-----------------------------------|------------------------------------|-----------------|
@@ -249,6 +251,11 @@ The table is "sorted" in a way how functions are declared in stdlib.fc:
 | pfxdict_delete?                   | prefixDictDelete                   | tvm-dicts       |
 
 
+See also for `accept_message` → `acceptExternalMessage`:
+- Effects and nuances: /v3/documentation/smart-contracts/transaction-fees/accept-message-effects.
+- FunC stdlib reference: /v3/documentation/smart-contracts/func/docs/stdlib#accept_message.
+
+
 ## A list of added functions
 
 Tolk standard library has some functions missing in FunC but is pretty typical for everyday tasks.
@@ -315,4 +322,3 @@ If you use blueprint, it automatically installs tolk-js; therefore, folder `node
 Inside are `common.tolk`, `tvm-dicts.tolk`, and others. 
 
 <Feedback />
-
