@@ -22,7 +22,7 @@ npx blueprint test
 As a result, you’ll see the corresponding output in the terminal window:
 
 ```bash
-% npx blueprint test
+npx blueprint test
 
 > MyProject@0.0.1 test
 > jest
@@ -40,18 +40,18 @@ Ran all test suites.
 
 ## Basic usage
 
-Testing smart contracts allows you to cover security, optimize gas spending, and examine edge cases.  
+Testing smart contracts allows you to cover security, optimize gas spending, and examine edge cases.
 Writing tests in Blueprint (based on [Sandbox](https://github.com/ton-org/sandbox)) involves defining arbitrary actions with the contract and comparing the test results with the expected outcome. For example:
 
 ```typescript
-it("should execute with success", async () => {
+it("should execute successfully", async () => {
   // Description of the test case
   const res = await main.sendMessage(sender.getSender(), toNano("0.05")); // Perform an action with the contract and save the result in res
 
   expect(res.transactions).toHaveTransaction({
     // Configure the expected result with the expect() function
-    from: main.address, // Set the expected sender for the transaction
-    success: true, // Set the desirable result using the matcher property success
+    on: main.address, // Set the expected target for the transaction
+    success: true, // Set the desired result using the matcher property success
  });
 
   printTransactionFees(res.transactions); // Print a table with details on spent fees
@@ -71,21 +71,19 @@ The `toHaveTransaction` matcher expects an object with any combination of fields
 | Name    | Type     | Description                                                                                                                                                |
 | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | from    | Address? | Contract address of the message sender                                                                                                                     |
-| on      | Address  | Contract address of the message destination (alternative name for the property `to`).                                                                      |
+| on      | Address? | Contract address of the message destination (alternative name for the property `to`).                                                                      |
 | value   | bigint?  | Amount of TON coins in the message, in nanotons                                                                                                            |
-| body    | Cell     | Message body defined as a Cell                                                                                                                             |
-| op      | number?  | Op code is usually the operation identifier number (crc32 from TL-B). Expected in the first 32 bits of a message body.                                     |
-| success | boolean? | Custom Sandbox flag that defines the resulting status of a certain transaction. True if both the compute and the action phases succeeded. Otherwise, False. |
+| body    | Cell?    | Message body defined as a Cell                                                                                                                             |
+| op      | number?  | Opcode is usually the operation identifier number (CRC32 from TL-B). Expected in the first 32 bits of a message body.                                      |
+| success | boolean? | Custom Sandbox flag that defines the resulting status of a certain transaction. true if both the compute and the action phases succeeded; otherwise, false. |
 
 You can omit fields you’re not interested in and pass functions that accept the types and return booleans (`true` meaning good) to check, for example, number ranges, message opcodes, etc. Note that if a field is optional (like `from?: Address`), the function must also accept the optional type.
 
-:::tip  
-The complete list of matcher fields is in the [Sandbox documentation](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).  
+:::tip
+The complete list of matcher fields is in the [Sandbox documentation](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).
 :::
 
-### Specific test suite
-
-#### Extract send mode
+### Extracting send mode
 
 To extract the send mode of a sent message, use the following code:
 
@@ -100,7 +98,7 @@ const re = await blockchain.executor.runTransaction({
  .endCell()
  .toBoc()
  .toString("base64"),
-  now: Math.floor(Date.now()) / 1000,
+  now: Math.floor(Date.now() / 1000),
   lt: BigInt(Date.now()),
   randomSeed: null,
   ignoreChksig: false,
@@ -145,4 +143,3 @@ Check test suites used for TON Ecosystem contracts and learn by examples:
 - [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript)
 
 <Feedback />
-
