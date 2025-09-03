@@ -5,10 +5,10 @@ import Feedback from '@site/src/components/Feedback';
 ## SDK List
 
 :::info
-We recommend using the [@tonconnect/ui-react](https://github.com/ton-connect/sdk/tree/main/packages/ui-react) kit for your DApps. Only switch to lower‑level packages (such as `@tonconnect/ui` or `@tonconnect/sdk`) or implement the protocol yourself if your product requires it.
+We recommend using the [@tonconnect/ui-react](https://github.com/ton-connect/sdk/tree/main/packages/ui-react) kit for your DApps. Only switch to lower-level packages (such as `@tonconnect/ui` or `@tonconnect/sdk`) or implement the protocol yourself if your product requires it.
 :::
 
-This page contains the list of useful libraries for TON Connect.
+This page contains a list of useful libraries for TON Connect.
 
 - [TON Connect React](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-react)
 - [TON Connect JS SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-js-sdk)
@@ -17,12 +17,12 @@ This page contains the list of useful libraries for TON Connect.
 
 - [@tonconnect/ui-react](https://github.com/ton-connect/sdk/tree/main/packages/ui-react) - TON Connect User Interface (UI) for React applications
 
-`@tonconnect/ui-react` is a React UI kit for the TON Connect SDK. Use it to connect your app to TON wallets through the TON Connect protocol in React.
+`@tonconnect/ui-react` is a React UI kit for the TON Connect SDK. Use it to connect your React app to TON wallets via the TON Connect protocol.
 
 - Example of a DApp with `@tonconnect/ui-react`: [GitHub](https://github.com/ton-connect/demo-dapp-with-react-ui)
 - Example of deployed `demo-dapp-with-react-ui`: [Live demo](https://ton-connect.github.io/demo-dapp-with-react-ui/)
 
-```bash
+```bash npm2yarn
 npm i @tonconnect/ui-react
 ```
 
@@ -35,14 +35,14 @@ npm i @tonconnect/ui-react
 The TON Connect repository contains the following main packages:
 
 - [@tonconnect/ui](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-ui) - TON Connect User Interface (UI)
-- [@tonconnect/sdk](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-sdk)  - TON Connect SDK
+- [@tonconnect/sdk](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-sdk) - TON Connect SDK
 - [@tonconnect/protocol](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-protocol-models) - TON Connect protocol models (TypeScript)
 
 ### TON Connect UI
 
 TON Connect UI is a UI kit for TON Connect SDK. Use it to connect your app to TON wallets via the TON Connect protocol. It allows you to integrate TON Connect into your app more efficiently using our UI elements, such as the **connect wallet** button, **select wallet** dialog, and **confirmation** modals.
 
-```bash
+```bash npm2yarn
 npm i @tonconnect/ui
 ```
 
@@ -54,12 +54,11 @@ The TON Connect **User Interface (UI)** is a UI kit that allows developers to im
 
 Developers can easily integrate TON Connect with apps using simple UI elements such as the connect wallet button, select wallet dialog, and confirmation modals. Here are related resources and examples:
 
-- Example of app functionality in the DApp browser: [Live demo](https://ton-connect.github.io/demo-dapp/)
-- Example of the backend part for the DApp above: [GitHub](https://github.com/ton-connect/demo-dapp-backend)
-- Example of a bridge server using Go: [GitHub](https://github.com/ton-connect/bridge)
+- Example app live demo: [Live demo](https://ton-connect.github.io/demo-dapp/)
+- Example backend for the demo DApp: [GitHub](https://github.com/ton-connect/demo-dapp-backend)
+- Example bridge server (Go): [GitHub](https://github.com/ton-connect/bridge)
 
-This kit simplifies the implementation of TON Connect in apps built for TON Blockchain.
-Standard frontend frameworks are supported, as well as applications built without specific frameworks.
+This kit simplifies the implementation of TON Connect in apps built for the TON Blockchain. See framework guides for React and client-side JS: [React](/v3/guidelines/ton-connect/frameworks/react) and [Web](/v3/guidelines/ton-connect/frameworks/web).
 
 ### TON Connect SDK
 
@@ -68,6 +67,7 @@ The TON Connect SDK is the middle layer between the UI kit and the protocol mode
 
 - [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
 - [npm](https://www.npmjs.com/package/@tonconnect/sdk)
+- [API Documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_sdk.html)
 
 ### TON Connect Protocol Models
 
@@ -75,16 +75,17 @@ This package contains protocol requests, protocol responses, event models, and e
 
 - [GitHub](https://github.com/ton-connect/sdk/tree/main/packages/protocol)
 - [npm](https://www.npmjs.com/package/@tonconnect/protocol)
+- [API Documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_protocol.html)
 
 ## General Questions and Concerns
 
-If you encounter any additional issues during the implementation of TON Connect, open an issue on [GitHub](https://github.com/ton-blockchain/ton-connect/issues).
+If you encounter any additional issues during the implementation of TON Connect, open an issue on [GitHub](https://github.com/ton-connect/sdk/issues).
 
 ## See also
 
 - [Step-by-step guide for building your first web client](https://helloworld.tonstudio.io/03-client/)
-- [\[YouTube\] TON Smart Contracts | 10 | Telegram DApp\[EN\]](https://www.youtube.com/watch?v=D6t3eZPdgAU&t=254s&ab_channel=AlefmanVladimir%5BEN%5D)
+- [[YouTube] TON Smart Contracts | 10 | Telegram DApp [EN]](https://www.youtube.com/watch?v=D6t3eZPdgAU&t=254s&ab_channel=AlefmanVladimir%5BEN%5D)
 - [TON Connect SDK](https://github.com/ton-connect/sdk/tree/main/packages/sdk)
-- [\[YouTube\] TON Dev Study TON Connect Protocol \[RU\]](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_)
+- [[YouTube] TON Dev Study TON Connect Protocol [RU]](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_)
 
 <Feedback />
