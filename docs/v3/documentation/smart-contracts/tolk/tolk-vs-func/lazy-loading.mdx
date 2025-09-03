@@ -4,11 +4,11 @@ title: "The magic lazy"
 
 import Feedback from '@site/src/components/Feedback';
 
-# Lazy loading, partial loading, partial updating
+# The magic lazy
 
 One magic keyword — `lazy` — to rule them all.
 
-## Lazy loading, partial loading
+## Lazy loading
 
 Suppose you have a `Storage` struct in a wallet:
 
@@ -155,8 +155,8 @@ match (msg) {
 }
 ```
 
-Without an explicit `else`, unpacking throws `error 63` by default,
-which is controlled by the `throwIfOpcodeDoesNotMatch` option in fromCell/fromSlice.
+Without an explicit `else`, unpacking throws exit code 63 by default,
+which is controlled by the `throwIfOpcodeDoesNotMatch` option in `fromCell`/`fromSlice`.
 Adding `else` allows you to override this behavior.
 
 Note that `else` in `match` by type is only allowed with `lazy` because it matches on prefixes.
@@ -180,7 +180,7 @@ contract.setData(storage.toCell());   // <-- magic
 ```
 
 The compiler is smart: when calling `toCell()`, it **does not save all fields of the storage** since only `seqno` was modified.
-Instead, during loading, after loading `seqno`, it saved an _immutable tail_ and reuses it when writing back:
+Instead, during loading, after loading `seqno`, it saved an _immutable tail_ and reuses it on write back:
 
 ```tolk
 val storage = lazy Storage.load();
@@ -197,10 +197,10 @@ storage.toCell();
 ```
 
 No more manual optimizations using intermediate slices—the compiler handles everything for you.
-It can even group unmodified fields in the middle, load them as a slice, and preserve that slice on write-back.
+It can even group unmodified fields in the middle, load them as a slice, and preserve that slice on write back.
 
 This optimization is only effective when the compiler can statically resolve control flow within a local function scope.
-If you use globals, split logic into non-inlined functions, this optimization will break, and `lazy` will fall back to regular loading.
+If you use globals or split logic into non-inlined functions, this optimization breaks and `lazy` falls back to regular loading.
 
 
 ## Q: What are the disadvantages of lazy?
@@ -209,10 +209,10 @@ In terms of gas usage, `lazy fromSlice` is always equal to or cheaper than regul
 
 However, there is another difference unrelated to gas consumption:
 
-- When you do `T.fromSlice(s)`, it unpacks all fields of `T` and then inserts`s.assertEnd()`, which can be turned off using an option. So, if the slice is corrupted or contains extra data, `fromSlice` will throw an error.
+- When you do `T.fromSlice(s)`, it unpacks all fields of `T` and then inserts `s.assertEnd()`, which can be turned off using an option. So, if the slice is corrupted or contains extra data, `fromSlice` will throw an error.
 
 - The `lazy` keyword, of course, selectively _picks_ only the requested fields and handles partially invalid input gracefully. For example, given:
-```
+```tolk
 struct Point { x: int8, y: int8 }
 ```
 
