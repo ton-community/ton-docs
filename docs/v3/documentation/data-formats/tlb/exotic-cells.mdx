@@ -2,11 +2,11 @@ import Feedback from '@site/src/components/Feedback';
 
 # Exotic cells
 
-Each cell has a type encoded by an integer ranging from -1 to 255. A cell with a type of -1 is considered an `ordinary` cell, while all other cells are classified as `exotic` or `special`.
+Cells are either ordinary or special (exotic).
 The type of an exotic cell is stored in the first eight bits of its data. It is considered invalid if an exotic cell contains fewer than eight data bits.
 Currently, there are 4 exotic cell types:
 
-```json
+```text
 {
   Prunned Branch: 1,
   Library Reference: 2,
@@ -26,7 +26,7 @@ The structure of a pruned branch cell is as follows:
 - Next, `h * 32` bytes represent hashes of the deleted subtrees.
 - Then, `h * 2` bytes represent the depths of the deleted subtrees.
 
-The level `l` of a pruned branch is is the index of the most significant bit in `mask` (starting from zero) plus one. The level is also called its De Bruijn index, as it determines the outer Merkle proof or Merkle update during the construction process in which the branch was pruned.
+The level `l` of a pruned branch is is the index of the most significant bit in `mask` (starting from zero) plus one.
 
 Higher-level hashes `Hash[0]..Hash[l-1]` of a pruned branch are stored within its data and can be obtained as follows:
 
@@ -69,7 +69,7 @@ Following that, 4 bytes represent the depth of the deleted old and new subtrees.
 
 Let's assume there is a cell `c`:
 
-```json
+```text
 24[000078] -> {
 	32[0000000F] -> {
 		1[80] -> {
@@ -93,7 +93,7 @@ To achieve this, we request the prover to generate a Merkle proof, replacing all
 
 The first descendant of `c` from which there is no way to reach `a` is `ref1`:
 
-```json
+```text
 32[0000000F] -> {
 	1[80] -> {
 		32[0000000E]
@@ -110,7 +110,7 @@ The next cell is `512[0000000...00000000064]`.
 
 The prover creates a pruned branch to replace this cell as well:
 
-```json
+```text
 24[000078] -> {
 	288[0101EC7C1379618703592804D3A33F7E120CEBE946FA78A6775F6EE2E28D80DDB7DC0002],
 	16[000B] -> {
@@ -124,7 +124,7 @@ The prover creates a pruned branch to replace this cell as well:
 
 The resulting Merkle proof that the prover sends to the verifier (us, in this example) looks like this:
 
-```json
+```text
 280[0344EFD0FDFFFA8F152339A0191DE1E1C5901FDCFE13798AF443640AF99616B9770003] -> {
 	24[000078] -> {
 		288[0101EC7C1379618703592804D3A33F7E120CEBE946FA78A6775F6EE2E28D80DDB7DC0002],
@@ -146,6 +146,6 @@ Such proofs significantly reduce computational load and minimize the amount of d
 
 ## See also
 
-- [Advanced proofs verifying examples](/v3/documentation/data-formats/tlb/proofs)
+- [Proofs verifying (low-level)](/v3/documentation/data-formats/tlb/proofs)
 
 <Feedback />
