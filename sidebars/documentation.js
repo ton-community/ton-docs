@@ -80,7 +80,6 @@ module.exports = [
           'v3/documentation/smart-contracts/shards/infinity-sharding-paradigm',
         ],
       },
-      'v3/documentation/smart-contracts/tact',
       {
         type: 'category',
         label: 'Tolk language',
@@ -140,6 +139,7 @@ module.exports = [
           'v3/documentation/smart-contracts/fift/fift-deep-dive',
         ],
       },
+      'v3/documentation/smart-contracts/tact',
     ],
   },
   {
