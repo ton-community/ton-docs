@@ -8,7 +8,7 @@ import ThemedImage from "@theme/ThemedImage";
 This page demonstrates how to write tests for FunC contracts using the [Blueprint](https://github.com/ton-org/blueprint) ([Sandbox](https://github.com/ton-org/sandbox)).
 The test suites focus on the demo contract [Fireworks](https://github.com/ton-community/fireworks-func), a smart contract that starts running with the `set_first` message.
 
-When you create a new FunC project using `npm create ton@latest`, the SDK automatically generates a test file `tests/contract.spec.ts` in the project directory for testing the contract:
+When you create a new FunC project using `npm create ton@latest`, the SDK automatically generates a test file `tests/Main.spec.ts` in the project directory for testing the contract:
 
 ```typescript
 import ...
@@ -51,7 +51,7 @@ The Fireworks contract demonstrates different ways of sending messages in the TO
 
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Direct unit tests flow diagram"
   sources={{
     light: "/img/docs/writing-test-examples/test-examples-schemes.svg?raw=true",
     dark: "/img/docs/writing-test-examples/test-examples-schemes-dark.svg?raw=true",
@@ -100,7 +100,7 @@ To filter a specific transaction from the `launchResult.transactions` array, you
 
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Transaction ID 1 flow diagram"
   sources={{
     light:
       "/img/docs/writing-test-examples/test-examples-schemes_id1.svg?raw=true",
@@ -135,7 +135,7 @@ it("first transaction[ID:1] should set fireworks successfully", async () => {
 
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Transaction ID 2 flow diagram"
   sources={{
     light:
       "/img/docs/writing-test-examples/test-examples-schemes_id2.svg?raw=true",
@@ -184,7 +184,7 @@ The complete list of account status-related fields includes:
 
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Transaction ID 3 flow diagram"
   sources={{
     light:
       "/img/docs/writing-test-examples/test-examples-schemes_id3.svg?raw=true",
@@ -222,7 +222,7 @@ it("should exist a transaction[ID:3] which launches second fireworks successfull
 
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Transaction ID 4 flow diagram"
   sources={{
     light:
       "/img/docs/writing-test-examples/test-examples-schemes_id4.svg?raw=true",
@@ -259,7 +259,7 @@ it("should exist a transaction[ID:4] with a comment send mode = 0", async () => 
 
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Transaction ID 5 flow diagram"
   sources={{
     light:
       "/img/docs/writing-test-examples/test-examples-schemes_id5.svg?raw=true",
@@ -296,7 +296,7 @@ it("should exist a transaction[ID:5] with a comment send mode = 1", async () => 
 
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Transaction ID 6 flow diagram"
   sources={{
     light:
       "/img/docs/writing-test-examples/test-examples-schemes_id6.svg?raw=true",
@@ -333,7 +333,7 @@ it("should exist a transaction[ID:6] with a comment send mode = 2", async () => 
 
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Transaction ID 7 flow diagram"
   sources={{
     light:
       "/img/docs/writing-test-examples/test-examples-schemes_id7.svg?raw=true",
@@ -370,7 +370,7 @@ it("should exist a transaction[ID:7] with a comment send mode = 32 + 128", async
 
 <br></br>
 <ThemedImage
-  alt=""
+  alt="Transaction ID 8 flow diagram"
   sources={{
     light:
       "/img/docs/writing-test-examples/test-examples-schemes_id8.svg?raw=true",
@@ -431,7 +431,7 @@ For instance, in the case of `launchResult`, the following table will be printed
 | 7       | '0x0'        | '0.783142 TON' | '0 TON'        | '0.000309 TON' | 0          |
 | 8       | '0x0'        | '1.088638 TON' | '0 TON'        | '0.000309 TON' | 0          |
 
-![](/img/docs/writing-test-examples/fireworks_trace_tonviewer.png?=RAW)
+![Fireworks transaction fee trace](/img/docs/writing-test-examples/fireworks_trace_tonviewer.png?=RAW)
 
 **Index** refers to the ID of a transaction in the `launchResult` array.
 
@@ -637,4 +637,3 @@ Since the order of lines may change when updating the code, some links may becom
 :::
 
 <Feedback />
-
