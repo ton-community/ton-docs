@@ -760,10 +760,6 @@
         "to": "/v3/documentation/smart-contracts/func/changelog"
     },
     {
-        "from": "/participate/nft",
-        "to": "/v3/concepts/dive-into-ton/ton-ecosystem/nft"
-    },
-    {
         "from": "/develop/smart-contracts/fee-calculation",
         "to": "/v3/guidelines/smart-contracts/fee-calculation"
     },
