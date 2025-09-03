@@ -9,17 +9,17 @@ import Feedback from "@site/src/components/Feedback";
 ## Table of contents
 
 1. [Basic syntax](#basic-syntax)
-3. [Functions](#functions)
-4. [Variables and types](#variables-and-types)
-5. [Control flow](#control-flow)
-6. [Type system](#type-system)
-7. [Collections](#collections)
-8. [Error handling](#error-handling)
-9. [Structures](#structures)
-10. [Methods](#methods)
-11. [Imports and modules](#imports-and-modules)
-12. [Advanced features](#advanced-features)
-13. [Standard library](#standard-library)
+1. [Functions](#functions)
+1. [Variables and types](#variables-and-types)
+1. [Control flow](#control-flow)
+1. [Type system](#type-system)
+1. [Collections](#collections)
+1. [Error handling](#error-handling)
+1. [Structures](#structures)
+1. [Methods](#methods)
+1. [Imports and modules](#imports-and-modules)
+   - [Standard library](#standard-library)
+1. [Advanced features](#advanced-features)
 
 ## Basic syntax
 
@@ -88,7 +88,7 @@ fun increment(x: int, by: int = 1): int {
 }
 ```
 
-### GET methods
+### Get methods
 
 Contract getters use the `get fun` syntax:
 
@@ -176,7 +176,7 @@ repeat (10) {
 - `int` -  integer; fixed-width variants like `int32` and `uint64` are also supported
 - `bool` - boolean (`true`/`false`). **Note:** in TVM, `true` is represented as `-1`, **not** `1`
 - `cell` - a TVM cell
-- `slice` - a TVM slice; you can also use `bitsN`. (e.g. `bits512` for storing a signature)
+- `slice` - a TVM slice; you can also use `bitsN` (e.g., `bits512` for storing a signature)
 - `builder` - a TVM builder
 - `address` - blockchain address
 - `coins` - Toncoin or coin amounts
@@ -585,7 +585,7 @@ val reply = createMessage({
 reply.send(SEND_MODE_REGULAR);
 ```
 
-Deep dive: [Sending messages](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message.mdx).
+Deep dive: [Sending messages](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message).
 
 
 <Feedback />
