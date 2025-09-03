@@ -1,18 +1,18 @@
 import Feedback from "@site/src/components/Feedback";
 import Button from '@site/src/components/button'
 
-# Setup development environment
+# Set up development environment
 
 > **Summary:** In the previous steps, we learned the concept of a smart contract and basic ways of interacting with TON Blockchain through **wallet apps** and **explorers**.
 
-This guide covers the basic steps of setting up your smart contract development environment using **`Blueprint`** and creating a basic project template.
+This guide covers the basic steps of setting up your smart contract development environment using **Blueprint** and creating a basic project template.
 
 ## Prerequisites
 
 - Basic programming skills.
 - Familiarity with the command-line interface.
 
-## Setup development environment
+## Set up development environment
 
 For this guide, we will rely on the [Blueprint](https://github.com/ton-org/blueprint/) and [Node.js](https://nodejs.org/en)/TypeScript stack for writing wrappers, tests, and deployment scripts for your smart contract, as it provides the easiest, ready-to-use environment for smart contract development.
 
@@ -24,9 +24,9 @@ Using native tools and language-dependent SDKs for smart contract development is
 
 ### Step 1: install Node.js
 
-First, visit the [installation page](https://nodejs.org/en/download) and execute the download commands in `PowerShell` or `Bash` corresponding to your operating system (Windows/Linux).
+Install Node.js for your OS (Windows, macOS, or Linux) using the official installer or a package manager, then verify with the following commands.
 
-Check that `npm` and `node` are installed by executing the following command:
+Check that npm and node are installed by executing the following commands:
 
 ```bash
 npm -v
@@ -35,7 +35,7 @@ node -v
 
 ### Step 2: choose a smart contract development language
 
-During the guide, we provide examples in `FunC`, `Tolk`, and `Tact`. You can choose any of them and even combine smart contracts in different languages. To proceed through the guide, there is no need for a deep understanding of the chosen language—basic programming skills will be enough.
+During the guide, we provide examples in FunC, Tolk, and Tact. You can choose any of them and even combine smart contracts in different languages. To proceed through the guide, there is no need for a deep understanding of the chosen language—basic programming skills will be enough.
 
 :::info
 You can find a brief overview of the languages here: [Programming languages](/v3/documentation/smart-contracts/overview#programming-languages).
@@ -49,11 +49,11 @@ Change the directory to the parent folder of your future project and run the fol
 npm create ton@latest
 ```
 
-This will run an interactive script to create the project template. You can enter anything you want, but if you want to follow the same paths as in this guide, choose the following:
+This will run an interactive script to create the project template. You can enter anything you want, but if you want to follow the same names and options as in this guide, choose the following:
 
 1. **Project name**: `Example`  
 2. **First contract name**: `HelloWorld`  
-3. **Project template**: a **simple counter contract** in `FunC`, `Tolk` or `Tact`
+3. **Project template**: a **simple counter contract** in FunC, Tolk, or Tact
 
 Finally, change your current directory to the generated project template folder and install all required dependencies:
 
@@ -66,13 +66,13 @@ npm install
 
 The TON community has developed plugins that provide syntax support for several IDEs and code editors. You can find them here: [plugin list](/v3/documentation/smart-contracts/getting-started/ide-plugins).
 
-Also, consider installing plugins that support **JavaScript/TypeScript** tools for your preferred IDE or code editor, specifically `Jest`, for debugging smart contract tests.
+Also, consider installing plugins that support **JavaScript/TypeScript** tools for your preferred IDE or code editor, specifically Jest, for debugging smart contract tests.
 
 
 
 ## Choose the programming language
 
-Now that your environment is set up choose a programming language to get started:
+Now that your environment is set up, choose a programming language to get started:
 
 - **FunC or Tolk**: estimated time to learn is 25 min for each.
 - **Tact**: estimated time to learn is 15 min.
