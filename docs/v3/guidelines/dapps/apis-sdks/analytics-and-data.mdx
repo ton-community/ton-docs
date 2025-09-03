@@ -15,20 +15,20 @@ users to start working with data even without SQL knowledge. Dune Analytics cons
 and comes with a variety of raw and decoded tables.
 
 The [raw tables](https://dune.com/queries?category=canonical&namespace=ton) include:
-* [Blocks](https://docs.dune.com/data-catalog/ton/blocks)
-* [Transactions](https://docs.dune.com/data-catalog/ton/transactions)
-* [Messages](https://docs.dune.com/data-catalog/ton/messages) - includes raw body and state init data.
-* [Balances history](https://docs.dune.com/data-catalog/ton/balances_history) - allows you to get a precise point-in-time balance for any account.
-* [Jetton events](https://docs.dune.com/data-catalog/ton/jetton_events) - comes with transfers, burns and mints. Note that since mints
+- [Blocks](https://docs.dune.com/data-catalog/ton/blocks)
+- [Transactions](https://docs.dune.com/data-catalog/ton/transactions)
+- [Messages](https://docs.dune.com/data-catalog/ton/messages) - includes raw body and state init data.
+- [Balances history](https://docs.dune.com/data-catalog/ton/balances_history) - allows you to get a precise point-in-time balance for any account.
+- [Jetton events](https://docs.dune.com/data-catalog/ton/jetton_events) - comes with transfers, burns and mints. Note that since mints
 are not covered by the [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) standard, it is not possible
 to reconstruct balances based solely on jetton events, so balances history should be used.
 
 Apart from raw tables, there are decoded tables that allow you to work with high-level structures in a unified manner:
-* [NFT events](https://dune.com/queries?category=canonical&namespace=ton&id=ton.nft_events) - comprehensive source of NFT-related data including 
+- [NFT events](https://dune.com/queries?category=canonical&namespace=ton&id=ton.nft_events) - comprehensive source of NFT-related data including 
 sales, transfers and mints.
-* [DEX trades](https://docs.dune.com/data-catalog/ton/dex_trades) - includes a unified data model for DEX trades. The full list of 
+- [DEX trades](https://docs.dune.com/data-catalog/ton/dex_trades) - includes a unified data model for DEX trades. The full list of 
 supported DEXs is available [here](https://github.com/ton-studio/ton-etl/blob/main/datalake/README.md#dex-trades).
-* [DEX pools](https://docs.dune.com/data-catalog/ton/dex_pools) - comes with the full history of DEX pool balances and TVL estimations.
+- [DEX pools](https://docs.dune.com/data-catalog/ton/dex_pools) - comes with the full history of DEX pool balances and TVL estimations.
 
 Finally, two tables with off-chain metadata are available: [Jetton metadata](https://docs.dune.com/data-catalog/ton/jetton_metadata) and 
 [NFT metadata](https://dune.com/queries?category=canonical&namespace=ton&id=ton.nft_metadata).
@@ -40,31 +40,31 @@ has been created. It works on top of [Spellbook](https://github.com/duneanalytic
 custom tables with [dbt](https://github.com/dbt-labs/dbt-core) and Jinja macros. It helps decode important
 information from raw protocol message payloads. The following protocols are decoded using this framework and serve
 as examples:
-* [EVAA](https://dune.com/queries?category=abstraction&namespace=evaa) ([implementation](https://github.com/duneanalytics/spellbook/tree/main/dbt_subprojects/daily_spellbook/models/evaa/ton))
-* [Affluent](https://dune.com/queries?category=abstraction&namespace=affluent) ([implementation](https://github.com/duneanalytics/spellbook/tree/main/dbt_subprojects/daily_spellbook/models/affluent/ton))
-* [StormTrade](https://dune.com/queries?category=abstraction&namespace=stormtrade) ([implementation](https://github.com/duneanalytics/spellbook/tree/main/dbt_subprojects/daily_spellbook/models/stormtrade/ton))
-* [TON DNS](https://dune.com/queries?category=abstraction&namespace=dns_ton) ([implementation](https://github.com/duneanalytics/spellbook/tree/main/dbt_subprojects/daily_spellbook/models/ton/dns))
+- [EVAA](https://dune.com/queries?category=abstraction&namespace=evaa) ([implementation](https://github.com/duneanalytics/spellbook/tree/main/dbt_subprojects/daily_spellbook/models/evaa/ton))
+- [Affluent](https://dune.com/queries?category=abstraction&namespace=affluent) ([implementation](https://github.com/duneanalytics/spellbook/tree/main/dbt_subprojects/daily_spellbook/models/affluent/ton))
+- [StormTrade](https://dune.com/queries?category=abstraction&namespace=stormtrade) ([implementation](https://github.com/duneanalytics/spellbook/tree/main/dbt_subprojects/daily_spellbook/models/stormtrade/ton))
+- [TON DNS](https://dune.com/queries?category=abstraction&namespace=dns_ton) ([implementation](https://github.com/duneanalytics/spellbook/tree/main/dbt_subprojects/daily_spellbook/models/ton/dns))
 
 In addition to decoding raw data, the Spellbook allows building custom materialized views. Some of them are widely used and maintained
 to be up to date:
-* [ton.prices_daily](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.prices_daily) - prices calculated based on all other tables. The prices include jettons traded on DEXs, LP tokens for DEXs and perpetuals, tsUSDe and other core assets. 
+- [ton.prices_daily](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.prices_daily) - prices calculated based on all other tables. The prices include jettons traded on DEXs, LP tokens for DEXs and perpetuals, tsUSDe and other core assets. 
 It is recommended to use this table if you need to build an estimation of assets denominated in TON or USD.
-* [ton.accounts](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.accounts) - materialized view with 
+- [ton.accounts](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.accounts) - materialized view with 
 information about all accounts. It comes with the latest TON balance, interface (if any), funding information and other fields.
-* [ton.latest_balances](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.latest_balances) - helper table to
+- [ton.latest_balances](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.latest_balances) - helper table to
 get the latest balances for TON and Jettons.
 
 Note that all tables mentioned above are updated daily.
 
 If you're just starting to explore TON data on Dune, we recommend checking these articles first:
-* [TON data quick start](https://dune.com/ton_foundation/ton-quick-start)
-* [TON on-chain data analysis: quickstart on Dune](https://blog.ton.org/ton-on-chain-data-analysis-dune) 
-* [How to Analyze TON Users and Token Flows on Dune: A Practical Guide](https://blog.ton.org/how-to-analyze-ton-users-and-token-flows-on-dune)
+- [TON data quick start](https://dune.com/ton_foundation/ton-quick-start)
+- [TON on-chain data analysis: quickstart on Dune](https://blog.ton.org/ton-on-chain-data-analysis-dune) 
+- [How to Analyze TON Users and Token Flows on Dune: A Practical Guide](https://blog.ton.org/how-to-analyze-ton-users-and-token-flows-on-dune)
 
 For inspiration to build your own dashboards, check out these examples:
-* [Application Activity](https://dune.com/ton_foundation/application-activity)
-* [TON & Ethena Boost Rewards Campaign](https://dune.com/ton_foundation/tonandethena-staking-rewards-campaign)
-* [Telegram Gifts Dashboard](https://dune.com/rdmcd/telegram-gifts)
+- [Application Activity](https://dune.com/ton_foundation/application-activity)
+- [TON & Ethena Boost Rewards Campaign](https://dune.com/ton_foundation/tonandethena-staking-rewards-campaign)
+- [Telegram Gifts Dashboard](https://dune.com/rdmcd/telegram-gifts)
 
 ## The Public Data Lake
 
@@ -78,14 +78,14 @@ in this [article](https://repost.aws/articles/AR3ABC81yvTPW2ktfHiHPWIA/new-datas
 The [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/datalake/README.md) extracts raw data and performs decoding
 to create a unified view of high-level on-chain activity. The most important part is decoding DEX activity. To add support
 for a new DEX, you need to prepare a PR on Github. The decoding implementation must solve the following tasks:
-* Decoding of swap events. The decoding code must check the authenticity of the swap (for example, you cannot rely on the opcode alone since anyone can generate messages with your opcode).
-* Extracting all swap-related fields: tokens sold and bought, amounts, query IDs, trader, router (if any), and pool.
-* Fetching pool reserves and LP token supply (if applicable).
+- Decoding of swap events. The decoding code must check the authenticity of the swap (for example, you cannot rely on the opcode alone since anyone can generate messages with your opcode).
+- Extracting all swap-related fields: tokens sold and bought, amounts, query IDs, trader, router (if any), and pool.
+- Fetching pool reserves and LP token supply (if applicable).
 
 If you are starting to implement decoding for your DEX, consider checking these existing PRs:
-* [BidAsk](https://github.com/ton-studio/ton-etl/pull/186)
-* [CoffeeSwap](https://github.com/ton-studio/ton-etl/pull/171/files)
-* [MemesLab](https://github.com/ton-studio/ton-etl/pull/144)
+- [BidAsk](https://github.com/ton-studio/ton-etl/pull/186)
+- [CoffeeSwap](https://github.com/ton-studio/ton-etl/pull/171/files)
+- [MemesLab](https://github.com/ton-studio/ton-etl/pull/144)
 
 ## Real-time streams
 
