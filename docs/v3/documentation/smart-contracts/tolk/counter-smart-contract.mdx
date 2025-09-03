@@ -57,7 +57,7 @@ Let’s explore what’s happening here.
 
 First, we declare the storage structure. It corresponds exactly to the format used when deploying from the TypeScript client `wrappers/Counter.ts`.
 ```tolk
-// In `Counter.ts`, the function `counterConfigToCell`
+// In `wrappers/Counter.ts`, the function `counterConfigToCell`
 // manually constructs two uint32 values — which correspond here:
 struct Storage {
     id: uint32
@@ -67,16 +67,16 @@ struct Storage {
 // Methods to load from and store to persistent storage
 
 fun Storage.load() {
-    return Storage.fromCell(contract.getData())
+    return Storage.fromCell(contract.getData());
 }
 fun Storage.save(self) {
-    contract.setData(self.toCell())
+    contract.setData(self.toCell());
 }
 ```
 
 ## Handling incoming messages
 
-When a client sends a message — for example, using the `sendIncrease` function in `wrappers/Counter.ts`— the contract processes it using this function:
+When a client sends a message — for example, using the `sendIncrease` function in `wrappers/Counter.ts` — the contract processes it using this function:
 
 ```tolk
 fun onInternalMessage(in: InMessage) {
@@ -110,9 +110,9 @@ struct (0x7e8764ef) IncreaseCounter {
 ## Sending messages
 
 This contract doesn’t send any messages.
-To learn how message construction works in Tolk, see the [Create message](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message.mdx) article.
+To learn how message construction works in Tolk, see the [Universal createMessage](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message) article.
 
-## Handling internal bounced messages
+## Handling bounced messages
 
 **Bounced messages** are messages that you _send_, but the receiver fails to process — so they are returned to you.
 
@@ -135,5 +135,7 @@ get fun currentCounter(): int {
 ```
 
 The `getCounter` function in `wrappers/Counter.ts` calls this exact getter from `counter.tolk`.
+
+Note: The initial scaffold also includes an `initialId()` getter that returns the storage `id`.
 
 <Feedback />
