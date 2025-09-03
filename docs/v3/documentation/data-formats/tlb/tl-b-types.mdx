@@ -2,16 +2,16 @@ import Feedback from '@site/src/components/Feedback';
 
 import ThemedImage from '@theme/ThemedImage';
 
-# TL-B types
+# TL‑B types
 :::caution advanced level
-This information is **very low-level **and may be difficult for newcomers to grasp.
+This information is **very low-level** and may be difficult for newcomers to grasp.
 Feel free to revisit it later if needed.
 :::
 
-This section analyzes complex and unconventional typed language binary (TL-B) structures.
+This section analyzes complex and unconventional Type Language – Binary (TL‑B) structures.
 We recommend reading [this documentation](/v3/documentation/data-formats/tlb/tl-b-language) to familiarize yourself with the topic and get started.
 
-<img alt="tlb structure" src="/img/docs/tlb.drawio.svg" width={'100%'}/>
+<img alt="TL-B structure" src="/img/docs/tlb.drawio.svg" width={'100%'}/>
 
 
 ## Either
@@ -47,11 +47,11 @@ Unary supports two main options:
 unary_zero$0 = Unary ~0;
 unary_succ$1 {n:#} x:(Unary ~n) = Unary ~(n + 1);
 ```
-### Unary serialization
+### Unary decoding
 
 The `unary_zero` variation is straightforward: if the first bit is `0`, the result of the entire unary deserialization is `0`.
 
-The `unary_succ` variation, however, is more complex—it is loaded recursively and represents a value of `~(n + 1)`. This means it repeatedly calls itself until it reaches `unary_zero`. In other words, the desired value will equal the number of units in a row.
+The `unary_succ` variation, however, is more complex—it is loaded recursively and represents a value of `~(n + 1)`. This means it repeatedly calls itself until it reaches `unary_zero`. In other words, the desired value equals the number of consecutive 1 bits before the terminating 0.
 
 For example, consider the serialization of the bitstring `110`.
 The deserialization call chain is as follows:
@@ -80,7 +80,7 @@ Based on the explanation above, `Foo` is deserialized as:
 
 <br></br>
 <ThemedImage
-alt=""
+alt="Unary deserialization diagram"
 sources={{
 light: '/img/docs/data-formats/tl-b-docs-10.png?raw=true',
 dark: '/img/docs/data-formats/tl-b-docs-10-dark.png?raw=true',
@@ -99,7 +99,7 @@ foo u:(unary_succ x:(unary_succ x:(unary_zero)))
 
 The Hashmap complex type is used to store dictionaries from FunC smart contract code, i.e., `dict`.
 
-The following TL-B structures are used to serialize a Hashmap with a fixed key length:
+The following TL‑B structures are used to serialize a Hashmap with a fixed key length:
 
 ```tlb
 hm_edge#_ {n:#} {X:Type} {l:#} {m:#} label:(HmLabel ~l n)
@@ -126,7 +126,7 @@ This means the root structure uses `HashmapE` and one of its two possible states
 
 As an example, consider the following cell, represented in binary form:
 
-```json
+```text
 1[1] -> {
   2[00] -> {
     7[1001000] -> {
@@ -179,7 +179,7 @@ hm_edge#_ {n:#} {X:Type} {l:#} {m:#} label:(HmLabel ~l 8)
           {8 = (~m) + l} node:(HashmapNode m uint16) = Hashmap 8 uint16;
 ```
 
-As shown above, conditional variables `{l:#}` and `{m:#}` have appeared, but both values are unknown at this stage. After reading the corresponding `label`, we can deduce that `n` is part of the equation `{n = (~m) + l}`. This means we must calculate both `l` and `m`, where the sign indicates the resulting value of `~`.
+As shown above, conditional variables `{l:#}` and `{m:#}` have appeared, but both values are unknown at this stage. After reading the corresponding `label`, we can see that `n` is part of the equation `{n = (~m) + l}`. Here, the `~` symbol marks a value deduced during deserialization (in this case, `m`), not a numeric sign.
 
 To determine the value of `l`, we need to load the `label:(HmLabel ~l uint16)` sequence. Below, we outline the 3 basic structural options for `HmLabel`:
 
@@ -198,7 +198,7 @@ Next, let's fill in the `hml_short` structure with known values:
 hml_short$0 {m:#} {n:#} len:(Unary ~n) {n <= 8} s:(n * Bit) = HmLabel ~n 8
 ```
 
-At this point, we don't know the value of `n`. However, since it includes a `~` character, we can calculate it. To do so, we load `len:(Unary ~n)`;  [more about unary here](#unary).
+At this point, we don't know the value of `n`. However, since it includes a `~` marker, we can deduce it during deserialization. To do so, we load `len:(Unary ~n)`;  [more about unary here](#unary).
 
 Starting with `2[00]`, only one bit remains after defining the `HmLabel` type.
 
@@ -373,13 +373,13 @@ The binary tree key generation mechanism operates similarly to the standardized 
 
 
 ## Addresses
-TON addresses are generated using the sha256 hashing mechanism within the TL-B StateInit structure, allowing the address to be computed before the network contract is deployed.
+TON addresses are generated using the SHA256 hashing mechanism within the TL‑B StateInit structure, allowing the address to be computed before the network contract is deployed.
 
 ### Serialization
 
-Standard addresses, such as `EQBL2_3lMiyywU17g-or8N7v9hDmPCpttzBPE2isF2GTzpK4`, utilize base64 URI encoding for byte representation. Typically, these addresses are 36 bytes long, with the last 2 bytes representing the `CRC16 checksum`, calculated using the `XMODEM` table. The first byte denotes the flag, while the second indicates the WorkChain. The 32 middle bytes correspond to the address data, also called AccountID, often represented in schemas like int256.
+Standard addresses, such as `EQBL2_3lMiyywU17g-or8N7v9hDmPCpttzBPE2isF2GTzpK4`, utilize base64 URI encoding for byte representation. Typically, these addresses are 36 bytes long, with the last 2 bytes representing the `CRC16 checksum`, calculated using the `XMODEM` table. The first byte denotes the flag, while the second indicates the WorkChain. The 32 middle bytes correspond to the address data, also called `account_id` (32 bytes, 256-bit).
 
-[Decoding example](https://github.com/xssnick/tonutils-go/blob/3d9ee052689376061bf7e4a22037ff131183afad/address/addr.go#L156)
+[Decoding reference](/v3/documentation/smart-contracts/addresses/address-formats#encoding)
 
 ## References
 
@@ -387,4 +387,3 @@ Standard addresses, such as `EQBL2_3lMiyywU17g-or8N7v9hDmPCpttzBPE2isF2GTzpK4`, 
 
 
 <Feedback />
-
