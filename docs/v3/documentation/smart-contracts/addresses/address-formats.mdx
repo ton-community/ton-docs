@@ -17,8 +17,8 @@ It is designed for system-level use where precision is crucial, and UX features 
 
 A raw address consists of two components separated by a colon:
 
--   **workchain_id**: a signed 32-bit integer identifying the WorkChain.<br/>
-Examples: `-1` for the MasterChain and `0` for the BaseChain.
+-   **workchain_id**: a signed 32-bit integer identifying the workchain.<br/>
+Examples: `-1` for the masterchain and `0` for the basechain.
 -   **account_id**: a 256-bit identifier, represented as 64 hexadecimal characters.
 
 **Example:**
@@ -32,7 +32,7 @@ Uppercase letters (A–F) may be used in address strings instead of their lowerc
 
 Raw addresses lack built-in safety features, making them unsuitable for general use:
 
--   **No error detection**: the format includes no checksum.<br/>
+-   **No error detection**: the format includes no checksum.
 A single-character mistake can cause irreversible loss of funds.
 -   **No metadata**: flags like `isBounceable` are unsupported, limiting control over message handling.
 
@@ -47,14 +47,14 @@ The user-friendly address format is a secure, base64-encoded wrapper around the 
 A user-friendly address is a 36-byte structure with the following components:  
 
 1. Flags (1 byte): metadata that modifies message handling.
-2. `workchain_id` (1 byte): an 8-bit signed integer (`-1` for MasterChain is `0xff`).
+2. `workchain_id` (1 byte): an 8-bit signed integer (`-1` for masterchain is `0xff`).
 3. `account_id` (32 bytes): the 256-bit ([big-endian](https://www.freecodecamp.org/news/what-is-endianness-big-endian-vs-little-endian/)) account identifier.
 4. Checksum (2 bytes): a [CRC16-CCITT](https://github.com/ton-blockchain/ton-kotlin/blob/main/crypto/src/crc16.kt) checksum of the preceding 34 bytes.
 
-The checksum mechanism in user-friendly addresses is similar to the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm), providing a first-line defense against input errors by validating format integrity upfront.
+A CRC16-CCITT checksum validates the preceding 34 bytes to detect input errors.
 
 #### Flag definitions  
-The first 6 bits of the address encode its type, as defined in [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md):  
+The flags byte encodes bounceability and test-only; its top 6 bits determine the first base64 character, as defined in [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md):  
 
 | Address prefix | Binary form | Bounceable | Testnet-only |
 |:--------------:|:-----------:|:----------:|:------------:|  
@@ -68,14 +68,14 @@ The first 6 bits of the address encode its type, as defined in [TEP-2](https://g
   - `true` (`0x11`): messages to non-existent/uninitialized contracts are returned.
   - `false` (`0x51`): funds are credited to the uninitialized account.
 - **`isTestnetOnly`**:  
-  - `true` (`0x80`): address is valid only on the testnet.<br/>
-  Mainnet applications must reject such addresses.
+  - `true` (`0x80`): address is valid only on the testnet.
+  mainnet applications must reject such addresses.
 
 Learn more about [non-bounceable messages](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) and their use cases.
 
 ### Encoding
 
-The 36-byte structure is encoded into a 48-character string using either standard base64 or URL-safe base64. Both encodings are valid and must be supported by applications.
+The 36-byte structure is encoded into a 48-character string using either base64 or base64url. Both encodings are valid and must be supported by applications.
 
 **Examples:**
 
@@ -84,7 +84,7 @@ The 36-byte structure is encoded into a 48-character string using either standar
 -   **Bounceable-Testnet**: `kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP`
 -   **Testnet-only**: `0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK`
 
-:::info DNS ADDRESS FLAGS
+:::info DNS Address Flags
 In TON, DNS addresses such as mywallet.ton can be used as alternatives to raw and user-friendly addresses. These DNS addresses encapsulate user-friendly address data along with all necessary flags, allowing developers to retrieve the complete address configuration directly from the TON domain's DNS records.
 :::
 
@@ -102,19 +102,17 @@ Tools for converting between raw and user-friendly formats are essential for dev
 -   **APIs**:
     -   [dton.io](https://dton.io/api/address/0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e)
     -   [toncenter.com](https://toncenter.com/api/v2/packAddress?address=0%3Aca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e)
--   **SDKs**: see `Address.spec.ts` in the [ton-core](https://github.com/ton-org/ton/tree/master/ton-core) library for the conversion examples.<br/>
-It's also possible to make use of similar mechanisms through other [SDKs](/v3/guidelines/dapps/apis-sdks/sdk).
+-   **SDKs**: see conversion examples in the [Cookbook](/v3/guidelines/dapps/cookbook#how-to-convert-between-user-friendly-and-raw-addresses-assemble-and-extract-them-from-strings) and the [SDKs page](/v3/guidelines/dapps/apis-sdks/sdk). For reference, see `Address.spec.ts` in ton-core: https://github.com/ton-org/ton-core/blob/main/src/address/Address.spec.ts
 
 ## Armored base64 representations
 
-Additional binary data related to TON Blockchain employs similar **armored** base64 user-friendly address representations. These differentiate from one another depending on the first 4 characters of their byte tag. For example, 256-bit Ed25519 public keys are represented by first creating a 36-byte sequence using the process below in order:
+Additional binary data related to TON Blockchain employs similar armored base64 representations. For example, 256-bit Ed25519 public keys are represented by first creating a 36-byte sequence consisting of:
 
-- A single byte tag using the _0x3E_ format denotes a public key.
-- A single byte tag using the _0xE6_ format denotes a Ed25519 public key.
+- Two one-byte tags: `0x3E` (public key) followed by `0xE6` (Ed25519).
 - 32 bytes containing the standard binary representation of the Ed25519 public key.
 - 2 bytes containing the CRC16-CCITT checksum of the previous 34 bytes.
 
-The resulting 36-byte sequence is converted into a 48-character base64 or base64url string in the standard fashion. For example, the Ed25519 public key `E39ECDA0A7B0C60A7107EC43967829DBE8BC356A49B9DFC6186B3EAC74B5477D` (usually represented by a sequence of 32 bytes such as:  `0xE3, 0x9E, ..., 0x7D`) presents itself through the **armored** representation as follows:
+The resulting 36-byte sequence is converted into a 48-character base64 or base64url string in the standard fashion. For example, the Ed25519 public key `E39ECDA0A7B0C60A7107EC43967829DBE8BC356A49B9DFC6186B3EAC74B5477D` (usually represented by a sequence of 32 bytes such as:  `0xE3, 0x9E, ..., 0x7D`) presents itself through the armored representation as follows:
 
 `Pubjns2gp7DGCnEH7EOWeCnb6Lw1akm538YYaz6sdLVHfRB2`
 
