@@ -8,7 +8,7 @@ This information is accurate at the time of writing. It may change during any ne
 
 Lottery contracts occasionally appear on TON. These contracts often use unsafe methods to handle randomness, making the generated values predictable and allowing the lottery to be exploited.  
 
-Exploiting weaknesses in random number generation typically involves using a proxy contract that forwards a message if the random value meets specific conditions. While proposals exist for wallet contracts that can execute arbitrary on-chain code (specified and signed by the user), most popular wallet versions do not support this functionality. So, if a lottery checks whether a gambler participates through a wallet contract, is it safe?  
+Exploiting weaknesses in random number generation typically involves using a proxy contract that forwards a message if the random value meets specific conditions. While proposals exist for wallet contracts that can execute arbitrary on-chain code (specified and signed by the user), most popular wallet versions do not support this functionality. So, if a lottery verifies that a gambler participates via a wallet contract, is it safe?  
 
 Alternatively, the question can be framed as: Can an external message be included in a block where the random value matches the sender's requirements?  
 
@@ -30,13 +30,13 @@ However, the most reliable and up-to-date source is the code itself. Let's exami
   }
 ```
 
-This code generates the random seed for a block. It resides in the collator code because the party generating blocks requires it, while lite validators do not.
+This code generates the random seed for a block. It resides in the collator code because the party generating blocks requires it, while lite clients (via liteservers) do not.
 
 A single validator or collator generates the seed when creating a block. This raises the following question:  
 
 ## Can the decision to include an external message be made after the seed is known?
 
-Yes, it can. Here’s why: if the system imports an external message, its execution must succeed. Since execution can depend on random values, the block seed must be known beforehand.
+Yes, it can. Here’s why: if the system imports an external message, its execution must be deterministic and valid (succeed or fail with an exit code and possible bounce). Since execution can depend on random values, the block seed must be known beforehand.
 
 Thus, there **is** a way to exploit "unsafe" (single-block) randomness if the sender collaborates with a validator. Even if the contract uses `randomize_lt()`, the validator can generate a suitable seed or include the proposed external message in a block that meets all conditions. A validator acting in this way would still be considered fair. This is the essence of decentralization.  
 
@@ -65,17 +65,16 @@ Pseudorandom numbers are then generated using the procedure described on the [TV
 > **x\{F810} RANDU256**  
 > Generates a new pseudorandom unsigned 256-bit Integer x. The algorithm is as follows: if r is the old value of the random seed, considered as a 32-byte array (by constructing the big-endian representation of an unsigned 256-bit integer), then its sha512(r) is computed; the first 32 bytes of this hash are stored as the new value r' of the random seed, and the remaining 32 bytes are returned as the next random value x.  
 
-This process is confirmed by examining the code for [preparing the contract's c7](https://github.com/ton-blockchain/ton/blob/master/crypto/block/transaction.cpp#L903) (c7 is a tuple for temporary data, storing the contract address, starting balance, random seed, etc.) and [generating random values](https://github.com/ton-blockchain/ton/blob/master/crypto/vm/tonops.cpp#L217-L268).  
+This process is confirmed by examining the code for [preparing the contract's c7](https://github.com/ton-blockchain/ton/blob/f59c363ab942a5ddcacd670c97c6fbd023007799/crypto/block/transaction.cpp) (c7 is a tuple for temporary data, storing the contract address, starting balance, random seed, etc.) and [generating random values](https://github.com/ton-blockchain/ton/blob/f59c363ab942a5ddcacd670c97c6fbd023007799/crypto/vm/tonops.cpp).  
 
 ## Conclusion  
 
 No random number generation in TON is entirely safe in terms of unpredictability. This means **no perfect lottery can exist on TON**, nor can any lottery be fully trusted to be fair.  
 
-Typical usage of pseudorandom number generators (PRNGs) may include `randomize_lt()`, but such contracts can still be tricked by selecting the correct blocks to send messages. Proposed solutions, such as sending messages to another workchain and receiving a response to skip blocks, only delay the threat. In reality, any validator (representing 1/250 of the TON Blockchain) can choose the optimal time to send a request to a lottery contract so that the response arrives in a block they generate. They can then select any block seed they desire. This risk will increase once collators are introduced to the mainnet, as standard complaints cannot fine them since they do not stake anything in the Elector contract.  
+Typical usage of pseudorandom number generators (PRNGs) may include `randomize_lt()`, but such contracts can still be tricked by selecting the correct blocks to send messages. Proposed solutions, such as sending messages to another workchain and receiving a response to skip blocks, only delay the threat. In reality, any validator can choose the optimal time to send a request to a lottery contract so that the response arrives in a block they generate. They can then select any block seed they desire. If/when collators are introduced on mainnet, this risk could increase.  
 
 {/* TODO: Find an example contract using random without any additions and demonstrate how to determine the result of RANDU256 knowing the block random seed (include a link to dton.io to show the generated value). */}
 
 {/* TODO: Next article. "Let's proceed to writing a tool that exploits this. It will attach to a validator and include proposed external messages in blocks satisfying specific conditions—provided a fee is paid." */}
 
 <Feedback />
-
