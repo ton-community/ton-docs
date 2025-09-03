@@ -19,7 +19,7 @@ import TabItem from '@theme/TabItem';
 
 <Tabs groupId="NftTransfer">
   <TabItem value="@ton/ton" label="@ton/ton">
-    The `body` message typically should be done according the following way:
+    The `body` message should be constructed as follows:
 
     ```js
     import { beginCell, toNano } from '@ton/ton'
@@ -38,8 +38,7 @@ import TabItem from '@theme/TabItem';
             .endCell();
     ```
 
-    `WALLET_DST` - Address - The address of the initial NFT owner for the receiving excess
-    Transfer the `NFTitem` to a new owner `NEW_OWNER_WALLET`.
+    WALLET_DST — the address of the current NFT owner to receive any excess fees. Transfer the NFT item to the new owner (NEW_OWNER_WALLET).
 
     <Tabs groupId="NftTransferUI">
       <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
@@ -97,8 +96,8 @@ import TabItem from '@theme/TabItem';
       </TabItem>
     </Tabs>
 
-    - `NFTitem` - Address - The address of the NFT item smart contract which we want to transfer to a new owner `NEW_OWNER_WALLET`.
-    - `balance` - Integer, the amount of Toncoin used for gas payments in nanotons.
+    - `nftItem` - Address - The address of the NFT item smart contract which we want to transfer to a new owner `NEW_OWNER_WALLET`.
+    - `amount` - Integer, the amount of Toncoin used for gas payments in nanotons.
     - `body` - payload for the NFT contract
 
   </TabItem>
@@ -111,7 +110,7 @@ import TabItem from '@theme/TabItem';
 
     For more examples, check [documentation](https://github.com/ton-community/assets-sdk)
 
-    ```js
+    ```ts
     const NETWORK = "testnet";
     const api = await createApi(NETWORK);
     const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react
@@ -136,7 +135,7 @@ import TabItem from '@theme/TabItem';
     nft.send(sender, RECEIVER_ADDRESS);
     ```
 
-    OR you can use an NFT Contract with built-in methods:
+    Alternatively, you can use an NFT contract with built-in methods:
 
     ```ts
     const client = new TonClient({
@@ -165,7 +164,7 @@ import TabItem from '@theme/TabItem';
 
 Here is an example of preparing message and transaction for sale on GetGems marketplace, according to contract [nft-fixprice-sale-v3r3](https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-fixprice-sale-v3r3.fc).
 
-To place NFT on the GetGems Sale Contract, we should prepare a special message body, `transferNftBody`, to transfer NFT to the special NFT Sale contract.
+To place an NFT on the GetGems sale contract, we should prepare a special message body, `transferNftBody`, to transfer the NFT to the special NFT sale contract.
 
 ```js
 const transferNftBody = beginCell()
@@ -279,7 +278,7 @@ async function main() {
 
 </details>
 
-The prepared `transferNftBody` should be sent to the NFT Item contract with at least `1.08` TON, which is expected for successful processing. Excess will be returned to a sender's wallet.
+The prepared `transferNftBody` should be sent to the NFT item contract with at least `1.08` TON, which is expected for successful processing. Excess will be returned to a sender's wallet.
 
 <Tabs groupId="NftSaleFixPrice">
   <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
