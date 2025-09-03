@@ -69,11 +69,7 @@ The following list outlines the SAR commands that can be used to gather various 
 sar -rh
 ```
 
-The TON validator engine uses the **jemalloc** feature, which allows it to cache a significant amount of data. As a result, the `sar —rh` command often returns a low number in the `%memused` column.
-
-Meanwhile, you will typically see a high number in the `kbcached` column. Therefore, there is no need to worry about the low amount of free RAM indicated in the `kbmemfree` column. The key indicator to monitor is the value shown in the `%memused` column.
-
-If the percentage exceeds 90%, you should consider adding more RAM. Additionally, keep an eye on your validator engine to ensure it doesn't stop unexpectedly due to an out-of-memory (OOM) issue. The best way to check for this is to grep the `/var/ton-work/log` file for any **Signal** messages.
+The TON validator engine uses the **jemalloc** feature, which allows it to cache a significant amount of data. You will typically see a high value in the `kbcached` column. Linux counts page cache as used; low values in the `kbmemfree` column alone aren’t an issue—monitor swap activity (`sar -Sh`) and OOM events. Consider adding more RAM if `%memused` stays high (e.g., >90%) together with swap usage. Additionally, keep an eye on your validator engine to ensure it doesn't stop unexpectedly due to an out-of-memory (OOM) issue. The best way to check for this is to grep the `/var/ton-work/log` directory, for example: `grep -i "Signal" /var/ton-work/log/*`.
 
 **Swap usage:**
 
@@ -81,7 +77,7 @@ If the percentage exceeds 90%, you should consider adding more RAM. Additionally
 sar -Sh
 ```
 
-If you notice that a swap is used, you should consider adding more RAM. The general recommendation from the **TON Core team** is to disable the swap.
+If you notice that swap is in use, consider disabling swap for production validator nodes.
 
 ### CPU report
 
@@ -89,9 +85,9 @@ If you notice that a swap is used, you should consider adding more RAM. The gene
 sar -u
 ```
 
-If your server utilizes CPU on average up to 70% (see the `%user` column), this should be considered as good.
+If your server utilizes CPU on average up to 70% (see the `%user` column), this should be considered good for production validator nodes.
 
-### Disk Usage report
+### Disk usage report
 
 ```bash
 sar -dh
@@ -101,7 +97,7 @@ Watch the `%util` column and react accordingly if it stays above 90% for a parti
 
 ### Network report
 
-Use the commands :
+Use the following commands:
 
 ```bash
 sar -n DEV -h
@@ -115,23 +111,23 @@ sar -n DEV -h --iface=<interface name>
 
 if you want to filter results by network interface name.
 
-Check out the result of column `%ifutil` - it shows the usage of your interface considering its maximum link speed.
+Check the `%ifutil` column; it shows your interface utilization relative to its maximum link speed.
 
-You can check what speed is supported by your NIC by executing the command below:
+You can check which link speed your NIC supports by executing the command below:
 
 ```bash
 cat /sys/class/net/<interface>/speed
 ```
 
 :::info
-The speed you're experiencing is not what your provider promised you.
+Link speed reflects the negotiated NIC link rate; actual throughput may differ from your provider’s advertised bandwidth.
 :::
 
-Consider upgrading your link speed if `%ifutil` shows above 70% usage or columns `rxkB/s` and `txkB/s` reporting values close to a bandwidth provided by your provider.
+Consider upgrading your link if `%ifutil` is above 70% or if `rxkB/s` and `txkB/s` are close to your provisioned bandwidth, especially for production validator nodes.
 
 ### Reporting a performance issue
 
-Before reporting any performance issues, ensure that you meet the minimum requirements for the node. Then, execute the following commands:
+Before reporting any performance issues, ensure that you meet the [minimum requirements](/v3/guidelines/nodes/running-nodes/validator-node#minimal-hardware-requirements) for the node. Then, execute the following commands:
 
 To generate today's report, run:
 
@@ -151,7 +147,7 @@ Additionally, stop the TON node and measure your disk I/O and network speed with
 sudo fio --randrepeat=1 --ioengine=io_uring --direct=1 --gtod_reduce=1 --name=test --filename=/var/ton-work/testfile --bs=4096 --iodepth=1 --size=40G --readwrite=randread --numjobs=1 --group_reporting
 ```
 
-Look for the value at `read: IOPS=` and include it in your report. A value above **10K IOPS** is considered good.
+Look for the value at `read: IOPS=` and include it in your report. A value above **10K IOPS** is considered good for production validator nodes.
 
 Check your download and upload speeds using the following command:
 
@@ -159,11 +155,10 @@ Check your download and upload speeds using the following command:
 curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -
 ```
 
-Speeds exceeding **700 Mbit/s** are deemed satisfactory.
+Speeds exceeding **700 Mbit/s** are deemed satisfactory for production validator nodes.
 
 When reporting, please send the SAR report, IOPS, and network speed results to [@mytonctrl_help_bot](https://t.me/mytonctrl_help_bot).
 
 Initial version - _[@neodix](https://t.me/neodix) - TON Core team_, Sep 23, 2024
 
 <Feedback />
-
