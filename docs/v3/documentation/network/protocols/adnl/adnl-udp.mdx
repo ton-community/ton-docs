@@ -124,7 +124,7 @@ Packets sent to a channel have a different content structure compared to packets
 
 First, let’s examine the main packet used for initialization.
 
-During the initial data exchange, before the channel is established, the packet's serialized content structure is prefixed with the peer's public key, which is 32 bytes.
+During the initial data exchange, before the channel is established, the packet's serialized content structure is prefixed with the peer's Key ID and our public key.
 
 Our public key is also 32 bytes, and the SHA-256 hash of the serialized TL of the packet's content structure is another 32 bytes.
 
