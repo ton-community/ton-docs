@@ -64,23 +64,35 @@ Most SDKs automatically verify a wallet address during creation or transaction p
     package main
 
     import (
+      "errors"
       "fmt"
       "github.com/xssnick/tonutils-go/address"
     )
 
-    if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
-      return errors.New("invalid address")
-    }
+    func main() {
+      if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
+        fmt.Println(errors.New("invalid address"))
+        return
+  }
+      fmt.Println("Address is valid")
+  }
     ```
   </TabItem>
 
   <TabItem value="Java" label="Ton4j">
     ```java
-    try {
-      Address.of("...");
-      } catch (e) {
-      // not valid address
-    }
+    import org.ton.java.address.Address;
+
+    public class Main {
+      public static void main(String[] args) {
+        try {
+          Address.of("...");
+          System.out.println("Valid address");
+        } catch (Exception e) {
+          System.out.println("Not valid address");
+        }
+      }
+  }
     ```
   </TabItem>
 
@@ -115,8 +127,8 @@ To retrieve a smart contract's transactions, use the [getTransactions](https://t
 It is possible to track message flows during transaction processing. Since the message flow forms a DAG (Directed Acyclic Graph), follow these steps:
 
 1. Use the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) to obtain the current transaction.
-2. Identify incoming transactions by checking out_msg with [tryLocateResultTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get).
-3. Identify outgoing transactions by checking in_msg with [tryLocateSourceTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
+2. Identify incoming transactions by checking in_msg with [tryLocateSourceTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
+3. Identify outgoing transactions by checking out_msg with [tryLocateResultTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get).
 
 <Tabs groupId="example-outgoing-transaction">
   <TabItem value="JS" label="JS">
