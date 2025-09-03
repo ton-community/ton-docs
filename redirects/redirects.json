@@ -585,7 +585,11 @@
     },
     {
         "from": "/develop/data-formats/tlb-ide",
-        "to": "/v3/documentation/data-formats/tlb/tlb-ide"
+        "to": "/v3/documentation/smart-contracts/getting-started/ide-plugins"
+    },
+    {
+        "from": "/v3/documentation/data-formats/tlb/tlb-ide",
+        "to": "/v3/documentation/smart-contracts/getting-started/ide-plugins"
     },
     {
         "from": "/develop/data-formats/tlb-tools",
