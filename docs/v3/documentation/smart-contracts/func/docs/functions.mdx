@@ -34,7 +34,7 @@ where `[ ... ]` represents an optional entry.
 
 ### Function name
 
-A function name can be any valid [identifier](/v3/documentation/smart-contracts/func/docs/literals_identifiers#identifiers). Additionally, it may start with the symbols `.` or `~`, which have specific meanings explained in the [Statements](/v3/documentation/smart-contracts/func/docs/statements#methods-calls) section.
+A function name can be any valid [identifier](/v3/documentation/smart-contracts/func/docs/literals_identifiers#identifiers). Additionally, it may start with the symbols `.` or `~`, which have specific meanings explained in the [Statements](/v3/documentation/smart-contracts/func/docs/statements#method-calls) section.
 
 For example, `udict_add_builder?`, `dict_set`, and `~dict_set` are all valid function names, and each is distinct. These functions are defined in [stdlib.fc](/v3/documentation/smart-contracts/func/docs/stdlib).
 
@@ -141,8 +141,6 @@ b = store_uint(b, 239, 8);
 builder b = begin_cell();
 b = b.store_uint(239, 8);
 ```
-So the first argument of a function can be passed to it being located before the function name, if separated by `.`. The code can be further simplified:
-
 The function's first argument is passed before the function name, separated by `.`. The syntax can be further condensed into a single statement:
 
 ```func
@@ -156,7 +154,7 @@ builder b = begin_cell().store_uint(239, 8)
                         .store_uint(0xff, 10);
 ```
 
-#### Modifying functions
+#### Modifying methods
 :::info
 A modifying function supports a short form using the `~` and `.` operators.
 :::
@@ -196,7 +194,7 @@ int x = cs~load_uint(8); ;; Modifying method syntax
 
 **Modifying methods with no return value**
 
-Sometimes, a function only modifies its first argument without returning a meaningful value. To enable modifying method syntax, such functions should return a unit type () as the second component.
+Sometimes, a function only modifies its first argument without returning a meaningful value. To enable modifying method syntax, such functions should return a unit type `()` as the second component.
 
 For example, suppose we want to define a function `inc` of type `int → int`, which increments an integer. To use it as a modifying method, we define it as follows:
 
@@ -250,7 +248,7 @@ In FunC, function specifiers modify the behavior of functions. There are three t
 2. `inline`/ `inline_ref`
 3. `method_id`
 
-One, multiple, or none can be used in a function declaration. However, they must appear in a specific order (e.g., `impure` must come before `inline`).
+One, multiple, or none can be used in a function declaration. They are typically written with `impure` before `inline`.
 
 
 #### Impure specifier
@@ -302,7 +300,6 @@ When a function is marked with the `inline_ref` specifier, its code is stored in
 #### method_id
 
 In a TVM program, every function has an internal integer ID that determines how it can be called. 
-By default, ordinary functions are assigned sequential numbers starting from `1`, while contract get-methods use `crc16` hashes of their names.
 The `method_id(<some_number>)` specifier allows you to set a function's ID to a specific value manually. 
 If no ID is specified, the default is calculated as `(crc16(<function_name>) & 0xffff) | 0x10000`. 
 If a function has the `method_id` specifier, it can be invoked by its name as a get-method in lite client or TON explorer.
@@ -311,7 +308,7 @@ If a function has the `method_id` specifier, it can be invoked by its name as a 
 **19-bit limitation**: Method IDs are limited to 19 bits by the TVM assembler, meaning the valid range is **0 to 524,287** (2^19 - 1).
 
 **Reserved ranges**:
-- **0-999**: Reserved for system functions (approximate range)
+- **0-999**: Reserved for system functions
 - **Special functions**: `main`/`recv_internal` (id=0), `recv_external` (id=-1), `run_ticktock` (id=-2)  
 - **65536+**: Default range for user functions when using automatic generation `(crc16() & 0xffff) | 0x10000`
 
@@ -358,9 +355,7 @@ int get_counter() method_id {
 ```
 
 ### Polymorphism with forall
-Before any function declaration or definition, there can be `forall` type variables declarator. It has the following syntax:
-
-A function definition can include a `forall` type variable declaration before its declaration or implementation. The syntax is:
+A function definition can include a `forall` type-variable declarator before the signature, using the following syntax:
 
 ```func
 forall <comma_separated_type_variables_names> ->
@@ -394,10 +389,7 @@ For example, the following function increments an integer and then negates it:
 ```func
 int inc_then_negate(int x) asm "INC" "NEGATE";
 ```
-– a function that increments an integer and then negates it. Calls to this function will be translated to 2 assembler commands `INC` and `NEGATE`. An alternative way to define the function is:
-
-When called, this function is directly translated into the two assembler commands, `INC` and `NEGATE`.
-Alternatively, the function can be written as:
+When called, this function is translated into `INC` and `NEGATE`. Alternatively, it can be written as:
 
 ```func
 int inc_then_negate'(int x) asm "INC NEGATE";
@@ -405,25 +397,25 @@ int inc_then_negate'(int x) asm "INC NEGATE";
 Here, `INC NEGATE` is treated as a single assembler command by FunC, but the Fift assembler correctly interprets it as two separate commands.
 
 :::info
-The list of assembler commands can be found here: [TVM instructions](/v3/documentation/tvm/instructions).
+The list of assembler commands can be found here: [TVM instructions](/v3/documentation/tvm/tvm-overview#tvm-instructions).
 :::
 
 ### Rearranging stack entries
 Sometimes, the order in which function arguments are passed may not match the expected order of an assembler command. Similarly, the returned values may need to be arranged differently. While this can be done manually using stack manipulation primitives, FunC automatically handles it.
 
 :::info
-When manually rearranging arguments, they are computed in the new order. To overwrite this behavior use `#pragma compute-asm-ltr`: [compute-asm-ltr](/v3/documentation/smart-contracts/func/docs/compiler_directives#pragma-compute-asm-ltr)
+When manually rearranging arguments, they are computed in the new order. To override this behavior, use `#pragma compute-asm-ltr`: [compute-asm-ltr](/v3/documentation/smart-contracts/func/docs/compiler_directives#pragma-compute-asm-ltr)
 :::
 
 For instance, the assembler command `STUXQ` takes an integer, a builder, and another integer as input. It then returns the builder and an integer flag indicating whether the operation succeeded. We can define the corresponding function as follows:
 
 ```func
-(builder, int) store_uint_quite(int x, builder b, int len) asm "STUXQ";
+(builder, int) store_uint_quiet(int x, builder b, int len) asm "STUXQ";
 ```
 However, if we need to rearrange the order of arguments, we can specify them explicitly in the `asm` declaration:
 
 ```func
-(builder, int) store_uint_quite(builder b, int x, int len) asm(x b len) "STUXQ";
+(builder, int) store_uint_quiet(builder b, int x, int len) asm(x b len) "STUXQ";
 ```
 So you can indicate the required order of arguments after the `asm` keyword.
 
@@ -432,7 +424,7 @@ This allows us to control the order in which arguments are passed to the assembl
 Similarly, we can rearrange return values using the following notation:
 
 ```func
-(int, builder) store_uint_quite(int x, builder b, int len) asm( -> 1 0) "STUXQ";
+(int, builder) store_uint_quiet(int x, builder b, int len) asm( -> 1 0) "STUXQ";
 ```
 
 
@@ -441,10 +433,10 @@ Here, the numbers indicate the order of return values, where `0` represents the 
 
 Additionally, we can combine these techniques:
 ```func
-(int, builder) store_uint_quite(builder b, int x, int len) asm(x b len -> 1 0) "STUXQ";
+(int, builder) store_uint_quiet(builder b, int x, int len) asm(x b len -> 1 0) "STUXQ";
 ```
 
-### Multiline asms
+### Multiline asm
 Multiline assembler commands, including Fift code snippets, can be defined using triple-quoted strings `"""`.
 
 ```func
@@ -458,4 +450,3 @@ slice hello_world() asm """
 ```
 
 <Feedback />
-
