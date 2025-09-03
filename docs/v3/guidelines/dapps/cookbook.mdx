@@ -14,7 +14,7 @@ During product development, various questions often arise regarding interactions
 
 ### How to convert between user-friendly and raw addresses, assemble, and extract them from strings?
 
-TON addresses uniquely identify contracts on TON Blockchain, indicating their workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses) are: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
+TON addresses uniquely identify contracts on TON Blockchain, indicating their workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses/address-formats) are: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
 
 ```
 User-friendly: EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
@@ -32,8 +32,8 @@ To obtain a TON address object from a string in your SDK, you can use the follow
     const address1 = Address.parse('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF');
     const address2 = Address.parse('0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e');
 
-    // toString arguments: urlSafe, bounceable, testOnly
-    // default values: true, true, false
+    // toStrings arguments: urlSafe, bounceable, testOnly
+    // defaults values: true, true, false
 
     console.log(address1.toString()); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
     console.log(address1.toRawString()); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
@@ -107,7 +107,7 @@ To obtain a TON address object from a string in your SDK, you can use the follow
 
 ### Flags in user-friendly addresses
 
-There are two flags in user-friendly addresses: **bounceable**/**non-bounceable** and **testnet**/**any-net**. These flags are represented in the first character of the address, which corresponds to the first 6 bits of the address encoding. These flags can be detected by looking at the first character, according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
+There are two flags in user-friendly addresses: **bounceable**/**non-bounceable** and **Testnet-only**. These flags are represented in the first character of the address, which corresponds to the first 6 bits of the address encoding. These flags can be detected by looking at the first character, according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
 
 | Address beginning | Binary form | Bounceable | Testnet-only |
 | :---------------: | :---------: | :--------: | :----------: |
@@ -129,8 +129,8 @@ Also, in some libraries, you may notice a serialization parameter called `urlSaf
 
     const address = Address.parse('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF');
 
-    // toStrings arguments: urlSafe, bounceable, testOnly
-    // defaults values: true, true, false
+    // toString arguments: urlSafe, bounceable, testOnly
+    // default values: true, true, false
 
     console.log(address.toString()); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
     console.log(address.toString({urlSafe: false})) // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff+W72r5gqPrHF
@@ -324,7 +324,7 @@ Most SDKs follow a similar process for sending messages from your wallet:
       seqno,
       secretKey: keyPair.secretKey,
       messages: [internal({
-        value: '1',
+        value: toNano('1'),
         to: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N',
         body: 'Example transfer body',
       })]
@@ -435,7 +435,7 @@ Most SDKs follow a similar process for sending messages from your wallet:
   </TabItem>
 </Tabs>
 
-### Writing comments: long strings in snake format
+### Writing comments: long strings in snake cells
 
 Sometimes, it's necessary to store large strings in cells, but the maximum size for a cell is 1023 bits. In these cases, you can use snake cells, which reference other cells recursively.
 
@@ -458,7 +458,7 @@ Sometimes, it's necessary to store large strings in cells, but the maximum size 
     }
 
     function readStringTail(slice) {
-        const str = new TextDecoder('ascii').decode(slice.array); // decode uint8array to string
+        const str = new TextDecoder('utf-8').decode(slice.array); // decode uint8array to string
         if (slice.refs.length > 0) {
             return str + readStringTail(slice.refs[0]); // read next cell
         } else {
@@ -889,7 +889,7 @@ However, if you know the jetton wallet code and storage structure, you can calcu
 
     ```
 
-    Read the simple example [here](/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py).
+    Read the simple example [here](/static/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py).
   </TabItem>
 </Tabs>
 
@@ -989,7 +989,7 @@ Of course, one can always do calculation in indivisible units.
         const jettonTransferBody = new TonWeb.boc.Cell();
         jettonTransferBody.bits.writeUint(0xf8a7ea5, 32); // opcode for jetton transfer
         jettonTransferBody.bits.writeUint(0, 64); // query id
-        jettonTransferBody.bits.writeCoins(new TonWeb.utils.BN('5')); // jetton amount, amount * 10^9
+        jettonTransferBody.bits.writeCoins(TonWeb.utils.toNano('5')); // jetton amount, amount * 10^9
         jettonTransferBody.bits.writeAddress(destinationAddress);
         jettonTransferBody.bits.writeAddress(destinationAddress); // response destination
         jettonTransferBody.bits.writeBit(false); // no custom payload
@@ -2104,7 +2104,7 @@ Create a listener function that will assert specific transaction on certain acco
                     const inBOC = inMsg?.body;
                     if (typeof inBOC === 'undefined') {
 
-                        reject(new Error('Invalid external'));
+                        throw new Error('Invalid external');
                         continue;
                     }
                     const extHash = Cell.fromBase64(exBoc).hash().toString('hex')
