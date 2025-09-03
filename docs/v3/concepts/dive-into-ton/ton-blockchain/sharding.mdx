@@ -10,11 +10,11 @@ In TON, sharding is highly dynamic. Unlike other blockchains with a fixed number
 Shards split as the transaction load increases, and as the load decreases, they merge.
 This flexibility ensures the system can adapt to varying workloads while maintaining efficiency.
 
-![Schematic of TON multichain: Masterchain, Workchains, ShardChains](/img/docs/blockchain-fundamentals/scheme.png)
+![Schematic of TON multichain: MasterChain, WorkChains, ShardChains](/img/docs/blockchain-fundamentals/scheme.png)
 
-The **Masterchain** is crucial in maintaining the network configuration and the final state of all **Workchains** and **ShardChains**.
-While the Masterchain is responsible for overall coordination, Workchains operate under their own specific rules, each of which can be split further into ShardChains.
-Currently, two Workchains are active: Masterchain and BaseChain.
+The **MasterChain** is crucial in maintaining the network configuration and the final state of all **WorkChains** and **ShardChains**.
+While the MasterChain is responsible for overall coordination, WorkChains operate under their own specific rules, each of which can be split further into ShardChains.
+Only one WorkChain - the **BaseChain**, currently operates on TON. 
 
 At the heart of TON's efficiency is the [Infinity Sharding Paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm/), which treats each account as its own AccountChain.
 These AccountChains are then aggregated into ShardChain blocks, facilitating efficient transaction processing.
