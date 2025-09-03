@@ -7,9 +7,9 @@ This section provides instructions and guidance for interacting with the TON nod
 If you are using MyTonCtrl, check the [Collators and validators](/v3/guidelines/nodes/running-nodes/collators-validators.mdx) guideline for a more user-friendly experience.
 :::
 
-The key feature of TON Blockchain is the ability to distribute transaction processing across network nodes, shifting from **everybody checks all transactions** to **every transaction is checked by a secure subset of validators**. This ability to infinitely horizontally scale throughput across shards when a WorkChain splits into the required number of ShardChains distinguishes TON from other L1 networks.
+The key feature of TON Blockchain is the ability to distribute transaction processing across network nodes, shifting from **everybody checks all transactions** to **each transaction is checked by a secure subset of validators**. This ability to infinitely horizontally scale throughput across shards when a workchain splits into the required number of ShardChains distinguishes TON from other L1 networks.
 
-However, it is necessary to rotate validator subsets regularly, which involves processing one shard or another, to prevent collusion. At the same time, to process transactions, validators obviously should know the state of the shard before the transaction. The most straightforward approach is to require all validators to be aware of the state of all shards.
+However, it is necessary to rotate validator subsets regularly, that process specific shards, to prevent collusion. At the same time, to process transactions, validators must know the state of the shard before the transaction. The most straightforward approach is to require all validators to be aware of the state of all shards.
 
 This approach works well when the number of TON users is within the range of a few million and the TPS (transactions per second) is under 100. However, in the future, when TON Blockchain processes many thousands of transactions per second for hundreds of millions or billions of people, no single server will be able to keep the actual state of the whole network. Fortunately, TON was designed with such loads in mind and supports sharding both throughput and state updates.
 
@@ -18,10 +18,10 @@ This approach works well when the number of TON users is within the range of a f
 **Accelerator** is an updated design to improve blockchain scalability. Its main features are:
 
 - **Partial nodes**: A node can monitor specific shards of the blockchain instead of the entire set of shards.
-- **Liteserver infrastructure**: Liteserver operators can configure each LS to monitor a set of shards, and lite-clients can select a suitable LS for each request.
+- **Liteserver infrastructure**: Liteserver operators can configure each LS to monitor a set of shards, and lite clients can select a suitable LS for each request.
 - **Collator/validator separation**: Validators can only monitor MasterChain, significantly reducing their load.
 
-Validator can use **collator nodes** to collate new shard blocks.
+Validators can use **collator nodes** to collate new shard blocks.
 
 ## Partial nodes
 
@@ -43,7 +43,7 @@ Nodes can only monitor an entire group of shards at once. For instance, a node c
 It is guaranteed that shards from different groups will not merge. This ensures that a monitored shard will not unexpectedly merge with a non-monitored shard.
 
 :::note
-Current value of `monitor_min_split` in Mainnet is `0`, which means that all shards are in one group. The actual value can always be checked in [Config param 12](/v3/documentation/network/configs/blockchain-configs#param-12).
+Current value of `monitor_min_split` in Mainnet is `0`, which means that all shards are in one group. The actual value can always be checked in [ConfigParam 12](/v3/documentation/network/configs/blockchain-configs#param-12).
 :::
 
 ## Node configuration
@@ -51,9 +51,9 @@ Current value of `monitor_min_split` in Mainnet is `0`, which means that all sha
 - By default, a node monitors all shards. You can turn off this behavior by adding the `-M` flag to the `validator-engine`.
 - When you use the `-M` flag, the node will only monitor the MasterChain. If you want to monitor specific BaseChain shards, use the `--add-shard <wc:shard>` flag. For example:
 
-```
+```bash
 validator-engine ... -M --add-shard 0:2000000000000000 --add-shard 0:e000000000000000
-  ```
+```
 
 - These flags will configure the node to monitor all shards with the prefixes `0:2000000000000000` and `0:e000000000000000`. You can either add these flags to an existing node or launch a new node with them included.
 
@@ -61,7 +61,7 @@ validator-engine ... -M --add-shard 0:2000000000000000 --add-shard 0:e0000000000
 
 1. **DO NOT** add these flags to a node that is participating in validation. Currently, validators are required to monitor all shards; this will be improved in future updates, allowing them to monitor only the MasterChain.
 2. If you use the `-M` flag, the node will begin downloading any missing shards, which may take some time. This is also true if you add new shards later using the `--add-shard` flag.
-3. The command `--add-shard 0:0800000000000000` will add the entire shard group associated with the prefix `0:2000000000000000` due to the `monitor_min_split` configuration.
+3. The command `--add-shard 0:2000000000000000` will add the entire shard group associated with the prefix `0:2000000000000000` due to the `monitor_min_split` configuration.
 
 ### Low-level configuration
 
@@ -69,7 +69,7 @@ validator-engine ... -M --add-shard 0:2000000000000000 --add-shard 0:e0000000000
 A node stores a list of shards to monitor in the config (see file `db/config.json`, section `shards_to_monitor`).
 This list can be modified using `validator-engine-console`:
 
-```
+```bash
 add-shard <wc>:<shard>
 del-shard <wc>:<shard>
 ```
@@ -137,13 +137,13 @@ Its primary purpose is to create a single liteserver that functions as a liteser
 
 **Usage:**
 
-```
+```bash
 proxy-liteserver -p <tcp-port> -C global-config.json --db db-dir/ --logname ls.log
 ```
 
 List all child liteservers in the global config. These can be partial liteservers, as shown in the example above.
 
-To use the proxy liteserver in clients, create a new global config with this proxy in the `liteservers` section. See `db-dir/config.json`:
+To use the proxy liteserver in clients, create a new global config with this proxy in the `liteservers_v2` section. See `db-dir/config.json`:
 
 ```json
 {
@@ -156,7 +156,7 @@ To use the proxy liteserver in clients, create a new global config with this pro
 }
 ```
 
-This file contains the port and public key for the proxy liteserver. You can copy these details to the new global configuration.
+This file contains the port and public key for the proxy liteserver. You can copy these details to the global configuration’s `liteservers_v2` section.
 
 The key is generated upon the first launch and remains unchanged after any restarts.
 
@@ -184,7 +184,7 @@ In the current `master` node branch, validators must still monitor all shards. H
 
 To configure a collator node, use the following commands in the `validator-engine-console`:
 
-```
+```bash
 new-key
 add-adnl <key-id-hex> 0
 add-collator <key-id-hex> <wc>:<shard>
@@ -303,9 +303,7 @@ You can enable the whitelist to allow requests only from certain validators usin
 
 ## Full collated data
 
-By default, validators proposing a new block in the validator set do not attach data that proves "before block" state. This data should be obtained by other validators from the locally stored state. That way, both old and new nodes can reach consensus, but new validators should monitor the entire network state.
-
-Once [ton::capFullCollatedData](https://github.com/ton-blockchain/ton/blob/160b539eaad7bc97b7e238168756cca676a5f3be/validator/impl/collator-impl.h#L49) capabilities in network configuration parameter 8 will be enabled, `collated_data` will be included in blocks. Validators will be able to eliminate monitoring of anything except the masterchain: incoming data will be sufficient to verify the correctness of the block fully.
+By default, validators proposing a new block in the validator set do not attach data that proves the pre-block state; other validators obtain this data from their locally stored state. This allows old (master branch) and new nodes to reach consensus, but new validators must keep an eye on the entire network state. Once [ton::capFullCollatedData](https://github.com/ton-blockchain/ton/blob/160b539eaad7bc97b7e238168756cca676a5f3be/validator/impl/collator-impl.h#L49) (network configuration parameter 8) is enabled, `collated_data` will be included in blocks, and validators will be able to monitor only the MasterChain because the incoming data will suffice to fully validate the block.
 
 ## Next steps
 
