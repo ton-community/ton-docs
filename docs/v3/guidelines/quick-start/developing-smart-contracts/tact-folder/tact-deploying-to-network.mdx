@@ -16,7 +16,7 @@ The address of a smart contract is a hash of the aggregated initial code and dat
 
 ### You already know the address
 
-In TON, any address that doesn't have any data is considered in the `nonexistent` state. Nevertheless, when we created a wallet using the wallet app in the [Getting started](/v3/guidelines/quick-start/getting-started) section, we were still able to get the address of our **future** wallet smart contract from the wallet app before its deployment and examine it in the explorer.
+In TON, any address that doesn't have any data is considered in the `nonexist` state. Nevertheless, when we created a wallet using the wallet app in the [Getting started](/v3/guidelines/quick-start/getting-started) section, we were still able to get the address of our **future** wallet smart contract from the wallet app before its deployment and examine it in the explorer.
 
 The reason behind this is that creating your **private** and **public** key pair through a **mnemonic phrase**, where the second key is part of the initial data of the smart contract, makes the `state_init` of our contract fully determined:
 - **code** is one of the standard wallet implementations, like `v5r1`.
