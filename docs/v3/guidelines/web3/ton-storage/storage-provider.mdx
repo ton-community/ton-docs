@@ -74,7 +74,7 @@ new-contract-message <BagID> <file> --query-id 0 --provider <address>
 
 The client must then send the generated message body to the provider's smart contract address. If an error occurs, the message bounces back to the sender. If successful, a new storage contract is created, and the client receives a message from the contract with [`op=0xbf7bd0c1`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L3) and the same query ID.
 
-At this stage, the contract is not yet active. Once the provider downloads the bag, the contract is activated, and the client receives another message from the same contract with  [`op=0xd4caedcd`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L4).
+At this stage, the contract is not yet active. Once the provider downloads the bag, the contract is activated, and the client receives another message from the same contract with  [`op=0xd4caedcd`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L5).
 
 #### Client balance
 
@@ -87,7 +87,7 @@ The storage contract maintains a client balance, which consists of the funds tra
 ### Contract closure
 
 :::info
-If the storage contract is closed, the client receives a message with the remaining balance and [`op=0xb6236d63`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L6).
+If the storage contract is closed, the client receives a message with the remaining balance and [`op=0xb6236d63`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L7).
 :::
 
 A storage contract may be closed under the following conditions:
@@ -95,7 +95,7 @@ A storage contract may be closed under the following conditions:
 - Immediately after creation, before activation, if the provider declines the request, e.g., due to capacity limits or configuration issues.
 - When the client balance reaches 0.
 - Voluntarily by the provider.
-- Voluntarily by the client by sending a message with [`op=0x79f937ea`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L2) from the client's wallet; the message may use any query ID.
+- Voluntarily by the client by sending a message with [`op=0x79f937ea`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L3) from the client's wallet; the message may use any query ID.
 
 ## Running and configuring a provider
 
