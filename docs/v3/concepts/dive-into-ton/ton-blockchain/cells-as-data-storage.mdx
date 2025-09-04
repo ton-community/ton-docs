@@ -50,14 +50,14 @@ Cells are deduplicated: if several equivalent sub-cells are referenced in differ
 
 Another unique cell flavor in TVM:
 
-- Continuation — cells containing opcodes for the TON Virtual Machine (TVM); see [TVM overview](/v3/documentation/tvm/tvm-overview).
+- Continuation — cells containing opcodes for the **TON Virtual Machine (TVM)**; see [TVM overview](/v3/documentation/tvm/tvm-overview).
 
 ## Serialization of data into cells
 
 Any object in TON—such as a message, block, or the whole blockchain state—serializes into a tree of cells ([Bag of Cells](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells));
 
-A TL-B scheme describes the serialization process: a formal description of how this object can be serialized into a Builder or parsed from a Slice.
-TL-B for cells plays a role similar to TL or Protocol Buffers (Protobuf) for byte streams.
+A TL-B scheme describes the serialization process: a formal description of how this object can be serialized into a builder or parsed from a slice.
+TL-B for cells plays a role similar to TL or Protocol Buffers for byte streams.
 
 For more details about cell serialization and deserialization, see the article ‘[Cell & bag of cells](/v3/documentation/data-formats/tlb/cell-boc)’.
 
