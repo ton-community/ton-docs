@@ -295,7 +295,7 @@ module.exports = [
     items: [
       {
         type: 'category',
-        label: 'TL-B',
+        label: 'TL-B language',
         items: [
           'v3/documentation/data-formats/tlb/tl-b-language',
           'v3/documentation/data-formats/tlb/cell-boc',

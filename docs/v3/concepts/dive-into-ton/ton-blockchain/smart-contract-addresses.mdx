@@ -2,32 +2,33 @@ import Feedback from '@site/src/components/Feedback';
 
 # Addresses
 
-This document provides a high-level overview of account addresses on TON Blockchain. Every [account](/v3/concepts/dive-into-ton/ton-blockchain/accounts) (actor), including wallets and smart contracts, is represented by an address, used for all on-chain interactions.
+Every [account](/v3/concepts/dive-into-ton/ton-blockchain/accounts), including wallets and smart contracts, is represented by an address, used for all on-chain interactions.
 
-## Address components
+## Components
 
 A TON address is a composite identifier consisting of two main components:
 
-- **WorkChain ID**: a signed 32-bit integer that identifies a specific WorkChain.<br/>
-The MasterChain uses `-1`, and the BaseChain uses `0`.
-- **Account ID**: a 256-bit unique identifier for a contract within its WorkChain. <br/>
-It is derived from the hash of the contract’s **initial** state (`state_init`), which includes the code and data.
+- **WorkChain ID**: identifies a specific WorkChain (for example, MasterChain is `-1`, and BaseChain is `0`).<br/>
+- **Account ID**: a unique identifier for a contract within its WorkChain.
+It is derived from the hash of the contract’s initial state, which includes the code and data.
 
 For detailed technical specifications, see the [Addresses documentation](/v3/documentation/smart-contracts/addresses/address).
 
-## Address formats
+## Formats
 
-TON addresses are represented in two standard formats:
+TON addresses are represented in two formats:
 
--   **Raw format**: a direct representation of the `workchain_id` and `account_id` (e.g., `-1:fcb...260`). Intended for system-level use, it does not include user-facing safety features.
+-   **Raw format**: a direct representation of the `workchain_id` and `account_id` (e.g., `-1:fcb...260`). Intended for system-level use.
 -   **User-friendly format**: a base64-encoded version of the raw address that includes flags and a checksum. Designed for user interfaces, this format enhances security and prevents errors.
 
-These formats are not interchangeable. The user-friendly format includes critical metadata, such as the _bounceable flag_, which determines message-handling behavior for uninitialized accounts. A bounceable message sent to an address in `nonexist`, `uninit` or `frozen` state is returned to the sender. In contrast, a non-bounceable message will be credited to the account.
+These formats are not interchangeable. The user-friendly format includes critical metadata, such as the _bounceable flag_, which determines message-handling behavior for uninitialized accounts.
+
+A bounceable message sent to an address in nonexist, uninitialized or frozen state is returned to the sender. In contrast, a non-bounceable message will be credited to the account.
 
 For a detailed breakdown of address structures, encoding, and flags, refer to the [address formats documentation](/v3/documentation/smart-contracts/addresses/address-formats).
 
 
-## Address states
+## States
 
 Every address on TON Blockchain exists in one of four states, reflecting its lifecycle and operational status:
 
