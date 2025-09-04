@@ -1,30 +1,40 @@
 import Feedback from '@site/src/components/Feedback';
 
-# TON networking
+# Network
 
-TON Ecosystem uses its peer-to-peer network protocols.
+TON uses a family of peer‑to‑peer protocols to propagate blocks and transactions and to run ecosystem services.
 
-- **TON Blockchain** uses these protocols to propagate new blocks, send and collect transaction candidates, etc.
+In single‑chain blockchains like Bitcoin or Ethereum a simple gossip protocol suffices, but TON runs many shardchains in parallel, so each node subscribes only to the chains it needs. This selective subscription makes TON’s networking efficient and scalable.
 
-  While the networking demands of single-blockchain projects, such as Bitcoin or Ethereum, can be met quite easily: one essentially needs to construct a peer-to-peer overlay network and then propagate all new blocks and transaction candidates via a [gossip](https://en.wikipedia.org/wiki/Gossip_protocol) protocol.
+Beyond the blockchain itself, the same protocols support TON Proxy, TON Sites, TON Storage and other decentralised applications.
 
-Multi-blockchain projects, such as TON, are much more demanding. For example, one must be able to subscribe to updates for only some shardchains, not necessarily all of them.
+## Core protocols
 
-- **TON Ecosystem services** like TON Proxy, TON Sites, TON Storage, and dApps run on these protocols.
+The TON stack includes several complementary protocols; together they enable everything from lightweight datagrams to large data transfers and service discovery.
 
-  Once the more sophisticated network protocols are in place to support the TON blockchain.
-  They can easily be used for purposes not necessarily related to the immediate demands of the blockchain itself, thus providing more possibilities and flexibility for creating new services in TON Ecosystem.
+### Abstract Datagram Network Layer (ADNL)
 
-## TON network protocols
+The base peer‑to‑peer transport layer of TON. Each node has an ADNL address that masks its underlying IP, and messages are signed and encrypted.
+ADNL provides the foundation on which higher‑level protocols like RLDP and the DHT are built.
 
-- [TON Connect](/v3/guidelines/ton-connect/overview/)
-- [ADNL protocol](/v3/documentation/network/protocols/adnl/overview/)
-- [Overlay subnetworks](/v3/documentation/network/protocols/overlay/)
-- [RLDP protocol](/v3/documentation/network/protocols/rldp/)
-- [TON DHT service](/v3/documentation/network/protocols/dht/ton-dht/)
+Learn more in the [ADNL](/v3/documentation/network/protocols/adnl/overview) section.
 
-## See also
+### Overlay subnetworks
 
-- [TON security audits](/v3/concepts/dive-into-ton/ton-blockchain/security-measures/)
+Overlays subdivide the global network by shardchain or service. Instead of broadcasting to all peers, a node connects to a handful of neighbors and forwards messages along those links. Overlay peers are discovered through the DHT.
+
+Learn more in the [Overlay](/v3/documentation/network/protocols/overlay) section.
+
+### Distributed Hash Table (DHT)
+
+The DHT is a distributed lookup service that helps nodes find each other and other resources. It stores key‑value pairs. In its simplest form the key encodes an ADNL address and the value contains an IP/port. DHT replicates those records across multiple nodes for reliability.
+
+Learn more in the [DHT](/v3/documentation/network/protocols/dht/ton-dht) section.
+
+### Reliable Large Datagram Protocol (RLDP)
+
+RLDP sits on top of ADNL and is used to transfer large chunks of data. It’s the protocol that nodes use to download blocks, move data, and access TON Sites and TON Storage. RLDP can also encapsulate HTTP to handle web requests within the TON network.
+
+Learn more in the [RLDP](/v3/documentation/network/protocols/rldp) section.
 
 <Feedback />
