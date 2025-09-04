@@ -46,7 +46,7 @@ export async function retry<T>(fn: () => Promise<T>, options: { retries: number;
             await new Promise((resolve) => setTimeout(resolve, options.delay));
         }
     }
-    throw lastError;
+    throw lastError ?? new Error('Retry attempts exhausted');
 }
 ```
 
@@ -148,7 +148,7 @@ async function waitForTransaction(
 ### Hash normalization
 
 ```ts
-import { beginCell, Cell, loadMessage, storeMessage, Message } from '@ton/ton';
+import { Cell, loadMessage } from '@ton/ton';
 
 // The helper function to get a normalized hash from BoC
 export function normalizedExtHashFromBoc(bocBase64: string): string {
