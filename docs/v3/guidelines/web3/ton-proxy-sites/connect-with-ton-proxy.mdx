@@ -2,62 +2,53 @@ import Feedback from '@site/src/components/Feedback';
 
 # Connect with TON Proxy
 
-TON Proxy is fully compatible with standard HTTP proxy settings so that you can configure it directly through your browser or operating system.
+TON Proxy works with standard HTTP proxy settings. Configure it on your device or browser using the steps below.
+
+> **Before you start:** You’ll need the address of a **public entry proxy** and the port `8080`.
 
 ## Google Chrome
-
-Follow the instructions specific to your device’s operating system: Windows, macOS, Linux, iOS, or Android.
-
-## Firefox
-
-1. Go to **Settings → General → Network Settings → Settings...**. 
-2. Choose **Manual proxy configuration**. 
-3. In **HTTP Proxy**, enter the address of a public entry proxy. 
-4. In **Port**, enter 8080.
-5. Click **OK**.
-
+Google Chrome does not have its own proxy settings.  
+Configure the proxy at the **operating system** level; Chrome will automatically use it.
 
 ## Safari
+Safari uses your operating system’s proxy settings.  
+Configure the proxy at the **macOS** (or **iOS**) level; Safari will automatically use it.
 
-Safari is available on Apple platforms. Follow the instructions for **[macOS](#macos)** or **[iOS](#ios)**.
+## Firefox
+1. Go to **Settings → General → Network Settings → Configure**.  
+2. Choose **Manual proxy settings**.  
+3. In **HTTP Proxy**, enter the address of a public entry proxy.  
+4. In **Port**, enter `8080` (without quotes).  
+5. Click **OK**.
 
-## iOS
+## Operating systems
 
-1. Go to **Settings → Wi‑Fi**. 
-2. Tap your currently connected network. 
-3. Scroll to **HTTP Proxy** and choose **Manual**. 
-4. In **Server**, enter the address of a public entry proxy. 
-5. In **Port**, enter 8080. 
-6. Tap **Save**.
+### Windows
+1. Open **Settings → Network & Internet → Proxy**.  
+2. Under **Manual proxy setup**, select **Set up** and turn on **Use a proxy server**.  
+3. Enter the public entry proxy in **Address** and `8080` in **Port**.  
+4. Click **Save**.
 
-## Android
-
-1. Go to **Settings → Wi‑Fi**.
-2. Tap and hold the Wi‑Fi network name. 
-3. Select **Modify Network → Advanced options → Proxy → Manual**. 
-4. In **Server**, enter the address of a public entry proxy. 
-5. In **Port**, enter 8080.
-6. Tap **Save**.
-
-## Windows
-
-1. Click **Start** and select **Settings → Network & Internet → Proxy**. 
-2. Under **Manual proxy setup**, next to **Use a proxy server**, select **Set up**. 
-3. Turn on **Use a proxy server**.
-4. Enter the proxy address in **Address** and 8080 in **Port**.
-5. Click **Save**.
-
-## macOS
-
-1. Go to **Settings → Network → Advanced → Web proxy (HTTP)**. 
-2. In **Web proxy server**, enter the address of one of the public entry proxies; after the colon, enter 8080.
+### macOS
+1. Go to **Settings → Network → Advanced → Web proxy (HTTP)**.  
+2. In **Web proxy server**, enter the public entry proxy, followed by `:8080`.  
 3. Click **OK**.
 
-## Ubuntu
+### Ubuntu (Linux)
+1. Open **Settings → Network**.  
+2. Click **Network Proxy → Manual**.  
+3. Enter the public entry proxy in **HTTP Proxy** and `8080` in **Port**.
 
-1. Go to **Settings → Network**. 
-2. Click **Network Proxy → Manual**. 
-3. In **HTTP Proxy**, enter the address of one of the public entry proxies.
-4. In **Port**, enter 8080.
+### iOS
+1. Go to **Settings → Wi-Fi** and tap your current network.  
+2. Under **HTTP Proxy**, choose **Manual**.  
+3. Enter the public entry proxy in **Server** and `8080` in **Port**.  
+4. Tap **Save**.
+
+### Android
+1. Go to **Settings → Wi-Fi** and long-press your network.  
+2. Select **Modify network → Advanced options → Manual**.  
+3. Enter the public entry proxy in **Server** and `8080` in **Port**.  
+4. Tap **Save**.
 
 <Feedback />
