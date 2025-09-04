@@ -1,4 +1,4 @@
-import Feedback from '@site/src/components/Feedback';
+ import Feedback from '@site/src/components/Feedback';
 
 # TON Storage FAQ
 
@@ -10,7 +10,7 @@ import Feedback from '@site/src/components/Feedback';
    - [TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd)
    - [MyTonWallet](https://chrome.google.com/webstore/detail/mytonwallet/fldfpgipfncgndfolcbkdeeknbbbnhcc)
 4. Open the extension, click "Import wallet", and import the wallet that owns the domain using your recovery phrase. 
-5. Go to [dns.ton.org](https://dns.ton.org), open your domain, and click "Edit". (See how to open a domain for editing in the [DNS guide](/v3/guidelines/web3/ton-proxy-sites/site-and-domain-management#how-to-open-a-domain-for-editing).)
+5. Go to [dns.ton.org](https://dns.ton.org), open your domain, and click "Edit".
 6. Paste the `<BagID>` into the "Storage" field and click "Save". Confirm the transaction in the extension.
 
 ## How to host a static TON Site in TON Storage
@@ -18,19 +18,18 @@ import Feedback from '@site/src/components/Feedback';
 1. [Create a bag](/v3/guidelines/web3/ton-storage/storage-daemon#creating-a-bag-of-files) from the folder containing your static website. 
 2. The folder must contain an `index.html` file. 
 3. Upload the bag to the network and copy the bag ID. 
-4. Open Google Chrome and install a wallet browser extension ([TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) or [MyTonWallet](https://chrome.google.com/webstore/detail/mytonwallet/fldfpgipfncgndfolcbkdeeknbbbnhcc)).  
+4. Open Google Chrome and install a wallet browser extension ([TON Wallet](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd) or [MyTonWallet](https://chrome.google.com/webstore/detail/mytonwallet/fldfpgipfncgndfolcbkdeeknbbbnhcc).  
 5. Import the wallet that owns the domain using your recovery phrase. 
-6. Go to [dns.ton.org](https://dns.ton.org), open your domain, and click "Edit". (See how to open a domain for editing in the [DNS guide](/v3/guidelines/web3/ton-proxy-sites/site-and-domain-management#how-to-open-a-domain-for-editing).)
-7. Paste the `<BagID>` into the "Site" field, select "Host in TON Storage", and click "Save". Confirm the transaction in the extension.
+6. Go to [dns.ton.org](https://dns.ton.org), open your domain, and click "Edit".
+7. Paste the `<BagID>` into the "Site" field, select "Host in TON Storage", and click "Save".
    
-   Note: Depending on the UI version, the field may appear as "Storage" or "Site". For details, see the [DNS guide](/v3/guidelines/web3/ton-proxy-sites/site-and-domain-management#how-to-link-a-ton-site-to-a-domain).
 
 ## How to migrate TON NFT content to TON Storage
 
-If you're using a [standard NFT contract](https://github.com/ton-blockchain/token-contract/blob/2d411595a4f25fba43997a2e140a203c140c728a/nft/nft-collection-editable.fc), update the content prefix by sending a [message](https://github.com/ton-blockchain/token-contract/blob/2d411595a4f25fba43997a2e140a203c140c728a/nft/nft-collection-editable.fc#L132) to your NFT collection smart contract from the collection owner's wallet.
+If you're using a [standard NFT contract](https://github.com/ton-blockchain/token-contract/blob/main/nft/nft-collection-editable.fc), update the content prefix by sending a [message](https://github.com/ton-blockchain/token-contract/blob/2d411595a4f25fba43997a2e140a203c140c728a/nft/nft-collection-editable.fc#L132) to your NFT collection smart contract from the collection owner's wallet.
 
 - **Old URL prefix example:** `https://mysite/my_collection/`
-- **New URL prefix format:** `tonstorage://<BagID>/` (where `<BagID>` is a 64-character hex hash; see [Adding a bag of files](/v3/guidelines/web3/ton-storage/storage-daemon#adding-a-bag-of-files)).
+- **New URL prefix format:** `tonstorage://<BagID>/` (where `<BagID>` is a 64-character hex hash; see [Adding a bag of files](/v3/guidelines/web3/ton-storage/storage-daemon#adding-a-bag-of-files).
 
 
 ## How to assign a TON domain to a TON Storage bag (low-level)
@@ -50,6 +49,5 @@ To host a static site via TON Storage directly:
 ```tlb
 dns_storage_address#7473 bag_id:uint256 = DNSRecord;
 ```
-
 
 <Feedback />
