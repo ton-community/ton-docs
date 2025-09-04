@@ -46,12 +46,12 @@ Please be especially careful when translating strings where the source text is '
 
 Some examples of language codes for the most widely spoken languages:
 
-- English - en
-- Simplified Chinese - zh-CN
-- Russian - ru
-- Korean - ko
-- Polish - pl
-- Ukrainian - uk
+- English - en  
+- Simplified Chinese - zh-CN  
+- Russian - ru  
+- Korean - ko  
+- Polish - pl  
+- Ukrainian - uk  
 
 ## Titles of external articles
 
@@ -59,7 +59,7 @@ Some strings contain titles of external articles. Most of our developer document
 
 ## Crowdin warnings
 
-Crowdin has a built-in feature that warns translators when they are about to make a mistake. Crowdin will automatically alert you before saving your translation if you forget to include a tag from the source, translate elements that should not be translated, add several consecutive spaces, forget end punctuation, etc. If you see a warning like this, please double-check the suggested translation.
+Crowdin has a built-in feature that warns translators when they are about to make a mistake. Crowdin will automatically alert you before saving your translation if you forget to include a tag from the source, translate elements that should not be translated, add several consecutive spaces, forget the end punctuation, etc. If you see a warning like this, please double-check the suggested translation.
 
 :::warning
 Never ignore these warnings, as they usually mean something is wrong or the translation lacks a key part of the source text.
@@ -69,9 +69,9 @@ Never ignore these warnings, as they usually mean something is wrong or the tran
 
 The website uses many abbreviations, such as apps, DApps, NFT, DAO, DeFi, etc. These abbreviations are standard in English, and most visitors are familiar with them.
 
-Since they usually don’t have established translations in other languages, the best approach to these and similar terms is to provide a descriptive translation of the entire form and add the English abbreviation in brackets.
+Since they usually don’t have established translations in other languages, the best approach to these and similar terms is to provide a descriptive translation of the entire form and add the English abbreviation in brackets.  
 
-Do not translate these abbreviations since most people are unfamiliar with them, and the localized versions would not make much sense to most visitors.
+Do not translate English abbreviations into localized versions, since they would not make much sense to most visitors.
 
 Example of how to translate DApps:
 
@@ -117,76 +117,75 @@ Some examples of what to be particularly mindful of:
 
 #### Capitalization
 
-- There are vast differences in capitalization in different languages.
-- In English, it is common to capitalize all words in titles and names, months and days, language names, holidays, etc. In many other languages, this is grammatically incorrect, as they have different capitalization rules.
-- Some languages also have rules about capitalizing personal pronouns, nouns, and adjectives that you shouldn't capitalize in English.
+- There are vast differences in capitalization in different languages.  
+- In English, it is common to capitalize all words in titles and names, months and days, language names, holidays, etc. In many other languages, this is grammatically incorrect, as they have different capitalization rules.  
+- Some languages also have rules about capitalizing personal pronouns, nouns, and adjectives that you shouldn't capitalize in English.  
 
 #### Spacing
 
-- Orthography rules define the use of spaces for each language. Because spaces are used everywhere, these rules are some of the most distinct, and spaces are some of the most mistranslated elements.
-You should be aware that spacing rules vary by language. Spacing before units, degree signs, certain punctuation (e.g., the ellipsis), and around slashes differs across languages. Follow your language’s orthographic rules.
+Spacing before units, degree signs, certain punctuation (such as ellipses), and around slashes varies by language. Translators should follow their language’s orthographic rules.
 
 #### Lists
 
-- Every language has a diverse and complex set of rules for writing lists. These can be significantly different from English.
-- In some languages, the first word of each new line needs to be capitalized, while in others, new lines should start with lowercase letters. Many languages also have different rules about capitalization in lists, depending on the length of each line.
-- The same applies to the punctuation of line items. The end punctuation in lists can be a period (.), comma (,), or semicolon (;), depending on the language.
+- Every language has a diverse and complex set of rules for writing lists. These can be significantly different from English.  
+- In some languages, the first word of each new line needs to be capitalized, while in others, new lines should start with lowercase letters. Many languages also have different rules about capitalization in lists, depending on the length of each line.  
+- The same applies to the punctuation of line items. The end punctuation in lists can be a period (.), comma (,), or semicolon (;), depending on the language.  
 
 #### Quotation marks
 
-- Languages use many different quotation marks. Simply copying the English quotation marks from the source is often incorrect.
-- Some of the most common types of quotation marks include:
-  - „example text“
-  - ‚example text’
-  - »example text«
-  - “example text”
-  - ‘example text’
-  - «example text»
+- Languages use many different quotation marks. Simply copying the English quotation marks from the source is often incorrect.  
+- Some of the most common types of quotation marks include:  
+  - „example text“  
+  - ‚example text’  
+  - »example text«  
+  - “example text”  
+  - ‘example text’  
+  - «example text»  
 
 #### Hyphens and dashes
 
-- In English, use an en dash (–) for ranges and an em dash (—) for pauses.
-  - Example: Use an em dash—like this—to indicate a pause.
-- Many languages have different rules for using hyphens and dashes that should be observed.
+- In English, use an en dash (–) for ranges and an em dash (—) for pauses.  
+  - Example: Use an em dash—like this—to indicate a pause.  
+- Many languages have different rules for using hyphens and dashes that should be observed.  
 
 ### Formats
 
 #### Numbers
 
-- The main difference in writing numbers in different languages is the separator for decimals and thousands. For thousands, this can be a period, comma, or space. Similarly, some languages use a decimal point, while others use a decimal comma.
-  - Example:
-    - English – **1,000.50**
-    - Spanish – **1.000,50**
-    - French – **1 000,50**
-- The percent sign is another critical consideration when translating numbers. Write numbers in the typical format for the corresponding language.
-  - Example: **100%**, **100 %**, or **%100**.
-- Finally, negative numbers can be displayed differently, depending on the language.
-  - Example: -100, 100-, (100) or [100].
+- The main difference in writing numbers in different languages is the separator for decimals and thousands. For thousands, this can be a period, comma, or space. Similarly, some languages use a decimal point, while others use a decimal comma.  
+  - Example:  
+    - English – **1,000.50**  
+    - Spanish – **1.000,50**  
+    - French – **1 000,50**  
+- The percent sign is another critical consideration when translating numbers. Write numbers in the typical format for the corresponding language.  
+  - Example: **100%**, **100 %**, or **%100**.  
+- Finally, negative numbers can be displayed differently, depending on the language.  
+  - Example: -100, 100-, (100), or [100].  
 
 #### Dates
 
-- When translating dates, there are several considerations and differences based on the language. These include the date format, separator, capitalization, and leading zeros. There are also differences between full-length and numerical dates.
-  - Some examples of different date formats:
-    - English UK (dd/mm/yyyy) – 1st January, 2022
-    - English US (mm/dd/yyyy) – January 1st, 2022
-    - Chinese (yyyy-mm-dd) – 2022 年 1 月 1 日
-    - French (dd/mm/yyyy) – 1er janvier 2022
-    - Italian (dd/mm/yyyy) – 1º gennaio 2022
-    - German (dd/mm/yyyy) – 1. Januar 2022
+- When translating dates, there are several considerations and differences based on the language. These include the date format, separator, capitalization, and leading zeros. There are also differences between full-length and numerical dates.  
+  - Some examples of different date formats:  
+    - English UK (dd/mm/yyyy) – 1 January 2022  
+    - English US (mm/dd/yyyy) – January 1, 2022  
+    - Chinese (yyyy-mm-dd) – 2022 年 1 月 1 日  
+    - French (dd/mm/yyyy) – 1er janvier 2022  
+    - Italian (dd/mm/yyyy) – 1º gennaio 2022  
+    - German (dd/mm/yyyy) – 1. Januar 2022  
 
 #### Currencies
 
-- Translating currencies can be challenging due to the different formats, conventions, and conversions. As a general rule, please keep currencies the same as the source. You can add your local currency and conversion in brackets for the reader's benefit.
-- The main differences in writing currencies in different languages include symbol placement, decimal commas vs. decimal points, spacing, and abbreviations vs. symbols.
-  - Symbol placement: $100 or 100$
-  - Decimal commas vs. decimal points: 100,50$ or 100.50$
-  - Spacing: 100$ or 100 $
-  - Abbreviations vs. symbols: 100 $ or 100 USD
+- The main differences in writing currencies in different languages include symbol placement, decimal commas vs. decimal points, spacing, and abbreviations vs. symbols.  
+  - Symbol placement: $100 or 100 €  
+  - Decimal commas vs. decimal points: $100.50 or 100,50 €  
+  - Spacing: $100 or 100 €  
+  - Abbreviations vs. symbols: $100 or 100 USD  
+- Note: symbol placement, spacing, and format are language-dependent.  
 
 #### Units of measure
 
-- As a general rule, please keep the units of measure as per the source. You can include the conversion in brackets if your country uses a different system.
-- Aside from the localization of units of measure, it is also important to note the differences in how languages approach these units. The main difference is the spacing between the number and unit, which can differ based on the language. Examples of this include 100kB vs. 100 kB or 50ºF vs. 50 ºF.
+- As a general rule, please keep the units of measure as per the source. You can include the conversion in brackets if your country uses a different system.  
+- Aside from the localization of units of measure, it is also important to note the differences in how languages approach these units. The main difference is the spacing between the number and unit, which can differ based on the language. Examples of this include 100kB vs. 100 kB or 50°C vs. 50 °F.  
 
 ## Conclusion
 
