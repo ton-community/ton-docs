@@ -57,7 +57,7 @@ As developers scale their applications and require additional resources, they ca
 - Provides access to archive nodes, multiple server locations, and custom settings.
 - Guarantees premium-level service and support to clients.
 
-This is a next-level solution for developers and decentralized applications (dApps) that require enhanced throughput, higher speed of node connection, and guaranteed resources as they scale.
+This is a next-level solution for developers and decentralized applications (DApps) that require enhanced throughput, higher speed of node connection, and guaranteed resources as they scale.
 
 ## How to use TON HTTP API by GetBlock
 
@@ -68,8 +68,7 @@ In this section, we delve into the practical usage of the TON HTTP API provided 
 You can use the `/getAddressBalance` method to get the balance for a specific TON address:
 
 ```bash
-curl --location --request GET 'https://go.getblock.io/[ACCESS-TOKEN]/getAddressBalance?address=EQDXZ2c5LnA12Eum-DlguTmfYkMOvNeFCh4rBD0tgmwjcFI-' \
---header 'Content-Type: application/json'
+curl --location --request GET 'https://go.getblock.io/[ACCESS-TOKEN]/getAddressBalance?address=EQDXZ2c5LnA12Eum-DlguTmfYkMOvNeFCh4rBD0tgmwjcFI-'
 ```
 
 Make sure to replace `[ACCESS-TOKEN]` with your actual access token provided by GetBlock.
@@ -80,13 +79,14 @@ This will output the balance in nanotons.
 
 Some other available GetBlock methods to query the TON Blockchain:
 
-| # | Method | Path               | Description                                                                          |
-| - | ------ | ------------------ | ------------------------------------------------------------------------------------ |
-| 1 | GET    | `/getAddressState`    | Returns the current state of a specified address (uninitialized, active, or frozen). |
-| 2 | GET    | `/getMasterchainInfo` | Fetches the state of the masterchain.                                                |
-| 3 | GET    | `/getTokenData`       | Retrieves details about an NFT or jetton associated with the address.                |
-| 4 | GET    | `/packAddress`        | Converts a TON address from raw format to human-readable format.                     |
-| 5 | POST   | `/sendBoc`            | Sends serialized BOC files with external messages for blockchain execution.          |
+| # | HTTP method | Path                  | Description                                                                          |
+| - | ----------- | --------------------- | ------------------------------------------------------------------------------------ |
+| 1 | GET         | `/getAddressState`    | Returns the current state of a specified address (uninitialized, active, or frozen). |
+| 2 | GET         | `/getMasterchainInfo` | Fetches the state of the masterchain.                                                |
+| 3 | GET         | `/getTokenData`       | Retrieves details about an NFT or jetton associated with the address.                |
+| 4 | GET         | `/packAddress`        | Converts a TON address from raw format to human-readable format.                     |
+| 5 | POST        | `/sendBoc`            | Sends serialized BOC files with external messages for blockchain execution.          |
+| 6 | GET         | `/getAddressBalance`  | Returns the balance of a specified TON address in nanotons.                          |
 
 For the official method list and detailed API documentation, see GetBlock’s [TON JSON-RPC reference](https://getblock.io/docs/ton/json-rpc/ton_jsonrpc/).
 
