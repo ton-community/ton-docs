@@ -18,7 +18,7 @@ Explore the full [ton.org/wallets](https://ton.org/wallets) catalog for more wal
 
 ## Non-custodial wallets
 
-**Non-custodial wallets** empower users with full ownership and control over their private keys and funds. Unlike custodial wallets, which a third party manages, non-custodial wallets store private keys exclusively with the user, secured using a seed phrase (also called recovery phrase)—a unique sequence of 12 or 24 words.
+**Non-custodial wallets** empower users with full ownership and control over their private keys and funds. Unlike custodial wallets, which a third party manages, non-custodial wallets store private keys exclusively with the user, secured using a seed phrase (also called recovery phrase) — a unique sequence of 24 words.
 
 ### Software (hot) wallets
 
@@ -28,17 +28,14 @@ Below is a selection of prominent non-custodial software wallets.
 
 #### Wallets for everyday users
 
-<a id="tonkeeper-test-environment" />
-### Tonkeeper test environment
-
 <table style={{ width: '100%', tableLayout: 'fixed' }}>
   <thead>
   <tr>
     <th style={{ width: '5%' }}>Wallet</th>
-    <th style={{ width: '25%' }}>Description</th>
-    <th style={{ width: '10%' }}>Platforms</th>
+    <th style={{ width: '40%' }}>Description</th>
+    <th style={{ width: '1%' }}>Platforms</th>
     <th style={{ width: '50%' }}>Testnet Access</th>
-    <th style={{ width: '10%' }}>Links</th>
+    <th style={{ width: '4%' }}>Links</th>
   </tr>
   </thead>
   <tbody>
@@ -47,23 +44,21 @@ Below is a selection of prominent non-custodial software wallets.
     <td>Open-source wallet commonly used in the TON ecosystem. Supports tokens and NFTs.</td>
     <td>iOS, Android</td>
     <td>
-      1. Create wallet and save seed phrase.<br />
+      1. Create wallet and save recovery phrase.<br />
       2. From main screen, tap wallet name → **Add Wallet** → **Testnet Account**.<br />
-      3. Enter saved seed phrase.
+      3. Enter saved recovery phrase.
     </td>
-
     <td>
-      <a href="https://github.com/tonkeeper/wallet">GitHub</a><br />
+      <a href="https://github.com/tonkeeper/">GitHub</a><br />
       <a href="https://github.com/tonkeeper/wallet-api">Wallet API</a>
     </td>
   </tr>
 
   <tr>
     <td><a href="https://mytonwallet.io"><strong>MyTonWallet</strong></a></td>
-    <td>Open-source browser wallet supporting tokens, NFTs, TON DNS, TON Sites, and TON Proxy.</td>
-    <td>Chrome, Firefox</td>
+    <td>Open-source web wallet supporting tokens, NFTs, TON DNS, TON Sites and TON Proxy — also compatible with TRON.</td>
+    <td>iOS, Android, Chrome, Firefox</td>
     <td>
-    <br />
       1. Open **Settings**.
       2. Scroll down and tap **MyTonWallet app version**.
       3. Select the environment in the popup.
@@ -79,9 +74,11 @@ Below is a selection of prominent non-custodial software wallets.
     <td>Open-source, mobile-first wallet with <a href="https://github.com/tonwhales/ton-nominators">Ton Nominator</a> integration.</td>
     <td>iOS, Android</td>
     <td>
-      Requires <strong>Sandbox app</strong>:<br />
-      <a href="https://apps.apple.com/app/ton-development-wallet/id1607857373">iOS</a> /
+      - Requires different app for 
+      <a href="https://apps.apple.com/app/ton-development-wallet/id1607857373">iOS</a>
+      - Same app for 
       <a href="https://play.google.com/store/apps/details?id=com.tonhub.wallet">Android</a>
+      - Tap 6+ times on the app version to change the environment
     </td>
     <td>
       <a href="https://github.com/tonwhales/wallet">GitHub</a><br />
@@ -113,7 +110,7 @@ Below is a selection of prominent non-custodial software wallets.
     <td>
       <ul style={{ paddingLeft: '16px', margin: 0 }}>
         <li>Seamless integration with TON Connect</li>
-        <li>Local transaction emulation before submitting on-chain</li>
+        <li>Local transaction emulation before on-chain submission.</li>
         <li>Manage multiple keys and wallets</li>
       </ul>
     </td>
@@ -129,14 +126,15 @@ Below is a selection of prominent non-custodial software wallets.
     <td>
       <ul style={{ paddingLeft: '16px', margin: 0 }}>
         <li>ADNL connection support</li>
-      <li>Cross-platform architecture</li>
-      <li><a href="https://github.com/ton-blockchain/bug-bounty">Bug bounty program</a></li>
-    </ul>
+        <li>Cross-platform architecture</li>
+        <li><a href="https://github.com/ton-blockchain/bug-bounty">Bug bounty program</a></li>
+        <li>Supports the `testnet` parameter in the browser</li>
+      </ul>
     </td>
   </tr>
   <tr>
     <td><a href="https://www.openmask.app/"><strong>OpenMask</strong></a></td>
-    <td>Open-source Chrome extension wallet focused on Web3 and dApp development.</td>
+    <td>Open-source Chrome extension wallet focused on Web3 and DApp development.</td>
     <td>Chrome</td>
     <td>
       <a href="https://github.com/OpenProduct/openmask-extension">GitHub</a><br />
@@ -144,7 +142,7 @@ Below is a selection of prominent non-custodial software wallets.
     </td>
     <td>
       <ul style={{ paddingLeft: '16px', margin: 0 }}>
-        <li>Desktop wallet optimized for dApp development</li>
+        <li>Chrome extension optimized for DApp development</li>
         <li>Multiple wallet support</li>
       </ul>
     </td>
