@@ -309,7 +309,6 @@ module.exports = [
           'v3/documentation/data-formats/tlb/block-layout',
           'v3/documentation/data-formats/tlb/transaction-layout',
           'v3/documentation/data-formats/tlb/crc32',
-          'v3/documentation/data-formats/tlb/tlb-ide',
           'v3/documentation/data-formats/tlb/tlb-tools',
         ],
       },

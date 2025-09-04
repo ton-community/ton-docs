@@ -126,19 +126,17 @@ When working with a jetton wallet, where the code is stored in a library cell, y
 - Finding the cell with that hash in the MasterChain's library collection
 - Executing the code from there
 
-In Layered Solutions (LS), all these processes happen automatically behind the scenes, and users needn’t be concerned with the specific method of code storage.
+During intraction with **liteserver (LS)** all these processes happen automatically behind the scenes, and users needn’t be concerned with the specific method of code storage.
 
 However, the process differs when working locally. For example, when using an explorer or wallet, you might examine the account state to determine its type, such as whether it's an NFT, wallet, token, or auction.
 
 You can review regular contracts' available get methods, the contract interface, to understand how they work. Alternatively, you may "steal" the account state to your local pseudonet and execute methods there.
 
-This approach is not feasible for a library cell because it does not store data on its own. Instead, you must manually detect and retrieve the necessary cells from the context. This can be done using LS, though bindings do not yet support this, or via DTon.
+This approach is not feasible for a library cell because it does not store data on its own. Instead, you must manually detect and retrieve the necessary cells from the context. This can be done using toncenter, LS or via DTon.
+#### Retrieving library cell with TON Center
+[getLibraries method](https://toncenter.com/api/v2/#/blocks/get_libraries_getLibraries_get) - accepts list of base64 encoded libraries hashes and returns cell bocs.
 
-#### Retrieving Library Cell with Liteserver
-
-When running get methods with liteserver, the correct library context is automatically set. If you need to detect the contract type using get methods or run them locally, download the corresponding cells via the LS method [liteServer.getLibraries](https://github.com/ton-blockchain/ton/blob/4cfe1d1a96acf956e28e2bbc696a143489e23631/tl/generate/scheme/lite_api.tl#L96).
-
-#### Retrieving Library Cell with DTon
+#### Retrieving library cell with DTon
 
 You can also get the library from [dton.io/graphql](https://dton.io/graphql):
 
@@ -160,6 +158,11 @@ as well as a list of libraries for specific MasterChain block:
   }
 }
 ```
+
+#### Retrieving Library Cell with liteserver
+
+When running get methods with liteserver, the correct library context is automatically set. If you need to detect the contract type using get methods or run them locally, download the corresponding cells via the LS method [liteServer.getLibraries](https://github.com/ton-blockchain/ton/blob/4cfe1d1a96acf956e28e2bbc696a143489e23631/tl/generate/scheme/lite_api.tl#L96).
+
 
 ## See also
 
