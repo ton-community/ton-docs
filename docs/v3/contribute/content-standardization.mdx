@@ -47,7 +47,7 @@ Present tense is standard, but future and past tenses are allowed in specific ca
 - After setup, the system will send a confirmation email.
 - If payment fails, the user will get a notification.
 
-*Avoid the future tense for immediate behavior or unreleased features. Also, avoid *would*.*
+*Avoid the future tense for immediate behavior or unreleased features. Also, avoid "would".*
 
 *Avoid:*
 - The system will check the file format.
@@ -351,18 +351,18 @@ Contributors can use the following examples to format various types of math expr
 For systems of equations, use `LaTeX` formatting for clarity:
 
 ```mdx
-<BlockMath math={`\\begin{cases}
-x + y = 10 \\\\
+<BlockMath math={`\begin{cases}
+x + y = 10 \\
 2x - y = 4
-\\end{cases}`} />
+\end{cases}`} />
 ```
 
 This renders the system of equations as:
 
-<BlockMath math={`\\begin{cases}
-x + y = 10 \\\\
+<BlockMath math={`\begin{cases}
+x + y = 10 \\
 2x - y = 4
-\\end{cases}`} />
+\end{cases}`} />
 
 
 ### Exponential functions
@@ -370,12 +370,10 @@ x + y = 10 \\\\
 For exponential functions, you can use the following format:
 
 ```mdx
-<InlineMath math="e^{x} = \lim\limits_{n\to \infty} \left( 1 + rac{x}{n} 
-ight)^n" />
+<InlineMath math="e^{x} = \\lim\\limits_{n\\to \\infty} \\left( 1 + \\frac{x}{n} \\right)^n" />
 ```
 
-This renders the equation: <InlineMath math="e^{x} = \lim\limits_{n\to \infty} \left( 1 + rac{x}{n} 
-ight)^n" />
+This renders the equation: <InlineMath math="e^{x} = \\lim\\limits_{n\\to \\infty} \\left( 1 + \\frac{x}{n} \\right)^n" />
 
 
 ### Fractions
@@ -383,30 +381,30 @@ ight)^n" />
 To represent fractions, use `\frac{numerator}{denominator}`:
 
 ```mdx
-<InlineMath math="\frac{a}{b}"/>
+<InlineMath math="\\frac{a}{b}"/>
 ```
 
-This renders the fraction: <InlineMath math="\frac{a}{b}"/>
+This renders the fraction: <InlineMath math="\\frac{a}{b}"/>
 
 ### Summation
 
 For summation notation, use the following `LaTeX` formatting:
 
 ```mdx
-<BlockMath math="\sum_{i=1}^{n} i^2" />
+<BlockMath math="\\sum_{i=1}^{n} i^2" />
 ```
 
-This renders the summation: <BlockMath math="\sum_{i=1}^{n} i^2" />
+This renders the summation: <BlockMath math="\\sum_{i=1}^{n} i^2" />
 
 ### Logarithmic expressions
 
 For logarithmic equations, use the following `LaTeX` syntax:
 
 ```mdx
-<InlineMath math="\log_{b}(x)" />
+<InlineMath math="\\log_{b}(x)" />
 ```
 
-This renders the logarithmic expression: <InlineMath math="\log_{b}(x)" />
+This renders the logarithmic expression: <InlineMath math="\\log_{b}(x)" />
 
 
 ## Terminology
