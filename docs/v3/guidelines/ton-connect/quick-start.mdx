@@ -43,13 +43,13 @@ npm i @tonconnect/ui-react
 ### Minimal React example
 
 ```tsx title="App.tsx"
-import { TonConnectUIProvider, ConnectButton } from '@tonconnect/ui-react';
+import { TonConnectUIProvider, TonConnectButton } from '@tonconnect/ui-react';
 
 export default function App() {
   return (
     <TonConnectUIProvider
       manifestUrl="https://myapp.com/tonconnect-manifest.json">
-      <ConnectButton />
+      <TonConnectButton />
     </TonConnectUIProvider>
   );
 }
@@ -60,10 +60,12 @@ Once the user has connected, you can build and send a transaction:
 ```ts
 await tonConnectUI.sendTransaction({
   validUntil: Math.floor(Date.now() / 1000) + 300,
-  messages: [{
-    address: wallet.account.address,
-    amount: '1000000000' // 1 TON in nanoTON
-  }]
+  messages: [
+    {
+      address: wallet.account.address,
+      amount: '1000000000' // 1 TON in nanotons 
+    }
+  ]
 });
 ```
 
