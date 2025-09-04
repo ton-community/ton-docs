@@ -7,7 +7,7 @@ import Feedback from '@site/src/components/Feedback';
 Smart contract development involves using predefined languages such as Solidity for Ethereum and FunC for TON.
 Solidity is an object-oriented, high-level, strictly typed language influenced by C++, Python, and JavaScript. It is designed explicitly to write smart contracts on Ethereum blockchain platforms.
 
-FunC is a high-level language used to program smart contracts on TON blockchain. It is a domain-specific, C-like, statically typed language.
+FunC is a high-level language used to program smart contracts on TON Blockchain. It is a domain-specific, C-like, statically typed language.
 
 Below, we briefly analyze data types, storage, functions, flow control, and dictionaries (hashmaps).
 
@@ -18,7 +18,7 @@ Below, we briefly analyze data types, storage, functions, flow control, and dict
 Solidity stores state variables in a flat key-value storage where each slot is a 256-bit word. Slots are numbered sequentially starting from zero, and declaration order (with packing rules) determines slot assignment. The `storage` keyword sets data location for reference types; it does not define layout.
 
 #### FunC
-Permanent storage data in TON blockchain is stored as a cell. Cells play the role of memory in the stack-based TVM. To read data from a cell, you need to transform a cell into a slice and then obtain the data bits and references to other cells by loading them from the slice. To write data, you must store data bits and references to other cells in a builder and cast the builder into a new cell.
+Permanent storage data in TON Blockchain is stored as a cell. Cells play the role of memory in the stack-based TVM. To read data from a cell, you need to transform a cell into a slice and then obtain the data bits and references to other cells by loading them from the slice. To write data, you must store data bits and references to other cells in a builder and cast the builder into a new cell.
 
 ### Data types
 
@@ -50,7 +50,7 @@ Currently, FunC does not support defining custom types. Read more about types in
 #### Solidity
 Solidity is a statically typed language, meaning each variable's type must be specified when declared.
 
-```solidity
+```js
 uint test = 1; // Declaring an unsigned variable of integer type
 bool isActive = true; // Logical variable
 string name = "Alice"; // String variable
@@ -73,7 +73,7 @@ Solidity supports `for`, `while`, and `do { ... } while` loops.
 
 If you want to do something 10 times, you can do it this way:
 
-```solidity
+```js
 uint x = 1;
 
 for (uint i; i < 10; i++) {
@@ -103,7 +103,7 @@ Solidity approaches function declarations with a blend of clarity and control. I
 
 What sets Solidity apart is its categorization of function visibility—you can designate functions as `public`, `private`, `internal`, or `external`. These definitions dictate the conditions under which developers can access and call other parts of the contract or external entities. Below is an example in which we set the global variable `num` in the Solidity language: 
 
-```solidity
+```js
 function set(uint256 _num) public returns (bool) {
     num = _num;
     return true;
@@ -113,7 +113,7 @@ function set(uint256 _num) public returns (bool) {
 #### FunC
 Transitioning to FunC, the FunC program is essentially a list of function declarations/definitions and global variable declarations. A FunC function declaration typically starts with an optional declarator, followed by the return type and the function name. 
 
-Parameters are listed next, and the declaration ends with a selection of specifiers—such as `impure`, `inline/inline_ref`, and `method_id`. These specifiers control purity (ability to modify storage), inlining behavior, and the ABI method ID; they do not control visibility. Below is an example in which we store a storage variable as a cell in persistent storage in the FunC language: 
+Parameters are listed next, and the declaration ends with a selection of specifiers—such as `impure`, `inline/inline_ref`, and `method_id`. These specifiers adjust the function's visibility, ability to modify contract storage, and inlining behavior. Below is an example in which we store a storage variable as a cell in persistent storage in the FunC language: 
 
 ```func
 () save_data(int num) impure inline {
@@ -147,7 +147,7 @@ In Solidity, mappings don't have a length or the concept of setting a key or a v
 
 #### FunC 
 
-The analog of mappings in FunC is dictionaries (TON hashmaps). In the context of TON, a hashmap is a data structure represented by a tree of cells. A hashmap maps keys to values of arbitrary types so that quick lookup and modification are possible. The abstract representation of a hashmap in TVM is a Patricia tree or a compact binary trie. 
+The analog of mappings in FunC is dictionaries or TON hashmaps. In the context of TON, a hashmap is a data structure represented by a tree of cells. A hashmap maps keys to values of arbitrary types so that quick lookup and modification are possible. The abstract representation of a hashmap in TVM is a Patricia tree or a compact binary trie. 
 
 Working with potentially large cell trees can create several problems. Each update operation builds an appreciable number of cells (each cell built costs 500 gas), meaning these operations can run out of resources if used carelessly. To avoid exceeding the gas limit, limit the number of dictionary updates in a single transaction. 
 
@@ -163,7 +163,7 @@ Solidity and FunC provide different approaches to interacting with smart contrac
 
 Solidity uses object-oriented contracts that interact with each other through method calls. This design is similar to method calls in traditional object-oriented programming languages.
 
-```solidity
+```js
 // External contract interface
 interface IReceiver {
     function receiveData(uint x) external;
@@ -203,7 +203,7 @@ Initially, the smart contract recipient must describe how it will receive messag
 
 **Receiving message flow:**
 1. `recv_internal()` is invoked when the contract receives an inbound internal message.
-2. Parameters: contract balance, message value, original message cell, and the `in_msg_body` slice (the body of the received message).
+2. Parameters: contract balance, message value, original message cell, and the `in_msg_body` slice—the body of the received message.
 3. Our message body will store two integer numbers. The first number is a 32-bit unsigned integer `op` defining the smart contract's operation. You can draw some analogy with Solidity and think of `op` as a function signature. 
 4. We use `load_uint()` to read `op` as a number from the resulting slice.
 5. Next, we execute business logic for a given operation. Note that we omitted this functionality in this example.
@@ -227,7 +227,7 @@ send_raw_message(msg, mode);
 ```
 **Sending message flow:**
 1. Initially, we need to build our message. The complete structure of the send can be found [here](/v3/documentation/smart-contracts/message-management/sending-messages/). 
-2. The body of the message represents a cell. In `msg_body_cell` we do: `begin_cell()` - creates `builder` for the future cell, first `store_uint` - stores the first uint into `builder` (1 - this is our `op`), second `store_uint` - stores the second uint into `builder` (num - this is our number that we will manipulate in the receiving contract), `end_cell()` - creates the cell.
+2. The body of the message represents a cell. In `msg_body_cell` we do: `begin_cell()` - creates builder for the future cell, first `store_uint` - stores the first uint into builder (1 - this is our `op`), second `store_uint` - stores the second uint into builder (num - this is our number that we will manipulate in the receiving contract), `end_cell()` - creates the cell.
 3. To attach the body that will come in `recv_internal` in the message, we reference the collected cell in the message itself with `store_ref`.
 4. Sending a message.
 
@@ -239,6 +239,6 @@ Read more on the [Internal messages](/v3/documentation/smart-contracts/message-m
 
 - [TON documentation](/v3/documentation/ton-documentation/)
 - [FunC overview](/v3/documentation/smart-contracts/func/overview/)
-- [Six unique aspects of TON blockchain that will surprise Solidity developers](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers)
+- [Six unique aspects of TON Blockchain that will surprise Solidity developers](https://blog.ton.org/six-unique-aspects-of-ton-blockchain-that-will-surprise-solidity-developers)
 
 <Feedback />
