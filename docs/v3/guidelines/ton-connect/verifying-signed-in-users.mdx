@@ -30,10 +30,10 @@ Upon receiving the `TonProofItemReplySuccess` object from the client, the first 
 type TonProofItemReplySuccess = {
   name: "ton_proof";
   proof: {
-    timestamp: string;     // 64-bit unix epoch time of the signing operation (seconds)
+    timestamp: string;     // 64-bit Unix epoch time of the signing operation (seconds)
     domain: {
       lengthBytes: number; // AppDomain length
-      value: string;       // App domain name (as url part, without encoding)
+      value: string;       // App domain name (as URL part, without encoding)
     };
     signature: string;     // base64-encoded signature
     payload: string;       // Payload from the request
@@ -52,6 +52,7 @@ The core of the verification process is to reconstruct the message that was sign
 The message signed by the wallet follows a strict format. Your backend must assemble an identical message to reproduce the hash that was signed.
 
 The message is a concatenation of several fields:
+
 ```text
 message = utf8_encode("ton-proof-item-v2/") ++
           Address ++
@@ -59,14 +60,15 @@ message = utf8_encode("ton-proof-item-v2/") ++
           Timestamp ++
           Payload
 ```
+
 - **`Address`**: The user's wallet address, comprising a `workchain` (32-bit big-endian integer) and a `hash` (256-bit big-endian integer).
-- **`AppDomain`**: The domain of your application, prefixed with its length.
-- **`Timestamp`**: A 64-bit Unix timestamp.
+- **`AppDomain`**: The domain of your application, prefixed with its length. `lengthBytes` is a 32-bit little-endian integer (number of bytes).
+- **`Timestamp`**: A 64-bit little-endian integer containing Unix epoch time in seconds.
 - **`Payload`**: A unique string, often a nonce, to prevent replay attacks.
 
 ### Signature verification
 
-The final signature is a hash of the assembled message, prefixed with `0xffff` and `ton-connect`:
+The signature is an Ed25519 signature over `sha256(0xffff ++ utf8_encode('ton-connect') ++ sha256(message))`:
 ```
 signature = Ed25519Sign(
               privkey, 
@@ -109,6 +111,8 @@ Note: The helper used in the example to extract a public key from `stateInit` is
 1. Add a token provider to the root of your app:
 
 ```tsx
+import { useState } from 'react';
+
 function App() {
     const [token, setToken] = useState<string | null>(null);
 
@@ -146,7 +150,9 @@ function App() {
               return;
           }
 
-          clearInterval(interval.current);
+          if (interval.current) {
+              clearInterval(interval.current);
+          }
 
           if (!wallet) {
               localStorage.removeItem(localStorageKey);
@@ -164,8 +170,12 @@ function App() {
               }
 
               refreshPayload();
-              setInterval(refreshPayload, payloadTTLMS);
-              return;
+              interval.current = setInterval(refreshPayload, payloadTTLMS);
+              return () => {
+                  if (interval.current) {
+                      clearInterval(interval.current);
+                  }
+              };
           }
 
           const token = localStorage.getItem(localStorageKey);
@@ -174,8 +184,8 @@ function App() {
               return;
           }
 
-          if (wallet.connectItems?.tonProof && !('error' in wallet.connectItems.tonProof)) {
-              backendAuth.checkProof(wallet.connectItems.tonProof.proof, wallet.account).then(result => {
+          if (wallet.connectItems?.tonProof && ('proof' in wallet.connectItems.tonProof)) {
+              backendAuth.checkProof(wallet.connectItems.tonProof.proof, wallet.account.address).then(result => {
                   if (result) {
                       setToken(result);
                       localStorage.setItem(localStorageKey, result);
@@ -211,19 +221,20 @@ import { sign } from 'tweetnacl';
 import { sha256 } from 'js-sha256';
 
 // This DTO is simplified for demonstration.
-// See the full structure in the demo dApp repository.
+// `walletStateInit` and `publicKey` come from TonAddressItemReply.
+// `proof` mirrors the ton_proof fields.
 interface CheckProofRequestDto {
   address: string;
-  public_key: string;
+  walletStateInit?: string; // base64 (optional, but preferred)
+  publicKey?: string;       // hex (optional; compare if provided)
   proof: {
-    timestamp: number;
+    timestamp: string;      // string; backend must parse to BigInt/number
     domain: {
       lengthBytes: number;
       value: string;
     };
     signature: string;
     payload: string;
-    state_init: string;
   };
 }
 
@@ -251,26 +262,30 @@ function tryParsePublicKey(stateInit: Cell): Buffer | null {
 // in the official demo dApp.
 export async function checkProof(payload: CheckProofRequestDto, getWalletPublicKey: (address: string) => Promise<Buffer | null>): Promise<boolean> {
   try {
-    const stateInitCell = Cell.fromBase64(payload.proof.state_init);
-    const stateInit = loadStateInit(stateInitCell.beginParse());
+    const stateInitCell = payload.walletStateInit ? Cell.fromBase64(payload.walletStateInit) : null;
+    const stateInit = stateInitCell ? loadStateInit(stateInitCell.beginParse()) : null;
 
-    // Obtain the public key from stateInit or via a get-method call.
-    let publicKey = tryParsePublicKey(stateInitCell) ?? await getWalletPublicKey(payload.address);
+    // Obtain the public key from stateInit or via a get method call.
+    let publicKey = (stateInitCell ? tryParsePublicKey(stateInitCell) : null) ?? await getWalletPublicKey(payload.address);
     if (!publicKey) {
       return false;
     }
 
     // Verify that the public key matches the one from the payload.
-    const wantedPublicKey = Buffer.from(payload.public_key, 'hex');
-    if (!publicKey.equals(wantedPublicKey)) {
-      return false;
+    if (payload.publicKey) {
+      const wantedPublicKey = Buffer.from(payload.publicKey, 'hex');
+      if (!publicKey.equals(wantedPublicKey)) {
+        return false;
+      }
     }
 
     // Verify that the wallet address matches the one derived from stateInit.
     const wantedAddress = Address.parse(payload.address);
-    const address = contractAddress(wantedAddress.workChain, stateInit);
-    if (!address.equals(wantedAddress)) {
-      return false;
+    if (stateInit) {
+      const derived = contractAddress(wantedAddress.workChain, stateInit);
+      if (!derived.equals(wantedAddress)) {
+        return false;
+      }
     }
 
     // Verify that the request originates from an allowed domain.
@@ -280,20 +295,24 @@ export async function checkProof(payload: CheckProofRequestDto, getWalletPublicK
 
     // Verify that the proof's timestamp is recent.
     const now = Math.floor(Date.now() / 1000);
-    if (now - validAuthTime > payload.proof.timestamp) {
+    const tsNumber = Number(payload.proof.timestamp);
+    if (!Number.isFinite(tsNumber)) {
+      return false;
+    }
+    if (now - validAuthTime > tsNumber) {
       return false;
     }
 
     const message = {
-      workchain: address.workChain,
-      address: address.hash,
+      workchain: wantedAddress.workChain,
+      address: wantedAddress.hash,
       domain: {
         lengthBytes: payload.proof.domain.lengthBytes,
         value: payload.proof.domain.value,
       },
       signature: Buffer.from(payload.proof.signature, 'base64'),
       payload: payload.proof.payload,
-      stateInit: payload.proof.state_init,
+      stateInit: payload.walletStateInit,
       timestamp: payload.proof.timestamp
     };
 
