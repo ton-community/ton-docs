@@ -585,7 +585,11 @@
     },
     {
         "from": "/develop/data-formats/tlb-ide",
-        "to": "/v3/documentation/data-formats/tlb/tlb-ide"
+        "to": "/v3/documentation/smart-contracts/getting-started/ide-plugins"
+    },
+    {
+        "from": "/v3/documentation/data-formats/tlb/tlb-ide",
+        "to": "/v3/documentation/smart-contracts/getting-started/ide-plugins"
     },
     {
         "from": "/develop/data-formats/tlb-tools",
@@ -754,10 +758,6 @@
     {
         "from": "/develop/func/changelog",
         "to": "/v3/documentation/smart-contracts/func/changelog"
-    },
-    {
-        "from": "/participate/nft",
-        "to": "/v3/concepts/dive-into-ton/ton-ecosystem/nft"
     },
     {
         "from": "/develop/smart-contracts/fee-calculation",

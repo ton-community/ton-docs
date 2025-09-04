@@ -1,0 +1,116 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Analytics and Data
+
+Developers often need to run analytical queries on top of on-chain data — for example, to track historical changes and aggregate data from multiple accounts.
+Since blockchains are not designed for analytical workloads, you need to build an indexing pipeline and run off-chain analytical queries. Creating such pipelines
+from scratch can be resource-consuming, so we recommend using one of the tools mentioned on this page.
+
+## Dune Analytics
+
+[Dune Analytics](https://dune.com/) is one of the leading platforms for running analytical queries and building dashboards. It comes with 
+100+ blockchain integrations, and TON is among them. Basically, one needs to be familiar with SQL language to
+write queries, but the [Dune AI](https://docs.dune.com/learning/how-tos/dune-ai-prompt-engineering) prompt engine allows
+users to start working with data even without SQL knowledge. Dune Analytics consumes data from the public TON Data Lake (see below)
+and comes with a variety of raw and decoded tables.
+
+The [raw tables](https://dune.com/queries?category=canonical&namespace=ton) include:
+- [Blocks](https://docs.dune.com/data-catalog/ton/blocks)
+- [Transactions](https://docs.dune.com/data-catalog/ton/transactions)
+- [Messages](https://docs.dune.com/data-catalog/ton/messages) - includes raw body and state init data.
+- [Balances history](https://docs.dune.com/data-catalog/ton/balances_history) - allows you to get a precise point-in-time balance for any account.
+- [Jetton events](https://docs.dune.com/data-catalog/ton/jetton_events) - comes with transfers, burns and mints. Note that since mints
+are not covered by the [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md) standard, it is not possible
+to reconstruct balances based solely on jetton events, so balances history should be used.
+
+Apart from raw tables, there are decoded tables that allow you to work with high-level structures in a unified manner:
+- [NFT events](https://dune.com/queries?category=canonical&namespace=ton&id=ton.nft_events) - comprehensive source of NFT-related data including 
+sales, transfers and mints.
+- [DEX trades](https://docs.dune.com/data-catalog/ton/dex_trades) - includes a unified data model for DEX trades. The full list of 
+supported DEXs is available [here](https://github.com/ton-studio/ton-etl/blob/main/datalake/README.md#dex-trades).
+- [DEX pools](https://docs.dune.com/data-catalog/ton/dex_pools) - comes with the full history of DEX pool balances and TVL estimations.
+
+Finally, two tables with off-chain metadata are available: [Jetton metadata](https://docs.dune.com/data-catalog/ton/jetton_metadata) and 
+[NFT metadata](https://dune.com/queries?category=canonical&namespace=ton&id=ton.nft_metadata).
+
+Dune Analytics allows projects to build bespoke data marts for each protocol - it is widely used for EVMs with the help of ABIs.
+Since TON doesn't have ABIs and handles complex [data structures](/v3/documentation/data-formats/tlb/cell-boc/), a [special
+decoding framework](https://github.com/duneanalytics/spellbook/blob/main/dbt_subprojects/daily_spellbook/macros/project/ton/README.md) 
+has been created. It works on top of [Spellbook](https://github.com/duneanalytics/spellbook) - a powerful tool for building
+custom tables with [dbt](https://github.com/dbt-labs/dbt-core) and Jinja macros. It helps decode important
+information from raw protocol message payloads. The following protocols are decoded using this framework and serve
+as examples:
+- [EVAA](https://dune.com/queries?category=abstraction&namespace=evaa) ([implementation](https://github.com/duneanalytics/spellbook/tree/main/dbt_subprojects/daily_spellbook/models/evaa/ton))
+- [Affluent](https://dune.com/queries?category=abstraction&namespace=affluent) ([implementation](https://github.com/duneanalytics/spellbook/tree/main/dbt_subprojects/daily_spellbook/models/affluent/ton))
+- [StormTrade](https://dune.com/queries?category=abstraction&namespace=stormtrade) ([implementation](https://github.com/duneanalytics/spellbook/tree/main/dbt_subprojects/daily_spellbook/models/stormtrade/ton))
+- [TON DNS](https://dune.com/queries?category=abstraction&namespace=dns_ton) ([implementation](https://github.com/duneanalytics/spellbook/tree/main/dbt_subprojects/daily_spellbook/models/ton/dns))
+
+In addition to decoding raw data, the Spellbook allows building custom materialized views. Some of them are widely used and maintained
+to be up to date:
+- [ton.prices_daily](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.prices_daily) - prices calculated based on all other tables. The prices include jettons traded on DEXs, LP tokens for DEXs and perpetuals, tsUSDe and other core assets. 
+It is recommended to use this table if you need to build an estimation of assets denominated in TON or USD.
+- [ton.accounts](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.accounts) - materialized view with 
+information about all accounts. It comes with the latest TON balance, interface (if any), funding information and other fields.
+- [ton.latest_balances](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.latest_balances) - helper table to
+get the latest balances for TON and Jettons.
+
+Note that all tables mentioned above are updated daily.
+
+If you're just starting to explore TON data on Dune, we recommend checking these articles first:
+- [TON data quick start](https://dune.com/ton_foundation/ton-quick-start)
+- [TON on-chain data analysis: quickstart on Dune](https://blog.ton.org/ton-on-chain-data-analysis-dune) 
+- [How to Analyze TON Users and Token Flows on Dune: A Practical Guide](https://blog.ton.org/how-to-analyze-ton-users-and-token-flows-on-dune)
+
+For inspiration to build your own dashboards, check out these examples:
+- [Application Activity](https://dune.com/ton_foundation/application-activity)
+- [TON & Ethena Boost Rewards Campaign](https://dune.com/ton_foundation/tonandethena-staking-rewards-campaign)
+- [Telegram Gifts Dashboard](https://dune.com/rdmcd/telegram-gifts)
+
+## The Public Data Lake
+
+Dune integration runs on the public data lake from the [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/datalake/README.md) project.
+The [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/datalake/README.md) is built on top of the [TON Center](https://github.com/toncenter) indexer
+and allows extraction of data from TON Node into data formats suitable for MPP (Massively Parallel Processing) engines (Presto, Apache Spark, etc.).
+You can deploy it on your own infrastructure or use publicly available data from the S3 bucket **s3://aws-public-blockchain/v1.1/ton/**.
+This dataset is part of the [AWS Public Blockchain Data](https://registry.opendata.aws/aws-public-blockchain/) project and 
+is optimized for use within the AWS big data stack. Examples of AWS Athena and AWS Bedrock integration can be found 
+in this [article](https://repost.aws/articles/AR3ABC81yvTPW2ktfHiHPWIA/new-dataset-added-to-the-aws-public-blockchain-data-ton-the-open-network).
+The [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/datalake/README.md) extracts raw data and performs decoding
+to create a unified view of high-level on-chain activity. The most important part is decoding DEX activity. To add support
+for a new DEX, you need to prepare a PR on Github. The decoding implementation must solve the following tasks:
+- Decoding of swap events. The decoding code must check the authenticity of the swap (for example, you cannot rely on the opcode alone since anyone can generate messages with your opcode).
+- Extracting all swap-related fields: tokens sold and bought, amounts, query IDs, trader, router (if any), and pool.
+- Fetching pool reserves and LP token supply (if applicable).
+
+If you are starting to implement decoding for your DEX, consider checking these existing PRs:
+- [BidAsk](https://github.com/ton-studio/ton-etl/pull/186)
+- [CoffeeSwap](https://github.com/ton-studio/ton-etl/pull/171/files)
+- [MemesLab](https://github.com/ton-studio/ton-etl/pull/144)
+
+## Real-time streams
+
+In addition to bulk data export, TON-ETL provides real-time data streaming via Kafka. A [public endpoint](https://github.com/ton-studio/ton-etl/blob/main/datalake/README.md#near-real-time--data-streaming-via-pulic-kafka-topics) is available free of charge for non-profit projects. For projects that don't meet the non-profit criteria or require an in-house solution, you can deploy the infrastructure yourself by:
+
+1. Running your own [TON node](/v3/documentation/infra/nodes/node-types)
+2. Launching [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/README.md)
+3. Setting up [ton-index-worker](https://github.com/ton-studio/ton-index-worker)
+
+## TON Labels
+
+While data availability and integrations are essential, building insightful dashboards requires enriching data with address labels.
+The [TON Labels](https://github.com/ton-studio/ton-labels) project simplifies this process by providing a comprehensive taxonomy
+of addresses in TON Ecosystem. It covers active addresses across various categories including centralized exchanges (CEXs),
+decentralized applications (dApps), and DeFi protocols.
+
+You can access the latest labels either directly from [the build branch](https://github.com/ton-studio/ton-labels/blob/build/assets.json)
+or through Dune Analytics using the [dune.ton_foundation.dataset_labels](https://dune.com/queries?category=uploaded_data&id=dune.ton_foundation.dataset_labels) table.
+
+## Other platforms
+
+- [Chainbase](https://docs.chainbase.com/catalog/Ton/Overview) offers a set of raw and decoded tables with TON data. It allows you to run SQL queries and fetch results via API.
+- [TON Console](https://docs.tonconsole.com/tonconsole/analytics) provides analysts with Analytics Service.
+- [TokenTerminal](https://tokenterminal.com/explorer/projects/the-open-network) comes with high-level metrics across TON Ecosystem.
+- [Artemis](https://app.artemisanalytics.com/project/ton?from=projects) contains key metrics for TON and allows you to build customized charts.
+
+<Feedback />
+
