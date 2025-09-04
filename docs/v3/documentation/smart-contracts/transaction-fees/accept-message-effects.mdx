@@ -7,43 +7,48 @@ The `accept_message` and `set_gas_limit` TVM primitives play a crucial role in m
 ## External messages
 
 External messages follow this processing flow:
-- The `gas_limit` is initially set to `gas_credit` [Param20/Param21](/v3/documentation/network/configs/blockchain-configs#param-20-and-21), which equals 10k gas units.
-- During credit spending, a contract must call `accept_message` to `set_gas_limit`, indicating its readiness to pay processing fees.
-- If `gas_credit` is depleted or computation completes without `accept_message`, the message is discarded (as if it never existed).
-- Otherwise, a new gas limit is set to either:
-  - `contract_balance/gas_price` (with `accept_message`)
-  - A custom value (with `set_gas_limit`).
+- The `gas_limit` is initially set to `gas_credit` [Param 20 and 21](/v3/documentation/network/configs/blockchain-configs#param-20-and-21), which equals 10,000 gas units.
+- During the Credit phase, a contract must call `accept_message` or `set_gas_limit` to raise the gas limit and indicate its readiness to pay processing fees.
+- If `gas_credit` is depleted or computation completes without `accept_message`, the external message is not included in a block and no transaction is created.
+- Gas limit semantics:
+  - `accept_message` sets `gl` to the maximum allowed (`gm`).
+  - `set_gas_limit(limit)` sets `gl` to `min(limit, gm)`.
+  - `gm` is capped by the network gas limit (Config Param 20 and 21).
 - After transaction completion, full computation fees are deducted from the contract balance (making `gas_credit` truly a credit, not free gas).
 
 
 If an error occurs after `accept_message` (in either Compute or Action phase):
-- The transaction is recorded on the blockchain
-- Fees are deducted from the contract balance
-- Storage remains unchanged
-- Actions are not applied
+- The transaction is recorded on the blockchain.
+- Fees are deducted from the contract balance.
+- Storage remains unchanged unless state was committed with `commit()` prior to the error.
+- Actions are not applied.
+
+Note on action errors and flags:
+- By default, a compute/action failure reverts state and cancels pending actions.
+- With `ignore_errors` (send mode flag `2`), failed sends are skipped without reverting other actions.
+- For action-phase errors, a bounce occurs only if the failed send used flag `16` (bounce on action error).
 
 **Critical security consideration**
 
 If a contract accepts an external message and then throws an exception (due to invalid message data or serialization errors), it:
-- Pays for processing
-- Cannot prevent message replay
-- Will continue accepting the same message until its balance is depleted
+- Pays for processing.
+- Cannot prevent message replay.
+- Will continue accepting the same message until its balance is depleted.
 
-## Internal message 
+## Internal messages
 
 When a contract receives an internal message from another contract:
-- Default gas limit: `message_value`/`gas_price` (message covers its own processing)
-- The contract can modify this limit using `accept_message`/`set_gas_limit`
+- Default gas limit: `message_value`/`gas_price` (message covers its own processing).
+- The contract can modify this limit using `accept_message`/`set_gas_limit`.
 
 Note that manual settings of gas limits do not interfere with bouncing behavior; messages will be bounced if sent in bounceable mode and contain enough money to pay for their processing and the creation of bounce messages.
 
-:::info example
+:::info Example
 **Case 1:**
-If you send a bounceable message with 0.1 TON in the basechain that is accepted by a contract with a 1 TON balance, and the computation costs 0.005 TON, with a message fee of 0.001 TON, then the bounce message will contain `0.1 - 0.005 - 0.001` = `0.094` TON.
+If you send a bounceable message with 0.1 TON in the BaseChain that is accepted by a contract with a 1 TON balance, and the computation costs 0.005 TON, with forwarding fees of 0.001 TON, then the bounce message will contain `0.1 - 0.005 - 0.001` = `0.094` TON.
 
 **Case 2:**
-If in the same example, the computation cost is 0.5 (instead of 0.005), there will be no bounce (the message balance would be `0.1 - 0.5 - 0.001 = -0.401`, thus no bounce), and the contract balance will be `1 + 0.1 - 0.5` = `0.6` TON.
+If in the same example, the computation cost is 0.5 TON (instead of 0.005 TON), there will be no bounce (the message balance would be `0.1 - 0.5 - 0.001 = -0.401`, thus no bounce), and the contract balance will be `1 + 0.1 - 0.5` = `0.6` TON.
 :::
 
 <Feedback />
-
