@@ -63,5 +63,33 @@ module.exports = [
     to:  '/v3/guidelines/dapps/apis-sdks/api-types',
     from:'/v3/guidelines/dapps/apis-sdks/ton-http-apis',
   },
+  {
+    to: '/v3/concepts/dive-into-ton/ton-ecosystem/blockchain-tech',
+    from: '/v3/concepts/dive-into-ton/go-from-ethereum/blockchain-services',
+  },
+  {
+    to: '/v3/concepts/dive-into-ton/go-from-ethereum/blockchain-comparison',
+    from: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison',
+  },
+  {
+    to: '/v3/concepts/dive-into-ton/ton-blockchain/overview',
+    from: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains',
+  },
+  {
+    to: '/v3/concepts/dive-into-ton/ton-blockchain/addresses',
+    from: '/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses',
+  },
+  {
+    to: '/v3/concepts/dive-into-ton/ton-blockchain/cells',
+    from: '/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage',
+  },
+  {
+    to: '/v3/concepts/dive-into-ton/ton-blockchain/network',
+    from: '/v3/concepts/dive-into-ton/ton-blockchain/ton-networking',
+  },
+  {
+    to: '/v3/concepts/dive-into-ton/security-measures',
+    from: '/v3/concepts/dive-into-ton/ton-ecosystem/security-measures',
+  },
   ...v3Redirects,
 ];
