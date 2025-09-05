@@ -50,13 +50,13 @@ The manifest is a JSON file named `tonconnect-manifest.json`, and it must follow
   <tr>
     <td><code>termsOfUseUrl</code></td>
     <td>Optional</td>
-    <td>Optional for most apps, but mandatory for apps listed on Tonkeeper’s Recommended Apps list.</td>
+    <td>Optional for most apps, but mandatory for apps listed on Tonkeeper’s recommended apps list.</td>
   </tr>
 
   <tr>
     <td><code>privacyPolicyUrl</code></td>
     <td>Optional</td>
-    <td>Optional for most apps, but mandatory for apps listed on Tonkeeper’s Recommended Apps list.</td>
+    <td>Optional for most apps, but mandatory for apps listed on Tonkeeper’s recommended apps list.</td>
   </tr>
   </tbody>
 </table>
@@ -81,13 +81,8 @@ For reference, see the [TON Connect specification](https://github.com/ton-blockc
 
 > For example: `https://myapp.com/tonconnect-manifest.json`. This helps wallets discover your app more reliably and enhances the overall user experience when users connect to it.
 
-2. The fields `iconUrl`, `termsOfUseUrl`, and `privacyPolicyUrl` must be publicly accessible from any origin without CORS restrictions.
+2. The fields `url`, `iconUrl`, `termsOfUseUrl`, and `privacyPolicyUrl` must be publicly accessible from any origin without CORS restrictions.
 3. Ensure the `tonconnect-manifest.json` is accessible and can be retrieved via a `GET` request to its URL (without requiring authentication or special CORS headers).
-
-## See also
-- [Create a manifest](
-  /v3/guidelines/ton-connect/quick-start#create-a-manifest
-  )
 
 ## Next steps
 Add the SDK to the project and explore the Transaction cookbook to start building with TON Connect.
