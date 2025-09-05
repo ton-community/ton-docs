@@ -30,7 +30,7 @@ These subnetworks operate using a special [gossip](https://en.wikipedia.org/wiki
 
 ## Interaction with overlay nodes
 
-We have already analyzed an example of finding overlay nodes in an article about Distributed Hash Tables (DHT). This was discussed in the section titled [Search for nodes that store the state of the blockchain](/v3/documentation/network/protocols/dht/dht-deep-dive#search-for-nodes-that-store-the-state-of-the-blockchain).
+We have already analyzed an example of finding overlay nodes in an article about Distributed Hash Tables (DHT). This was discussed in the section titled [Search for nodes that store the state of the blockchain](/v3/documentation/network/protocols/dht/deep-dive#search-for-nodes-that-store-the-state-of-the-blockchain).
 
 In this section, we will focus on how to interact with these nodes.
 
@@ -73,7 +73,7 @@ Once the connection is established, we can access the overlay nodes using `tonNo
 
 We utilize the RLDP protocol for these types of requests. It's crucial to remember that every query in the overlay must begin with the `overlay.query` prefix.
 
-The requests themselves are quite standard and resemble those we discussed in the article about ADNL TCP found [here](/v3/documentation/network/protocols/adnl/adnl-tcp#getmasterchaininfo).
+The requests themselves are quite standard and resemble those we discussed in the article about ADNL TCP found [here](/v3/documentation/network/protocols/adnl/tcp#getmasterchaininfo).
 
 For example, the `downloadBlockFull` request follows the familiar block ID schema:
 

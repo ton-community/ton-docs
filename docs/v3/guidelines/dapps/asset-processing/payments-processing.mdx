@@ -135,7 +135,7 @@ It is possible to track message flows during transaction processing. Since the m
       const outMessagesInfos = transaction.outMessages.values()
         .map(message => message.info)
         .filter((info): info is CommonMessageInfoInternal => info.type === 'internal');
-      
+
       return Promise.all(
         outMessagesInfos.map((info) => client.tryLocateResultTx(info.src, info.dest, info.createdLt.toString())),
       );
@@ -162,7 +162,7 @@ It is possible to track message flows during transaction processing. Since the m
         endpoint,
         apiKey: '[API-KEY]',
       });
-      
+
       const transaction: Transaction = ...; // Obtain first transaction to start traversing
       await traverseIncomingTransactions(client, transaction);
       await traverseOutgoingTransactions(client, transaction);
@@ -189,7 +189,7 @@ Learn the basics of payment processing from the [TMA USDT Payments demo](https:/
 8. Requests sent to `v3` of `high-load` have a 60-second expiration time by default. After expiration, unprocessed requests can be safely resent following steps 3-6.
 
 :::caution
-If the attached `value` is too small, the transaction may fail with the error `cskip_no_gas`. In this case, Toncoin will be transferred, but no logic will be executed on the recipient's side (the TVM will not launch). Read more [here](/v3/documentation/network/configs/blockchain-configs#param-20-and-21).
+If the attached `value` is too small, the transaction may fail with the error `cskip_no_gas`. In this case, Toncoin will be transferred, but no logic will be executed on the recipient's side (the TVM will not launch). Read more [here](/v3/documentation/network/config-params/overview#param-20-and-21).
 :::
 
 ### Get the transaction ID
@@ -278,7 +278,7 @@ You can find more examples and supported features in the documentation:
 
 ## Explorers
 
-The official TON blockchain explorer: [https://tonscan.org](https://tonscan.org).  
+The official TON blockchain explorer: [https://tonscan.org](https://tonscan.org).
 The most popular TON blockchain explorer: [https://tonviewer.com](https://tonviewer.com).
 
 To generate a transaction link in the explorer, the service needs to get the lt (logical time), the transaction hash, and the account address (the address of the account for which the lt and txhash were obtained using the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method). Then [https://tonscan.org](https://tonscan.org) and [https://explorer.toncoin.org/](https://explorer.toncoin.org/) can display the page for this transaction in the following format:
@@ -406,7 +406,7 @@ This way, you can provide the best user experience regardless of the current net
       <summary>Checking deposits</summary>
 
       ```go
-      package main 
+      package main
 
       import (
       	"context"
@@ -593,7 +593,7 @@ This way, you can provide the best user experience regardless of the current net
         wallet = await WalletV4R2.from_mnemonic(provider, MY_MNEMONICS)
 
         await wallet.transfer(DESTINATION_WALLET, 5)
-        
+
         await provider.close_all()
 
 
