@@ -243,9 +243,7 @@ It is best suited for one-time payments and invoices.
 
 ```text
 ton://transfer/<destination-address>?
-    [nft=<nft-address>&]
-    [fee-amount=<nanocoins>&]
-    [forward-amount=<nanocoins>] 
+    [nft=<nft-address>]
 ```
 
 **Advantages**
@@ -262,9 +260,26 @@ ton://transfer/<destination-address>?
 
 [Learn more about TON links here](https://github.com/tonkeeper/wallet-api#payment-urls).
 
+### Invoices with wallet-specific links
+
+You can use wallet-specific links to create simple Jetton and Toncoin transfers. The syntax is usually similar to `ton://transfer` links, but you should always check each wallet’s documentation.
+
+Example: transferring 1 USDT to someone:
+```
+https://app.tonkeeper.com/transfer/saint.ton?amount=1000000&jetton=EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs
+or
+https://my.tt/transfer/UQDYzZmfsrGzhObKJUw4gzdeIxEai3jAFbiGKGwxvxHinf4K?amount=1000000&jetton=EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs
+```
+You can find more examples and supported features in the documentation:
+
+- Tonkeeper - [docs.tonconsole.com](https://docs.tonconsole.com/tonkeeper/deep-linking)
+- MyTonWallet - [help.mytonwallet.io](https://help.mytonwallet.io/intro/key-features/deeplinks-in-mytonwallet)
+
+
 ## Explorers
 
-The official TON blockchain explorer: [https://tonscan.org](https://tonscan.org).
+The official TON blockchain explorer: [https://tonscan.org](https://tonscan.org).  
+The most popular TON blockchain explorer: [https://tonviewer.com](https://tonviewer.com).
 
 To generate a transaction link in the explorer, the service needs to get the lt (logical time), the transaction hash, and the account address (the address of the account for which the lt and txhash were obtained using the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method). Then [https://tonscan.org](https://tonscan.org) and [https://explorer.toncoin.org/](https://explorer.toncoin.org/) can display the page for this transaction in the following format:
 
