@@ -16,10 +16,6 @@ module.exports = [
     from: '/learn/tvm-instructions/tvm_overview',
   },
   {
-    to: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain',
-    from: '/learn/overviews/TON_Blockchain_overview',
-  },
-  {
     to: '/v3/documentation/network/protocols/adnl/low-level',
     from: '/learn/overviews/adnl',
   },
