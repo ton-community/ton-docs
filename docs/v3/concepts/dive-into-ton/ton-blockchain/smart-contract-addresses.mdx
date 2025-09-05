@@ -2,44 +2,46 @@ import Feedback from '@site/src/components/Feedback';
 
 # Addresses
 
-This document provides a high-level overview of account addresses on TON Blockchain. Every [account](/v3/concepts/dive-into-ton/ton-blockchain/accounts) (actor), including wallets and smart contracts, is represented by an address, used for all on-chain interactions.
+Every [account](/v3/concepts/dive-into-ton/ton-blockchain/accounts), including wallets and smart contracts, is represented by an address, used for all on-chain interactions.
 
-## Address components
+## Components
 
 A TON address is a composite identifier consisting of two main components:
 
-- **WorkChain ID**: a signed 32-bit integer that identifies a specific WorkChain.<br/>
-The MasterChain uses `-1`, and the BaseChain uses `0`.
-- **Account ID**: a 256-bit unique identifier for a contract within its WorkChain. <br/>
-It is derived from the hash of the contract’s **initial** state (`state_init`), which includes the code and data.
+- **WorkChain ID**: identifies a specific WorkChain (for example, MasterChain is `-1`, and BaseChain is `0`).<br/>
+- **Account ID**: a unique identifier for a contract within its WorkChain.
+It is derived from the hash of the contract’s initial state, which includes the code and data.
 
 For detailed technical specifications, see the [Addresses documentation](/v3/documentation/smart-contracts/addresses/address).
 
-## Address formats
+## Status
 
-TON addresses are represented in two standard formats:
+Every address on the TON Blockchain exists in one of four statuses, reflecting its lifecycle and operational condition.
 
--   **Raw format**: a direct representation of the `workchain_id` and `account_id` (e.g., `-1:fcb...260`). Intended for system-level use, it does not include user-facing safety features.
+Three of them are derived from its [account state](/v3/concepts/dive-into-ton/ton-blockchain/accounts#state):
+- `uninit`
+- `active`
+- `frozen`
+
+The fourth is `nonexist`, a special status used when the account does not exist at all.
+
+The status defines the account’s capabilities and is fundamental to transaction processing. Further details are available in the [address states documentation](/v3/documentation/smart-contracts/addresses/address-states).
+
+## Formats
+
+TON addresses are represented in two formats:
+
+-   **Raw format**: a direct representation of WorkChain ID and Account ID (e.g., `-1:fcb...260`). Intended for system-level use.
 -   **User-friendly format**: a base64-encoded version of the raw address that includes flags and a checksum. Designed for user interfaces, this format enhances security and prevents errors.
 
-These formats are not interchangeable. The user-friendly format includes critical metadata, such as the _bounceable flag_, which determines message-handling behavior for uninitialized accounts. A bounceable message sent to an address in `nonexist`, `uninit` or `frozen` state is returned to the sender. In contrast, a non-bounceable message will be credited to the account.
+These formats are not interchangeable. The user-friendly format includes critical metadata, such as the _bounceable flag_, which determines message-handling behavior for uninitialized accounts.
+
+A bounceable message sent to an address in `nonexist`, `uninit` or `frozen` status is returned to the sender. In contrast, a non-bounceable message will be credited to the account.
 
 For a detailed breakdown of address structures, encoding, and flags, refer to the [address formats documentation](/v3/documentation/smart-contracts/addresses/address-formats).
 
-
-## Address states
-
-Every address on TON Blockchain exists in one of four states, reflecting its lifecycle and operational status:
-
-- `nonexist`: the initial state for all potential addresses. The address has no associated code, data, or balance.
-- `uninit`: the address has received funds and has a balance but contains no smart contract code or data. It cannot execute logic.
-- `active`: the address holds a balance, smart contract code, and data. It is fully operational and can process messages.
-- `frozen`: the contract's storage fees have exceeded its balance, freezing its state. The address cannot execute transactions until it is unfrozen by replenishing its balance and providing its exact **previous** `state_init` (with sufficient funds for storage fees).
-
-The address state dictates its capabilities and is fundamental to transaction processing. Further details are available in the [address states documentation](/v3/documentation/smart-contracts/addresses/address-states).
-
 ## See also
 
-- [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton)
+- [Explorers](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton)
 
 <Feedback />

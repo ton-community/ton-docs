@@ -53,12 +53,12 @@ Both `cell_price` and `bit_price` could be obtained from Network Config [param 1
 
 Current values are:
 
-- Workchain.
+- WorkChain.
   ```cpp
   bit_price_ps:1
   cell_price_ps:500
   ```
-- Masterchain.
+- MasterChain.
   ```cpp
   mc_bit_price_ps:1000
   mc_cell_price_ps:500000
@@ -227,7 +227,7 @@ Internal messages define an `ihr_fee` in Toncoins, which is subtracted from the 
 - **IHR would only be relevant** when the network has more than 16 shards and not all shards are neighbors to each other
 - **Current network settings forbid splitting deeper than 16 shards**, which means IHR is not relevant in any practical sense
 
-In the current TON network configuration, all message routing uses standard **Hypercube Routing (HR)**, which can handle message delivery efficiently with the current shard topology. The `ihr_fee` field exists in the message structure for future compatibility, but serves no functional purpose today. 
+In the current TON network configuration, all message routing uses standard **Hypercube Routing (HR)**, which can handle message delivery efficiently with the current shard topology. The `ihr_fee` field exists in the message structure for future compatibility, but serves no functional purpose today.
 
 If you set the `ihr_fee` to a non-zero value, it will always be added to the message value upon receipt. For now, there are no practical reasons to do this.
 :::

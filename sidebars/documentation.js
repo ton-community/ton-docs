@@ -29,28 +29,6 @@ module.exports = [
       },
       {
         type: 'category',
-        label: 'Contracts specification',
-        items: [
-          'v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
-          'v3/documentation/smart-contracts/contracts-specs/highload-wallet',
-          'v3/documentation/smart-contracts/contracts-specs/vesting-contract',
-          'v3/documentation/smart-contracts/contracts-specs/governance',
-          'v3/documentation/smart-contracts/contracts-specs/nominator-pool',
-          'v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
-          'v3/documentation/smart-contracts/contracts-specs/precompiled-contracts',
-          'v3/documentation/smart-contracts/contracts-specs/examples',
-
-          {
-            type: 'link',
-            label: 'TON enhancement proposals (TEPs)',
-            href: 'https://github.com/ton-blockchain/TEPs/tree/master',
-          },
-
-        ],
-      },
-      'v3/documentation/smart-contracts/limits',
-      {
-        type: 'category',
         label: 'Message management',
         items: [
           'v3/documentation/smart-contracts/message-management/messages-and-transactions',
@@ -80,7 +58,28 @@ module.exports = [
           'v3/documentation/smart-contracts/shards/infinity-sharding-paradigm',
         ],
       },
-      'v3/documentation/smart-contracts/tact',
+      'v3/documentation/smart-contracts/limits',
+      {
+        type: 'category',
+        label: 'Contracts specification',
+        items: [
+          'v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
+          'v3/documentation/smart-contracts/contracts-specs/highload-wallet',
+          'v3/documentation/smart-contracts/contracts-specs/vesting-contract',
+          'v3/documentation/smart-contracts/contracts-specs/governance',
+          'v3/documentation/smart-contracts/contracts-specs/nominator-pool',
+          'v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
+          'v3/documentation/smart-contracts/contracts-specs/precompiled-contracts',
+          'v3/documentation/smart-contracts/contracts-specs/examples',
+
+          {
+            type: 'link',
+            label: 'TON enhancement proposals (TEPs)',
+            href: 'https://github.com/ton-blockchain/TEPs/tree/master',
+          },
+
+        ],
+      },
       {
         type: 'category',
         label: 'Tolk language',
@@ -140,6 +139,7 @@ module.exports = [
           'v3/documentation/smart-contracts/fift/fift-deep-dive',
         ],
       },
+      'v3/documentation/smart-contracts/tact',
     ],
   },
   {
@@ -295,7 +295,7 @@ module.exports = [
     items: [
       {
         type: 'category',
-        label: 'TL-B',
+        label: 'TL-B language',
         items: [
           'v3/documentation/data-formats/tlb/tl-b-language',
           'v3/documentation/data-formats/tlb/cell-boc',
