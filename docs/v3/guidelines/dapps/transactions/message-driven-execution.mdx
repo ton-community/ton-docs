@@ -589,7 +589,7 @@ To run the script and send an internal message, follow these steps:
           .storeAddress(myAddress) // to_address (sending to myself)
           .storeAddress(myAddress) // response_address for excesses
           .storeMaybeRef(null) // custom_payload
-          .storeCoins(toNano('0.000000001')) // forward_ton_amount lowest possible amount to get jetton notify message
+          .storeCoins(toNano('0.001')) // forward_ton_amount recommended minimum amount to get jetton notify message
           .storeMaybeRef(null) // forward_payload
           .endCell();
 

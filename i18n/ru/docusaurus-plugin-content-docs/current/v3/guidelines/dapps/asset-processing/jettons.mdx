@@ -36,7 +36,7 @@ import Button from '@site/src/components/button';
 ### Дополнительная информация
 
 :::caution Уведомление о транзакции
-Ожидается, что каждый сервис в Экосистеме установит `forward_ton_amount` равный 0,000000001 TON (1 нанотон), когда будет производиться вывод жетонов, чтобы отправить Jetton Notify при [успешном переводе](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), иначе перевод не будет соответствовать стандарту и не сможет быть обработан другими CEX и сервисами.
+Ожидается, что каждый сервис в Экосистеме установит `forward_ton_amount` равный 0.001 TON, когда будет производиться вывод жетонов, чтобы отправить Jetton Notify при [успешном переводе](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), иначе перевод не будет соответствовать стандарту и не сможет быть обработан другими CEX и сервисами.
 :::
 
 - Пожалуйста, найдите пример JS lib - [tonweb](https://github.com/toncenter/tonweb) - это официальная JS библиотека от TON Foundation.
@@ -315,16 +315,15 @@ dark: '/img/docs/asset-processing/jetton_transfer_dark.png?raw=true',
 Для отправки транзакции требуется определенное количество ton coins для оплаты **комиссии** и **сообщения об уведомлении**.
 
 Чтобы отправить **комментарий**, вам нужно настроить `forward payload`. Установите **первые 32 бита на 0x0** и добавьте **свой текст**, `forward payload` отправляется во внутреннем сообщении `jetton notify 0x7362d09c`. Оно будет сгенерировано только в том случае, если `forward_ton_amount` > 0.
+
 :::info
-Рекомендуемое `forward_ton_amount` для перевода жетонов с комментарием составляет 1 nanoton.
+Рекомендуемое `forward_ton_amount` для перевода жетонов с комментарием составляет 0.001 TON.
 :::
 
 В конце концов, чтобы получить `Excess 0xd53276db` сообщение, необходимо настроить `response destination`.
 
 Иногда при отправке жетонов может возникнуть ошибка `709`. Эта ошибка указывает на то, что количество Toncoin, прикрепленное к сообщению, недостаточно для его отправки. Убедитесь, что `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`, что обычно >0,04, если только forward payload не очень большая. Комиссия зависит от различных факторов, включая детали Jetton code и необходимость развертывания нового Jetton wallet для получателя.
-Рекомендуется добавить к сообщению запас Toncoin и указать свой адрес в качестве `response_destination` для извлечения сообщения `Excess 0xd53276db`. Например, вы можете добавить 0,05 TON к сообщению, установив `forward_ton_amount` в размере 1 nanoton (это количество TON будет прикреплено к сообщению `jetton notify` 0x7362d09c).
-
-Вы также можете столкнуться с ошибкой [`cskip_no_gas`](/v3/documentation/tvm/tvm-overview#compute-phase-skipped), которая указывает на то, что жетоны были успешно переведены, но никаких других вычислений не было выполнено. Это распространенная ситуация, когда значение `forward_ton_amount` равно 1 nanoton.
+Рекомендуется добавить к сообщению запас Toncoin и указать свой адрес в качестве `response_destination` для извлечения сообщения `Excess 0xd53276db`. Например, вы можете добавить 0,05 TON к сообщению, установив `forward_ton_amount` в размере 0.001 TON (это количество TON будет прикреплено к сообщению `jetton notify` 0x7362d09c).
 
 :::tip
 Проверьте [лучшие практики](/v3/guidelines/dapps/asset-processing/jettons#best-practices) на примере *"отправки жетонов с комментариями"*.
@@ -371,7 +370,7 @@ dark: '/img/docs/asset-processing/jetton_transfer_dark.png?raw=true',
 :::
 
 :::caution Уведомление о транзакции
-Ожидается, что каждый сервис в экосистеме установит `forward_ton_amount` на 0,000000001 TON (1 nanoton) при выводе жетона, чтобы отправить Jetton Notify при [успешном переводе](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), в противном случае перевод не будет соответствовать стандарту и не сможет быть обработан другими CEX и сервисами.
+Ожидается, что каждый сервис в экосистеме установит `forward_ton_amount` на 0.001 TON при выводе жетона, чтобы отправить Jetton Notify при [успешном переводе](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), в противном случае перевод не будет соответствовать стандарту и не сможет быть обработан другими CEX и сервисами.
 :::
 
 В этом сценарии платежный сервис создает уникальный идентификатор memo для каждого отправителя, раскрывая адрес централизованного кошелька и отправляемые суммы. Отправитель отправляет токены на указанный централизованный адрес с обязательным memo в комментарии.
@@ -484,7 +483,7 @@ const wallet = new WalletClass(tonweb.provider, {
 Ниже вы найдете пошаговое руководство по обработке вывода жетонов
 :::
 
-Для вывода жетонов кошелек отправляет сообщения с телом `transfer` на соответствующий Jetton wallet. Затем Jetton wallet отправляет жетоны получателю. Важно прикрепить некоторое количество TON (минимум 1 nanoTON) в качестве `forward_ton_amount` (и необязательный комментарий к `forward_payload`), чтобы вызвать `transfer notification`. См.: [Макеты сообщений контрактов жетонов](/v3/guidelines/dapps/asset-processing/jettons#message-layouts)
+Для вывода жетонов кошелек отправляет сообщения с телом `transfer` на соответствующий Jetton wallet. Затем Jetton wallet отправляет жетоны получателю. Важно прикрепить некоторое количество TON (минимум 0.001 TON) в качестве `forward_ton_amount` (и необязательный комментарий к `forward_payload`), чтобы вызвать `transfer notification`. См.: [Макеты сообщений контрактов жетонов](/v3/guidelines/dapps/asset-processing/jettons#message-layouts)
 
 #### Подготовка
 
@@ -706,7 +705,7 @@ async def main():
                     .store_address(DESTINATION_ADDRESS) # Destination address
                     .store_address(USER_ADDRESS)        # Response address
                     .store_bit(0)                       # Custom payload is None
-                    .store_coins(1)                     # Ton forward amount in nanoton
+                    .store_coins(1000000)               # Ton forward amount (0.001 TON)
                     .store_bit(1)                       # Store forward_payload as a reference
                     .store_ref(forward_payload)         # Forward payload
                     .end_cell())

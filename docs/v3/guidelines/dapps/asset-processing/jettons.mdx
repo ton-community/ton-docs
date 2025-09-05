@@ -34,7 +34,7 @@ It is recommended to set up multiple memo deposit wallets for better performance
 ### Additional info
 
 :::caution Transaction notification
-Each service in the ecosystem is expected to set `forward_ton_amount` to 0.000000001 TON (1 nanoton) when withdrawing a token to send a jetton Notify on [successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be compliant. It will not be able to be processed by other CEXs and services.
+Each service in the ecosystem is expected to set `forward_ton_amount` to 0.001 TON when withdrawing a token to send a jetton Notify on [successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be compliant. It will not be able to be processed by other CEXs and services.
 :::
 
 - Refer to the official JS library [tonweb](https://github.com/toncenter/tonweb) for the examples.
@@ -317,15 +317,13 @@ This transfer requires some Toncoin for **fees** and a **transfer notification m
 To send a **comment** you need to set up `forward_payload`. Set **first 32 bits to 0x0** and add **custom text**; `forward_payload` is sent in the internal `jetton notify 0x7362d09c` message. It will only be generated if `forward_ton_amount` > 0.
 
 :::info
-Recommended `forward_ton_amount` for a jetton transfer with a comment: 1 nanoton.
+Recommended `forward_ton_amount` for a jetton transfer with a comment: 0.001 TON.
 :::
 
 Finally, to retrieve `Excess 0xd53276db` message you must set up `response destination`.
 
 Sometimes you may get a `709` error when sending a jetton. This error indicates that the amount of Toncoin attached to the message is not enough to send it. Make sure `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`, which is usually >0.04 unless the payload being forwarded is very large. The fee depends on various factors, including the jetton code data and whether the recipient needs to deploy a new jetton wallet.
-It is recommended to add a supply of Toncoin to the message and set your address as the `response_destination` to receive `Excess 0xd53276db` messages. For example, you can add 0.05 TON to the message by setting `forward_ton_amount` to 1 nanoton (this amount of TON will be attached to the `jetton notify 0x7362d09c` message).
-
-You may also encounter the error [`cskip_no_gas`](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped), which indicates that the tokens were successfully transferred, but no other computations were performed. This is a common situation when the `forward_ton_amount` value is 1 nanoton.
+It is recommended to add a supply of Toncoin to the message and set your address as the `response_destination` to receive `Excess 0xd53276db` messages. For example, you can add 0.05 TON to the message by setting `forward_ton_amount` to 0.001 TON (this amount of TON will be attached to the `jetton notify 0x7362d09c` message).
 
 :::tip
 Check [best practices](/v3/guidelines/dapps/asset-processing/jettons#best-practices) for the _"send jettons with comments"_ example.
@@ -372,7 +370,7 @@ To prevent transaction bottlenecks in a single wallet, distribute deposits acros
 :::
 
 :::warning Transaction notification
-Each service in the ecosystem is expected to set `forward_ton_amount` to 0.000000001 TON (1 nanoton) when withdrawing a token, in order to send a token notification upon [a successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be compliant and will not be processed by other CEXs and services.
+Each service in the ecosystem is expected to set `forward_ton_amount` to 0.001 TON when withdrawing a token, in order to send a token notification upon [a successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be compliant and will not be processed by other CEXs and services.
 :::
 
 In this scenario, the payment service creates a unique memo identifier for each sender, revealing the
@@ -501,7 +499,7 @@ Below, you will find a step-by-step guide on how to process jetton withdrawals.
 :::
 
 To withdraw jettons, the wallet sends messages with a `transfer` body to the corresponding jetton wallet.
-The jetton wallet then sends the jettons to the recipient. It is important to attach some TON (at least 1 nanoTON)
+The jetton wallet then sends the jettons to the recipient. It is important to attach some TON (at least 0.001 TON)
 as the `forward_ton_amount` (and an optional comment to the `forward_payload`) to trigger a `transfer notification`.
 See: [Jetton contract message layouts](/v3/guidelines/dapps/asset-processing/jettons#message-layouts).
 
@@ -753,7 +751,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
                           .store_address(DESTINATION_ADDRESS) # Destination address
                           .store_address(USER_ADDRESS)        # Response address
                           .store_bit(0)                       # Custom payload is None
-                          .store_coins(1)                     # Ton forward amount in nanoton
+                          .store_coins(1000000)               # Ton forward amount (0.001 TON)
                           .store_bit(1)                       # Store forward_payload as a reference
                           .store_ref(forward_payload)         # Forward payload
                           .end_cell())
