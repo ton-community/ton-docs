@@ -145,7 +145,7 @@ npx export-ton-verifier ./circuits/Multiplier/Multiplier_final.zkey ./contracts/
 npx export-ton-verifier ./circuits/Multiplier/Multiplier_final.zkey ./contracts/verifier_multiplier.tact --tact
 ```
 
-For FunC/Tolk:
+For FunC/Tolk we also need to manually create wrappers:
 
 ```bash
 npx export-ton-verifier import-wrapper ./wrappers/Verifier.ts --force
