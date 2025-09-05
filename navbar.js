@@ -26,7 +26,7 @@ module.exports = {
           label: 'Explorers',
         },
         {
-          to: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain',
+          to: '/v3/concepts/dive-into-ton/ton-blockchain/overview',
           label: 'Blockchain',
         },
       ],
