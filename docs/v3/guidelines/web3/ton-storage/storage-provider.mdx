@@ -72,7 +72,7 @@ new-contract-message <BagID> <file> --query-id 0 --provider <address>
 - The generated message includes the provider's current rate and max span parameters. These values are displayed after execution and should be reviewed before sending.
 - If the provider updates their parameters before the message is submitted, it will be rejected. This ensures that the storage contract is created under the client's agreed-upon conditions.
 
-The client must then send the generated message body to the provider's smart contract address. If an error occurs, the message bounces back to the sender. If successful, a new storage contract is created, and the client receives a message from the contract with [`op=0xbf7bd0c1`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L3) and the same query ID.
+The client must then send the generated message body to the provider's smart contract address. If an error occurs, the message bounces back to the sender. If successful, a new storage contract is created, and the client receives a message from the contract with [`op=0xbf7bd0c1`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L4) and the same query ID.
 
 At this stage, the contract is not yet active. Once the provider downloads the bag, the contract is activated, and the client receives another message from the same contract with  [`op=0xd4caedcd`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L5).
 
