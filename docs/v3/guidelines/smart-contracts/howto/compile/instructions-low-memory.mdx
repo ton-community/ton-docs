@@ -6,7 +6,7 @@ import Feedback from '@site/src/components/Feedback';
 This section provides low-level instructions for working with TON.
 :::
 
-To compile TON on systems with limited memory (< 1 GiB), you need to create swap space (using a swap file).
+To compile TON on systems with limited memory (< 1 GB), you need to create swap partition.
 
 ## Symptoms
 
@@ -19,13 +19,13 @@ compilation terminated.
 
 ## Solution
 
-Follow these steps to create a 4 GiB swap file:
+Follow these steps to create a 4 GB swap partition:
 
 ```bash
-# Create swap directory
+# Create swap partition
 sudo mkdir -p /var/cache/swap/
 
-# Allocate 4 GiB swap space (64 MiB blocks × 64)
+# Allocate 4 GB swap space (64 MB blocks × 64)
 sudo dd if=/dev/zero of=/var/cache/swap/swap0 bs=64M count=64
 
 # Set secure permissions
@@ -54,21 +54,7 @@ sudo rm /var/cache/swap/swap0
 
 ```bash
 sudo swapoff -a
-free -m
-```
-
-### Make swap persistent (optional)
-
-To enable the swap file on boot, add the following line to `/etc/fstab`:
-
-```text
-/var/cache/swap/swap0 none swap sw 0 0
-```
-
-After reboot, verify with:
-
-```bash
-sudo swapon --show
+free -m  # Check memory
 ```
 
 <Feedback />
