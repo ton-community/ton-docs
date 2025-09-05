@@ -15,9 +15,7 @@ If using React for your DApp, look at the [TON Connect UI React SDK](/v3/guideli
 
 <Tabs groupId="Installation">
   <TabItem value="CDN" label="CDN">
-    Add the script to the `<HEAD>` element of your website:
-
-    <br />
+    Add the script to the `<head>` element of your website:
 
     <br />
 
@@ -35,12 +33,12 @@ If using React for your DApp, look at the [TON Connect UI React SDK](/v3/guideli
   </TabItem>
 </Tabs>
 
-### TON Connect initiation
+### Set up TON Connect
 
-After installing the package, create a `manifest.json` file for your app.
-More information on how to create a `manifest.json` file can be found [here](/v3/guidelines/ton-connect/creating-manifest).
+After installing the package, create a `tonconnect-manifest.json` file for your app.
+See the [manifest creation guide](/v3/guidelines/ton-connect/creating-manifest) for details.
 
-Add a button with a `ton-connect` id to connect to the wallet:
+Add a container element with the id `ton-connect` to host the connect button:
 
 ```html
 <div id="ton-connect"></div>
@@ -59,16 +57,15 @@ _After this tag_, add a script for `tonConnectUI` in the `<body>` part of the ap
 
 ### Connect to the wallet
 
-The `'ton-connect'` button in `buttonRootId` will automatically manage clicks.
+The element specified by `buttonRootId` renders the connect button and handles clicks automatically.
 
-But you can open **connect modal** programmatically, for example, after clicking on the custom button:
+You can also open the connect modal programmatically; for example, from a custom button’s click handler:
 
 ```html
 <script>
     async function connectToWallet() {
-        const connectedWallet = await tonConnectUI.connectWallet();
-        // Do something with connectedWallet if needed
-        console.log(connectedWallet);
+        // Open the connect modal programmatically
+        await tonConnectUI.openModal();
     }
 
     // Call the function
@@ -86,19 +83,21 @@ To redirect the user to a specific URL after connection, you can [customize your
 
 #### Telegram Mini Apps
 
-To redirect the user to a [Telegram Mini App](/v3/guidelines/dapps/tma/overview) after wallet connection use the `twaReturnUrl` option:
+To redirect the user to a [Telegram Mini App](/v3/guidelines/dapps/tma/overview) after wallet connection, use the `twaReturnUrl` option:
 
-```tsx
+```js
 tonConnectUI.uiOptions = {
-      twaReturnUrl: 'https://t.me/YOUR_APP_NAME'
-  };
+  actionsConfiguration: {
+    twaReturnUrl: 'https://t.me/YOUR_APP_NAME'
+  }
+};
 ```
 
 [Read more in SDK documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#use-inside-twa-telegram-web-app)
 
 ### UI customization
 
-TonConnect UI provides an interface that should be familiar and recognizable to the user when using various apps. However, the app developer can modify this interface to keep it consistent with the app's interface.
+TON Connect UI provides an interface that should be familiar and recognizable to the user when using various apps. However, the app developer can modify this interface to keep it consistent with the app's interface.
 
 - [TonConnect UI documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
 
@@ -109,14 +108,14 @@ TonConnect UI provides an interface that should be familiar and recognizable to 
 
 ## Usage
 
-Let's look at the example of using the TON Connect UI in the app.
+Let's look at an example of using TON Connect UI in an app.
 
 ### Sending messages
 
 Here's an example of sending a transaction using the TON Connect UI:
 
 ```js
-import TonConnectUI from '@tonconnect/ui';
+import { TonConnectUI } from '@tonconnect/ui';
 
 const tonConnectUI = new TonConnectUI({ //connect application
     manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
@@ -146,7 +145,7 @@ Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset
 
 ### Signing and verification
 
-Understand how to sign and verify messages using the TON Connect:
+Understand how to sign and verify messages using TON Connect:
 
 - [Signing and verification](/v3/guidelines/ton-connect/verifying-signed-in-users)
 - [TON Connect UI implementation on GitHub](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-connect-request-parameters-ton_proof)
@@ -155,7 +154,7 @@ This feature is particularly useful for verifying ownership of off-chain assets 
 
 ### Wallet disconnection
 
-Call to disconnect the wallet:
+Call to disconnect from the wallet:
 
 ```js
 await tonConnectUI.disconnect();
@@ -165,6 +164,6 @@ await tonConnectUI.disconnect();
 
 - [UI customization](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
 - [\[YouTube\] TON Connect UI React \[RU\]](https://youtu.be/wIMbkJHv0Fs?list=PLyDBPwv9EPsCJ226xS5_dKmXXxWx1CKz_&t=1747)
-- [\[YouTube\] Connect TON Connect UI to site \[RU\]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
+- [\[YouTube\] Connect TON Connect UI to a site \[RU\]](https://www.youtube.com/watch?v=HUQ1DPfFxG4&list=PLyDBPwv9EPsAIWi8vgic9kiV3KF_wvIcz&index=4)
 
 <Feedback />

@@ -32,7 +32,7 @@ To obtain a TON address object from a string in your SDK, you can use the follow
     const address1 = Address.parse('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF');
     const address2 = Address.parse('0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e');
 
-    // toStrings arguments: urlSafe, bounceable, testOnly
+    // toString arguments: urlSafe, bounceable, testOnly
     // default values: true, true, false
 
     console.log(address1.toString()); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
@@ -53,10 +53,10 @@ To obtain a TON address object from a string in your SDK, you can use the follow
     // toString arguments: isUserFriendly, isUrlSafe, isBounceable, isTestOnly
 
     console.log(address1.toString(true, true, true)); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
-    console.log(address1.toString(isUserFriendly = false)); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+    console.log(address1.toString(false)); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 
     console.log(address1.toString(true, true, true)); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
-    console.log(address2.toString(isUserFriendly = false)); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
+    console.log(address2.toString(false)); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
     ```
   </TabItem>
 
@@ -210,40 +210,42 @@ Also, in some libraries, you may notice a serialization parameter called `urlSaf
   </TabItem>
 
   <TabItem value="GO" label="tonutils-go">
-    ```python
+    ```go
     package main
 
     import (
         "fmt"
+        "errors"
         "github.com/xssnick/tonutils-go/address"
     )
 
-    if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
-     return errors.New("invalid address")
+    func main() {
+        if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
+            _ = errors.New("invalid address")
+        }
     }
     ```
   </TabItem>
 
   <TabItem value="Java" label="ton4j">
-    ```javascript
-      /* Maven
-      <dependency>
-        <groupId>io.github.neodix42</groupId>
-        <artifactId>address</artifactId>
-        <version>0.3.2</version>
-      </dependency>
-      */
+    ```java
+    // Maven
+    // <dependency>
+    //   <groupId>io.github.neodix42</groupId>
+    //   <artifactId>address</artifactId>
+    //   <version>0.3.2</version>
+    // </dependency>
 
-      try {
+    try {
       Address.of("...");
-      } catch (Exception e) {
+    } catch (Exception e) {
       // not valid address
-      }
+    }
     ```
   </TabItem>
 
   <TabItem value="Kotlin" label="ton-kotlin">
-    ```javascript
+    ```kotlin
     try {
         AddrStd("...")
     } catch(e: IllegalArgumentException) {
@@ -263,7 +265,7 @@ Also, in some libraries, you may notice a serialization parameter called `urlSaf
 
 <div class="text--center">
   <ThemedImage
-    alt=""
+    alt="Wallet message flow diagram"
     sources={{
   light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1.svg?raw=true',
   dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_1_dark.svg?raw=true',
@@ -279,7 +281,7 @@ Also, in some libraries, you may notice a serialization parameter called `urlSaf
 
 <div class="text--center">
   <ThemedImage
-    alt=""
+    alt="Jetton transfer message flow diagram"
     sources={{
   light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_2.svg?raw=true',
   dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_2_dark.svg?raw=true',
@@ -298,13 +300,13 @@ Most SDKs follow a similar process for sending messages from your wallet:
 
 <Tabs groupId="code-examples">
   <TabItem value="js-ton-v4" label="JS (@ton) for Wallet V4">
-    ```js
+    ```ts
     import { TonClient, WalletContractV4, internal } from "@ton/ton";
     import { mnemonicNew, mnemonicToPrivateKey } from "@ton/crypto";
 
     const client = new TonClient({
       endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
-      apiKey: 'your-api-key', // Optional, but note that without api-key you need to send requests once per second, and with 0.25 seconds
+      apiKey: '<YOUR_API_KEY>', // Optional. Without an API key: 1 request/second; with a key: up to 4 requests/second (one every 0.25 s)
     });
 
     // Convert mnemonics to private key
@@ -331,13 +333,13 @@ Most SDKs follow a similar process for sending messages from your wallet:
   </TabItem>
 
   <TabItem value="js-ton-v5" label="JS (@ton) for Wallet V5">
-    ```js
+    ```ts
     import { TonClient, WalletContractV5R1, internal, SendMode } from "@ton/ton";
     import { mnemonicToPrivateKey } from "@ton/crypto";
 
     const client = new TonClient({
       endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
-      apiKey: 'your-api-key', // Optional, but note that without api-key you need to send requests once per second, and with 0.25 seconds
+      apiKey: '<YOUR_API_KEY>', // Optional. Without an API key: 1 request/second; with a key: up to 4 requests/second (one every 0.25 s)
     });
 
     // Convert mnemonics to private key
@@ -366,6 +368,10 @@ Most SDKs follow a similar process for sending messages from your wallet:
       ],
     });
     ```
+
+:::info
+`sendMode: SendMode.PAY_GAS_SEPARATELY + SendMode.IGNORE_ERRORS` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
   </TabItem>
 
   <TabItem value="ton-kotlin" label="ton-kotlin">
@@ -389,7 +395,7 @@ Most SDKs follow a similar process for sending messages from your wallet:
         wallet.transfer(pk, WalletTransfer {
             destination = AddrStd("EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N")
             bounceable = true
-            coins = Coins(100000000) // 1 TON (in nanotons)
+            coins = Coins(1_000_000_000) // 1 TON (in nanotons)
             messageData = org.ton.contract.wallet.MessageData.raw(
                 body = buildCell {
                     storeUInt(0, 32)
@@ -453,7 +459,7 @@ Sometimes, it's necessary to store large strings in cells, but the maximum size 
 
     function readStringTail(slice) {
         const str = new TextDecoder('ascii').decode(slice.array); // decode uint8array to string
-        if (cell.refs.length > 0) {
+        if (slice.refs.length > 0) {
             return str + readStringTail(slice.refs[0]); // read next cell
         } else {
             return str;
@@ -475,7 +481,7 @@ Don't forget that the comment message in a snake cell has 32 zero bits (i.e., it
 
 ## TEP-74 (jettons standard)
 
-### How to calculate the user's jetton wallet address (offchain)?
+### How to calculate the user's jetton wallet address (off-chain)?
 
 To calculate a user's jetton wallet address, use the `get_wallet_address` method from the jetton master contract with the user's address. You can also call the master contract directly or use the `getWalletAddress` method provided in the JettonMaster SDK.
 
@@ -964,7 +970,7 @@ Of course, one can always do calculation in indivisible units.
     async function main() {
         const tonweb = new TonWeb(new TonWeb.HttpProvider(
             'https://toncenter.com/api/v2/jsonRPC', {
-                apiKey: 'put your api key'
+                apiKey: '<YOUR_API_KEY>'
             })
         );
         const destinationAddress = new TonWeb.Address('put destination wallet address');
@@ -1015,6 +1021,10 @@ Of course, one can always do calculation in indivisible units.
 
     main().finally(() => console.log("Exiting..."));
     ```
+
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
   </TabItem>
 
   <TabItem value="py" label="Python">
@@ -1060,7 +1070,7 @@ Of course, one can always do calculation in indivisible units.
   </TabItem>
 </Tabs>
 
-If the `forward_amount` is nonzero, a notification about the Jetton reception will be sent to the destination contract. Additionally, if the `response_destination` address is non-null, excess Toncoins (called "excesses") will be sent to that address.
+If the `forward_amount` is nonzero, a notification about the Jetton reception will be sent to the destination contract. Additionally, if the `response_destination` address is non-null, excess Toncoin (called "excesses") will be sent to that address.
 
 :::tip
 Explorers support comments in Jetton notifications, similar to regular TON transfers. Comments are formatted as 32 zero bits followed by UTF-8 text.
@@ -1079,12 +1089,12 @@ Reminder: all methods about NFT below are not bound by TEP-62 to work. Before tr
 
 ### How to use NFT batch deployment?
 
-NFT collection smart contracts allow batch deployment of up to 250 NFTs in a single transaction. However, due to the 1 TON computation fee limit, this number is practically reduced to 100-130 NFTs.
+NFT collection smart contracts allow batch deployment of up to 250 NFTs in a single transaction. However, due to the 1 TON computation fee limit, this number is practically reduced to 100–130 NFTs.
 
 #### Batch mint NFT
 
 :::info
-Does not specified by NFT standard for /ton-blockchain /token-contract
+Not specified by the NFT standard (ton-blockchain/token-contract).
 :::
 
 <br />
@@ -1193,7 +1203,8 @@ Next, we need to correctly calculate the total transaction cost. The value of `0
 
 ### How to change the owner of a collection's smart contract?
 
-Changing the owner of a collection is simple. Specify the `opcode = 3`, any `query_id`, and the new owner’s address.
+Changing the owner of a collection is simple. Specify the `opcode = 3`, any `query_id`, and the new owner's address.
+
 
 <Tabs groupId="code-examples">
   <TabItem value="js-ton" label="JS (@ton)">
@@ -1233,7 +1244,7 @@ Changing the owner of a collection is simple. Specify the `opcode = 3`, any `que
     async function main() {
         const tonweb = new TonWeb(new TonWeb.HttpProvider(
             'https://toncenter.com/api/v2/jsonRPC', {
-                apiKey: 'put your api key'
+                apiKey: '<YOUR_API_KEY>'
             })
         );
         const collectionAddress  = new TonWeb.Address('put your collection address');
@@ -1264,6 +1275,10 @@ Changing the owner of a collection is simple. Specify the `opcode = 3`, any `que
 
     main().finally(() => console.log("Exiting..."));
     ```
+
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
   </TabItem>
 </Tabs>
 
@@ -1290,11 +1305,11 @@ Often, the collection's metadata is stored in a format similar to `0.json` and c
         const royaltyAddress = Address.parse('put royalty address');
 
         const collectionMetaCell = beginCell()
-            .storeUint(1, 8) // we have offchain metadata
+            .storeUint(1, 8) // we have off-chain metadata
             .storeStringTail(newCollectionMeta)
             .endCell();
         const nftCommonMetaCell = beginCell()
-            .storeUint(1, 8) // we have offchain metadata
+            .storeUint(1, 8) // we have off-chain metadata
             .storeStringTail(newNftCommonMeta)
             .endCell();
 
@@ -1340,7 +1355,7 @@ Often, the collection's metadata is stored in a format similar to `0.json` and c
     async function main() {
         const tonweb = new TonWeb(new TonWeb.HttpProvider(
             'https://testnet.toncenter.com/api/v2/jsonRPC', {
-                apiKey: 'put your api key'
+                apiKey: '<YOUR_API_KEY>'
             })
         );
         const collectionAddress  = new TonWeb.Address('put your collection address');
@@ -1349,10 +1364,10 @@ Often, the collection's metadata is stored in a format similar to `0.json` and c
         const royaltyAddress = new TonWeb.Address('put royalty address');
 
         const collectionMetaCell = new TonWeb.boc.Cell();
-        collectionMetaCell.bits.writeUint(1, 8); // we have offchain metadata
+        collectionMetaCell.bits.writeUint(1, 8); // we have off-chain metadata
         collectionMetaCell.bits.writeString(newCollectionMeta);
         const nftCommonMetaCell = new TonWeb.boc.Cell();
-        nftCommonMetaCell.bits.writeUint(1, 8); // we have offchain metadata
+        nftCommonMetaCell.bits.writeUint(1, 8); // we have off-chain metadata
         nftCommonMetaCell.bits.writeString(newNftCommonMeta);
 
         const contentCell = new TonWeb.boc.Cell();
@@ -1390,6 +1405,10 @@ Often, the collection's metadata is stored in a format similar to `0.json` and c
 
     main().finally(() => console.log("Exiting..."));
     ```
+
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
   </TabItem>
 </Tabs>
 
@@ -1461,7 +1480,7 @@ This information is sufficient to construct the swap message.
     - Pool: The pool calculates the swap amount based on predefined formulas and informs the vault, which in turn releases the swapped asset to the user.
 
     Calculations of swap amount are based on a mathematical formula, which means so far we have two different pools, one known as Volatile, that operates based on the commonly used "Constant Product" formula: <InlineMath math="x \cdot y = k" />, And the other known as Stable-Swap - Optimized for assets of near-equal value (e.g. USDT / USDC, TON / stTON). It uses the formula: <InlineMath math="x^3 \cdot y + y^3 \cdot x = k" />.
-    So for every swap we need the corresponding Vault and it needs just implement a specific API tailored for interacting with a distinct asset type. DeDust has three implementations of Vault, Native Vault - Handles the native coin (Toncoin). Jetton Vault - Manages jettons and Extra-Currency Vault (upcoming) - Designed for TON extra-currencies.
+    So for every swap we need the corresponding Vault and it needs to implement a specific API tailored for interacting with a distinct asset type. DeDust has three implementations of Vault: Native Vault - handles the native coin (Toncoin); Jetton Vault - manages jettons; and Extra-Currency Vault (upcoming) - designed for TON extra-currencies.
 
     DeDust provides an SDK, written in TypeScript, to interact with the contracts, components, and APIs needed for the swap. Before swapping any assets, the environment must be set up and the necessary objects initialized.
 
@@ -1470,7 +1489,7 @@ This information is sufficient to construct the swap message.
 
     ```
 
-    we also need to bring DeDust SDK as well.
+    we also need to bring the DeDust SDK.
 
     ```bash
     npm install --save @dedust/sdk
@@ -1526,7 +1545,7 @@ This information is sufficient to construct the swap message.
       throw new Error("Pool (TON, SCALE) does not exist.");
     }
 
-    // Check if the vault exits:
+    // Check if the vault exists:
     if ((await tonVault.getReadinessStatus()) !== ReadinessStatus.READY) {
       throw new Error("Vault (TON) does not exist.");
     }
@@ -1579,8 +1598,8 @@ This information is sufficient to construct the swap message.
 
     This was swapping TON with jetton SCALE. The process for swapping jetton with jetton is the same, the only difference is we should provide the payload that was described in the TL-B schema.
 
-    ```TL-B
-    swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
+```tlb
+swap#e3a0d482 _:SwapStep swap_params:^SwapParams = ForwardPayload;
     ```
 
     ```typescript
@@ -1641,7 +1660,7 @@ This information is sufficient to construct the swap message.
     ```kotlin
     runBlocking {
         wallet.transfer(pk, WalletTransfer {
-            destination = JETTON_WALLET_A // yours existing jetton wallet
+            destination = JETTON_WALLET_A // your existing jetton wallet
             bounceable = true
             coins = Coins(300000000) // 0.3 ton in nanotons
             messageData = MessageData.raw(
@@ -1721,7 +1740,7 @@ This information is sufficient to construct the swap message.
         swap_params = (begin_cell()
                       .store_uint(int(time.time() + 60 * 5), 32) # Deadline
                       .store_address(wallet.address) # Recipient address
-                      .store_address(None) # Referall address
+                      .store_address(None) # Referral address
                       .store_maybe_ref(None) # Fulfill payload
                       .store_maybe_ref(None) # Reject payload
                       .end_cell())
@@ -1748,6 +1767,10 @@ This information is sufficient to construct the swap message.
   </TabItem>
 </Tabs>
 
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
+
 ## Basics of message processing
 
 ### How to parse transactions of an account (transfers, jettons, NFTs)?
@@ -1769,7 +1792,7 @@ Below is an example on how you can fetch 5 most recent transactions on any block
     async function main() {
         const client = new TonClient({
             endpoint: 'https://toncenter.com/api/v2/jsonRPC',
-            apiKey: '1b312c91c3b691255130350a49ac5a0742454725f910756aff94dfe44858388e',
+            apiKey: '<YOUR_API_KEY>',
         });
 
         const myAddress = Address.parse('EQBKgXCNLPexWhs2L79kiARR1phGH1LwXxRbNsCFF9doc2lN'); // address that you want to fetch transactions from
@@ -2022,11 +2045,11 @@ Note that this example covers only the simplest case with incoming messages, whe
 
 This topic is explored in depth in the [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing) article.
 
-### How to find transaction for a certain TON Connect result?
+### How to find a transaction for a certain TON Connect result?
 
 TON Connect 2 only returns the cell sent to the blockchain, not the transaction hash itself, as the transaction may not be confirmed. To track a transaction from TON Connect, you can search for it in your account history using an indexer.
 :::tip
-You can use an indexer to make the search easier. The provided implementation is for `TonClient` connected to a RPC.
+You can use an indexer to make the search easier. The provided implementation is for `TonClient` connected to an RPC.
 :::
 
 Prepare `retry` function for attempts on listening blockchain:
@@ -2056,13 +2079,14 @@ Create a listener function that will assert specific transaction on certain acco
   <TabItem value="ts" label="@ton/ton">
     ```typescript
 
-    import {Cell, Address, beginCell, storeMessage, TonClient} from "@ton/ton";
+    import { Cell, Address, beginCell, storeMessage } from "@ton/core";
+    import { TonClient } from "@ton/ton";
 
     const res = tonConnectUI.send(msg); // exBoc in the result of sending message
     const exBoc = res.boc;
     const client = new TonClient({
             endpoint: 'https://toncenter.com/api/v2/jsonRPC',
-            apiKey: 'INSERT YOUR API-KEY', // https://t.me/tonapibot
+            apiKey: '<YOUR_API_KEY>', // https://t.me/tonapibot
         });
 
     export async function getTxByBOC(exBoc: string): Promise<string> {
@@ -2111,7 +2135,7 @@ Create a listener function that will assert specific transaction on certain acco
   </TabItem>
 </Tabs>
 
-### How to find transaction or message hash?
+### How to find a transaction or message hash?
 
 :::info
 Be careful with the hash definition. It can be either a transaction hash or a message hash.
@@ -2130,7 +2154,7 @@ to build a message cell using a `storeMessage` method and then use a `hash` meth
 
     const transactions = await tonClient.getTransactions(Address.parse('[ADDRESS]'), { limit: 10 });
     for (const transaction of transactions) {
-      // ful transaction hash
+      // full transaction hash
       const transactionHash = transaction.hash();
 
       const inMessage = transaction.inMessage;

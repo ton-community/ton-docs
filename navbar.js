@@ -311,10 +311,6 @@ module.exports = {
           type: 'html',
           value: '<hr style="margin: 0.3rem 0;">',
         },
-        {
-          href: "/v3/contribute/localization-program/overview",
-          label: 'Help Us Translate',
-        },
       ],
     },
   ],

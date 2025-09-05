@@ -12,7 +12,7 @@ Please refer to the updated version here: [Latest guide](/v3/guidelines/dapps/tu
 **Zero-knowledge (ZK)** proofs are a fundamental cryptographic concept that allows **the prover** to prove to **the verifier** that a statement is true without revealing any additional information. ZK proofs are a powerful tool for building privacy-preserving systems and are widely used in applications such as anonymous payments, private messaging, and trustless bridges.
 
 :::tip TVM upgrade 2023.07
-Before June 2023, verifying cryptographic proofs on TON was not possible. Due to the complex computations required for the pairing algorithm, the TON Virtual Machine (TVM) needed to be upgraded with new opcodes to support proof verification. This functionality was added in the [June 2023 update](https://docs.ton.org/learn/tvm-instructions/tvm-upgrade#bls12-381) and, at the time of writing, is only available on testnet.
+Before June 2023, verifying cryptographic proofs on TON was not possible. Due to the complex computations required for the pairing algorithm, the TON Virtual Machine (TVM) needed to be upgraded with new opcodes to support proof verification. This functionality was added in the [June 2023 update](https://docs.ton.org/learn/tvm-instructions/tvm-upgrade#bls12-381).
 :::
 
 ## 🦄 This tutorial will cover
@@ -70,19 +70,13 @@ npm add --save-dev snarkjs ffjavascript
 npm i -g circom
 ```
 
-4. Modify the package.json file by adding the necessary dependencies. Note that some opcodes used in this tutorial are not yet available on the mainnet release.
+4. Modify the package.json file by adding the necessary dependencies.
 
 ```json
 "overrides": {
-    "@ton-community/func-js-bin": "0.4.5-tvmbeta.1",
-    "@ton-community/func-js": "0.6.3-tvmbeta.1"
+    "@ton-community/func-js-bin": "0.4.6-wasmfix.debugger.0",
+    "@ton-community/func-js": "0.10.0"
 }
-```
-
-5. Update the version of the @ton-community/sandbox to ensure compatibility with the latest [latest TVM updates](https://t.me/thetontech/56).
-
-```bash
-npm i --save-dev @ton-community/sandbox@0.12.0-tvmbeta.1
 ```
 
 Great! Now we’re ready to start writing our first ZK project on TON!

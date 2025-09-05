@@ -169,8 +169,8 @@ In this particular example, we want to prove the state of a JettonMaster and the
 The [full example](https://github.com/tact-lang/dex/blob/main/sources/contracts/vaults/proofs/block-proof.tact) is too large for this article, but let's cover some key points.
 
 This is an example of the proof composition technique described above. It is convenient because for `getRawAccountState`, the [LiteServer](/v3/documentation/infra/nodes/node-types) returns two items:
-* the account state itself
-* a BoC containing two proofs
+- the account state itself
+- a BoC containing two proofs
 
 The first is a ShardChain block proof, and the second is a shard state proof.
 

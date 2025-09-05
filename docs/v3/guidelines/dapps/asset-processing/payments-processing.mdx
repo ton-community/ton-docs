@@ -6,7 +6,7 @@ import TabItem from '@theme/TabItem';
 
 # Payments processing
 
-This page **explains how to process** (send and accept) digital assets on TON Blockchain. While it primarily focuses on handling TON coins, the **theoretical concepts** are also relevant for processing `jettons`.
+This page **explains how to process** (send and accept) digital assets on TON Blockchain. While it primarily focuses on handling Toncoin, the **theoretical concepts** are also relevant for processing `jettons`.
 
 :::tip
 It's recommended to review the [Asset processing overview](/v3/documentation/dapps/assets/overview) before reading this tutorial.
@@ -14,7 +14,7 @@ It's recommended to review the [Asset processing overview](/v3/documentation/dap
 
 ## Wallet smart contract
 
-Wallet smart contracts on the TON Network allow external actors to interact with blockchain entities. They serve the following purposes:
+Wallet smart contracts on the TON Blockchain allow external actors to interact with blockchain entities. They serve the following purposes:
 
 - Authenticating the owner: Rejects requests that attempt to process transactions or pay fees on behalf of unauthorized users.
 - Providing replay protection: Prevents the repeated execution of the same request, such as sending assets to another smart contract multiple times.
@@ -37,7 +37,7 @@ High-load wallets take a different approach by storing the identifiers of non-ex
 To deploy a wallet via TonLib, follow these steps:
 
 1. Generate a private/public key pair using [createNewKey](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L244) or its wrapper functions (example in [tonlib-go](https://github.com/mercuryoio/tonlib-go/tree/master/v2#create-new-private-key)). The private key is generated locally and never leaves the host machine.
-2. Form [InitialAccountWallet](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L62) structure corresponding to one of the available wallet versions. Currently, the supported `wallets` are: `wallet.v3`, `wallet.v4`, `wallet.highload.v1`, `wallet.highload.v2` are available.
+2. Form [InitialAccountWallet](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L62) structure corresponding to one of the available wallet versions. Currently, the supported `wallets` are: `wallet.v3`, `wallet.v4`, `wallet.highload.v1`, `wallet.highload.v2`.
 3. Calculate the address of the new `wallet` smart contract using the [getAccountAddress](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L283) method. It is recommended to use revision 0 by default. Deploy wallets in the basechain `workchain=0`     to minimize processing and storage fees.
 4. Send some Toncoin to the calculated address. The transfer should be made in `non-bounce` mode since the wallet address has no code yet and cannot process incoming messages. The `non-bounce` flag ensures that if processing fails, the funds are not returned via a bounce message. Warning: Avoid using the non-bounce flag for other transactions, especially when transferring large sums, as the bounce mechanism provides protection against mistakes.
 5. Form the desired [action](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L154), such as `actionNoop` for deploy only. Then use [createQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L292) and [sendQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L300) to initiate interactions with the blockchain.
@@ -103,7 +103,7 @@ Full Address description on the [Smart contract addresses](/v3/documentation/sma
 
 ### Check contract's transactions
 
-To retrieve a smart contract's transactions, use the [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get). method. This method fetches up to 10 transactions starting from a specified `last_transaction_id` and earlier. To process all incoming transactions, follow these steps:
+To retrieve a smart contract's transactions, use the [getTransactions](https://toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get) method. This method fetches up to 10 transactions starting from a specified `last_transaction_id` and earlier. To process all incoming transactions, follow these steps:
 
 1. Obtain the latest `last_transaction_id` using [getAddressInformation](https://toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get).
 2. Load 10 transactions using the `getTransactions` method.
@@ -189,7 +189,7 @@ Learn the basics of payment processing from the [TMA USDT Payments demo](https:/
 8. Requests sent to `v3` of `high-load` have a 60-second expiration time by default. After expiration, unprocessed requests can be safely resent following steps 3-6.
 
 :::caution
-If the attached `value` is too small, the transaction may fail with the error `cskip_no_gas`. n this case, Toncoins will be transferred, but no logic will be executed on the recipient's side (the TVM will not launch). Read more [here](/v3/documentation/network/configs/blockchain-configs#param-20-and-21).
+If the attached `value` is too small, the transaction may fail with the error `cskip_no_gas`. In this case, Toncoin will be transferred, but no logic will be executed on the recipient's side (the TVM will not launch). Read more [here](/v3/documentation/network/configs/blockchain-configs#param-20-and-21).
 :::
 
 ### Get the transaction ID
@@ -225,7 +225,7 @@ Best for dApps that require multiple transactions within a session or a persiste
 
 **Disadvantages**
 
-- ❌ If only one payment is needed, users must connect the wallet and confirm the transaction
+- ❌ If only one payment is needed, users must connect the wallet and confirm the transaction.
 - ❌ More complex integration than a ton:// link.
 
 <Button href="/v3/guidelines/ton-connect/overview/" colorType="primary" sizeType={'lg'}>
@@ -235,17 +235,15 @@ Best for dApps that require multiple transactions within a session or a persiste
 ### Invoices with ton:// link
 
 :::warning
-The Ton link is deprecated. Avoid using it.
+The TON link is deprecated. Avoid using it.
 :::
 
 If you need an easy integration for a simple user flow, it is suitable to use the ton:// link.
 It is best suited for one-time payments and invoices.
 
-```bash
+```text
 ton://transfer/<destination-address>?
-    [nft=<nft-address>&]
-    [fee-amount=<nanocoins>&]
-    [forward-amount=<nanocoins>] 
+    [nft=<nft-address>]
 ```
 
 **Advantages**
@@ -262,9 +260,26 @@ ton://transfer/<destination-address>?
 
 [Learn more about TON links here](https://github.com/tonkeeper/wallet-api#payment-urls).
 
+### Invoices with wallet-specific links
+
+You can use wallet-specific links to create simple Jetton and Toncoin transfers. The syntax is usually similar to `ton://transfer` links, but you should always check each wallet’s documentation.
+
+Example: transferring 1 USDT to someone:
+```
+https://app.tonkeeper.com/transfer/saint.ton?amount=1000000&jetton=EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs
+or
+https://my.tt/transfer/UQDYzZmfsrGzhObKJUw4gzdeIxEai3jAFbiGKGwxvxHinf4K?amount=1000000&jetton=EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs
+```
+You can find more examples and supported features in the documentation:
+
+- Tonkeeper - [docs.tonconsole.com](https://docs.tonconsole.com/tonkeeper/deep-linking)
+- MyTonWallet - [help.mytonwallet.io](https://help.mytonwallet.io/intro/key-features/deeplinks-in-mytonwallet)
+
+
 ## Explorers
 
-The official TON blockchain explorer: [https://tonscan.org](https://tonscan.org).
+The official TON blockchain explorer: [https://tonscan.org](https://tonscan.org).  
+The most popular TON blockchain explorer: [https://tonviewer.com](https://tonviewer.com).
 
 To generate a transaction link in the explorer, the service needs to get the lt (logical time), the transaction hash, and the account address (the address of the account for which the lt and txhash were obtained using the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method). Then [https://tonscan.org](https://tonscan.org) and [https://explorer.toncoin.org/](https://explorer.toncoin.org/) can display the page for this transaction in the following format:
 
@@ -274,7 +289,7 @@ To generate a transaction link in the explorer, the service needs to get the lt 
 
 `https://explorer.toncoin.org/transaction?account={account address}&lt={lt as int}&hash={txhash as base64url}`
 
-Note: tonviewer and tonscan also support external-in message hashes instead of transaction hashes for explorer links. This is useful when generating an external message and needing an instant transaction link. Learn more about transactions and messages hashes [here](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
+Note: tonviewer and tonscan also support external-in message hashes instead of transaction hashes for explorer links. This is useful when generating an external message and needing an instant transaction link. Learn more about transaction and message hashes [here](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
 
 ## Best practices
 
@@ -295,7 +310,7 @@ Note: tonviewer and tonscan also support external-in message hashes instead of t
   </TabItem>
 
   <TabItem value="Python" label="Python">
-    - **psylopunk/pythonlib:**
+    - **psylopunk/pytonlib:**
       - [Wallet creation + get wallet address](https://github.com/psylopunk/pytonlib/blob/main/examples/generate_wallet.py)
 
     - **yungwine/pytoniq:**
@@ -325,7 +340,7 @@ Note: tonviewer and tonscan also support external-in message hashes instead of t
 
 ### Wallet creation for different shards
 
-When under heavy load, TON Blockchain may split into [shards](/v3/documentation/smart-contracts/shards/shards-intro)to distribute network activity. A shard is similar to a network segment in Web3.
+When under heavy load, TON Blockchain may split into [shards](/v3/documentation/smart-contracts/shards/shards-intro) to distribute network activity. A shard is similar to a network segment in Web3.
 
 Just as we distribute service infrastructure in the Web2 world to be as close to the end user as possible, in TON we can deploy contracts that will reside in the same shard as the user's wallet or any other contract that interacts with it.
 
@@ -544,11 +559,11 @@ This way, you can provide the best user experience regardless of the current net
 <Tabs groupId="example-toncoin_withdrawals">
   <TabItem value="JS" label="JS">
     - **toncenter:**
-      - [Withdraw Toncoins from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-highload-batch.js)
-      - [Withdraw Toncoins from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-highload.js)
+      - [Withdraw Toncoin from a wallet in batches](https://github.com/toncenter/examples/blob/main/withdrawals-highload-batch.js)
+      - [Withdraw Toncoin from a wallet](https://github.com/toncenter/examples/blob/main/withdrawals-highload.js)
 
     - **ton-community/ton:**
-      - [Withdraw Toncoins from a wallet](https://github.com/ton-community/ton#usage)
+      - [Withdraw Toncoin from a wallet](https://github.com/ton-community/ton#usage)
   </TabItem>
 
   <TabItem value="Go" label="Go">

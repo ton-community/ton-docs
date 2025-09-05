@@ -11,16 +11,7 @@ module.exports = [
       'v3/documentation/smart-contracts/overview',
       {
         type: 'category',
-        label: 'Addresses',
-        items: [
-          'v3/documentation/smart-contracts/addresses/address',
-          'v3/documentation/smart-contracts/addresses/address-formats',
-          'v3/documentation/smart-contracts/addresses/address-states',
-        ],
-      },
-      {
-        type: 'category',
-        label: 'Getting started',
+        label: 'Development environment',
         items: [
           'v3/documentation/smart-contracts/getting-started/javascript',
           'v3/documentation/smart-contracts/getting-started/ide-plugins',
@@ -29,26 +20,13 @@ module.exports = [
       },
       {
         type: 'category',
-        label: 'Contracts specification',
+        label: 'Addresses',
         items: [
-          'v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
-          'v3/documentation/smart-contracts/contracts-specs/highload-wallet',
-          'v3/documentation/smart-contracts/contracts-specs/vesting-contract',
-          'v3/documentation/smart-contracts/contracts-specs/governance',
-          'v3/documentation/smart-contracts/contracts-specs/nominator-pool',
-          'v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
-          'v3/documentation/smart-contracts/contracts-specs/precompiled-contracts',
-          'v3/documentation/smart-contracts/contracts-specs/examples',
-
-          {
-            type: 'link',
-            label: 'TON enhancement proposals (TEPs)',
-            href: 'https://github.com/ton-blockchain/TEPs/tree/master',
-          },
-
+          'v3/documentation/smart-contracts/addresses/address',
+          'v3/documentation/smart-contracts/addresses/address-formats',
+          'v3/documentation/smart-contracts/addresses/address-states',
         ],
       },
-      'v3/documentation/smart-contracts/limits',
       {
         type: 'category',
         label: 'Message management',
@@ -80,7 +58,28 @@ module.exports = [
           'v3/documentation/smart-contracts/shards/infinity-sharding-paradigm',
         ],
       },
-      'v3/documentation/smart-contracts/tact',
+      'v3/documentation/smart-contracts/limits',
+      {
+        type: 'category',
+        label: 'Contracts specification',
+        items: [
+          'v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
+          'v3/documentation/smart-contracts/contracts-specs/highload-wallet',
+          'v3/documentation/smart-contracts/contracts-specs/vesting-contract',
+          'v3/documentation/smart-contracts/contracts-specs/governance',
+          'v3/documentation/smart-contracts/contracts-specs/nominator-pool',
+          'v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
+          'v3/documentation/smart-contracts/contracts-specs/precompiled-contracts',
+          'v3/documentation/smart-contracts/contracts-specs/examples',
+
+          {
+            type: 'link',
+            label: 'TON enhancement proposals (TEPs)',
+            href: 'https://github.com/ton-blockchain/TEPs/tree/master',
+          },
+
+        ],
+      },
       {
         type: 'category',
         label: 'Tolk language',
@@ -108,10 +107,6 @@ module.exports = [
             id: 'v3/documentation/smart-contracts/func/overview',
           },
           {
-            type: 'doc',
-            id: 'v3/documentation/smart-contracts/func/cookbook',
-          },
-          {
             type: 'category',
             label: 'Documentation',
             items: [
@@ -127,6 +122,10 @@ module.exports = [
               'v3/documentation/smart-contracts/func/docs/stdlib',
             ],
           },
+          {
+            type: 'doc',
+            id: 'v3/documentation/smart-contracts/func/cookbook',
+          },
           'v3/documentation/smart-contracts/func/libraries',
           'v3/documentation/smart-contracts/func/changelog',
         ],
@@ -140,6 +139,7 @@ module.exports = [
           'v3/documentation/smart-contracts/fift/fift-deep-dive',
         ],
       },
+      'v3/documentation/smart-contracts/tact',
     ],
   },
   {
@@ -167,6 +167,7 @@ module.exports = [
         label: 'Assets',
         items: [
           'v3/documentation/dapps/assets/overview',
+          'v3/documentation/dapps/assets/nft-2.0',
           'v3/documentation/dapps/assets/usdt',
         ],
       },
@@ -294,7 +295,7 @@ module.exports = [
     items: [
       {
         type: 'category',
-        label: 'TL-B',
+        label: 'TL-B language',
         items: [
           'v3/documentation/data-formats/tlb/tl-b-language',
           'v3/documentation/data-formats/tlb/cell-boc',
@@ -308,7 +309,6 @@ module.exports = [
           'v3/documentation/data-formats/tlb/block-layout',
           'v3/documentation/data-formats/tlb/transaction-layout',
           'v3/documentation/data-formats/tlb/crc32',
-          'v3/documentation/data-formats/tlb/tlb-ide',
           'v3/documentation/data-formats/tlb/tlb-tools',
         ],
       },

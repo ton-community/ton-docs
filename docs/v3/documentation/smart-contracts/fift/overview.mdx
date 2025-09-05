@@ -4,27 +4,19 @@ import Button from "@site/src/components/button";
 
 # Overview
 
-Fift is a stack-based programming language specifically designed for developing, debugging, and managing TON Blockchain smart contracts. It provides optimized interaction with:
+Fift is a stack-based language specifically designed for developing, debugging, and managing TON Blockchain smart contracts.
 
-- TON Virtual Machine (TVM)
-- TON Blockchain infrastructure
-
+Here is a simple Hello World example written in Fift:
 ```fift
 { ."hello " } execute ."world"
 hello world ok
 ```
 
-:::info
-While most smart contract development doesn't require Fift, it becomes essential for:
-
+While most smart contract development cases don't require Fift, it becomes essential for:
 - Solving unique technical challenges
 - Low-level TVM interactions
 - Advanced contract debugging
 
-**Recommended resources**:
-
-- [TVM Retracer](https://retracer.ton.org/)
-:::
 
 <Button
   href="https://blog.ton.org/introduction-to-fift"
@@ -34,36 +26,23 @@ While most smart contract development doesn't require Fift, it becomes essential
   Introduction To Fift
 </Button>
 
-<Button
-  href="https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs"
-  colorType="secondary"
-  sizeType={"sm"}
->
-  His majesty Fift
-</Button>
-
-<br></br>
-<br></br>
-
 ## Documentation
 
-- [Fift: A Brief Introduction](https://ton.org/fiftbase.pdf)
+- [Fift: A Brief Introduction](https://ton.org/fiftbase.pdf) by Nikolai Durov
 - [TON Virtual Machine](/v3/documentation/tvm/tvm-overview)
-
-## Examples
-
-- [Fift smart contract examples](/v3/documentation/smart-contracts/contracts-specs/examples#fift-smart-contracts)
+- [Deep dive](/v3/documentation/smart-contracts/fift/fift-deep-dive)
+- [Difference between Fift and TVM assembly](/v3/documentation/smart-contracts/fift/fift-and-tvm-assembly)
 
 ## Tutorials
 
-- [Introduction To Fift](https://blog.ton.org/introduction-to-fift)
-- [His majesty Fift](https://www.youtube.com/watch?v=HVsveTmVowc&list=PLtUBO1QNEKwttRsAs9eacL2oCMOhWaOZs)
-  - [Russian version](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCYG-hR4N5FRTKUkfM8POgh)
-created - _@MarcoDaTr0p0je & @Wikimar_
+- [His majesty Fift](https://www.youtube.com/playlist?list=PLyDBPwv9EPsCYG-hR4N5FRTKUkfM8POgh) (Russian version only)
 
-## Source code
+## Smart contract examples
+Follow [this link](/v3/documentation/smart-contracts/contracts-specs/examples#fift-smart-contracts) to find various standard smart contracts and examples from the community.
 
-- [Standard smart contracts in Fift](https://github.com/ton-blockchain/ton/tree/master/crypto/smartcont)
+## Recommended resources
+
+- [TVM Retracer](https://retracer.ton.org/)
 
 <Feedback />
 

@@ -1,3 +1,20 @@
+---
+title: "API-based retrieval"
+description: "Learn how to retrieve TON transactions using API v2 and v3, including SDK integration and query methods."
+keywords:
+  - TON API v2
+  - TON API v3
+  - TON transaction retrieval
+  - TON SDK transactions
+  - TON blockchain API
+  - TON client
+  - TON developer tools
+faq:
+  - "Which API should I use: v2 or v3?"
+  - "What's the difference between raw data and high-level processed data?"
+  - "Where does the transaction hash come from if it’s not on-chain?"
+---
+
 import Feedback from '@site/src/components/Feedback';
 import Button from '@site/src/components/button'
 
@@ -5,7 +22,7 @@ import Button from '@site/src/components/button'
 
 This section covers how to access transaction data from the blockchain using APIs. You'll learn about the available API services in TON and how to retrieve data by account, by message, or through a full blockchain scan.
 
-## TON HTTP API services
+## APIs of TON
 
 An _HTTP API service_ is a software solution that retrieves raw data from a LiteServer node and encodes it into standard formats for other services.
 A provider that offers such a solution is referred to as an HTTP API _provider_.
@@ -24,10 +41,6 @@ The TON Center was developed by the TON Core team. It offers two levels of API a
 
 A solution focused on business needs. It often provides ready-made implementations for common tasks in TON.
 
-### Tonhub API
-
-An alternative open-source HTTP API service with a unique structure different from TON API and TON Center. This interface may be helpful in some specific use cases.
-
 ---
 
 ## API data levels
@@ -37,7 +50,7 @@ Data that undergoes minimal post-processing is often referred to as **raw data**
 
 In contrast, when working with event analytics that does **not** involve significant asset transfers, it is often more efficient to use **high-level interfaces** — such as APIs that apply post-processing before returning results. These interfaces provide simplified, structured data that is easier to work with in most application-level scenarios.
 
-In TON, transactions are grouped into blocks. Because TON uses **sharding**, each Masterchain block includes references to the corresponding shard blocks. A shard block in the Basechain is considered finalized once a Masterchain block references that block. This also applies if any block built on top of it (its descendants) is referenced. To retrieve all transactions, services must, therefore, read both the Masterchain and the relevant Basechain shard blocks.
+In TON, transactions are grouped into blocks. Because TON uses **sharding**, each MasterChain block includes references to the corresponding shard blocks. A shard block in the Basechain is considered finalized once a MasterChain block references that block. This also applies if any block built on top of it (its descendants) is referenced. To retrieve all transactions, services must, therefore, read both the MasterChain and the relevant Basechain shard blocks.
 
 All WorkChain blocks follow a consistent structure. For transaction analysis, the relevant section is the `block_extra` field.
 
@@ -396,7 +409,7 @@ The transaction object includes the following key sections:
   ```json
   {
     "account": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account of transcation
-    "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=",
+    "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=", # transaction hash
     "lt": "15371766000003", # logical time, may have same values for txs on different accounts but every transaction on a given account will have unique lt
     "now": 1696238450, # unix timestamp
     "mc_block_seqno": 13353447, # seqno of masterchain block
@@ -456,7 +469,7 @@ The transaction object includes the following key sections:
   },
     # in message
     "in_msg": {
-    "hash": "O9XCuICyXBWOs4hHMOYA0k6o4GPBsWbAkjFi2qbttQE=", # hash of whole message
+    "hash": "O9XCuICyXBWOs4hHMOYA0k6o4GPBsWbAkjFi2qbttQE=", # full message hash (headers + body)
     "source": "0:F0C9C78F021AC65839B4006321A68BBB32DE5025F84C853CB9D75EB4894D0848", # account who has sended this message
     "destination": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account who received this message (for in_msg should be same as account of transaction)
     "value": "400000000", # attached TONS
@@ -470,7 +483,7 @@ The transaction object includes the following key sections:
     "bounced": false, # if bounce has happened
     "import_fee": null,
     "message_content": { # message body
-    "hash": "tWjTyEL/sabOLNt97uyCj5na740lW54GUcVa0UrSDao=", # hash of the message body
+    "hash": "tWjTyEL/sabOLNt97uyCj5na740lW54GUcVa0UrSDao=", # message body hash (only payload)
     # message body in base64 format
     "body": "te6cckEBAgEAiAABbQ+KfqUAAAAAdJizmkC/A/doAc9ztfOy5YIoBWjnofpWHchoFtAb/s4FvzXctxUu0Cf0ED8uUQMBAJclk4VhgB3j1vChEcRNFz9a4PfQWGcds91PdwGR6Jm4o4muESRZKAJfTMEAPDJx48CGsZYObQAYyGmi7sy3lAl+EyFPLnXXrSJTQhIQIjm5Xw==",
     "decoded": null # text comment if it could be decoded
@@ -479,7 +492,7 @@ The transaction object includes the following key sections:
   },
     "out_msgs": [
   {
-    "hash": "FuV4JPR/uZZOCzZxWQ473bASToqChvKDLmnf5BiCspI=",
+    "hash": "FuV4JPR/uZZOCzZxWQ473bASToqChvKDLmnf5BiCspI=", # full message hash (headers + body)
     "source": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # should coinside with transaction account for out_msg
     "destination": "0:794760D36E657A27CDB8D3D65F243D6B468CAD2C34AF413E7709390E4DBE9907",
     "value": "380306000",
@@ -493,14 +506,14 @@ The transaction object includes the following key sections:
     "bounced": false,
     "import_fee": null,
     "message_content": {
-    "hash": "o+VOluS6wdyl44k2AIFTcRBvdxZD/98275dunIWcVIA=",
+    "hash": "o+VOluS6wdyl44k2AIFTcRBvdxZD/98275dunIWcVIA=", # message body hash (only payload)
     "body": "te6cckEBAgEAiAABbReNRRkAAAAAdJizmkC/A/doAeGTjx4ENYywc2gAxkNNF3ZlvKBL8JkKeXOuvWkSmhCQIH5cogYBAJclk4VhgB3j1vChEcRNFz9a4PfQWGcds91PdwGR6Jm4o4muESRZKAJfTMEAPDJx48CGsZYObQAYyGmi7sy3lAl+EyFPLnXXrSJTQhIQPzgXtA==",
     "decoded": null
   },
     # init state in same format as message body
     # needed to deploy a new contract
     "init_state": {
-    "hash": "eUdg025leifNuNPWXyQ9a0aMrSw0r0E+dwk5Dk2+mQc=",
+    "hash": "eUdg025leifNuNPWXyQ9a0aMrSw0r0E+dwk5Dk2+mQc=",  # init state hash
     "body": "te6cckECFAEAA4AAAgE0AgEBhwgBz3O187LlgigFaOeh+lYdyGgW0Bv+zgW/Ndy3FS7QJ/UAN1wXvOOOdJfwh7sHnzxnFjjhTeJ04Bmd10caY4RPyrggAgEU/wD0pBP0vPLICwMCAWIEBQICywYHABug9gXaiaH0AfSB9IGoYQIBIAgJAIPSAINch7UTQ+gD6QPpA1DAE0x+CEBeNRRlSILqCEHvdl94TuhKx8uLF0z8x+gAwE6BQI8hQBPoCWM8WAc8WzMntVICAUgKCwIBWAwNAMNCDHAJJfBOAB0NMDAXGwlRNfA/AQ4PpA+kAx+gAxcdch+gAx+gAwc6m0AALTH4IQD4p+pVIgupUxNFnwDeCCEBeNRRlSILqWMUREA/AO4DWCEFlfB7y6k1nwD+BfBIQX8vCAART6RDBwuvLhTYAfFQPTP/oA+kAh8ALtRND6APpA+kDUMFE2oVIqxwXy4sEowv/y4sJUNEJwVCATVBQDyFAE+gJYzxYBzxbMySLIywES9AD0AMsAySD5AHB0yMsCygfL/8nQBPpA9AQx+gAg10nCAPLixHeAGMjLBVAIzxZw+gIXy2sTzIDgIBIA8QAK6CEBeNRRnIyx8Zyz9QB/oCIs8WUAbPFiX6AlADzxbJUAXMI5FykXHiUAioE6CCCOThwKoAggiYloCgoBS88uLFBMmAQPsAECPIUAT6AljPFgHPFszJ7VQD9ztRND6APpA+kDUMAjTP/oAUVGgBfpA+kBTW8cFVHNtcFQgE1QUA8hQBPoCWM8WAc8WzMkiyMsBEvQA9ADLAMn5AHB0yMsCygfL/8nQUA3HBRyx8uLDCvoAUaihggiYloCCCJiWgBK2CKGCCOThwKAYoSfjDyXXCwHDACOAREhMA2ztRND6APpA+kDUMAfTP/oA+kAwUVGhUknHBfLiwSfC//LiwoII5OHAqgAWoBa88uLDghB73ZfeyMsfFcs/UAP6AiLPFgHPFslxgBjIywUkzxZw+gLLaszJgED7AEATyFAE+gJYzxYBzxbMye1UgAHBSeaAYoYIQc2LQnMjLH1Iwyz9Y+gJQB88WUAfPFslxgBDIywUkzxZQBvoCFctqFMzJcfsAECQQIwAOEEkQODdfBAB2wgCwjiGCENUydttwgBDIywVQCM8WUAT6AhbLahLLHxLLP8ly+wCTNWwh4gPIUAT6AljPFgHPFszJ7VTOKoYI",
     "decoded": null
   }

@@ -19,12 +19,12 @@ This document provides a high-level overview of how TVM processes transactions.
 Before starting the course, ensure you have a solid understanding of blockchain basics. If you need to fill knowledge gaps, consider taking the [Blockchain basics with TON](https://stepik.org/course/201294/promo) course ([RU version](https://stepik.org/course/202221/), [CHN version](https://stepik.org/course/200976/)).
 :::
 
-The [TON blockchain course](https://stepik.org/course/176754/) is a comprehensive guide to TON blockchain development. Module 2 covers **TVM**, transactions, scalability, and business cases in detail.
+The [TON Blockchain course](https://stepik.org/course/176754/) is a comprehensive guide to TON Blockchain development. Module 2 covers **TVM**, transactions, scalability, and business cases in detail.
 
 <Button href="https://stepik.org/course/176754/promo"
         colorType={'primary'} sizeType={'sm'}>
 
-Explore TON blockchain course
+Explore TON Blockchain course
 
 </Button>
 
@@ -44,7 +44,7 @@ RU
 
 ## Transactions and phases
 
-When an event occurs on an account in the TON blockchain, it triggers a **transaction**. The most common event is receiving a message, but other events like `tick-tock`, `merge`, and `split` can also initiate transactions.
+When an event occurs on an account in TON Blockchain, it triggers a **transaction**. The most common event is receiving a message, but other events like `tick-tock`, `merge`, and `split` can also initiate transactions.
 
 Each transaction consists of up to five phases:
 
@@ -98,7 +98,7 @@ TVM operates as a stack machine, supporting seven variable types:
 - `c0`: stores the next or return continuation, similar to a return address.
 - `c1`: stores the alternative continuation.
 - `c2`: contains the exception handler. Continuation.
-- `c3`: holds the current dictionary like a hashmap of functions codes. Continuation.
+- `c3`: holds the smart contract code. Cell.
 - `c4`: stores the persistent data (contract's `data` section). Cell.
 - `c5`: contains output actions. Cell.
 - `c7`: stores temporary data. Tuple.
@@ -131,4 +131,3 @@ To send more than 255 messages, a contract can send a message to itself with a r
 - [TON TVM concepts](https://ton.org/tvm.pdf) (may include outdated information)
 
 <Feedback />
-

@@ -76,11 +76,11 @@ Don't confuse `address none` with null! `None` is a valid address (two zero bits
 However, if T1 and T2 are both structures with manual serialization prefixes, those prefixes are used instead of a 0/1 bit.
 
 
-* (4) To (un)pack a union, say, `Msg1 | Msg2 | Msg3`, we need serialization prefixes. For structures, you can specify them manually 
+- (4) To (un)pack a union, say, `Msg1 | Msg2 | Msg3`, we need serialization prefixes. For structures, you can specify them manually
 (or the compiler will generate them right here). For primitives, like `int32 | int64 | int128 | int256`, the compiler generates a prefix tree 
 (00/01/10/11 in this case). Read **auto-generating serialization prefixes** below.
 
-* (5) Using raw `builder` and `slice` for writing is supported but not recommended, as they do not reveal any information about their internal structure.
+- (5) Using raw `builder` and `slice` for writing is supported but not recommended, as they do not reveal any information about their internal structure.
 Auto-generated TypeScript wrappers will be available in the future. However, for a raw `slice`, a wrapper cannot be generated, as there is no way to predict how to read such a field back.
 This feature will likely be removed in the future.
 

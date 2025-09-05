@@ -133,13 +133,13 @@ npm install @vitejs/plugin-basic-ssl
 
 Then change `vite.config.ts`. Add import:
 
-```jsx
+```ts
 import basicSsl from '@vitejs/plugin-basic-ssl';
 ```
 
 And add the plugin
 
-```jsx
+```ts
 export default defineConfig({
    plugins: [react(), basicSsl()]
 });
@@ -154,7 +154,7 @@ ngrok http 5173
 
 Also, we are going to prepare our project for deployment:
 
-```jsx
+```ts
 export default defineConfig({
    plugins: [react(), basicSsl()],
 	 build: {
@@ -252,7 +252,7 @@ WebApp.ready();
 ReactDOM.createRoot...
 ```
 
-`WebApp.ready()`method informs Telegram that the Mini App is ready to display. This method should be called as early as possible to ensure all interface elements load before the app appears.
+`WebApp.ready()` method informs Telegram that the Mini App is ready to display. This method should be called as early as possible to ensure all interface elements load before the app appears.
 
 Then add some interaction with the user. Go to `src/App.tsx` and add a button that triggers an alert.
 
@@ -298,7 +298,7 @@ export default App
 
 And now we need to create a Telegram Bot so that we can launch Telegram Mini App within the messenger application.
 
-### Setting up a bot for the App
+### Setting up a bot for the app
 
 To launch the Telegram Mini App within the messenger, you need to create a bot and configure it. Follow these steps:
 
@@ -317,4 +317,3 @@ When using a self-signed SSL certificate, you may see security warnings.
 ![Screenshot 2023-09-11 at 18.58.24.png](/img/docs/telegram-apps/modern-2.png)
 
 <Feedback />
-

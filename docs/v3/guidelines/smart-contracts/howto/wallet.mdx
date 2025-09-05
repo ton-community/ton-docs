@@ -20,7 +20,7 @@ This section will teach us to create operations without using pre-configured fun
 
 ## 💡 Prerequisites
 
-This tutorial requires basic knowledge of JavaScript and TypeScript or Golang. It is also necessary to hold at least 3 TON (which can be stored in an exchange account, a non-custodial wallet, or the Telegram bot wallet). It is necessary to have a basic understanding of [cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), [addresses in TON](/v3/documentation/smart-contracts/addresses), [blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains) to understand this tutorial.
+This tutorial requires basic knowledge of JavaScript and TypeScript or Golang. It is also necessary to hold at least 3 TON (which can be stored in an exchange account, a non-custodial wallet, or the Telegram bot wallet). It is necessary to have a basic understanding of [cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), [addresses in TON](/v3/documentation/smart-contracts/addresses/address), [blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains) to understand this tutorial.
 
 :::info MAINNET DEVELOPMENT IS ESSENTIAL  
 Working with the TON Testnet often leads to deployment errors, difficulty tracking transactions, and unstable network functionality. Completing most of the development on the TON Mainnet could help avoid potential issues. This may reduce the number of transactions and minimize fees.
@@ -2575,6 +2575,10 @@ await wallet.sendBatch(
   createdAt
 );
 ```
+
+:::info
+`sendMode: 3` is a combination of `SendMode.PAY_GAS_SEPARATELY` (`+1`) and `SendMode.IGNORE_ERRORS` (`+2`) flags. Please note that it may be unsafe **not to use** the `+2` flag. For more information, please refer to the [message sending modes documentation](/v3/documentation/smart-contracts/message-management/sending-messages#mode3).
+:::
 
 </TabItem>
 </Tabs>

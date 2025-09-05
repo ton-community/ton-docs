@@ -209,9 +209,9 @@ In terms of gas usage, `lazy fromSlice` is always equal to or cheaper than regul
 
 However, there is another difference unrelated to gas consumption:
 
-* When you do `T.fromSlice(s)`, it unpacks all fields of `T` and then inserts`s.assertEnd()`, which can be turned off using an option. So, if the slice is corrupted or contains extra data, `fromSlice` will throw an error.
+- When you do `T.fromSlice(s)`, it unpacks all fields of `T` and then inserts`s.assertEnd()`, which can be turned off using an option. So, if the slice is corrupted or contains extra data, `fromSlice` will throw an error.
 
-* The `lazy` keyword, of course, selectively _picks_ only the requested fields and handles partially invalid input gracefully. For example, given:
+- The `lazy` keyword, of course, selectively _picks_ only the requested fields and handles partially invalid input gracefully. For example, given:
 ```
 struct Point { x: int8, y: int8 }
 ```

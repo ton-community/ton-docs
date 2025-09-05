@@ -1,0 +1,243 @@
+---
+title: NFT 2.0
+---
+
+import Feedback from '@site/src/components/Feedback';
+import {InlineMath} from 'react-katex';
+import 'katex/dist/katex.min.css';
+import Button from '@site/src/components/button';
+
+## Concept
+
+This section outlines the on-chain and off-chain specifications for **NFTs with obligatory royalties**.
+
+### Problem
+
+On TON, there are two primary NFT standards: [TEP-62](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) and [TEP-66](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md). To be recognized as an NFT by ecosystem products such as wallets, explorers, and indexers, a smart contract must conform to the interfaces and internal constraints defined by these specifications.
+
+TEP-66, _the NFT royalty standard_, defines the on-chain layout for royalty parameters but does not impose any rules on how royalties should be enforced across the ecosystem. **This is intentional:** introducing mandatory on-chain royalty enforcement for auctions or other market mechanisms would interfere with the foundational principles of NFTs. So it means enforcing royalties at the cost of restricting legitimate, non-commercial transfers — such as gifting or migrating assets between personal wallets. These constraints undermine usability and conflict with the open, decentralized principles that define NFTs.
+
+These limitations have significantly impacted the TON NFT market.
+
+
+### Motivation
+For artists and collection creators, royalties from secondary sales are a primary source of revenue. Without a reliable way to enforce them, the initial mint becomes the only guaranteed income. As a result, some community-driven collections have been traded through Web2 platforms instead of on-chain.  In such cases, royalty logic is typically bypassed, and profit distribution becomes unfair within the NFT trading ecosystem.
+
+To ensure fair value distribution among all participants — including artists, marketplaces, and sellers — royalty enforcement must be addressed through coordinated off-chain mechanisms.
+
+### Solution
+
+The solution for enforcing royalties while maintaining compatibility with existing services and standards involves introducing _additional mutable fields in the off-chain metadata_. The NFT contracts themselves remain unchanged; instead, the semantics of the metadata associated with each item in the collection are extended. In particular, each item includes a mutable boolean field named `royalty_violation`, along with a potentially modified image field, in addition to the existing off-chain data standard.
+
+#### Execution model
+
+The execution model of the proposed royalty-enforcing solution includes both on-chain and off-chain components, working together to abstract blockchain complexity from ecosystem products.
+
+**1. Minting and metadata layer:** all NFTs are minted on a minting platform that combines on-chain contracts and a mint API.
+- On-chain contracts handle actions like minting, burning, etc.
+- Off-chain metadata includes pack configuration and sale logic: number of items per pack, royalty rules, and mutable fields (e.g., `royalty_violation`).
+
+:::info Mint API
+Refer to the [Mint Platform API](https://api.getgems.io/mint-platform/docs) for detailed integration information and endpoints.
+:::
+
+**2. NFT store integration:** NFT stores integrate solely through the mint API and do not interact with smart contracts directly.
+
+Stores can:
+- Query available packs and their metadata (e.g., price, available supply)
+- Request NFT minting by attaching Toncoin on behalf of a user
+
+**3. Enforcing a mutable field:** specific field in the off-chain metadata, such as `royalty_violation`, is updated to reflect policy changes.
+
+These updates do not affect the smart contract but are respected by ecosystem products that rely on metadata.
+
+**4. Reindexing and propagation:** when mutable metadata changes, the mint API triggers ecosystem products and indexers to reindex the affected items.
+
+Indexers read updated metadata and, if needed, propagate critical flags (e.g., `royalty_violation = true`) back on-chain.
+
+
+![](/img/docs/asset-processing/workflow.svg)
+
+#### Royalty violation marking
+
+Royalty payment assurance works through an off-chain signalling mechanism. Suppose a user or service violates the collection's royalty policy. In that case, the corresponding NFT item is marked as **royalty violated**.
+This status does not involve any on-chain transactions or changes to the contract state. Instead, it's reflected in the off-chain metadata by setting the `royalty_violation` field to `true`.
+
+The examples illustrate a standard NFT and the same item when it is marked as **royalty violated**.
+
+
+```json
+// Standard NFT metadata
+{
+  "name": "Magic Mushroom #57",
+  "description": "Hand drawing brings the NFT an artistic value, while various accessories and materials bring uniqueness and significance in our rapidly changing world.",
+  "image": "https://s.getgems.io/nft/c/62695cb92d780b7496caea3a/nft/56/629b9349e034e8e582cf6448.png",
+  "attributes": [
+    {
+      "trait_type": "Material",
+      "value": "Wool fabric"
+    }
+  ]
+}
+```
+
+
+```json
+// Royalty violated NFT metadata
+{
+  "name": "Magic Mushroom #58",
+  "description": "Hand drawing brings the NFT an artistic value, while various accessories and materials bring uniqueness and significance in our rapidly changing world.",
+  "image": "https://s.getgems.io/nft-local/b/c/687f5a964d396571109281fa/629b9349e034e8e582cf6449",
+  "attributes": [
+    {
+      "trait_type": "Material",
+      "value": "Wool fabric"
+    },
+    {
+      "trait_type": "Royalty violation",
+      "value": "True"
+    }
+  ],
+  "royalty_violation": true
+}
+```
+
+Ecosystem products are expected to **restrict functionality** for NFTs in this status. To indicate the violation in the UI, the image is _replaced with a blurred version labeled accordingly_.
+
+![](/img/docs/asset-processing/royalty-violation-status.png)
+
+If a third-party marketplace or secondary platform offers NFTs with forced royalty trading but does not respect collection-level royalty rules, all NFT items traded on that platform are marked as royalty violated. This strictly limits their availability across the ecosystem: wallets and explorers show these items as **royalty violated** in collection views, and NFT marketplaces or stores that follow the royalty policy do not allow trading or offers for them. As a result, it is not possible to use restricted items in any service that follows this royalty policy.
+
+#### The royalty violation process
+
+The flowchart illustrates how a royalty violation results in an NFT being flagged as `royalty_violated` and how this status is propagated through the ecosystem to user-facing interfaces.
+
+![](/img/docs/asset-processing/royalty-violation-process.svg)
+
+
+## NFT 2.0 royalty policy
+
+### Royalty-free operations
+
+Not all NFT-related operations are subject to royalty fees. Some actions — such as ownership transfers without commercial intent — are allowed without triggering a royalty. These operations are considered part of the core NFT protocol and do not represent value-generating events.
+
+#### List of royalty-free operations:
+
+- Ownership transfer without commercial intent
+- NFT item donation
+
+### Royalty-bearing operations
+
+All operations that involve commercial intent must include royalty payments, as defined by the [TEP-66 specification](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md#specification). This includes all market-based NFT trading models, such as auctions and offer mechanisms, as well as NFT-related DeFi use cases like floor perpetuals and staking.
+
+#### Retrieving royalty parameters
+According to the specification, the sales contract must retrieve royalty parameters from the collection contract and calculate payments based on that data.
+
+The easiest way to obtain royalty parameters is by calling the `royalty_params()` get method on the main collection contract. It returns `(int numerator, int denominator, slice destination)`, where the royalty share is calculated as <InlineMath math="\frac{numerator}{denominator}"/>.
+
+For example, if `numerator = 11` and `denominator = 1000`, the royalty share is `1.1%`. The numerator must be less than the denominator. The `destination` is a slice of type `MsgAddress`, indicating the address where the royalty should be sent.
+
+#### Marketplaces responsibilities
+
+- Marketplaces that comply with the NFT 2.0 specification are expected to send `muldiv(price, numerator, denominator)` to the destination address after an NFT sale or any other successful commercial operation.
+- Marketplaces **SHOULD NOT** send royalty payments when the calculated amount is zero.
+- Marketplaces **MAY** deduct gas and message fees required to send the royalty from the royalty amount.
+
+
+#### Royalty message format
+The TEP-66 standard does not define the body of internal messages used to deliver royalties to the `destination`. As a result, many existing contracts use different message formats. For backward compatibility, NFT 2.0 does not impose any requirements on the message body, allowing any payload to be treated as a valid royalty message.
+
+Below is an example contract snippet written in Tolk:
+
+```tolk
+// You should retrieve these values by calling the collection's getter method beforehand
+struct Storage {
+    numerator: uint16
+    denominator: uint16
+    destination: address
+}
+
+// salePrice — the total amount paid for the NFT
+fun handleRoyalty(salePrice: coins) {
+    val storage = lazy Storage.fromCell(contract.getData());
+
+    val royalty = mulDivFloor(salePrice, storage.numerator, storage.denominator);
+
+    val royaltyMsg = createMessage({
+        dest: storage.destination,
+        bounce: false,
+        value: royalty,
+    });
+
+    royaltyMsg.send(SEND_MODE_PAY_FEES_SEPARATELY);
+}
+
+fun onInternalMessage(in: InMessage) {
+    // Handle the sale
+    // and define the actual amount received
+    val salePrice = ton("1");
+    handleRoyalty(salePrice);
+}
+```
+
+For a reference implementation of royalty distribution logic, see the [open-source royalty distributor contract](https://github.com/ton-community/royalty-distributor) on GitHub.
+
+## Ecosystem products requirements
+
+NFT 2.0 is a protocol including TEP–66–compatible contracts with an additional off-chain restriction mechanism. The primary difference from other collections is the use of mutable metadata, which can change, according to royalty compliance requirements.
+If your service caches off-chain NFT item metadata, it must be prepared to reindex affected items periodically — ideally at least once per day — to reflect any updates.
+
+As an alternative to scheduled reindexing, services may expose a public endpoint that allows on-demand cache invalidation for specific collection items.
+
+
+#### Example request
+GET `https://{api-name}/{reindex}/{item-address}`
+
+Anyone can call this endpoint to refresh the metadata of a specific NFT item if it changes.
+
+To comply with the NFT 2.0 specification, ecosystem products should restrict user interactions with restricted NFT items. All standard protocol operations involving these items should be turned off — at least at the UI level. This includes listing restricted items for sale on marketplaces, transferring them to wallets, or engaging in DeFi operations within DeFi protocols.
+
+## Ecosystem integration checklist
+
+#### Wallets
+
+- Check for the `royalty_violation` field in the metadata.
+- If `royalty_violation: true`, restrict all interactions with the item, including transfers, sales and burns.
+
+#### Explorers
+
+- Display the `royalty_violation` flag alongside other metadata fields.
+- If `royalty_violation: true`, display a warning or status label indicating that the NFT violates royalty policy.
+
+#### Marketplaces
+- Exclude NFTs with `royalty_violation: true` from search results.
+- Disable trading functionality for NFTs that violate the royalty policy.
+
+
+#### Indexers/APIs
+- Include the `royalty_violation` flag in your metadata response schema.
+- Provide endpoints or filters that return only NFTs with `royalty_violation: false`.
+
+## Appendix
+
+#### NFT 2.0 initial distribution process
+
+This diagram illustrates the full sequence of actions involved in distributing NFT 2.0 items through the mint platform — from request and transaction creation to on-chain execution, indexing, and UI update.
+
+![](/img/docs/asset-processing/nft-2.0-process.svg)
+
+#### NFT 2.0 initial distribution data flow
+
+This diagram illustrates the end-to-end data flow of NFT 2.0 item distribution through the mint platform, from the initial purchase request to on-chain execution, data propagation, and user interface updates.
+
+![](/img/docs/asset-processing/nft-2.0-data-flow.svg)
+
+## See also
+
+* [NFT standard: TEP-62](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
+* [NFT royalty standard extension: TEP-66](https://github.com/ton-blockchain/TEPs/blob/master/text/0066-nft-royalty-standard.md)
+* [NFT processing](/v3/guidelines/dapps/asset-processing/nft-processing/nfts)
+
+
+<Feedback/>
+
