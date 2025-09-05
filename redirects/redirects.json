@@ -4,32 +4,12 @@
         "to": "/v3/concepts/glossary"
     },
     {
-        "from": "/learn/overviews/ton-blockchain",
-        "to": "/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains"
-    },
-    {
         "from": "/participate/wallets/apps",
         "to": "/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps"
     },
     {
         "from": "/participate/explorers",
         "to": "/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton"
-    },
-    {
-        "from": "/learn/overviews/cells",
-        "to": "/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage"
-    },
-    {
-        "from": "/learn/networking/overview",
-        "to": "/v3/concepts/dive-into-ton/ton-blockchain/ton-networking"
-    },
-    {
-        "from": "/learn/overviews/blockchain-comparison",
-        "to": "/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison"
-    },
-    {
-        "from": "/develop/ethereum-to-ton/blockchain-services",
-        "to": "/v3/concepts/dive-into-ton/go-from-ethereum/blockchain-services"
     },
     {
         "from": "/develop/ethereum-to-ton/difference-of-blockchains",
@@ -790,10 +770,6 @@
     {
       "from": "/learn/introduction",
       "to": "v3/concepts/dive-into-ton/introduction"
-    },
-    {
-      "from": "/learn/overviews/addresses",
-      "to": "/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses"
     },
     {
       "from": "/participate/run-nodes/full-node",

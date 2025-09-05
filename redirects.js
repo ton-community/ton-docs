@@ -8,15 +8,15 @@ const v3Redirects = JSON.parse(fs.readFileSync(require.resolve('./redirects/redi
 module.exports = [
   // CamelCase to kebab-case
   {
-    to: '/v3/documentation/tvm/tvm-exit-codes',
+    to: '/v3/documentation/tvm/exit-codes',
     from: '/learn/tvm-instructions/tvm_exit_codes',
   },
   {
-    to: '/v3/documentation/tvm/tvm-overview',
+    to: '/v3/documentation/tvm/overview',
     from: '/learn/tvm-instructions/tvm_overview',
   },
   {
-    to: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains',
+    to: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain',
     from: '/learn/overviews/TON_Blockchain_overview',
   },
   {
@@ -40,7 +40,7 @@ module.exports = [
     from: '/develop/getting-started',
   },
   {
-    to: '/v3/documentation/data-formats/tlb/tl-b-language',
+    to: '/v3/documentation/data-formats/tlb/overview',
     from: '/v3/documentation/data-formats/tl-b',
   },
   {
@@ -86,10 +86,6 @@ module.exports = [
   {
     to: '/v3/concepts/dive-into-ton/ton-blockchain/network',
     from: '/v3/concepts/dive-into-ton/ton-blockchain/ton-networking',
-  },
-  {
-    to: '/v3/concepts/dive-into-ton/security-measures',
-    from: '/v3/concepts/dive-into-ton/ton-ecosystem/security-measures',
   },
   ...v3Redirects,
 ];
