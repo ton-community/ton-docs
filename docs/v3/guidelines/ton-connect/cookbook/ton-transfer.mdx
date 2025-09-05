@@ -28,7 +28,7 @@ No matter what level of task a developer is solving, it is typically necessary t
 Examples created based on `@tonconnect/ui-react` and `@tonconnect/ui`:
 
 <Tabs groupId="TON Connect template">
-  <TabItem value="tonconnect-react" label="@tonconnect/ui-react">
+  <TabItem value="tonconnect-ui-react" label="@tonconnect/ui-react">
 
     ```js
     import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -82,7 +82,7 @@ Examples created based on `@tonconnect/ui-react` and `@tonconnect/ui`:
 
 TON Connect SDKs include wrappers for sending messages, making it easy to prepare regular transfers of Toncoins between two wallets as default transaction without payload. For specific custom transactions, a particular payload must be defined.
 
-Pass the `address` in a [user-friendly format](/v3/documentation/smart-contracts/addresses#user-friendly-address), not in raw form. When you send the message to a smart contract, use a bounceable address; when you send it to a wallet, use a non-bounceable address.
+Pass the `address` in a [user-friendly format](/v3/documentation/smart-contracts/addresses/address-formats#user-friendly-address), not in raw form. When you send the message to a smart contract, use a bounceable address; when you send it to a wallet, use a non-bounceable address.
 
 By the way, there is a limit to the number of messages sent in one transaction:
 
@@ -93,7 +93,7 @@ By the way, there is a limit to the number of messages sent in one transaction:
 A regular TON transfer using the TON Connect JS SDKs can be executed as follows:
 
 <Tabs groupId="Regular Transfer">
-  <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+  <TabItem value="tonconnect-ui-react" label="@tonconnect/ui-react">
 
     ```js
     import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -171,7 +171,7 @@ A regular TON transfer using the TON Connect JS SDKs can be executed as follows:
 </Tabs>
 
 :::tip
-Learn more about [TON smart contract addresses](/v3/documentation/smart-contracts/addresses).
+Learn more about [TON smart contract addresses](/v3/documentation/smart-contracts/addresses/address).
 :::
 
 ### Getting the result
@@ -212,9 +212,8 @@ See more details on [this page](/v3/documentation/smart-contracts/message-manage
 The transaction is created as follows:
 
 <Tabs groupId="Transfer With a Comment">
-  <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+  <TabItem value="tonconnect-ui-react" label="@tonconnect/ui-react">
 
-    Note: replace the placeholder with the destination address in a user-friendly format (see /v3/documentation/smart-contracts/addresses/address-formats#user-friendly-address).
 
     ```js
     import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -249,7 +248,6 @@ The transaction is created as follows:
 
   <TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
-    Note: replace the placeholder with the destination address in a user-friendly format (see /v3/documentation/smart-contracts/addresses/address-formats#user-friendly-address).
 
     ```js
     import TonConnectUI from '@tonconnect/ui'
