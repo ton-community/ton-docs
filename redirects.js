@@ -83,9 +83,5 @@ module.exports = [
     to: '/v3/concepts/dive-into-ton/ton-blockchain/network',
     from: '/v3/concepts/dive-into-ton/ton-blockchain/ton-networking',
   },
-  {
-    to: '/v3/concepts/dive-into-ton/security-measures',
-    from: '/v3/concepts/dive-into-ton/ton-ecosystem/security-measures',
-  },
   ...v3Redirects,
 ];
