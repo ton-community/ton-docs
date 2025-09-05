@@ -41,7 +41,7 @@ Processing a message produces a transaction; inter-contract communication is asy
 
 A developer coming from Ethereum needs to realize that smart contracts in the TON blockchain can only communicate with each other by sending asynchronous messages, which means that if there is a need to request data from another contract and an immediate response is required, this will not be possible. Instead, clients outside the network must call `get methods`, much like a wallet in Ethereum that uses RPC nodes to request smart contract states. This is an important limitation for several reasons. For example, flash loans are transactions executed within a single block, relying on the ability to borrow and repay in the same transaction.
 
-The synchronous nature of Ethereum's EVM facilitates such transactions, whereas the asynchronous nature of all transactions in TON makes executing a flash loan infeasible. Oracles, which provide smart contracts with external data, also involve a more intricate design process in TON. What oracles are and how to use them in TON can be found [here](/v3/documentation/dapps/oracles/about_blockchain_oracles/).
+The synchronous nature of Ethereum's EVM facilitates such transactions, whereas the asynchronous nature of all transactions in TON makes executing a flash loan infeasible. Oracles, which provide smart contracts with external data, also involve a more intricate design process in TON. What oracles are and how to use them in TON can be found [here](/v3/documentation/infra/oracles/overview/).
 
 
 :::info

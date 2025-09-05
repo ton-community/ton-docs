@@ -13,7 +13,7 @@ export const firstRow = [
   },
   {
     title: "Documents",
-    linkUrl: "/v3/documentation/ton-documentation",
+    linkUrl: "/v3/documentation/introduction",
     imageUrl: "img/mainPageCards/developer.svg",
     description: "Learn technical aspects of TON."
   }

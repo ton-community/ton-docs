@@ -25,16 +25,16 @@ module.exports = [
       'v3/concepts/dive-into-ton/ton-blockchain/cells',
       'v3/concepts/dive-into-ton/ton-blockchain/nodes',
       'v3/concepts/dive-into-ton/ton-blockchain/network',
-    ],
-  },
-  {
-    type: 'category',
-    label: 'TON vs Ethereum',
-    items: [
-      'v3/concepts/dive-into-ton/go-from-ethereum/difference-of-blockchains',
-      'v3/concepts/dive-into-ton/go-from-ethereum/solidity-vs-func',
-      'v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm',
-      'v3/concepts/dive-into-ton/go-from-ethereum/blockchain-comparison',
+      {
+        type: 'category',
+        label: 'TON vs Ethereum',
+        items: [
+          'v3/concepts/dive-into-ton/go-from-ethereum/difference-of-blockchains',
+          'v3/concepts/dive-into-ton/go-from-ethereum/solidity-vs-func',
+          'v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm',
+          'v3/concepts/dive-into-ton/go-from-ethereum/blockchain-comparison',
+        ],
+      },
     ],
   },
   'v3/concepts/security-measures',

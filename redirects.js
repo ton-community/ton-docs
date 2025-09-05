@@ -20,7 +20,7 @@ module.exports = [
     from: '/learn/overviews/TON_Blockchain_overview',
   },
   {
-    to: '/v3/documentation/network/protocols/adnl/low-level-adnl',
+    to: '/v3/documentation/network/protocols/adnl/low-level',
     from: '/learn/overviews/adnl',
   },
   {
@@ -36,7 +36,7 @@ module.exports = [
     from: '/develop/onboarding-challenge',
   },
   {
-    to: '/v3/documentation/ton-documentation',
+    to: '/v3/documentation/introduction',
     from: '/develop/getting-started',
   },
   {
