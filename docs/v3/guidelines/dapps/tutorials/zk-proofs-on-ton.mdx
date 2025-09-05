@@ -6,6 +6,8 @@ import Feedback from '@site/src/components/Feedback';
 
 This guide shows how to create, compile, and test a simple Circom scheme and verify a **ZK-proof** in the **TON** blockchain using the **zk-SNARK Groth16** protocol. This approach is a starting point for more complex cases and integrations. The examples are based on a minimal multiplication scheme.
 
+You can read more about Circom and zero-knowledge proofs [here](https://docs.circom.io/).
+
 :::note
 This guide is also applicable to circuits written in the [Noname](https://github.com/zksecurity/noname) language, since the `export-ton-verifier` library integrates with `snarkjs`, which in turn integrates with the Noname language.  
 
@@ -158,7 +160,8 @@ In `tests/ZkSimple.spec.ts`:
 import * as snarkjs from 'snarkjs';
 import path from 'path';
 import { dictFromInputList, groth16CompressProof } from 'export-ton-verifier';
-// for Tact
+
+// for Tact (After running `npx blueprint build --all`)
 import { Verifier } from '../build/Verifier_tact/tact_Verifier';
 
 // for FunC and Tolk
@@ -182,6 +185,12 @@ On-chain verification:
 
 ```ts
 const { pi_a, pi_b, pi_c, pubInputs } = await groth16CompressProof(proof, publicSignals);
+
+// Quick check via get-method: verifies the proof locally without changing blockchain state.
+expect(await verifier.getVerify({ pi_a, pi_b, pi_c, pubInputs })).toBe(true);
+
+// Send the proof to the contract in a message
+// The contract will run verification; handling the result/flow is up to the developer using this template.
 await verifier.sendVerify(deployer.getSender(), { pi_a, pi_b, pi_c, pubInputs, value: toNano('0.15') });
 ```
 

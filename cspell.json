@@ -6,23 +6,28 @@
     "**/*.md",
     "**/*.mdx"
   ],
-  "dictionaries": ["tvm-instructions", "names", "commands", "examples"],
+  "dictionaries": [
+    "tvm-instructions",
+    "names",
+    "commands",
+    "examples"
+  ],
   "dictionaryDefinitions": [
     {
-      "name":"tvm-instructions",
-      "path":"./src/grammar/tvm-dictionary.txt"
+      "name": "tvm-instructions",
+      "path": "./src/grammar/tvm-dictionary.txt"
     },
     {
-      "name":"names",
-      "path":"./src/grammar/names-dictionary.txt"
+      "name": "names",
+      "path": "./src/grammar/names-dictionary.txt"
     },
     {
-      "name":"commands",
-      "path":"./src/grammar/commands-dictionary.txt"
+      "name": "commands",
+      "path": "./src/grammar/commands-dictionary.txt"
     },
     {
-      "name":"examples",
-      "path":"./src/grammar/examples-dictionary.txt"
+      "name": "examples",
+      "path": "./src/grammar/examples-dictionary.txt"
     }
   ],
   "words": [
@@ -349,20 +354,20 @@
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",
-    "^\\[.+\\]: .+",       // link declarations like [foo]: /ref/stdlib-ownable#bar
-    "\\[.+\\]\\[.+\\]",    // links like [`Resumable{:tact}`][res]
-    "\\[.*\\]\\(.+\\)",    // links like [`self.toCell().asSlice(){:tact}`](/ref/core-cells#cellasslice)
+    "^\\[.+\\]: .+", // link declarations like [foo]: /ref/stdlib-ownable#bar
+    "\\[.+\\]\\[.+\\]", // links like [`Resumable{:tact}`][res]
+    "\\[.*\\]\\(.+\\)", // links like [`self.toCell().asSlice(){:tact}`](/ref/core-cells#cellasslice)
     "address\\(\".+\"\\)", // Ton addresses
-    "mathrm\\{.+\\}",      // LaTeX subset
-    "\\[#.+\\]",           // [#nativereserve-combining-modes-with-flags]
-    "href=\".+\"",         // href="/cookbook/dexes/stonfi"
-    "\".+\": \".+\"",      // "from": "kQBrSAP2y7QIUw4_1q0qciHfqdFmOYR9CC1oinn7kyWWRuoV",
+    "mathrm\\{.+\\}", // LaTeX subset
+    "\\[#.+\\]", // [#nativereserve-combining-modes-with-flags]
+    "href=\".+\"", // href="/cookbook/dexes/stonfi"
+    "\".+\": \".+\"", // "from": "kQBrSAP2y7QIUw4_1q0qciHfqdFmOYR9CC1oinn7kyWWRuoV",
     "Urls",
-    "EQ.+",               // addresses
-    "Pub.+",              // addresses
-    "kf.+",               // addresses
+    "EQ.+", // addresses
+    "Pub.+", // addresses
+    "kf.+", // addresses
     "[Tt]on\\w*",
-    "```[\\s\\S]*```",    // code snippets
+    "```[\\s\\S]*```", // code snippets
     "\/?([\\w\\-]+\/)*[\\w\\-]+\\.[a-zA-Z]{1,5}", // path
   ],
   "flagWords": [],

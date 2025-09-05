@@ -6,6 +6,8 @@ import Feedback from '@site/src/components/Feedback';
 
 Это руководство показывает, как создать, скомпилировать и протестировать простую Circom-схему и проверить **ZK-proof** в блокчейне **TON** с использованием протокола **zk-SNARK Groth16**. Подход является стартовой точкой для более сложных кейсов и интеграций. Основа примеров — минимальная схема умножения. 
 
+Подробнее о Circom и ZK-доказательствах можно прочитать [здесь](https://docs.circom.io/).
+
 :::note
 Это руководство также применимо к схемам, написанным на языке [Noname](https://github.com/zksecurity/noname), так как библиотека `export-ton-verifier` интегрируется со `snarkjs`, который, в свою очередь, поддерживает интеграцию с языком Noname.  
 
@@ -162,10 +164,10 @@ import * as snarkjs from 'snarkjs';
 import path from 'path';
 import { dictFromInputList, groth16CompressProof } from 'export-ton-verifier';
 
-// для Tact
+// для Tact (После запуска `npx blueprint build --all`)
 import { Verifier } from '../build/Verifier_tact/tact_Verifier';
 
-// для FunC и Tolk
+// для FunC и Tolk вам также необходимо вручную создать обертки:
 import { Verifier } from '../wrappers/Verifier';
 ```
 
@@ -186,8 +188,15 @@ On-chain проверка:
 
 ```ts
 const { pi_a, pi_b, pi_c, pubInputs } = await groth16CompressProof(proof, publicSignals);
+
+// Быстрая проверка с помощью метода get: проверяет доказательство локально, не изменяя состояние блокчейна.
+expect(await verifier.getVerify({ pi_a, pi_b, pi_c, pubInputs })).toBe(true);
+
+// Отправка доказательства в контракт в сообщении.
+// Контракт выполнит проверку; обработка результата/потока зависит от разработчика, использующего этот шаблон.
 await verifier.sendVerify(deployer.getSender(), { pi_a, pi_b, pi_c, pubInputs, value: toNano('0.15') });
 ```
+
 ## Заключение
 
 Вы собрали минимальный пример: Circom → trusted setup → экспорт верификатора → проверка в TON. На этой базе легко строить более сложные сценарии.
