@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# ADNL UDP - internode
+# Work with UDP
 
 ADNL over UDP is a low-level protocol used by nodes and TON components to communicate with one another. It serves as the foundation for other higher-level TON protocols, such as DHT (Distributed Hash Table) and RLDP (Reliable Large Datagram Protocol).
 
@@ -63,7 +63,7 @@ We have two parameters to consider: a key and a date. The date will be represent
 Next, we will serialize the populated TL structure to get the final result:
 
 ```
-bbc373e6                                                         -- TL ID adnl.message.createChannel 
+bbc373e6                                                         -- TL ID adnl.message.createChannel
 d59d8e3991be20b54dde8b78b3af18b379a62fa30e64af361c75452f6af019d7 -- key
 555c8763                                                         -- date
 ```
@@ -97,7 +97,7 @@ d7be82afbc80516ebca39784b8e2209886a69601251571444514b7f17fcd8875 -- query_id
 All communication is conducted using packets, which contain the following structure: [TL structure](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L81):
 
 ```tlb
-adnl.packetContents 
+adnl.packetContents
   rand1:bytes                                     -- random 7 or 15 bytes
   flags:#                                         -- bit flags, used to determine the presence of fields further
   from:flags.0?PublicKey                          -- sender's public key
@@ -108,14 +108,14 @@ adnl.packetContents
   priority_address:flags.5?adnl.addressList       -- priority list of our addresses
   seqno:flags.6?long                              -- packet sequence number
   confirm_seqno:flags.7?long                      -- sequence number of the last packet received
-  recv_addr_list_version:flags.8?int              -- address version 
+  recv_addr_list_version:flags.8?int              -- address version
   recv_priority_addr_list_version:flags.9?int     -- priority address version
   reinit_date:flags.10?int                        -- connection reinitialization date (counter reset)
   dst_reinit_date:flags.10?int                    -- connection reinitialization date from the last received packet
   signature:flags.11?bytes                        -- signature
   rand2:bytes                                     -- random 7 or 15 bytes
         = adnl.PacketContents
-        
+
 ```
 
 Once we have serialized all the messages we wish to send, we can begin building the packet.
@@ -140,11 +140,11 @@ d9050000                                                               -- flags 
 c6b41348                                                                  -- TL ID pub.ed25519
    afc46336dd352049b366c7fd3fc1b143a518f0d02d9faef896cb0155488915d6       -- key:int256
                                                                        -- messages (present because flag's third bit = 1)
-02000000                                                                  -- vector adnl.Message, size = 2 messages   
+02000000                                                                  -- vector adnl.Message, size = 2 messages
    bbc373e6                                                                  -- TL ID adnl.message.createChannel
    d59d8e3991be20b54dde8b78b3af18b379a62fa30e64af361c75452f6af019d7          -- key
    555c8763                                                                  -- date (date of creation)
-   
+
    7af98bb4                                                                  -- TL ID [adnl.message.query](/)
    d7be82afbc80516ebca39784b8e2209886a69601251571444514b7f17fcd8875          -- query_id
    04 ed4879a9 000000                                                        -- query (bytes size 4, padding 3)
@@ -175,11 +175,11 @@ d90d0000                                                               -- flags 
 c6b41348                                                                  -- TL ID pub.ed25519
    afc46336dd352049b366c7fd3fc1b143a518f0d02d9faef896cb0155488915d6       -- key:int256
                                                                        -- messages (present because flag's third bit = 1)
-02000000                                                                  -- vector adnl.Message, size = 2 message   
+02000000                                                                  -- vector adnl.Message, size = 2 message
    bbc373e6                                                                  -- TL ID adnl.message.createChannel
    d59d8e3991be20b54dde8b78b3af18b379a62fa30e64af361c75452f6af019d7          -- key
    555c8763                                                                  -- date (date of creation)
-   
+
    7af98bb4                                                                  -- TL ID adnl.message.query
    d7be82afbc80516ebca39784b8e2209886a69601251571444514b7f17fcd8875          -- query_id
    04 ed4879a9 000000                                                        -- query (bytes size 4, padding 3)
@@ -242,12 +242,12 @@ The content of the packet will look like this:
 ca0d0000                                                               -- flags (0x0dca) -> 0b0000110111001010
 daa76538d99c79ea097a67086ec05acca12d1fefdbc9c96a76ab5a12e66c7ebb       -- from_short (because flag's first bit = 1)
 02000000                                                               -- messages (present because flag's third bit = 1)
-   691ddd60                                                               -- TL ID adnl.message.confirmChannel 
+   691ddd60                                                               -- TL ID adnl.message.confirmChannel
    db19d5f297b2b0d76ef79be91ad3ae01d8d9f80fab8981d8ed0c9d67b92be4e3       -- key (server channel public key)
    d59d8e3991be20b54dde8b78b3af18b379a62fa30e64af361c75452f6af019d7       -- peer_key (our public channel key)
    94848863                                                               -- date
-   
-   1684ac0f                                                               -- TL ID adnl.message.answer 
+
+   1684ac0f                                                               -- TL ID adnl.message.answer
    d7be82afbc80516ebca39784b8e2209886a69601251571444514b7f17fcd8875       -- query_id
    90 48325384c6b413487d99e4a08031ad3778c5e060569645466e52bd5bd2c7b       -- answer (the answer to our request, we will analyze its content in an article about DHT)
       78ddd56def1cf3760c901000000e7a60d67ad071541c53d0000ee354563ee       --
@@ -333,7 +333,7 @@ After serialization, as we did last time, we calculate the SHA256 hash of the pa
 To do this we [calculate](/v3/documentation/network/protocols/adnl/adnl-tcp#getting-key-id) `pub.aes` - ID of the encryption key for our outgoing messages and then build our packet:
 
 ```
-bcd1cf47b9e657200ba21d94b822052cf553a548f51f539423c8139a83162180 -- ID of encryption key of our outgoing messages 
+bcd1cf47b9e657200ba21d94b822052cf553a548f51f539423c8139a83162180 -- ID of encryption key of our outgoing messages
 6185385aeee5faae7992eb350f26ba253e8c7c5fa1e3e1879d9a0666b9bd6080 -- sha256 content hash (before encryption)
 ...                                                              -- the encrypted content of the packet
 ```
@@ -349,7 +349,7 @@ For basic communication, messages such as `adnl.message.query` and `adnl.message
 This message type is part of another possible message type, such as `adnl.message.answer`. This method of data transfer is used when a message is too large to be sent in a single UDP datagram.
 
 ```tlb
-adnl.message.part 
+adnl.message.part
 hash:int256            -- sha256 hash of the original message
 total_size:int         -- original message size
 offset:int             -- offset according to the beginning of the original message

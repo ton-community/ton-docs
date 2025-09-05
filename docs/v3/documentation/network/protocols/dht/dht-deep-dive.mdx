@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# DHT
+# Deep dive
 
 DHT stands for Distributed Hash Table, which is a type of distributed key-value database. In this system, each member of the network can store information, such as details about themselves.
 
@@ -104,7 +104,7 @@ dht.updateRule.overlayNodes = dht.UpdateRule;
 
 dht.keyDescription key:dht.key id:PublicKey update_rule:dht.UpdateRule signature:bytes = dht.KeyDescription;
 
-dht.value key:dht.keyDescription value:bytes ttl:int signature:bytes = dht.Value; 
+dht.value key:dht.keyDescription value:bytes ttl:int signature:bytes = dht.Value;
 
 dht.valueFound value:dht.Value = dht.ValueResult;
 ```
@@ -151,7 +151,7 @@ As a result, we obtain a valid list of nodes that can provide information about 
 
 There are no signatures required; anyone can make updates.
 
-### Using a value
+## Using a value
 
 Once everything has been verified and the `ttl:int` value has not expired, we can begin working with the value itself, specifically `value:bytes`. For an ADNL address, this will include an `adnl.addressList` structure.
 
@@ -161,7 +161,7 @@ We will use the public key, `id:PublicKey`, from the DHT key information as the 
 
 After establishing the connection, we can request the site's pages using the RLDP protocol. At this stage, the task from the DHT perspective is complete.
 
-### Search for nodes that store the state of the blockchain
+## Search for nodes that store the state of the blockchain
 
 DHT is also used to locate information about the nodes storing the data of WorkChains and their shards. The process for retrieving this information is similar to searching for any key; however, the key serialization and response validation differ. We will examine these aspects in this section.
 
@@ -176,7 +176,7 @@ In the context of a MasterChain, the `workchain` value will be set to `-1`. The 
 ```json
 "zero_state": {
   "workchain": -1,
-  "shard": -9223372036854775808, 
+  "shard": -9223372036854775808,
   "seqno": 0,
   "root_hash": "F6OpKZKqvqeFp6CQmFomXNMfMj2EnaUSOXN+Mh+wVWk=",
   "file_hash": "XplPz01CXAps5qeSWUtxcyBfdAo5zVb1N979KLSKD24="

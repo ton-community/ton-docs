@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# ADNL TCP - liteserver
+# Work with TCP
 
 This is the low-level protocol that supports all interactions within the TON network. While it can operate on top of any protocol, it is most commonly used in conjunction with TCP and UDP. Typically, UDP facilitates communication between nodes, whereas TCP is employed for communication with liteservers.
 
@@ -141,13 +141,13 @@ After decoding the response, we get a packet of the form:
                                                                           last:tonNode.blockIdExt
         ffffffff                                                          -> workchain:int
         0000000000000080                                                  -> shard:long
-        27405801                                                          -> seqno:int   
+        27405801                                                          -> seqno:int
         e585a47bd5978f6a4fb2b56aa2082ec9deac33aaae19e78241b97522e1fb43d4  -> root_hash:int256
         876851b60521311853f59c002d46b0bd80054af4bce340787a00bd04e0123517  -> file_hash:int256
       8b4d3b38b06bb484015faf9821c3ba1c609a25b74f30e1e585b8c8e820ef0976    -> state_root_hash:int256
-                                                                          init:tonNode.zeroStateIdExt 
+                                                                          init:tonNode.zeroStateIdExt
         ffffffff                                                          -> workchain:int
-        17a3a92992aabea785a7a090985a265cd31f323d849da51239737e321fb05569  -> root_hash:int256      
+        17a3a92992aabea785a7a090985a265cd31f323d849da51239737e321fb05569  -> root_hash:int256
         5e994fcf4d425c0a6ce6a792594b7173205f740a39cd56f537defd28b48a0f6e  -> file_hash:int256
     000000                                                                -> 3 bytes of padding
 520c46d1ea4daccdf27ae21750ff4982d59a30672b3ce8674195e8a23e270d21          -> sha256
@@ -404,18 +404,18 @@ Our structure references other structures, such as:
 anycast_info$_ depth:(#<= 30) { depth >= 1 } rewrite_pfx:(bits depth) = Anycast;
 addr_std$10 anycast:(Maybe Anycast) workchain_id:int8 address:bits256  = MsgAddressInt;
 addr_var$11 anycast:(Maybe Anycast) addr_len:(## 9) workchain_id:int32 address:(bits addr_len) = MsgAddressInt;
-   
+
 storage_info$_ used:StorageUsed last_paid:uint32 due_payment:(Maybe Grams) = StorageInfo;
 storage_used$_ cells:(VarUInteger 7) bits:(VarUInteger 7) public_cells:(VarUInteger 7) = StorageUsed;
-  
+
 account_storage$_ last_trans_lt:uint64 balance:CurrencyCollection state:AccountState = AccountStorage;
 
 currencies$_ grams:Grams other:ExtraCurrencyCollection = CurrencyCollection;
-           
+
 var_uint$_ {n:#} len:(#< n) value:(uint (len * 8)) = VarUInteger n;
 var_int$_ {n:#} len:(#< n) value:(int (len * 8)) = VarInteger n;
-nanograms$_ amount:(VarUInteger 16) = Grams;  
-           
+nanograms$_ amount:(VarUInteger 16) = Grams;
+
 account_uninit$00 = AccountState;
 account_active$1 _:StateInit = AccountState;
 account_frozen$01 state_hash:bits256 = AccountState;
