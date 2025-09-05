@@ -252,7 +252,7 @@ Send Toncoin to a specific address:
 import { useTonConnectUI } from '@tonconnect/ui-react';
 
 const transaction: SendTransactionRequest = {
-  validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes
+  validUntil: Math.floor(Date.now() / 1000) + 600, // 5 minutes
   messages: [
     {
       address:
@@ -399,7 +399,7 @@ Deploying a contract using TON Connect is pretty straightforward. You must:
 
 - Obtain the contract `code` and `data`
 - Store them as a `stateInit` cell
- - Send a transaction using the `stateInit` field provided
+- Send a transaction using the `stateInit` field provided
 
 Note that `CONTRACT_CODE` and `CONTRACT_INIT_DATA` may be found in wrappers.
 
@@ -420,7 +420,7 @@ const stateInit = beginCell()
 const address = contractAddress(0, init);
 
 await tonConnectUI.sendTransaction({
-    validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes
+    validUntil: Math.floor(Date.now() / 1000) + 600, // 5 minutes
     messages: [
         {
             address: address.toRawString(),
