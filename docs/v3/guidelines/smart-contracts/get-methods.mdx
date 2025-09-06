@@ -3,7 +3,7 @@ import Feedback from '@site/src/components/Feedback';
 # Get methods
 
 :::note
-To fully benefit from this content, readers must understand the [FunC programming language](/v3/documentation/smart-contracts/func/overview/) on the TON Blockchain. This knowledge is crucial for grasping the information presented here.
+This guide assumes familiarity with the [FunC programming language](/v3/documentation/smart-contracts/func/overview/).
 :::
 
 ## Introduction
@@ -26,7 +26,7 @@ return get_data().begin_parse().preload_uint(64);
 }
 ```
 
-2. **Aggregate data retrieval**: Another common method is to create methods that gather multiple pieces of data from a contract's state in one call. This is useful when specific data points are often used together. You can see this approach frequently in [Jetton](#jettons) and [NFT](#nfts) contracts.
+2. **Aggregate data retrieval**: Another common method is to create methods that gather multiple pieces of data from a contract's state in one call. This is useful when specific data points are often used together. You can see this approach frequently in [Jetton](#jettons) ([overview](/v3/guidelines/dapps/asset-processing/jettons#overview)) and [NFT](#nfts) ([overview](/v3/guidelines/dapps/asset-processing/nft-processing/nfts#overview)) contracts.
 
 Example:
 
@@ -72,7 +72,7 @@ int seqno() method_id {
 }
 ```
 
-Returns the transaction's sequence number within a specific wallet. This method is primarily used for [replay protection](/v3/guidelines/smart-contracts/howto/wallet#replay-protection---seqno).
+Returns the wallet’s current outbound message sequence number (seqno).
 
 #### get_subwallet_id()
 
@@ -93,7 +93,7 @@ int get_public_key() method_id {
 }
 ```
 
-This method retrieves the public key associated with the wallet.
+Returns the stored public key.
 
 ### Jettons
 
@@ -108,8 +108,8 @@ This method retrieves the public key associated with the wallet.
 This method returns the complete set of data associated with a jetton wallet:
 
 - (int) balance
-- (slice) owner_address
-- (slice) jetton_master_address
+- (slice) owner address
+- (slice) jetton master (minter) address
 - (cell) jetton_wallet_code
 
 #### get_jetton_data()
@@ -121,7 +121,7 @@ This method returns the complete set of data associated with a jetton wallet:
 }
 ```
 
-Returns data of a jetton master, including its total supply, the address of its admin, the content of the jetton, and its wallet code.
+Returns total supply, mintable flag, admin address, content, and jetton wallet code. The mintable flag is −1 for mintable and 0 for non‑mintable.
 
 #### get_wallet_address(slice owner_address)
 
@@ -157,7 +157,7 @@ Returns the data associated with a non-fungible token, including whether it has 
 }
 ```
 
-Returns the data of an NFT collection, including the index of the next item available for minting, the content of the collection, and the owner's address.
+Returns the data of an NFT collection, including the index of the next item available for minting, the content of the collection, and the owner's address. The returned tuple order is (next_item_index, collection_content, owner_address).
 
 #### get_nft_address_by_index(int index)
 
@@ -377,4 +377,3 @@ Get methods are vital for querying data from smart contracts on the TON Blockcha
 - [Writing tests examples](/v3/guidelines/smart-contracts/testing/writing-test-examples)
 
 <Feedback />
-
