@@ -18,16 +18,16 @@ import TabItem from '@theme/TabItem';
 
 # Jetton transfer
 
-The `body` for jetton transfers is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while typically jettons and Toncoin uses 9 decimals (1 TON = 1 × 10<sup>9</sup>).
+The `body` for jetton transfers is based on the [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer) standard. Please note that the number of decimals can vary between different tokens: for example, USDT uses 6 decimals (1 USDT = 1 × 10<sup>6</sup>), while typically jettons and Toncoin use 9 decimals (1 TON = 1 × 10<sup>9</sup>).
   
 :::info
 The `assets-sdk` library works out of the box with `ton-connect`.
 :::
 
-<Tabs groupId="Jetton transfer">
+<Tabs groupId="jetton-transfer">
   <TabItem value="@ton/ton" label="@ton/ton">
   
-    ```js
+    ```ts
     import { beginCell, toNano, Address } from '@ton/ton'
     // transfer#0f8a7ea5 query_id:uint64 amount:(VarUInteger 16) destination:MsgAddress
     // response_destination:MsgAddress custom_payload:(Maybe ^Cell)
@@ -37,21 +37,24 @@ The `assets-sdk` library works out of the box with `ton-connect`.
     const body = beginCell()
         .storeUint(0xf8a7ea5, 32)                 // jetton transfer op code
         .storeUint(0, 64)                         // query_id:uint64
-        .storeCoins(toNano("0.001"))              // amount:(VarUInteger 16) -  Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Function toNano use decimals = 9 (remember it)
+        .storeCoins(toNano("0.001"))              // amount:(VarUInteger 16) -  Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Function `toNano` uses 9 decimals (remember it)
         .storeAddress(Address.parse(Wallet_DST))  // destination:MsgAddress
         .storeAddress(Address.parse(Wallet_SRC))  // response_destination:MsgAddress
         .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell)
         .storeCoins(toNano("0.05"))               // forward_ton_amount:(VarUInteger 16) - if >0, will send notification message
-        .storeUint(0,1)                           // forward_payload:(Either Cell ^Cell)
+        .storeBit(1)                              // forward_payload:(Either Cell ^Cell) - as a reference
+        .storeRef(beginCell().endCell())          // empty payload reference
         .endCell();
     ```
 
-    Next, sending the transaction with this body to sender's `jettonWalletContract` executed:
+    Note: `toNano` assumes 9 decimals. For jettons with a different number of decimals (for example, 6), compute the amount using the token’s `decimals` value, such as `BigInt(value) * 10n ** BigInt(jettonDecimals)`.
 
-    <Tabs groupId="JettonTransferUI">
+    Next, send the transaction with this body to the sender's `jettonWalletContract`:
+
+    <Tabs groupId="jetton-transfer-ui">
       <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
-        ```js
+        ```ts
         import { useTonConnectUI } from '@tonconnect/ui-react';
         import { toNano } from '@ton/ton'
 
@@ -83,7 +86,7 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
       <TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
-        ```js
+        ```ts
         import TonConnectUI from '@tonconnect/ui'
         import { toNano } from '@ton/ton'
 
@@ -104,21 +107,21 @@ The `assets-sdk` library works out of the box with `ton-connect`.
       </TabItem>
     </Tabs>
 
-    - `validUntil` - UNIX-time until message valid
-    - `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
-    - `balance` - Integer, the amount of Toncoin used for gas payments in nanotons.
-    - `body` - payload for the `jettonContract`
+    - `validUntil` - UNIX timestamp until the message is valid
+    - `jettonWalletAddress` - Address, Jetton wallet address that is defined based on JettonMaster and wallet contracts
+    - `amount` - Integer, the amount of Toncoin used for gas payments in nanotons.
+    - `body` - payload for the jetton wallet contract
 
     <details>
       <summary>Jetton wallet state init and address preparation example</summary>
 
-      ```js
+      ```ts
       import { Address, TonClient, beginCell, StateInit, storeStateInit } from '@ton/ton'
 
       async function main() {
           const client = new TonClient({
               endpoint: 'https://toncenter.com/api/v2/jsonRPC',
-              apiKey: 'put your api key'
+              apiKey: 'enter your API key'
           })
 
           const jettonWalletAddress = Address.parse('Sender_Jetton_Wallet');
@@ -158,7 +161,8 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
     For more examples, check [documentation](https://github.com/ton-community/assets-sdk)
 
-    ```js
+    ```ts
+    ```ts
     const NETWORK = "testnet";
     const api = await createApi(NETWORK);
     const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react
@@ -178,7 +182,7 @@ The `assets-sdk` library works out of the box with `ton-connect`.
     });
 
     const jetton = sdk.openJettonWallet(Address.parse("JETTON_ADDRESS"));
-    const RECEIVER_ADDRESS = Address.parse("RECIEVER_ADDRESS");
+    const RECEIVER_ADDRESS = Address.parse("RECEIVER_ADDRESS");
 
     jetton.send(sender, RECEIVER_ADDRESS, toNano(10));
     ```
@@ -197,7 +201,7 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
     const jettonMaster = client.open(
       JettonMinter.createFromAddress(
-        Address.parse("[JETTON_WALLET]"),
+        Address.parse("[JETTON_MASTER]"),
         new DefaultContentResolver()
       )
     );
@@ -212,7 +216,7 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
     await jetton.send(
       sender,
-      Address.parse("[SENDER_WALLET]"),
+      Address.parse("[RECEIVER_WALLET]"),
       BigInt(1 * 10 ** jettonDecimals)
     );
 
@@ -225,7 +229,7 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
 <Tabs groupId="JettonTransferComment">
   <TabItem value="@ton/ton" label="@ton/ton">
-    The `messageBody` for jetton transfer([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) with comment we should additionally to the regular transfer `body` serialize comment and pack this in the `forwardPayload`.  Please note that the number of decimals can vary between different tokens:
+    The `messageBody` for a jetton transfer with a comment ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)): in addition to the regular transfer `body`, serialize the comment and place it into the `forwardPayload`. Please note that the number of decimals can vary between different tokens:
 
     - 9 decimals: 1 TON = 1 × 10<sup>9</sup> typically for various jettons and always for Toncoin
     - 6 decimals: 1 USDT = 1 × 10<sup>6</sup> specific jettons, like USDT
@@ -247,7 +251,7 @@ The `assets-sdk` library works out of the box with `ton-connect`.
     const body = beginCell()
         .storeUint(0xf8a7ea5, 32)           // opcode for jetton transfer
         .storeUint(0, 64)                   // query id
-        .storeCoins(toNano("5"))            // Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Function toNano use decimals = 9 (remember it)
+        .storeCoins(toNano("5"))            // Jetton amount for transfer (decimals = 6 - USDT, 9 - default). Function `toNano` uses 9 decimals (remember it)
         .storeAddress(destinationAddress)   // TON wallet destination address
         .storeAddress(destinationAddress)   // response excess destination
         .storeBit(0)                        // no custom payload
@@ -257,12 +261,12 @@ The `assets-sdk` library works out of the box with `ton-connect`.
         .endCell();
     ```
 
-    Next, send the transaction with this body to the sender's `jettonWalletContract` executed:
+    Next, send the transaction with this body to the sender's `jettonWalletContract`:
 
     <Tabs groupId="JettonTransferCommentUI">
     <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
-        ```js
+        ```ts
         import { useTonConnectUI } from '@tonconnect/ui-react';
         import { toNano } from '@ton/ton'
 
@@ -297,7 +301,7 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
         <TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
-        ```js
+        ```ts
         import TonConnectUI from '@tonconnect/ui'
         import { toNano } from '@ton/ton'
 
@@ -318,21 +322,21 @@ The `assets-sdk` library works out of the box with `ton-connect`.
         </TabItem>
     </Tabs>
 
-    - `validUntil` - UNIX-time until message valid
-    - `jettonWalletAddress` - Address, JettonWallet address, that defined based on JettonMaser and Wallet contracts
-    - `balance` - Integer, the amount of Toncoin used for gas payments in nanotons.
-    - `body` - payload for the `jettonContract`
+    - `validUntil` - UNIX timestamp until the message is valid
+    - `jettonWalletAddress` - Address, Jetton wallet address that is defined based on JettonMaster and wallet contracts
+    - `amount` - Integer, the amount of Toncoin used for gas payments in nanotons.
+    - `body` - payload for the jetton wallet contract
 
     <details>
         <summary>Jetton wallet state init and address preparation example</summary>
 
-        ```js
+        ```ts
         import { Address, TonClient, beginCell, StateInit, storeStateInit } from '@ton/ton'
 
         async function main() {
         const client = new TonClient({
         endpoint: 'https://toncenter.com/api/v2/jsonRPC',
-        apiKey: 'put your api key'
+        apiKey: 'enter your API key'
         })
 
         const jettonWalletAddress = Address.parse('Sender_Jetton_Wallet');
@@ -372,7 +376,9 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
     For more examples, check [documentation](https://github.com/ton-community/assets-sdk)
 
-    ```js
+    Note: `tonConnectUI` refers to an existing `TonConnectUI` instance created earlier (for example, `const provider = new TonConnectUI({...})`).
+
+    ```ts
     const NETWORK = "testnet";
     const api = await createApi(NETWORK);
     const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react
@@ -408,12 +414,12 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
 <Tabs groupId="JettonBurn">
   <TabItem value="@ton/ton" label="@ton/ton">
-    The `body` for jetton burn is based on the ([TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer)) standard. Please note that the number of decimals can vary between different tokens:
+    The `body` for jetton burn is based on the [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md#1-transfer) standard. Please note that the number of decimals can vary between different tokens:
 
     - 9 decimals: 1 TON = 1 × 10<sup>9</sup> typically for various jettons and always for Toncoin
     - 6 decimals: 1 USDT = 1 × 10<sup>6</sup> specific jettons, like USDT
 
-    ```js
+    ```ts
     import { beginCell, Address } from '@ton/ton'
     // burn#595f07bc query_id:uint64 amount:(VarUInteger 16)
     // response_destination:MsgAddress custom_payload:(Maybe ^Cell)
@@ -422,18 +428,18 @@ The `assets-sdk` library works out of the box with `ton-connect`.
     const body = beginCell()
         .storeUint(0x595f07bc, 32)                // jetton burn op code
         .storeUint(0, 64)                         // query_id:uint64
-        .storeCoins(toNano("0.001"))              // amount:(VarUInteger 16) - Jetton amount in decimal (decimals = 6 - USDT, 9 - default). Function toNano use decimals = 9 (remember it)
+        .storeCoins(toNano("0.001"))              // amount:(VarUInteger 16) - Jetton amount in decimal (decimals = 6 - USDT, 9 - default). Function `toNano` uses 9 decimals (remember it)
         .storeAddress(Address.parse(Wallet_SRC))  // response_destination:MsgAddress - owner's wallet
         .storeUint(0, 1)                          // custom_payload:(Maybe ^Cell) - w/o payload typically
         .endCell();
     ```
 
-    Message places into the following request:
+    Place the message body into the following transaction:
 
     <Tabs groupId="JettonBurnUI">
       <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
 
-        ```js
+        ```ts
         import { useTonConnectUI } from '@tonconnect/ui-react';
         import { toNano } from '@ton/ton'
 
@@ -465,7 +471,7 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
       <TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
-        ```js
+        ```ts
         import TonConnectUI from '@tonconnect/ui'
         import { toNano } from '@ton/ton'
 
@@ -486,8 +492,8 @@ The `assets-sdk` library works out of the box with `ton-connect`.
       </TabItem>
     </Tabs>
 
-    - `jettonWalletAddress` - Jetton Wallet contract address, that defined based on JettonMaser and Wallet contracts
-    - `amount` - Integer, amount of Toncoin for gas payments in nanotons.
+    - `jettonWalletAddress` - Jetton wallet contract address that is defined based on JettonMaster and wallet contracts
+    - `amount` - Integer, the amount of Toncoin used for gas payments in nanotons.
     - `body` - payload for the jetton wallet with the `burn#595f07bc` op code
 
   </TabItem>
@@ -500,7 +506,7 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 
     For more examples, check [documentation](https://github.com/ton-community/assets-sdk)
 
-    ```js
+    ```ts
     const NETWORK = "testnet";
     const api = await createApi(NETWORK);
     const provider = new TonConnectUI(); // OR you can use tonConnectUI as a provider from @tonconnect/ui-react
@@ -564,6 +570,6 @@ The `assets-sdk` library works out of the box with `ton-connect`.
 ## Next steps
 
 1. Work with NFTs → [NFT transfer](/v3/guidelines/ton-connect/cookbook/nft-transfer)  
-2. Search your transaction → [Transaction lookup](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message)
+2. Search for your transaction → [Transaction lookup](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message)
 
 <Feedback />
