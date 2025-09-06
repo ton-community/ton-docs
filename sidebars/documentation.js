@@ -106,6 +106,10 @@ module.exports = [
             id: 'v3/documentation/smart-contracts/func/overview',
           },
           {
+            type: 'doc',
+            id: 'v3/documentation/smart-contracts/func/cookbook',
+          },
+          {
             type: 'category',
             label: 'Documentation',
             items: [
@@ -120,10 +124,6 @@ module.exports = [
               'v3/documentation/smart-contracts/func/docs/dictionaries',
               'v3/documentation/smart-contracts/func/docs/stdlib',
             ],
-          },
-          {
-            type: 'doc',
-            id: 'v3/documentation/smart-contracts/func/cookbook',
           },
           'v3/documentation/smart-contracts/func/libraries',
           'v3/documentation/smart-contracts/func/changelog',
