@@ -16,17 +16,17 @@ To ensure an optimal experience while running MyTonCtrl, here are the recommende
 - 16 TB/month traffic on peak load
 
 :::warning 
- This setup is primarily intended for testing purposes, so it may not be suitable for production environments. If you’d like to bypass hardware checks for any reason, you can easily do this by setting the variable ``IGNORE_MINIMAL_REQS=true``.
+ This setup is primarily intended for testing purposes, so it may not be suitable for production environments. If you’d like to bypass hardware checks for any reason, you can easily do this by setting the variable `IGNORE_MINIMAL_REQS=true`.
 :::
 ## Software requirements
 
 To get started, please ensure you have the following software installed:
 
-- Docker CE  
-- Docker CE CLI  
-- Containerd.io  
-- Docker Buildx Plugin  
-- Docker Compose Plugin  
+- Docker CE
+- Docker CE CLI
+- Containerd.io
+- Docker Buildx Plugin
+- Docker Compose Plugin
 
 For detailed installation instructions, see the official [Docker installation guide](https://docs.docker.com/engine/install/).
 
@@ -34,11 +34,11 @@ For detailed installation instructions, see the official [Docker installation gu
 
 We’ve successfully tested MyTonCtrl on these operating systems:
 
-- Ubuntu 20.04  
-- Ubuntu 22.04  
-- Ubuntu 24.04  
-- Debian 11  
-- Debian 12  
+- Ubuntu 20.04
+- Ubuntu 22.04
+- Ubuntu 24.04
+- Debian 11
+- Debian 12
 
 ## Running MyTonCtrl v2 using the official Docker image
 
@@ -99,11 +99,11 @@ ghcr.io/ton-blockchain/ton-docker-ctrl:latest
 
 In the `.env` file, you can configure the following variables:
 
-- ``GLOBAL_CONFIG_URL``: Points to the network configurations for the TON Blockchain (default: [Testnet](https://ton.org/testnet-global.config.json))  
-- ``MYTONCTRL_VERSION``: Indicates the Git branch used for assembling MyTonCtrl  
-- ``TELEMETRY``: Turn telemetry on or off  
-- ``MODE``: Define the mode for MyTonCtrl (either validator or liteserver)  
-- ``IGNORE_MINIMAL_REQS``: Option to bypass hardware requirements  
+- `GLOBAL_CONFIG_URL`: Points to the network configurations for the TON Blockchain (default: [Testnet](https://ton.org/testnet-global.config.json))
+- `MYTONCTRL_VERSION`: Indicates the Git branch used for assembling MyTonCtrl
+- `TELEMETRY`: Turn telemetry on or off
+- `MODE`: Define the mode for MyTonCtrl (either validator or liteserver)
+- `IGNORE_MINIMAL_REQS`: Option to bypass hardware requirements
 
 ## Stopping and deleting MyTonCtrl
 
@@ -137,14 +137,14 @@ docker compose exec -it ton-node bash -c "mytonctrl"
 
 Once connected, check the status with:
 
-```bash
+```text
 MyTonCtrl> status
 ```
-![](https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/screens/mytonctrl-status.png)
+![MyTonCtrl status screen](/img/docs/mytonctrl/status.png)
 
 And if you would like to see a list of commands you can use, simply enter:
 
-```bash
+```text
 MyTonCtrl> help
 ```
 
@@ -171,14 +171,13 @@ After that, restart Docker Compose:
 docker compose up -d
 ```
 
-When you’re connected to MyTonCtrl, it will automatically check for updates. If any are available, you’ll see a message saying, “``MyTonCtrl update available. Please update it with the `update` command``”.  To do the update, use the command below and specify the branch you want:
+When you’re connected to MyTonCtrl, it will automatically check for updates. If any are available, you’ll see a message: MyTonCtrl update available; please run the update command. To do the update, use the command below and specify the branch you want:
 
-```bash
+```text
 MyTonCtrl> update mytonctrl2
 ```
 
 ## Changing the data storage path
 
-TON and MyTonCore data is stored in ``/var/lib/docker/volumes/``by default. If you wish to change this storage path, update the required route in the ``volumes`` section of your `docker-compose.yml` file to fit your needs. 
+TON and MyTonCtrl data is stored in ``/var/lib/docker/volumes/`` by default. If you wish to change this storage path, update the required path in the ``volumes`` section of your `docker-compose.yml` file to fit your needs. 
 <Feedback />
-
