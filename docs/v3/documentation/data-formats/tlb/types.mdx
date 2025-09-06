@@ -181,7 +181,7 @@ hm_edge#_ {n:#} {X:Type} {l:#} {m:#} label:(HmLabel ~l 8)
 
 As shown above, conditional variables `{l:#}` and `{m:#}` have appeared, but both values are unknown at this stage. After reading the corresponding `label`, we can deduce that `n` is part of the equation `{n = (~m) + l}`. This means we must calculate both `l` and `m`, where the sign indicates the resulting value of `~`.
 
-To determine the value of `l`, we need to load the `label:(HmLabel ~l uint16)` sequence. Below, we outline the 3 basic structural options for `HmLabel`:
+To determine the value of `l`, we need to load the `label:(HmLabel ~l 8)` sequence. Below, we outline the 3 basic structural options for `HmLabel`:
 
 
 ```tlb
