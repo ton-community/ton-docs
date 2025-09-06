@@ -1,14 +1,12 @@
 import Feedback from "@site/src/components/Feedback";
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 import Button from '@site/src/components/button'
 
 # Storage and get methods
 
-> **Summary:** In the previous steps, we learned how to use the `Blueprint SDK` and its project structure.
+> **Summary:** In the previous steps, we learned how to use `Blueprint` and its project structure.
 
 :::info
-For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#start/) and [Tact By Example](https://tact-by-example.org/00-hello-world/).
+For more details, refer to the [Tact documentation](https://docs.tact-lang.org/#start/) and [Tact by example](https://tact-by-example.org/00-hello-world/).
 :::
 
 
@@ -63,7 +61,7 @@ message(0x7e8764ef) Add {
 
 
 
-#### Defining the contract
+### Defining the contract
 
 The [contract](https://docs.tact-lang.org/book/contracts/) definition in Tact follows an object-oriented programming style:
 
@@ -73,9 +71,9 @@ contract HelloWorld {
 }
 ```
 
-#### Contract storage
+### Contract storage
 
-A contract may store its state variables as follows. They may be accessed with [`Self reference`](https://docs.tact-lang.org/book/contracts/#self)
+A contract may store its state variables as follows. They may be accessed using the [`self` reference](https://docs.tact-lang.org/book/contracts/#self).
 
 ```tact
 id: Int as uint32;
@@ -85,7 +83,7 @@ These fields are serialized similarly to structures and stored in the contract's
 
 Use `self.id` and `self.counter` to access them within contract functions.
 
-#### Initializing the contract
+### Initializing the contract
 
 Define an [`init()`](https://docs.tact-lang.org/book/contracts/#init-function/) function to set initial values:
 
@@ -96,7 +94,7 @@ init(id: Int) {
 }
 ```
 
-#### Handling messages
+### Handling messages
 
 To accept messages from other contracts, use a [receiver](https://docs.tact-lang.org/book/functions/#receiver-functions) function. Receiver functions automatically match the message's opcode and invoke the corresponding function:
 
@@ -107,7 +105,7 @@ receive(msg: Add) {
 }
 ```
 
-For accepting messages with empty body you can add `receive` function with no arguments:
+To accept messages with an empty body, add a `receive` function with no arguments:
 
 ```tact title="/contracts/hello_world.tact"
 receive() {
@@ -115,12 +113,12 @@ receive() {
 }
 ```
 
-#### Getter functions
+### Getter functions
 
 Tact supports [getter functions](https://docs.tact-lang.org/book/functions/#getter-functions) for retrieving contract state off-chain:
 
 :::note
-Get function cannot be called from another contract.
+Getter functions cannot be called from another contract.
 :::
 
 ```tact title="/contracts/hello_world.tact"
@@ -129,7 +127,7 @@ get fun counter(): Int {
 }
 ```
 
-#### Complete contract
+### Complete contract
 
 ```tact title="/contracts/hello_world.tact"
 // message with opcode
@@ -160,11 +158,11 @@ contract HelloWorld {
     receive(msg: Add) {
         self.counter += msg.amount;
 
-        // Notify the caller that the receiver was executed and forward remaining value back
+        // Notify the caller that the receiver was executed
         self.notify("Cashback".asComment());
     }
 
-    // getter function to be called offchain
+    // getter function to be called off-chain
     get fun counter(): Int {
         return self.counter;
     }
@@ -175,7 +173,7 @@ contract HelloWorld {
 }
 ```
 
-Verify that smart contract code is correct by running build script:
+Verify that the smart contract code is correct by running the build script:
 
 ```bash
 npx blueprint build
@@ -197,7 +195,7 @@ Expected output should look like this:
 
 ## Step 2: update wrapper
 
-After building your contract, Tact automatically generates a special wrapper file. This [wrapper]((https://docs.tact-lang.org/book/compile/#wrap-ts)) simplifies interaction with your contract from TypeScript, such as calling its methods or sending messages.
+After building your contract, Tact automatically generates a special wrapper file. This [wrapper](https://docs.tact-lang.org/book/compile/#wrap-ts) simplifies interaction with your contract from TypeScript, such as calling its methods or sending messages.
 
 In the wrapper file, you'll find this line of code:
 
@@ -207,7 +205,7 @@ export * from '../build/HelloWorld/tact_HelloWorld';
 
 This code exports everything inside the `tact_HelloWorld.ts` file in the build folder, making it available for use in other files.
 
-## Step 3: updating tests
+## Step 3: update tests
 
 
 <details>
@@ -288,7 +286,7 @@ This code exports everything inside the `tact_HelloWorld.ts` file in the build f
 
   ```
 
-  Don't forget to verify the example is correct by running test script:
+  Don't forget to verify the example is correct by running the test script:
 
   ```bash
   npx blueprint test
@@ -320,7 +318,7 @@ You've written your first smart contract using Tact, tested it, and explored how
 
 Now, it's time to **deploy the contract** to TON Blockchain.
 
-<Button href="/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-deploying-to-network" colorType={'primary'} sizeType={'sm'}>
+<Button href="/v3/guidelines/quick-start/developing-smart-contracts/tact-folder/tact-deploying-to-network/" colorType={'primary'} sizeType={'sm'}>
 
   Deploy to the network
 
