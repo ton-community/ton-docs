@@ -8,19 +8,15 @@ const v3Redirects = JSON.parse(fs.readFileSync(require.resolve('./redirects/redi
 module.exports = [
   // CamelCase to kebab-case
   {
-    to: '/v3/documentation/tvm/tvm-exit-codes',
+    to: '/v3/documentation/tvm/exit-codes',
     from: '/learn/tvm-instructions/tvm_exit_codes',
   },
   {
-    to: '/v3/documentation/tvm/tvm-overview',
+    to: '/v3/documentation/tvm/overview',
     from: '/learn/tvm-instructions/tvm_overview',
   },
   {
-    to: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains',
-    from: '/learn/overviews/TON_Blockchain_overview',
-  },
-  {
-    to: '/v3/documentation/network/protocols/adnl/low-level-adnl',
+    to: '/v3/documentation/network/protocols/adnl/low-level',
     from: '/learn/overviews/adnl',
   },
   {
@@ -36,11 +32,11 @@ module.exports = [
     from: '/develop/onboarding-challenge',
   },
   {
-    to: '/v3/documentation/ton-documentation',
+    to: '/v3/documentation/introduction',
     from: '/develop/getting-started',
   },
   {
-    to: '/v3/documentation/data-formats/tlb/tl-b-language',
+    to: '/v3/documentation/data-formats/tlb/overview',
     from: '/v3/documentation/data-formats/tl-b',
   },
   {
@@ -62,6 +58,30 @@ module.exports = [
   {
     to:  '/v3/guidelines/dapps/apis-sdks/api-types',
     from:'/v3/guidelines/dapps/apis-sdks/ton-http-apis',
+  },
+  {
+    to: '/v3/concepts/dive-into-ton/ton-ecosystem/blockchain-tech',
+    from: '/v3/concepts/dive-into-ton/go-from-ethereum/blockchain-services',
+  },
+  {
+    to: '/v3/concepts/dive-into-ton/go-from-ethereum/blockchain-comparison',
+    from: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison',
+  },
+  {
+    to: '/v3/concepts/dive-into-ton/ton-blockchain/overview',
+    from: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains',
+  },
+  {
+    to: '/v3/concepts/dive-into-ton/ton-blockchain/addresses',
+    from: '/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses',
+  },
+  {
+    to: '/v3/concepts/dive-into-ton/ton-blockchain/cells',
+    from: '/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage',
+  },
+  {
+    to: '/v3/concepts/dive-into-ton/ton-blockchain/network',
+    from: '/v3/concepts/dive-into-ton/ton-blockchain/ton-networking',
   },
   ...v3Redirects,
 ];
