@@ -644,14 +644,6 @@
         "to": "/v3/documentation/whitepapers/overview"
     },
     {
-        "from": "/develop/smart-contracts/compile",
-        "to": "/v3/documentation/archive/compile"
-    },
-    {
-        "from": "/develop/smart-contracts/environment/installation",
-        "to": "/v3/documentation/archive/precompiled-binaries"
-    },
-    {
         "from": "/contribute/localization-program/translation-style-guide",
         "to": "/v3/contribute/localization-program/translation-style-guide"
     },
