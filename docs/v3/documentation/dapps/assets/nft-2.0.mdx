@@ -65,7 +65,7 @@ This status does not involve any on-chain transactions or changes to the contrac
 The examples illustrate a standard NFT and the same item when it is marked as **royalty violated**.
 
 
-```jsonc
+```json
 // Standard NFT metadata
 {
   "name": "Magic Mushroom #57",
@@ -81,7 +81,7 @@ The examples illustrate a standard NFT and the same item when it is marked as **
 ```
 
 
-```jsonc
+```json
 // Royalty violated NFT metadata
 {
   "name": "Magic Mushroom #58",
@@ -138,7 +138,7 @@ For example, if `numerator = 11` and `denominator = 1000`, the royalty share is 
 
 #### Marketplace responsibilities
 
-- Marketplaces that comply with the NFT 2.0 specification are expected to send `mulDivFloor(price, numerator, denominator)` to the destination address after an NFT sale or any other successful commercial operation.
+- Marketplaces that comply with the NFT 2.0 specification are expected to send `muldiv(price, numerator, denominator)` to the destination address after an NFT sale or any other successful commercial operation.
 - Marketplaces **SHOULD NOT** send royalty payments when the calculated amount is zero.
 - Marketplaces **MAY** deduct gas and message fees required to send the royalty from the royalty amount.
 
