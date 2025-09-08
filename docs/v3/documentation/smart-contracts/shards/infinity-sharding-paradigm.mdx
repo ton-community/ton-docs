@@ -34,7 +34,7 @@ Each block includes three core parameters that are used to assess load:
 
 ### 2. Block limits and classification
 
-Limits for these metrics are defined in [configuration parameters 22 and 23](/v3/documentation/network/configs/blockchain-configs#param-22-and-23).
+Limits for these metrics are defined in [configuration parameters 22 and 23](/v3/documentation/network/config-params/overview#param-22-and-23).
 Each parameter has three thresholds: **underload**, **soft**, and **hard**:
 
 #### Threshold table
@@ -90,7 +90,7 @@ Here, `one_bits` counts the number of `1`-bits in the mask. Lower-order bits cor
 
 ### 5. Final decision
 
-Validators determine whether to split or merge shards based on the `want_split` and `want_merge` flags, along with [WorkChain configuration parameters](/v3/documentation/network/configs/blockchain-configs#param-12):
+Validators determine whether to split or merge shards based on the `want_split` and `want_merge` flags, along with [WorkChain configuration parameters](/v3/documentation/network/config-params/overview#param-12):
 
 - If a shard's depth is less than `min_split`, it will split.
 - If a shard's depth exceeds `max_split`, it will merge.
@@ -193,7 +193,7 @@ When a split or merge is triggered, the affected shards pause and wait for the n
 
 ## See also
 
-- [Block layout](/v3/documentation/data-formats/tlb/block-layout)
+- [Block layout](/v3/documentation/data-formats/layout/blocks)
 - [Whitepapers](/v3/documentation/whitepapers/overview)
 
 <Feedback />
