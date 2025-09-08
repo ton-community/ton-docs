@@ -4,15 +4,15 @@ import Button from '@site/src/components/button'
 
 # Introduction
 
-Smart contracts on TON are autonomous programs executed by the [TON Virtual Machine (TVM)](/v3/documentation/tvm/tvm-overview). Each contract combines immutable code with persistent data and interacts with other contracts through asynchronous [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions).
+Smart contracts on TON are autonomous programs executed by the [TON Virtual Machine (TVM)](/v3/documentation/tvm/overview). Each contract combines immutable code with persistent data and interacts with other contracts through asynchronous [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions).
 
 ## Quick start
 
 If you want to jump right in, follow our [quick start guide](/v3/guidelines/quick-start/developing-smart-contracts/setup-environment).
 
-## TON Virtual Machine (TVM)
+## Virtual machine
 
-The TVM is the execution engine for your smart contracts. It processes transactions in phases and operates on a stack‑based model. For details on its state, control registers and compute pipeline, see the [TVM overview](/v3/documentation/tvm/tvm-overview).
+TVM is the execution engine for your smart contracts. It processes transactions in phases and operates on a stack‑based model. For details on its state, control registers and compute pipeline, see the [TVM overview](/v3/documentation/tvm/overview).
 
 ## Messages, transaction fees and sharding
 
@@ -66,13 +66,13 @@ To build and test smart contracts on TON, it’s best to set up a local developm
 
 TON provides a set of standard smart contracts that act as building blocks for wallets, governance, staking and other core services. These reference implementations are open‑source and well reviewed; studying them will help you understand how to build secure applications on TON.
 
-- [Wallet contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) – regular wallet contracts on TON are just smart contracts with code and data.  Like any other contract, they accept external and internal messages, send messages and logs.  Each version has a different implementation of this standard interface.
+- [Wallet](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) – regular wallet contracts on TON are just smart contracts with code and data.  Like any other contract, they accept external and internal messages, send messages and logs.  Each version has a different implementation of this standard interface.
 
-- [Highload wallet contracts](/v3/documentation/smart-contracts/contracts-specs/highload-wallet) – designed for scenarios where you must send large numbers of transactions quickly.  It can send one internal message per external call, but by sending that message back to itself it can effectively dispatch up to 254 messages in one request.
+- [Highload wallet](/v3/documentation/smart-contracts/contracts-specs/highload-wallet) – designed for scenarios where you must send large numbers of transactions quickly.  It can send one internal message per external call, but by sending that message back to itself it can effectively dispatch up to 254 messages in one request.
 
-- [Vesting contract](/v3/documentation/smart-contracts/contracts-specs/vesting-contract) – a smart contract that locks Toncoin and releases it according to a predefined vesting schedule.  It acts as a secure escrow, locking a specified amount of Toncoin for a defined period and gradually unlocking it based on parameters such as total duration, unlock period and cliff.
+- [Vesting](/v3/documentation/smart-contracts/contracts-specs/vesting-contract) – a smart contract that locks Toncoin and releases it according to a predefined vesting schedule.  It acts as a secure escrow, locking a specified amount of Toncoin for a defined period and gradually unlocking it based on parameters such as total duration, unlock period and cliff.
 
-- [Governance contracts](/v3/documentation/smart-contracts/contracts-specs/governance) – TON uses special smart contracts to manage consensus parameters (TVM configuration, catchain settings, fee parameters and chain topology) on‑chain.  The main governance contracts are the **Elector** (manages validator elections and reward distribution), **Config** and **DNS**.
+- [Governance](/v3/documentation/smart-contracts/contracts-specs/governance) – TON uses special smart contracts to manage consensus parameters (TVM configuration, catchain settings, fee parameters and chain topology) on‑chain.  The main governance contracts are the **Elector** (manages validator elections and reward distribution), **Config** and **DNS**.
 
 - [Nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) – a pool contract that allows nominators to lend Toncoin to validators for staking.  It ensures that funds are used exclusively for validation and distributes rewards proportionally to nominators’ stakes.  Pools are designed for large stakes and a limited number of nominators.
 
