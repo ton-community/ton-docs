@@ -325,7 +325,7 @@ Finally, to retrieve `Excess 0xd53276db` message you must set up `response desti
 Sometimes you may get a `709` error when sending a jetton. This error indicates that the amount of Toncoin attached to the message is not enough to send it. Make sure `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`, which is usually >0.04 unless the payload being forwarded is very large. The fee depends on various factors, including the jetton code data and whether the recipient needs to deploy a new jetton wallet.
 It is recommended to add a supply of Toncoin to the message and set your address as the `response_destination` to receive `Excess 0xd53276db` messages. For example, you can add 0.05 TON to the message by setting `forward_ton_amount` to 1 nanoton (this amount of TON will be attached to the `jetton notify 0x7362d09c` message).
 
-You may also encounter the error [`cskip_no_gas`](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped), which indicates that the tokens were successfully transferred, but no other computations were performed. This is a common situation when the `forward_ton_amount` value is 1 nanoton.
+You may also encounter the error [`cskip_no_gas`](/v3/documentation/tvm/overview#when-the-compute-phase-is-skipped), which indicates that the tokens were successfully transferred, but no other computations were performed. This is a common situation when the `forward_ton_amount` value is 1 nanoton.
 
 :::tip
 Check [best practices](/v3/guidelines/dapps/asset-processing/jettons#best-practices) for the _"send jettons with comments"_ example.
@@ -710,10 +710,10 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
       my_wallet = Wallet(provider=client, mnemonics=my_wallet_mnemonics, version='v4r2')
 
       # for TonCenterClient and LsClient
-      await my_wallet.transfer_jetton(destination_address='address', jetton_master_address=jetton.address, jettons_amount=1000, fee=0.15) 
+      await my_wallet.transfer_jetton(destination_address='address', jetton_master_address=jetton.address, jettons_amount=1000, fee=0.15)
 
       # for all clients
-      await my_wallet.transfer_jetton_by_jetton_wallet(destination_address='address', jetton_wallet='your jetton wallet address', jettons_amount=1000, fee=0.1)  
+      await my_wallet.transfer_jetton_by_jetton_wallet(destination_address='address', jetton_wallet='your jetton wallet address', jettons_amount=1000, fee=0.1)
       ```
     </details>
   </TabItem>
@@ -844,7 +844,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
                   const userAddress = Address.parse(MY_WALLET_ADDRESS);
 
                   const jettonUserAddress =  await jettonMaster.getWalletAddress(userAddress);
-                
+
                   console.log('My jetton wallet for ' + name + ' is ' + jettonUserAddress.toString());
 
                   const jettonWallet = client.open(jettonWallet.create(jettonUserAddress));
@@ -958,7 +958,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
                   if (!(comment == orderId)) {
                       continue;
                   }
-                  
+
                   console.log('Got ' + jettonName + ' jetton deposit ' + amount?.toString() + ' units with text comment "' + comment + '"');
                   const txHash = tx.hash().toString('hex');
                   return (txHash);
