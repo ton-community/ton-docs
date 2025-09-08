@@ -22,7 +22,7 @@ import Button from '@site/src/components/button'
 
 This section covers how to access transaction data from the blockchain using APIs. You'll learn about the available API services in TON and how to retrieve data by account, by message, or through a full blockchain scan.
 
-## APIs of TON 
+## APIs of TON
 
 An _HTTP API service_ is a software solution that retrieves raw data from a LiteServer node and encodes it into standard formats for other services.
 A provider that offers such a solution is referred to as an HTTP API _provider_.
@@ -50,7 +50,7 @@ Data that undergoes minimal post-processing is often referred to as **raw data**
 
 In contrast, when working with event analytics that does **not** involve significant asset transfers, it is often more efficient to use **high-level interfaces** — such as APIs that apply post-processing before returning results. These interfaces provide simplified, structured data that is easier to work with in most application-level scenarios.
 
-In TON, transactions are grouped into blocks. Because TON uses **sharding**, each Masterchain block includes references to the corresponding shard blocks. A shard block in the Basechain is considered finalized once a Masterchain block references that block. This also applies if any block built on top of it (its descendants) is referenced. To retrieve all transactions, services must, therefore, read both the Masterchain and the relevant Basechain shard blocks.
+In TON, transactions are grouped into blocks. Because TON uses **sharding**, each MasterChain block includes references to the corresponding shard blocks. A shard block in the Basechain is considered finalized once a MasterChain block references that block. This also applies if any block built on top of it (its descendants) is referenced. To retrieve all transactions, services must, therefore, read both the MasterChain and the relevant Basechain shard blocks.
 
 All WorkChain blocks follow a consistent structure. For transaction analysis, the relevant section is the `block_extra` field.
 
