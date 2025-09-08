@@ -26,8 +26,8 @@ Use the `GETSTORAGEFEE` opcode with the following parameters:
 | bits       | Number of contract bits                                 |
 | is_mc      | True if the source or destination is in the MasterChain |
 
-:::info 
-The system counts only unique hash cells for storage and forward fees. For example, it counts three identical hash cells as one. This mechanism deduplicates data by storing the content of multiple equivalent sub-cells only once, even if they are referenced across different branches. [Read more about deduplication](/v3/documentation/data-formats/tlb/library-cells). 
+:::info
+The system counts only unique hash cells for storage and forward fees. For example, it counts three identical hash cells as one. This mechanism deduplicates data by storing the content of multiple equivalent sub-cells only once, even if they are referenced across different branches. [Read more about deduplication](/v3/documentation/data-formats/cells/library).
 :::
 
 ### Calculation flow
@@ -188,8 +188,8 @@ If the message structure is deterministic, use the `GETFORWARDFEE` opcode with t
 | bits       | Number of bits                                          |
 | is_mc      | True if the source or destination is in the MasterChain |
 
-:::info 
-The system counts only unique hash cells for storage and forward fees. For example, it counts three identical hash cells as one. This mechanism deduplicates data by storing the content of multiple equivalent sub-cells only once, even if they are referenced across different branches. [Read more about deduplication](/v3/documentation/data-formats/tlb/library-cells). 
+:::info
+The system counts only unique hash cells for storage and forward fees. For example, it counts three identical hash cells as one. This mechanism deduplicates data by storing the content of multiple equivalent sub-cells only once, even if they are referenced across different branches. [Read more about deduplication](/v3/documentation/data-formats/cells/library).
 :::
 
 However, if the outgoing message depends significantly on the incoming structure, you may not be able to fully predict the fee. In such cases, try using the `GETORIGINALFWDFEE` opcode with the following parameters:
@@ -199,7 +199,7 @@ However, if the outgoing message depends significantly on the incoming structure
 | fwd_fee    | Parsed from the incoming message                        |
 | is_mc      | True if the source or destination is in the MasterChain |
 
-:::caution 
+:::caution
 Be careful with the `SENDMSG` opcode, as it uses an **unpredictable amount** of gas. Avoid using it unless necessary.
 :::
 

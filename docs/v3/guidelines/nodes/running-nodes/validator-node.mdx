@@ -33,13 +33,13 @@ To determine which UDP ports are open, use the `netstat -tulpn` command.
 
 If a validator processes less than 90% of the expected blocks during a validation round, they will be fined by 101 TON.
 
-Learn more about the [slashing policy](/v3/documentation/infra/nodes/validation/staking-incentives#decentralized-system-of-penalties).
+Learn more about the [slashing policy](/v3/documentation/nodes/validation/staking-incentives#decentralized-system-of-penalties).
 
 ### Running a fullnode
 
 Launch the [Full Node](/v3/guidelines/nodes/running-nodes/full-node) before follow this article.
 
-Ensure that validator mode is enabled by using the `status_modes` command. If it is not enabled, refer to the [MyTonCtrl enable_mode command](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#enable_mode).
+Ensure that validator mode is enabled by using the `status_modes` command. If it is not enabled, refer to the [MyTonCtrl enable_mode command](/v3/documentation/nodes/mytonctrl/overview#enable_mode).
 
 ## Architecture
 
@@ -59,7 +59,7 @@ During the installation of `MyTonCtrl`, the installer creates a wallet named `va
 
 ## Activate the wallets
 
-1. Send the necessary number of coins to the wallet and activate it. The minimum stake is approximately **300K TON**, and the maximum is about **1M** TON. To understand the required amount of coins, please check the current stakes at [tonscan.com](https://tonscan.com/validation). For  more information, see [how maximum and minimum stakes calculated](/v3/documentation/infra/nodes/validation/staking-incentives#values-of-stakes-max-effective-stake).
+1. Send the necessary number of coins to the wallet and activate it. The minimum stake is approximately **300K TON**, and the maximum is about **1M** TON. To understand the required amount of coins, please check the current stakes at [tonscan.com](https://tonscan.com/validation). For  more information, see [how maximum and minimum stakes calculated](/v3/documentation/nodes/validation/staking-incentives#values-of-stakes-max-effective-stake).
 
 2. Use the `vas` command to view the history of transfers:
 
@@ -90,7 +90,7 @@ The command above sets the stake size to 50k Toncoins. If the bet is accepted an
 ## Adhere to rules
 
 :::caution Slashing policy for underperforming validators
-If a validator processes less than 90% of the expected number of blocks during a validation round, that validator will incur a fine of 101 TON. For more information, read about the [slashing policy](/v3/documentation/infra/nodes/validation/staking-incentives#decentralized-system-of-penalties).
+If a validator processes less than 90% of the expected number of blocks during a validation round, that validator will incur a fine of 101 TON. For more information, read about the [slashing policy](/v3/documentation/nodes/validation/staking-incentives#decentralized-system-of-penalties).
 :::
 
 As a TON validator, make sure you follow these crucial steps to ensure network stability and avoid slashing penalties in the future.
@@ -161,6 +161,6 @@ If you run a regular node, then contact the group: [@mytonctrl_help](https://t.m
 
 - [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
 - [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
-- [Staking incentives](/v3/documentation/infra/nodes/validation/staking-incentives)
+- [Staking incentives](/v3/documentation/nodes/validation/staking-incentives)
 
 <Feedback />

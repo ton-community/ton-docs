@@ -178,11 +178,11 @@ transaction$0111 account_addr:bits256 lt:uint64
     total_fees:CurrencyCollection state_update:^(HASH_UPDATE Account)
     description:^TransactionDescr = Transaction;
 ```
-See the full explanation in [Transaction layout](/v3/documentation/data-formats/tlb/transaction-layout).
+See the full explanation in [Transaction layout](/v3/documentation/data-formats/layout/transactions).
 
 For details on how a hash is computed from the structure above, see:
 
-- **Cell hash** and **Standard representation hash calculation** on the [Cells & BoC](/v3/documentation/data-formats/tlb/cell-boc#cell-hash) page.
+- **Cell hash** and **Standard representation hash calculation** on the [Cells & BoC](/v3/documentation/data-formats/cells/overview#cell-hash) page.
 - The practical section on retrieving hashes in the [DApp cookbook](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
 
 :::info
@@ -1033,7 +1033,7 @@ async function main() {
   validateStateInitMatchesAddress(walletAddress, stateInitBase64);
 
   // Example: you can get state from api/explorer in base64 format
-/*  
+/*
   const stateInit = new StateInit({
         code: Cell.fromBoc(
           Buffer.from(accountDetails.state.code!, "base64")
