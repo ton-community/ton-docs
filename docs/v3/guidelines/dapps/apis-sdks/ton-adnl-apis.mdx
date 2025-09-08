@@ -8,7 +8,7 @@ Clients connect directly to lite servers (nodes) using a binary protocol.
 
 The client downloads keyblocks, which represent the current state of an account, and their Merkle proofs, ensuring the validity of the received data.
 
-For read operations (such as get-method calls), the client launches a local TVM with a downloaded and verified state. There's no need to download the full blockchain state—the client only retrieves what’s required for the operation.
+For read operations (such as [get-method calls](/docs/v3/guidelines/smart-contracts/get-methods.mdx)), the client launches a local TVM with a downloaded and verified state. There's no need to download the full blockchain state—the client only retrieves what’s required for the operation.
 
 Read more about [Merkle proofs](/v3/documentation/data-formats/tlb/proofs) in [TON whitepaper](https://ton.org/ton.pdf) sections 2.3.10 and 2.3.11.
 

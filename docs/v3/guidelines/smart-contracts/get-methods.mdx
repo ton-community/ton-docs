@@ -22,7 +22,7 @@ Example:
 
 ```func
 int get_balance() method_id {
-return get_data().begin_parse().preload_uint(64);
+    return get_data().begin_parse().preload_uint(64);
 }
 ```
 
@@ -170,6 +170,7 @@ slice get_nft_address_by_index(int index) method_id {
 ```
 
 Given an index, this method calculates and returns the corresponding NFT item contract address within this collection.
+The helper function `workchain()` returns the current workchain ID. See how to [generate an internal address](/v3/documentation/smart-contracts/func/cookbook.mdx#generate-an-internal-address) for more details.
 
 #### royalty_params()
 
@@ -199,7 +200,7 @@ cell get_nft_content(int index, cell individual_nft_content) method_id {
 }
 ```
 
-Given an index and [individual NFT content](#get_nft_data), this method fetches and returns the NFT's combined common and individual content.
+Given an index and [get_nft_data()](#get_nft_data), this method fetches and returns the NFT's combined common and individual content.
 
 ## How to work with get methods
 
@@ -219,7 +220,7 @@ You can call get methods on the "Get methods" tab.
 
 ### Calling get methods from code
 
-We will use Javascript libraries and tools for the examples below:
+We will use JavaScript libraries and tools for the examples below:
 
 - [ton](https://github.com/ton-org/ton/) library
 - [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript) 
@@ -244,6 +245,7 @@ async function main() {
   // Create Client
   const client = new TonClient({
     endpoint: "https://toncenter.com/api/v2/jsonRPC",
+    // For Testnet use: "https://testnet.toncenter.com/api/v2/jsonRPC"
   });
 
   // Call get method
@@ -262,7 +264,7 @@ This code will produce an output in the format `Total: 123`. The number may vary
 
 ### Testing get methods
 
-We can use the [Sandbox](https://github.com/ton-community/sandbox/) to test smart contracts, which is installed by default in new Blueprint projects.
+We can use the [Sandbox](https://github.com/ton-org/sandbox/) to test smart contracts, which is installed by default in new Blueprint projects.
 
 First, you must add a special method in the contract wrapper to execute the get method and return the typed result. Let's say your contract is called _Counter_, and you have already implemented the method to update the stored number. Open `wrappers/Counter.ts` and add the following method:
 
@@ -295,7 +297,7 @@ First, acquiring data from another ShardChain may introduce significant latency.
 
 Second, achieving consensus among validators would be problematic. Validators would also need to invoke the same get method to verify a transaction's correctness. However, if the state of the target contract changes between these multiple invocations, validators could end up with differing versions of the transaction result.
 
-Lastly, smart contracts in TON are designed to be pure functions: they will always produce the same output for the same input. This principle allows for straightforward consensus during message processing. Introducing runtime acquisition of arbitrary, dynamically changing data would break this deterministic property.
+Smart contracts in TON are deterministic: for the same state and input, they produce the same output. This principle allows for straightforward consensus during message processing. Introducing runtime acquisition of arbitrary, dynamically changing data would break this deterministic property.
 
 ### Implications for developers
 
@@ -343,13 +345,15 @@ int get_total() method_id {
  .store_uint(0x18, 6)
  .store_slice(sender)
  .store_coins(0)
- .store_uint(0, 107) ;; default message headers (see sending messages page)
+ .store_uint(0, 107) ;; default message headers
  .store_uint(3, 32) ;; response operation code
  .store_uint(total, 32) ;; the requested number
  .end_cell(), 64);
  }
 }
 ```
+
+See [sending messages page](/v3/documentation/smart-contracts/message-management/sending-messages) for details on default message headers.
 
 In this example, the contract receives and processes internal messages by interpreting operation codes, executing specific methods, and returning responses appropriately:
 
@@ -363,7 +367,7 @@ For simplicity, we used just simple little numbers 1, 2, and 3 for the operation
 
 ## Common pitfalls and how to avoid them
 
-1. **Misuse of get methods**: As mentioned earlier, get methods are designed to return data from the contract's state and are not meant to change the contract's state. Attempting to alter the contract's state within a get method will not do it.
+1. **Misuse of get methods**: As mentioned earlier, get methods are designed to return data from the contract's state and are not meant to change the contract's state. Get methods must not change state; any attempted state changes have no effect.
 
 2. **Ignoring return types**: Every get method must have a clearly defined return type that matches the retrieved data. If a method is expected to return a specific type of data, ensure that all execution paths within the method return this type. Inconsistent return types should be avoided, as they can lead to errors and complications when interacting with the contract.
 
@@ -375,5 +379,6 @@ Get methods are vital for querying data from smart contracts on the TON Blockcha
 
 ## See also
 - [Writing tests examples](/v3/guidelines/smart-contracts/testing/writing-test-examples)
+- [Storage and get-methods](/v3/guidelines/quick-start/developing-smart-contracts/func-tolk-folder/storage-and-get-methods/)
 
 <Feedback />
