@@ -4,83 +4,43 @@ import Feedback from '@site/src/components/Feedback';
 
 Select your IDE or editor and install the relevant plugin for your language.
 
-## Recommended plugins
+There are officially supported plugins for [Tolk](/v3/documentation/smart-contracts/tolk/overview), [FunC](/v3/documentation/smart-contracts/func/overview), [Fift](/v3/documentation/smart-contracts/fift/overview), [TL-B](/v3/documentation/data-formats/tlb/overviewe), and [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript).
 
-Officially supported plugins for Tolk and FunC languages.
-
-### JetBrains IDEs
+## JetBrains IDEs
 
 Plugin for JetBrains products (IntelliJ IDEA, WebStorm, PyCharm, CLion, etc.).
 
 ![TON JetBrains plugin screenshot](/img/docs/ton-jetbrains-plugin.png)
 
-:::info
-The TON FunC plugin can be used with any JetBrains product.
-(IntelliJ IDEA, WebStorm, PyCharm, CLion, etc.)
-:::
+There are several ways to install a plugin:
+- Using an IDE built-in plugin system:
+<kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "TON"</kbd> >
+  <kbd>Install Plugin</kbd>
 
-There are several ways to install the plugin:
-- Find the plugin directly in the IDE plugins section with the "**TON**" keyword
-- [Marketplace link](https://plugins.jetbrains.com/plugin/23382-ton)
-- [GitHub repository](https://github.com/ton-blockchain/intellij-ton)
+- Via the [Marketplace](https://plugins.jetbrains.com/plugin/23382-ton)
+- Download the [latest release](https://github.com/ton-blockchain/intellij-ton/releases/latest) and install it manually using
+<kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
-### Visual Studio Code
+## Visual Studio Code
 
 Extension for Visual Studio Code (VS Code) and VS Code-based editors (VS Codium, Cursor, Windsurf, etc.).
 
-- [Marketplace](https://marketplace.visualstudio.com/items?itemName=ton-core.vscode-ton)
-- [Open VSX registry](https://open-vsx.org/extension/ton-core/vscode-ton)
-- [GitHub repository](https://github.com/ton-blockchain/ton-language-server/tree/main/editors/code#installation)
+### Marketplace
+
+Install the TON extension in [VS Code](https://marketplace.visualstudio.com/items?itemName=ton-core.vscode-ton) or [VS Code-based editors](https://open-vsx.org/extension/ton-core/vscode-ton).
+
+### Manually
+Get the latest `.vsix` file from [releases](https://github.com/ton-blockchain/ton-language-server/releases), from
+[VS Code marketplace](https://marketplace.visualstudio.com/items?itemName=ton-core.vscode-ton),
+or from [Open VSX Registry](https://open-vsx.org/extension/ton-core/vscode-ton).
+
+In VS Code:
+<kbd>Open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`)</kbd> >
+<kbd>Type "Install from VSIX"</kbd> >
+<kbd>Select the downloaded `.vsix` file</kbd> >
+<kbd>Reload VS Code</kbd>
 
 ## Web IDE
 Using the [TON Web IDE](https://ide.ton.org/), you can try smart contract development online without installing anything locally.
-
-## Tact plugins
-
-### JetBrains IDEs
-
-There are several ways to install the plugin:
-- Find the plugin directly in the IDE plugins section with the "**Tact**" keyword
-- [Marketplace link](https://plugins.jetbrains.com/plugin/27290-tact)
-- [GitHub repository](https://github.com/tact-lang/intelli-tact)
-
-### Visual Studio Code
-
-Visual Studio Code is a free and popular code editor.
-
-### FunC
-
-- [Extension (Marketplace)](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
-- [GitHub repository](https://github.com/ton-foundation/vscode-func)
-
-### Tact
-
-- [Extension (Marketplace)](https://marketplace.visualstudio.com/items?itemName=tonstudio.vscode-tact)
-- [Extension (Open VSX)](https://open-vsx.org/extension/tonstudio/vscode-tact)
-- [GitHub repository](https://github.com/tact-lang/tact-language-server)
-
-### Sublime Text
-
-- [Package Control](https://packagecontrol.io/packages/Tact)
-- [GitHub repository](https://github.com/tact-lang/tact-sublime)
-
-### Vim
-
-All-in-one Vim 8+ plugin for the Tact language.
-
-- [GitHub repository](https://github.com/tact-lang/tact.vim)
-
-### Neovim
-
-To enable syntax highlighting in Neovim, follow the installation instructions in the [nvim-treesitter quickstart guide](https://github.com/nvim-treesitter/nvim-treesitter#quickstart).
-
-To make sure the `.tact` extension is properly recognized, install the [tact.vim](https://github.com/tact-lang/tact.vim) plugin.
-
-### Helix
-
-To enable support for the Tact language, refer to the following instructions:
-
-1. For the latest syntax highlighting, set up [tree-sitter-tact](https://github.com/tact-lang/tree-sitter-tact#helix)
-2. For editor intelligence, set up [tact-language-server](https://github.com/tact-lang/tact-language-server#other-editors)
 
 <Feedback />
