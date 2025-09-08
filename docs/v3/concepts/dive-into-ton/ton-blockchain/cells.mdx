@@ -30,6 +30,13 @@ You can imagine it as a **family tree**: every child points to parents, but you 
 
 <br />
 
+These design choices allow us to define the following rules for cells:
+
+- Storage is compact and efficient (cells can be reused in multiple places).
+- Verification is simple (Merkle proofs can show that data is correct).
+- Serialization is standardized (Bag of Cells).
+
+
 ## Types of cells
 
 There are **five types of cells** in TON.
@@ -52,6 +59,15 @@ This tree is called a [Bag of Cells (BoC)](/v3/documentation/data-formats/cells/
 
 To describe how exactly data is put into boxes, TON uses a special language called [TL-B](/v3/documentation/data-formats/tlb/overviewe).
 It plays the same role as **Protocol Buffers** or **JSON schemas**, but for TON cells.
+
+## Transition to cells
+
+When a transaction happens:
+1. Validators execute smart contracts inside the TVM.
+2. The resulting changes are written to account states.
+3. These account states are stored as **cells**, which are then committed into blocks.
+
+Thus, **cells are the fundamental building blocks of TON’s data storage**.
 
 ## See also
 
