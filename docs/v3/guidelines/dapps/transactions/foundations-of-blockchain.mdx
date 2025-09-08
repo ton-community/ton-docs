@@ -218,7 +218,7 @@ TON defines account states `AccountState` as follows:
 | State   | TL-B code | Description                                                                                                                                                                                                                                  |
 |----------|-----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `uninit` | `00`      | The account exists but contains no code or data. It may hold a non-zero balance but is not initialized yet.                                                                                                                                  |
-| `frozen` | `01`      | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. The account has zero or negative balance, or doesn't meet the workchain’s minimum requirement. |
+| `frozen` | `01`      | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. The account has zero or unpaid balance, or doesn't meet the WorkChain’s minimum requirement. |
 | `active` | `10`      | The account includes a `StateInit`, which stands for State Initialized, with deployed code and data. It means that it's already initialized. It is an active smart contract, ready to process incoming messages.                             |
 
 ```tlb
@@ -231,7 +231,7 @@ account_frozen$01 state_hash:bits256 = AccountState;
 
 The account status `AccountStatus` provides a high-level view of an account’s lifecycle stage.
 
-While **account's state** captures the account’s underlying content— _its code and data_ — **account's status** abstracts these details to indicate whether an account is _uninitialized, active, frozen, or nonexistent_.
+While **account's state** captures the account’s underlying content— _its code and data_ — **account's status** abstracts these details to indicate whether an account is _uninitialized, frozen, active, or nonexistent_.
 
 ```tlb
 acc_state_uninit$00 = AccountStatus;
