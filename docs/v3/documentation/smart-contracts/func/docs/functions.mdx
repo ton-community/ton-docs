@@ -49,7 +49,7 @@ Every program must include a function with `id = 0`, meaning it must define eith
 
 #### Receive internal
 
-The `recv_internal` function is invoked when a smart contract receives **an inbound internal message**. When the [TVM initializes](/v3/documentation/tvm/tvm-overview#initialization-of-tvm), certain variables are automatically placed on the stack. By specifying arguments in `recv_internal`, the smart contract can access some of these values. Any values not explicitly referenced in the function parameters will remain unused at the bottom of the stack.
+The `recv_internal` function is invoked when a smart contract receives **an inbound internal message**. When the [TVM initializes](/v3/documentation/tvm/overview#initialization-of-tvm), certain variables are automatically placed on the stack. By specifying arguments in `recv_internal`, the smart contract can access some of these values. Any values not explicitly referenced in the function parameters will remain unused at the bottom of the stack.
 
 The following `recv_internal` function declarations are all valid. Functions with fewer parameters consume slightly less gas, as each unused argument results in an additional `DROP` instruction:
 
@@ -81,7 +81,7 @@ _ pyth(int m, int n) {
   return (m * m - n * n, 2 * m * n, m * m + n * n);
 }
 ```
-This is a valid definition of the function `pyth`, which has the inferred type `(int, int) → (int, int, int)`. 
+This is a valid definition of the function `pyth`, which has the inferred type `(int, int) → (int, int, int)`.
 It computes Pythagorean triples based on the given input values.
 
 ### Function arguments
@@ -96,7 +96,7 @@ In function arguments, commas separate it. The following types of argument decla
     return x;
   }
   ```
-  This is a valid function definition of type `(int, int) → int`. 
+  This is a valid function definition of type `(int, int) → int`.
 
 
 - Argument with inferred type declaration: If an argument's type is not explicitly declared, it is inferred by the type-checker.
@@ -111,7 +111,7 @@ In function arguments, commas separate it. The following types of argument decla
 
 **Argument tensor representation**
 
-Even though a function may appear to take multiple arguments, it takes a single [tensor-type](/v3/documentation/smart-contracts/func/docs/types#tensor-types) argument. For more details on this distinction, refer to the [Function application](/v3/documentation/smart-contracts/func/docs/statements#function-application) section. 
+Even though a function may appear to take multiple arguments, it takes a single [tensor-type](/v3/documentation/smart-contracts/func/docs/types#tensor-types) argument. For more details on this distinction, refer to the [Function application](/v3/documentation/smart-contracts/func/docs/statements#function-application) section.
 However, for convenience, the individual components of this tensor are conventionally referred to as "function arguments."
 
 ### Function calls

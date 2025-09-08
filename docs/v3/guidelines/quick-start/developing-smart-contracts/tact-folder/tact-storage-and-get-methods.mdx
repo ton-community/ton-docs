@@ -30,7 +30,7 @@ message Add {
 ```
 
 A **message** is a structure that sends data into a contract from another contract or outside the blockchain.
-Tact simplifies working with messages by automatically serializing and deserializing them into [TVM cells](https://docs.ton.org/v3/documentation/data-formats/tlb/msg-tlb). You don’t need to write low-level serialization code or think about bit layout manually — Tact handles that for you.
+Tact simplifies working with messages by automatically serializing and deserializing them into [TVM cells](https://docs.ton.org/v3/documentation/data-formats/layout/messages). You don’t need to write low-level serialization code or think about bit layout manually — Tact handles that for you.
 
 Every message is assigned a unique 32-bit identifier called an **opcode** (short for operation code). This identifier is stored at the beginning of the serialized message and helps the contract understand what type of message it is *receiving*.
 
