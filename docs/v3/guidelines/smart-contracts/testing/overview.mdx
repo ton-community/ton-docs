@@ -40,7 +40,7 @@ Ran all test suites.
 
 ## Basic usage
 
-Testing smart contracts allows you to cover security, optimize gas spending, and examine edge cases.  
+Testing smart contracts allows you to cover security, optimize gas spending, and examine edge cases.
 Writing tests in Blueprint (based on [Sandbox](https://github.com/ton-org/sandbox)) involves defining arbitrary actions with the contract and comparing the test results with the expected outcome. For example:
 
 ```typescript
@@ -79,8 +79,8 @@ The `toHaveTransaction` matcher expects an object with any combination of fields
 
 You can omit fields you’re not interested in and pass functions that accept the types and return booleans (`true` meaning good) to check, for example, number ranges, message opcodes, etc. Note that if a field is optional (like `from?: Address`), the function must also accept the optional type.
 
-:::tip  
-The complete list of matcher fields is in the [Sandbox documentation](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).  
+:::tip
+The complete list of matcher fields is in the [Sandbox documentation](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).
 :::
 
 ### Specific test suite
@@ -118,6 +118,34 @@ for (const act of actions) {
     console.log(act.mode);
  }
 }
+```
+
+## TVM exit codes
+
+In Blueprint tests, exit codes from the [compute phase](#compute) are specified in the `exitCode` field of the object argument for the `toHaveTransaction()` method of the `expect()` matcher. The field for the result codes (exit codes from the [action phase](#action)) in the same `toHaveTransaction()` method is called `actionResultCode`.
+
+Note that to do so, you'll have to do a couple of type checks before that:
+
+```typescript
+it('tests something, you name it', async () => {
+  // Send a specific message to our contract and store the results
+  const res = await your_contract_name.send(/* args */);
+
+  // Now, we have access to an array of executed transactions,
+  // with the second one (index 1) being the one that we look for
+  const tx = res.transactions[1]!;
+
+  // To do something useful with it, let's ensure that its type is 'generic'
+  // and that the compute phase wasn't skipped
+  if (tx.description.type === "generic"
+ && tx.description.computePhase.type === "vm") {
+    // Finally, we're able to peek into the transaction for general details freely,
+    // such as printing out the exit code of the compute phase if we so desire
+ console.log(tx.description.computePhase.exitCode);
+ }
+
+  // ...
+});
 ```
 
 ## Tutorials
