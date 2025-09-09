@@ -86,7 +86,7 @@ async function main() {
   });
 
   // Using mnemonic to derive public and private keys
-  // ATTENTION! Replace on your own mnemonic 24-word phrase that you get from wallet app!
+  // Replace with your own 24-word mnemonic from your wallet app
   const mnemonic = "swarm trumpet innocent empty faculty banner picnic unique major taste cigar slogan health neither diary monster jar scale multiply result biology champion genuine outside".split(' ');
   const { publicKey, secretKey } = await mnemonicToWalletKey(mnemonic);
 
@@ -167,7 +167,7 @@ async function main() {
   });
 
   // Using mnemonic to derive public and private keys
-  // ATTENTION! Replace on your own mnemonic 24-word phrase that you get from wallet app!
+  // Replace with your own 24-word mnemonic from your wallet app
   const mnemonic = "swarm trumpet innocent empty faculty banner picnic unique major taste cigar slogan health neither diary monster jar scale multiply result biology champion genuine outside".split(' ');
   // Remember that it should be mnemonic of the wallet that you have made an owner of NFT
 
@@ -182,11 +182,11 @@ async function main() {
     .storeAddress(wallet.address) // address to transfer ownership to
     .storeAddress(wallet.address) // response destination
     .storeBit(0) // no custom payload
-    .storeCoins(1) // forward amount - if >0, will send notification message
+    .storeCoins(toNano('0.01')) // forward amount - recommended minimum in NFT docs
     .storeMaybeRef(comment('Hello from NFT!'))
     .endCell();
 
-  //The one that you have acquired from https://ton-collection-edit.vercel.app/deploy-nft-single
+  // Address of the NFT you created at https://ton-collection-edit.vercel.app/deploy-nft-single
   const nftAddress = Address.parse('YOUR_NFT_ADDRESS'); 
   // Sending NFT transfer
   await wallet.sendTransfer({
