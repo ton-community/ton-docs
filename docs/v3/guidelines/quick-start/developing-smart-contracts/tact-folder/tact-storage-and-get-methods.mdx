@@ -109,7 +109,7 @@ To accept messages with an empty body, add a `receive` function with no argument
 
 ```tact title="/contracts/hello_world.tact"
 receive() {
-    cashback(sender())
+    cashback(sender());
 }
 ```
 
@@ -136,7 +136,7 @@ message(0x7e8764ef) Add {
     amount: Int as uint32;
 }
 
-// Contract defenition
+// Contract definition
 contract HelloWorld {
 
     // storage variables
@@ -149,9 +149,9 @@ contract HelloWorld {
         self.counter = 0;
     }
 
-    // default(null) receive for deploy
+    // // default (empty body) receiver for deploy
     receive() {
-        cashback(sender())
+        cashback(sender());
     }
 
     // function to receive messages from other contracts
