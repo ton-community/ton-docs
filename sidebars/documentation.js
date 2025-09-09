@@ -149,9 +149,19 @@ module.exports = [
       'v3/documentation/dapps/dapps-overview',
       {
         type: 'category',
+        label: 'Assets',
+        items: [
+          'v3/documentation/dapps/assets/toncoin',
+          'v3/documentation/dapps/assets/extra-currencies',
+          'v3/documentation/dapps/assets/nft-2.0',
+          'v3/documentation/dapps/assets/usdt',
+        ],
+      },
+      {
+        type: 'category',
         label: 'DeFi principles',
         items: [
-          'v3/documentation/dapps/defi/coins',
+          'v3/documentation/dapps/assets/overview',
           'v3/documentation/dapps/defi/tokens',
           {
             type: 'doc',
@@ -160,15 +170,6 @@ module.exports = [
           },
           'v3/documentation/dapps/defi/subscriptions',
           'v3/documentation/dapps/defi/ton-payments',
-        ],
-      },
-      {
-        type: 'category',
-        label: 'Assets',
-        items: [
-          'v3/documentation/dapps/assets/overview',
-          'v3/documentation/dapps/assets/nft-2.0',
-          'v3/documentation/dapps/assets/usdt',
         ],
       },
       {

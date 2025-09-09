@@ -1,24 +1,10 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Native token: Toncoin
-
-The native cryptocurrency of the TON Ecosystem is **Toncoin**.
-
-Transaction fees, gas fees, and storage fees are paid in Toncoin.
-
-Toncoin is used for staking to become a validator.
-
-The process of making Toncoin payments is described in [Payments processing](/v3/guidelines/dapps/asset-processing/payments-processing).
-
-You can find where to buy or exchange Toncoin on the [Toncoin page](https://ton.org/coin).
-
-## Extra currencies
+# Extra currencies
 
 TON Blockchain supports up to `2^32` built-in extra currencies.
 
 Extra currency balances can be stored on each blockchain account and transferred to other accounts natively (in an [internal message](/v3/documentation/smart-contracts/message-management/internal-messages) from one smart contract to another, you can specify a hashmap of the extra currency amounts in addition to the Toncoin amount).
-
-TLB:
 
 ```tlb
 extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) = ExtraCurrencyCollection;
