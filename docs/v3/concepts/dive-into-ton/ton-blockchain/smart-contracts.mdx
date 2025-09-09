@@ -1,0 +1,24 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Smart contracts
+
+In TON, every account can be more than just a balance holder — it can also contain **code** and **data**.
+When both are present, the account becomes a **smart contract**.
+
+- **Code** — the program logic that defines how the contract reacts to incoming messages.
+- **Data** — the storage that keeps the contract’s state between transactions.
+
+Smart contracts are actors: they don’t call each other directly, but exchange **messages** (transactions). This follows the **actor model**:
+- Isolation: contracts cannot directly read each other’s storage.
+- [Asynchronous communication](/v3/concepts/dive-into-ton/ton-blockchain/asynchrony): messages are delivered and processed independently.
+
+## Why it matters
+
+Smart contracts and TVM together make TON a **programmable blockchain** — not just a ledger, but a platform where apps and services can run.
+
+Learn more about smart contracts in the [Smart contract documentation](/v3/documentation/smart-contracts/overview).
+
+## See also
+- [TON Virtual Machine](/v3/concepts/dive-into-ton/ton-blockchain/ton-virtual-machine)
+
+<Feedback />
