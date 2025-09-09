@@ -52,7 +52,7 @@ This mechanism plays a crucial role in [Jetton Processing](/v3/guidelines/dapps/
 
 Now that our smart contracts are fully tested, we are ready to deploy them to TON. In Blueprint, this process is the same for both Mainnet and Testnet and for any of the presented languages in the guide: FunC or Tolk.
 
-### Step 1: Update the Deployment Script
+### Step 1: update the deployment script
 
 Deployment scripts rely on the same wrappers that you have used in testing scripts. We will use one script to deploy the previously developed smart contract. Update `deployHelloWorld.ts` with this code:
 
@@ -82,7 +82,7 @@ export async function run(provider: NetworkProvider) {
 }
 ```
 
-### Step 2: Run the Deploy Script
+### Step 2: run the deploy script
 
 You can run the script by entering the following command:
 
@@ -90,7 +90,7 @@ You can run the script by entering the following command:
 npx blueprint run deployHelloWorld
 ```
 
-### Step 3: Choose Network
+### Step 3: choose network
 
 After that, you will see an interactive menu allowing you to choose a network:
 
@@ -105,7 +105,7 @@ After that, you will see an interactive menu allowing you to choose a network:
 Before deployment to the Mainnet, ensure that your smart contracts correspond to [Security measures](/v3/guidelines/smart-contracts/security/overview/). As we said before, the HelloWorld smart contract **doesn't**.
 :::
 
-### Step 4: Choose Wallet App
+### Step 4: choose wallet app
 
 Next, choose how to access your wallet. The easiest way is to use [TON Connect](/v3/guidelines/ton-connect/overview/) for the most popular wallet apps: Tonkeeper, MyTonWallet, or Tonhub.
 
@@ -125,7 +125,7 @@ Finally, scan the QR code in the terminal through your wallet app and connect th
 
 You will receive a transaction request in your wallet app each time your code requires currency for a transaction.
 
-### Step 5: Observe Your Smart Contract on the Network
+### Step 5: observe your smart contract on the network
 
 After confirming the request in your wallet and awaiting deployment, you will see a corresponding message with a reference to your newly deployed smart contract view in the explorer:
 
@@ -134,8 +134,7 @@ Contract deployed at address EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 You can view it at https://testnet.tonscan.org/address/EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 ```
 
-**Congratulations!** Your custom smart contract is ready to execute get methods the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started) section and execute transactions the same as in the [Writing to network](/v3/guidelines/quick-start/blockchain-interaction/writing-to-network) section — consider reading it to understand how to interact with smart contracts off-chain if you haven't already.
-
+**Congratulations!** Your custom *smart contract* is ready to execute *get methods* the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started) section and execute *transactions* the same as in the [Blockchain interaction](/v3/guidelines/quick-start/blockchain-interaction/reading-from-network) section. Consider reading these sections to understand how to interact with **smart contracts** off-chain if you haven't already.
 
 :::tip
 Using Blueprint and wallet apps is not the only option. You can create a message with [state_init](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) by yourself. Moreover, you can do it even through a smart contract's [internal message](/v3/documentation/smart-contracts/message-management/internal-messages).
