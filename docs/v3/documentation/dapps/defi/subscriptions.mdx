@@ -2,36 +2,35 @@ import Feedback from '@site/src/components/Feedback';
 
 # Content subscriptions
 
-Because transactions on the TON blockchain are fast and network fees are low, you can process recurring payments on-chain via smart contracts.
+On TON blockchain you can process recurring payments on-chain via smart contracts. For example, users can subscribe to digital content (or anything else) and be charged a monthly fee of 1 Toncoin.
+This feature requires [Wallet v4](https://github.com/ton-blockchain/wallet-contract/) which supports plugins.
 
-For example, users can subscribe to digital content (or anything else) and be charged a monthly fee of 1 Toncoin (TON).
-
-:::tip
-This feature requires Wallet v4. Older wallets don’t support plugins; behavior is subject to change in future versions.
-:::
-
-:::warning
-A subscription plugin requires authorization exactly once, upon installation; after that, it can transfer Toncoin without further user confirmation. Do your own research before authorizing unknown subscriptions. Users cannot have a subscription installed without their knowledge.
-:::
+Upon installation of subscription plugin, it can transfer Toncoin without further user confirmation. Do your own research before authorizing unknown subscriptions. Users cannot have a subscription installed without their knowledge.
 
 ## Example flow
 
-- Users with [Wallet v4](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4) can install additional smart contracts (plugins) to extend wallet functionality.
+:::warning
 
-After reviewing plugin functionality, users can approve trusted smart contract (plugin) addresses for their wallet. After approval, trusted smart contracts can withdraw Toncoin from the wallet. This is similar to infinite approval in some other blockchains.
+A subscription plugin requires authorization only once, which is sufficient to perform further transfers without confirmation.
 
-- An intermediate subscription smart contract, deployed as a wallet plugin, sits between each user and the service.
+:::
 
-This smart contract guarantees that a specified amount of Toncoin will be debited from a user's wallet at most once per specified period.
+1. Users with [Wallet v4](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4) can install additional smart contracts (plugins) to extend wallet functionality.
 
-- The backend initiates a charge by sending an external message to the user’s subscription smart contract.
+2. After reviewing plugin functionality, users can approve trusted smart contract (plugin) addresses for their wallet. After approval, trusted smart contracts can withdraw Toncoin from the wallet. This is similar to infinite approval in some other blockchains.
 
-- Either the user or the service can decide they no longer need a subscription and terminate it.
+3. An intermediate subscription smart contract, deployed as a wallet plugin, sits between each user and the service.
+
+4. This smart contract guarantees that a specified amount of Toncoin will be debited from a user's wallet at most once per specified period.
+
+5. The backend initiates a charge by sending an external message to the user’s subscription smart contract.
+
+6. Either the user or the service can decide they no longer need a subscription and terminate it.
 
 ## Smart contract examples
 
-- [Wallet v4 smart contract source code](https://github.com/ton-blockchain/wallet-contract/blob/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f/func/wallet-v4-code.fc)
-- [Subscription smart contract source code](https://github.com/ton-blockchain/wallet-contract/blob/3fd1d7ae39f1c46ec1f2be54c4040d8d87505e0f/func/simple-subscription-plugin.fc)
+- [Wallet v4](https://github.com/ton-blockchain/wallet-contract/blob/main/func/wallet-v4-code.fc)
+- [Subscription](https://github.com/ton-blockchain/wallet-contract/blob/main/func/simple-subscription-plugin.fc)
 
 ## Implementation
 
