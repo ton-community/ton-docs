@@ -28,7 +28,7 @@ No matter what level of task a developer is solving, it is typically necessary t
 Examples created based on `@tonconnect/ui-react` and `@tonconnect/ui`:
 
 <Tabs groupId="TON Connect template">
-  <TabItem value="tonconnect-react" label="@tonconnect/ui-react">
+  <TabItem value="tonconnect-ui-react" label="@tonconnect/ui-react">
 
     ```js
     import { useTonConnectUI } from '@tonconnect/ui-react';
@@ -66,7 +66,12 @@ Examples created based on `@tonconnect/ui-react` and `@tonconnect/ui`:
         //transaction body
     }
 
-    const result = await tonConnectUI.sendTransaction(transaction)
+    async function sendTransaction() {
+        const result = await tonConnectUI.sendTransaction(transaction);
+        return result;
+    }
+
+    sendTransaction();
 
     ```
 
@@ -75,44 +80,45 @@ Examples created based on `@tonconnect/ui-react` and `@tonconnect/ui`:
 
 ## Simple TON transfer
 
-TON Connect SDKs include wrappers for sending messages, making it easy to prepare regular transfers of Toncoins between two wallets as default transaction without payload. For specific custom transactions, a particular payload must be defined.
+TON Connect SDKs include wrappers for sending messages, making it easy to prepare regular transfers of Toncoin between two wallets as a default transaction without a payload. For specific custom transactions, a particular payload must be defined.
 
-Pass the `address` in a [user-friendly format](/v3/documentation/smart-contracts/addresses#user-friendly-address), not in raw form. When you send the message to a smart contract, use a bounceable address; when you send it to a wallet, use a non-bounceable address.
+Pass the `address` in a [user-friendly format](/v3/documentation/smart-contracts/addresses/address-formats#user-friendly-address), not in raw form. When you send the message to a smart contract, use a bounceable address; when you send it to a wallet, use a non-bounceable address.
 
 By the way, there is a limit to the number of messages sent in one transaction:
 
 - standard ([v3](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v3)/[v4](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)) wallets: 4 outgoing messages;
+- wallet v5: up to 255 messages;
 - highload wallets: 255 outgoing messages (close to blockchain limitations).
 
 A regular TON transfer using the TON Connect JS SDKs can be executed as follows:
 
 <Tabs groupId="Regular Transfer">
-  <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+  <TabItem value="tonconnect-ui-react" label="@tonconnect/ui-react">
 
     ```js
     import { useTonConnectUI } from '@tonconnect/ui-react';
-    const [tonConnectUI] = useTonConnectUI();
-
-    const transaction = {
-        messages: [
-            {
-                address: tonConnectUI.account.address,
-                amount: '200000000' // 0.2 TON (in nanotons)
-            },
-            {            // Bounceable address
-                address: 'EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c',
-                amount: '100000000'
-            },
-            {            // Non-bounceable address
-                address: 'UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ',
-                amount: '100000000'
-            }
-        ]
-
-    }
 
     export const Settings = () => {
         const [tonConnectUI, setOptions] = useTonConnectUI();
+
+        const transaction = {
+            validUntil: Math.floor(Date.now() / 1000) + 300,
+            messages: [
+                {
+                    address: tonConnectUI.account.address,
+                    amount: '200000000' // 0.2 TON (in nanotons)
+                },
+                {            // Bounceable address
+                    address: 'EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c',
+                    amount: '100000000'
+                },
+                {            // Non-bounceable address
+                    address: 'UQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJKZ',
+                    amount: '100000000'
+                }
+            ]
+
+        }
 
         return (
             <div>
@@ -137,6 +143,7 @@ A regular TON transfer using the TON Connect JS SDKs can be executed as follows:
     });
 
     const transaction = {
+        validUntil: Math.floor(Date.now() / 1000) + 300,
         messages: [
             {
                 address: tonConnectUI.account.address,
@@ -153,14 +160,19 @@ A regular TON transfer using the TON Connect JS SDKs can be executed as follows:
         ]
     }
 
-    const result = await tonConnectUI.sendTransaction(transaction)
+    async function sendTransaction() {
+        const result = await tonConnectUI.sendTransaction(transaction);
+        return result;
+    }
+
+    sendTransaction();
     ```
 
   </TabItem>
 </Tabs>
 
 :::tip
-Learn more about [TON smart contract addresses](/v3/documentation/smart-contracts/addresses).
+Learn more about [TON smart contract addresses](/v3/documentation/smart-contracts/addresses/address).
 :::
 
 ### Getting the result
@@ -173,9 +185,9 @@ Check out the [Transaction lookup](/v3/guidelines/ton-connect/guidelines/transac
 
 It's pretty easy to handle request rejection, but it's better to know what would happen in advance when you're developing some project.
 
-When a user clicks **Cancel** in the popup in the wallet application, an exception is thrown:
+When a user clicks **Cancel** in the popup in the wallet application, an exception is thrown. Example error (message may vary):
 
-```ts
+```text
 Error: [TON_CONNECT_SDK_ERROR] The Wallet declined the request 
 ```
 
@@ -201,26 +213,26 @@ See more details on [this page](/v3/documentation/smart-contracts/message-manage
 The transaction is created as follows:
 
 <Tabs groupId="Transfer With a Comment">
-  <TabItem value="tonconnect-react-ui" label="@tonconnect/react-ui">
+  <TabItem value="tonconnect-ui-react" label="@tonconnect/ui-react">
+
 
     ```js
     import { useTonConnectUI } from '@tonconnect/ui-react';
     import { toNano } from '@ton/ton'
 
-    const myTransaction = {
-        validUntil: Math.floor(Date.now() / 1000) + 360,
-        messages: [
-            {
-                address: destination,
-                amount: toNano("0.05").toString(),
-                payload: body.toBoc().toString("base64")
-                // payload with the comment in body
-            }
-        ]
-    }
-
     export const Settings = () => {
         const [tonConnectUI, setOptions] = useTonConnectUI();
+        const myTransaction = {
+            validUntil: Math.floor(Date.now() / 1000) + 360,
+            messages: [
+                {
+                    address: '<DESTINATION_ADDRESS>',
+                    amount: toNano("0.05").toString(),
+                    payload: body.toBoc().toString("base64")
+                    // payload with the comment in body
+                }
+            ]
+        }
 
         return (
             <div>
@@ -236,6 +248,7 @@ The transaction is created as follows:
 
   <TabItem value="tonconnect-ui" label="@tonconnect/ui">
 
+
     ```js
     import TonConnectUI from '@tonconnect/ui'
     import { toNano } from '@ton/ton'
@@ -244,7 +257,7 @@ The transaction is created as follows:
         validUntil: Math.floor(Date.now() / 1000) + 360,
         messages: [
             {
-                address: destination,
+                address: '<DESTINATION_ADDRESS>',
                 amount: toNano("0.05").toString(),
                 payload: body.toBoc().toString("base64")
                 // payload with the comment in body
@@ -252,15 +265,20 @@ The transaction is created as follows:
         ]
     }
 
-    const result = await tonConnectUI.sendTransaction(transaction)
-    ```
+    async function sendTransaction() {
+        const result = await tonConnectUI.sendTransaction(transaction);
+        return result;
+    }
+
+    sendTransaction();
+```
 
   </TabItem>
 </Tabs>
 
 ### Smart contract deployment
 
-As more complex example, we'll deploy an instance of the simple [chatbot Doge](https://github.com/LaDoger/doge.fc) smart contract, which is featured as one of the [smart-contract examples](/v3/documentation/smart-contracts/overview#examples-of-smart-contracts). To create our own unique instance, we'll load the contract code and store a unique value in the data section. Finally, we'll combine the code and data into a `stateInit` structure.
+As a more complex example, we'll deploy an instance of the simple [chatbot Doge](https://github.com/LaDoger/doge.fc) smart contract, which is featured as one of the [smart-contract examples](/v3/documentation/smart-contracts/overview#examples-of-smart-contracts). To create our own unique instance, we'll load the contract code and store a unique value in the data section. Finally, we'll combine the code and data into a `stateInit` structure.
 
 ```ts
 import { Cell, beginCell, contractAddress, storeStateInit } from "@ton/ton";
@@ -305,7 +323,7 @@ const transaction = {
         {
             address: contractData.address,
             amount: toNano("0.069").toString(),
-            payload: contractData.stateInit
+            stateInit: contractData.stateInit
         }
     ]
 }
@@ -326,7 +344,7 @@ Continue exploring TON Connect features and workflows by choosing one of the fol
 </Button>
 
 <Button href="/v3/guidelines/ton-connect/guidelines/transaction-by-external-message" colorType="secondary" sizeType={'sm'}>
-  Search your transaction
+  Search for your transaction
 </Button>
 
 <Feedback />
