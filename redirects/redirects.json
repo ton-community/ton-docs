@@ -436,10 +436,6 @@
         "to": "/v3/documentation/smart-contracts/fift/overview"
     },
     {
-        "from": "/develop/dapps/defi/coins",
-        "to": "/v3/documentation/dapps/defi/coins"
-    },
-    {
         "from": "/develop/dapps/defi/nft",
         "to": "/v3/documentation/dapps/defi/nft"
     },
