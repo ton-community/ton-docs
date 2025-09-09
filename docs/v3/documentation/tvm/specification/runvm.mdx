@@ -3,7 +3,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # RUNVM specification
 
-The `RUNVM` instruction creates an isolated VM instance, allowing code execution while safely retrieving data such as stack state, registers, and gas consumption, ensuring the caller's state remains unaffected and allowing arbitrary code to run safely. This is helpful for [v4-style plugins](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4), Tact's `init`-style subcontract calculations, and similar use cases.
+The `RUNVM` instruction creates an isolated VM instance, allowing code execution while safely retrieving data such as stack state, registers, and gas consumption, ensuring the caller's state remains unaffected and allowing arbitrary code to run safely. This is helpful for [v4-style plugins](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4) and similar use cases.
 
 | Fift syntax | Stack | Description                                                                                                                                                                                                                                                                                                                                                                                                          |
 |:-|:-|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -36,6 +36,6 @@ Gas cost:
 
 ## See also
 
-- [TVM overview](/v3/documentation/tvm/tvm-overview)
+- [TVM overview](/v3/documentation/tvm/overview)
 
 <Feedback />
