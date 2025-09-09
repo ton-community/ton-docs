@@ -2,7 +2,7 @@ import Feedback from "@site/src/components/Feedback";
 import ThemedImage from "@theme/ThemedImage";
 import Button from '@site/src/components/button'
 
-# Reading from the network
+# Reading from network
 
 ## Introduction
 
@@ -100,15 +100,15 @@ Create a new file `1-get-account-state.ts`:
 import { Address, TonClient } from "@ton/ton";
 
 async function main() {
-  // Initializaing TON HTTP API Client
+  // Initializaing TON HTTP API client
   const tonClient = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
 
-  // Replace with any address
+  // Replace with your Testnet address
   const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-');
 
-  // Calling method on http api
+  // Calling tonClient.getContractState(), which corresponds to TON Center’s getAddressInformation endpoint
   const state = await tonClient.getContractState(accountAddress);
 
 
@@ -165,7 +165,7 @@ Create a new file `2-call-get-method.ts`:
 import { Address, TonClient, TupleBuilder } from "@ton/ton";
 
 async function main() {
-  // Initializaing TON HTTP API Client
+  // Initializaing TON HTTP API client
   const tonClient = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
@@ -178,11 +178,11 @@ async function main() {
 
   const accountAddress = Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy')
 
-  // Calling http api to run get method on specific contract
+  // Calling HTTP API to run get method on specific contract
   const result = await tonClient.runMethod(
-    accountAddress, // address to call get method on
-    'get_wallet_address', // method name
-    builder.build(), // optional params list
+    accountAddress, // Address to call get method on
+    'get_wallet_address', // Method name
+    builder.build(), // Optional params list
   );
 
   // Deserializing get method result
@@ -233,7 +233,7 @@ Wrappers are classes that simplify interactions with smart contracts by turning 
 import { Address, JettonMaster, TonClient } from "@ton/ton";
 
 async function main() {
-  // Initializaing TON HTTP API Client
+  // Initializaing TON HTTP API client
   const tonClient = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
@@ -259,9 +259,9 @@ Interaction within an account on the blockchain happens due to [messages and tra
 
 A transaction in TON is the **result** of a smart contract successfully processing an incoming message. It consists of:
 
-* the **incoming message** that triggered the contract
-* the **state changes** performed by the contract during message processing (e.g. storage or balance updates)
-* any **outgoing messages** sent to other contracts (if applicable)
+- the **incoming message** that triggered the contract
+- the **state changes** performed by the contract during message processing (e.g. storage or balance updates)
+- any **outgoing messages** sent to other contracts (if applicable)
 
 <ThemedImage
   alt="Transaction diagram"
@@ -337,7 +337,7 @@ Let’s now try to fetch transactions for an account we control.
 
 Before running this code:
 
-- Go to [Tonviewer](https://testnet.tonviewer.com) and open your Testnet wallet address, which we created earlier in the [Getting Started](/v3/guidelines/quick-start/getting-started#interacting-with-the-ton-ecosystem) section.
+- Go to [Tonviewer](https://testnet.tonviewer.com) and open your Testnet wallet address, which we created earlier in the [Getting started](/v3/guidelines/quick-start/getting-started#interacting-with-the-ton-ecosystem) section.
 - Send some test TON to yourself using [Testgiver Ton Bot](https://t.me/testgiver_ton_bot/).
 - Wait a few seconds and make sure the transaction appears in Tonviewer.
 
@@ -353,19 +353,19 @@ Also, please note that the Testnet API may update data with some delay, so your 
 import { Address, TonClient } from "@ton/ton";
 
 async function main() {
-  // Initializaing TON HTTP API Client
+  // Initializaing TON HTTP API client
   const tonClient = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
 
-  // Calling method on http api
-  // full api: https://testnet.toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get
+  // Calling method on HTTP API
+  // Full API: https://testnet.toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get
   const transactions = await tonClient.getTransactions(
     // Replace with your Testnet address to fetch transactions
     Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'),
     {
-      limit: 10,      //maximum ammount of recieved transactions
-      archival: true, //search in all history
+      limit: 10,      // Maximum number of received transactions
+      archival: true, // Search the entire history
     },
   );
 
