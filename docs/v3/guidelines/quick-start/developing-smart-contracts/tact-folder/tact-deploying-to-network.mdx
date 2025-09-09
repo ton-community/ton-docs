@@ -4,13 +4,13 @@ import Feedback from "@site/src/components/Feedback";
 
 > **Summary:** In previous steps, we developed and tested our smart contract, ensuring its correctness.
 
-In this part of the guide, we will proceed with the deployment of previously developed smart contracts and cover interaction with them on-chain.
+In this part of the guide, we will proceed with the deployment of the previously developed smart contract and cover interaction with it on-chain.
 
 ## Address and initial state
 
-We already know that [address](/v3/documentation/smart-contracts/addresses/address) is a unique identifier of a `smart contract` on the network, used to send transactions and verify the sender upon receiving. However, we still haven't discussed how it's created. The common formula for a smart contract address looks like this:
+We already know that [address](/v3/documentation/smart-contracts/addresses/address) is a unique identifier of a `smart contract` on the network, used to send transactions and verify the sender upon receiving a message. However, we still haven't discussed how it's created. The common formula for a smart contract address looks like this:
 
-***address = hash(state_init(code, data))***
+`address = hash(state_init(code, data))`
 
 The address of a smart contract is a hash of the aggregated initial code and data of the smart contract upon deployment. This simple mechanism has a few important consequences:
 
@@ -32,7 +32,7 @@ Since we can't deploy a smart contract with the same `state_init`, the only way 
 
 ### One to rule them all
 
-If you've already considered that the `ID` field is a must-have for any smart contract, there is another opportunity that could change your mind. Let's examine the previously developed `HelloWorld` smart contract's init section:
+If you've already considered that the `id` field is a must-have for any smart contract, there is another opportunity that could change your mind. Let's examine the previously developed `HelloWorld` smart contract's init section:
 
 ```tact
 init(id: Int) {
@@ -63,15 +63,15 @@ import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider) {
     const sender = provider.sender();
-    
+
     const helloWorld = provider.open(
-      await HelloWorld.fromInit(0n)
+        await HelloWorld.fromInit(0n)
     );
 
     await helloWorld.send(
-      sender,
-      { value: toNano('0.05') },
-      null
+        sender,
+        { value: toNano('0.05') },
+        null
     );
 
     await provider.waitForDeploy(helloWorld.address);
@@ -92,7 +92,7 @@ npx blueprint run deployHelloWorld
 
 After that, you will see an interactive menu allowing you to choose a network:
 
-```bash
+```text
 ? Which network do you want to use? (Use arrow keys)
   mainnet
 ❯ testnet
@@ -107,7 +107,7 @@ Before deployment to the `Mainnet`, ensure that your smart contracts correspond 
 
 Next, choose the way to access your wallet. The easiest way to do that is using [TON Connect](/v3/guidelines/ton-connect/overview/) for the most popular wallet apps: `Tonkeeper`, `MyTonWallet`, or `Tonhub`.
 
-```bash
+```text
 ? Which wallet are you using? (Use arrow keys)
 ❯ TON Connect compatible mobile wallet (example: Tonkeeper)
   Create a ton:// deep link
@@ -132,10 +132,10 @@ Contract deployed at address EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 You can view it at https://testnet.tonscan.org/address/EQBrFHgzSwxVYBXjIYAM6g2RHbeFebJA8QUDwg4IX8CPDPug
 ```
 
-**Congratulations!** Your custom `smart contract` is ready to execute `get methods` the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs) section and execute `transactions` the same as in the [Blockchain interaction](/v3/guidelines/quick-start/blockchain-interaction/writing-to-network) section — consider reading it to understand how to interact with `smart contracts` off-chain if you haven't already.
+**Congratulations!** Your custom *smart contract* is ready to execute *get methods* the same way as your wallet in the [Getting started](/v3/guidelines/quick-start/getting-started#navigation-tabs) section and execute *transactions* the same as in the [Blockchain interaction](/v3/guidelines/quick-start/blockchain-interaction/writing-to-network) section. Consider reading these sections to understand how to interact with **smart contracts** off-chain if you haven't already.
 
 :::tip
-Using `Blueprint` and wallet apps is not the only option. You can create a message with [state_init](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) by yourself. Moreover, you can do it even through a smart contract's [internal message](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
+Using `Blueprint` and wallet apps is not the only option. You can create a message with [state_init](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout) by yourself. Moreover, you can do it even through a smart contract's [internal message](/v3/documentation/smart-contracts/message-management/sending-messages#types-of-messages).
 :::
 
 
@@ -145,7 +145,7 @@ Now, it’s time to dive deeper and keep building. Here are some helpful resourc
 - [Official website](https://tact-lang.org) - overview, news, and ecosystem links
 - [Tact documentation](https://docs.tact-lang.org) — the go-to reference for language features
 - [Tact GitHub repo](https://github.com/tact-lang) — source code, issues, and contributions
-- [Tact by example](https://tact-by-example.org/all) — hands-on smart contract examples
+- [Tact By Example](https://tact-by-example.org/all) — hands-on smart contract examples
 - [Tact smart battle](https://github.com/ton-studio/tact-smart-battle) — coding challenges to sharpen your skills
 - [@tact_kitchen](https://t.me/tact_kitchen) — channel with the latest Tact updates
 - [@tactlang](https://t.me/tactlang) — chat for dev discussions and help
