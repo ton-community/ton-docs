@@ -17,12 +17,12 @@ To learn more about the RedStone oracle design, see the [RedStone docs](https://
 
 ## Smart contracts
 
-### price_manager.fc
+### price_manager
 
 - Sample oracle contract that consumes RedStone oracles data [price_manager.fc](https://github.com/redstone-finance/redstone-oracles-monorepo/blob/main/packages/ton-connector/contracts/price_manager.fc) written in
   FunC. It requires [TVM Upgrade 2023.07](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07).
 
-#### Initial Data
+#### Initial data
 
 As mentioned above, the data packages transferred to the contract are being verified by signature checking.
 To be counted to achieve the `signer_count_threshold`, the signer signing the passed data
@@ -121,7 +121,7 @@ Returns the timestamp of data last saved/written to the contract's storage by us
 
 That's just a `method_id` function - it doesn't modify the contract's storage and don't consume TONs.
 
-### price_feed.fc
+### price_feed
 
 Due to the architecture of TON contracts, the initial data must convene with the contract's storage structure,
 which is constructed as below:
@@ -187,7 +187,7 @@ Returns the value and timestamp of the last saved/written data to the adapter's 
 
 That's just a `method_id` function - it doesn't modify the contract's storage and don't consume TONs.
 
-### single_feed_man.fc
+### single_feed_man
 
 #### initial data
 
@@ -240,7 +240,7 @@ Similar to `OP_REDSTONE_WRITE_PRICES`, but omitting the first (`data_feed_ids`) 
     }
 ```
 
-### sample_consumer.fc
+### sample_consumer
 
 A sample consumer for data stored in the `price_feed`. Works also with `single_feed_man`.
 The `price_feed` to be called needs to be passed.
