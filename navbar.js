@@ -26,7 +26,7 @@ module.exports = {
           label: 'Explorers',
         },
         {
-          to: '/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains',
+          to: '/v3/concepts/dive-into-ton/ton-blockchain/overview',
           label: 'Blockchain',
         },
       ],
@@ -67,7 +67,7 @@ module.exports = {
 
     {
       type: 'dropdown',
-      to: '/v3/documentation/ton-documentation',
+      to: '/v3/documentation/introduction',
       label: 'Documentation',
       position: 'left',
       items: [
@@ -76,24 +76,24 @@ module.exports = {
           label: 'Smart contracts',
         },
         {
-          to: 'v3/documentation/tvm/tvm-overview',
-          label: 'TON Virtual Machine (TVM)',
-        },
-        {
-          to: 'v3/documentation/infra/nodes/node-types',
-          label: 'Nodes'
-        },
-        {
           to: 'v3/documentation/dapps/dapps-overview',
           label: 'DApps',
         },
         {
-          to: '/v3/documentation/data-formats/tlb/cell-boc',
+          to: 'v3/documentation/nodes/overview',
+          label: 'Nodes'
+        },
+        {
+          to: 'v3/documentation/network/protocols/adnl/overview',
+          label: 'Network'
+        },
+        {
+          to: '/v3/documentation/data-formats/tlb/overview',
           label: 'Data formats',
         },
         {
-          to: 'v3/documentation/network/protocols/adnl/low-level-adnl',
-          label: 'Networking'
+          to: 'v3/documentation/tvm/overview',
+          label: 'Virtual machine',
         },
         {
           to: 'v3/documentation/whitepapers/overview',
@@ -310,10 +310,6 @@ module.exports = {
         {
           type: 'html',
           value: '<hr style="margin: 0.3rem 0;">',
-        },
-        {
-          href: "/v3/contribute/localization-program/overview",
-          label: 'Help Us Translate',
         },
       ],
     },
