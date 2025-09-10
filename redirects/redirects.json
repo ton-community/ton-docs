@@ -444,10 +444,6 @@
         "to": "/v3/documentation/dapps/defi/subscriptions"
     },
     {
-        "from": "/develop/dapps/defi/tokens",
-        "to": "/v3/documentation/dapps/defi/tokens"
-    },
-    {
         "from": "/develop/dapps/defi/ton-payments",
         "to": "/v3/documentation/dapps/defi/ton-payments"
     },

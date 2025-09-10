@@ -151,9 +151,11 @@ module.exports = [
         label: 'Assets',
         items: [
           'v3/documentation/dapps/assets/toncoin',
-          'v3/documentation/dapps/assets/extra-currencies',
+          'v3/documentation/dapps/assets/jetton',
+          'v3/documentation/dapps/assets/nft',
           'v3/documentation/dapps/assets/nft-2.0',
           'v3/documentation/dapps/assets/usdt',
+          'v3/documentation/dapps/assets/extra-currencies',
         ],
       },
       {
@@ -161,7 +163,6 @@ module.exports = [
         label: 'DeFi principles',
         items: [
           'v3/documentation/dapps/assets/overview',
-          'v3/documentation/dapps/defi/tokens',
           {
             type: 'doc',
             label: 'NFT use cases in TON',

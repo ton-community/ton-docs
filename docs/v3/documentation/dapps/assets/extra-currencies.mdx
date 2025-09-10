@@ -2,12 +2,32 @@ import Feedback from '@site/src/components/Feedback';
 
 # Extra currencies
 
-TON Blockchain supports up to `2^32` built-in extra currencies.
+In TON, extra currencies are arbitrary custom tokens that can be stored alongside TON in an account’s balance.
 
-Extra currency balances can be stored on each blockchain account and transferred to other accounts natively (in an [internal message](/v3/documentation/smart-contracts/message-management/internal-messages) from one smart contract to another, you can specify a hashmap of the extra currency amounts in addition to the Toncoin amount).
+Extra currency balances can be stored on each blockchain account (`ExtraCurrencyCollection`) and transferred to other accounts natively (in an [internal message](/v3/documentation/smart-contracts/message-management/internal-messages) from one smart contract to another, you can specify a hashmap of the extra currency amounts in addition to the Toncoin amount).
 
 ```tlb
-extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) = ExtraCurrencyCollection;
+
+//extra currency part of account balance
+
+extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) 
+                 = ExtraCurrencyCollection;
+currencies$_ grams:Grams other:ExtraCurrencyCollection 
+           = CurrencyCollection;
+``` 
+           
+```tlb
+
+//account balance kept in account storage
+           
+account_storage$_ last_trans_lt:uint64
+    balance:CurrencyCollection state:AccountState 
+  = AccountStorage;
+  
+account_none$0 = Account;
+account$1 addr:MsgAddressInt storage_stat:StorageInfo
+          storage:AccountStorage = Account;
+
 ```
 
 A hashmap of currency IDs and amounts.
