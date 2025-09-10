@@ -103,12 +103,12 @@ Note that the wallet doesn't provide any validation for internal messages you se
 
 | Exit code | Description                                    |
 | --------- | ---------------------------------------------- |
-| 0x21      | `seqno` check failed, reply protection occured |
+| 0x21      | `seqno` check failed, reply protection occurred |
 | 0x22      | `Ed25519 signature` check failed               |
 | 0x0       | Standard successful execution exit code.      |
 
 :::info
-Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standard exit codes](/v3/documentation/tvm/exit-codes) (`0x0` - is one of them), so you can get one of them too, if you run out of [gas](/v3/documentation/smart-contracts/transaction-fees/fees), for example, you will get `0xD` code.
+Note that [TVM](/v3/documentation/tvm/overview) has [standard exit codes](/v3/documentation/tvm/exit-codes) (`0x0` - is one of them), so you can get one of them too, if you run out of [gas](/v3/documentation/smart-contracts/transaction-fees/fees), for example, you will get `0xD` code.
 :::
 
 #### Get methods
@@ -305,7 +305,7 @@ TL-B scheme:
 - [ton-blockchain/wallet-contract-v5/types.tlb](https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb)
 
 :::caution
-In contrast to the specifications of previous wallet versions, we will rely on the [TL-B](/v3/documentation/data-formats/tlb/overviewe) scheme, due to the relative complexity of this wallet version's interface implementation. We will provide a brief description for each. Nevertheless, a basic understanding is still required; in combination with the wallet source code, it should be enough.
+In contrast to the specifications of previous wallet versions, we will rely on the [TL-B](/v3/documentation/data-formats/tlb/overview) scheme, due to the relative complexity of this wallet version's interface implementation. We will provide a brief description for each. Nevertheless, a basic understanding is still required; in combination with the wallet source code, it should be enough.
 :::
 
 #### Official code hash
@@ -380,7 +380,7 @@ actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other
 We can consider `InnerRequest` as two lists of actions: the first, `OutList`, is an optional chain of cell references, each containing a send message request led by the message mode. The second, `ActionList,` is led by a one-bit flag, `has_other_actions`, which marks the presence of extended actions, starting from the first cell and continuing as a chain of cell references. We are already familiar with the first two extended actions, `action_add_ext` and `action_delete_ext`, followed by the internal address that we want to add or delete from the extensions dictionary. The third, `action_set_signature_auth_allowed`, restricts or allows authentication through the public key, leaving the only way to interact with the wallet through extensions. This functionality might be extremely important in the case of a lost or compromised private key.
 
 :::info
-Note that the maximum number of actions is 255; this is a consequence of the realization through the [c5](/v3/documentation/tvm/tvm-overview#results-of-tvm-execution) TVM register. Technically, you can make a request with empty `OutAction` and `ExtendedAction`, but in that case, it will be similar to just receiving funds.
+Note that the maximum number of actions is 255; this is a consequence of the realization through the [c5](/v3/documentation/tvm/overview#results-of-tvm-execution) TVM register. Technically, you can make a request with empty `OutAction` and `ExtendedAction`, but in that case, it will be similar to just receiving funds.
 :::
 
 #### Exit codes

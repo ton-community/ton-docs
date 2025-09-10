@@ -14,10 +14,10 @@ TON features a complex configuration consisting of many technical parameters, so
 
 This material should be read alongside the parameter list.
 
-You can view the parameter values in the [current configuration](https://tonviewer.com/config), and the method of writing them into [cells](/v3/concepts/dive-into-ton/ton-blockchain/cells) is outlined in the [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) file in [TL-B](/v3/documentation/data-formats/tlb/overviewe) format.
+You can view the parameter values in the [current configuration](https://tonviewer.com/config), and the method of writing them into [cells](/v3/concepts/dive-into-ton/ton-blockchain/cells) is outlined in the [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb) file in [TL-B](/v3/documentation/data-formats/tlb/overview) format.
 
 :::info
-Configuration values are TL‑B‑typed cells serialized into Bags of Cells (BoC); see [canonical serialization](v3/documentation/data-formats/cells/serialization) and [Bag of Cells](/v3/documentation/data-formats/cells/overview).
+Configuration values are TL‑B‑typed cells serialized into Bags of Cells (BoC); see [canonical serialization](/v3/documentation/data-formats/cells/serialization) and [Bag of Cells](/v3/documentation/data-formats/cells/overview).
 :::
 
 All parameters are in place, and you won't get lost. For your convenience, please use the right sidebar for quick navigation.
@@ -27,7 +27,7 @@ All parameters are in place, and you won't get lost. For your convenience, pleas
 This parameter is the address of a special smart contract that stores the blockchain's configuration. The configuration is stored in the contract to simplify its loading and modification during validator voting.
 
 :::info
-In the configuration parameter, only the hash portion of the address is recorded, as the contract always resides in the [MasterChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain) (WorkChain -1). Therefore, the full address of the contract will be written as `-1:<value of the configuration parameter>`.
+In the configuration parameter, only the hash portion of the address is recorded, as the contract always resides in the [MasterChain](/v3/concepts/dive-into-ton/ton-blockchain/overview#masterchain) (WorkChain -1). Therefore, the full address of the contract will be written as `-1:<value of the configuration parameter>`.
 :::
 
 ## Param 1

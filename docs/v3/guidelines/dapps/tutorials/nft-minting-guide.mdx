@@ -351,7 +351,7 @@ const file = await readFile(filePath);
 const metadata = JSON.parse(file.toString());
 ```
 
-After that, we assign the value `ipfs://{IpfsHash}/{index}.jpg` to the image field. If this file is mnot the last one in the folder, assign `ipfs://{imagesIpfsHash}/logo.jpg` and rewrite the file with new data.
+After that, we assign the value `ipfs://{IpfsHash}/{index}.jpg` to the image field. If this file is not the last one in the folder, assign `ipfs://{imagesIpfsHash}/logo.jpg` and rewrite the file with new data.
 
 Full code of metadata.ts:
 
@@ -1204,7 +1204,7 @@ const nftToSaleAddress = await NftItem.getAddressByIndex(collection.address, 0);
 
 Create a variable to store sale information.
 
-At beggining of the `app.ts`, add:
+At the start of the `app.ts`, add:
 
 ```ts
 import { GetGemsSaleData, NftSale } from "./contracts/NftSale";

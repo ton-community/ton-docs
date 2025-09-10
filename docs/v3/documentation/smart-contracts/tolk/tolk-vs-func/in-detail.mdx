@@ -1156,7 +1156,7 @@ if ((flags & 0xFF) != 0)
 if (flags & (0xFF != 0))
 ```
 
-I've also added a diagnostic for a common mistake in bitshift operators: `a << 8 + 1` is equivalent to `a << 9`, probably unexpected.
+I've also added a diagnostic for a common mistake in bit shift operators: `a << 8 + 1` is equivalent to `a << 9`, probably unexpected.
 
 ```
 int result = a << 8 + low_mask;
@@ -1451,15 +1451,11 @@ Tolk supports logical operators. They behave exactly as you get used to (right c
   <tbody>
     <tr>
       <td>
-        <code>
-          {'if (~ found?)'}
-        </code>
+        `if (~ found?)`
       </td>
 
       <td>
-        <code>
-          {'if (!found)'}
-        </code>
+        `if (!found)`
       </td>
     </tr>
 
@@ -1489,15 +1485,11 @@ Tolk supports logical operators. They behave exactly as you get used to (right c
 
     <tr>
       <td>
-        <code>
-          {'elseifnot (eq_checksum)'}
-        </code>
+        `elseifnot (eq_checksum)`
       </td>
 
       <td>
-        <code>
-          {'else if (!eqChecksum)'}
-        </code>
+        `else if (!eqChecksum)`
       </td>
     </tr>
   </tbody>
@@ -2412,7 +2404,7 @@ fun onInternalMessage(in: InMessage) {
         BurnNotificationForMinter => {
             var storage = lazy MinterStorage.load();
             ...
-            storage.save();    
+            storage.save();
             ...
         }
         RequestWalletAddress => ...

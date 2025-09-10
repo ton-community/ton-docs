@@ -288,7 +288,7 @@ const client = new TonClient({ endpoint });
 ```
 
 :::info what to do in production?
-Using an RPC node provider or running your own ton-http-api instance is better for that. Read more at the [TON HTTP-based APIs page](/v3/guidelines/dapps/apis-sdks/ton-http-apis).
+Using an RPC node provider or running your own ton-http-api instance is better for that. Read more at the [TON HTTP-based APIs page](/v3/guidelines/dapps/apis-sdks/api-types).
 :::
 
 ### Receiving mining data from TON Blockchain
@@ -434,7 +434,7 @@ First, we must prepare a mining message by ensuring the correct parameters to en
 Thankfully, the [README file](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive) allows us to retrieve the correct guidelines to achieve this goal. As you can see, the above README file comprises a table with specific fields and cell types (titled "Layout of proof of work cell') to help achieve our desired result.
 
 :::info What are cells?
-Cells are data storage structures on TON that fulfill numerous purposes, including increasing network scalability and smart contract transaction speeds. We won't get into specifics here, but if you're interested in understanding the complexity of cells and how they work, consider diving into [this](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) section of our documentation.
+Cells are data storage structures on TON that fulfill numerous purposes, including increasing network scalability and smart contract transaction speeds. We won't get into specifics here, but if you're interested in understanding the complexity of cells and how they work, consider diving into [this](/v3/concepts/dive-into-ton/ton-blockchain/cells) section of our documentation.
 :::
 
 Fortunately, all the data structures used in this tutorial are already written in TypeScript. Use the `MineMessageParams` object from _NftGiver.ts_ to build a transaction with _Queries_:

@@ -73,7 +73,7 @@ No random number generation in TON is entirely safe in terms of unpredictability
 
 Typical usage of pseudorandom number generators (PRNGs) may include `randomize_lt()`, but such contracts can still be tricked by selecting the correct blocks to send messages. Proposed solutions, such as sending messages to another workchain and receiving a response to skip blocks, only delay the threat. In reality, any validator (representing 1/250 of the TON Blockchain) can choose the optimal time to send a request to a lottery contract so that the response arrives in a block they generate. They can then select any block seed they desire. This risk will increase once collators are introduced to the mainnet, as standard complaints cannot fine them since they do not stake anything in the Elector contract.  
 
-{/* TODO: Find an example contract using random without any additions and demonstrate how to determine the result of RANDU256 knowing the block random seed (include a link to dton.io to show the generated value). */}
+{/* TODO: Find an example contract using random without any additions and demonstrate how to determine the result of RANDU256 knowing the block random seed (include a link to `dton.io` to show the generated value). */}
 
 {/* TODO: Next article. "Let's proceed to writing a tool that exploits this. It will attach to a validator and include proposed external messages in blocks satisfying specific conditions—provided a fee is paid." */}
 
