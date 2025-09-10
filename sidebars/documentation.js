@@ -175,12 +175,36 @@ module.exports = [
         type: 'category',
         label: 'Oracles',
         items: [
+          'v3/documentation/infra/oracles/overview',
+          {
+            type: 'category',
+            label: 'Providers',
+            items: [
+              'v3/documentation/infra/oracles/pyth',
+              'v3/documentation/infra/oracles/redstone',
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'category',
+    label: 'Nodes',
+    items: [
+      'v3/documentation/nodes/overview',
+      {
+        type: 'category',
+        label: 'Validation',
+        items: [
+          'v3/documentation/nodes/validation/collators',
           {
             type: 'doc',
             label: 'Proof-of-stake',
             id: 'v3/documentation/nodes/validation/staking-incentives',
           },
-          'v3/documentation/nodes/validation/collators',
+          'v3/documentation/dapps/proofs',
+          'v3/documentation/dapps/basic-proofing-concepts',
         ],
       },
       {
@@ -205,21 +229,6 @@ module.exports = [
         items: [
           'v3/documentation/infra/bridges/toncoin',
           'v3/documentation/infra/bridges/toncoin-addresses',
-        ],
-      },
-      {
-        type: 'category',
-        label: 'Oracles',
-        items: [
-          'v3/documentation/infra/oracles/overview',
-          {
-            type: 'category',
-            label: 'Providers',
-            items: [
-              'v3/documentation/infra/oracles/pyth',
-              'v3/documentation/infra/oracles/redstone',
-            ],
-          },
         ],
       },
     ]
