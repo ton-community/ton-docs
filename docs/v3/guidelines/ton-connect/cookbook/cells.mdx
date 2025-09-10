@@ -37,7 +37,7 @@ To build a cell, you use the `beginCell()` function. While the cell is _open_, y
 When you're done, you close the cell with the `endCell()` function.
 
 ```ts
-import { Address, beginCell } from "@ton/ton";
+import { Address, beginCell } from "@ton/core";
 
 const cell = beginCell()
   .storeUint(99, 64) // Stores uint 99 in 64 bits
@@ -47,8 +47,8 @@ const cell = beginCell()
 ```
 
 :::info
-These examples use the `@ton/ton` library only. <br/>
-However, every [TON SDK](/v3/guidelines/dapps/apis-sdks/sdk) offers equivalent helper functions.
+These examples use the `@ton/core` library only. <br/>
+However, many [SDKs](/v3/guidelines/dapps/apis-sdks/sdk) provide similar helper functions.
 :::
 
 ### Parsing a cell
@@ -107,14 +107,15 @@ const cell = beginCell()
   .storeMaybeInt(1, 64)
   .storeMaybeRef(null) // Optionally stores a reference
   .storeMaybeRef(beginCell().storeCoins(123).endCell());
+  .endCell();
 ```
 
 You can parse optional values using the corresponding `loadMaybe...()` functions. Returned values are nullable, so do not forget to check them for null.
 
 ```ts
 const slice = cell.beginParse();
-const maybeInt = slice.loadMaybeUint(64);
-const maybeInt1 = slice.loadMaybeUint(64);
+const maybeInt = slice.loadMaybeInt(64);
+const maybeInt1 = slice.loadMaybeInt(64);
 const maybeRef = slice.loadMaybeRef();
 const maybeRef1 = slice.loadMaybeRef();
 if (maybeRef1) {
@@ -154,7 +155,7 @@ Using `@ton-community/assets-sdk` is more readable and less error-prone.
 
   </TabItem>
 
-  <TabItem value="@ton/ton" label="@ton/ton">
+  <TabItem value="@ton/core" label="@ton/core">
 
     ```ts
     import { Address, beginCell } from "@ton/core";
