@@ -17,8 +17,8 @@ It is designed for system-level use where precision is crucial, and UX features 
 
 A raw address consists of two components separated by a colon:
 
--   **workchain_id**: a signed 32-bit integer identifying the workchain.<br/>
-Examples: `-1` for the masterchain and `0` for the basechain.
+-   **workchain_id**: a signed 32-bit integer identifying the WorkChain.<br/>
+Examples: `-1` for the MasterChain and `0` for the BaseChain.
 -   **account_id**: a 256-bit identifier, represented as 64 hexadecimal characters.
 
 **Example:**
@@ -40,21 +40,21 @@ Due to these limitations, raw addresses should **not** be exposed to end-users.
 
 ## User-friendly address
 
-The user-friendly address format is a secure, base64-encoded wrapper around the raw address. It adds metadata flags and a checksum to prevent common errors and provide greater control over message routing.
+The user-friendly address format is a secure, base64/base64url-encoded wrapper around the raw address. It adds metadata flags and a checksum to prevent common errors and provide greater control over message routing.
 
 ### Structure  
 
 A user-friendly address is a 36-byte structure with the following components:  
 
 1. Flags (1 byte): metadata that modifies message handling.
-2. `workchain_id` (1 byte): an 8-bit signed integer (`-1` for masterchain is `0xff`).
+2. `workchain_id` (1 byte): an 8-bit signed integer (`-1` for MasterChain is `0xff`).
 3. `account_id` (32 bytes): the 256-bit ([big-endian](https://www.freecodecamp.org/news/what-is-endianness-big-endian-vs-little-endian/)) account identifier.
 4. Checksum (2 bytes): a [CRC16-CCITT](https://github.com/ton-blockchain/ton-kotlin/blob/main/crypto/src/crc16.kt) checksum of the preceding 34 bytes.
 
-A CRC16-CCITT checksum validates the preceding 34 bytes to detect input errors.
+The checksum mechanism in user-friendly addresses is similar to the [Luhn algorithm](https://en.wikipedia.org/wiki/Luhn_algorithm), providing a first-line defense against input errors by validating format integrity upfront.
 
 #### Flag definitions  
-The flags byte encodes bounceability and test-only; its top 6 bits determine the first base64 character, as defined in [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md):  
+The flags byte encodes bounce behavior and test-only options; its top 6 bits determine the first base64 character, as defined in [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md):  
 
 | Address prefix | Binary form | Bounceable | Testnet-only |
 |:--------------:|:-----------:|:----------:|:------------:|  
@@ -71,6 +71,8 @@ The flags byte encodes bounceability and test-only; its top 6 bits determine the
   - `true` (`0x80`): address is valid only on the testnet.
   mainnet applications must reject such addresses.
 
+Hex flag values per [TEP‑2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md); see also the Cookbook section on [flags in user-friendly addresses](/v3/guidelines/dapps/cookbook#flags-in-user-friendly-addresses).
+
 Learn more about [non-bounceable messages](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) and their use cases.
 
 ### Encoding
@@ -84,15 +86,15 @@ The 36-byte structure is encoded into a 48-character string using either base64 
 -   **Bounceable-Testnet**: `kQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPgpP`
 -   **Testnet-only**: `0QDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPleK`
 
-:::info DNS Address Flags
-In TON, DNS addresses such as mywallet.ton can be used as alternatives to raw and user-friendly addresses. These DNS addresses encapsulate user-friendly address data along with all necessary flags, allowing developers to retrieve the complete address configuration directly from the TON domain's DNS records.
+:::info DNS address flags
+In TON, DNS names such as mywallet.ton resolve to the underlying smart contract address. Applications choose bounceable/non-bounceable and test-only flags when serializing user-friendly addresses; DNS records do not store these flags.
 :::
 
 ### Custom address safety
 
 When developing custom solutions on TON Blockchain, it is critical to implement proper address handling logic. First, always verify whether the recipient address is initialized before sending funds to prevent unintended losses.
 
-For address type selection: use _bounceable_ addresses for user smart contracts with custom logic to ensure funds are returned if the contract is invalid, and _non-bounceable_ addresses for wallets to guarantee funds are credited even if the recipient is uninitialized.
+For address type selection: use _bounceable_ addresses for user smart contracts with custom logic to ensure funds are returned if the contract is uninitialized or non-existent, and _non-bounceable_ addresses for wallets to guarantee funds are credited even if the recipient is uninitialized.
 
 ## Address conversion
 
@@ -106,7 +108,7 @@ Tools for converting between raw and user-friendly formats are essential for dev
 
 ## Armored base64 representations
 
-Additional binary data related to TON Blockchain employs similar armored base64 representations. For example, 256-bit Ed25519 public keys are represented by first creating a 36-byte sequence consisting of:
+TON also employs similar armored base64 representations, inspired by the user-friendly address format; these payloads are not addresses. For example, 256-bit Ed25519 public keys are represented by first creating a 36-byte sequence consisting of:
 
 - Two one-byte tags: `0x3E` (public key) followed by `0xE6` (Ed25519).
 - 32 bytes containing the standard binary representation of the Ed25519 public key.
