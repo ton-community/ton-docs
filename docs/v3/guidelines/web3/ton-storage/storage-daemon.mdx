@@ -4,14 +4,14 @@ import Feedback from '@site/src/components/Feedback';
 
 A **storage daemon** is a program used to download and share files in the TON network. The `storage-daemon-cli` console program manages a running storage daemon.
 
-See source code in the [TON repository](https://github.com/ton-blockchain/ton/).
+The current version of the storage daemon is available in the [Testnet](https://github.com/ton-blockchain/ton/tree/testnet) branch
 
 ## Hardware requirements
 
 - At least 1 GHz dual-core CPU
 - At least 2 GB RAM
-- At least 2 GB free SSD (excluding space for bag data)
-- 10 Mbps network bandwidth with a static IP
+- At least 2 GB SSD, excluding space for torrents
+- 10 Mb/s network bandwidth with a static IP
 
 ## Binaries
 
@@ -33,21 +33,17 @@ You can compile `storage-daemon` and `storage-daemon-cli` from source using thes
 
 - A **bag of files** includes:
   - Torrent info.
-  - The data block starts with a torrent header including file names and sizes, followed by the files themselves.
-
-The data block is divided into chunks, with a default size of 128 KB. A Merkle tree built from TVM cells is constructed on the SHA-256 hashes of these chunks. This structure enables the creation and verification of _Merkle proofs_ for individual chunks and allows efficient reconstruction of the _bag_ by exchanging only the proof of the changed chunk.
+  - The data block starts with a torrent header including file names and sizes, followed by the files themselves. The data block is divided into chunks, with a default size of 128 KB. A Merkle tree built from TVM cells is constructed on the SHA-256 hashes of these chunks. This structure enables the creation and verification of _Merkle proofs_ for individual chunks and allows efficient reconstruction of the _bag_ by exchanging only the proof of the changed chunk.
 
 - **Torrent info** includes:
   - The chunk size (data block)
   - The list of chunk sizes
   - Hash-based Merkle tree
-  - Description, which is any text specified by the creator of the torrent
-  
-  It also includes a Merkle root computed over the data block.
+  - Description, which is any text specified by the creator of the torrent. It also includes a Merkle root computed over the data block.
 
 - Torrent info is serialized into a TVM cell. The hash of this cell is called the **bagID**, and it uniquely identifies the **bag**.
 
-- The **bag metafile** is a file that includes the _torrent info_ and _header_. This file serves the same purpose as a `.torrent` file.
+- The **bag meta** is a file that includes the _torrent info_ and _header_. This file serves the same purpose as a `.torrent` file.
 
 ## Starting the storage daemon and storage-daemon-cli
 
@@ -101,7 +97,7 @@ create -d "Description" -- -filename.txt
 You can run `storage-daemon-cli` in non-interactive mode by passing it commands to execute:
 
 ```bash
-storage-daemon-cli ... -c "add-by-meta <metafile>" -c "list --hashes"
+storage-daemon-cli ... -c "add-by-meta m" -c "list --hashes"
 ```
 
 ## Adding a bag of files
@@ -110,10 +106,10 @@ To download a **bag of files**, you need its hash `bagID` or a metafile. Use the
 
 ```bash
 add-by-hash <hash> -d directory
-add-by-meta <metafile> -d directory
+add-by-meta <meta-file> -d directory
 ```
 
-If -d is omitted, the bag is saved to the storage daemon’s default directory.
+The bag will be downloaded to the specified directory. If `-d` is not specified, the bag will be saved to the default storage daemon directory.
 
 :::info
 The hash must be provided in hexadecimal format with a length of 64 characters.
@@ -126,16 +122,16 @@ When adding a bag via a metafile, information such as size, description, and fil
 - The `list` command shows all added bags.
 - The `list --hashes` command shows full hashes.
 
-In the following commands, `<BagID>` can be either a bag's hexadecimal hash or its ordinal number in the current session, which is visible in the list output using the list command. Note that ordinal numbers of bags are not persistent and are unavailable in non-interactive mode.
+In the following commands, `<BagID>` can be either a bag's hexadecimal hash or its ordinal number in the current session, which is visible in the `list` output using the list command. Note that ordinal numbers of bags are not persistent and are unavailable in non-interactive mode.
 
 ### Methods
 
-- `get <BagID>` - shows full information about the bag: description, size, download speed, and file list.
+- `get <BagID>` - shows full information about the Bag: description, size, download speed, and file list.
 - `get-peers <BagID>` - lists connected peers.
 - `download-pause <BagID>`, `download-resume <BagID>` - pauses or resumes download.
 - `upload-pause <BagID>`, `upload-resume <BagID>` - pauses or resumes upload.
 - `remove <BagID>` - removes the bag.
-- `remove --remove-files <BagID>` also removes the bag and its files. Note that if the bag is saved in the internal storage daemon directory, the files will be deleted in any case.
+- `remove --remove-files` also removes the bag and its files. Note that if the bag is saved in the internal storage daemon directory, the files will be deleted in any case.
 
 ## Partial downloads and priorities
 
@@ -145,7 +141,7 @@ When adding a bag, you can specify which files to download:
 
 ```bash
 add-by-hash <hash> -d dir --partial file1 file2 file3
-add-by-meta <metafile> -d dir --partial file1 file2 file3
+add-by-meta <meta-file> -d dir --partial file1 file2 file3
 ```
 
 ### Priorities
@@ -174,16 +170,16 @@ create <path>
 create <path> -d "Bag of Files description"
 ```
 
-After creation, detailed information, including the hash `bagID`, is shown in the console, and the daemon begins sharing the bag.
+After creation, detailed information, including the hash `BagID`, is shown in the console, and the daemon begins sharing the torrent.
 Additional options for the `create` command:
 
 - `--no-upload` - daemon will not distribute files to peers. Upload can be started using the `upload-resume` command.
 - `--copy` - files will be copied to the internal directory of the storage daemon.
 
-To download the bag, other users need to know its hash. You can also save the bag metafile:
+To download the bag, other users need to know its hash. You can also save the torrent metafile:
 
 ```bash
-get-meta <BagID> <metafile>
+get-meta <BagID> <meta-file>
 ```
 
 <Feedback />
