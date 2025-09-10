@@ -4,10 +4,11 @@ import Feedback from '@site/src/components/Feedback';
 
 This document briefly introduces TON Sites — websites accessed through the TON Network. TON Sites can serve as convenient entry points to other TON Services. For instance, HTML pages loaded from TON Sites may contain `ton://...` URIs, such as payment links. When clicked, these links can trigger actions like making a payment, provided the user has a TON Wallet installed on their device.
 
-From a technical standpoint, TON Sites function similarly to standard websites. Still, they are accessed via the [TON Network](/v3/concepts/dive-into-ton/ton-blockchain/ton-networking) — an overlay network that operates within the Internet — rather than directly through the Internet itself. Instead of using standard IPv4 or IPv6 addresses, TON Sites are addressed via [ADNL](/v3/documentation/network/protocols/adnl/overview) addresses. They receive HTTP requests over the [RLDP](/v3/documentation/network/protocols/rldp) protocol, a high-level RPC protocol built on top of ADNL, the TON Network's primary protocol, instead of the usual TCP/IP.
+From a technical standpoint, TON Sites function similarly to standard websites. Still, they are accessed via the [TON Network](/v3/concepts/dive-into-ton/ton-blockchain/ton-networking) which is an overlay network that operates within the Internet rather than directly through the Internet itself. Instead of using standard IPv4 or IPv6 addresses, TON Sites are addressed via [ADNL](/v3/documentation/network/protocols/adnl/overview) addresses. They receive HTTP requests over the [RLDP](/v3/documentation/network/protocols/rldp) protocol, a high-level RPC protocol built on top of ADNL, the TON Network's primary protocol, instead of the usual TCP/IP.
 Since encryption is handled at the ADNL level, there’s no need for HTTPS (TLS), mainly when the entry proxy is hosted locally on the user's device.
 
 A gateway between the "ordinary" Internet and the TON Network is required to access existing sites or create new TON Sites. In practice, this involves:
+
 - A HTTP → RLDP proxy running locally on the client's machine to access TON Sites. 
 - A reverse RLDP → HTTP proxy running on a remote web server to serve your content through the TON Network.
 
@@ -20,9 +21,7 @@ To access existing TON Sites, you need to run an RLDP-HTTP proxy on your local m
 1. Download the proxy.
     
    You can either:
-   - Download the precompiled **rldp-http-proxy** from [TON auto builds](https://github.com/ton-blockchain/ton/releases/latest).
-  
-   or 
+   - Download the precompiled **rldp-http-proxy** from [TON auto builds](https://github.com/ton-blockchain/ton/releases/latest), or 
    - Compile it yourself by following these [instructions](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy).
 
 2. Download the [TON global config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config).
@@ -47,9 +46,7 @@ To stop the proxy, press `Ctrl+C` or close the terminal window.
 1. Download the proxy.
 
 You can either:
-- Download **rldp-http-proxy** from [TON auto builds](https://github.com/ton-blockchain/ton/releases/latest).
-  
-  or
+- Download **rldp-http-proxy** from [TON auto builds](https://github.com/ton-blockchain/ton/releases/latest), or
 - Compile it yourself by following these [instructions](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy).
 
 2. Download the [TON global config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config).
@@ -162,9 +159,7 @@ We assume that you already know how to set up a regular website and that:
 1. Download the proxy.
 
 You can either:
-- Download **rldp-http-proxy** from [TON auto builds](https://github.com/ton-blockchain/ton/releases/latest).
-
-  or
+- Download **rldp-http-proxy** from [TON auto builds](https://github.com/ton-blockchain/ton/releases/latest), or
 - Compile it yourself by following these [instructions](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy).
 
 2. Download the [TON global config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config).
