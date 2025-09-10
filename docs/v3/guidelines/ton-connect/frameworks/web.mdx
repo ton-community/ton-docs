@@ -68,10 +68,12 @@ You can also open the connect modal programmatically; for example, from a custom
         await tonConnectUI.openModal();
     }
 
-    // Call the function
-    connectToWallet().catch(error => {
-        console.error("Error connecting to wallet:", error);
-    });
+    // Attach to a button click
+    document.getElementById('connect-btn').onclick = () => {
+        connectToWallet().catch(error => {
+            console.error("Error connecting to wallet:", error);
+        });
+    };
 </script>
 ```
 
@@ -86,20 +88,20 @@ To redirect the user to a specific URL after connection, you can [customize your
 To redirect the user to a [Telegram Mini App](/v3/guidelines/dapps/tma/overview) after wallet connection, use the `twaReturnUrl` option:
 
 ```js
-tonConnectUI.uiOptions = {
+tonConnectUI.setOptions({
   actionsConfiguration: {
-    twaReturnUrl: 'https://t.me/YOUR_APP_NAME'
+    twaReturnUrl: 'https://t.me/<YOUR_APP_NAME>'
   }
-};
+});
 ```
 
-[Read more in SDK documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#use-inside-twa-telegram-web-app)
+[Read more in SDK documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#use-inside-tma-telegram-mini-apps)
 
 ### UI customization
 
 TON Connect UI provides an interface that should be familiar and recognizable to the user when using various apps. However, the app developer can modify this interface to keep it consistent with the app's interface.
 
-- [TonConnect UI documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
+- [TON Connect UI documentation](https://github.com/ton-connect/sdk/tree/main/packages/ui#ui-customisation)
 
 ## SDK documentation
 
@@ -115,9 +117,9 @@ Let's look at an example of using TON Connect UI in an app.
 Here's an example of sending a transaction using the TON Connect UI:
 
 ```js
-import { TonConnectUI } from '@tonconnect/ui';
+import TonConnectUI from '@tonconnect/ui';
 
-const tonConnectUI = new TonConnectUI({ //connect application
+const tonConnectUI = new TonConnectUI({ // connect application
     manifestUrl: 'https://<YOUR_APP_URL>/tonconnect-manifest.json',
     buttonRootId: '<YOUR_CONNECT_BUTTON_ANCHOR_ID>'
 });
@@ -127,21 +129,23 @@ const transaction = {
   messages: [
         {
             address: "EQABa48hjKzg09hN_HjxOic7r8T1PleIy1dRd8NvZ3922MP0", // destination address
-            amount: "20000000" //Toncoin in nanotons
+            amount: "20000000" // Toncoin in nanotons
         }
     ]
 }
 
-const result = await tonConnectUI.sendTransaction(transaction)
+async function sendTransactionHandler() {
+  const result = await tonConnectUI.sendTransaction(transaction);
+}
 ```
 
 :::tip
-Get more examples on the [Sending messages](/v3/guidelines/ton-connect/cookbook/ton-transfer) page.
+Get more examples on the [TON transfer](/v3/guidelines/ton-connect/cookbook/ton-transfer) page.
 :::
 
 ### Understanding transaction status by hash
 
-Learn the principle explained in [payment processing](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions) using the tonweb library.
+Learn the principle explained in [payment processing](/v3/guidelines/ton-connect/guidelines/transaction-by-external-message).
 
 ### Signing and verification
 
@@ -154,7 +158,7 @@ This feature is particularly useful for verifying ownership of off-chain assets 
 
 ### Wallet disconnection
 
-Call to disconnect from the wallet:
+To disconnect from the wallet, call:
 
 ```js
 await tonConnectUI.disconnect();
