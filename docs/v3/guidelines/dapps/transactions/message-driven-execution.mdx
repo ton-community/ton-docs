@@ -133,7 +133,7 @@ ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
 import_fee:Grams = CommonMsgInfo;
 ```
 
-Since an external-in message is sent into the blockchain from the outside, the initiator is an external actor. This can be either a wallet contract or custom code interacting with blockchain API services.
+Since an external-in message is sent into the blockchain from the outside, the initiator is an external actor. This can be either a wallet app or custom code interacting with blockchain API services.
 
 To send an external-in message to a smart contract, you need to:
 
@@ -239,7 +239,6 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
 ### External outgoing messages
 
-
 **External outgoing** messages are full-fledged messages sent outside the network (to `MsgAddressExt`).
 They _do not have a specific recipient_ within the blockchain.
 They are typically used to communicate with off-chain systems, for example, as callbacks or signals.
@@ -258,7 +257,7 @@ ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
 created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ```
 
-## Message bounces
+## Message bounce
 
 A **bounce message** is automatically returned to the sender — but only if the following conditions are met:
 - the message is **internal**,
@@ -283,7 +282,7 @@ You can run the following script in Blueprint to compare the differences between
 
 Use one of the methods below to run the script:
 
-#### Option 1: using environment variables in the command line
+#### Option 1: using environment variables on the command line
 
 ```bash
 WALLET_MNEMONIC="unfold your mnemonics ... is added here" \
@@ -306,7 +305,7 @@ Then run:
 npx blueprint run sendBounceableMessages --testnet --mnemonic
 ```
 
-**Note**: TON Connect (e.g., the `--tonconnect` flag) cannot be used here because wallet extensions like Tonkeeper do not allow DApps to control the `bounce` flag for security reasons. They always send bounceable messages. To maintain this flag, you need to create and sign the message manually using a mnemonic.
+**Note**: TON Connect (e.g., the `--tonconnect` flag) cannot be used here because wallet extensions like Tonkeeper do not allow DApps to control the `bounce` flag for security reasons. Wallets typically send bounceable messages by default, but the final behavior depends on the address format (e.g., a `UQ…` address results in a non-bounceable message). To maintain this flag, you need to create and sign the message manually using a mnemonic.
 
 <details>
   <summary> Send bounceable message </summary>
@@ -402,8 +401,6 @@ npx blueprint run sendBounceableMessages --testnet --mnemonic
 
   ````mdx-code-block
   ```text
-  Using file: sendBounceableMessages
-  Connected to wallet at address: 0QD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxYkp
   Using wallet v4r2 at address: EQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxW9m
      Current seqno: 36
   Sending one external message with two internal messages (one bounceable, one non-bounceable)...
@@ -435,7 +432,7 @@ From a technical standpoint, this is an internal message sent from the current o
 ```tlb
 
 transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress
-custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;`
+custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;
 
 ```
 
@@ -445,14 +442,14 @@ The TON SDK provides predefined primitives for the most common structures, so co
 import { Address, beginCell, toNano } from '@ton/ton';
 /*
 `transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress
-custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;`
+custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;
 */
 
 const messageBody = beginCell()
     .storeUint(0x5fcc3d14, 32) // opcode for NFT transfer
     .storeUint(0, 64) // query id, by default 0
-    .storeAddress(destinationAddress) //
-    .storeAddress(destinationAddress) // response destination for lasts funds
+    .storeAddress(destinationAddress) // new owner
+    .storeAddress(destinationAddress) // response destination for excess funds
     .storeBit(0) // if 0, no custom payload
     .storeCoins(toNano('0.01')) // forward amount - if >0, will send additional message to destination as a wallet notification message
     .endCell();
@@ -481,7 +478,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     const messageBody = beginCell()
         .storeUint(0x5fcc3d14, 32) // opcode for NFT transfer
         .storeUint(0, 64) // query id
-        .storeAddress(destinationAddress)
+        .storeAddress(destinationAddress) // new owner
         .storeAddress(destinationAddress) // response destination
         .storeBit(0) // if 0, no custom payload
         .storeCoins(toNano('0.01')) // forward amount - if >0, will send additional message to destination as a wallet notification message
@@ -499,7 +496,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
 Suppose you need to compose a message for a smart contract. As an example, we'll use the Jetton wallet and wallet V3 contracts.
 There are two types of receiving functions commonly used:
 
-- [() recv_internal(cell in_msg_full, slice in_msg_body) impure](https://github.com/ton-blockchain/jetton-contract/blob/3d24b419f2ce49c09abf6b8703998187fe358ec9/contracts/jetton-wallet.fc#L187)
+1. [() recv_internal(cell in_msg_full, slice in_msg_body) impure](https://github.com/ton-blockchain/jetton-contract/blob/3d24b419f2ce49c09abf6b8703998187fe358ec9/contracts/jetton-wallet.fc#L187)
 
 To correctly serialize an internal message for this smart contract, we must examine how the contract deserializes incoming messages.
 
@@ -621,7 +618,7 @@ To run the script and send an internal message, follow these steps:
   ````
 </details>
 
-- [() recv_external(slice msg_body) impure](https://github.com/aSpite/wallet-tutorial/blob/73c213add90ff115e45e58d0bcd9f1ea1fd44c89/JavaScript%20-%20TypeScript/src/wallet_v3.fc#L7)
+2. [() recv_external(slice msg_body) impure](https://github.com/aSpite/wallet-tutorial/blob/73c213add90ff115e45e58d0bcd9f1ea1fd44c89/JavaScript%20-%20TypeScript/src/wallet_v3.fc#L7)
 
 Although you can use `blueprint --tonconnect` to send internal messages, it does **not** support external messages.
 This limitation exists because TON Connect does **not** expose low-level signing capabilities due to the following reasons:
@@ -630,7 +627,7 @@ This limitation exists because TON Connect does **not** expose low-level signing
 2. **TON Connect abstraction**: the provider hides the wallet's internal implementation behind a unified interface.
 3. **Limited API surface**: blueprint is designed for contract deployment and testing, not for manual message signing.
 
-That is why we use mnemonic method of the blueprint instead of TON Connect:
+That is why we use mnemonic method of the Blueprint instead of TON Connect:
 
 ```func
 () recv_external(slice in_msg) impure {
@@ -655,7 +652,7 @@ That is why we use mnemonic method of the blueprint instead of TON Connect:
 
 Use one of the methods below to run the following script:
 
-#### Option 1: using environment variables in the command line
+#### Option 1: using environment variables on the command line
 
 ```bash
 WALLET_MNEMONIC="unfold your mnemonics ... is added here" \
@@ -674,7 +671,7 @@ WALLET_VERSION="v4r2"
 
 Then run:
 
-```
+```bash
 npx blueprint run sendExternalMessage --testnet --mnemonic
 ```
 
