@@ -8,8 +8,8 @@ TON DNS is a powerful tool for assigning TON Sites or Storage bags to domains an
 
 ## Relevant links
 
-1. [Smart contract addresses](/v3/documentation/smart-contracts/addresses/address)
-1. [TON DNS standard](https://github.com/ton-blockchain/TIPs/issues/81)
+1. [TON smart contract address system](/v3/documentation/smart-contracts/addresses)
+1. [TEP-0081 - TON DNS standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0081-dns-standard.md)
 1. [Source code of .ton DNS collection](https://tonscan.org/address/EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz#source)
 1. [Source code of .t.me DNS collection](https://tonscan.org/address/EQCA14o1-VWhS2efqoh_9M1b_A9DtKTuoqfmkn83AbJzwnPi#source)
 1. [Domain contracts searcher](https://tonscan.org/address/EQDkAbAZNb4uk-6pzTPDO2s0tXZweN-2R08T2Wy6Z3qzH_Zp#source)
@@ -132,7 +132,7 @@ How `dnsresolve()` works:
    - A suffix variable `subdomain_sfx` is set to the `subdomain`. It reads bytes until the zero byte.
    - At this point: `subdomain = "resolve-contract\0", subdomain_sfx = ""`.
    - The zero byte and suffix are trimmed, resulting in `subdomain = "resolve-contract"`.
-   - The domain name is converted into a contract address using helper functions `slice_hash` and `get_ton_dns_nft_address_by_index`. See [Appendix 1](#appendix-1-code-of-resolve-contractton) for implementation details.
+   - The domain name is converted into a contract address using helper functions `slice_hash` and `get_ton_dns_nft_address_by_index`. See [Appendix 1](subresolvers#appendix-1-code-of-resolve-contractton) for implementation details.
 4. If the subdomain starts with `"address\0"`:
    - The prefix is skipped, and the rest is interpreted as a base64-encoded address.
 5. If the subdomain doesn't match any known prefix:
@@ -154,7 +154,7 @@ The `dnsresolve()` function can:
 - Return a "domain not found" result if the subdomain is unknown.
 
 :::warning
-Base64 address parsing is currently not functional. If you attempt to resolve a domain like `<some-address>.address.resolve-contract.ton`, you will receive an error indicating that the domain is misconfigured or does not exist. This limitation results in lowercase domain labels, which may cause the resolver to query a non-existent or invalid WorkChain address.
+Base64 address parsing is currently not functional. If you attempt to resolve a domain like `<some-address>.address.resolve-contract.ton`, you will receive an error indicating that the domain is misconfigured or does not exist. This issue arises because domain names are case-insensitive—a behavior inherited from traditional DNS, which results in the lowercase. Consequently, the resolver may attempt to query a non-existent or invalid WorkChain address
 :::
 
 ### Binding the resolver
@@ -252,7 +252,7 @@ Finally, we update the record associated with the specified domain and write the
   int subdomain_suffix_bits = slice_bits(subdomain_suffix);
 
   load_data();
-  (cell records, _) = domains.udict_get_ref?(256, string_hash(top));
+  (cell records, _) = domains.udict_get_ref?(256, string_hash(subdomain));
 
   if (subdomain_suffix_bits > 0) { ;; More than "<SUBDOMAIN>\0" requested.
     category = "dns_next_resolver"H;
@@ -281,7 +281,7 @@ While this function could be improved to handle errors more gracefully, such enh
 <details>
 <summary>subresolver.fc</summary>
 
-```func
+```func showLineNumbers
 (builder, ()) ~store_slice(builder to, slice s) asm "STSLICER";
 int starts_with(slice a, slice b) asm "SDPFXREV";
 
@@ -390,7 +390,7 @@ slice decode_base64_address(slice readable) method_id {
     
     domain_nft_address = get_ton_dns_nft_address_by_index(slice_hash(subdomain));
   } elseif (subdomain.starts_with("6D65007400"s)) {
-    ;; "me" \\0 "t" \\0 <subdomain> \\0 [subdomain_sfx]
+    ;; "t" \\0 "me" \\0 <subdomain> \\0 [subdomain_sfx]
     subdomain~skip_bits(40);
     
     ;; reading domain name
