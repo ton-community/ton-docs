@@ -8,7 +8,7 @@ From a technical standpoint, TON Sites function similarly to standard websites. 
 Since encryption is handled at the ADNL level, there’s no need for HTTPS (TLS), mainly when the entry proxy is hosted locally on the user's device.
 
 A gateway between the "ordinary" Internet and the TON Network is required to access existing sites or create new TON Sites. In practice, this involves:
-- An HTTP → RLDP proxy running locally on the client's machine to access TON Sites. 
+- A HTTP → RLDP proxy running locally on the client's machine to access TON Sites. 
 - A reverse RLDP → HTTP proxy running on a remote web server to serve your content through the TON Network.
 
 [Read more about TON Sites, WWW, and Proxy](https://blog.ton.org/ton-sites)
@@ -38,7 +38,7 @@ To access existing TON Sites, you need to run an RLDP-HTTP proxy on your local m
   - `3333`: UDP port used for outbound and inbound RLDP and ADNL communication — connecting to TON Sites via the TON Network.
   - `global.config.json`: path to the global TON config file.
 
-The proxy will continue running in your terminal if everything is set up correctly. Configure your tools or browser to use `http://localhost:8080` as an HTTP proxy (for example, `curl -x 127.0.0.1:8080`). See [Accessing TON Sites](#accessing-ton-sites) for details.
+The proxy will continue running in your terminal if everything is set up correctly. You can now access TON Sites through: `http://localhost:8080`.
 
 To stop the proxy, press `Ctrl+C` or close the terminal window.
 
@@ -68,7 +68,7 @@ You can either:
    45061C1D4EC44A937D0318589E13C73D151D1CEF5D3C0E53AFBCF56A6C2FE2BD vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
    ```
 
-   This is your newly generated persistent ADNL address in hexadecimal and user-friendly form. The corresponding private key is saved into file `45061...E2BD` in the current directory. Move the key into the keyring directory.
+   This is your newly generated persistent ADNL address in hexadecimal and user-friendly form. The corresponding private key is saved into file `45061...2BD` in the current directory. Move the key into the keyring directory.
 
    ```bash
    mv 45061C1* keyring/
@@ -84,7 +84,7 @@ You can either:
 
    **Example**
    ```bash
-   rldp-http-proxy/rldp-http-proxy -p 8080 -a <your_public_ip>:3333 -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
+   rldp-http-proxy/rldp-http-proxy -p 8080 -a 777.777.777.777:3333 -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
    ```
 
    - `8080`: TCP port to listen for incoming HTTP requests on localhost. 
@@ -92,14 +92,14 @@ You can either:
    - `global.config.json`: Path to the global TON configuration file. 
    - `-A <your_adnl_address>`: specifies the persistent ADNL address generated earlier.
 
-The proxy will stay running in the terminal if everything is configured correctly. Configure your tools or browser to use `http://<your_public_ip>:8080` as an HTTP proxy (for example, `curl -x <your_public_ip>:8080`). See [Accessing TON Sites](#accessing-ton-sites) for setup details.
-
+The proxy will stay running in the terminal if everything is configured correctly. You can now access TON Sites through: `http://<your_public_ip>:8080`.
+ 
 To stop the proxy, press `Ctrl+C` or close the terminal window.
 
 ## Accessing TON Sites
 
 
-Once your RLDP-HTTP proxy is running on `localhost:8080`, as described in [Running an entry proxy](#running-an-entry-proxy), you can verify your setup with `curl`.
+Once your RLDP-HTTP proxy is up and running on `localhost:8080` for inbound TCP connections, as explained [above](#running-an-entry-proxy-on-a-remote-computer).
 
 You can verify your setup with a simple test using `curl` or `wget`. For example,
 
@@ -122,7 +122,7 @@ This command attempts to download the main page of the TON Site `just-for-test.t
 
 ```
 
-You can also use the ADNL address with the `.adnl` suffix. For example:
+You can also use the ADNL address directly with a fake `.adnl` domain. For example:
 
 ```bash
 curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h72gllt.adnl/
@@ -185,7 +185,7 @@ You can either:
    ```bash
    45061C1D4EC44A937D0318589E13C73D151D1CEF5D3C0E53AFBCF56A6C2FE2BD vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3
    ```
-    This is your newly generated persistent ADNL address in hexadecimal and user-friendly form. The corresponding private key is saved into file `45061...E2BD` in the current directory. Move the key into the keyring directory.
+    This is your newly generated persistent ADNL address in hexadecimal and user-friendly form. The corresponding private key is saved into file `45061...2BD` in the current directory. Move the key into the keyring directory.
 
    ```bash
    mv 45061C1* keyring/
@@ -213,7 +213,7 @@ If you want your TON Site to run permanently, you need to use options `-d` and `
 
  **Example**
  ```bash
- rldp-http-proxy/rldp-http-proxy -a <your_public_ip>:3333 -L '*' -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3 -d -l tonsite.log
+ rldp-http-proxy/rldp-http-proxy -a 777.777.777.777:3333 -L '*' -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3 -d -l tonsite.log
  ```
 
 If everything is configured correctly, the RLDP-HTTP proxy will:
@@ -254,14 +254,13 @@ You can also host your RLDP-HTTP proxy on a machine different from your web serv
 
 **Example**
 ```bash
-rldp-http-proxy/rldp-http-proxy -a <your_public_ip>:3333 -R '*'@<YOUR_WEB_SERVER_HTTP_IP>:80 -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3 -d -l tonsite.log
+rldp-http-proxy/rldp-http-proxy -a 777.777.777.777:3333 -R '*'@333.333.333.333:80 -C global.config.json -A vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3 -d -l tonsite.log
 ```
 
-In this case, your regular web server must be accessible at `http://<YOUR_WEB_SERVER_HTTP_IP>:80`, although this IP address will remain hidden from external access.
-
+In this case, your regular web server must be accessible at `http://333.333.333.333:80`, although this IP address will remain hidden from external access.
 
 ### Recommendations
-TON Proxy currently lacks anonymity features, so if you'd prefer to keep your web server's IP address private, you have two options:
+Since anonymity features will only be introduced in TON Proxy 2.0, if you'd prefer to keep your web server's IP address private, you have two options:
 - Set up a reverse proxy on a different server using the `-R` flag. 
 - Create a duplicate server containing a copy of your website and run the reverse proxy locally.
 
