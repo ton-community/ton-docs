@@ -31,7 +31,7 @@ Each transaction consists of up to five phases:
 The compute phase involves executing the contract code on TVM.
 
 :::tip
-- See the section 4.3.5 in the TON Blockchain whitepaper (may include outdated information): https://docs.ton.org/tblkch.pdf
+- See the section 4.3.5 in the [TON Blockchain whitepaper](https://docs.ton.org/tblkch.pdf) (may include outdated information)
 :::
 
 ### When the compute phase is skipped
@@ -52,7 +52,7 @@ At any point, the TVM state is defined by six properties:
 - **Gas limits**: includes the current gas limit (`g<sub>l</sub>`), maximum gas limit (`g<sub>m</sub>`), remaining gas (`g<sub>r</sub>`), and gas credit (`g<sub>c</sub>`).
 - **Library context**: a hashmap of libraries available for TVM.
 
-### TVM as a stack machine
+### Types
 
 TVM operates as a stack machine, supporting seven variable types:
 - **Non-cell types**:
@@ -81,7 +81,7 @@ TVM initializes during the compute phase and executes commands/opcodes from the 
 
 ## TVM instructions
 
-For a complete list of TVM instructions, visit [TVM instructions](/v3/documentation/tvm/instructions).
+For a complete list of instructions, visit [TVM instructions](/v3/documentation/tvm/instructions).
 
 ### Results of TVM execution
 
