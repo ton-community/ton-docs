@@ -308,7 +308,7 @@ This example shows a low-level construction of the message. For a higher-level, 
 
 **Practical example of calculating a non-normalized hash:**
 
-Historically, message hashes were not normalized across the ecosystem. If your code constructs messages without applying normalization, it may produce inconsistent hashes. In such cases, update the logic to follow the normalization rules described in [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467).
+Before April 2025, message hashes were not normalized across the ecosystem. If your code constructs messages without applying normalization, it may produce inconsistent hashes. In such cases, update the logic to follow the normalization rules described in [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467).
 
 Below is an example of non-normalized message construction — avoid using this approach:
 
@@ -400,6 +400,7 @@ import {
   Transaction,
   loadMessage,
   Cell,
+  toNano,
 } from "@ton/ton";
 
 export function getNormalizedExtMessageHash(message: Message) {
@@ -913,7 +914,7 @@ async function checkTransactionStatus(txHash: string, walletAddress: string) {
 
     if (data.result.length > 0) {
       console.log("Transaction found on the blockchain");
-      const viewerUrl = `https://testnet.tonviewer.com/transaction/${trxHash}`;
+      const viewerUrl = `https://testnet.tonviewer.com/transaction/${txHash}`;
       console.log("Transaction link:", viewerUrl);
       return data.result[0];
     } else {
@@ -979,7 +980,7 @@ async function getStateInit(
 
   const stateInitBase64 = stateInitCell.toBoc().toString("base64");
 
-  console.log("StateInit (base64):", stateInitBase64);
+  console.log("StateInit cell (base64):", stateInitBase64);
   console.log("StateInit (hash):  ", stateInitCell.hash().toString("base64"));
   console.log(
     "Wallet address:    ",
