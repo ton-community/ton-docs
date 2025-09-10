@@ -23,9 +23,23 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci # or yarn install
-      - name: Build the docs
-        run: npm run build
+      - name: Build the English docs
+        run: npm run build -- -l en
       - name: Lint Markdown code
         run: npm run lint-mdx
       - name: Spellcheck
         run: npm run spell
+
+  markdown-i18n:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - run: npm ci # or yarn install
+      - name: Build the zh-cn locale
+        run: npm run build -- -l mandarin
+      - name: Build the ru locale
+        run: npm run build -- -l ru
