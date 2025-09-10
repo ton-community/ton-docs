@@ -8,7 +8,7 @@ import Feedback from '@site/src/components/Feedback';
 
 - If the cell is a leaf node: `weight = 1`
 - For ordinary (non-leaf) cells: `weight = sum of children’s weights + 1`
-- If the cell is [special (exotic)](./cell-boc.mdx#special-exotic-cells): `weight = 0`
+- If the cell is [special (exotic)](/v3/documentation/data-formats/cells/overview#exotic-cells): `weight = 0`
 
 This concept is used to construct a weight-balanced tree structure when serializing cells. The following algorithm outlines how weights are assigned to each cell and how the tree is reordered accordingly.
 
@@ -24,7 +24,7 @@ The method also:
 
 Reindexing is performed in depth-first order, likely due to specific dependencies or optimizations. As stated in the whitepaper, this indexing order is preferred.
 
-To follow the original node’s bag of cells ([BoC](./cell-boc.mdx)) serialization format, the following steps should be applied:
+To follow the original node’s bag of cells ([BoC](/v3/documentation/data-formats/cells/overview)) serialization format, the following steps should be applied:
 
 - First, if the cell's weights have not been set, this is typically handled during cell import; the weight for each cell is set to `1 + sum_child_weight`, where `sum_child_weight` represents the total weight of its child nodes. The additional 1 ensures that leaf nodes receive a weight of 1.
 
