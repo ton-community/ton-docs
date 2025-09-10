@@ -2,8 +2,7 @@
  * @type {import('@docusaurus/plugin-content-docs').SidebarConfig}
  */
 module.exports = [
-  'v3/documentation/ton-documentation',
-  'v3/documentation/faq',
+  'v3/documentation/introduction',
   {
     type: 'category',
     label: 'Smart contracts',
@@ -27,28 +26,6 @@ module.exports = [
           'v3/documentation/smart-contracts/addresses/address-states',
         ],
       },
-      {
-        type: 'category',
-        label: 'Contracts specification',
-        items: [
-          'v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
-          'v3/documentation/smart-contracts/contracts-specs/highload-wallet',
-          'v3/documentation/smart-contracts/contracts-specs/vesting-contract',
-          'v3/documentation/smart-contracts/contracts-specs/governance',
-          'v3/documentation/smart-contracts/contracts-specs/nominator-pool',
-          'v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
-          'v3/documentation/smart-contracts/contracts-specs/precompiled-contracts',
-          'v3/documentation/smart-contracts/contracts-specs/examples',
-
-          {
-            type: 'link',
-            label: 'TON enhancement proposals (TEPs)',
-            href: 'https://github.com/ton-blockchain/TEPs/tree/master',
-          },
-
-        ],
-      },
-      'v3/documentation/smart-contracts/limits',
       {
         type: 'category',
         label: 'Message management',
@@ -80,7 +57,28 @@ module.exports = [
           'v3/documentation/smart-contracts/shards/infinity-sharding-paradigm',
         ],
       },
-      'v3/documentation/smart-contracts/tact',
+      'v3/documentation/smart-contracts/limits',
+      {
+        type: 'category',
+        label: 'Contracts specification',
+        items: [
+          'v3/documentation/smart-contracts/contracts-specs/wallet-contracts',
+          'v3/documentation/smart-contracts/contracts-specs/highload-wallet',
+          'v3/documentation/smart-contracts/contracts-specs/vesting-contract',
+          'v3/documentation/smart-contracts/contracts-specs/governance',
+          'v3/documentation/smart-contracts/contracts-specs/nominator-pool',
+          'v3/documentation/smart-contracts/contracts-specs/single-nominator-pool',
+          'v3/documentation/smart-contracts/contracts-specs/precompiled-contracts',
+          'v3/documentation/smart-contracts/contracts-specs/examples',
+
+          {
+            type: 'link',
+            label: 'TON enhancement proposals (TEPs)',
+            href: 'https://github.com/ton-blockchain/TEPs/tree/master',
+          },
+
+        ],
+      },
       {
         type: 'category',
         label: 'Tolk language',
@@ -108,6 +106,10 @@ module.exports = [
             id: 'v3/documentation/smart-contracts/func/overview',
           },
           {
+            type: 'doc',
+            id: 'v3/documentation/smart-contracts/func/cookbook',
+          },
+          {
             type: 'category',
             label: 'Documentation',
             items: [
@@ -123,10 +125,6 @@ module.exports = [
               'v3/documentation/smart-contracts/func/docs/stdlib',
             ],
           },
-          {
-            type: 'doc',
-            id: 'v3/documentation/smart-contracts/func/cookbook',
-          },
           'v3/documentation/smart-contracts/func/libraries',
           'v3/documentation/smart-contracts/func/changelog',
         ],
@@ -140,6 +138,7 @@ module.exports = [
           'v3/documentation/smart-contracts/fift/fift-deep-dive',
         ],
       },
+      'v3/documentation/smart-contracts/tact',
     ],
   },
   {
@@ -149,9 +148,19 @@ module.exports = [
       'v3/documentation/dapps/dapps-overview',
       {
         type: 'category',
+        label: 'Assets',
+        items: [
+          'v3/documentation/dapps/assets/toncoin',
+          'v3/documentation/dapps/assets/extra-currencies',
+          'v3/documentation/dapps/assets/nft-2.0',
+          'v3/documentation/dapps/assets/usdt',
+        ],
+      },
+      {
+        type: 'category',
         label: 'DeFi principles',
         items: [
-          'v3/documentation/dapps/defi/coins',
+          'v3/documentation/dapps/assets/overview',
           'v3/documentation/dapps/defi/tokens',
           {
             type: 'doc',
@@ -164,26 +173,48 @@ module.exports = [
       },
       {
         type: 'category',
-        label: 'Assets',
+        label: 'Oracles',
         items: [
-          'v3/documentation/dapps/assets/overview',
-          'v3/documentation/dapps/assets/nft-2.0',
-          'v3/documentation/dapps/assets/usdt',
+          'v3/documentation/infra/oracles/overview',
+          {
+            type: 'category',
+            label: 'Providers',
+            items: [
+              'v3/documentation/infra/oracles/pyth',
+              'v3/documentation/infra/oracles/redstone',
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'category',
+    label: 'Nodes',
+    items: [
+      'v3/documentation/nodes/overview',
+      {
+        type: 'category',
+        label: 'Validation',
+        items: [
+          'v3/documentation/nodes/validation/collators',
+          {
+            type: 'doc',
+            label: 'Proof-of-stake',
+            id: 'v3/documentation/nodes/validation/staking-incentives',
+          },
+          'v3/documentation/dapps/proofs',
+          'v3/documentation/dapps/basic-proofing-concepts',
         ],
       },
       {
         type: 'category',
-        label: 'Oracles',
+        label: 'MyTonCtrl',
         items: [
-          'v3/documentation/dapps/oracles/about_blockchain_oracles',
-          {
-            type: 'category',
-            label: 'Oracles in TON',
-            items: [
-              'v3/documentation/dapps/oracles/pyth',
-              'v3/documentation/dapps/oracles/red_stone',
-            ],
-          },
+          'v3/documentation/nodes/mytonctrl/overview',
+          'v3/documentation/nodes/mytonctrl/commands',
+          'v3/documentation/nodes/mytonctrl/status',
+          'v3/documentation/nodes/mytonctrl/errors',
         ],
       },
     ],
@@ -194,68 +225,31 @@ module.exports = [
     items: [
       {
         type: 'category',
-        label: 'Blockchain nodes',
+        label: 'Bridges',
         items: [
-          'v3/documentation/infra/nodes/node-types',
-          {
-            type: 'category',
-            label: 'MyTonCtrl',
-            items: [
-              'v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview',
-              'v3/documentation/infra/nodes/mytonctrl/mytonctrl-status',
-              'v3/documentation/infra/nodes/mytonctrl/mytonctrl-errors',
-            ],
-          },
-          'v3/documentation/infra/nodes/node-commands',
-          {
-            type: 'category',
-            label: 'Validation',
-            items: [
-              {
-                type: 'doc',
-                label: 'Proof-of-stake',
-                id: 'v3/documentation/infra/nodes/validation/staking-incentives',
-              },
-              'v3/documentation/infra/nodes/validation/collators',
-            ],
-          },
-        ],
-      },
-      'v3/documentation/infra/minter-flow',
-      {
-        type: 'category',
-        label: 'Cross-chain bridges',
-        items: [
-          {
-            type: 'doc',
-            label: 'Overview',
-            id: 'v3/documentation/infra/crosschain/overview',
-          },
-          {
-            type: 'doc',
-            label: 'Bridges addresses',
-            id: 'v3/documentation/infra/crosschain/bridge-addresses',
-          },
+          'v3/documentation/infra/bridges/toncoin',
+          'v3/documentation/infra/bridges/toncoin-addresses',
         ],
       },
     ]
   },
   {
     type: 'category',
-    label: 'Network protocols',
+    label: 'Network',
     items: [
+      'v3/documentation/network/global-config',
       {
         type: 'category',
-        label: 'Network configurations',
+        label: 'Config params',
         items: [
-          'v3/documentation/network/configs/network-configs',
-          'v3/documentation/network/configs/blockchain-configs',
-          'v3/documentation/network/configs/config-params',
+          'v3/documentation/network/config-params/overview',
+          'v3/documentation/network/config-params/update',
+          'v3/documentation/network/config-params/extra-currency',
         ],
       },
       {
         type: 'category',
-        label: 'Network protocols',
+        label: 'Protocols',
         items: [
           {
             type: 'category',
@@ -266,9 +260,9 @@ module.exports = [
                 label: 'Overview',
                 id: 'v3/documentation/network/protocols/adnl/overview',
               },
-              'v3/documentation/network/protocols/adnl/low-level-adnl', // TODO: MERGE ADNL
-              'v3/documentation/network/protocols/adnl/adnl-tcp',
-              'v3/documentation/network/protocols/adnl/adnl-udp',
+              'v3/documentation/network/protocols/adnl/low-level', // TODO: MERGE ADNL
+              'v3/documentation/network/protocols/adnl/tcp',
+              'v3/documentation/network/protocols/adnl/udp',
             ],
           },
           {
@@ -278,16 +272,16 @@ module.exports = [
               {
                 type: 'doc',
                 label: 'Overview',
-                id: 'v3/documentation/network/protocols/dht/ton-dht',
+                id: 'v3/documentation/network/protocols/dht/overview',
               },
-              'v3/documentation/network/protocols/dht/dht-deep-dive',
+              'v3/documentation/network/protocols/dht/deep-dive',
             ]
           },
           'v3/documentation/network/protocols/rldp',
           'v3/documentation/network/protocols/overlay',
         ],
       },
-    ]
+    ],
   },
   {
     type: 'category',
@@ -295,49 +289,58 @@ module.exports = [
     items: [
       {
         type: 'category',
-        label: 'TL-B',
+        label: 'TL-B language',
         items: [
-          'v3/documentation/data-formats/tlb/tl-b-language',
-          'v3/documentation/data-formats/tlb/cell-boc',
-          'v3/documentation/data-formats/tlb/exotic-cells',
-          'v3/documentation/data-formats/tlb/library-cells',
-          'v3/documentation/data-formats/tlb/proofs',
-          'v3/documentation/data-formats/tlb/basic-proofing-concepts',
-          'v3/documentation/data-formats/tlb/tl-b-types',
-          'v3/documentation/data-formats/tlb/canonical-cell-serialization',
-          'v3/documentation/data-formats/tlb/msg-tlb',
-          'v3/documentation/data-formats/tlb/block-layout',
-          'v3/documentation/data-formats/tlb/transaction-layout',
+          'v3/documentation/data-formats/tlb/overview',
+          'v3/documentation/data-formats/tlb/types',
           'v3/documentation/data-formats/tlb/crc32',
-          'v3/documentation/data-formats/tlb/tlb-ide',
-          'v3/documentation/data-formats/tlb/tlb-tools',
+          'v3/documentation/data-formats/tlb/tools',
         ],
+      },
+      {
+        type: 'category',
+        label: 'Layouts',
+        items: [
+          'v3/documentation/data-formats/layout/messages',
+          'v3/documentation/data-formats/layout/transactions',
+          'v3/documentation/data-formats/layout/blocks',
+        ]
+      },
+      {
+        type: 'category',
+        label: 'Cells',
+        items: [
+          'v3/documentation/data-formats/cells/overview',
+          'v3/documentation/data-formats/cells/exotic',
+          'v3/documentation/data-formats/cells/library',
+          'v3/documentation/data-formats/cells/serialization',
+        ]
       },
       'v3/documentation/data-formats/tl',
     ],
   },
   {
     type: 'category',
-    label: 'TON Virtual Machine (TVM)',
+    label: 'Virtual machine',
     items: [
-      'v3/documentation/tvm/tvm-overview',
-      'v3/documentation/tvm/tvm-initialization',
-      'v3/documentation/tvm/tvm-exit-codes',
+      'v3/documentation/tvm/overview',
+      'v3/documentation/tvm/initialization',
+      'v3/documentation/tvm/exit-codes',
       {
         type: 'link',
-        label: 'TVM instructions',
+        label: 'Instructions',
         href: '/v3/documentation/tvm/instructions',
       },
       {
         type: 'category',
-        label: 'TVM specification',
+        label: 'Specification',
         items: [
           'v3/documentation/tvm/specification/runvm',
         ],
       },
       {
         type: 'category',
-        label: 'TVM changelog',
+        label: 'Changelog',
         items: [
           'v3/documentation/tvm/changelog/tvm-upgrade-2025-02',
           'v3/documentation/tvm/changelog/tvm-upgrade-2024-04',
@@ -349,7 +352,7 @@ module.exports = [
   },
   {
     type: 'category',
-    label: 'TON whitepapers',
+    label: 'Whitepapers',
     items: [
       {
         type: 'doc',
@@ -378,5 +381,5 @@ module.exports = [
       },
     ],
   },
-
+  'v3/documentation/faq',
 ];
