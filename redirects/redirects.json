@@ -934,5 +934,9 @@
     {
       "from": "/v3/documentation/ton-documentation",
       "to": "/v3/documentation/introduction"
+    },
+    {
+      "from": "/v3/documentation/smart-contracts/addresses",
+      "to": "/v3/documentation/smart-contracts/addresses/address"
     }
 ]
