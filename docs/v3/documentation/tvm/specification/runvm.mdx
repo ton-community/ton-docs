@@ -27,8 +27,6 @@ Flags are the same as for Fift `RUNVMX`; `RUNVMX` reads flags from the stack:
   - If `RUNVM` fails with an exception, only one element is returned, `exit_arg`, which should not be confused with `exit_code`.
   - In the case of running out of gas, `exit_code` is set to `-14`, and `exit_arg` contains the amount of gas.
 
-Note: when an exception occurs with the `+256` flag, only `exit_arg` is returned; `exit_code` and stack/register values are not returned.
-
 Gas cost:
 - 66 gas.
 - 1 gas for each stack element passed to the child VM (the first 32 elements are free).
