@@ -5,7 +5,6 @@ import Feedback from '@site/src/components/Feedback';
 :::info
 To maximize your comprehension of this page,
 it is highly recommended to familiarize yourself with the [TL-B language](/v3/documentation/data-formats/tlb/overview).
-- [TVM retracer](https://retracer.ton.org/)
 :::
 
 TVM is invoked during the compute phase of ordinary and other transactions.
@@ -173,22 +172,23 @@ smc_info#076ef1ea
 
 The first component of this tuple is an _integer_ value, always equal to 0x076ef1ea, followed by nine named fields:
 
-| Field               | Type                                                                                | Description                                                                                                                                                                                         |
-|---------------------|-------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `actions`           | uint16                                                                              | Initially set to 0, but incremented by one whenever a non-RAW output action primitive is executed                                                                                                   |
-| `msgs_sent`         | uint16                                                                              | Number of messages sent                                                                                                                                                                             |
-| `unixtime`          | uint32                                                                              | Unix timestamp in seconds                                                                                                                                                                           |
-| `block_lt`          | uint64                                                                              | Represents the logical time of the previous block of this account. [More about logical time](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-logical-time) |
-| `trans_lt`          | uint64                                                                              | Represents the logical time of the previous transaction of this account                                                                                                                             |
-| `rand_seed`         | bits256                                                                             | Initialized deterministically starting from `rand_seed` of the block, the account address, the hash of the incoming message being processed (if any), and the transaction logical time `trans_lt`   |
+| Field               | Type                                                                                    | Description                                                                                                                                                                                         |
+|---------------------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `actions`           | uint16                                                                                  | Initially set to 0, but incremented by one whenever a non-RAW output action primitive is executed                                                                                                   |
+| `msgs_sent`         | uint16                                                                                  | Number of messages sent                                                                                                                                                                             |
+| `unixtime`          | uint32                                                                                  | Unix timestamp in seconds                                                                                                                                                                           |
+| `block_lt`          | uint64                                                                                  | Represents the logical time of the previous block of this account. [More about logical time](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-logical-time) |
+| `trans_lt`          | uint64                                                                                  | Represents the logical time of the previous transaction of this account                                                                                                                             |
+| `rand_seed`         | bits256                                                                                 | Initialized deterministically starting from `rand_seed` of the block, the account address, the hash of the incoming message being processed (if any), and the transaction logical time `trans_lt`   |
 | `balance_remaining` | [CurrencyCollection](/v3/documentation/data-formats/layout/messages#currencycollection) | Remaining balance of the smart contract                                                                                                                                                             |
 | `myself`            | [MsgAddressInt](/v3/documentation/data-formats/layout/messages#msgaddressint-tl-b)      | Address of this smart contract                                                                                                                                                                      |
-| `global_config`     | (Maybe Cell)                                                                        | Contains information about the global config                                                                                                                                                        |
+| `global_config`     | (Maybe Cell)                                                                            | Contains information about the global config                                                                                                                                                        |
 
 In the July 2023 TVM upgrade, the **c7** tuple was extended from 10 to 14 elements. Read more about it [here](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07).
 
 ## See also
 
-- Original description of [the TVM initialization section](https://docs.ton.org/tblkch.pdf#page=89&zoom=100) in the TVM whitepaper.
+- Original description of [TVM initialization](https://docs.ton.org/tblkch.pdf#page=89&zoom=100) from the TVM whitepaper.
+- [TVM Retracer](https://retracer.ton.org/)
 
 <Feedback />
