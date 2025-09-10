@@ -1,0 +1,46 @@
+import Feedback from '@site/src/components/Feedback';
+
+import Button from '@site/src/components/button'
+
+# Jetton
+
+Jettons are digital assets that represent fungible tokens in the TON ecosystem, as defined by the [Jettons standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md).
+
+Jettons are TON-powered decentralized tokens, avoiding single points of failure and bottlenecks. Each user's jetton balance is stored in a separate jetton wallet contract.
+Smart contracts interact directly with one another, distributing the load across the entire network.
+As the number of users and transactions grows, the network maintains an even load, enabling seamless scalability.
+
+Below you can find documentation, tools, and best practices for integrating Jettons into your DApp.
+
+## Guides
+
+- [TON jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
+
+## Community tutorials
+
+- [Web3 Game Tutorial](/v3/guidelines/dapps/tutorials/web3-game-example) — Learn how to build a Web3 game with TON Blockchain.
+- [Mint your first Jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token/) — Learn how to deploy and customize your first Jetton.
+- [\[YouTube\] TON Keeper founders Oleg Andreev and Oleg Illarionov on TON jettons](https://www.youtube.com/watch?v=oEO29KmOpv4).
+- [Tonspeedrun](https://tonspeedrun.tapps.ninja/)
+
+## Smart contracts
+
+- [Smart contracts implementation (FunC)](https://github.com/ton-blockchain/token-contract/)
+
+## Jetton deployer
+
+Jettons are custom fungible tokens on the TON blockchain. You can create your own token on the TON blockchain using the Jetton Deployer example below:
+
+- [TON Minter](https://minter.ton.org/) — open-source Jetton Deployer dApp
+- [Jetton Deployer — contracts](https://github.com/ton-defi-org/jetton-deployer-contracts) (FunC, TL-B)
+- [Jetton Deployer — Web Client](https://github.com/ton-defi-org/jetton-deployer-webclient) (React, TypeScript)
+
+## Tools to work with jettons
+
+- [NFT Jetton Sale Contract](https://github.com/dvlkv/nft-jetton-sale-smc) — NFT sale contract with jetton support
+
+## See also
+
+- [Jetton processing](/v3/guidelines/dapps/asset-processing/jettons)
+
+<Feedback />

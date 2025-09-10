@@ -1,0 +1,148 @@
+import Feedback from '@site/src/components/Feedback'
+
+# Introduction
+
+Welcome to the official **TON Blockchain** developer documentation.
+
+This section is designed for _developers building advanced applications and smart contracts on TON_. It offers in-depth explanations, implementation examples, and best practices.
+
+
+## Explore core topics
+
+<div style={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+  gap: '1.25rem',
+  marginTop: '1.5rem'
+}}>
+
+  {[
+    {
+      title: 'Smart contracts',
+      desc: 'Learn how contracts are addressed and executed in TON. Discover languages, messaging model, and transaction fees.',
+      link: '/v3/documentation/smart-contracts/overview',
+      btn: 'Explore smart contracts'
+    },
+    {
+      title: 'DApps',
+      desc: 'Explore core primitives used in DApp development on TON: digital assets, DeFi principles, and blockchain oracles.',
+      link: '/v3/documentation/dapps/dapps-overview',
+      btn: 'Build a DApp'
+    },
+    {
+      title: 'Data formats',
+      desc: 'Explore the TL-B language and types, the cell structure, exotic cells, and serialization of messages and blocks.',
+      link: '/v3/documentation/data-formats/tlb/overview',
+      btn: 'Dive into data formats'
+    },
+    {
+      title: 'Virtual Machine',
+      desc: 'Understand the execution model, TVM initialization, exit codes, and the low-level instruction set.',
+      link: '/v3/documentation/tvm/overview',
+      btn: 'Learn about TVM'
+    },
+  ].map(({ title, desc, link, btn }) => (
+    <div
+      key={title}
+      style={{
+        border: '1px solid #e5e7eb',
+        borderRadius: '0.75rem',
+        padding: '0.9rem 1rem',
+        backgroundColor: 'var(--card-bg)',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.6rem',
+        color: 'var(--text-color)'
+      }}
+    >
+      <h3 style={{ fontSize: '1rem', fontWeight: '600', margin: 0 }}>{title}</h3>
+      <p style={{ fontSize: '0.84rem', lineHeight: '1.45', margin: 0 }}>{desc}</p>
+      <a href={link} style={{
+        alignSelf: 'start',
+        padding: '0.4rem 0.75rem',
+        backgroundColor: 'var(--btn-bg)',
+        color: 'var(--btn-text)',
+        borderRadius: '0.5rem',
+        fontSize: '0.8rem',
+        textDecoration: 'none',
+        marginTop: 'auto'
+      }}>{btn}</a>
+    </div>
+  ))}
+</div>
+
+
+## Choose your path
+
+While this section is tailored for experienced developers, TON documentation also includes dedicated sections for users and beginner developers.
+Use the links below to navigate to the most appropriate starting point for your needs.
+
+<div style={{
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+  gap: '1.25rem',
+  marginTop: '1.5rem'
+}}>
+
+  {[
+    {
+      title: 'Concepts for users and enthusiasts',
+      desc: (<>
+        Educational resources and core concepts.<br />
+        Learn about TON’s foundations and ecosystem.
+      </>),
+      link: '/v3/concepts/dive-into-ton/introduction',
+      btn: 'Learn the basics'
+    },
+    {
+      title: 'Guidelines for beginner developers',
+      desc: (<>
+        Step-by-step guidelines.<br />
+        Learn how to run nodes, deploy sample apps, and integrate with TON.
+      </>),
+      link: '/v3/guidelines/quick-start/getting-started',
+      btn: 'Start building'
+    }
+  ].map(({ title, desc, link, btn }) => (
+    <div
+      key={title}
+      style={{
+        border: '1px solid #e5e7eb',
+        borderRadius: '0.75rem',
+        padding: '0.9rem 1rem',
+        backgroundColor: 'var(--card-bg)',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        gap: '0.75rem',
+        height: '100%',
+        color: 'var(--text-color)'
+      }}
+    >
+      <h3 style={{ fontSize: '1rem', fontWeight: '600', margin: 0 }}>{title}</h3>
+      <p style={{ fontSize: '0.84rem', lineHeight: '1.45', margin: 0 }}>{desc}</p>
+      <a href={link} style={{
+        alignSelf: 'start',
+        padding: '0.4rem 0.75rem',
+        backgroundColor: 'var(--btn-bg)',
+        color: 'var(--btn-text)',
+        borderRadius: '0.5rem',
+        fontSize: '0.8rem',
+        textDecoration: 'none',
+        marginTop: 'auto'
+      }}>{btn}</a>
+    </div>
+  ))}
+</div>
+
+## How to contribute
+
+This is an open-source effort — [here’s how to contribute](/v3/contribute).
+
+## See also
+
+- [FAQ](/v3/documentation/faq)
+
+<Feedback />
