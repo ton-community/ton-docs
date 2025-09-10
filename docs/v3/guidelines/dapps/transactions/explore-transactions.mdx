@@ -27,7 +27,7 @@ import TabItem from '@theme/TabItem'
 
 # Transactions
 
-In the TON blockchain, any change to an account’s state is recorded as a **transaction**. However, a transaction does not occur independently — it is the result of _a successfully processed message_. Each transaction captures the full execution context, including the inbound message that triggered it, the resulting state changes, and any outbound messages generated during execution.
+In the TON blockchain, any change to an account’s state is recorded as a **transaction**. However, a transaction does not occur independently — it is the result of _a delivered message_. Each transaction captures the full execution context, including the inbound message that triggered it, the resulting state changes, and any outbound messages generated during execution.
 
 Unlike messages, transactions do not _move, send, or receive_ anything. These terms are often confused, but it’s essential to understand that a transaction is a **record** of what happened to a specific account.
 
@@ -152,12 +152,12 @@ cskip_suspended$110 = ComputeSkipReason;
 
 To start, note that the compute phase can be **skipped** entirely. In that case, the reason for skipping is explicitly recorded and can be one of the following:
 
-| Skip reason       | Description                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `cskip_no_state`  | The smart contract has no state and, therefore, no code, so execution is not possible.                                                                                                                                                                                                                                                                                                                                                |
-| `cskip_bad_state` | Raised in two cases: when the `fixed_prefix_length` [field has an invalid value](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1721) or when the `StateInit` provided in the incoming message [does not match the account’s address](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1726). |
-| `cskip_no_gas`    | The incoming message did not provide enough TON to cover the gas required to execute the smart contract.                                                                                                                                                                                                                                                                                                                              |
-| `cskip_suspended` | The account is frozen, so execution is disabled. This was used to freeze early miner accounts during the stabilization of TON’s tokenomics.                                                                                                                                                                                                                                                                                           |
+| Skip reason       | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ----------------- |---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `cskip_no_state`  | The smart contract has no state and, therefore, no code, so execution is not possible.                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `cskip_bad_state` | Raised in two cases: when the `fixed_prefix_length` [field has an invalid value](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1721) or when the `StateInit` provided in the incoming message [does not match the account’s address](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L1726).                                                                                                           |
+| `cskip_no_gas`    | The incoming message did not provide enough TON to cover the gas required to execute the smart contract.                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `cskip_suspended` | The address is suspended; execution is disabled (used to limit early miner accounts).                                                                                                                                                                                                                                                                                                       |
 
 :::tip
 The `fixed_prefix_length` field can be used to specify a fixed prefix for the account address, ensuring that the account resides in a specific shard. This topic is outside the scope of this guide, but more information is available [here](https://github.com/ton-blockchain/ton/blob/master/doc/GlobalVersions.md#anycast-addresses-and-address-rewrite).
@@ -167,7 +167,7 @@ Now that we've covered the reasons why the compute phase might be skipped, let's
 
 | Field                                                                                      | Type                    | Description                                                                                                                                                                                                                                                                                                                                                           |
 | ------------------------------------------------------------------------------------------ | ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `success`                                                                                  | `Bool`                  | Indicates whether the compute phase was completed successfully. If `false`, any state changes made during this phase are discarded.                                                                                                                                                                                                                                   |
+| `success`                                                                                  | `Bool`                  | Indicates whether the compute phase was completed successfully. Exit code `0` indicates success; `1` is a reserved alternative success that generally does not occur. If `false`, any state changes made during this phase are discarded.                                                                                                                                                                                                                                   |
 | `msg_state_used`, `account_activated`, `mode`, `vm_init_state_hash`, `vm_final_state_hash` | -                       | These fields are currently unused in the blockchain. They are always recorded as zero values.                                                                                                                                                                                                                                                                         |
 | `gas_fees`                                                                                 | `Grams`                 | The amount of fees paid for executing the smart contract code.                                                                                                                                                                                                                                                                                                        |
 | `gas_used`, `gas_limit`                                                                    | `VarUInteger`           | The actual amount of gas used and the maximum gas limit set for execution.                                                                                                                                                                                                                                                                                            |
@@ -261,7 +261,7 @@ The `tr_phase_bounce_negfunds` type is not used in the current version of the bl
 | `tr_phase_bounce_nofunds` | Indicates that the account does not have enough funds to process the message that should be bounced back to the sender. |
 | `tr_phase_bounce_ok`      | Indicates that the system successfully processes the bounce and sends the message back to the sender.                   |
 
-In this phase, `msg_fees` and `fwd_fees` are calculated based on the total forwarding fee `fwd_fees` for the message:
+In this phase, `msg_fees` and `fwd_fees` are calculated based on the total forwarding fee `total_fwd_fees` for the message:
 
 - **One-third** of the fee goes into `msg_fees` and is charged immediately.
 - The remaining **two-thirds** go into `fwd_fees`.
@@ -309,10 +309,10 @@ acc_state_nonexist$11 = AccountStatus;
 
 ## How to access transaction data
 
-### How to retrieve a transaction using api/v2
+### How to retrieve a transaction using API/v2
 
-Among the supported open-source APIs, we can use TON Center [APIv2](https://toncenter.com/api/v2/) and [APIv3](https://toncenter.com/api/v3/index.html#/).
-**APIv2** is a more raw version and provides only basic access to blockchain data. To retrieve a transaction, there are two options:
+Among the supported open-source APIs, we can use TON Center [API/v2](https://toncenter.com/api/v2/) and [API/v3](https://toncenter.com/api/v3/index.html#/).
+**API/v2** is a more raw version and provides only basic access to blockchain data. To retrieve a transaction, there are two options:
 
 - Use the `/api/v2/getTransactions` endpoint:
 
@@ -384,11 +384,11 @@ When retrieving transactions, you might encounter the following error:
 This means the account’s transactions are old, and the blocks containing them are no longer stored on the LiteServer. In this case, you can use the option `archival: true` to fetch data from an archival node.
 :::
 
-### How to retrieve a transaction using api/v3
+### How to retrieve a transaction using API/v3
 
-`APIv3` is more advanced and convenient for retrieving various events from the blockchain. For example, it allows you to fetch information about NFT transfers, token operations, and even transactions in `pending` status. In this tutorial, we'll focus only on the `transactions` endpoint, which returns finalized transactions:
+**API/v3** is more advanced and convenient for retrieving various events from the blockchain. For example, it allows you to fetch information about NFT transfers, token operations, and even transactions in `pending` status. In this tutorial, we'll focus only on the `transactions` endpoint, which returns finalized transactions:
 
-**APIv3** is more advanced and convenient for accessing various types of blockchain events. For example, it allows you to retrieve data on NFT transfers, token movements, and even transactions that are still in the **pending** state.
+**API/v3** is more advanced and convenient for accessing various types of blockchain events. For example, it allows you to retrieve data on NFT transfers, token movements, and even transactions that are still in the **pending** state.
 
 In this guide, we focus only on the `transactions` endpoint, which returns _confirmed_ transactions.
 
@@ -423,41 +423,41 @@ In this guide, we focus only on the `transactions` endpoint, which returns _conf
   </TabItem>
 </Tabs>
 
-If you examine the response, you’ll see that it differs significantly from the APIv2 output. The key difference is that APIv3 **indexes** transactions, while the previous version acts only as a wrapper around LiteServer. In API v3, all information comes directly from the server’s database.
+If you examine the response, you’ll see that it differs significantly from the API/v2 output. The key difference is that API/v3 **indexes** transactions, while the previous version acts only as a wrapper around LiteServer. In API/v3, all information comes directly from the server’s database.
 
 This allows the API to return preprocessed data. For example, if you examine the `account_state_before` and `account_state_after` fields, they include not only the account state hash but also complete data, such as the code, data, TON balance, and even the ExtraCurrency balance.
 
 ```json
-[
-  account_state_before: {
-    hash: 'Rljfqi3l3198Fok7x1lyf9OlT5jcVRae7muNhaOyqNQ=',
-    balance: '235884286762',
-    extra_currencies: {},
-    account_status: 'active',
-    frozen_hash: null,
-    data_hash: 'uUe+xBA4prK3EyIJ8iBk8unWktT4Grj+abz4LF2opX0=',
-    code_hash: '/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA='
+{
+  "account_state_before": {
+    "hash": "Rljfqi3l3198Fok7x1lyf9OlT5jcVRae7muNhaOyqNQ=",
+    "balance": "235884286762",
+    "extra_currencies": {},
+    "account_status": "active",
+    "frozen_hash": null,
+    "data_hash": "uUe+xBA4prK3EyIJ8iBk8unWktT4Grj+abz4LF2opX0=",
+    "code_hash": "/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA="
   },
-  account_state_after: {
-    hash: 'asmytWJakUpuVVYtuSMgwjmlZefj5tV5AgnWgGYP+Qo=',
-    balance: '225825734714',
-    extra_currencies: {},
-    account_status: 'active',
-    frozen_hash: null,
-    data_hash: '6L0wUi1S55GRvdizozJj2GkCqjKSx8iK7dEHlTOe8d0=',
-    code_hash: '/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA='
+  "account_state_after": {
+    "hash": "asmytWJakUpuVVYtuSMgwjmlZefj5tV5AgnWgGYP+Qo=",
+    "balance": "225825734714",
+    "extra_currencies": {},
+    "account_status": "active",
+    "frozen_hash": null,
+    "data_hash": "6L0wUi1S55GRvdizozJj2GkCqjKSx8iK7dEHlTOe8d0=",
+    "code_hash": "/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA="
   }
-]
+}
 ```
 
 Additionally, the response includes an `address_book` field, which contains an array of addresses the account interacted with during transaction execution.
 
 ### Transaction fields in the SDK
 
-When inspecting the response returned via the JSON-RPC protocol in `@ton/ton@`, you may notice two additional fields — `hash` and `raw` — that are not part of the on-chain transaction data. The SDK adds these fields for convenience.
+When inspecting the response returned via the JSON-RPC protocol in `@ton/ton`, you may notice two additional fields — `hash` and `raw` — that are not part of the on-chain transaction data. The SDK adds these fields for convenience.
 
 - The `hash` field provides a function that lets you compute the transaction hash.
-- The `raw` field contains the transaction BOC, which you can parse yourself using either a built-in method from the SDK or manually.
+- The `raw` field contains the transaction BoC, which you can parse yourself using either a built-in method from the SDK or manually.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
@@ -487,10 +487,10 @@ When inspecting the response returned via the JSON-RPC protocol in `@ton/ton@`, 
 
 ### Which API to use?
 
-After reviewing both API v2 and API v3, a natural question is which one to choose, the answer depends entirely on your specific use case.
-As a general recommendation, you can use the `JSON-RPC` protocol from APIv2 since it allows you to rely on an existing SDK that already provides all the necessary methods and types.
+After reviewing both API/v2 and API/v3, a natural question is which one to choose. The answer depends entirely on your specific use case.
+As a general recommendation, you can use the `JSON-RPC` protocol from API/v2 since it allows you to rely on an existing SDK that already provides all the necessary methods and types.
 
-If this functionality does not cover all your requirements, you should consider a full or partial transition to API v3 or explore other APIs in the ecosystem that may offer more data.
+If this functionality does not cover all your requirements, you should consider a full or partial transition to API/v3 or explore other APIs in the ecosystem that may offer more data.
 
 ## Transaction success criteria
 
@@ -500,11 +500,11 @@ Before moving on to user operations and their processing, let’s summarize what
 
 - A **transaction** is a record that captures all changes applied to a specific account.
 - A transaction consists of multiple **phases** that handle incoming messages, execute smart contract code, and process generated actions.
-- Each phase has its description that contains information about what occurred during execution.
+- Each phase has its own description, which contains information about what occurred during execution.
 - A transaction may complete successfully or fail, depending on whether all phases execute correctly and whether valid actions are created.
 - Regular transactions always include an incoming message but may not include any outgoing messages.
-- A transaction can be retrieved using **API v2** or **API v3**, both of which return transaction data in a convenient format.
-- In API v3, transactions are **indexed**, which allows access to preprocessed data, whereas API v2 acts only as a **wrapper** for communicating with LiteServer.
+- A transaction can be retrieved using **API/v2** or **API/v3**, both of which return transaction data in a convenient format.
+- In API/v3, transactions are **indexed**, which allows access to preprocessed data, whereas API/v2 acts only as a **wrapper** for communicating with LiteServer.
 - The SDK may include additional fields, such as `hash` and `raw`, for convenience. These fields allow you to obtain the transaction hash and BoC, respectively.
 
 Earlier, we discussed **actions** from a technical perspective. However, many API services use this term to refer to user-level operations. It's essential to note that TON is an asynchronous blockchain, meaning that a single operation can span multiple transactions. In this context, the overall sequence matters more than individual transactions.
@@ -531,7 +531,7 @@ To determine whether the transfer was successful, we should focus on the second 
 
 Suppose we want to monitor deposits sent to our wallet:
 `UQDHkdee26bn3ezu3cpoXxPtWax_V6GtKU80Oc4fqa5brTkL`
-For simplicity, we’ll use **APIv3** to fetch the latest 10 transactions for this account.
+For simplicity, we’ll use **API/v3** to fetch the latest 10 transactions for this account.
 
 <Tabs groupId="code-examples">
   <TabItem value="js" label="JavaScript">
@@ -588,7 +588,7 @@ After retrieving the transactions, we need to perform the following checks:
 
 1. The transaction must be ordinary, meaning `description.type` should be equal to `ord`.
 2. The inbound message must be **internal**. This means the `created_lt` field must be present.
-3. If the transaction description includes a `bounce` field (specific to the `transactions` endpoint in APIv3), it indicates that the **bounce phase** was triggered. In that case, we must check whether the bounce was completed successfully, which means the funds were returned to the sender.
+3. If the transaction description includes a `bounce` field (specific to the `transactions` endpoint in API/v3), it indicates that the **bounce phase** was triggered. In that case, we must check whether the bounce was completed successfully, which means the funds were returned to the sender.
 
 If all these conditions are met, we can consider the deposit successfully credited to the wallet.
 
@@ -597,7 +597,7 @@ Please note that the provided code is a simplified example and does not constitu
 In real applications, you should not limit the check to just the latest 10 transactions.
 Instead, you must process all transactions that occurred since the last check.
 
-Additionally, note that field values for fake deposits may vary depending on the API service used. This example only reflects the APIv3 response from the TON Center `transactions` endpoint.
+Additionally, note that field values for fake deposits may vary depending on the API service used. This example only reflects the API/v3 response from the TON Center `transactions` endpoint.
 :::
 
 If we run this code, the expected output is:
@@ -609,9 +609,9 @@ Fake deposit detected: 4vXGhdvtfgFx8tkkaL17POhOwrUZq3sQDVSdNpW+Duk=
 By inspecting this transaction in the [explorer](https://tonviewer.com/transaction/e2f5c685dbed7e0171f2d92468bd7b3ce84ec2b519ab7b100d549d3695be0ee9), we see that the funds return to the sender.
 
 :::note
-If we query this account’s transactions using APIv2, we don’t see any transactions. This happens because the transaction data exists only in the block, and only the APIv3 indexer captures it.
+If we query this account’s transactions using API/v2, we don’t see any transactions. This happens because the transaction data exists only in the block, and only the API/v3 indexer captures it.
 
-Since the account has no state at all—not even a single balance top-up—there are no transactions formally associated with it. If there is at least one deposit, the state changes from `nonexist` to `uninit`, and APIv2 then returns the transaction.
+Since the account has no state at all—not even a single balance top-up—there are no transactions formally associated with it. If there is at least one deposit, the state changes from `nonexist` to `uninit`, and API/v2 then returns the transaction.
 :::
 
 ### Jetton transfer: determining event success
@@ -644,7 +644,7 @@ To simplify the example, assume we want to track incoming Jettons for a specific
       import { Address, TonClient } from '@ton/ton';
 
       // Changed version of
-      // https://github.com/ton-org/ton-core/blob/b2e781f67b41958e4fde0440752a27c168602717/src/utils/convert.ts#L69C1-L96C2
+      // https://github.com/ton-org/ton-core/blob/b2e781f67b41958e4fde0440752a27c168602717/src/utils/convert.ts#L69-L96
       export function fromMicro(src: bigint | number | string) {
           let v = BigInt(src);
           let neg = false;
@@ -730,7 +730,7 @@ To simplify the example, assume we want to track incoming Jettons for a specific
                   const queryId = body.loadUintBig(64);
                   const amount = body.loadCoins();
                   const from = body.loadAddress();
-                  const responseAddress = body.loadMaybeAddress();
+                  const responseAddress = body.loadAddress();
                   const forwardTonAmount = body.loadCoins();
                   const eitherForwardPayload = body.loadBoolean();
                   const forwardPayload = eitherForwardPayload ? body.loadRef() : body.asCell();
@@ -741,7 +741,7 @@ To simplify the example, assume we want to track incoming Jettons for a specific
         Amount: ${fromMicro(amount)} USDT
         From: ${from.toString({ testOnly: true })}
         Response Address: ${responseAddress ? responseAddress.toString({ testOnly: true }) : 'None'}
-        Forward TON Amount: ${forwardTonAmount.toString()} TON
+        Forward TON Amount: ${fromNano(forwardTonAmount)} TON
         Forward Payload: ${forwardPayload.toBoc().toString('hex')}`);
               } catch (e) {
                   console.error(`Error processing transaction ${transaction.hash().toString('hex')}:`, e);
@@ -1082,7 +1082,7 @@ The success of a **transaction** is determined by the **successful completion** 
 - **Compute phase** - the smart contract executed with Exit code `0`.
 - **Action phase** - actions were created and applied correctly with Exit code `0`.
 
-The success of a **events** is determined depend on the type of operation:
+The success of **events** is determined depending on the type of operation:
 
 - **Ordinary TON transfer:** inbound message must be internal; if a bounce occurs, it must be processed correctly.
 - **Jetton transfers:** the transaction inited by `internal_transfer` message must complete successfully.
