@@ -15,8 +15,6 @@ faq:
 ---
 
 import Feedback from '@site/src/components/Feedback';
-import { BlockMath} from 'react-katex';
-import 'katex/dist/katex.min.css';
 import Button from '@site/src/components/button';
 
 
@@ -245,11 +243,15 @@ The `account_id` never changes, as it’s based on the very first `StateInit` re
 
 The address is defined as:
 
-<BlockMath math="\text{Address} := (\text{workchain\_id}, \text{account\_id})" />
+$$
+\text{Address} := (\text{workchain\_id}, \text{account\_id})
+$$
 
 , where
 
-<BlockMath math="\text{account\_id}:= \text{HASH(StateInit)}" />
+$$
+\text{account\_id}:= \text{HASH(StateInit)}
+$$
 
 An address corresponds to the first initialized state of a contract and can be calculated even **before** the contract is deployed.
 This allows you to use the address ahead of time — for example, to receive tokens or set up interactions.

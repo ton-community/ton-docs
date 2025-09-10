@@ -3,8 +3,6 @@ import Feedback from '@site/src/components/Feedback';
 import ThemedImage from '@theme/ThemedImage';
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-import { BlockMath, InlineMath } from 'react-katex';
-import 'katex/dist/katex.min.css';
 
 # TON cookbook
 
@@ -1479,7 +1477,7 @@ This information is sufficient to construct the swap message.
     - Vault: The vault is responsible for holding assets and receiving transfer messages. When a swap is requested, the vault informs the corresponding pool.
     - Pool: The pool calculates the swap amount based on predefined formulas and informs the vault, which in turn releases the swapped asset to the user.
 
-    Calculations of swap amount are based on a mathematical formula, which means so far we have two different pools, one known as Volatile, that operates based on the commonly used "Constant Product" formula: <InlineMath math="x \cdot y = k" />, And the other known as Stable-Swap - Optimized for assets of near-equal value (e.g. USDT / USDC, TON / stTON). It uses the formula: <InlineMath math="x^3 \cdot y + y^3 \cdot x = k" />.
+    Calculations of swap amount are based on a mathematical formula, which means so far we have two different pools, one known as Volatile, that operates based on the commonly used "Constant Product" formula: $x \cdot y = k$, And the other known as Stable-Swap - Optimized for assets of near-equal value (e.g. USDT / USDC, TON / stTON). It uses the formula: $x^3 \cdot y + y^3 \cdot x = k$.
     So for every swap we need the corresponding Vault and it needs to implement a specific API tailored for interacting with a distinct asset type. DeDust has three implementations of Vault: Native Vault - handles the native coin (Toncoin); Jetton Vault - manages jettons; and Extra-Currency Vault (upcoming) - designed for TON extra-currencies.
 
     DeDust provides an SDK, written in TypeScript, to interact with the contracts, components, and APIs needed for the swap. Before swapping any assets, the environment must be set up and the necessary objects initialized.
