@@ -3,8 +3,6 @@ title: NFT 2.0
 ---
 
 import Feedback from '@site/src/components/Feedback';
-import {InlineMath} from 'react-katex';
-import 'katex/dist/katex.min.css';
 
 ## Concept
 
@@ -132,7 +130,7 @@ All operations that involve commercial intent must include royalty payments, as 
 #### Retrieving royalty parameters
 According to the specification, the sales contract must retrieve royalty parameters from the collection contract and calculate payments based on that data.
 
-The easiest way to obtain royalty parameters is by calling the `royalty_params()` get method on the main collection contract. It returns `(int numerator, int denominator, slice destination)`, where the royalty share is calculated as <InlineMath math="\frac{numerator}{denominator}"/>.
+The easiest way to obtain royalty parameters is by calling the `royalty_params()` get method on the main collection contract. It returns `(int numerator, int denominator, slice destination)`, where the royalty share is calculated as $\frac{numerator}{denominator}$.
 
 For example, if `numerator = 11` and `denominator = 1000`, the royalty share is `1.1%`. The numerator must be less than the denominator. The `destination` is a slice of type `MsgAddress`, indicating the address where the royalty should be sent.
 

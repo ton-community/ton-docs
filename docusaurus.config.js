@@ -51,7 +51,7 @@ const config = {
   themes: [
     '@docusaurus/theme-live-codeblock',
     '@docusaurus/theme-mermaid',
-  ], 
+  ],
   markdown: {
     mermaid: true,
   },
@@ -66,6 +66,12 @@ const config = {
   ],
   stylesheets: [
     'https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&family=Inter:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap',
+    {
+      href: 'https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css',
+      type: 'text/css',
+      integrity: 'sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP',
+      crossorigin: 'anonymous',
+    },
   ],
   onBrokenLinks: 'warn', // for PRODUCTION
   onBrokenMarkdownLinks: 'warn', //for PRODUCTION
@@ -116,7 +122,9 @@ const config = {
           // }
           remarkPlugins: [
             [require('@docusaurus/remark-plugin-npm2yarn'), { sync: true }],
+            require('remark-math').default,
           ],
+          rehypePlugins: [require('rehype-katex').default]
         },
         blog: {
           showReadingTime: true,
@@ -125,10 +133,9 @@ const config = {
           editUrl:
             'https://github.com/ton-community/ton-docs/tree/main/',
         },
-        theme:
-          {
-            customCss: require.resolve('./src/css/custom.css'),
-          },
+        theme: {
+          customCss: require.resolve('./src/css/custom.css'),
+        },
         pages: {
           mdxPageComponent: '@site/src/components/MDXPage'
         }
@@ -137,7 +144,7 @@ const config = {
   ],
 
   themeConfig:
-  /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
       // announcementBar: {
       //   // id: 'contribute/hacktoberfest',
@@ -202,7 +209,7 @@ const config = {
         // disableSwitch: true,
       },
       mermaid: {
-        theme: {light: 'neutral', dark: 'dark'},
+        theme: { light: 'neutral', dark: 'dark' },
       },
     }),
 };
