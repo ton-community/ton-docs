@@ -132,7 +132,7 @@ How `dnsresolve()` works:
    - A suffix variable `subdomain_sfx` is set to the `subdomain`. It reads bytes until the zero byte.
    - At this point: `subdomain = "resolve-contract\0", subdomain_sfx = ""`.
    - The zero byte and suffix are trimmed, resulting in `subdomain = "resolve-contract"`.
-   - The domain name is converted into a contract address using helper functions `slice_hash` and `get_ton_dns_nft_address_by_index`. See [Appendix 1](subresolvers#appendix-1-code-of-resolve-contractton) for implementation details.
+   - The domain name is converted into a contract address using helper functions `slice_hash` and `get_ton_dns_nft_address_by_index`. See [Appendix 1](#appendix-1-code-of-resolve-contractton) for implementation details.
 4. If the subdomain starts with `"address\0"`:
    - The prefix is skipped, and the rest is interpreted as a base64-encoded address.
 5. If the subdomain doesn't match any known prefix:
