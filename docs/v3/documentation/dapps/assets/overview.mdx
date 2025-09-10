@@ -18,7 +18,7 @@ The common path of any interaction starts with an external message sent to a wal
 
 For example:
 
-![Message flow DAG from Alice to wallet A v4 to wallet B v4](/img/docs/asset-processing/alicemsgDAG.svg)
+![Message flow DAG from Alice to wallet A v4 to wallet B v4](/img/docs/asset-processing/alice-msg-dag.svg)
 
 - Alice uses, e.g., [Tonkeeper](https://tonkeeper.com/) to send an external message to her wallet.
 - The external message is the input to wallet A v4 with an empty source (external message).
@@ -44,7 +44,7 @@ TON has three types of digital assets.
 
 - Toncoin, the main token of the network. It is used for all basic operations on the blockchain, for example, paying gas fees or staking for validation.
 - Contract assets, such as jettons and NFTs, are analogous to the ERC‑20/ERC‑721 standards and are managed by arbitrary contracts, which can require custom processing rules. You can find more info on their processing in the [NFT processing](/v3/guidelines/dapps/asset-processing/nft-processing/nfts) and [Jetton processing](/v3/guidelines/dapps/asset-processing/jettons) articles.
-- TON supports up to 2^32 extra currencies; accounts and messages support them, but no extra currency has been created on the TON Blockchain yet—the minter system contract for their creation has not been deployed. See [Extra currencies](/v3/documentation/dapps/defi/coins) for more details.
+- TON supports up to 2^32 extra currencies; accounts and messages support them, but no extra currency has been created on the TON Blockchain yet—the minter system contract for their creation has not been deployed. See [Extra currencies](/v3/documentation/dapps/assets/toncoin) for more details.
 
 ## Interaction with the TON Blockchain
 

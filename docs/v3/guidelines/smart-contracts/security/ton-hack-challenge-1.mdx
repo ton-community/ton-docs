@@ -66,7 +66,7 @@ Voting power was stored in message as an integer. So the attacker could send a n
 Always randomize seed before doing [`rand()`](/v3/documentation/smart-contracts/func/docs/stdlib#rand)
 :::
 
-Seed was brought from logical time of the transaction, and a hacker can win by bruteforcing the logical time in the current block (cause lt is sequential in the borders of one block).
+Seed was brought from logical time of the transaction, and a hacker can win by brute-forcing the logical time in the current block (cause `lt` is sequential in the borders of one block).
 
 ```func
 int seed = cur_lt();
@@ -126,7 +126,7 @@ Be careful with hashmap gas consumption.
 
 There were race conditions in the contract: you could deposit money, then try to withdraw it twice in concurrent messages. There is no guarantee that a message with reserved money will be processed, so the bank can shut down after a second withdrawal. After that, the contract could be redeployed and anybody could withdraw unclaimed money.
 
-### 8. Dehasher
+### 8. De-hasher {#8-dehasher}
 
 :::note SECURITY RULE
 Avoid executing third-party code in your contract.

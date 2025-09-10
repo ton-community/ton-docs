@@ -464,7 +464,7 @@ Updates the `c3` value to modify the contract’s execution code at runtime. The
 cont bless(slice s) impure asm "BLESS";
 ```
 
-Converts a `slice s` into a basic continuation `c`, where `c.code = s`, an empty stack and a savelist.
+Converts a `slice s` into a basic continuation `c`, where `c.code = s`, an empty stack and a save list.
 
 ### Gas related primitives
 
@@ -1416,7 +1416,7 @@ Same as `dict_get_max?` but it returns a reference.
 
 Finds the smallest key `k` in `dict` that is greater than the `pivot`. Returns `k`, associated value, and a success flag. If the dictionary is empty, it returns `(null, null, 0)`.
 
-#### dict_get_nexteq?
+#### `dict_get_nexteq?`
 
 ```func
 (int, slice, int) udict_get_nexteq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETNEXTEQ" "NULLSWAPIFNOT2";
@@ -1434,7 +1434,7 @@ Similar to `dict_get_next?`, but instead finds the smallest key `k` that is grea
 
 Similar to `dict_get_next?`, but instead finds the largest key `k` that is less than the `pivot`.
 
-#### dict_get_preveq?
+#### `dict_get_preveq?`
 
 ```func
 (int, slice, int) udict_get_preveq?(cell dict, int key_len, int pivot) asm(pivot dict key_len -> 1 0 2) "DICTUGETPREVEQ" "NULLSWAPIFNOT2";

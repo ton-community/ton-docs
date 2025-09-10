@@ -23,5 +23,9 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci # or yarn install
+      - name: Build the docs
+        run: npm run build
       - name: Lint Markdown code
         run: npm run lint-mdx
+      - name: Spellcheck
+        run: npm run spell

@@ -28,10 +28,10 @@ block_id_ext$_ shard_id:ShardIdent seq_no:uint32
   root_hash:bits256 file_hash:bits256 = BlockIdExt;
 ```
 
-- **ShardIdent** contains information about the WorkChain and the shard the block belongs to.
-- **seq_no** is the sequence number of the current block.
-- **root_hash** is the hash of the block data (block header).
-- **file_hash** helps validators optimize processes; typically, you don’t need it.
+- `ShardIdent` contains information about the WorkChain and the shard the block belongs to.
+- `seq_no` is the sequence number of the current block.
+- `root_hash` is the hash of the block data (block header).
+- `file_hash` helps validators optimize processes; typically, you don’t need it.
 
 A full block structure is as follows:
 ```tlb
@@ -68,7 +68,7 @@ masterchain_block_extra#cca5
 = McBlockExtra;
 ```
 
-The **shard_hashes** field is essential, as it holds the latest known ShardChain blocks, which are critical for BaseChain proofs.
+The `shard_hashes` field is essential, as it holds the latest known ShardChain blocks, which are critical for BaseChain proofs.
 
 For detailed inspections, it is convenient to use the [official explorer](https://explorer.toncoin.org/).
 
@@ -87,7 +87,7 @@ To prove a transaction's existence in the **MasterChain**:
 For **BaseChain** transactions:
 
 1. Follow *steps 1-2* above to get a trusted **MasterChain** block.
-2. Extract the **shard_hashes** field from the MasterChain block.
+2. Extract the `shard_hashes` field from the MasterChain block.
 3. User provides the full ShardChain block that should be validated against the trusted hash.
 4. Parse the ShardChain block to find the transaction.
 
@@ -120,11 +120,11 @@ graph TD
 
 *v1* is a regular cell tree; in *v2*, the cell *c1* becomes a pruned branch, removing its content and references. However, if you only need *c0*, there’s no practical difference, as `$hash_0(v1) == hash_0(v2)$`.
 
-- **hash0(cell)** ignores pruned branches, returning the original tree’s hash.
-- **reprHash(cell)** accounts for everything. Matching *reprHashes* ensures cell path equivalency.
+- `hash0(cell)` ignores pruned branches, returning the original tree’s hash.
+- `reprHash(cell)` accounts for everything. Matching `reprHashes` ensures cell path equivalency.
 
 :::note
-Use `HASHCU` for reprHash and `CHASHI`/`CHASHIX` for different-level hashes.
+Use `HASHCU` for `reprHash` and `CHASHI`/`CHASHIX` for different-level hashes.
 :::
 
 ## Composing proofs
@@ -229,7 +229,7 @@ let shardDescr = findShardInBinTree(binTreeWithShardDescr, jettonMaster, shardBi
 _ (HashmapE 32 ^(BinTree ShardDescr)) = ShardHashes;
 ```
 
-A `BinTree` is a TL-B structure that operates straightforwardly. It stores a single bit to indicate whether the current cell is a leaf. If it is a leaf, it stores the **ShardDescr**. Otherwise, the cell holds two references: a left child and a right child.
+A `BinTree` is a TL-B structure that operates straightforwardly. It stores a single bit to indicate whether the current cell is a leaf. If it is a leaf, it stores the `ShardDescr`. Otherwise, the cell holds two references: a left child and a right child.
 
 Since a shard identifier is a binary prefix of an address, we can traverse the tree by following the path of bits in the address.
 
