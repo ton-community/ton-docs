@@ -258,6 +258,7 @@
     "nmon",
     "nonexist",
     "nonfinal",
+    "permissionless",
     "penalising",
     "penalised",
     "pfxdict",
@@ -267,6 +268,7 @@
     "presales",
     "previsit",
     "pythonlib",
+    "predefines",
     "qrcode",
     "quadtree",
     "quadtrees",
@@ -330,6 +332,7 @@
     "Wikimar",
     "workchain",
     "workchains",
+    "walletv",
     "xguard",
     "xlarge",
     "xtwitter",
@@ -337,6 +340,7 @@
     "yourname",
     "zellic",
     "zerostate",
+    "Zoomable",
     "decentralised",
     "colour",
     "analyse",
@@ -357,7 +361,8 @@
     "liteserver",
     "mytonctrl",
     "mytoncore",
-    "unexist"
+    "unexist",
+    "walletv"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",

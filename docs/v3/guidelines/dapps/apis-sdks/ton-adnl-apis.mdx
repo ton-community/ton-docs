@@ -6,30 +6,29 @@ import Feedback from '@site/src/components/Feedback';
 
 Clients connect directly to lite servers (nodes) using a binary protocol.
 
-The client downloads keyblocks, which represent the current state of an account, and their Merkle proofs, ensuring the validity of the received data.
+The client downloads key blocks, the current state of an account, and their Merkle proofs, ensuring the validity of received data.
 
-For read operations (such as get-method calls), the client launches a local TVM with a downloaded and verified state. There's no need to download the full blockchain state—the client only retrieves what’s required for the operation.
+For read operations (such as [get-method](/v3/guidelines/smart-contracts/get-methods) calls), the client launches a local TVM with a downloaded and verified state. There's no need to download the full blockchain state—the client only retrieves what’s required for the operation.
 
-Read more about [Merkle proofs](/v3/documentation/dapps/proofs) in [TON whitepaper](https://ton.org/ton.pdf) sections 2.3.10 and 2.3.11.
+Read more about [Merkle proofs](/v3/documentation/data-formats/tlb/proofs) in the TON Whitepaper (sections 2.3.10 and 2.3.11): https://docs.ton.org/ton.pdf
 
 ## Pros & cons
 
-- ✅ Reliable - Uses an API with Merkle proof hashes to verify incoming binary data.
-- ✅ Secure - Since it checks Merkle proofs, you can even use untrusted lite servers.
-- ✅ Fast - Connects directly to TON Blockchain nodes instead of relying on HTTP middleware.
+- ✅ Reliable - Uses Merkle proofs to verify incoming binary data.
+- ✅ Secure - Since it checks Merkle proofs, you can even use untrusted liteservers.  
+- ✅ Fast - Connects directly to TON Blockchain nodes instead of relying on HTTP middleware. 
 
-- ❌ Complex - Requires time to set up and understand.
-- ❌ Back-end first - Not compatible with web frontends (built for a non-HTTP protocol) unless you use an HTTP-ADNL proxy.
+- ❌ Complex - Requires time to set up and understand. 
+- ❌ Backend-first - Not compatible with web frontends (built for a non-HTTP protocol) unless you use an HTTP↔ADNL proxy.
 
 ## API reference
 
 Requests and responses follow the [TonLib schema](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl), the formal specification of the API provided by TonLib (TON Library) written in [TL](/v3/documentation/data-formats/tl) (Type Language). It allows you to generate a typed interface for a specific programming language.
 
-See available SDKs for ADNL in the [SDKs section](/v3/guidelines/dapps/apis-sdks/sdk#overview).
+See available SDKs for ADNL in the [SDKs section](/v3/guidelines/dapps/apis-sdks/sdk#overview). For protocol details, refer to the [LiteServer TL schema](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/lite_api.tl).
 
 ## Providers
 
 The list of [ADNL providers](/v3/guidelines/dapps/apis-sdks/api-types#providers-2).
 
 <Feedback />
-

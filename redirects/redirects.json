@@ -436,20 +436,12 @@
         "to": "/v3/documentation/smart-contracts/fift/overview"
     },
     {
-        "from": "/develop/dapps/defi/coins",
-        "to": "/v3/documentation/dapps/defi/coins"
-    },
-    {
         "from": "/develop/dapps/defi/nft",
         "to": "/v3/documentation/dapps/defi/nft"
     },
     {
         "from": "/develop/dapps/defi/subscriptions",
         "to": "/v3/documentation/dapps/defi/subscriptions"
-    },
-    {
-        "from": "/develop/dapps/defi/tokens",
-        "to": "/v3/documentation/dapps/defi/tokens"
     },
     {
         "from": "/develop/dapps/defi/ton-payments",
@@ -642,14 +634,6 @@
     {
         "from": "/learn/docs",
         "to": "/v3/documentation/whitepapers/overview"
-    },
-    {
-        "from": "/develop/smart-contracts/compile",
-        "to": "/v3/documentation/archive/compile"
-    },
-    {
-        "from": "/develop/smart-contracts/environment/installation",
-        "to": "/v3/documentation/archive/precompiled-binaries"
     },
     {
         "from": "/contribute/localization-program/translation-style-guide",
@@ -950,5 +934,9 @@
     {
       "from": "/v3/documentation/ton-documentation",
       "to": "/v3/documentation/introduction"
+    },
+    {
+      "from": "/v3/documentation/smart-contracts/addresses",
+      "to": "/v3/documentation/smart-contracts/addresses/address"
     }
 ]
