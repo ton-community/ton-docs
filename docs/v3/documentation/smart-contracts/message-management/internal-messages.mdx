@@ -18,7 +18,7 @@ This approach requires distinguishing whether an internal message is a:
 
 Additionally, when receiving responses, there must be a clear way to match them to their original queries.
 
-To implement this, the following message layout approaches are recommended (note: TON Blockchain imposes no message body restrictions - these are purely advisory):
+To implement this, the following message layout approaches are recommended (note: TON Blockchain imposes no message body restrictions - these are purely advisory).
 
 ### Internal message structure
 
@@ -104,10 +104,10 @@ We expect "query" messages to have an `op` with the high-order bit clear, i.e., 
 
 There are some "standard" response messages with the `op` equal to `0xffffffff` and `0xfffffffe`. In general, the values of `op` from `0xfffffff0` to `0xffffffff` are reserved for such standard responses.
 
-- `op` = `0xffffffff` means "operation not supported". It is followed by the 64-bit `query_id` extracted from the original query and the 32-bit `op` of the original query. All but the simplest smart contracts should return this error when they receive a query with an unknown `op` in the range `1 .. 2^31-1`.
-- `op` = `0xfffffffe` means "operation not allowed". It is followed by the 64-bit `query_id` of the original query, followed by the 32-bit `op` extracted from the original query.
+- `0xffffffff` - **operation not supported**. It is followed by the 64-bit `query_id` extracted from the original query and the 32-bit `op` of the original query. All but the simplest smart contracts should return this error when they receive a query with an unknown `op` in the range `1 .. 2^31-1`.
+- `0xfffffffe` - **operation not allowed**. It is followed by the 64-bit `query_id` of the original query, followed by the 32-bit `op` extracted from the original query.
 
-Notice that unknown "responses" (with an `op` in the range `2^31 .. 2^32-1`) should be ignored (in particular, no response with an `op` equal to `0xffffffff` should be generated in response to them), just as unexpected bounced messages (with the "bounced" flag set).
+Notice that unknown `responses` (with an `op` in the range `2^31 .. 2^32-1`) should be ignored (in particular, no response with an `op` equal to `0xffffffff` should be generated in response to them), just as unexpected bounced messages (with the `bounced` flag set).
 
 ## Known opcodes
 
