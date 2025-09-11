@@ -267,7 +267,7 @@ ton://transfer/<destination-address>?
 
 ## Explorers
 
-[tonviewer.com](https://tonviewer.com), [tonscan.org](https://tonscan.org) and [explorer.toncoin.org](https://explorer.toncoin.org/) can display the page for a transaction. To generate a transaction link in an explorer, the service needs to get the lt (logical time), the transaction hash, and the account address (the address of the account for which the `lt` and `txhash` were obtained using the [getTransactions](toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method). Then  [tonviewer.com](https://tonviewer.com), [tonscan.org](https://tonscan.org), and [explorer.toncoin.org](https://explorer.toncoin.org/) can display the page for this transaction in the following format:
+To generate a transaction link, the service must obtain the account address, logical time (lt), and transaction hash by calling the [getTransactions](toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method. Using these values, [tonviewer.com](https://tonviewer.com), [tonscan.org](https://tonscan.org) and [explorer.toncoin.org](https://explorer.toncoin.org/) explorers render the transaction page according to the following formats:
 
 `https://tonviewer.com/transaction/{hash as base64url}`
 
