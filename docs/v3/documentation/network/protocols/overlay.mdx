@@ -32,7 +32,7 @@ We have already analyzed an example of finding overlay nodes in an article about
 
 In this section, we will focus on how to interact with these nodes.
 
-When querying the DHT, we will retrieve the addresses of the overlay nodes. From these nodes, we can discover additional peers (nodes) in the overlay by using the [overlay.getRandomPeers](https://github.com/ton-blockchain/ton/blob/ee42357f5954f777d7ebd937b2683096da3699bf/tl/generate/scheme/ton_api.tl#L244) query.
+When querying the DHT, we will retrieve the addresses of the overlay nodes. From these nodes, we can discover additional peers (nodes) in the overlay by using the [overlay.getRandomPeers](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L244) query.
 
 After connecting to a sufficient number of nodes, we will be able to receive information about all blocks and other chain events from them. Additionally, we can send our transactions to these nodes for processing.
 
@@ -67,7 +67,7 @@ We then wrap the resulting array in the `adnl.message.query` schema and send it 
 
 ### Functional requests
 
-Once the connection is established, we can access the overlay nodes using `tonNode.*` via the [requests](https://github.com/ton-blockchain/ton/blob/ee42357f5954f777d7ebd937b2683096da3699bf/tl/generate/scheme/ton_api.tl#L420).
+Once the connection is established, we can access the overlay nodes using `tonNode.*` via the [requests](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L413).
 
 We utilize RLDP for these types of requests. Queries in the overlay are prefixed by the `overlay.query` prefix.
 
@@ -82,7 +82,12 @@ tonNode.downloadBlockFull block:tonNode.blockIdExt = tonNode.DataFull;
 After this step, you can download the full block data, and in response, you will receive:
 
 ```tlb
-tonNode.dataFull id:tonNode.blockIdExt proof:bytes block:bytes is_link:Bool = tonNode.DataFull;
+tonNode.dataFull id:tonNode.blockIdExt 
+    proof:bytes block:bytes is_link:Bool = tonNode.DataFull;
+```
+or
+
+```tlb
 tonNode.dataFullEmpty = tonNode.DataFull;
 ```
 
