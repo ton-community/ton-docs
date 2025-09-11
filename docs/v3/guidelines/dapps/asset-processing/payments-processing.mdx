@@ -138,7 +138,7 @@ It is possible to track message flows during transaction processing. Since the m
       const outMessagesInfos = transaction.outMessages.values()
         .map(message => message.info)
         .filter((info): info is CommonMessageInfoInternal => info.type === 'internal');
-      
+
       return Promise.all(
         outMessagesInfos.map((info) => client.tryLocateResultTx(info.src, info.dest, info.createdLt.toString())),
       );
@@ -165,7 +165,7 @@ It is possible to track message flows during transaction processing. Since the m
         endpoint,
         apiKey: '[API-KEY]',
       });
-      
+
       const transaction: Transaction = ...; // Obtain first transaction to start traversing
       await traverseIncomingTransactions(client, transaction);
       await traverseOutgoingTransactions(client, transaction);
@@ -192,7 +192,7 @@ Learn the basics of payment processing from the [TMA USDT Payments demo](https:/
 8. Requests sent to `v3` of `high-load` have a 60-second expiration time by default. After expiration, unprocessed requests can be safely resent following steps 3-6.
 
 :::caution
-If the attached `value` is too small, the transaction may fail with the error `cskip_no_gas`. In this case, Toncoin will be transferred, but no logic will be executed on the recipient's side (the TVM will not launch). Read more [here](/v3/documentation/network/configs/blockchain-configs#param-20-and-21).
+If the attached `value` is too small, the transaction may fail with the error `cskip_no_gas`. In this case, Toncoin will be transferred, but no logic will be executed on the recipient's side (the TVM will not launch). Read more [here](/v3/documentation/network/config-params/overview#param-20-and-21).
 :::
 
 ### Get the transaction ID
@@ -246,9 +246,7 @@ It is best suited for one-time payments and invoices.
 
 ```text
 ton://transfer/<destination-address>?
-    [nft=<nft-address>&]
-    [fee-amount=<nanocoins>&]
-    [forward-amount=<nanocoins>] 
+    [nft=<nft-address>]
 ```
 
 **Advantages**
@@ -265,9 +263,25 @@ ton://transfer/<destination-address>?
 
 [Learn more about TON links here](https://github.com/tonkeeper/wallet-api#payment-urls).
 
+### Invoices with wallet-specific links
+
+You can use wallet-specific links to create simple Jetton and Toncoin transfers. The syntax is usually similar to `ton://transfer` links, but you should always check each wallet’s documentation.
+
+Example: transferring 1 USDT to someone:
+```
+https://app.tonkeeper.com/transfer/saint.ton?amount=1000000&jetton=EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs
+or
+https://my.tt/transfer/UQDYzZmfsrGzhObKJUw4gzdeIxEai3jAFbiGKGwxvxHinf4K?amount=1000000&jetton=EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs
+```
+You can find more examples and supported features in the documentation:
+
+- Tonkeeper - [docs.tonconsole.com](https://docs.tonconsole.com/tonkeeper/deep-linking)
+- MyTonWallet - [help.mytonwallet.io](https://help.mytonwallet.io/intro/key-features/deeplinks-in-mytonwallet)
+
+
 ## Explorers
 
-tonviewer.com, tonscan.org and explorer.toncoin.org can display the page for a transaction. To generate a transaction link in an explorer, the service needs to get the lt (logical time), the transaction hash, and the account address (the address of the account for which the lt and txhash were obtained using the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method). Then [https://tonscan.org](https://tonscan.org), [https://tonviewer.com](https://tonviewer.com) and [https://explorer.toncoin.org/](https://explorer.toncoin.org/) can display the page for this transaction in the following format:
+[tonviewer.com](https://tonviewer.com), [tonscan.org](https://tonscan.org) and explorer.toncoin.org can display the page for a transaction. To generate a transaction link in an explorer, the service needs to get the lt (logical time), the transaction hash, and the account address (the address of the account for which the lt and txhash were obtained using the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method). Then [https://tonscan.org](https://tonscan.org), [https://tonviewer.com](https://tonviewer.com) and [https://explorer.toncoin.org/](https://explorer.toncoin.org/) can display the page for this transaction in the following format:
 
 `https://tonviewer.com/transaction/{txhash as base64url}`
 
@@ -392,7 +406,7 @@ This way, you can provide the best user experience regardless of the current net
       <summary>Checking deposits</summary>
 
       ```go
-      package main 
+      package main
 
       import (
       	"context"
@@ -579,7 +593,7 @@ This way, you can provide the best user experience regardless of the current net
         wallet = await WalletV4R2.from_mnemonic(provider, MY_MNEMONICS)
 
         await wallet.transfer(DESTINATION_WALLET, 5)
-        
+
         await provider.close_all()
 
 
