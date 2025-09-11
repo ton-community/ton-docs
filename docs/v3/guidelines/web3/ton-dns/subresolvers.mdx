@@ -250,8 +250,8 @@ Finally, we update the record associated with the specified domain and write the
   int subdomain_bits = slice_bits(subdomain);
   throw_unless(70, subdomain_bits % 8 == 0);
   if (subdomain.preload_uint(8) == 0) { subdomain~skip_bits(8); }
-  
-  (slice top, slice subdomain_suffix) = subdomain~parse_sd();  ;; "test\0" -> "test" ""
+    
+  slice subdomain_suffix = subdomain~parse_sd();  ;; "test\0" -> "test" ""
   int subdomain_suffix_bits = slice_bits(subdomain_suffix);
 
   load_data();
