@@ -68,13 +68,13 @@ The basic workflow for creating a test is as follows:
 
 The `toHaveTransaction` matcher expects an object with any combination of fields from the `FlatTransaction` type, defined with the following properties:
 
-| Name    | Type     | Description                                                                                                                                                |
-| ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| from    | Address  | Contract address of the message sender                                                                                                                     |
-| on      | Address? | Contract address of the message destination (alternative name for the property `to`).                                                                      |
-| value   | bigint?  | Amount of TON coins in the message, in nanotons                                                                                                            |
-| body    | Cell    | Message body defined as a Cell                                                                                                                             |
-| op      | number?  | Opcode is usually the operation identifier number (CRC32 from TL-B). Expected in the first 32 bits of a message body.                                      |
+| Name    | Type     | Description                                                                                                                                                 |
+| ------- | -------- |-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| from    | Address  | Contract address of the message sender                                                                                                                      |
+| on      | Address? | Contract address of the message destination (alternative name for the property `to`).                                                                       |
+| value   | bigint?  | Amount of TON coins in the message, in nanotons                                                                                                             |
+| body    | Cell    | Message body defined as a Cell                                                                                                                              |
+| op      | number?  | Op code is usually the operation identifier number (CRC32 from TL-B). Expected in the first 32 bits of a message body.                                      |
 | success | boolean? | Custom Sandbox flag that defines the resulting status of a certain transaction. True if both the compute and the action phases succeeded; otherwise, false. |
 
 You can omit fields you’re not interested in and pass functions that accept the types and return booleans (`true` meaning good) to check, for example, number ranges, message opcodes, etc. Note that if a field is optional (like `from?: Address`), the function must also accept the optional type.
