@@ -1,15 +1,12 @@
-description: At the end of the tutorial, you will have deployed a multisig contract on the TON blockchain.
----
-
 import Feedback from '@site/src/components/Feedback';
 
-# Make a Simple Multisig Contract with Fift
+# Make a simple multisig contract with Fift
 
 :::caution advanced level
 This information is **very low-level**. It could be hard for newcomers and designed for advanced people who want to understand [Fift](/v3/documentation/smart-contracts/fift/overview). The use of Fift is not required in everyday tasks.
 :::
 
-## 💡 Overview
+## Overview
 
 This tutorial helps you learn how to deploy your multisig contract.  
 Recall that an (n, k)-multisig contract is a multisignature wallet with n private key holders, which accepts requests to send messages if the request (aka order, query) collects at least k holders' signatures.
@@ -23,10 +20,10 @@ Based on the original multisig contract code and updates by akifoq:
 For anyone new to multisig: [What is Multisig Technology? (video)](https://www.youtube.com/watch?v=yeLqe_gg2u0)
 :::
 
-## 📖 What you'll learn
+## What you'll learn
 
 - How to create and customize a simple multisig wallet.
-- How to deploy a multisig wallet using Lite Client.
+- How to deploy a multisig wallet using Lite client.
 - How to sign a request and send it in a message to the blockchain.
 
 ## ⚙ Set up your environment
@@ -41,7 +38,7 @@ git clone https://github.com/akifoq/multisig.git
 cd ./multisig
 ```
 
-## 🚀 Let's get started!
+## Get started
 
 1. Compile the code to Fift.
 2. Prepare multisig owners' keys.
@@ -150,13 +147,13 @@ lite-client -C global.config.json
 You can get a fresh config file `global.config.json` for [mainnet](https://ton.org/global-config.json) or [testnet](https://ton.org/testnet-global.config.json).
 :::
 
-After starting Lite Client, it's best to run the `time` command in the `lite-client` console to make sure the connection was successful:
+After starting Lite client, it's best to run the `time` command in the `lite-client` console to make sure the connection was successful:
 
 ```bash
 time
 ```
 
-Okay, Lite Client works!
+Okay, Lite client works!
 
 After that, you need to deploy the wallet. Run the command:
 
@@ -273,7 +270,6 @@ You did it!
 
 ## See also
 
-- [Read more about multisig wallets in TON](https://github.com/akifoq/multisig) — _[@akifoq](https://t.me/akifoq)_
 - [Multisig wallet v2](https://github.com/ton-blockchain/multisig-contract-v2)
 
 <Feedback />
