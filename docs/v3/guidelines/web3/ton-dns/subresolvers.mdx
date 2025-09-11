@@ -160,8 +160,11 @@ Base64 address parsing is currently not functional. If you attempt to resolve a 
 ### Binding the resolver
 
 Now that the subresolver contract is deployed, the next step is to point the domain to it by updating the domain’s `dns_next_resolver` record. This is done by sending a message with the following TL-B structure to the domain contract:
-```text
-change_dns_record#4eb1f0f9 query_id:uint64 record_key#19f02441ee588fdb26ee24b2568dd035c3c9206e11ab979be62e55558a1d17ff record:^[dns_next_resolver#ba93 resolver:MsgAddressInt]
+
+```tlb
+change_dns_record#4eb1f0f9 query_id:uint64 r
+    ecord_key#19f02441ee588fdb26ee24b2568dd035c3c9206e11ab979be62e55558a1d17ff 
+    record:^[dns_next_resolver#ba93 resolver:MsgAddressInt]
 ```
 
 ## Creating your own subdomain manager
