@@ -84,9 +84,17 @@ export const Header = () => {
 To open a modal window for a specific wallet, use the `openSingleWalletModal()` method. This method takes the wallet's `app_name` as a parameter (refer to the [wallets-v2.json](https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json) file) and opens the corresponding wallet modal.
 
 ```tsx
-<button onClick={() => tonConnectUI.openSingleWalletModal('tonwallet')}>
-  Connect Wallet
-</button>
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
+export const ConnectSpecificWallet = () => {
+  const [tonConnectUI] = useTonConnectUI();
+
+  return (
+    <button onClick={() => tonConnectUI.openSingleWalletModal('tonwallet')}>
+      Connect Wallet
+    </button>
+  );
+};
 ```
 
 ### Redirects
@@ -101,7 +109,7 @@ If you want to redirect the user to a [Telegram Mini App](/v3/guidelines/dapps/t
       <TonConnectUIProvider
             // ... other parameters
           actionsConfiguration={{
-              twaReturnUrl: 'https://t.me/<YOUR_APP_NAME>'
+              twaReturnUrl: 'https://t.me/YOUR_APP_NAME'
           }}
       >
       </TonConnectUIProvider>
