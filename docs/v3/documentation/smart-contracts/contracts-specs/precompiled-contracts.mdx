@@ -21,7 +21,7 @@ The `list:(HashmapE 256 PrecompiledSmc)` represents a mapping of `(code_hash -> 
 Transactions for precompiled smart contracts (those with code hashes in `ConfigParam 45`) follow this execution flow:
 
 1. Retrieve the `gas_usage` value from the masterchain config
-2. If the contract balance cannot cover the `gas_usage` cost, the compute phase fails with [`cskip_no_gas`](/v3/documentation/tvm/overview#when-the-compute-phase-is-skipped)
+2. If the contract balance cannot cover the `gas_usage` cost, the compute phase fails with `cskip_no_gas`.
 3. Execution proceeds via one of two paths:
    - **TVM execution**: Used if precompiled execution is disabled or the C++ implementation is unavailable in the node version. TVM executes with the gas limits defined by the network configuration (see [gas and fee parameters](/v3/documentation/smart-contracts/limits#gas-and-fee-parameters) and [Param20/Param21](/v3/documentation/network/configs/blockchain-configs#param-20-and-21)).
    - **Native execution**: Used when precompiled implementation is both enabled and available, executing the C++ code directly
