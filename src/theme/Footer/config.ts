@@ -174,6 +174,7 @@ export const FOOTER_COLUMN_LINKS_CN = [
       { langKey: "入门指南", url: PAGE_DEV },
       { langKey: "文档", url: FOOTER_DOCUMENTATION_URL },
       { langKey: "Telegram 小程序", url: PAGE_TELEGRAM_MINI_APPS },
+      { langKey: "开发者论坛", url: FOOTER_TON_FORUM_URL },
       { langKey: "开发社区", url: FOOTER_DEV_COMMUNITY_URL },
       { langKey: "漏洞赏金", url: FOOTER_BUG_BOUNTY_URL },
       { langKey: "寻找职位", url: FOOTER_CAREERS_URL },
