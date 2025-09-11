@@ -8,7 +8,7 @@ This section provides a comprehensive understanding of NFTs on TON Blockchain. R
 The following information assumes familiarity with our previous [section on Toncoin payment processing](/v3/guidelines/dapps/asset-processing/payments-processing) and a basic understanding of programmatic interactions with wallet smart contracts.
 
 
-## Understanding the basics of NFTs
+## NFT fundamentals
 
 NFTs operating on TON Blockchain are represented by the [TEP-62](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md) and [TEP-64](https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md) standards.
 
@@ -63,9 +63,9 @@ To facilitate an NFT transfer, a transfer message containing specific parameters
 3. `new_owner` - `MsgAddress` - The recipient’s smart contract address.
 4. `response_destination` - `MsgAddress` - Address for returning unused funds (e.g., when sending extra TON to cover fees).
 5. `forward_amount` - `VarUInteger 16` - The amount of TON forwarded with the message (typically 0.01 TON). This funds an internal notification message to the `new_owner` upon successful receipt of the NFT.
-6. `forward_payload` - `Either Cell ^Cell` - Optional data included in the ownership_assigned notification message.
+6. `forward_payload` - `Either Cell ^Cell` - Optional data included in the `ownership_assigned` notification message.
 
-This transfer message is the standard way to change NFT ownership and trigger the ownership_assigned notification.
+This transfer message is the standard way to change NFT ownership and trigger the `ownership_assigned` notification.
 
 For example, wallets use this message to transfer an NFT item. When the NFT smart contract receives this message and executes it, the NFT contract storage (internal contract data) is updated along with the owner address. In this way, the NFT item (contract) changes owners correctly. This process details a standard NFT transfer.
 
@@ -138,7 +138,7 @@ Retrieving a list of NFTs in an unordered collection is more difficult because t
 
 To do this, it is necessary to extract the NFT data and call the `get_nft_address_by_index` method on the collection with the ID returned by the NFT. If the NFT contract address and the address returned by the `get_nft_address_by_index` method match, it means that the NFT belongs to the current collection. However, parsing all the messages in the collection can be a lengthy process and may require archive nodes.
 
-## Working with NFTs via wallets and deeplinks
+## Working with NFTs outside of TON
 
 ### Sending NFTs
 
@@ -162,7 +162,7 @@ The next steps may vary depending on the specific use case. Let’s examine seve
 - Now you can manage your new NFT.
   
 #### Service listening to all types of NFT transfer:
-- Verify all new transactions and ignore those with a body length less than 363 bits (OP - 32, `query_id` - 64, Address - 267; internal addresses are 267 bits).
+- Verify all new transactions and ignore those with a body length less than 363 bits (OP - 32, `query_id` - 64, Address - 267; [internal addresses are 267 bits](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-detail#type-address)).
 - Repeat the steps detailed in the previous list above.
 - If the process works correctly, you need to verify the authenticity of the NFT by analyzing it and the collection it belongs to. Next, you need to verify that the NFT belongs to the specified collection. More information on this process can be found in the section [Retrieving all NFTs within a collection](#retrieving-all-nfts-within-a-collection). This process can be simplified by using a whitelist of NFTs or collections.
 - Now you can manage your new NFT.
