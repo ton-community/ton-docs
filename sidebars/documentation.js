@@ -20,6 +20,7 @@ module.exports = [
       {
         type: 'category',
         label: 'Addresses',
+        link: { type: 'doc', id: 'v3/documentation/smart-contracts/addresses/address' },
         items: [
           'v3/documentation/smart-contracts/addresses/address',
           'v3/documentation/smart-contracts/addresses/address-formats',
@@ -148,10 +149,21 @@ module.exports = [
       'v3/documentation/dapps/dapps-overview',
       {
         type: 'category',
+        label: 'Assets',
+        items: [
+          'v3/documentation/dapps/assets/toncoin',
+          'v3/documentation/dapps/assets/jetton',
+          'v3/documentation/dapps/assets/nft',
+          'v3/documentation/dapps/assets/nft-2.0',
+          'v3/documentation/dapps/assets/usdt',
+          'v3/documentation/dapps/assets/extra-currencies',
+        ],
+      },
+      {
+        type: 'category',
         label: 'DeFi principles',
         items: [
-          'v3/documentation/dapps/defi/coins',
-          'v3/documentation/dapps/defi/tokens',
+          'v3/documentation/dapps/assets/overview',
           {
             type: 'doc',
             label: 'NFT use cases in TON',
@@ -163,15 +175,19 @@ module.exports = [
       },
       {
         type: 'category',
-        label: 'Assets',
+        label: 'Oracles',
         items: [
-          'v3/documentation/dapps/assets/overview',
-          'v3/documentation/dapps/assets/nft-2.0',
-          'v3/documentation/dapps/assets/usdt',
+          'v3/documentation/infra/oracles/overview',
+          {
+            type: 'category',
+            label: 'Providers',
+            items: [
+              'v3/documentation/infra/oracles/pyth',
+              'v3/documentation/infra/oracles/redstone',
+            ],
+          },
         ],
       },
-      'v3/documentation/dapps/proofs',
-      'v3/documentation/dapps/basic-proofing-concepts',
     ],
   },
   {
@@ -183,12 +199,14 @@ module.exports = [
         type: 'category',
         label: 'Validation',
         items: [
+          'v3/documentation/nodes/validation/collators',
           {
             type: 'doc',
             label: 'Proof-of-stake',
             id: 'v3/documentation/nodes/validation/staking-incentives',
           },
-          'v3/documentation/nodes/validation/collators',
+          'v3/documentation/dapps/proofs',
+          'v3/documentation/dapps/basic-proofing-concepts',
         ],
       },
       {
@@ -213,21 +231,6 @@ module.exports = [
         items: [
           'v3/documentation/infra/bridges/toncoin',
           'v3/documentation/infra/bridges/toncoin-addresses',
-        ],
-      },
-      {
-        type: 'category',
-        label: 'Oracles',
-        items: [
-          'v3/documentation/infra/oracles/overview',
-          {
-            type: 'category',
-            label: 'Providers',
-            items: [
-              'v3/documentation/infra/oracles/pyth',
-              'v3/documentation/infra/oracles/redstone',
-            ],
-          },
         ],
       },
     ]
