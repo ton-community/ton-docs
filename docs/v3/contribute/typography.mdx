@@ -6,7 +6,7 @@ import Feedback from '@site/src/components/Feedback';
 
 This standard ensures a consistent and professional style across TON documentation.
 
-Following these guidelines, you help maintain clarity, enhance readability, and support easy navigation in the documentation site and any associated menus.
+By following these guidelines, you help maintain clarity, enhance readability, and support easy navigation in the documentation site and any associated menus.
 
 ---
 
@@ -18,7 +18,7 @@ Following these guidelines, you help maintain clarity, enhance readability, and 
 
 ---
 
-## Documents typography
+## Document typography
 
 ### General text style
 
@@ -51,12 +51,9 @@ When introducing an unfamiliar acronym, spell the entire term and put the abbrev
   - Example: `# This sentence is in sentence case`
   - Example: `## This sentence is in sentence case`
   - Example: `### This sentence is in sentence case`
-  - Example: `### This sentence is in sentence case`
+  - Example: `#### This sentence is in sentence case`
 
-- **Exception**: **Special terms**.
-  Despite the overall _sentence case_ rule,
-  certain words or phrases—key concepts or defined terms within the documentation—must always be formatted
-  using the title case.
+- Headers use sentence case. Capitalize only proper nouns and defined terms.
   - Example: `## Use American English`
   - Example: `# Run the TON Center service`
 
@@ -69,7 +66,7 @@ When introducing an unfamiliar acronym, spell the entire term and put the abbrev
 Use plain text for all headers.
 Avoid using any formatting styles in headings:
 
-- No code formatting `backticks` (\`\`)
+- No code formatting using backticks (&#96;)
 - No bold **text**
 - No italics _text_
 - No quotation marks (“ ” or " ")
@@ -91,21 +88,18 @@ Keep headers clean and consistent. Use formatting only in body text.
 
 #### Capitalized terms in headers
 
-Sometimes, you can face specific capitalization defined as capitalized according to American English rules.
+Some terms are defined as proper nouns and should be capitalized according to American English rules.
 
-- Capitalization standard for specific terms:
 - Example: `## Use American English`
-- Example: `### Date Format`
+- Example: `### Date format`
 
-Date and Format are special terms and should be capitalized, regardless of the overall Sentence Case rule.
-
-### Avoid "quotation marks"
+### Avoid quotation marks
 
 Do not use "quotation marks" to highlight terms, variables, or functions. Instead, apply **bold** for terms and `code formatting` for code references.
 
 **Correct usage:**
 
-- Use **get_wallet_address** when introducing a term.
+- Use **smart contract** when introducing a term.
 - Use `get_wallet_address` when referencing a code variable or function.
 
 **Incorrect usage:**
@@ -114,7 +108,7 @@ Do not use "quotation marks" to highlight terms, variables, or functions. Instea
 
 ### Navigation menu headings
 
-The navigation menus should remain minimalistic in both the left sidebar and the top menu. For consistency and clarity, all menu headings must use Sentence case.
+The navigation menus should remain minimalistic in both the left sidebar and the navbar. For consistency and clarity, all menu headings must use sentence case.
 
 #### Left sidebar menu:
 
@@ -122,41 +116,41 @@ The navigation menus should remain minimalistic in both the left sidebar and the
 - Use short, clear labels of two or three words.
 
 :::info
-Specify the left side menu with [sidebars](https://github.com/ton-community/ton-docs/tree/main/sidebars) configuration files.
+Specify the left sidebar with [sidebars](https://github.com/ton-community/ton-docs/tree/main/sidebars) configuration files.
 :::
 
-#### Navigation bar menu:
+#### Navbar
 
 - Set only high-level hierarchy pages in this menu.
 - Use broad, descriptive terms to categorize content, ensuring users can quickly identify the main section they need.
 
 :::info
-Specify the navigation bar menu with the [navbar.js](https://github.com/ton-community/ton-docs/blob/main/navbar.js) configuration file.
+Specify the navbar with the [navbar.js](https://github.com/ton-community/ton-docs/blob/main/navbar.js) configuration file.
 :::
 
 #### Consistency between menu and in-page headers
 
-- Match the header text used in the table of contents or side menu with the header text in the article, ensuring readers know they're on the correct page or section.
+- Match the header text used in the left sidebar or table of contents with the header text in the article, ensuring readers know they're on the correct page or section.
 
 ---
 
 ## Putting it all together
 
 1. **Create your new documentation file** using the kebab-case naming convention
-   - Example:`getting-started-guide.md`.
+   - Example: `getting-started-guide.md`.
 2. **Open the file** and set an H1 heading in sentence case
    - Example: `# Getting started guide`.
 3. **Organize content** with H2 headings for main topics
-   - Example:`## Installation steps`, also in sentence case.
+   - Example: `## Installation steps`, also in sentence case.
 4. **Use H3 headings** for more detailed subtopics in sentence case
-   - Example: `### Installing on Linux`).
+   - Example: `### Installing on Linux`.
 5. **Maintain consistency** in any side menus or tables of contents by matching the header text from within the document.
 
 ---
 
 ## Example structure
 
-```md title="getting-started-with-ton.md"
+```markdown title="getting-started-with-ton.md"
 # Getting started with TON
 
 ## Prerequisites

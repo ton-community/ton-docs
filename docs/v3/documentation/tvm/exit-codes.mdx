@@ -19,48 +19,37 @@ While exit codes are 32-bit signed integers in TON, attempting to throw an exit 
 
 The following table lists exit codes with an origin (where it can occur) and a short description. The table doesn't list the exit codes from contracts. To see such exit codes, refer to the source code of the specific contract.
 
-| Exit code | Origin                                 | Brief description                                                                                                |
-| :-------- | :------------------------------------- |:-----------------------------------------------------------------------------------------------------------------|
-| 0         | [Compute][c] and [action][a] phases    | Standard successful execution exit code.                                                                         |
-| 1         | [Compute phase][c]                     | Alternative successful execution exit code. Reserved, but doesn't occur.                                         |
-| 2         | [Compute phase][c]                     | Stack underflow.                                                                                                 |
-| 3         | [Compute phase][c]                     | Stack overflow.                                                                                                  |
-| 4         | [Compute phase][c]                     | Integer overflow.                                                                                                |
-| 5         | [Compute phase][c]                     | Range check error: an integer is out of its expected range.                                                       |
-| 6         | [Compute phase][c]                     | Invalid [TVM][tvm] opcode.                                                                                       |
-| 7         | [Compute phase][c]                     | Type check error.                                                                                                |
-| 8         | [Compute phase][c]                     | Cell overflow.                                                                                                   |
-| 9         | [Compute phase][c]                     | Cell underflow.                                                                                                  |
-| 10        | [Compute phase][c]                     | Dictionary error.                                                                                                |
-| 11        | [Compute phase][c]                     | As described in [TVM][tvm] documentation: "Unknown error, may be thrown by user programs".                       |
-| 12        | [Compute phase][c]                     | Fatal error thrown by [TVM][tvm] in unexpected situations.                                                       |
-| 13        | [Compute phase][c]                     | Out of gas error.                                                                                                |
-| -14       | [Compute phase][c]                     | Equivalent to code 13. A negative value (see [13](#13)) prevents emulation.                                      |
-| 14        | [Compute phase][c]                     | VM virtualization error (reserved but unused).                                                                   |
-| 32        | [Action phase][a]                      | Action list is invalid.                                                                                          |
-| 33        | [Action phase][a]                      | Action list is too long.                                                                                         |
-| 34        | [Action phase][a]                      | Action is invalid or not supported.                                                                              |
-| 35        | [Action phase][a]                      | Invalid source address in outbound message.                                                                      |
-| 36        | [Action phase][a]                      | Invalid destination address in outbound message.                                                                 |
-| 37        | [Action phase][a]                      | Not enough Toncoin.                                                                                              |
-| 38        | [Action phase][a]                      | Not enough extra currencies.                                                                                     |
-| 39        | [Action phase][a]                      | Outbound message does not fit into a cell after rewriting.                                                       |
-| 40        | [Action phase][a]                      | Cannot process a message — not enough funds, the message is too large, or its Merkle depth is too big.           |
-| 41        | [Action phase][a]                      | Library reference is null during library change action.                                                          |
-| 42        | [Action phase][a]                      | Library change action error.                                                                                     |
-| 43        | [Action phase][a]                      | Exceeded the maximum number of cells in the library or the maximum depth of the Merkle tree.                     |
-| 50        | [Action phase][a]                      | Account state size exceeded limits.                                                                              |
-| 128       | Tact compiler ([Compute phase][c])     | Null reference exception. Configurable since Tact 1.6.                                                           |
-| 129       | Tact compiler ([Compute phase][c])     | Invalid serialization prefix.                                                                                    |
-| 130       | Tact compiler ([Compute phase][c])     | Invalid incoming message — there's no receiver for the opcode of the received message.                           |
-| 131       | Tact compiler ([Compute phase][c])     | Constraints error. Reserved, but never thrown.                                                                   |
-| 132       | Tact compiler ([Compute phase][c])     | Access denied — someone other than the owner sent a message to the contract.                                     |
-| 133       | Tact compiler ([Compute phase][c])     | Contract stopped. Reserved, but never thrown.                                                                    |
-| 134       | Tact compiler ([Compute phase][c])     | Invalid argument.                                                                                                |
-| 135       | Tact compiler ([Compute phase][c])     | Code of a contract was not found.                                                                                |
-| 136       | Tact compiler ([Compute phase][c])     | Invalid standard address.                                                                                        |
-| ~~137~~   | ~~Tact compiler ([Compute phase][c])~~ | ~~Masterchain support is not enabled for this contract.~~ Removed since Tact 1.6                                 |
-| 138       | Tact compiler ([Compute phase][c])     | Not a BaseChain address.                                                                                         |
+| Exit code | Origin                              | Brief description                                                                                      |
+|:----------|:------------------------------------|:-------------------------------------------------------------------------------------------------------|
+| 0         | [Compute][c] and [action][a] phases | Standard successful execution exit code.                                                               |
+| 1         | [Compute phase][c]                  | Alternative successful execution exit code (rarely used).                                              |
+| 2         | [Compute phase][c]                  | Stack underflow.                                                                                       |
+| 3         | [Compute phase][c]                  | Stack overflow.                                                                                        |
+| 4         | [Compute phase][c]                  | Integer overflow.                                                                                      |
+| 5         | [Compute phase][c]                  | Range check error — some integer is out of its expected range.                                         |
+| 6         | [Compute phase][c]                  | Invalid [TVM][tvm] opcode.                                                                             |
+| 7         | [Compute phase][c]                  | Type check error.                                                                                      |
+| 8         | [Compute phase][c]                  | Cell overflow.                                                                                         |
+| 9         | [Compute phase][c]                  | Cell underflow.                                                                                        |
+| 10        | [Compute phase][c]                  | Dictionary error.                                                                                      |
+| 11        | [Compute phase][c]                  | As described in [TVM][tvm] documentation: "Unknown error, may be thrown by user programs".             |
+| 12        | [Compute phase][c]                  | Fatal error thrown by [TVM][tvm] in unexpected situations.                                             |
+| 13        | [Compute phase][c]                  | Out of gas error.                                                                                      |
+| -14       | [Compute phase][c]                  | Equivalent to code 13; see [exit code 13](#13).                                                        |
+| 14        | [Compute phase][c]                  | VM virtualization error (reserved but unused).                                                         |
+| 32        | [Action phase][a]                   | Action list is invalid.                                                                                |
+| 33        | [Action phase][a]                   | Action list is too long.                                                                               |
+| 34        | [Action phase][a]                   | Action is invalid or not supported.                                                                    |
+| 35        | [Action phase][a]                   | Invalid source address in outbound message.                                                            |
+| 36        | [Action phase][a]                   | Invalid destination address in outbound message.                                                       |
+| 37        | [Action phase][a]                   | Not enough Toncoin.                                                                                    |
+| 38        | [Action phase][a]                   | Not enough extra currencies.                                                                           |
+| 39        | [Action phase][a]                   | Outbound message does not fit into a cell.                                                             |
+| 40        | [Action phase][a]                   | Cannot process a message — not enough funds, the message is too large, or its Merkle depth is too big. |
+| 41        | [Action phase][a]                   | Library reference is null during library change action.                                                |
+| 42        | [Action phase][a]                   | Library change action error.                                                                           |
+| 43        | [Action phase][a]                   | Exceeded the maximum number of cells in the library or the maximum depth of the Merkle tree.           |
+| 50        | [Action phase][a]                   | Account state size exceeded limits.                                                                    |
 
 :::note
 The exit code 65535 (`0xffff`) typically indicates the same issue as exit code `130`: an unrecognized message opcode. It is assigned manually when developing contracts rather than generated by [TVM][tvm] or the Tact compiler.
@@ -76,7 +65,7 @@ This exit (or [result](#action)) code indicates a successful completion of the [
 
 ### 1: Alternative termination \{#1}
 
-This is an alternative exit code for successfully executing the [compute phase](#compute). Reserved, but never occurs.
+This is an alternative exit code for successfully executing the [compute phase](#compute); rarely used. Can be produced by `RETALT`.
 
 ### 2: Stack underflow \{#2}
 
@@ -182,7 +171,7 @@ try {
 
 ### 6: Invalid opcode \{#6}
 
-If you specify an instruction that the current [TVM][tvm] version does not define or try to set an unsupported [code page](/v3/documentation/tvm/overview#tvm-state), the system throws an error with exit code 6: `Invalid opcode`.
+If you specify an instruction that the current [TVM][tvm] version does not define or try to set an unsupported [code page](/v3/documentation/tvm/tvm-overview#tvm-state), the system throws an error with exit code 6: `Invalid opcode`.
 
 ```tact
 // There's no such codepage, and attempt to set it fails
@@ -277,7 +266,7 @@ try {
 
 ### 10: Dictionary error \{#10}
 
-In Tact, the `map<K, V>` type is an abstraction over the ["hash" map dictionaries of FunC](/v3/documentation/smart-contracts/func/docs/dictionaries#hash-map) and underlying [`HashmapE` type](/v3/documentation/data-formats/tlb/types#hashmap) of [TL-B][tlb] and [TVM][tvm].
+In Tact, the `map<K, V>` type is an abstraction over the ["hash" map dictionaries of FunC](/v3/documentation/smart-contracts/func/docs/dictionaries#hash-map) and underlying [`HashmapE` type](/v3/documentation/data-formats/tlb/tl-b-types#hashmap) of [TL-B][tlb] and [TVM][tvm].
 
 If there is an incorrect manipulation of dictionaries, such as improper assumptions about their memory layout, an error with exit code 10 is thrown: `Dictionary error`. Note that Tact prevents you from getting this error unless you do Fift and TVM assembly work yourself:
 
@@ -343,7 +332,7 @@ See [exit code 13](#13).
 
 ### 14: Virtualization error \{#14}
 
-Virtualization error related to [pruned branch cells](/v3/documentation/data-formats/cells/exotic#pruned-branch). Reserved, but never thrown.
+Virtualization error related to [pruned branch cells](/v3/documentation/data-formats/tlb/exotic-cells#pruned-branch). Reserved, but never thrown.
 
 ## Action phase \{#action}
 
@@ -353,7 +342,7 @@ Some actions may fail during processing, in which case the system may skip them 
 
 ### 32: Action list is invalid \{#32}
 
-If the list of actions contains [exotic cells](/v3/documentation/data-formats/cells/exotic), an action entry cell does not have references, or some action entry cell couldn't be parsed, an error with exit code 32 is thrown: `Action list is invalid`.
+If the list of actions contains [exotic cells](/v3/documentation/data-formats/tlb/exotic-cells), an action entry cell does not have references, or some action entry cell couldn't be parsed, an error with exit code 32 is thrown: `Action list is invalid`.
 
 Aside from this exit code, there's a boolean flag `valid`, which you can find under `description.actionPhase.valid` in the transaction results when working with [Sandbox and Blueprint](#blueprint). The transaction can set this flag to `false` even when the action phase throws some other exit code.
 
@@ -371,7 +360,7 @@ repeat (256) {
 
 ### 34: Invalid or unsupported action \{#34}
 
-Currently, only four actions are supported: changing the contract code, sending a message, reserving a specific amount of _nanotons_, and changing the library cell. If there's any issue with the specified action (invalid message, unsupported action, etc.), an error with exit code 34 is thrown: `Invalid or unsupported action`.
+Currently, only four actions are supported: changing the contract code, sending a message, reserving a specific amount of nanotons, and changing the library cell. If there's any issue with the specified action (invalid message, unsupported action, etc.), an error with exit code 34 is thrown: `Invalid or unsupported action`.
 
 ```tact
 // For example, let's try to send an ill-formed message:
@@ -401,7 +390,7 @@ If the [optional flag +2][flag2] is set, this error will not be thrown, and the 
 
 ### 38: Not enough extra currencies \{#38}
 
-Besides the native currency, Toncoin, TON Blockchain supports up to 2<sup>32</sup> extra currencies. They differ from making new jettons because extra currencies are natively supported — one can potentially specify an extra [`HashmapE`](/v3/documentation/data-formats/tlb/types#hashmap) of extra currency amounts in addition to the Toncoin amount in the internal message to another contract. Unlike Jettons, extra currencies can only be stored and transferred and do not have any other functionality.
+Besides the native currency, Toncoin, TON Blockchain supports up to 2^32 extra currencies. They differ from making new jettons because extra currencies are natively supported — one can potentially specify an extra [`HashmapE`](/v3/documentation/data-formats/tlb/types#hashmap) of extra currency amounts in addition to the Toncoin amount in the internal message to another contract. Unlike jettons, extra currencies can only be stored and transferred and do not have any other functionality.
 
 Currently, **there are no extra currencies** on TON Blockchain, but the exit code 38 is reserved for cases when there is not enough extra currency to send the specified amount: `Not enough extra currencies`.
 
@@ -446,26 +435,25 @@ If the account state (contract storage, essentially) exceeds any of the limits s
 If the configuration is absent, the default values are:
 
 
-- `max_msg_bits` equals 2<sup>21</sup> — maximum message size in bits.
-- `max_msg_cells` equals 2<sup>13</sup> — maximum number of cells a message can occupy.
+- `max_msg_bits` equals `2^21` — maximum message size in bits.
+- `max_msg_cells` equals `2^13` — maximum number of cells a message can occupy.
 - `max_library_cells` equals `1000` — maximum number of cells that can be used as [library reference cells][lib].
-- `max_vm_data_depth` equals 2<sup>9</sup> — maximum cells depth in messages and account state.
+- `max_vm_data_depth` equals `2^9` — maximum cell depth in messages and account state.
 - `ext_msg_limits.max_size` equals `65535` — maximum external message size in bits.
-- `ext_msg_limits.max_depth` equals 2<sup>9</sup> — maximum external message depth.
-- `max_acc_state_cells` equals 2<sup>16</sup> — maximum number of cells an account state can occupy.
-- `max_acc_state_bits` equals 2<sup>16</sup> x 1023 — maximum account state size in bits.
-- `max_acc_public_libraries` equals 2<sup>8</sup> — maximum number of [library reference cells][lib] that an account state can use on the masterchain.
-- `defer_out_queue_size_limit` equals 2<sup>8</sup> — maximum number of outbound messages to be queued (regards validators and collators).
-
+- `ext_msg_limits.max_depth` equals `2^9` — maximum external message depth.
+- `max_acc_state_cells` equals `2^16` — maximum number of cells an account state can occupy.
+- `max_acc_state_bits` equals `2^16 * 1023` — maximum account state size in bits.
+- `max_acc_public_libraries` equals `2^8` — maximum number of [library reference cells][lib] that an account state can use on the masterchain.
+- `defer_out_queue_size_limit` equals `2^8` — maximum number of outbound messages to be queued (applies to validators and collators).
 
 [c]: /v3/documentation/tvm/overview#compute-phase
-[a]: /v3/documentation/tvm/overview#transactions-and-phases
+[a]: #action
 [flag2]: /v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode2
 [tlb]: /v3/documentation/data-formats/tlb/overviewe
 [lib]: /v3/documentation/data-formats/cells/exotic#library-reference
 [p]: /v3/documentation/smart-contracts/func/docs/types#atomic-types
 [tvm]: /v3/documentation/tvm/overview
-[bp]: https://github.com/ton-org/blueprint
 [fift]: /v3/documentation/smart-contracts/fift/fift-and-tvm-assembly
+[exotic]: /v3/documentation/data-formats/cells/exotic
 
 <Feedback />

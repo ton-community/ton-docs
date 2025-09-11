@@ -5,42 +5,8 @@ import Feedback from '@site/src/components/Feedback';
 The TON Blockchain is maintained by a distributed network of **nodes**.
 
 Some are **validators**, who produce and validate blocks. Others are **full nodes**, who keep history and serve data.
-And at the edge are **lite clients**, used by apps to interact with the network efficiently.
 
 Together, these components form the backbone of TON’s decentralized architecture.
-
-## Full nodes
-
-A **full node** is the basic node type in TON.
-It stores the blockchain history and provides access to it:
-
-- Store recent blocks and account states (not necessarily the entire chain).
-- Provide APIs and data for explorers, developers, wallets, and analytics.
-
-## Validator node
-
-**Validators** are the backbone of consensus. They also function as full nodes but with additional responsibilities:
-
-- Collect incoming transactions and form new blocks.
-- Validate and sign blocks produced by other validators.
-- Maintain the **current shard state** (balances, code, and data of accounts).
-- Store recent blocks to extend the chain.
-
-Validators **do not need to keep the full blockchain history**.
-They focus on the *present* — ensuring new blocks are valid and properly added to the chain.
-
-## Lite clients
-
-Nodes can run in liteserver mode, which allows lite clients (external applications) to interact with the blockchain.
-In this mode, the nodes process requests from lite clients, enabling them to access blockchain data, send transactions,
-and retrieve information about blocks and transactions—for instance, to fetch and update wallet balances.
-
-Lite clients:
-- Downloads block headers.
-- Verifies **Merkle proofs** for the specific account data it needs.
-- Uses validators’ signatures to confirm authenticity.
-
-Lite clients make it possible to use TON securely on resource-constrained devices (like mobile phones) without trusting any single server.
 
 ## What do nodes actually keep
 
@@ -52,24 +18,46 @@ Nodes maintain:
 
 This ensures that even a lite client can verify the correctness of an account’s state without trusting any single node — relying only on cryptographic proofs.
 
-## The role of cells
+## Full nodes
 
-All data in TON — blocks, accounts, smart contracts — is ultimately stored in **cells**.
-Cells are like tiny boxes that can hold up to 1023 bits of data and point to up to 4 other boxes.
+A **full node** is the basic node type in TON.
+It stores the blockchain history and provides access to it:
 
-Because of this:
-- Storage is compact and efficient (cells can be reused in multiple places).
-- Verification is simple (Merkle proofs can show that data is correct).
-- Serialization is standardized (Bag of Cells).
+- Stores recent blocks and account states for a week or entire history (optional, depending on configuration).
+- Provides APIs and data for explorers, developers, wallets, and analytics (optional).
 
-## Transition to cells
+Depending on the chosen settings for the full node:
+- A full node that keeps the entire block history is called an **archive node**.
+- A full node with enabled data querying is called a **liteserver**.
 
-When a transaction happens:
-1. Validators execute smart contracts inside the TVM.
-2. The resulting changes are written to account states.
-3. These account states are stored as **cells**, which are then committed into blocks.
+## Validator node
 
-Thus, **cells are the fundamental building blocks of TON’s data storage**.
+**Validators** are the backbone of consensus. They also function as full nodes but with additional responsibilities:
+
+- Collect incoming transactions and form new blocks.
+- Validate and sign blocks produced by other validators.
+- Maintain the current shard state (balances, code, and data of accounts).
+- Store recent blocks to extend the chain.
+
+Validators do not need to keep the full blockchain history.
+They focus on the present — ensuring new blocks are valid and properly added to the chain.
+
+## Lite clients
+
+A liteserver allows external applications to interact with the blockchain.
+Applications that retrieve data from nodes are called **lite clients** in TON.
+
+Lite clients enable users to access blockchain data, send external messages,
+and retrieve information about blocks and transactions — for example, to fetch and update wallet balances.
+
+Lite clients perform the following tasks:
+- Download block headers.
+- Verify Merkle proofs for the specific account data they need.
+- Use validators’ signatures to confirm authenticity.
+
+Lite clients make it possible to use TON securely on resource-constrained devices (like mobile phones) without trusting any single server.
+
+Read more about nodes in [Nodes documentation](/v3/documentation/nodes/overview).
 
 ## See also
 

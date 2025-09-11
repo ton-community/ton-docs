@@ -1,8 +1,8 @@
-import Feedback from '@site/src/components/Feedback'
+import Feedback from '@site/src/components/Feedback';
 
-# DApps primitives
+# DApps Overview
 
-TON Decentralized Applications (DApps) run on-chain and rely on smart contracts for computation, storage, and communication. They support a range of use cases, including token transfers, payments, decentralized finance, and external data integration.
+TON decentralized applications (DApps) are powered by on-chain smart contracts and may integrate off-chain components for UI and data access. They support a range of use cases, including token transfers, payments, decentralized finance, and external data integration.
 
 This page provides an overview of the core primitives used in DApp development on TON: digital assets, DeFi principles, and blockchain oracles.
 
@@ -16,34 +16,34 @@ This page provides an overview of the core primitives used in DApp development o
   {[
     {
       title: 'Digital assets',
-      desc: 'Explore Toncoin, assets, and native tokens. <br> Learn how USD₮ works on TON.' ,
-      link: '/v3/documentation/dapps/assets/overview',
-      btn: 'Start with assets'
+      desc: 'Explore Toncoin, Jettons, and NFTs.',
+      link: '/v3/documentation/dapps/assets/toncoin',
+      btn: 'Explore'
     },
     {
       title: 'DeFi principles',
-      desc: 'Explore Toncoin and extra currencies. <br> Explore NFT use cases and Jettons. <br>  Implement subscriptions and micropayments.',
-      link: '/v3/documentation/dapps/defi/coins',
-      btn: 'Explore DeFi'
+      desc: 'Learn development approaches for DeFi. <br> Explore NFTs and Jettons use cases.',
+      link: '/v3/documentation/dapps/assets/overview',
+      btn: 'Explore'
     },
     {
       title: 'Oracles',
-      desc: 'Connect real-world data to smart contracts. <br> Use Pyth oracles for on-chain price feeds. <br> Deliver data on demand with RedStone.',
+      desc: 'Connect real-world data to smart contracts. <br> Learn oracles available on TON.',
       link: '/v3/documentation/infra/oracles/overview',
-      btn: 'Integrate oracles'
+      btn: 'Explore'
     }
   ].map(({ title, desc, link, btn }) => (
     <div
       key={title}
       style={{
-        border: '1px solid  #e5e7eb',
+        border: '1px solid #e5e7eb',
         borderRadius: '0.75rem',
         padding: '0.9rem 1rem',
         backgroundColor: 'var(--card-bg)',
         boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'start',
+        justifyContent: 'flex-start',
         gap: '0.75rem',
         height: '100%',
         color: 'var(--text-color)'
@@ -52,7 +52,7 @@ This page provides an overview of the core primitives used in DApp development o
       <h3 style={{ fontSize: '1rem', fontWeight: '600', margin: 0 }}>{title}</h3>
       <p style={{ fontSize: '0.84rem', lineHeight: '1.45', margin: 0 }} dangerouslySetInnerHTML={{ __html: desc }} />
       <a href={link} style={{
-        alignSelf: 'start',
+        alignSelf: 'flex-start',
         padding: '0.4rem 0.75rem',
         backgroundColor: 'var(--btn-bg)',
         color: 'var(--btn-text)',
@@ -65,4 +65,4 @@ This page provides an overview of the core primitives used in DApp development o
   ))}
 </div>
 
-<Feedback/>
+<Feedback />
