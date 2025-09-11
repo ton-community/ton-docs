@@ -12,6 +12,16 @@ This section answers the most popular questions about the TON Blockchain.
 - [The TON Blockchain is based on PoS consensus](https://blog.ton.org/the-ton-blockchain-is-based-on-pos-consensus)
 - [TON Whitepapers](/v3/documentation/whitepapers/overview)
 
+### What are blockchain explorers in TON exist? 
+
+For quick overview, there are three popular TON block explorers:
+
+- [tonviewer.com](https://tonviewer.com/)
+- [tonscan.org](https://toncenter.com/)
+- [explorer.toncoin.org](https://explorer.toncoin.org/last)
+
+For more information, refer to our documentation's [Explorers](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton) section.
+
 ### What are some of the main similarities and differences to EVM blockchains?
 
 - [Ethereum to TON](/v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm)
@@ -39,7 +49,7 @@ WorkChains support cross-shard activity, allowing users to interact between diff
 
 Scalability is a significant challenge for modern blockchain systems. In traditional L2 solutions, scalability is limited by the capacity of the sequencer. If the transactions per second (TPS) on L2 exceed the sequencer's capacity, it can cause problems. In TON, WorkChains solve this problem by dividing a shard when the load exceeds its capacity. This allows the system to scale almost without limits.
 
-### Is there a need for L2 on the TON?
+### Is there a need for L2 on TON?
 
 While the TON platform offers highly optimized transaction fees and low latency, some applications may require lower transaction costs or further reduced latency. L2 solutions may be needed to meet specific application requirements in such cases. Thus, the need for L2 on TON could arise.
 
@@ -51,46 +61,44 @@ In the TON Blockchain, deterministic transaction ordering is critical to prevent
 Unlike blockchains such as Ethereum, where validators can change the order of transactions within a block, creating opportunities for MEV, TON’s architecture eliminates this possibility.
 
 Additionally, TON does not rely on a market-based mechanism to determine transaction fees. Commissions are fixed and do not fluctuate based on transaction priority. This lack of fee variability further reduces the incentive and feasibility of front-running.
-Due to the combination of fixed fees and deterministic transaction ordering,front-running in TON is not a trivial task.
+Due to the combination of fixed fees and deterministic transaction ordering, front-running in TON is not a trivial task.
 
 ## Block
 
 ### What is the RPC method used to retrieve block information?
 
-Validators produce blocks, and existing blocks can be accessed via liteservers, which are available through lite clients. Additionally, third-party tools like wallets, explorers, and dApps are built on top of lite clients.
-
-To access the core lite client, visit our GitHub repository:
-
-[ton-blockchain/tonlib](https://github.com/ton-blockchain/ton/tree/master/tonlib)
-
-Here are three popular third-party block explorers:
-
-- [TON Explorer](https://explorer.toncoin.org/last)
-- [TON Center](https://toncenter.com/)
-- [TON Whales Explorer](https://tonwhales.com/explorer)
-
-For more information, refer to our documentation's [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton) section.
+TON Indexed API provide ready made interfaces such as like: [/api_v3_get_blocks](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_blocks). Learn more on the [APIs on TON](/v3/guidelines/dapps/apis-sdks/api-types/).
 
 ### Block time
 
-_Block time: under 1 second_
+Block time: 1 seconds
 
 :::info
+
 You can compare TON's on-chain metrics, including block time and time-to-finality, with Solana and Ethereum by reading our analysis at:
 
+:::info
+
 - [Comparison of blockchains table](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison)
-  :::
+
+:::
+
 
 ### Time-to-finality
 
 _Time-to-finality: under 3 seconds_
 :::info
+
 Compare TON's on-chain metrics, including block time and time-to-finality, with Solana and Ethereum by reading our analysis at:
 
-- [Comparison of Blockchains table (much less informative than the document, but more visual)](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison)
-  :::
+- [Comparison of Blockchains table](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison)
 
-### Average block size
+:::
+
+### Maximum block size parameters
+
+
+Maximum block size defined in blockchain config parameter 29:
 
 ```bash
 max block size param 29
@@ -98,42 +106,38 @@ max_block_bytes:2097152
 ```
 
 :::info
-For more up-to-date parameters, refer to the [Network configs](/v3/documentation/network/global-config) section.
+
+For more up-to-date parameters, refer to the [Config parameters](/v3/documentation/network/configs/blockchain-configs) 
+
 :::
 
-### What is the layout of blocks on TON?
+### What's the layout of blocks on TON?
 
 For detailed explanations of each field in the block layout, visit the [Block layout](/v3/documentation/data-formats/layout/blocks).
 
 ## Transactions
 
-### RPC method to get transactions data
+### RPC method to get transaction data
 
-For details, please refer to the previous answer:
-
-- [See answer above](/v3/documentation/faq#are-there-any-standardized-protocols-for-minting-burning-and-transferring-fungible-and-non-fungible-tokens-in-transactions)
+For details, see detailed guideline [Mastering transaction](/v3/guidelines/dapps/transactions/overview/).
 
 ### Is the TON transaction asynchronous or synchronous? Can I access documentation that shows how this system works?
 
 TON Blockchain messages are **asynchronous**:
 
-- The sender prepares the transaction body (message BoC) and broadcasts it via the lite client (or a higher-level tool).
+- The sender prepares the external message body and broadcasts it via the lite client (or a higher-level tool).
 - The lite client returns the status of the broadcast, not the result of executing the transaction.
 - To check the desired result, the sender must monitor the state of the target account (address) or the overall blockchain state.
 
-An explanation of how TON asynchronous messaging works is provided in the context of **wallet smart contracts**:
-
-- [How TON wallets work and how to access them using JavaScript](https://blog.ton.org/how-ton-wallets-work-and-how-to-access-them-from-javascript#1b-sending-a-transfer)
-
-Example for wallet contract transfer (low-level):
-
-- [Wallet transfer example](https://github.com/xssnick/tonutils-go/blob/master/example/wallet/main.go)
+Read more on how asynchrony defined in TON: [Foundation of blockchain](/v3/guidelines/dapps/transactions/foundations-of-blockchain/)
 
 ### Can a transaction be determined to be 100% finalized? Is querying the transaction-level data sufficient to obtain this information?
 
 **Short answer:**
 The receiver's account must be checked to ensure a transaction is finalized.
-For more details on transaction verification, refer to the following examples:
+For more details on transaction verification, refer to the following guide [API-based retrieval](/v3/guidelines/dapps/transactions/api-based-retrieval)
+
+Examples:
 
 - Go: [Wallet example](https://github.com/xssnick/tonutils-go/blob/master/example/wallet/main.go)
 - Python: [Storefront bot with payments in TON](/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot)
@@ -152,7 +156,7 @@ Yes, transaction batching is possible in TON and can be achieved in two ways:
 1. **Asynchronous transactions:** by sending independent transactions to the network.
 2. **Using smart contracts:** smart contracts can receive tasks and execute them in batches.
 
-Example of using batch-featured contract (high-load wallet):
+Example of a batching-capable contract (Highload Wallet)::
 
 - [High-load wallet API example](https://github.com/tonuniverse/highload-wallet-api)
 
@@ -165,7 +169,9 @@ Default wallets (v3/v4) also support sending multiple messages (up to 4) in a si
 _9 digits_
 
 :::info
-Mainnet supports a 9-digit accuracy for currencies.
+
+Mainnet supports 9 decimal places for currency amounts.
+
 :::
 
 ### Are there any standardized protocols for minting, burning, and transferring fungible and non-fungible tokens in transactions?
@@ -201,7 +207,7 @@ To understand this process better, refer to the [Payments processing](/v3/guidel
 
 - [Smart contract address](/v3/documentation/smart-contracts/addresses)
 
-### Is it possible to have a named account similar to ENS
+### Is it possible to have a named account similar to ENS?
 
 Yes, use TON DNS:
 
@@ -228,9 +234,9 @@ Yes. TON includes a special master blockchain called the **MasterChain**, which 
 Read more about MasterChain, WorkChains and ShardChains in TON Blockchain overview article: [Blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains).
 :::
 
-A good example is a smart governance contract, which is a part of MasterChain:
+A good example is a governance contract, which is a part of the MasterChain:
 
-- [Governance contracts](/v3/documentation/smart-contracts/contracts-specs/governance)
+- [Governance contract](/v3/documentation/smart-contracts/contracts-specs/governance)
 
 ## Smart contracts
 
@@ -248,7 +254,7 @@ To prevent message chains from getting stuck due to missing contracts, TON uses 
 - [Deploying wallet via TonLib](/v3/guidelines/dapps/asset-processing/payments-processing#wallet-deployment)
 - [Paying for processing queries and sending responses](/v3/documentation/smart-contracts/transaction-fees/forward-fees)
 
-### Does the upgradability of a smart-contract pose a threat to its users?
+### Does the upgradability of a smart contract pose a threat to its users?
 
 The ability to upgrade smart contracts is currently a common practice and widely adopted across modern protocols. Upgradability allows developers to fix bugs, add new features, and enhance security over time.
 
@@ -282,12 +288,12 @@ Yes. A smart contract can be deleted in one of two ways:
 
 Yes, smart contract addresses are case-sensitive because they are encoded using the [base64 algorithm](https://en.wikipedia.org/wiki/Base64). You can learn more about how smart contract addresses work [here](/v3/documentation/smart-contracts/addresses).
 
-### Is the Ton Virtual Machine (TVM) EVM-compatible?
+### Is the TON Virtual Machine (TVM) EVM-compatible?
 
 No, the TON Virtual Machine (TVM) is incompatible with the Ethereum Virtual Machine (EVM).
-TON uses an entirely different architecture: **asynchronous**, while Ethereum operates synchronously.
+TON uses an entirely different architecture: **asynchronous**, while Ethereum operates **synchronously**.
 
-[Read more on asynchronous smart contracts](https://telegra.ph/Its-time-to-try-something-new-Asynchronous-smart-contracts-03-25).
+Read more on the [TVM vs EVM](/v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm).
 
 ### Can smart contracts be written in Solidity on TON?
 
@@ -301,25 +307,10 @@ FunC is TON's native smart contract language. It features a syntax similar to ma
 
 ### Recommended node providers for data extraction
 
-API types:
+Learn more about the available node providers on the [API types](/v3/guidelines/dapps/apis-sdks/api-types).
 
-Learn more about the different [API Types](/v3/guidelines/dapps/apis-sdks/api-types) available in TON, including Indexed, HTTP, and ADNL.
 
-Node providers partners:
-
-- [TON Center API (v2)](https://toncenter.com/api/v2/)
-- [GetBlock](https://getblock.io/)
-- [TON Access by Orbs](https://www.orbs.com/ton-access/)
-- [TON API by TON Center](https://github.com/toncenter/ton-http-api)
-- [NOWNodes](https://nownodes.io/nodes)
-- [DTON GraphQL API](https://dton.io/graphql)
-
-**TON Directory**
-Explore a wide range of TON-related projects and tools curated by the community:
-
-- [ton.app](https://ton.app/)
-
-### Below are two primary resources for accessing information about public node endpoints on the TON Blockchain, including both Mainnet and Testnet.
+### Below are two primary resources for accessing information about public node endpoints on TON Blockchain, including both Mainnet and Testnet.
 
 - [Network configs](/v3/documentation/network/global-config)
 - [Examples and tutorials](/v3/guidelines/dapps/overview#tutorials-and-examples)
