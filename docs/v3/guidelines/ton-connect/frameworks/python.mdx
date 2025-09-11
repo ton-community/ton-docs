@@ -475,16 +475,16 @@ TON Connect emits two categories of events:
 
 These events are triggered when an action completes successfully:
 
-* `Event.CONNECT` — emitted when a wallet is successfully connected.
+- `Event.CONNECT` — emitted when a wallet is successfully connected.
   **Parameters:** `user_id: int`, `wallet: WalletInfo`
 
-* `Event.DISCONNECT` — emitted when a wallet is disconnected.
+- `Event.DISCONNECT` — emitted when a wallet is disconnected.
   **Parameters:** `user_id: int`, `wallet: WalletInfo`
 
-* `Event.TRANSACTION` — emitted when a transaction is confirmed by the user.
+- `Event.TRANSACTION` — emitted when a transaction is confirmed by the user.
   **Parameters:** `user_id: int`, `transaction: SendTransactionResponse`, `rpc_request_id: int`
 
-* `Event.SIGN_DATA` — emitted when a sign data request is approved.
+- `Event.SIGN_DATA` — emitted when a sign data request is approved.
   **Parameters:** `user_id: int`, `sign_data: SignDataResponse`, `rpc_request_id: int`
 
 #### Error Events

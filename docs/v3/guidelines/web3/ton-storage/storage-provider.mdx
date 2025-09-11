@@ -51,10 +51,10 @@ get-provider-params <address>
 
 The output includes the following parameters:
 
-* Whether new storage contracts are currently accepted.
-* Minimum and maximum **bag** size (in bytes).
-* Rate – the cost of storage specified in nanoTON per megabyte per day.
-* Max span – the interval at which the provider must submit proofs of **bag** storage.
+- Whether new storage contracts are currently accepted.
+- Minimum and maximum **bag** size (in bytes).
+- Rate – the cost of storage specified in nanoTON per megabyte per day.
+- Max span – the interval at which the provider must submit proofs of **bag** storage.
 
 ### Storage request
 
@@ -66,11 +66,11 @@ new-contract-message <BagID> <file> --query-id 0 --provider <address>
 
 ### Notes
 
-* This command may take some time to execute for large **bags**.
-* The generated message body, not the full internal message, is saved to `<file>`.
-* The query ID can be any integer from `0` to `2^64 - 1`.
-* The generated message includes the provider's current rate and max span parameters. These values are displayed after execution and should be reviewed before sending.
-* If the provider updates their parameters before the message is submitted, it will be rejected. This ensures that the storage contract is created under the client's agreed-upon conditions.
+- This command may take some time to execute for large **bags**.
+- The generated message body, not the full internal message, is saved to `<file>`.
+- The query ID can be any integer from `0` to `2^64 - 1`.
+- The generated message includes the provider's current rate and max span parameters. These values are displayed after execution and should be reviewed before sending.
+- If the provider updates their parameters before the message is submitted, it will be rejected. This ensures that the storage contract is created under the client's agreed-upon conditions.
 
 The client must then send the generated message body to the provider's smart contract address. If an error occurs, the message bounces back to the sender. If successful, a new storage contract is created, and the client receives a message from the contract with [`op=0xbf7bd0c1`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L4) and the same query ID.
 
@@ -80,18 +80,18 @@ At this stage, the contract is not yet active. Once the provider downloads the *
 
 The storage contract maintains a client balance, which consists of the funds transferred by the client that have not yet been paid to the provider. This balance gradually reduces over time based on the provider's rate (in nanoTON per megabyte per day).
 
-* The initial balance is the amount sent when creating the storage contract with the request.
-* The client can top up the contract anytime by making transfers to the storage contract — this can be done from any wallet address.
-* The current balance can be retrieved using the [`get_storage_contract_data`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/storage-contract.fc#L222) getter method. It is returned as the second value: `balance`.
+- The initial balance is the amount sent when creating the storage contract with the request.
+- The client can top up the contract anytime by making transfers to the storage contract — this can be done from any wallet address.
+- The current balance can be retrieved using the [`get_storage_contract_data`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/storage-contract.fc#L222) getter method. It is returned as the second value: `balance`.
 
 ### Contract closure
 
 A storage contract may be closed under the following conditions:
 
-* Immediately after creation, before activation, if the provider declines the request, e.g., due to capacity limits or configuration issues.
-* When the client balance reaches 0.
-* Voluntarily by the provider.
-* Voluntarily by the client by sending a message with [`op=0x79f937ea`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L3) from the client's wallet; the message may use any query ID.
+- Immediately after creation, before activation, if the provider declines the request, e.g., due to capacity limits or configuration issues.
+- When the client balance reaches 0.
+- Voluntarily by the provider.
+- Voluntarily by the client by sending a message with [`op=0x79f937ea`](https://github.com/ton-blockchain/ton/blob/master/storage/storage-daemon/smartcont/constants.fc#L3) from the client's wallet; the message may use any query ID.
 
 ## Running and configuring a provider
 
@@ -113,8 +113,8 @@ By default, the contract does not accept new storage contracts. Before activatio
 
 The provider configuration includes:
 
-* `max contracts` - maximum number of concurrent storage contracts.
-* `max total size` - maximum total size of **bags** in storage contracts.
+- `max contracts` - maximum number of concurrent storage contracts.
+- `max total size` - maximum total size of **bags** in storage contracts.
 
 To view the current configuration (local daemon state):
 
@@ -130,10 +130,10 @@ set-provider-config --max-contracts 100 --max-total-size 100000000000
 
 ### Contract parameters
 
-* `accept` - whether to accept new storage contracts.
-* `min file size`, `max file size`, - size limits for one **bag**.
-* `rate` - cost of storage specified in nanoTON per megabyte per day.
-* `max span` - how often the provider will have to submit storage proofs.
+- `accept` - whether to accept new storage contracts.
+- `min file size`, `max file size`, - size limits for one **bag**.
+- `rate` - cost of storage specified in nanoTON per megabyte per day.
+- `max span` - how often the provider will have to submit storage proofs.
 
 To view the current parameters (local daemon state):
 
@@ -153,8 +153,8 @@ It is recommended that the provider's smart contract be funded with more than 1 
 
 After setting the `accept` parameter to `1`, the smart contract starts accepting requests from clients and creates storage contracts. The storage daemon automatically:
 
-* Downloads and distributes **bags**.
-* Generates and submits storage proofs.
+- Downloads and distributes **bags**.
+- Generates and submits storage proofs.
 
 ## Further work with the provider
 
@@ -168,8 +168,8 @@ get-provider-info --contracts --balances
 
 Each contract displays:
 
-* `Client$`: funds provided by the client.
-* `Contract$`: total funds in the contract.
+- `Client$`: funds provided by the client.
+- `Contract$`: total funds in the contract.
 
 The difference between these values represents the provider's earnings, which can be withdrawn using `withdraw <address>`.
 
