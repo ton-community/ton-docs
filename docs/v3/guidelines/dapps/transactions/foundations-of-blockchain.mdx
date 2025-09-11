@@ -30,9 +30,8 @@ This section covers the core concepts that underlie how transactions work in TON
 
 An **actor** is an abstract behavioral model, formalized as a computational object that reacts to incoming messages, changes its internal state, creates new actors, and sends messages to others. Actors are isolated: they do not have access to each other’s state and interact only through message passing.
 
-In other words:
-
-An actor is an independent entity with its own state and behavior. Actors interact by exchanging messages. Each actor can:
+In essence, an actor is an independent entity that maintains its own state, defines its behavior, and interacts only through message passing.
+Each actor can:
 
 - change its state
 - send messages to other actors
@@ -65,9 +64,28 @@ An **account** in TON is an actor characterized by the following components:
 
 The general state fully defines all account types in TON. Examples:
 
-- `(ID1, 0 TON, nonexist)`
-- `(ID2, 10 TON, uninit, last_trans_lt)`
-- `(ID3, -0.5 TON, frozen)`
+```json
+[
+  {
+    "ID": "ID1",
+    "balance": "0 TON",
+    "status": "nonexist",
+    "last_trans_lt": null
+  },
+  {
+    "ID": "ID2",
+    "balance": "10 TON",
+    "status": "uninit",
+    "last_trans_lt": "tx_id_example"
+  },
+  {
+    "ID": "ID3",
+    "balance": "-0.5 TON",
+    "status": "frozen",
+    "last_trans_lt": null
+  }
+]
+```
 
 ![Account properties](/img/docs/blockchain-fundamentals/account_eng.svg)
 
@@ -130,11 +148,12 @@ Transactions are processed **asynchronously**, meaning that each account’s upd
 
 Earlier, we mentioned that an account is an actor defined by the following components:
 
-- Account properties (ID, balance, status, `last_trans_lt`)
+- Account properties (ID, balance, status, and last transaction)
 - Data
 - Code
 
-In practice, the actual data layout is more complex, but the logical distinction between an account and a smart contract remains the same. To describe data structures, in TON, TL-B schemas are used. These define how data is laid out at the bit level.
+In practice, the actual data layout is more complex. However, the logical distinction between an account and a smart contract remains the same. To describe data structures, [TL-B](/v3/documentation/data-formats/tlb/overview) schemas are used.
+These define how data is laid out at the bit level.
 
 Let’s take a look at how an account is defined.
 The account structure consists of several nested objects:
@@ -146,10 +165,11 @@ account$1 addr:MsgAddressInt storage_stat:StorageInfo
 ```
 
 - Address — `MsgAddressInt`
-- Balance — `CurrencyCollection`
-- State — `AccountState`, which defines the account’s behavior
-- Logical time of the account's last applied transaction — `last_trans_lt`
 - Storage statistics — `StorageInfo`
+- Storage — `AccountStorage`, which contains:
+  - Logical time of the account's last applied transaction — `last_trans_lt`
+  - Balance — `CurrencyCollection`
+  - State — `AccountState`, which defines the account’s behavior
 
 <details>
   <summary>Full TL‑B account schema</summary>
@@ -184,23 +204,22 @@ Let’s clarify which properties are part of the **account properties**, accordi
 
 - ID → `MsgAddressInt`
 - Balance → `CurrencyCollection`
-- Status → `AccountState`
-- Last transaction logical time (`last_trans_lt`) — also part of the general state
+- State → `AccountState`
+- Last transaction logical time → `last_trans_lt`
 
-Meanwhile, the data and code are defined within the state: `AccountState` field.
 
-Now, let’s take a closer look at the account properties and how they’re represented in the data layout.
+### Account state
 
-### Account status
+The data and code are defined within the state: `AccountState` field.
 
+Now, let’s take a closer look at the account properties and how it’s represented in the data layout.
 TON defines account states `AccountState` as follows:
 
-| Status   | TL-B code | Description                                                                                                                                                                                                                                        |
-| -------- | --------- |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `uninit` | `00`      | The account exists but contains no code or data. It may hold a non-zero balance but is not initialized yet.                                                                                                                                        |
-| `frozen` | `01`      | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. This occurs when storage‑fee debt exceeds network limits.                                            |
-| `active` | `10`      | The account includes a `StateInit` (State Initialized) with deployed code and data. It means that it's already initialized. It is an active smart contract, ready to process incoming messages.                                                               |
-| `nonexist` | `11`   | The account does not exist. It has no balance, code, or data, and can be created on first initialization or incoming transfer.                                                                                                                     |
+| State   | TL-B code | Description                                                                                                                                                                                                                                                       |
+|----------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `uninit` | `00`      | The account exists but contains no code or data. It may hold a non-zero balance but is not initialized yet.                                                                                                                                                       |
+| `frozen` | `01`      | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. The account has a zero balance and accumulated debt. Therefore, does not meet the WorkChain’s minimum requirement.     |
+| `active` | `10`      | The account includes a `StateInit`, which stands for State Initialized, with deployed code and data. It means that it's already initialized. It is an active smart contract, ready to process incoming messages.                                                  |
 
 ```tlb
 account_uninit$00 = AccountState;
@@ -208,18 +227,31 @@ account_active$1 _:StateInit = AccountState;
 account_frozen$01 state_hash:bits256 = AccountState;
 ```
 
-The diagram below illustrates the lifecycle of an account in the TON blockchain, showing how its state changes under different conditions.
+### Account status
 
-![Account's lifecycle](/img/docs/blockchain-fundamentals/account_states.svg)
+The account status `AccountStatus` provides a high-level view of an account’s lifecycle stage.
+
+While **account's state** captures the account’s underlying content— _its code and data_ — **account's status** abstracts these details to indicate whether an account is _uninitialized, frozen, active, or nonexistent_.
+
+```tlb
+acc_state_uninit$00 = AccountStatus;
+acc_state_frozen$01 = AccountStatus;
+acc_state_active$10 = AccountStatus;
+acc_state_nonexist$11 = AccountStatus;
+```
+
+The diagram below illustrates the lifecycle of an account in the TON blockchain, showing how its status changes under different conditions.
+
+![Account's lifecycle](/img/docs/blockchain-fundamentals/account_status.svg)
 
 ### Smart contract structure
 
-Smart contracts are a set of promises in digital form, including protocols that govern how the parties fulfill these promises.
+[Smart contracts](/v3/documentation/smart-contracts/overview) are a set of promises in digital form, including protocols that govern how the parties fulfil these promises.
 
-In TON, a smart contract typically refers to:
+In TON, a smart contract is typically recognized by:
 
-- Program code executed on the blockchain, written in FunC, Tact, or Tolk.
-- The account that contains the contract code and implements the business logic.
+- the program code executed within the blockchain
+- the account that implements business logic and content code
 
 In technical terms, a smart contract in TON is an `Account` in the active state (`AccountState = active`) with:
 
@@ -322,9 +354,11 @@ Thanks to the hierarchical structure of WorkChains and ShardChains, TON forms a 
 
 ![Blockchain architecture](/img/docs/blockchain-fundamentals/chain-of-chains.svg)
 
-### Testnet and Mainnet
+## Testnet and Mainnet
 
-#### Mainnet (the main network)
+Although TON maintains one architecture, it operates in separate environments: the Mainnet for live execution and the Testnet for development.
+
+### Mainnet (the main network)
 
 The **Mainnet** is the live production network where:
 
@@ -333,7 +367,7 @@ The **Mainnet** is the live production network where:
 
 All users and projects operating in production use the Mainnet.
 
-#### Testnet (the test network)
+### Testnet (the test network)
 
 The **Testnet** is an independent blockchain network that replicates the functionality of the main network but uses valueless coins. In Testnet:
 
