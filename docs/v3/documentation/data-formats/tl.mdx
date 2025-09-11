@@ -17,7 +17,7 @@ To encode a byte array, we first determine its size. If the array is less than 2
 
 For example, to encode the array `[0xAA, 0xBB]` with size 2, we use 1 byte for the size, followed by the data itself, resulting in `[0x02, 0xAA, 0xBB]`. However, the total size is 3 bytes, which is not a multiple of 4. Therefore, we add 1 byte of padding to align it to 4 bytes, resulting in `[0x02, 0xAA, 0xBB, 0x00]`.
 
-If we need to encode an array with a size of, for example, 396 bytes, we use 3 bytes for the size encoding and 1 byte for the 0xFE long-form length marker. The encoding would be: `[0xFE, 0x8C, 0x01, 0x00, array bytes]`. The total size becomes `396 + 4 = 400` bytes, a multiple of 4, so no additional alignment is needed.
+If we need to encode an array with a size of, for example, 396 bytes, we use 3 bytes for the size encoding and 1 byte for the oversize indicator. The encoding would be: `[0xFE, 0x8C, 0x01, 0x00, array bytes]`. The total size becomes `396+4 = 400` bytes, a multiple of 4, so no additional alignment is needed.
 
 ## Non-obvious serialization rules
 
@@ -48,5 +48,6 @@ The type is explicitly specified, so the prefix is not needed.
 
 ## Reference
 
-[Link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/TL.md) - _[Oleg Baranov](https://github.com/xssnick)_.
+- Link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/TL.md) - _[Oleg Baranov](https://github.com/xssnick)_.
+
 <Feedback />
