@@ -56,7 +56,7 @@ cell message = begin_cell()
         .end_cell();
 
 slice msg = message.begin_parse(); ;; Convert cell to slice
-while (~ msg.slice_refs_empty?()) {
+while (msg.slice_refs_empty?() != -1) { ;; We should remind that -1 is true
     cell inner_cell = msg~load_ref(); ;; Load cell from slice msg
     ;; do something
 }
@@ -79,7 +79,7 @@ int flag = 0;
 
 do {
     ;; do something even flag is false (0) 
-} until (flag);
+} until (flag == -1); ;; -1 is true
 ```
 
 **Reference:** [`Until loop` in docs](/v3/documentation/smart-contracts/func/docs/statements#until-loop)
@@ -257,9 +257,9 @@ else {
 ```
 
 **References:**
-- [`dict_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#dict_empty)
 - [`new_dict()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#new_dict)
-- [`udict_set()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#udict_set)
+- [`udict_set()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#dict_set)
+- [`dict_empty?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#dict_empty)
 
 ### How to determine if a tuple is empty
 
@@ -284,7 +284,7 @@ When working with `tuples`, checking for existing values before extracting them 
 }
 ```
 **Note:** 
-We are defining the `tlen` assembly function. You can find more details [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) and see a [list of assembler commands](/v3/documentation/tvm/tvm-overview#tvm-instructions).
+We are defining the `tlen` assembly function. You can find more details [here](/v3/documentation/smart-contracts/func/docs/functions#assembler-function-body-definition) and see a [list of assembler commands](/v3/documentation/tvm/instructions).
 
 **References:**
 - [`empty_tuple()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#empty_tuple)
@@ -484,7 +484,7 @@ forall X -> (tuple) to_tuple (X x) asm "NOP";
 ### How to write custom functions using asm keyword
 
 
-Many features we use in FunC come from pre-prepared methods inside `stdlib.fc`. However, we have many more capabilities, and learning to write custom functions unlocks new possibilities.
+Many features we use in FunC come from functions provided by `stdlib.fc`. However, we have many more capabilities, and learning to write custom functions unlocks new possibilities.
 
 For example, while `tpush`, which adds an element to a `tuple`, exists, there is no built-in `tpop` function. In such cases, we must implement it ourselves.
 
@@ -555,7 +555,7 @@ global int max_value;
 **References:**
 - [`global variables` in docs](/v3/documentation/smart-contracts/func/docs/global_variables)
 - [`~dump` in docs](/v3/documentation/smart-contracts/func/docs/builtins#dumping-a-variable)
-- [`TVM instructions` in docs](/v3/documentation/tvm/tvm-overview#tvm-instructions) 
+- [`TVM instructions` in docs](/v3/documentation/tvm/instructions) 
 
 
 ### Basic operations with tuples
@@ -640,7 +640,7 @@ forall X -> () resolve_type (X value) impure {
 }
 ```
 
-**Reference:** [`TVM instructions` in docs](/v3/documentation/tvm/tvm-overview#tvm-instructions) 
+**Reference:** [`TVM instructions` in docs](/v3/documentation/tvm/instructions) 
 
 
 ### How to get current time
@@ -693,7 +693,7 @@ Variable names like `xp+zp` are valid as long as there are no spaces between the
 }
 ```
 
-**Reference:** [`TVM instructions` in docs](/v3/documentation/tvm/tvm-overview#tvm-instructions)
+**Reference:** [`TVM instructions` in docs](/v3/documentation/tvm/instructions)
 
 
 ### How to throw errors
@@ -708,9 +708,9 @@ throw_unless(39, number == 198); ;; the error will be triggered only if the numb
 throw(36); ;; the error will be triggered anyway
 ```
 
-[Standard TVM exception codes](/v3/documentation/tvm/tvm-exit-codes)
+- [Standard TVM exception codes](/v3/documentation/tvm/tvm-exit-codes)
+- [Throwing exceptions](/v3/documentation/smart-contracts/func/docs/builtins#throwing-exceptions)
 
-See also: [Throwing exceptions](/v3/documentation/smart-contracts/func/docs/builtins#throwing-exceptions)
 ### Reversing tuples
 Since tuples behave as stacks in FunC, sometimes we need to **reverse** them to access data from the opposite end.
 
@@ -799,7 +799,7 @@ int are_slices_equal_2? (slice a, slice b) asm "SDEQ";
 
 **References:**
 - [`slice_hash()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#slice_hash)
-- [`TVM instructions` in docs](/v3/documentation/tvm/tvm-overview#tvm-instructions)
+- [`TVM instructions` in docs](/v3/documentation/tvm/instructions)
 
 ### Determine if the cells are equal
 We can determine if two cells are equal by comparing their hashes.
@@ -953,7 +953,7 @@ slice generate_external_address (int address) {
 ```
 Since we need to find the exact number of bits occupied by the address, we must [declare an asm function](#how-to-write-custom-functions-using-asm-keyword) with the `UBITSIZE` opcode. This function will return the minimum number of bits required to store a given number.
 
-**Reference:** [`TVM instructions` in docs](/v3/documentation/tvm/tvm-overview#tvm-instructions)
+**Reference:** [`TVM instructions` in docs](/v3/documentation/tvm/instructions)
 
 ### How to store and load dictionary in a local storage
 
@@ -988,7 +988,7 @@ To send a simple message with a comment, prepend the message body with `32 bits`
 cell msg = begin_cell()
     .store_uint(0x18, 6) ;; flags
     .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
-    .store_coins(100) ;; amount of nanoTons to send
+    .store_coins(100) ;; amount of nanotons to send
     .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1) ;; default message headers (see sending messages page)
     .store_uint(0, 32) ;; zero opcode - means simple transfer message with comment
     .store_slice("Hello from FunC!") ;; comment
@@ -998,7 +998,7 @@ send_raw_message(msg, 3); ;; mode 3 - pay fees separately, ignore errors
 
 **Reference:** [`Message layout` in docs](/v3/documentation/smart-contracts/message-management/sending-messages)
 
-### How to send a message with an incoming account
+### How to send a message via a proxy contract
 
 A proxy contract can facilitate secure message exchange if interaction between a user and the main contract is needed.
 
@@ -1050,13 +1050,13 @@ send_raw_message(msg, 128); ;; mode = 128 is used for messages that are to carry
 
 ### How to send a message with a long text comment
 
-A `cell` can store up to 127 characters (`<1023 bits`). 
+A cell can store up to 1023 bits (about 127 ASCII characters). 
 A sequence of linked cells ("snake cells") must be used if more space is required.
 
 ```func
 {-
     If we want to send a message with really long comment, we should split the comment to several slices.
-    Each slice should have <1023 bits of data (127 chars).
+    Each cell can store up to 1023 bits (about 127 ASCII characters).
     Each slice should have a reference to the next one, forming a snake-like structure.
 -}
 
@@ -1075,7 +1075,7 @@ cell msg = begin_cell()
     .store_uint(0x18, 6) ;; flags
     ;; We use literal `a` to get valid address inside slice from string containing address 
     .store_slice("EQBIhPuWmjT7fP-VomuTWseE8JNWv2q7QYfsVQ1IZwnMk8wL"a) ;; destination address
-    .store_coins(100) ;; amount of nanoTons to send
+    .store_coins(100) ;; amount of nanotons to send
     .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1) ;; default message headers (see sending messages page)
     .store_uint(1, 1) ;; we want to store body as a ref
     .store_ref(body)
@@ -1219,7 +1219,7 @@ while (flag) {
 - [`dict_get_next?()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_get_next)
 - [`dict_set()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_set)
 
-### How to delete value from dictionaries
+### How to delete a value from a dictionary.
 
 ```func
 cell names = new_dict();
