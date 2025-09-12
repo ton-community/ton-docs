@@ -19,11 +19,11 @@ Before starting, ensure your system meets these requirements:
 #### Windows installation steps
 
 - Install Microsoft Visual C++ Redistributable 2015+ x64
-- Download the correct JAR file based on your system architecture:
+- Download the correct JAR file from the [MyLocalTon Releases page](https://github.com/neodix42/MyLocalTon/releases) based on your system architecture:
   - For x86-64 systems: `MyLocalTon-x86-64.jar`
-  - For ARM64 systems: `MyLocalTon-arm64.jar`
+  - For arm64 systems: `MyLocalTon-arm64.jar`
 
-#### Linux/MacOS Installation Steps
+#### Linux/macOS installation steps
 
 ```bash
 # For x86-64 systems
@@ -58,7 +58,7 @@ mvn clean package assembly:single
 After successful compilation, find your built artifacts in the `target` directory:
 
 - `MyLocalTon-x86_64.jar` for x86-64 systems
-- `MyLocalTon-arm64.jar` for ARM64 systems
+- `MyLocalTon-arm64.jar` for arm64 systems
 
 ### Basic operation
 
@@ -69,7 +69,7 @@ Launch MyLocalTon using Java:
 java -jar MyLocalTon-x86-64.jar
 
 # For ARM64 systems  
-java -jar MyLocalTon-arm64.jar`
+java -jar MyLocalTon-arm64.jar
 ```
 
 #### Command line options
@@ -79,18 +79,18 @@ MyLocalTon accepts several parameters to customize its operation:
 - `nogui`: Run without graphical interface
 - `ton-http-api`: Enable HTTP API functionality
 - `explorer`: Launch explorer interface
-- `ip.addr.xxx.xxx`: Set custom IP address
-- `with-validators-N`: Specify number of validators to start
-- `custom-binaries=absolute-path`: Use custom binaries
+- `ip.addr=<A.B.C.D>`: Set custom IP address
+- `with-validators=<N>`: Specify the number of validators to start
+- `custom-binaries=<absolute-path>`: Use custom binaries
 - `debug`: Enable debug mode
 
-For complete technical details, [see](https://github.com/neodix42/MyLocalTon?tab=readme-ov-file#parameters).
+For complete technical details, [see the full parameter list](https://github.com/neodix42/MyLocalTon?tab=readme-ov-file#parameters).
 
 MyLocalTon features a user-friendly interface:
-![](/img/docs/mylocalton.jpeg)
-![](/img/docs/mylocalton-demo.gif)
+![MyLocalTon UI screenshot](/img/docs/mylocalton.jpeg)
+![MyLocalTon demo animation](/img/docs/mylocalton-demo.gif)
 
-### Lite-client access setup
+### Lite client access setup
 
 MyLocalTon generates permanent private/public keys for secure lite-server and validator-engine-console connections:
 
@@ -131,58 +131,62 @@ Track MyLocalTon's operation through these log files:
    | ---------------- | ------------- | --------- |
    | Linux            | x86_64       | ✅         |
    | Linux            | arm64/aarch64 | ✅         |
-   | MacOS            | x86_64 (12+) | ✅         |
-   | MacOS            | arm64/aarch64 | ✅         |
-   | Windows          | x86_64.      | ✅         |
+   | macOS            | x86_64       | ✅         |
+   | macOS            | arm64/aarch64 | ✅         |
+   | Windows          | x86_64       | ✅         |
 
-2. MacOS users note
+2. macOS users note
 
    If you use MacPorts instead of Homebrew, execute these commands:
 
    ```bash
-   mkdir -p /usr/local/opt/readline/lib
-   ln -s /opt/local/lib/libreadline.8.dylib /usr/local/opt/readline/lib
+   sudo mkdir -p /usr/local/opt/readline/lib
+   sudo ln -s /opt/local/lib/libreadline.8.dylib /usr/local/opt/readline/lib
    ```
 
-3. Upgrade process :
+3. Upgrade process:
 
    Currently, upgrading requires these steps:
 
    - Download the latest version
-   - Replace the existing MyLocalTon file
-   - Remove the myLocalTon directory
+   - Replace the existing MyLocalTon JAR file
+   - Remove the `myLocalTon` directory
 
    Developers are planning to include direct upgrade functionality in future releases.
 
 4. HTTP API integration:
 
-   ```bash
-   # Linux Installation  
-   sudo  apt  install -y python3 
-   sudo  apt  install -y      
-   python3-pip pip3 install --user ton-http-api 
+  Linux/macOS:
 
-   # MacOS Installation  
-   brew install -q python3 
-   python3 -m ensurepip --upgrade
-   pip3 install --user ton-http-api 
+  ```bash
+  # Linux Installation  
+  sudo apt update && sudo apt install -y python3 python3-pip
+  pip3 install --user ton-http-api 
 
-   # Windows Installation  
-   wget https://www.python.org/ftp/python/3.12.0/python-3.12.0-amd64.exe    
-   python -m ensurepip --upgrade
-   start pip3 install -U ton-http-api`
-   ```
+  # MacOS Installation  
+  brew install -q python3 
+  python3 -m ensurepip --upgrade
+  pip3 install --user ton-http-api 
+  ```
+
+  Windows:
+
+  ```powershell
+  # Windows Installation  
+  winget install -e --id Python.Python.3
+  pip3 install -U ton-http-api
+  ```
 
 ### Important notice
 
 :::caution
-Developers currently classify MyLocalTon as alpha software, making it unsuitable for production environments. For containerized deployment, developers recommend using the  [dedicated Docker repository](https://github.com/neodix42/mylocalton-docker).
+Developers currently classify MyLocalTon as alpha software, making it unsuitable for production environments. For containerized deployment, developers recommend using the [dedicated Docker repository](https://github.com/neodix42/mylocalton-docker).
 :::
 
 ### Resources
 
-- [MyLocalTon binaries](https://github.com/neodiX42/MyLocalTon/releases)
+- [MyLocalTon binaries](https://github.com/neodix42/MyLocalTon/releases)
 
-- [MyLocalTon source code](https://github.com/neodiX42/MyLocalTon)
+- [MyLocalTon source code](https://github.com/neodix42/MyLocalTon)
 
 <Feedback />
