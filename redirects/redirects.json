@@ -93,11 +93,23 @@
     },
     {
         "from": "/develop/dapps/ton-connect/business",
-        "to": "/v3/guidelines/ton-connect/business/ton-connect-for-business"
+        "to": "/v3/guidelines/ton-connect/overview#why-use-ton-connect"
     },
     {
         "from": "/develop/dapps/ton-connect/security",
-        "to": "/v3/guidelines/ton-connect/business/ton-connect-for-security"
+        "to": "/v3/guidelines/ton-connect/overview#why-use-ton-connect"
+    },
+    {
+        "from": "/v3/guidelines/ton-connect/business/ton-connect-for-business",
+        "to": "/v3/guidelines/ton-connect/overview#why-use-ton-connect"
+    },
+    {
+        "from": "/v3/guidelines/ton-connect/business/ton-connect-for-security",
+        "to": "/v3/guidelines/ton-connect/overview#why-use-ton-connect"
+    },
+    {
+        "from": "/v3/guidelines/ton-connect/business/ton-connect-comparison",
+        "to": "/v3/guidelines/ton-connect/overview#why-use-ton-connect"
     },
     {
         "from": "/participate/run-nodes/archive-node",
