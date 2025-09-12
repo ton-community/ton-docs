@@ -22,6 +22,7 @@ module.exports = [
       'v3/concepts/dive-into-ton/ton-blockchain/accounts',
       'v3/concepts/dive-into-ton/ton-blockchain/addresses',
       'v3/concepts/dive-into-ton/ton-blockchain/smart-contracts',
+      'v3/concepts/dive-into-ton/ton-blockchain/operations',
       `v3/concepts/dive-into-ton/ton-blockchain/ton-virtual-machine`,
       'v3/concepts/dive-into-ton/ton-blockchain/cells',
       'v3/concepts/dive-into-ton/ton-blockchain/nodes',
