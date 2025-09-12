@@ -9,7 +9,7 @@ Once new versions are released, they will be announced on this page.
 1. The magic `lazy` keyword — lazy loading, partial loading, partial updating
 2. Auto-detect and inline functions at the compiler level
 3. Various peephole optimizations for gas efficiency
-4. `onInternalMessage` and `onBouncedMessage`, TVM 11 support
+4. `onInternalMessage` and `onBouncedMessage`, TVM‑11 support (new instructions; see [Tolk vs FunC: in detail](/v3/documentation/smart-contracts/tolk/tolk-vs-func/in-detail))
 5. Custom pack/unpack serializers for custom types
 
 
@@ -17,21 +17,21 @@ Once new versions are released, they will be announced on this page.
 
 1. Universal `createMessage`
 2. Universal `createExternalLogMessage`
-3. Sharding — calculate addresses "close to another contract"
+3. Sharding — calculate addresses 'close to' another contract.
 
 
 ## v0.13
 
 1. Auto-packing to/from cells/builders/slices
 2. Type `address`
-3. Lateinit variables
+3. `lateinit` variables
 4. Defaults for parameters
 
 
 ## v0.12
 
 1. Structures `struct A { ... }`
-2. Generics `struct<T>` and `type<T>`
+2. Generics `struct<T>`
 3. Methods `fun Point.getX(self)`
 4. Rename stdlib functions to short methods
 
@@ -50,7 +50,7 @@ Once new versions are released, they will be announced on this page.
 
 1. Fixed-width integers: `int32`, `uint64`, etc. [Details](https://github.com/ton-blockchain/ton/pull/1559)
 2. Type `coins` and function `ton("0.05")`
-3. `bytesN` and `bitsN` types (backed by slices at TVM level)
+3. `bytesN` and `bitsN` types (backed by slices at the TVM level)
 4. Replace `"..."c` postfixes with `stringCrc32("...")` functions
 5. Support `0b...` number literals along with `0x...`
 6. Trailing comma support
@@ -83,7 +83,7 @@ Once new versions are released, they will be announced on this page.
 
 ## v0.6
 
-The first public release. Here are some notes about its origin: 
+The first public release.
 
 
 ## A brief history of Tolk
@@ -95,7 +95,7 @@ FunC gave complete control over the TVM — and if you mastered it, it gave you 
 But its Lisp-like syntax and functional style made onboarding difficult for many.
 
 Tolk began as an experiment: to maintain efficiency while changing the interface.
-There are no parentheses and no prefix notation, just clean types, structs, pattern matching, and a modern toolchain.
+No Lisp-style prefix notation; familiar C-style syntax, with clean types, structs, pattern matching, and a modern toolchain.
 
 Since then, Tolk has grown far beyond just being **easier FunC**. It now offers:
 - a powerful type system,
@@ -103,19 +103,19 @@ Since then, Tolk has grown far beyond just being **easier FunC**. It now offers:
 - idiomatic message composition,
 - and better performance — not despite abstraction, but thanks to it.
 
-Today, Tolk is not an experiment — it's a production-ready replacement for FunC.
+Today, Tolk is not an experiment — it's a production-ready replacement for FunC (see [Is Tolk production-ready?](/v3/documentation/smart-contracts/tolk/overview#is-tolk-production-ready)).
 
 ## How Tolk was born
 
 In June 2024, I submitted a pull request: [FunC v0.5.0](https://github.com/ton-blockchain/ton/pull/1026) — along with a roadmap for how FunC could be improved, syntactically and semantically.
 
 But instead of merging it, we made a decision: **To fork**.
-To leave FunC untouched. As it is. As it always was. And to create a new language driven by a fresh and new name.
+To leave FunC untouched. As it is. As it always was. And to create a new language driven by a new name.
 
 Over the next several months, I worked on Tolk privately, implementing not just syntax changes,
 but a fully redesigned architecture — including an internal AST representation that FunC never had.
 
-On the TON Gateway in Dubai in November 2024, I gave a speech presenting Tolk to the public.
+At TON Gateway in Dubai in November 2024, I gave a speech presenting Tolk to the public.
 The video is available [on YouTube](https://www.youtube.com/watch?v=Frq-HUYGdbI).
 
 The very first pull request: [Tolk Language: next-generation FunC](https://github.com/ton-blockchain/ton/pull/1345).
@@ -128,15 +128,14 @@ The first released version of Tolk was **v0.6** — a metaphor for the **FunC v0
 
 In English, it sounds like *talk*. And after all, what do we use a language for? To talk. To talk to computers. 
 
-In all Slavic languages, the root *tolk* and the phrase *"to have tolk"* means "to make sense"; "to have deep internals".
+In many Slavic languages, the root *tolk* and the phrase "to have tolk" mean "to make sense"; "to have deep internals".
 
 But actually, **TOLK** is an abbreviation.  
-You know, that TON is **The Open Network**.  
+You know that TON is **The Open Network**.  
 By analogy, TOLK is **The Open Language K**.   
 
-What is K, you might ask? Maybe, it's *kot* — the nickname of Nikolay Durov? Or Kolya? Kitten? Kernel? Kit? Knowledge?  
+What is K, you might ask? Maybe it's *kot* — the nickname of Nikolay Durov? Or Kolya? Kitten? Kernel? Kit? Knowledge?  
 The correct answer is none of these. The K stands for nothing. It's open.
 *The Open Letter K*
 
 <Feedback />
-
