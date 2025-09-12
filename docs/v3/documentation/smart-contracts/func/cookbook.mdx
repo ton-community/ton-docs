@@ -264,7 +264,7 @@ else {
 ### How to determine if a tuple is empty
 
 When working with `tuples`, checking for existing values before extracting them is crucial. Extracting a value from an empty tuple will result in an error:
-["not a tuple of valid size" - `exit code 7`](/v3/documentation/tvm/tvm-exit-codes#7)
+["not a tuple of valid size" - `exit code 7`](/v3/documentation/tvm/exit-codes#7)
 
 ```func
 ;; Declare tlen function because it's not presented in stdlib
@@ -289,7 +289,7 @@ We are defining the `tlen` assembly function. You can find more details [here](/
 **References:**
 - [`empty_tuple()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib#empty_tuple)
 - [`tpush()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#tpush)
-- [`Exit codes` in docs](/v3/documentation/tvm/tvm-exit-codes)
+- [`Exit codes` in docs](/v3/documentation/tvm/exit-codes)
 
 ### How to determine if a lisp-style list is empty
 
@@ -711,6 +711,7 @@ throw(36); ;; the error will be triggered anyway
 - [Standard TVM exception codes](/v3/documentation/tvm/tvm-exit-codes)
 - [Throwing exceptions](/v3/documentation/smart-contracts/func/docs/builtins#throwing-exceptions)
 
+
 ### Reversing tuples
 Since tuples behave as stacks in FunC, sometimes we need to **reverse** them to access data from the opposite end.
 
@@ -928,7 +929,7 @@ This function creates an internal address corresponding to the `MsgAddressInt` T
     ;; then we can deploy new contract
 }
 ```
-**Note:** In this example, we use `workchain()` to retrieve the WorkChain ID. You can learn more about the WorkChain ID in [docs](/v3/documentation/smart-contracts/addresses#workchain-id).
+**Note:** In this example, we use `workchain()` to retrieve the WorkChain ID. You can learn more about the WorkChain ID in [docs](/v3/documentation/smart-contracts/addresses/address#workchain-id).
 
 **Reference:** [`cell_hash()` in docs](/v3/documentation/smart-contracts/func/docs/stdlib/#cell_hash)
 
