@@ -1,0 +1,47 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Addresses
+
+Every [account](/v3/concepts/dive-into-ton/ton-blockchain/accounts), including wallets and smart contracts, is represented by an address, used for all on-chain interactions.
+
+## Components
+
+A TON address is a composite identifier consisting of two main components:
+
+- **WorkChain ID**: identifies a specific WorkChain (for example, MasterChain is `-1`, and BaseChain is `0`).<br/>
+- **Account ID**: a unique identifier for a contract within its WorkChain.
+It is derived from the hash of the contract’s initial state, which includes the code and data.
+
+For detailed technical specifications, see the [Addresses documentation](/v3/documentation/smart-contracts/addresses/address).
+
+## Status
+
+Every address on the TON Blockchain exists in one of four statuses, reflecting its lifecycle and operational condition.
+
+Three of them are derived from its [account state](/v3/concepts/dive-into-ton/ton-blockchain/accounts#state):
+- `uninit`
+- `active`
+- `frozen`
+
+The fourth is `nonexist`, a special status used when the account does not exist at all.
+
+The status defines the account’s capabilities and is fundamental to transaction processing. Further details are available in the [address states documentation](/v3/documentation/smart-contracts/addresses/address-states).
+
+## Formats
+
+TON addresses are represented in two formats:
+
+-   **Raw format**: a direct representation of WorkChain ID and Account ID (e.g., `-1:fcb...260`). Intended for system-level use.
+-   **User-friendly format**: a base64-encoded version of the raw address that includes flags and a checksum. Designed for user interfaces, this format enhances security and prevents errors.
+
+These formats are not interchangeable. The user-friendly format includes critical metadata, such as the _bounceable flag_, which determines message-handling behavior for uninitialized accounts.
+
+A bounceable message sent to an address in `nonexist`, `uninit` or `frozen` status is returned to the sender. In contrast, a non-bounceable message will be credited to the account.
+
+For a detailed breakdown of address structures, encoding, and flags, refer to the [address formats documentation](/v3/documentation/smart-contracts/addresses/address-formats).
+
+## See also
+
+- [Smart contracts](/v3/concepts/dive-into-ton/ton-blockchain/smart-contracts)
+
+<Feedback />
