@@ -1,0 +1,32 @@
+# Operations
+
+On TON, an operation is a high-level process initiated by a user or system, such as transferring Jettons, purchasing an NFT, or deploying a smart contract. From a product or business perspective, it represents **what is happening on-chain**.
+
+Under the hood, each operation consists of smaller technical units — _transactions, actions, traces, and events_ — which capture the exact sequence of state changes and message flows. The sections below break down these building blocks.
+
+## Transaction
+
+A transaction in TON is a **record** of a state change caused by an inbound message. Each delivered message results in a transaction, which records the entire context: the triggering message, state updates, and any generated outbound messages.
+
+A transaction always belongs to **one account**. If multiple accounts are involved (e.g., TON transfer), each of them has its own transaction.
+
+## Action
+
+An action is a **subset of one or more transactions** that represents a single, human-understandable operation. Examples include a TON transfer, a jetton transfer, or a jetton swap.
+
+## Trace
+
+A trace is a **directed acyclic graph (DAG)** where _transactions are nodes_ and _messages are edges_ connecting them, representing the complete sequence of account state changes triggered by a single external message.
+
+A trace identifies actions within this graph, grouping related transactions into human-understandable operations. This provides developers with both the low-level transaction flow and the higher-level actions resulting from a single external input.
+
+## Event
+
+An event is a representation of blockchain changes derived from a single trace. It provides a **user-** and **API-friendly** view of the resulting state changes, classifying them as a TON transfer, a Jetton transfer, or a swap.
+
+
+
+
+TODO:
+
+add graph
