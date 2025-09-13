@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # ADNL API
 
-[ADNL](/v3/documentation/network/protocols/adnl/overview) is TON’s peer-to-peer protocol for direct communication with nodes. Unlike HTTP APIs, it gives developers verifiable, low-level access to blockchain data and transaction submission.
+[ADNL]((/v3/documentation/network/protocols/adnl/overview)) is TON’s peer-to-peer protocol for direct communication with nodes. Unlike HTTP APIs, it gives developers verifiable, low-level access to blockchain data and transaction submission.
 
 Clients connect directly to lite servers (nodes) using a binary protocol.
 
@@ -10,7 +10,7 @@ The client downloads key blocks, the current state of an account, and their Merk
 
 For read operations (such as [get-method](/v3/guidelines/smart-contracts/get-methods) calls), the client launches a local TVM with a downloaded and verified state. There's no need to download the full blockchain state—the client only retrieves what’s required for the operation.
 
-Read more about [Merkle proofs](/v3/documentation/dapps/proofs) in the TON Whitepaper (sections 2.3.10 and 2.3.11): https://docs.ton.org/ton.pdf
+Read more about [Merkle proofs](/v3/documentation/data-formats/tlb/proofs) in the TON Whitepaper (sections 2.3.10 and 2.3.11): https://docs.ton.org/ton.pdf
 
 ## Pros & cons
 

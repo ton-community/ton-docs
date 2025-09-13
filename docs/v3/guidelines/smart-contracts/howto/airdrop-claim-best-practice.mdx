@@ -71,7 +71,7 @@ To build a fundamental understanding, refer to [wallet creation for different sh
 
 #### Distributor address
 
-We have full control over the distributor's data and can place it in any shard. How? Remember, the contract address is [defined by its state](/v3/documentation/smart-contracts/addresses#account-id). We can use one of the contract's data fields as a nonce and keep trying until we achieve the desired result. A good example of a nonce in actual contracts is the `subwalletId` or `publicKey` for a wallet contract. Any field that can be modified after deployment or doesn't impact the contract logic (like `subwalletId`) will work. You could even create an unused field explicitly for this purpose, as demonstrated by [vanity-contract](https://github.com/ton-community/vanity-contract).
+We have full control over the distributor's data and can place it in any shard. How? Remember, the contract address is [defined by its state](/v3/documentation/smart-contracts/addresses/address#account-id). We can use one of the contract's data fields as a nonce and keep trying until we achieve the desired result. A good example of a nonce in actual contracts is the `subwalletId` or `publicKey` for a wallet contract. Any field that can be modified after deployment or doesn't impact the contract logic (like `subwalletId`) will work. You could even create an unused field explicitly for this purpose, as demonstrated by [vanity-contract](https://github.com/ton-community/vanity-contract).
 
 #### Distributor jetton wallet
 
@@ -87,7 +87,7 @@ _ amount:Coins start_from:uint48 expired_at:uint48 = AirdropItem;
 _ _(HashMap 267 AirdropItem) = Airdrop;
 ```
 
-In this case, the address distribution is random, and all data fields are meaningful, making it unreliable. However, nothing stops us from modifying it like this:
+In this case, the address distribution is random, and all data fields are meaningful, making it untunable. However, nothing stops us from modifying it like this:
 
 ```
 _ amount:Coins start_from:uint48 expired_at:uint48 nonce:uint64 = AirdropItem;

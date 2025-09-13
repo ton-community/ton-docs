@@ -43,7 +43,7 @@ Nodes can only monitor an entire group of shards at once. For instance, a node c
 It is guaranteed that shards from different groups will not merge. This ensures that a monitored shard will not unexpectedly merge with a non-monitored shard.
 
 :::note
-Current value of `monitor_min_split` in Mainnet is `0`, which means that all shards are in one group. The actual value can always be checked in [Config param 12](/v3/documentation/network/config-params/overview#param-12).
+Current value of `monitor_min_split` in Mainnet is `0`, which means that all shards are in one group. The actual value can always be checked in [Config param 12](/v3/documentation/network/configs/blockchain-configs#param-12).
 :::
 
 ## Node configuration
@@ -201,7 +201,7 @@ Alternatively, you can launch a partial node that monitors and collates only a s
 #### Notes:
 
 - A collator node generates blocks automatically, even without requests from validators.
-- A collator node configured to generate blocks for a specific shard does not need to monitor other shards. However, it does require access to outbound message queues from neighboring shard states for collation. This is accomplished by downloading these message queues from other nodes that monitor the relevant shards.
+- A collator node configured to generate blocks for a specific shard does not need to monitor other shards. However, it does require access to outbound message queues from neighbouring shard states for collation. This is accomplished by downloading these message queues from other nodes that monitor the relevant shards.
 
 ## Configuring a validator
 

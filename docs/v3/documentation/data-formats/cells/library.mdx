@@ -39,7 +39,7 @@ Opening a library cell incurs the exact computational cost of opening an ordinar
 
 **Nested library cells**
 
-It is possible to create a library cell that references another library cell, which in turn references another, and so on. However, attempting to parse such nested structures directly using `.begin_parse()` will raise an exception. Instead, nested library references can be unwrapped step-by-step using the [`XLOAD`](/v3/documentation/tvm/overview) opcode.
+It is possible to create a library cell that references another library cell, which in turn references another, and so on. However, attempting to parse such nested structures directly using `.begin_parse()` will raise an exception. Instead, nested library references can be unwrapped step-by-step using the [`XLOAD`](/v3/documentation/tvm/tvm-overview) opcode.
 
 **Immutability**
 
@@ -75,7 +75,7 @@ For example, see a Fift assembly construction in [order_code.func](https://githu
 
 ```fift
 ;; https://docs.ton.org/tvm.pdf, page 30
-;; Library reference cell — always has level 0 and contains 8+256 data bits, including its 8-bit type integer 2.
+;; Library reference cell — always has level 0 and contains 8+256 data bits, including its 8-bit type integer 2.  
 ;; The representation hash Hash(c) of the library cell being referred to. When loaded, a library.
 ;; If found in the current library context, the reference cell may be transparently replaced by the cell it refers to.
 
@@ -128,11 +128,11 @@ When working with a `jetton-wallet`, where the code is stored in a library cell,
 - Finding the cell with that hash in the MasterChain's library collection
 - Executing the code from there
 
-With the **liteserver** (LS), all these processes happen automatically behind the scenes, and users needn’t be concerned with the specific method of code storage.
+In Layered Solutions (LS), all these processes happen automatically behind the scenes, and users needn’t be concerned with the specific method of code storage.
 
 However, the process differs when working locally. For example, when using an explorer or wallet, you might examine the account state to determine its type, such as whether it's an NFT, wallet, token, or auction.
 
-You can review regular contracts' available get methods, the contract interface, to understand how they work. Alternatively, you may "steal" the account state to your local pseudo-net and execute methods there.
+You can review regular contracts' available get methods, the contract interface, to understand how they work. Alternatively, you may "steal" the account state to your local pseudonet and execute methods there.
 
 This approach is not feasible for a library cell because it does not store data on its own. Instead, you must manually detect and retrieve the necessary cells from the context. This can be done using LS, though bindings do not yet support this, or via DTon.
 
@@ -165,7 +165,7 @@ as well as a list of libraries for a specific MasterChain block:
 
 ## See also
 
-- [Exotic cells](/v3/documentation/data-formats/cells/exotic)
-- [TVM instructions](/v3/documentation/tvm/overview)
+- [Exotic cells](/v3/documentation/data-formats/tlb/exotic-cells)
+- [TVM instructions](/v3/documentation/tvm/tvm-overview)
 
 <Feedback />

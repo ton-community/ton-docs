@@ -135,7 +135,7 @@ x{00} @Defop NOP
 ```
 > Asm.fif (lines in reverse order)
 
-### How `@Defop` works
+### How @Defop works
 `@Defop` checks available space for the opcode using `@havebitrefs`. If space is insufficient, it writes to another builder via `@|` (implicit jump). 
 
 Prefer `x{A988} @addop` instead of `x{A988} s,` when space may be limited.

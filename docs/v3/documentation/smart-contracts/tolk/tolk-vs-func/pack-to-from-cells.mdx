@@ -461,7 +461,7 @@ Internally, a cell is unpacked to a slice, and that slice is parsed (c.beginPars
 var msg = CounterIncrement.fromSlice(cs);
 ```
 
-All fields are read from a slice immediately. If a slice is corrupted, an exception is thrown (most likely, exit code 9 "cell underflow"). Note, that a passed slice is NOT mutated, its internal pointer is NOT shifted. If you need to mutate it, like `cs.loadInt()`, consider calling `cs.loadAny<Increment>()`.
+All fields are read from a slice immediately. If a slice is corrupted, an exception is thrown (most likely, excode 9 "cell underflow"). Note, that a passed slice is NOT mutated, its internal pointer is NOT shifted. If you need to mutate it, like `cs.loadInt()`, consider calling `cs.loadAny<Increment>()`.
 
 3. `slice.loadAny<T>` — parse anything from a slice, shifting its internal pointer. Similar to `slice.loadUint()` and others, but allows loading structures. Example:
 

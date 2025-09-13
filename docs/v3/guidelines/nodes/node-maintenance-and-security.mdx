@@ -130,7 +130,7 @@ We will utilize the **[ufw](https://help.ubuntu.com/community/UFW)** firewall in
 
 As a node operator, you need to retain full control and access to the machine. To do this, you need at least one fixed IP address or range.
 
-We also advise you to set up a small `jumpstation` VPS with a fixed IP Address that can be used to access your locked-down machine(s) if you do not have a fixed IP at your home or office or to add an alternative way to access secured machines should you lose your primary IP address.
+We also advise you to set up a small **jumpstation** VPS with a fixed IP Address that can be used to access your locked-down machine(s) if you do not have a fixed IP at your home or office or to add an alternative way to access secured machines should you lose your primary IP address.
 
 #### Install ufw and jq
 
@@ -164,7 +164,7 @@ Repeat the above command for each management network/address.
 sudo  ufw  allow  proto  udp  from  any  to  any  port  `sudo jq -r '.addrs[0].port' /var/ton-work/db/config.json`
 ```
 
-#### Double-check your management networks {#doublecheck-your-management-networks}
+#### Doublecheck your management networks
 
 :::caution important
 **Before enabling a firewall,  double-check that you added the correct management addresses!**

@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Sending messages
 
-Composition, parsing, and sending messages lie at the intersection of [TL-B schemas](/v3/documentation/data-formats/tlb/overview), [transaction phases, and TVM](/v3/documentation/tvm/overview).
+Composition, parsing, and sending messages lie at the intersection of [TL-B schemas](/v3/documentation/data-formats/tlb/overviewe), [transaction phases, and TVM](/v3/documentation/tvm/overview).
 
 Indeed, FunC exposes the [send_raw_message](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) function which expects a serialized message as an argument.
 
@@ -163,7 +163,7 @@ The entire scheme of the message layout and the layout of all constituting field
 ## Message size
 
 :::info cell size
-Note that any [Cell](/v3/concepts/dive-into-ton/ton-blockchain/cells) may contain up to `1023` bits. If you need to store more data, you should split it into chunks and store it in reference cells.
+Note that any [Cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) may contain up to `1023` bits. If you need to store more data, you should split it into chunks and store it in reference cells.
 :::
 
 For example, if your message body is 900 bits long, you can't store it in the same cell as the message header. Including the message header fields would make the total cell size exceed 1023 bits, triggering a `cell overflow` exception during serialization.

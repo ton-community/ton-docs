@@ -65,16 +65,16 @@ In the TON blockchain, a **message** is the fundamental unit of interaction betw
   While external-in and internal messages fulfill a similar role from the actor’s perspective, each actor may handle them differently. Some may process them normally, while others might completely ignore messages from the outside world — like someone who refuses to open letters from strangers.
 </details>
 
-#### Message structure: TL-B
+#### Message schema (TL-B)
 
 Now, let’s look at the data contained in the messages. TON distinguishes between external and internal messages, both of which are capable of carrying data.
 
-In TON, all data is represented using **cells**.
-To serialize data into a cell, TON relies on a well-established standard called **TL-B** (Type Language – Binary).
+In TON, this data is represented using **cells**, and **TL-B schemas** define how it is serialized into these cells.
+
 
 ## Native message structure
 
-In TON, all messages adhere to a unified schema that defines their structure and serialization.
+All messages adhere to a unified schema that defines their structure and serialization:
 
 ```tlb
 message$_ {X:Type} info:CommonMsgInfo
@@ -166,15 +166,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
 ```
 
 :::info How to use examples with Blueprint
-
-1. Prepare a wallet application (e.g., Tonkeeper) that you’ll use to send the external message
-2. Install the Blueprint project locally:
-   `npm create ton@latest`
-3. Add the provided script to your Blueprint project under the `scripts` directory, for example:
-   `blueprintproject/scripts/yourscript.ts`
-4. Run the script with the command:
-   `npx blueprint run yourscript`
-
+Prepare a wallet application (e.g., Tonkeeper) that you’ll use to send the external message and set up a Blueprint project locally by following the [setup instructions](/v3/guidelines/quick-start/developing-smart-contracts/setup-environment).
 :::
 
 ### Internal messages
@@ -280,7 +272,7 @@ Smart contracts, in turn, must:
 
 You can run the following script in Blueprint to compare the differences between bounceable and non-bounceable messages visually.
 
-Use one of the methods below to run the script:
+Use one of the methods below to run the script (examples use wallet V4R2, a widely adopted version):
 
 #### Option 1: using environment variables on the command line
 
@@ -305,7 +297,7 @@ Then run:
 npx blueprint run sendBounceableMessages --testnet --mnemonic
 ```
 
-**Note**: TON Connect (e.g., the `--tonconnect` flag) cannot be used here because wallet extensions like Tonkeeper do not allow DApps to control the `bounce` flag for security reasons. Wallets typically send bounceable messages by default, but the final behavior depends on the address format (e.g., a `UQ…` address results in a non-bounceable message). To maintain this flag, you need to create and sign the message manually using a mnemonic.
+**Note**: [TON Connect](/v3/guidelines/ton-connect/overview) (e.g., the `--tonconnect` flag) cannot be used here because wallet extensions like Tonkeeper do not allow DApps to control the `bounce` flag for security reasons. Wallets typically send bounceable messages by default, but the final behavior depends on the address format (e.g., a `UQ…` address results in a non-bounceable message). To maintain this flag, you need to create and sign the message manually using a mnemonic.
 
 <details>
   <summary> Send bounceable message </summary>
@@ -456,7 +448,7 @@ const messageBody = beginCell()
 
 ```
 
-A pre-configured example is available for testing the sending process.
+A preconfigured example is available for testing the sending process.
 To run it, you need to specify the wallet address and the NFT contract address.
 
 ```ts title="nft.ts"
@@ -493,7 +485,8 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
 ### Internal message serializer according to contract code
 
-Suppose you need to compose a message for a smart contract. As an example, we'll use the Jetton wallet and wallet V3 contracts.
+Suppose you need to compose a message for a smart contract. As an example, we'll use the Jetton wallet and wallet V3 contracts, with V3 highlighted as a standard version often used in examples for its straightforward structure.
+
 There are two types of receiving functions commonly used:
 
 1. [() recv_internal(cell in_msg_full, slice in_msg_body) impure](https://github.com/ton-blockchain/jetton-contract/blob/3d24b419f2ce49c09abf6b8703998187fe358ec9/contracts/jetton-wallet.fc#L187)
@@ -797,7 +790,7 @@ In this case, the service doesn't use its own private key to sign an external me
 
 In this approach, the service doesn't sign messages, but rather its users do.
 
-Example:NFT market DApp - NFT sale.
+Example: NFT market DApp - NFT sale.
 
 ### For backend
 
@@ -810,7 +803,7 @@ The service sends external messages signed by its own private key.
 
 In this approach, the service signs its external messages without the involvement of a third party.
 
-Example:Centralized exchange - deposit and withdrawals.
+Example: Centralized exchange - deposit and withdrawals.
 
 ## Next step
 
