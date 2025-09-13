@@ -258,6 +258,7 @@
     "nmon",
     "nonexist",
     "nonfinal",
+    "permissionless",
     "penalising",
     "penalised",
     "pfxdict",
@@ -360,7 +361,8 @@
     "liteserver",
     "mytonctrl",
     "mytoncore",
-    "unexist"
+    "unexist",
+    "walletv"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",
