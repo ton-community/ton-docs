@@ -24,14 +24,13 @@ const address: Address = await tonweb.dns.resolve('test.ton', TonWeb.dns.DNS_CAT
 
 Also, lite-client and tonlib-cli support DNS queries.
 
-## Top-level domains (TLD)
+## First-level domain
 
-TON DNS currently supports `.ton` and `.t.me` domains.
+Only domains ending in `.ton` are currently recognized as valid TON DNS domains.
 
 You can view the root DNS smart contract source code [here](https://github.com/ton-blockchain/dns-contract/blob/main/func/root-dns.fc).
 
-This may change in the future. Adding a new top-level domain would require deploying a new root DNS smart contract and a validator vote to update the [network config #4](/v3/documentation/network/configs/blockchain-configs#param-4) (see also [tonviewer](https://tonviewer.com/config#4)).
-
+This may change in the future. Adding a new top-level domain would require deploying a new root DNS smart contract and a community vote to update the [network config #4](https://tonviewer.com/config#4).
 
 ## .ton domains
 
@@ -39,7 +38,7 @@ This may change in the future. Adding a new top-level domain would require deplo
 
 The source code for `.ton` domains is available [here](https://github.com/ton-blockchain/dns-contract).
 
-The `.ton` DNS collection contract acts as an NFT collection, while each `.ton` domain is an NFT item.
+The `.ton` domain resolver acts as an NFT collection, while each individual `.ton` domain functions as an NFT item.
 
 Primary sales of `.ton` domains occur through a decentralized open auction at [dns.ton.org](https://dns.ton.org). The auction's source code can be found [here](https://github.com/ton-blockchain/dns).
 
