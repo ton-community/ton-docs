@@ -86,7 +86,7 @@ Each opcode consumes 26 gas, except for `PREVMCBLOCKS` and `PREVKEYBLOCK`, which
 | `PREVBLOCKSINFOTUPLE` | _`- t`_           | Retrieves `PrevBlocksInfo`: `[last_mc_blocks, prev_key_block]` from `c7`. |
 | `PREVMCBLOCKS` | _`- t`_           | Retrieves only `last_mc_blocks`.                                          |
 | `PREVKEYBLOCK` | _`- t`_           | Retrieves only `prev_key_block`.                                          |
-| `GLOBALID` | _`- i`_           | Retrieves `global_id` from ConfigParam 19.                        |
+| `GLOBALID` | _`- i`_           | Retrieves `global_id` from network config **19**.                        |
 
 ## Gas
 
@@ -94,7 +94,7 @@ Each opcode consumes 26 gas, except for `PREVMCBLOCKS` and `PREVKEYBLOCK`, which
 |:-|:-----------------|:--------------------------------------------------------------------------------------------|
 | `GASCONSUMED` | _`- g_c`_        | Returns the total gas consumed by the VM so far, including this instruction.<br/>_26 gas_. |
 
-## Arithmetic
+## Arithmetics
 New variants of [the division opcode](/v3/documentation/tvm/instructions) `A9mscdf` have been introduced.
 
 New `d=0` variant:
@@ -128,7 +128,7 @@ Gas cost is determined as 10 plus the opcode length:
 | `MULADDDIVMODC`                      | _`x y w z - q=ceil((xy+w)/z) r=(xy+w)-zq`_               |
 | `ADDDIVMOD`                          | _`x w z - q=floor((x+w)/z) r=(x+w)-zq`_                  |
 | `ADDDIVMODR`                         | _`x w z - q=round((x+w)/z) r=(x+w)-zq`_                  |
-| `ADDDIVMODC`                         | _`x w z - q=ceil((x+w)/z) r=(x+w)-zq`_                   |
+| `ADDDIVMODC`                         | _`x w y - q=ceil((x+w)/z) r=(x+w)-zq`_                  |
 | `ADDRSHIFTMOD`                       | _`x w z - q=floor((x+w)/2^z) r=(x+w)-q*2^z`_             |
 | `ADDRSHIFTMODR`                      | _`x w z - q=round((x+w)/2^z) r=(x+w)-q*2^z`_             |
 | `ADDRSHIFTMODC`                      | _`x w z - q=ceil((x+w)/2^z) r=(x+w)-q*2^z`_              |
@@ -166,7 +166,7 @@ The argument limits for the following operations have been removed:
 **Gas cost adjustments for large arguments**
 
 Certain operations now consume additional gas when arguments exceed 255:
-- `ROLL`, `ROLLREV`, `REVX`, `ONLYTOPX`: additional gas cost is calculated as: `max(arg-255,0)`. _For arguments ≤ 255, gas consumption remains unchanged_.
+- `ROLL`, `ROLLREV`, `REVX`, `ONLYTOPX`: additional gas cost is calculated as: `max(arg−255,0)`. _For arguments ≤ 255, gas consumption remains unchanged_.
 
 - `BLKSWX`: additional gas cost is determined by: `max(arg1+arg2-255,0)`. _This differs from previous behavior, where both arguments were limited to 255_.
 
@@ -216,7 +216,7 @@ If `[A]` is not enabled, the result is returned as an unsigned integer if it fit
 
 
 ## Crypto
-Before this upgrade, the only cryptographic algorithm available was `CHKSIGNS`/`CHKSIGNU`: it checks the `Ed25519`-signature of a hash `h` for a public key `k`.
+Currently, the only cryptographic algorithm available is `CHKSIGN`: it checks the `Ed25519`-signature of a hash `h` for a public key `k`.
 - For compatibility with previous generation blockchains such as Bitcoin and Ethereum, we must also check `secp256k1` signatures.
 - For modern cryptographic algorithms, the bare minimum includes curve addition and multiplication.
 - For compatibility with Ethereum 2.0 PoS and some other modern cryptography, we need the BLS-signature scheme on the `bls12-381` curve.
@@ -229,10 +229,10 @@ Used for Bitcoin/Ethereum signatures. This implementation uses the [libsecp256k1
 
 | Fift syntax | Stack | Description                                                                                                                                                                                                                                                                                                                                  |
 |:-|:-|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `ECRECOVER` | _`hash v r s - 0 or h x1 x2 -1`_ | Recovers the public key from the signature, similar to Bitcoin/Ethereum operations. Inputs are a 32-byte hash, a 1-byte recovery id `v`, and 256-bit integers `r` and `s`; returns header byte `h` and 256-bit coordinates `x1` and `x2` (65 bytes total). Returns `0` on failure or the public key and `-1` on success. <br/>_1526 gas_ |
+| `ECRECOVER` | _`hash v r s - 0 or h x1 x2 -1`_ | Recovers the public key from the signature, similar to Bitcoin/Ethereum operations. It takes a 32-byte hash as uint256 `hash`, a 65-byte signature as uint8 `v`, and uint256 `r` and `s`. Returns `0` on failure or the public key and `-1` on success. The 65-byte public key is returned as uint8 `h`, uint256 `x1`, `x2`. <br/>_1526 gas_ |
 
 ### secp256r1
-Uses OpenSSL implementation. The interface is similar to `CHKSIGNS`/`CHKSIGNU`.
+Uses OpenSSL implementation. The interface is similar to `CHKSIGNS`/`CHKSIGNU`. It is compatible with Apple Secure Enclave.
 
 
 
@@ -266,7 +266,7 @@ The implementation is based on [libsodium](https://github.com/jedisct1/libsodium
 | `RIST255_SUB` | _`x y - x-y`_ | Subtracts one curve point from another. <br/>_626 gas_                                                        |
 | `RIST255_MUL` | _`x n - x*n`_ | Multiplies a curve point `x` by a scalar `n`.<br/>Any `n` is valid, including negative.<br/>_2026 gas_.       |
 | `RIST255_MULBASE` | _`n - g*n`_ | Multiplies the generator point `g` by a scalar `n`.<br/>Any `n` is valid, including negative.<br/>_776 gas_   |
-| `RIST255_PUSHL` | _`- l`_ | Pushes the integer `l=2^252+27742317777372353535851937790883648493`, which is the group’s order.<br/>_26 gas_ |
+| `RIST255_PUSHL` | _`- l`_ | Pushes the integer `l=2^252+27742317777372353535851937790883648493`, which is the group`s order.<br/>_26 gas_ |
 | `RIST255_QVALIDATE` | _`x - 0 or -1`_ | Quiet version of `RIST255_VALIDATE`.<br/>_234 gas_.                                                           |
 | `RIST255_QADD` | _`x y - 0 or x+y -1`_ | Quiet version of `RIST255_ADD`. <br/>_634 gas_.                                                               |
 | `RIST255_QSUB` | _`x y - 0 or x-y -1`_ | Quiet version of `RIST255_SUB`.<br/>_634 gas_.                                                                |
@@ -281,7 +281,7 @@ BLS values are represented in TVM in the following way:
 - G2-points and signatures: 96-byte slice.
 - Elements of field FP: 48-byte slice.
 - Elements of field FP2: 96-byte slice.
-- Messages: slice; the bit length must be divisible by 8.
+- Messages: slice. Several bits should be divisible by 8.
 
 **Handling input sizes**
 - If an input point or field element exceeds 48/96 bytes, only the first 48/96 bytes are considered.
@@ -293,9 +293,9 @@ These high-level operations are designed to verify BLS signatures efficiently.
 | Fift syntax | Stack                                      | Description                                                                                                                                                                             |
 |:-|:-------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `BLS_VERIFY` | _`pk msg sgn - bool`_                      | Checks a BLS signature. It returns true if valid, false otherwise.<br/>_61034 gas_.                                                                                                     |
-| `BLS_AGGREGATE` | _`sig_1 ... sig_n n - sig`_                | Aggregates signatures. `n>0`. Throws an exception if `n=0` or if any `sig_i` is invalid.<br/>_`gas=n*4350-2616`_.                                                                       |
-| `BLS_FASTAGGREGATEVERIFY` | _`pk_1 ... pk_n n msg sig - bool`_         | Checks an aggregated BLS signature for keys `pk_1...pk_n` and a message `msg`. It returns false if `n=0`.<br/>_`gas=58034+n*3000`_.                                                      |
-| `BLS_AGGREGATEVERIFY` | _`pk_1 msg_1 ... pk_n msg_n n sgn - bool`_ | Checks an aggregated BLS signature for multiple key-message pairs `pk_1 msg_1...pk_n msg_n`. Returns true if valid, false otherwise. Returns false if `n=0`.<br/>_`gas=38534+n*22500`_ |
+| `BLS_AGGREGATE` | _`sig_1 ... sig_n n - sig`_                | Aggregates signatures. `n>0`. Throws an exception if `n=0` or if any `sig_i` is invalid. <br/>_`gas=n*4350-2616`_.                                                                       |
+| `BLS_FASTAGGREGATEVERIFY`- | _`pk_1 ... pk_n n msg sig - bool`_         | Checks an aggregated BLS signature for keys `pk_1...pk_n` and a message `msg`. It returns false if `n=0`. <br/>_`gas=58034+n*3000`_.                                                      |
+| `BLS_AGGREGATEVERIFY` | _`pk_1 msg_1 ... pk_n msg_n n sgn - bool`_ | Checks an aggregated BLS signature for multiple key-message pairs `pk_1 msg_1...pk_n msg_n`. Returns true if valid, false otherwise. Returns false if `n=0`. <br/>_`gas=38534+n*22500`_ |
 
 
 `VERIFY` instructions
@@ -326,7 +326,7 @@ These operations perform arithmetic computations on group elements.
 | `BLS_MAP_TO_G2` | _`f - x`_ | Converts an FP2 element `f` to a G2 point.<br/>_7984 gas_.                                                                                                                                                                       |
 | `BLS_G2_INGROUP` | _`x - bool`_ | Checks whether the slice `x` represents a valid element of G2.<br/>_4284 gas_.                                                                                                                                                   |
 | `BLS_G2_ISZERO` | _`x - bool`_ | Checks if G2 point `x` is equal to zero.<br/>_34 gas_.                                                                                                                                                                           |
-| `BLS_PAIRING` | _`x_1 y_1 ... x_n y_n n - bool`_ | Given G1 points `x_i` and G2 points `y_i`, calculates the product of the pairings of `x_i` and `y_i`. Returns true if the result is the multiplicative identity in FP12, false otherwise. Returns false if `n=0`.<br/>_`gas=20034+n*11800`_. |
+| `BLS_PAIRING` | _`x_1 y_1 ... x_n y_n n - bool`_ | Given G1 points `x_i` and G2 points `y_i`, calculates and multiply pairings of `x_i,y_i`. Returns true if the result is the multiplicative identity in FP12, false otherwise. Returns false if `n=0`.<br/>_`gas=20034+n*11800`_. |
 | `BLS_PUSHR` | _`- r`_ | Pushes the order of G1 and G2, approximately `2^255`.<br/>_34 gas_.                                                                                                                                                              |
 
 
@@ -344,14 +344,14 @@ The `RUNVM` instruction creates an isolated VM instance, allowing code execution
 
 | Fift syntax | Stack | Description                                                                                                                                                                                                                                                                                                                                                                                                          |
 |:-|:-|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `flags RUNVM` | _`x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] - x'_1 ... x'_m exit_code [data'] [c4'] [c5] [g_c]`_ | Executes a child VM with the given `code` and stack values `x_1 ... x_n`. Returns the modified stack `x'_1 ... x'_m` along with an exit code. <br/> Flags determine other arguments and return values. See details below.|
-| `RUNVMX` | _`x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] flags - x'_1 ... x'_m exit_code [data'] [c4'] [c5] [g_c]`_ | It is the same as `RUNVM` but retrieves flags from the stack.                                                                                                                                                                                                                                                                                                                                                        |
+| `flags RUNVM` | _`x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] - x'_1 ... x'_m exitcode [data'] [c4'] [c5] [g_c]`_ | Executes a child VM with the given `code` and stack values `x_1 ... x_n`. Returns the modified stack `x'_1 ... x'_m` along with an exit code. <br/> Flags determine other arguments and return values. See details below.|
+| `RUNVMX` | _`x_1 ... x_n n code [r] [c4] [c7] [g_l] [g_m] flags - x'_1 ... x'_m exitcode [data'] [c4'] [c5] [g_c]`_ | It is the same as `RUNVM` but retrieves flags from the stack.                                                                                                                                                                                                                                                                                                                                                        |
 
 
 Flags operate similarly to `RUNVMX` in Fift:
 
 - `+1`: sets `c3` to code.
-- `+2`: pushes an implicit `0` before executing the code (only when `+1` is also set).
+- `+2`: pushes an implicit `0` before executing the code.
 - `+4`: takes persistent data `c4` from the stack and returns its final value.
 - `+8`: takes the gas limit `g_l` from the stack and returns the consumed gas `g_c`.
 - `+16`: takes `c7` (smart contract context) from the stack.
