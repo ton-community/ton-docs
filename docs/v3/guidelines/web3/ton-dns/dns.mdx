@@ -20,7 +20,7 @@ const address: Address = await tonweb.dns.getWalletAddress('test.ton');
 const address: Address = await tonweb.dns.resolve('test.ton', TonWeb.dns.DNS_CATEGORY_WALLET);
 ```
 
-Also, `lite-client` and `tonlib-cli` are supported by DNS queries..
+Also, `lite-client` and `tonlib-cli` are supported by DNS queries.
 
 ## First-level domain
 
@@ -39,8 +39,6 @@ The source code for `.ton` domains is available [here](https://github.com/ton-bl
 The `.ton` domain resolver acts as an NFT collection, while each individual `.ton` domain functions as an NFT item.
 
 Primary sales of `.ton` domains occur through a decentralized open auction at [dns.ton.org](https://dns.ton.org). The auction's source code can be found [here](https://github.com/ton-blockchain/dns).
-
-
 
 ## Subdomains
 Domain owners can create subdomains by setting the smart contract address responsible for subdomain resolution in the DNS record using the key `sha256("dns_next_resolver")`.
