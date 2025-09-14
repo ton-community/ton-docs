@@ -326,8 +326,8 @@ fun third<X>(t: tuple): X
     asm "THIRD"
 
 @pure
-fun iDictDeleteGet(dict: cell, keyLen: int, index: int): (cell, slice, int)
-    asm(index dict keyLen) "DICTIDELGET NULLSWAPIFNOT"
+fun builder.storeSlice(mutate self, s: slice): self
+    asm(s self) "STSLICE"
 
 @pure
 fun mulDivFloor(x: int, y: int, z: int): int
@@ -1226,11 +1226,11 @@ All names in the standard library were reconsidered. Now, functions are called u
   <tbody>
     <tr>
       <td>
-        <code dangerouslySetInnerHTML={{__html: 'cur_lt()<br>car(l)<br>get_balance().pair_first()<br>raw_reserve(count)<br>dict~idict_add?(...)<br>dict~udict::delete_get_max()<br>t~tpush(triple(x, y, z))<br>s.slice_bits()<br>~dump(x)<br>...'}} />
+        <code dangerouslySetInnerHTML={{__html: 'cur_lt()<br>car(l)<br>get_balance().pair_first()<br>raw_reserve(count)<br>dict~idict_add?(...)<br>t~tpush(triple(x, y, z))<br>s.slice_bits()<br>~dump(x)<br>...'}} />
       </td>
 
       <td>
-        <code dangerouslySetInnerHTML={{__html: 'blockchain.logicalTime()<br>listGetHead(l)<br>contract.getOriginalBalance()<br>reserveToncoinsOnBalance(count)<br>dict.iDictSetIfNotExists(...)<br>dict.uDictDeleteLastAndGet()<br>t.push([x, y, z])<br>s.remainingBitsCount()<br>debug.print(x)<br>...'}} />
+        <code dangerouslySetInnerHTML={{__html: 'blockchain.logicalTime()<br>listGetHead(l)<br>contract.getOriginalBalance()<br>reserveToncoinsOnBalance(count)<br>dict.addIfNotExists(...)<br>t.push([x, y, z])<br>s.remainingBitsCount()<br>debug.print(x)<br>...'}} />
       </td>
     </tr>
   </tbody>
@@ -1277,16 +1277,14 @@ It works in such a way. Tolk compiler knows how to locate a standard library. If
 Standard library is split into multiple files: `common.tolk` (most common functions), `gas-payments.tolk` (calculating gas fees), `tvm-dicts.tolk`, and others. Functions from `common.tolk` are available always (a compiler implicitly imports it). Other files are needed to be explicitly imported:
 
 ```tolk
-import "@stdlib/tvm-dicts"   // ".tolk" optional
+import "@stdlib/gas-payments"       // ".tolk" optional
 
-...
-var dict = createEmptyDict();
-dict.iDictSet(...);
+var fee = calculateStorageFee(...);
 ```
 
 Mind the rule **import what you use**, it's applied to `@stdlib/...` files also (with the only exception of `common.tolk`).
 
-JetBrains IDE plugin automatically discovers stdlib folder and inserts necessary imports as you type.
+IDE plugins automatically discover the stdlib folder and inserts necessary imports as you type.
 
 ### Logical operators && ||, logical not !
 
@@ -1677,8 +1675,7 @@ i = null;       // error, can't assign `null` to `int`
 i = maybeInt;   // error, can't assign `int?` to `int`
 ```
 
-Such a code will not work. You must **explicitly declare the variable as nullable**::
-
+Such a code will not work. You must **explicitly declare the variable as nullable**:
 ```tolk
 // incorrect
 var i = null;
@@ -1744,23 +1741,6 @@ fun analyzeStorage(nCells: int, lastCell: cell?) {
     if (nCells) {           // then lastCell 100% not null
         doSmth(lastCell!);  // use ! for this fact
     }
-}
-```
-
-In practice, you'll use this operator working with low-level dicts API.
-Tolk will have a high-level `map<K,V>` in the future.
-For now, working with dicts will require the `!` operator.
-
-```tolk
-// it returns either (slice, true) or (null, false)
-@pure
-fun dict.iDictGet(self, keyLen: int, key: int): (slice?, bool)
-    asm(key self keyLen) "DICTIGET" "NULLSWAPIFNOT"
-
-var (cs, exists) = myDict.iDictGet(...);
-// if exists is true, cs is not null
-if (exists) {
-    cs!.loadInt(32);
 }
 ```
 
@@ -2036,6 +2016,30 @@ var d: DefDemo = { f2: 5 };  // ok
 
 Structs can have methods as extension functions, read below.
 
+Fields can have modifiers:
+* `private` field — accessible only within methods
+* `readonly` field — immutable after object creation
+```tolk
+struct PositionInTuple {
+    private readonly t: tuple
+    currentIndex: int
+}
+
+fun PositionInTuple.create(t: tuple): PositionInTuple {
+    // the only way to create an object with a private field
+    // is from a static method (or asm function)
+    return { t, currentIndex: 0 }
+}
+
+fun PositionInTuple.next(mutate self) {
+    // self.t can not be modified: it's readonly
+    self.currentIndex += 1;
+}
+
+var p = PositionInTuple.create(someTuple);
+// p.t is unavailable here: it's private
+```
+
 ### Generic structs and aliases
 
 They exist only at the type level (no runtime cost).
@@ -2204,49 +2208,22 @@ fun T?.isNull(self): bool {
 }
 ```
 
-When you call `someObj.method()`, multiple methods with the same name may exist and theoretically be acceptable:
-
-```tolk
-fun T.copy(self) { ... }
-fun int.copy(self) { ... }
-
-someVar.copy();   // ???
-```
-
-So, the compiler performs matching to find as precise method as follows:
-
-1. Search for exact type receiver like `int.copy` (most practical cases finish here)
-2. Search for non-generic receivers that are acceptable (like `int32.copy` / `int?.copy`)
-3. Search for generic receivers except `T` (like `Container<T>.copy`)
-4. Search for `T` receivers (`T.copy`)
-
+When you call `someObj.method()`, multiple methods are applicable, the compiler chooses the most precise one:
 ```tolk
 fun int.copy(self) { ... }
 fun T.copy(self) { ... }
 
-6.copy()              // int.copy (rule 1)
-(6 as int32).copy()   // int.copy (rule 2)
-(6 as int32?).copy()  // T.copy with T=int? (rule 4)
-```
+6.copy()              // int.copy
+(6 as int32).copy()   // T.copy with T=int32
+(6 as int32?).copy()  // T.copy with T=int?
 
-```tolk
 type MyMessage = CounterIncrement | CounterReset
 fun MyMessage.check() { ... }
 fun CounterIncrement.check() { ... }
 
-MyMessage{...}.check()         // first (rule 1)
-CounterIncrement{...}.check()  // second (rule 1)
-CounterReset{...}.check()      // first (rule 2)
-```
-
-In case of ambiguity, an error is printed:
-
-```tolk
-fun int?.doSmth(self) { ... }
-fun int64.doSmth(self) { ... }
-
-var v: int32;
-v.doSmth();   // error: no exact match, but two possible acceptable receivers
+MyMessage{...}.check()         // first
+CounterIncrement{...}.check()  // second
+CounterReset{...}.check()      // first
 ```
 
 You can assign a generic function to the variable, but you should explicitly specify types:
@@ -2258,6 +2235,168 @@ fun Container<T>.getItem(self) { ... }
 var callable1 = genericFn<slice>;
 var callable2 = Container<int32>.getItem;
 callable2(someContainer32);   // pass it as self
+```
+
+### Enums
+
+```tolk
+// will be 0 1 2
+enum Color {
+    Red
+    Green
+    Blue
+}
+```
+
+They are:
+- similar to TypeScript/C++ enums
+- distinct type, not just `int`
+- checked on deserialization
+- exhaustive in `match`
+
+**Syntax of `enum`**
+
+Enum members can be separated by `,` or by `;` or by a newline — like struct fields.
+
+Like in TypeScript and C++, you can manually specify a value, the following will be auto-calculated.
+```tolk
+enum Mode {
+    Foo = 256,
+    Bar,        // implicitly 257
+}
+```
+
+**Enums are distinct types, not integers**
+
+`Color.Red` is `Color`, not `int`, although it holds a value "0" at runtime.
+
+```tolk
+fun isRed(c: Color) {
+    return c == Color.Red
+}
+
+isRed(Color.Blue)    // ok
+isRed(1)             // error, can not pass `int` to `Color`
+```
+
+Since enums are types, you can
+- declare variables and parameters
+- declare methods for an enum
+- use them in struct fields, in unions, in generics, etc.
+
+```tolk
+struct Gradient {
+    from: Color
+    to: Color? = null
+}
+
+fun Color.isRed(self) {
+    return self == Color.Red
+}
+
+var g: Gradient = { from: Color.Blue };
+g.from.isRed();       // false
+Color.Red.isRed();    // true
+
+match (g.to) {
+    null => ...
+    Color => ...
+}
+```
+
+**Enums are integers under the hood**
+
+An enum, like `Color`, is just `int` at the TVM level. It can be cast back and forth:
+- `Color.Blue as int` (will be 2)
+- `2 as Color` (will be Color.Blue)
+
+Note that using `as` you can reach an invalid enum value. It's undefined behavior: `100 as Color` is a valid syntax, but the program may behave unexpectedly after this point.
+
+Although on deserialization via `fromCell()`, the compiler inserts necessary checks that an encoded integer is a valid enum value.
+
+Note that enums are NOT similar to Rust. In Rust, every member of an enum may have its own shape. In Tolk, we have union types — a more powerful solution. So, enums are just integer constants.
+
+**`match` for enums is exhaustive**
+
+If you use pattern matching, the compiler checks that you've covered all cases.
+```tolk
+match (someColor) {
+    Color.Red => {}
+    Color.Green => {}
+    // error: Color.Blue is missing
+}
+```
+
+You should cover all cases or use `else` to "catch the remaining":
+```tolk
+match (someColor) {
+    Color.Red => {}
+    else => {}
+}
+```
+
+Of course, you can use `==` like for integers and addresses:
+```tolk
+if (someColor == Color.Red) {}
+else {}
+```
+
+Note that `someColor is Color.Red` is invalid syntax: `is` operator is used for types. E.g. if you have `var union: Color | A` and check `u is Color`. So, just `==` for checking values, no surprises.
+
+**Enums are allowed in `throw` and `assert`**
+
+```tolk
+enum Err {
+    InvalidId = 0x100
+    TooHighId
+}
+
+assert (id < 1000) throw Err.TooHighId;  // excno = 257
+```
+
+**Enums and serialization**
+
+Enums can be packed to/from cells like `intN` or `uintN`, where N
+- either specified manually `enum Role: int8 { ... }`
+- or calculated automatically: minimal N to fit all values
+
+_You can manually specify serialization type_:
+```tolk
+// `Role` will be (un)packed as `int8`
+enum Role: int8 {
+    Admin,
+    User,
+    Guest,
+}
+
+struct ChangeRoleMsg {
+    ownerAddress: address
+    newRole: Role    // int8: -128 <= V <= 127
+}
+```
+
+_Or it will be calculated automatically_. For `Role` above — `uint2`, it's enough to fit values "0 1 2".
+```tolk
+// `Role` will (un)packed as `uint2`
+enum Role {
+	Admin,
+	User,
+	Guest,
+}
+```
+
+_On deserialization, an input value is checked for correctness_. Say, you have `enum Role: int8` with "0 1 2" values. Then if input&lt;0 or input&gt;2, an exception "5 (integer out of range)" will be thrown.
+
+This works not only for ranges, but with manually specified enum values, also.
+```tolk
+enum OwnerHashes: uint256 {
+    id1 = 0x1234,
+    id2 = 0x2345,
+    ...
+}
+
+// on serialization, just "store uint256"
+// on deserialization, "load uint256" + throw 5 if v not in [0x1234, 0x2345, ...]
 ```
 
 ### Auto-detect and inline functions
@@ -2372,6 +2511,258 @@ reply.send(SEND_MODE_REGULAR);
 ```
 
 Continue reading on a separate page: [Universal createMessage](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message).
+
+### Convenient map&lt;K,V&gt; instead of low-level TVM dictionaries
+
+Tolk introduces a convenient way to work with TVM dictionaries:
+- a generic type `map<K, V>` — any serializable keys and values
+- the compiler automatically generates effective asm instructions and performs (de)serialization on demand
+- natural syntax for iterating forwards, backwards, or starting from a specified key
+- absolutely zero overhead compared to low-level approach
+
+**Basic demo: `set`, `exists`, `get`, etc.**
+
+```tolk
+var m: map<int8, int32> = createEmptyMap();
+m.set(1, 10);
+m.addIfNotExists(2, -20);
+m.replaceIfExists(2, 20);
+m.delete(2);   // now: [ 1 => 10 ]
+
+m.exists(1);   // true
+m.exists(2);   // false
+
+val r1 = m.get(1);
+if (r1.isFound) {   // true
+    val v = r1.loadValue();  // 10
+}
+
+val r2 = m.get(2);
+if (r2.isFound) {   // false
+    ...
+}
+
+m.mustGet(1);   // 10
+m.mustGet(2);   // runtime error
+```
+
+**Note: `m.get(key)` returns not "optional value", but "isFound + loadValue()"**
+
+```tolk
+// NOT like this
+var v = m.get(key);
+if (v != null) {
+    // "then v is the value" — NO, not like this
+}
+
+// BUT
+var r = m.get(key);
+if (r.isFound) {
+    val v = r.loadValue();   // this is the value
+}
+```
+
+In other words, `m.get(key)` returns NOT `V?` but a special struct.
+
+If you expect a key to exist, feel free to call `m.mustGet(key)`, it returns `V` and throws on a missing key.
+
+
+**Why "isFound" but not "optional value"?**
+
+TLDR:
+- Gas consumption (zero overhead)
+- Nullable values can be supported, like `map<int32, address?>` or `map<K, Point?>`. Returning `V?`, you can't differ "key exists, value is null" vs "key doesn't exist".
+
+Detailed explanation can be found on GitHub.
+
+**Iterating forward and backward**
+
+There is no special syntax like `foreach` and so on. The principle is simple:
+- find the starting key; most likely, `r = m.findFirst()` or `r = m.findLast()`
+- while `r.isFound`, you:
+    - use `r.getKey()` and `r.loadValue()`
+    - move the cursor: `r = m.iterateNext(r)` or `r = m.iteratePrev(r)`
+
+Example: iterate all keys forward
+```tolk
+// suppose you have a map [ 1 => 10, 2 => 20, 3 => 30 ]
+// this function will print "1 10 2 20 3 30"
+fun iterateAndPrint<K, V>(m: map<K, V>) {
+    var r = m.findFirst();
+    while (r.isFound) {
+        debug.print(r.getKey());
+        debug.print(r.loadValue());
+        r = m.iterateNext(r);
+    }
+}
+```
+
+Example: iterate from key&lt;=2 backward
+```tolk
+// suppose `m` is `[ int => address ]`, already filled
+// for every key<=2, print addr.workchain
+fun printWorkchainsBackwards(m: map<int32, address>) {
+    var r = m.findKeyLessOrEqual(2);
+    while (r.isFound) {
+        val a = r.loadValue();   // it's address
+        debug.print(a.getWorkchain());
+        r = m.iteratePrev(r);
+    }
+}
+```
+
+So, iteration over maps perfectly fits into existing syntax.
+
+**Note: `while (r.isFound)`, not `while (r == null)`**
+
+Similar to `m.get(key)`, when you check existence via `isFound`.
+
+```tolk
+// this is a cursor, it has "isFound" + "getKey()" + "loadValue()"
+// (methods are applicable only if isFound)
+var r = m.findFirst();
+while (r.isFound) {
+    // ... use r.getKey() and r.loadValue()    
+    r = m.iterateNext(r);
+}
+
+// similar to map.get() with "isFound" + "loadValue()"
+var f = m.get(key);
+if (f.isFound) {
+    // ... use f.loadValue()
+}
+```
+
+The reason "why" is the same: zero overhead, no hidden runtime instructions or stack manipulations.
+
+**Note: `m.isEmpty()`, not `m == null`**
+
+Since `map` is a dedicated type, you should **check it via `m.isEmpty()`**, because `m == null` will NOT work. It's quite obvious. Suppose you are writing your own wrapper over dictionaries:
+```tolk
+struct MyMap {
+    tvmDict: cell | null
+}
+
+fun MyMap.isEmpty(self) {}
+```
+
+Then given `var m: MyMap`, you will call `m.isEmpty()`, you will not expect `m == null` to work, right? Same for built-in maps. The compiler will give a warning:
+```text
+variable `m` of type `map<int32, int64>` can never be `null`, this condition is always false
+```
+
+Don't forget about this when transitioning your code from low-level dicts to high-level maps, and pay attention to compiler warnings in the console.
+
+By the way, *a nullable map* is a valid type: `var m: map<...>?`, why not. Now, this variable can be null and not null. When not null, it can hold an empty map or non-empty map. Don't use it in practice, this example just explains why `m == null` doesn't make sense otherwise.
+
+**Allowed types for K and V**
+
+Almost all keys and values are allowed:
+```tolk
+// all these types are valid
+map<int32, Point?>
+map<address, address>
+map<Point, map<int3, bool>>
+map<uint256, Cell<SnakeData>>
+map<bits18, slice>
+```
+
+Although there are some **NOT allowed** types. General rules:
+* a key must be fixed-width with 0 refs
+    - int32, uint64, address, bits256, Point; 
+    - invalid K: int, coins, cell
+* a value must be serializable:
+    - int32, coins, AnyStruct, Cell&lt;AnyStruct&gt; 
+    - invalid V: int, builder
+
+In practice, K is most likely intN/uintN/address, V is any serializable value.
+
+At the TVM level, keys can be numbers or slices. When K is complex (K=Point, for example), the compiler automatically performs (de)serialization to slices.
+```tolk
+struct Point {
+    x: int8
+    y: int8
+}
+
+// the compiler automatically packs Point to a 16-bit slice key
+var m: map<Point, V>
+```
+
+Although if K is a struct with a single intN field, it effectively behaves like a number.
+```tolk
+struct UserId {
+    v: int32
+}
+
+// works equally to K=int32 without extra serialization
+var m: map<UserId, V>
+```
+
+**Full list of methods for maps**
+
+JetBrains IDE and VS Code will gently suggest all methods after dot, most of them are self-explanatory.
+
+<table className="code-remove-bg">
+    <thead>
+    <tr>
+        <th>Function/method and description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr><td><code>{'createEmptyMap<K, V>(): map<K, V>'}</code></td></tr>
+    <tr><td>Returns an empty typed map.<br/>It's essentially "PUSHNULL", since TVM NULL represents an empty map.</td></tr>
+    <tr><td><code>{'createMapFromLowLevelDict<K, V>(d: dict): map<K, V>'}</code></td></tr>
+    <tr><td>Converts a low-level TVM dictionary to a typed map.<br/>Actually, does nothing: accepts an "optional cell" and returns the same "optional cell", so if you specify key/value types incorrectly, it will fail later, at <code className="inline">map.get</code> and similar.</td></tr>
+    <tr><td><code>{'m.toLowLevelDict(): dict'}</code></td></tr>
+    <tr><td>Converts a high-level map to a low-level TVM dictionary.<br/>Actually, does nothing: returns the same "optional cell".</td></tr>
+    <tr><td><code>{'m.isEmpty(): bool'}</code></td></tr>
+    <tr><td>Checks whether a map is empty (whether a cell is null).<br/>Note: a check <code className="inline">m == null</code> will not work, use <code className="inline">m.isEmpty()</code>.</td></tr>
+    <tr><td><code>{'m.exists(key: K): bool'}</code></td></tr>
+    <tr><td>Checks whether a key exists in a map.</td></tr>
+    <tr><td><code>{'m.get(key: K): MapLookupResult<'+'V'+'>'}</code></td></tr>
+    <tr><td>Gets an element by key.<br/>If not found, does NOT throw, just returns isFound = false.</td></tr>
+    <tr><td><code>{'m.mustGet(key: K, throwIfNotFound: int = 9): V'}</code></td></tr>
+    <tr><td>Gets an element by key and throws if it doesn't exist.</td></tr>
+    <tr><td><code>{'m.set(key: K, value: V): self'}</code></td></tr>
+    <tr><td>Sets an element by key.<br/>Since it returns <code className="inline">self</code>, calls may be chained.</td></tr>
+    <tr><td><code>{'m.setAndGetPrevious(key: K, value: V): MapLookupResult<'+'V'+'>'}</code></td></tr>
+    <tr><td>Sets an element and returns the previous element at that key.<br/>If no previous, isFound = false.</td></tr>
+    <tr><td><code>{'m.replaceIfExists(key: K, value: V): bool'}</code></td></tr>
+    <tr><td>Sets an element only if the key already exists.<br/>Returns whether an element was replaced.</td></tr>
+    <tr><td><code>{'m.replaceAndGetPrevious(key: K, value: V): MapLookupResult<'+'V'+'>'}</code></td></tr>
+    <tr><td>Sets an element only if the key already exists and returns the previous element at that key.</td></tr>
+    <tr><td><code>{'m.addIfNotExists(key: K, value: V): bool'}</code></td></tr>
+    <tr><td>Sets an element only if the key does not exist.<br/>Returns whether an element was added.</td></tr>
+    <tr><td><code>{'m.addOrGetExisting(key: K, value: V): MapLookupResult<'+'V'+'>'}</code></td></tr>
+    <tr><td>Sets an element only if the key does not exist. If exists, returns an old value.</td></tr>
+    <tr><td><code>{'m.delete(key: K): bool'}</code></td></tr>
+    <tr><td>Delete an element at the key.<br/>Returns whether an element was deleted.</td></tr>
+    <tr><td><code>{'m.deleteAndGetDeleted(key: K): MapLookupResult<'+'V'+'>'}</code></td></tr>
+    <tr><td>Delete an element at the key and returns the deleted element.<br/>If not exists, isFound = false.</td></tr>
+    <tr><td><code>{'m.findFirst(): MapEntry<K, V>'}</code></td></tr>
+    <tr><td>Finds the first (minimal) element in a map. If key are integers, it's the minimal integer. If keys are addresses or complex structures (represented as slices), it's lexicographically smallest. For an empty map, just returns isFound = false.</td></tr>
+    <tr><td><code>{'m.findLast(): MapEntry<K, V>'}</code></td></tr>
+    <tr><td>Finds the last (maximal) element in a map. If key are integers, it's the maximal integer. If keys are addresses or complex structures (represented as slices), it's lexicographically largest. For an empty map, just returns isFound = false.</td></tr>
+    <tr><td><code>{'m.findKeyGreater(pivotKey: K): MapEntry<K, V>'}</code></td></tr>
+    <tr><td>Finds an element with key &gt; pivotKey.</td></tr>
+    <tr><td><code>{'m.findKeyGreaterOrEqual(pivotKey: K): MapEntry<K, V>'}</code></td></tr>
+    <tr><td>Finds an element with key &gt;= pivotKey.</td></tr>
+    <tr><td><code>{'m.findKeyLess(pivotKey: K): MapEntry<K, V>'}</code></td></tr>
+    <tr><td>Finds an element with key &lt; pivotKey.</td></tr>
+    <tr><td><code>{'m.findKeyLessOrEqual(pivotKey: K): MapEntry<K, V>'}</code></td></tr>
+    <tr><td>Finds an element with key &lt;= pivotKey.</td></tr>
+    <tr><td><code>{'m.iterateNext(current: MapEntry<K, V>): MapEntry<K, V>'}</code></td></tr>
+    <tr><td>Iterate over a map in ascending order, see demos above.</td></tr>
+    <tr><td><code>{'m.iteratePrev(current: MapEntry<K, V>): MapEntry<K, V>'}</code></td></tr>
+    <tr><td>Iterate over a map in descending order, see demos above.</td></tr>
+    </tbody>
+</table>
+
+**Q: What about augmented hashmaps and prefix dictionaries?**
+
+Since they are extremely rarely used, they are not embedded into the type system.  
+For prefix dicts, import `@stdlib/tvm-dicts` and use asm functions.  
+For augmented hashmaps and merkle proofs, implement your own interaction.
 
 ### Modern onInternalMessage
 

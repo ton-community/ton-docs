@@ -60,8 +60,9 @@ For example, if you assign 256 to uint8, asm command "8 STU" will fail with code
 | `(T1, T2)`               | TL-B `(Pair T1 T2)` = one by one         | pack T1 + pack T2                   |
 | `(T1, T2, ...)`          | nested pairs = one by one                | pack T1 + pack T2 + ...             |
 | `SomeStruct`             | fields one by one                        | like a tensor                       |
+| `enum SomeEnum`          | intN or uintN, where N manual or auto    | `enum SomeEnum: int8` for manual    |
 
-- (1) By analogy with `intN`, there is are `bytesN` types. It's just a `slice` under the hood: the type shows how to serialize this slice.
+- (1) By analogy with `intN`, there are `bytesN` types. It's just a `slice` under the hood: the type shows how to serialize this slice.
   By default, before `STSLICE`, the compiler inserts runtime checks (get bits/refs count + compare with N + compare with 0).
   These checks ensure that serialized binary data will be correct, but they cost gas.
   However, if you guarantee that a slice is valid (for example, it comes from trusted sources), pass an option `skipBitsNValidation` to disable runtime checks.
