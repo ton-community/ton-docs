@@ -18,17 +18,17 @@ Any given external message (transfer request) to a Highload wallet v3 contains:
 - subwallet ID (32 bits)
 - message to send as a reference (the serialized internal message that will be sent)
 - send mode for the message (8 bits)
-- composite query ID — 13-bit shift and 10-bit bit number; however, the bit number can only go up to 1022 (not 1023), and the last usable query ID (8388605) is reserved for emergencies and should not normally be used
+composite query ID - 13 bits of "shift" and 10 bits of "bit number", however the 10 bits of bit number can only go up to 1022, not 1023, and also the last such usable query ID (8388605) is reserved for emergencies and should not be normally used
 - created_at (message timestamp)
 - timeout
 
 Timeout is stored in the Highload wallet as a parameter and is checked against the timeout in all requests—so the timeout for all requests is equal. The message should not be older than the timeout at the time of arrival to the Highload wallet, or in code it is required that `created_at > now() - timeout`. Query IDs are stored for the purposes of replay protection for at least timeout and possibly up to 2 \* timeout; however, one should not expect them to be stored for longer than timeout. The subwallet ID is checked against the one stored in the wallet. The inner reference’s hash is checked along with the signature against the public key of the wallet.
 
-A single transaction can create up to 255 messages; a common pattern uses one self-call to continue processing, leaving up to 254 outgoing messages per external message.
+Highload v3 can only send 1 message from any given external message, however it can send that message to itself with a special op code, allowing one to set any action cell on that internal message invocation, effectively making it possible to send up to 254 messages per 1 external message (possibly more if another message is sent to Highload wallet again among these 254).
 
 Highload wallet v3 will always store the query ID (replay protection) once all the checks pass; however, a message may not be sent due to some conditions, including but not limited to:
 
-- **containing state init** (such messages, if required, may be sent using the special opcode to set the action cell after an internal message from Highload wallet to itself)
+- **containing state init** (such messages, if required, may be sent using the special op code to set the action cell after an internal message from Highload wallet to itself)
 - not enough balance
 - invalid message structure (that includes external-out messages — only internal messages may be sent straight from the external message)
 
@@ -39,7 +39,7 @@ When iterating (incrementing) query ID, it is cheaper (in terms of TON spent on 
 ## Highload wallet v2
 
 :::danger
-Legacy contract — use Highload wallet v3 instead.
+Legacy contract, it is suggested to use Highload wallet v3.
 :::
 
 This wallet is made for those who need to send hundreds of transactions in a short period of time. For example, crypto exchanges.
@@ -57,10 +57,11 @@ It is not recommended to set too high an expiration date: the number of queries 
 
 ## How to
 
-See the [Highload wallet tutorial(s)](/v3/guidelines/smart-contracts/howto/wallet#-high-load-wallet-v3).
+You can also read [Highload wallet tutorials](/v3/guidelines/smart-contracts/howto/wallet#-high-load-wallet-v3)
 
 Wallet source code:
 
-- [ton/crypto/smartcont/new-highload-wallet-v2.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif)
+
+- [ton/crypto/smartcont/Highload-wallet-v2-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/new-highload-wallet-v2.fif)
 
 <Feedback />
