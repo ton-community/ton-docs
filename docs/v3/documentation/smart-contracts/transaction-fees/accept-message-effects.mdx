@@ -8,7 +8,7 @@ The `accept_message` and `set_gas_limit` TVM primitives play a crucial role in m
 
 External messages follow this processing flow:
 - The `gas_limit` is initially set to `gas_credit` [Param 20 and 21](/v3/documentation/network/configs/blockchain-configs#param-20-and-21), which equals 10,000 gas units.
-- During the Credit phase, a contract must call `accept_message` or `set_gas_limit` to raise the gas limit and indicate its readiness to pay processing fees.
+- During the Compute phase, a contract must call `accept_message` or `set_gas_limit` to raise the gas limit and indicate its readiness to pay processing fees.
 - If `gas_credit` is depleted or computation completes without `accept_message`, the external message is not included in a block and no transaction is created.
 - Gas limit semantics:
   - `accept_message` sets `gl` to the maximum allowed (`gm`).
