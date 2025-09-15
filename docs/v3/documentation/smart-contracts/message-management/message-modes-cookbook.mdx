@@ -19,9 +19,9 @@ The contract reflects all TON tokens it holds in its `balance`. Some of these to
 Therefore, any blockchain payment may come either:
 
 - From the incoming message's `value`.
-  Contracts pay computation fees this way unless they call [accept_message](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects), which prevents malicious actors from spending the contract's balance to process their data
-- From the contract's `balance`, which leaves the incoming TON amount untouched during the transaction
-  This approach currently applies to storage fees in workchains 0 and -1 and for the most common actions
+  Contracts pay computation fees this way unless they call [accept_message](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects), which prevents malicious actors from spending the contract's balance to process their data.
+- From the contract's `balance`, which leaves the incoming TON amount untouched during the transaction.
+  This approach currently applies to storage fees in workchains 0 and -1 and for the most common actions.
 
 #### Fees
 
