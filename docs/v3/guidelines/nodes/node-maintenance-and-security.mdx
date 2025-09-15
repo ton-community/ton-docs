@@ -30,7 +30,7 @@ If you don't use MyTonCtrl, you can edit the node service file.
 
 `state-ttl` is a parameter defining the block states' TTL. The default value is 86400 seconds (24 hours). You can decrease this value to reduce the database size, but for validators, it's highly recommended that the default value be used (keep the flag unset).
 
-Also, this value should be more than the length of the validation period (check the value in [15th config param](/v3/documentation/network/configs/blockchain-configs#param-15)).
+Also, this value should be more than the length of the validation period (check the value in [15th config param](/v3/documentation/network/config-params/overview#param-15)).
 
 ```bash
 MyTonCtrl> installer  set_node_argument  --state-ttl <value>
