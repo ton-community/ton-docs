@@ -1,29 +1,32 @@
 import Feedback from '@site/src/components/Feedback';
 
+import ConceptImage from "@site/src/components/conceptImage";
 import ThemedImage from "@theme/ThemedImage";
 
 # Message modes cookbook
 
 Understanding the modes and flags for sending messages ensures your smart contracts behave as intended. This section illustrates their practical application through specific examples.
 
-:::info Important
+:::info IMPORTANT
 You can check [this example](https://testnet.tonviewer.com/transaction/42ed45726e4fe994b7fd6dbf953a2ac24ecd77753858abeda9d6755c664a537a) as a real-world validation.
 :::
 
 #### Message value and account balance
 
-The contract reflects all TON tokens it holds in its `balance`. Some of these tokens are also assigned to the currently processed incoming `message`. Transactions process one incoming message and up to 255 outgoing messages (see [overview on messages and transactions](/v3/documentation/dapps/assets/overview#overview-on-messages-and-transactions)).
+The contract reflects all TON tokens it holds in its `balance`. Some of these tokens are also assigned to the currently processed incoming `message`. This mechanism is effective because any TON transaction involving a [non-system contract](/v3/documentation/smart-contracts/contracts-specs/governance) processes exactly one incoming message at a time.
 
 > To better understand the `balance` inside the TVM, refer to how the [get_balance](/v3/documentation/smart-contracts/func/docs/stdlib/#get_balance) function operates.
 
 Therefore, any blockchain payment may come either:
 
-- From the incoming message's `value`. See [accept_message effects](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects).
-- From the contract's `balance`. Storage fees are paid from the contract balance.
+- From the incoming message's `value`.
+  Contracts pay computation fees this way unless they call [accept_message](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects), which prevents malicious actors from spending the contract's balance to process their data
+- From the contract's `balance`, which leaves the incoming TON amount untouched during the transaction
+  This approach currently applies to storage fees in workchains 0 and -1 and for the most common actions
 
 #### Fees
 
-Actual transaction fees will vary depending on the blockchain configuration, the smart contract code, and other factors. Storage fees are deducted from the contract balance; for internal messages, gas is covered by the incoming message value by default, and if funds are insufficient the compute phase may be skipped.
+Actual transaction fees will vary depending on the blockchain configuration, the smart contract code, and other factors. When a message is received, storage and gas fees will consume part of the contract `balance` if the message `value` [is above a certain amount](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped).
 
 According to the [transaction flow](/v3/documentation/tvm/tvm-overview#transactions-and-phases), each transaction consists of five distinct phases:
 
@@ -50,7 +53,7 @@ Credit → Storage → Compute → Action → Bounce
 For bounceable messages:
 Storage → Credit → Compute → Action → Bounce
 
-> Compute, Action, and Bounce phases may be skipped.
+> Compute, Action and Bounce phases may be skipped
 
 #### Fee deduction sequence
 
@@ -64,7 +67,7 @@ Storage → Credit → Compute → Action → Bounce
 | Fee in explorer                                                                                       | Value       | How it's obtained               |
 | :---------------------------------------------------------------------------------------------------- | :---------- | :------------------------------ |
 | Total fee                                                                                             | 0.001982134 | gas + storage + action + import |
-| Fwd. fee                                                                                              | 0.001       | action_fee + fwd_fee + ihr_fee  |
+| Fwd. fee                                                                                              | 0.001       | fwd_fee + action_fee + ihr_fee  |
 | Gas fee                                                                                               | 0.0011976   | compute phase, gas used         |
 | Storage fee                                                                                           | 0.000000003 | storage phase, account only     |
 | Action fee                                                                                            | 0.000133331 | action phase, cost per action   |
@@ -72,14 +75,16 @@ Storage → Credit → Compute → Action → Bounce
 | [Forward fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#formula-1) (each msg) | 0.000266669 | cost of fwd of in_msg           |
 | [IHR fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#ihr) (each msg)           | 0.0006      | cost of ihr fwd of in_msg       |
 
-:::info Important
+:::info IMPORTANT
 The table is populated using [this example transaction](https://tonviewer.com/transaction/b5e14a9c4a4e982fda42d6079c3f84fa48e76497a8f3fca872f9a3737f1f6262).
 
 For live calculations, refer to the [**fee calculator**](/v3/documentation/smart-contracts/transaction-fees/fees#basic-fees-formula).
+
+`Storage fee` (part of `total_fee`) is **always** paid from the contract **balance**.
 :::
 
 The transaction fees used in these examples are hypothetical and for illustrative purposes only. Any fees other than message forwarding are outside the scope of this article.
-For internal messages using `+2` (ignore action-phase errors), the inbound value remains credited in the credit phase even if the action phase is ignored. See this [example transaction](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557).
+Funds included with an ignored message will still be [credited to the receiving address](https://testnet.tonviewer.com/transaction/8a388731812c80ab9b0ea9531108425488af5def854e4bd6f0ed47362b56d557).
 
 ## 1. (Mode 0, flag 0) basic message \{#mode0}
 
@@ -115,7 +120,7 @@ In case of an error during [action phase](/v3/documentation/smart-contracts/mess
 
 State after the transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
-:::tip
+:::info tip
 If no errors occur, the result is the same as [mode = 0](#mode0).
 :::
 
@@ -154,7 +159,7 @@ State after the transaction with error: Account A has 1 - ([total_fee](/v3/docum
 </div>
 <br></br>
 
-:::tip
+:::info tip
 If no errors occur, the result is the same as [mode = 0](#mode0).
 
 The key difference is that `flag 16` creates bounces for [action phase errors](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes). In contrast, the message's [built‐in bounce flag](/v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo) handles protocol‐level failures like:
@@ -223,7 +228,7 @@ State after the transaction with an error: Account A has 1 - ([total_fee](/v3/do
 </div>
 <br></br>
 
-:::tip
+:::info tip
 If no errors occur, the result is the same as [mode = 0, flag = 1](#mode1).
 :::
 
@@ -244,7 +249,7 @@ If no errors occur, the result is the same as [mode = 0, flag = 1](#mode1).
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 64, `msg_fwd_fees` are 0.004 TON, actual received `value` will be 0.6 TON. The sum `action_fee` + `fwd_fee` (and `ihr_fee` if applicable) is deducted from the outbound message value; `storage_fee` (part of `total_fee`) is paid from the contract balance; the recipient’s net credit equals the message value minus outbound fees.
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 64, `msg_fwd_fees` are 0.004 TON, actual received `value` will be 0.6 TON, `total_fee` + `fwd_fee` are deducted from `value`.
 
 State after the transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account C has 1.6 - (`total_fee` + `fwd_fee`) TON
 
@@ -276,9 +281,9 @@ When sending multiple messages, you may get exit code 37 (Insufficient Toncoin) 
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 65, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON. The sum `action_fee` + `fwd_fee` (and `ihr_fee` if applicable) is deducted from the contract balance; `storage_fee` (part of `total_fee`) is paid from the contract balance; the recipient’s net credit equals the full message value.
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 65, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `total_fee` + `fwd_fee` are deducted from `balance`.
 
-State after the transaction: Account A has 0.896 TON, Account B has 0.5 - (`action_fee` + `fwd_fee` + `ihr_fee`, if applicable) TON, Account C has 1.6 TON
+State after the transaction: Account A has 0.896 TON, Account B has 0.5 - (`total_fee` + `fwd_fee`) TON, Account C has 1.6 TON
 
 :::info
 You can check [this example](https://testnet.tonviewer.com/transaction/ad93e784453b573d737d9d928b4377ff3779177753e05629e54f6629556568ad).
@@ -302,7 +307,7 @@ Please note that `storage_fee` is included in `total_fee` but is always paid fro
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON. The sum `action_fee` + `fwd_fee` (and `ihr_fee` if applicable) is deducted from the outbound message value; `storage_fee` (part of `total_fee`) is paid from the contract balance; the recipient’s net credit equals the message value minus outbound fees.
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `total_fee` + `fwd_fee` are deducted from `value`.
 If an error occurs during the action phase, the message will bounce, and `total_fee` + `fwd_fee` will be deducted from the `value`.
 
 State after the transaction with an error: Account A has 1 - (`total_fee` + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
@@ -320,14 +325,14 @@ State after the transaction with an error: Account A has 1 - (`total_fee` + `fwd
 </div>
 <br></br>
 
-:::tip
-If no errors occur, the result is the same as [mode = 64, flag 0](#mode64). You can [check it in the C5 action list](https://retracer.ton.org/?tx=6489d60d9197c0be7ee64b0812139d82221e8f94c6e378c356acc10f9067310c) of the jetton wallet.
+:::info tip
+If no errors occur, the result is the same as [mode = 64, flag 0](#mode64). This mode is widely used for jetton transfers. You can [check it in the C5 action list](https://retracer.ton.org/?tx=6489d60d9197c0be7ee64b0812139d82221e8f94c6e378c356acc10f9067310c) of the jetton wallet.
 :::
 
 <br></br>
 <div class="text--center">
   <ThemedImage
-    alt="Diagram: mode 80 carry remaining value (no error)"
+    alt=""
     sources={{
       light:
         "/img/docs/message-modes-cookbook/carry_remaining_value_8_noerror.png?raw=true",
@@ -341,10 +346,10 @@ If no errors occur, the result is the same as [mode = 64, flag 0](#mode64). You 
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 81, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON. The sum `action_fee` + `fwd_fee` (and `ihr_fee` if applicable) is deducted from the contract balance; `storage_fee` (part of `total_fee`) is paid from the contract balance; the recipient’s net credit equals the full message value.
+**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 81, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `total_fee` + `fwd_fee` are deducted from `balance`.
 If an error occurs during the action phase, the message will bounce, and `total_fee` + `fwd_fee` will be deducted from the `value`.
 
-State after the transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
+State after the transaction with an error: Account A has 1 - (`total_fee` + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
 
 <br></br>
 <div class="text--center">
@@ -359,7 +364,7 @@ State after the transaction with an error: Account A has 1 - (total_fee + `fwd_f
 </div>
 <br></br>
 
-:::tip
+:::info tip
 If no errors occur, the result is the same as [mode = 65](#mode65).
 :::
 
@@ -418,8 +423,8 @@ State after the transaction with an error: Account A has 1 - (`total_fee` + `fwd
 </div>
 <br></br>
 
-:::tip
-If no errors occur, the result is the same as [mode = 128](#mode128). You can [check it in the C5 action list](https://retracer.ton.org/?tx=e4f31e37eec74a8cfcecdad9246a6bbf3da20c4edb3635150cb0fa54b9def558) of the jetton wallet.
+:::info tip
+If no errors occur, the result is the same as [mode = 128](#mode128). This mode is widely used for jetton transfers. You can [check it in the C5 action list](https://retracer.ton.org/?tx=e4f31e37eec74a8cfcecdad9246a6bbf3da20c4edb3635150cb0fa54b9def558) of the jetton wallet.
 :::
 
 <br></br>
