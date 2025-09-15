@@ -8,9 +8,9 @@ import ConceptImage from '@site/src/components/conceptImage';
 
 To log in to the test environment, use one of the following methods:
 
-- **iOS:** Tap the Settings icon 10 times. Go to Accounts > Log in to another account > Test.
-- **Telegram Desktop:** Open ☰ Settings > Shift+Alt+right-click **Add Account** and select **Test Server**.
-- **macOS:** Click the Settings icon 10 times to open the Debug Menu. ⌘-click **Add Account** and log in using your phone number.
+- **iOS:** tap the Settings icon 10 times. Go to Accounts > Log in to another account > Test.
+- **Telegram Desktop:** open ☰ Settings > Shift+Alt+right-click **Add Account** and select **Test Server**.
+- **macOS:** click the Settings icon 10 times to open the Debug Menu. ⌘-click **Add Account** and log in using your phone number.
 
 The test environment is completely separate from the main environment. You must create a **new user account** and a **new bot** using [@BotFather](https://t.me/BotFather).
 
@@ -79,24 +79,24 @@ Right-click inside the Mini App and choose *Inspect Element*.
 
 ![Eruda console UI](/img/docs/telegram-apps/eruda-1.png)
 
-### Step 1: Include Eruda Library
+### Step 1: include Eruda Library
 
 To begin, add the Eruda library to your HTML file:
 
-**Option 1:** Use a CDN (recommended).
+**Option 1:** use a CDN (recommended).
 
 ```html
 <!-- Include Eruda from CDN (Recommended) -->
 <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
 ```
 
-**Option 2:** Install via npm.
+**Option 2:** install via npm.
 
 ```bash npm2yarn
 npm install eruda
 ```
 
-### Step 2: Initialize Eruda
+### Step 2: initialize Eruda
 
 If using the CDN, initialize Eruda when the page loads:
 
@@ -117,15 +117,15 @@ import eruda from 'eruda'
 eruda.init()
 ```
 
-### Step 3: Launch Eruda
+### Step 3: launch Eruda
 
 After deploying your Mini App:
 
 - Open it in Telegram.
 - Press the Eruda icon to start debugging.
 
-<ConceptImage alt="Eruda button in Mini App UI" style={{maxWidth:'200px', margin: '10pt 20pt 0 0', display: 'flex'}} src="/img/docs/telegram-apps/eruda-2.png" />
-<ConceptImage alt="Eruda panels and console output" style={{maxWidth:'200px', margin: '10pt 20pt', display: 'flex'}}  src="/img/docs/telegram-apps/eruda-3.png" />
+<ConceptImage alt="Eruda button in Mini App UI" style={{maxWidth:'200px', margin: '10pt 20pt 0 0', display: 'flex-box'}} src="/img/docs/telegram-apps/eruda-2.png" />
+<ConceptImage alt="Eruda panels and console output" style={{maxWidth:'200px', margin: '10pt 20pt', display: 'flex-box'}}  src="/img/docs/telegram-apps/eruda-3.png" />
 
 
 <Feedback />
