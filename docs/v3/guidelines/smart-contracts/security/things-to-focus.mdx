@@ -8,15 +8,15 @@ In this article, we will review and discuss the elements to consider for those w
 
 ### 1. Name collisions
 
-FunC variable and function names may contain many valid characters; e.g., `var++`, `foo-bar+baz`. Only function names may start with `~` or `.`.
+FunC variables and functions may contain almost any legit character. i.e. `var++`, `~bits`, `foo-bar+baz` including commas are valid variables and functions names.
 
-When writing and reviewing FunC code, use a linter.
+When writing and inspecting a Func code, Linter should be used.
 
 - [IDE plugins](/v3/documentation/smart-contracts/getting-started/ide-plugins)
 
 ### 2. Check the throw values
 
-Each time the TVM execution stops normally, it stops with exit codes `0` or `1`. A contract can explicitly terminate with a successful exit by calling `throw(0)` or `throw(1)`.
+Each time the TVM execution stops normally, it stops with exit codes `0` or `1`. Although it is done automatically, TVM execution can be interrupted directly in an unexpected way if exit codes `0` and `1` are thrown directly by either `throw(0)` or `throw(1)` command.
 
 - [How to handle errors](/v3/documentation/smart-contracts/func/docs/builtins#throwing-exceptions)
 - [TVM exit codes](/v3/documentation/tvm/tvm-exit-codes)
@@ -25,11 +25,11 @@ Each time the TVM execution stops normally, it stops with exit codes `0` or `1`.
 
 It is crucial to keep track of what the code does and what it may return. Keep in mind that the compiler cares only about the code and only in its initial state. After certain operations stored values of some variables can change.
 
-Reading unexpected variable values and calling methods on data types that are not supposed to have such methods (or their return values are not stored properly) are errors and are not skipped as "warnings" or "notices" but lead to unreachable code. Keep in mind that storing an unexpected value may be okay, however, reading it may cause problems, e.g., error code 5 (integer out of expected range) may be thrown for an integer variable.
+Reading unexpected variables values and calling methods on data types that are not supposed to have such methods (or their return values are not stored properly) are errors and are not skipped as "warnings" or "notices" but lead to unreachable code. Keep in mind that storing an unexpected value may be okay, however, reading it may cause problems, e.g., error code 5 (integer out of expected range) may be thrown for an integer variable.
 
 ### 4. Messages have modes
 
-It is essential to check the message mode, in particular its interaction with previous messages sent and fees. A possible failure is not accounting for storage fees, in which case the contract may run out of Toncoin, leading to unexpected failures when sending outgoing messages. You can view the message modes [here](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
+It is essential to check the message mode, in particular its interaction with previous messages sent and fees. A possible failure is not accounting for storage fees, in which case the contract may run out of TON, leading to unexpected failures when sending outgoing messages. You can view the message modes [here](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes).
 
 ### 5. Replay protection \{#replay-protection}
 
@@ -42,7 +42,7 @@ For `seqno`, refer to [this section](/v3/documentation/smart-contracts/message-m
 
 ### 6. TON fully implements the actor model
 
-The code of a contract can be updated. It can be changed permanently using [`SETCODE`](/v3/documentation/smart-contracts/func/docs/stdlib#set_code) or updated at runtime using `set_c3` until the end of execution.
+It means the code of the contract can be changed. It can either be changed permanently, using [`SETCODE`](/v3/documentation/smart-contracts/func/docs/stdlib#set_code) TVM directive, or in runtime, setting the TVM code registry to a new cell value until the end of execution.
 
 ### 7. TON Blockchain has several transaction phases: compute phase, action phase, including a bounce phase
 
@@ -52,22 +52,22 @@ The compute phase executes the code of smart contracts and only then the actions
 
 ### 8. TON contracts are autonomous
 
-Contracts in the blockchain can reside in separate shards, processed by another set of validators, meaning that developers cannot pull data from other contracts on demand. Thus, any communication is asynchronous and done by sending messages.
+Contracts in the blockchain can reside in separate shards, processed by other set of validators, meaning that developer cannot pull data from other contracts on demand. Thus, any communication is asynchronous and done by sending messages.
 
 - [Sending messages from smart contract](/v3/documentation/smart-contracts/message-management/sending-messages)
 - [Sending messages from DApp](/v3/guidelines/ton-connect/cookbook/ton-transfer)
 
-### 9. TON does not include revert reason strings; outcomes are indicated by [exit codes](/v3/documentation/tvm/tvm-exit-codes)
+### 9. Unlike other blockchains, TON does not include revert messages; outcomes are indicated by exit codes
 
 It is helpful to think through the roadmap of exit codes for the code flow (and have it documented) before starting programming your TON smart contract.
 
-### 10. FunC method IDs
+### 10. FunC functions that have method_id identifiers have method IDs
 
 They can be either set explicitly `method_id(5)`, or implicitly by the FunC compiler. In this case, they can be found among method declarations in the Fift assembly (.fif) file. Two of them are predefined: `recv_internal` = 0 (receiving messages inside the blockchain) and `recv_external` = -1 (receiving messages from outside).
 
-### 11. TON address may not have any coins or code
+### 11. TON crypto address may not have any coins or code
 
-Smart contract addresses on the TON Blockchain are deterministic and can be precomputed. Accounts have states: non-existent, uninitialized, active, or frozen. Uninitialized addresses may still hold a balance.
+Smart contracts addresses in TON blockchain are deterministic and can be precomputed. Ton Accounts, associated with addresses may even contain no code which means they are uninitialized (if not deployed) or frozen while having no more storage or TON coins if the message with special flags was sent.
 
 ### 12. TON addresses have two standard representations
 
@@ -75,19 +75,19 @@ A full representation can either be "raw" (`workchain:address`) or "user-friendl
 
 - [Raw and user-friendly addresses](/v3/documentation/smart-contracts/addresses/address-formats)
 
-### 13. Understand method visibility
+### 13. Keep track of the flaws in code execution
 
-FunC has no visibility specifiers (unlike Solidity); implement access control in message handlers and contract logic.
+Unlike Solidity where it's up to you to set methods visibility, in the case of FunC, the visibility is restricted in a more intricate way either by showing errors or by `if` statements.
 
-### 14. Keep an eye on fees before sending bounced messages
+### 14. Keep an eye on gas fees before sending bounced messages
 
-When returning bounced value provided by a user, subtract the corresponding fees and be explicit about message mode/flags to control fee charging and bounce behavior.
+In case the smart contract sends the bounced messages with the value, provided by a user, make sure that the corresponding gas fees are subtracted from the returned amount not to be drained.
 
 ### 15. Monitor the callbacks and their failures
 
-TON blockchain is asynchronous. That means messages do not necessarily arrive in order; e.g., when a failure notification of an action arrives, it should be handled properly.
+TON blockchain is asynchronous. That means the messages do not have to arrive successively. e.g. when a fail notification of an action arrives, it should be handled properly.
 
-### 16. Check the bounced flag when receiving internal messages
+### 16. Check if the bounced flag was sent receiving internal messages
 
 You may receive bounced messages (error notifications), which should be handled.
 
