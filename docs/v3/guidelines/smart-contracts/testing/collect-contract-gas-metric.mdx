@@ -27,7 +27,7 @@ To enable this, write test scenarios that cover the contract’s primary usage p
 
 Before running the tests, a store is created to collect metrics from all transactions generated during the tests. After test execution, the collected metrics are supplemented with [ABI information from the snapshot](https://github.com/ton-org/sandbox/blob/main/docs/collect-metric-api.md#abi-auto-mapping), and a report is generated based on this data.
 
-While more [metrics are collected](https://github.com/ton-org/sandbox/blob/main/docs/collect-metric-api.md#snapshot-structure), the current report format includes only `compute.phase`, `state.code`, and `state.data`.
+While more [metrics are collected](https://github.com/ton-org/sandbox/blob/main/docs/collect-metric-api.md#snapshot-structure), the current report format includes `gasUsed`, `cells`, and `bits`, which correspond to the internal metrics `compute.phase`, `state.code`, and `state.data`.
 
 ## Metrics comparison example
 
@@ -38,6 +38,17 @@ Start by creating a new project using `npm create ton@latest`:
 ```bash
 npm create ton@latest -y -- sample --type func-counter --contractName Sample
 cd sample
+```
+
+**Note:**
+- The `-y` flag skips prompts and accepts defaults.
+- `--type` specifies the template (e.g., `func-counter`).
+- `--contractName` sets the contract name.
+
+Alternatively, you can run:
+
+```bash
+npm create ton@latest sample
 ```
 
 This command scaffolds a project with a basic counter contract at `contracts/sample.fc`.
@@ -145,7 +156,7 @@ Here’s the formula:
 storage_fee = ceil(
                   (account.bits * bit_price
                   + account.cells * cell_price)
-               * time_delta / 2 ^ 16)
+               * time_delta / 2 ** 16)
 ```
 
 To try this in practice, use the [calculator example](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#calculator-example).
@@ -272,14 +283,19 @@ import type { Config } from 'jest';
 
 const config: Config = {
     preset: 'ts-jest',
++    testEnvironment: '@ton/sandbox/jest-environment',
     testPathIgnorePatterns: ['/node_modules/', '/dist/'],
++    reporters: [
++        'default',
++        ['@ton/sandbox/jest-reporter', {}],
++    ]
 };
 
 export default config;
 ```
 
 :::tip
-See the full list of options in the [Sandbox Jest config docs](https://github.com/ton-org/sandbox/blob/main/README.md#setup-in-jestconfigts).
+See the full list of options in the [Sandbox jest config docs](https://github.com/ton-org/sandbox/blob/main/README.md#setup-in-jestconfigts).
 :::
 
 #### Option 2: create a separate config `gas-report.config.ts`
@@ -303,7 +319,7 @@ When using this separate config, pass it using the `--config` option:
 
 ```bash
 npx blueprint test --gas-report -- --config gas-report.config.ts
-npx blueprint snapshot --label 'v2' -- --config gas-report.config.ts
+npx blueprint snapshot --label "v2" -- --config gas-report.config.ts
 ```
 
 ## Collect metrics manually
