@@ -248,7 +248,7 @@ If no errors occur, the result is the same as [mode = 0, flag = 1](#mode1).
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 64, `msg_fwd_fees` are 0.004 TON, actual received `value` will be 0.6 TON, `total_fee` + `fwd_fee` are deducted from `value`.
+**A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 64, `msg_fwd_fees` are 0.004 TON, actual received `value` will be 0.6 TON, `total_fee` + `fwd_fee` are deducted from `value`.
 
 State after the transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account C has 1.6 - (`total_fee` + `fwd_fee`) TON
 
@@ -280,7 +280,7 @@ When sending multiple messages, you may get exit code 37 (Insufficient Toncoin) 
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 65, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `total_fee` + `fwd_fee` are deducted from `balance`.
+**A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 65, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `total_fee` + `fwd_fee` are deducted from `balance`.
 
 State after the transaction: Account A has 0.896 TON, Account B has 0.5 - (`total_fee` + `fwd_fee`) TON, Account C has 1.6 TON
 
@@ -306,7 +306,7 @@ Please note that `storage_fee` is included in `total_fee` but is always paid fro
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `total_fee` + `fwd_fee` are deducted from `value`.
+**A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `total_fee` + `fwd_fee` are deducted from `value`.
 If an error occurs during the action phase, the message will bounce, and `total_fee` + `fwd_fee` will be deducted from the `value`.
 
 State after the transaction with an error: Account A has 1 - (`total_fee` + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
@@ -345,7 +345,7 @@ If no errors occur, the result is the same as [mode = 64, flag 0](#mode64). This
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B** after that **B** sent 0.5 TON to **C** with `mode` = 81, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `total_fee` + `fwd_fee` are deducted from `balance`.
+**A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 81, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON, `total_fee` + `fwd_fee` are deducted from `balance`.
 If an error occurs during the action phase, the message will bounce, and `total_fee` + `fwd_fee` will be deducted from the `value`.
 
 State after the transaction with an error: Account A has 1 - (`total_fee` + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
