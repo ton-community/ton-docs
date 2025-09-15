@@ -3,7 +3,8 @@ import Feedback from '@site/src/components/Feedback';
 # Drawing conclusions from TON Hack Challenge
 
 The TON Hack Challenge was held on October 23, 2022.
-Several smart contracts were deployed to the TON mainnet with synthetic security breaches. Every contract had a balance of 3000 or 5000 TON, allowing participants to hack them and get rewards immediately.
+Several smart contracts were deployed to TON Mainnet with synthetic security breaches.
+Every contract had a balance of 3000 or 5000 TON, allowing participants to hack them and get rewards immediately.
 
 Source code and contest rules were hosted on GitHub in [ton-blockchain/hack-challenge-1](https://github.com/ton-blockchain/hack-challenge-1).
 
@@ -111,7 +112,9 @@ if (op == op_not_winner) {
 }
 ```
 
-The vault does not have a bounce handler and does not proxy the 'check' message to the database. In the database, we can set `msg_addr_none` as an award address because `load_msg_address` allows it. We request a check from the vault; the database tries to parse `msg_addr_none` using [`parse_std_addr`](/v3/documentation/smart-contracts/func/docs/stdlib#parse_std_addr) and fails. The message bounces to the vault from the database, and `op` is not `op_not_winner`.
+The vault does not have a bounce handler or proxy message to the database if the user sends **check**. In the database, we can set `msg_addr_none` as an award address because `load_msg_address` allows it.
+
+We request a check from the vault; the database tries to parse `msg_addr_none` using [`parse_std_addr`](/v3/documentation/smart-contracts/func/docs/stdlib#parse_std_addr) and fails. The message bounces to the vault from the database, and `op` is not `op_not_winner`.
 
 ### 7. Better bank
 
