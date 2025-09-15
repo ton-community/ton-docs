@@ -2,9 +2,9 @@ import Feedback from '@site/src/components/Feedback';
 
 # Infinite Sharding Paradigm
 
-## Understanding split-merge in the TON Blockchain
+## Understanding split-merge in TON Blockchain
 
-The TON (The Open Network) Blockchain introduces innovative mechanisms for scalability and efficiency. One of the key features is **split-merge**, a fundamental component of its architecture. This article outlines the core principles of split-merge within the Infinite Sharding Paradigm (ISP) framework.
+The TON (The Open Network) blockchain introduces innovative mechanisms for scalability and efficiency. One of the key features is **split-merge**, a fundamental component of its architecture. This article outlines the core principles of split-merge within the Infinite Sharding Paradigm (ISP) framework.
 
 #### ISP and its application
 
@@ -13,7 +13,8 @@ At the heart of TON's design is the ISP, which treats each account as its own **
 - **ShardState**: approximated as `Hashmap(n, AccountState)`, where `n` is the bit length of the `account_id`.
 - **ShardBlock**: approximated as `Hashmap(n, AccountBlock)`.
 
-Each ShardChain block is uniquely identified by `ShardIdent` (workchain + shard prefix) and `seq_no` (sequence number).
+Each ShardChain block is uniquely identified by a combination consisting of the `workchain_id` and a binary prefix `s` of the `account_id`.
+
 
 ## Algorithm for deciding whether to split or merge
 
@@ -30,7 +31,7 @@ Each block includes three core parameters that are used to assess load:
 
 1. **Block size estimate:** an estimated value computed during block collation (not the actual block size).
 2. **Gas consumption:** total gas consumed by all transactions in the block, excluding ticktock, mint, and recover transactions.
-3. **LT delta:** the difference between the block's starting and ending logical times.
+3. **lt delta:** the difference between the block's starting and ending logical times.
 
 ### 2. Block limits and classification
 
@@ -43,10 +44,11 @@ Each parameter has three thresholds: **underload**, **soft**, and **hard**:
 | --------------- | --------------------------------------- | ----------------------------------------- |
 | Block size      | 128 / 256 / 512 KiB (illustrative)      | N/A                                       |
 | Gas consumption | 2M / 10M / 20M (illustrative)           | 200K / 1M / 2.5M (illustrative)           |
-| LT delta        | 1000 / 5000 / 10000 (illustrative)      | Same as BaseChain                         |
+| lt delta        | 1000 / 5000 / 10000 (illustrative)      | Same as BaseChain                         |
 
-Note: Thresholds are defined by [configuration parameters 22 and 23](/v3/documentation/network/configs/blockchain-configs#param-22-and-23) and the live network configuration.
-
+:::note
+All values are illustrative only. The thresholds are defined by [configuration parameters 22 and 23](/v3/documentation/network/config-params/overview#param-22-and-23) and the live network configuration.
+:::
 A **medium limit** is also defined as `(soft + hard) / 2`.
 
 Each parameter is classified as follows:
@@ -57,9 +59,9 @@ Each parameter is classified as follows:
 - `3` - medium limit is exceeded.
 - `4` - hard limit is exceeded.
 
-The block classification is the maximum of the three individual classifications (`Classification of size`, `Classification of gas`, `Classification of LT delta`).
+The block classification is the maximum of the three individual classifications (`Classification of size`, `Classification of gas`, `Classification of lt delta`).
 
-Example: size = 2, gas = 3, LT = 1 → block classification = 3.
+Example: size = 2, gas = 3, lt = 1 → block classification = 3.
 
 Based on classification:
 
@@ -102,9 +104,9 @@ Shards perform the split or merge after a protocol-defined delay from the decisi
 
 ## Messages and Instant Hypercube Routing (IHR)
 
-In the infinite sharding paradigm, each account or smart contract is treated as if it were a part of its own ShardChain.
+In Infinite Sharding Paradigm, each account or smart contract is treated as if it were a part of its own ShardChain.
 Interactions between accounts occur exclusively through message passing, following the **actor model**, where accounts act as actors.
-An efficient messaging system between ShardChains is essential for the operation of the TON blockchain. A proposed mechanism called **Instant Hypercube Routing** would enable direct message delivery across ShardChains without intermediate hops. For related fee parameters, see [configuration parameters 24 and 25](/v3/documentation/network/configs/blockchain-configs#param-24-and-25).
+An efficient messaging system between ShardChains is essential for the operation of the TON blockchain. A proposed mechanism called **Instant Hypercube Routing** would enable direct message delivery across ShardChains without intermediate hops. For related fee parameters, see [configuration parameters 24 and 25](/v3/documentation/network/config-params/overview#param-24-and-25).
 
 ### Current Status of IHR
 
@@ -137,7 +139,7 @@ In the diagram above:
 - For illustration, blocks 222, 223, and 224 correspond to MasterChain block `seqno = 102`. Block 222 belongs to one shard, while blocks 223 and 224 belong to another.
 - If a split or merge event occurs, the affected shards pause operations until the next MasterChain block is produced.
 
-In summary, **split-merge** in the TON Blockchain is a sophisticated yet efficient mechanism that enhances scalability and inter-shard communication. It exemplifies TON's approach to solving core blockchain challenges by prioritizing efficiency and global consistency.
+In summary, **split-merge** in TON Blockchain is a sophisticated yet efficient mechanism that enhances scalability and inter-shard communication. It exemplifies TON's approach to solving core blockchain challenges by prioritizing efficiency and global consistency.
 
 ## Sharding details
 
