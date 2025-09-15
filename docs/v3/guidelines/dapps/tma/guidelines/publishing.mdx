@@ -9,7 +9,9 @@ As developers, it's important to understand the ecosystem we operate in. Telegra
 
 ## Telegram Apps Center
 
-**What is Telegram Apps Center (tApps Center)?** The TON Foundation launched the Telegram Apps Center to serve as a centralized repository for Telegram Bots and Mini Apps (TMAs). This platform enhances the user experience by providing an interface similar to familiar app stores.
+**What is Telegram Apps Center (tApps Center)?**
+
+The TON Foundation launched the Telegram Apps Center to serve as a centralized repository for Telegram Bots and Mini Apps (TMAs). This platform enhances the user experience by providing an interface similar to familiar app stores.
 
 **Broad ecosystem support**. The Telegram Apps Center is not limited to the TON ecosystem — it welcomes apps from other blockchains as well. Web3 integration is not required to be listed in this catalog. This inclusive approach provides a unified interface to access a variety of services.
 
@@ -90,7 +92,7 @@ Apart from this, Mini Apps opened via the menu button work in the same way as [i
 
 **TL;DR:** Mini Apps launched via **web_app** type [InlineQueryResultsButton](https://core.telegram.org/bots/api#inlinequeryresultsbutton) can be used anywhere in inline mode. Users can create content in a web interface and seamlessly send it to the current chat via inline mode.
 
-Use the `button` parameter in the `answerInlineQuery` method to display a special 'Switch to Mini App' button either above or in place of the inline results. This button will open a Mini App from the specified URL. Once done, you can call the [Telegram.WebApp.switchInlineQuery](https://core.telegram.org/bots/webapps#initializing-web-apps) method to send the user back to inline mode.
+Use the `button` parameter in the [answerInlineQuery](https://core.telegram.org/bots/api#answerinlinequery) method to display a special 'Switch to Mini App' button either above or in place of the inline results. This button opens a Mini App from the specified URL. Once done, you can call the [Telegram.WebApp.switchInlineQuery](https://core.telegram.org/bots/webapps#initializing-web-apps) method to send the user back to inline mode.
 
 Inline Mini Apps have **no access** to the chat — they can't read messages or send new ones on behalf of the user. To send messages, the user must be redirected to **inline mode** and actively pick a result.
 
