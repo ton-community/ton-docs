@@ -66,24 +66,24 @@ The Fireworks contract redeploys itself, creating three entities, each with its 
 
 For clarity, define Fireworks instances with different `state_init` by ID as follows:
 
-- **1 - Fireworks Setter**: This entity spreads different launch opcodes and can be extended to support up to four different opcodes.  
-- **2 - Fireworks Launcher-1**: This Fireworks instance launches the first fireworks, sending messages to the launcher.  
-- **3 - Fireworks Launcher-2**: This Fireworks instance launches the second fireworks, sending messages to the launcher.  
+- **1 - Fireworks Setter**: This entity spreads different launch opcodes and can be extended to support up to four different opcodes.
+- **2 - Fireworks Launcher-1**: This Fireworks instance launches the first fireworks, sending messages to the launcher.
+- **3 - Fireworks Launcher-2**: This Fireworks instance launches the second fireworks, sending messages to the launcher.
 
-<details>  
+<details>
     <summary>Expand details on transactions</summary>
 
-**Index** refers to the ID of a transaction in the `launchResult` array.  
+**Index** refers to the ID of a transaction in the `launchResult` array.
 
-- **0**: An external request to the treasury sends an outbound message `op::set_first` with 2.5 TON to Fireworks.  
-- **1**: The Fireworks Setter contract processes a transaction with `op::set_first`, sending two outbound messages to Fireworks Launcher-1 and Fireworks Launcher-2.  
+- **0**: An external request to the treasury sends an outbound message `op::set_first` with 2.5 TON to Fireworks.
+- **1**: The Fireworks Setter contract processes a transaction with `op::set_first`, sending two outbound messages to Fireworks Launcher-1 and Fireworks Launcher-2.
 - **2**: Fireworks Launcher-1 processes a transaction with `op::launch_first`, sending four outbound messages to the Launcher.
-- **3**: Fireworks Launcher-2 processes a transaction with `op::launch_second`, sending one outbound message to the Launcher.  
-- **4**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-1, sent with `send mode = 0`.  
-- **5**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-1, sent with `send mode = 1`.  
-- **6**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-1, sent with `send mode = 2`.  
-- **7**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-1, sent with `send mode = 128 + 32`.  
-- **8**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-2, sent with `send mode = 64`.  
+- **3**: Fireworks Launcher-2 processes a transaction with `op::launch_second`, sending one outbound message to the Launcher.
+- **4**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-1, sent with `send mode = 0`.
+- **5**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-1, sent with `send mode = 1`.
+- **6**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-1, sent with `send mode = 2`.
+- **7**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-1, sent with `send mode = 128 + 32`.
+- **8**: The Launcher processes a transaction with an incoming message from Fireworks Launcher-2, sent with `send mode = 64`.
 
 </details>
 
@@ -93,8 +93,8 @@ Below is a list of tests for each transaction expected to execute successfully.
 
 ### Transaction ID:1 success test
 
-[This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L75) verifies that the fireworks are successfully set by sending a transaction with a value of 2.5 TON.  
-This is the simplest case, in which the main goal is to confirm that the transaction result's `success` property is `true`.  
+[This test](https://github.com/ton-community/fireworks-func/blob/main/tests/Fireworks.spec.ts#L75) verifies that the fireworks are successfully set by sending a transaction with a value of 2.5 TON.
+This is the simplest case, in which the main goal is to confirm that the transaction result's `success` property is `true`.
 
 To filter a specific transaction from the `launchResult.transactions` array, you can use the most convenient fields: `from`, `to`, and `op`. This combination retrieves only one transaction.
 
@@ -487,7 +487,7 @@ it("should execute with expected fees", async () => {
 
 ## Edge cases tests
 
-This section provides test cases for TVM exit [codes](/v3/documentation/tvm/tvm-exit-codes) that can occur during transaction processing. These exit codes are part of the blockchain code itself. It is necessary to distinguish between exit codes during the [Compute Phase](/v3/documentation/tvm/tvm-overview#compute-phase) and the Action Phase.
+This section provides test cases for TVM exit [codes](/v3/documentation/tvm/exit-codes) that can occur during transaction processing. These exit codes are part of the blockchain code itself. It is necessary to distinguish between exit codes during the [Compute Phase](/v3/documentation/tvm/overview#compute-phase) and the Action Phase.
 
 The contract logic is executed during the Compute Phase. Various actions can be created while processing. These actions are processed in the next phase—the Action Phase. If the Compute Phase is unsuccessful, the Action Phase does not start. However, a successful Compute Phase does not guarantee that the Action Phase will also succeed.
 
@@ -503,13 +503,13 @@ but the only code denoting successful execution remains `0`.
 
 ### Compute Phase | exit code = 2
 
-TVM is a [stack machine](/v3/documentation/tvm/tvm-overview#tvm-as-a-stack-machine). When interacting with different values, the system places them on the stack. If an opcode requires elements from the stack but finds it empty, the system throws this error.
+TVM is a [stack machine](/v3/documentation/tvm/overview#tvm-as-a-stack-machine). When interacting with different values, the system places them on the stack. If an opcode requires elements from the stack but finds it empty, the system throws this error.
 
-This issue can arise when working directly with opcodes, as [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) assumes this problem will not occur. 
+This issue can arise when working directly with opcodes, as [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) assumes this problem will not occur.
 
 ### Compute Phase | exit code = 3
 
-Before execution, the system converts any code into a `continuation`. This special data type includes a slice with code, a stack, registers, and other data required for code execution. If needed, you can run this continuation later, passing the necessary parameters to initialize the stack's state.  
+Before execution, the system converts any code into a `continuation`. This special data type includes a slice with code, a stack, registers, and other data required for code execution. If needed, you can run this continuation later, passing the necessary parameters to initialize the stack's state.
 
 First, we [build](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L31-L32) such a continuation. In this case, it is an empty continuation that does nothing. Next, using the opcode `0 SETNUMARGS`, we indicate that no values should be on the stack at the start of execution. Then, we call the continuation using the opcode `1 -1 SETCONTARGS`, passing one value. Since there should have been no values, we get a StackOverflow error.
 
@@ -547,7 +547,7 @@ There are many other cases where this error is thrown, such as:
 
 ### Compute Phase | exit code = 8
 
-All data in TON is stored in [cells](/v3/documentation/data-formats/tlb/cell-boc#cell). A cell can store up to 1023 bits of data and four references to other cells. If you attempt to write more than 1023 bits or more than four references, exit code 8 is thrown.
+All data in TON is stored in [cells](/v3/documentation/data-formats/cells/overview#cell). A cell can store up to 1023 bits of data and four references to other cells. If you attempt to write more than 1023 bits or more than four references, exit code 8 is thrown.
 
 ### Compute Phase | exit code = 9
 
@@ -588,13 +588,13 @@ It also occurs when attempting to call a non-existent method. Developers often e
 
 ### Compute Phase | exit code = -14 (13)
 
-The system throws this error if there is insufficient TON to handle the Compute Phase. In the `Excno` enum class, which defines exit codes for various Compute Phase errors, [the value 13 is specified](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/excno.hpp#L39).  
+The system throws this error if there is insufficient TON to handle the Compute Phase. In the `Excno` enum class, which defines exit codes for various Compute Phase errors, [the value 13 is specified](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/excno.hpp#L39).
 
-However, during processing, the system applies the [NOT operation](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1574) to this value, changing it to `-14`. This ensures that the exit code cannot be faked using functions like `throw`, as these functions only accept positive values for exit codes. 
+However, during processing, the system applies the [NOT operation](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1574) to this value, changing it to `-14`. This ensures that the exit code cannot be faked using functions like `throw`, as these functions only accept positive values for exit codes.
 
 ### Action Phase | exit code = 32
 
-The Action Phase starts after the Compute Phase and processes actions stored in [register c5](/v3/documentation/tvm/tvm-initialization#control-register-c5) during the Compute Phase. If the system detects incorrect data in this register, it throws exit code 32.  
+The Action Phase starts after the Compute Phase and processes actions stored in [register c5](/v3/documentation/tvm/initialization#control-register-c5) during the Compute Phase. If the system detects incorrect data in this register, it throws exit code 32.
 
 ### Action Phase | exit code = 33
 
@@ -606,7 +606,7 @@ This exit code covers most errors when working with actions, such as invalid mes
 
 ### Action Phase | exit code = 35
 
-You must specify the correct source address when building a message's [CommonMsgInfo](/v3/guidelines/smart-contracts/howto/wallet#commonmsginfo) part. It must be either [addr_none](/v3/documentation/data-formats/tlb/msg-tlb#addr_none00) or the address of the account sending the message.
+You must specify the correct source address when building a message's [CommonMsgInfo](/v3/guidelines/smart-contracts/howto/wallet#commonmsginfo) part. It must be either [addr_none](/v3/documentation/data-formats/layout/messages#addr_none00) or the address of the account sending the message.
 
 In the blockchain code, this is handled by [check_replace_src_addr](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1985).
 
@@ -620,7 +620,7 @@ This exit code is similar to `-14` in the Compute Phase. It indicates insufficie
 
 ### Action Phase | exit code = 38
 
-This is similar to exit code `37` but refers to insufficient [ExtraCurrency](/v3/documentation/infra/minter-flow#extracurrency) balance.
+This is similar to exit code `37` but refers to insufficient [ExtraCurrency](/v3/documentation/network/config-params/extra-currency#extracurrency) balance.
 
 ### Action Phase | exit code = 40
 
@@ -632,8 +632,8 @@ This error may occur if the maximum number of cells in the library is exceeded o
 
 A library is a cell stored in [MasterChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) and can be used by all smart contracts if it is [public](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1844).
 
-:::info  
-Since the order of lines may change when updating the code, some links may become outdated. Therefore, all links reference the code base at commit [9728bc65b75defe4f9dcaaea0f62a22f198abe96](https://github.com/ton-blockchain/ton/tree/9728bc65b75defe4f9dcaaea0f62a22f198abe96).  
+:::info
+Since the order of lines may change when updating the code, some links may become outdated. Therefore, all links reference the code base at commit [9728bc65b75defe4f9dcaaea0f62a22f198abe96](https://github.com/ton-blockchain/ton/tree/9728bc65b75defe4f9dcaaea0f62a22f198abe96).
 :::
 
 <Feedback />

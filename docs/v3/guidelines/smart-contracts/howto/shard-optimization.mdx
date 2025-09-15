@@ -144,7 +144,7 @@ if((addressA.hash[0] >> 4) == (addressB.hash[0] >> 4)) {
 }
 ```
 
-From the human perspective, the easiest way to check the address shard is to look at the address [raw form](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses#raw-address).
+From the human perspective, the easiest way to check the address shard is to look at the address [raw form](/v3/documentation/smart-contracts/addresses/address-formats#raw-address).
 One could use the [address page](https://ton.org/address/) for it.
 Let's test it on the USDT address, for example: `EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs`.
 You will see `0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe` as a raw representation, and the first 4 bits are essentially the first hexadecimal symbol - `b`.
@@ -152,7 +152,7 @@ Now we know that the USDT minter is located in shard `b` (hex) or `11` (decimal)
 
 ### How to deploy a contract to a specific shard
 
-To understand how this works, you must first grasp how a contract address [depends](/v3/documentation/smart-contracts/addresses#account-id) on its code and data. Essentially, the system generates the address by computing a SHA256 hash of the contract’s code and data at deployment time.  
+To understand how this works, you must first grasp how a contract address [depends](/v3/documentation/smart-contracts/addresses/address#account-id) on its code and data. Essentially, the system generates the address by computing a SHA256 hash of the contract’s code and data at deployment time.  
 
 Given this, the only way to deploy a contract with the same code in a different shard is to manipulate its initial data. The data field influencing the resulting contract address is called a _nonce_. You can use any field that is either safe to update after deployment or does not directly affect contract execution for this purpose.  
 

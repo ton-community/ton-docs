@@ -10,7 +10,7 @@ In this article, we'll explore an imaginary claim solution, identify its perform
 How does a typical claim solution work? Let's break it down.
 :::
 
-The user submits some form of proof to demonstrate eligibility for the claim. The solution verifies the proof and sends jettons to the user. In this case, `proof` refers to a [merkle proof](/v3/documentation/data-formats/tlb/exotic-cells#merkle-proof), but it could also be signed data or any other authorization method. To send jettons, we'll need a jetton wallet and minter. Additionally, we must prevent users from claiming twice—this requires a double-spend protection contract. And, of course, we'd like to monetize this, right? So, we'll need at least one claim wallet. Let's summarize:
+The user submits some form of proof to demonstrate eligibility for the claim. The solution verifies the proof and sends jettons to the user. In this case, `proof` refers to a [merkle proof](/v3/documentation/data-formats/cells/exotic#merkle-proof), but it could also be signed data or any other authorization method. To send jettons, we'll need a jetton wallet and minter. Additionally, we must prevent users from claiming twice—this requires a double-spend protection contract. And, of course, we'd like to monetize this, right? So, we'll need at least one claim wallet. Let's summarize:
 
 ### Distributor
 
@@ -71,7 +71,7 @@ To build a fundamental understanding, refer to [wallet creation for different sh
 
 #### Distributor address
 
-We have full control over the distributor's data and can place it in any shard. How? Remember, the contract address is [defined by its state](/v3/documentation/smart-contracts/addresses#account-id). We can use one of the contract's data fields as a nonce and keep trying until we achieve the desired result. A good example of a nonce in actual contracts is the `subwalletId` or `publicKey` for a wallet contract. Any field that can be modified after deployment or doesn't impact the contract logic (like `subwalletId`) will work. You could even create an unused field explicitly for this purpose, as demonstrated by [vanity-contract](https://github.com/ton-community/vanity-contract).
+We have full control over the distributor's data and can place it in any shard. How? Remember, the contract address is [defined by its state](/v3/documentation/smart-contracts/addresses/address#account-id). We can use one of the contract's data fields as a nonce and keep trying until we achieve the desired result. A good example of a nonce in actual contracts is the `subwalletId` or `publicKey` for a wallet contract. Any field that can be modified after deployment or doesn't impact the contract logic (like `subwalletId`) will work. You could even create an unused field explicitly for this purpose, as demonstrated by [vanity-contract](https://github.com/ton-community/vanity-contract).
 
 #### Distributor jetton wallet
 
@@ -136,8 +136,8 @@ Now, everything should be ready to go!
 
 **More naive art**
 
-Is there anything wrong with this approach? Let's take a closer look.  
-...  
+Is there anything wrong with this approach? Let's take a closer look.
+...
 Yes, there is! There's only one fee wallet, and fees queue up to a single shard. This could have been a disaster! (Has this ever happened in real life?).
 
 ### V4
