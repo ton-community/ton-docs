@@ -50,7 +50,7 @@ Credit → Storage → Compute → Action → Bounce
 For bounceable messages:
 Storage → Credit → Compute → Action → Bounce
 
-> Compute, Action, and Bounce phases may be skipped
+> Compute, Action, and Bounce phases may be skipped.
 
 #### Fee deduction sequence
 
@@ -64,12 +64,12 @@ Storage → Credit → Compute → Action → Bounce
 | Fee in explorer                                                                                       | Value       | How it's obtained               |
 | :---------------------------------------------------------------------------------------------------- | :---------- | :------------------------------ |
 | Total fee                                                                                             | 0.001982134 | gas + storage + action + import |
-| Outbound fees (per message)                                                                            | 0.001       | fwd_fee + action_fee + ihr_fee  |
+| Fwd. fee                                                                                              | 0.001       | action_fee + fwd_fee + ihr_fee  |
 | Gas fee                                                                                               | 0.0011976   | compute phase, gas used         |
 | Storage fee                                                                                           | 0.000000003 | storage phase, account only     |
 | Action fee                                                                                            | 0.000133331 | action phase, cost per action   |
 | Import fee (hidden)                                                                                   | 0.0006512   | cost of import of in_ext_msg    |
-| [Forward fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#forward-fees) (each msg) | 0.000266669 | cost of fwd of in_msg           |
+| [Forward fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#formula-1) (each msg) | 0.000266669 | cost of fwd of in_msg           |
 | [IHR fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#ihr) (each msg)           | 0.0006      | cost of ihr fwd of in_msg       |
 
 :::info Important
@@ -246,7 +246,7 @@ State before the transaction: Account A has 1 TON, Account B has 1 TON, Account 
 
 **A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 64, `msg_fwd_fees` are 0.004 TON, actual received `value` will be 0.6 TON. The sum `action_fee` + `fwd_fee` (and `ihr_fee` if applicable) is deducted from the outbound message value; `storage_fee` (part of `total_fee`) is paid from the contract balance; the recipient’s net credit equals the message value minus outbound fees.
 
-State after the transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account C has 1.6 - (total_fee + `fwd_fee`) TON
+State after the transaction: Account A has 0.896 TON, Account B has 0.5 TON, Account C has 1.6 - (`total_fee` + `fwd_fee`) TON
 
 :::info
 You can check [this example](https://testnet.tonviewer.com/transaction/f63ab35f34e342cdd249f13018d5034ce3d80c488628d5a4db0a43163fa50adb).
@@ -276,9 +276,9 @@ When sending multiple messages, you may get exit code 37 (Insufficient Toncoin) 
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 65, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON. The sum `action_fee` + `fwd_fee` (and `ihr_fee` if applicable) is deducted from the contract balance; `storage_fee` (part of `total_fee`) is paid from the contract balance; the recipient’s net credit equals the message value minus outbound fees.
+**A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 65, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON. The sum `action_fee` + `fwd_fee` (and `ihr_fee` if applicable) is deducted from the contract balance; `storage_fee` (part of `total_fee`) is paid from the contract balance; the recipient’s net credit equals the full message value.
 
-State after the transaction: Account A has 0.896 TON, Account B has 0.5 - (total_fee + `fwd_fee`) TON, Account C has 1.6 TON
+State after the transaction: Account A has 0.896 TON, Account B has 0.5 - (`action_fee` + `fwd_fee` + `ihr_fee`, if applicable) TON, Account C has 1.6 TON
 
 :::info
 You can check [this example](https://testnet.tonviewer.com/transaction/ad93e784453b573d737d9d928b4377ff3779177753e05629e54f6629556568ad).
@@ -305,7 +305,7 @@ State before the transaction: Account A has 1 TON, Account B has 1 TON, Account 
 **A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 80, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON. The sum `action_fee` + `fwd_fee` (and `ihr_fee` if applicable) is deducted from the outbound message value; `storage_fee` (part of `total_fee`) is paid from the contract balance; the recipient’s net credit equals the message value minus outbound fees.
 If an error occurs during the action phase, the message will bounce, and `total_fee` + `fwd_fee` will be deducted from the `value`.
 
-State after the transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
+State after the transaction with an error: Account A has 1 - (`total_fee` + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
 
 <br></br>
 <div class="text--center">
@@ -341,7 +341,7 @@ If no errors occur, the result is the same as [mode = 64, flag 0](#mode64). You 
 
 State before the transaction: Account A has 1 TON, Account B has 1 TON, Account C has 1 TON
 
-**A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 81, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON. The sum `action_fee` + `fwd_fee` (and `ihr_fee` if applicable) is deducted from the contract balance; `storage_fee` (part of `total_fee`) is paid from the contract balance; the recipient’s net credit equals the message value minus outbound fees.
+**A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 81, `msg_fwd_fees` are 0.004 TON, actual received value will be 0.6 TON. The sum `action_fee` + `fwd_fee` (and `ihr_fee` if applicable) is deducted from the contract balance; `storage_fee` (part of `total_fee`) is paid from the contract balance; the recipient’s net credit equals the full message value.
 If an error occurs during the action phase, the message will bounce, and `total_fee` + `fwd_fee` will be deducted from the `value`.
 
 State after the transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
@@ -382,7 +382,7 @@ State before the transaction: Account A has 1 TON, Account B has 1 TON, Account 
 
 **A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 128, `msg_fwd_fees` are 0.004 TON, the actual received value will be 1.1 - `total_fee` TON, `total_fee` is deducted from `value`.
 
-State after the transaction: Account A has 0.896 TON, Account B has 0 TON, Account C has 2.1 - (total_fee + `fwd_fee`) TON
+State after the transaction: Account A has 0.896 TON, Account B has 0 TON, Account C has 2.1 - (`total_fee` + `fwd_fee`) TON
 
 <br></br>
 <div class="text--center">
@@ -403,7 +403,7 @@ State before the transaction: Account A has 1 TON, Account B has 1 TON, Account 
 
 **A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 144, `msg_fwd_fees` are 0.004 TON, the actual received value will be 1.1 - `total_fee` TON, `total_fee` is deducted from `value`.
 
-State after the transaction with an error: Account A has 1 - (total_fee + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
+State after the transaction with an error: Account A has 1 - (`total_fee` + `fwd_fee`) TON, Account B has 1 TON, Account C has 1 TON
 
 <br></br>
 <div class="text--center">
@@ -441,7 +441,7 @@ State before the transaction: Account A has 1 TON, Account B has 1 TON, Account 
 
 **A** sent 0.1 TON to **B**; after that, **B** sent 0.5 TON to **C** with `mode` = 160. The `msg_fwd_fees` are 0.004 TON. The actual received value will be 1.1 - `total_fee` TON, with `total_fee` deducted from `value`.
 
-State after the transaction: Account A has 0.896 TON, Account B has 0 TON and `nonexist`, Account C has 2.1 - (total_fee + `fwd_fee`) TON
+State after the transaction: Account A has 0.896 TON, Account B has 0 TON and `nonexist`, Account C has 2.1 - (`total_fee` + `fwd_fee`) TON
 
 When the balance reaches 0 TON, destroy the contract.
 
