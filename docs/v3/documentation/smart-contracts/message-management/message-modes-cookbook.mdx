@@ -25,23 +25,23 @@ Therefore, any blockchain payment may come either:
 
 #### Fees
 
-Actual transaction fees will vary depending on the blockchain configuration, the smart contract code, and other factors. When a message is received, storage and gas fees will consume part of the contract `balance` if the message `value` [is above a certain amount](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped).
+Actual transaction fees will vary depending on the blockchain configuration, the smart contract code, and other factors. When a message is received, storage and gas fees will consume part of the contract `balance` if the message `value` [is above a certain amount](/v3/documentation/tvm/overview#when-the-compute-phase-is-skipped).
 
-According to the [transaction flow](/v3/documentation/tvm/tvm-overview#transactions-and-phases), each transaction consists of five distinct phases:
+According to the [transaction flow](/v3/documentation/tvm/overview#transactions-and-phases), each transaction consists of five distinct phases:
 
-- **Storage phase**  
+- **Storage phase**
    Handles storage fee and `in_msg` import fee.
 
-- **Credit phase**  
+- **Credit phase**
    The `in_msg` value [is credited](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L959-L981) to the account balance.
 
-- **Compute phase**  
+- **Compute phase**
    Executes the smart contract code via TVM.
 
-- **Action phase**  
+- **Action phase**
    Processes transaction outputs including `SENDRAWMSG` operations.
 
-- **Bounce phase**  
+- **Bounce phase**
    Manages message bounce handling when applicable.
 
 #### Execution order notes:
@@ -115,7 +115,7 @@ Please note that omitting the `+2` flag may be unsafe. For more information, ref
 State before transaction: Account A has 1 TON, Account B has 1 TON
 
 **A** sent 0.1 TON to **B**. The `msg_fwd_fees` are 0.004 TON, and the actual received value will be 0.096 TON. The `fwd_fee` and `action_fee` are deducted from `value`.
-In case of an error during [action phase](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes), the message will be skipped instead of throwing an [exit code](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes).
+In case of an error during [action phase](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes), the message will be skipped instead of throwing an [exit code](/v3/documentation/tvm/exit-codes#standard-exit-codes).
 
 State after the transaction: Account A has 0.9 TON, Account B has 1.096 TON
 
@@ -463,7 +463,7 @@ When the balance reaches 0 TON, destroy the contract.
 <br></br>
 
 [cb]: https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/block.tlb#L263C1-L265C20
-[msg]: /v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo
+[msg]: /v3/documentation/data-formats/layout/messages#commonmsginfo
 [storage_fee]: /v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee
 [account_storage]: https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L651-L675
 [in_msg_import]: https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L783-L816

@@ -84,7 +84,7 @@ mv /var/ton-work /var/ton-work.bak
 Here is an example command to download & restore the **mainnet** dump from the ton.org server:
 
 ```shell
-curl -L -s https://archival-dump.ton.org/dumps/mainnet_full_44888096.zfs.zstd | pv | zstd -d -T16 | zfs recv mypool/ton-db
+curl -L -s https://archival-dump.ton.org/dumps/mainnet_full_44888096.zfs.zstd | pv | zstd -d -T16 | zfs recv data/ton-db
 ```
 
 To install the **testnet** dump, use:
@@ -250,7 +250,7 @@ zfs destroy <snapshot>
 
 ### Force the archive node not to store blocks
 
-To force the node not to store archive blocks, use the value `86400`. Check the [set_node_argument section](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#set_node_argument) for more details.
+To force the node not to store archive blocks, use the value `86400`. Check the [set_node_argument section](/v3/documentation/nodes/mytonctrl/overview#set_node_argument) for more details.
 
 ```bash
 installer set_node_argument --archive-ttl 86400
@@ -262,7 +262,7 @@ Contact technical support at [@ton_node_help](https://t.me/ton_node_help).
 
 ## See also
 
-- [TON node types](/v3/documentation/infra/nodes/node-types)
+- [TON node types](/v3/documentation/nodes/overview)
 - [Run a full node](/v3/guidelines/nodes/running-nodes/full-node)
 
 <Feedback />
