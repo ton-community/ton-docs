@@ -21,6 +21,7 @@
       "path": "./src/grammar/allow-list-dictionary.txt"
     }
   ],
+
   "flagWords": [
     "SSmart->Smart",
   ],

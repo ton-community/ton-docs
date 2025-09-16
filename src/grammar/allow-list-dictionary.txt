@@ -32,6 +32,7 @@ Daemonizes
 Damgård
 Datagram
 DeFi
+Defop
 Decompilation
 Dedust
 Descr
@@ -159,6 +160,7 @@ asms
 basechain
 berfest
 bitmask
+bitshift
 bitstring
 bitstrings
 blackhole
@@ -193,6 +195,7 @@ decompiles
 decompiling
 deeplink
 defi
+Dehasher
 delcustomoverlay
 dnsresolve
 docker-buildx-plugin
@@ -200,7 +203,9 @@ dracones
 drvcf
 dstat
 ed25519_chksign
+elseifnot
 ensurepip
+excode
 exitcode
 extout
 extracurrencies
@@ -287,6 +292,7 @@ nanocoins
 nanogram
 nanoton
 nanotons
+nexteq
 newbot
 newkeypair
 nextra
@@ -298,9 +304,11 @@ penalising
 pfxdict
 plzip
 precomplied
+preconfigured
 predefines
 preimage
 prer
+preveq
 presales
 previsit
 psylopunk
@@ -316,6 +324,7 @@ romanovichim
 rungetmethod
 runvm
 runvmcode
+savelist
 seamus
 searchability
 seck256r1
@@ -327,7 +336,9 @@ selfcheck
 sendfile
 seqno
 seqnos
+setmenubutton
 setwebpass
+shardblk
 shardblocks
 shardchain
 shardchains
@@ -381,6 +392,7 @@ walletv
 workchain
 workchains
 xguard
+XMPL
 xlarge
 xlarge
 xssnick
@@ -389,3 +401,8 @@ yourname
 yungwine
 zellic
 zerostate
+repr
+plsc
+clcf
+permissionless
+

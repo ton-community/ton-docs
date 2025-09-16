@@ -87,7 +87,8 @@ _ amount:Coins start_from:uint48 expired_at:uint48 = AirdropItem;
 _ _(HashMap 267 AirdropItem) = Airdrop;
 ```
 
-In this case, the address distribution is random, and all data fields are meaningful, making it untunable. However, nothing stops us from modifying it like this:
+In this case, the address distribution is random, and all data fields are meaningful, making it non-tunable.
+However, nothing stops us from modifying it like this:
 
 ```
 _ amount:Coins start_from:uint48 expired_at:uint48 nonce:uint64 = AirdropItem;
