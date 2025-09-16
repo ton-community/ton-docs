@@ -22,13 +22,15 @@ Below, we outline three fundamental approaches:
 
 ## Approach 1: [randomize_lt()](/v3/documentation/smart-contracts/func/docs/stdlib#randomize_lt) \{#randomize_lt}
 
-**Mechanism**: Generates [randomness using transaction logical time](/v3/guidelines/smart-contracts/security/ton-hack-challenge-1/#4-lottery) (`lt`) and blockchain entropy.  
+**Mechanism**: generates [randomness using transaction logical time](/v3/guidelines/smart-contracts/security/ton-hack-challenge-1/#4-lottery) (`lt`) and blockchain entropy.
+
 **Security model**:
 
 - ✅ Safe against user manipulation
 - ❌ Vulnerable to colluding validators (could predict/influence values)
 
-**Speed**: Fast (single-block operation)  
+**Speed**: fast (single-block operation)
+
 **Use cases**:
 
 - Non-critical applications, for example, gaming and NFTs
@@ -36,28 +38,30 @@ Below, we outline three fundamental approaches:
 
 ---
 
-## Approach 2: Block skipping \{#block-skip}
+## Approach 2: block skipping \{#block-skip}
 
-**Mechanism**: Uses [entropy from skipped blocks](https://github.com/puppycats/ton-random#ton-random) in blockchain history (see also [guidance](/v3/guidelines/smart-contracts/security/random#conclusion)).  
+**Mechanism**: uses [entropy from skipped blocks](https://github.com/puppycats/ton-random#ton-random) in blockchain history (see also [guidance](/v3/guidelines/smart-contracts/security/random#conclusion)).
+
 **Security model**:
 
 - ✅ Resistant to user manipulation
 - ⚠️ Not fully secure against determined validators (may influence block inclusion timing)
 
-**Speed**: Slow (requires multiple blocks to finalize)  
+**Speed**: slow (requires multiple blocks to finalize)
+
 **Use cases**:
 
 - Medium-stakes applications, for example, lottery systems
-- Scenarios with partial trust in validator set
+- Scenarios with partial trust in a validator set
 
 ---
 
-## Approach 3: Commit‑reveal scheme \{#commit-reveal}
+## Approach 3: commit‑reveal scheme \{#commit-reveal}
 
 **Mechanism**:
 
-1. **Commit phase**: Participants submit hashed secrets
-2. **Reveal phase**: Secrets are disclosed and combined to generate final randomness
+1. **Commit phase**: participants submit hashed secrets
+2. **Reveal phase**: secrets are disclosed and combined to generate final randomness
 
 **Security model**:
 
@@ -65,7 +69,8 @@ Below, we outline three fundamental approaches:
 - ✅ More resilient to user manipulation; validators may still influence via timing or censorship—no method is perfectly unpredictable on TON.
 - ⚠️ Requires smart-contract (on-chain) verification of commitments and incentives/penalties for non-reveals.
 
-**Speed**: Very slow (multi-phase, multi-block process)  
+**Speed**: very slow (multi-phase, multi-block process)
+
 **Use cases**:
 
 - High-value applications, for example, decentralized auctions
@@ -85,12 +90,15 @@ Below, we outline three fundamental approaches:
 ---
 
 :::caution
-No method is universally perfect – choose based on:
+Single-block randomness (for example, [`randomize_lt()`](/v3/guidelines/smart-contracts/security/random-number-generation#randomize_lt)) is not secure against validators who can influence or predict values.
+For stronger guarantees, consider multi-phase schemes such as [commit–reveal](/v3/guidelines/smart-contracts/security/random-number-generation#commit-reveal).
+
+
+When choosing an approach, weigh:
 
 - Value-at-risk in your application
 - Required time-to-finality
 - Trust assumptions about validators
-
 :::
 
 
