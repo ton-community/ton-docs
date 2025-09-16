@@ -18,7 +18,8 @@ In most cases, the sender:
 1. Attaches enough Toncoin to cover gas and forwarding fees to the internal message
 2. Sets the `bounce` flag (sends a bounceable internal message)
 
-The receiver then returns the unused portion of the received value with the answer, deducting message forwarding fees. This is typically done using `SENDRAWMSG` with [`mode = 64`](/v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode64).
+The receiver then returns the unused portion of the received value with the answer, deducting message forwarding fees.
+In Jettons it is typically done using `RAWRESERVE` with `SENDRAWMSG` + [`mode = 128/130/144`](/v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode128).
 :::
 
 ## Message bouncing
@@ -28,7 +29,7 @@ The receiver then returns the unused portion of the received value with the answ
 If the receiver cannot parse the received message and terminates with a non-zero exit code (for example, due to an unhandled cell deserialization exception), the message automatically bounces back to its sender. The bounced message:
 - Has its `bounce` flag cleared
 - Has its `bounced` flag set
-- Contains 32 bits `0xffffffff` followed by 256 bits from the original message body
+- Contains `0xffffffff` (32-bit) followed by the original message body (256-bit)
 
 ### Handling bounced messages
 
@@ -40,7 +41,7 @@ If the `bounced` flag is set:
 - Alternatively, terminate with zero exit code to ignore bounced messages
 
 :::note
-The `bounced` flag is rewritten by the protocol during sending and cannot be forged. If a message has the `bounced` flag set, it is the result of a bounced message from the receiver. See also: [non-bounceable messages](/v3/documentation/smart-contracts/message-management/non-bounceable-messages).
+The `bounced` flag is set by the protocol during bounce; a message with this flag indicates a bounced message. See also: [non-bounceable messages](/v3/documentation/smart-contracts/message-management/non-bounceable-messages).
 :::
 
 ## Error handling
