@@ -102,7 +102,7 @@ This is equivalent to the longer form:
 int x = foo(a, b, c);
 ```
 
-
+Also Haskell-style calls are possible, but not always (to be fixed later):
 
 FunC also supports **Haskell-style** function application, but with some limitations:
 
@@ -124,13 +124,13 @@ Instead, parentheses are required:
 int y = foo (1) (2) (3); ;; Valid syntax
 ```
 ### Lambda expressions
-Lambda expressions are not supported in FunC.
+Lambda expressions are not yet supported in FunC.
 
 ### Method calls
 
 #### Non-modifying methods
 
-In FunC, a function with at least one argument can be invoked as a non‑modifying method using the `.` syntax.
+In FunC, a function with at least one argument can be invoked as a non‑modifying method using the dot `.` syntax.
 
 For example, the function `store_uint` has the type `(builder, int, int)  → builder`, where:
 - The first argument is a builder object.
@@ -338,7 +338,7 @@ repeat(-1) {
 ;; x = 1
 ```
 
-A range check exception is thrown if the repetition count is less than `-2³¹` or greater than `2³¹ - 1`
+A range check exception is thrown if the repetition count is less than `-2³¹` or greater than `2³¹ - 1`.
 
 ### While loop
 
@@ -365,9 +365,6 @@ do {
 } until (x % 17 == 0);
 ;; x = 51
 ```
-
-
-
 
 ## If statements
 
