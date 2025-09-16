@@ -45,7 +45,6 @@ allowing a variable of type `A` to store either a valid value or `null`.
 This transformation happens automatically and is not enforced by the type checker.
 
 ## Hole types
-
 FunC has support for type inference. Types `_` and `var` represent type "holes" which can later be filled with some actual type during type checking. For example, `var x = 2;` is a definition of variable `x` equal to `2`. The type checker can infer that `x` has type `int`, because `2` has type `int`, and the left and right sides of the assignment must have equal types.
 
 FunC supports type inference. The hole types `_` and `var` serve as placeholders that are resolved during type checking.
