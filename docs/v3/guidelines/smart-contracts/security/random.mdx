@@ -8,7 +8,7 @@ This information is accurate at the time of writing. It may change during any ne
 
 Lottery contracts occasionally appear on TON. These contracts often use unsafe methods to handle randomness, making the generated values predictable and allowing the lottery to be exploited.  
 
-Exploiting weaknesses in random number generation typically involves using a proxy contract that forwards a message if the random value meets specific conditions. While proposals exist for wallet contracts that can execute arbitrary on-chain code (specified and signed by the user), most popular wallet versions do not support this functionality. So, if a lottery checks whether a gambler participates through a wallet contract, is it safe?  
+Exploiting weaknesses in random number generation typically involves using a proxy contract that forwards a message if the random value meets specific conditions. While proposals exist for wallet contracts that can execute arbitrary on-chain code (specified and signed by the user), most popular wallet versions do not support this functionality. So, if a lottery verifies that a gambler participates through a wallet contract, is it safe?  
 
 Alternatively, the question can be framed as: Can an external message be included in a block where the random value matches the sender's requirements?  
 
@@ -65,17 +65,16 @@ Pseudorandom numbers are then generated using the procedure described on the [TV
 > **x\{F810} RANDU256**  
 > Generates a new pseudorandom unsigned 256-bit Integer x. The algorithm is as follows: if r is the old value of the random seed, considered as a 32-byte array (by constructing the big-endian representation of an unsigned 256-bit integer), then its sha512(r) is computed; the first 32 bytes of this hash are stored as the new value r' of the random seed, and the remaining 32 bytes are returned as the next random value x.  
 
-This process is confirmed by examining the code for [preparing the contract's c7](https://github.com/ton-blockchain/ton/blob/master/crypto/block/transaction.cpp#L903) (c7 is a tuple for temporary data, storing the contract address, starting balance, random seed, etc.) and [generating random values](https://github.com/ton-blockchain/ton/blob/master/crypto/vm/tonops.cpp#L217-L268).  
+This process is confirmed by examining the code for [preparing the contract's c7](https://github.com/ton-blockchain/ton/blob/master/crypto/block/transaction.cpp#L903) (c7 is a tuple for temporary data, storing the contract address, starting balance, random seed, etc.) and [generating random values](https://github.com/ton-blockchain/ton/blob/master/crypto/vm/tonops.cpp#L217-L268).
 
 ## Conclusion  
 
 No random number generation in TON is entirely safe in terms of unpredictability. This means **no perfect lottery can exist on TON**, nor can any lottery be fully trusted to be fair.  
 
-Typical usage of pseudorandom number generators (PRNGs) may include `randomize_lt()`, but such contracts can still be tricked by selecting the correct blocks to send messages. Proposed solutions, such as sending messages to another workchain and receiving a response to skip blocks, only delay the threat. In reality, any validator (representing 1/250 of the TON Blockchain) can choose the optimal time to send a request to a lottery contract so that the response arrives in a block they generate. They can then select any block seed they desire. This risk will increase once collators are introduced to the mainnet, as standard complaints cannot fine them since they do not stake anything in the Elector contract.  
+Typical usage of pseudorandom number generators (PRNGs) may include `randomize_lt()`, but such contracts can still be tricked by selecting the correct blocks to send messages. Proposed solutions, such as sending messages to another workchain and receiving a response to skip blocks, only delay the threat. In reality, any validator (representing 1/250 of the TON Blockchain) can choose the optimal time to send a request to a lottery contract so that the response arrives in a block they generate. They can then select any block seed they desire. This risk will increase once collators are introduced to the mainnet, as standard complaints cannot fine them since they do not stake anything in the Elector contract.
 
 {/* TODO: Find an example contract using random without any additions and demonstrate how to determine the result of RANDU256 knowing the block random seed (include a link to `dton.io` to show the generated value). */}
 
 {/* TODO: Next article. "Let's proceed to writing a tool that exploits this. It will attach to a validator and include proposed external messages in blocks satisfying specific conditions—provided a fee is paid." */}
 
 <Feedback />
-
