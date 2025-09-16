@@ -28,25 +28,26 @@ git clone --recurse-submodules https://github.com/ton-blockchain/ton.git
    - `cmake` version 3.0.2 or later
    - `g++` or `clang` (or another C++14-compatible compiler as appropriate for your operating system).
    - OpenSSL (including C header files) version 1.1.1 or later
-   - `git`, `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`, `pkg-config`, `libsodium-dev`, `libsecp256k1-dev`, `liblz4-dev`
+   - `build-essential`, `zlib1g-dev`, `gperf`, `libreadline-dev`, `ccache`, `libmicrohttpd-dev`, `pkg-config`, `libsodium-dev`, `libsecp256k1-dev`, `liblz4-dev`
 
 ### On Ubuntu
 
 ```bash
 sudo apt update
-sudo apt install git build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev pkg-config libsodium-dev libsecp256k1-dev liblz4-dev
+sudo apt install build-essential cmake clang openssl libssl-dev zlib1g-dev gperf libreadline-dev ccache libmicrohttpd-dev pkg-config libsodium-dev libsecp256k1-dev liblz4-dev
 ```
 
 3. Suppose that you have fetched the source tree to directory `~/ton`, where `~` is your home directory, and that you have created an empty directory `~/ton-build`:
 
 ```bash
-mkdir -p ~/ton-build && cd ~/ton-build
+mkdir ton-build
 ```
 
 Then run the following in a terminal on Linux or macOS:
 Then run the following in a terminal on Linux or macOS:
 
 ```bash
+cd ton-build
 export CC=clang
 export CXX=clang++
 cmake -DCMAKE_BUILD_TYPE=Release ../ton && cmake --build . -j$(nproc)
@@ -112,42 +113,29 @@ cmake -GNinja -DCMAKE_BUILD_TYPE=Release .. \
 -DLZ4_LIBRARIES=$lz4Path/lib/liblz4.a \
 -DLZ4_INCLUDE_DIRS=$lz4Path/lib
 ```
-
-Before invoking CMake, create and enter a build directory (for example, `mkdir -p ~/ton-build && cd ~/ton-build`) and point CMake to the TON sources with `../ton`.
-
-Note: On Intel Macs, Homebrew may be installed under `/usr/local` instead of `/opt/homebrew`. Adjust paths like `/opt/homebrew/opt/llvm@16/...` accordingly.
-
-Build the project:
-
-```zsh
-cmake --build . -j$(sysctl -n hw.ncpu)
-```
-
-
-
 :::tip
-If you are compiling on a computer with low memory (e.g., 1 GiB), don't forget to [create swap space](/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory).
+If you are compiling on a computer with low memory (e.g., 1 GiB), don't forget to [create swap partitions](/v3/guidelines/smart-contracts/howto/compile/instructions-low-memory).
 :::
 
 ## Download global config
 
-For tools like the Lite Client, download the global network config.
+For tools like the lite client, download the global network config.
 
-Download the newest configuration file from [https://ton.org/global-config.json](https://ton.org/global-config.json) for mainnet:
+Download the newest configuration file from [https://ton.org/global-config.json](https://ton-blockchain.github.io/global.config.json) for mainnet:
 
 ```bash
 wget https://ton-blockchain.github.io/global.config.json
 ```
 
-or from [https://ton.org/testnet-global.config.json](https://ton.org/testnet-global.config.json) for testnet:
+or from [https://ton.org/testnet-global.config.json](https://ton-blockchain.github.io/testnet-global.config.json) for testnet:
 
 ```bash
 wget https://ton-blockchain.github.io/testnet-global.config.json
 ```
 
-## Lite Client
+## Lite client
 
-To build the Lite Client, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [download the config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config), and then do:
+To build the lite client, do [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common), [download the config](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config), and then do:
 
 ```bash
 cmake --build . --target lite-client
