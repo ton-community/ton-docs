@@ -91,10 +91,10 @@ In the following example, `x` will contain the initial value of `ds`:
 
 ```func
 #pragma allow-post-modification
-(x, y) = (ds, ds~load_bits(8));
+(x, y) = (ds, ds~load_bits(8)); 
 ```
 
-Here, in `f(ds, ds~load_uint(8));`:
+Here, in `f(ds, ds~load_bits(8));`:
 
 - The first argument of `f` will contain the initial value of `ds`.
 - The second argument will contain the 8-bit-modified value of `ds`.
