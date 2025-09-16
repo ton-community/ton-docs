@@ -91,7 +91,7 @@ Nevertheless, because each subsequent version inherits the functionality of the 
    - <b>signature</b>: 512-bit long Ed25519 signature.
    - <b>msg-seqno</b>: 32-bit long sequence number.
    - <b>(0-4) mode</b>: up to four 8-bit long integers defining sending mode for each message.
-2. Up to 4 references to cells containing messages:
+2. Up to 4 references to cells containing messages.
 
 As you can see, the main functionality of the wallet is to provide a safe way to communicate with TON Blockchain from the outside world. The `seqno` mechanism protects against replay attacks, and the `Ed25519 signature` provides authorized access to wallet functionality. We will not dwell in detail on each of these mechanisms, as they are described in detail in the [external message](/v3/documentation/smart-contracts/message-management/external-messages) documentation page and are quite common among smart contracts receiving external messages. The payload data consists of up to 4 references to cells and the corresponding number of modes, which will be directly transferred to the [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
 
@@ -235,12 +235,12 @@ All previous versions of wallets had a straightforward implementation for receiv
 - <b>signature</b>: 512-bit long Ed25519 signature.
 - <b>subwallet_id</b>: 32-bit long subwallet ID.
 - <b>valid-until</b>: 32-bit long Unix time integer.
- - <b>msg-seqno</b>: 32-bit long sequence number.
- - <b>opcode</b>: 32-bit long operation code.
+- <b>msg-seqno</b>: 32-bit long sequence number.
+- <b>opcode</b>: 32-bit long operation code.
 
 1. opcode = 0x0, simple send.
    - <b>(0-4) mode</b>: up to four 8-bit integers defining the sending mode for each message.
- - <b>(0-4) messages</b>: up to four references to cells containing messages.
+   - <b>(0-4) messages</b>: up to four references to cells containing messages.
 2. opcode = 0x1, deploy and install plugin.
    - <b>workchain</b>: 8-bit long integer.
    - <b>balance</b>: VARUINT16 Toncoin amount of initial balance.
@@ -318,7 +318,7 @@ In contrast to the specifications of previous wallet versions, we will rely on t
 
 #### Persistent memory layout
 
-```
+```tlb
 contract_state$_
     is_signature_allowed:(## 1)
     seqno:#
@@ -331,7 +331,7 @@ As you can see, the `ContractState`, compared to previous versions, hasn't under
 
 #### Authentication process
 
-```
+```tlb
 signed_request$_             // 32 (opcode from outer)
   wallet_id:    #            // 32
   valid_until:  #            // 32
@@ -351,7 +351,7 @@ external_signed#7369676e signed:SignedRequest = ExternalMsgBody;
 
 Before we get to the actual payload of our messages — `InnerRequest` — let's first look at how version 5 differs from previous versions in the authentication process. The `InternalMsgBody` combinator describes two ways to access wallet actions through internal messages. The first method is one we are already familiar with from version 4: authentication as a previously registered extension, the address of which is stored in `extensions_dict`. The second method is authentication through the stored public key and signature, similar to external requests.
 
-At first, this might seem like an unnecessary feature, but it actually enables requests to be processed through external services (smart contracts) that are not part of your wallet's extension infrastructure—a key feature of V5. Gas-free transactions rely on this functionality.
+At first, this might seem like an unnecessary feature, but it actually enables requests to be processed through external services (smart contracts) that are not part of your wallet's extension infrastructure — a key feature of V5. Gasless transactions rely on this functionality.
 
 Note that simply receiving funds is still an option. Practically, any received internal message that doesn't pass the authentication process will be considered a transfer.
 
@@ -359,7 +359,7 @@ Note that simply receiving funds is still an option. Practically, any received i
 
 The first thing that we should notice is `InnerRequest`, which we have already seen in the authentication process. In contrast to the previous version, both external and internal messages have access to the same functionality, except for changing the signature mode (i.e., the `is_signature_allowed` flag).
 
-```
+```tlb
 out_list_empty$_ = OutList 0;
 out_list$_ {n:#}
     prev:^(OutList n)
@@ -389,7 +389,7 @@ Note that the maximum number of actions is 255; this is a consequence of the rea
 | Exit code | Description                                                                       |
 |-----------| --------------------------------------------------------------------------------- |
 | 0x84      | Authentication attempt through signature while it's disabled                      |
-| 0x85      | `seqno` check failed, reply protection occurred                                   |
+| 0x85      | `seqno` check failed, replay protection occurred                                   |
 | 0x86      | `wallet_id` does not correspond to the stored one                                 |
 | 0x87      | `Ed25519 signature` check failed                                                  |
 | 0x88      | `valid-until` check failed                                                        |
@@ -458,7 +458,7 @@ If you, for some reason, need to lock coins in a wallet for some time without th
 
 It allows you to set the time until which you won't be able to withdraw anything from the wallet. You can also customize it by setting unlock periods so that you will be able to spend some coins during these set periods.
 
-For example: you can create a wallet which will hold 1 million coins with total vesting time of 10 years. Set the cliff duration to one year, so the funds will be locked for the first year after the wallet is created. Then, you can set the unlock period to one month, so `1'000'000 TON / 120 months = ~8333 TON` will unlock every month.
+For example: you can create a wallet which will hold 1 million coins with total vesting time of 10 years. Set the cliff duration to one year, so the funds will be locked for the first year after the wallet is created. Then, you can set the unlock period to one month, so `1'000'000 Toncoin / 120 months = ~8333 Toncoin` will unlock every month.
 
 Wallet source code:
 

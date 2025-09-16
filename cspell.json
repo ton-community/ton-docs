@@ -345,7 +345,8 @@
     "liteserver",
     "mytonctrl",
     "mytoncore",
-    "unexist"
+    "unexist",
+    "walletv"
   ],
   "ignoreRegExpList": [
     "\\(#.*\\)",
