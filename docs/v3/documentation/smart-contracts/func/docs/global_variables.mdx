@@ -9,7 +9,7 @@ A FunC program is a list of function declarations, function definitions, and glo
 ```func
 global ((int, int) -> int) op;
 ```
-Here's a simple program demonstrating how to use a function-typed global variable:
+Here's a simple program demonstrating how to use a global functional variable:
 
 ```func
 int check_assoc(int a, int b, int c) {
@@ -24,8 +24,8 @@ int main() {
 
 In this example, the global variable `op` is assigned the addition operator [`_+_`](/v3/documentation/smart-contracts/func/docs/literals_identifiers#identifiers). The program then verifies the associativity of addition using three sample integers: 2, 3, and 9.
 
- 
 
+Under the hood, global variables in FunC are stored in the `c7` control register of the TVM, with a maximum limit of 31 variables.
 
 In FunC, you can _omit the type_ of a global variable. 
 In this case, the compiler determines the type based on how the variable is used. 
@@ -74,13 +74,14 @@ However, the following example is valid:
 
 ```func
 global int C;
-
 int main() {
-  C = 3; ;; assigns to global C (not a local declaration)
+  int C = 3;
   return C;
 }
 ```
 
-In this case, this is not declaring a new local variable but instead assigning the value `3` to the global variable `C`. 
+In this case, `int C = 3;` is not declaring a new local variable but instead assigning value `3` to the global variable `C`.
+
 This behavior is explained in more detail in the section on [statements](/v3/documentation/smart-contracts/func/docs/statements#variable-declaration).
+
 <Feedback />
