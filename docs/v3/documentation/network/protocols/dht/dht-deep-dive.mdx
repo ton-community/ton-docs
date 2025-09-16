@@ -197,7 +197,7 @@ When constructing the corresponding `dht.key`, set `name` to `nodes`. We will re
 
 After the validation process, we will obtain the public keys (IDs) of the nodes that have information about our workchain and shard. To access the ADNL addresses of these nodes, we will hash the keys to create IDs and repeat the same procedure for each ADNL address, similar to how we did for the `foundation.ton` domain.
 
-As a result, we will have the addresses of the nodes. If desired, we can use these addresses to discover additional nodes within the same chain using [overlay.getRandomPeers](https://github.com/ton-blockchain/ton/blob/ee42357f5954f777d7ebd937b2683096da3699bf/tl/generate/scheme/ton_api.tl#L244).
+As a result, we will have the addresses of the nodes. If desired, we can use these addresses to discover additional nodes within the same chain using [overlay.getRandomPeers](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L237).
 
 These nodes will also provide us with all the information regarding the blocks.
 
