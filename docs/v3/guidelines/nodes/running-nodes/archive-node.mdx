@@ -14,8 +14,8 @@ An archive node is a type of full node that stores the entire block history of t
 
 We highly recommend installing MyTonCtrl on the following supported operating systems:
 
-- Ubuntu 20.04
 - Ubuntu 22.04
+- Ubuntu 24.04
 - Debian 11
 
 ## Minimal hardware requirements
@@ -29,7 +29,7 @@ We highly recommend installing MyTonCtrl on the following supported operating sy
 - A public IP address (fixed IP address)
 
 :::info Data compression
-Uncompressed data requires 12 TB of storage. A ZFS volume with compression reduces this to 11 TB. Archive size grows over time; check the dump index for current size.
+Currently, uncompressed data requires ~14 TB of storage. A ZFS volume with compression reduces this to ~12.4 TB with a compression ratio of about 1.08x. Archive size grows over time; check the [dump index](https://archival-dump.ton.org/) for the current size.
 :::
 
 ## Installation
@@ -58,150 +58,77 @@ sudo zpool create data <disk>
 sudo zfs set compression=lz4 data
 ```
 
+4. Create ZFS dataset and set the mount point to `/var/ton-work`:
+
+```shell
+sudo zfs create data/ton-work
+sudo zfs set mountpoint=/var/ton-work data/ton-work
+```
+
 ### Install MyTonCtrl
 
-Please use the [Running Full Node](/v3/guidelines/nodes/running-nodes/full-node) guide to **install** and **run** MyTonCtrl.
+To install MyTonCtrl and run the interactive CLI installer, use:
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+sudo bash install.sh
+```
+
+After choosing `liteserver` mode and specifying the network, send `1` to the prompt `Do you want to download archive blocks via TON Storage?` to set up an archive node.  
+After specifying all required info, it is recommended to choose MyTonCtrl installation in the background (last question), as block downloading takes a long time (up to several days).  
+You can track this progress in the MyTonCtrl installation logs.
 
 ### Run an archive node
 
-#### Prepare the node
+After the MyTonCtrl installation is complete, the node has downloaded all blocks and started the process of importing them.  
+This process may take a long time (up to several weeks) depending on your hardware.
 
-1. Before performing a restore, you must stop the validator using the root account:
+To check the synchronization status, use the `status` command and check the `Local validator initial sync status` field.  
+You can also set up an [alert bot](/v3/guidelines/nodes/maintenance-guidelines/mytonctrl-private-alerting) to get a notification when the node is fully synchronized.
 
-```shell
-sudo -s
-systemctl stop validator.service
-```
+### Set correct ownership
 
-2. Make a backup of `ton-work` config files (we will need `/var/ton-work/db/config.json`, `/var/ton-work/keys`, and `/var/ton-work/db/keyring`):
-
-```shell
-mv /var/ton-work /var/ton-work.bak
-```
-
-#### Download the dump
-
-Here is an example command to download & restore the **mainnet** dump from the archival-dump.ton.org server:
-
-```shell
-curl -L -s https://archival-dump.ton.org/dumps/mainnet_full_44888096.zfs.zstd | pv | zstd -d -T16 | zfs recv mypool/ton-db
-```
-
-To install the **testnet** dump (from dump.ton.org), use:
-
-```shell
-wget -c https://dump.ton.org/dumps/latest_testnet_archival.zfs.lz | pv | plzip -d -n <cores> | zfs recv data/ton-work
-```
-
-The compressed mainnet dump is approximately 9 TB, so it may take several days to download and restore. The dump size will increase as the network grows.
-
-Prepare and run the command:
-
-1. Install the necessary tools (`pv`, `plzip`, `zstd`).
-2. Tell `plzip` to use as many cores as your machine allows to speed up extraction (`-n`); for `zstd`, use the threading flag `-T<threads>`.
-
-#### Mount the dump
-
-1. Mount ZFS:
-
-```shell
-zfs set mountpoint=/var/ton-work data/ton-work && zfs mount data/ton-work
-```
-
-2. Restore `db/config.json`, `keys`, and `db/keyring` from the backup to `/var/ton-work`:
-
-```shell
-cp /var/ton-work.bak/db/config.json /var/ton-work/db/config.json
-cp -r /var/ton-work.bak/keys /var/ton-work/keys
-cp -r /var/ton-work.bak/db/keyring /var/ton-work/db/keyring
-```
-
-3. Set the ownership for the `/var/ton-work` and `/var/ton-work/keys` directories correctly:
+After installation, verify file ownership for the node directories:
 
 - The owner of the `/var/ton-work/db` directory should be the `validator` user:
 
 ```shell
-chown -R validator:validator /var/ton-work/db
+sudo chown -R validator:validator /var/ton-work/db
 ```
 
-- The owner of the `/var/ton-work/keys` directory should be the `<install_user>` user:
+- The owner of the `/var/ton-work/keys` directory should be the user that installed MyTonCtrl (replace `<install_user>` with your username):
 
 ```shell
-chown -R <install_user>:<install_user> /var/ton-work/keys
+sudo chown -R <install_user>:<install_user> /var/ton-work/keys
 ```
 
-#### Update configuration
+## Troubleshooting
 
-Update the node configuration for the archive node.
+### Importing blocks logs
 
-1. Open the node config file `/etc/systemd/system/validator.service`:
+To check the logs of importing blocks, you need to increase node log verbosity:
 
-```shell
-nano /etc/systemd/system/validator.service
+```bash
+MyTonCtrl> installer set_node_argument --verbosity 3
+tail -f /var/ton-work/log*
 ```
 
-2. Add storage settings for the node in the `ExecStart` line:
+You should see logs like this:
 
-```shell
---state-ttl 3153600000 --archive-ttl 3153600000
+```text
+[ 2][t49][2025-01-01 00:00:00.632794989][import-db-slice-local.cpp:629][!archiveimport] Imported archive in 2.755176s : mc_seqno=761229 shard_seqno=761229
 ```
 
-:::info
-Please remain patient after starting the node and monitor the logs closely.
-The dump files lack DHT caches, requiring your node to discover other nodes and synchronize with them.
-Depending on the snapshot's age and your network bandwidth,
-your node might need **anywhere from several hours to multiple days** to synchronize with the network.
-**The synchronization process typically takes up to 5 days when using minimum hardware specifications.**
-This is expected behavior.
-:::
+If you see timeout errors and logs like `Importing archive for masterchain seqno #8242118 from net`, that probably means your disk is not powerful enough to import blocks.
 
-:::caution
-If the node sync process has already taken 5 days, but the node is still out of sync, you should check the
-[troubleshooting section](/v3/guidelines/nodes/nodes-troubleshooting#archive-node-is-out-of-sync-even-after-5-days-of-the-syncing-process).
-:::
+**Note:** Don't forget to set verbosity back to `1` after you check the logs.
 
-#### Start the node
+### ZFS Snapshots
 
-1. Start the validator by running the command:
+You can create regular filesystem snapshots for rollback capability. For automated snapshot management, [zfsnap](https://www.zfsnap.org/docs.html) handles rotation effectively.  
+If, for some reason, something does not work or breaks, you can always [roll back](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk) to a snapshot on your ZFS filesystem.
 
-```shell
-systemctl start validator.service
-```
-
-2. Open `mytonctrl` from the _local user_ and check the node status using the `status` command.
-
-## Node maintenance
-
-The node database requires cleansing from time to time (we advise doing this once a week). To do so, please perform the following steps as root:
-
-1. Stop the validator process (Never skip this!):
-
-```shell
-sudo -s
-systemctl stop validator.service
-```
-
-2. Remove old logs:
-
-```shell
-find /var/ton-work -name 'LOG.old*' -exec rm {} +
-```
-
-3. Remove temporary files:
-
-```shell
-rm -r /var/ton-work/db/files/packages/temp.archive.*
-```
-
-4. Start the validator process:
-
-```shell
-systemctl start validator.service
-```
-
-## Troubleshooting and backups
-
-If, for some reason, something does not work or breaks, you can always [roll back](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk) to the `@archstate` snapshot on your ZFS filesystem. This is the original state from the dump.
+To restore from a snapshot, follow these steps:
 
 1. Stop the validator process (**Never skip this!**):
 
@@ -219,41 +146,7 @@ zfs list -t snapshot
 3. Roll back to the snapshot:
 
 ```shell
-zfs rollback data/ton-work@dumpstate
-```
-
-If your node operates properly, you may remove this snapshot to reclaim storage space. However, we recommend creating regular filesystem snapshots for rollback capability since the validator node may occasionally corrupt data and `config.json`. For automated snapshot management, [zfsnap](https://www.zfsnap.org/docs.html) handles rotation effectively.
-
-:::tip Need help?
-Have a question or need help? Please ask in the [TON dev chat](https://t.me/tondev_eng) to get help from the community. MyTonCtrl developers also hang out there.
-:::
-
-## Tips & tricks
-
-:::info
-Basic info about archival dumps is present at https://archival-dump.ton.org/
-:::
-
-### Remove dump snapshot
-
-1. Find the correct snapshot
-
-```bash
-zfs list -t snapshot
-```
-
-2. Delete it
-
-```bash
-zfs destroy <snapshot>
-```
-
-### Force the archive node not to store blocks
-
-To force the node not to store archive blocks, use the value `86400`. Check the [set_node_argument section](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#set_node_argument) for more details.
-
-```bash
-installer set_node_argument --archive-ttl 86400
+zfs rollback data/ton-work@<snapshot-name>
 ```
 
 ## Support
