@@ -41,7 +41,7 @@ The initial design that comes to mind is as follows:
 3. The distributor sends a message to the double spend contract.
 4. If the double spend contract has not been deployed previously, it sends a `claim_ok` message to the distributor.
 5. The distributor sends the claim fee to the fee wallet.
-6. The distributor releases the jettons to the user.
+6. The distributor releases jettons to the user.
 
 **NAIVE ART AHEAD!**
 
@@ -155,4 +155,3 @@ How about now? LGTM.
 We can always push further. For example, consider a custom [jetton wallet](https://github.com/ton-community/mintless-jetton/blob/main/contracts/jetton-utils.fc#L142) with built-in shard optimization. This ensures the user's jetton wallet ends up in the same shard as the user with an 87% probability. However, this is relatively uncharted territory, so you'll need to explore it on your own. Good luck with your TGE!
 
 <Feedback />
-
