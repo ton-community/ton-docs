@@ -21,7 +21,6 @@ FunC includes several built-in types that serve as the foundation of the languag
 - `builder` is a mutable structure used to construct cells by adding data and references before finalizing them into a new cell.
 
 - `tuple` is an ordered collection of up to 255 elements, each capable of holding a value of any type.
-  Note: the atomic `tuple` type is distinct from composite tuple types (for example, `tuple` ≠ `[int, cell]`) and they are not interchangeable. See “Tuple types” below.
 
 - `cont` is a TVM continuation used to manage execution flow in TVM programs. Although a low-level construct, it provides flexible execution control.
 
@@ -35,16 +34,29 @@ Instead, booleans are represented as integers:
 - In conditional checks, any nonzero integer is treated as `true`.
 
 ### Null values
-In FunC, the `null` value of the TVM type `Null` represents the absence of a value. Optional types are written as `A^?` (read as “Maybe A”). A variable of type `A` cannot contain `null`; passing `null` where a non-null `A` is required is an error. Whether a function accepts or returns `null` is explicitly defined in its specification.
+In FunC, the `null` value of the TVM type `Null` represents the absence of a value for a given atomic type. While `null` is generally not allowed, some standard library functions handle it in specific ways:
+- Some functions that return an atomic type may return `null` in some instances. 
+- Others may expect an atomic type as input but can also accept `null` without errors. 
+- This behavior is explicitly defined in the function specification.
+By default, `null` values are not permitted and will cause a runtime exception.
 
+Additionally, an atomic type `A` can be implicitly transformed into `A^?` (also known as `Maybe A`), 
+allowing a variable of type `A` to store either a valid value or `null`. 
+This transformation happens automatically and is not enforced by the type checker.
 
 ## Hole types
-FunC supports type inference. The hole types `_` and `var` serve as placeholders that are resolved during type checking. For example:
+
+FunC has support for type inference. Types `_` and `var` represent type "holes" which can later be filled with some actual type during type checking. For example, `var x = 2;` is a definition of variable `x` equal to `2`. The type checker can infer that `x` has type `int`, because `2` has type `int`, and the left and right sides of the assignment must have equal types.
+
+FunC supports type inference. The hole types `_` and `var` serve as placeholders that are resolved during type checking.
+For example, in the declaration:
+
 ```func
 var x = 2;
-```
-The type checker determines that `x` is of type `int` since `2` is an `int`, and both sides of the assignment must have matching types.
+ ``` 
 
+The type checker determines that `x` is of type `int` since `2` is an `int`, 
+and both sides of the assignment must have matching types.
 
 ## Composite types
 Types can be combined to form more complex structures.
@@ -76,7 +88,7 @@ Internally, the function consumes one stack entry and produces two.
 
 
 **Type representation**
-Although the values `(2, (3, 9))` of type `(int, (int, int))` and `(2, 3, 9)` of type `(int, int, int)` are stored identically as three stack entries `(2, 3, 9)`, FunC treats them as distinct types.
+Although the values `(2, (3, 9))` of type `(int, (int, int))` and `(2, 3, 9)` of type `(int, int, int)` are stored identically as three stack entries `(2, 3 and 9)`, FunC treats them as distinct types.
 For instance, the following code **will not compile**:
 
 ```func
@@ -92,9 +104,10 @@ The unit type `()` is used to indicate that:
 - A function takes no arguments
 
 **Examples**
-- `~dump` has the type `X -> ()`, meaning it takes a value but returns nothing.
+- `print_int` has the type `int -> ()`, meaning it takes an integer but returns nothing.
 - `random` has the type `() -> int`, meaning it takes no arguments but returns an integer.
 - The unit type `()` has a single value, also written as `()`, occupying **zero stack** entries.
+- Type of form `(A)` is considered by type checker as the same type as `A`.
 
 **Note:** A type written as `(A)` is treated as identical to `A` by the FunC type checker.
 
@@ -122,7 +135,9 @@ forall X -> (X, X) duplicate(X value) {
   return (value, value);
 }
 ```
-This function is polymorphic; it takes a single stack entry and returns two copies of the input value.
+is a polymorphic function which takes a (single stack entry) value and returns two copies of this value. `duplicate(6)` will produce values `6 6`, and `duplicate([])` will produce two copies `[] []` of an empty tuple.
+
+This **polymorphic function** takes a single stack entry and returns two copies of the input value.
 - Calling `duplicate(6)` produces `6 6`.
 - Calling `duplicate([])` produces two copies of an empty tuple: `[] []`.
 
