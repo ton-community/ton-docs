@@ -30,8 +30,7 @@ For more details on polymorphic functions, refer to the [Polymorphism with foral
 
 ### Lisp-style lists
 
-Lists in FunC are represented as nested two-element tuples. An empty list is conventionally represented by the TVM `null` value, which can be obtained using `null()`.
-For example, the tuple `(1, (2, (3, null)))` corresponds to the list `[1, 2, 3]`. Lists in FunC can contain elements of different types.
+Lists can be represented as nested 2-element tuples. Empty list is conventionally represented as TVM `null` value (it can be obtained by calling `null()`). For example, the tuple `(1, (2, (3, null)))` represents the list `[1, 2, 3]`. Elements of a list can be of different types.
 
 #### cons
 
@@ -305,7 +304,7 @@ Returns the logical time at the beginning of the current block.
 cell config_param(int x) asm "CONFIGOPTPARAM";
 ```
 
-Returns the value of the global configuration parameter with integer index `x` as `cell` or `null` value.
+Returns the value of the global configuration parameter with integer index `i` as `cell` or `null` value.
 
 #### my_code
 
@@ -392,7 +391,7 @@ The following functions help calculate storage fees for user-provided data.
 Returns `(x, y, z, -1)` or `(null, null, null, 0)`. It recursively calculates the number of unique cells `x`, data bits `y`, and cell references `z` in the **directed acyclic graph (DAG)** at `cell c`. This provides the total storage used by the DAG while recognizing identical cells.
 
 The computation uses a depth-first traversal with a hash table to track visited cells, preventing redundant visits.
-If the total number of visited cells `x` exceeds `max_cells`, the process stops before visiting the `(max_cells + 1)`-th cell, and the function returns `(null, null, null, 0)` to indicate failure. If `c` is `null`, the function returns `(0, 0, 0, -1)`.
+If the total amount of visited cells `x` exceeds `max_cells`, the process stops before visiting the `(max_cells + 1)` -th cell, and the function returns `0` to indicate failure. If `c` is `null`, the function returns `x = y = z = 0`.
 
 #### slice_compute_data_size?
 
@@ -408,7 +407,7 @@ It works similarly to `compute_data_size?` but takes a `slice s` instead of a `c
 (int, int, int) compute_data_size(cell c, int max_cells) impure asm "CDATASIZE";
 ```
 
-A strict version of `compute_data_size?` that throws an exception if the computation fails.
+A strict version of `compute_data_size?` that throws a cell overflow exception (8) if the computation fails.
 
 #### slice_compute_data_size
 
@@ -416,7 +415,7 @@ A strict version of `compute_data_size?` that throws an exception if the computa
 (int, int, int) slice_compute_data_size(slice s, int max_cells) impure asm "SDATASIZE";
 ```
 
-A strict version of `slice_compute_data_size?` that throws an exception if the computation fails.
+A strict version of `slice_compute_data_size?` that throws a cell overflow exception (8) if the computation fails.
 
 ### Persistent storage save and load
 
@@ -651,6 +650,9 @@ Generates a new pseudo-random 256-bit unsigned integer `x`. The process works as
 int rand(int range) impure asm "RAND";
 ```
 
+Generates a new pseudo-random integer `z` in the range `0..range−1` (or `range..−1` if `range < 0`). More precisely, an unsigned random value `x` is generated as in `random`; then `z := x * range / 2^256` is
+computed.
+
 Produces a pseudo-random integer `z` within the range `0..range−1` (or `range..−1` if `range < 0`).
 
 - First, an unsigned random value `x` is generated using `random()`.
@@ -678,11 +680,13 @@ Sets the random seed to a specified 256-bit unsigned integer `seed`.
 () randomize(int x) impure asm "ADDRAND";
 ```
 
-Mixes a 256-bit unsigned integer `x` into the random seed `r` by updating `r` to `sha256(r || x)`, where:
+Mixes an unsigned 256-bit integer `x` into a random seed `r` by setting the random seed to sha256 of the concatenation of two 32-byte strings: the first with a big-endian representation of the old seed `r`, and the second with a big-endian representation of `x`.
+
+Mixes a 256-bit unsigned integer `x` into the random seed `r` by updating`r` to `sha256(r || x)`, where:
 
 - `r` is the previous seed, represented as a 32-byte big-endian array.
 - `x` is also converted into a 32-byte big-endian array.
-  The new seed is the SHA-256 hash of their concatenation.
+The new seed is the SHA-256 hash of their concatenation.
 
 #### randomize_lt
 
@@ -690,13 +694,13 @@ Mixes a 256-bit unsigned integer `x` into the random seed `r` by updating `r` to
 () randomize_lt() impure asm "LTIME" "ADDRAND";
 ```
 
-Call `randomize_lt` before using the pseudo‑random number generator for the first time.
+Equivalent to calling `randomize(cur_lt());`.
 
 ### Address manipulation primitives
 
 The functions below handle the serialization and deserialization of values based on the following TL-B scheme.
 
-```tlb
+```func
 addr_none$00 = MsgAddressExt;
 
 addr_extern$01 len:(## 8) external_address:(bits len)
@@ -722,7 +726,14 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
   created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
 ```
 
-A deserialized `MsgAddress` is represented as a tuple `t` with the following structure:
+- `addr_none` is represented by `t = (0)`, i.e., a tuple containing exactly
+  one integer that equals zero
+- `addr_extern` is represented by `t = (1, s)`, where slice `s` contains the
+  field `external_address`. In other words, `t` is a pair (a tuple consisting of two entries), containing an integer equal to one and slice `s`
+- `addr_std` is represented by `t = (2, u, x, s)`, where `u` is either `null` (if `anycast` is absent) or a slice `s'` containing `rewrite_pfx` (if `anycast` is present). Next, integer `x` is the `workchain_id`, and slice `s` contains the address
+- `addr_var` is represented by `t = (3, u, x, s)`, where `u`, `x`, and `s` have the same meaning as for `addr_std`
+
+A deserialized `MsgAddress`cis represented as a tuple `t` with the following structure:
 
 - `addr_none` is represented as `t = (0)`, a single-element tuple where the integer is zero.
 - `addr_extern` is represented as `t = (1, s)`, where `s` is a slice containing `external_address`. In other words, `t` is a pair with the first element being `1` and the second being `s`.
@@ -730,7 +741,7 @@ A deserialized `MsgAddress` is represented as a tuple `t` with the following str
   - `u` is `null` if `anycast` is absent or a slice `s'` containing `rewrite_pfx` if `anycast` is present.
   - `x` is the `workchain_id`.
   - `s` is a slice containing the address.
-- `addr_var` is represented as `t = (3, u, x, s)`, where `u`, `x,` and `s` follow the same structure as `addr_std`.
+- addr_var is represented as `t = (3, u, x, s)`, where `u`, `x,` and `s` follow the same structure as `addr_std`.
 
 #### load_msg_addr
 
@@ -846,7 +857,7 @@ Loads a signed `len`-bit integer from a slice.
 #### load_uint
 
 ```func
-;; (slice, int) ~load_uint(slice s, int len) asm(s len -> 1 0) "LDUX";
+;; (slice, int) ~load_uint(slice s, int len) asm( -> 1 0) "LDUX";
 ```
 
 Loads an unsigned `len`-bit integer from a slice.
@@ -889,7 +900,7 @@ Preloads the first `0 ≤ len ≤ 1023` bits from `slice s` into a new slice `s'
 (slice, int) load_coins(slice s) asm( -> 1 0) "LDGRAMS";
 ```
 
-Loads a serialized amount of Toncoin, which is an unsigned integer up to `2^120 - 1`.
+Loads a serialized amount of Toncoins, which is an unsigned integer up to `2^120 - 1`.
 
 #### skip_bits
 
@@ -1448,7 +1459,7 @@ Checks whether a dictionary is empty. Equivalent to `cell_null?`.
 ## Prefix dictionaries primitives
 
 TVM supports dictionaries with non-fixed length keys that follow a prefix code structure, meaning no key is a prefix of another key.
-Learn more in the [TVM overview](/v3/documentation/tvm/overview) section.
+Learn more in the [TVM instruction](/v3/documentation/tvm/overview) section.
 
 #### pfxdict_get?
 
