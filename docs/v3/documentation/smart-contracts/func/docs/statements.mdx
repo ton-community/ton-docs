@@ -244,7 +244,7 @@ FunC supports two unary operators:
 - `~` is bitwise not (priority 75)
 - `-` is integer negation (priority 20)
 
-These operators must be separated from the operands:
+These operators must be separated from the arguments:
 - `- x` - Negates x.
 - `-x` - Interpreted as a single identifier, not an operation.
 
@@ -283,7 +283,7 @@ With priority 15 (left-associative):
 - `>=` is integer comparison
 - `<=>` is integer comparison (returns -1, 0 or 1)
 
-They also should be separated from the operands:
+They also should be separated from the argument:
 - `x + y` -  Proper spacing between operands.
 - `x+y` - Interpreted as a single identifier, not an operation.
 
@@ -337,7 +337,7 @@ repeat(-1) {
 ;; x = 1
 ```
 
-A range check exception is thrown if the repetition count is less than `-2^31` or greater than `2^31 - 1`.
+A range check exception is thrown if the repetition count is less than `-2³¹` or greater than `2³¹ - 1`
 
 ### While loop
 
@@ -379,7 +379,7 @@ if (flag) {
 }
 ```
 
-Negated condition (equivalent to `if (~flag)`):
+Negated condition, which is equivalent to `if` (`~flag`):
 ```func
 ifnot (flag) {
   do_something();
@@ -396,10 +396,11 @@ if (flag) {
 ```
 
 ```func
+;; Some specific features
 if (flag1) {
   do_something1();
 } else {
-  do_alternative1();
+  do_alternative4();
 }
 ```
 
@@ -451,9 +452,9 @@ forall X -> int cast_to_int(X x) asm "NOP";
 try {
   throw_arg(-1, 100);
 } catch (x, n) {
-  int xi = x.cast_to_int();
-  ;; xi = -1, n = 100
-  return xi + 1;
+  x.cast_to_int();
+  ;; x = -1, n = 100
+  return x + 1;
 }
 ```
 
