@@ -176,17 +176,12 @@ Track MyLocalTon's operation through these log files:
   Windows:
 
   ```powershell
-  # Windows Installation
+  # Windows Installation (Windows 10/11)
 
-  # Option 1: Install Python via winget (Windows 10/11)
+  # Install Python via winget
   winget install -e --id Python.Python.3
 
-  # Option 2: Download installer manually if winget is unavailable
-  # https://www.python.org/downloads/windows/
-  # Run the installer, then ensure pip is up to date:
-  python -m ensurepip --upgrade
-
-  # Finally, install the HTTP API
+  # Install the HTTP API
   pip3 install -U ton-http-api
 
   ```
