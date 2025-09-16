@@ -84,7 +84,7 @@ mv /var/ton-work /var/ton-work.bak
 Here is an example command to download & restore the **mainnet** dump from the ton.org server:
 
 ```shell
-curl -L -s https://archival-dump.ton.org/dumps/mainnet_full_44888096.zfs.zstd | pv | zstd -d -T16 | zfs recv mypool/ton-db
+curl -L -s https://archival-dump.ton.org/dumps/mainnet_full_44888096.zfs.zstd | pv | zstd -d -T16 | zfs recv data/ton-db
 ```
 
 To install the **testnet** dump, use:
