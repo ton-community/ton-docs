@@ -85,7 +85,7 @@ int x = foo(1, 2, 3);
 ```
 
 However, unlike many conventional languages, FunC treats functions as taking a single argument. 
-In the example above, `foo` is a function that takes one tuple argument of type `(int, int, int)` (see [Functions → Argument tensor representation](/v3/documentation/smart-contracts/func/docs/functions#argument-tensor-representation)).
+In the example above, `foo` is a function that takes one tuple argument of type `(int, int, int)` (see [Functions → Argument tensor representation](/v3/documentation/smart-contracts/func/docs/functions#function-arguments)).
 
 **Function composition**
 
@@ -420,7 +420,7 @@ If an error occurs, all changes made within the `try` block are completely rolle
 Unlike many other languages, in FunC, all changes are **undone** if an error occurs inside the `try` block. These modifications include updates to local and global variables and changes to storage registers (`c4` for storage, `c5` for action/messages, `c7` for context, etc.). 
 Any contract storage updates and outgoing messages are also reverted.
 
-For register details, see [stdlib → commit](/v3/documentation/smart-contracts/func/docs/stdlib#commit) for `c4`/`c5` and [Global variables](/v3/documentation/smart-contracts/func/docs/global_variables#global-variables) for `c7`.
+For register details, see [stdlib → commit](/v3/documentation/smart-contracts/func/docs/stdlib#commit) for `c4`/`c5` and [Global variables](/v3/documentation/smart-contracts/func/docs/global_variables) for `c7`.
 
 However, certain TVM state parameters are not rolled back, such as:
 - Codepage settings
