@@ -30,9 +30,6 @@ According to TL-B rules, all data can be stored within a single cell—if it fit
 
 A serialized `Message X` is placed into the action list using the FunC method `send_raw_message()`. The smart contract then executes this action, and the message is sent.
 
-See the `CommonMsgInfoRelaxed` definition in the [Func stdlib](/v3/documentation/smart-contracts/func/docs/stdlib).
-
-
 ### Definition of explicit serialization
 
 To construct valid binary data according to a TL-B structure, serialization must be performed as defined recursively for each type. To serialize a `Message X`, you must also know how to serialize nested structures like `StateInit`, `CommonMsgInfo`, etc.
