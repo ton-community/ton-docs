@@ -44,12 +44,12 @@ Additionally, an atomic type `A` can be implicitly transformed into `A^?` (also 
 allowing a variable of type `A` to store either a valid value or `null`. 
 This transformation happens automatically and is not enforced by the type checker.
 
-
-## Hole type
+## Hole types
 FunC has support for type inference. Types `_` and `var` represent type "holes" which can later be filled with some actual type during type checking. For example, `var x = 2;` is a definition of variable `x` equal to `2`. The type checker can infer that `x` has type `int`, because `2` has type `int`, and the left and right sides of the assignment must have equal types.
 
 FunC supports type inference. The hole types `_` and `var` serve as placeholders that are resolved during type checking.
 For example, in the declaration:
+
 ```func
 var x = 2;
  ``` 
@@ -57,15 +57,14 @@ var x = 2;
 The type checker determines that `x` is of type `int` since `2` is an `int`, 
 and both sides of the assignment must have matching types.
 
-
 ## Composite types
 Types can be combined to form more complex structures.
 
 ### Functional type
 
 A functional type is written in the form `A -> B`, where:
-- `A` is the input type, which is called domain.
-- `B` is the output type, which is called codomain.
+- `A` is the input type, which is called the domain.
+- `B` is the output type, which is called the codomain.
 
 **Example:**
 The type `int -> cell` represents a function that:
@@ -88,16 +87,16 @@ Internally, the function consumes one stack entry and produces two.
 
 
 **Type representation**
-Although the values `(2, (3, 9))` of type `(int, (int, int))` and `(2, 3, 9)` of type `(int, int, int)` are stored identically as three stack entries `(2, 3, and 9)`, FunC treats them as distinct types.
+Although the values `(2, (3, 9))` of type `(int, (int, int))` and `(2, 3, 9)` of type `(int, int, int)` are stored identically as three stack entries `(2, 3 and 9)`, FunC treats them as distinct types.
 For instance, the following code **will not compile**:
 
 ```func
 (int a, int b, int c) = (2, (3, 9));
- ```
+```
 Since FunC strictly enforces type consistency, these structures cannot be mixed.
 
 
-**Special case: unit type`()`**
+**Special case: unit type `()`**
 
 The unit type `()` is used to indicate that:
 - A function does not return a value or
@@ -105,14 +104,13 @@ The unit type `()` is used to indicate that:
 
 **Examples**
 - `print_int` has the type `int -> ()`, meaning it takes an integer but returns nothing.
-- random has the type `() -> int`, meaning it takes no arguments but returns an integer.
+- `random` has the type `() -> int`, meaning it takes no arguments but returns an integer.
 - The unit type `()` has a single value, also written as `()`, occupying **zero stack** entries.
-
-Type of form `(A)` is considered by type checker as the same type as `A`.
+- Type of form `(A)` is considered by type checker as the same type as `A`.
 
 **Note:** A type written as `(A)` is treated as identical to `A` by the FunC type checker.
 
-### Tuples types
+### Tuple types
 
 Tuple types in FunC are written in the form `[A, B, ...]` and represent TVM tuples with a fixed length and known component types at compile time.
 
@@ -156,4 +154,3 @@ If this number is consistent for all values of a given type, it is called the **
 At the moment, polymorphic functions can only be defined for types with a fixed and predefined type width.
 
 <Feedback />
-

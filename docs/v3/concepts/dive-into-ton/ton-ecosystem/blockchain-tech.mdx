@@ -1,0 +1,47 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Blockchain technologies
+
+## Domain name systems
+
+The TON Blockchain includes an embedded domain name system called the [TON DNS](/v3/guidelines/web3/ton-dns/dns). This service allows users to register human-readable domain names for smart contracts, websites, or other online content. This service facilitates interaction with **decentralized applications (DApps)** and other resources on the TON Blockchain.
+
+TON DNS functions similarly to traditional Internet DNS systems, but its decentralized nature eliminates the need for a centralized authority to control and manage domain names, thereby reducing the risks of censorship, fraud, and domain name hijacking.
+
+One key feature of TON DNS is the ability to bind crypto wallets to domain names directly. Users can send cryptocurrency to names like `alice.place.ton`, which resolve to wallet addresses, simplifying donations and payments.
+
+## TON Proxy
+
+[TON Proxy](/v3/guidelines/web3/ton-proxy-sites/connect-with-ton-proxy) is a tool based on the TON protocol that offers high security. All data transmitted through TON Proxy is encrypted, thus protecting users' confidential information.
+
+## TON Sites
+
+[TON Sites](https://ton.org/en/ton-sites) is a technology that allows hosting decentralized websites directly on the TON Blockchain.
+
+A TON Site is similar to a traditional website but:
+- Its content is stored in **TON Storage**.
+- It is accessed through **TON Proxy**.
+- It can be linked to a human-readable name via **TON DNS**.
+
+This combination makes TON Sites:
+- **Censorship-resistant** — no single authority can take them down.
+- **Secure** — traffic is encrypted end-to-end.
+- **User-friendly** — accessed via `.ton` domains or TON Proxy-enabled browsers.
+
+Example use cases:
+- Hosting landing pages for decentralized apps.
+- Providing decentralized alternatives to traditional websites.
+
+## Decentralized storage
+
+TON has its own decentralized storage service called [TON Storage](/v3/guidelines/web3/ton-storage/storage-daemon), which the blockchain uses to store archive copies of blocks and state data. TON Storage can also store users’ and services’ files with torrent-like access technology. A popular use case is storing NFT metadata directly on TON Storage, without using additional distributed file storage services like IPFS. TON Storage also distributes blockchain snapshots.
+
+
+## Payment channels
+
+[TON Payment channels](/v3/documentation/dapps/defi/ton-payments) is a solution for lightning-fast transactions on the TON Blockchain. While TON is sufficient for most tasks, some applications, such as [TON Proxy](/v3/guidelines/web3/ton-proxy-sites/connect-with-ton-proxy), [TON Storage](/v3/guidelines/web3/ton-storage/storage-daemon), or a particular DApp, require microtransactions with much higher speed and lower costs. In TON, payment channels solve this problem.
+
+Payment channels allow two parties to make transactions off-chain by creating a special smart contract on the blockchain with their initial balances. They can then perform as many transactions between them as they want without per-transaction network fees. The network charges fees only when opening and closing the channel. The technology guarantees proper operation by allowing a party to close the channel if the other party cheats or disappears.
+
+
+<Feedback />
