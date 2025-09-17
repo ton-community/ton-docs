@@ -1,29 +1,28 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Site & domain management
+# Site and Domain Management
 
 ## How to open a domain for editing
 
 1. Open Google Chrome on your computer. 
-2. Install the [TON Chrome extension](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd). 
-3. Open the extension, click "Import wallet", and import the wallet that holds the domain.
+2. Install the [TON Chrome extension](https://chrome.google.com/webstore/detail/ton-wallet/nphplpgoakhhjchkkhmiggakijnkhfnd).
+3. Open the extension, click "Import wallet", and import the wallet that owns the domain.
 
-> **Recovery phrases**
+> **Recovery phrase**
 >
 > Your recovery phrase consists of 24 words written down when the wallet was created.
 >
-> You can restore this phrase using any TON wallet if you lose it. 
+> If you lose access, you can restore your wallet in any TON wallet app using this recovery phrase.
 > In Tonkeeper: go to Settings → Wallet protection → Your private key.
 > 
-> Store your 24 words securely. In case of an emergency, you will be able to restore access to the wallet using only your recovery phrase.
-> Please do not share them. Anyone with access to your phrase can access your funds.
+> Store your 24 words securely. Never share it. Anyone with access to your phrase can access your funds.
 > 
 
-4. Go to [dns.ton.org](https://dns.ton.org), open your domain, and click "Edit".
+4. Go to [dns.ton.org](https://dns.ton.org), open your domain, and click "Edit"
 
 ## How to link a wallet to a domain
 
-You can link a wallet address to a domain, allowing users to send coins directly to that domain name instead of a wallet address.
+You can link a wallet address to a domain, allowing users to send Toncoin directly to that domain name instead of a wallet address.
 1. Open your domain for editing. See steps above. 
 2. Paste your wallet address into the "Wallet address" field and click "Save". 
 3. Confirm the transaction in the extension.
@@ -32,7 +31,7 @@ You can link a wallet address to a domain, allowing users to send coins directly
 ## How to link a TON Site to a domain
 
 1. Open your domain for editing. See steps above. 
-2. Copy the ADNL address of your TON Site in HEX format, paste it into the "Site" field, and click "Save". 
+2. Copy the ADNL address of your TON Site in hexadecimal format, paste it into the "Site" field, and click "Save". 
 3. Confirm the transaction in the extension.
 
 ## How to set up subdomains
@@ -45,7 +44,6 @@ You can link a wallet address to a domain, allowing users to send coins directly
 4. Paste the smart contract address of the subdomain manager into the "Subdomains" field and click "Save".
 5. Confirm the transaction in the extension.
 
-
+See [TON DNS resolvers](/v3/guidelines/web3/ton-dns/subresolvers) for details.
 
 <Feedback />
-
