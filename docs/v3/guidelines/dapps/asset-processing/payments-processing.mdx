@@ -38,8 +38,8 @@ To deploy a wallet via TonLib, follow these steps:
 
 1. Generate a private/public key pair using [createNewKey](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L244) or its wrapper functions (example in [tonlib-go](https://github.com/mercuryoio/tonlib-go/tree/master/v2#create-new-private-key)). The private key is generated locally and never leaves the host machine.
 2. Form [InitialAccountWallet](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L62) structure corresponding to one of the available wallet versions. Currently, the supported `wallets` are: `wallet.v3`, `wallet.v4`, `wallet.highload.v1`, `wallet.highload.v2`.
-3. Calculate the address of the new `wallet` smart contract using the [getAccountAddress](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L283) method. It is recommended to use revision 0 by default. Deploy wallets in the basechain `workchain=0`     to minimize processing and storage fees.
-4. Send some Toncoin to the calculated address. The transfer should be made in `non-bounce` mode since the wallet address has no code yet and cannot process incoming messages. The `non-bounce` flag ensures that if processing fails, the funds are not returned via a bounce message. Warning: Avoid using the non-bounce flag for other transactions, especially when transferring large sums, as the bounce mechanism provides protection against mistakes.
+3. Calculate the address of the new `wallet` smart contract using the [getAccountAddress](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L283) method. Deploy wallets in the BaseChain `workchain=0` to minimize processing and storage fees.
+4. Send some Toncoin to the calculated address. The transfer should be made in `non-bounceable` mode since the wallet address has no code yet and cannot process incoming messages. The `non-bounceable` flag ensures that if processing fails, the funds are not returned via a bounce message. Warning: Avoid using the `non-bounceable` flag for other transactions, especially when transferring large sums, as the bounce mechanism provides protection against mistakes.
 5. Form the desired [action](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L154), such as `actionNoop` for deploy only. Then use [createQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L292) and [sendQuery](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L300) to initiate interactions with the blockchain.
 6. Check the contract’s status after a few seconds using the [getAccountState](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L288) method.
 
@@ -65,11 +65,14 @@ Most SDKs automatically verify a wallet address during creation or transaction p
 
     import (
       "fmt"
+      "errors"
       "github.com/xssnick/tonutils-go/address"
     )
 
-    if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
-      return errors.New("invalid address")
+    func main() {
+      if _, err := address.ParseAddr("EQCD39VS5j...HUn4bpAOg8xqB2N"); err != nil {
+        _ = errors.New("invalid address")
+      }
     }
     ```
   </TabItem>
@@ -78,7 +81,7 @@ Most SDKs automatically verify a wallet address during creation or transaction p
     ```java
     try {
       Address.of("...");
-      } catch (e) {
+      } catch (Exception e) {
       // not valid address
     }
     ```
@@ -115,8 +118,8 @@ To retrieve a smart contract's transactions, use the [getTransactions](https://t
 It is possible to track message flows during transaction processing. Since the message flow forms a DAG (Directed Acyclic Graph), follow these steps:
 
 1. Use the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) to obtain the current transaction.
-2. Identify incoming transactions by checking out_msg with [tryLocateResultTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get).
-3. Identify outgoing transactions by checking in_msg with [tryLocateSourceTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
+2. Identify incoming transactions by checking `in_msg` with [tryLocateSourceTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_source_tx_tryLocateSourceTx_get).
+3. Identify outgoing transactions by checking `out_msg` with [tryLocateResultTx](https://testnet.toncenter.com/api/v2/#/transactions/get_try_locate_result_tx_tryLocateResultTx_get).
 
 <Tabs groupId="example-outgoing-transaction">
   <TabItem value="JS" label="JS">
@@ -179,7 +182,7 @@ It is possible to track message flows during transaction processing. Since the m
 Learn the basics of payment processing from the [TMA USDT Payments demo](https://github.com/ton-community/tma-usdt-payments-demo).
 :::
 
-1. The service must deploy a `wallet` and keep it funded to prevent contract destruction due to storage fees. Storage fees are typically less than 1 Toncoin per year.
+1. The service must deploy a `wallet` and keep it funded to prevent contract destruction due to storage fees. Keep the wallet funded to cover [storage fees](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee).
 2. The service should collect the `destination_address` and an optional `comment` from the user. To avoid duplicate outgoing payments with the same (`destination_address`, `value`, `comment`), either prohibit unfinished payments with identical parameters or schedule payments so that a new payment starts only after the previous one is confirmed.
 3. Create [msg.dataText](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L103) with `comment` as text.
 4. Create [msg.message](https://github.com/ton-blockchain/ton/blob/master/tl/generate/scheme/tonlib_api.tl#L113) which includes `destination_address`, empty `public_key`, `amount`, and `msg.dataText`.
@@ -203,7 +206,7 @@ To understand the required pipeline, carefully read [Send payments](/v3/guidelin
 To accept payments based on attached comments, the service should:
 
 1. Deploy the `wallet` contract.
-2. Generate a unique `invoice` for each user. A uuid32 string is sufficient for invoice identification.
+2. Generate a unique `invoice` for each user. Generate a unique invoice identifier per user (for example, a UUID).
 3. Users should send payments to the service’s `wallet` contract with the `invoice` as a comment.
 4. Service should regularly poll the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method for the `wallet` contract.
 5. For each new transaction extract the incoming message, match the comment against stored invoice data, and deposit the Toncoin value into the user's account.
@@ -235,10 +238,10 @@ Best for dApps that require multiple transactions within a session or a persiste
 ### Invoices with ton:// link
 
 :::warning
-The TON link is deprecated. Avoid using it.
+The TON link is deprecated.
 :::
 
-If you need an easy integration for a simple user flow, it is suitable to use the ton:// link.
+Although deprecated, for simple one-time flows you may still generate a ton:// link; prefer TON Connect.
 It is best suited for one-time payments and invoices.
 
 ```text
@@ -264,17 +267,15 @@ ton://transfer/<destination-address>?
 
 ## Explorers
 
-The official TON blockchain explorer: [https://tonscan.org](https://tonscan.org).
+To generate a transaction link, the service must obtain the account address, logical time (lt), and transaction hash by calling the [getTransactions](toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method. Using these values, [tonviewer.com](https://tonviewer.com), [tonscan.org](https://tonscan.org) and [explorer.toncoin.org](https://explorer.toncoin.org/) explorers render the transaction page according to the following formats:
 
-To generate a transaction link in the explorer, the service needs to get the lt (logical time), the transaction hash, and the account address (the address of the account for which the lt and txhash were obtained using the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method). Then [https://tonscan.org](https://tonscan.org) and [https://explorer.toncoin.org/](https://explorer.toncoin.org/) can display the page for this transaction in the following format:
+`https://tonviewer.com/transaction/{hash as base64url}`
 
-`https://tonviewer.com/transaction/{txhash as base64url}`
+`https://tonscan.org/tx/{lt as int}:{hash as base64url}:{account address}`
 
-`https://tonscan.org/tx/{lt as int}:{txhash as base64url}:{account address}`
+`https://explorer.toncoin.org/transaction?account={account address}&lt={lt as int}&hash={hash as base64url}`
 
-`https://explorer.toncoin.org/transaction?account={account address}&lt={lt as int}&hash={txhash as base64url}`
-
-Note: tonviewer and tonscan also support external-in message hashes instead of transaction hashes for explorer links. This is useful when generating an external message and needing an instant transaction link. Learn more about transaction and message hashes [here](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
+**Note:** **Tonviewer** and **Tonscan** also support external-in message hashes instead of transaction hashes for explorer links. This is useful when generating an external message and needing an instant transaction link. Learn more about transaction and message hashes [here](/v3/guidelines/dapps/cookbook#how-to-find-transaction-or-message-hash).
 
 ## Best practices
 
@@ -300,7 +301,7 @@ Note: tonviewer and tonscan also support external-in message hashes instead of t
 
     - **yungwine/pytoniq:**
 
-    ```py
+    ```python
     import asyncio
 
     from pytoniq.contract.wallets.wallet import WalletV4R2
@@ -567,7 +568,7 @@ This way, you can provide the best user experience regardless of the current net
     from pytoniq.liteclient.balancer import LiteBalancer
 
 
-    MY_MNEMONICS = "one two tree ..."
+    MY_MNEMONICS = "one two three ..."
     DESTINATION_WALLET = Address("Destination wallet address")
 
 

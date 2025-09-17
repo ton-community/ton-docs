@@ -13,7 +13,7 @@ which provides standard functions for FunC.
 :::
 
 The FunC standard library serves as a wrapper around the most commonly used TVM assembly commands that aren’t built-in.
-For detailed descriptions of these commands, refer to the [TVM documentation](/v3/documentation/tvm/tvm-overview).
+For detailed descriptions of these commands, refer to the [TVM documentation](/v3/documentation/tvm/overview).
 Some explanations in this document adapted from there.
 
 Some functions in the library are commented out, meaning they have already been optimized and integrated as built-in operations.
@@ -249,7 +249,7 @@ Returns the third element of a triple.
 
 ### Extracting info from c7
 
-The [c7 special register](/v3/documentation/tvm/tvm-overview#control-registers) holds useful data about smart contract execution.
+The [c7 special register](/v3/documentation/tvm/overview#control-registers) holds useful data about smart contract execution.
 The following primitives facilitate easy retrieval of this information:
 
 #### now
@@ -624,7 +624,7 @@ See also [set_c3](/v3/documentation/smart-contracts/func/docs/stdlib#set_c3).
 
 ### Random number generator primitives
 
-The pseudo-random number generator relies on a random seed, a 256-bit unsigned integer, and sometimes additional data stored in [c7](/v3/documentation/tvm/tvm-overview#control-registers).
+The pseudo-random number generator relies on a random seed, a 256-bit unsigned integer, and sometimes additional data stored in [c7](/v3/documentation/tvm/overview#control-registers).
 Before a smart contract executes in the TON Blockchain, its initial random seed is derived from a hash of the smart contract address and the global block random seed. If the same smart contract runs multiple times within a block, each run will use the same random seed. This can be adjusted by calling `randomize_ltbefore` using the pseudo-random number generator for the first time.
 
 :::caution
@@ -1462,7 +1462,7 @@ Checks whether a dictionary is empty. Equivalent to `cell_null?`.
 ## Prefix dictionaries primitives
 
 TVM supports dictionaries with non-fixed length keys that follow a prefix code structure, meaning no key is a prefix of another key.
-Learn more in the [TVM instruction](/v3/documentation/tvm/tvm-overview) section.
+Learn more in the [TVM instruction](/v3/documentation/tvm/overview) section.
 
 #### pfxdict_get?
 
