@@ -3,64 +3,60 @@ import Feedback from '@site/src/components/Feedback';
 # TMA design guidelines
 
 :::info
-Starting with version **6.10**, Telegram updated the Mini App color palette by fixing some old colors and adding new ones.
+Starting with Telegram app version **6.10**, Telegram updated the color palette for Mini Apps (TMA) by fixing some old colors and adding new ones.
 
 :::
 
 For context, let's look back at the update history.
 
-### Changelog
+## Changelog
 
-1. `bg_color` and `secondary_bg_color` have been updated.
+- `bg_color` and `secondary_bg_color` have been updated.
 
-![](/img/docs/tma-design-guidelines/tma-design_1.png)
+![Background color token updates](/img/docs/tma-design-guidelines/tma-design_1.png)
 
-### Reasons for these changes
+## Reasons for these changes
 
-• These colors were originally intended for page backgrounds, not UI controls.
-
-• To maintain consistency, they have been updated.
-
-• `section_bg_color` was introduced to color the backgrounds of different sections and cards.
+- These colors were originally intended for page backgrounds, not UI controls.
+- To maintain consistency, they have been updated.
+- `section_bg_color` was introduced to color the backgrounds of different sections and cards.
 
 To enhance your app’s appearance, adjust how you use color variables.
 
-The example above clearly shows what will change on iOS. There should be no changes on Android.
+The example above clearly shows what will change on iOS; for the `bg_color`/`secondary_bg_color` update, there should be no changes on Android.
 
 1. New colors.
-   Many new colors have been added with most being noticeable on Android. The examples focus on Android but apply to all platforms.
+   Many new colors have been added, with most noticeable on Android; the examples focus on Android but apply to all platforms.
 
-![](/img/docs/tma-design-guidelines/tma-design_2.png)
+![New color tokens overview](/img/docs/tma-design-guidelines/tma-design_2.png)
 
-2. Telegram header colors has become available for Mini Apps.
+2. Telegram header colors have become available for Mini Apps.
 
-![](/img/docs/tma-design-guidelines/tma-design_3.png)
+![Telegram header colors in Mini Apps](/img/docs/tma-design-guidelines/tma-design_3.png)
 
-3. accent_text_color is now available for highlighting accent elements in your apps. Previously, everyone used the less suitable dark link_color.
+3. `accent_text_color` is now available for highlighting accent elements in your apps. Previously, developers used the less suitable `link_color`.
 
-![](/img/docs/tma-design-guidelines/tma-design_4.png)
+![Accent text color examples](/img/docs/tma-design-guidelines/tma-design_4.png)
 
-4. For all secondary cell labels, use `subtitle_text_color` to create more contrast and improve the accessibility.
+4. For all secondary cell labels, use `subtitle_text_color` to create more contrast and improve accessibility.
 
-![](/img/docs/tma-design-guidelines/tma-design_5.png)
+![Subtitle text color for secondary labels](/img/docs/tma-design-guidelines/tma-design_5.png)
 
 5. A new token `section_header_text_color` is now available for section headers of cards.
 
-![](/img/docs/tma-design-guidelines/tma-design_6.png)
+![Section header text color token](/img/docs/tma-design-guidelines/tma-design_6.png)
 
-6. For cells that trigger a destructive action, use `destructive_text_color` instead of custom color.
+6. For cells that trigger a destructive action, use `destructive_text_color` instead of a custom color.
 
 <p align="center">
   <br />
 
-  <img width="360" src="/img/docs/tma-design-guidelines/tma-design_7.png" alt="" />
+  <img width="360" src="/img/docs/tma-design-guidelines/tma-design_7.png" alt="Destructive text color example" />
 
   <br />
 </p>
 
-7. A reasonable question arises: how should `link_color` and `hint_color` be used now?
-
-Use `hint_color` for hint sections under different sections. For backgrounds like `secondary_bg_color`, use `link_color`.
+7. Use `hint_color` for hint text under sections; on backgrounds like `secondary_bg_color`, use `link_color`.
 
 ## See also
 

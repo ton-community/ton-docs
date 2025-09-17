@@ -37,7 +37,7 @@ it involves serialization and internal formatting steps.
 Each cell, message, or transaction has its unique hash, which acts as a cryptographic fingerprint or identifier.
 
 :::info Important
-Hashes in TON are irreversible — the original data cannot be reconstructed from the hash.
+Hashes are irreversible — the original data cannot be reconstructed from the hash.
 However, they are deterministic — the same input always produces the same hash.
 :::
 
@@ -156,7 +156,7 @@ Full message hash: b213bbaf387106685137f548d4564450295f226fa8a56063854de52ca74a1
 **When to use the full message hash:**
 
 - to track specific messages on the blockchain
-- when using the TON Center API to search for transactions
+- when using an API to search for transactions
 - to verify that no one modified the message
 
 ### Transaction hash
