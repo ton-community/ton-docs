@@ -5,7 +5,7 @@ import Button from '@site/src/components/button'
 
 # Processing messages
 
-> **Summary:** In previous steps, we modified our smart contract interaction with `storage`, `get methods`, and learned the basic smart contract development flow.
+> **Summary:** In previous steps, we modified our smart contract to interact with storage and get methods, and learned the basic smart contract development flow.
 
 Now, we are ready to move on to the main functionality of smart contracts — **sending and receiving messages**. In TON, messages are used not only for sending currency but also as a data-exchange mechanism between smart contracts, making them crucial for smart contract development.
 
@@ -33,19 +33,19 @@ Let's examine the `recv_internal` function signature to understand how we could 
 ```func
 () recv_internal(int my_balance, int msg_value, cell in_msg_full, slice in_msg_body) impure
 ```
- - `my_balance` - smart-contract balance at the beginning of the transaction.
- - `msg_value` - funds received with message.
- - `in_msg_full` - `cell` containing "header" fields of the message.
- - `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containing payload of the message.
+ - `my_balance` - smart contract balance at the beginning of the transaction.
+ - `msg_value` - funds received with the message.
+  - `in_msg_full` - `cell` containing "header" fields of the message.
+ - `in_msg_body` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containing the payload of the message.
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
 ```tolk
 fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice)
 ```
  - `myBalance` - balance of smart contract at the beginning of the transaction.
- - `msgValue` - funds received with message.
- - `msgFull` - `cell` containing "header" fields of message.
- - `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containing payload pf the message.
+ - `msgValue` - funds received with the message.
+ - `msgFull` - `cell` containing "header" fields of the message.
+ - `msgBody` - [slice](/v3/documentation/smart-contracts/func/docs/types#atomic-types) containing the payload of the message.
 </TabItem>
 </Tabs>
 
@@ -53,7 +53,7 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 You can find a comprehensive description of sending messages in this [section](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout).
 :::
 
-What we are specifically interested in is the source address of the message, which we can extract from the `msg_full` cell. By obtaining that address and comparing it to a stored one — we can conditionally allow access to crucial parts of our smart contract functionality. A common approach looks like this:
+What we are specifically interested in is the source address of the message, which we can extract from `in_msg_full` (FunC) or `msgFull` (Tolk). By obtaining that address and comparing it to a stored one — we can conditionally allow access to crucial parts of our smart contract functionality. A common approach looks like this:
 
 <Tabs groupId="language">
 <TabItem value="FunC" label="FunC">
@@ -65,21 +65,18 @@ What we are specifically interested in is the source address of the message, whi
     int flags = cs~load_uint(4);
     slice sender_address = cs~load_msg_addr();
 
-    ;; check if message was send by owner
+    ;; Check if the message was sent by the owner.
     if (equal_slices_bits(sender_address, owner_address)) {
-      ;;owner operations
-      return
+        ;; Owner operations
+        return
     } else if (equal_slices_bits(sender_address, other_role_address)){
-      ;;other role operations
-      return
+        ;; Other-role operations
+        return
     } else {
-      ;;anyone else operations
-      return
+        ;; Anyone-else operations
+        ;; 0xffff is not a standard exit code, but is common practice among TON developers
+        throw(0xffff);
     }
-
-    ;;no known operation were obtained for presented role
-    ;;0xffff is not standard exit code, but is standard practice among TON developers
-    throw(0xffff);
 }
 ```
 </TabItem>
@@ -87,23 +84,22 @@ What we are specifically interested in is the source address of the message, whi
 ```tolk
 // This is NOT a part of the project, just an example.
 fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
-    // Parse the sender address from in_msg_full
+    // Parse the sender address from msgFull
     var cs: slice = msgFull.beginParse();
     val flags = cs.loadMessageFlags();
-    var sender_address = cs~load_msg_address();
+    val senderAddress = cs.loadAddress();
 
-    if (isSliceBitsEqual(sender_address, owner_address)) {
-      // owner operations
-      return
-    } else if (isSliceBitsEqual(sender_address, other_role_address)){
-      // other role operations
-      return
+    if (senderAddress.bitsEqual(ownerAddress)) {
+        // Owner operations
+        return;
+    } else if (senderAddress.bitsEqual(otherRoleAddress)) {
+        // Other-role operations
+        return;
     } else {
-      // anyone else operations
-      return
+        // Anyone-else operations
+        // If the message contains an unknown op, throw
+        throw 0xffff;
     }
-
-    throw 0xffff; // if the message contains an op that is not known to this contract, we throw
 }
 ```
 </TabItem>
@@ -148,24 +144,24 @@ const int op::decrement = 2;
 <TabItem value="Tolk" label="Tolk">
 ```tolk
 //This is NOT a part of the project, just an example!
-const op::increment : int = 1;
-const op::decrement : int = 2;
+const int OP_INCREMENT = 1;
+const int OP_DECREMENT = 2;
 
 fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: slice) {
     // Step 1: Check if the message is empty
-    if (slice.isEndOfSlice()) {
+    if (msgBody.isEndOfSlice()) {
         return; // Nothing to do with empty messages
     }
 
     // Step 2: Extract the operation code
-    var op = in_msg_body~load_uint(32);
+    val op = msgBody.loadUint(32);
 
     // Step 3-7: Handle the requested operation
-    if (op == op::increment) {
-        increment();   //call to specific operation handler
+    if (op == OP_INCREMENT) {
+        increment();   // Call to specific operation handler
         return;
-    } else if (op == op::decrement) {
-        decrement();
+    } else if (op == OP_DECREMENT) {
+          decrement();
         // Just accept the money
         return;
     }
@@ -177,16 +173,16 @@ fun onInternalMessage(myBalance: int, msgValue: int, msgFull: cell, msgBody: sli
 </TabItem>
 </Tabs>
 
-By combining both of these patterns, you can achieve a comprehensive description of your smart contract's systems, ensuring secure interaction between them and unleashing the full potential of the TON actors model.
+By combining both of these patterns, you can achieve a comprehensive description of your smart contract's systems, ensuring secure interaction between them and unleashing the full potential of the TON actor model.
 
 ## External messages
 
-`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because, in most cases, you don't want external entry points to be accessible to anyone except you. If this is all the functionality that you want from the external section, the standard way is to delegate this responsibility to a separate actor - [wallet](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets), which is practically the main reason they were designed for.
+`External messages` are your only way of toggling smart contract logic from outside the blockchain. Usually, there is no need for implementation of them in smart contracts because, in most cases, you don't want external entry points to be accessible to anyone except you. If this is all the functionality that you want from the external section, the standard way is to delegate this responsibility to a separate actor — [wallet](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#basic-wallets), which is practically the main reason they were designed for.
 
 Developing external endpoints includes several standard [approaches](/v3/documentation/smart-contracts/message-management/external-messages) and [security measures](/v3/guidelines/smart-contracts/security/overview) that might be overwhelming at this point. Therefore, in this guide, we will implement incrementing the previously added `ctx_counter_ext` number.
 
 :::danger
-This implementation is **unsafe** and may lead to losing your contract funds. Don't deploy it to `Mainnet`, especially with a high smart contract balance.
+This implementation is **unsafe** and may lead to losing your contract funds. Don't deploy it to Mainnet, especially with a high smart contract balance.
 :::
 
 ## Implementation
@@ -228,7 +224,7 @@ Add the `recv_external` function to the `HelloWorld` smart contract:
 ```
 </TabItem>
 <TabItem value="Tolk" label="Tolk">
-```tolk title="/contracts/HelloWorld.tolk"
+```tolk title="/contracts/hello_world.tolk"
 fun acceptExternalMessage(): void
     asm "ACCEPT";
 
@@ -261,6 +257,7 @@ fun onExternalMessage(inMsg: slice) {
 </Tabs>
 
 This function, upon receiving an external message, will increment our `ctx_counter_ext` and also send an internal message to the specified address with the `increase` operation.
+**Note:** In FunC, it is written as `op::increase`, in Tolk as `OP_INCREASE`.
 
 Verify that the smart contract code is correct by running:
 
