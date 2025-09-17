@@ -46,7 +46,7 @@ transfer#5fcc3d14 <...> = InternalMsgBody;
 // ....
 ```
 - Constructor name: `transfer`
-- Constructor tag: `#5fcc3d14`
+- Constructor prefix code: `#5fcc3d14`
 
 Note that every constructor name is immediately followed by an optional constructor tag, such as `#_` or `$10`, which specifies the bitstring used to encode (serialize) the corresponding constructor.
 
@@ -64,7 +64,7 @@ It begins with the name of a constructor, such as a `message` or `bool_true`, fo
 | `some#3f5476ca`             | A 32-bit uint is serialized from a hex value.      |
 | `some#5fe`                  | A 12-bit uint is serialized from a hex value.      |
 | `some$0101`                 | Serialize the `0101` raw bits.                 |
-| `some` or `some#_`          | Serialize `crc32(equation) \| 0x80000000`. |
+| `some` or `some#`          | Serialize `crc32(equation) \| 0x80000000`. |
 | `some#_` or `some$_` or `_` | Serialize nothing.                         |
 
 Constructor names, such as `some` in this example, are used as variables during code generation. For example:
@@ -538,7 +538,7 @@ To enable the loading of special types in the constructor, prepend `!` before th
 !merkle_proof#03 {X:Type} virtual_hash:bits256 depth:uint16 virtual_root:^X = MERKLE_PROOF X;
 ```
 
-This technique allows code generation to mark special (exotic) cells when printing a structure and ensures proper validation of structures with special cells.
+This technique allows code generation to mark `SPECIAL` cells when printing a structure and ensures proper validation of structures with special cells.
 
 ## Multiple instances of the same type without constructor uniqueness tag check
 
