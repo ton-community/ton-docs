@@ -56,10 +56,10 @@ const int RESERVE_AT_MOST = 2;
 ;;; In the case of action failure, the transaction is bounced. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. [/v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages)
 const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 
-() calculate_and_reserve_at_most_storage_fee(int balance, int msg_value, int is_mc, int seconds, int bits, int cells) inline {
- int ton_balance_before_msg = balance - msg_value;
- int min_storage_fee = get_storage_fee(is_mc, seconds, bits, cells); ;; You can hardcode this value if the contract code will not be updated.
- raw_reserve(max(ton_balance_before_msg, min_storage_fee + my_storage_due()), RESERVE_AT_MOST);
+() calculate_and_reserve_at_most_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
+ int on_balance_before_msg = my_ton_balance - msg_value;
+ int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; You can hardcode this value if the contract code will not be updated.
+ raw_reserve(max(on_balance_before_msg, min_storage_fee + my_storage_due()), RESERVE_AT_MOST);
 }
 ```
 
