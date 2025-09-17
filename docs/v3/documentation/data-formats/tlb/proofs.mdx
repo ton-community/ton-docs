@@ -96,10 +96,10 @@ We should deserialize the cell according to the block [TL‑B scheme](https://gi
 ```
 
 
-Next, we need to verify that the `seqno` in the deserialized block matches the `seqno` of the block we know. After that, compute the representation hash (`get_hash(0)`) of the referenced cell from the Merkle proof and compare it to the block hash.
+Next, we need to verify that the `seqno` in the deserialized block matches the `seqno` of the block we know. After that, we compute `hash_1` for the single Merkle proof reference and compare it to our block hash.
 
 ```python
-h_proof = Cell.from_boc(header_proof)[0]
+
 assert h_proof.refs[0].get_hash(0) == block_id.root_hash
 ```
 Now, we can trust all other data in the cell.
@@ -108,7 +108,7 @@ _Checking proof examples:_ [Python](https://github.com/yungwine/pytoniq-core/blo
 
 ## Full block
 
-In the `liteServer.getBlock` method, proof verification is performed in the same manner as described above. However, it includes full cells instead of pruned branches for the [value flow](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L464), [state update](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413), and [block extra](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L452) schemas.
+In the `liteserver.getBlock` method, proof verification is performed in the same manner as described above. However, it includes full cells instead of pruned branches for the [value flow](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L464), [state update](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L412-L413), and [block extra](https://github.com/ton-blockchain/ton/blob/24dc184a2ea67f9c47042b4104bbb4d82289fac1/crypto/block/block.tlb#L452) schemas.
 
 
 ## Shard block
@@ -159,7 +159,7 @@ After deserializing the shard proof BoC, 2 root cells are obtained:
 [<Cell 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> 1 refs>, <Cell 280[0332BF3592969931CA4FBC7715494B50597F1884C0D847456029D8CF0E526E6046016F] -> 1 refs>]
 ```
 
-The first root is a MasterChain block Merkle proof, which must be verified using the `check_block_header_proof` function:
+The first root is a MasterChain block Merkle proof, which must be verified using the `check_block_header` function:
 
 ```json
 280[0351ED3B9E728E7C548B15A5E5CE988B4A74984C3F8374F3F1A52C7B1F46C264060016] -> {
@@ -289,7 +289,7 @@ Now, proceed to deserialize the second cell:
 }
 ```
 
-Since this cell is trusted, we can also trust the shard block data (`ShardStateUnsplit` -> `custom` -> `shard_hashes` -> `0 (workchain 0)` -> `leaf`).
+Since this cell is trusted, we can also trust the shard block data (`ShardStateUnsplit` -> `custom` -> `shard_hashes` -> `0 (shrdblk wc)` -> `leaf`).
 
 ## Account state
 
@@ -338,7 +338,7 @@ The first `root` is a Merkle proof for the shard block, whose hash we have alrea
 }
 ```
 
-As in the `shard_proof` verification, the `check_block_header_proof` function must validate the block cell and record the new `StateUpdate` hash.
+As in the `shard_proof` verification, the `check_block_header` function must validate the block cell and record the new `StateUpdate` hash.
 
 Next, deserialize the second root (`state_cell`) and verify that its `Hash_1` matches the previously recorded hash:
 
@@ -349,7 +349,7 @@ if len(proof_cells) != 2:
 
 state_cell = proof_cells[1]
 
-state_hash = check_block_header_proof(proof_cells[0][0], block_id.root_hash, True)
+state_hash = check_block_header_proof(proof_cells[0][0], shrd_blk.root_hash, True)
 
 if state_cell[0].get_hash(0) != state_hash:
     raise ProofError('state hashes mismatch')
@@ -851,7 +851,7 @@ Next, deserialize the `config_proof` cell:
 ```
 
 </details>
-Compare the `Hash_1` from the Merkle proof (reference only) with the hash obtained from the `check_block_header_proof` function above. If they match, the cell can be trusted:
+Compare the `Hash_1` from the Merkle proof (reference only) with the hash obtained from the `check_block_header` function above. If they match, the cell can be trusted:
 
 ```python
 state_hash = check_block_header_proof(state_proof[0], block.root_hash, True)
