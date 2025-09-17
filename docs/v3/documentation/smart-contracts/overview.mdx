@@ -1,55 +1,18 @@
 import Feedback from '@site/src/components/Feedback';
 
-import Button from '@site/src/components/button'
+import Button from '@site/src/components/button';
 
 # Introduction
 
-Smart contracts on TON are autonomous programs executed by the [TON Virtual Machine (TVM)](/v3/documentation/tvm/tvm-overview). Each contract combines immutable code with persistent data and interacts with other contracts through asynchronous [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions).
+Smart contract creation, development, and deployment on TON Blockchain leverage the [TON Virtual Machine (TVM)](/v3/documentation/smart-contracts/overview#ton-virtual-machine-tvm) and one of the following programming languages:
 
-## Quick start
-
-If you want to jump right in, follow our [quick start guide](/v3/guidelines/quick-start/developing-smart-contracts/setup-environment).
-
-## TON Virtual Machine (TVM)
-
-The TVM is the execution engine for your smart contracts. It processes transactions in phases and operates on a stack‑based model. For details on its state, control registers and compute pipeline, see the [TVM overview](/v3/documentation/tvm/tvm-overview).
-
-## Messages, transaction fees and sharding
-
-In TON, smart contracts have unique addresses and communicate through asynchronous messages that trigger transactions.
-
-Every transaction incurs a fee. All computation costs are denominated in gas units, and the gas price is fixed by the network configuration. Fees are made up of storage, forwarding, computation and action components; their exact amount depends on message size, execution time and current network settings.
-
-Scalability in TON is achieved through sharding: the blockchain is split into smaller pieces called shards. Shards can dynamically split and merge based on load, and each shard is handled by its own set of validators. The [Infinity sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm) treats each account as its own account chain, aggregated into shard chains, enabling massive parallelism.
-
-For more information, see the sections on [addresses](/v3/documentation/smart-contracts/addresses/address), [messages and transactions](/v3/documentation/smart-contracts/message-management/messages-and-transactions), [transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees) and [sharding](/v3/documentation/smart-contracts/shards/shards-intro).
-
-## Programming languages
-
-TON supports several languages for writing smart contracts:
 - [Tolk](/v3/documentation/smart-contracts/tolk/overview) – Next-generation language for developing smart contracts on TON with modern syntax, strong types, and built-in serialization.
 - [FunC](/v3/documentation/smart-contracts/func/overview) – Minimalist, functional-style language designed for writing low-level TON smart contracts, tightly bound to the TVM model.
 - [Fift](/v3/documentation/smart-contracts/fift/overview) – Stack-based language for TON, used for deployment, testing, and direct TVM interaction.
 
-## TON Blockchain course
+## Quick start
 
-:::tip
-Before starting this course, we recommend taking the [Blockchain Basics with TON](/v3/concepts/educational-resources#blockchain-basics) course, to make sure you have a solid understanding of the basics of blockchain technology.
-:::
-
-The course is aimed at developers interested in gaining practical knowledge about the technologies and concepts of the TON blockchain, such as FunC, dApps, decentralization, smart contracts, contract testing, as well as the creation of Mini Apps within Telegram.
-
-<Button href="https://stepik.org/course/176754/promo" colorType={'primary'} sizeType={'sm'}>
-  Explore TON course
-</Button>
-
-<Button href="https://stepik.org/course/201638/promo" colorType={'secondary'} sizeType={'sm'}>
-  Chinese
-</Button>
-
-<Button href="https://stepik.org/course/201855/promo" colorType={'secondary'} sizeType={'sm'}>
-  Russian
-</Button>
+If you want to jump right in, follow our [quick start guide](/v3/guidelines/quick-start/developing-smart-contracts/setup-environment).
 
 ## Development environment
 
@@ -62,30 +25,38 @@ To build and test smart contracts on TON, it’s best to set up a local developm
 - [Testnet](/v3/documentation/smart-contracts/getting-started/testnet) – an test network for development purposes. This network allows you to develop safely and efficiently before moving to Mainnet.
 
 
+## TON Blockchain course
+
+:::tip
+Before starting this course, we recommend taking the [Blockchain Basics with TON](/v3/concepts/educational-resources#blockchain-basics) course, to make sure you have a solid understanding of the basics of blockchain technology.
+:::
+
+The course is aimed at developers interested in gaining practical knowledge about the technologies and concepts of the TON blockchain, such as FunC, dApps, decentralization, smart contracts, contract testing, as well as the creation of Mini Apps within Telegram.
+
+<Button href="https://stepik.org/course/176754/promo" colorType={'primary'} sizeType={'sm'}>
+  English
+</Button>
+
+<Button href="https://stepik.org/course/201638/promo" colorType={'secondary'} sizeType={'sm'}>
+  Chinese
+</Button>
+
+<Button href="https://stepik.org/course/201855/promo" colorType={'secondary'} sizeType={'sm'}>
+  Russian
+</Button>
+
 ## Examples of smart contracts
 
-TON provides a set of standard smart contracts that act as building blocks for wallets, governance, staking and other core services. These reference implementations are open‑source and well reviewed; studying them will help you understand how to build secure applications on TON.
+Examples of smart contracts on TON include wallets, electors (which manage validator elections on TON), and multi-signature wallets, which can serve as references when studying.
 
-- [Wallet contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts) – regular wallet contracts on TON are just smart contracts with code and data.  Like any other contract, they accept external and internal messages, send messages and logs.  Each version has a different implementation of this standard interface.
+<Button href="/v3/documentation/smart-contracts/contracts-specs/examples" colorType="primary" sizeType={'sm'}>
+  Open examples
+</Button>
 
-- [Highload wallet contracts](/v3/documentation/smart-contracts/contracts-specs/highload-wallet) – designed for scenarios where you must send large numbers of transactions quickly.  It can send one internal message per external call, but by sending that message back to itself it can effectively dispatch up to 254 messages in one request.
+## Additional resources
 
-- [Vesting contract](/v3/documentation/smart-contracts/contracts-specs/vesting-contract) – a smart contract that locks Toncoin and releases it according to a predefined vesting schedule.  It acts as a secure escrow, locking a specified amount of Toncoin for a defined period and gradually unlocking it based on parameters such as total duration, unlock period and cliff.
-
-- [Governance contracts](/v3/documentation/smart-contracts/contracts-specs/governance) – TON uses special smart contracts to manage consensus parameters (TVM configuration, catchain settings, fee parameters and chain topology) on‑chain.  The main governance contracts are the **Elector** (manages validator elections and reward distribution), **Config** and **DNS**.
-
-- [Nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) – a pool contract that allows nominators to lend Toncoin to validators for staking.  It ensures that funds are used exclusively for validation and distributes rewards proportionally to nominators’ stakes.  Pools are designed for large stakes and a limited number of nominators.
-
-- [Single nominator pool](/v3/documentation/smart-contracts/contracts-specs/nominator-pool) – a simplified, security‑focused version of the nominator pool for validators with sufficient self‑stake.  It keeps signing keys separate from staked funds using a cold wallet and is recommended for validators who do not need third‑party nominators.
-
-- [Precompiled contracts](/v3/documentation/smart-contracts/contracts-specs/precompiled-contracts) – smart contracts whose logic is implemented natively in validator software (C++).  When the code hash of a contract is listed in the masterchain’s precompiled contracts configuration, the node executes the built‑in C++ function instead of interpreting TVM bytecode, which improves performance and lowers fees.
-
-These standard contracts can serve as references when designing your own smart contracts.
-
-For more examples of production‑ready contracts (vesting wallets, multi‑signatures, Jettons and more), explore the [Examples of smart contracts](/v3/documentation/smart-contracts/contracts-specs/examples) page.
-
-## Smart contract guidelines
-
-TON offers endless possibilities. Learn how to make the most of them while adhering to recommended [guidelines](/v3/guidelines/smart-contracts/guidelines).
+- [What is blockchain? What is a smart contract? What is gas?](https://blog.ton.org/what-is-blockchain)
+- [Understanding Transaction Fees](/v3/guidelines/smart-contracts/fee-calculation)
+– [How to work with wallet smart contracts](/v3/guidelines/smart-contracts/howto/wallet)
 
 <Feedback />
