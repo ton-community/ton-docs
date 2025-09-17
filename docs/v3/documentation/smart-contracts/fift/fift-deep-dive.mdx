@@ -1,8 +1,8 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Deep dive
+# Fift deep dive
 
-Fift is a stack-based language used for local manipulation of cells and other TVM primitives. Its primary purpose is to compile TVM assembly code into contract code as a bag-of-cells (BoC).
+Fift is a high-level stack-based language used for local manipulation of cells and other TVM primitives. Its primary purpose is to compile TVM assembly code into contract code as a bag of cells (BoC).
 
 :::caution
 **Advanced topic notice**
@@ -17,7 +17,7 @@ This section covers low-level interactions with TON's implementation details. Be
 
 Use the Fift interpreter as a calculator with reverse Polish notation:
 
-```
+```fift
 6 17 17 * * 289 + .
 2023 ok
 ```
@@ -30,44 +30,44 @@ This example calculates:
 
 ## Standard output
 
-```
+```fift
 27 emit ."[30;1mgrey text" 27 emit ."[37m"
 grey text ok
 ```
 
 - `emit` prints the Unicode character corresponding to the number on top of the stack
-- `."..."` outputs a constant string
+- `."..."` outputs a constant string  
 
 ## Defining functions (Fift words)
 
-To define a word, follow these steps:
+To define a word, follow these steps:  
 
-1. **Enclose the word's effects** in curly braces `{}`.
-2. **Add a colon `:`** after the closing brace.
+1. **Enclose the word's effects** in curly braces `{}`.  
+2. **Add a colon `:`** after the closing brace.  
 3. **Specify the word's name** after the colon.
 
-First line defines a word `increment` that increases `x` by `1`.
+Defines `increment`, which adds 1 to the top stack item.
 
-**Examples:**
-```
+**Examples:**  
+```fift
 { x 1 + } : increment
 { minmax drop } : min
 { minmax nip } : max
-```
+```  
 > Fift.fif
 
-In TON, multiple **defining words** exist, not just `:`. They differ in behavior:
+In TON, multiple **defining words** exist, not just `:`. They differ in behavior:  
 
 - **Active words** – Operate inside curly braces `{}`.
-- **Prefix words** – Do not require a trailing space .
+- **Prefix words** – Do not require a trailing space.
 
-```
-{ bl word 1 2 ' (create) } "::" 1 (create)
-{ bl word 0 2 ' (create) } :: :
-{ bl word 2 2 ' (create) } :: :_
-{ bl word 3 2 ' (create) } :: ::_
-{ bl word 0 (create) } : create
-```
+```fift
+{ bl word 1 2 ' (create) } "::" 1 (create)  
+{ bl word 0 2 ' (create) } :: :  
+{ bl word 2 2 ' (create) } :: :_  
+{ bl word 3 2 ' (create) } :: ::_  
+{ bl word 0 (create) } : create  
+``` 
 
 > Fift.fif
 
@@ -75,7 +75,7 @@ In TON, multiple **defining words** exist, not just `:`. They differ in behavior
 
 Execute code blocks conditionally using `cond`:
 
-```
+```fift
 { { ."true " } { ."false " } cond } : ?.   4 5 = ?.  4 5 < ?.
 false true  ok
 { ."hello " } execute ."world"
@@ -86,7 +86,7 @@ hello world ok
 
 Use loop primitives for repetitive operations:
 
-```
+```fift
 // ( l c -- l') Removes first c elements from list l
 { ' safe-cdr swap times } : list-delete-first
 ```
@@ -103,14 +103,14 @@ Comments in Fift are defined in `Fift.fif` and come in two forms:
 1. **Single-line comments**: Start with `//` and continue to the end of the line
 2. **Multiline comments**: Start with `/*` and end with `*/`
 
-```
+```fift
 { 0 word drop 0 'nop } :: //
 { char " word 1 { swap { abort } if drop } } ::_ abort"
 { { bl word dup "" $= abort"comment extends after end of file" "*/" $= } until 0 'nop } :: /*
 ```
 > Fift.fif
 
-#### How comments work
+### How comments work
 
 Fift programs are sequences of words that transform the stack or define new words. Comments must work even during word definitions, requiring them to be **active words** (defined with `::`).
 
@@ -122,7 +122,7 @@ Breaking down the `//` definition:
 5. `'nop` - Pushes an execution token that does nothing (equivalent to `{ nop }`)
 
 
-## Using Fift for defining TVM assembly codes
+## Using Fift to define TVM assembly code
 
 ```fift
 x{00} @Defop NOP
@@ -133,44 +133,43 @@ x{00} @Defop NOP
 { rot >= -rot <= and } : 2x<=
 ...
 ```
-> Asm.fif (lines order reversed)
+> Asm.fif (lines in reverse order)
 
 ### How @Defop works
-`@Defop` checks available space for the opcode using `@havebitrefs`. If space is insufficient, it writes to another builder via `@|` (implicit jump).
+`@Defop` checks available space for the opcode using `@havebitrefs`. If space is insufficient, it writes to another builder via `@|` (implicit jump). 
 
-**Important:** Always use `x{A988} @addop` instead of `x{A988} s,` to avoid compilation failures when space is limited.
+Prefer `x{A988} @addop` instead of `x{A988} s,` when space may be limited.
 
 ### Including cells in contracts
-You can embed large bag-of-cells into contracts:
+You can embed a large BoC into contracts:
 ```fift
 <b 8 4 u, 8 4 u, "fift/blob.boc" file>B B>boc ref, b> <s @Defop LDBLOB
 ```
 
 This defines an opcode that:
 1. Writes `x{88}` (`PUSHREF`) when included in the program
-2. Adds a reference to the specified bag-of-cells
-3. Pushes the cell to TVM stack when executing `LDBLOB`
+2. Adds a reference to the specified Bag of Cells (BoC)
+3. Pushes the cell onto the TVM stack when executing `LDBLOB`
 
 ## Special features
 
 ### Ed25519 cryptography
 Fift provides built-in support for Ed25519 cryptographic operations:
-- **`newkeypair`** - Generates a private-public key pair
-- **`priv>pub`** - Derives a public key from a private key
-- **`ed25519_sign[_uint]`** - Creates a signature for given data using a private key
-- **`ed25519_chksign`** - Verifies an Ed25519 signature
+- **`newkeypair`** - Generates a private/public key pair  
+- **`priv>pub`** - Derives a public key from a private key  
+- **`ed25519_sign[_uint]`** - Creates a signature for given data using a private key  
+- **`ed25519_chksign`** - Verifies an Ed25519 signature  
 
 ### TVM interaction
-- **`runvmcode` and similar commands** - Executes TVM with a code slice taken from the stack
+- **`runvmcode` and similar words** - Executes TVM code from a slice taken from the stack  
 
 ### File operations
-- **Save BoC to file**:
+- **Save BoC to file**:  
   ```fift
-  boc>B ".../contract.boc" B>file
+  boc>B "<path/to/contract.boc>" B>file
   ```
 
 ## Continue learning
-- [Fift: A Brief Introduction](https://docs.ton.org/fiftbase.pdf) - _Nikolai Durov_
+- [Fift: A Brief Introduction](https://docs.ton.org/fiftbase.pdf) - _Nikolai Durov_  
 
 <Feedback />
-

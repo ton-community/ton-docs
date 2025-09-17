@@ -1,0 +1,76 @@
+import Feedback from '@site/src/components/Feedback';
+
+import ThemedImage from '@theme/ThemedImage';
+
+# Cells
+
+In TON, a **cell** is like a small box that can hold information.
+Each box (cell) has two parts inside:
+
+- it can keep up to **1023 bits** of data (like a small note inside the box)
+- it can point to up to **4 other boxes** (arrows to other cells)
+
+There are some rules:
+
+- data and arrows are kept separately
+- arrows cannot go in circles — a box cannot point back to itself, directly or indirectly
+
+Because of this, all cells together form a [directed acyclic graph (DAG)](https://en.wikipedia.org/wiki/Directed_acyclic_graph).
+You can imagine it as a **family tree**: every child points to parents, but you can never circle back to your great-grandparent.
+
+<br />
+
+<ThemedImage
+  alt="Directed acyclic graph (DAG) of TON cells"
+  sources={{
+    light: '/img/docs/cells-as-data-storage/dag.png?raw=true',
+    dark: '/img/docs/cells-as-data-storage/Cells-as-data-storage_1_dark.png?raw=true',
+  }}
+/>
+
+<br />
+
+These design choices allow us to define the following rules for cells:
+
+- Storage is compact and efficient (cells can be reused in multiple places).
+- Verification is simple (Merkle proofs can show that data is correct).
+- Serialization is standardized (Bag of Cells).
+
+
+## Types of cells
+
+There are **five types of cells** in TON.
+One is the normal cell, and four are special (called [exotic](/v3/documentation/data-formats/cells/exotic)).
+
+| Type                  | Think of it as...                     | Purpose |
+|-----------------------|----------------------------------------|---------|
+| **Ordinary cell**     | A regular box                         | Default, stores most data |
+| **Pruned branch**     | A “summary” of many boxes             | Used for short proofs |
+| **Library reference** | A shared folder everyone can use      | Helps avoid duplicates |
+| **Merkle proof**      | A certificate attached to a box       | Used for verification |
+| **Merkle update**     | A “change log” for a set of boxes     | Used for updating state |
+
+## Serialization of data into cells
+
+In TON, everything is stored in cells: messages, blocks, even the whole blockchain state.
+
+All these objects are broken down into trees of cells.
+This tree is called a [Bag of Cells (BoC)](/v3/documentation/data-formats/cells/overview#bag-of-cells). You can imagine it as a **set of nested boxes inside boxes**.
+
+To describe how exactly data is put into boxes, TON uses a special language called [TL-B](/v3/documentation/data-formats/tlb/overviewe).
+It plays the same role as **Protocol Buffers** or **JSON schemas**, but for TON cells.
+
+## Transition to cells
+
+When a transaction happens:
+1. Validators execute smart contracts inside the TVM.
+2. The resulting changes are written to account states.
+3. These account states are stored as **cells**, which are then committed into blocks.
+
+Thus, **cells are the fundamental building blocks of TON’s data storage**.
+
+## See also
+
+- [Nodes](/v3/concepts/dive-into-ton/ton-blockchain/nodes)
+
+<Feedback />
