@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Security Guidelines for Nodes
+# Security guidelines for nodes
 
 Ensuring the security of nodes, particularly in decentralized networks such as blockchain or distributed systems, is essential for maintaining data integrity, confidentiality, and availability. The guidelines for securing nodes should cover several layers, including network communication, hardware, and software configurations. Below is a set of guidelines to enhance node security:
 
@@ -31,16 +31,16 @@ Ensuring the security of nodes, particularly in decentralized networks such as b
 
 - **Disable root login:** Prevent root access through SSH by editing the `/etc/ssh/sshd_config` file.
 
-  ```conf
+  ```bash
   PermitRootLogin no
   ```
 - **Use SSH keys:** For a more secure connection, opt for SSH keys instead of password authentication.
-  ```conf
+  ```bash
   PasswordAuthentication no
   ```
 - **Modify the default SSH port:** Changing the default SSH port can help reduce automated brute-force attacks:
 
-  ```conf
+  ```bash
   Port 2222
   ```
 - After editing `/etc/ssh/sshd_config`, apply changes with `sudo systemctl reload ssh` (Debian/Ubuntu) or `sudo systemctl reload sshd` (RHEL/CentOS/Fedora).
@@ -63,7 +63,7 @@ Before disabling password authentication or changing the SSH port, ensure you ca
   sudo ufw enable # Enable firewall
   ```
 
-- Note: Replace `22` with your configured SSH port (e.g., `2222`). Also, if running a full node, ensure the required UDP port is allowed/forwarded. See `guidelines/nodes/running-nodes/full-node.mdx#port-forwarding`.
+- Note: Replace `22` with your configured SSH port (e.g., `2222`). Also, if running a full node, ensure the required UDP port is allowed/forwarded. See [port forwarding](guidelines/nodes/running-nodes/full-node#port-forwarding).
 
 ### 5. Monitor logs
 
