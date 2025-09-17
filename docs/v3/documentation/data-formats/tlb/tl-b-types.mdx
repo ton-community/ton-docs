@@ -379,7 +379,7 @@ TON addresses are generated using the SHA256 hashing mechanism within the TL‑B
 
 Standard addresses, such as `EQBL2_3lMiyywU17g-or8N7v9hDmPCpttzBPE2isF2GTzpK4`, utilize base64 URI encoding for byte representation. Typically, these addresses are 36 bytes long, with the last 2 bytes representing the `CRC16 checksum`, calculated using the `XMODEM` table. The first byte denotes the flag, while the second indicates the WorkChain. The 32 middle bytes correspond to the address data, also called AccountID, often represented in schemas like int256.
 
-[Decoding reference](/v3/documentation/smart-contracts/addresses/address-formats#encoding)
+[Decoding reference](https://github.com/xssnick/tonutils-go/blob/3d9ee052689376061bf7e4a22037ff131183afad/address/addr.go#L156)
 
 ## References
 
