@@ -61,7 +61,7 @@ validator-engine ... -M --add-shard 0:2000000000000000 --add-shard 0:e0000000000
 
 1. **DO NOT** add these flags to a node that is participating in validation. Currently, validators are required to monitor all shards; this will be improved in future updates, allowing them to monitor only the MasterChain.
 2. If you use the `-M` flag, the node will begin downloading any missing shards, which may take some time. This is also true if you add new shards later using the `--add-shard` flag.
-The command `--add-shard 0:0800000000000000` will add the entire shard group associated with the prefix `0:2000000000000000` due to the `monitor_min_split` configuration
+The command `--add-shard 0:0800000000000000` will add the entire shard group associated with the prefix `0:2000000000000000` due to the `monitor_min_split` configuration.
 
 ### Low-level configuration
 
