@@ -18,7 +18,7 @@ In most cases, the sender:
 1. Attaches a small amount of Toncoin (typically one Toncoin) to the internal message
 2. Sets the "bounce" flag (sends a bounceable internal message)
 
-The receiver then returns the unused portion of the received value with the answer, deducting message forwarding fees. This is typically done using `SENDRAWMSG` with `mode = 64`.
+The receiver then returns the unused portion of the received value with the answer, deducting message forwarding fees. This is typically done using `SENDRAWMSG` with [mode = 64](/v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode64).
 :::
 
 ## Message bouncing
