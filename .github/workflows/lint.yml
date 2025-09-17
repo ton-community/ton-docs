@@ -10,7 +10,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
-      - run: npm ci # or yarn install
+      - run: npm ci
       - name: Lint JS/TS code
         run: npm run lint
 
@@ -19,9 +19,31 @@ jobs:
     continue-on-error: true
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: true
       - uses: actions/setup-node@v3
         with:
           node-version: '20'
-      - run: npm ci # or yarn install
+      - run: npm ci
+      - name: Build the English docs
+        run: npm run build -- -l en
       - name: Lint Markdown code
         run: npm run lint-mdx
+      - name: Spellcheck
+        run: npm run spell
+
+  markdown-i18n:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - run: npm ci
+      - name: Build the zh-cn locale
+        run: npm run build -- -l mandarin
+      - name: Build the ru locale
+        run: npm run build -- -l ru
