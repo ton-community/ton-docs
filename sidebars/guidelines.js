@@ -218,6 +218,7 @@ module.exports = [
           'v3/guidelines/dapps/apis-sdks/api-types',
           'v3/guidelines/dapps/apis-sdks/sdk',
           'v3/guidelines/dapps/apis-sdks/ton-adnl-apis',
+          'v3/guidelines/dapps/apis-sdks/analytics-and-data',
         ],
       },
       {
@@ -530,21 +531,6 @@ module.exports = [
         ],
       },
 
-      // 9. Business
-      {
-        type: 'category',
-        label: 'Business',
-        link: {
-          type: 'generated-index',
-          title: 'Business',
-          slug: '/guidelines/business',
-          keywords: ['business'],
-        },
-        items: [
-          'v3/guidelines/ton-connect/business/ton-connect-for-business',
-          'v3/guidelines/ton-connect/business/ton-connect-for-security'
-        ],
-      }
     ],
 
   },

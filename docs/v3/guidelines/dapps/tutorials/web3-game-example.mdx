@@ -9,12 +9,12 @@ In this tutorial, we will explore how to integrate TON Blockchain into a game. A
 
 We will implement the following:
 - Achievements. Let’s reward our users with [SBTs](/v3/concepts/glossary#sbt). The achievement system is a great tool for increasing user engagement.
-- Game currency. On the TON blockchain, it’s easy to launch your own token (jetton). The token can be used to create an in-game economy. Our users will be able to earn game coins and spend them later.
-- Game shop. We will allow users to purchase in-game items using either in-game currency or TON coins.
+- Game currency. On the TON Blockchain, it’s easy to launch your own token (jetton). The token can be used to create an in-game economy. Our users will be able to earn game coins and spend them later.
+- Game shop. We will allow users to purchase in-game items using either in-game currency or Toncoin.
   
 ## Preparations
 
-### Install GameFi SDK
+### Install Assets SDK (CLI)
 First, we need to set up the game environment by installing `assets-sdk`. This package is designed to provide developers with everything required to integrate blockchain into games. The library can be used either from the CLI or within Node.js scripts. In this tutorial, we will use the CLI approach.
 ```sh
 npm install -g @ton-community/assets-sdk@beta
@@ -30,18 +30,18 @@ You will be asked a few questions during the setup.
 Field | Hint
 :----- | :-----
 Network | Select `testnet` since this is a test game.
-Type | Select `highload-v2`wallet type, as it offers the best performance for use as a master wallet.
-Storage | Storage is used to hold `NFT`/`SB`T files. You can choose between `Amazon S3` (centralized) or `Pinata` (decentralized).  For this tutorial, we'll use Pinata since decentralized storage is more illustrative for a Web3 game.
-IPFS gateway | This service loads asset metadata from  `pinata`, `ipfs.io,  or a custom service URL.
+Type | Select `highload-v2` wallet type to use as a master wallet.
+Storage | Storage is used to hold `NFT`/`SBT` files. You can choose between `Amazon S3` (centralized) or `Pinata` (decentralized). For this tutorial, we'll use Pinata since decentralized storage is more illustrative for a Web3 game.
+IPFS gateway | This service loads asset metadata from `pinata`, `ipfs.io`, or a custom service URL.
 
 The script will output a link where you can view the created wallet's state.
 
-![New wallet in Nonexist status](/img/tutorials/gamefi-flappy/wallet-nonexist-status.png)
+![New wallet in nonexist status](/img/tutorials/gamefi-flappy/wallet-nonexist-status.png)
 
-As you can see, the wallet has not actually been created yet. To finalize the creation, we need to deposit funds into it. In a real-world scenario, you can fund the wallet however you prefer using its address. In our case, we will use the [Testgiver TON Bot](https://t.me/testgiver_ton_bot). Open it to claim 5 test TON coins.
+As you can see, the wallet has not actually been created yet. To finalize the creation, we need to deposit funds into it. In a real-world scenario, you can fund the wallet however you prefer using its address. In our case, we will use the [Testgiver TON Bot](https://t.me/testgiver_ton_bot). Open it to claim 5 test Toncoin.
 
-A little later, you should see 5 TON in the wallet, and its status will change to Uninit. The wallet is now ready. After the first transaction, its status will change to Active.
-![Wallet status after top-up](/img/tutorials/gamefi-flappy/wallet-nonexist-status.png)
+A little later, you should see 5 TON in the wallet, and its status will change to uninit. The wallet is now ready. After the first transaction, its status will change to active.
+![Wallet status after top-up](/img/tutorials/gamefi-flappy/wallet-uninit-status.png)
 
 ### Mint in-game currency
 We are going to create an in-game currency to reward users.
@@ -52,13 +52,13 @@ You will be asked a few questions during the setup:
 
 Field | Hint
 :----- | :-----
-Name | Token name, for example ` Flappy Jetton `.
+Name | Token name, for example `Flappy Jetton`.
 Description | Token description, for instance: A vibrant digital token from the Flappy Bird universe.
-Image | Download prepared [jetton logo](https://raw.githubusercontent.com/ton-community/flappy-bird/ca4b6335879312a9b94f0e89384b04cea91246b1/scripts/tokens/flap/image.png) and specify file path. Of course, you can use any image.
+Image | Download the prepared [jetton logo](https://raw.githubusercontent.com/ton-community/flappy-bird/ca4b6335879312a9b94f0e89384b04cea91246b1/scripts/tokens/flap/image.png) and specify the file path. Of course, you can use any image.
 Symbol | `FLAP` or enter any abbreviation you want to use.
-Decimals | How many zeros after the dot your currency will have. Let’ it be `0` in our case.
+Decimals | How many zeros after the dot your currency will have. Let it be `0` in our case.
 
-The script will output a link where you can view the created jetton's state. It will have an **Active** status. The wallet’s status will change from **Uninit** to **Active**.
+The script will output a link where you can view the created jetton's state. It will have an active status. The wallet’s status will change from uninit to active.
 
 ![In-game currency / jetton](/img/tutorials/gamefi-flappy/jetton-active-status.png)
 
@@ -72,10 +72,10 @@ Field | First game | Fifth game
 :----- | :----- | :-----
 Type | `sbt` | `sbt`
 Name | Flappy First Flight | Flappy High Fiver
-Description | Commemorating your inaugural journey in the Flappy Bird game! | Celebrate your persistent play with the Flappy High Fiver NFT!
+Description | Commemorating your inaugural journey in the Flappy Bird game! | Celebrate your persistent play with the Flappy High Fiver SBT!
 Image | You can download [the image](https://raw.githubusercontent.com/ton-community/flappy-bird/article-v1/scripts/tokens/first-time/image.png) here | You can download [the image](https://raw.githubusercontent.com/ton-community/flappy-bird/article-v1/scripts/tokens/five-times/image.png) here
 
-Now that we are fully prepared, let's proceed to implementing the game logic.
+Now that we are fully prepared, let's proceed to implement the game logic.
 
 ## Connecting wallet
 The process begins with the user connecting their wallet. Let's integrate wallet connectivity.
@@ -162,7 +162,7 @@ const unsubscribe = gameFi.onWalletChange(onWalletChange)
 
 > To learn about more complex scenarios please check out the full implementation of [wallet connect flow](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/index.ts#L16).
 
-Read how [game UI managing](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/index.ts#L50) can be implemented.
+Learn how to manage the [game UI](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/index.ts#L50).
 
 Now that we have the user's wallet connected, we can move forward.
 
@@ -175,7 +175,7 @@ Now that we have the user's wallet connected, we can move forward.
 To implement the achievements and reward system, we need to set up an endpoint that will be triggered each time a user plays.
 
 ### `/played` endpoint
-We need to create an endpoint `/played ` which does the following:
+We need to create an endpoint `/played` which does the following:
 - receives a request body containing the user’s wallet address and Telegram initial data, which is passed to the Mini App during launch. The initial data must be parsed to extract authentication details and verify that the user is sending the request on their own behalf.
 - tracks and stores the number of games a user has played.
 - checks whether this is the user’s first or fifth game. If so, it rewards the user with the corresponding SBT.
@@ -183,7 +183,7 @@ We need to create an endpoint `/played ` which does the following:
 
 > Read [/played endpoint](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/server/src/index.ts#L197) code.
 
-### Request `/played` endpoint
+### Requesting the `/played` endpoint
 Every time the bird hits a pipe or falls, the client code must call the `/played` endpoint, passing the correct request body:
 ```typescript
 async function submitPlayed(endpoint: string, walletAddress: string) {
@@ -202,31 +202,34 @@ async function submitPlayed(endpoint: string, walletAddress: string) {
 const playedInfo = await submitPlayed('http://localhost:3001', wallet.account.address);
 ```
 
-> Read [submitPlayer function](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/game-scene.ts#L10) code.
+> Note: The examples use different localhost ports for separate services—`/played` on `3001` and `/purchases` on `3000`.
+> Note: The `/played` endpoint expects Telegram initial data in the request body as `tg_data`, while `/purchases` expects it as an `auth` query parameter.
+
+> Read [submitPlayed function](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/client/src/game-scene.ts#L10) code.
 
 Let’s play for the first time and ensure we receive a FLAP token and an SBT. Click the Play button, fly through a pipe or two, then crash into a pipe. Everything works!
 
 ![Rewarded with token and SBT](/img/tutorials/gamefi-flappy/sbt-rewarded.png)
 
 Play four more times to earn the second SBT, then open your TON Space Wallet. Here are your collectibles:
-![Achievements as SBT in Wallet](/img/tutorials/gamefi-flappy/sbts-in-wallet.png)
+![Achievements as SBTs in wallet](/img/tutorials/gamefi-flappy/sbts-in-wallet.png)
 
 ## Implementing the game shop
 To set up an in-game shop, we need two components. The first is an endpoint that provides information about users' purchases. The second is a global loop that monitors user transactions and assigns game properties to item owners.
 
 ### `/purchases` endpoint
 The endpoint does the following:
-- receive `auth` query parameter containing Telegram Mini App initial data.
+- receives the `auth` query parameter containing Telegram Mini App initial data.
 - retrieves the items a user has purchased and responds with a list of those items.
 
 > Read [/purchases](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/server/src/index.ts#L303) endpoint code.
 
 ### Purchases loop
-o track user payments, we need to monitor transactions in the master wallet. Each transaction must include a message in the format `userId`:`itemId`. We will store the last processed transaction, retrieve only new ones, assign purchased properties to users based on `userId` and `itemId`, and update the last transaction hash. This process will run in an infinite loop.
+To track user payments, we need to monitor transactions in the master wallet. Each transaction must include a message in the format `userId`:`itemId`. We will store the last processed transaction, retrieve only new ones, assign purchased properties to users based on `userId` and `itemId`, and update the last transaction hash. This process will run in an infinite loop.
 
 > Read the [purchase loop](https://github.com/ton-community/flappy-bird/blob/article-v1/workspaces/server/src/index.ts#L110) code.
 
-### Client side for the shop
+### Client-side for the shop
 
 On the client side, we have a **Shop** button.
 
@@ -259,7 +262,7 @@ gameFi.buyWithJetton({
 ![Purchase confirmation](/img/tutorials/gamefi-flappy/purchase-confirmation.png)
 ![Property is ready to use](/img/tutorials/gamefi-flappy/purchase-done.png)
 
-It is also possible to pay with TON coins:
+It is also possible to pay with Toncoin:
 ```typescript
 import { toNano } from '@ton/phaser-sdk'
 
@@ -281,4 +284,3 @@ Let us know your thoughts in [Discussions](https://github.com/ton-org/game-engin
 The complete implementation is available in the [flappy-bird](https://github.com/ton-community/flappy-bird) repository.
 
 <Feedback />
-

@@ -9,13 +9,12 @@ import Feedback from '@site/src/components/Feedback';
 
 ## External incoming messages
 
-**External incoming messages (external-in)** are messages sent from outside TON Blockchain to smart contracts. They serve as the main entry point for external actors to interact with the blockchain.
+**External incoming messages (external inbound, ext_in)** are messages sent from outside to smart contracts on TON Blockchain. They serve as the main entry point for external actors to interact with the blockchain.
 
 **Key points**
-- Any account can receive external-in messages, but handling depends on the contract’s logic.
+- Any account can receive external incoming messages, but handling depends on the contract’s logic.
 - Common sources include wallet users, validators, and DApp services.
-- Wallet contracts often receive external-in messages and relay instructions internally through _internal messages_.
-
+- Wallet contracts often receive external incoming messages and relay instructions internally through _internal messages_.
 
 ### External incoming message structure
 
@@ -96,21 +95,20 @@ created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ## Replay protection
 
 :::caution
-Stay vigilant and check replay protection in contracts for external-in messages.
+Ensure replay protection in contracts that process external inbound (ext_in) messages.
 :::
 
-Notice that all external messages must be protected against replay attacks. The validators normally remove an external message from the pool of suggested external messages (received from the network); however, in some situations another validator could process the same external message twice (thus creating a second transaction for the same external message, leading to the duplication of the original action). Even worse, a `malicious actor could extract` the external message from the block containing the processing transaction and re-send it later. This could force a wallet smart contract to repeat a payment.
+Notice that all external messages must be protected against replay attacks. The validators normally remove an external message from the pool of suggested external messages (received from the network); however, in some situations a validator could process the same external message twice, resulting in a duplicate transaction. Even worse, a malicious actor could extract the external message from the block containing the processing transaction and resend it later. This could force a wallet smart contract to repeat a payment.
 
-The simplest way to protect smart contracts from replay attacks related to external messages is to store a 32-bit counter `cur-seqno` in the persistent data of the smart contract, and to expect a `req-seqno` value in (the signed part of) any inbound external messages. Then an external message is accepted only if both the signature is valid and `req-seqno` equals `cur-seqno`. After successful processing, the `cur-seqno` value in the persistent data is increased by one, so the same external message will never be accepted again.
+The simplest way to protect smart contracts from replay attacks related to external messages is to store a 32-bit counter `seqno` in the persistent data of the smart contract, and to expect a `msg-seqno` value in (the signed part of) any inbound external messages. Then an external message is accepted only if both the signature is valid and `msg-seqno` equals `seqno`. After successful processing, the `seqno` value in the persistent data is increased by one, so the same external message will never be accepted again.
 
-And one could also include an `expire-at` field in the external message, and accept an external message only if the current Unix time is less than the value of this field. This approach can be used in conjunction with `seqno`; alternatively, the receiving smart contract could store the set of (the hashes of) all recent (not expired) accepted external messages in its persistent data, and reject a new external message if it is a duplicate of one of the stored messages. Some garbage collection of expired messages in this set should also be performed to avoid bloating the persistent data.
+Include a `valid-until` field (32-bit Unix time) in the external message and accept it only if the current Unix time is less than `valid-until`; this can be used together with the `seqno` mechanism. Alternatively, the receiving smart contract could store the set of (the hashes of) all recent (not expired) accepted external messages in its persistent data and reject a new external message if it is a duplicate of one of the stored messages. Some garbage collection of expired messages in this set should also be performed to avoid bloating the persistent data. See also: [Wallet v2 spec](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v2), [Wallet replay protection](/v3/guidelines/smart-contracts/howto/wallet#replay-protection).
 
-:::note  
-In general, an external message begins with a 256-bit signature (if needed), a 32-bit `req-seqno` (if needed), a 32-bit `expire-at` (if needed), and possibly a 32-bit `op` and other required parameters depending on `op`. The layout of external messages does not need to be as standardized as that of internal messages because external messages are not used for interaction between different smart contracts (written by different developers and managed by different owners).  
+:::note
+In general, an external message begins with a 512-bit Ed25519 signature (if needed), a 32-bit `msg-seqno` (if needed), a 32-bit `valid-until` (if needed), and possibly a 32-bit `op` and other required parameters depending on `op`. The layout of external messages does not need to be as standardized as that of internal messages because external messages are not used for interaction between different smart contracts (written by different developers and managed by different owners).
 :::
 
 ### See also
 - [Message-driven execution](/v3/guidelines/dapps/transactions/message-driven-execution)
 
 <Feedback />
-
