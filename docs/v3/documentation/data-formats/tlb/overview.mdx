@@ -313,7 +313,7 @@ _ flags:(## 10) { flags <= 100 } = Flag;
 
 `Nat` fields are allowed in constraints. For example, the constraint `{ flags <= 100 }` means that the `flags` variable is less than or equal to `100`.
 
-Allowed contraints: `E` | `E = E` | `E <= E` | `E < E` | `E >= E` | `E > E` | `E + E` | `E * E` | `E ? E`
+Allowed constraints: `E` | `E = E` | `E <= E` | `E < E` | `E >= E` | `E > E` | `E + E` | `E * E` | `E ? E`
 
 ## Implicit fields
 
@@ -520,7 +520,7 @@ Note: `x:(Unary ~n)` means that `n` is defined during the serialization process 
 Currently, TVM allows the following types of cells:
 
 - Ordinary
-- PrunnedBranch
+- PrunedBranch
 - Library
 - MerkleProof
 - MerkleUpdate
