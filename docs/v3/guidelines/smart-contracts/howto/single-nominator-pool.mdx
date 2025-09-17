@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 Before proceeding with this tutorial, we recommend familiarizing yourself with the [single nominator pool specification](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool).
 :::
 
-## Set up single-nominator mode
+## Set up single nominator mode
 
 :::caution
 Before starting, ensure you have topped up and [activated](/v3/guidelines/nodes/running-nodes/validator-node#activate-the-wallets) the validator's wallet.
@@ -23,27 +23,27 @@ MyTonCtrl> enable_mode single-nominator
 
 2. Verify if single nominator mode is enabled:
 
-```text
+```bash
 MyTonCtrl> status_modes
 Name              Status   Description
-single-nominator  enabled  Single nominator pools.
+single-nominator  enabled  Orbs's single nominator pools.
 ```
 
 3. Create a pool:
 
-```text
+```bash
 MyTonCtrl> new_single_pool <pool-name> <owner-address>
 ```
 
 If you have already created a pool, you can import it:
 
-```text
+```bash
 MyTonCtrl> import_pool <pool-name> <pool-addr>
 ```
 
 4. Display pool addresses using `pools_list`:
 
-```text
+```bash
 MyTonCtrl> pools_list
 Name       Status  Balance  Version   Address
 test-pool  empty   0.0      spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
@@ -51,13 +51,13 @@ test-pool  empty   0.0      spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjA
 
 5. Activate the pool:
 
-```text
+```bash
 MyTonCtrl> activate_single_pool <pool-name>
 ```
 
 After successfully activating the pool:
 
-```text
+```bash
 MyTonCtrl> pools_list
 Name       Status  Balance  Version   Address
 test-pool  active  0.99389  spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
@@ -185,31 +185,37 @@ $ fift -s ./scripts/fift/withdraw.fif <withdraw_amount>
 $ tons wallet transfer <my-wallet> <single_nominator_address> <amount=1> --body withdraw.boc
 ```
 
-3. Generate a deeplink:
+3. Link TypeScript:
+
+```bash
+npm link typescript
+```
+
+4. Generate a deeplink:
 
 ```bash
 npx ts-node scripts/ts/withdraw-deeplink.ts <single-nominator-addr> <withdraw-amount>
 ```
 
-4. Open the deeplink on the owner's phone.
+5. Open the deeplink on the owner's phone.
 
 ## Deposit to pool
 
 You can deposit using **MyTonCtrl** with the following commands:
 
-```text
+```bash
 MyTonCtrl> mg <from-wallet-name> <pool-addr> <amount>
 ```
 
 or
 
-```text
+```bash
 MyTonCtrl> deposit_to_pool <pool-addr> <amount>
 ```
 
 Alternatively, follow these steps:
 
-1. Navigate to the pool’s page: [tonscan nominator page](https://tonscan.org/nominator/{pool_address}).
+1. Navigate to the pool’s page: `https://tonscan.org/nominator/{pool_address}`.
 2. Ensure the pool information is displayed correctly. If the pool has an incorrect smart contract, no information will appear.
 3. Click the `ADD STAKE` button or scan the QR code using Tonkeeper or another TON wallet.
 4. Enter the TON amount and send the transaction. The TON coins will then be added to staking.
@@ -220,7 +226,7 @@ If the wallet does not open automatically, manually send the transaction by copy
 
 You can withdraw funds using the following command:
 
-```text
+```bash
 MyTonCtrl> withdraw_from_pool <pool-addr> <amount>
 ```
 
@@ -301,7 +307,7 @@ Configure the single nominator pool contract using the [following instructions](
 
 **MyTonCtrl** will automatically join the elections. You can set the stake amount that MyTonCtrl sends to the [elector contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector) approximately every 18 hours on Mainnet and 2 hours on Testnet.
 
-```text
+```bash
 MyTonCtrl> set stake 90000
 ```
 
@@ -313,13 +319,13 @@ Set `stake` to `null` to have it calculated from `stakePercent` (see `status_set
 
 Verify if the election has started:
 
-```text
+```bash
 MyTonCtrl> status
 ```
 
 For Testnet:
 
-```text
+```bash
 MyTonCtrl> status fast
 ```
 
@@ -331,7 +337,7 @@ If the election has started and the single nominator pool is activated, the vali
 
 Check the validator wallet:
 
-```text
+```bash
 MyTonCtrl> wl
 Name                  Status  Balance           Ver  Wch  Address
 validator_wallet_001  active  995.828585374     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
@@ -339,7 +345,7 @@ validator_wallet_001  active  995.828585374     v1   -1   kf_dctjwS4tqWdeG4GcCLJ
 
 Check the transaction history:
 
-```text
+```bash
 MyTonCtrl> vas kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
 Address                                           Status  Balance        Version
 kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct  active  995.828585374  v1r3
@@ -384,7 +390,7 @@ If you no longer wish to participate in validation:
 
 1. Disable validator mode:
 
-```text
+```bash
 MyTonCtrl> disable_mode validator
 ```
 
@@ -423,25 +429,25 @@ Ensure you have backed up the vesting `owner_wallet` recovery phrase. If you los
 3. Send 200 TON (for monthly expenses) to the `validator_wallet`.
 4. Create a `single_nominator_pool`:
 
-```text
+```bash
 MyTonCtrl> new_single_pool <pool-name> <vesting>
 ```
 
 Example:
 
-```text
+```bash
 MyTonCtrl> new_single_pool my_s_pool EQD...lme-D
 ```
 
 5. Activate the `single_nominator_pool`:
 
-```text
+```bash
 MyTonCtrl> activate_single_pool <pool-name>
 ```
 
 Example:
 
-```text
+```bash
 MyTonCtrl> activate_single_pool my_s_pool
 ```
 
