@@ -52,18 +52,18 @@ By integrating block information into the TVM context, several trustless mechani
 
 Block identifiers follow this structure:
 
-```
+```text
 [ wc:Integer shard:Integer seqno:Integer root_hash:Integer file_hash:Integer ] = BlockId;
 [ last_mc_blocks:[BlockId0, BlockId1, ..., BlockId15]
   prev_key_block:BlockId ] : PrevBlocksInfo
 ```
 
 This includes:
-- The last 16 MasterChain block IDs, or fewer if the masterchain sequence number is below 16.
+- The last 16 MasterChain block IDs, or fewer if the MasterChain sequence number is below 16. 
 - The most recent key block.
 
-**Why not include shardblocks data?**
-- Including shardblocks data could cause data availability issues due to merge/split events.
+**Why not include shard blocks data?**
+- Including shard blocks data could cause data availability issues due to merge/split events. 
 - However, this data isn’t strictly necessary, as any event or data can be verified using MasterChain blocks.
 
 
@@ -86,13 +86,13 @@ Each opcode consumes 26 gas, except for `PREVMCBLOCKS` and `PREVKEYBLOCK`, which
 | `PREVBLOCKSINFOTUPLE` | _`- t`_           | Retrieves `PrevBlocksInfo`: `[last_mc_blocks, prev_key_block]` from `c7`. |
 | `PREVMCBLOCKS` | _`- t`_           | Retrieves only `last_mc_blocks`.                                          |
 | `PREVKEYBLOCK` | _`- t`_           | Retrieves only `prev_key_block`.                                          |
-| `GLOBALID` | _`- i`_           | Retrieves `global_id` from network config  **19**.                        |
+| `GLOBALID` | _`- i`_           | Retrieves `global_id` from network config **19**.                        |
 
 ## Gas
 
 | Fift syntax | Stack            | Description                                                                                 |
 |:-|:-----------------|:--------------------------------------------------------------------------------------------|
-| `GASCONSUMED` | _`- g_c`_        | Returns the total gas consumed by the VM so far, including this instruction .<br/>_26 gas_. |
+| `GASCONSUMED` | _`- g_c`_        | Returns the total gas consumed by the VM so far, including this instruction. <br/>_26 gas_. |
 
 ## Arithmetics
 New variants of [the division opcode](/v3/documentation/tvm/instructions) `A9mscdf` have been introduced.
@@ -128,7 +128,7 @@ Gas cost is determined as 10 plus the opcode length:
 | `MULADDDIVMODC`                      | _`x y w z - q=ceil((xy+w)/z) r=(xy+w)-zq`_               |
 | `ADDDIVMOD`                          | _`x w z - q=floor((x+w)/z) r=(x+w)-zq`_                  |
 | `ADDDIVMODR`                         | _`x w z - q=round((x+w)/z) r=(x+w)-zq`_                  |
-| `ADDDIVMODC`                         | _`x w y - q=ceil((x+w)/z) r=(x+w)-zq`_                   |
+| `ADDDIVMODC`                         | _`x w y - q=ceil((x+w)/z) r=(x+w)-zq`_                  |
 | `ADDRSHIFTMOD`                       | _`x w z - q=floor((x+w)/2^z) r=(x+w)-q*2^z`_             |
 | `ADDRSHIFTMODR`                      | _`x w z - q=round((x+w)/2^z) r=(x+w)-q*2^z`_             |
 | `ADDRSHIFTMODC`                      | _`x w z - q=ceil((x+w)/2^z) r=(x+w)-q*2^z`_              |
@@ -292,10 +292,10 @@ These high-level operations are designed to verify BLS signatures efficiently.
 
 | Fift syntax | Stack                                      | Description                                                                                                                                                                             |
 |:-|:-------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `BLS_VERIFY` | _`pk msg sgn - bool`_                      | Checks a BLS signature. It returns true  if valid, false otherwise.<br/>_61034 gas_.                                                                                                    |
-| `BLS_AGGREGATE` | _`sig_1 ... sig_n n - sig`_                | Aggregates signatures. `n>0`. Throws an exception if `n=0` or if any `sig_i` is invalid .<br/>_`gas=n*4350-2616`_.                                                                      |
-| `BLS_FASTAGGREGATEVERIFY`- | _`pk_1 ... pk_n n msg sig - bool`_         | Checks an aggregated BLS signature for keys `pk_1...pk_n` and a message `msg`. It returns false if `n=0`.<br/>_`gas=58034+n*3000`_.                                                     |
-| `BLS_AGGREGATEVERIFY` | _`pk_1 msg_1 ... pk_n msg_n n sgn - bool`_ | Checks an aggregated BLS signature for multiple key-message pairs `pk_1 msg_1...pk_n msg_n`. Returns true if valid, false otherwise. Returns false if `n=0`.<br/>_`gas=38534+n*22500`_ |
+| `BLS_VERIFY` | _`pk msg sgn - bool`_                      | Checks a BLS signature. It returns true if valid, false otherwise.<br/>_61034 gas_.                                                                                                     |
+| `BLS_AGGREGATE` | _`sig_1 ... sig_n n - sig`_                | Aggregates signatures. `n>0`. Throws an exception if `n=0` or if any `sig_i` is invalid. <br/>_`gas=n*4350-2616`_.                                                                       |
+| `BLS_FASTAGGREGATEVERIFY`- | _`pk_1 ... pk_n n msg sig - bool`_         | Checks an aggregated BLS signature for keys `pk_1...pk_n` and a message `msg`. It returns false if `n=0`. <br/>_`gas=58034+n*3000`_.                                                      |
+| `BLS_AGGREGATEVERIFY` | _`pk_1 msg_1 ... pk_n msg_n n sgn - bool`_ | Checks an aggregated BLS signature for multiple key-message pairs `pk_1 msg_1...pk_n msg_n`. Returns true if valid, false otherwise. Returns false if `n=0`. <br/>_`gas=38534+n*22500`_ |
 
 
 `VERIFY` instructions
@@ -321,13 +321,13 @@ These operations perform arithmetic computations on group elements.
 | `BLS_G2_SUB` | _`x y - x-y`_ | Performs subtraction on G2.<br/>_6134 gas_.                                                                                                                                                                                      |
 | `BLS_G2_NEG` | _`x - -x`_ | Performs negation on G2.<br/>_1584 gas_.                                                                                                                                                                                         |
 | `BLS_G2_MUL` | _`x s - x*s`_ | Multiplies G2 point `x` by scalar `s`.<br/>Any `s` is valid, including negative.<br/>_10584 gas_.                                                                                                                                |
-| `BLS_G2_MULTIEXP` | _`x_1 s_1 ... x_n s_n n - x_1*s_1+...+x_n*s_n`_ | Calculates `x_1*s_1+...+x_n*s_n` for G2 points `x_i` and scalars `s_i`. Returns zero point if `n=0`.<br/>Any `s_i` is valid, including negative.<br/>_`gas=30422+n*1280+n/floor(max(log2(n),4))*22840`_ .                        |
+| `BLS_G2_MULTIEXP` | _`x_1 s_1 ... x_n s_n n - x_1*s_1+...+x_n*s_n`_ | Calculates `x_1*s_1+...+x_n*s_n` for G2 points `x_i` and scalars `s_i`. Returns zero point if `n=0`.<br/>Any `s_i` is valid, including negative.<br/>_`gas=30422+n*1280+n/floor(max(log2(n),4))*22840`_.                         |
 | `BLS_G2_ZERO` | _`- zero`_ | Pushes zero point in G2.<br/>_34 gas_.                                                                                                                                                                                           |
 | `BLS_MAP_TO_G2` | _`f - x`_ | Converts an FP2 element `f` to a G2 point.<br/>_7984 gas_.                                                                                                                                                                       |
 | `BLS_G2_INGROUP` | _`x - bool`_ | Checks whether the slice `x` represents a valid element of G2.<br/>_4284 gas_.                                                                                                                                                   |
 | `BLS_G2_ISZERO` | _`x - bool`_ | Checks if G2 point `x` is equal to zero.<br/>_34 gas_.                                                                                                                                                                           |
 | `BLS_PAIRING` | _`x_1 y_1 ... x_n y_n n - bool`_ | Given G1 points `x_i` and G2 points `y_i`, calculates and multiply pairings of `x_i,y_i`. Returns true if the result is the multiplicative identity in FP12, false otherwise. Returns false if `n=0`.<br/>_`gas=20034+n*11800`_. |
-| `BLS_PUSHR` | _`- r`_ | Pushes the order of G1 and G2, approximately `2^255` .<br/>_34 gas_.                                                                                                                                                             |
+| `BLS_PUSHR` | _`- r`_ | Pushes the order of G1 and G2, approximately `2^255`.<br/>_34 gas_.                                                                                                                                                              |
 
 
 `INGROUP` and `ISZERO` do not throw exceptions for invalid points except in cases of cell underflow; instead, they return false.
@@ -407,4 +407,3 @@ The upgrade to the TON Virtual Machine (TVM) was analyzed for security risks and
 **Audit report**: [TON Blockchain TVM Upgrade](https://docs.ton.org/audits/TVM_Upgrade_ToB_2023.pdf)
 
 <Feedback />
-
