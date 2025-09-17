@@ -76,24 +76,24 @@ module.exports = {
           label: 'Smart contracts',
         },
         {
-          to: 'v3/documentation/tvm/overview',
-          label: 'Virtual machine',
+          to: 'v3/documentation/dapps/dapps-overview',
+          label: 'DApps',
         },
         {
           to: 'v3/documentation/nodes/overview',
           label: 'Nodes'
         },
         {
-          to: 'v3/documentation/dapps/dapps-overview',
-          label: 'DApps',
+          to: 'v3/documentation/network/protocols/adnl/overview',
+          label: 'Network'
         },
         {
           to: '/v3/documentation/data-formats/tlb/overview',
           label: 'Data formats',
         },
         {
-          to: 'v3/documentation/network/protocols/adnl/overview',
-          label: 'Network'
+          to: 'v3/documentation/tvm/overview',
+          label: 'Virtual machine',
         },
         {
           to: 'v3/documentation/whitepapers/overview',

@@ -22,7 +22,7 @@ npx blueprint test
 As a result, you’ll see the corresponding output in the terminal window:
 
 ```bash
-% npx blueprint test
+npx blueprint test
 
 > MyProject@0.0.1 test
 > jest
@@ -68,14 +68,14 @@ The basic workflow for creating a test is as follows:
 
 The `toHaveTransaction` matcher expects an object with any combination of fields from the `FlatTransaction` type, defined with the following properties:
 
-| Name    | Type     | Description                                                                                                                                                |
-| ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| from    | Address? | Contract address of the message sender                                                                                                                     |
-| on      | Address  | Contract address of the message destination (alternative name for the property `to`).                                                                      |
-| value   | bigint?  | Amount of TON coins in the message, in nanotons                                                                                                            |
-| body    | Cell     | Message body defined as a Cell                                                                                                                             |
-| op      | number?  | Op code is usually the operation identifier number (crc32 from TL-B). Expected in the first 32 bits of a message body.                                     |
-| success | boolean? | Custom Sandbox flag that defines the resulting status of a certain transaction. True if both the compute and the action phases succeeded. Otherwise, False. |
+| Name    | Type     | Description                                                                                                                                                 |
+| ------- | -------- |-------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| from    | Address  | Contract address of the message sender                                                                                                                      |
+| on      | Address? | Contract address of the message destination (alternative name for the property `to`).                                                                       |
+| value   | bigint?  | Amount of TON coins in the message, in nanotons                                                                                                             |
+| body    | Cell    | Message body defined as a Cell                                                                                                                              |
+| op      | number?  | Op code is usually the operation identifier number (CRC32 from TL-B). Expected in the first 32 bits of a message body.                                      |
+| success | boolean? | Custom Sandbox flag that defines the resulting status of a certain transaction. True if both the compute and the action phases succeeded; otherwise, false. |
 
 You can omit fields you’re not interested in and pass functions that accept the types and return booleans (`true` meaning good) to check, for example, number ranges, message opcodes, etc. Note that if a field is optional (like `from?: Address`), the function must also accept the optional type.
 
@@ -83,9 +83,7 @@ You can omit fields you’re not interested in and pass functions that accept th
 The complete list of matcher fields is in the [Sandbox documentation](https://github.com/ton-org/sandbox#test-a-transaction-with-matcher).
 :::
 
-### Specific test suite
-
-#### Extract send mode
+### Extracting send mode
 
 To extract the send mode of a sent message, use the following code:
 
@@ -173,4 +171,3 @@ Check test suites used for TON Ecosystem contracts and learn by examples:
 - [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript)
 
 <Feedback />
-
