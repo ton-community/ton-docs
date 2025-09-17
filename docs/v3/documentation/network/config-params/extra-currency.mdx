@@ -4,7 +4,7 @@ import Feedback from '@site/src/components/Feedback';
 
 ## Extra currency
 
-According to [TON Blockchain Whitepaper 3.1.6](https://ton-blockchain.github.io/docs/tblkch.pdf#page=55), the TON Blockchain allows users to create arbitrary cryptocurrencies or tokens, in addition to Toncoin, provided certain conditions are met. These additional cryptocurrencies are identified by 32-bit `currency_ids`. The list of these defined cryptocurrencies is a part of the blockchain configuration stored in the masterchain. Internal messages and account balances include a special field for `ExtraCurrencyCollection`, which is a set of extra currencies attached to a message or maintained in a balance:
+According to [TON Blockchain Whitepaper 3.1.6](https://ton-blockchain.github.io/docs/tblkch.pdf#page=55), the TON Blockchain allows users to create arbitrary cryptocurrencies or tokens, in addition to Toncoin, provided certain conditions are met. These additional cryptocurrencies are identified by 32-bit `currency_ids`. The list of these defined cryptocurrencies is a part of the blockchain configuration stored in the masterchain. Each internal messages and account balances include a special field for `ExtraCurrencyCollection`, which is a set of extra currencies attached to a message or maintained in a balance:
 
 ```tlb
 extra_currencies$_ dict:(HashmapE 32 (VarUInteger 32)) = ExtraCurrencyCollection;
@@ -45,9 +45,9 @@ One possible high-level minting flow, which is implemented [here](https://github
 _ (Hashmap 32 std_addr) = ExtraCurrencyAuthorizationConfig;
 ```
 
-where the key is `currency_id`, and `std_addr` is the admin of this currency (can be in any workchain).
+where the key is `currency_id`, and `std_addr` is the admin of this currency (can be in any WorkChain).
 
-2. Minter accepts mint requests from **admins**, forwards minting requests to **config**, **config** updates `ConfigParam 7`, and responds to **minter**. Since extra currencies would be minted to **minter** only on the next masterchain block, withdrawing extra currencies to **admin** should be delayed. It is done via an **echo** smart contract (a round-trip delay), not in the masterchain. When a response from **echo** comes to **minter**, it sends extra currencies to **admin**. So the scheme is as follows: 
+2. Minter accepts mint requests from **admins**, forwards minting requests to **config**, **config** updates `ConfigParam 7`, and responds to **minter**. Since extra currencies would be minted to **minter** only on the next masterchain block, withdrawing extra currencies to **admin** should be delayed. It is done via an **echo** smart contract, not in the masterchain. When a response from **echo** comes to **minter**, it sends extra currencies to **admin**. So the scheme is as follows: 
 
 `Admin -> Minter -> Config -> Minter -> Echo (in another workchain to wait until the next masterchain block) -> Minter -> Admin`
 
