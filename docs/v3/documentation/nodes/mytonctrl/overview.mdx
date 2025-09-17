@@ -44,7 +44,7 @@ su root -c 'bash install.sh'
 
 To use testnet, pass `-c https://ton.org/testnet-global.config.json`.
 
-The default for `-c` is `https://ton-blockchain.github.io/global.config.json` (mainnet).
+The default value for the `-c` flag is `https://ton-blockchain.github.io/global.config.json`, which is default configuration for the mainnet.
 
 ## General Commands
 
@@ -85,7 +85,7 @@ Gets current MyTonCtrl and node status. Param combinations:
 | Format name | Format        | Example       | Description                                                                                                                     |
 | ----------- | ------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | No args     | `status`      | `status`      | Full status report including validator efficiency and online validators.                                                        |
-| Fast        | `status fast` | `status fast` | Use in testnet; excludes validator efficiency and online validator count. |
+| Fast | `status fast` | `status fast` | This must be used on Testnet. The status report should exclude the efficiency of validators and the count of online validators. |
 
 [See more about status output](/v3/documentation/nodes/mytonctrl/status)
 
@@ -194,7 +194,7 @@ MyTonCtrl> getconfig 0
 Retrieves and displays the JSON representation of the pool data specified by `<pool-name>` or `<pool-addr>`.
 
 ```bash
-MyTonCtrl> get_pool_data <pool-name | pool-addr>
+MyTonCtrl> get_pool_data <<pool-name> | <pool-addr>>
 ```
 
 Example:
@@ -218,7 +218,7 @@ MyTonCtrl> add_custom_overlay <name> <path_to_config>
 Example:
 
 ```bash
-MyTonCtrl> add_custom_overlay custom /config.json
+add_custom_overlay custom /config.json
 # check link from above to know what config this command requires (/v3/guidelines/nodes/custom-overlays)
 ```
 
@@ -256,7 +256,7 @@ Votes for the complaint specified by `<complaint-hash>` in the election specifie
 MyTonCtrl> vc <election-id> <complaint-hash>
 ```
 
-This also works, but you should prefer values from your current MyTonCtrl state:
+Actually, this will work as well, but you should use data from your current MyTonCtrl state:
 
 ```bash
 MyTonCtrl> vc 0 0
@@ -410,7 +410,7 @@ MyTonCtrl> nw <workchain-id> <wallet-name> [<version> <subwallet>]
 Example:
 
 ```bash
-MyTonCtrl> nw 0 name v3 # By default, the subwallet is 0x29A9A317 + workchain
+MyTonCtrl> nw 0 name v3 # by default subwallet is 0x29A9A317 + workchain
 ```
 
 ### Activate a local wallet
@@ -450,6 +450,7 @@ wallet_004            active  0.998256399       v1   0    kQBxnZJq4oHVFs4ban3kJ5
 MyTonCtrl> seqno <wallet-name>
 ```
 
+![](/img/docs/mytonctrl/nw.png)
 
 ### Set a wallet version
 
@@ -713,8 +714,8 @@ Displays the status of services — Full Node, MyTonCore, Validator Console, Lit
 
 | Format name        | Format                         | Description                                                                                       |
 | ------------------ | ------------------------------ | ------------------------------------------------------------------------------------------------- |
-| Add or replace arg | `set_node_argument -ARG_NAME ARG_VALUE` | Add argument or replace its value if it exists. `-ARG_NAME` must have `-` or `--` at the beginning |
-| Delete arg         | `set_node_argument -ARG_NAME -d`          | Delete argument from list.                                                                        |
+| Add or replace arg | `set_node_argument [-ARG_NAME] [ARG_VALUE]` | Add argument or replace its value if it exists. `-ARG_NAME` must have `-` or `--` at the beginning |
+| Delete arg         | `set_node_argument [-ARG_NAME] -d`          | Delete argument from list.                                                                        |
 
 Available arguments:
 
