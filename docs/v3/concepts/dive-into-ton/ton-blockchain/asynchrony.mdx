@@ -58,3 +58,6 @@ Using this analogy, we can highlight the main properties of asynchronous communi
 1. **Immediate responses are not guaranteed.** A sender cannot assume a message will be answered instantly, much like a customer cannot expect their food order to arrive immediately.
 2. **Senders remain non-blocking.** After sending a message, an account continues processing other messages or tasks without waiting for a reply, even if no response ever arrives — akin to a customer placing additional orders while waiting.
 3. **Message order is preserved per account.** Each account processes messages in the order they are received. If a message is malformed or incomplete, it is skipped, and processing immediately continues with the following message — just as a kitchen prepares orders sequentially but moves on if an order cannot be fulfilled.
+
+## See also
+- [Sharding](/v3/concepts/dive-into-ton/ton-blockchain/sharding)

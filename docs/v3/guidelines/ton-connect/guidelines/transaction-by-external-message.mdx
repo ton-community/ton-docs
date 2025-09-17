@@ -4,9 +4,11 @@ This article describes how to find a transaction associated with an external-in 
 
 ## Message normalization
 
-In TON, messages may contain fields such as `init`, `src`, and `importFee`. These fields should be removed or zeroed out before calculating the message hash, as described in [TEP-467](https://github.com/ton-blockchain/TEPs/pull/467).
+In TON, messages may contain fields such as `init`, `src`, and `importFee`. These fields should be removed or zeroed out before calculating the message hash, as described in [TEP-467](https://github.com/ton-blockchain/TEPs/blob/8b3beda2d8611c90ec02a18bec946f5e33a80091/text/0467-normalized-message-hash.md).
 
 ```ts
+import { beginCell, storeMessage, Message } from '@ton/ton';
+
 export function getNormalizedExtMessageHash(message: Message) {
     if (message.info.type !== 'external-in') {
         throw new Error(`Message must be "external-in", got ${message.info.type}`);
@@ -46,7 +48,7 @@ export async function retry<T>(fn: () => Promise<T>, options: { retries: number;
             await new Promise((resolve) => setTimeout(resolve, options.delay));
         }
     }
-    throw lastError;
+    throw lastError ?? new Error('Retry attempts exhausted');
 }
 ```
 
@@ -55,6 +57,8 @@ export async function retry<T>(fn: () => Promise<T>, options: { retries: number;
 The `getTransactionByInMessage` function searches the account’s transaction history for a match by normalized external message hash:
 
 ```ts
+import { TonClient, Transaction, Cell, loadMessage } from '@ton/ton';
+
 async function getTransactionByInMessage(
     inMessageBoc: string,
     client: TonClient,
@@ -148,7 +152,7 @@ async function waitForTransaction(
 ### Hash normalization
 
 ```ts
-import { beginCell, Cell, loadMessage, storeMessage, Message } from '@ton/ton';
+import { Cell, loadMessage } from '@ton/ton';
 
 // The helper function to get a normalized hash from BoC
 export function normalizedExtHashFromBoc(bocBase64: string): string {
@@ -186,12 +190,13 @@ if (tx) {
 
 ### Wait for transaction confirmation
 
-```ts
+```tsx
 import { TonClient } from '@ton/ton';
+import { useTonConnectUI } from '@tonconnect/ui-react';
 
 const client = new TonClient({ endpoint: 'https://toncenter.com/api/v2/jsonRPC' });
 
-const [tonConnectUI, setOptions] = useTonConnectUI();
+const [tonConnectUI] = useTonConnectUI();
 
 // Obtain ExternalInMessage boc
 const { boc } = await tonConnectUI.sendTransaction({
@@ -221,5 +226,5 @@ if (tx) {
 
 - [TEP-467: Normalized Message Hash](https://github.com/ton-blockchain/TEPs/blob/8b3beda2d8611c90ec02a18bec946f5e33a80091/text/0467-normalized-message-hash.md)
 - [Messages and transactions](/v3/documentation/smart-contracts/message-management/messages-and-transactions)
-- [TON Connect: Sending messages](/v3/guidelines/ton-connect/cookbook/ton-transfer)
+- [TON transfer](/v3/guidelines/ton-connect/cookbook/ton-transfer)
 - [TON Cookbook: Basics of Message Processing](/v3/guidelines/dapps/cookbook#basics-of-message-processing)
