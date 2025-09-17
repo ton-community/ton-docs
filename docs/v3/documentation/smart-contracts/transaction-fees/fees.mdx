@@ -106,9 +106,9 @@ function FeeCalculator() {
   let total_fee =
     gas_fees +
     storage_fees +
-    total_action_fees * nano +
+    // total_action_fees * nano + <- already included in total_fwd_fees
     import_fee * nano +
-    total_fwd_fees * nano;
+    total_fwd_fees * nano; // <- not included in explorer's total fee
 
   return (
     <div>
