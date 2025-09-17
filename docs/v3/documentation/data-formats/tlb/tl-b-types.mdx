@@ -51,7 +51,7 @@ unary_succ$1 {n:#} x:(Unary ~n) = Unary ~(n + 1);
 
 The `unary_zero` variation is straightforward: if the first bit is `0`, the result of the entire unary deserialization is `0`.
 
-The `unary_succ` variation, however, is more complex—it is loaded recursively and represents a value of `~(n + 1)`. This means it repeatedly calls itself until it reaches `unary_zero`. In other words, the desired value equals the number of consecutive 1 bits before the terminating 0.
+The `unary_succ` variation, however, is more complex—it is loaded recursively and represents a value of `~(n + 1)`. This means it repeatedly calls itself until it reaches `unary_zero`. In other words, the desired value will equal the number of units in a row.
 
 For example, consider the serialization of the bitstring `110`.
 The deserialization call chain is as follows:
@@ -179,7 +179,7 @@ hm_edge#_ {n:#} {X:Type} {l:#} {m:#} label:(HmLabel ~l 8)
           {8 = (~m) + l} node:(HashmapNode m uint16) = Hashmap 8 uint16;
 ```
 
-As shown above, conditional variables `{l:#}` and `{m:#}` have appeared, but both values are unknown at this stage. After reading the corresponding `label`, we can see that `n` is part of the equation `{n = (~m) + l}`. Here, the `~` symbol marks a value deduced during deserialization (in this case, `m`), not a numeric sign.
+As shown above, conditional variables `{l:#}` and `{m:#}` have appeared, but both values are unknown at this stage. After reading the corresponding `label`, we can see that `n` is part of the equation `{n = (~m) + l}`. This means we must calculate both `l` and `m`, where the sign indicates the resulting value of `~`.
 
 To determine the value of `l`, we need to load the `label:(HmLabel ~l uint16)` sequence. Below, we outline the 3 basic structural options for `HmLabel`:
 
@@ -198,7 +198,7 @@ Next, let's fill in the `hml_short` structure with known values:
 hml_short$0 {m:#} {n:#} len:(Unary ~n) {n <= 8} s:(n * Bit) = HmLabel ~n 8
 ```
 
-At this point, we don't know the value of `n`. However, since it includes a `~` marker, we can deduce it during deserialization. To do so, we load `len:(Unary ~n)`;  [more about unary here](#unary).
+At this point, we don't know the value of `n`. However, since it includes a `~` character, we can calculate it during deserialization. To do so, we load `len:(Unary ~n)`;  [more about unary here](#unary).
 
 Starting with `2[00]`, only one bit remains after defining the `HmLabel` type.
 
@@ -377,7 +377,7 @@ TON addresses are generated using the SHA256 hashing mechanism within the TL‑B
 
 ### Serialization
 
-Standard addresses, such as `EQBL2_3lMiyywU17g-or8N7v9hDmPCpttzBPE2isF2GTzpK4`, utilize base64 URI encoding for byte representation. Typically, these addresses are 36 bytes long, with the last 2 bytes representing the `CRC16 checksum`, calculated using the `XMODEM` table. The first byte denotes the flag, while the second indicates the WorkChain. The 32 middle bytes correspond to the address data, also called `account_id` (32 bytes, 256-bit).
+Standard addresses, such as `EQBL2_3lMiyywU17g-or8N7v9hDmPCpttzBPE2isF2GTzpK4`, utilize base64 URI encoding for byte representation. Typically, these addresses are 36 bytes long, with the last 2 bytes representing the `CRC16 checksum`, calculated using the `XMODEM` table. The first byte denotes the flag, while the second indicates the WorkChain. The 32 middle bytes correspond to the address data, also called AccountID, often represented in schemas like int256.
 
 [Decoding reference](/v3/documentation/smart-contracts/addresses/address-formats#encoding)
 
