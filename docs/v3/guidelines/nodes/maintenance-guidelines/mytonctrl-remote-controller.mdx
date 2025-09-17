@@ -4,9 +4,9 @@ import Feedback from '@site/src/components/Feedback';
 
 MyTonCtrl and TON node can be used on separate machines. There are several advantages to this setup:
 
-- To participate in elections, the validator wallet's private key is required by MyTonCtrl. If the node server
+* To participate in elections, the validator wallet's private key is required by MyTonCtrl. If the node server
   is compromised, it could lead to unauthorized access to the wallet funds. As a security measure, MyTonCtrl can be hosted on a separate server.
-- MyTonCtrl continually expands its functionality, which may consume resources crucial for the node.
+* MyTonCtrl continually expands its functionality, which may consume resources crucial for the node.
 
 ## Setting up
 
@@ -21,11 +21,14 @@ wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/i
 sudo bash install.sh -m validator -l
 ```
 
-It will install the TON node and create a backup file which you need to download and transfer to the controller server:
+* `-m validator` — installs in validator mode.
+* `-l` — only-node mode: installs TON node only, no MyTonCtrl controller.
+
+It will install the TON node and create a backup file which you need to download and transfer to the controller server. The backup archive is saved under `/tmp/mytoncore/backupv2/` with a name like `mytonctrl_backup_hostname_timestamp.tar.gz`.
 
 ```text
 ...
-[debug]   01.01.2025, 00:00:00.000 (UTC)  <MainThread>  start CreateSymlinks fuction
+[debug]   01.01.2025, 00:00:00.000 (UTC)  <MainThread>  start CreateSymlinks function
 Local DB path: /home/user/.local/share/mytoncore/mytoncore.db
 [info]    01.01.2025, 00:00:00.000 (UTC)  <MainThread>  start ConfigureOnlyNode function
 [1/2] Copied files to /tmp/mytoncore/backupv2
@@ -34,7 +37,7 @@ If you wish to use archive package to migrate node to different machine please m
 [info]    01.01.2025, 00:00:00.000 (UTC)  <MainThread>  Backup successfully created. Use this file on the controller server with `--only-mtc` flag on installation.
 [debug]   01.01.2025, 00:00:00.000 (UTC)  <MainThread>  Start/restart mytoncore service
 [debug]   01.01.2025, 00:00:00.000 (UTC)  <MainThread>  sleep 1 sec
-[5/5] Mytonctrl installation completed
+[5/5] MytonCtrl installation completed
 ```
 
 Note that you still have access to the MyTonCtrl console on this server, which you can use to update the node and monitor node metrics, etc.
@@ -49,7 +52,7 @@ MyTonCtrl> set onlyNode false
 systemctl restart mytoncore
 ```
 
-2. controller server
+2. Controller server:
 
 Install MyTonCtrl in `only-mtc` mode:
 
@@ -58,7 +61,10 @@ wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/i
 sudo bash install.sh -p /home/user/mytonctrl_backup_hostname_timestamp.tar.gz -o
 ```
 
-Check the `status` command, there should appear `Node IP address` field:
+* `-p <path>` — specifies the path to the backup archive.
+* `-o` — only-mtc mode: installs MyTonCtrl only, no TON node.
+
+Run the `status` command; you should see the node’s IP address when configured:
 
 ```text
 MyTonCtrl> status
@@ -68,7 +74,7 @@ MyTonCtrl> status
 [debug]   01.01.2025, 00:00:00.000 (UTC)  <MainThread>  start WalletVersion2Wallet function
 [debug]   01.01.2025, 00:00:00.000 (UTC)  <MainThread>  start GetDbSize function
 ===[ Node status ]===
-Node IP address: 0.0.0.0
+Node IP address: <configured_ip>
 Validator index: n/a
 ...
 ```
