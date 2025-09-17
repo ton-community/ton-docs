@@ -17,7 +17,7 @@ Below, you will find more detailed information about each node type and the inte
 
 **A full node** is a basic node type within the TON blockchain. It serves as the backbone of the TON blockchain by keeping the current state of the blockchain (with recent history).
 
-Compared to **archive nodes**, full nodes keep only the latest part of the blockchain state, which is vital for the stability and operation of client applications on the network; full nodes prune the blockchain state they keep, automatically removing older data that is no longer required.
+Compared to **archive nodes**, full nodes keep only the latest part of the blockchain state, which is vital for ensuring client applications' network stability and operation. Full nodes _prune_ the state of the TON blockchain they keep. This means the full node automatically removes earlier blocks that become unnecessary for the network to manage its data volume effectively.
 
 Full nodes can run in liteserver mode to let client applications query blocks and transactions and submit new ones—see [Interacting with TON nodes](#interacting-with-ton-nodes) below.
 
@@ -33,7 +33,7 @@ Full nodes can run in liteserver mode to let client applications query blocks an
 
 An archive node is a full node that keeps the entire block history of the TON blockchain. These nodes act as the decentralized source of truth to ensure consistency of the whole blockchain history. They are a backend for blockchain explorers and other applications relying on deep transaction history.
 
-Archive nodes do not prune the blockchain state, elevating system requirements, especially in storage. Full and validator nodes require about 1 TB of disk space, while archive nodes need about 12 TB, especially for storage.
+Archive nodes do not prune the blockchain state, elevating system requirements, especially in storage. According to the latest estimations, while full and validator nodes require about 1 TB of disk space, archive nodes need about 12 TB to store the complete block history.
 
 <Button href="/v3/guidelines/nodes/running-nodes/archive-node"
         colorType="primary" sizeType={'sm'}>
@@ -49,7 +49,7 @@ Archive nodes do not prune the blockchain state, elevating system requirements, 
 
 Validators get [rewards in TON](/v3/documentation/infra/nodes/validation/staking-incentives/) for successful participation in the validation process.
 
-Validators are elected by other participants based on their stake (the amount of TON they hold); the more TON a validator stakes, the higher their chances of being elected, validating blocks, and earning rewards. As a rule, validator operators motivate other TON holders to stake with them to get passive income from the resulting rewards. In this way, validators ensure network stability and security and contribute to its growth.
+To be entitled to propose and validate blocks, other participants elect validators based on the amount of TON they hold—in other words, their _stake_. The more TON a validator stakes, the higher its chances of being elected, validating blocks for the network, and earning rewards. As a rule, validator operators motivate other TON holders to stake with them to get passive income from the resulting rewards. In this way, validators ensure network stability and security and contribute to its growth.
 
 <Button href="/v3/guidelines/nodes/running-nodes/validator-node"
         colorType="primary" sizeType={'sm'}>
@@ -63,12 +63,12 @@ Validators are elected by other participants based on their stake (the amount of
 
 TON nodes can run in **liteserver mode**, which allows lite clients (external applications) to interact with the TON blockchain. In this mode, the nodes process requests from lite clients, enabling them to access blockchain data, send transactions, and retrieve information about blocks and transactions—for instance, to fetch and update wallet balances.
 
-Full and archive nodes typically enable liteserver mode because they store blockchain history and handle external requests. In contrast, validator nodes do not need it as they focus on validating new blocks efficiently without extra workload from external queries. In MyTonCtrl, validator and liteserver modes cannot be enabled simultaneously (see [liteserver errors](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-errors#liteserver-errors) and [validator errors](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-errors#validator-errors)).
+Full and archive nodes typically enable liteserver mode because they store blockchain history and handle external requests. In contrast, validator nodes do not need it as they focus on validating new blocks efficiently without extra workload from external queries.
 
 You have two options to allow your lite client application to interact with the TON blockchain:
 
 1. To have a stable connection, you can run your own full or archive node with liteserver mode enabled in your node configuration file.
-2. If you cannot set up your TON node with a liteserver, you can use public liteservers from the global config. For this purpose, use the following configuration files:
+2. If you cannot set up your TON node with a liteserver, you can use public liteservers from the global config provided by the TON Foundation. For this purpose, use the following configuration files:
  - [Global config – Mainnet](https://ton.org/global-config.json)
  - [Global config – Testnet](https://ton.org/testnet-global.config.json)
 
