@@ -924,10 +924,6 @@
       "to": "/v3/documentation/nodes/mytonctrl/errors"
     },
     {
-      "from": "/v3/documentation/infra/nodes/node-types",
-      "to": "/v3/documentation/nodes/overview"
-    },
-    {
       "from": "/v3/documentation/infra/nodes/validation/staking-incentives",
       "to": "/v3/documentation/nodes/validation/staking-incentives"
     },
