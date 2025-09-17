@@ -2,17 +2,17 @@ import Feedback from '@site/src/components/Feedback';
 
 # External messages
 
-**External message** in TON is a message that originates *outside the blockchain* or is intended for actors *outside it*. These messages enable interaction between smart contracts and the external world. External messages (external inbound, ext_in) come in two types:
+**External message** in TON is a message that originates *outside the blockchain* or is intended for actors *outside it*. These messages enable interaction between smart contracts and the external world. External messages come in two types:
 
 - External incoming messages
 - External outgoing messages
 
 ## External incoming messages
 
-**External incoming messages (external inbound, ext_in)** are messages sent from outside to smart contracts on the TON Blockchain. They serve as the main entry point for external actors to interact with the blockchain.
+**External incoming messages (external inbound, ext_in)** are messages sent from outside to smart contracts on TON Blockchain. They serve as the main entry point for external actors to interact with the blockchain.
 
 **Key points**
-- Any account can receive external inbound (ext_in) messages, but handling depends on the contract’s logic.
+- Any account can receive external incoming messages, but handling depends on the contract’s logic.
 - Common sources include wallet users, validators, and DApp services.
 - Wallet contracts often receive external inbound (ext_in) messages and relay instructions internally through _internal messages_.
 
