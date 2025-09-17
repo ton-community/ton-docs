@@ -36,30 +36,30 @@ The system counts only unique hash cells for storage and forward fees. For examp
 Each contract has its balance. You can calculate how many TONs your contract requires to remain valid for a specified `seconds` duration using the function:
 
 ```func
-int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
+int get_storage_fee(int is_mc, int seconds, int bits, int cells) asm(cells bits seconds is_mc) "GETSTORAGEFEE";
 ```
 
 You can then hardcode this value into the contract and calculate the current storage fee using:
 
 ```func
-;; functions from func stdlib (not available on mainnet)
+;; functions from the FunC stdlib
 () raw_reserve(int amount, int mode) impure asm "RAWRESERVE";
-int get_storage_fee(int workchain, int seconds, int bits, int cells) asm(cells bits seconds workchain) "GETSTORAGEFEE";
+int get_storage_fee(int is_mc, int seconds, int bits, int cells) asm(cells bits seconds is_mc) "GETSTORAGEFEE";
 int my_storage_due() asm "DUEPAYMENT";
 
 ;; constants from stdlib
-;;; Creates an output action which reserves exactly x nanoTONs (if y = 0).
+;;; Creates an output action which reserves exactly x nanotons (if y = 0).
 const int RESERVE_REGULAR = 0;
-;;; Creates an output action which reserves at most x nanoTONs (if y = 2).
+;;; Creates an output action which reserves at most x nanotons (if y = 2).
 ;;; Bit +2 in y ensures the external action does not fail if the specified amount cannot be reserved. Instead, it reserves all remaining balance.
 const int RESERVE_AT_MOST = 2;
-;;; In the case of action failure, the transaction is bounced. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. [v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages](https://ton.org/docs/#/tvm/changelog/tvm-upgrade-2023-07#sending-messages)
+;;; In the case of action failure, the transaction is bounced. No effect if RESERVE_AT_MOST (+2) is used. TVM UPGRADE 2023-07. [/v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages)
 const int RESERVE_BOUNCE_ON_ACTION_FAIL = 16;
 
-() calculate_and_reserve_at_most_storage_fee(int balance, int msg_value, int workchain, int seconds, int bits, int cells) inline {
- int on_balance_before_msg = my_ton_balance - msg_value;
- int min_storage_fee = get_storage_fee(workchain, seconds, bits, cells); ;; You can hardcode this value if the contract code will not be updated.
- raw_reserve(max(on_balance_before_msg, min_storage_fee + my_storage_due()), RESERVE_AT_MOST);
+() calculate_and_reserve_at_most_storage_fee(int balance, int msg_value, int is_mc, int seconds, int bits, int cells) inline {
+ int ton_balance_before_msg = balance - msg_value;
+ int min_storage_fee = get_storage_fee(is_mc, seconds, bits, cells); ;; You can hardcode this value if the contract code will not be updated.
+ raw_reserve(max(ton_balance_before_msg, min_storage_fee + my_storage_due()), RESERVE_AT_MOST);
 }
 ```
 
@@ -79,7 +79,7 @@ In most cases, use the `GETGASFEE` opcode with the following parameters:
 ### Calculation flow
 
 ```func
-int get_compute_fee(int workchain, int gas_used) asm(gas_used workchain) "GETGASFEE";
+int get_compute_fee(int is_mc, int gas_used) asm(gas_used is_mc) "GETGASFEE";
 ```
 
 But how do you determine `gas_used`? Through testing!
@@ -108,7 +108,7 @@ let customPayload = beginCell().storeUint(0xfedcba0987654321n, 128).endCell();
 // Embed the forward payload into the custom payload to ensure maximum gas usage during computation
 const sendResult = await deployerJettonWallet.sendTransfer(
   deployer.getSender(),
-  toNano("0.17"), // tons
+  toNano("0.17"), // TON
   sentAmount,
   notDeployer.address,
   deployer.address,
@@ -164,7 +164,7 @@ printTxGasStats = (name, transaction) => {
   return txComputed.gasFees;
 };
 
-send_gas_fee = printTxGasStats("Jetton transfer", transferTx);
+const send_gas_fee = printTxGasStats("Jetton transfer", transferTx);
 ```
 
 ## Forward fee
@@ -187,7 +187,7 @@ If the message structure is deterministic, use the `GETFORWARDFEE` opcode with t
 | :--------- | :------------------------------------------------------ |
 | cells      | Number of cells                                         |
 | bits       | Number of bits                                          |
-| is_mc      | True if the source or destination is in the MasterChain |
+| is_mc      | True if execution is in the masterchain; false if basechain |
 
 :::info 
 The system counts only unique hash cells for storage and forward fees. For example, it counts three identical hash cells as one. This mechanism deduplicates data by storing the content of multiple equivalent sub-cells only once, even if they are referenced across different branches. [Read more about deduplication](/v3/documentation/data-formats/tlb/library-cells). 
@@ -198,7 +198,7 @@ However, if the outgoing message depends significantly on the incoming structure
 | Param name | Description                                             |
 | :--------- | :------------------------------------------------------ |
 | fwd_fee    | Parsed from the incoming message                        |
-| is_mc      | True if the source or destination is in the MasterChain |
+| is_mc      | True if execution is in the masterchain; false if basechain |
 
 :::caution 
 Be careful with the `SENDMSG` opcode, as it uses an **unpredictable amount** of gas. Avoid using it unless necessary.
@@ -220,7 +220,7 @@ Modes influence the fee calculation in the following ways:
 - **`+64`**: This mode substitutes the entire balance of the incoming message as the outgoing value. This is also slightly inaccurate, as gas expenses that cannot be estimated until the computation is completed are excluded.
 - Refer to the [message modes page](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) for additional modes.
 
-It creates an output action and returns the fee for creating a message. However, it uses an unpredictable amount of gas, which cannot be calculated using formulas. To measure gas usage, use `GASCONSUMED`:
+With modes other than `+1024`, it creates an output action and returns the fee for creating a message. With `+1024`, it only returns the estimated fee and does not create an output action. In all cases, it uses an unpredictable amount of gas, which cannot be calculated using formulas. To measure gas usage, use `GASCONSUMED`:
 
 ```func
 int send_message(cell msg, int mode) impure asm "SENDMSG";
