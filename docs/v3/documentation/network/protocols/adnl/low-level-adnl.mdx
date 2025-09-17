@@ -35,9 +35,15 @@ Then, the client has to generate AES-CTR session parameters, a 16-byte nonce and
 | padding | 64 bytes |
 
 
-The specification does not define the purpose of this field; implementations ignore it during processing, and endpoints should fill all 160 bytes with random data.
+The purpose of padding is unknown; it is not used by server implementations. It is recommended that the whole 160-byte buffer be filled with random bytes. Otherwise, an attacker may perform an active MitM attack using compromised AES-CTR session parameters.
 
-The next step is to encrypt the session parameters using the `secret` through the key agreement protocol outlined above. To achieve this, AES-256 needs to be initialized in CTR mode with a 128-bit big-endian counter. The key and nonce for encrypting `aes_params` are computed exactly as specified in the ADNL TCP documentation: [Handshake packet: data encryption](/v3/documentation/network/protocols/adnl/adnl-tcp#handshake-packet-data-encryption) (do not use ad‑hoc concatenations here).
+The next step is to encrypt the session parameters using the `secret` through the key agreement protocol outlined above. To achieve this, AES-256 needs to be initialized in CTR mode with a 128-bit big-endian counter. This will utilize a (key, nonce) pair that is computed as follows (note that `aes_params` is a 160-byte buffer that was created earlier):
+
+```cpp
+hash = SHA-256(aes_params)
+key = secret[0..16] || hash[16..32]
+nonce = hash[0..4] || secret[20..32]
+```
 
 After encrypting `aes_params`, noted as `E(aes_params)`, remove AES as it is no longer needed. We are now ready to serialize all this information into the 256-byte handshake packet and send it to the server.
 
@@ -73,7 +79,7 @@ The whole structure must be encrypted using the corresponding AES instance (TX f
 
 The receiving peer must fetch the first 4 bytes, decrypt it into the `length` field, and read exactly the `length` bytes to get the full datagram. The receiving peer may start to decrypt and process `buffer` earlier, but it must take into account that it may be corrupted, intentionally or occasionally. Datagram `hash` must be checked to ensure the integrity of the `buffer`. In case of failure, no new datagrams can be issued and the connection must be dropped.
 
-The first datagram in the session always goes from the server to the client after a handshake packet is successfully accepted by the server and whose payload is empty. The client should decrypt it and disconnect from the server in case of failure because it means that the server has not followed the protocol properly and the actual session keys differ on the server and client side.
+The first datagram in the session always goes from the server to the client after a handshake packet is successfully accepted by the server andits actual buffer is empty.. The client should decrypt it and disconnect from the server in case of failure because it means that the server has not followed the protocol properly and the actual session keys differ on the server and client side.
 
 ### Communication details
 
@@ -83,15 +89,19 @@ If you want to dive into communication details, you could check the article [ADN
 
 #### Handshake padding
 
-The specification does not define the purpose of this field; implementations ignore it during processing, and endpoints should fill all 160 bytes with random data.
+It is unknown why the initial TON team decided to include this field in the handshake. `aes_params` integrity is protected by a SHA-256 hash, and confidentiality is protected by the key derived from the `secret` parameter. Probably, it was intended to migrate from AES-CTR at some point. To do this, the specification may be extended to include a special magic value in `aes_params`, which will signal that the peer is ready to use the updated primitives. The response to such a handshake may be decrypted twice, with new and old schemes, to clarify which scheme the other peer is actually using.
 
 #### Session parameters encryption key derivation process
 
-If an encryption key is derived only from the `secret` parameter, it will be static because the secret is static. To derive a new encryption key for each session, developers also use `SHA-256(aes_params)`, which is random if `aes_params` is random. For the canonical algorithm, refer to the ADNL TCP documentation.
+If an encryption key is derived only from the `secret` parameter, it will be static because the secret is static. To derive a new encryption key for each session, developers also use `SHA-256(aes_params)`, which is random if `aes_params` is random. However, the actual key derivation algorithm with the concatenation of different subarrays is considered harmful
 
 #### Datagram nonce
 
-A datagram includes a 32-byte random nonce. It protects the integrity checksum (SHA-256(nonce || buffer)) from forgery by ensuring the checksum cannot be recomputed without the nonce.
+The purpose of the `nonce` field in the datagram may not be immediately clear. Even without it, any two ciphertexts will differ due to the session-bounded keys used in AES and the encryption method in CTR mode. However, if a nonce is absent or predictable, a potential attack can occur. 
+
+In CTR encryption mode, block ciphers like AES function as stream ciphers, allowing for bit-flipping attacks. If an attacker knows the plaintext corresponding to an encrypted datagram, they can create an exact key stream and XOR it with their own plaintext, effectively replacing the original message sent by a peer. Although buffer integrity is protected by a hash (referred to here as SHA-256), an attacker can still manipulate it because if they know the entire plaintext, they can also compute its hash. 
+
+The nonce field is crucial for preventing such attacks, as it ensures that an attacker cannot replace the SHA-256 without also having access to the nonce.
 
 ## P2P protocol (ADNL over UDP)
 
