@@ -13,25 +13,20 @@ Before reading this tutorial, you should familiarize yourself with [nominator po
    To maintain network stability, distribute validator nodes across different geographical locations worldwide rather than concentrating them in a single data center. See [recommended providers](/v3/guidelines/nodes/running-nodes/full-node#recommended-providers).
 
    :::caution
+
    Ensure your hardware meets or exceeds the specifications above. Running the validator on insufficient hardware negatively impacts the network and could result in penalties.
-   :::
-   :::caution
-   Ensure your hardware meets or exceeds the specifications above. Running the validator on insufficient hardware negatively impacts the network and could result in penalties.
+
    :::
 
 2. Install and synchronize **MyTonCtrl** as described in the guide [here](/v3/guidelines/nodes/running-nodes/full-node#install-mytonctrl).
 
-   For additional help, refer to this video tutorial.
-
-3. Transfer 1 TON to the validator wallet address listed by the `wl` command.
+3. Transfer 1 Toncoin to the validator wallet address listed by the `wl` command.
 
 4. Use the `aw` command to activate your validator wallet.
 
 5. Activate pool mode:
 
-   Run in the MyTonCtrl console.
-
-   ```text
+   ```bash
    enable_mode nominator-pool
    set stake null
    ```
@@ -40,7 +35,7 @@ Before reading this tutorial, you should familiarize yourself with [nominator po
 
    Run in the MyTonCtrl console.
 
-   ```text
+   ```bash
    new_pool p1 0 1 1000 300000
    new_pool p2 0 1 1001 300000
    ```
@@ -48,13 +43,13 @@ Before reading this tutorial, you should familiarize yourself with [nominator po
    Where:
 
    - `p1` is the pool name;
-   - `0%` is the validator's reward share (e.g., use 40 for 40%);
+   - `0` is the validator's reward share in percents (e.g., use 40 for 40%);
    - `1` is the maximum number of nominators in the pool (should be \<= 40);
    - `1000` TON is the minimum validator stake (should be >= 1K TON);
    - `300000` TON is the minimum nominator stake (should be >= 10K TON);
 
    :::note
-   Pool configurations do not have to be identical. You can add 1 to the minimum stake of one pool to make them different.
+   Pool configurations do not have to be identical. You can add 1 Toncoin to the minimum stake of one pool to make them different.
    :::
 
    :::tip
@@ -63,9 +58,7 @@ Before reading this tutorial, you should familiarize yourself with [nominator po
 
 7. Type `pools_list` to display pool addresses:
 
-   Run in the MyTonCtrl console.
-
-   ```text
+   ```bash
    pools_list
    Name  Status  Balance  Address
    p1    empty   0        0f98YhXA9wnr0d5XRXT-I2yH54nyQzn0tuAYC4FunT780qIT
@@ -73,14 +66,14 @@ Before reading this tutorial, you should familiarize yourself with [nominator po
    ```
 
    :::info
+
    Addresses may appear in raw form (starting with `0f…`) or user-friendly form (starting with `kf…`). Both represent the same address in different formats.
+
    :::
 
-8. Send 1 TON to each pool and activate the pools:
+8. Send 1 Toncoin to each pool and activate the pools:
 
-   Run in the MyTonCtrl console.
-
-   ```text
+   ```bash
    mg validator_wallet_001 0f98YhXA9wnr0d5XRXT-I2yH54nyQzn0tuAYC4FunT780qIT 1
    mg validator_wallet_001 0f9qtmnzs2-PumMisKDmv6KNjNfOMDQG70mQdp-BcAhnV5jL 1
    activate_pool p1
@@ -89,9 +82,7 @@ Before reading this tutorial, you should familiarize yourself with [nominator po
 
 9. Type `pools_list` to display pools:
 
-   Run in the MyTonCtrl console.
-
-   ```text
+   ```bash
    pools_list
    Name  Status  Balance      Address
    p1    active  0.731199733  kf98YhXA9wnr0d5XRXT-I2yH54nyQzn0tuAYC4FunT780v_W
@@ -102,9 +93,7 @@ Before reading this tutorial, you should familiarize yourself with [nominator po
 
 11. Proceed with the validator deposit to each pool:
 
-    Run in the MyTonCtrl console.
-
-    ```text
+    ```bash
     deposit_to_pool validator_wallet_001 <address_of_pool_1> 1005
     deposit_to_pool validator_wallet_001 <address_of_pool_2> 1005
     ```
@@ -113,27 +102,19 @@ In these commands, `1005` TON is the deposit amount. Ensure you attach sufficien
 
 12. Make a nominator deposit to each pool.
 
-    Visit the pool link (from **Step 10**) and click **ADD STAKE**.
-    You can also make a deposit using **MyTonCtrl** with the following commands:
+    - Visit the pool link (from **Step 10**) and click **ADD STAKE**.
+    - You can also make a deposit using **MyTonCtrl** with the following commands:
 
-    Run in the MyTonCtrl console.
-
-    ```text
+    ```bash
     mg nominator_wallet_001 <address_of_pool_1> 300001 -C d
     mg nominator_wallet_001 <address_of_pool_2> 300001 -C d
     ```
 
-:::info
 The nominator wallet must be initialized in the basechain (workchain 0).
-:::
 
-:::caution
 Remember that the validator and nominator wallets must be stored separately! Store the validator wallet on the server with the validator node to ensure the processing of all system transactions. Meanwhile, store the nominator wallet in your cold cryptocurrency wallet.
-:::
 
-:::note
 To withdraw a nominator deposit, send a transaction with the comment `w` to the pool address (attach 1 TON to process the transaction). You can also perform this action using **mytonctrl**.
-:::
 
 13. Invite nominators to deposit into your pools. Participation in validation will commence automatically.
 
