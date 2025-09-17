@@ -24,7 +24,7 @@ Current settings in the Masterchain are as follows: 1 unit of gas costs 10000 na
 
 ### Average transaction cost
 
-> **TL;DR:** A basic transaction typically costs a small fraction of a TON; see the [fee calculator](/v3/guidelines/smart-contracts/fee-calculation) for current estimates.
+> **TL;DR:** A basic transaction typically costs approximately 0.003 TON
 
 :::info
 Gas price is defined in Network Config: [param 20](/v3/documentation/network/configs/blockchain-configs#param-20) (Masterchain), [param 21](/v3/documentation/network/configs/blockchain-configs#param-21) (Basechain).
@@ -64,7 +64,7 @@ Fees on TON are calculated by this formula:
 
 ```cpp
 transaction_fee = storage_fees
-                + in_fwd_fees // also named import_fee
+                + in_fwd_fees // also called import fee
                 + computation_fees
                 + action_fees
                 + out_fwd_fees
@@ -76,7 +76,7 @@ transaction_fee = storage_fees
 // Check https://retracer.ton.org/?tx=b5e14a9c4a4e982fda42d6079c3f84fa48e76497a8f3fca872f9a3737f1f6262
 
 function FeeCalculator() {
-  // https://tonviewer.com/config#25
+  // Config param 25 (fees): https://tonviewer.com/config#25 — names mirror config fields
   const lump_price = 400000;
   const bit_price = 26214400;
   const cell_price = 2621440000;
@@ -90,10 +90,11 @@ function FeeCalculator() {
   let fwd_fee =
     lump_price + Math.ceil((bit_price * 0 + cell_price * 0) / bit16);
 
+  let ihr_fee;
   if (ihr_disabled) {
-    var ihr_fee = 0;
+    ihr_fee = 0;
   } else {
-    var ihr_fee = Math.ceil((fwd_fee * ihr_price_factor) / bit16);
+    ihr_fee = Math.ceil((fwd_fee * ihr_price_factor) / bit16);
   }
 
   let total_fwd_fees = fwd_fee + ihr_fee;
@@ -103,7 +104,11 @@ function FeeCalculator() {
   let import_fee =
     lump_price + Math.ceil((bit_price * 528 + cell_price * 1) / bit16);
   let total_fee =
-    gas_fees + storage_fees + total_action_fees * nano + import_fee * nano;
+    gas_fees +
+    storage_fees +
+    total_action_fees * nano +
+    import_fee * nano +
+    total_fwd_fees * nano;
 
   return (
     <div>
@@ -116,6 +121,8 @@ function FeeCalculator() {
   );
 }
 ```
+
+Note: The constants above are defined in nanotons; the displayed outputs are in TON. Variable names mirror configuration fields in param 25 (fees).
 
 ## Elements of the transaction fee
 
@@ -158,7 +165,7 @@ There is an article about [fee calculation](/v3/guidelines/smart-contracts/fee-c
 
 ## References
 
-- Based on “Commissions on TON” (The Daily TON, 2022‑07‑22) — contributed by _[@menschee](https://github.com/menschee)_. Source: https://telegra.ph/Commissions-on-TON-07-22
+- Based on “Commissions on TON” (The Daily TON, 2022‑07‑22) — contributed by _[@menschee](https://github.com/menschee)_. Source: [telegra.ph](https://telegra.ph/Commissions-on-TON-07-22)
 
 ## See also
 
