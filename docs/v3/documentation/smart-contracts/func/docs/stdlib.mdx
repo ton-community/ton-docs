@@ -680,8 +680,6 @@ Sets the random seed to a specified 256-bit unsigned integer `seed`.
 () randomize(int x) impure asm "ADDRAND";
 ```
 
-Mixes an unsigned 256-bit integer `x` into a random seed `r` by setting the random seed to sha256 of the concatenation of two 32-byte strings: the first with a big-endian representation of the old seed `r`, and the second with a big-endian representation of `x`.
-
 Mixes a 256-bit unsigned integer `x` into the random seed `r` by updating`r` to `sha256(r || x)`, where:
 
 - `r` is the previous seed, represented as a 32-byte big-endian array.
@@ -726,13 +724,6 @@ ext_out_msg_info$11 src:MsgAddress dest:MsgAddressExt
   created_lt:uint64 created_at:uint32 = CommonMsgInfoRelaxed;
 ```
 
-- `addr_none` is represented by `t = (0)`, i.e., a tuple containing exactly
-  one integer that equals zero
-- `addr_extern` is represented by `t = (1, s)`, where slice `s` contains the
-  field `external_address`. In other words, `t` is a pair (a tuple consisting of two entries), containing an integer equal to one and slice `s`
-- `addr_std` is represented by `t = (2, u, x, s)`, where `u` is either `null` (if `anycast` is absent) or a slice `s'` containing `rewrite_pfx` (if `anycast` is present). Next, integer `x` is the `workchain_id`, and slice `s` contains the address
-- `addr_var` is represented by `t = (3, u, x, s)`, where `u`, `x`, and `s` have the same meaning as for `addr_std`
-
 A deserialized `MsgAddress`cis represented as a tuple `t` with the following structure:
 
 - `addr_none` is represented as `t = (0)`, a single-element tuple where the integer is zero.
@@ -741,7 +732,7 @@ A deserialized `MsgAddress`cis represented as a tuple `t` with the following str
   - `u` is `null` if `anycast` is absent or a slice `s'` containing `rewrite_pfx` if `anycast` is present.
   - `x` is the `workchain_id`.
   - `s` is a slice containing the address.
-- addr_var is represented as `t = (3, u, x, s)`, where `u`, `x,` and `s` follow the same structure as `addr_std`.
+- `addr_var` is represented as `t = (3, u, x, s)`, where `u`, `x,` and `s` follow the same structure as `addr_std`.
 
 #### load_msg_addr
 
