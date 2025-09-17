@@ -6,9 +6,9 @@ Fift is a stack-based programming language with TON-specific features that can w
 
 ## Key differences
 
-Fift executes at **compile-time** - when your compiler builds the smart contract code BOC after processing FunC code. Fift can appear in different forms:
+Fift executes at **compile-time** - when your compiler builds the smart contract code bag of cells (BoC) after processing FunC code. Fift can appear in different forms:
 
-```
+```fift
 // Tuple primitives
 x{6F0} @Defop(4u) TUPLE
 x{6F00} @Defop NIL
@@ -17,7 +17,7 @@ x{6F02} dup @Defop PAIR @Defop CONS
 ```
 > TVM opcode definitions in Asm.fif
 
-```
+```fift
 "Asm.fif" include
 <{ SETCP0 DUP IFNOTRET // Return if recv_internal
    DUP 85143 INT EQUAL OVER 78748 INT EQUAL OR IFJMP:<{ // "seqno" and "get_public_key" get-methods
@@ -49,15 +49,15 @@ The last code fragment resembles TVM assembly because most of it actually is TVM
 
 Imagine explaining programming concepts to a trainee. Your instructions become part of their program, processed twice - similar to how opcodes in capital letters (SETCP0, DUP, etc.) are processed by both Fift and TVM.
 
-Think of Fift as a teaching language where you can introduce high-level concepts to a learner. Just as a trainee programmer gradually absorbs and applies new concepts, Fift allows you to define custom commands and abstractions. The Asm[Tests].fif file demonstrates this perfectly - it's essentially a collection of TVM opcode definitions.
+Think of Fift as a teaching language where you can introduce high-level concepts to a learner. Just as a trainee programmer gradually absorbs and applies new concepts, Fift allows you to define custom commands and abstractions. The Asm.fif file demonstrates this perfectly - it's essentially a collection of TVM opcode definitions.
 
 TVM assembly, in contrast, is like the trainee's final working program. While it operates with fewer built-in features (it can't perform cryptographic signing, for instance), it has direct access to the blockchain environment during contract execution. Where Fift works at compile-time to shape the contract's code, TVM assembly runs that code on the actual blockchain.
 
 ## Smart contract usage
 
-### [Fift] including large BoCs in contracts
+### [Fift] including a large BoC in contracts
 
-When using `toncli`, you can include large BoCs by:
+When using `toncli`, you can include a large BoC by:
 
 1. Editing `project.yaml` to include `fift/blob.fif`:
 ```yaml
@@ -71,12 +71,12 @@ contract:
 2. Adding the BoC to `fift/blob.boc`
 
 3. Including this code in `fift/blob.fif`:
-```
+```fift
 <b 8 4 u, 8 4 u, "fift/blob.boc" file>B B>boc ref, b> <s @Defop LDBLOB
 ```
 
 Now you can access the blob in your contract:
-```
+```func
 cell load_blob() asm "LDBLOB";
 
 () recv_internal() {
@@ -88,7 +88,7 @@ cell load_blob() asm "LDBLOB";
 
 Fift primitives can't convert integers to strings at runtime because Fift operates at compile-time. For runtime conversion, use TVM assembly like this solution from TON Smart Challenge 3:
 
-```
+```func
 tuple digitize_number(int value)
   asm "NIL WHILE:<{ OVER }>DO<{ SWAP TEN DIVMOD s1 s2 XCHG TPUSH }> NIP";
 
@@ -110,7 +110,7 @@ builder store_signed(builder msg, int v) inline_ref {
 
 Compare these implementations:
 
-```
+```func
 int mul_mod(int a, int b, int m) inline_ref {               ;; 1232 gas units
   (_, int r) = muldivmod(a % m, b % m, m);
   return r;
@@ -122,6 +122,5 @@ int mul_mod_better(int a, int b, int m) inline_ref {        ;; 1110 gas units
 int mul_mod_best(int a, int b, int m) asm "x{A988} s,";     ;; 65 gas units
 ```
 
-The `x{A988}` opcode implements an optimized division operation with built-in multiplication (as specified in [section 5.2 Division](/v3/documentation/tvm/instructions#A988)). This specialized instruction directly computes just the modulo remainder of the operation, skipping unnecessary computation steps. The `s,` suffix then handles the result storage - it takes the resulting slice from the stack's top and efficiently writes it into the target builder. Together, this combination delivers substantial gas savings compared to conventional approaches.
+The `x{A988}` opcode implements an optimized division operation with built-in multiplication (as specified in [TVM instructions](/v3/documentation/tvm/instructions#A988)). This specialized instruction directly computes just the modulo remainder of the operation, skipping unnecessary computation steps. The `s,` suffix then handles the result storage - it takes the resulting slice from the stack's top and efficiently writes it into the target builder. Together, this combination delivers substantial gas savings compared to conventional approaches.
 <Feedback />
-
