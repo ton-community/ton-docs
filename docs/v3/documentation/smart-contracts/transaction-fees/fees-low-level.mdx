@@ -188,7 +188,9 @@ By passing the bit-string in another form (a builder instead of a slice), we sub
 
 ### Inline and inline_refs
 
-By default, when you have a FunC function, it gets its own `id`, stored in a separate leaf of id->function dictionary, and when you call it somewhere in the program, a search of the function in dictionary and subsequent jump occur. Such behavior is justified if your function is called from many places in the code and thus jumps allow to decrease the code size (by storing a function body once). However, if the function is only used once or twice, it is often much cheaper to declare this function as `inline` or `inline_ref`. `inline` modifier places the body of the function into the caller, while `inline_ref` places it into a reference (which is still cheaper than a dictionary lookup).
+By default, when you have a FunC function, it gets its own `id`, stored in a separate leaf of id->function dictionary, and when you call it somewhere in the program, a search of the function in dictionary and subsequent jump occur. Such behavior is justified if your function is called from many places in the code and thus jumps allow to decrease the code size (by storing a function body once). However, if the function is only used once or twice, it is often much cheaper to declare this function as `inline` or `inline_ref`. `inline` modifier places the body of the function right into the code of the parent function, while `inline_ref` places the function code into the reference (jumping to the reference is still much cheaper than searching and jumping to the dictionary entry).
+
+
 
 ### Dictionaries
 

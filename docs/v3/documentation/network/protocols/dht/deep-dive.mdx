@@ -28,26 +28,26 @@ To achieve this, we first need to get the ID of the DHT key. We will begin by po
 dht.key id:int256 name:bytes idx:int = dht.Key
 ```
 
-The term `name` refers to the type of key. For ADNL addresses, the term `address` is used. For instance, when searching for ShardChain nodes, the term `nodes` is used. However, the key type can vary and may consist of any array of bytes, depending on the specific value you are seeking.
+The term `name` refers to the type of key. For ADNL addresses, the term `address` is used. For instance, when searching for shard nodes, the term `nodes` is used. However, the key type can vary and may consist of any array of bytes, depending on the specific value you are seeking.
 
 By applying this schema, we get:
 
 ```
 8fde67f6                                                           -- TL ID dht.key
-516618cf6cbe9004f6883e742c9a2e3ca53ed02e3e36f4cef62a98ee1e449174   -- our searched ADNL address
-07 61646472657373                                                  -- key type, the word "address" as an TL array of bytes
+516618cf6cbe9004f6883e742c9a2e3ca53ed02e3e36f4cef62a98ee1e449174   -- the ADNL address being searched
+07 61646472657373                                                  -- key type, the word "address" as a TL array of bytes
 00000000                                                           -- index 0 because there is only 1 key
 ```
 
-Next, retrieve the key ID and the SHA256 hash from the bytes serialized above. It will be `b30af0538916421b46df4ce580bf3a29316831e0c3323a7f156df0236c5b2f75`.
+Next, retrieve the key ID and the SHA-256 hash from the bytes serialized above. It will be `b30af0538916421b46df4ce580bf3a29316831e0c3323a7f156df0236c5b2f75`.
 
-Now we can begin our search. To do this, we need to execute a query that has [schema](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L197):
+Now we can begin our search. To do this, we need to execute a query that uses the following [schema](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L197):
 
 ```tlb
 dht.findValue key:int256 k:int = dht.ValueResult
 ```
 
-The `key` represents the ID of our DHT key, while `k` indicates the "width" of the search. A smaller value for `k` results in a more accurate search but limits the number of potential nodes to query. In a TON, the maximum value for `k` is 10, although 6 is typically used.
+The `key` represents the ID of our DHT key, while `k` indicates the "width" of the search. A smaller value for `k` results in a more accurate search but limits the number of potential nodes to query. In TON, the specific value of `k` depends on the implementation.
 
 Now, let's populate this structure, serialize it, and send the request using the `adnl.message.query` schema. For more details, please refer to the documentation [here](/v3/documentation/network/protocols/adnl/udp#packet-structure-and-communication).
 
@@ -62,7 +62,7 @@ If we receive `dht.valueNotFound`, the response will include a list of nodes tha
 
 Afterwards, we will select the closest, accessible nodes that have not yet been queried from our entire list of known nodes and send the same request to one of them. We will continue this process until we have tried all the nodes within our chosen range or until we stop receiving new nodes.
 
-Now, let's take a closer look at the fields in the response and the schemas that are used:
+Let’s analyze the response fields and the schemas used in more detail:
 
 ```tlb
 adnl.address.udp ip:int port:int = adnl.Address;
@@ -74,7 +74,7 @@ dht.nodes nodes:(vector dht.node) = dht.Nodes;
 dht.valueNotFound nodes:dht.nodes = dht.ValueResult;
 ```
 
-`dht.nodes -> nodes` -  list of DHT nodes (array).
+`dht.nodes -> nodes` - list of DHT nodes (array).
 
 Each node has an `id`, which serves as its public key, typically represented as [pub.ed25519](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L47). This key is used to connect to the node via ADNL. Additionally, each node contains a list of addresses, `addr_list:adnl.addressList`, along with its version and signature.
 
@@ -130,7 +130,7 @@ We verify the key signature in the same manner as before. First, we set the sign
 
 Used for keys that contain information about other nodes, shards of the WorkChain in the network, the value always follows the TL structure `overlay.nodes`.
 
-The value field must be empty.
+The signature field must be empty.
 
 ```tlb
 overlay.node id:PublicKey overlay:int256 version:int signature:bytes = overlay.Node;
@@ -155,7 +155,7 @@ There are no signatures required; anyone can make updates.
 
 Once everything has been verified and the `ttl:int` value has not expired, we can begin working with the value itself, specifically `value:bytes`. For an ADNL address, this will include an `adnl.addressList` structure.
 
-This structure will contain the IP addresses and ports of the servers corresponding to the requested ADNL address. In our case, we will most likely have one RLDP-HTTP address associated with the `foundation.ton` service.
+This structure will contain the IP addresses and ports of the servers corresponding to the requested ADNL address. In our case, we will have an RLDP-HTTP address associated with the `foundation.ton` service.
 
 We will use the public key, `id:PublicKey`, from the DHT key information as the server key.
 
@@ -167,11 +167,11 @@ DHT is also used to locate information about the nodes storing the data of WorkC
 
 To retrieve data, such as that of the MasterChain and its shards, we need to complete the TL structure:
 
-```
+```tlb
 tonNode.shardPublicOverlayId workchain:int shard:long zero_state_file_hash:int256 = tonNode.ShardPublicOverlayId;
 ```
 
-In the context of a MasterChain, the `workchain` value will be set to `-1`. The corresponding shard will be represented as `-922337203685477580 (0xFFFFFFFFFFFFFFFF)`. Additionally, the `zero_state_file_hash` refers to the hash of the chain’s zero state (file_hash). Like other data, this can be obtained from the global network configuration in the `validator` field.
+In the context of a MasterChain, the `workchain` value will be set to `-1`. The corresponding shard will be represented as `-9223372036854775808 (0x8000000000000000)`. Additionally, the `zero_state_file_hash` refers to the hash of the chain’s zero state (file_hash). Like other data, this can be obtained from the global network configuration in the `validator` field.
 
 ```json
 "zero_state": {
@@ -189,11 +189,11 @@ Next, we use this key ID as the `name` to populate the `pub.overlay name:bytes =
 
 This resulting ID will serve as the key for the command:
 
-```bash
+```tlb
 dht.findValue
 ```
 
-In this command, the `name` field will have the value `nodes`. We will repeat the process from the previous section; everything remains the same as before, but this time the `updateRule` will be set to [dht.updateRule.overlayNodes](#dhtupdateruleoverlaynodes).
+When constructing the corresponding `dht.key`, set `name` to `nodes`. We will repeat the process from the previous section; everything remains the same as before, but this time the `updateRule` will be set to [dht.updateRule.overlayNodes](#dhtupdateruleoverlaynodes).
 
 After the validation process, we will obtain the public keys (IDs) of the nodes that have information about our workchain and shard. To access the ADNL addresses of these nodes, we will hash the keys to create IDs and repeat the same procedure for each ADNL address, similar to how we did for the `foundation.ton` domain.
 
