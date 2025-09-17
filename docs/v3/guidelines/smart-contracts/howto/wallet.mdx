@@ -20,7 +20,7 @@ This section will teach us to create operations without using pre-configured fun
 
 ## 💡 Prerequisites
 
-This tutorial requires basic knowledge of JavaScript and TypeScript or Go. It is also necessary to hold at least 3 TON (which can be stored in an exchange account, a non-custodial wallet, or the Telegram bot wallet). It is necessary to have a basic understanding of [cell](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), [addresses in TON](/v3/documentation/smart-contracts/addresses), [blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains) to understand this tutorial.
+This tutorial requires basic knowledge of JavaScript and TypeScript or Go. It is also necessary to hold at least 3 TON (which can be stored in an exchange account, a non-custodial wallet, or the Telegram bot wallet). It is necessary to have a basic understanding of [cell]((/v3/documentation/smart-contracts/addresses/address)), [blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains) to understand this tutorial.
 
 :::info MAINNET DEVELOPMENT IS ESSENTIAL  
 Working with the TON Testnet often leads to deployment errors, difficulty tracking transactions, and unstable network functionality. Completing most of the development on the TON Mainnet could help avoid potential issues. This may reduce the number of transactions and minimize fees.
@@ -235,7 +235,7 @@ Before exploring wallets in more detail, let’s examine how wallets accept exte
 
 Now, let’s take a closer look.
 
-### Replay protection - `seqno`
+### Replay protection - seqno
 
 Message replay protection in the wallet smart contract relies on the `seqno` (Sequence Number), which tracks the order of sent messages. Preventing message repetition is critical, as duplicate messages can compromise the system’s integrity. When analyzing wallet smart contract code, the `seqno` is typically managed as follows:
 
@@ -283,7 +283,7 @@ throw_if(35, valid_until <= now());
 
 This algorithm safeguards against potential errors, such as when a message is no longer valid but is still sent to the blockchain for an unknown reason.
 
-### Wallet v3 and Wallet v4 differences
+### Wallet v3 and wallet v4 differences
 
 The key difference between wallet v3 and wallet v4 lies in wallet v4’s support for `plugins`. Users can install or delete these plugins, which are specialized smart contracts capable of requesting a specific amount of TON from the wallet smart contract at a designated time.
 
