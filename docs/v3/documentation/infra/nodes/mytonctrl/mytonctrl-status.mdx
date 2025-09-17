@@ -16,11 +16,11 @@ Possible values are: `mainnet`, `testnet`, and `unknown`. However, the value `un
 
 There are two key values: one represented in green and the other in yellow. The green value indicates the number of online validators, while the yellow value represents the total number of validators.
 
-Both values are integers; the total validator count is ≥ 1. `getconfig 34` returns validator set counts (yellow/total). The green value is dynamic (not from blockchain configs); see the [params 32/34/36](/v3/documentation/network/configs/blockchain-configs#param-32-34-and-36) and the MyTonCtrl `vl` command for active validators.
+Both values must be integers greater than 0. You can obtain the green value using the command `getconfig 34` with MyTonCtrl. For more information, please check the [relevant section here](/v3/documentation/network/configs/blockchain-configs#param-32-34-and-36) regarding parameters 32, 34, and 36.
 
 ### Number of ShardChains
 
-This value is an integer and is displayed in green.
+This value must be an integer greater than 0 and is displayed in green.
 
 ### Number of offers
 
@@ -58,11 +58,11 @@ This section shows the current balance of the wallet.
 
 ### Load average
 
-Format: `[CPUs]: <1m>, <5m>, <15m>`. The first value is the CPU count (integer); the subsequent values are the system load averages over 1, 5, and 15 minutes (may be fractional).
+The `load average` format is `[int]: int, int, int`. The first integer represents the number of CPUs, while the subsequent integers indicate the system load average for the last 1, 5, and 15 minutes.
 
 ### Network load average
 
-Shows network load averages for the last 1, 5, and 15 minutes; values may be fractional.
+This section also displays three integers, following the same logic as the `load average`: it presents the system load average for the last 1, 5, and 15 minutes.
 
 ### Memory load
 
@@ -70,7 +70,7 @@ Shows network load averages for the last 1, 5, and 15 minutes; values may be fra
 
 ### Disk usage
 
-Shows total disk space usage (absolute and relative).
+This is similar to the `memory load`. However, it relates to the usage of all disk space instead.
 
 ### mytoncore status
 
@@ -82,15 +82,15 @@ This indicator should be green, displaying the uptime of the local validator.
 
 ### Local validator out of sync
 
-Displays the number of blocks the local validator is out of sync.
+This integer value should be less than 20, indicating that it is functioning properly (it will appear green).
 
 ### Local validator last state serialization
 
-Displays the number of MasterChain blocks since the last state serialization.
+This entry displays the number of MasterChain blocks that are currently out of service.
 
 ### Local validator database size
 
-Shows absolute database size and relative usage.
+The absolute load size should be less than 1000 GB, and the relative load should be under 80%.
 
 ### Version of MyTonCtrl
 
@@ -136,13 +136,13 @@ The maximum stake allowed in Toncoins. Check [Param 17](/v3/documentation/networ
 
 This indicates the launch time of the current network, whether it is the Mainnet or Testnet.
 
-### Start of the validation period
+### Start of the validation cycle
 
-The timestamp indicates the beginning of the validation period. If it represents a future event, it will be displayed in green.
+The timestamp indicates the beginning of the validation cycle. If it represents a future event, it will be displayed in green.
 
-### End of the validation period
+### End of the validation cycle
 
-This is the timestamp for the end of the validation period; it will also appear green if it indicates a future date.
+This is the timestamp for the end of the validation cycle; it will also appear green if it indicates a future date.
 
 ### Start of elections
 
