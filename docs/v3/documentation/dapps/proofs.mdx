@@ -221,11 +221,11 @@ The Merkle proof reference in this cell has the prefix `9023AFE2`, corresponding
 ```python
 """
 Here mc_block_cell is the first shard proof root and mc_state_root is the second one.
-The check_block_header_proof function returns the new hash of the ShardState Merkle Update.
+The check_block_header_proof function returns new hash of the ShardState Merkle Update.
 """
 
 mc_state_hash = mc_state_root[0].get_hash(0)
-state_hash = check_block_header_proof(mc_block_cell[0], block_id.root_hash, True)
+state_hash = check_block_header_proof(mc_block_cell[0], blk.root_hash, True)
 
 if mc_state_hash != state_hash:
     raise ProofError('mc state hashes mismatch')
