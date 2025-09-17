@@ -98,9 +98,9 @@ Where:
 
 2. **Bits descriptor (2nd byte)**
 
-This byte equals the number of 4‑bit groups (nibbles) in the cell’s bitstring: `ceil(b / 4)`.
+This byte indicates the size of the cell’s bitstring and is calculated as: `floor(b / 8) + ceil(b / 8)`
 
-Where `0 ≤ b ≤ 1023` is the number of bits in the cell.
+Where `0 <= b <= 1023` is the number of bits in the cell.
 
 This descriptor represents the length of full 4-bit groups in the cell’s data and is always at least 1 for non-empty data.
 
@@ -111,6 +111,7 @@ The result is:
 7[FE]      -> 0101 -> 1 ref, length 1
 24[0AAAAA] -> 0006 -> 0 refs, length 6
 ```
+For data with incomplete 4-bit groups, 1 bit is added to the end of the sequence. This means it denotes the end bit of the group and is used to determine the actual size of incomplete groups.
 
 Let’s add the end bits to each of the cells:
 
@@ -123,8 +124,8 @@ Let’s add the end bits to each of the cells:
 We now specify which cells each one references:
 
 ```text
-0 1[8_]      -> 02 01 -> references 2 cells with these indexes
-1 7[FE]      -> 02 -> references the cell with index 2
+0 1[8_]      -> 0201 -> refers to 2 cells with such indexes
+1 7[FE]      -> 02 -> refers to cells with index 2
 2 24[0AAAAA] -> no refs
 ```
 
@@ -144,21 +145,19 @@ Size: 14 bytes.
 <details>
   <summary><b>Show example</b></summary>
 
-  ```go
+  ```golang
   func (c *Cell) descriptors() []byte {
     ceilBytes := c.bitsSz / 8
-    if c.bitsSz%8 != 0 {
+    if c.bitsSz%8 ! = 0 {
       ceilBytes++
     }
 
   	// calc size
   	ln := ceilBytes + c.bitsSz / 8
-
   	specBit := byte(0)
   	if c.special {
   	  specBit = 8
   	}
-
   	return []byte{byte(len(c.refs)) + specBit + c.level*32, byte(ln)}
   }
   ```
@@ -212,7 +211,7 @@ The level of an ordinary cell is always equal to the maximum level among all of 
 Lvl(c) = max(Lvl(r_0), ..., Lvl(r_i), ..., Lvl(r_e))
 ```
 
-Where i indexes references of c, and e is the number of references of c (reference count).
+Where `i` is a `c` reference index, `e` is a `c` reference amount.
 
 _If an ordinary cell has no references, its level is zero._
 
