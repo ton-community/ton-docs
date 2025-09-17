@@ -20,6 +20,7 @@ module.exports = [
       {
         type: 'category',
         label: 'Addresses',
+        link: { type: 'doc', id: 'v3/documentation/smart-contracts/addresses/address' },
         items: [
           'v3/documentation/smart-contracts/addresses/address',
           'v3/documentation/smart-contracts/addresses/address-formats',
