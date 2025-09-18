@@ -37,9 +37,9 @@ The Elector is a special smart contract that receives protocol-delivered **tick�
 
 **Process details:**
 
-- Take applications with stake ≥ `min_stake` ([**ConfigParam 17**](/v3/documentation/network/configs/blockchain-configs#param-17)).
+- Take applications with stake ≥ `min_stake` ([**ConfigParam 17**](/v3/documentation/network/config-params/overview#param-17)).
 - Arrange candidates by stake in descending order.
-- If applicants exceed `max_validators` ([**ConfigParam 16**](/v3/documentation/network/configs/blockchain-configs#param-16)), discard the lowest-staked candidates.
+- If applicants exceed `max_validators` ([**ConfigParam 16**](/v3/documentation/network/config-params/overview#param-16)), discard the lowest-staked candidates.
 - For each subset size `i` (from 1 to remaining candidates):
   - Assume the `i`-th candidate (lowest in the subset) defines the baseline.
   - Calculate effective stake (`true_stake`) for each candidate as:
@@ -83,9 +83,9 @@ To report misbehavior, a user must:
 1. Provide cryptographic proof demonstrating the validator's failure to produce the expected blocks.
 2. Submit the proof to the Elector contract, covering the associated storage costs.
 
-The Elector registers the complaint in the `past_elections` hashmap. Current round validators then verify the complaint. If the proof is valid, validators vote on the complaint. Approval requires agreement from more than **three-quarters of the total validator weight** and follows the wins/losses limits defined in [**ConfigParam 11**](/v3/documentation/network/configs/blockchain-configs#param-11) (not just a majority of participants).
+The Elector registers the complaint in the `past_elections` hashmap. Current round validators then verify the complaint. If the proof is valid, validators vote on the complaint. Approval requires agreement from more than **three-quarters of the total validator weight** and follows the wins/losses limits defined in [**ConfigParam 11**](/v3/documentation/network/config-params/overview#param-11) (not just a majority of participants).
 
-If approved, the fine (as determined by [**ConfigParam 40**](/v3/documentation/network/configs/blockchain-configs#param-40) — MisbehaviourPunishmentConfig) is deducted from the validator's `frozen` stake in the relevant `past_elections` record. These funds stay locked for the period defined by [**ConfigParam 15**](/v3/documentation/network/configs/blockchain-configs#param-15) (`stake_held_for`).
+If approved, the fine (as determined by [**ConfigParam 40**](/v3/documentation/network/config-params/overview#param-40) — MisbehaviourPunishmentConfig) is deducted from the validator's `frozen` stake in the relevant `past_elections` record. These funds stay locked for the period defined by [**ConfigParam 15**](/v3/documentation/network/config-params/overview#param-15) (`stake_held_for`).
 
 #### Distributing rewards
 
@@ -102,7 +102,7 @@ The **Config** contract manages TON’s configuration parameters, validator set 
 ### Validator set updates
 
 1. The **Elector** notifies **Config** of a new validator set.
-2. **Config** stores it in [**ConfigParam 36**](/v3/documentation/network/configs/blockchain-configs#param-32-34-and-36) (_next validators_).
+2. **Config** stores it in [**ConfigParam 36**](/v3/documentation/network/config-params/overview#param-32-34-and-36) (_next validators_).
 3. At the scheduled time (`utime_since`), **Config**:
    - Moves the old set to **ConfigParam 32** (_previous validators_).
    - Promotes [**ConfigParam 36**](/v3/documentation/network/configs/blockchain-configs#param-32-34-and-36) to [**ConfigParam 34**](/v3/documentation/network/configs/blockchain-configs#param-32-34-and-36) (_current validators_).
@@ -114,7 +114,7 @@ The **Config** contract manages TON’s configuration parameters, validator set 
 3. **Outcome**:
    - **Approved**: After `min_wins` rounds ([**ConfigParam 11**](/v3/documentation/network/configs/blockchain-configs#param-11)) with ≥3/4 weighted votes.
    - **Rejected**: After `max_losses` rounds.
-   - _Critical parameters_ ([**ConfigParam 10**](/v3/documentation/network/configs/blockchain-configs#param-10)) require more rounds.
+   - _Critical parameters_ ([**ConfigParam 10**](/v3/documentation/network/config-params/overview#param-10)) require more rounds.
 
 #### Emergency updates
 
