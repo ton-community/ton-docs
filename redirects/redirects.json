@@ -93,11 +93,23 @@
     },
     {
         "from": "/develop/dapps/ton-connect/business",
-        "to": "/v3/guidelines/ton-connect/business/ton-connect-for-business"
+        "to": "/v3/guidelines/ton-connect/overview#why-use-ton-connect"
     },
     {
         "from": "/develop/dapps/ton-connect/security",
-        "to": "/v3/guidelines/ton-connect/business/ton-connect-for-security"
+        "to": "/v3/guidelines/ton-connect/overview#why-use-ton-connect"
+    },
+    {
+        "from": "/v3/guidelines/ton-connect/business/ton-connect-for-business",
+        "to": "/v3/guidelines/ton-connect/overview#why-use-ton-connect"
+    },
+    {
+        "from": "/v3/guidelines/ton-connect/business/ton-connect-for-security",
+        "to": "/v3/guidelines/ton-connect/overview#why-use-ton-connect"
+    },
+    {
+        "from": "/v3/guidelines/ton-connect/business/ton-connect-comparison",
+        "to": "/v3/guidelines/ton-connect/overview#why-use-ton-connect"
     },
     {
         "from": "/participate/run-nodes/archive-node",
@@ -436,20 +448,12 @@
         "to": "/v3/documentation/smart-contracts/fift/overview"
     },
     {
-        "from": "/develop/dapps/defi/coins",
-        "to": "/v3/documentation/dapps/defi/coins"
-    },
-    {
         "from": "/develop/dapps/defi/nft",
         "to": "/v3/documentation/dapps/defi/nft"
     },
     {
         "from": "/develop/dapps/defi/subscriptions",
         "to": "/v3/documentation/dapps/defi/subscriptions"
-    },
-    {
-        "from": "/develop/dapps/defi/tokens",
-        "to": "/v3/documentation/dapps/defi/tokens"
     },
     {
         "from": "/develop/dapps/defi/ton-payments",
@@ -942,5 +946,9 @@
     {
       "from": "/v3/documentation/ton-documentation",
       "to": "/v3/documentation/introduction"
+    },
+    {
+      "from": "/v3/documentation/smart-contracts/addresses",
+      "to": "/v3/documentation/smart-contracts/addresses/address"
     }
 ]
