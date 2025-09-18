@@ -39,7 +39,7 @@ Opening a library cell incurs the exact computational cost of opening an ordinar
 
 **Nested library cells**
 
-It is possible to create a library cell that references another library cell, which in turn references another, and so on. However, attempting to parse such nested structures directly using `.begin_parse()` will raise an exception. Instead, nested library references can be unwrapped step-by-step using the [`XLOAD`](/v3/documentation/tvm/tvm-overview) opcode.
+It is possible to create a library cell that references another library cell, which in turn references another, and so on. However, attempting to parse such nested structures directly using `.begin_parse()` will raise an exception. Instead, nested library references can be unwrapped step-by-step using the [`XLOAD`](/v3/documentation/tvm/overview) opcode.
 
 **Immutability**
 
@@ -165,7 +165,7 @@ as well as a list of libraries for a specific MasterChain block:
 
 ## See also
 
-- [Exotic cells](/v3/documentation/data-formats/tlb/exotic-cells)
-- [TVM instructions](/v3/documentation/tvm/tvm-overview)
+- [Exotic cells](/v3/documentation/data-formats/cells/exotic)
+- [TVM instructions](/v3/documentation/tvm/overview)
 
 <Feedback />
