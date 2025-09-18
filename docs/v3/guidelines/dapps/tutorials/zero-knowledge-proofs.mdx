@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Building a simple ZK project on TON
 
-## 👋 Introduction
+##  Introduction
 
 **Zero-knowledge (ZK)** proofs are a fundamental cryptographic concept that allows **the prover** to prove to **the verifier** that a statement is true without revealing any additional information. ZK‑proofs are a powerful tool for building privacy-preserving systems and are widely used in applications such as anonymous payments, private messaging, and trustless bridges.
 
@@ -17,7 +17,7 @@ Since December 2023, BLS12-381 operations have been available on Mainnet. Due to
 3. Writing and compiling a simple ZK circuit (using the Circom language).
 4. Generating, deploying, and testing a FunC contract to verify a sample ZK‑proof.
 
-## 🟥🟦 Explaining ZK-proofs with a color-focused example
+##  Explaining ZK-proofs with a color-focused example
 
 Before diving into the technical details, let's start with a simple analogy. Imagine you want to prove to a color-blind person that two colors are different. We’ll use an interactive method to demonstrate this. Assume the color-blind person (the verifier) has two identical pieces of paper, one red 🟥 and one blue 🟦.
 
@@ -29,7 +29,7 @@ However, this method is interactive, meaning it requires multiple steps between 
 
 For this tutorial, we’ll focus on zk-SNARKs. However, you can learn more about zk-STARKs on the [StarkWare website](https://starkware.co/stark/), and find a comparison of zk-SNARKs vs. zk-STARKs in this [Panther Protocol blog post](https://blog.pantherprotocol.io/zk-snarks-vs-zk-starks-differences-in-zero-knowledge-technologies/).
 
-### 🎯 zk-SNARK: zero-knowledge succinct non-interactive argument of knowledge
+###  zk-SNARK: zero-knowledge succinct non-interactive argument of knowledge
 
 A zk-SNARK is a non-interactive proof system where the prover submits a single proof to demonstrate that a statement is true. The verifier can then quickly validate the proof. Typically, working with a zk-SNARK involves three main steps:
 
@@ -110,7 +110,7 @@ mkdir -p ./build/circuits
 cd ./build/circuits
 ```
 
-### 💪 Creating a trusted setup with Powers of Tau (PTAU)
+###  Creating a trusted setup with Powers of Tau (PTAU)
 
 Now, it’s time to establish a trusted setup using the [Powers of Tau](https://a16zcrypto.com/posts/article/on-chain-trusted-setup-ceremony/) method. This process may take a few minutes to complete. Let’s get started:
 
@@ -141,7 +141,7 @@ rm pot14_0000.ptau pot14_0001.ptau pot14_0002.ptau pot14_beacon.ptau
 :::
 ```
 
-### 📜 Circuit compilation
+###  Circuit compilation
 
 To compile the circuit, run the following command from the `build/circuits` folder:
 
@@ -158,7 +158,7 @@ The altbn-128 and bls12-381 elliptic curves are currently supported by snarkjs. 
 To check the constraint size of the circuit, run:
 
 ```bash
-node ../../../snarkjs/build/cli.cjs r1cs info circuit.r1cs 
+node ../../../snarkjs/build/cli.cjs r1cs info circuit.r1cs
 ```
 
 Therefore, the correct result should be:
@@ -223,7 +223,7 @@ build
 
 ```
 
-### ✅ Exporting the verifier contract
+###  Exporting the verifier contract
 
 The final step in this section is to generate the FunC verifier contract, which will be used in our ZK project.
 
@@ -233,7 +233,7 @@ node ../../../snarkjs/build/cli.cjs zkey export funcverifier circuit_final.zkey 
 
 Then, the `verifier.fc` file will be generated in the `contracts` folder.
 
-## 🚢 Deploying the verifier contract
+##  Deploying the verifier contract
 
 Now, let's review the `contracts/verifier.fc` file step by step. This file contains the core logic required for ZK-SNARK verification.
 
@@ -426,7 +426,7 @@ Now, we can run the required tests before deploying the contract. The contract m
 npx blueprint test
 ```
 
-## 🧑‍💻 Writing tests for the verifier
+##  Writing tests for the verifier
 
 Let's open the `ZkSimple.spec.ts` file inside the `tests` folder and write a test for the verify function. The test is conducted as follows:
 
@@ -465,9 +465,9 @@ import {buildBls12381, utils} from "ffjavascript";
 const {unstringifyBigInts} = utils;
 ```
 
-- If you run the test, the result will be a TypeScript error because we don't have a declaration file for the modules `snarkjs` and `ffjavascript`. This can be addressed by editing the `tsconfig.json` file in the root of the `simple-zk` folder. Change the `strict` option to `false` in that file.
-
 We'll also need to import the `circuit.wasm` and `circuit_final.zkey` files, which will be used to generate the proof to send to the contract.
+
+- If you run the test, the result will be a TypeScript error, because we don't have a declaration file for the module 'snarkjs' & ffjavascript. This can be addressed by editing the `tsconfig.json` file in the root of the `simple-zk` folder. We'll need to change the **strict** option to **false** in that file
 
 ```ts
 const wasmPath = path.join(__dirname, "../build/circuits", "circuit.wasm");
@@ -492,7 +492,7 @@ it('should verify', async () => {
   var pi_a = Buffer.from(pi_aS, "hex");
   var pi_b = Buffer.from(pi_bS, "hex");
   var pi_c = Buffer.from(pi_cS, "hex");
-  
+
   // todo send the proof to the contract
 });
 ```
@@ -538,8 +538,8 @@ Once we have the proof formatted correctly, we can send it to the contract using
 ```ts
 it('should verify', async () => {
   // proof generation
-  
-  
+
+
   // send the proof to the contract
   const verifier = await blockchain.treasury('verifier');
   const verifyResult = await zkSimple.sendVerify(verifier.getSender(), {
@@ -560,7 +560,7 @@ it('should verify', async () => {
   expect(res).not.toEqual(0); // check proof result
 
   return;
-  
+
 });
 ```
 
@@ -587,7 +587,7 @@ Ran all test suites.
 
 In order to check the repo that contains the code from this tutorial, visit [here](https://github.com/SaberDoTcodeR/zk-ton-doc).
 
-## 🏁 Conclusion
+##  Conclusion
 
 In this tutorial, you have learned:
 
@@ -606,7 +606,7 @@ Note: This tutorial covered a basic ZK use case, but zero-knowledge proofs can p
 
 If you have any questions or run into any errors, feel free to reach out to the author: [@saber_coder](https://t.me/saber_coder)
 
-## 📌 References
+## References
 
 - [TVM upgrade Jul 2023](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07)
 - [snarkjs](https://github.com/iden3/snarkjs)
@@ -614,7 +614,7 @@ If you have any questions or run into any errors, feel free to reach out to the 
 - [Sample ZK on TON](https://github.com/SaberDoTcodeR/ton-zk-verifier)
 - [Blueprint](https://github.com/ton-org/blueprint)
 
-## 📖 See also
+## See also
 
 - [TON trustless bridge EVM contracts](https://github.com/ton-blockchain/ton-trustless-bridge-evm-contracts)
 - [Tonnel network: privacy protocol on TON](https://github.com/saberdotcoder/tonnel-network)

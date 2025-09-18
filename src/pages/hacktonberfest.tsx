@@ -3,34 +3,7 @@ import React from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 
-import ContentBlock from "@site/src/components/contentBlock";
 import './index.module.css'
-
-const content = [
-  {
-    title: "What is Hacktoberfest?",
-    status: "Everyone curious about TON",
-    linkUrl: "/v3/documentation/archive/hacktoberfest-2022",
-    imageUrl: "img/ton_symbol_old.svg",
-    description: "Read more about the event and why it's so cool to start right now!"
-  },
-  {
-    title: "Contribute to TON",
-    status: "Open-source Developer",
-    linkUrl: "/v3/documentation/archive/hacktoberfest-2022/as-contributor",
-    imageUrl: "img/ton_symbol_old.svg",
-    description: "Participate in open-source and receive cool rewards from TON."
-  },
-  {
-    title: "Prepare Repository",
-    status: "Open-source Maintainer",
-    linkUrl: "/v3/documentation/archive/hacktoberfest-2022/as-maintainer",
-    imageUrl: "img/ton_symbol_old.svg",
-    description: "Improve your open-source project with help of active TON community."
-  },
-];
-
-
 
 export default function Home(): JSX.Element {
   const {siteConfig} = useDocusaurusContext();
@@ -45,17 +18,6 @@ export default function Home(): JSX.Element {
         <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Choose your path to start journey:</p>
 
         <div className="container">
-
-          <div id="Get Started" className="row">
-            {content &&
-                            content.length &&
-                            content.map((props, idx) => (
-                              <ContentBlock key={idx} {...props} />
-                            ))}{" "}
-          </div>
-
-          <br/>
-          <br/>
 
           <h1 style={{ fontWeight: '650', textAlign:'center', padding: '0 10px' }}>List of repositories to Contribute 🛠</h1>
           <p style={{ textAlign:'center', fontWeight: '400', fontSize:'18px' }}>Here is a list of repositories in TON Ecosystem who awaits of contributors right now:</p>

@@ -14,7 +14,7 @@ Before we start, there are some terms and concepts that you should be familiar w
 
 - [Message management](/v3/documentation/smart-contracts/message-management/messages-and-transactions), because this is the main functionality of the wallets.
 - [FunC language](/v3/documentation/smart-contracts/func/overview), because we will heavily rely on implementations made using it.
-  :::
+:::
 
 ## Common concept
 
@@ -39,16 +39,16 @@ For detailed specifications of each wallet contract, please refer further down t
 
 | Contract version         | Hash                                     |
 |--------------------------|------------------------------------------|
-| [walletv1r1](#wallet-v1) | `oM/CxIruFqJx8s/AtzgtgXVs7LEBfQd/qqs7tgL2how=` |
-| [walletv1r2](#wallet-v1) | `1JAvzJ+tdGmPqONTIgpo2g3PcuMryy657gQhfBfTBiw=` |
-| [walletv1r3](#wallet-v1) | `WHzHie/xyE9G7DeX5F/ICaFP9a4k8eDHpqmcydyQYf8=` |
-| [walletv2r1](#wallet-v2) | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
-| [walletv2r2](#wallet-v2) | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
-| [walletv3r1](#wallet-v3) | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
-| [walletv3r2](#wallet-v3) | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
-| [walletv4r1](#wallet-v4) | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
-| [walletv4r2](#wallet-v4) | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
-| [walletv5r1](#wallet-v5) | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
+| [V1 R1](#wallet-v1) | `oM/CxIruFqJx8s/AtzgtgXVs7LEBfQd/qqs7tgL2how=` |
+| [V1 R2](#wallet-v1) | `1JAvzJ+tdGmPqONTIgpo2g3PcuMryy657gQhfBfTBiw=` |
+| [V1 R3](#wallet-v1) | `WHzHie/xyE9G7DeX5F/ICaFP9a4k8eDHpqmcydyQYf8=` |
+| [V2 R1](#wallet-v2) | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
+| [V2 R2](#wallet-v2) | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
+| [V3 R1](#wallet-v3) | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
+| [V3 R2](#wallet-v3) | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
+| [V4 R1](#wallet-v4) | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
+| [V4 R2](#wallet-v4) | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
+| [V5 R1](#wallet-v5) | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
 
 </details>
 
@@ -60,7 +60,7 @@ This is the simplest one. It only allows you to send four transactions at a time
 
 Wallet source code:
 
-- [ton/crypto/smartcont/wallet-code.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet.fif)
+- [ton/crypto/smartcont/wallet.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet.fif)
 
 This version isn’t even used in regular apps because it has some major issues:
 
@@ -75,9 +75,9 @@ Nevertheless, because each subsequent version inherits the functionality of the 
 
 | Contract version | Hash                                     |
 |------------------|------------------------------------------|
-| walletv1r1       | `oM/CxIruFqJx8s/AtzgtgXVs7LEBfQd/qqs7tgL2how=` |
-| walletv1r2       | `1JAvzJ+tdGmPqONTIgpo2g3PcuMryy657gQhfBfTBiw=` |
-| walletv1r3       | `WHzHie/xyE9G7DeX5F/ICaFP9a4k8eDHpqmcydyQYf8=` |
+| V1 R1       | `oM/CxIruFqJx8s/AtzgtgXVs7LEBfQd/qqs7tgL2how=` |
+| V1 R2       | `1JAvzJ+tdGmPqONTIgpo2g3PcuMryy657gQhfBfTBiw=` |
+| V1 R3       | `WHzHie/xyE9G7DeX5F/ICaFP9a4k8eDHpqmcydyQYf8=` |
 
 
 #### Persistent memory layout
@@ -91,7 +91,7 @@ Nevertheless, because each subsequent version inherits the functionality of the 
    - <b>signature</b>: 512-bit long Ed25519 signature.
    - <b>msg-seqno</b>: 32-bit long sequence number.
    - <b>(0-4) mode</b>: up to four 8-bit long integers defining sending mode for each message.
-2. Up to 4 references to cells containing messages:
+2. Up to 4 references to cells containing messages.
 
 As you can see, the main functionality of the wallet is to provide a safe way to communicate with TON Blockchain from the outside world. The `seqno` mechanism protects against replay attacks, and the `Ed25519 signature` provides authorized access to wallet functionality. We will not dwell in detail on each of these mechanisms, as they are described in detail in the [external message](/v3/documentation/smart-contracts/message-management/external-messages) documentation page and are quite common among smart contracts receiving external messages. The payload data consists of up to 4 references to cells and the corresponding number of modes, which will be directly transferred to the [send_raw_message(cell msg, int mode)](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message) method.
 
@@ -103,12 +103,12 @@ Note that the wallet doesn't provide any validation for internal messages you se
 
 | Exit code | Description                                    |
 | --------- | ---------------------------------------------- |
-| 0x21      | `seqno` check failed, reply protection occured |
+| 0x21      | `seqno` check failed, replay protection occurred |
 | 0x22      | `Ed25519 signature` check failed               |
 | 0x0       | Standard successful execution exit code.      |
 
 :::info
-Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standard exit codes](/v3/documentation/tvm/tvm-exit-codes) (`0x0` - is one of them), so you can get one of them too, if you run out of [gas](/v3/documentation/smart-contracts/transaction-fees/fees), for example, you will get `0xD` code.
+Note that [TVM](/v3/documentation/tvm/tvm-overview) has [standard exit codes](/v3/documentation/tvm/exit-codes) (`0x0` - is one of them), so you can get one of them too, if you run out of [gas](/v3/documentation/smart-contracts/transaction-fees/fees), for example, you will get `0xD` code.
 :::
 
 #### Get methods
@@ -123,7 +123,7 @@ Wallet source code:
 
 - [ton/crypto/smartcont/wallet-code.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/wallet-code.fc)
 
-This version introduces the `valid_until` parameter, which is used to set a time limit for a transaction in case you don't want it to be confirmed too late. This version also does not have a get-method for the public key, which was added in `V2R2`.
+This version introduces the `valid_until` parameter, which is used to set a time limit for a transaction in case you don't want it to be confirmed too late. This version also does not have a get method for the public key, which was added in `V2R2`.
 
 All differences compared to the previous version are a consequence of adding the `valid_until` functionality. A new exit code was added: `0x23`, marking the failure of the valid_until check. Additionally, a new UNIX-time field has been added to the external message body layout, setting the time limit for the transaction. All get methods remain the same.
 
@@ -131,8 +131,8 @@ All differences compared to the previous version are a consequence of adding the
 
 | Contract version      | Hash                                     |
 |-----------------------|------------------------------------------|
-| walletv2r1 | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
-| walletv2r2 | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
+| V2 R1 | `XJpeaMEI4YchoHxC+ZVr+zmtd+xtYktgxXbsiO7mUyk=` |
+| V2 R2 | `/pUw0yQ4Uwg+8u8LTCkIwKv2+hwx6iQ6rKpb+MfXU/E=` |
 
 #### External message body layout
 
@@ -146,7 +146,7 @@ All differences compared to the previous version are a consequence of adding the
 
 ### Wallet V3 \{#wallet-v3}
 
-This version introduces the `subwallet_id` parameter, which allows you to create multiple wallets using the same public key (so you can have only one seed phrase and multiple wallets). As before, `V3R2` only adds the get-method for the public key.
+This version introduces the `subwallet_id` parameter, which allows you to create multiple wallets using the same public key (so you can have only one seed phrase and multiple wallets). As before, `V3R2` only adds the get method for the public key.
 
 Wallet source code:
 
@@ -159,14 +159,14 @@ Essentially, `subwallet_id` is just a number added to the contract state when it
 
 | Contract version       | Hash                                     |
 |------------------------|------------------------------------------|
-| walletv3r1 | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
-| walletv3r2 | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
+| V3 R1 | `thBBpYp5gLlG6PueGY48kE0keZ/6NldOpCUcQaVm9YE=` |
+| V3 R2 | `hNr6RJ+Ypph3ibojI1gHK8D3bcRSQAKl0JGLmnXS1Zk=` |
 
 
 #### Persistent memory layout
 
 - <b>seqno</b>: 32-bit sequence number.
-- <b>subwallet</b>: 32-bit subwallet ID.
+- <b>subwallet_id</b>: 32-bit subwallet ID.
 - <b>public-key</b>: 256-bit public key.
 
 #### External message body layout
@@ -183,9 +183,9 @@ Essentially, `subwallet_id` is just a number added to the contract state when it
 
 | Exit code | Description                                                             |
 |-----------| ----------------------------------------------------------------------- |
-| 0x23      | `valid_until` check failed; transaction confirmation attempted too late |
+| 0x24      | `valid_until` check failed; transaction confirmation attempted too late |
 | 0x23      | `Ed25519 signature` check failed                                        |
-| 0x21      | `seqno` check failed; reply protection triggered                        |
+| 0x21      | `seqno` check failed; replay protection triggered                        |
 | 0x22      | `subwallet_id` does not match the stored one                            |
 | 0x0       | Standard successful execution exit code.                                |
 
@@ -204,8 +204,8 @@ This feature allows developers to implement complex logic that works in tandem w
 
 | Contract version       | Hash                                     |
 |------------------------|------------------------------------------|
-| walletv4r1 | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
-| walletv4r2 | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
+| V4 R1 | `ZN1UgFUixb6KnbWc6gEFzPDQh4bKeb64y3nogKjXMi0=` |
+| V4 R2 | `/rX/aCDi/w2Ug+fg1iyBfYRniftK5YDIeIZtlZ2r1cA=` |
 
 #### Plugins
 
@@ -226,7 +226,7 @@ All previous versions of wallets had a straightforward implementation for receiv
 - <b>query-id</b>: 64-bit long integer. This field has no effect on the smart contract's behavior; it is used to track chains of messages between contracts.
 
 1. opcode = 0x706c7567, request funds operation code.
-   - <b>toncoins</b>: VARUINT16 amount of requested toncoins.
+   - <b>Toncoin</b>: VARUINT16 amount of requested Toncoin.
    - <b>extra_currencies</b>: dictionary containing the amount of requested extra currencies (may be empty).
 2. opcode = 0x64737472, request removal of plugin-sender from the "allowed list".
 
@@ -235,20 +235,20 @@ All previous versions of wallets had a straightforward implementation for receiv
 - <b>signature</b>: 512-bit long Ed25519 signature.
 - <b>subwallet_id</b>: 32-bit long subwallet ID.
 - <b>valid-until</b>: 32-bit long Unix time integer.
- - <b>msg-seqno</b>: 32-bit long sequence number.
- - <b>opcode</b>: 32-bit long operation code.
+- <b>msg-seqno</b>: 32-bit long sequence number.
+- <b>opcode</b>: 32-bit long operation code.
 
 1. opcode = 0x0, simple send.
    - <b>(0-4) mode</b>: up to four 8-bit integers defining the sending mode for each message.
-   - <b>(0-4)messages</b>: up to four references to cells containing messages.
+   - <b>(0-4) messages</b>: up to four references to cells containing messages.
 2. opcode = 0x1, deploy and install plugin.
    - <b>workchain</b>: 8-bit long integer.
-   - <b>balance</b>: VARUINT16 toncoins amount of initial balance.
+   - <b>balance</b>: VARUINT16 Toncoin amount of initial balance.
    - <b>state_init</b>: cell reference containing plugin initial state.
    - <b>body</b>: cell reference containing body.
 3. opcode = 0x2/0x3, install plugin/remove plugin.
-   - <b>wc_n_address</b>: 8-bit long workchain_id + 256-bit long plugin address.
-   - <b>balance</b>: VARUINT16 toncoins amount of initial balance.
+   - <b>wc_n_address</b>: 8-bit long compact workchain ID specific to this layout + 256-bit long plugin address.
+   - <b>balance</b>: VARUINT16 Toncoin amount of initial balance.
    - <b>query-id</b>: 64-bit long integer.
 
 As you can see, the fourth version still provides standard functionality through the `0x0` opcode, similar to previous versions. The `0x2` and `0x3` operations allow manipulation of the plugin dictionary. Note that in the case of `0x2`, you need to deploy the plugin with that address yourself. In contrast, the `0x1` opcode also handles the deployment process with the `state_init` field.
@@ -256,8 +256,9 @@ As you can see, the fourth version still provides standard functionality through
 :::tip
 If `state_init` doesn't make much sense from its name, take a look at the following references:
 
-- [addresses-in-ton-blockchain](/v3/documentation/smart-contracts/addresses#workchain-id-and-account-id)
+- [addresses-in-ton-blockchain](/v3/documentation/smart-contracts/addresses/address)
 - [send-a-deploy-message](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-deploy-message-with-stateinit-only-with-stateinit-and-body)
+- [Account ID](/v3/documentation/smart-contracts/addresses/address#account-id)
 - [internal-message-layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout)
 :::
 
@@ -267,7 +268,7 @@ If `state_init` doesn't make much sense from its name, take a look at the follow
 |-----------| ----------------------------------------------------------------------- |
 | 0x24      | `valid_until` check failed, transaction confirmation attempted too late |
 | 0x23      | `Ed25519 signature` check failed                                        |
-| 0x21      | `seqno` check failed, reply protection triggered                        |
+| 0x21      | `seqno` check failed, replay protection triggered                        |
 | 0x22      | `subwallet_id` does not match the stored one                            |
 | 0x27      | Plugins dictionary manipulation failed (0x1-0x3 recv_external opcodes) |
 | 0x50      | Not enough funds for the funds request                                  |
@@ -278,7 +279,7 @@ If `state_init` doesn't make much sense from its name, take a look at the follow
 1. int seqno() returns current stored seqno.
 2. int get_public_key() returns current stored public key.
 3. int get_subwallet_id() returns current subwallet ID.
-4. int is_plugin_installed(int wc, int addr_hash) checks if plugin with defined workchain ID and address hash is installed.
+4. int is_plugin_installed(int wc, int addr_hash) checks if plugin with defined workchain_id and address hash is installed.
 5. tuple get_plugin_list() returns list of plugins.
 
 
@@ -294,7 +295,7 @@ sources={{
     }}
 />
 <br></br>
-The V5 wallet standard offers many benefits that improve the experience for both users and merchants. V5 supports gas-free transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers. In addition to retaining the previous functionality (V4), the new contract allows you to send up to 255 messages at a time.
+The V5 wallet standard offers many benefits that improve the experience for both users and merchants. V5 supports gasless transactions, account delegation and recovery, subscription payments using tokens and Toncoin, and low-cost multi-transfers. In addition to retaining the previous functionality (V4), the new contract allows you to send up to 255 messages at a time.
 
 Wallet source code:
 
@@ -305,19 +306,19 @@ TL-B scheme:
 - [ton-blockchain/wallet-contract-v5/types.tlb](https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb)
 
 :::caution
-In contrast to the specifications of previous wallet versions, we will rely on the [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) scheme, due to the relative complexity of this wallet version's interface implementation. We will provide a brief description for each. Nevertheless, a basic understanding is still required; in combination with the wallet source code, it should be enough.
+In contrast to the specifications of previous wallet versions, we will rely on the [TL-B](/v3/documentation/data-formats/tlb/overviewe) scheme, due to the relative complexity of this wallet version's interface implementation. We will provide a brief description for each. Nevertheless, a basic understanding is still required; in combination with the wallet source code, it should be enough.
 :::
 
 #### Official code hash
 
 | Contract version       | Hash                                     |
 |------------------------|------------------------------------------|
-| walletv5r1 | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
+| V5 R1 | `IINLe3KxEhR+Gy+0V7hOdNGjDwT3N9T2KmaOlVLSty8=` |
 
 
 #### Persistent memory layout
 
-```
+```tlb
 contract_state$_
     is_signature_allowed:(## 1)
     seqno:#
@@ -330,7 +331,7 @@ As you can see, the `ContractState`, compared to previous versions, hasn't under
 
 #### Authentication process
 
-```
+```tlb
 signed_request$_             // 32 (opcode from outer)
   wallet_id:    #            // 32
   valid_until:  #            // 32
@@ -350,7 +351,7 @@ external_signed#7369676e signed:SignedRequest = ExternalMsgBody;
 
 Before we get to the actual payload of our messages — `InnerRequest` — let's first look at how version 5 differs from previous versions in the authentication process. The `InternalMsgBody` combinator describes two ways to access wallet actions through internal messages. The first method is one we are already familiar with from version 4: authentication as a previously registered extension, the address of which is stored in `extensions_dict`. The second method is authentication through the stored public key and signature, similar to external requests.
 
-At first, this might seem like an unnecessary feature, but it actually enables requests to be processed through external services (smart contracts) that are not part of your wallet's extension infrastructure—a key feature of V5. Gas-free transactions rely on this functionality.
+At first, this might seem like an unnecessary feature, but it actually enables requests to be processed through external services (smart contracts) that are not part of your wallet's extension infrastructure — a key feature of V5. Gasless transactions rely on this functionality.
 
 Note that simply receiving funds is still an option. Practically, any received internal message that doesn't pass the authentication process will be considered a transfer.
 
@@ -358,7 +359,7 @@ Note that simply receiving funds is still an option. Practically, any received i
 
 The first thing that we should notice is `InnerRequest`, which we have already seen in the authentication process. In contrast to the previous version, both external and internal messages have access to the same functionality, except for changing the signature mode (i.e., the `is_signature_allowed` flag).
 
-```
+```tlb
 out_list_empty$_ = OutList 0;
 out_list$_ {n:#}
     prev:^(OutList n)
@@ -388,7 +389,7 @@ Note that the maximum number of actions is 255; this is a consequence of the rea
 | Exit code | Description                                                                       |
 |-----------| --------------------------------------------------------------------------------- |
 | 0x84      | Authentication attempt through signature while it's disabled                      |
-| 0x85      | `seqno` check failed, reply protection occurred                                   |
+| 0x85      | `seqno` check failed, replay protection occurred                                   |
 | 0x86      | `wallet_id` does not correspond to the stored one                                 |
 | 0x87      | `Ed25519 signature` check failed                                                  |
 | 0x88      | `valid-until` check failed                                                        |
@@ -413,7 +414,7 @@ Note that the `0x8E`, `0x90`, and `0x92` wallet exit codes are designed to preve
 
 1. int is_signature_allowed() returns stored `is_signature_allowed` flag.
 2. int seqno() returns current stored seqno.
-3. int get_subwallet_id() returns current subwallet ID.
+3. int get_wallet_id() returns current wallet ID.
 4. int get_public_key() returns current stored public key.
 5. cell get_extensions() returns extensions dictionary.
 
@@ -421,10 +422,10 @@ Note that the `0x8E`, `0x90`, and `0x92` wallet exit codes are designed to preve
 
 As was said, before v5, the wallet smart contract allowed the processing of internal messages signed by the owner. This also allows you to make gasless transactions, e.g., payment of network fees when transferring USDt in USDt itself. The common scheme looks like this:
 
-![image](/img/gasless.jpg)
+![Gasless transaction flow diagram](/img/gasless.jpg)
 
 :::tip
-Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in TONs on behalf of the user, but charge a fee in tokens.
+Consequently, there will be services (such as [Tonkeeper's Battery](https://blog.ton.org/tonkeeper-releases-huge-update#tonkeeper-battery)) that provide this functionality: they pay the transaction fees in Toncoin on behalf of the user, but charge a fee in tokens.
 :::
 
 #### Flow
@@ -457,7 +458,7 @@ If you, for some reason, need to lock coins in a wallet for some time without th
 
 It allows you to set the time until which you won't be able to withdraw anything from the wallet. You can also customize it by setting unlock periods so that you will be able to spend some coins during these set periods.
 
-For example: you can create a wallet which will hold 1 million coins with total vesting time of 10 years. Set the cliff duration to one year, so the funds will be locked for the first year after the wallet is created. Then, you can set the unlock period to one month, so `1'000'000 TON / 120 months = ~8333 TON` will unlock every month.
+For example: you can create a wallet which will hold 1 million coins with total vesting time of 10 years. Set the cliff duration to one year, so the funds will be locked for the first year after the wallet is created. Then, you can set the unlock period to one month, so `1'000'000 Toncoin / 120 months = ~8333 Toncoin` will unlock every month.
 
 Wallet source code:
 
@@ -473,7 +474,7 @@ Wallet source code:
 
 ## Conclusion
 
-As you see, there are many different versions of wallets in TON. But in most cases, you only need `V3R2` or `V4R2`. You can also use one of the special wallets if you want to have some additional functionality like a periodic unlocking of funds.
+As you see, there are many different versions of wallets in TON. For new deployments, prefer `V5`. Use `V3R2` or `V4R2` only for legacy compatibility or specific constraints. You can also use one of the special wallets if you want additional functionality like periodic unlocking of funds.
 
 ## See also
 
