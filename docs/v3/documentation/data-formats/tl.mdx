@@ -7,13 +7,13 @@ TL (Type Language) is a language used to describe data structures.
 
 TL operates on 32-bit blocks, meaning the data size in TL must always be a multiple of 4 bytes. If the object's size is not a multiple of 4, zero padding must be added to make it align with a 4-byte boundary.
 
-Numbers are always encoded in Little Endian order.
+In TL, numbers are encoded in little-endian order.
 
 For more details on TL, refer to the [Telegram documentation](https://core.telegram.org/mtproto/TL).
 
 
-## Encoding bytes array
-To encode a byte array, we first determine its size. If the array is less than 254 bytes, the size is encoded using a single byte. If the array size exceeds 254 bytes, the first byte is set to `0xFE` to indicate an oversized array, followed by a 3-byte size field.
+## Encoding a byte array
+To encode a byte array, we first determine its size. If the array is less than 254 bytes, the size is encoded using a single byte. If the array size is ≥ 254 bytes, the first byte is `0xFE`, followed by a 3‑byte little-endian length.
 
 For example, to encode the array `[0xAA, 0xBB]` with size 2, we use 1 byte for the size, followed by the data itself, resulting in `[0x02, 0xAA, 0xBB]`. However, the total size is 3 bytes, which is not a multiple of 4. Therefore, we add 1 byte of padding to align it to 4 bytes, resulting in `[0x02, 0xAA, 0xBB, 0x00]`.
 
@@ -34,13 +34,13 @@ pub.overlay name:bytes = PublicKey;
 
 Consider the following scenario: if `PublicKey` is specified within the schema like this:
 
-```
+```tlb
 adnl.node id:PublicKey addr_list:adnl.addressList = adnl.Node;
 ```
 
 Since the type is not explicitly defined, it needs to be serialized with an ID prefix (boxed). However, if the schema is specified as follows:
 
-```
+```tlb
 adnl.node id:pub.ed25519 addr_list:adnl.addressList = adnl.Node;
 ```
 
@@ -48,6 +48,6 @@ The type is explicitly specified, so the prefix is not needed.
 
 ## Reference
 
-[Link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/TL.md) - _[Oleg Baranov](https://github.com/xssnick)_.
-<Feedback />
+- Link to the original article](https://github.com/xssnick/ton-deep-doc/blob/master/TL.md) - _[Oleg Baranov](https://github.com/xssnick)_.
 
+<Feedback />

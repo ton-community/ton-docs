@@ -14,7 +14,7 @@ During product development, various questions often arise regarding interactions
 
 ### How to convert between user-friendly and raw addresses, assemble, and extract them from strings?
 
-TON addresses uniquely identify contracts on TON Blockchain, indicating their workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses) are: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
+TON addresses uniquely identify contracts on TON Blockchain, indicating their workchain and original state hash. [Two common formats](/v3/documentation/smart-contracts/addresses/address-formats) are: **raw** (workchain and HEX-encoded hash separated by the ":" character) and **user-friendly** (base64-encoded with certain flags).
 
 ```
 User-friendly: EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
@@ -55,7 +55,7 @@ To obtain a TON address object from a string in your SDK, you can use the follow
     console.log(address1.toString(true, true, true)); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
     console.log(address1.toString(false)); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
 
-    console.log(address1.toString(true, true, true)); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
+    console.log(address2.toString(true, true, true)); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
     console.log(address2.toString(false)); // 0:ca6e321c7cce9ecedf0a8ca2492ec8592494aa5fb5ce0387dff96ef6af982a3e
     ```
   </TabItem>
@@ -107,7 +107,7 @@ To obtain a TON address object from a string in your SDK, you can use the follow
 
 ### Flags in user-friendly addresses
 
-There are two flags in user-friendly addresses: **bounceable**/**non-bounceable** and **testnet**/**any-net**. These flags are represented in the first character of the address, which corresponds to the first 6 bits of the address encoding. These flags can be detected by looking at the first character, according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
+There are two flags in user-friendly addresses: **bounceable**/**non-bounceable** and **Testnet-only**. These flags are represented in the first character of the address, which corresponds to the first 6 bits of the address encoding. These flags can be detected by looking at the first character, according to [TEP-2](https://github.com/ton-blockchain/TEPs/blob/master/text/0002-address.md#smart-contract-addresses):
 
 | Address beginning | Binary form | Bounceable | Testnet-only |
 | :---------------: | :---------: | :--------: | :----------: |
@@ -129,8 +129,8 @@ Also, in some libraries, you may notice a serialization parameter called `urlSaf
 
     const address = Address.parse('EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF');
 
-    // toStrings arguments: urlSafe, bounceable, testOnly
-    // defaults values: true, true, false
+    // toString arguments: urlSafe, bounceable, testOnly
+    // default values: true, true, false
 
     console.log(address.toString()); // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
     console.log(address.toString({urlSafe: false})) // EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff+W72r5gqPrHF
@@ -302,6 +302,7 @@ Most SDKs follow a similar process for sending messages from your wallet:
   <TabItem value="js-ton-v4" label="JS (@ton) for Wallet V4">
     ```ts
     import { TonClient, WalletContractV4, internal } from "@ton/ton";
+    import { toNano } from "@ton/core";
     import { mnemonicNew, mnemonicToPrivateKey } from "@ton/crypto";
 
     const client = new TonClient({
@@ -324,7 +325,7 @@ Most SDKs follow a similar process for sending messages from your wallet:
       seqno,
       secretKey: keyPair.secretKey,
       messages: [internal({
-        value: '1',
+        value: toNano('1'),
         to: 'EQCD39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2N',
         body: 'Example transfer body',
       })]
@@ -402,7 +403,7 @@ Most SDKs follow a similar process for sending messages from your wallet:
                     storeBytes("Comment".toByteArray())
                 }
             )
-            sendMode = 0
+            sendMode = 3
         })
     }
     ```
@@ -435,7 +436,7 @@ Most SDKs follow a similar process for sending messages from your wallet:
   </TabItem>
 </Tabs>
 
-### Writing comments: long strings in snake format
+### Writing comments: long strings in snake cells
 
 Sometimes, it's necessary to store large strings in cells, but the maximum size for a cell is 1023 bits. In these cases, you can use snake cells, which reference other cells recursively.
 
@@ -458,7 +459,7 @@ Sometimes, it's necessary to store large strings in cells, but the maximum size 
     }
 
     function readStringTail(slice) {
-        const str = new TextDecoder('ascii').decode(slice.array); // decode uint8array to string
+        const str = new TextDecoder('utf-8').decode(slice.array); // decode uint8array to string
         if (slice.refs.length > 0) {
             return str + readStringTail(slice.refs[0]); // read next cell
         } else {
@@ -889,7 +890,7 @@ However, if you know the jetton wallet code and storage structure, you can calcu
 
     ```
 
-    Read the simple example [here](/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py).
+    Read the simple example [here](/static/example-code-snippets/pythoniq/jetton-offline-address-calc-wrapper.py).
   </TabItem>
 </Tabs>
 
@@ -905,7 +906,7 @@ When constructing a message for a jetton transfer, refer to [TEP-74](https://git
 
 <div class="text--center">
   <ThemedImage
-    alt=""
+    alt="Jetton transfer message flow diagram"
     sources={{
   light: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5.svg?raw=true',
   dark: '/img/docs/ecosystem-messages-layout/ecosystem_messages_layout_5_dark.svg?raw=true',
@@ -973,7 +974,7 @@ Of course, one can always do calculation in indivisible units.
                 apiKey: '<YOUR_API_KEY>'
             })
         );
-        const destinationAddress = new TonWeb.Address('put destination wallet address');
+        const destinationAddress = new TonWeb.utils.Address('put destination wallet address');
 
         const forwardPayload = new TonWeb.boc.Cell();
         forwardPayload.bits.writeUint(0, 32); // 0 opcode means we have a comment
@@ -989,7 +990,8 @@ Of course, one can always do calculation in indivisible units.
         const jettonTransferBody = new TonWeb.boc.Cell();
         jettonTransferBody.bits.writeUint(0xf8a7ea5, 32); // opcode for jetton transfer
         jettonTransferBody.bits.writeUint(0, 64); // query id
-        jettonTransferBody.bits.writeCoins(new TonWeb.utils.BN('5')); // jetton amount, amount * 10^9
+        // jetton amount must be scaled by token decimals (commonly 9)
+        jettonTransferBody.bits.writeCoins(TonWeb.utils.toNano('5')); // example: 5 tokens with 9 decimals
         jettonTransferBody.bits.writeAddress(destinationAddress);
         jettonTransferBody.bits.writeAddress(destinationAddress); // response destination
         jettonTransferBody.bits.writeBit(false); // no custom payload
@@ -1247,8 +1249,8 @@ Changing the owner of a collection is simple. Specify the `opcode = 3`, any `que
                 apiKey: '<YOUR_API_KEY>'
             })
         );
-        const collectionAddress  = new TonWeb.Address('put your collection address');
-        const newOwnerAddress = new TonWeb.Address('put new owner wallet address');
+        const collectionAddress  = new TonWeb.utils.Address('put your collection address');
+        const newOwnerAddress = new TonWeb.utils.Address('put new owner wallet address');
 
         const messageBody  = new TonWeb.boc.Cell();
         messageBody.bits.writeUint(3, 32); // opcode for changing owner
@@ -1358,10 +1360,10 @@ Often, the collection's metadata is stored in a format similar to `0.json` and c
                 apiKey: '<YOUR_API_KEY>'
             })
         );
-        const collectionAddress  = new TonWeb.Address('put your collection address');
-        const newCollectionMeta = 'put url fol collection meta';
+        const collectionAddress  = new TonWeb.utils.Address('put your collection address');
+        const newCollectionMeta = 'put url for collection meta';
         const newNftCommonMeta = 'put common url for nft meta';
-        const royaltyAddress = new TonWeb.Address('put royalty address');
+        const royaltyAddress = new TonWeb.utils.Address('put royalty address');
 
         const collectionMetaCell = new TonWeb.boc.Cell();
         collectionMetaCell.bits.writeUint(1, 8); // we have off-chain metadata
@@ -1787,7 +1789,8 @@ Below is an example on how you can fetch 5 most recent transactions on any block
 <Tabs groupId="code-examples">
   <TabItem value="js-ton" label="JS (@ton)">
     ```js
-    import { Address, TonClient, beginCell, fromNano } from '@ton/ton';
+    import { Address, beginCell, fromNano } from '@ton/core';
+    import { TonClient } from '@ton/ton';
 
     async function main() {
         const client = new TonClient({
@@ -2104,7 +2107,7 @@ Create a listener function that will assert specific transaction on certain acco
                     const inBOC = inMsg?.body;
                     if (typeof inBOC === 'undefined') {
 
-                        reject(new Error('Invalid external'));
+                        throw new Error('Invalid external');
                         continue;
                     }
                     const extHash = Cell.fromBase64(exBoc).hash().toString('hex')
