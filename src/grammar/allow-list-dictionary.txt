@@ -46,6 +46,7 @@ EvaCodes
 Everscale
 Excno
 Extracurrency
+ffjavascript
 FIFTPATH
 Fift
 Fullnode
