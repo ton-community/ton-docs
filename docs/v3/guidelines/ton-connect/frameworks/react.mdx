@@ -17,9 +17,9 @@ npm i @tonconnect/ui-react
 
 ### Set up TON Connect
 
-After installing the package, you should create a `manifest.json` file for your application. More information on creating a manifest.json file can be found [here](/v3/guidelines/ton-connect/creating-manifest).
+After installing the package, you should create a `tonconnect-manifest.json` file for your application. More information on creating a `tonconnect-manifest.json` file can be found [here](/v3/guidelines/ton-connect/creating-manifest).
 
-After creating the manifest file, import `TonConnectUIProvider` into the root of your Mini App and pass the manifest URL:
+After creating the manifest file, import `TonConnectUIProvider` into the root of your app and pass the manifest URL:
 
 ```tsx
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
@@ -53,9 +53,9 @@ export const Header = () => {
 
 The `TonConnectButton` is a universal UI component for initializing a connection. After the wallet is connected, it transforms into a wallet menu. Place the **Connect** button in the top right corner of your app.
 
-You can add the `className` and style props to the button:
+You can add the `className` and `style` props to the button:
 
-```js
+```tsx
 <TonConnectButton className="my-button-class" style={{ float: "right" }}/>
 ```
 
@@ -81,12 +81,20 @@ export const Header = () => {
 
 #### Connect with a specific wallet
 
-To open a modal window for a specific wallet, use the `openSingleWalletModal()` method. This method takes the wallet's `app_name` as a parameter (refer to the [wallets-list.json](https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json) file) and opens the corresponding wallet modal. It returns a promise that resolves once the modal window opens successfully.
+To open a modal window for a specific wallet, use the `openSingleWalletModal()` method. This method takes the wallet's `app_name` as a parameter (refer to the [wallets-v2.json](https://github.com/ton-blockchain/wallets-list/blob/main/wallets-v2.json) file) and opens the corresponding wallet modal.
 
 ```tsx
-<button onClick={() => tonConnectUI.openSingleWalletModal('tonwallet')}>
-  Connect Wallet
-</button>
+import { useTonConnectUI } from '@tonconnect/ui-react';
+
+export const ConnectSpecificWallet = () => {
+  const [tonConnectUI] = useTonConnectUI();
+
+  return (
+    <button onClick={() => tonConnectUI.openSingleWalletModal('tonwallet')}>
+      Connect Wallet
+    </button>
+  );
+};
 ```
 
 ### Redirects
@@ -101,13 +109,13 @@ If you want to redirect the user to a [Telegram Mini App](/v3/guidelines/dapps/t
       <TonConnectUIProvider
             // ... other parameters
           actionsConfiguration={{
-              twaReturnUrl: 'https://t.me/<YOUR_APP_NAME>'
+              twaReturnUrl: 'https://t.me/YOUR_APP_NAME'
           }}
       >
       </TonConnectUIProvider>
 ```
 
-[Open example on GitHub](https://github.com/ton-connect/demo-dapp-with-wallet/blob/master/src/App.tsx)
+[Open example on GitHub](https://github.com/ton-connect/demo-dapp-with-react-ui)
 
 ### UI customization
 
@@ -119,7 +127,7 @@ If you want to use some low-level TON Connect UI SDK features in your React app,
 
 ### useTonAddress
 
-Use it to get the user's current TON wallet address. Pass the boolean parameter `isUserFriendly` to choose the address format, where the `isUserFriendly` is `true` by default. The hook will return an empty string if the wallet is not connected.
+Use it to get the user's current TON wallet address. Pass the boolean parameter `isUserFriendly` to choose the address format, where `isUserFriendly` is `true` by default. The hook will return an empty string if the wallet is not connected.
 
 ```tsx
 import { useTonAddress } from '@tonconnect/ui-react';
@@ -193,7 +201,7 @@ export const Wallet = () => {
 
 ### useTonConnectUI
 
-Access the `TonConnectUI` instance and update the UI options function.
+Access the `TonConnectUI` instance and a function to update UI options.
 
 [See more about TonConnectUI instance methods](https://github.com/ton-connect/sdk/tree/main/packages/ui#send-transaction)
 
@@ -248,11 +256,11 @@ Let's look at how to use the React UI SDK in practice.
 
 Send Toncoin to a specific address:
 
-```js
+```ts
 import { useTonConnectUI } from '@tonconnect/ui-react';
 
 const transaction: SendTransactionRequest = {
-  validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes
+  validUntil: Math.floor(Date.now() / 1000) + 600, // 5 minutes
   messages: [
     {
       address:
@@ -399,7 +407,7 @@ Deploying a contract using TON Connect is pretty straightforward. You must:
 
 - Obtain the contract `code` and `data`
 - Store them as a `stateInit` cell
-- Send a transaction using the `statement` field provided
+- Send a transaction using the `stateInit` field provided
 
 Note that `CONTRACT_CODE` and `CONTRACT_INIT_DATA` may be found in wrappers.
 
@@ -420,7 +428,7 @@ const stateInit = beginCell()
 const address = contractAddress(0, init);
 
 await tonConnectUI.sendTransaction({
-    validUntil: Date.now() + 5 * 60 * 1000, // 5 minutes
+    validUntil: Math.floor(Date.now() / 1000) + 600, // 5 minutes
     messages: [
         {
             address: address.toRawString(),
@@ -465,7 +473,7 @@ Let's take a look at the default `Blueprint` counter wrapper example and how we 
       increase: 0x7e8764ef,
   };
 
-  export class Counter implements contract {
+  export class Counter implements Contract {
       constructor(
           readonly address: Address,
           readonly init?: { code: Cell; data: Cell },
@@ -607,7 +615,6 @@ Let's take a look at the default `Blueprint` counter wrapper example and how we 
       // Use the TonConnect UI to send the message and wait for the sending
       await this.provider.sendTransaction({
         validUntil: validUntil,
-        from: from,
         messages: [
           {
             address: address,
@@ -688,7 +695,7 @@ This SDK provides wrappers that simplify interaction with these assets. Please c
 
 ## API documentation
 
-[Latest API documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui_react.html)
+[Latest API documentation](https://ton-connect.github.io/sdk/modules/_tonconnect_ui-react.html)
 
 ## Examples
 
