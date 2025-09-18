@@ -2,7 +2,7 @@ import Feedback from '@site/src/components/Feedback';
 
 # Statements
 
-This section briefly overviews FunC statements, which form the core of function bodies.
+This section provides a brief overview of FunC statements, which form the core of function bodies.
 
 ## Expression statements
 The most common type of statement is the expression statement—an expression followed by `;`. As a rule, all sub-expressions are evaluated from left to right, 
@@ -85,7 +85,7 @@ int x = foo(1, 2, 3);
 ```
 
 However, unlike many conventional languages, FunC treats functions as taking a single argument. 
-In the example above, `foo` is a function that takes one tuple argument of type `(int, int, int)`.
+In the example above, `foo` is a function that takes one tuple argument of type `(int, int, int)` (see [Functions → Argument tensor representation](/v3/documentation/smart-contracts/func/docs/functions#function-arguments)).
 
 **Function composition**
 
@@ -101,8 +101,6 @@ This is equivalent to the longer form:
 (int a, int b, int c) = bar(42);
 int x = foo(a, b, c);
 ```
-
-
 
 Also Haskell-style calls are possible, but not always (to be fixed later):
 
@@ -128,11 +126,11 @@ int y = foo (1) (2) (3); ;; Valid syntax
 ### Lambda expressions
 Lambda expressions are not yet supported in FunC.
 
-### Methods calls
+### Method calls
 
 #### Non-modifying methods
 
-In FunC, a function with at least one argument can be called a non-modifying method using the dot `.` syntax.
+In FunC, a function with at least one argument can be invoked as a non‑modifying method using the dot `.` syntax.
 
 For example, the function `store_uint` has the type `(builder, int, int)  → builder`, where:
 - The first argument is a builder object.
@@ -186,7 +184,7 @@ This function takes a cell slice and a number of bits to load, returning the rem
 int x = cs~load_uint(8);
 ```
 
-Without return values
+#### Modifying methods with no return value
 Sometimes, a function can be used as a modifying method even when it doesn’t return a meaningful value—only modifying its first argument. 
 This can be achieved using unit types.
 
@@ -313,7 +311,7 @@ Supports simple assignment `=` and compound assignment operators: `+=`, `-=`, `*
 FunC supports `repeat`, `while`, and `do { ... } until` loops. The `for` loop is not supported.
 
 ### Repeat loop
-The `repeat` loop uses the `repeat` keyword followed by an `int`  expression. It executes the code a specified number of times.
+The `repeat` loop uses the `repeat` keyword followed by an `int` expression. It executes the code a specified number of times.
 
 **Examples:**
 ```func
@@ -368,9 +366,6 @@ do {
 ;; x = 51
 ```
 
-
-
-
 ## If statements
 
 **Examples**
@@ -384,7 +379,6 @@ if (flag) {
 
 Negated condition, which is equivalent to `if` (`~flag`):
 ```func
-
 ifnot (flag) {
   do_something();
 }
@@ -423,8 +417,10 @@ If an error occurs, all changes made within the `try` block are completely rolle
 - `n`: the error code, an integer
 
 
-Unlike many other languages, in FunC, all changes are **undone** if an error occurs inside the `try` block. These modifications include updates to local and global variables and changes to storage registers (`c4` for storage, `c5`for action/messages, `c7` for context, etc.). 
+Unlike many other languages, in FunC, all changes are **undone** if an error occurs inside the `try` block. These modifications include updates to local and global variables and changes to storage registers (`c4` for storage, `c5` for action/messages, `c7` for context, etc.). 
 Any contract storage updates and outgoing messages are also reverted.
+
+For register details, see [stdlib → commit](/v3/documentation/smart-contracts/func/docs/stdlib#commit) for `c4`/`c5` and [Global variables](/v3/documentation/smart-contracts/func/docs/global_variables) for `c7`.
 
 However, certain TVM state parameters are not rolled back, such as:
 - Codepage settings
@@ -489,4 +485,3 @@ In this example, the inner block introduces a new `builder` variable named `x`, 
 The outer `x` remains unchanged and can be used after the block ends.
 
 <Feedback />
-
