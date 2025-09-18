@@ -33,8 +33,9 @@ import TabItem from '@theme/TabItem';
             .storeAddress(Address.parse("NEW_OWNER_WALLET")) // new_owner:MsgAddress
             .storeAddress(Address.parse("WALLET_DST"))       // response_destination:MsgAddress
             .storeUint(0, 1)                         // custom_payload:(Maybe ^Cell)
-            .storeCoins(toNano('0.0001'))            // forward_amount:(VarUInteger 16)
+            .storeCoins(toNano('0.001'))             // forward_amount:(VarUInteger 16)
             .storeUint(0, 1)                         // forward_payload:(Either Cell ^Cell)
+
             .endCell();
     ```
 

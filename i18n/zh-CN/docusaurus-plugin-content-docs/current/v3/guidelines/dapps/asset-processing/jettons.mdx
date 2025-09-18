@@ -31,7 +31,7 @@ TON 交易只需确认一次就不可逆转。为获得最佳用户体验/用户
 ### 其他信息
 
 :::caution 交易通知
-在进行 jetton 提取时，生态系统中的每项服务都应将 `forward_ton_amount` 设置为 0.000000001  TON （1  nanotons  ），以便在[成功转账](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407) 时发送 Jetton 通知，否则转账将不符合标准，其他 CEX 和服务将无法处理。
+在进行 jetton 提取时，生态系统中的每项服务都应将 `forward_ton_amount` 设置为 0.001 TON，以便在[成功转账](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407) 时发送 Jetton 通知，否则转账将不符合标准，其他 CEX 和服务将无法处理。
 :::
 
 - 请参见 JS 库示例 - [tonweb](https://github.com/toncenter/tonweb)  - 这是 TON 基金会的官方 JS 库。
@@ -307,15 +307,13 @@ Jetton 钱包和 TON 钱包之间通过以下通信顺序进行通信：
 
 要发送**评论**，您需要设置 "转发有效载荷"。将 **前 32 位设置为 0x0**，并附加 **您的文本**，"前向有效载荷 "将在 `jetton notify 0x7362d09c` 内部信息中发送。只有当 `forward_ton_amount` > 0 时才会生成。
 :::info
-建议带注释的 jetton 传输的 `forward_ton_amount` 为 1  nanotons  。
+建议带注释的 jetton 传输的 `forward_ton_amount` 为 0.001 TON。
 :::
 
 最后，要获取 `Excess 0xd53276db` 信息，必须设置 `response destination`。
 
 有时，您在发送 jetton 时可能会遇到 `709` 错误。该错误表示信息所附的 Toncoin 数量不足以发送信息。请确保 `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`，这通常>0.04，除非转发的有效载荷非常大。佣金取决于多种因素，包括 Jetton 代码详情以及是否需要为收款人部署新的 Jetton 钱包。
-建议在消息中添加一定数量的 Toncoin 作为余量，并将您的地址设置为 `response_destination`，以便接收 `Excess 0xd53276db` 消息。例如，您可以向消息中添加 0.05 TON，同时将 `forward_ton_amount` 设置为 1 nanoton（此 TON 数量将附加到 `jetton notify 0x7362d09c` 消息中）。
-
-你也可能会遇到 [`cskip_no_gas`](/v3/documentation/tvm/tvm-overview#compute-phase-skipped) 错误，它表示成功转移了 jetton，但没有执行其他计算。当 `forward_ton_amount` 的值等于 1  nanotons  时，这种情况很常见。
+建议在消息中添加一定数量的 Toncoin 作为余量，并将您的地址设置为 `response_destination`，以便接收 `Excess 0xd53276db` 消息。例如，您可以向消息中添加 0.05 TON，同时将 `forward_ton_amount` 设置为 0.001 TON（此 TON 数量将附加到 `jetton notify 0x7362d09c` 消息中）。
 
 :::tip
 查看 [最佳实践](/v3/guidelines/dapps/asset-processing/jettons#best-practices) 中的 *"发送带注释的 jettons"* 示例。
@@ -364,7 +362,7 @@ TON 交易只需确认一次就不可逆转。为获得最佳用户体验，建�
 :::
 
 :::caution 交易通知
-在进行 jetton 提取时，生态系统中的每项服务都应将 `forward_ton_amount` 设置为 0.000000001  TON （1  nanotons  ），以便在[成功转账](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407) 时发送 Jetton 通知，否则转账将不符合标准，其他 CEX 和服务将无法处理。
+在进行 jetton 提取时，生态系统中的每项服务都应将 `forward_ton_amount` 设置为 0.001 TON ，以便在[成功转账](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407) 时发送 Jetton 通知，否则转账将不符合标准，其他 CEX 和服务将无法处理。
 :::
 
 在这种情况下，支付服务会为每个发件人创建一个唯一的 memo 标识符，披露集中钱包的地址和发送的金额。发送方将代币
@@ -513,7 +511,7 @@ TON 交易只需确认一次就不可逆转。为获得最佳用户体验，建�
 :::
 
 要提取 Jettons，钱包会向相应的 Jetton 钱包发送带有 `transfer` 主体的信息。
-然后，Jetton 钱包会将 Jettons 发送给收件人。必须附加一些 TON （至少 1  nanotons  ）
+然后，Jetton 钱包会将 Jettons 发送给收件人。必须附加一些 TON （至少 0.001 TON）
 作为`forward_ton_amount`（以及`forward_payload`的可选注释），以触发`transfer notification`（转账通知）。
 请参阅：[Jetton 合约信息布局](/v3/guidelines/dapps/asset-processing/jettons#message-layouts)
 
@@ -748,7 +746,7 @@ async def main():
                     .store_address(DESTINATION_ADDRESS) # Destination address
                     .store_address(USER_ADDRESS)        # Response address
                     .store_bit(0)                       # Custom payload is None
-                    .store_coins(1)                     # Ton forward amount in nanoton
+                    .store_coins(1000000)               # Ton forward amount (0.001 TON)
                     .store_bit(1)                       # Store forward_payload as a reference
                     .store_ref(forward_payload)         # Forward payload
                     .end_cell())
