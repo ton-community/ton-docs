@@ -1,3 +1,24 @@
+---
+title: "Message-driven execution"
+description: "Learn how TON executes smart contracts through message passing, actor-based processing, and how messages trigger transactions."
+keywords:
+  - TON messages
+  - TON internal messages
+  - TON external incoming messages
+  - TON external-in messages
+  - TON external outgoing messages
+  - Bounce messages
+  - Serializing messages
+faq:
+  - "Why does my contract not answer right away?"
+  - "Why do transactions show up later than I expect?"
+  - "What’s the difference between an internal message and an external one?"
+  - "What happens if a message never gets answered?"
+  - "Can I make my contract return a value instantly?"
+  - "How to detect if a message bounced or failed?"
+---
+
+
 import Button from '@site/src/components/button'
 import Feedback from '@site/src/components/Feedback'
 
@@ -25,8 +46,8 @@ In the TON blockchain, a **message** is the fundamental unit of interaction betw
 
   If the task is successful, the person, as specified in the original message:
 
-  - send new messages to other residents, or
-  - store the resulting items safely in their home.
+  - sends new messages to other residents, or
+  - stores the resulting items safely in their home.
 
   After finishing, they return to their mailbox and retrieve the **next** incoming message.
 
@@ -41,21 +62,21 @@ In the TON blockchain, a **message** is the fundamental unit of interaction betw
   Messages delivered via the postal system between residents are called **internal messages**.
   Messages from the outside world also reach the city. These have a specified recipient, but their sender is unknown — they are known as **external incoming** or **external-in messages**.
 
-  While external-in and internal messages fulfil a similar role from the actor’s perspective, each actor may handle them differently. Some may process them normally, while others might completely ignore messages from the outside world — like someone who refuses to open letters from strangers.
+  While external-in and internal messages fulfill a similar role from the actor’s perspective, each actor may handle them differently. Some may process them normally, while others might completely ignore messages from the outside world — like someone who refuses to open letters from strangers.
 </details>
 
-#### Message structure: TL-B
+#### Message schema (TL-B)
 
 Now, let’s look at the data contained in the messages. TON distinguishes between external and internal messages, both of which are capable of carrying data.
 
-In TON, all data is represented using **cells**.
-To serialize data into a cell, TON relies on a well-established standard called **TL-B** (Type Language – Binary).
+In TON, this data is represented using **cells**, and **TL-B schemas** define how it is serialized into these cells.
+
 
 ## Native message structure
 
-In TON, all messages adhere to a unified schema that defines their structure and serialization.
+All messages adhere to a unified schema that defines their structure and serialization:
 
-```
+```tlb
 message$_ {X:Type} info:CommonMsgInfo
 init:(Maybe (Either StateInit ^StateInit))
 body:(Either X ^X) = Message X;
@@ -98,7 +119,7 @@ The term **message** is closely related to a **transaction**, but they serve dif
 
 An **external-in message** is a message whose `CommonMsgInfo` header uses the `ext_in_msg_info$10` structure.
 
-```
+```tlb
 message$_ {X:Type} info:CommonMsgInfo
 init:(Maybe (Either StateInit ^StateInit))
 body:(Either X ^X) = Message X;
@@ -106,13 +127,13 @@ body:(Either X ^X) = Message X;
 
 **TL-B:**
 
-```
+```tlb
 //external incoming message
 ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
 import_fee:Grams = CommonMsgInfo;
 ```
 
-Since an external-in message is sent into the blockchain from the outside, the initiator is an external actor. This can be either a wallet contract or custom code interacting with blockchain API services.
+Since an external-in message is sent into the blockchain from the outside, the initiator is an external actor. This can be either a wallet app or custom code interacting with blockchain API services.
 
 To send an external-in message to a smart contract, you need to:
 
@@ -127,13 +148,13 @@ import { Address, beginCell } from '@ton/ton';
 import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider, args: string[]) {
-    //Mainnet address : 'EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2'
+    // Mainnet address: 'EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2'
     const address = Address.parse('EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2');
 
-    //Switch address for the Testnet :
+    // Switch to Testnet address:
     //const address = Address.parse('kQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16z768');
 
-    // Get current seqno using blueprint's provider
+    // Get current seqno using Blueprint's provider
     const contractProvider = provider.provider(address);
     const result = await contractProvider.get('seqno', []);
     const currentSeqno = result.stack.readNumber();
@@ -145,15 +166,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
 ```
 
 :::info How to use examples with Blueprint
-
-1. Prepare a wallet application (e.g., Tonkeeper) that you’ll use to send the external message
-2. Install the Blueprint project locally:
-   `npm create ton@latest`
-3. Add the provided script to your Blueprint project under the `scripts` directory, for example:
-   `blueprintproject/scripts/yourscript.ts`
-4. Run the script with the command:
-   `npx blueprint run yourscript`
-
+Prepare a wallet application (e.g., Tonkeeper) that you’ll use to send the external message and set up a Blueprint project locally by following the [setup instructions](/v3/guidelines/quick-start/developing-smart-contracts/setup-environment).
 :::
 
 ### Internal messages
@@ -163,10 +176,11 @@ export async function run(provider: NetworkProvider, args: string[]) {
 An **internal message** is a message sent from one smart contract to another within the TON blockchain.
 When a contract receives an internal message, it can reliably determine:
 
-- how many TON coins are attached
+- how much Toncoin is attached
 - which contracts are the sender and the recipient
 
-The blockchain ensures the integrity of this information, allowing the contract to be trusted and used safely.
+The blockchain ensures the integrity of this information, allowing this information to be trusted and used safely.
+
 **TL-B:**
 
 A contract always initiates internal messages — they are the result of a transaction’s execution.
@@ -174,7 +188,7 @@ In other words, as the name implies, the sender of an internal message is always
 
 The most common way to send an internal message is by first sending an external message to a contract that contains the logic to forward the internal message to another contract.
 
-```
+```tlb
 //internal message
 int_msg_info$0 ihr_disabled:Bool bounce:Bool bounced:Bool
 src:MsgAddressInt dest:MsgAddressInt
@@ -196,13 +210,13 @@ created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 | `created_lt`     | Logical time at which the message was created, used for ordering contract actions.          |
 | `created_at`     | Unix timestamp of when the message was created.                                             |
 
-The first thing a developer needs to specify is the amount of Toncoin attached to the internal message `value` and the destination address `dest`.
+The first thing a developer specifies is the amount of Toncoin attached to the internal message `value` and the destination address `dest`.
 
 In this example, an external message is sent to the wallet contract with additional instructions for sending an internal message. As a result of processing the transaction, the wallet contract sends an outgoing internal message with the specified `value` and recipient `address`.
 
 ```typescript title="internal.ts"
 //@ton/blueprint 0.36.1
-import { Address } from '@ton/ton';
+import { Address, toNano } from '@ton/ton';
 import { NetworkProvider } from '@ton/blueprint';
 
 export async function run(provider: NetworkProvider, args: string[]) {
@@ -210,13 +224,12 @@ export async function run(provider: NetworkProvider, args: string[]) {
     const contractProvider = provider.provider(address);
 
     return contractProvider.internal(provider.sender(), {
-        value: '0.01',
+        value: toNano('0.01'),
     });
 }
 ```
 
 ### External outgoing messages
-
 
 **External outgoing** messages are full-fledged messages sent outside the network (to `MsgAddressExt`).
 They _do not have a specific recipient_ within the blockchain.
@@ -230,13 +243,13 @@ For example, a decentralized exchange (DEX) contract might emit an external outg
 
 **TL-B:**
 
-```
+```tlb
 //external outgoing message
 ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
 created_lt:uint64 created_at:uint32 = CommonMsgInfo;
 ```
 
-## Bounce of messages
+## Message bounce
 
 A **bounce message** is automatically returned to the sender — but only if the following conditions are met:
 - the message is **internal**,
@@ -259,9 +272,9 @@ Smart contracts, in turn, must:
 
 You can run the following script in Blueprint to compare the differences between bounceable and non-bounceable messages visually.
 
-Use one of the methods below to run the script:
+Use one of the methods below to run the script (examples use wallet V4R2, a widely adopted version):
 
-#### Option 1: using environment variables in the command line
+#### Option 1: using environment variables on the command line
 
 ```bash
 WALLET_MNEMONIC="unfold your mnemonics ... is added here" \
@@ -284,7 +297,7 @@ Then run:
 npx blueprint run sendBounceableMessages --testnet --mnemonic
 ```
 
-**Note**: TON Connect (e.g., the `--tonconnect` flag) cannot be used here because wallet extensions like Tonkeeper do not allow dApps to control the `bounce` flag for security reasons. They always send bounceable messages. To maintain this flag, you need to create and sign the message manually using a mnemonic.
+**Note**: [TON Connect](/v3/guidelines/ton-connect/overview) (e.g., the `--tonconnect` flag) cannot be used here because wallet extensions like Tonkeeper do not allow DApps to control the `bounce` flag for security reasons. Wallets typically send bounceable messages by default, but the final behavior depends on the address format (e.g., a `UQ…` address results in a non-bounceable message). To maintain this flag, you need to create and sign the message manually using a mnemonic.
 
 <details>
   <summary> Send bounceable message </summary>
@@ -380,8 +393,6 @@ npx blueprint run sendBounceableMessages --testnet --mnemonic
 
   ````mdx-code-block
   ```text
-  Using file: sendBounceableMessages
-  Connected to wallet at address: 0QD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxYkp
   Using wallet v4r2 at address: EQD3oTH51Tp4UNhCLfX3axyG2X9H_9wZpLoC7W--WbXwxW9m
      Current seqno: 36
   Sending one external message with two internal messages (one bounceable, one non-bounceable)...
@@ -413,7 +424,7 @@ From a technical standpoint, this is an internal message sent from the current o
 ```tlb
 
 transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress
-custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;`
+custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;
 
 ```
 
@@ -423,14 +434,14 @@ The TON SDK provides predefined primitives for the most common structures, so co
 import { Address, beginCell, toNano } from '@ton/ton';
 /*
 `transfer#5fcc3d14 query_id:uint64 new_owner:MsgAddress response_destination:MsgAddress
-custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;`
+custom_payload:(Maybe ^Cell) forward_amount:(VarUInteger 16) forward_payload:(Either Cell ^Cell) = InternalMsgBody;
 */
 
 const messageBody = beginCell()
     .storeUint(0x5fcc3d14, 32) // opcode for NFT transfer
     .storeUint(0, 64) // query id, by default 0
-    .storeAddress(destinationAddress) //
-    .storeAddress(destinationAddress) // response destination for lasts funds
+    .storeAddress(destinationAddress) // new owner
+    .storeAddress(destinationAddress) // response destination for excess funds
     .storeBit(0) // if 0, no custom payload
     .storeCoins(toNano('0.01')) // forward amount - if >0, will send additional message to destination as a wallet notification message
     .endCell();
@@ -459,7 +470,7 @@ export async function run(provider: NetworkProvider, args: string[]) {
     const messageBody = beginCell()
         .storeUint(0x5fcc3d14, 32) // opcode for NFT transfer
         .storeUint(0, 64) // query id
-        .storeAddress(destinationAddress)
+        .storeAddress(destinationAddress) // new owner
         .storeAddress(destinationAddress) // response destination
         .storeBit(0) // if 0, no custom payload
         .storeCoins(toNano('0.01')) // forward amount - if >0, will send additional message to destination as a wallet notification message
@@ -474,10 +485,11 @@ export async function run(provider: NetworkProvider, args: string[]) {
 
 ### Internal message serializer according to contract code
 
-Suppose you need to compose a message for a smart contract. As an example, we'll use the Jetton wallet and wallet V3 contracts.
+Suppose you need to compose a message for a smart contract. As an example, we'll use the Jetton wallet and wallet V3 contracts, with V3 highlighted as a standard version often used in examples for its straightforward structure.
+
 There are two types of receiving functions commonly used:
 
-- [() recv_internal(cell in_msg_full, slice in_msg_body) impure](https://github.com/ton-blockchain/jetton-contract/blob/3d24b419f2ce49c09abf6b8703998187fe358ec9/contracts/jetton-wallet.fc#L187)
+1. [() recv_internal(cell in_msg_full, slice in_msg_body) impure](https://github.com/ton-blockchain/jetton-contract/blob/3d24b419f2ce49c09abf6b8703998187fe358ec9/contracts/jetton-wallet.fc#L187)
 
 To correctly serialize an internal message for this smart contract, we must examine how the contract deserializes incoming messages.
 
@@ -599,16 +611,16 @@ To run the script and send an internal message, follow these steps:
   ````
 </details>
 
-- [() recv_external(slice msg_body) impure](https://github.com/aSpite/wallet-tutorial/blob/73c213add90ff115e45e58d0bcd9f1ea1fd44c89/JavaScript%20-%20TypeScript/src/wallet_v3.fc#L7)
+2. [() recv_external(slice msg_body) impure](https://github.com/aSpite/wallet-tutorial/blob/73c213add90ff115e45e58d0bcd9f1ea1fd44c89/JavaScript%20-%20TypeScript/src/wallet_v3.fc#L7)
 
 Although you can use `blueprint --tonconnect` to send internal messages, it does **not** support external messages.
 This limitation exists because TON Connect does **not** expose low-level signing capabilities due to the following reasons:
 
-1. **Security by design**: wallets (e.g., Tonkeeper) do not expose raw private keys to dApps.
+1. **Security by design**: wallets (e.g., Tonkeeper) do not expose raw private keys to DApps.
 2. **TON Connect abstraction**: the provider hides the wallet's internal implementation behind a unified interface.
 3. **Limited API surface**: blueprint is designed for contract deployment and testing, not for manual message signing.
 
-That is why we use mnemonic method of the blueprint instead of TON Connect:
+That is why we use mnemonic method of the Blueprint instead of TON Connect:
 
 ```func
 () recv_external(slice in_msg) impure {
@@ -633,7 +645,7 @@ That is why we use mnemonic method of the blueprint instead of TON Connect:
 
 Use one of the methods below to run the following script:
 
-#### Option 1: using environment variables in the command line
+#### Option 1: using environment variables on the command line
 
 ```bash
 WALLET_MNEMONIC="unfold your mnemonics ... is added here" \
@@ -652,7 +664,7 @@ WALLET_VERSION="v4r2"
 
 Then run:
 
-```
+```bash
 npx blueprint run sendExternalMessage --testnet --mnemonic
 ```
 
@@ -761,6 +773,37 @@ If the developer does not have access to TL-B schemas or the original contract s
 This method is the least efficient and most error-prone but can be helpful when working with legacy or undocumented contracts.
 
 Example: [Simple contract](https://verifier.ton.org/EQAyVZ2rDnEDliuaQJ3PJFKiqAS-9fOm9s7DG1y5Ta16zwU2)
+
+## Sending messages
+
+In TON, typically, transactions are triggered by messages. The approach of preparing and sending messages depends on which side the signing key is used:
+
+### For frontend
+
+In this case, the service doesn't use its own private key to sign an external message in the blockchain; instead, it provides the user with a prepared payload that should be sent. These services never access the users' private key directly.
+
+1. User confirms some business event in a service.
+2. A service prepares the **external message body (payload)**.
+3. A user's wallet app receives a prepared payload through TON Connect.
+4. User **signs the message** in the wallet app and submits it to the blockchain.
+5. Service track blockchain state and perform further steps for this business process.
+
+In this approach, the service doesn't sign messages, but rather its users do.
+
+Example: NFT market DApp - NFT sale.
+
+### For backend
+
+The service sends external messages signed by its own private key.
+
+1. A user or event triggers a specific business event.
+2. A service prepares and signs an external message according to the inner business logic.
+3. A service sends a signed external message to the blockchain.
+4. A service tracks blockchain state and reports on completed business events.
+
+In this approach, the service signs its external messages without the involvement of a third party.
+
+Example: Centralized exchange - deposit and withdrawals.
 
 ## Next step
 

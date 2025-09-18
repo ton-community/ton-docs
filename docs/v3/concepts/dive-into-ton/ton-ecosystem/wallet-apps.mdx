@@ -18,16 +18,15 @@ Explore the full [ton.org/wallets](https://ton.org/wallets) catalog for more wal
 
 ## Non-custodial wallets
 
-**Non-custodial wallets** empower users with full ownership and control over their private keys and funds. Unlike custodial wallets, which a third party manages, non-custodial wallets store private keys exclusively with the user, secured using a seed phrase—a unique sequence of 12 or 24 words.
+**Non-custodial wallets** empower users with full ownership and control over their private keys and funds. Unlike custodial wallets, which a third party manages, non-custodial wallets store private keys exclusively with the user, secured using a seed phrase (also called recovery phrase) — a unique sequence of 24 words.
 
 ### Software (hot) wallets
 
-A **software wallet**—commonly referred to as a **hot wallet**—runs locally on a device such as a smartphone or computer, storing private keys securely within the device’s storage.
+A **software wallet** — commonly referred to as a **hot wallet** — runs locally on a device such as a smartphone or computer, storing private keys securely within the device’s storage.
 
 Below is a selection of prominent non-custodial software wallets.
 
 #### Wallets for everyday users
-
 
 <table style={{ width: '100%', tableLayout: 'fixed' }}>
   <thead>
@@ -43,25 +42,23 @@ Below is a selection of prominent non-custodial software wallets.
   <tr>
     <td><a href="https://tonkeeper.com"><strong>Tonkeeper</strong></a></td>
     <td>Open-source wallet commonly used in the TON ecosystem. Supports tokens and NFTs.</td>
-    <td>iOS, Android, Chrome, Firefox</td>
+    <td>iOS, Android</td>
     <td>
       1. Create wallet and save recovery phrase.<br />
       2. From main screen, tap wallet name → **Add Wallet** → **Testnet Account**.<br />
       3. Enter saved recovery phrase.
     </td>
-
     <td>
-      <a href="https://github.com/tonkeeper/wallet">GitHub</a><br />
+      <a href="https://github.com/tonkeeper/">GitHub</a><br />
       <a href="https://github.com/tonkeeper/wallet-api">Wallet API</a>
     </td>
   </tr>
 
   <tr>
     <td><a href="https://mytonwallet.io"><strong>MyTonWallet</strong></a></td>
-    <td>Open-source web wallet supporting tokens, NFTs, DNS, Sites, Proxy, Magic — also compatible with TRON.</td>
+    <td>Open-source web wallet supporting tokens, NFTs, TON DNS, TON Sites and TON Proxy — also compatible with TRON.</td>
     <td>iOS, Android, Chrome, Firefox</td>
     <td>
-    <br />
       1. Open **Settings**.
       2. Scroll down and tap **MyTonWallet app version**.
       3. Select the environment in the popup.
@@ -77,9 +74,11 @@ Below is a selection of prominent non-custodial software wallets.
     <td>Open-source, mobile-first wallet with <a href="https://github.com/tonwhales/ton-nominators">Ton Nominator</a> integration.</td>
     <td>iOS, Android</td>
     <td>
-      Requires <strong>Sandbox app</strong>:<br />
-      <a href="https://apps.apple.com/app/ton-development-wallet/id1607857373">iOS</a> /
+      - Requires different app for 
+      <a href="https://apps.apple.com/app/ton-development-wallet/id1607857373">iOS</a>
+      - Same app for 
       <a href="https://play.google.com/store/apps/details?id=com.tonhub.wallet">Android</a>
+      - Tap 6+ times on the app version to change the environment
     </td>
     <td>
       <a href="https://github.com/tonwhales/wallet">GitHub</a><br />
@@ -111,7 +110,7 @@ Below is a selection of prominent non-custodial software wallets.
     <td>
       <ul style={{ paddingLeft: '16px', margin: 0 }}>
         <li>Seamless integration with TON Connect</li>
-        <li>Local transaction emulation before submitting on-chain</li>
+        <li>Local transaction emulation before on-chain submission.</li>
         <li>Manage multiple keys and wallets</li>
       </ul>
     </td>
@@ -135,7 +134,7 @@ Below is a selection of prominent non-custodial software wallets.
   </tr>
   <tr>
     <td><a href="https://www.openmask.app/"><strong>OpenMask</strong></a></td>
-    <td>Open-source Chrome extension wallet focused on Web3 and dApp development.</td>
+    <td>Open-source Chrome extension wallet focused on Web3 and DApp development.</td>
     <td>Chrome</td>
     <td>
       <a href="https://github.com/OpenProduct/openmask-extension">GitHub</a><br />
@@ -143,7 +142,7 @@ Below is a selection of prominent non-custodial software wallets.
     </td>
     <td>
       <ul style={{ paddingLeft: '16px', margin: 0 }}>
-        <li>Desktop wallet optimized for dApp development</li>
+        <li>Chrome extension optimized for DApp development</li>
         <li>Multiple wallet support</li>
       </ul>
     </td>
@@ -171,16 +170,16 @@ Do **NOT** use it to store real funds — it is **insecure** and does **NOT** pr
 
 ## Custodial wallets
 
-In **custodial wallets**, a third party—such as a cryptocurrency exchange—holds and manages users’ private keys. This means users entrust the entity with the storage and control of their assets.
+In **custodial wallets**, a third party — such as a cryptocurrency exchange — holds and manages users’ private keys. This means users entrust the entity with the storage and control of their assets.
 
 | Wallet | Description | Links                                                                                                             |
 |--------|-------------|-------------------------------------------------------------------------------------------------------------------|
 | [@wallet](https://t.me/wallet) | Telegram bot for sending, receiving, and trading Toncoin via P2P. Supports Telegram Mini Apps. | —                                                                                                                 |
 | [@cryptobot](https://t.me/cryptobot)  | Telegram bot wallet for storing, sending, and exchanging Toncoin. | [Pay API](https://help.crypt.bot/crypto-pay-api)                                                                  |
-| [@tonRocketBot](https://t.me/tonRocketBot) | Telegram bot wallet for Toncoin storage, transfers, and trading. | [Exchange API](https://trade.ton-rocket.com/api/), [Pay API](https://pay.ton-rocket.com/api/)                      |
+| [@tonrocketbot](https://t.me/tonrocketbot) | Telegram bot wallet for Toncoin storage, transfers, and trading. | [Exchange API](https://trade.ton-rocket.com/api/), [Pay API](https://pay.ton-rocket.com/api/)                      |
 
 
-## Multi-signature wallet
+## Multi-signature wallets
 
 | Wallet   | Description | Links |
 |----------|-------------|-------|
@@ -189,7 +188,7 @@ In **custodial wallets**, a third party—such as a cryptocurrency exchange—ho
 
 ## See also
 
-- [Explorers in TON](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton/)
+- [Explorers](/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton/)
 - [Wallet contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts/)
 
 <Feedback />

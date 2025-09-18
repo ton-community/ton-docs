@@ -7,7 +7,7 @@ import Button from '@site/src/components/button';
 
 # Jetton processing
 
-## Best practices for jetton processing
+## Quick recommendations
 
 Jettons are tokens on TON Blockchain, similar to ERC-20 tokens on Ethereum.
 
@@ -19,7 +19,7 @@ TON transactions become irreversible after a single confirmation. To enhance UX/
 
 [Highload wallet v3](/v3/documentation/smart-contracts/contracts-specs/highload-wallet#highload-wallet-v3): v3 is the latest solution on TON Blockchain and the gold standard for jetton withdrawals. It enables batched withdrawals.
 
-[Batched withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload-batch.js): Allow multiple withdrawals to be processed in batches, ensuring fast and cost-effective transactions.
+[Batched withdrawals](https://github.com/toncenter/examples/blob/main/withdrawals-jettons-highload-batch.js): allows multiple withdrawals to be processed in batches, ensuring fast and cost-effective transactions.
 
 #### Deposits
 
@@ -29,15 +29,15 @@ It is recommended to set up multiple memo deposit wallets for better performance
 
 [Memo deposits](https://github.com/toncenter/examples/blob/main/deposits-jettons.js): This method lets you use a single deposit wallet, with users adding a memo for identification. It eliminates the need to scan the entire blockchain, though it may be slightly less convenient for users.
 
-[Memo-less deposits](https://github.com/gobicycle/bicycle): This alternative exists but is more difficult to integrate. We can assist with implementation if you prefer this approach. Please notify us before proceeding.
+[Memo-less deposits](https://github.com/gobicycle/bicycle): This alternative exists but is more difficult to integrate. Integration is more complex; evaluate suitability before adoption.
 
 ### Additional info
 
 :::caution Transaction notification
-Each service in the ecosystem is expected to set `forward_ton_amount` to 0.000000001 TON (1 nanoton) when withdrawing a token to send a jetton Notify on [successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be compliant. It will not be able to be processed by other CEXs and services.
+Each service in the ecosystem is expected to set `forward_ton_amount` to 0.000000001 TON (1 nanoton) when withdrawing a token to send a transfer notification on [successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will be non‑compliant and cannot be processed by other CEXs and services.
 :::
 
-- Refer to the official JS library from TON Foundation, [tonweb](https://github.com/toncenter/tonweb), for a JS lib example.
+- Refer to the JS library [tonweb](https://github.com/toncenter/tonweb) for the examples.
 
 - For Java, consider [ton4j](https://github.com/neodix42/ton4j/tree/main).
 
@@ -64,7 +64,7 @@ This document covers the following topics in order:
 ## Overview
 
 :::info
-TON transactions are irreversible after just one confirmation. To clearly understand this process, readers should be familiar with the basic principles of asset processing described in [this section of our documentation](/v3/documentation/dapps/assets/overview). It is particularly important to understand [contracts](/v3/documentation/smart-contracts/addresses#everything-is-a-smart-contract), [wallets](/v3/guidelines/smart-contracts/howto/wallet), [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions), and the deployment process.
+TON transactions are irreversible after just one confirmation. To clearly understand this process, readers should be familiar with the basic principles of asset processing described in [this section of our documentation](/v3/documentation/dapps/assets/overview). It is particularly important to understand [contracts](/v3/documentation/smart-contracts/addresses/address#everything-is-a-smart-contract), [wallets](/v3/guidelines/smart-contracts/howto/wallet), [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions), and the deployment process.
 :::
 
 :::info
@@ -73,10 +73,10 @@ For the best user experience, avoid waiting for additional blocks once transacti
 
 Quick jump to the core description of jetton processing:
 
-<Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>Centralized Processing</Button>
+<Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-users-through-a-centralized-wallet" colorType={'primary'} sizeType={'sm'}>Centralized processing</Button>
 
 <Button href="/v3/guidelines/dapps/asset-processing/jettons#accepting-jettons-from-user-deposit-addresses" colorType="secondary" sizeType={'sm'}>
-  On-chain processing
+  Deposit addresses
 </Button>
 
 <br />
@@ -99,7 +99,7 @@ Standardized tokens on TON are implemented using a set of smart contracts, inclu
 <br />
 
 <ThemedImage
-  alt=""
+  alt="Jetton architecture: master and wallet contracts."
   sources={{
       light: '/img/docs/asset-processing/jetton_contracts.png?raw=true',
       dark: '/img/docs/asset-processing/jetton_contracts_dark.png?raw=true',
@@ -112,9 +112,9 @@ Standardized tokens on TON are implemented using a set of smart contracts, inclu
 
 Standardized tokens on TON use a set of smart contracts, including:
 
-- Jetton master smart contract: Stores general information about the jetton, such as total supply, a metadata link, or the metadata itself.
+- Jetton master smart contract: stores general information about the jetton, such as total supply, a metadata link, or the metadata itself.
 
-- Jetton wallet smart contracts: Used for transactions and balance management.
+- Jetton wallet smart contracts: used for transactions and balance management.
 
 :::warning Beware of jetton scams
 Anyone can create a counterfeit version of a valuable jetton by using an arbitrary name, ticker, or image that closely resembles the original. However, counterfeit jettons can be identified by their addresses.
@@ -122,9 +122,7 @@ Anyone can create a counterfeit version of a valuable jetton by using an arbitra
 
 Jettons with the symbol TON or those containing system notification messages such as ERROR or SYSTEM should be displayed in a way that prevents confusion with TON transfers or system notifications. Sometimes, scammers design the `symbol`, `name`, and `image` to mimic the original and mislead users.
 
-
 To prevent fraud, verify the **original jetton address** (jetton master contract) for specific jetton types. Alternatively, **check the project’s official social media** or website for **accurate information**. Use [Tonkeeper ton-assets list](https://github.com/tonkeeper/ton-assets) to verify assets.
-
 
 ### Retrieving jetton data
 
@@ -157,7 +155,7 @@ console.log('URI to off-chain metadata:', data.jettonContentUri);
 
 Jettons can be either `mintable` or `non-mintable`.
 
-If they are non-mintable, no additional tokens can be minted. To mint jettons for the first time, refer to the [mint your first jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token) page.
+If they are non-mintable, no additional tokens can be minted. To mint jettons for the first time, refer to the [Mint first jetton](/v3/guidelines/dapps/tutorials/mint-your-first-token) page.
 
 If jettons are mintable, the [minter contract](https://github.com/ton-blockchain/minter-contract/blob/main/contracts/jetton-minter.fc) includes a function to mint additional jettons. The admin can trigger this function by sending an internal message with a specified opcode from the admin address.
 
@@ -184,7 +182,7 @@ To get the `address` of a `jetton wallet` using the `owner address` (the TON wal
 
 <Tabs groupId="retrieve-wallet-address">
   <TabItem value="api" label="API">
-    > Run `get_wallet_address(slice owner_address)` through `/runGetMethod` method from the [TON Center API](https://toncenter.com/api/v3/#/default/run_get_method_api_v3_runGetMethod_post). In real cases (not test ones) it is important to always check that wallet indeed is attributed to desired jetton Master. Check the code example for more.
+    > Run `get_wallet_address(slice owner_address)` through `/runGetMethod` method from the [TON Center API](https://toncenter.com/api/v3/#/default/run_get_method_api_v3_runGetMethod_post). In real cases (not test ones) it is important to always check that wallet indeed is attributed to desired jetton master. Check the code example for more.
   </TabItem>
 
   <TabItem value="js" label="js">
@@ -194,13 +192,14 @@ To get the `address` of a `jetton wallet` using the `owner address` (the TON wal
     const JettonMinter = new TonWeb.token.jetton.JettonMinter(tonweb.provider, { address: '<jetton_MASTER_ADDRESS>' });
     const jettonWalletAddress = await JettonMinter.getJettonWalletAddress(new TonWeb.utils.Address('<OWNER_WALLET_ADDRESS>'));
 
-    // It is important to verify that the Jetton Master recognizes this wallet:
+
+    // It is important to verify that the jetton master recognizes this wallet:
     const jettonWallet = new TonWeb.token.jetton.JettonWallet(tonweb.provider, {
       address: jettonWalletAddress
     });
     const jettonData = await jettonWallet.getData();
     if (jettonData.JettonMinterAddress.toString(false) !== JettonMinter.address.toString(false)) {
-      throw new Error("jetton minter address from jetton wallet doesn't match config");
+      throw new Error('jetton minter address from jetton wallet does not match config');
     }
 
     console.log('jetton wallet address:', jettonWalletAddress.toString(true, true, true));
@@ -214,7 +213,7 @@ For more examples, read the [TON cookbook](/v3/guidelines/dapps/cookbook#tep-74-
 
 ### Retrieving data for a specific jetton wallet
 
-To retrieve the wallet's account balance, owner identification information, and other details related to a specific jetton wallet contract, use the get_wallet_data() method within the jetton wallet contract.
+To retrieve the wallet's account balance, owner identification information, and other details related to a specific jetton wallet contract, use the `get_wallet_data()` method within the jetton wallet contract.
 
 This method returns the following data:
 
@@ -235,11 +234,12 @@ This method returns the following data:
     import TonWeb from "tonweb";
     const tonweb = new TonWeb();
     const walletAddress = "EQBYc3DSi36qur7-DLDYd-AmRRb4-zk6VkzX0etv5Pa-Bq4Y";
-    const jettonWallet = new TonWeb.token.jetton.jettonWallet(tonweb.provider,{address: walletAddress});
+    const jettonWallet = new TonWeb.token.jetton.JettonWallet(tonweb.provider,{address: walletAddress});
     const data = await jettonWallet.getData();
     console.log('jetton balance:', data.balance.toString());
     console.log('jetton owner address:', data.ownerAddress.toString(true, true, true));
-    // It is important to verify that the Jetton Master recognizes the wallet
+
+    // It is important to verify that the jetton master recognizes the wallet
     const JettonMinter = new TonWeb.token.jetton.JettonMinter(tonweb.provider, {address: data.JettonMinterAddress.toString(false)});
     const expectedjettonWalletAddress = await JettonMinter.getJettonWalletAddress(data.ownerAddress.toString(false));
     if (expectedjettonWalletAddress.toString(false) !== new TonWeb.utils.Address(walletAddress).toString(false)) {
@@ -262,7 +262,7 @@ Communication between jetton wallets and TON wallets follows this sequence:
 <br />
 
 <ThemedImage
-  alt=""
+  alt="Jetton transfer message flow."
   sources={{
       light: '/img/docs/asset-processing/jetton_transfer.png?raw=true',
       dark: '/img/docs/asset-processing/jetton_transfer_dark.png?raw=true',
@@ -276,16 +276,16 @@ Communication between jetton wallets and TON wallets follows this sequence:
 `Sender -> sender's jetton wallet`. _Transfer_ message contains the following data:
 
 | Name                   | Type       | Description                                                                                                                                                            |
-| ---------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ---------------------- | ---------- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `query_id`             | uint64     | Links the three messaging types—transfer, transfer notification, and excesses—to each other. To ensure this process works correctly, **always use a unique query ID**. |
-| `amount`               | coins      | The total `ton coin` amount sent with the message.                                                                                                                    |
+| `amount`               | coins      | The total jetton amount to transfer.                                                                                                                         |
 | `destination`          | address    | The address of the new owner of the jettons                                                                                                                            |
 | `response_destination` | address    | The wallet address used to return remaining Toncoin through the excesses message.                                                                                      |
 | `custom_payload`       | maybe cell | Always at least 1 bit in size. Custom data used by either the sender or receiver jetton wallet for internal logic.                                                     |
-| `forward_ton_amount`   | coins      | Must be greater than 0 to send a transfer notification message with a `forward_payload`. It is **part of `amount` value** and **must be lesser than `amount`**.        |
-| `forward_payload`      | maybe cell | Always at least 1 bit in size. If the first 32 bits equal 0x0, it is a simple message.                                                                                 |
+| `forward_ton_amount`   | coins      | Toncoin to forward to the recipient; must be > 0 to send a transfer notification with `forward_payload` and must be less than the Toncoin attached to this message.       |
+| `forward_payload`      | maybe cell | Always at least 1 bit in size. If the first 32 bits equal 0x00000000, it is a text comment.                                                                                 |
 
-#### Message 2'
+#### Message 1: transfer notification
 
 The `payee's jetton wallet` → payee. Transfer notification message. This is sent only if `forward_ton_amount` is not zero and contains the following data:
 
@@ -296,11 +296,11 @@ The `payee's jetton wallet` → payee. Transfer notification message. This is se
 | `sender`          | address |
 | `forward_payload` | cell    |
 
-In this case, the `sender` address refers to Alice's `jetton wallet`.
+In this case, the `sender` address refers to the transfer initiator’s `jetton wallet`.
 
-#### Message 2''
+#### Message 2: excess
 
-`payee's jetton wallet -> Sender`. Excess message body. This is sent only if there are remaining Toncoin after paying the fees. Contains the following data:
+`payee's jetton wallet -> sender`. Excess message body. This is sent only if there are remaining Toncoin after paying the fees. Contains the following data:
 
 | Name       | Type   |
 | ---------- | ------ |
@@ -320,12 +320,12 @@ To send a **comment** you need to set up `forward_payload`. Set **first 32 bits 
 Recommended `forward_ton_amount` for a jetton transfer with a comment: 1 nanoton.
 :::
 
-Finally, to retrieve `Excess 0xd53276db` message you must set up `response destination`.
+Finally, to retrieve the Excess (`0xd53276db`) message you must set up `response_destination`.
 
 Sometimes you may get a `709` error when sending a jetton. This error indicates that the amount of Toncoin attached to the message is not enough to send it. Make sure `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`, which is usually >0.04 unless the payload being forwarded is very large. The fee depends on various factors, including the jetton code data and whether the recipient needs to deploy a new jetton wallet.
-It is recommended to add a supply of Toncoin to the message and set your address as the `response_destination` to receive `Excess 0xd53276db` messages. For example, you can add 0.05 TON to the message by setting `forward_ton_amount` to 1 nanoton (this amount of TON will be attached to the `jetton notify 0x7362d09c` message).
+It is recommended to add a supply of Toncoin to the message and set your address as the `response_destination` to receive the Excess (`0xd53276db`) message. For example, you can add 0.05 TON to the message by setting `forward_ton_amount` to 1 nanoton (this amount of TON will be attached to the `transfer notification (0x7362d09c)` message).
 
-You may also encounter the error [`cskip_no_gas`](/v3/documentation/tvm/tvm-overview#when-the-compute-phase-is-skipped), which indicates that the tokens were successfully transferred, but no other computations were performed. This is a common situation when the `forward_ton_amount` value is 1 nanoton.
+You may also encounter the error [`cskip_no_gas`](/v3/documentation/tvm/overview#when-the-compute-phase-is-skipped), which indicates that the tokens were successfully transferred, but no other computations were performed. This is a common situation when the `forward_ton_amount` value is 1 nanoton.
 
 :::tip
 Check [best practices](/v3/guidelines/dapps/asset-processing/jettons#best-practices) for the _"send jettons with comments"_ example.
@@ -386,9 +386,9 @@ to the specified centralized address with a mandatory comment.
 Tonweb examples:
 
 1. [Accepting jetton deposits to an individual HOT wallet with comments (memo)](https://github.com/toncenter/examples/blob/main/deposits-jettons.js)
-2. [Jettons withdrawals example](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
+2. [Jetton withdrawals example](https://github.com/toncenter/examples/blob/main/withdrawals-jettons.js)
 
-#### Preparations
+#### Preparation
 
 1. [Prepare a list of accepted jettons](/v3/guidelines/dapps/asset-processing/jettons#adding-new-jettons-for-asset-processing-and-initial-verification) (jetton master addresses).
 2. Deploy hot wallet (using v3R2 if no jetton withdrawals are expected; highload v3 - if jetton withdrawals are expected). [Wallet deployment](/v3/guidelines/dapps/asset-processing/payments-processing#wallet-deployment).
@@ -399,7 +399,7 @@ Tonweb examples:
 1. Download the list of accepted jettons.
 2. [Retrieve the jetton wallet address](#retrieving-jetton-wallet-addresses-for-a-given-user) for your deployed hot wallet.
 3. Retrieve the jetton master address for each jetton wallet using [retrieving wallet data](/v3/guidelines/dapps/asset-processing/jettons#retrieving-data-for-a-specific-jetton-wallet).
-4. Compare the jetton master contract addresses from step 1. and step 3 (immediately above). If the addresses do not match, you should report an address validation error to jetton.
+4. Compare the jetton master contract addresses from step 1 and step 3 (immediately above). If the addresses do not match, you should report an address validation error for the jetton.
 5. Retrieve the list of recent unprocessed transactions using the hot wallet account and repeat (sorting each transaction one at a time). See: [Check contract transactions](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions).
 6. Check the input message (in_msg) for transactions and extract the source address from the input message. [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-jettons-single-wallet.js#L84).
 7. If the source address matches the address in the jetton wallet, then the transaction should be processed further. If not, then skip the transaction processing and check the next transaction.
@@ -435,11 +435,11 @@ const wallet = new WalletClass(tonweb.provider, {
 #### Creating deposits
 
 1. Accept a request to create a new deposit for the user.
-2. Generate a new subwallet address (/v3R2) based on the hot wallet seed. [Creating a subwallet in Tonweb](#creating-a-subwallet-in-tonweb)
+2. Generate a new subwallet address (v3R2) based on the hot wallet seed. [Creating a subwallet in Tonweb](#creating-a-subwallet-in-tonweb)
 3. The receiving address can be provided to the user as the address used for jetton deposits (this is the address
    of the owner of the jetton deposit wallet). No wallet initialization is required, this can
    be done when withdrawing jettons from the deposit.
-4. For this address, the jetton wallet address must be calculated through the jetton main contract.
+4. For this address, the jetton wallet address must be calculated through the jetton master (contract).
    [How to get the jetton wallet address for a given user](#retrieving-jetton-wallet-addresses-for-a-given-user).
 5. Add the jetton wallet address to the address pool for transaction monitoring and save the subwallet address.
 
@@ -449,7 +449,7 @@ const wallet = new WalletClass(tonweb.provider, {
 TON transactions are irreversible after one confirmation. To enhance user experience, avoid waiting for additional blocks once transactions are finalized on TON Blockchain. Read more in [Catchain.pdf](https://docs.ton.org/catchain.pdf#page=3).
 :::
 
-It is not always possible to determine the exact amount of jettons received from a message, as jetton wallets cannot send `transfer notification`, `excesses` and `internal transfer` messages. They are not standardized. This means that there is no guarantee that an `internal transfer` message can be decoded.
+It is not always possible to determine the exact amount of jettons received from a message, as `transfer_notification`, `excesses`, and `internal_transfer` messages are defined in [TEP-74](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md), but their support is optional. This means that some implementations may not send them, so there is no guarantee that such a message can be relied on or decoded.
 
 Therefore, to determine the amount received in a wallet, it is necessary to query balances using the get method. To obtain key data when querying balances, blocks are used according to the account state for a specific block in the chain.
 
@@ -487,7 +487,7 @@ By default, jetton deposit wallets are uninitialized since storage fees are not 
 4. When the balance on the address becomes non-zero, the account status is changed. Wait a few seconds and check the status of the
    account, it will soon change from `nonexist` to `uninit`.
 5. For each owner address (with `uninit` status), an external message with v3R2 wallet
-   init and a body with the message `transfer` must be sent to deposit to the jetton wallet = 128 + 32. For `transfer`, the user must specify the hot wallet address as `destination` and `response destination`.
+   init and a body with the message `transfer` must be sent to deposit to the jetton wallet = 128 + 32. For `transfer`, the user must specify the hot wallet address as `destination` and `response_destination`.
    A text comment can be added to make it easier to identify the transfer.
 6. Jetton delivery can be verified using the deposit address to the hot wallet address,
    taking into account [processing incoming jettons information found here](#processing-incoming-jettons).
@@ -535,7 +535,7 @@ The `jetton` parameter is required (which is actually the address of the primary
 10. Send a single message or multiple messages (message batch).
 
 11. Get a list of the latest unprocessed transactions in the hot wallet account and retry it.
-    Learn more here: [Check contract transactions](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions),
+    Learn more here: [Check contract's transactions](/v3/guidelines/dapps/asset-processing/payments-processing#check-contracts-transactions),
     [Tonweb example](https://github.com/toncenter/examples/blob/9f20f7104411771793dfbbdf07f0ca4860f12de2/deposits-single-wallet.js#L43) or
     use the TON Center API method `/getTransactions`.
 
@@ -580,16 +580,16 @@ Below is a `list of best practices` to keep in mind when **doing on-chain jetton
 
 Learn **more** about [Secure Smart Contract Programming in FunC by CertiK](https://blog.ton.org/secure-smart-contract-programming-in-func). It is recommended to **handle all smart contract exceptions,** so they are never skipped during application development.
 
-## Jetton Wallet Processing Guidelines
+## Jetton wallet processing guidelines
 
 In general, all verification procedures used to process jetton offline are also applicable to wallets. For jetton wallet processing, our most important recommendations are as follows:
 
-1. When a wallet receives a transfer notification from an unknown jetton wallet, it is **vital** to trust the jetton wallet and its master address, as it may be a malicious fake. To protect yourself, verify the jetton master (master contract) using the address it provides to ensure that your verification processes recognize the jetton wallet as legitimate. Once you trust the wallet and it has been verified as legitimate, you can allow it to access your account balances and other data in the wallet. If the jetton Master does not recognize this wallet, it is recommended not to initiate or disclose your jetton transfers at all and only show incoming TON transfers (Toncoin attached to transfer notifications).
+1. When a wallet receives a transfer notification from an unknown jetton wallet, it is **vital** to trust the jetton wallet and its master address, as it may be a malicious fake. To protect yourself, verify the jetton master (master contract) using the address it provides to ensure that your verification processes recognize the jetton wallet as legitimate. Once you trust the wallet and it has been verified as legitimate, you can allow it to access your account balances and other data in the wallet. If the jetton master does not recognize this wallet, it is recommended not to initiate or disclose your jetton transfers at all and only show incoming TON transfers (Toncoin attached to transfer notifications).
 
 2. In practice, if a user wants to interact with jetton and not the jetton wallet. In other words, users send wTON/oUSDT/jUSDT, jUSDC, jDAI instead of `EQAjN...`/`EQBLE...`
-   etc. Often this means that when a user initiates a jetton transfer, the wallet will ask the corresponding jetton master which jetton wallet (owned by the user) should initiate the transfer request. **It is important to never blindly trust** this data from the Master (master contract). Always verify that the jetton wallet actually belongs to the jetton Master it claims to belong to before sending a transfer request to a jetton wallet.
+   etc. Often this means that when a user initiates a jetton transfer, the wallet will ask the corresponding jetton master which jetton wallet (owned by the user) should initiate the transfer request. **It is important to never blindly trust** this data from the master (master contract). Always verify that the jetton wallet actually belongs to the jetton master it claims to belong to before sending a transfer request to a jetton wallet.
 
-3. **Please be aware** that hostile jetton masters/jetton wallets **may change** their wallets/Masters over time. Therefore, it is imperative that users perform due diligence and verify the legitimacy of any wallets they interact with before each use.
+3. **Please be aware** that hostile jetton masters/jetton wallets **may change** their wallets/masters over time. Therefore, it is imperative that users perform due diligence and verify the legitimacy of any wallets they interact with before each use.
 
 4. **Always make sure** that you display tokens in your interface in a way that **does not mix with TON transfers**, system notifications, etc. Even the `symbol`, `name`, and `image` parameters
    can be crafted to mislead users, making victims potential victims of fraud. There have been several cases of malicious tokens being used to simulate TON transfers, notification errors, rewards, or asset freeze announcements.
@@ -710,10 +710,10 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
       my_wallet = Wallet(provider=client, mnemonics=my_wallet_mnemonics, version='v4r2')
 
       # for TonCenterClient and LsClient
-      await my_wallet.transfer_jetton(destination_address='address', jetton_master_address=jetton.address, jettons_amount=1000, fee=0.15) 
+      await my_wallet.transfer_jetton(destination_address='address', jetton_master_address=jetton.address, jettons_amount=1000, fee=0.15)
 
       # for all clients
-      await my_wallet.transfer_jetton_by_jetton_wallet(destination_address='address', jetton_wallet='your jetton wallet address', jettons_amount=1000, fee=0.1)  
+      await my_wallet.transfer_jetton_by_jetton_wallet(destination_address='address', jetton_wallet='your jetton wallet address', jettons_amount=1000, fee=0.1)
       ```
     </details>
   </TabItem>
@@ -770,7 +770,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
 ### Accept jetton transfer with comment parse
 
 <Tabs groupId="parse-code-examples">
-  <TabItem value="tonweb" label="JS (tonweb)">
+  <TabItem value="@ton/ton" label="JS (@ton/ton)">
     <details>
       <summary>
         Source code
@@ -844,7 +844,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
                   const userAddress = Address.parse(MY_WALLET_ADDRESS);
 
                   const jettonUserAddress =  await jettonMaster.getWalletAddress(userAddress);
-                
+
                   console.log('My jetton wallet for ' + name + ' is ' + jettonUserAddress.toString());
 
                   const jettonWallet = client.open(jettonWallet.create(jettonUserAddress));
@@ -958,7 +958,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
                   if (!(comment == orderId)) {
                       continue;
                   }
-                  
+
                   console.log('Got ' + jettonName + ' jetton deposit ' + amount?.toString() + ' units with text comment "' + comment + '"');
                   const txHash = tx.hash().toString('hex');
                   return (txHash);
@@ -992,7 +992,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
 
       const (
       	MainnetConfig   = "https://ton.org/global.config.json"
-      	TestnetConfig   = "https://ton.org/global.config.json"
+      	TestnetConfig   = "https://ton.org/testnet-global.config.json"
       	MyWalletAddress = "INSERT-YOUR-HOT-WALLET-ADDRESS"
       )
 
@@ -1017,8 +1017,8 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
       	jettons := make(map[string]jettons)
 
       	for name, info := range jettonsInfo {
-      		jettonMaster := jetton.NewjettonMasterClient(api, address.MustParseAddr(info.address))
-      		jettonWallet, err := jettonMaster.GetjettonWallet(context.Background(), userAddress)
+      		jettonMaster := jetton.NewJettonMasterClient(api, address.MustParseAddr(info.address))
+      		jettonWallet, err := jettonMaster.GetJettonWallet(context.Background(), userAddress)
       		if err != nil {
       			return nil, err
       		}
@@ -1036,6 +1036,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
       		adminAddress := slice.MustLoadAddr()
 
       		if adminAddress.String() != info.address {
+
 			return nil, fmt.Errorf("jetton minter address from jetton wallet doesn't match config")
       		}
 
@@ -1141,7 +1142,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
 
       		payload := msgBodySlice.MustLoadMaybeRef()
       		payloadOp := payload.MustLoadUInt(32)
-      		if payloadOp == 0 {
+      		if payloadOp != 0 {
       			log.Println("no text comment in transfer_notification")
       			continue
       		}
@@ -1160,7 +1161,7 @@ For ready-to-test examples, check [SDKs](/v3/guidelines/dapps/asset-processing/j
     </details>
   </TabItem>
 
-  <TabItem value="pythoniq" label="Python">
+  <TabItem value="pytoniq" label="Python">
     <details>
       <summary>
         Source code

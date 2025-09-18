@@ -2,77 +2,45 @@ import Feedback from '@site/src/components/Feedback';
 
 # IDE plugins
 
-Select the IDE or editor in the table of contents on the right and install the relevant plugin for your language of choice.
+Select your IDE or editor and install the relevant plugin for your language.
 
-Using the [TON Web IDE](https://ide.ton.org/), you can try FunC or Tact online without installing anything locally.
+There are officially supported plugins for [Tolk](/v3/documentation/smart-contracts/tolk/overview), [FunC](/v3/documentation/smart-contracts/func/overview), [Fift](/v3/documentation/smart-contracts/fift/overview), [TL-B](/v3/documentation/data-formats/tlb/overviewe), and [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript).
 
-## IntelliJ IDEs
+## JetBrains IDEs
 
-### FunC
+Plugin for JetBrains products (IntelliJ IDEA, WebStorm, PyCharm, CLion, etc.).
 
-![](/img/docs/ton-jetbrains-plugin.png)
-
-:::info
-This plugin can be used with any JetBrains product.
-(IntelliJ IDEA, WebStorm, PyCharm, CLion, etc.)
-:::
+![TON JetBrains plugin screenshot](/img/docs/ton-jetbrains-plugin.png)
 
 There are several ways to install a plugin:
-- Find plugin directly in the IDE plugins section with "**TON**" keywords
-- [Marketplace link](https://plugins.jetbrains.com/plugin/23382-ton)
-- [GitHub repository](https://github.com/ton-blockchain/intellij-ton)
+- Using an IDE built-in plugin system:
+<kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>Marketplace</kbd> > <kbd>Search for "TON"</kbd> >
+  <kbd>Install Plugin</kbd>
 
-### Tact
+- Via the [Marketplace](https://plugins.jetbrains.com/plugin/23382-ton)
+- Download the [latest release](https://github.com/ton-blockchain/intellij-ton/releases/latest) and install it manually using
+<kbd>Settings/Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
-There are several ways to install a plugin:
-- Find the plugin directly in the IDE plugins section with "**Tact**" keywords
-- [Marketplace link](https://plugins.jetbrains.com/plugin/27290-tact)
-- [GitHub repository](https://github.com/tact-lang/intelli-tact)
+## Visual Studio Code
 
-## VS Code
+Extension for Visual Studio Code (VS Code) and VS Code-based editors (VS Codium, Cursor, Windsurf, etc.).
 
-Visual Studio Code is a free and popular IDE for developers.
+### Marketplace
 
-### FunC
+Install the TON extension in [VS Code](https://marketplace.visualstudio.com/items?itemName=ton-core.vscode-ton) or [VS Code-based editors](https://open-vsx.org/extension/ton-core/vscode-ton).
 
-- [Marketplace link](https://marketplace.visualstudio.com/items?itemName=tonwhales.func-vscode)
-- [GitHub repository](https://github.com/ton-foundation/vscode-func)
+### Manually
+Get the latest `.vsix` file from [releases](https://github.com/ton-blockchain/ton-language-server/releases), from
+[VS Code marketplace](https://marketplace.visualstudio.com/items?itemName=ton-core.vscode-ton),
+or from [Open VSX Registry](https://open-vsx.org/extension/ton-core/vscode-ton).
 
-### Tact
+In VS Code:
+<kbd>Open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`)</kbd> >
+<kbd>Type "Install from VSIX"</kbd> >
+<kbd>Select the downloaded `.vsix` file</kbd> >
+<kbd>Reload VS Code</kbd>
 
-- [Marketplace link](https://marketplace.visualstudio.com/items?itemName=tonstudio.vscode-tact)
-- [Open VSX registry link](https://open-vsx.org/extension/tonstudio/vscode-tact)
-- [GitHub repository](https://github.com/tact-lang/tact-language-server)
-
-## Sublime Text
-
-### FunC
-
-- [GitHub repository](https://github.com/savva425/func_plugin_sublimetext3)
-
-### Tact
-
-- [Package Control link](https://packagecontrol.io/packages/Tact)
-- [GitHub repository](https://github.com/tact-lang/tact-sublime)
-
-## Vim
-
-All-in-one Vim 8+ plugin for Tact language.
-
-- [GitHub repository](https://github.com/tact-lang/tact.vim)
-
-## Neovim
-
-To enable syntax highlighting in Neovim, follow the installation instructions in the [nvim-treesitter quickstart guide](https://github.com/nvim-treesitter/nvim-treesitter#quickstart).
-
-To make sure `.tact` extension is properly recognized, install the [tact.vim](https://github.com/tact-lang/tact.vim) plugin.
-
-## Helix
-
-To enable support of the Tact language, refer to the following instructions:
-
-1. For latest syntax highlighting, setup [tree-sitter-tact](https://github.com/tact-lang/tree-sitter-tact#helix)
-2. For editor intelligence, setup [tact-language-server](https://github.com/tact-lang/tact-language-server#other-editors)
+## Web IDE
+Using the [TON Web IDE](https://ide.ton.org/), you can try smart contract development online without installing anything locally.
 
 <Feedback />
-

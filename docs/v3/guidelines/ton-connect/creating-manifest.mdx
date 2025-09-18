@@ -10,13 +10,13 @@ To integrate with wallets through TON Connect, every app must include a manifest
 
 The manifest is a JSON file named `tonconnect-manifest.json`, and it must follow the format below:
 
-```jsonc
+```json
 {
-    "url": "<app-url>",                        // required
-    "name": "<app-name>",                      // required
-    "iconUrl": "<app-icon-url>",               // required
-    "termsOfUseUrl": "<terms-of-use-url>",     // optional
-    "privacyPolicyUrl": "<privacy-policy-url>" // optional
+    "url": "<app-url>",
+    "name": "<app-name>",
+    "iconUrl": "<app-icon-url>",
+    "termsOfUseUrl": "<terms-of-use-url>",
+    "privacyPolicyUrl": "<privacy-policy-url>"
 }
 ```
 
@@ -32,7 +32,7 @@ The manifest is a JSON file named `tonconnect-manifest.json`, and it must follow
   <tr>
     <td><code>url</code></td>
     <td>Yes</td>
-    <td>Defines the DApp’s base URL. It is used to open the app when a user taps its icon in the wallet. The URL should not include a trailing slash — for example, use <strong>https://mydapp.com</strong> instead of <strong>https://mydapp.com/</strong>.</td>
+    <td>Defines the app’s base URL. It is used to open the app when a user taps its icon in the wallet. Avoid a trailing slash — for example, use <strong>https://mydapp.com</strong> instead of <strong>https://mydapp.com/</strong> — to ensure consistent routing.</td>
   </tr>
 
   <tr>
@@ -44,19 +44,19 @@ The manifest is a JSON file named `tonconnect-manifest.json`, and it must follow
   <tr>
     <td><code>iconUrl</code></td>
     <td>Yes</td>
-    <td>Defines the URL to the app icon. Must be in **PNG** or **ICO** format. SVG is **not** supported. Ideally, use a **180x180px PNG**.</td>
+    <td>Defines the URL to the app icon. Must be in <strong>PNG</strong> or <strong>ICO</strong> format. <strong>SVG</strong> is not supported. Ideally, use a <strong>180x180px PNG</strong>.</td>
   </tr>
 
   <tr>
     <td><code>termsOfUseUrl</code></td>
     <td>Optional</td>
-    <td>Optional for most apps, but mandatory for those listed in the Tonkeeper recommended apps list.</td>
+    <td>Optional for most apps, but mandatory for apps listed on Tonkeeper’s recommended apps list.</td>
   </tr>
 
   <tr>
     <td><code>privacyPolicyUrl</code></td>
     <td>Optional</td>
-    <td>Optional for most apps, but mandatory for those listed in the Tonkeeper recommended apps list.</td>
+    <td>Optional for most apps, but mandatory for apps listed on Tonkeeper’s recommended apps list.</td>
   </tr>
   </tbody>
 </table>
@@ -82,21 +82,18 @@ For reference, see the [TON Connect specification](https://github.com/ton-blockc
 > For example: `https://myapp.com/tonconnect-manifest.json`. This helps wallets discover your app more reliably and enhances the overall user experience when users connect to it.
 
 2. The fields `url`, `iconUrl`, `termsOfUseUrl`, and `privacyPolicyUrl` must be publicly accessible from any origin without CORS restrictions.
-3. Ensure the `manifest.json` is accessible and can be retrieved through a `GET` request to its URL.
-
-## See also
-- [TON Connect GitHub - App manifest](https://github.com/ton-blockchain/ton-connect/blob/main/requests-responses.md#app-manifest)
+3. Ensure the `tonconnect-manifest.json` is accessible and can be retrieved via a `GET` request to its URL (without requiring authentication or special CORS headers).
 
 ## Next steps
-Add the SDK to the project and explore the payload cookbook to start building with TON Connect.
+Add the SDK to the project and explore the Transaction cookbook to start building with TON Connect.
 
-<Button href="/guidelines/install-ton-connect" colorType="primary" sizeType={'sm'}>
+<Button href="/v3/guidelines/ton-connect/quick-start#install-ton-connect" colorType="primary" sizeType={'sm'}>
   Install SDK
 </Button>
 
 
 <Button href="/v3/guidelines/ton-connect/cookbook/ton-transfer" colorType="secondary" sizeType={'sm'}>
-  Check payload cookbook
+  Transaction cookbook
 </Button>
 
 <Feedback />

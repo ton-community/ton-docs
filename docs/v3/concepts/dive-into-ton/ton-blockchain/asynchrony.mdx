@@ -1,0 +1,63 @@
+# Asynchrony
+
+**Asynchrony** is the property of a system where events, actions, or processes happen independently, without waiting for other operations to complete.
+
+_Asynchrony is the opposite of synchrony_, which means that operations occur one after another in a fixed order, and each step must wait for the previous one to complete before proceeding.
+
+## Synchronous vs asynchronous
+
+<table style={{ width: '100%' }}>
+  <thead>
+  <tr>
+    <th style={{ width: '50%' }}>Synchronous</th>
+    <th style={{ width: '50%' }}>Asynchronous</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+      <strong>A traffic light at an intersection:</strong> cars from one direction must wait
+      for the green light before they can move, and only then can cars from
+      the other direction proceed.
+    </td>
+    <td>
+    <strong>Food delivery app:</strong> you and your friend place orders simultaneously.
+      Each restaurant processes its orders independently, and delivery
+      times may differ.
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+
+## Real-life example
+
+Imagine TON as a bustling **food delivery platform**. Customers place orders by **sending requests to the platform**.
+
+Each restaurant operates independently with **its kitchen**.
+Each restaurant processes _one order at a time_.
+While preparing an order, incoming new orders wait their turn — they are _not processed immediately_, ensuring the kitchen focuses entirely on the current order.
+
+Some orders may be impossible to fulfil, for example, if ingredients are missing or if the request fails to arrive due to system issues.
+In such cases, the restaurant skips the order and moves on.
+
+Once an order is completed, the restaurant records the result in a **log**, which documents the changes,
+noting exactly what was received, what was done, and the time of the order.
+
+The key idea is that all restaurants operate _independently and asynchronously of each other_.
+Some may be faster, while others may be slower; they do not wait for each other, and customers can continue placing orders without blocking the system.
+Within each restaurant, orders are processed in sequence, but there’s no global order across all restaurants.
+
+
+## Asynchrony in TON
+
+In TON, the same principle applies. Instead of a food delivery platform, we have **TON Blockchain**. Instead of restaurants with kitchens, there are **accounts**. Instead of customer orders, accounts interact through **messages**. And instead of a kitchen log, each account records **transactions** that track every change in its state.
+
+Using this analogy, we can highlight the main properties of asynchronous communication in TON:
+
+1. **Immediate responses are not guaranteed.** A sender cannot assume a message will be answered instantly, much like a customer cannot expect their food order to arrive immediately.
+2. **Senders remain non-blocking.** After sending a message, an account continues processing other messages or tasks without waiting for a reply, even if no response ever arrives — akin to a customer placing additional orders while waiting.
+3. **Message order is preserved per account.** Each account processes messages in the order they are received. If a message is malformed or incomplete, it is skipped, and processing immediately continues with the following message — just as a kitchen prepares orders sequentially but moves on if an order cannot be fulfilled.
+
+## See also
+- [Sharding](/v3/concepts/dive-into-ton/ton-blockchain/sharding)

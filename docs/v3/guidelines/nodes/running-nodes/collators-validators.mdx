@@ -1,0 +1,186 @@
+# Collators and validators in MyTonCtrl
+
+
+:::caution
+Please be aware that collator nodes used by validators should be treated as mission-critical assets, especially if more than one validator utilizes a collator machine. Great care should be taken to ensure the flawless operation and failover of these nodes. Any configuration changes to collators must be thoroughly tested and reviewed before being implemented.
+:::
+
+## Collators
+
+### Installation
+To install and set up a new node in `collator` mode, you can use the interactive installer:
+
+```bash
+wget https://raw.githubusercontent.com/ton-blockchain/mytonctrl/master/scripts/install.sh
+sudo bash install.sh
+```
+There, you should choose `collator` mode and provide the shards you want to sync and collate blocks for.
+In the process of installation, MyTonCtrl will enable `collator` mode, create a specific ADNL address for the collator and
+set up the node to monitor specified shards and collate blocks for them.
+
+### Enabling collator on existing node
+
+If you already have an installed MyTonCtrl instance, you can enable `collator` mode by running the following command:
+
+```bash
+enable_mode collator
+```
+Note that to enable `collator` mode, you first have to turn off `validator` or `liteserver` modes if they are enabled.
+
+After this, you can run blocks collation using:
+
+```bash
+setup_collator [--adnl <ADNL address>] <shard1> [shard2] ...
+```
+
+MyTonCtrl will create an ADNL address for the collator, edit the node configuration to monitor only specified shards and start collating blocks for them.
+You can actually specify the ADNL address with the `--adnl` option if you want to use one that already exists in your node configuration.
+Example of the command:
+
+```bash
+setup_collator --adnl 5889072E81219A0E656F31E8784EA09C93A562AA74308E1B25364EE87EEE6631 0:2000000000000000 0:6000000000000000
+```
+
+:::caution
+Adding new shards to monitor on an existing node that is already monitoring other shards is not recommended, as it may cause performance issues or unexpected behavior.
+When using `setup_collator`, MyTonCtrl checks if the provided shards are already included in the nodes already monitored and raises an error if they are not.
+However, it's entirely ok to add new ADNL addresses to the collator to collate blocks for already monitored shards and broadcast them with a different ADNL address.
+:::
+
+### Collator actions
+
+#### Print local collators
+To print collator addresses and their shards, you can use the following command:
+
+```bash
+print_local_collators
+```
+You will get a table with the collator's addresses and the shards it's collating blocks for.
+
+### Validator whitelist
+By default, the collator sends collated blocks to anyone who requests them. Thus, it's a good idea to restrict access to collated blocks to only whitelisted validators.
+
+#### Add validators to collation whitelist
+To enable the collation whitelist and add validators to it, you can use the following command:
+
+```bash
+add_validator_to_collation_wl <adnl> [adnl2] ...
+```
+
+:::note
+The `adnl` argument here is the ADNL address of the remote validator, in line with the output of the `status` command on the validator that shows the address in the `ADNL address of local validator` field.
+:::
+
+This will enable collation wl and add specified validators to it.
+
+#### Delete validators from whitelist
+To remove validators from the collation whitelist, use:
+
+```bash
+delete_validator_from_collation_wl <adnl> [adnl2] ...
+```
+
+This command removes the specified ADNL addresses from the collation whitelist. The validators with these addresses will no longer be able to receive collated blocks from this collator.
+
+#### Disable collation whitelist
+To altogether turn off the collation whitelist and allow any validator to receive collated blocks:
+
+```bash
+disable_collation_wl
+```
+
+This command turns off the whitelist functionality, reverting the collator to its default behavior of sending blocks to any requesting validator.
+
+#### Print collation whitelist
+To view the current collation whitelist and see which validators are allowed to receive collated blocks:
+
+```bash
+print_collation_whitelist
+```
+
+This command displays the current state of the collation whitelist, showing all whitelisted validator ADNL addresses and whether the whitelist is currently enabled.
+
+### Stopping collator
+
+:::caution
+It is highly not recommended to reuse a collator node as a validator after it was used as a collator, as it may
+not sync the whole blockchain and miss the creation of blocks for some shards. So it is recommended to uninstall MyTonCtrl
+and then install it again in `validator` mode.
+:::
+
+To stop the collator, you can use the command:
+
+```bash
+stop_collator <adnl> <shard>
+```
+
+Or to stop all collators on the node, you can use the same command without parameters:
+
+```bash
+stop_collator
+```
+
+
+## Validators
+
+In both cases, when you installed collator from scratch or enabled it on an existing node, MyTonCtrl will print in the logs the command to add this collator to your validator node:
+
+```
+...
+To add this collator to the validator, use the command:
+`add_collator 5889072E81219A0E656F31E8784EA09C93A562AA74308E1B25364EE87EEE6631 0:4000000000000000`
+setup_collator - OK
+```
+You can still access these params using `print_local_collators` on the collator node.
+
+
+### Adding collators to validator
+
+To enable the validator to use external collators for block production, you need to add collator configurations to the validator node.
+
+```bash
+add_collator <adnl> <shard> [--self-collate <true/false>] [--select-mode <random/ordered/round_robin>]
+```
+
+Where:
+- `<shard>` - The shard identifier (e.g., `0:4000000000000000`)
+- `<adnl>` - The ADNL address of the collator node
+- `--self-collate` - Whether the validator should also collate blocks itself in addition to using external collators (default is `true`)
+- `true` - Validator will collate blocks locally in case none of the added collators are available
+- `false` - Validator will only use external collators
+- `--select-mode` - How to choose between multiple available collators (default is `random`)
+- `random` - Select online collators randomly
+- `ordered` - Select collators in the order they were added, falling back to the next if unavailable
+- `round_robin` - Cycle through collators sequentially
+
+:::note
+The `--self-collate` and `--select-mode` options apply to all collators for the specified shard.
+If these options are already configured for that shard, they will be overridden.
+:::
+
+### Managing validator collators
+
+#### View configured collators
+To see which collators are currently configured on the validator:
+
+```bash
+print_collators
+```
+You can add flag `--json` to get output in JSON ValidatorConsole-friendly format.
+
+#### Remove collator
+To remove a collator from the validator configuration:
+
+```bash
+delete_collator [shard] <adnl>
+```
+If a shard is provided, the collator with the specified ADNL address will be removed only for that shard.
+Otherwise, the collator will be removed from all shards to which it was added.
+If all collators for a shard are removed, the shard will be removed from the configuration.
+
+#### Reset all collators
+To turn off using collators on the validator, use the command:
+
+```bash
+reset_collators
+```

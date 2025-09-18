@@ -1,11 +1,28 @@
+---
+title: "API-based retrieval"
+description: "Learn how to retrieve TON transactions using API/v2 and API/v3, including SDK integration and query methods."
+keywords:
+  - TON API/v2
+  - TON API/v3
+  - TON transaction retrieval
+  - TON SDK transactions
+  - TON blockchain API
+  - TON client
+  - TON developer tools
+faq:
+  - "Which API should I use: v2 or v3?"
+  - "What's the difference between raw data and high-level processed data?"
+  - "Where does the transaction hash come from if it’s not on-chain?"
+---
+
 import Feedback from '@site/src/components/Feedback';
-import Button from '@site/src/components/button'
+import Button from '@site/src/components/button';
 
 # API-based retrieval
 
 This section covers how to access transaction data from the blockchain using APIs. You'll learn about the available API services in TON and how to retrieve data by account, by message, or through a full blockchain scan.
 
-## TON HTTP API services
+## APIs of TON
 
 An _HTTP API service_ is a software solution that retrieves raw data from a LiteServer node and encodes it into standard formats for other services.
 A provider that offers such a solution is referred to as an HTTP API _provider_.
@@ -15,18 +32,14 @@ We recommend evaluating each provider independently based on its [historical per
 
 ### TON Center
 
-The TON Center was developed by the TON Core team. It offers two levels of API access:
+TON Center offers two levels of API access:
 
-- **TON Center API V3:** delivers indexed and enriched blockchain data in a convenient format, with support for flexible filtering. Data is validated once at indexing time.
-- **TON Center API V2:** provides data directly from TON nodes. It supports limited filtering and validates data on every request.
+- **TON Center API/v3:** delivers indexed and enriched blockchain data in a convenient format, with support for flexible filtering. Data is validated once at indexing time.
+- **TON Center API/v2:** provides data directly from TON nodes. It supports limited filtering and validates data on every request.
 
 ### TON API
 
 A solution focused on business needs. It often provides ready-made implementations for common tasks in TON.
-
-### Tonhub API
-
-An alternative open-source HTTP API service with a unique structure different from TON API and TON Center. This interface may be helpful in some specific use cases.
 
 ---
 
@@ -37,7 +50,7 @@ Data that undergoes minimal post-processing is often referred to as **raw data**
 
 In contrast, when working with event analytics that does **not** involve significant asset transfers, it is often more efficient to use **high-level interfaces** — such as APIs that apply post-processing before returning results. These interfaces provide simplified, structured data that is easier to work with in most application-level scenarios.
 
-In TON, transactions are grouped into blocks. Because TON uses **sharding**, each Masterchain block includes references to the corresponding shard blocks. A shard block in the Basechain is considered finalized once a Masterchain block references that block. This also applies if any block built on top of it (its descendants) is referenced. To retrieve all transactions, services must, therefore, read both the Masterchain and the relevant Basechain shard blocks.
+In TON, transactions are grouped into blocks. Because TON uses **sharding**, each MasterChain block includes references to the corresponding shard blocks. A shard block in the BaseChain is considered finalized once a MasterChain block references that block. This also applies if any block built on top of it (its descendants) is referenced. To retrieve all transactions, services must, therefore, read both the MasterChain and the relevant BaseChain shard blocks.
 
 All WorkChain blocks follow a consistent structure. For transaction analysis, the relevant section is the `block_extra` field.
 
@@ -70,7 +83,7 @@ Thus, when reading the blockchain, services iteratively process blocks, starting
 
 - **Trace**: a trace is a deterministic graph of all transactions triggered by a single external message. Trace interfaces enable the retrieval of the complete graph associated with a specific transaction, making it easier to analyze all related interactions.
   This is especially useful for exchanges and analytical tools to verify asset flows or to reconstruct the logic of a business operation.
-  Trace can also be used to detect Jetton transfers even in the absence of Jetton notification messages. It is particularly relevant when a business operation spans multiple interdependent transactions.
+  Traces can also be used to detect Jetton transfers even in the absence of Jetton notification messages. It is particularly relevant when a business operation spans multiple interdependent transactions.
 
 - **Action**: an action is an aggregated abstraction that represents a complete business operation across one or more account state changes.
   For example, transferring Jettons between two users would be represented as a single action.
@@ -84,10 +97,10 @@ Thus, when reading the blockchain, services iteratively process blocks, starting
 
 To fetch transaction data, you can use high-level interfaces such as:
 
-- `get /actions`
-- `get /traces`
-- `get /jetton/transfers` and `get /jetton/burns`
-- `get /nft`
+- `GET /actions`
+- `GET /traces`
+- `GET /jetton/transfers` and `GET /jetton/burns`
+- `GET /nft`
 
 With this approach, the developer doesn’t need to parse the contents of individual transactions.
 This method, which involves no additional data validation, is only suitable when fund transfers are not involved.
@@ -97,8 +110,8 @@ In addition to simple service-level checks, this approach can also be used in mo
 
 ### By message payload
 
-To get transaction by external or internal message, use [/api/v3/transactionsByMessage](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_message).
-Available only in API v3.
+To get transactions by external or internal message, use [/api/v3/transactionsByMessage](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_message).
+Available only in API/v3.
 
 This approach is beneficial when tracking a small number of accounts (up to \~10).
 It works well for wallet-v4 and wallet-v5 transfers and is primarily used to find transactions triggered by external messages.
@@ -121,16 +134,16 @@ This method is broadly supported, including LiteClient. It's suitable for tracki
 
 When monitoring a large number of accounts (1,000 or more), it's better to iterate through all transactions starting from the latest MasterChain block.
 
-- **API v2**:
+- **API/v2**:
 
 1. Fetch shard information for the MasterChain block
 2. Compute shard diffs
 3. For each resulting block, call `getBlockTransactionsExt`
-   See: TON Center cookbook: [How to scan blockchain](https://docs.toncenter.com/docs/ton-center-cookbook#how-to-scan-blockchain)
+   See: TON Center cookbook: [How to scan the blockchain](https://docs.toncenter.com/docs/ton-center-cookbook#how-to-scan-blockchain)
 
-- **API v3**:
+- **API/v3**:
 
-Do not reuse the API v2 logic. Instead, use the dedicated method:
+Do not reuse the API/v2 logic. Instead, use the dedicated method:
 
 [GET /api/v3/transactionsByMasterchainBlock](https://toncenter.com/api/v3/index.html#/blockchain/api_v3_get_transactions_by_masterchain_block)
 
@@ -141,7 +154,8 @@ However, for greater security, it is always recommended to process transactions 
 
 ### API response
 
-In the blockchain, a regular transaction consists of a whole body and a unique header.
+In the blockchain, a regular transaction consists of a body and a header.
+
 
 ```tlb
 transaction$0111 account_addr:bits256 lt:uint64
@@ -171,7 +185,7 @@ Each transaction returned in the API response (`Transaction[]`) reflects the str
 - Native computed – the core data exists on-chain, but additional information is expanded by the API.
 - Postprocessed – data computed additionally by the API provider based on indexed information.
 
-One of the **most important computed fields** is the **transaction hash**, which does not exist in the blockchain itself. It is generated by the API provider.
+One of the **most important computed fields** is the **transaction hash**. The transaction hash is not stored on‑chain as a field; it is a deterministic representation hash of the Transaction cell that APIs compute and clients can compute locally.
 
 ```json
 "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM="
@@ -185,7 +199,7 @@ The [https://toncenter.com/api/v2/getTransactions](https://toncenter.com/api/v2/
 
 Example `curl` request:
 
-```curl
+```bash
 curl -X 'GET' \
   'https://toncenter.com/api/v2/getTransactions?address=EQAFmjUoZUqKFEBGYFEMbv-m61sFStgAfUR8J6hJDwUU09iT&limit=10&to_lt=0&archival=true' \
   -H 'accept: application/json'
@@ -201,17 +215,17 @@ The response includes the transaction body, which consists of the following comp
 
 | Field                     | Origin          | Description                                                                                 | Example                                              |
 | ------------------------- | --------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
-| `address.account_address` | Native computed | Account address where the transaction occurred; returned in userfriendly format             | `"EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1"` |
+| `address.account_address` | Native computed | Account address where the transaction occurred; returned in user-friendly format             | `"EQDcN89ChMLQe4G-p5Tqk5qhH_PpY9lbhRjXNagmCGsg_9l1"` |
 | `utime`                   | Native          | UNIX timestamp of the transaction. TL-B field name: `now`                                   | `1736738146`                                         |
 | `transaction_id.hash`     | Postprocessed   | Hash of the current transaction                                                             | `mkma+u5TOi12BSu6m6YhZaatY2b2ozdabOdBnVuWmWM=`       |
 | `transaction_id.lt`       | Native          | Logical time of the transaction; unique per account. TL-B field name: `lt`                  | `52863169000074`                                     |
-| `fee`                     | Native          | Total amount of fees associated with the transaction. TL-B field: `total_fees`in Gas units. | `1207600`                                            |
-| `storage_fee`             | Native          | Storage fees. TL-B field: `Trans Descriptor` -> `TrStoragePhase` ->                         | `1207600`                                            |
+| `fee`                     | Native          | Total amount of fees associated with the transaction. TL-B field: `total_fees` in nanotons. | `1207600`                                            |
+| `storage_fee`             | Native          | Storage fees. TL‑B: `TransactionDescr` → `TrStoragePhase` → `storage_fees_collected`.       | `1207600`                                            |
 | `other_fee`               | Native          | `other_fee` = `fee` - `storage_fee`                                                         | `1207600`                                            |
-| `in_msg`                  | Native          | Inbound message `Message X` structure that triggered this transaction                       | `"in_msg": {...}`                                    |
-| `out_msgs`                | Native          | List of outbound messages represented by `Message X` structure                              | `"out_msgs": [{...}, {...}, ...,  {...}]`            |
+| `in_msg`                  | Native          | Inbound message `Message Any` structure that triggered this transaction                     | `"in_msg": {...}`                                    |
+| `out_msgs`                | Native          | List of outbound messages represented by `Message Any` structure                            | `"out_msgs": [{...}, {...}, ...,  {...}]`            |
 
-```json
+```jsonc
  "result": [
     {
       "@type": "raw.transaction",
@@ -241,6 +255,7 @@ The response includes the transaction body, which consists of the following comp
 ```
 
 <details>
+  <summary>Full JSON example</summary>
   ```json
   "result": [
   {
@@ -312,7 +327,7 @@ The [https://toncenter.com/api/v3/transactions](https://toncenter.com/api/v3/tra
 
 Example request:
 
-```curl
+```bash
 curl -X 'GET' \
   'https://toncenter.com/api/v3/transactions?limit=10&offset=0&sort=desc' \
   -H 'accept: application/json'
@@ -323,17 +338,17 @@ The transaction object includes the following key sections:
 - Header data - transaction metadata `lt`, `now` (Unix time)
 - Incoming message data - a message that initiated the transaction
 - Compute phase data - results of command executions
-- Action phase data  - results of actions done after computed, sent messages
-- Block ref - data of the blockchain block belonging.
-- Account state before　and after
+- Action phase data — results of actions performed after the compute phase.
+- Block reference — reference to the block this transaction belongs to.
+- Account state before and after
 
 | Field                  | Origin          | Description                                                            | Example                                                                |
 | ---------------------- | --------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| `"account"`            | Native computed | Account address where the transaction occurred; returned in RAW format | `"0:C8F053E2CE.."`                                                     |
+| `account`              | Native computed | Account address where the transaction occurred; returned in RAW format | `"0:C8F053E2CE.."`                                                     |
 | `hash`                 | Postprocessed   | Hash of the current transaction                                        | `"/QesPZ+FW7Z.."`                                                      |
 | `utime` / `now`        | Native          | UNIX timestamp of the transaction. TL-B field name: `now`              | `1696238450`                                                           |
 | `lt`                   | Native          | Logical time of the transaction                                        | `"15371766000003"`                                                     |
-| `mc_block_seqno`       | Postprocessed   | Sequence number of the masterchain block containing this transaction   | `13353447`                                                             |
+| `mc_block_seqno`       | Postprocessed   | Sequence number of the MasterChain block containing this transaction   | `13353447`                                                             |
 | `trace_id`             | Postprocessed   | ID of traces in TON Center API/v3                                      | `"13b...dBjpfc="`                                                      |
 | `prev_trans_hash`      | Native          | Hash of the previous transaction on this account                       | `"6+AzO3...dwuI="`                                                     |
 | `prev_trans_lt`        | Native          | Logical time of the previous transaction                               | `"15371704000004"`                                                     |
@@ -343,13 +358,13 @@ The transaction object includes the following key sections:
 | `description`          | Native computed | Set of transaction descriptors `type`, `aborted`                       | `{ "type": "ord", "aborted": false, ... }`                             |
 | `compute_ph`           | Native          | Deserialized `TrComputePhase` structure                                | `{ "success": true, "gas_used": "8823", "exit_code": 0 }`              |
 | `action`               | Native          | Deserialized `TrActionPhase` structure                                 | `{ "success": true, "msgs_created": 1, "total_fwd_fees": "10871000" }` |
-| `block_ref`            | Computed        | Reference to the block this transaction belongs to                     | `{ "workchain": 0, "seqno": 14627985 }`                                |
-| `in_msg`               | Native          | Inbound message `Message X` structure that triggered this transaction  | `{ "source": "...", "value": "400000000", "opcode": "0x0f8a7ea5" }`    |
-| `out_msgs`             | Native          | List of outbound messages represented by `Message X` structure         | `[ { "destination": "...", "value": "380306000" }, ... ]`              |
+| `block_ref`            | Postprocessed   | Reference to the block this transaction belongs to                     | `{ "workchain": 0, "seqno": 14627985 }`                                |
+| `in_msg`               | Native          | Inbound message `Message Any` structure that triggered this transaction| `{ "source": "...", "value": "400000000", "opcode": "0x0f8a7ea5" }`    |
+| `out_msgs`             | Native          | List of outbound messages represented by `Message Any` structure       | `[ { "destination": "...", "value": "380306000" }, ... ]`              |
 | `account_state_before` | Native          | Account state snapshot before this transaction                         | `{ "balance": "37821399", "status": "active" }`                        |
 | `account_state_after`  | Native          | Account state snapshot after this transaction                          | `{ "balance": "37821351", "status": "active" }`                        |
 
-```json
+```jsonc
  {
   "account": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF",
   "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=",
@@ -393,13 +408,14 @@ The transaction object includes the following key sections:
 ```
 
 <details>
-  ```json
+  <summary>Full JSON example</summary>
+  ```jsonc
   {
-    "account": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account of transcation
+    "account": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account of transaction
     "hash": "/QesPZ+FW7Z0MdG/vVDuYR/sK1dWx2Nip6CCDbdqQeM=", # transaction hash
     "lt": "15371766000003", # logical time, may have same values for txs on different accounts but every transaction on a given account will have unique lt
     "now": 1696238450, # unix timestamp
-    "mc_block_seqno": 13353447, # seqno of masterchain block
+    "mc_block_seqno": 13353447, # seqno of MasterChain block
     "trace_id": "13bnlzO0u4ayE5qPXtdSTUikuLaoYJj5HL4GZdBjpfc=", # tx_hash of the root transaction of the trace
     "prev_trans_hash": "6+AzO3VYCnq9PO5ibdHXE5i9VASBo/DS9iYZksVdwuI=", # hash of previous transaction on this account
     "prev_trans_lt": "15371704000004", # lt of prev. transaction
@@ -456,20 +472,20 @@ The transaction object includes the following key sections:
   },
     # in message
     "in_msg": {
-    "hash": "O9XCuICyXBWOs4hHMOYA0k6o4GPBsWbAkjFi2qbttQE=", # full message hash (headers + body)
-    "source": "0:F0C9C78F021AC65839B4006321A68BBB32DE5025F84C853CB9D75EB4894D0848", # account who has sended this message
-    "destination": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account who received this message (for in_msg should be same as account of transaction)
-    "value": "400000000", # attached TONS
-    "fwd_fee": "1494679", # fee for forwarding the message using Hypercube Routing
-    "ihr_fee": "0", # fee for forwarding the message throught Instant Hypercube Routing (now IHR is not implemented so this should be added to value)
-    "created_lt": "15371766000002", # logical time of creation (usually slightly differs from transaction lt, where this message appears as an out_msg)
-    "created_at": "1696238450", # unix timestamp
-    "opcode": "0x0f8a7ea5", # opcode
-    "ihr_disabled": true,
-    "bounce": true, # if bounce should be perfomed on failure
-    "bounced": false, # if bounce has happened
-    "import_fee": null,
-    "message_content": { # message body
+      "hash": "O9XCuICyXBWOs4hHMOYA0k6o4GPBsWbAkjFi2qbttQE=", # full message hash (headers + body)
+      "source": "0:F0C9C78F021AC65839B4006321A68BBB32DE5025F84C853CB9D75EB4894D0848", # account that sent this message
+      "destination": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # account that received this message (for in_msg, should be the same as the transaction account)
+      "value": "400000000", # attached TON
+      "fwd_fee": "1494679", # fee for forwarding the message using Hypercube Routing
+      "ihr_fee": "0", # fee for forwarding the message through Instant Hypercube Routing (now IHR is not implemented so this should be added to value)
+      "created_lt": "15371766000002", # logical time of creation (usually slightly differs from transaction lt, where this message appears as an out_msg)
+      "created_at": "1696238450", # unix timestamp
+      "opcode": "0x0f8a7ea5", # opcode
+      "ihr_disabled": true,
+      "bounce": true, # if bounce should be performed on failure
+      "bounced": false, # if bounce has happened
+      "import_fee": null,
+      "message_content": { # message body
     "hash": "tWjTyEL/sabOLNt97uyCj5na740lW54GUcVa0UrSDao=", # message body hash (only payload)
     # message body in base64 format
     "body": "te6cckEBAgEAiAABbQ+KfqUAAAAAdJizmkC/A/doAc9ztfOy5YIoBWjnofpWHchoFtAb/s4FvzXctxUu0Cf0ED8uUQMBAJclk4VhgB3j1vChEcRNFz9a4PfQWGcds91PdwGR6Jm4o4muESRZKAJfTMEAPDJx48CGsZYObQAYyGmi7sy3lAl+EyFPLnXXrSJTQhIQIjm5Xw==",
@@ -480,7 +496,7 @@ The transaction object includes the following key sections:
     "out_msgs": [
   {
     "hash": "FuV4JPR/uZZOCzZxWQ473bASToqChvKDLmnf5BiCspI=", # full message hash (headers + body)
-    "source": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # should coinside with transaction account for out_msg
+    "source": "0:C8F053E2CE6406D3D8FCFA30BA0D0EFC3FD9FE9217DCD50147EB73BFC4EA5BBF", # should coincide with the transaction account for out_msg
     "destination": "0:794760D36E657A27CDB8D3D65F243D6B468CAD2C34AF413E7709390E4DBE9907",
     "value": "380306000",
     "fwd_fee": "7247389",

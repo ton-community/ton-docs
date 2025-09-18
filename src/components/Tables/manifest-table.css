@@ -1,5 +1,4 @@
-/* styles.module.css */
-.table {
+.manifest-table {
   width: 100%;
   table-layout: auto;
   font-size: 16px;
@@ -7,16 +6,28 @@
   border-collapse: collapse;
 }
 
-.th, .td {
+.manifest-table th,
+.manifest-table td {
   padding: 10px 9px;
   text-align: left;
   border-bottom: 1px solid #ccc;
   vertical-align: middle;
 }
 
-.td code {
+.manifest-table td code {
   font-family: monospace;
   background: #f5f5f5;
   padding: 0.2em 0.4em;
-  border-radius: 4px;
+  color: #111111;
+}
+
+/* Dark theme overrides */
+html[data-theme='dark'] .manifest-table th,
+html[data-theme='dark'] .manifest-table td {
+  border-bottom: 1px solid #333333;
+}
+
+html[data-theme='dark'] .manifest-table td code {
+  background: #2c2c2c;
+  color: #f5f5f5;
 }

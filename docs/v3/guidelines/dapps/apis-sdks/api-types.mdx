@@ -1,91 +1,80 @@
 import Feedback from '@site/src/components/Feedback';
 
-# API types
+# APIs
 
-**High availability blockchain APIs are essential for developing secure, efficient, and scalable applications on TON.**
+## Types of API
 
-- [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis) — An API that allows working with the _indexed blockchain information_.
-- [TON ADNL API](/v3/guidelines/dapps/apis-sdks/ton-adnl-apis) — A secure API for communicating with TON using the ADNL protocol.
+TON provides several ways to interact with the blockchain, depending on your use case:
 
-:::tip TON Infrastructure Status
+- **HTTP API** — basic access to blockchain data for queries and transactions.
+- **Indexed API** — high-level access to structured blockchain data.
+- **ADNL** — raw network-level protocol for advanced and custom integrations.
 
-- [status.toncenter](https://status.toncenter.com/) - Displays various node activity statistics from the last hour.
-- [Tonstat.us](https://tonstat.us/) - A real-time Grafana dashboard, updated every 5 minutes.
-  :::
-
-## TON Center APIs
-
-- [TON Index](https://toncenter.com/api/v3/) - Collects data from a full node into a PostgreSQL database and provides a convenient API for accessing indexed blockchain data.
-- [toncenter/v2](https://toncenter.com/) - Enables HTTP access to TON Blockchain, allowing developers to retrieve account and wallet information, look up blocks and transactions, send messages to the blockchain, call smart contract methods, and more.
-
-## Third-party APIs
-
-- [tonapi.io](https://docs.tonconsole.com/tonapi) - A fast indexed API that provides basic data about accounts, transactions, blocks, application-specific data about NFT, auctions, jettons, TON DNS, and subscriptions. It also offers annotated transaction chain data.
-- [dton.io](https://dton.io/graphql/) - A GraphQL API that delivers data on accounts, transactions, and blocks, as well as application-specific data about NFT, auctions, jettons, and TON DNS.
-- [ton-api-v4](https://mainnet-v4.tonhubapi.com) - A lightweight API optimized for speed through aggressive CDN caching
-- [docs.nftscan.com](https://docs.nftscan.com/reference/ton/model/asset-model) - NFT APIs for TON Blockchain.
-- [everspace.center](https://everspace.center/toncoin) - A simple RPC API for accessing TON Blockchain.
-
-## Additional APIs
-
-### Toncoin rate APIs
-
-- [https://docs.tonconsole.com/tonapi/rest-api/rates](https://docs.tonconsole.com/tonapi/rest-api/rates)
-- [https://coinmarketcap.com/api/documentation/v1/](https://coinmarketcap.com/api/documentation/v1/)
-- [https://apiguide.coingecko.com/getting-started](https://apiguide.coingecko.com/getting-started)
-
-### Address convert APIs
+## HTTP API
+The HTTP API allows you to interact with the TON blockchain through both REST and JSON-RPC interfaces: fetch account and wallet information, explore blocks and transactions, send messages, call smart contract methods, and more.
 
 :::info
-It is preferable to convert addresses using a local algorithm. See [Addresses](/v3/documentation/smart-contracts/addresses) section of documentation for details.
+We recommend integrating at least 2 providers for production environment.
 :::
 
-#### From friendly to raw form
+### Providers
 
-/api/v2/unpackAddress
+- [TON Center](https://toncenter.com/api/v2/)
+- [Chainstack](https://chainstack.com/build-better-with-ton/)
+- [Ankr](https://www.ankr.com/rpc/ton/)
+- [QuickNode](https://www.quicknode.com/chains/ton)
+- [Tatum](https://tatum.io/)
+- [GetBlock](https://getblock.io/nodes/ton/) (see a [tutorial](/v3/guidelines/dapps/apis-sdks/getblock-ton-api))
+- [Chainbase](https://chainbase.com/)
+- [NowNodes](https://nownodes.io/nodes/ton)
 
-Curl
+### Own instance
 
-```curl
-curl -X 'GET' \
-'https://toncenter.com/api/v2/unpackAddress?address=EQApAj3rEnJJSxEjEHVKrH3QZgto_MQMOmk8l72azaXlY1zB' \
--H 'accept: application/json'
-```
+See the [API setup guide](https://github.com/toncenter/ton-http-api) for instructions on running your own instance.
 
-Response body
+### SDKs
 
-```curl
-{
-"ok": true,
-"result": "0:29023deb1272494b112310754aac7dd0660b68fcc40c3a693c97bd9acda5e563"
-}
-```
 
-#### From friendly to raw form
+| Library                                    | Language   | Description           |
+|--------------------------------------------|------------|-----------------------|
+| [@ton/ton](https://github.com/ton-org/ton) | JavaScript | Client library providing wallet wrappers for building DApps on TON Blockchain. |
 
-/api/v2/packAddress
 
-Curl
+## Indexed API
 
-```curl
-curl -X 'GET' \
-'https://toncenter.com/api/v2/packAddress?address=0%3A29023deb1272494b112310754aac7dd0660b68fcc40c3a693c97bd9acda5e563' \
--H 'accept: application/json'
-```
+APIs that provide structured, historical, and aggregated blockchain data. Useful for explorers, analytics, and applications that need fast queries without running a node.
 
-Response body
+### Providers
 
-```json
-{
-  "ok": true,
-  "result": "EQApAj3rEnJJSxEjEHVKrH3QZgto/MQMOmk8l72azaXlY1zB"
-}
-```
+- [TON API](https://docs.tonconsole.com/tonapi)
+- [TON Center v3](https://toncenter.com/api/v3/index.html)
+
+
+## ADNL
+
+ADNL (Abstract Datagram Network Layer) is TON’s peer-to-peer protocol. It allows low-level network messaging and direct interaction with nodes. Typically used for building node software, validators, or advanced network tools.
+
+Learn more in the [ADNL overview](/v3/documentation/network/protocols/adnl/overview).
+
+:::info
+We recommend running your own lite servers or using trusted providers for production environment.
+:::
+
+### Providers
+
+- [dTON](https://t.me/dtontech_bot)
+- Public lite servers from the [global config](/v3/documentation/network/global-config).
+
+### Own instance
+
+See the [lite server setup guide](/v3/guidelines/nodes/running-nodes/liteserver-node) for instructions on running your own instance.
+
+### Usage
+
+See a dedicated page about [ADNL API](/v3/guidelines/dapps/apis-sdks/ton-adnl-apis).
 
 ## See also
 
-- [TON HTTP API](/v3/guidelines/dapps/apis-sdks/ton-http-apis)
 - [List of SDKs](/v3/guidelines/dapps/apis-sdks/sdk)
-- [TON cookbook](/v3/guidelines/dapps/cookbook)
 
 <Feedback />

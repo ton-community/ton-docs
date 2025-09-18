@@ -2,25 +2,113 @@ import Feedback from '@site/src/components/Feedback';
 
 # External messages
 
-External messages are `sent from the outside` to the smart contracts residing in TON Blockchain to make them perform certain actions.
+**External message** in TON is a message that originates *outside the blockchain* or is intended for actors *outside it*. These messages enable interaction between smart contracts and the external world. External messages come in two types:
 
-For instance, a wallet smart contract expects to receive external messages containing orders (e.g., internal messages to be sent from the wallet smart contract) signed by the wallet's owner. When such an external message is received by the wallet smart contract, it first checks the signature, then accepts the message (by running the TVM primitive `ACCEPT`), and then performs whatever actions are required.
+- External incoming messages
+- External outgoing messages
+
+## External incoming messages
+
+**External incoming messages (external inbound, ext_in)** are messages sent from outside to smart contracts on TON Blockchain. They serve as the main entry point for external actors to interact with the blockchain.
+
+**Key points**
+- Any account can receive external incoming messages, but handling depends on the contract’s logic.
+- Common sources include wallet users, validators, and DApp services.
+- Wallet contracts often receive external incoming messages and relay instructions internally through _internal messages_.
+
+### External incoming message structure
+
+All messages in TON commonly defined with the following structure: 
+
+```tlb
+message$_ {X:Type} info:CommonMsgInfo
+init:(Maybe (Either StateInit ^StateInit))
+body:(Either X ^X) = Message X;
+```
+
+- `info: CommonMsgInfo` — contains metadata about the message.
+- `init: (Maybe (Either StateInit ^StateInit))` — optional field used to initialize a new account or update the existing one.
+- `body: (Either X ^X)` —  the main payload of the message; can be embedded directly or stored as a reference.
+
+An **external incoming message** is a message whose `CommonMsgInfo` header organized as the `ext_in_msg_info$10` structure.
+
+```tlb
+//external incoming message
+ext_in_msg_info$10 src:MsgAddressExt dest:MsgAddressInt
+import_fee:Grams = CommonMsgInfo;
+```
+
+| Structure          | Type                                 | Required | Description                                                                                                                     |
+|--------------------|--------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------|
+| ext_in_msg_info$10 | Constructor                          | Required | The `$10` tag indicates that the `CommonMsgInfo` begins with `10` bits in serialization, denoting an external incoming message. |
+| src                | [MsgAddressExt](#msgaddressext-tl-b) | Required | The external sender’s address.                                                                                                  |
+| dest               | [MsgAddressInt](#msgaddressint-tl-b) | Required | The destination smart contract address.                                                                                         |
+| import_fee         | [VarUInteger 16](#varuinteger-n)     | Required | The fee for executing and delivering the message.                                                                               |
+
+
+The sender is always an **external actor**— either a wallet or custom code interacting through blockchain APIs.
+
+
+## External outgoing messages
+
+**External outgoing messages (external-out)** are messages sent _from a smart contract to an off-chain actor `(MsgAddressExt)`_. Unlike internal or incoming messages, they do **not** have a specific recipient within the blockchain.
+
+**Key points**
+- Used to communicate with external systems, e.g., as callbacks or signals.
+- Typically important for tasks such as:
+  - Indexing and monitoring blockchain state,
+  - Triggering off-chain processes like notifying external services or updating UIs.
+
+
+### External outgoing message structure
+
+All messages in TON commonly defined with the following structure:
+
+```tlb
+message$_ {X:Type} info:CommonMsgInfo
+init:(Maybe (Either StateInit ^StateInit))
+body:(Either X ^X) = Message X;
+```
+
+- `info: CommonMsgInfo` — contains metadata about the message.
+- `init: (Maybe (Either StateInit ^StateInit))` — optional field used to initialize a new account or update the existing one.
+- `body: (Either X ^X)` —  the main payload of the message; can be embedded directly or stored as a reference.
+
+An **external outgoing message** is a message whose `CommonMsgInfo` header organized as the `ext_out_msg_info$11`
+
+```tlb
+//external outgoing message
+ext_out_msg_info$11 src:MsgAddressInt dest:MsgAddressExt
+created_lt:uint64 created_at:uint32 = CommonMsgInfo;
+```
+
+
+| Structure           | Type                                 | Required | Description                                                                                                                     |
+|---------------------|--------------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------|
+| ext_out_msg_info$11 | Constructor                          | Required | The `$11` tag indicates that the `CommonMsgInfo` begins with `11` bits in serialization, denoting an external outgoing message. |
+| src                 | [MsgAddressInt](#msgaddressint-tl-b) | Required | The sender’s smart contract address.                                                                                            |
+| dest                | [MsgAddressExt](#msgaddressext-tl-b) | Required | The external destination address for the message.                                                                               |
+| created_lt          | uint64                               | Required | Logic times of the message, assigned by the validator. Used for ordering actions in the smart contract.                         |
+| created_at          | uint32                               | Required | UNIX timestamp representing when the message was created.                                                                       |
+
 
 ## Replay protection
 
 :::caution
-Stay vigilant and check replay protection in contracts for external-in messages.
+Ensure replay protection in contracts that process external inbound (ext_in) messages.
 :::
 
-Notice that all external messages must be protected against replay attacks. The validators normally remove an external message from the pool of suggested external messages (received from the network); however, in some situations another validator could process the same external message twice (thus creating a second transaction for the same external message, leading to the duplication of the original action). Even worse, a `malicious actor could extract` the external message from the block containing the processing transaction and re-send it later. This could force a wallet smart contract to repeat a payment.
+Notice that all external messages must be protected against replay attacks. The validators normally remove an external message from the pool of suggested external messages (received from the network); however, in some situations a validator could process the same external message twice, resulting in a duplicate transaction. Even worse, a malicious actor could extract the external message from the block containing the processing transaction and resend it later. This could force a wallet smart contract to repeat a payment.
 
-The simplest way to protect smart contracts from replay attacks related to external messages is to store a 32-bit counter `cur-seqno` in the persistent data of the smart contract, and to expect a `req-seqno` value in (the signed part of) any inbound external messages. Then an external message is accepted only if both the signature is valid and `req-seqno` equals `cur-seqno`. After successful processing, the `cur-seqno` value in the persistent data is increased by one, so the same external message will never be accepted again.
+The simplest way to protect smart contracts from replay attacks related to external messages is to store a 32-bit counter `seqno` in the persistent data of the smart contract, and to expect a `msg-seqno` value in (the signed part of) any inbound external messages. Then an external message is accepted only if both the signature is valid and `msg-seqno` equals `seqno`. After successful processing, the `seqno` value in the persistent data is increased by one, so the same external message will never be accepted again.
 
-And one could also include an `expire-at` field in the external message, and accept an external message only if the current Unix time is less than the value of this field. This approach can be used in conjunction with `seqno`; alternatively, the receiving smart contract could store the set of (the hashes of) all recent (not expired) accepted external messages in its persistent data, and reject a new external message if it is a duplicate of one of the stored messages. Some garbage collection of expired messages in this set should also be performed to avoid bloating the persistent data.
+Include a `valid-until` field (32-bit Unix time) in the external message and accept it only if the current Unix time is less than `valid-until`; this can be used together with the `seqno` mechanism. Alternatively, the receiving smart contract could store the set of (the hashes of) all recent (not expired) accepted external messages in its persistent data and reject a new external message if it is a duplicate of one of the stored messages. Some garbage collection of expired messages in this set should also be performed to avoid bloating the persistent data. See also: [Wallet v2 spec](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v2), [Wallet replay protection](/v3/guidelines/smart-contracts/howto/wallet#replay-protection).
 
-:::note  
-In general, an external message begins with a 256-bit signature (if needed), a 32-bit `req-seqno` (if needed), a 32-bit `expire-at` (if needed), and possibly a 32-bit `op` and other required parameters depending on `op`. The layout of external messages does not need to be as standardized as that of internal messages because external messages are not used for interaction between different smart contracts (written by different developers and managed by different owners).  
+:::note
+In general, an external message begins with a 512-bit Ed25519 signature (if needed), a 32-bit `msg-seqno` (if needed), a 32-bit `valid-until` (if needed), and possibly a 32-bit `op` and other required parameters depending on `op`. The layout of external messages does not need to be as standardized as that of internal messages because external messages are not used for interaction between different smart contracts (written by different developers and managed by different owners).
 :::
+
+### See also
+- [Message-driven execution](/v3/guidelines/dapps/transactions/message-driven-execution)
 
 <Feedback />
-

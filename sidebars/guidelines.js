@@ -206,7 +206,7 @@ module.exports = [
       },
       {
         type: 'category',
-        label: 'APIs and SDKs',
+        label: 'Blockchain APIs',
         link: {
           type: 'generated-index',
           title: 'APIs and SDKs',
@@ -215,10 +215,10 @@ module.exports = [
         },
         items: [
           'v3/guidelines/dapps/apis-sdks/overview',
-          'v3/guidelines/dapps/apis-sdks/sdk',
           'v3/guidelines/dapps/apis-sdks/api-types',
-          'v3/guidelines/dapps/apis-sdks/ton-http-apis',
+          'v3/guidelines/dapps/apis-sdks/sdk',
           'v3/guidelines/dapps/apis-sdks/ton-adnl-apis',
+          'v3/guidelines/dapps/apis-sdks/analytics-and-data',
         ],
       },
       {
@@ -324,8 +324,6 @@ module.exports = [
               'v3/guidelines/dapps/tma/tutorials/design-guidelines',
             ],
           },
-          'v3/guidelines/dapps/tma/notcoin',
-          'v3/guidelines/dapps/tma/grants',
         ],
       },
       {
@@ -386,6 +384,7 @@ module.exports = [
           'v3/guidelines/nodes/running-nodes/full-node',
           'v3/guidelines/nodes/running-nodes/liteserver-node',
           'v3/guidelines/nodes/running-nodes/validator-node',
+          'v3/guidelines/nodes/running-nodes/collators-validators',
           'v3/guidelines/nodes/running-nodes/staking-with-nominator-pools',
           'v3/guidelines/nodes/running-nodes/run-mytonctrl-docker',
           'v3/guidelines/nodes/running-nodes/running-a-local-ton',
@@ -532,21 +531,6 @@ module.exports = [
         ],
       },
 
-      // 9. Business
-      {
-        type: 'category',
-        label: 'Business',
-        link: {
-          type: 'generated-index',
-          title: 'Business',
-          slug: '/guidelines/business',
-          keywords: ['business'],
-        },
-        items: [
-          'v3/guidelines/ton-connect/business/ton-connect-for-business',
-          'v3/guidelines/ton-connect/business/ton-connect-for-security'
-        ],
-      }
     ],
 
   },

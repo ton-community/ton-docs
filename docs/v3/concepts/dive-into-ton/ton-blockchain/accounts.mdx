@@ -1,0 +1,44 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Accounts
+
+In TON, an **account** is an **actor** - an isolated computational entity that communicates exclusively through message passing. This design follows the **actor model** of concurrent computation, which is based on:
+- *Actor isolation* - accounts cannot access each other’s internal state.
+- *Asynchronous communication* - interactions happen through messages that may be delivered and processed at different times.
+- *Universality* - any computational abstraction can be implemented as an actor.
+
+## Structure
+Each account consists of:
+- **[Properties](#properties)** — basic information about an account. These properties let users track their funds and activity.
+- **Data** — storage, holding contract-specific information. This is where an account keeps its custom data.
+- **Code** — the logic that determines how the account reacts to incoming messages and generates outgoing ones. This defines the account’s behavior on the blockchain.
+
+:::note
+Accounts that include both **code** and **data**, in addition to their properties, are considered **smart contracts** on the blockchain.
+:::
+
+## Properties
+
+TON accounts store information in a structured format to ensure accurate tracking of balances, states, and transactions.
+
+Each account contains several key elements:
+- [Address](/v3/concepts/dive-into-ton/ton-blockchain/addresses) - the unique identifier of the account.
+- Balance - the amount of Toncoin held by the account.
+- [State](#state) - defines the account’s behavior, including its code and data.
+- Logical time of the last transaction - tracks the sequence of updates to the account.
+- Storage statistics - information about how much space the account uses on-chain.
+
+## State
+
+Every account in TON has a **state** that reflects its readiness and activity on the blockchain:
+
+| State     | Description                                                                                                                                 |
+| ---------- |---------------------------------------------------------------------------------------------------------------------------------------------|
+| **Uninitialized** | The account exists but has no code or data yet. It may hold a balance but cannot process messages.                                          |
+| **Active** | The account has **deployed code and data**. It is a fully initialized smart contract, ready to process incoming messages.       |
+| **Frozen** | The account’s code and data are removed, but a hash of the previous state is kept. It cannot be used, but it can potentially be restored.      |
+
+## See also
+- [Addresses](/v3/concepts/dive-into-ton/ton-blockchain/addresses)
+
+<Feedback />
