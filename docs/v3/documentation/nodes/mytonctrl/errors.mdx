@@ -8,28 +8,28 @@ This document explains the errors that users may encounter with **MyTonCtrl**.
 
 | Error | Possible solution |
 |:---------------------------------------------------------------------------|:----------------------------------------------------------------------|
-| Unknown module name: `name`. Available modes: `modes` | Check available modes list |
-| No mode named `name` found in current modes: `current_modes` | Check current modes list |
-| GetWalletFromFile error: Private key not found | Check wallet name path |
-| Cannot get own IP address | Verify access to the resources at [ipconfig.me](https://ifconfig.me/ip) and [ipinfo.io](https://ipinfo.io/ip) |
+| Unknown module name: `name`. Available modes: `modes` | Check available modes list [`status_modes`](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#status_modes) |
+| No module named `name` found in current modes: `current_modes` | Check current modes list [`status_modes`](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#status_modes) |
+| GetWalletFromFile error: Private key not found | Check the wallet path |
+| Cannot get own IP address | Verify access to the resources at [ifconfig.me](https://ifconfig.me/ip) and [ipinfo.io](https://ipinfo.io/ip) |
 
 ## Liteserver errors
 
 | Error | Possible solution |
 |:---------------------------------------------------------------------------|:----------------------------------------------------------------------|
 | Cannot enable liteserver mode while validator mode is enabled | Use `disable_mode validator` |
-| LiteClient error: `error_msg` | Check MyTonCtrl parameters for running liteserver |
+| LiteClient error: `error_msg` | Check MyTonCtrl parameters for running the liteserver; see [setup guidance](/v3/guidelines/nodes/running-nodes/liteserver-node) |
 
 ## Validator errors
 
 | Error | Possible solution |
 |:---------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------|
-| ValidatorConsole error: Validator console is not settings | Check [validator article](/v3/guidelines/nodes/nodes-troubleshooting#validator-console-is-not-settings) |
+| ValidatorConsole error: `Validator console is not settings` | See [Troubleshooting: Validator console is not settings](/v3/guidelines/nodes/nodes-troubleshooting#validator-console-is-not-settings) |
 | Cannot enable validator mode while liteserver mode is enabled | Use `disable_mode liteserver` |
-| Validator wallet not found | Check [validator article](/v3/guidelines/nodes/running-nodes/validator-node#view-the-list-of-wallets) |
-| Validator is not synchronized | Wait more for sync or check [sync troubleshouting](/v3/guidelines/nodes/nodes-troubleshooting#about-no-progress-in-node-synchronization-within-3-hours) |
-| Stake less than the minimum stake. Minimum stake: `minStake` | Use [`set stake {amount}`](/v3/guidelines/nodes/running-nodes/validator-node#your-validator-is-now-ready) and [check stake parameters](/v3/documentation/network/configs/blockchain-configs#param-17) |
-| Don't have enough coins. stake: `stake`, account balance: `balance` | Add funds to your account `balance`, ensuring it reaches the required `stake` amount |
+| Validator wallet not found | See [Validator node: View the list of wallets](/v3/guidelines/nodes/running-nodes/validator-node#view-the-list-of-wallets) |
+| Validator is not synchronized | Wait longer for synchronization or check [sync troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting#about-no-progress-in-node-synchronization-within-3-hours) |
+| Stake less than the minimum stake. Minimum stake: `minStake` | Use [`set stake <amount>`](/v3/guidelines/nodes/running-nodes/validator-node#your-validator-is-ready-to-use) and [check stake parameters](/v3/documentation/network/configs/blockchain-configs#param-17) |
+| Don't have enough coins. stake: `stake`, account balance: `balance` | Add funds to your account until the balance reaches the required `stake` amount |
 
 ## Nominator pool errors
 
@@ -42,4 +42,3 @@ This document explains the errors that users may encounter with **MyTonCtrl**.
 
 - [Troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting)
 <Feedback />
-
