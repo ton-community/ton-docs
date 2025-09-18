@@ -20,6 +20,7 @@ module.exports = [
       {
         type: 'category',
         label: 'Addresses',
+        link: { type: 'doc', id: 'v3/documentation/smart-contracts/addresses/address' },
         items: [
           'v3/documentation/smart-contracts/addresses/address',
           'v3/documentation/smart-contracts/addresses/address-formats',
@@ -261,7 +262,7 @@ module.exports = [
                 label: 'Overview',
                 id: 'v3/documentation/network/protocols/adnl/overview',
               },
-              'v3/documentation/network/protocols/adnl/low-level', // TODO: MERGE ADNL
+              'v3/documentation/network/protocols/adnl/low-level',
               'v3/documentation/network/protocols/adnl/tcp',
               'v3/documentation/network/protocols/adnl/udp',
             ],
