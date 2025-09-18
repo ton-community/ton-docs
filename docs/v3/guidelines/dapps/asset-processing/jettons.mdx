@@ -34,7 +34,7 @@ It is recommended to set up multiple memo deposit wallets for better performance
 ### Additional info
 
 :::caution Transaction notification
-Each service in the ecosystem is expected to set `forward_ton_amount` to 0.001 TON when withdrawing a token to send a jetton Notify on [successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be compliant. It will not be able to be processed by other CEXs and services.
+When a centralized service performs a user withdrawal (i.e., sends jettons from its hot wallet to a user wallet), set `forward_ton_amount` > 0 if you want the `transfer_notification` (with optional comment) to be emitted. We recommend 0.001 TON as a practical default so the notification is reliably delivered and easily processed by downstream services. This is a recommendation for interoperability, not a TEP‑74 requirement: any value (including 0) is standard‑compliant; with 0 no `transfer_notification` is sent.
 :::
 
 - Refer to the JS library [tonweb](https://github.com/toncenter/tonweb) for the examples.
@@ -371,7 +371,8 @@ To prevent transaction bottlenecks in a single wallet, distribute deposits acros
 :::
 
 :::warning Transaction notification
-Each service in the ecosystem is expected to set `forward_ton_amount` to 0.001 TON when withdrawing a token, in order to send a token notification upon [a successful transfer](https://testnet.tonviewer.com/transaction/a0eede398d554318326b6e13081c2441f8b9a814bf9704e2e2f44f24adb3d407), otherwise the transfer will not be compliant and will not be processed by other CEXs and services.
+When a centralized service performs a user withdrawal (i.e., sends jettons from its hot wallet to a user wallet), set `forward_ton_amount` > 0 if you want the `transfer_notification` (with optional comment) to be emitted. We recommend 0.001 TON as a practical default so the notification is reliably delivered and easily processed by downstream services. This is a recommendation for interoperability, not a TEP‑74 requirement: any value (including 0) is standard‑compliant; with 0 no `transfer_notification` is sent.
+
 :::
 
 In this scenario, the payment service creates a unique memo identifier for each sender, revealing the
