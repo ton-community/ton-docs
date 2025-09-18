@@ -4,11 +4,11 @@ import Button from '@site/src/components/button'
 
 # Introduction
 
-Smart contracts on TON are autonomous programs executed by the [TON Virtual Machine (TVM)](/v3/documentation/tvm/overview). Each contract combines immutable code with persistent data and interacts with other contracts through asynchronous [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions).
+Smart contracts on TON are autonomous programs executed by the [TON Virtual Machine (TVM)](/v3/documentation/tvm/overview/). Each contract combines immutable code with persistent data and interacts with other contracts through asynchronous [messages](/v3/documentation/smart-contracts/message-management/messages-and-transactions).
 
 ## Quick start
 
-If you want to jump right in, follow our [quick start guide](/v3/guidelines/quick-start/developing-smart-contracts/setup-environment).
+If you want to jump right in, follow our [quick start guide](/v3/guidelines/quick-start/developing-smart-contracts/setup-environment/).
 
 ## Virtual machine
 
@@ -17,19 +17,18 @@ TVM is the execution engine for your smart contracts. It processes transactions 
 ## Messages, transaction fees and sharding
 
 In TON, smart contracts have unique addresses and communicate through asynchronous messages that trigger transactions.
+For more information, see the sections on [Mastering the transaction](/v3/guidelines/dapps/transactions/overview/).
 
 Every transaction incurs a fee. All computation costs are denominated in gas units, and the gas price is fixed by the network configuration. Fees are made up of storage, forwarding, computation and action components; their exact amount depends on message size, execution time and current network settings.
 
 Scalability in TON is achieved through sharding: the blockchain is split into smaller pieces called shards. Shards can dynamically split and merge based on load, and each shard is handled by its own set of validators. The [Infinity sharding paradigm](/v3/documentation/smart-contracts/shards/infinity-sharding-paradigm) treats each account as its own account chain, aggregated into shard chains, enabling massive parallelism.
 
-For more information, see the sections on [addresses](/v3/documentation/smart-contracts/addresses/address), [messages and transactions](/v3/documentation/smart-contracts/message-management/messages-and-transactions), [transaction fees](/v3/documentation/smart-contracts/transaction-fees/fees) and [sharding](/v3/documentation/smart-contracts/shards/shards-intro).
-
 ## Programming languages
 
 TON supports several languages for writing smart contracts:
-- [Tolk](/v3/documentation/smart-contracts/tolk/overview) – Next-generation language for developing smart contracts on TON with modern syntax, strong types, and built-in serialization.
-- [FunC](/v3/documentation/smart-contracts/func/overview) – Minimalist, functional-style language designed for writing low-level TON smart contracts, tightly bound to the TVM model.
-- [Fift](/v3/documentation/smart-contracts/fift/overview) – Stack-based language for TON, used for deployment, testing, and direct TVM interaction.
+- [Tolk](/v3/documentation/smart-contracts/tolk/overview/) – Next-generation language for developing smart contracts on TON with modern syntax, strong types, and built-in serialization.
+- [FunC](/v3/documentation/smart-contracts/func/overview/) – Minimalist, functional-style language designed for writing low-level TON smart contracts, tightly bound to the TVM model.
+- [Fift](/v3/documentation/smart-contracts/fift/overview/) – Stack-based language for TON, used for deployment, testing, and direct TVM interaction.
 
 ## TON Blockchain course
 
