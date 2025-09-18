@@ -46,7 +46,7 @@ The ciphers are utilized in the following order:
 To establish a connection, the client must send a handshake packet containing:
 
 - \[32 bytes] **Server key ID** ([details](#getting-key-id))
-- \[32 bytes] **Our Ed25519 public key (32 bytes)**
+- \[32 bytes] **Our Ed25519 public key**
 - \[32 bytes] **SHA-256 hash of our 160 bytes**
 - \[160 bytes] **Our 160 bytes encrypted** ([details](#handshake-packet-data-encryption))
 
