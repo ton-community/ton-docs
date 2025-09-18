@@ -17,12 +17,12 @@
 
 ## 从源代码编译
 
-您可以使用此[说明](/develop/howto/compile#storage-daemon)从源代码编译`storage-daemon`和`storage-daemon-cli`。
+您可以使用此[说明](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#storage-daemon)从源代码编译`storage-daemon`和`storage-daemon-cli`。
 
 ## 关键概念
 
 - *文件包*或*包* - 通过TON存储分发的文件集合
-- TON存储的网络部分基于类似于种子的技术，因此术语*种子*、*文件包*和*包*将互换使用。但重要的是要注意一些区别：TON存储通过[ADNL](/learn/networking/adnl)通过[RLDP](/learn/networking/rldp)协议传输数据，每个*包*通过其自己的网络覆盖层分发，merkle结构可以存在两个版本 - 用于高效下载的大块和用于高效所有权证明的小块，以及[TON DHT](/learn/networking/ton-dht)网络用于查找节点。
+- TON存储的网络部分基于类似于种子的技术，因此术语*种子*、*文件包*和*包*将互换使用。但重要的是要注意一些区别：TON存储通过[ADNL](/v3/documentation/network/protocols/adnl/overview)通过[RLDP](/v3/documentation/network/protocols/rldp)协议传输数据，每个*包*通过其自己的网络覆盖层分发，merkle结构可以存在两个版本 - 用于高效下载的大块和用于高效所有权证明的小块，以及[TON DHT](/v3/documentation/network/protocols/dht/overview)网络用于查找节点。
 - *文件包*由*种子信息*和数据块组成。
 - 数据块以*种子头*开头 - 包含文件列表及其名称和大小的结构。文件本身紧随在数据块中。
 - 数据块被划分为块（默认为128 KB），并且在这些块的 SHA256 散列上构建了一个 *merkle 树*（由 TVM cell构成）。这允许构建和验证单个块的 *merkle 证明*，以及通过仅交换修改块的证明来高效重建 *包*。
@@ -41,7 +41,7 @@
 `storage-daemon -v 3 -C global.config.json -I <ip>:3333 -p 5555 -D storage-db`
 
 - `-v` - 详细程度（INFO）
-- `-C` - 全局网络配置（[下载全局配置](/develop/howto/compile#download-global-config)）
+- `-C` - 全局网络配置（[下载全局配置](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config)）
 - `-I` - ADNL的IP地址和端口
 - `-p` - 控制台接口的TCP端口
 - `-D` - 存储守护程序数据库的目录
