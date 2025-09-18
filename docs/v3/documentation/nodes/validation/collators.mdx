@@ -7,7 +7,7 @@ This section provides instructions and guidance for interacting with the TON nod
 If you are using MyTonCtrl, check the [Collators and validators](/v3/guidelines/nodes/running-nodes/collators-validators.mdx) guideline for a more user-friendly experience.
 :::
 
-The key feature of TON Blockchain is the ability to distribute transaction processing across network nodes, shifting from **everybody checks all transactions** to **each transaction is checked by a secure subset of validators**. This ability to infinitely horizontally scale throughput across shards when a workchain splits into the required number of ShardChains distinguishes TON from other L1 networks.
+The key feature of TON Blockchain is the ability to distribute transaction processing across network nodes, shifting from **everybody checks all transactions** to **each transaction is checked by a secure subset of validators**. This ability to infinitely horizontally scale throughput across shards when a WorkChain splits into the required number of ShardChains distinguishes TON from other L1 networks.
 
 However, it is necessary to rotate validator subsets regularly, which involves processing one shard or another, to prevent collusion. At the same time, to process transactions, validators must know the state of the shard before the transaction. The most straightforward approach is to require all validators to be aware of the state of all shards.
 
