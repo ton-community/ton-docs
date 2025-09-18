@@ -28,7 +28,7 @@
 
 - Dune Analytics содержит набор таблиц с данными TON: необработанные транзакции и сообщения, события с жетонами и сделки на DEX. Dune позволяет создавать пользовательские диаграммы и панели мониторинга, получать результаты запросов через API и настраивать оповещения. Перед началом написания запросов, пожалуйста, ознакомьтесь с этим руководством для получения рекомендаций, советов и трюков.
 - Интеграция Dune основана на базе общедоступного хранилища данных проекта [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/datalake/README.md). Это конвейер анализа и декодирования, который загружает необработанные и декодированные данные в контейнер S3 **s3://ton-blockchain-public-datalake/v1/** в формате AVRO. Контейнер общедоступный, и каждый может использовать его с такими инструментами, как [Amazon Athena](https://aws.amazon.com/athena/) (см. [DDL](https://github.com/re-doubt/ton-etl/blob/main/datalake/athena_ddl.sql)) или Apache Spark. Данные обновляются ежедневно.
-- Если вам необходимо отслеживать данные в цепочке практически в режиме реального времени, вы можете запустить свой собственный [Узел Ton](/v3/documentation/infra/nodes/node-types) и запустить [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/README.md) или [ton-index-worker](https://github.com/toncenter/ton-index-worker).
+- Если вам необходимо отслеживать данные в цепочке практически в режиме реального времени, вы можете запустить свой собственный [Узел Ton](/v3/documentation/nodes/overview) и запустить [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/README.md) или [ton-index-worker](https://github.com/toncenter/ton-index-worker).
 - [chainbase](https://docs.chainbase.com/catalog/Ton/Overview) поставляется с набором необработанных и декодированных таблиц с данными TON. Позволяет выполнять SQL-запросы и получать результаты через API.
 
 ## Состояние инфраструктуры
@@ -40,5 +40,5 @@
 
 - [SDK](/v3/guidelines/dapps/apis-sdks/sdk)
 - [Руководства по разработке TMA](/v3/guidelines/dapps/tma/tutorials/step-by-step-guide)
-- [Руководства по TON Connect](/v3/guidelines/ton-connect/guidelines/how-ton-connect-works)
+- [Руководства по TON Connect](/v3/guidelines/ton-connect/overview)
 - [Обработка платежей](/v3/guidelines/dapps/asset-processing/payments-processing)

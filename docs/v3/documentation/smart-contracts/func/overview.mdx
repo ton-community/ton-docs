@@ -30,7 +30,7 @@ FunC is a domain-specific, C-like, statically typed language. Here is a simple e
 
 ## Compiler
 
-The compiler converts FunC programs into Fift assembler code, generating the corresponding bytecode for the [TON Virtual Machine](/v3/documentation/tvm/tvm-overview/).
+The compiler converts FunC programs into Fift assembler code, generating the corresponding bytecode for the [TON Virtual Machine](/v3/documentation/tvm/overview).
 
 Developers can use this bytecode, which is structured as a [Bag of Cells](/v3/documentation/data-formats/cells/overview) like all data in the TON Blockchain, to deploy smart contracts or run this bytecode on a local instance of the TVM.
 
@@ -46,15 +46,11 @@ npm create ton@latest
 ### Use precompiled binaries
 
 If you want to use the FunC compiler locally, you need to set up the TON compiler binaries on your machine.
-FunC compiler binaries for Windows, macOS (Intel/Apple Silicon), and Linux can be downloaded from:
 
-- [Precompiled binaries](/v3/documentation/archive/precompiled-binaries/)
-
-:::info
-Alternatively, you can build binaries from source code,
+You can build binaries from source code,
 such as the [compiler's source code for FunC](https://github.com/ton-blockchain/ton/tree/master/crypto/func/).
 Read [how to compile](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#func) it from source.
-:::
+
 
 ## TON Blockchain course
 

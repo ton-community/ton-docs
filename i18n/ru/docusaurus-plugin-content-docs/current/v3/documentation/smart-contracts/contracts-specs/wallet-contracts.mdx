@@ -106,7 +106,7 @@ Before we start, there are some terms and concepts that you should be familiar w
 | 0x0          | Стандартный код возврата при успешном выполнении.                            |
 
 :::info
-Обратите внимание, что у [TVM](/v3/documentation/tvm/tvm-overview) есть [стандартные коды возврата](/v3/documentation/tvm/tvm-exit-codes) (`0x0` — один из них), поэтому вы можете столкнуться и с один из них: например, если у вас закончится [газ](/v3/documentation/smart-contracts/transaction-fees/fees), вы получите код `0xD`.
+Обратите внимание, что у [TVM](/v3/documentation/tvm/overview) есть [стандартные коды возврата](/v3/documentation/tvm/exit-codes) (`0x0` — один из них), поэтому вы можете столкнуться и с один из них: например, если у вас закончится [газ](/v3/documentation/smart-contracts/transaction-fees/fees), вы получите код `0xD`.
 :::
 
 #### Get-методы
@@ -249,7 +249,7 @@ Before we start, there are some terms and concepts that you should be familiar w
 :::tip
 If `state_init` doesn't make much sense from its name, take a look at the following references:
 
-- [Адреса в блокчейне TON](/v3/documentation/smart-contracts/addresses#workchain-id-and-account-id)
+- [Адреса в блокчейне TON](/v3/documentation/smart-contracts/addresses/address)
 - [Отправка сообщения для развёртывания](/v3/documentation/smart-contracts/func/cookbook)
 - [Структура внутреннего сообщения](/v3/documentation/smart-contracts/message-management/sending-messages)
   :::
@@ -301,7 +301,7 @@ If `state_init` doesn't make much sense from its name, take a look at the follow
 - [ton-blockchain/wallet-contract-v5/types.tlb](https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb)
 
 :::caution
-Из-за относительной сложности реализации интерфейса этой версии кошелька, в отличие от предыдущих версий, мы будем полагаться на схему [TL-B](/v3/documentation/data-formats/tlb/tl-b-language). Мы предоставим краткое описание для каждой схемы. Тем не менее, базовое понимание всё ещё требуется; в сочетании с исходным кодом кошелька этого должно быть достаточно.
+Из-за относительной сложности реализации интерфейса этой версии кошелька, в отличие от предыдущих версий, мы будем полагаться на схему [TL-B](/v3/documentation/data-formats/tlb/overview). Мы предоставим краткое описание для каждой схемы. Тем не менее, базовое понимание всё ещё требуется; в сочетании с исходным кодом кошелька этого должно быть достаточно.
 :::
 
 #### Официальный хеш кода
@@ -375,7 +375,7 @@ actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other
 Мы можем рассматривать `InnerRequest` как два списка действий: первый, `OutList`, опционален и представляет собой цепочку ссылок на ячейки, каждая из которых содержит запрос на отправку сообщения, предваряемый режимом сообщения. Второй, `ActionList`, предваряется однобитным флагом `has_other_actions`, который сигнализирует о наличии расширенных действий, начиная с первой ячейки и продолжаясь в виде цепочки ссылок на ячейки. Нам уже знакомы первые два расширенные действия, `action_add_ext` и `action_delete_ext`, за которыми следует внутренний адрес, который мы хотим добавить или удалить из словаря расширений. Третье, `action_set_signature_auth_allowed`, запрещает или разрешает аутентификацию через публичный ключ, оставляя расширения единственным способом взаимодействия с кошельком. Эта функциональность может быть чрезвычайно важна в случае утери или компрометации приватного ключа.
 
 :::info
-Обратите внимание, что максимальное количество действий равно 255; это следствие реализации с помощью регистра TVM [c5](/v3/documentation/tvm/tvm-overview#results-of-tvm-execution). Технически вы можете сделать запрос с пустыми `OutAction` и `ExtendedAction`, но это будет похоже на простое получение средств.
+Обратите внимание, что максимальное количество действий равно 255; это следствие реализации с помощью регистра TVM [c5](/v3/documentation/tvm/overview#results-of-tvm-execution). Технически вы можете сделать запрос с пустыми `OutAction` и `ExtendedAction`, но это будет похоже на простое получение средств.
 :::
 
 #### Коды возврата

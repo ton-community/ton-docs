@@ -36,7 +36,7 @@ ISP лежит в основе дизайна блокчейна TON, рассм
 
 ### 2. Ограничения блоков и классификация
 
-Ограничения блоков загружаются из [параметров конфигурации 22 и 23](/v3/documentation/network/configs/blockchain-configs#param-22-and-23).
+Ограничения блоков загружаются из [параметров конфигурации 22 и 23](/v3/documentation/network/config-params/overview#param-22-and-23).
 Каждый из трех параметров имеет три ограничения: недогрузка, мягкое и жесткое:
 
 1. _Размер блока_: `128/256/512 KiB`.
@@ -81,7 +81,7 @@ ISP лежит в основе дизайна блокчейна TON, рассм
 
 ### 5. Окончательное решение
 
-Валидаторы решают разделить или объединить шарды, используя флаги `want_split` и `want_merge` и [параметры конфигурации воркчейна](/v3/documentation/network/configs/blockchain-configs#param-12).
+Валидаторы решают разделить или объединить шарды, используя флаги `want_split` и `want_merge` и [параметры конфигурации воркчейна](/v3/documentation/network/config-params/overview#param-12).
 
 - Если шард имеет глубину < `min_split`, то он разделится.
 - Если шард имеет глубину > `max_split`, то он объединится.
@@ -148,5 +148,5 @@ ISP лежит в основе дизайна блокчейна TON, рассм
 
 ## См. также
 
-- [Блочная компоновка](/v3/documentation/data-formats/tlb/block-layout)
+- [Блочная компоновка](/v3/documentation/data-formats/layout/blocks)
 - [Технические документы](/v3/documentation/whitepapers/overview)

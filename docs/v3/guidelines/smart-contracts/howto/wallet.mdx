@@ -20,7 +20,7 @@ This section will teach us to create operations without using pre-configured fun
 
 ## 💡 Prerequisites
 
-This tutorial requires basic knowledge of JavaScript and TypeScript or Go. It is also necessary to hold at least 3 TON (which can be stored in an exchange account, a non-custodial wallet, or the Telegram bot wallet). It is necessary to have a basic understanding of [cell]((/v3/documentation/smart-contracts/addresses/address)), [blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains) to understand this tutorial.
+This tutorial requires basic knowledge of JavaScript and TypeScript or Go. It is also necessary to hold at least 3 TON (which can be stored in an exchange account, a non-custodial wallet, or the Telegram bot wallet). It is necessary to have a basic understanding of [cell](/v3/documentation/smart-contracts/addresses/address), [blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/overview) to understand this tutorial.
 
 :::info MAINNET DEVELOPMENT IS ESSENTIAL
 Working with the TON Testnet often leads to deployment errors, difficulty tracking transactions, and unstable network functionality. Completing most of the development on the TON Mainnet could help avoid potential issues. This may reduce the number of transactions and minimize fees.
@@ -339,7 +339,7 @@ As mentioned earlier, everything in the TON Blockchain is a smart contract compo
 This section will explore [block.tlb](https://github.com/ton-blockchain/ton/blob/master/crypto/block/block.tlb). This file will be invaluable for future development as it outlines how to assemble different types of cells. Specifically for our purposes, it provides detailed information about the structure and behavior of internal and external messages.
 
 :::info
-This guide provides basic information. For further details, please refer to our TL-B [documentation](/v3/documentation/data-formats/tlb/overviewe) to learn more about TL-B.
+This guide provides basic information. For further details, please refer to our TL-B [documentation](/v3/documentation/data-formats/tlb/overview) to learn more about TL-B.
 :::
 
 ### CommonMsgInfo
@@ -388,7 +388,7 @@ Now, let’s go through each option in detail:
 
 |    Option    |                                                                                                                                                                                                                           Explanation                                                                                                                                                                                                                           |
 | :----------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| IHR Disabled |                Currently, this option is disabled (meaning we store `1`) because Instant Hypercube Routing (IHR) is not yet fully implemented. This option will become relevant once many [Shardchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards) are active on the network. For more details about the IHR Disabled option, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (chapter 2).                |
+| IHR Disabled |                Currently, this option is disabled (meaning we store `1`) because Instant Hypercube Routing (IHR) is not yet fully implemented. This option will become relevant once many [Shardchains](/v3/guidelines/dapps/transactions/foundations-of-blockchain#shardchain) are active on the network. For more details about the IHR Disabled option, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (chapter 2).                |
 |    Bounce    | When sending messages, errors can occur during smart contract processing. Setting the `Bounce` option to `1` (true) is essential to prevent TON loss. If any errors arise during transaction processing, the message will be returned to the sender, and the same amount of TON (minus fees) will be refunded. Refer to [this guide](/v3/documentation/smart-contracts/message-management/non-bounceable-messages) for more details on non-bounceable messages. |
 |   Bounced    |                                                                                                                                  Bounced messages are those returned to the sender due to an error during transaction processing with a smart contract. This option indicates whether the received message is bounced or not.                                                                                                                                   |
 |     Src      |                                                                                                                                                                                 The Src is the sender's address. In this case, two zero bits indicate the `addr_none` address.                                                                                                                                                                                  |
@@ -962,11 +962,11 @@ Before building a message, it is essential to understand what a State Init is. F
 
 |   Option    |                                                                                                                                                                                                                Explanation                                                                                                                                                                                                                 |
 | :---------: |:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| split_depth |        This option is designed for highly loaded smart contracts that can be split and distributed across multiple [ShardChains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#many-accountchains-shards). For more details on how this works, refer to the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is not needed for wallet smart contracts, only a `0` bit is stored.         |
-|   special   | This option is used for tick-tock smart contracts that are automatically triggered for each block. Regular smart contracts, such as wallets, do not require this functionality. For more details, refer to [this section](/v3/documentation/data-formats/tlb/transaction-layout#tick-tock) or the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is unnecessary for our use case, only a `0` bit is stored. |
+| split_depth |        This option is designed for highly loaded smart contracts that can be split and distributed across multiple [ShardChains](/v3/guidelines/dapps/transactions/foundations-of-blockchain#shardchain). For more details on how this works, refer to the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is not needed for wallet smart contracts, only a `0` bit is stored.         |
+|   special   | This option is used for tick-tock smart contracts that are automatically triggered for each block. Regular smart contracts, such as wallets, do not require this functionality. For more details, refer to [this section](/v3/documentation/data-formats/layout/transactions#tick-tock) or the [tblkch.pdf](https://ton.org/tblkch.pdf) (section 4.1.6). Since this feature is unnecessary for our use case, only a `0` bit is stored. |
 |    code     |                                                                                                                                                                                   `1` bit means the presence of the smart contract code as a reference.                                                                                                                                                                                    |
 |    data     |                                                                                                                                                                                   `1` bit means the presence of the smart contract data as a reference.                                                                                                                                                                                    |
-|   library   |                     This option refers to a library that operates on the [MasterChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) and can be shared across multiple smart contracts. Since wallets do not require this functionality, its bit is set to `0`. For more information, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (section 1.8.4).                      |
+|   library   |                     This option refers to a library that operates on the [MasterChain](/v3/guidelines/dapps/transactions/foundations-of-blockchain#masterchain) and can be shared across multiple smart contracts. Since wallets do not require this functionality, its bit is set to `0`. For more information, refer to [tblkch.pdf](https://ton.org/tblkch.pdf) (section 1.8.4).                      |
 
 Next, we’ll prepare the `initial data`, which will be present in our contract’s storage immediately after deployment:
 
@@ -1688,7 +1688,7 @@ Now, let’s move to the methods that only the V4 wallet makes use of:
 |                     Method                     |                                                                                                                            Explanation                                                                                                                            |
 | :--------------------------------------------: |:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 |             int get_subwallet_id()             |                                                                                   Earlier in the tutorial, we considered this. This method allows you to retrieve subwallet_id.                                                                                    |
-| int is_plugin_installed(int wc, int addr_hash) |         Let us know if the plugin has been installed. To call this method, you need to pass the [WorkChain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-a-blockchain-with-your-own-rules) and the plugin address hash.          |
+| int is_plugin_installed(int wc, int addr_hash) |         Let us know if the plugin has been installed. To call this method, you need to pass the [WorkChain](/v3/guidelines/dapps/transactions/foundations-of-blockchain#workchain-and-basechain) and the plugin address hash.          |
 |            tuple get_plugin_list()             |                                                                                                     This method returns the address of the installed plugins.                                                                                                     |
 
 Let’s consider the `get_public_key` and the `is_plugin_installed` methods. These two methods were chosen because we would first have to get a public key from 256 bits of data, and then we would have to learn how to pass a slice and different types of data to GET methods. This is very useful to help us learn how to properly use these methods.
@@ -2170,7 +2170,7 @@ storage$_ public_key:bits256 subwallet_id:uint32 old_queries:(HashmapE 14 ^Cell)
 ```
 
 :::tip TL-B
-You can read more about TL-B [here](/v3/documentation/data-formats/tlb/overviewe).
+You can read more about TL-B [here](/v3/documentation/data-formats/tlb/overview).
 :::
 
 In the contract storage, we can find the following fields:
@@ -2698,7 +2698,7 @@ do {
 >
 > [udict_delete_get_min()](/v3/documentation/smart-contracts/func/docs/stdlib/#dict_delete_get_min)
 
-It is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](/v3/documentation/tvm/tvm-overview#tvm-as-a-stack-machine), during each interaction with the `f` variable, it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f variable at the top of the stack to optimize code execution.
+It is necessary to interact with the `f` variable several times. Since the [TVM is a stack machine](/v3/documentation/tvm/overview), during each interaction with the `f` variable, it is necessary to pop all values to get the desired variable. The `f~touch()` operation places the f variable at the top of the stack to optimize code execution.
 
 ### Bitwise operations
 
@@ -3225,8 +3225,8 @@ TON documentation:
 - [Internal messages](/v3/documentation/smart-contracts/message-management/internal-messages)
 - [External messages](/v3/documentation/smart-contracts/message-management/external-messages)
 - [Types of wallet contracts](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts#wallet-v4)
-- [TL-B](/v3/documentation/data-formats/tlb/overviewe)
-- [Blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)
+- [TL-B](/v3/documentation/data-formats/tlb/overview)
+- [Blockchain of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/overview)
 
 External references:
 

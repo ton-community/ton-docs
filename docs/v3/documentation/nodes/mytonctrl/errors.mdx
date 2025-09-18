@@ -8,8 +8,8 @@ This document explains the errors that users may encounter with **MyTonCtrl**.
 
 | Error | Possible solution |
 |:---------------------------------------------------------------------------|:----------------------------------------------------------------------|
-| Unknown module name: `name`. Available modes: `modes` | Check available modes list [`status_modes`](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#status_modes) |
-| No module named `name` found in current modes: `current_modes` | Check current modes list [`status_modes`](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#status_modes) |
+| Unknown module name: `name`. Available modes: `modes` | Check available modes list [`status_modes`](/v3/documentation/nodes/mytonctrl/overview#status_modes) |
+| No module named `name` found in current modes: `current_modes` | Check current modes list [`status_modes`](/v3/documentation/nodes/mytonctrl/overview#status_modes) |
 | GetWalletFromFile error: Private key not found | Check the wallet path |
 | Cannot get own IP address | Verify access to the resources at [ifconfig.me](https://ifconfig.me/ip) and [ipinfo.io](https://ipinfo.io/ip) |
 
@@ -28,7 +28,7 @@ This document explains the errors that users may encounter with **MyTonCtrl**.
 | Cannot enable validator mode while liteserver mode is enabled | Use `disable_mode liteserver` |
 | Validator wallet not found | See [Validator node: View the list of wallets](/v3/guidelines/nodes/running-nodes/validator-node#view-the-list-of-wallets) |
 | Validator is not synchronized | Wait longer for synchronization or check [sync troubleshooting](/v3/guidelines/nodes/nodes-troubleshooting#about-no-progress-in-node-synchronization-within-3-hours) |
-| Stake less than the minimum stake. Minimum stake: `minStake` | Use [`set stake <amount>`](/v3/guidelines/nodes/running-nodes/validator-node#your-validator-is-ready-to-use) and [check stake parameters](/v3/documentation/network/configs/blockchain-configs#param-17) |
+| Stake less than the minimum stake. Minimum stake: `minStake` | Use [`set stake <amount>`](/v3/guidelines/nodes/running-nodes/validator-node#your-validator-is-ready-to-use) and [check stake parameters](/v3/documentation/network/config-params/overview#param-17) |
 | Don't have enough coins. stake: `stake`, account balance: `balance` | Add funds to your account until the balance reaches the required `stake` amount |
 
 ## Nominator pool errors
