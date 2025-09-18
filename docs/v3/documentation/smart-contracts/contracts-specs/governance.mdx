@@ -14,7 +14,7 @@ The Elector stores:
 
 - Non-withdrawn Toncoin in the `credits` hashmap.
 - New validator applications in the `elect` hashmap.
-- Past election data in the `past_elections` hashmap (including complaints and `frozen` stakes held for `stake_held_for` periods, defined in [**ConfigParam 15**](/v3/documentation/network/configs/blockchain-configs#param-15)).
+- Past election data in the `past_elections` hashmap (including complaints and `frozen` stakes held for `stake_held_for` periods, defined in [**ConfigParam 15**](/v3/documentation/network/config-params/overview#param-15)).
 
 ### Key functions
 
@@ -67,11 +67,11 @@ min(stake, max_factor * min_stake_in_subset)
 
 **Election constraints**:
 
-- `min_validators` ≤ participants ≤ `max_validators` ([**ConfigParam 16**](/v3/documentation/network/configs/blockchain-configs#param-16)).
+- `min_validators` ≤ participants ≤ `max_validators` ([**ConfigParam 16**](/v3/documentation/network/config-params/overview#param-16)).
 - Stakes must satisfy:
 - `min_stake` ≤ stake ≤ `max_stake`
   - `min_total_stake` ≤ total stake
-  - Stake ratios ≤ `max_stake_factor` ([**ConfigParam 17**](/v3/documentation/network/configs/blockchain-configs#param-17)).
+  - Stake ratios ≤ `max_stake_factor` ([**ConfigParam 17**](/v3/documentation/network/config-params/overview#param-17)).
 - If conditions aren’t met, elections are **postponed**.
 
 ### Process of reporting validator misbehavior
@@ -105,14 +105,14 @@ The **Config** contract manages TON’s configuration parameters, validator set 
 2. **Config** stores it in [**ConfigParam 36**](/v3/documentation/network/config-params/overview#param-32-34-and-36) (_next validators_).
 3. At the scheduled time (`utime_since`), **Config**:
    - Moves the old set to **ConfigParam 32** (_previous validators_).
-   - Promotes [**ConfigParam 36**](/v3/documentation/network/configs/blockchain-configs#param-32-34-and-36) to [**ConfigParam 34**](/v3/documentation/network/configs/blockchain-configs#param-32-34-and-36) (_current validators_).
+   - Promotes [**ConfigParam 36**](/v3/documentation/network/config-params/overview#param-32-34-and-36) to [**ConfigParam 34**](/v3/documentation/network/config-params/overview#param-32-34-and-36) (_current validators_).
 
 ### Proposal/voting mechanism
 
 1. **Submit a proposal**: Pay storage fees to propose parameter changes.
-2. **Vote**: Validators (from [**ConfigParam 34**](/v3/documentation/network/configs/blockchain-configs#param-32-34-and-36)) sign approval messages.
+2. **Vote**: Validators (from [**ConfigParam 34**](/v3/documentation/network/config-params/overview#param-32-34-and-36)) sign approval messages.
 3. **Outcome**:
-   - **Approved**: After `min_wins` rounds ([**ConfigParam 11**](/v3/documentation/network/configs/blockchain-configs#param-11)) with ≥3/4 weighted votes.
+   - **Approved**: After `min_wins` rounds ([**ConfigParam 11**](/v3/documentation/network/config-params/overview#param-11)) with ≥3/4 weighted votes.
    - **Rejected**: After `max_losses` rounds.
    - _Critical parameters_ ([**ConfigParam 10**](/v3/documentation/network/config-params/overview#param-10)) require more rounds.
 

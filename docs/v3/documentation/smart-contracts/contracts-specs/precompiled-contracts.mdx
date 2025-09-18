@@ -32,7 +32,7 @@ Transactions for precompiled smart contracts (those with code hashes in `ConfigP
 
 For precompiled contracts, the 17th element of `c7` (index `16`) holds the precompiled `gas_usage` value for the current contract as defined in `ConfigParam 45`; see [c7](/v3/documentation/tvm/changelog/tvm-upgrade-2024-04#c7). The `GETPRECOMPILEDGAS` opcode is currently reserved and returns `null`; when activated, it will return the precompiled contract gas usage; see [new opcodes](/v3/documentation/tvm/changelog/tvm-upgrade-2024-04#new-opcodes). Non-precompiled contracts return `null` for this value.
 
-**Note**: Enable precompiled contract execution by running `validator-engine` with the [`--enable-precompiled-smc`](/v3/documentation/infra/nodes/node-commands) (experimental) flag. Both execution methods produce identical transactions, allowing validators with and without C++ implementations to coexist in the network. This enables gradual adoption when adding new entries to `ConfigParam 45`.
+**Note**: Enable precompiled contract execution by running `validator-engine` with the [`--enable-precompiled-smc`](/v3/documentation/nodes/mytonctrl/commands#advanced-options) (experimental) flag. Both execution methods produce identical transactions, allowing validators with and without C++ implementations to coexist in the network. This enables gradual adoption when adding new entries to `ConfigParam 45`.
 
 ## See also
 

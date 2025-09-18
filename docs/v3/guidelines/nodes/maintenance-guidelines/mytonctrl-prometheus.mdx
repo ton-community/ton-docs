@@ -62,13 +62,13 @@ For validators, it's highly recommended to run Prometheus and Pushgateway on a s
 
 4. Configure MyTonCtrl
 
-    Enable mode `prometheus` in MyTonCtrl (see the [MyTonCtrl enable_mode command](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#enable_mode)):
+    Enable mode `prometheus` in MyTonCtrl (see the [MyTonCtrl enable_mode command](/v3/documentation/nodes/mytonctrl/overview#enable_mode)):
 
     ```text
     MyTonCtrl> enable_mode prometheus
     ```
 
-    Set the Pushgateway URL (see the [MyTonCtrl set command](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#set)):
+    Set the Pushgateway URL (see the [MyTonCtrl set command](/v3/documentation/nodes/mytonctrl/overview#set)):
 
     ```text
     MyTonCtrl> set prometheus_url http://<host>:9091/metrics/job/<job_name>
