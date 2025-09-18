@@ -68,7 +68,7 @@ root_cell("0x00000000" - 32 bit, "string" up to 123 bytes)
 Алгоритм шифрования следующий:
 
 1. Вычислить `shared_secret` с помощью `priv_1` и `pub_2`.
-2. Пусть `salt` будет [представлением bas64url](/v3/documentation/smart-contracts/addresses#user-friendly-address) адреса кошелька отправителя с `isBounceable=1` и `isTestnetOnly=0`.
+2. Пусть `salt` будет [представлением bas64url](/v3/documentation/smart-contracts/addresses/address-formats#user-friendly-address) адреса кошелька отправителя с `isBounceable=1` и `isTestnetOnly=0`.
 3. Выберите байтовую строку `prefix` длиной от 16 до 31, так что `len(prefix+msg)` делится на 16. Первый байт `prefix` равен `len(prefix)`, остальные байты случайны. Пусть `data = prefix + msg`.
 4. Пусть `msg_key` будет первыми 16 байтами `hmac_sha512(salt, data)`.
 5. Вычислите `x = hmac_sha512(shared_secret, msg_key)`. Пусть `key=x[0:32]` и `iv=x[32:48]`.

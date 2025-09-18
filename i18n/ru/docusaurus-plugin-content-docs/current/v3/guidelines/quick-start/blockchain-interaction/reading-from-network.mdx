@@ -12,7 +12,7 @@ import Button from '@site/src/components/button'
 - Вызывать `get-методы`
 - Получать данные о транзакциях аккаунта
 
-В итоге вы поймёте, как взаимодействовать с [TON API на основе HTTP](/v3/guidelines/dapps/apis-sdks/ton-http-apis). В этом руководстве используется [TON Center](https://toncenter.com/) — быстрый и надёжный HTTP API для TON.
+В итоге вы поймёте, как взаимодействовать с [TON API на основе HTTP](/v3/guidelines/dapps/apis-sdks/api-types#http-api). В этом руководстве используется [TON Center](https://toncenter.com/) — быстрый и надёжный HTTP API для TON.
 
 ## Настройка окружения
 
@@ -60,7 +60,7 @@ npx ts-node script.ts
   - **Active**: Адрес уже активен, у него есть и код, и баланс.
   - **Frozen**: Адрес заблокирован, поскольку баланс оказался недостаточным для расходов на хранение данных.
 - `code`: Код контракта в «сыром формате».
-- `data`: Сериализованные данные контракта, хранящиеся в [*ячейке*](/ru/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage/).
+- `data`: Сериализованные данные контракта, хранящиеся в [*ячейке*](/v3/concepts/dive-into-ton/ton-blockchain/cells).
 
 Состояние аккаунта может быть получено с помощью метода [`getContractState`](https://testnet.toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get/).
 
