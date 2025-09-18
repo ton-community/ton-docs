@@ -18,7 +18,7 @@ npm i @tonconnect/ui-react
 
 ### Инициализация TON Connect
 
-После установки пакета вам следует создать файл `manifest.json` для вашего приложения. Более подробную информацию о том, как создать файл manifest.json, можно найти [здесь](/v3/guidelines/ton-connect/guidelines/creating-manifest).
+После установки пакета вам следует создать файл `manifest.json` для вашего приложения. Более подробную информацию о том, как создать файл manifest.json, можно найти [здесь](/v3/guidelines/ton-connect/creating-manifest).
 
 После создания файла манифеста, импортируйте TonConnectUIProvider в корень вашего мини-приложения и передайте URL файла manifest:
 
@@ -154,7 +154,7 @@ export const ModalControl = () => {
 
 ### useTonWallet
 
-Используйте этот хук для извлечения текущего кошелька TON пользователя. Если кошелек не подключен, хук вернет `null`. Объект `wallet` предоставляет общие данные, такие как адрес пользователя, провайдер, [TON proof](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users) и другие атрибуты (см. интерфейс [Wallet](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)).
+Используйте этот хук для извлечения текущего кошелька TON пользователя. Если кошелек не подключен, хук вернет `null`. Объект `wallet` предоставляет общие данные, такие как адрес пользователя, провайдер, [TON proof](/v3/guidelines/ton-connect/verifying-signed-in-users) и другие атрибуты (см. интерфейс [Wallet](https://ton-connect.github.io/sdk/interfaces/_tonconnect_sdk.Wallet.html)).
 
 Кроме того, вы можете получить более конкретную информацию о подключенном кошельке, такую как его имя, изображение и другие атрибуты (см. интерфейс [WalletInfo](https://ton-connect.github.io/sdk/types/_tonconnect_sdk.WalletInfo.html)).
 
@@ -267,7 +267,7 @@ export const Settings = () => {
 
 ```
 
-- Больше примеров здесь: [Отправка сообщений](/v3/guidelines/ton-connect/guidelines/sending-messages)
+- Больше примеров здесь: [Отправка сообщений](/v3/documentation/smart-contracts/message-management/sending-messages)
 
 ### Понимание статуса транзакции по хэшу
 
@@ -276,7 +276,7 @@ export const Settings = () => {
 ### Дополнительная проверка (ton_proof) на Backend
 
 :::tip
-Узнайте, как подписывать и проверять сообщения: [Подпись и проверка](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
+Узнайте, как подписывать и проверять сообщения: [Подпись и проверка](/v3/guidelines/ton-connect/verifying-signed-in-users)
 :::
 
 Чтобы убедиться, что пользователь действительно владеет заявленным адресом, вы можете использовать `ton_proof`.
@@ -346,7 +346,7 @@ type TonProofItemReplySuccess = {
 }
 ```
 
-Пример аутентификации можно найти на этой [странице](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users#react-example)
+Пример аутентификации можно найти на этой [странице](/v3/guidelines/ton-connect/verifying-signed-in-users#react-example)
 
 ### Отключение кошелька
 

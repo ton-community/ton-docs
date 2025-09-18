@@ -4,7 +4,7 @@
 Эта страница переведена сообществом на русский язык, но нуждается в улучшениях. Если вы хотите принять участие в переводе свяжитесь с [@alexgton](https://t.me/alexgton).
 :::
 
-Составление, анализ и отправка сообщений лежат на пересечении [схем TL-B](/v3/documentation/data-formats/tlb/tl-b-language), [фаз транзакций и TVM](/v3/documentation/tvm/tvm-overview).
+Составление, анализ и отправка сообщений лежат на пересечении [схем TL-B](/v3/documentation/data-formats/tlb/overview), [фаз транзакций и TVM](/v3/documentation/tvm/overview).
 
 Действительно, FunC предоставляет функцию [send_raw_message](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message), которая ожидает сериализованное сообщение в качестве аргумента.
 
@@ -158,7 +158,7 @@ currencies$_ grams:Grams other:ExtraCurrencyCollection
 ## Размер сообщения
 
 :::info размер ячейки
-Обратите внимание, что любая [ячейка](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) может содержать до `1023` бит. Если вам нужно сохранить больше данных, вы должны разбить их на части и сохранить в ссылочных ячейках.
+Обратите внимание, что любая [ячейка](/v3/concepts/dive-into-ton/ton-blockchain/cells) может содержать до `1023` бит. Если вам нужно сохранить больше данных, вы должны разбить их на части и сохранить в ссылочных ячейках.
 :::
 
 Если, например, размер тела вашего сообщения составляет 900 бит, вы не можете сохранить его в той же ячейке, что и заголовок сообщения.
@@ -170,7 +170,7 @@ currencies$_ grams:Grams other:ExtraCurrencyCollection
 
 :::info размер сообщения
 
-Дополнительные параметры конфигурации и их значения можно найти [здесь](/v3/documentation/network/configs/blockchain-configs#param-43)
+Дополнительные параметры конфигурации и их значения можно найти [здесь](/v3/documentation/network/config-params/overview#param-43)
 :::
 
 ## Режимы сообщений

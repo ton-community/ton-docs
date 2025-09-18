@@ -69,7 +69,7 @@
 Compare TON's on-chain metrics, including block time and time-to-finality, to Solana and Ethereum by reading our analysis at:
 
 - [Документ о сравнении блокчейнов](https://ton.org/comparison_of_blockchains.pdf)
-- [Таблица сравнения блокчейнов (гораздо менее информативна, чем в документе, но более наглядна)](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison)
+- [Таблица сравнения блокчейнов (гораздо менее информативна, чем в документе, но более наглядна)](/v3/concepts/dive-into-ton/go-from-ethereum/blockchain-comparison)
   :::
 
 ### Время до завершения
@@ -80,7 +80,7 @@ Compare TON's on-chain metrics, including block time and time-to-finality, to So
 Compare TON's on-chain metrics, including block time and time-to-finality, to Solana and Ethereum by reading our analysis at:
 
 - [Документ о сравнении блокчейнов](https://ton.org/comparison_of_blockchains.pdf)
-- [Таблица сравнения блокчейнов (гораздо менее информативна, чем в документе, но более наглядна)](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison)
+- [Таблица сравнения блокчейнов (гораздо менее информативна, чем в документе, но более наглядна)](/v3/concepts/dive-into-ton/go-from-ethereum/blockchain-comparison)
   :::
 
 ### Средний размер блока
@@ -96,7 +96,7 @@ max_block_bytes:2097152
 
 Подробные пояснения по каждому полю макета:
 
-- [Расположение блоков](/v3/documentation/data-formats/tlb/block-layout)
+- [Расположение блоков](/v3/documentation/data-formats/layout/blocks)
 
 ## Транзакции
 
@@ -134,7 +134,7 @@ max_block_bytes:2097152
 
 Подробные пояснения по каждому полю макета:
 
-- [Макет транзакции](/v3/documentation/data-formats/tlb/transaction-layout)
+- [Макет транзакции](/v3/documentation/data-formats/layout/transactions)
 
 ### Возможна ли пакетная обработка транзакций?
 
@@ -164,13 +164,13 @@ max_block_bytes:2097152
 Невзаимозаменяемые токены (NFT):
 
 - [TEP-62: стандарт NFT](https://github.com/ton-blockchain/TEPs/blob/master/text/0062-nft-standard.md)
-- [Документация NFT](/v3/documentation/dapps/defi/tokens#nft)
+- [Документация NFT](/v3/documentation/dapps/assets/nft)
 
 Жетоны (токены):
 
 - [TEP-74: Стандарт Жетонов](https://github.com/ton-blockchain/TEPs/blob/master/text/0074-jettons-standard.md)
 - [Обзор распределенных токенов](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
-- [Документация по взаимозаменяемым токенам (Жетонам)](/v3/documentation/dapps/defi/tokens#jettons-fungible-tokens)
+- [Документация по взаимозаменяемым токенам (Жетонам)](/v3/documentation/dapps/assets/jetton)
 
 Другие стандарты:
 
@@ -190,7 +190,7 @@ max_block_bytes:2097152
 
 ### Каков формат адреса?
 
-- [Адрес смарт-контракта](/v3/documentation/smart-contracts/addresses)
+- [Адрес смарт-контракта](/v3/documentation/smart-contracts/addresses/address-formats)
 
 ### Возможно ли владеть именным аккаунтом, похожим на ENS
 
@@ -200,7 +200,7 @@ max_block_bytes:2097152
 
 ### Как отличить обычный аккаунт от смарт-контракта?
 
-- [Все есть смарт-контракт](/v3/documentation/smart-contracts/addresses#everything-is-a-smart-contract)
+- [Все есть смарт-контракт](/v3/documentation/smart-contracts/addresses/address#everything-is-a-smart-contract)
 
 ### Как узнать, является ли адрес адресом токена?
 
@@ -211,7 +211,7 @@ max_block_bytes:2097152
 Внутри TON есть специальный главный блокчейн, называемый Мастерчейн. Он состоит из общесетевых контрактов с сетевой конфигурацией, контрактов, связанных с валидатором, и т. д.:
 
 :::info
-Подробнее о мастерчейне, воркчейнах и шардчейнах читайте в обзорной статье с блокчейне TON: [Блокчейн Блокчейнов](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains).
+Подробнее о мастерчейне, воркчейнах и шардчейнах читайте в обзорной статье с блокчейне TON: [Блокчейн Блокчейнов](/v3/concepts/dive-into-ton/ton-blockchain/overview).
 :::
 
 Хорошим примером является смарт-контракт управления, который является частью мастерчейна:
@@ -222,7 +222,7 @@ max_block_bytes:2097152
 
 ### Можно ли обнаружить события развертывания контракта в TON?
 
-[Все в TON является смарт-контрактом](/v3/documentation/smart-contracts/addresses#everything-is-a-smart-contract).
+[Все в TON является смарт-контрактом](/v3/documentation/smart-contracts/addresses/address#everything-is-a-smart-contract).
 
 Адрес аккаунта генерируется детерминированн из его *начального состояния*, которое включает *начальный код* и *начальные данные* (для кошельков начальные данные включают открытый ключ среди других параметров).
 При изменении любого компонента адрес изменяется соответствующим образом.
@@ -263,7 +263,7 @@ max_block_bytes:2097152
 
 ### Чувствительны ли адреса смарт-контрактов к регистру?
 
-Да, адреса смарт-контрактов чувствительны к регистру, поскольку они генерируются с использованием [алгоритма base64](https://en.wikipedia.org/wiki/Base64). Узнать больше об адресах смарт-контрактов можно [здесь](/v3/documentation/smart-contracts/addresses).
+Да, адреса смарт-контрактов чувствительны к регистру, поскольку они генерируются с использованием [алгоритма base64](https://en.wikipedia.org/wiki/Base64). Узнать больше об адресах смарт-контрактов можно [здесь](/v3/documentation/smart-contracts/addresses/address).
 
 ### Совместима ли Ton Virtual Machin (TVM) с EVM?
 
@@ -300,5 +300,5 @@ TVM несовместима с виртуальной машиной Ethereum (
 
 ### Ниже приведены два основных ресурса, используемых для получения информации, связанной с конечными точками публичных узлов в блокчейне TON (как для TON Mainnet, так и для TON Testnet).
 
-- [Конфигурации сети](/v3/documentation/network/configs/network-configs)
+- [Конфигурации сети](/v3/documentation/network/config-params/overview)
 - [Примеры и руководства](/v3/guidelines/dapps/overview#tutorials-and-examples)

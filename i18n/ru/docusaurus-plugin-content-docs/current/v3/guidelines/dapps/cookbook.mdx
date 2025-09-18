@@ -16,7 +16,7 @@ import TabItem from '@theme/TabItem';
 
 ### Как конвертировать (user friendly \<-\> raw), собирать и извлекать адреса из строк?
 
-Адрес TON однозначно идентифицирует контракт в блокчейне, указывая его workchain и хеш исходного состояния. [Используются два основных формата](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses): **raw** (workchain и хеш в HEX-формате, разделенные символом ":") и **user-friendly** (base64-кодировка с определенными флагами).
+Адрес TON однозначно идентифицирует контракт в блокчейне, указывая его workchain и хеш исходного состояния. [Используются два основных формата](/v3/documentation/smart-contracts/addresses/address-formats): **raw** (workchain и хеш в HEX-формате, разделенные символом ":") и **user-friendly** (base64-кодировка с определенными флагами).
 
 ```
 User-friendly: EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
@@ -305,7 +305,7 @@ try {
 
 Большинство SDK обеспечивают следующий процесс отправки сообщений из вашего кошелька:
 
-- Вы создаете обёртку кошелька (объект в вашей программе) правильной версии (в большинстве случаев v3r2; см. также [версии кошельков](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)), используя секретный ключ и workchain (обычно 0, что обозначает [basechain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules)).
+- Вы создаете обёртку кошелька (объект в вашей программе) правильной версии (в большинстве случаев v3r2; см. также [версии кошельков](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)), используя секретный ключ и workchain (обычно 0, что обозначает [basechain](/v3/guidelines/dapps/transactions/foundations-of-blockchain#workchain-and-basechain)).
 - Вы также создаете блокчейн-обёртку, или "клиент" - объект, который будет направлять запросы к API или к лайтсерверам, в зависимости от того, что вы выберете.
 - Затем вы _открываете_ контракт в блокчейн-обёртке. Это означает, что объект контракта больше не является абстрактным и представляет собой реальную учётную запись в основной или тестовой сети TON.
 - После этого вы можете формировать необходимые вам сообщения и отправлять их. Вы также можете отправлять до 4 сообщений за один запрос, как описано в [расширенном руководстве](/v3/guidelines/smart-contracts/howto/wallet#sending-multiple-messages-simultaneously).
