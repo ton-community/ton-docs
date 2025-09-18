@@ -46,6 +46,7 @@ EvaCodes
 Everscale
 Excno
 Extracurrency
+ffjavascript
 FIFTPATH
 Fift
 Fullnode
@@ -406,4 +407,3 @@ plsc
 clcf
 permissionless
 Misbehaviour
-

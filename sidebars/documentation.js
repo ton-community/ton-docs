@@ -262,7 +262,7 @@ module.exports = [
                 label: 'Overview',
                 id: 'v3/documentation/network/protocols/adnl/overview',
               },
-              'v3/documentation/network/protocols/adnl/low-level', // TODO: MERGE ADNL
+              'v3/documentation/network/protocols/adnl/low-level',
               'v3/documentation/network/protocols/adnl/tcp',
               'v3/documentation/network/protocols/adnl/udp',
             ],

@@ -15,10 +15,11 @@ When a smart contract sends a query to another smart contract, it must pay for:
 
 :::note
 In most cases, the sender:
-1. Attaches a small amount of Toncoin (typically one Toncoin) to the internal message
-2. Sets the "bounce" flag (sends a bounceable internal message)
+1. Attaches enough Toncoin to cover gas and forwarding fees to the internal message
+2. Sets the `bounce` flag (sends a bounceable internal message)
 
-The receiver then returns the unused portion of the received value with the answer, deducting message forwarding fees. This is typically done using `SENDRAWMSG` with [mode = 64](/v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode64).
+The receiver then returns the unused portion of the received value with the answer, deducting message forwarding fees.
+In Jettons it is typically done using `RAWRESERVE` with `SENDRAWMSG` + [`mode = 128/130/144`](/v3/documentation/smart-contracts/message-management/message-modes-cookbook#mode128).
 :::
 
 ## Message bouncing
@@ -26,21 +27,21 @@ The receiver then returns the unused portion of the received value with the answ
 ### Automatic bouncing
 
 If the receiver cannot parse the received message and terminates with a non-zero exit code (for example, due to an unhandled cell deserialization exception), the message automatically bounces back to its sender. The bounced message:
-- Has its "bounce" flag cleared
-- Has its "bounced" flag set
-- Contains 32 bits `0xffffffff` followed by 256 bits from the original message
+- Has its `bounce` flag cleared
+- Has its `bounced` flag set
+- Contains `0xffffffff` (32-bit) followed by the original message body (256-bit)
 
 ### Handling bounced messages
 
-Always check the "bounced" flag of incoming internal messages before parsing the `op` field. This prevents processing a bounced message as a new query.
+Always check the `bounced` flag of incoming internal messages before parsing the `op` field. This prevents processing a bounced message as a new query.
 
-If the "bounced" flag is set:
+If the `bounced` flag is set:
 - You can identify the failed query by deserializing `op` and `query_id`
 - Take appropriate action based on the failure
 - Alternatively, terminate with zero exit code to ignore bounced messages
 
 :::note
-The "bounced" flag cannot be forged because it's rewritten during sending. If a message has the "bounced" flag set, it's definitely a result of a bounced message from the receiver.
+The `bounced` flag is set by the protocol during bounce; a message with this flag indicates a bounced message. See also: [non-bounceable messages](/v3/documentation/smart-contracts/message-management/non-bounceable-messages).
 :::
 
 ## Error handling
@@ -59,14 +60,13 @@ Some operations require both value transfer and confirmation. For example, the v
 
 ### Implementation
 
-1. The sender attaches exactly one Toncoin to the intended value
+1. The sender should attach an additional amount of Toncoin sufficient to cover fees (in addition to the main transfer value, e.g., the stake)
 2. If an error occurs (e.g., stake not accepted):
-   - Return the full received amount (minus processing fees)
+   - Return the full received amount minus processing and forwarding fees
    - Include an error message using `SENDRAWMSG` with `mode = 64`
 3. On success:
    - Create a confirmation message
-   - Return exactly one Toncoin (minus message transferring fees)
+   - Return exactly one Toncoin (fees paid from balance)
    - Use `SENDRAWMSG` with `mode = 1`
 
 <Feedback />
-
