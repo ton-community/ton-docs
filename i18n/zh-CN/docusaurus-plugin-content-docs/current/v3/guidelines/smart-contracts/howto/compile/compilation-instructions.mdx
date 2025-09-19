@@ -1,7 +1,5 @@
 # 从源代码编译
 
-您可以[在此处](/develop/smart-contracts/environment/installation#1-download)下载预构建的二进制文件。
-
 如果您仍然想自己编译源代码，请按照以下说明操作。
 
 :::caution
@@ -132,7 +130,7 @@ wget https://ton-blockchain.github.io/testnet-global.config.json
 
 ## FunC
 
-要从源代码构建FunC编译器，请执行上面描述的[通用部分](/develop/howto/compile#common)，然后：
+要从源代码构建FunC编译器，请执行上面描述的[通用部分](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common)，然后：
 
 ```bash
 cmake --build . --target lite-client
@@ -154,13 +152,13 @@ cmake --build . --target lite-client
 
 ## FunC
 
-要从源代码编译 FunC 编译器，请执行上述 [common part](/v3/guidelines/smart-contracts/howto/compile/compile-instructions#common)，然后：
+要从源代码编译 FunC 编译器，请执行上述 [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common)，然后：
 
 ```bash
 cmake --build . --target func
 ```
 
-要构建tonlib-cli，请执行[通用部分](/develop/howto/compile#common)，[下载配置](/develop/howto/compile#download-global-config)，然后执行：
+要构建tonlib-cli，请执行[通用部分](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common)，[下载配置](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config)，然后执行：
 
 ```bash
 ./crypto/func -o output.fif -SPA source0.fc source1.fc ...
@@ -168,7 +166,7 @@ cmake --build . --target func
 
 ## Fift
 
-要从源代码编译 Fift 编译器，请执行上述 [common part](/v3/guidelines/smart-contracts/howto/compile/compile-instructions#common)，然后：
+要从源代码编译 Fift 编译器，请执行上述 [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common)，然后：
 
 ```bash
 cmake --build . --target fift
@@ -204,7 +202,7 @@ cmake --build . --target tonlib-cli
 cmake --build . --target rldp-http-proxy
 ```
 
-要构建storage-daemon和storage-daemon-cli，请执行[通用部分](/develop/howto/compile#common)，然后执行：
+要构建storage-daemon和storage-daemon-cli，请执行[通用部分](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common)，然后执行：
 
 ```bash
 ./rldp-http-proxy/rldp-http-proxy
@@ -212,7 +210,7 @@ cmake --build . --target rldp-http-proxy
 
 ## generate-random-id
 
-要编译 generate-random-id，请执行 [common part](/v3/guidelines/smart-contracts/howto/compile/compile-instructions#common)，然后执行：
+要编译 generate-random-id，请执行 [common part](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#common)，然后执行：
 
 ```bash
 cmake --build . --target generate-random-id

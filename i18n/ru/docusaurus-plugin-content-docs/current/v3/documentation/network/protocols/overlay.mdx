@@ -38,7 +38,7 @@
 ## Взаимодействие с оверлейными узлами
 
 Мы уже разбирали пример с поиском оверлейных узлов в статье о DHT,
-в разделе [Поиск узлов, хранящих состояние блокчейна](/v3/documentation/network/protocols/dht/dht-deep-dive#search-for-nodes-that-store-the-state-of-the-blockchain).
+в разделе [Поиск узлов, хранящих состояние блокчейна](/v3/documentation/network/protocols/dht/deep-dive#search-for-nodes-that-store-the-state-of-the-blockchain).
 В этом разделе мы сосредоточимся на взаимодействии с ними.
 
 При запросе DHT мы получим адреса оверлейных узлов, из которых мы можем узнать адреса других узлов этого оверлея с помощью запроса [overlay.getRandomPeers](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L237).
@@ -80,7 +80,7 @@ overlay.query overlay:int256 = True;
 
 Для запросов такого рода используется протокол RLDP. И важно не забыть префикс `overlay.query` - он должен использоваться для каждого запроса в оверлее.
 
-В самих запросах нет ничего необычного, они очень похожи на то, что мы [делали в статье про ADNL TCP](/v3/documentation/network/protocols/adnl/adnl-tcp#getmasterchaininfo).
+В самих запросах нет ничего необычного, они очень похожи на то, что мы [делали в статье про ADNL TCP](/v3/documentation/network/protocols/adnl/tcp#getmasterchaininfo).
 
 Например, запрос `downloadBlockFull` использует уже знакомую схему идентификатора блока:
 

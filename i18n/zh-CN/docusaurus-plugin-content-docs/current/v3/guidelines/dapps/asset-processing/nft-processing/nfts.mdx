@@ -4,7 +4,7 @@
 
 在本文档部分中，我们将向读者提供对 NFT 的更深刻理解。这将教导读者如何与 NFT 交互，并如何通过在 TON 区块链上发送的交易接收 NFT。
 
-下面提供的信息假定读者已经深入了解了我们之前的[有关 Toncoin 支付处理的部分](/develop/dapps/asset-processing)，同时也假设他们具备通过编程与钱包智能合约交互的基本知识。
+下面提供的信息假定读者已经深入了解了我们之前的[有关 Toncoin 支付处理的部分](/guidelines/advanced-asset-processing)，同时也假设他们具备通过编程与钱包智能合约交互的基本知识。
 
 ## 理解 NFT 的基础
 
@@ -228,7 +228,7 @@ send_raw_message(nft_msg.end_cell(), 128 + 32);
 
 - `store_uint(0x18, 6)` - 存储消息标志。
 - `store_slice(nft_address)` - 存储消息目标（NFT 地址）。
-- `store_coins(0)` - 发送随消息发送的 TON 数量设置为 0，因为使用 `128` [消息模式](/develop/smart-contracts/messages#message-modes) 以其余余额发送消息。要发送非用户全部余额的金额，必须更改此数字。请注意，它应足够大以支付gas费以及任何转发金额。
+- `store_coins(0)` - 发送随消息发送的 TON 数量设置为 0，因为使用 `128` [消息模式](/v3/documentation/smart-contracts/message-management/sending-messages#message-modes) 以其余余额发送消息。要发送非用户全部余额的金额，必须更改此数字。请注意，它应足够大以支付gas费以及任何转发金额。
 - `store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)` - 剩余构成消息头的部分被留空。
 - `store_uint(op::transfer(), 32)` - 这是 msg_body 的开始。在这里，我们首先使用 transfer OP 代码，以便接收者理解其转移所有权消息。
 - `store_uint(query_id, 64)` - 存储查询 ID。

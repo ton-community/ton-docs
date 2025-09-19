@@ -20,7 +20,7 @@
     "lint": "eslint -c eslint.config.js .",
     "lint-mdx": "eslint -c eslint.mdx.config.js docs/ src/pages/",
     "lint-mdx-fix": "eslint -c eslint.mdx.config.js docs/ src/pages/ --fix",
-    "spell": "cspell **/*.md **/*.mdx --show-suggestions --exclude build",
+    "spell": "cspell --show-suggestions --no-progress --no-cache",
     "postinstall": "husky"
   },
   "dependencies": {

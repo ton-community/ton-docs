@@ -87,7 +87,7 @@ With a non-custodial wallet, the user owns the wallet and holds the private key 
 To download and create a TON wallet, follow these simple steps:
 
 1. Install the Tonkeeper app on your smartphone. It can be downloaded [here](https://tonkeeper.com/).
-2. Next, you need to [enable test mode](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#tonkeeper-test-environment) within Tonkeeper.
+2. Next, you need to [enable test mode](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps) within Tonkeeper.
 
 Let's start development now.
 
@@ -104,7 +104,7 @@ Please use the [ton-onboarding-challenge](https://github.com/ton-community/ton-o
 <br />
 
 <ThemedImage
-  alt="Creating a new repository"
+  alt="Create repository from template — GitHub UI"
   sources={{
       light: '/img/tutorials/onboarding/1.png?raw=true',
       dark: '/img/tutorials/onboarding/1-dark.png?raw=true',
@@ -126,7 +126,7 @@ Ensure you have opened the repository in your GitHub profile generated from the 
 <br />
 
 <ThemedImage
-  alt="A GitHub repository"
+  alt="Repository page — GitHub UI"
   sources={{
       light: '/img/tutorials/onboarding/3.png?raw=true',
       dark: '/img/tutorials/onboarding/3-dark.png?raw=true',
@@ -143,12 +143,12 @@ Ensure you have opened the repository in your GitHub profile generated from the 
 
 #### GitHub Codespaces
 
-If you choose the cloud development environment, it's easy to get started by first selecting the _Code_ tab and then by clicking on the _Create codespace on master_ button within the GitHub repository shown below:
+If you choose the cloud development environment, it's easy to get started by first selecting the _Code_ tab and then by clicking on the _Create a codespace on the default branch_ button within the GitHub repository shown below:
 
 <br />
 
 <ThemedImage
-  alt="A cloud development environment"
+  alt="Codespaces: Create codespace"
   sources={{
       light: '/img/tutorials/onboarding/2.png?raw=true',
       dark: '/img/tutorials/onboarding/2-dark.png?raw=true',
@@ -180,7 +180,7 @@ For example, in GitHub Codespaces, you should open the Terminal workspace if it 
 <br />
 
 <ThemedImage
-  alt="Running scripts"
+  alt="Terminal panel in Codespaces"
   sources={{
       light: '/img/tutorials/onboarding/6.png?raw=true',
       dark: '/img/tutorials/onboarding/6-dark.png?raw=true',
@@ -196,7 +196,7 @@ Enter commands in this window and execute them with _Enter_:
 <br />
 
 <ThemedImage
-  alt="The command line"
+  alt="Enter commands in terminal"
   sources={{
       light: '/img/tutorials/onboarding/4.png?raw=true',
       dark: '/img/tutorials/onboarding/4-dark.png?raw=true',
@@ -217,7 +217,7 @@ Okay, what do you need to connect to TON Blockchain?
 
 - **Smart contract address** as a point of destination. We aim to mine an NFT from the _proof-of-work smart contract_, so we need an address to determine the current mining complexity.
 - **API provider** to make requests to TON Blockchain. TON has multiple [API types](/v3/guidelines/dapps/apis-sdks/api-types) for different purposes. We will use the testnet version of [toncenter.com](https://toncenter.com/) API.
-- **JavaScript SDK**: a JavaScript SDK (recall that an SDK is a Software Development Kit) is needed to parse the smart contract address used and prepare it to create an API request. To better understand TON addresses and why they need to be parsed to carry out this process, please see this [resource](/v3/documentation/smart-contracts/addresses) to understand why we should parse it. To carry out this procedure, we use [`@ton/ton`](https://github.com/ton-org/ton).
+- **JavaScript SDK**: a JavaScript SDK (recall that an SDK is a Software Development Kit) is needed to parse the smart contract address used and prepare it to create an API request. To better understand TON addresses and why they need to be parsed to carry out this process, please see this [resource](/v3/documentation/smart-contracts/addresses/address) to understand why we should parse it. To carry out this procedure, we use [`@ton/ton`](https://github.com/ton-org/ton).
 
 In the next section, we describe how users send their initial requests to TON Blockchain using the TON Center API and `@ton/ton` to receive data from the PoW smart contract.
 
@@ -225,7 +225,7 @@ In the next section, we describe how users send their initial requests to TON Bl
 
 For the miner to work correctly, we need to add two different smart contract address types. These include:
 
-1. **Wallet address**: a wallet address is required for the miner to receive their mining reward (in this case, we must use the [Tonkeeper Testnet mode](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#tonkeeper-test-environment)).
+1. **Wallet address**: a wallet address is required for the miner to receive their mining reward (in this case, we must use the [Tonkeeper Testnet mode](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps)).
 2. **Collection address**: a collection address is required to act as a smart contract to correctly mine an NFT (to carry out this process, copy the NFT collection address under the TON onboarding challenge collection name from the [Getgems website](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX)).
 
 Next, we open the `./scripts/mine.ts` file in your miner and create a `mine()` function composed of initial constants as follows:
@@ -250,7 +250,7 @@ Later, when creating a TON NFT Miner, several requests will be executed to the p
 
 #### Address parsing
 
-On TON, smart contract addresses come in different forms that employ numerous flag types. In this context specifically, we use the _user-friendly address form_. If you are curious to learn more about the different smart contract address types, feel free to check out this additional [resource](/v3/documentation/smart-contracts/addresses) in our documentation.
+On TON, smart contract addresses come in different forms that employ numerous flag types. In this context specifically, we use the _user-friendly address form_. If you are curious to learn more about the different smart contract address types, feel free to check out this additional [resource](/v3/documentation/smart-contracts/addresses/address-formats) in our documentation.
 
 
 The `Address.parse()` method located in the `@ton/ton` SDK allows the developer to create an address object to convert addresses from one form to another in a simplified manner.
@@ -264,7 +264,7 @@ The simplest way to do it is by specifying the Testnet endpoint `https://testnet
 <br />
 
 <ThemedImage
-  alt="Connect to an API provider"
+  alt="TON Center endpoint screenshot"
   sources={{
       light: '/img/tutorials/onboarding/5.png?raw=true',
       dark: '/img/tutorials/onboarding/5-dark.png?raw=true',
@@ -288,7 +288,7 @@ const client = new TonClient({ endpoint });
 ```
 
 :::info what to do in production?
-Using an RPC node provider or running your own ton-http-api instance is better for that. Read more at the [TON HTTP-based APIs page](/v3/guidelines/dapps/apis-sdks/ton-http-apis).
+Using an RPC node provider or running your own ton-http-api instance is better for that. Read more at the [TON HTTP-based APIs page](/v3/guidelines/dapps/apis-sdks/api-types#http-api).
 :::
 
 ### Receiving mining data from TON Blockchain
@@ -299,7 +299,7 @@ By consulting the [README file](https://github.com/ton-community/ton-onboarding-
 
 As a result, we should receive an array with these fields:
 
-```bash
+```text
 (
 	int pow_complexity,
 	int last_success,
@@ -335,7 +335,7 @@ To avoid unexpected issues, ensure you have finalized all previous steps, includ
 
 Good! As long as the above processes are executed correctly, a successful connection to the API will be achieved, and the necessary data will be displayed in the console. The correct console output should be initiated as follows:
 
-```bash
+```text
 TupleReader {
   items: [
     {
@@ -359,9 +359,9 @@ We need to convert the stack output into a more _useful form_.
 :::info GAS PARAMETERS ON TON
 **Warning**: Though this information is highly complex and **not necessary for this tutorial** if you're interested in understanding the complex technical aspects of TON, consider using these resources:
 
-1. To better understand how TON Virtual Machine (TVM) operates and _how TON processes transactions_, check out [TVM overview section](/v3/documentation/tvm/tvm-overview).
+1. To better understand how TON Virtual Machine (TVM) operates and _how TON processes transactions_, check out [TVM overview section](/v3/documentation/tvm/overview).
 2. Secondly, if you want to learn more about how transaction and gas fees work on TON, consider diving into [this section](/v3/documentation/smart-contracts/transaction-fees/fees) of our documentation.
-3. Finally, to better understand the exact gas values needed to carry out TVM instructions, see [this section](/v3/documentation/tvm/instructions#gas-prices) of our documentation.
+3. Finally, to better understand the exact gas values needed to carry out TVM instructions, see [this section](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#computation-fees) of our documentation.
    :::
 
 Now, let's return to the tutorial!
@@ -397,7 +397,7 @@ npm run start:script
 
 Here is an example output:
 
-```bash
+```text
 {
   complexity: 7237005577332262213973186563042994240829374041602535252466099000494570602496n,
   lastSuccess: 1730818693n,
@@ -434,7 +434,7 @@ First, we must prepare a mining message by ensuring the correct parameters to en
 Thankfully, the [README file](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive) allows us to retrieve the correct guidelines to achieve this goal. As you can see, the above README file comprises a table with specific fields and cell types (titled "Layout of proof of work cell') to help achieve our desired result.
 
 :::info What are cells?
-Cells are data storage structures on TON that fulfill numerous purposes, including increasing network scalability and smart contract transaction speeds. We won't get into specifics here, but if you're interested in understanding the complexity of cells and how they work, consider diving into [this](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage) section of our documentation.
+Cells are data storage structures on TON that fulfill numerous purposes, including increasing network scalability and smart contract transaction speeds. We won't get into specifics here, but if you're interested in understanding the complexity of cells and how they work, consider diving into [this](/v3/concepts/dive-into-ton/ton-blockchain/cells) section of our documentation.
 :::
 
 Fortunately, all the data structures used in this tutorial are already written in TypeScript. Use the `MineMessageParams` object from _NftGiver.ts_ to build a transaction with _Queries_:
@@ -493,7 +493,7 @@ while (bufferToBigint(msg.hash()) > complexity) {
 console.log('Yoo-hoo, you found something!');
 ```
 
-We convert the hash from the `msg.hash()` to `bigint `with the `bufferToBigint()` function. This is done to use this hash in comparison with `complexity`.
+We convert the message hash buffer to a `bigint` with the `bufferToBigint()` function for comparison with `complexity`.
 
 Though the miner will work properly after completing the above steps, it will have a visually unappealing appearance (try `npm run start:script`). Therefore, we must address this issue. Let’s jump in.
 
@@ -543,7 +543,7 @@ npm run start:script
 <br />
 
 <ThemedImage
-  alt="Results"
+  alt="Miner progress output"
   sources={{
       light: '/img/tutorials/onboarding/7.png?raw=true',
       dark: '/img/tutorials/onboarding/7-dark.png?raw=true',
@@ -626,7 +626,7 @@ There are two main ways to mine an NFT on TON:
 
 Below are the steps needed to initiate your first Testnet transaction to mine your NFT:
 
-1. Activate [Testnet mode within your Tonkeeper wallet](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps#wallets-for-everyday-users)
+1. Activate [Testnet mode within your Tonkeeper wallet](/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps)
 2. Input your Testnet wallet address from Tonkeeper into the `walletAddress` variable in the `./scripts/mine.ts`.
 3. Input address of the [NFT collection from Testnet](https://testnet.getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX) into `collectionAddress` variable in the `./scripts/mine.ts`.
 
@@ -637,7 +637,7 @@ To successfully mine an NFT rocket on Testnet, it is necessary to follow these s
 1. _Open_ the Tonkeeper wallet on your phone (it should hold some newly received Testnet Toncoin).
 2. _Select_ scan mode in the wallet to scan the QR code.
 3. _Run_ your miner to acquire the correct hash (this process takes between 30 and 60 seconds).
-4. _Follow_ the steps in the Blueprint dialogue.
+4. _Follow_ the steps in the Blueprint dialog.
 5. _Scan_ the generated QR code from the miner.
 6. _Confirm_ the transaction in your Tonkeeper wallet.
 
@@ -656,9 +656,9 @@ Welcome aboard, **a true TON Developer**! You did it.
 Hey! For those who wish to mine an NFT on TON Mainnet, these instructions should be followed:
 
 1. You have activated _Mainnet_ mode in your Tonkeeper (it should hold at least 0.1 TON).
-2. Input our _Mainnet_ wallet address from Tonkeeper into the `walletAddress` variable in the `./scripts/mine.ts`
+2. Input your _Mainnet_ wallet address from Tonkeeper into the `walletAddress` variable in the `./scripts/mine.ts`
 3. Input address of the [NFT collection from the Mainnet](https://getgems.io/collection/EQDk8N7xM5D669LC2YACrseBJtDyFqwtSPCNhRWXU7kjEptX) into `collectionAddress` variable in the `./scripts/mine.ts`
-4. Replace **endpoint** to the _Mainnet_:
+4. Set the endpoint to the _Mainnet_ API:
 
 ```ts title="./scripts/mine.ts"
 // specify endpoint for Mainnet
@@ -672,7 +672,7 @@ As we outlined in the Testnet NFT rocket mining process, to successfully mine an
 1. _Open_ the Tonkeeper wallet on your phone (remember, it should hold some Toncoin).
 2. _Select_ scan mode in the wallet to scan the QR code.
 3. _Run_ your miner to acquire the correct hash (this process takes between 30 and 60 seconds).
-4. _Follow_ the steps in the Blueprint dialogue.
+4. _Follow_ the steps in the Blueprint dialog.
 5. _Scan_ the generated QR code from the miner.
 6. _Confirm_ the transaction in your Tonkeeper wallet.
 
@@ -712,7 +712,7 @@ After finishing the TON onboarding challenge, where we successfully mined an NFT
 - [How to run TON Site](/v3/guidelines/web3/ton-proxy-sites/how-to-run-ton-site)
 
 :::info have some feedback?
-You are one of the first explorers here. If you find any mistakes or feel stacked, please send feedback to [@SwiftAdviser](https://t.me/SwiftAdviser). I will fix it ASAP! :)
+You are one of the first explorers here. If you find any mistakes or feel stuck, please send feedback to [@SwiftAdviser](https://t.me/SwiftAdviser). I will fix it ASAP! :)
 :::
 
 <Feedback />

@@ -26,7 +26,7 @@
 
 特别是，它可以重复数据：如果在不同分支中引用了多个等效子 cell ，则其内容只需存储一次。
 
-[有关重复数据删除的更多信息](/v3/documentation/data-formats/ltb/library-cells)。
+[有关重复数据删除的更多信息](/v3/documentation/data-formats/cells/library)。
 :::
 
 ### 计算流程
@@ -180,7 +180,7 @@ send_gas_fee = printTxGasStats("Jetton transfer", transferTx);
 
 特别是，它可以重复数据：如果在不同分支中引用了多个等效 sub-cells，则其内容只需存储一次。
 
-[有关重复数据删除的更多信息](/v3/documentation/data-formats/ltb/library-cells)。
+[有关重复数据删除的更多信息](/v3/documentation/data-formats/cells/library)。
 :::
 
 但是，有时发出的报文在很大程度上取决于收到的结构，在这种情况下，您无法完全预测费用。请尝试使用带有以下参数的 `GETORIGINALFWDFEE` 操作码：

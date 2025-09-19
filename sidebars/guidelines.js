@@ -533,22 +533,6 @@ module.exports = [
           },
         ],
       },
-
-      // 9. Business
-      {
-        type: "category",
-        label: "Business",
-        link: {
-          type: "generated-index",
-          title: "Business",
-          slug: "/guidelines/business",
-          keywords: ["business"],
-        },
-        items: [
-          "v3/guidelines/ton-connect/business/ton-connect-for-business",
-          "v3/guidelines/ton-connect/business/ton-connect-for-security",
-        ],
-      },
     ],
   },
   {

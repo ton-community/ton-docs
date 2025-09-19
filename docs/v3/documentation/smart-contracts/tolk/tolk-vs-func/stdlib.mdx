@@ -3,10 +3,10 @@ import Feedback from '@site/src/components/Feedback';
 # Tolk vs FunC: standard library
 
 FunC has a rich [standard library](/v3/documentation/smart-contracts/func/docs/stdlib),
-known as *"stdlib.fc"* file. It's quite low-level and contains many `asm` functions
+known as the "stdlib.fc" file. It's quite low-level and contains many `asm` functions
 closely related to [TVM instructions](/v3/documentation/tvm/instructions/).
 
-Tolk also has a standard library based on a FunC one. Three main differences:
+Tolk also has a standard library based on the FunC one. Three main differences:
 1. It's split into multiple files: `common.tolk`, `tvm-dicts.tolk`, and others. Functions from `common.tolk` are always available. Functions from other files are available after import:
 ```tolk
 import "@stdlib/tvm-dicts"
@@ -14,14 +14,14 @@ import "@stdlib/tvm-dicts"
 beginCell()          // available always
 createEmptyDict()    // available due to import
 ```
-2. You don't need to download it from GitHub; it's a part of Tolk distribution. 
-3. Tolk has functions and methods (called via dot), lots of global FunC functions became methods of builder/slice/etc. (and can't be called as functions)
+2. You don't need to download it from GitHub; it's part of the Tolk distribution. 
+3. Tolk has functions and methods (called via the dot operator). Many global FunC functions became methods of builders/slices/etc. and can no longer be called as functions.
 
 
 ## Functions vs methods
 
-In FunC, there are no methods, actually. All functions are global-scoped.  
-You just call any function via dot:
+In FunC, there are no methods, actually. All functions are globally scoped.  
+You can call any function using the dot operator:
 ```func
 ;; FunC
 cell config_param(int x) asm "CONFIGOPTPARAM";
@@ -31,7 +31,7 @@ config_param(16);   ;; ok
 ```
 
 So, when you call `b.end_cell()`, you actually call a global function `end_cell`. 
-Since all functions are global-scoped, there are no "short methods."
+Since all functions are globally scoped, there are no "short methods."
 ```func
 someTuple.tuple_size();
 ;; why not someTuple.size()? because it's a global function:
@@ -39,8 +39,8 @@ someTuple.tuple_size();
 ```
 
 **Tolk separates functions and methods** like it's done in most languages:
-1) functions can NOT be called via dot, only methods can
-2) methods can have short names, they don't conflict
+1) functions can NOT be called via dot, only methods can.
+2) methods can have short names, they don't conflict.
 
 ```tolk
 // FunC
@@ -61,6 +61,8 @@ Note that some functions were deleted because they either can be expressed synta
 or they were very uncommon in practice.
 
 The table is "sorted" in a way how functions are declared in stdlib.fc:
+
+Note: FunC uses snake_case names (for example, `begin_cell`), while Tolk methods use camelCase (for example, `beginCell`).
 
 | FunC name                         | Tolk name                          | Required import |
 |-----------------------------------|------------------------------------|-----------------|
@@ -187,66 +189,71 @@ The table is "sorted" in a way how functions are declared in stdlib.fc:
 | list_next                         | listNext                           | lisp-lists      |
 | car                               | listGetHead                        | lisp-lists      |
 | cdr                               | listGetTail                        | lisp-lists      |
-| new_dict                          | createEmptyDict                    | tvm-dicts       |
-| dict_empty?(d) or dot             | d.dictIsEmpty                      | tvm-dicts       |
-| idict_set_ref                     | iDictSetRef                        | tvm-dicts       |
-| udict_set_ref                     | uDictSetRef                        | tvm-dicts       |
-| idict_get_ref                     | iDictGetRefOrNull                  | tvm-dicts       |
-| idict_get_ref?                    | iDictGetRef                        | tvm-dicts       |
-| udict_get_ref?                    | uDictGetRef                        | tvm-dicts       |
-| idict_set_get_ref                 | iDictSetAndGetRefOrNull            | tvm-dicts       |
-| udict_set_get_ref                 | iDictSetAndGetRefOrNull            | tvm-dicts       |
-| idict_delete?                     | iDictDelete                        | tvm-dicts       |
-| udict_delete?                     | uDictDelete                        | tvm-dicts       |
-| idict_get?                        | iDictGet                           | tvm-dicts       |
-| udict_get?                        | uDictGet                           | tvm-dicts       |
-| idict_delete_get?                 | iDictDeleteAndGet                  | tvm-dicts       |
-| udict_delete_get?                 | uDictDeleteAndGet                  | tvm-dicts       |
-| udict_set                         | uDictSet                           | tvm-dicts       |
-| idict_set                         | iDictSet                           | tvm-dicts       |
-| dict_set                          | sDictSet                           | tvm-dicts       |
-| udict_add?                        | uDictSetIfNotExists                | tvm-dicts       |
-| udict_replace?                    | uDictSetIfExists                   | tvm-dicts       |
-| idict_add?                        | iDictSetIfNotExists                | tvm-dicts       |
-| idict_replace?                    | iDictSetIfExists                   | tvm-dicts       |
-| udict_set_builder                 | uDictSetBuilder                    | tvm-dicts       |
-| idict_set_builder                 | iDictSetBuilder                    | tvm-dicts       |
-| dict_set_builder                  | sDictSetBuilder                    | tvm-dicts       |
-| udict_add_builder?                | uDictSetBuilderIfNotExists         | tvm-dicts       |
-| udict_replace_builder?            | uDictSetBuilderIfExists            | tvm-dicts       |
-| idict_add_builder?                | iDictSetBuilderIfNotExists         | tvm-dicts       |
-| idict_replace_builder?            | iDictSetBuilderIfExists            | tvm-dicts       |
-| udict_delete_get_min              | uDictDeleteFirstAndGet             | tvm-dicts       |
-| idict_delete_get_min              | iDictDeleteFirstAndGet             | tvm-dicts       |
-| dict_delete_get_min               | sDictDeleteFirstAndGet             | tvm-dicts       |
-| udict_delete_get_max              | uDictDeleteLastAndGet              | tvm-dicts       |
-| idict_delete_get_max              | iDictDeleteLastAndGet              | tvm-dicts       |
-| dict_delete_get_max               | sDictDeleteLastAndGet              | tvm-dicts       |
-| udict_get_min?                    | uDictGetFirst                      | tvm-dicts       |
-| udict_get_max?                    | uDictGetLast                       | tvm-dicts       |
-| udict_get_min_ref?                | uDictGetFirstAsRef                 | tvm-dicts       |
-| udict_get_max_ref?                | uDictGetLastAsRef                  | tvm-dicts       |
-| idict_get_min?                    | iDictGetFirst                      | tvm-dicts       |
-| idict_get_max?                    | iDictGetLast                       | tvm-dicts       |
-| idict_get_min_ref?                | iDictGetFirstAsRef                 | tvm-dicts       |
-| idict_get_max_ref?                | iDictGetLastAsRef                  | tvm-dicts       |
-| udict_get_next?                   | uDictGetNext                       | tvm-dicts       |
-| udict_get_nexteq?                 | uDictGetNextOrEqual                | tvm-dicts       |
-| udict_get_prev?                   | uDictGetPrev                       | tvm-dicts       |
-| udict_get_preveq?                 | uDictGetPrevOrEqual                | tvm-dicts       |
-| idict_get_next?                   | iDictGetNext                       | tvm-dicts       |
-| idict_get_nexteq?                 | iDictGetNextOrEqual                | tvm-dicts       |
-| idict_get_prev?                   | iDictGetPrev                       | tvm-dicts       |
-| idict_get_preveq?                 | iDictGetPrevOrEqual                | tvm-dicts       |
-| udict::delete_get_min             | uDictDeleteFirstAndGet             | tvm-dicts       |
-| idict::delete_get_min             | iDictDeleteFirstAndGet             | tvm-dicts       |
-| dict::delete_get_min              | sDictDeleteFirstAndGet             | tvm-dicts       |
-| udict::delete_get_max             | uDictDeleteLastAndGet              | tvm-dicts       |
-| idict::delete_get_max             | iDictDeleteLastAndGet              | tvm-dicts       |
-| dict::delete_get_max              | sDictDeleteLastAndGet              | tvm-dicts       |
+| new_dict                          | createEmptyMap                     |                 |
+| dict_empty?(d) or dot             | m.isEmpty                          |                 |
+| idict_set_ref                     | use native maps                    |                 |
+| udict_set_ref                     | use native maps                    |                 |
+| idict_get_ref                     | use native maps                    |                 |
+| idict_get_ref?                    | use native maps                    |                 |
+| udict_get_ref?                    | use native maps                    |                 |
+| idict_set_get_ref                 | use native maps                    |                 |
+| udict_set_get_ref                 | use native maps                    |                 |
+| idict_delete?                     | use native maps                    |                 |
+| udict_delete?                     | use native maps                    |                 |
+| idict_get?                        | use native maps                    |                 |
+| udict_get?                        | use native maps                    |                 |
+| idict_delete_get?                 | use native maps                    |                 |
+| udict_delete_get?                 | use native maps                    |                 |
+| udict_set                         | use native maps                    |                 |
+| idict_set                         | use native maps                    |                 |
+| dict_set                          | use native maps                    |                 |
+| udict_add?                        | use native maps                    |                 |
+| udict_replace?                    | use native maps                    |                 |
+| idict_add?                        | use native maps                    |                 |
+| idict_replace?                    | use native maps                    |                 |
+| udict_set_builder                 | use native maps                    |                 |
+| idict_set_builder                 | use native maps                    |                 |
+| dict_set_builder                  | use native maps                    |                 |
+| udict_add_builder?                | use native maps                    |                 |
+| udict_replace_builder?            | use native maps                    |                 |
+| idict_add_builder?                | use native maps                    |                 |
+| idict_replace_builder?            | use native maps                    |                 |
+| udict_delete_get_min              | use native maps                    |                 |
+| idict_delete_get_min              | use native maps                    |                 |
+| dict_delete_get_min               | use native maps                    |                 |
+| udict_delete_get_max              | use native maps                    |                 |
+| idict_delete_get_max              | use native maps                    |                 |
+| dict_delete_get_max               | use native maps                    |                 |
+| udict_get_min?                    | use native maps                    |                 |
+| udict_get_max?                    | use native maps                    |                 |
+| udict_get_min_ref?                | use native maps                    |                 |
+| udict_get_max_ref?                | use native maps                    |                 |
+| idict_get_min?                    | use native maps                    |                 |
+| idict_get_max?                    | use native maps                    |                 |
+| idict_get_min_ref?                | use native maps                    |                 |
+| idict_get_max_ref?                | use native maps                    |                 |
+| udict_get_next?                   | use native maps                    |                 |
+| udict_get_nexteq?                 | use native maps                    |                 |
+| udict_get_prev?                   | use native maps                    |                 |
+| udict_get_preveq?                 | use native maps                    |                 |
+| idict_get_next?                   | use native maps                    |                 |
+| idict_get_nexteq?                 | use native maps                    |                 |
+| idict_get_prev?                   | use native maps                    |                 |
+| idict_get_preveq?                 | use native maps                    |                 |
+| udict::delete_get_min             | use native maps                    |                 |
+| idict::delete_get_min             | use native maps                    |                 |
+| dict::delete_get_min              | use native maps                    |                 |
+| udict::delete_get_max             | use native maps                    |                 |
+| idict::delete_get_max             | use native maps                    |                 |
+| dict::delete_get_max              | use native maps                    |                 |
 | pfxdict_get?                      | prefixDictGet                      | tvm-dicts       |
 | pfxdict_set?                      | prefixDictSet                      | tvm-dicts       |
 | pfxdict_delete?                   | prefixDictDelete                   | tvm-dicts       |
+
+
+See also for `accept_message` → `acceptExternalMessage`:
+- Effects and nuances: /v3/documentation/smart-contracts/transaction-fees/accept-message-effects.
+- FunC stdlib reference: /v3/documentation/smart-contracts/func/docs/stdlib#accept_message.
 
 
 ## A list of added functions
@@ -278,20 +285,15 @@ you can quickly wrap any TVM instruction yourself.
     <td><code>{'var flags = cs.loadUint(32);'}</code></td>
   </tr>
   <tr>
-    <td><code>{'dict~udict_set(...);'}</code></td>
-    <td><code>{'dict.uDictSet(...);'}</code></td>
-  </tr>
-  <tr>
     <td>...</td>
     <td>...</td>
   </tr>
   </tbody>
 </table>
 
-Most FunC functions used with `~` tilda in practice now mutate the object; see examples above.
-
-For example, if you used `dict~udict_set(…)`, just use `dict.uDictSet(…)`, and everything is fine. 
-But if you used `dict.udict_set(…)` to obtain a copy, you'll need to express it another way.
+Most FunC functions used with `~` tilda in practice now mutate the object.
+For example, if you used `cs~load_uint(…)`, just use `cs.loadUint(…)`, and everything is fine. 
+But if you used `cs.load_uint(…)` to obtain a copy, you'll need to express it another way.
 
 [Read about mutability](/v3/documentation/smart-contracts/tolk/tolk-vs-func/mutability).
 
@@ -315,4 +317,3 @@ If you use blueprint, it automatically installs tolk-js; therefore, folder `node
 Inside are `common.tolk`, `tvm-dicts.tolk`, and others. 
 
 <Feedback />
-

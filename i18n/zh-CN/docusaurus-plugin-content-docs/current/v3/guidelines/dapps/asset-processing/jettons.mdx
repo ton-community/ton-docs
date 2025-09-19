@@ -62,7 +62,7 @@ TON 交易只需确认一次就不可逆转。为获得最佳用户体验/用户
 
 :::info
 TON 交易只需确认一次就不可逆转。
-为了清楚理解，读者应熟悉[本节文档](/v3/documentation/dapps/assets/overview) 中描述的资产处理基本原则。尤其要熟悉[合约](/v3/documentation/smart-contracts/addresses#everything-is-a-smart-contract)、[钱包](/v3/guidelines/smart-contracts/howto/wallet)、[消息](/v3/documentation/smart-contracts/message-management/messages-and-transactions) 和部署流程。
+为了清楚理解，读者应熟悉[本节文档](/v3/documentation/dapps/assets/overview) 中描述的资产处理基本原则。尤其要熟悉[合约](/v3/documentation/smart-contracts/addresses/address#everything-is-a-smart-contract)、[钱包](/v3/guidelines/smart-contracts/howto/wallet)、[消息](/v3/documentation/smart-contracts/message-management/messages-and-transactions) 和部署流程。
 :::
 
 :::info
@@ -315,7 +315,7 @@ Jetton 钱包和 TON 钱包之间通过以下通信顺序进行通信：
 有时，您在发送 jetton 时可能会遇到 `709` 错误。该错误表示信息所附的 Toncoin 数量不足以发送信息。请确保 `Toncoin > to_nano(TRANSFER_CONSUMPTION) + forward_ton_amount`，这通常>0.04，除非转发的有效载荷非常大。佣金取决于多种因素，包括 Jetton 代码详情以及是否需要为收款人部署新的 Jetton 钱包。
 建议在消息中添加一定数量的 Toncoin 作为余量，并将您的地址设置为 `response_destination`，以便接收 `Excess 0xd53276db` 消息。例如，您可以向消息中添加 0.05 TON，同时将 `forward_ton_amount` 设置为 1 nanoton（此 TON 数量将附加到 `jetton notify 0x7362d09c` 消息中）。
 
-你也可能会遇到 [`cskip_no_gas`](/v3/documentation/tvm/tvm-overview#compute-phase-skipped) 错误，它表示成功转移了 jetton，但没有执行其他计算。当 `forward_ton_amount` 的值等于 1  nanotons  时，这种情况很常见。
+你也可能会遇到 [`cskip_no_gas`](/v3/documentation/tvm/overview#when-the-compute-phase-is-skipped) 错误，它表示成功转移了 jetton，但没有执行其他计算。当 `forward_ton_amount` 的值等于 1  nanotons  时，这种情况很常见。
 
 :::tip
 查看 [最佳实践](/v3/guidelines/dapps/asset-processing/jettons#best-practices) 中的 *"发送带注释的 jettons"* 示例。

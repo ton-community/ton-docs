@@ -205,7 +205,7 @@ systemctl start validator.service
 
 Если по какой-то причине что-то не работает или ломается, вы всегда можете [откатиться](https://docs.oracle.com/cd/E23824_01/html/821-1448/gbciq.html#gbcxk) к снимку @archstate в вашей файловой системе ZFS, это исходное состояние, полученное из дампа.
 
-1. Остановите процесс валидатора (\*\*Никогда не пропускайте это! \*\*).
+1. Остановите процесс валидатора (**Никогда не пропускайте это!**).
 
 ```shell
 sudo -s
@@ -230,21 +230,11 @@ zfs rollback data/ton-work@dumpstate
 У вас есть вопросы или вам нужна помощь? Пожалуйста, задавайте вопросы в [TON Dev Chat (РУ)](https://t.me/tondev), чтобы получить помощь сообщества. Разработчики MyTonCtrl также присутствуют там.
 :::
 
-## Советы и рекомендации
-
-### Заставьте архивный узел не хранить блоки
-
-Чтобы заставить узел не хранить архивные блоки, используйте значение 86400. Подробнее смотрите в разделе [set_node_argument](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#set_node_argument).
-
-```bash
-installer set_node_argument --archive-ttl 86400
-```
-
 ## Поддержка
 
 Обратитесь в службу технической поддержки по ссылке [@mytonctrl_help](https://t.me/mytonctrl_help).
 
 ## См. также
 
-- [Типы узлов TON](/v3/documentation/infra/nodes/node-types)
+- [Типы узлов TON](/v3/documentation/nodes/overview)
 - [Запуск полного узла](/v3/guidelines/nodes/running-nodes/full-node)

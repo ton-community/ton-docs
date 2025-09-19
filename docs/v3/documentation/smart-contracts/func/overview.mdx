@@ -1,12 +1,12 @@
 import Feedback from '@site/src/components/Feedback';
 
-import Button from '@site/src/components/button'
+import Button from '@site/src/components/button';
 
 # Overview
 
-FunC is minimalist, domain-specific, functional-style language designed for writing low-level TON smart contracts, tightly bound to the TVM model.
+**FunC** is a high-level language used to program smart contracts on TON.
 
-Here is a simple example of a method for sending money written in FunC:
+FunC is a domain-specific, C-like, statically typed language. Here is a simple example of a method for sending money written in FunC:
 
 ```func
 () send_money(slice address, int amount) impure inline {
@@ -20,51 +20,65 @@ Here is a simple example of a method for sending money written in FunC:
 }
 ```
 
-The compiler converts FunC programs into Fift assembler code, generating the corresponding bytecode for the [TON Virtual Machine](/v3/documentation/tvm/tvm-overview/).
-
-Developers and engineers can use its bytecode, which is structured as a [tree of cells](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage/) like all data in the TON Blockchain, to create smart contracts or run it on a local instance of the TVM.
-
 <Button href="/v3/documentation/smart-contracts/func/cookbook" colorType={'primary'} sizeType={'sm'}>
   FunC cookbook
 </Button>
 
 <Button href="/v3/documentation/smart-contracts/func/docs/types" colorType={'secondary'} sizeType={'sm'}>
-  FunC documentation
+  FunC reference documentation
 </Button>
 
 ## Compiler
 
-### Blueprint
+The compiler converts FunC programs into Fift assembler code, generating the corresponding bytecode for the [TON Virtual Machine](/v3/documentation/tvm/overview).
 
-Using the Blueprint framework is the most convenient and quickest way to begin developing and compiling smart contracts.
+Developers can use this bytecode, which is structured as a [Bag of Cells](/v3/documentation/data-formats/cells/overview) like all data in the TON Blockchain, to deploy smart contracts or run this bytecode on a local instance of the TVM.
+
+### Compile with JS
+
+Using the Blueprint development environment is the most convenient and quickest way to begin developing and compiling smart contracts.
 Read more in the [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript/) section.
 
-### GitHub
+```bash
+npm create ton@latest
+```
 
-FunC binaries can be downloaded from the [GitHub repository](https://github.com/ton-blockchain/ton/releases) or [compiled manually](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#func) from sources.
+### Use precompiled binaries
+
+If you want to use the FunC compiler locally, you need to set up the TON compiler binaries on your machine.
+
+You can build binaries from source code,
+such as the [compiler's source code for FunC](https://github.com/ton-blockchain/ton/tree/master/crypto/func/).
+Read [how to compile](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#func) it from source.
+
+
+## TON Blockchain course
+
+The [TON Blockchain course](https://stepik.org/course/176754/) covers FunC and smart contract development.
+
+<Button href="https://stepik.org/course/176754/promo" colorType={'primary'} sizeType={'sm'}>
+  Check TON Blockchain course
+</Button>
+
+<Button href="https://stepik.org/course/201638/promo" colorType={'secondary'} sizeType={'sm'}>
+  Chinese
+</Button>
+
+<Button href="https://stepik.org/course/201855/promo" colorType={'secondary'} sizeType={'sm'}>
+  Russian
+</Button>
 
 ## Tutorials
 
 :::tip starter tip
-The best place to start developing on TON is the [Quick start](/v3/guidelines/quick-start/getting-started) section.
+The best place to start developing with FunC is the [Introduction](/v3/documentation/smart-contracts/overview/) section.
 :::
-
-The [TON Blockchain course](/v3/documentation/smart-contracts/overview#ton-blockchain-course) includes Module 4,
-which covers FunC and smart contract development.
 
 Below, you can find additional materials shared by community experts:
 
+- [Quick start](/v3/guidelines/quick-start/developing-smart-contracts/setup-environment/)
 - [TON Hello World: step-by-step guide for writing your first smart contract](https://helloworld.tonstudio.io/02-contract/)
-
-- [Challenge 1: Simple NFT deploy](https://github.com/romanovichim/TONQuest1/)
-- [Challenge 2: Chatbot contract](https://github.com/romanovichim/TONQuest2/)
-- [Challenge 3: Jetton vending machine](https://github.com/romanovichim/TONQuest3/)
-- [Challenge 4: Lottery/raffle](https://github.com/romanovichim/TONQuest4/)
-- [Challenge 5: Create UI to interact with the contract in 5 minutes](https://github.com/romanovichim/TONQuest5/)
-- [Challenge 6: Analyzing NFT sales on the Getgems marketplace](https://github.com/romanovichim/TONQuest6/)
-
 - [FunC lessons](https://github.com/romanovichim/TonFunClessons_Eng/) ([RU version](https://github.com/romanovichim/TonFunClessons_ru/)) by _@romanovichim_
-- [FunC quiz](https://t.me/toncontests/60/) ([RU version](https://t.me/toncontests/58?comment=14888/)) by _Vadim_. It is good for self-checking and will take 10–15 minutes. The questions are mainly about FunС, with a few general questions about TON.
 
 ## Smart contract examples
 
@@ -73,6 +87,11 @@ such as wallets, electors that manage validation on TON, multi-signature wallets
 
 ## Changelog
 
-[Blockchain changelog](https://github.com/ton-blockchain/ton/blob/master/Changelog.md)
+[History of FunC](/v3/documentation/smart-contracts/func/changelog/)
+
+## See also
+
+- [Types](/v3/documentation/smart-contracts/func/docs/types/)
+- [Cookbook](/v3/documentation/smart-contracts/func/cookbook/)
 
 <Feedback />

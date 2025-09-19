@@ -8,7 +8,7 @@ from scratch can be resource-consuming, so we recommend using one of the tools m
 
 ## Dune Analytics
 
-[Dune Analytics](https://dune.com/) is one of the leading platforms for running analytical queries and building dashboards. It comes with 
+[Dune Analytics](https://dune.com/) is one of the leading platforms for running analytical queries and building dashboards. It comes with
 100+ blockchain integrations, and TON is among them. Basically, one needs to be familiar with SQL language to
 write queries, but the [Dune AI](https://docs.dune.com/learning/how-tos/dune-ai-prompt-engineering) prompt engine allows
 users to start working with data even without SQL knowledge. Dune Analytics consumes data from the public TON Data Lake (see below)
@@ -24,18 +24,18 @@ are not covered by the [TEP-74](https://github.com/ton-blockchain/TEPs/blob/mast
 to reconstruct balances based solely on jetton events, so balances history should be used.
 
 Apart from raw tables, there are decoded tables that allow you to work with high-level structures in a unified manner:
-- [NFT events](https://dune.com/queries?category=canonical&namespace=ton&id=ton.nft_events) - comprehensive source of NFT-related data including 
+- [NFT events](https://dune.com/queries?category=canonical&namespace=ton&id=ton.nft_events) - comprehensive source of NFT-related data including
 sales, transfers and mints.
-- [DEX trades](https://docs.dune.com/data-catalog/ton/dex_trades) - includes a unified data model for DEX trades. The full list of 
+- [DEX trades](https://docs.dune.com/data-catalog/ton/dex_trades) - includes a unified data model for DEX trades. The full list of
 supported DEXs is available [here](https://github.com/ton-studio/ton-etl/blob/main/datalake/README.md#dex-trades).
 - [DEX pools](https://docs.dune.com/data-catalog/ton/dex_pools) - comes with the full history of DEX pool balances and TVL estimations.
 
-Finally, two tables with off-chain metadata are available: [Jetton metadata](https://docs.dune.com/data-catalog/ton/jetton_metadata) and 
+Finally, two tables with off-chain metadata are available: [Jetton metadata](https://docs.dune.com/data-catalog/ton/jetton_metadata) and
 [NFT metadata](https://dune.com/queries?category=canonical&namespace=ton&id=ton.nft_metadata).
 
 Dune Analytics allows projects to build bespoke data marts for each protocol - it is widely used for EVMs with the help of ABIs.
-Since TON doesn't have ABIs and handles complex [data structures](/v3/documentation/data-formats/tlb/cell-boc/), a [special
-decoding framework](https://github.com/duneanalytics/spellbook/blob/main/dbt_subprojects/daily_spellbook/macros/project/ton/README.md) 
+Since TON doesn't have ABIs and handles complex [data structures](/v3/documentation/data-formats/cells/overview/), a [special
+decoding framework](https://github.com/duneanalytics/spellbook/blob/main/dbt_subprojects/daily_spellbook/macros/project/ton/README.md)
 has been created. It works on top of [Spellbook](https://github.com/duneanalytics/spellbook) - a powerful tool for building
 custom tables with [dbt](https://github.com/dbt-labs/dbt-core) and Jinja macros. It helps decode important
 information from raw protocol message payloads. The following protocols are decoded using this framework and serve
@@ -47,9 +47,9 @@ as examples:
 
 In addition to decoding raw data, the Spellbook allows building custom materialized views. Some of them are widely used and maintained
 to be up to date:
-- [ton.prices_daily](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.prices_daily) - prices calculated based on all other tables. The prices include jettons traded on DEXs, LP tokens for DEXs and perpetuals, tsUSDe and other core assets. 
+- [ton.prices_daily](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.prices_daily) - prices calculated based on all other tables. The prices include jettons traded on DEXs, LP tokens for DEXs and perpetuals, tsUSDe and other core assets.
 It is recommended to use this table if you need to build an estimation of assets denominated in TON or USD.
-- [ton.accounts](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.accounts) - materialized view with 
+- [ton.accounts](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.accounts) - materialized view with
 information about all accounts. It comes with the latest TON balance, interface (if any), funding information and other fields.
 - [ton.latest_balances](https://dune.com/queries?category=abstraction&namespace=ton&id=ton.latest_balances) - helper table to
 get the latest balances for TON and Jettons.
@@ -58,7 +58,7 @@ Note that all tables mentioned above are updated daily.
 
 If you're just starting to explore TON data on Dune, we recommend checking these articles first:
 - [TON data quick start](https://dune.com/ton_foundation/ton-quick-start)
-- [TON on-chain data analysis: quickstart on Dune](https://blog.ton.org/ton-on-chain-data-analysis-dune) 
+- [TON on-chain data analysis: quickstart on Dune](https://blog.ton.org/ton-on-chain-data-analysis-dune)
 - [How to Analyze TON Users and Token Flows on Dune: A Practical Guide](https://blog.ton.org/how-to-analyze-ton-users-and-token-flows-on-dune)
 
 For inspiration to build your own dashboards, check out these examples:
@@ -72,8 +72,8 @@ Dune integration runs on the public data lake from the [TON-ETL](https://github.
 The [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/datalake/README.md) is built on top of the [TON Center](https://github.com/toncenter) indexer
 and allows extraction of data from TON Node into data formats suitable for MPP (Massively Parallel Processing) engines (Presto, Apache Spark, etc.).
 You can deploy it on your own infrastructure or use publicly available data from the S3 bucket **s3://aws-public-blockchain/v1.1/ton/**.
-This dataset is part of the [AWS Public Blockchain Data](https://registry.opendata.aws/aws-public-blockchain/) project and 
-is optimized for use within the AWS big data stack. Examples of AWS Athena and AWS Bedrock integration can be found 
+This dataset is part of the [AWS Public Blockchain Data](https://registry.opendata.aws/aws-public-blockchain/) project and
+is optimized for use within the AWS big data stack. Examples of AWS Athena and AWS Bedrock integration can be found
 in this [article](https://repost.aws/articles/AR3ABC81yvTPW2ktfHiHPWIA/new-dataset-added-to-the-aws-public-blockchain-data-ton-the-open-network).
 The [TON-ETL](https://github.com/re-doubt/ton-etl/blob/main/datalake/README.md) extracts raw data and performs decoding
 to create a unified view of high-level on-chain activity. The most important part is decoding DEX activity. To add support
@@ -91,7 +91,7 @@ If you are starting to implement decoding for your DEX, consider checking these 
 
 In addition to bulk data export, TON-ETL provides real-time data streaming via Kafka. A [public endpoint](https://github.com/ton-studio/ton-etl/blob/main/datalake/README.md#near-real-time--data-streaming-via-pulic-kafka-topics) is available free of charge for non-profit projects. For projects that don't meet the non-profit criteria or require an in-house solution, you can deploy the infrastructure yourself by:
 
-1. Running your own [TON node](/v3/documentation/infra/nodes/node-types)
+1. Running your own [TON node](/v3/documentation/nodes/overview)
 2. Launching [ton-etl](https://github.com/re-doubt/ton-etl/blob/main/README.md)
 3. Setting up [ton-index-worker](https://github.com/ton-studio/ton-index-worker)
 

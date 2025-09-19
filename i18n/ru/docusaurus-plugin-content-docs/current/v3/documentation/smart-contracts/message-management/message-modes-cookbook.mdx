@@ -20,16 +20,16 @@ import ThemedImage from "@theme/ThemedImage";
 
 Существует два способа оплаты действий в блокчейне:
 
-- Из [значения сообщения](/v3/documentation/data-formats/tlb/msg-tlb#commonmsginfo)
+- Из [значения сообщения](/v3/documentation/data-formats/layout/messages#commonmsginfo)
 - Из [баланса контракта](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/block.tlb#L263C1-L265C20)
 
 Обычно она взимается с `balance` контракта, но в определенных случаях будет использоваться часть `value` сообщения.
 
 #### Комиссии
 
-Фактические комиссии за транзакции будут варьироваться в зависимости от конфигурации блокчейна, кода смарт-контракта и других факторов. При получении сообщения часть `balance` контракта будет израсходована на [storage fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee) и gas_fees, если `value` сообщения [выше определенной суммы](/v3/documentation/tvm/tvm-overview#compute-phase-skipped).
+Фактические комиссии за транзакции будут варьироваться в зависимости от конфигурации блокчейна, кода смарт-контракта и других факторов. При получении сообщения часть `balance` контракта будет израсходована на [storage fee](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#storage-fee) и gas_fees, если `value` сообщения [выше определенной суммы](/v3/documentation/tvm/overview#when-the-compute-phase-is-skipped).
 
-Согласно [потоку транзакций](/v3/documentation/tvm/tvm-overview#transactions-and-phases) существует 5 фаз:
+Согласно [потоку транзакций](/v3/documentation/tvm/overview#transactions-and-phases) существует 5 фаз:
 
 - Хранилище, состоящее из [хранилища аккаунта](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L651-L675) и [импорта in_msg](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L783-L816)
 - [Кредит](https://github.com/ton-blockchain/ton/blob/7151ff26279fef6dcfa1f47fc0c5b63677ae2458/crypto/block/transaction.cpp#L959-L981), где in_msg `value` добавляется к `balance`

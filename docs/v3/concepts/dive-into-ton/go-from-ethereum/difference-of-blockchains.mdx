@@ -1,8 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Differences between TON and Ethereum blockchains
-
-## Introduction
+# Overview
 
 In this chapter, we examine the key differences between the Ethereum blockchain and the TON blockchain, including an overview of the network architectures, highlighting their unique features, and evaluating the advantages and disadvantages of each.
 
@@ -43,14 +41,12 @@ Processing a message produces a transaction; inter-contract communication is asy
 
 A developer coming from Ethereum needs to realize that smart contracts in the TON blockchain can only communicate with each other by sending asynchronous messages, which means that if there is a need to request data from another contract and an immediate response is required, this will not be possible. Instead, clients outside the network must call `get methods`, much like a wallet in Ethereum that uses RPC nodes to request smart contract states. This is an important limitation for several reasons. For example, flash loans are transactions executed within a single block, relying on the ability to borrow and repay in the same transaction.
 
-The synchronous nature of Ethereum's EVM facilitates such transactions, whereas the asynchronous nature of all transactions in TON makes executing a flash loan infeasible. Oracles, which provide smart contracts with external data, also involve a more intricate design process in TON. What oracles are and how to use them in TON can be found [here](/v3/documentation/dapps/oracles/about_blockchain_oracles/).
+The synchronous nature of Ethereum's EVM facilitates such transactions, whereas the asynchronous nature of all transactions in TON makes executing a flash loan infeasible. Oracles, which provide smart contracts with external data, also involve a more intricate design process in TON. What oracles are and how to use them in TON can be found [here](/v3/documentation/infra/oracles/overview/).
 
 
 :::info
 Read more in [Accounts](/v3/concepts/dive-into-ton/ton-blockchain/accounts).
 :::
-
-
 
 
 ### Wallets
@@ -146,12 +142,12 @@ Ethereum inherits and extends the foundational principles of Bitcoin. This appro
 TON offers an alternative approach to improve scalability and performance in response to these challenges. Designed to provide developers with maximum flexibility to create various applications, TON uses the concept of shards and the MasterChain to optimize the block creation process. TON each ShardChain and MasterChain generate a new block on average every 3 seconds, ensuring fast transaction execution. Unlike Ethereum, where state updates are synchronous, TON implements asynchronous messaging between smart contracts, allowing each transaction to be processed independently and in parallel, significantly speeding up transaction processing on the network. Sections and articles to familiarize yourself with:
 
 - [Sharding in TON](/v3/concepts/dive-into-ton/ton-blockchain/sharding)
-- [Comparison of blockchains](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison)
+- [Comparison of blockchains](/v3/concepts/dive-into-ton/go-from-ethereum/blockchain-comparison)
 
 In conclusion, by comparing TON and Ethereum's architecture and technological underpinnings, it's clear that TON offers significant advantages. With its innovative approach to asynchronous transaction processing and unique shard and MasterChain architecture, TON demonstrates the potential to support millions of transactions per second without compromising security or centralization. High scalability provides the platform with outstanding flexibility and efficiency, making it ideal for various applications.
 
 ## See also
 
-- [Smart contract addresses](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses/)
+- [Smart contract addresses](/v3/concepts/dive-into-ton/ton-blockchain/addresses)
 
 <Feedback />

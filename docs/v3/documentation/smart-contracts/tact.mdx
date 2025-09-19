@@ -7,30 +7,30 @@ import Button from "@site/src/components/button";
 
 # Tact language
 
-Tact is a programming language for TON Blockchain, focused on efficiency and ease of development. It is a good fit for complex smart contracts, quick onboarding and rapid prototyping.
+Tact is a programming language for TON Blockchain, focused on efficiency and ease of development. It is a good fit for complex smart contracts, quick onboarding, and rapid prototyping.
 
-Developed by [TON Studio](https://tonstudio.io), powered by the community — at the start of 2025, the number of _unique code_[^1] contracts deployed on the mainnet reached almost 28 thousand, of which about 33% were written in Tact. You can view some selected projects here: [Tact in production](#tact-in-production).
+Developed by [TON Studio](https://tonstudio.io), powered by the community — by the end of 2024, the number of _unique code_[^1] contracts deployed on the Mainnet reached almost 28,000, of which about 33% were written in Tact. You can view some selected projects here: [Tact in production](#tact-in-production).
 
 [^1]: The "unique code" means that each contract in the data sample has at least one TVM instruction that differs from the other contracts, excluding many preprocessed wallets with everything inlined — even seqno and a public key for signature verification!
 
 Tact has undergone a comprehensive security audit by [Trail of Bits](https://www.trailofbits.com), a leading Web3 security firm.
 
 <Button href="https://ide.ton.org/"
-        colorType={'primary'} sizeType={'sm'}>
+        colorType="primary" sizeType="sm">
 
 Try it online!
 
 </Button>
 
 <Button href="https://docs.tact-lang.org/"
-        colorType={'secondary'} sizeType={'sm'}>
+        colorType="secondary" sizeType="sm">
 
 Tact documentation
 
 </Button>
 
 <Button href="https://github.com/tact-lang/awesome-tact"
-        colorType="secondary" sizeType={'sm'}>
+        colorType="secondary" sizeType="sm">
 
 Awesome Tact
 
@@ -46,14 +46,14 @@ The most prominent and distinctive features of Tact are:
 - Automatic (de)serialization of incoming messages and data structures.
 - Automatic routing of [internal, external, and bounced messages][recvfun].
 - Automatic handling of message types, including [binary, text, and fallback slices][recv].
-- No boilerplate functions for [sending messages] and deploying child contracts.
+- No boilerplate required for [sending messages] and deploying child contracts.
 - Reusable behaviors through [traits].
 - Support for low-level programming with [`asm` functions][asmfun].
 - Generation of [single-file TypeScript wrappers] for convenient interactions with compiled contracts, which include:
-  - Type definitions for [Structs] and [Messages] observable in the [compilation report].
+  - Type definitions for [Structs] and [Messages] as shown in the [compilation report].
   - Corresponding `storeStructureName()` and `loadStructureName()` functions for (de)serialization.
   - All global and contract-level constants.
-  - Bi-directional records of exit codes: from their names to numbers and vice versa.
+  - Bidirectional records of exit codes: from their names to numbers and vice versa.
   - Opcodes of all [Messages].
   - A contract wrapper class with various helper functions for initialization, deployment, and message exchange.
 - Rich [standard library][stdlib].
@@ -77,19 +77,19 @@ The most prominent and distinctive features of Tact are:
 
 ## Security
 
-- [Security audit of Tact by the Trail of Bits (2025, PDF)](https://github.com/trailofbits/publications/blob/master/reviews/2025-01-ton-studio-tact-compiler-securityreview.pdf)
-  - Backup link: [PDF Report](https://github.com/tact-lang/website/blob/416073ed4056034639de257cb1e2815227f497cb/pdfs/2025-01-ton-studio-tact-compiler-securityreview.pdf)
+- [Security audit of Tact by Trail of Bits (2025, PDF)](https://github.com/trailofbits/publications/blob/master/reviews/2025-01-ton-studio-tact-compiler-securityreview.pdf)
+  - Backup link: [PDF report](https://github.com/tact-lang/website/blob/416073ed4056034639de257cb1e2815227f497cb/pdfs/2025-01-ton-studio-tact-compiler-securityreview.pdf)
 
 ## Tact in production
 
 Some selected software and applications based on contracts written in Tact, deployed in production, and consumed by end users:
 
-###### Open source or source available
+#### Open source or source available
 
-- [Proof-of-capital](https://github.com/proof-of-capital/TON) - [proof-of-capital](https://proofofcapital.org/) is a market-making smart contract that protects interests of all holders.
+- [Proof of Capital](https://github.com/proof-of-capital/TON) - [Proof of Capital](https://proofofcapital.org/) is a market-making smart contract that protects interests of all holders.
   - See the [security audit report](https://raw.githubusercontent.com/nowarp/public-reports/master/2025-01-proof-of-capital.pdf) by [Nowarp](https://nowarp.io).
 
-###### Closed source
+#### Closed source
 
 - [Tradoor](https://tradoor.io) - Fast and social DEX on TON.
   - See the [security audit report](https://www.tonbit.xyz/reports/Tradoor-Smart-Contract-Audit-Report-Summary.pdf) by TonBit.
@@ -103,14 +103,14 @@ See [Tact in production](https://github.com/tact-lang/awesome-tact#tact-in-produ
 
 ### Compiler
 
-The Tact compiler is distributed as an [NPM package](https://www.npmjs.com/package/@tact-lang/compiler) bundled with the [Tact standard library](https://docs.tact-lang.org/ref/).
+The Tact compiler is distributed as an [npm package](https://www.npmjs.com/package/@tact-lang/compiler) bundled with the [Tact standard library](https://docs.tact-lang.org/ref/).
 
 The recommended Node.js version is 22 or higher, while the minimum version is 18.
 
 Use your favorite package manager to install it into a Node.js project:
 
 ```bash
-# yarn is recommended, but not required
+# Example with yarn (others work too)
 yarn add @tact-lang/compiler
 
 # you can also use npm
@@ -129,9 +129,9 @@ Alternatively, you can install it globally as such:
 npm i -g @tact-lang/compiler
 ```
 
-It will make the `tact` compiler available on your PATH, as well as:
+It will make the `tact` compiler available in your `PATH`, as well as:
 
-- a convenient `unboc` disassembler of a contract's code compiled into a [bag of cells](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells) `.boc` format.
+- a convenient `unboc` disassembler for contract code compiled into the [Bag of Cells (BoC)](/v3/documentation/data-formats/cells/overview/#bag-of-cells) (`.boc`) format,
 - a formatter `tact-fmt`, which can format or check the formatting of individual Tact files and directories.
 
 ### Tooling
@@ -175,7 +175,6 @@ To enable support of the Tact language, refer to the following instructions:
 1. For latest syntax highlighting, setup [tree-sitter-tact](https://github.com/tact-lang/tree-sitter-tact#helix)
 2. For editor intelligence, setup [tact-language-server](https://github.com/tact-lang/tact-language-server#other-editors)
 
-
 #### Security
 
 - [Misti](https://github.com/nowarp/misti) - Static smart contract analyzer.
@@ -183,8 +182,8 @@ To enable support of the Tact language, refer to the following instructions:
 
 #### Utility
 
-- Formatter (`tact-fmt`) — The official formatter. It ships with the Tact Language Server, VS Code extension, and as a standalone binary with the compiler. You can invoke it by running `npx tact-fmt` in your Tact projects.
-- BoC Disassembler (`unboc`) — Disassembler for [`.boc`](/v3/documentation/data-formats/tlb/cell-boc#bag-of-cells) files. Ships as a standalone binary with the compiler. You can invoke it by running `npx unboc` in your Tact projects.
+- Formatter (`tact-fmt`) — the official formatter. It ships with the Tact Language Server, VS Code extension, and as a standalone binary with the compiler. You can invoke it by running `npx tact-fmt` in your Tact projects.
+- BoC Disassembler (`unboc`) — disassembler for [`.boc`](/v3/documentation/data-formats/cells/overview#bag-of-cells) files. Ships as a standalone binary with the compiler. You can invoke it by running `npx unboc` in your Tact projects.
 
 ### Getting started
 

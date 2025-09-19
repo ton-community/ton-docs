@@ -69,7 +69,7 @@ Before we start, there are some terms and concepts that you should be familiar w
 | 0x0  | 标准成功执行退出代码。        |
 
 :::info
-请注意，[TVM](/v3/documentation/tvm/tvm-overview) 有[标准退出代码](/v3/documentation/tvm/tvm-exit-codes) (`0x0`-是其中之一)，因此您也可以得到其中之一，例如，如果您用完了[gas](https://docs.ton.org/develop/smart-contracts/fees)，您将得到`0xD`代码。
+请注意，[TVM](/v3/documentation/tvm/overview) 有[标准退出代码](/v3/documentation/tvm/exit-codes) (`0x0`-是其中之一)，因此您也可以得到其中之一，例如，如果您用完了[gas](https://docs.ton.org/develop/smart-contracts/fees)，您将得到`0xD`代码。
 :::
 
 #### Get 方法
@@ -191,7 +191,7 @@ Before we start, there are some terms and concepts that you should be familiar w
 :::tip
 If `state_init` doesn't make much sense from its name, take a look at the following references:
 
-- [地址- TON -区块链](/v3/documentation/smart-contracts/addresses#workchain-id-and-account-id)
+- [地址- TON -区块链](/v3/documentation/smart-contracts/addresses/address)
 - [发送部署信息](/v3/documentation/smart-contracts/func/cookbook#how-to-send-a-deploy-message-with-stateinit-only-with-stateinit-and-body)
 - [internal-message-layout](/v3/documentation/smart-contracts/message-management/sending-messages#message-layout)
   :::
@@ -231,7 +231,7 @@ TL-B 方案：
 - [ton-blockchain/wallet-contract-v5/types.tlb](https://github.com/ton-blockchain/wallet-contract-v5/blob/main/types.tlb)
 
 :::caution
-与之前的钱包版本规范不同，由于本钱包版本的接口实现相对复杂，我们将依赖 [TL-B](/v3/documentation/data-formats/tlb/tl-b-language) 方案。我们将逐一进行说明。尽管如此，我们仍然需要对其有一个基本的了解，结合钱包源代码就足够了。
+与之前的钱包版本规范不同，由于本钱包版本的接口实现相对复杂，我们将依赖 [TL-B](/v3/documentation/data-formats/tlb/overview) 方案。我们将逐一进行说明。尽管如此，我们仍然需要对其有一个基本的了解，结合钱包源代码就足够了。
 :::
 
 #### 持久内存布局
@@ -299,7 +299,7 @@ actions$_ out_actions:(Maybe OutList) has_other_actions:(## 1) {m:#} {n:#} other
 我们可以将 `InnerRequest` 视为两个操作列表：第一个，`OutList`，是一个可选的 cell 引用链，每个 cell 都包含一个由消息模式引导的发送消息请求。第二个列表 "ActionList "由一个单比特标志 "has_other_actions "引导，它标志着扩展操作的存在，从第一个 cell 开始，以 cell 引用链的形式继续。我们已经熟悉了前两个扩展操作：`action_add_ext` 和 `action_delete_ext`，后面是我们要从扩展字典中添加或删除的内部地址。第三个扩展动作 `action_set_signature_auth_allowed`会限制或允许通过公钥进行身份验证，从而只剩下通过扩展与钱包进行交互的方式。在私钥丢失或泄露的情况下，这一功能可能极为重要。
 
 :::info
-请注意，操作的最大数目是 255；这是通过 [c5](/v3/documentation/tvm/tvm-overview#result-of-tvm-execution) TVM 寄存器实现的结果。从技术上讲，您可以使用空的 `OutAction` 和 `ExtendedAction` 提出申请，但在这种情况下，它将类似于只是接收资金。
+请注意，操作的最大数目是 255；这是通过 [c5](/v3/documentation/tvm/overview#result-of-tvm-execution) TVM 寄存器实现的结果。从技术上讲，您可以使用空的 `OutAction` 和 `ExtendedAction` 提出申请，但在这种情况下，它将类似于只是接收资金。
 :::
 
 #### 退出代码

@@ -1,0 +1,32 @@
+import Feedback from '@site/src/components/Feedback';
+
+# TON Virtual Machine (TVM)
+
+**TON Virtual Machine (TVM)** is the environment where smart contracts are executed.
+It works like a tiny computer inside the blockchain, designed for efficiency and security.
+
+- TVM reads the contract’s **code** (stored as [cells](/v3/concepts/dive-into-ton/ton-blockchain/cells)).
+- It processes **messages** sent to the contract.
+- It updates the contract’s **data** according to the code logic.
+- It may generate **outgoing messages** to other contracts.
+
+Learn more in the [TVM overview section](/v3/documentation/tvm/overview).
+
+### Key features
+
+- **Deterministic execution**: given the same inputs, TVM always produces the same outputs.
+- **Stack-based design**: computations are performed on a stack of values.
+- **Gas system**: each operation costs gas, preventing infinite loops.
+- **Continuation cells**: special cells used by TVM to store executable code.
+
+
+## Why it matters
+
+Smart contracts and TVM together make TON a **programmable blockchain** — not just a ledger, but a platform where apps and services can run.
+
+Learn more about TVM in the [TVM documentation](/v3/documentation/tvm/overview).
+
+## See also
+- [Cells](/v3/concepts/dive-into-ton/ton-blockchain/cells)
+
+<Feedback />

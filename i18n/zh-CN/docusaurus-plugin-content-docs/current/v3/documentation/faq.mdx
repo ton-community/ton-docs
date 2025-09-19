@@ -6,18 +6,18 @@
 
 ### 能分享一下关于 TON 的简要概述吗？
 
-- [The Open Network简介](/learn/introduction)
+- [The Open Network简介](/v3/concepts/dive-into-ton/introduction)
 - [TON区块链基于PoS共识](https://blog.ton.org/the-ton-blockchain-is-based-on-pos-consensus)
-- [TON白皮书](/learn/docs)
+- [TON白皮书](/v3/documentation/introduction)
 
 ### TON 与 EVM 区块链的主要相似之处和不同之处是什么？
 
-- [从以太坊到TON](/learn/introduction#ethereum-to-ton)
+- [从以太坊到TON](/v3/concepts/dive-into-ton/go-from-ethereum/tvm-vs-evm)
 - [TON、Solana和以太坊2.0的比较](https://ton.org/comparison_of_blockchains.pdf)
 
 ### TON 有测试环境吗？
 
-- [Testnet测试网](/develop/smart-contracts/environment/testnet)
+- [Testnet测试网](/v3/documentation/smart-contracts/getting-started/testnet)
 
 ## 区块
 
@@ -65,7 +65,7 @@
 Compare TON's on-chain metrics, including block time and time-to-finality, to Solana and Ethereum by reading our analysis at:
 
 - [区块链比较文件](https://ton.org/comparison_of_blockchains.pdf)
-- [区块链比较表（信息量比文档少得多，但更直观）](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-comparison)
+- [区块链比较表（信息量比文档少得多，但更直观）](/v3/concepts/dive-into-ton/go-from-ethereum/blockchain-comparison)
   :::
 
 ### 获取交易数据的RPC方法是什么？
@@ -91,7 +91,7 @@ max_block_bytes:2097152
 
 钱包合约转账的示例（低层级）：
 
-- [区块布局](/v3/documentation/data-formats/tlb/block-layout)
+- [区块布局](/v3/documentation/data-formats/layout/blocks)
 
 ## 是否可以确定交易100%完成？查询交易级数据是否足以获得这些信息？
 
@@ -129,7 +129,7 @@ TON区块链消息是异步的：
 
 *9位小数*
 
-- [交易布局](/v3/documentation/data-formats/tlb/transaction-layout)
+- [交易布局](/v3/documentation/data-formats/layout/transactions)
 
 ### 是否有标准化的协议用于铸造、销毁和交易中转移可替代和不可替代代币？
 
@@ -156,16 +156,16 @@ Mainnet支持的小数位数：9位。
 
 ### 账户结构
 
-要更好地理解这个过程是如何工作的，请参阅[支付处理](/develop/dapps/asset-processing/)部分。
+要更好地理解这个过程是如何工作的，请参阅[支付处理](/guidelines/advanced-asset-processing)部分。
 
-- [智能合约地址](/learn/overviews/addresses)
-- [NFT 文档](/v3/documentation/dapps/defi/tokens#nft)
+- [智能合约地址](/v3/concepts/dive-into-ton/ton-blockchain/addresses)
+- [NFT 文档](/v3/documentation/dapps/assets/nft)
 
 Jettons（代币）：
 
-- [智能合约地址](/learn/overviews/addresses)
+- [智能合约地址](/v3/concepts/dive-into-ton/ton-blockchain/addresses)
 - [分布式 TON 代币概述](https://telegra.ph/Scalable-DeFi-in-TON-03-30)
-- [可替换标记文档（Jettons）](/v3/documentation/dapps/defi/tokens#jettons-fungible-tokens)
+- [可替换标记文档（Jettons）](/v3/documentation/dapps/assets/jetton)
 
 其他标准：
 
@@ -185,7 +185,7 @@ TON内有一个特殊的主链叫做Masterchain。它由网络范围内的合约
 
 ### 地址格式是什么？
 
-- [治理合约](/develop/smart-contracts/governance)
+- [治理合约](/v3/documentation/smart-contracts/addresses/address)
 
 ### 智能合约
 
@@ -195,7 +195,7 @@ TON内有一个特殊的主链叫做Masterchain。它由网络范围内的合约
 
 ### 是否可以检测到 TON 上的合约部署事件？
 
-- [万物皆智能合约](/v3/documentation/smart-contracts/addresses#everything-is-a-smart-contract)
+- [万物皆智能合约](/v3/documentation/smart-contracts/addresses/address#everything-is-a-smart-contract)
 
 ### 如何判断地址是否为代币地址？
 
@@ -206,7 +206,7 @@ TON内有一个特殊的主链叫做Masterchain。它由网络范围内的合约
 是的，这是可能的。如果智能合约执行特定指令（`set_code()`），其代码可以被更新并且地址将保持不变。
 
 :::info
-在 TON 区块链概述文章中阅读更多有关主链、工作链和分片链的信息：[区块链中的区块链](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains)。
+在 TON 区块链概述文章中阅读更多有关主链、工作链和分片链的信息：[区块链中的区块链](/v3/concepts/dive-into-ton/ton-blockchain/overview)。
 :::
 
 是的，这是可能的。如果智能合约执行特定指令（`set_code()`），其代码可以被更新并且地址将保持不变。
@@ -217,7 +217,7 @@ TON内有一个特殊的主链叫做Masterchain。它由网络范围内的合约
 
 ### 是否可以检测到 TON 上的合约部署事件？
 
-[TON中的一切都是智能合约](/v3/documentation/smart-contracts/addresses#everything-is-a-smart-contract)。
+[TON中的一切都是智能合约](/v3/documentation/smart-contracts/addresses/address#everything-is-a-smart-contract)。
 
 TVM与以太坊虚拟机（EVM）不兼容，因为TON采用了完全不同的架构（TON是异步的，而以太坊是同步的）。
 
@@ -257,7 +257,7 @@ TON社区项目目录：
 
 ### 智能合约地址是否区分大小写？
 
-是的，智能合约地址是区分大小写的，因为它们是使用 [base64 算法](https://en.wikipedia.org/wiki/Base64) 生成的。  你可以在 [这里](/v3/documentation/smart-contracts/addresses) 了解有关智能合约地址的更多信息。
+是的，智能合约地址是区分大小写的，因为它们是使用 [base64 算法](https://en.wikipedia.org/wiki/Base64) 生成的。  你可以在 [这里](/v3/documentation/smart-contracts/addresses/address) 了解有关智能合约地址的更多信息。
 
 ### Ton 虚拟机（TVM）与 EVM 兼容吗？
 
@@ -294,5 +294,5 @@ TON社区项目目录：
 
 ### 以下提供了两个主要资源，用于获取与TON区块链公共节点端点相关的信息（适用于TON Mainnet和TON Testnet）。
 
-- [网络配置](/v3/documentation/network/configs/network-configs)
+- [网络配置](/v3/documentation/network/config-params/overview)
 - [示例和教程](/v3/guidelines/dapps/overview#tutorials-and-examples)

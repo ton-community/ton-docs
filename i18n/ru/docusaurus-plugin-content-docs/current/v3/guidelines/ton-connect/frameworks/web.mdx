@@ -38,7 +38,7 @@ npm i @tonconnect/ui
 
 ### Начало работы TON Connect
 
-После установки пакета создайте файл `manifest.json` для вашего приложения. Более подробную информацию о том, как создать файл manifest.json, можно найти [здесь](/v3/guidelines/ton-connect/guidelines/creating-manifest).
+После установки пакета создайте файл `manifest.json` для вашего приложения. Более подробную информацию о том, как создать файл manifest.json, можно найти [здесь](/v3/guidelines/ton-connect/creating-manifest).
 
 Добавьте кнопку с идентификатором `ton-connect` для подключения к кошельку:
 
@@ -136,7 +136,7 @@ const transaction = {
 const result = await tonConnectUI.sendTransaction(transaction)
 ```
 
-- Подробнее о подготовке сообщений можно найти здесь: [Отправка сообщений](/v3/guidelines/ton-connect/guidelines/sending-messages).
+- Подробнее о подготовке сообщений можно найти здесь: [Отправка сообщений](/v3/documentation/smart-contracts/message-management/sending-messages).
 
 ### Понимание статуса транзакции по хэшу
 
@@ -146,7 +146,7 @@ const result = await tonConnectUI.sendTransaction(transaction)
 
 Узнайте, как подписывать и проверять сообщения с помощью TON Connect:
 
-- [Подпись и проверка](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
+- [Подпись и проверка](/v3/guidelines/ton-connect/verifying-signed-in-users)
 - [Реализация пользовательского интерфейса TON Connect на GitHub](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-connect-request-parameters-ton_proof)
 
 ### Отключение кошелька

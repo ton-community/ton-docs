@@ -25,7 +25,7 @@ import Feedback from '@site/src/components/Feedback';
 #### TON Virtual Machine (TVM)
 
 1. Архитектура на основе ячеек
-   - TVM использует уникальную модель «[bag of cells»](/v3/documentation/data-formats/tlb/cell-boc/)» для представления данных. Каждая ячейка может содержать до 128 байтов данных и до 4 ссылок на другие ячейки.
+   - TVM использует уникальную модель «[bag of cells»](/v3/documentation/data-formats/cells/overview)» для представления данных. Каждая ячейка может содержать до 128 байтов данных и до 4 ссылок на другие ячейки.
    - Эта структура позволяет TVM изначально поддерживать произвольные алгебраические типы данных и более сложные конструкции, такие как деревья или направленные ациклические графы (DAG), непосредственно в своей модели хранения.
 2. Гибкость и эффективность
    - Модель ячеек обеспечивает значительную гибкость, позволяя TVM обрабатывать широкий спектр структур данных более естественно и эффективно, чем EVM.
@@ -130,6 +130,6 @@ import Feedback from '@site/src/components/Feedback';
 ## См. также
 
 - [Solidity vs FunC](/v3/concepts/dive-into-ton/go-from-ethereum/solidity-vs-func/)
-- [Обзор TVM](/v3/documentation/tvm/tvm-overview/)
+- [Обзор TVM](/v3/documentation/tvm/overview/)
 
 <Feedback />

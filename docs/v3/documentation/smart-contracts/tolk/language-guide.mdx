@@ -9,17 +9,17 @@ import Feedback from "@site/src/components/Feedback";
 ## Table of contents
 
 1. [Basic syntax](#basic-syntax)
-3. [Functions](#functions)
-4. [Variables and types](#variables-and-types)
-5. [Control flow](#control-flow)
-6. [Type system](#type-system)
-7. [Collections](#collections)
-8. [Error handling](#error-handling)
-9. [Structures](#structures)
-10. [Methods](#methods)
-11. [Imports and modules](#imports-and-modules)
-12. [Advanced features](#advanced-features)
-13. [Standard library](#standard-library)
+2. [Functions](#functions)
+3. [Variables and types](#variables-and-types)
+4. [Control flow](#control-flow)
+5. [Type system](#type-system)
+6. [Error handling](#error-handling)
+7. [Structures](#structures)
+8. [Methods](#methods)
+9. [Enums](#enums)
+10. [Imports and modules](#imports-and-modules)
+11. [Advanced features](#advanced-features)
+12. [Standard library](#standard-library)
 
 ## Basic syntax
 
@@ -375,6 +375,24 @@ struct Container<T> {
 var intContainer: Container<int> = { value: 42, isEmpty: false };
 ```
 
+### Field modifiers
+
+* `private` field — accessible only within methods
+* `readonly` field — immutable after object creation
+```tolk
+struct PosInTuple {
+    private readonly t: tuple
+    curIndex: int
+}
+
+fun PosInTuple.last(mutate self) {
+    // `t` is visible only in methods
+    // and can not be modified
+    self.curIndex = self.t.size() - 1;
+}
+```
+
+
 ## Methods
 
 ### Instance methods
@@ -420,30 +438,78 @@ fun builder.storeInt32(mutate self, value: int32): self {
 }
 ```
 
+## Enums
+
+```tolk
+// will be 0 1 2
+enum Color {
+    Red
+    Green
+    Blue
+}
+```
+
+They are:
+- similar to TypeScript/C++ enums
+- distinct type, not just `int`
+- checked on deserialization
+- allowed in `throw` and `assert`
+
+### Enums syntax
+
+Enum members can be separated by `,` or by `;` or by a newline — like struct fields.
+
+Like in TypeScript and C++, you can manually specify a value, the following will be auto-calculated.
+```tolk
+enum Mode {
+    Foo = 256,
+    Bar,        // implicitly 257
+}
+```
+
+### Enums usage: they are distinct types
+
+Since enums are types, you can
+- declare variables and parameters
+- declare methods for an enum
+- use them in struct fields, in unions, in generics, etc.
+
+```tolk
+struct Gradient {
+    from: Color
+    to: Color? = null
+}
+
+fun Color.isRed(self) {
+    return self == Color.Red
+}
+
+var g: Gradient = { from: Color.Blue };
+g.from.isRed();       // false
+```
+
+Enums are integers under the hood. They can be cast to `int` and back with `as` operator.
+
+### Serialization of enums
+
+You can manually specify `:intN`. Otherwise, the compiler will auto-calculate it.
+```tolk
+// will be (un)packed as `int8`
+enum Role1: int8 { Admin, User, Guest }
+
+// will (un)packed as `uint2` (auto-calculated to fit all values)
+enum Color { Red, Green, Blue }
+```
+
+On deserialization, an input value is checked for correctness. E.g., for `Role`, if input&lt;0 or input&gt;2, an exception "5 (integer out of range)" will be thrown.
+
 ## Imports and modules
 
 ### Import syntax
 
 ```tolk
-import "another";
-import "@stdlib/tvm-dicts";
-```
-
-### Standard library
-
-Common functions are available by default:
-
-```tolk
-// Common functions always available
-var time = blockchain.logicalTime();
-```
-
-Some functions require importing specific modules (your IDE will suggest them):
-
-```tolk
-import "@stdlib/tvm-dicts";
-
-var dict = createEmptyDict();
+import "another"
+import "@stdlib/gas-payments"
 ```
 
 ## Advanced features
@@ -586,6 +652,22 @@ reply.send(SEND_MODE_REGULAR);
 ```
 
 Deep dive: [Sending messages](/v3/documentation/smart-contracts/tolk/tolk-vs-func/create-message.mdx).
+
+
+## Standard library
+
+Common functions are available by default:
+```tolk
+// Common functions always available
+var time = blockchain.logicalTime();
+```
+
+While more specific ones require importing (IDE suggests you):
+```tolk
+import "@stdlib/gas-payments"
+
+var fee = calculateStorageFee(...);
+```
 
 
 <Feedback />

@@ -34,7 +34,7 @@ npm i @tonconnect/ui
 
 ### TON 连接启动
 
-安装软件包后，请为您的应用程序创建一个 `manifest.json` 文件。有关如何创建 manifest.json 文件的更多信息，请参阅 [此处](/v3/guidelines/ton-connect/guidelines/creating-manifest)。
+安装软件包后，请为您的应用程序创建一个 `manifest.json` 文件。有关如何创建 manifest.json 文件的更多信息，请参阅 [此处](/v3/guidelines/ton-connect/creating-manifest)。
 
 添加一个 ID 为 `ton-connect` 的按钮，用于连接到钱包：
 
@@ -131,7 +131,7 @@ const transaction = {
 const result = await tonConnectUI.sendTransaction(transaction)
 ```
 
-- 在此获取更多示例：[发送信息](/v3/guidelines/ton-connect/guidelines/sending-messages)。
+- 在此获取更多示例：[发送信息](/v3/guidelines/ton-connect/cookbook/cells)。
 
 ### 通过哈希值了解交易状态
 
@@ -141,7 +141,7 @@ const result = await tonConnectUI.sendTransaction(transaction)
 
 了解如何使用 TON Connect 签署和验证信息：
 
-- [签名和验证](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
+- [签名和验证](/v3/guidelines/ton-connect/verifying-signed-in-users)
 - [GitHub 上的 TON Connect UI 实现](https://github.com/ton-connect/sdk/tree/main/packages/ui#add-connect-request-parameters-ton_proof)
 
 ### 钱包断线

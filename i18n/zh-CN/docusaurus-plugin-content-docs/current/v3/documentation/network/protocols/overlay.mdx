@@ -14,7 +14,7 @@ TON的架构构建方式使得许多链可以同时且独立地存在于其中 -
 同时，由于其通用性，通信协议保持不变。像DHT、RLDP和Overlays这样的协议使这成为可能。
 我们已经熟悉前两者，在本节中我们将了解Overlay是什么。
 
-我们已经在关于DHT的文章中分析了一个查找overlay节点的例子，在[搜索存储区块链状态的节点](/develop/network/dht#search-for-nodes-that-store-the-state-of-the-blockchain)一节中。在这一节中，我们将专注于与它们的互动。
+我们已经在关于DHT的文章中分析了一个查找overlay节点的例子，在[搜索存储区块链状态的节点](/v3/documentation/network/protocols/dht/deep-dive#search-for-nodes-that-store-the-state-of-the-blockchain)一节中。在这一节中，我们将专注于与它们的互动。
 
 当查询DHT时，我们将获得overlay节点的地址，从中我们可以使用[overlay.getRandomPeers](https://github.com/ton-blockchain/ton/blob/ad736c6bc3c06ad54dc6e40d62acbaf5dae41584/tl/generate/scheme/ton_api.tl#L237)查询找出这个overlay的其他节点的地址。一旦我们连接了足够数量的节点，我们就可以从它们那里接收所有区块信息和其他链事件，以及向它们发送我们的交易以供处理。
 
@@ -51,7 +51,7 @@ overlay.getRandomPeers peers:overlay.nodes = overlay.Nodes;
 
 对于此类请求，使用的是 RLDP 协议。重要的是，不要忘记 `overlay.query` 前缀--overlay中的每个查询都必须使用它。
 
-请求本身并无异常，与我们[在有关 ADNL TCP 的文章中所做的](/develop/network/adnl-tcp#getmasterchaininfo)非常相似。
+请求本身并无异常，与我们[在有关 ADNL TCP 的文章中所做的](/v3/documentation/network/protocols/adnl/tcp#getmasterchaininfo)非常相似。
 
 ```tlb
 overlay.query overlay:int256 = True;

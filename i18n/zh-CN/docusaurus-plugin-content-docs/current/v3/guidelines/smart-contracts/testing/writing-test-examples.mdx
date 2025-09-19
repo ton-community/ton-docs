@@ -422,7 +422,7 @@ index - 是`launchResult`数组中交易的ID。
 
 ## 极端情况测试
 
-在本节中，将提供在交易处理期间可能发生的TVM [exit codes（退出代码）](/learn/tvm-instructions/tvm-exit-codes)的测试用例。这些exit codes在区块链代码本身中。同时，必须区分在[Compute Phase（ Compute Phase ）](/learn/tvm-instructions/tvm-overview#compute-phase)和Action Phase（行动阶段）期间的exit code。
+在本节中，将提供在交易处理期间可能发生的TVM [exit codes（退出代码）](/v3/documentation/tvm/exit-codes)的测试用例。这些exit codes在区块链代码本身中。同时，必须区分在[Compute Phase（ Compute Phase ）](/v3/documentation/tvm/overview#compute-phase)和Action Phase（行动阶段）期间的exit code。
 
 Compute Phase期间执行合约逻辑（其代码）。在处理期间，可以创建不同的action（动作）。这些action将在下一阶段 - Action Phase处理。如果Compute Phase不成功，则Action Phase不开始。然而，如果Compute Phase成功，这并不保证Action Phase也会成功结束。
 
@@ -438,7 +438,7 @@ Compute Phase期间执行合约逻辑（其代码）。在处理期间，可以�
 
 ### Compute Phase | exit code = 2
 
-TVM是[堆栈机](/learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine)。与不同值交互时，它们会出现在堆栈上。如果突然堆栈上没有元素，但某些操作码需要它们，那么将抛出此错误。
+TVM是[堆栈机](/v3/documentation/tvm/overview)。与不同值交互时，它们会出现在堆栈上。如果突然堆栈上没有元素，但某些操作码需要它们，那么将抛出此错误。
 
 这可能发生在直接使用操作码时，因为[stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc)（FunC的库）假设不会有这样的问题。
 
@@ -458,7 +458,7 @@ TVM是[堆栈机](/learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine)�
 
 ### Compute Phase | exit code = 6
 
-在较低层级，使用操作码而不是熟悉的函数名称，可以在[此表](/learn/archive/tvm-instructions)中以HEX形式看到。在这个例子中，我们[使用](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L25)`@addop`，添加了一个不存在的操作码。
+在较低层级，使用操作码而不是熟悉的函数名称，可以在[此表](/v3/documentation/tvm/instructions)中以HEX形式看到。在这个例子中，我们[使用](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L25)`@addop`，添加了一个不存在的操作码。
 
 模拟器在尝试处理此操作码时无法识别它，并抛出 6。
 
@@ -482,7 +482,7 @@ TVM是[堆栈机](/learn/tvm-instructions/tvm-overview#tvm-is-a-stack-machine)�
 
 ### Compute Phase | exit code = 8
 
-TON 中的所有数据都存储在 [cells](/develop/data-formats/cell-boc#cell) 中。一个 cell 可存储 1023 位数据和 4 个指向其他 cell 的引用。如果尝试写入超过 1023 位的数据或超过 4 个引用，将抛出 exit code 8。
+TON 中的所有数据都存储在 [cells](/v3/documentation/data-formats/cells/overview) 中。一个 cell 可存储 1023 位数据和 4 个指向其他 cell 的引用。如果尝试写入超过 1023 位的数据或超过 4 个引用，将抛出 exit code 8。
 
 ### Compute Phase | exit code = 9
 
@@ -490,7 +490,7 @@ TON 中的所有数据都存储在 [cells](/develop/data-formats/cell-boc#cell) 
 
 ### Compute Phase | exit code = 10
 
-此错误在处理[字典](/develop/func/stdlib/#dictionaries-primitives)时抛出。例如，当值属于键时[存储在另一个cell中](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L100-L110)作为引用。在这种情况下，您需要使用`.udict_get_ref()`函数来获取这样的值。
+此错误在处理[字典](/v3/documentation/smart-contracts/func/docs/stdlib#dictionaries-primitives)时抛出。例如，当值属于键时[存储在另一个cell中](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L100-L110)作为引用。在这种情况下，您需要使用`.udict_get_ref()`函数来获取这样的值。
 
 然而，另一个cell中的链接[应该只有1个](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/vm/dict.cpp#L454)，而不是2个，如我们的例子：
 
@@ -517,7 +517,7 @@ root_cell
 
 ### Compute Phase | exit code = 11
 
-此错误发生在未知情况。例如，在使用[SENDMSG](/learn/tvm-instructions/tvm-upgrade-2023-07#sending-messages)操作码时，如果传递了[错误](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L116)（例如，空的）的消息cell，那么就会发生这种错误。
+此错误发生在未知情况。例如，在使用[SENDMSG](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07#sending-messages)操作码时，如果传递了[错误](https://github.com/ton-community/fireworks-func/blob/ef49b4da12d287a8f6c2b6f0c19d65814c1578fc/contracts/fireworks.fc#L116)（例如，空的）的消息cell，那么就会发生这种错误。
 
 此外，它还在尝试调用不存在的方法时发生。开发人员通常是在调用不存在的GET方法时面临这种情况。
 
@@ -529,7 +529,7 @@ root_cell
 
 ### Action Phase | exit code = 32
 
-Action Phase在Compute Phase之后开始，它处理在Compute Phase期间写入[寄存器c5](/learn/tvm-instructions/tvm-initialization#control-register-c5)的动作。如果此寄存器中的数据写入不正确，则抛出exit code 32。
+Action Phase在Compute Phase之后开始，它处理在Compute Phase期间写入[寄存器c5](/v3/documentation/tvm/initialization#control-register-c5)的动作。如果此寄存器中的数据写入不正确，则抛出exit code 32。
 
 ### Action Phase | exit code = 33
 
@@ -541,7 +541,7 @@ Exit code是造成处理action时的大部分错误的原因：无效消息、�
 
 ### Action Phase | exit code = 35
 
-在构建消息的 [CommonMsgInfo](/develop/smart-contracts/tutorials/wallet#commonmsginfo) 部分时，必须指定正确的源地址。它必须等于[addr_none](/develop/data-formats/msg-tlb#addr_none00) 或发送消息的账户地址。
+在构建消息的 [CommonMsgInfo](/v3/documentation/data-formats/layout/messages#commonmsginfo) 部分时，必须指定正确的源地址。它必须等于[addr_none](/v3/documentation/data-formats/layout/messages#addr_none00) 或发送消息的账户地址。
 
 在区块链代码中，这由[check_replace_src_addr](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1985)处理。
 
@@ -555,7 +555,7 @@ Exit code是造成处理action时的大部分错误的原因：无效消息、�
 
 ### Action Phase | exit code = 38
 
-与exit code 37相同，但指的是余额中缺乏[ExtraCurrency](/develop/research-and-development/minter-flow#extracurrency)。
+与exit code 37相同，但指的是余额中缺乏[ExtraCurrency](/v3/documentation/dapps/assets/extra-currencies)。
 
 ### Action Phase | exit code = 40
 
@@ -565,7 +565,7 @@ Exit code是造成处理action时的大部分错误的原因：无效消息、�
 
 可能发生的情况是超过了库中cell的最大数量或超过了Merkle树的最大深度。
 
-库是存储在[Masterchain](/learn/overviews/ton-blockchain#masterchain-blockchain-of-blockchains)中的cell，如果它是[公开的](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1844)，可以被所有智能合约使用。
+库是存储在[Masterchain](/v3/guidelines/dapps/transactions/foundations-of-blockchain#masterchain)中的cell，如果它是[公开的](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1844)，可以被所有智能合约使用。
 
 :::info
 由于更新代码时行的顺序可能会改变，一些链接变得不相关。因此，所有链接都将使用提交[9728bc65b75defe4f9dcaaea0f62a22f198abe96](https://github.com/ton-blockchain/ton/tree/9728bc65b75defe4f9dcaaea0f62a22f198abe96)时的代码库状态。

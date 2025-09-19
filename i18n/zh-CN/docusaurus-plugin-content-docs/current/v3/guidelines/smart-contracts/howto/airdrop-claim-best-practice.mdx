@@ -13,7 +13,7 @@
 
 用户发送某种证明，证明他有资格领取
 解决方案对其进行检查，并发送回 jetton 。
-在当前情况下，"证明" 指的是[merkle 证明](/v3/documentation/data-formats/tlb/exotic-cells#merkle-proof)，但也可以是签名数据或其他任何授权方法。
+在当前情况下，"证明" 指的是[merkle 证明](/v3/documentation/data-formats/cells/exotic#merkle-proof)，但也可以是签名数据或其他任何授权方法。
 发送 jetton，因此会有一个 jetton 钱包和矿工。
 我们还得确保这些鬼鬼祟祟的用户不能申请两次--双花消费保护合约。
 哦，我们可能还想赚点钱，对吧？
@@ -82,7 +82,7 @@ Jetton 矿工不在本文讨论范围之内。
 
 我们完全控制着分发者的数据，因此我们必须能够将其放到任何分片中。
 怎么放？
-请记住，合约地址是 [由其状态定义](/v3/documentation/smart-contracts/addresses#account-id) 。
+请记住，合约地址是 [由其状态定义](/v3/documentation/smart-contracts/addresses/address#account-id) 。
 我们应该使用合约的某些数据字段作为 nonce，并不断尝试，直到得到想要的结果。
 在真实合约中，一个好的 nonce 例子可以是钱包合约的（subwalletId/publicKey）。
 任何可以在部署后修改或不影响合约逻辑（如 subwalletId）的字段都能满足要求。

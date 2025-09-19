@@ -77,7 +77,7 @@
 
 紧急更新的历史：
 
-- [预编译合约](/develop/smart-contracts/core-contracts/precompiled)
+- [预编译合约](/v3/documentation/smart-contracts/contracts-specs/precompiled-contracts)
 - 2023年3月2日，申请选举的数量增长到即使`20m`也不足以进行选举。然而，这一次由于更高的`hard_limit`，主链继续处理外部消息。紧急密钥被用于更新配置参数20 `special_gas_limit`至25m和`block_gas_limit`至27m（在区块`27747086`中）。结果，选举在下一个区块中成功进行。选举的总延迟约为6小时，除选举外，主链和基本链的功能未受影响。
 - 2023年11月22日，密钥被用于[放弃自己](https://t.me/tonblockchain/221)（在区块`34312810`中）。结果，公钥被替换为32个零字节。
 - 由于切换到OpenSSL实现的Ed25519签名验证，检查特殊情况[所有公钥字节都相同](https://github.com/ton-blockchain/ton/blob/7fcf26771748338038aec4e9ec543dc69afeb1fa/crypto/ellcurve/Ed25519.cpp#L57C1-L57C1)被禁用。因此，针对零公钥的检查按预期停止工作。利用这个问题，紧急密钥在12月9日[再次更新](https://t.me/tonstatus/80)（在区块`34665437`，[交易](https://tonscan.org/tx/MU%2FNmSFkC0pJiCi730Fmt6PszBooRZkzgiQMv0sExfY=)），为 nothing-in-my-sleeve字节序列`82b17caadb303d53c3286c06a6e1affc517d1bc1d3ef2e4489d18b873f5d7cd1`，这是`sha256("Not a valid curve point")`。现在，更新网络配置参数的唯一方法是通过验证者共识。

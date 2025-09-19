@@ -12,7 +12,7 @@ This guide will walk you through reading data from TON Blockchain. You'll learn 
 - Call `get methods`
 - Retrieve account transactions
 
-By the end, you'll understand how to interact with [TON HTTP-based APIs](/v3/guidelines/dapps/apis-sdks/ton-http-apis). In this guide, [TON Center](https://toncenter.com/) is used—a fast and reliable HTTP API for TON.
+By the end, you'll understand how to interact with [TON HTTP-based APIs](/v3/guidelines/dapps/apis-sdks/api-types). In this guide, [TON Center](https://toncenter.com/) is used—a fast and reliable HTTP API for TON.
 
 ## Set up environment
 
@@ -23,7 +23,7 @@ node -v
 npm -v
 ```
 
-Versions of `node` and `npm` should be at least `v20` and `v10` correspondingly.
+Versions of `node` and `npm` should be at least `v20` and `v10`, respectively.
 
 ## Project setup
 
@@ -55,18 +55,18 @@ Account information includes the `balance`, `state`, `code`, and `data`.
 
 - `balance`: The amount of TON the account holds.
 - `state`: Can be one of:
-  - **Nonexist**: The address has no data.
-  - **Uninit**: The address has a balance but no smart contract code.
-  - **Active**: The address is live with code and balance.
-  - **Frozen**: The address is locked due to insufficient balance for storage costs.
+  - `nonexist`: The address has no data.
+  - `uninit`: The address has a balance but no smart contract code.
+  - `active`: The address is live with code and balance.
+  - `frozen`: The address is locked due to insufficient balance for storage costs.
 - `code`: The contract's code in raw format.
-- `data`: Serialized contract data stored in a [_Cell_](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage).
+- `data`: Serialized contract data stored in a [_Cell_](/v3/concepts/dive-into-ton/ton-blockchain/cells).
 
 Account state may be obtained using the [`getContractState`](https://testnet.toncenter.com/api/v2/#/accounts/get_address_information_getAddressInformation_get/) method.
 
 #### Account's address
 
-To get account information, you need the account's address. In TON, we can use a user-friendly address — a base64url-encoded string that represents a blockchain account in a human-readable and error-resistant format.
+To get account information, you need the account's address. In TON, we can use a user-friendly address — a base64 or base64url-encoded string that represents a blockchain account in a human-readable and error-resistant format.
 
 User-friendly addresses also include special flags that define how the address should be used. For example, some addresses are valid only on Testnet, while others work on any network. These flags are encoded in the first few bits and influence the first letter of the address:
 
@@ -85,7 +85,7 @@ User-friendly addresses also include special flags that define how the address s
 
 #### Your address in the following examples
 
-In the given code snippets, feel free to change the example address to your test wallet address in this line.
+In the given code snippets, replace the example with your Testnet address in this line.
 
 ```typescript
  // Replace with any address
@@ -100,15 +100,15 @@ Create a new file `1-get-account-state.ts`:
 import { Address, TonClient } from "@ton/ton";
 
 async function main() {
-  // Initializaing TON HTTP API Client
+  // Initializaing TON HTTP API client
   const tonClient = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
 
-  // Replace with any address
+  // Replace with your Testnet address
   const accountAddress = Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-');
 
-  // Calling method on http api
+  // Calling tonClient.getContractState(), which corresponds to TON Center’s getAddressInformation endpoint
   const state = await tonClient.getContractState(accountAddress);
 
 
@@ -144,16 +144,16 @@ Get methods are special functions in smart contracts that allow you to convenien
 
 Their execution:
 
-- Do not charge any fees from contracts.
+- Does not charge any fees.
 - Cannot modify the smart contract’s storage or state.
 
-The result of calling a get method via the TON HTTP API is returned in a stack format, which can be deserialised step-by-step using functions like `readNumber()` or others, depending on the expected data type.
+The result of calling a get method via the TON HTTP API is returned in a stack format, which can be deserialized step by step using functions like `readNumber()` or others, depending on the expected data type.
 
 #### Why do we need this?
 
 In TON, tokens or jettons are managed via separate contracts called **Jetton wallets**, which are linked to users' main wallet addresses. To interact with a user's tokens, we first need to know the address of their Jetton wallet contract.
 
-The `get_wallet_address` get method on the Jetton master contract allows us to retrieve the **verified Jetton wallet contract address**  for a given user's main wallet address.
+The `get_wallet_address` get method on the Jetton master contract allows us to retrieve the **verified Jetton wallet contract address** for a given user's main wallet address.
 
 In this example, we demonstrate how to call this method to obtain the user's Jetton wallet address.
 
@@ -165,7 +165,7 @@ Create a new file `2-call-get-method.ts`:
 import { Address, TonClient, TupleBuilder } from "@ton/ton";
 
 async function main() {
-  // Initializaing TON HTTP API Client
+  // Initializaing TON HTTP API client
   const tonClient = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
@@ -178,11 +178,11 @@ async function main() {
 
   const accountAddress = Address.parse('kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy')
 
-  // Calling http api to run get method on specific contract
+  // Calling HTTP API to run get method on specific contract
   const result = await tonClient.runMethod(
-    accountAddress, // address to call get method on
-    'get_wallet_address', // method name
-    builder.build(), // optional params list
+    accountAddress, // Address to call get method on
+    'get_wallet_address', // Method name
+    builder.build(), // Optional params list
   );
 
   // Deserializing get method result
@@ -212,7 +212,7 @@ User-friendly address: kQB11H0oDahylXlASZjiDtINlrS0PevVMsvtsbmKmvN5l9np
 As you can see, the get method returns the contract address in two formats:
 
 - The _raw address_ (hexadecimal format) is how TON represents addresses internally. It’s precise but not very human-friendly.
-- The _user-friendly address_  is a readable, safer format designed for sharing and everyday use. It’s easier to work with in wallets and apps.
+- The _user-friendly address_ is a readable, safer format designed for sharing and everyday use. It’s easier to work with in wallets and apps.
 
 Both addresses point to the same contract — in this case, the **Jetton wallet contract** associated with the user’s wallet address.
 
@@ -220,7 +220,7 @@ Get methods may also be called using Tonviewer:
 
 1. Navigate to the [get methods section](https://testnet.tonviewer.com/kQD0GKBM8ZbryVk2aESmzfU6b9b_8era_IkvBSELujFZPsyy?section=method).
 2. Select `get_wallet_address`.
-3. Insert the address from the example _0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-_ into the slice section.
+3. Insert the address from the example `0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-` into the slice section.
 4. Press **Execute**.
 
 You will end up with the same address you got from the console.
@@ -233,7 +233,7 @@ Wrappers are classes that simplify interactions with smart contracts by turning 
 import { Address, JettonMaster, TonClient } from "@ton/ton";
 
 async function main() {
-  // Initializaing TON HTTP API Client
+  // Initializaing TON HTTP API client
   const tonClient = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
@@ -259,12 +259,12 @@ Interaction within an account on the blockchain happens due to [messages and tra
 
 A transaction in TON is the **result** of a smart contract successfully processing an incoming message. It consists of:
 
-* the **incoming message** that triggered the contract
-* the **state changes** performed by the contract during message processing (e.g. storage or balance updates)
-* any **outgoing messages** sent to other contracts (if applicable)
+- the **incoming message** that triggered the contract
+- the **state changes** performed by the contract during message processing (e.g. storage or balance updates)
+- any **outgoing messages** sent to other contracts (if applicable)
 
 <ThemedImage
-  alt=""
+  alt="Transaction diagram"
   sources={{
   light: '/img/docs/message-delivery/message_delivery_2.png?raw=true',
   dark: '/img/docs/message-delivery/message_delivery_2_dark.png?raw=true',
@@ -275,7 +275,7 @@ A transaction in TON is the **result** of a smart contract successfully processi
 
 A transaction obtained from the API has the following structure:
 
-```json5
+```text
 {
   "address": {
     "account_address": "EQD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje02Zx"
@@ -290,7 +290,7 @@ A transaction obtained from the API has the following structure:
 ```
 
 - `address`: The account address where the transaction occurred.
-- `utime`: The [unix timestamp](https://www.unixtimestamp.com/) of the transaction.
+- `utime`: The [Unix timestamp](https://www.unixtimestamp.com/) of the transaction.
 - `in_msg`: The incoming [message](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-message) that triggered the transaction.
 - `out_msgs`: Outgoing messages sent during the transaction.
 
@@ -300,7 +300,7 @@ A message is a set of instructions intended for a single actor. In TON Blockchai
 
 <div class="text--center">
   <ThemedImage
-    alt=""
+    alt="Message diagram"
     sources={{
     light: '/img/docs/message-delivery/message_delivery_1.png?raw=true',
     dark: '/img/docs/message-delivery/message_delivery_1_dark.png?raw=true',
@@ -310,7 +310,7 @@ A message is a set of instructions intended for a single actor. In TON Blockchai
 
 ### Key message fields
 
-```json5
+```text
 {
   "hash": "mcHdqltDAB8ODQHqtedtYQIS6MQL7x4ut+nf9tXWGqg=",
   "source": "EQAJTegD8OO-HksHfI4KVDqb7vW9Dlqi5C1FTcL1dECeosTf",
@@ -337,7 +337,7 @@ Let’s now try to fetch transactions for an account we control.
 
 Before running this code:
 
-- Go to [Tonviewer](https://testnet.tonviewer.com) and open your Testnet wallet address, which we created earlier in the [Getting Started](/v3/guidelines/quick-start/getting-started#interacting-with-ton-ecosystem) section.
+- Go to [Tonviewer](https://testnet.tonviewer.com) and open your Testnet wallet address, which we created earlier in the [Getting started](/v3/guidelines/quick-start/getting-started#interacting-with-the-ton-ecosystem) section.
 - Send some test TON to yourself using [Testgiver Ton Bot](https://t.me/testgiver_ton_bot/).
 - Wait a few seconds and make sure the transaction appears in Tonviewer.
 
@@ -353,19 +353,19 @@ Also, please note that the Testnet API may update data with some delay, so your 
 import { Address, TonClient } from "@ton/ton";
 
 async function main() {
-  // Initializaing TON HTTP API Client
+  // Initializaing TON HTTP API client
   const tonClient = new TonClient({
     endpoint: 'https://testnet.toncenter.com/api/v2/jsonRPC',
   });
 
-  // Calling method on http api
-  // full api: https://testnet.toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get
+  // Calling method on HTTP API
+  // Full API: https://testnet.toncenter.com/api/v2/#/accounts/get_transactions_getTransactions_get
   const transactions = await tonClient.getTransactions(
     // Replace with your Testnet address to fetch transactions
     Address.parse('0QD-SuoCHsCL2pIZfE8IAKsjc0aDpDUQAoo-ALHl2mje04A-'),
     {
-      limit: 10,      //maximum ammount of recieved transactions
-      archival: true, //search in all history
+      limit: 10,      // Maximum number of received transactions
+      archival: true, // Search the entire history
     },
   );
 
@@ -399,7 +399,7 @@ Sender: kQDhJ2Kx7dD6FLzAXcqiI4Xsu4ioY6JlE24m9Tx86eGkq0OF
 ```
 
 :::info
-A more complex example of traversing transactions graph may be found [here](/v3/guidelines/dapps/asset-processing/payments-processing/#retrieve-incomingoutgoing-transactions).
+A more complex example of traversing the transaction graph may be found [here](/v3/guidelines/dapps/asset-processing/payments-processing/#retrieve-incomingoutgoing-transactions).
 :::
 
 ## Next step

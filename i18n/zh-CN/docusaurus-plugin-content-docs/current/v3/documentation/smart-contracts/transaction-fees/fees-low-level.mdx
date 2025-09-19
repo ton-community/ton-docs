@@ -8,11 +8,11 @@ This section describes instructions and manuals for interacting with TON at a lo
 不过，其中大部分**已通过操作码**实现！因此，您可以**使用它们来代替手工计算**。
 :::
 
-如[TVM概述](/learn/tvm-instructions/tvm-overview)中所述，交易执行包括几个阶段(phase)。在这些阶段期间，可能会扣除相应的费用。
+如[TVM概述](/v3/documentation/data-formats/tlb/overview)中所述，交易执行包括几个阶段(phase)。在这些阶段期间，可能会扣除相应的费用。
 
 ## 交易及其阶段
 
-如[TVM 概述](/v3/documentation/tvm/tvm-overview)所述，交易执行由几个阶段组成。在这些阶段中，可能会扣除相应的费用。有一个 [高级费用概述](/v3/documentation/smart-contracts/transaction-fees/fees)。
+如[TVM 概述](/v3/documentation/data-formats/tlb/overview)所述，交易执行由几个阶段组成。在这些阶段中，可能会扣除相应的费用。有一个 [高级费用概述](/v3/documentation/smart-contracts/transaction-fees/fees)。
 
 ## 存储费
 
@@ -42,7 +42,7 @@ TON 校验器从智能合约中收取存储费。
 - `cell_price` -- 单个 cell 的价格
 - `bit_price` -- 单个比特的价格
 
-`cell_price` 和 `bit_price` 均可从网络配置[参数 18](/v3/documentation/network/configs/blockchain-configs#param-18)中获取。
+`cell_price` 和 `bit_price` 均可从网络配置[参数 18](/v3/documentation/network/config-params/overview#param-18)中获取。
 
 FunC中使用的几乎所有函数都在[stdlib.func](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc)中定义，它将FunC函数映射到Fift汇编指令。反过来，Fift汇编指令在[asm.fif](https://github.com/ton-blockchain/ton/blob/master/crypto/fift/lib/Asm.fif)中映射到位序列指令。因此，如果你想了解指令调用的确切成本，你需要在`stdlib.func`中找到`asm`表示，然后在`asm.fif`中找到位序列并计算指令长度（以位为单位）。
 
@@ -94,7 +94,7 @@ function storageFeeCalculator() {
 
 ### Gas
 
-所有计算成本均以 gas 单位计算。 gas 单位的价格由[链配置](/v3/documentation/network/configs/blockchain-configs#param-20and-21)决定（配置 20 用于主链，配置 21 用于基链），只有在验证者达成共识后才能更改。需要注意的是，与其他系统不同，用户不能设定自己的 gas 价格，也没有收费市场。
+所有计算成本均以 gas 单位计算。 gas 单位的价格由[链配置](/v3/documentation/network/config-params/overview#param-20-and-21)决定（配置 20 用于主链，配置 21 用于基链），只有在验证者达成共识后才能更改。需要注意的是，与其他系统不同，用户不能设定自己的 gas 价格，也没有收费市场。
 
 TON中的字典是作为cell的树（更准确地说是DAG）被引入的。这意味着如果你搜索、读取或写入字典，你需要解析树的相应分支的所有cell。这意味着
 
@@ -210,7 +210,7 @@ return (c, b, a);
 
 ## 预付费
 
-内部消息会定义一个以 Toncoins 为单位的 `ihr_fee`（转发费），如果目的地分片链通过 IHR 机制收录消息，就会从消息附加值中减去该费用，并将其奖励给目的地分片链的验证者。`fwd_fee` 是使用HR机制所支付的原始转发费用总额；它是根据[24和25配置参数](/v3/documentation/network/configs/blockchain-configs#param-24and-25)和信息生成时的大小自动计算得出的。请注意，新创建的内部出站消息所携带的总值等于 值、`hr_fee` 和 `fwd_fee` 之和。该总和从源账户余额中扣除。在这些部分中，只有值会在信息发送时记入目的地账户。`fwd_fee` 由从源到目的地的HR路径上的验证者收取，而 `ihr_fee` 要么由目的地分片链的验证者收取（如果信息是通过IHR传递的），要么记入目的地账户。
+内部消息会定义一个以 Toncoins 为单位的 `ihr_fee`（转发费），如果目的地分片链通过 IHR 机制收录消息，就会从消息附加值中减去该费用，并将其奖励给目的地分片链的验证者。`fwd_fee` 是使用HR机制所支付的原始转发费用总额；它是根据[24和25配置参数](/v3/documentation/network/config-params/overview#param-24-and-25)和信息生成时的大小自动计算得出的。请注意，新创建的内部出站消息所携带的总值等于 值、`hr_fee` 和 `fwd_fee` 之和。该总和从源账户余额中扣除。在这些部分中，只有值会在信息发送时记入目的地账户。`fwd_fee` 由从源到目的地的HR路径上的验证者收取，而 `ihr_fee` 要么由目的地分片链的验证者收取（如果信息是通过IHR传递的），要么记入目的地账户。
 
 :::tip
 
@@ -239,7 +239,7 @@ action_fee = floor((msg_fwd_fees * first_frac)/ 2^16);  //internal
 action_fee = msg_fwd_fees;  //external
 ```
 
-[`first_frac`](/v3/documentation/network/configs/blockchain-configs#param-24and-25)是TON区块链的24和25参数（主链和工作链）的一部分。目前，这两个参数的值都设置为 21845，这意味着 `action_fee` 约为 `msg_fwd_fees` 的三分之一。如果是外部消息操作 `SENDRAWMSG`，`action_fee` 等于 `msg_fwd_fees`。
+[`first_frac`](/v3/documentation/network/config-params/overview#param-24-and-25)是TON区块链的24和25参数（主链和工作链）的一部分。目前，这两个参数的值都设置为 21845，这意味着 `action_fee` 约为 `msg_fwd_fees` 的三分之一。如果是外部消息操作 `SENDRAWMSG`，`action_fee` 等于 `msg_fwd_fees`。
 
 :::tip
 Remember that an action register can contain up to 255 actions, which means that all formulas related to `fwd_fee` and `action_fee` will be computed for each `SENDRAWMSG` action, resulting in the following sum:
@@ -276,7 +276,7 @@ Only unique hash cells are counted for storage and fwd fees i.e. 3 identical has
 
 特别是，它可以重复数据：如果在不同分支中引用了多个等效子 cell ，则其内容只需存储一次。
 
-阅读有关 [重复数据删除](/v3/documentation/data-formats/ltb/library-cells) 的更多信息。
+阅读有关 [重复数据删除](/v3/documentation/data-formats/cells/library) 的更多信息。
 :::
 
 // 消息的根cell中的位不包括在msg.bits中（lump_price支付它们）
@@ -304,5 +304,5 @@ Only unique hash cells are counted for storage and fwd fees i.e. 3 identical has
 ## 另请参见
 
 - [ TON 收费概述](/v3/documentation/smart-contracts/transaction-fees/fees)
-- [事务和阶段](/v3/documentation/tvm/tvm-overview#transactions-and-phases)
+- [事务和阶段](/v3/documentation/data-formats/tlb/overview#transactions-and-phases)
 - [费用计算](/v3/guidelines/smart-contracts/fee-calculation)

@@ -8,7 +8,7 @@ TON DNS is a powerful tool for assigning TON Sites or Storage bags to domains an
 
 ## Relevant links
 
-1. [TON smart contract address system](/v3/documentation/smart-contracts/addresses)
+1. [TON smart contract addresses](/v3/documentation/smart-contracts/addresses/address)
 1. [TEP-0081 - TON DNS standard](https://github.com/ton-blockchain/TEPs/blob/master/text/0081-dns-standard.md)
 1. [Source code of .ton DNS collection](https://tonscan.org/address/EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz#source)
 1. [Source code of .t.me DNS collection](https://tonscan.org/address/EQCA14o1-VWhS2efqoh_9M1b_A9DtKTuoqfmkn83AbJzwnPi#source)
@@ -35,7 +35,7 @@ Some repetitive parts are omitted.
   int subdomain_bits = slice_bits(subdomain);
   throw_unless(70, (subdomain_bits % 8) == 0);
   
-  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  ;; Assuming that 'subdomain' is not empty.
+  int starts_with_zero_byte = subdomain.preload_int(8) == 0;  ;; assuming that 'subdomain' is not empty
   if (starts_with_zero_byte) {
     subdomain~load_uint(8);
     if (subdomain.slice_bits() == 0) {   ;; Current contract has no DNS records by itself.
@@ -126,13 +126,13 @@ How `dnsresolve()` works:
 
 
 1. It takes the subdomain and category as inputs. 
-2. It is skipped if the subdomain begins with zero byte. 
+2. If the subdomain begins with a zero byte, the function skips that leading byte. 
 3. It checks if the subdomain starts with `"ton\0"`. If it does:
    - The first 32 bits are skipped (`subdomain = "resolve-contract\0"`).  
    - A suffix variable `subdomain_sfx` is set to the `subdomain`. It reads bytes until the zero byte.
-   - At this point: `subdomain = "resolve-contract\0", subdomain_sfx = "")`.
+   - At this point: `subdomain = "resolve-contract\0", subdomain_sfx = ""`.
    - The zero byte and suffix are trimmed, resulting in `subdomain = "resolve-contract"`.
-   - The domain name is converted into a contract address using helper functions `slice_hash` and `get_ton_dns_nft_address_by_index`. See [Appendix 1](subresolvers#appendix-1-code-of-resolve-contractton) for implementation details.
+   - The domain name is converted into a contract address using helper functions `slice_hash` and `get_ton_dns_nft_address_by_index`. See [Appendix 1](#appendix-1-code-of-resolve-contractton) for implementation details.
 4. If the subdomain starts with `"address\0"`:
    - The prefix is skipped, and the rest is interpreted as a base64-encoded address.
 5. If the subdomain doesn't match any known prefix:
@@ -154,17 +154,20 @@ The `dnsresolve()` function can:
 - Return a "domain not found" result if the subdomain is unknown.
 
 :::warning
-Base64 address parsing is currently not functional. Suppose you attempt to resolve a domain like `<some-address>.address.resolve-contract.ton`, you will receive an error indicating that the domain is misconfigured or does not exist. This issue arises because domain names are case-insensitive—a behavior inherited from traditional DNS, which results in the lowercase. Consequently, the resolver may attempt to query a non-existent or invalid WorkChain address.
+Base64 address parsing is currently not functional. If you attempt to resolve a domain like `<some-address>.address.resolve-contract.ton`, you will receive an error indicating that the domain is misconfigured or does not exist. This issue arises because domain names are case-insensitive—a behavior inherited from traditional DNS, which results in the lowercase. Consequently, the resolver may attempt to query a non-existent or invalid WorkChain address
 :::
 
 ### Binding the resolver
 
-Now that the subresolver contract is deployed, the next step is to point the domain to it by updating domain `dns_next_resolver` record. This is done by sending a message with the following TL-B structure to the domain contract:
-```
-`change_dns_record#4eb1f0f9 query_id:uint64 record_key#19f02441ee588fdb26ee24b2568dd035c3c9206e11ab979be62e55558a1d17ff record:^[dns_next_resolver#ba93 resolver:MsgAddressInt]`
+Now that the subresolver contract is deployed, the next step is to point the domain to it by updating the domain’s `dns_next_resolver` record. This is done by sending a message with the following TL-B structure to the domain contract:
+
+```tlb
+change_dns_record#4eb1f0f9 query_id:uint64 r
+    ecord_key#19f02441ee588fdb26ee24b2568dd035c3c9206e11ab979be62e55558a1d17ff 
+    record:^[dns_next_resolver#ba93 resolver:MsgAddressInt]
 ```
 
-## Creating own subdomains manager
+## Creating your own subdomain manager
 Subdomains can be helpful for everyday users. For example, they can associate multiple projects with a single domain or link to friends' wallet addresses.
 
 ### Contract data
@@ -184,7 +187,7 @@ global cell domains;
 }
 ```
 
-### Processing records update
+### Processing record updates
 
 ```func
 const int op::update_record = 0x537a3491;
@@ -238,7 +241,7 @@ Finally, we update the record associated with the specified domain and write the
 (slice, slice) ~parse_sd(slice subdomain) {
   ;; "test\0qwerty\0" -> "test" "qwerty\0"
   slice subdomain_sfx = subdomain;
-  while (subdomain_sfx~load_uint(8)) { }  ;; Searching zero byte.
+  while (subdomain_sfx~load_uint(8)) { }  ;; Searching for a zero byte.
   subdomain~skip_last_bits(slice_bits(subdomain_sfx));
   return (subdomain, subdomain_sfx);
 }
@@ -247,7 +250,7 @@ Finally, we update the record associated with the specified domain and write the
   int subdomain_bits = slice_bits(subdomain);
   throw_unless(70, subdomain_bits % 8 == 0);
   if (subdomain.preload_uint(8) == 0) { subdomain~skip_bits(8); }
-  
+    
   slice subdomain_suffix = subdomain~parse_sd();  ;; "test\0" -> "test" ""
   int subdomain_suffix_bits = slice_bits(subdomain_suffix);
 
@@ -275,6 +278,7 @@ If a non-empty subdomain suffix remains, the function returns the number of byte
 
 While this function could be improved to handle errors more gracefully, such enhancements are not strictly required.
 
+<a id="appendix-1-code-of-resolve-contractton" />
 ## Appendix 1: code of resolve-contract.ton
 
 <details>
@@ -459,4 +463,3 @@ slice decode_base64_address(slice readable) method_id {
 </details>
 
 <Feedback />
-
