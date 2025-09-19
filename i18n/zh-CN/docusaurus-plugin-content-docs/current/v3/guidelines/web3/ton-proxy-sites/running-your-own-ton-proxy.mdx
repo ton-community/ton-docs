@@ -2,7 +2,7 @@
 
 本文档旨在简要地介绍TON网站，即通过TON网络访问的网站。TON网站可以方便地作为进入其他TON服务的入口。特别是，从TON网站下载的HTML页面可能包含指向`ton://...` URI的链接，用户点击这些链接后，如果用户设备上安装了TON钱包，就可以执行支付操作。
 
-从技术角度看，TON网站非常类似于标准网站，但它们是通过[TON网络](/learn/networking/overview)（互联网内的一个覆盖网络）而不是互联网访问的。更具体地说，它们拥有一个[ADNL](/learn/networking/adnl)地址（而不是更常见的IPv4或IPv6地址），并通过[RLDP](/learn/networking/rldp)协议（这是建立在ADNL之上的高级RPC协议，ADNL是TON网络的主要协议）接受HTTP查询，而不是常规的TCP/IP。所有加密由ADNL处理，所以如果入口代理托管在用户设备上，就没有必要使用HTTPS（即TLS）。
+从技术角度看，TON网站非常类似于标准网站，但它们是通过[TON网络](/v3/documentation/network/protocols/adnl/overview)（互联网内的一个覆盖网络）而不是互联网访问的。更具体地说，它们拥有一个[ADNL](/v3/documentation/network/protocols/adnl/overview)地址（而不是更常见的IPv4或IPv6地址），并通过[RLDP](/v3/documentation/network/protocols/rldp)协议（这是建立在ADNL之上的高级RPC协议，ADNL是TON网络的主要协议）接受HTTP查询，而不是常规的TCP/IP。所有加密由ADNL处理，所以如果入口代理托管在用户设备上，就没有必要使用HTTPS（即TLS）。
 
 为了访问现有的网站和创建新的TON网站，需要特殊的网关来连接“普通”互联网和TON网络。本质上，通过在客户端机器上本地运行的HTTP->RLDP代理访问TON网站，并通过在远程Web服务器上运行的RLDP->HTTP代理来创建它们。
 
@@ -14,9 +14,9 @@
 
 1. 从[TON自动构建](https://github.com/ton-blockchain/ton/releases/latest)下载**rldp-http-proxy**。
 
-   或者你可以按照这些[指示](/develop/howto/compile#rldp-http-proxy)自己编译**rldp-http-proxy**。
+   或者你可以按照这些[指示](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy)自己编译**rldp-http-proxy**。
 
-2. [下载](/develop/howto/compile#download-global-config)TON全局配置。
+2. [下载](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config)TON全局配置。
 
 3. 运行**rldp-http-proxy**
 
@@ -34,13 +34,13 @@
 
 1. 从[TON自动构建](https://github.com/ton-blockchain/ton/releases/latest)下载**rldp-http-proxy**。
 
-   或者你可以按照这些[指示](/develop/howto/compile#rldp-http-proxy)自己编译**rldp-http-proxy**。
+   或者你可以按照这些[指示](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy)自己编译**rldp-http-proxy**。
 
-2. [下载](/develop/howto/compile#download-global-config)TON全局配置。
+2. [下载](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config)TON全局配置。
 
 3. 从[TON自动构建](https://github.com/ton-blockchain/ton/releases/latest)下载**generate-random-id**。
 
-   或者你可以按照这些[指示](/develop/howto/compile#generate-random-id)自己编译**generate-random-id**。
+   或者你可以按照这些[指示](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#generate-random-id)自己编译**generate-random-id**。
 
 4. 为你的入口代理生成一个持久的ANDL地址
 
@@ -122,7 +122,7 @@ curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h7
 ## 运行TON网站
 
 :::tip 教程找到了！
-嘿！不要从初学者友好的教程[如何运行TON网站？](/develop/dapps/tutorials/how-to-run-ton-site)开始
+嘿！不要从初学者友好的教程[如何运行TON网站？](/v3/guidelines/web3/ton-proxy-sites/how-to-run-ton-site)开始
 :::
 
 大多数人只需要访问现有的TON网站，而不是创建新的。然而，如果你想创建一个，你需要在你的服务器上运行RLDP-HTTP代理，以及像Apache或Nginx这样的常规Web服务器软件。
@@ -131,13 +131,13 @@ curl -x 127.0.0.1:8080 http://utoljjye6y4ixazesjofidlkrhyiakiwrmes3m5hthlc6ie2h7
 
 1. 从 [TON Auto Builds](https://github.com/ton-blockchain/ton/releases/latest) 下载 **rldp-http-proxy** 。
 
-   或者你可以按照这个[指示](/develop/howto/compile#rldp-http-proxy)自己编译**rldp-http-proxy**。
+   或者你可以按照这个[指示](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#rldp-http-proxy)自己编译**rldp-http-proxy**。
 
-2. [下载](/develop/howto/compile#download-global-config)TON全局配置。
+2. [下载](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#download-global-config)TON全局配置。
 
 3. 从[TON自动构建](https://github.com/ton-blockchain/ton/releases/latest)下载**generate-random-id**。
 
-   或者你可以按照这些[指示](/develop/howto/compile#generate-random-id)自己编译**generate-random-id**。
+   或者你可以按照这些[指示](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#generate-random-id)自己编译**generate-random-id**。
 
 4. 为你的服务器生成一个持久的ANDL地址
 
@@ -183,7 +183,7 @@ rldp-http-proxy/rldp-http-proxy -a 777.777.777.777:3333 -L '*' -C global.config.
 
 你可以在客户端机器上的浏览器中访问TON网站`http://<your-adnl-address>.adnl`（在这个示例中是`http://vcqmha5j3ceve35ammfrhqty46rkhi455otydstv66pk2tmf7rl25f3.adnl`），如“访问TON网站”部分所解释的，并检查你的TON网站是否真的对公众开放。
 
-如果你愿意，你可以[注册](/participate/web3/site-management)一个TON DNS域名，比如'example.ton'，并为这个域名创建一个指向你TON网站的持久ADNL地址的`site`记录。然后，在客户端模式下运行的RLDP-HTTP代理将会解析http://example.ton为指向你的ADNL地址，并访问你的TON网站。
+如果你愿意，你可以[注册](/v3/guidelines/web3/ton-proxy-sites/site-and-domain-management)一个TON DNS域名，比如'example.ton'，并为这个域名创建一个指向你TON网站的持久ADNL地址的`site`记录。然后，在客户端模式下运行的RLDP-HTTP代理将会解析http://example.ton为指向你的ADNL地址，并访问你的TON网站。
 
 你还可以在一个单独的服务器上运行反向代理，并将你的Web服务器设置为远程地址。在这种情况下，请使用`-R '*'@<YOUR_WEB_SERVER_HTTP_IP>:<YOUR_WEB_SERVER_HTTP_PORT>`替代`-L '*'`。
 

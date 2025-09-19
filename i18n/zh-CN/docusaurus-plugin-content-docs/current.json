@@ -205,7 +205,7 @@
   },
   "sidebar.develop.doc.NFT Use Cases in TON": {
     "message": "TON 中的 NFT 使用案例",
-    "description": "The label for the doc item NFT Use Cases in TON in sidebar develop, linking to the doc participate/nft"
+    "description": "The label for the doc item NFT Use Cases in TON in sidebar develop, linking to the NFT doc"
   },
   "sidebar.develop.doc.NFT Minting Guide": {
     "message": "NFT 铸造指南",
@@ -281,11 +281,11 @@
   },
   "sidebar.participate.doc.Overview": {
     "message": "概览",
-    "description": "The label for the doc item Overview in sidebar participate, linking to the doc participate/crosschain/overview"
+    "description": "The label for the doc item Overview in sidebar participate."
   },
   "sidebar.participate.doc.Bridges Addresses": {
     "message": "桥地址",
-    "description": "The label for the doc item Bridges Addresses in sidebar participate, linking to the doc participate/crosschain/bridge-addresses"
+    "description": "The label for the doc item Bridges Addresses in sidebar participate."
   },
   "sidebar.contribute.category.Common Rules": {
     "message": "通用规则",

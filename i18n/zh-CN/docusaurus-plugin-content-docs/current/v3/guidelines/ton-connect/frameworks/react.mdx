@@ -1,6 +1,6 @@
 # 用于 React 的 TON Connect
 
-推荐用于React应用程序的SDK是[UI React SDK](/develop/dapps/ton-connect/developers#ton-connect-react)。它是一个React组件，提供了与TON Connect交互的高级方式。
+推荐用于React应用程序的SDK是[UI React SDK](/v3/guidelines/ton-connect/guidelines/developers#ton-connect-react)。它是一个React组件，提供了与TON Connect交互的高级方式。
 
 ## 实现
 
@@ -14,7 +14,7 @@ npm i @tonconnect/ui-react
 
 ### 2. TON Connect初始化
 
-安装包之后，您应该为您的应用程序创建一个`manifest.json`文件。有关如何创建manifest.json文件的更多信息，请参阅[此处](/develop/dapps/ton-connect/manifest)。
+安装包之后，您应该为您的应用程序创建一个`manifest.json`文件。有关如何创建manifest.json文件的更多信息，请参阅[此处](/v3/guidelines/ton-connect/creating-manifest)。
 
 创建manifest文件后，将TonConnectUIProvider导入到您的Mini App的根目录，并传入manifest URL：
 
@@ -230,7 +230,7 @@ export const EntrypointPage = () => {
 
 ## 通过哈希理解交易状态
 
-位于支付处理中（使用tonweb）的原理。[了解更多](/develop/dapps/asset-processing/#checking-contracts-transactions)
+位于支付处理中（使用tonweb）的原理。
 
 ### 后端的可选检查（tonproof）
 
@@ -264,7 +264,7 @@ export const Settings = () => {
 
 ```
 
-- 在此获取更多示例：[准备信息](/v3/guidelines/ton-connect/guidelines/preparing-messages)
+- 在此获取更多示例：[准备信息](/v3/guidelines/ton-connect/cookbook/cells)
 
 ### 通过哈希值了解交易状态
 
@@ -273,7 +273,7 @@ export const Settings = () => {
 ### 后台可选检查 (ton_proof)
 
 :::tip
-了解如何签署和验证信息：[签名和验证](/v3/guidelines/ton-connect/guidelines/verifying-signed-in-users)
+了解如何签署和验证信息：[签名和验证](/v3/guidelines/ton-connect/verifying-signed-in-users)
 :::
 
 要确保用户真正拥有声明的地址，可以使用 `ton_proof`。

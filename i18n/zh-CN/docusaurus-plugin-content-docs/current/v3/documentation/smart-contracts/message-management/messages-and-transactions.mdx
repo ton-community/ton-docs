@@ -31,7 +31,7 @@ TON 中的一笔交易包括以下内容：
 - 由传入消息引起的合约行动，例如更新合约的存储（可选）
 - 发送给其他参与者的所生成的传出消息（可选）
 
-> 技术上，合约可以通过特殊功能如 [Tick-Tock](/develop/data-formats/transaction-layout#tick-tock) 触发，但这个功能更多用于 TON 内部的区块链核心合约。
+> 技术上，合约可以通过特殊功能如 [Tick-Tock](/v3/documentation/data-formats/layout/transactions#tick-tock) 触发，但这个功能更多用于 TON 内部的区块链核心合约。
 >
 > 并非每笔交易都会导致传出消息或对合约存储的更新——这取决于合约代码所定义的操作。
 
@@ -52,7 +52,7 @@ TON 中的一笔交易包括以下内容：
 为了实现无限分片范式，必须确保完全并行化，这意味着每笔交易的执行都独立于其他交易。因此，与其进行影响和改变多个合约状态的交易，不如每笔 TON 交易只在单个智能合约上执行，智能合约通过消息进行通信。这样，智能合约只能通过调用它们的函数与特殊消息相互作用，并稍后通过其他消息获得响应。
 
 :::info
-[交易布局](/v3/documentation/data-formats/tlb/transaction-layout) 页面上有更详细准确的说明。
+[交易布局](/v3/documentation/data-formats/layout/transactions) 页面上有更详细准确的说明。
 :::
 
 ### 交易结果
@@ -85,7 +85,7 @@ TON 中的一笔交易包括以下内容：
 
 - 成功，退出代码为 0 或 1
 - 失败，`aborted: true` 未执行
-- Fail， [exit code](/v3/documentation/tvm/tvm-exit-codes), `aborted: true`.
+- Fail， [exit code](/v3/documentation/tvm/exit-codes), `aborted: true`.
 
 :::info 用于 toncenter api v3
 `aborted: true` 是 TON 中心字段，事务中没有此类字段

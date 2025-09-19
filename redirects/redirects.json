@@ -4,14 +4,6 @@
         "to": "/v3/concepts/glossary"
     },
     {
-        "from": "/participate/wallets/apps",
-        "to": "/v3/concepts/dive-into-ton/ton-ecosystem/wallet-apps"
-    },
-    {
-        "from": "/participate/explorers",
-        "to": "/v3/concepts/dive-into-ton/ton-ecosystem/explorers-in-ton"
-    },
-    {
         "from": "/develop/ethereum-to-ton/difference-of-blockchains",
         "to": "/v3/concepts/dive-into-ton/go-from-ethereum/difference-of-blockchains"
     },
@@ -27,50 +19,12 @@
         "from": "/learn/academy/academy-overview",
         "to": "/v3/concepts/educational-resources"
     },
-    {
-        "from": "/participate/web3/overview",
-        "to": "/v3/guidelines/web3/overview"
-    },
-    {
-        "from": "/participate/web3/dns",
-        "to": "/v3/guidelines/web3/ton-dns/dns"
-    },
+
     {
         "from": "/develop/howto/subresolvers",
         "to": "/v3/guidelines/web3/ton-dns/subresolvers"
     },
-    {
-        "from": "/participate/web3/app-sites",
-        "to": "/v3/guidelines/web3/ton-proxy-sites/ton-sites-for-applications"
-    },
-    {
-        "from": "/participate/web3/setting-proxy",
-        "to": "/v3/guidelines/web3/ton-proxy-sites/connect-with-ton-proxy"
-    },
-    {
-        "from": "/participate/web3/how-to-open-any-ton-site",
-        "to": "/v3/guidelines/web3/ton-proxy-sites/how-to-open-any-ton-site"
-    },
-    {
-        "from": "/participate/web3/site-management",
-        "to": "/v3/guidelines/web3/ton-proxy-sites/site-and-domain-management"
-    },
-    {
-        "from": "/participate/ton-storage/storage-daemon",
-        "to": "/v3/guidelines/web3/ton-storage/storage-daemon"
-    },
-    {
-        "from": "/participate/ton-storage/storage-faq",
-        "to": "/v3/guidelines/web3/ton-storage/storage-faq"
-    },
-    {
-        "from": "/participate/ton-storage/storage-provider",
-        "to": "/v3/guidelines/web3/ton-storage/storage-provider"
-    },
-    {
-        "from": "/participate/web3/sites-and-proxy",
-        "to": "/v3/guidelines/web3/ton-proxy-sites/running-your-own-ton-proxy"
-    },
+
     {
         "from": "/develop/dapps/ton-connect",
         "to": "/v3/guidelines/ton-connect/overview"
@@ -110,54 +64,6 @@
     {
         "from": "/v3/guidelines/ton-connect/business/ton-connect-comparison",
         "to": "/v3/guidelines/ton-connect/overview#why-use-ton-connect"
-    },
-    {
-        "from": "/participate/run-nodes/archive-node",
-        "to": "/v3/guidelines/nodes/running-nodes/archive-node"
-    },
-    {
-        "from": "/participate/run-nodes/enable-liteserver-node",
-        "to": "/v3/guidelines/nodes/running-nodes/liteserver-node"
-    },
-    {
-        "from": "/participate/run-nodes/become-validator",
-        "to": "/v3/guidelines/nodes/running-nodes/validator-node"
-    },
-    {
-        "from": "/participate/network-maintenance/nominators",
-        "to": "/v3/guidelines/nodes/running-nodes/staking-with-nominator-pools"
-    },
-    {
-        "from": "/participate/run-nodes/run-docker",
-        "to": "/v3/guidelines/nodes/running-nodes/run-mytonctrl-docker"
-    },
-    {
-        "from": "/participate/run-nodes/local-ton",
-        "to": "/v3/guidelines/nodes/running-nodes/running-a-local-ton"
-    },
-    {
-        "from": "/participate/run-nodes/secure-guidelines",
-        "to": "/v3/guidelines/nodes/running-nodes/secure-guidelines"
-    },
-    {
-        "from": "/participate/network-maintenance/custom-overlays",
-        "to": "/v3/guidelines/nodes/custom-overlays"
-    },
-    {
-        "from": "/participate/run-nodes/nodes-troubleshooting",
-        "to": "/v3/guidelines/nodes/nodes-troubleshooting"
-    },
-    {
-        "from": "/participate/nodes/node-maintenance-and-security",
-        "to": "/v3/guidelines/nodes/node-maintenance-and-security"
-    },
-    {
-        "from": "/participate/network-maintenance/persistent-states",
-        "to": "/v3/guidelines/nodes/persistent-states"
-    },
-    {
-        "from": "/participate/run-nodes/faq",
-        "to": "/v3/guidelines/nodes/faq"
     },
     {
         "from": "/develop/dapps/apis/adnl",
@@ -352,22 +258,6 @@
         "to": "/v3/documentation/smart-contracts/transaction-fees/forward-fees"
     },
     {
-        "from": "/participate/wallets/highload",
-        "to": "/v3/documentation/smart-contracts/contracts-specs/highload-wallet"
-    },
-    {
-        "from": "/participate/network-maintenance/vesting-contract",
-        "to": "/v3/documentation/smart-contracts/contracts-specs/vesting-contract"
-    },
-    {
-        "from": "/participate/network-maintenance/single-nominator",
-        "to": "/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool"
-    },
-    {
-        "from": "/participate/network-maintenance/nominator-pool",
-        "to": "/v3/documentation/smart-contracts/contracts-specs/nominator-pool"
-    },
-    {
         "from": "/develop/smart-contracts/governance",
         "to": "/v3/documentation/smart-contracts/contracts-specs/governance"
     },
@@ -478,42 +368,6 @@
     {
         "from": "/develop/research-and-development/minter-flow",
         "to": "/v3/documentation/network/config-params/extra-currency"
-    },
-    {
-        "from": "/participate/crosschain/bridge-addresses",
-        "to": "/v3/documentation/infra/bridges/toncoin-addresses"
-    },
-    {
-        "from": "/participate/crosschain/overview",
-        "to": "/v3/documentation/infra/bridges/toncoin"
-    },
-    {
-        "from": "/participate/nodes/node-types",
-        "to": "/v3/documentation/nodes/overview"
-    },
-    {
-        "from": "/participate/run-nodes/mytonctrl",
-        "to": "/v3/documentation/nodes/mytonctrl/overview"
-    },
-    {
-        "from": "/participate/run-nodes/mytonctrl-status",
-        "to": "/v3/documentation/nodes/mytonctrl/status"
-    },
-    {
-        "from": "/participate/run-nodes/alerting",
-        "to": "/v3/guidelines/nodes/maintenance-guidelines/mytonctrl-private-alerting"
-    },
-    {
-        "from": "/participate/run-nodes/node-commands",
-        "to": "/v3/documentation/nodes/mytonctrl/commands"
-    },
-    {
-        "from": "/participate/network-maintenance/staking-incentives",
-        "to": "/v3/documentation/nodes/validation/staking-incentives"
-    },
-    {
-        "from": "/participate/nodes/collators",
-        "to": "/v3/documentation/nodes/validation/collators"
     },
     {
         "from": "/develop/howto/network-configs",
@@ -756,24 +610,8 @@
       "to": "/v3/guidelines/get-started-with-ton"
     },
     {
-      "from": "/develop/overview",
-      "to": "/v3/documentation/introduction"
-    },
-    {
       "from": "/develop/smart-contracts/fees",
       "to": "/v3/documentation/smart-contracts/transaction-fees/fees"
-    },
-    {
-      "from": "/learn/introduction",
-      "to": "v3/concepts/dive-into-ton/introduction"
-    },
-    {
-      "from": "/participate/run-nodes/full-node",
-      "to": "/v3/guidelines/nodes/running-nodes/full-node"
-    },
-    {
-      "from": "/participate/wallets/contracts",
-      "to": "/v3/documentation/smart-contracts/contracts-specs/wallet-contracts"
     },
     {
       "from":"/v3/guidelines/ton-connect/guidelines/integration-with-javascript-sdk",

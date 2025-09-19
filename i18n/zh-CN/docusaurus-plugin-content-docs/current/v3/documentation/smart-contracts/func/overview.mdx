@@ -19,17 +19,17 @@ FunC 是一种领域特定的、类 C 语言的、静态类型语言。
 }
 ```
 
-FunC 程序被编译成 Fift 汇编代码，生成对应的 [TON 虚拟机](/learn/tvm-instructions/tvm-overview) 字节码。
+FunC 程序被编译成 Fift 汇编代码，生成对应的 [TON 虚拟机](/v3/documentation/tvm/overview) 字节码。
 
-进一步地，这个字节码（实际上是 [cell树](/learn/overviews/cells)，就像 TON 区块链中的任何其他数据一样）可以用于在区块链中创建智能合约，或者可以在 TVM 的本地实例上运行。
+进一步地，这个字节码（实际上是 [cell树](/v3/documentation/data-formats/cells/overview)，就像 TON 区块链中的任何其他数据一样）可以用于在区块链中创建智能合约，或者可以在 TVM 的本地实例上运行。
 
-<Button href="/develop/func/cookbook" colorType={'primary'} sizeType={'sm'}>
+<Button href="/v3/documentation/smart-contracts/func/cookbook" colorType={'primary'} sizeType={'sm'}>
 
 FunC 语言指南
 
 </Button>
 
-<Button href="/develop/func/types" colorType={'secondary'} sizeType={'sm'}>
+<Button href="/v3/documentation/smart-contracts/func/docs/types" colorType={'secondary'} sizeType={'sm'}>
 
 FunC 文档
 
@@ -39,7 +39,7 @@ FunC 文档
 
 ### 用 JS 编译
 
-开始开发和编译智能合约最方便快捷的方式是使用 Blueprint 框架。更多信息请参阅 [Blueprint](/develop/smart-contracts/sdk/javascript) 部分。
+开始开发和编译智能合约最方便快捷的方式是使用 Blueprint 框架。更多信息请参阅 [Blueprint](/v3/documentation/smart-contracts/getting-started/javascript) 部分。
 
 ```bash
 npm create ton@latest
@@ -49,11 +49,11 @@ npm create ton@latest
 
 如果您想在本地使用原生 TON 编译器 FunC，您需要在机器上设置二进制文件。可以从以下位置下载 FunC 编译器二进制文件，适用于 Windows、MacOS（Intel/M1）和 Ubuntu：
 
-- [环境设置页面](/develop/smart-contracts/environment/installation)
+- [环境设置页面](/v3/documentation/smart-contracts/getting-started/javascript)
 
 :::info
 同时，您始终可以从源代码构建二进制文件，如：
-[FunC 编译器源代码](https://github.com/ton-blockchain/ton/tree/master/crypto/func)（阅读[如何从源代码编译](/develop/howto/compile#func) FunC 编译器）。
+[FunC 编译器源代码](https://github.com/ton-blockchain/ton/tree/master/crypto/func)（阅读[如何从源代码编译](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#func) FunC 编译器）。
 :::
 
 ## TON 课程：FunC
@@ -86,7 +86,7 @@ RU
 ## 教程
 
 :::tip 新手提示
-开始使用 FunC 进行开发的最佳起点：[入门介绍](/develop/smart-contracts/)
+开始使用 FunC 进行开发的最佳起点：[入门介绍](/v3/documentation/smart-contracts/overview)
 :::
 
 社区专家提供的其他材料：

@@ -12,7 +12,7 @@ import TabItem from '@theme/TabItem';
 
 ### 如何转换（用户友好 \<-\> 原始）、组装和从字符串中提取地址？
 
-TON地址在区块链中唯一标识合约，指示其工作链和原始状态哈希。使用两种常见格式[详见](/v3/documentation/smart-contracts/addresses#raw-and-user-friendly-addresses)：原始（工作链和用":"字符分隔的HEX编码哈希）和用户友好（带有特定标志的base64编码）。
+TON地址在区块链中唯一标识合约，指示其工作链和原始状态哈希。使用两种常见格式[详见](/v3/documentation/smart-contracts/addresses/address)：原始（工作链和用":"字符分隔的HEX编码哈希）和用户友好（带有特定标志的base64编码）。
 
 ```
 User-friendly: EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF
@@ -301,7 +301,7 @@ try {
 
 大多数 SDK 都提供以下从钱包发送信息的流程：
 
-- 使用秘钥和工作链（通常为 0，代表 [basechain](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#workchain-blockchain-with-your-own-rules)）创建正确版本（大多数情况下为 v3r2；另请参阅  [wallet versions](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)）的钱包包装器（程序中的对象）。
+- 使用秘钥和工作链（通常为 0，代表 [basechain](/v3/guidelines/dapps/transactions/foundations-of-blockchain#workchain-and-basechain#workchain-blockchain-with-your-own-rules)）创建正确版本（大多数情况下为 v3r2；另请参阅  [wallet versions](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)）的钱包包装器（程序中的对象）。
 - 您还可以创建区块链封装器或 "客户端 "对象，将请求路由到 API 或 liteservers（任选其一）。
 - 然后，在区块链封装器中 _打开_ 合约。这意味着合约对象不再是抽象的，而是代表 TON 主网或测试网中的实际账户。
 - 之后，您就可以编写自己想要的信息并发送它们。根据[高级手册](/v3/guidelines/smart-contracts/howto/wallet#sending-multiple-messages-simultaneously) 中的说明，每次请求最多可发送 4 条信息。
