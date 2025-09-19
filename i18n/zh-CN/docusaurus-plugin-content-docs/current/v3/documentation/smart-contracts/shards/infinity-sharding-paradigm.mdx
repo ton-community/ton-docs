@@ -74,10 +74,10 @@ ISP是TON区块链设计的基础，将每个账户视为其独立的“账户�
 
 ### 5. 区块分割合并的最后决定
 
-验证者 (Validators ) 使用 `want_split`和 `want_merge`标志以及`工作链配置参数`[workchain configuration parameters](/v3/documentation/network/configs/blockchain-configs#param-12).来决定是否要分割或合并分片(shards)。
+验证者 (Validators ) 使用 `want_split`和 `want_merge`标志以及`工作链配置参数`[workchain configuration parameters](/v3/documentation/network/config-params/overview#param-12).来决定是否要分割或合并分片(shards)。
 
-- [区块布局](/develop/data-formats/block-layout)
-- [白皮书](/learn/docs)
+- [区块布局](/v3/documentation/data-formats/layout/blocks)
+- [白皮书](/v3/documentation/introduction)
 - 深度为 `min_split` 的分片不能合并，深度为 `max_split` 的分片不能分割。
 - 如果区块有`want_split`标志，分片将会分割。
 - 如果区块及其兄弟区块都设置了 `want_merge` 标志，则这些分片将会合并。
@@ -142,5 +142,5 @@ TON 的一项功能是即时超立方路由（Instant Hypercube Routing），它
 
 ## 参阅
 
-- [区块布局](/v3/documentation/data-formats/tlb/block-layout)
+- [区块布局](/v3/documentation/data-formats/layout/blocks)
 - [白皮书](/v3/documentation/whitepapers/overview)

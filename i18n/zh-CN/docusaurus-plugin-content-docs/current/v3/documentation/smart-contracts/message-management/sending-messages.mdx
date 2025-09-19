@@ -1,8 +1,8 @@
 # 发送消息
 
-消息的组成、解析和发送位于[TL-B schemas](/develop/data-formats/tl-b-language)、[交易阶段和TVM](/learn/tvm-instructions/tvm-overview)的交汇处。
+消息的组成、解析和发送位于[TL-B schemas](/v3/documentation/data-formats/tlb/overview)、[交易阶段和TVM](/v3/documentation/tvm/overview)的交汇处。
 
-事实上，FunC有[send_raw_message](/develop/func/stdlib#send_raw_message)函数，该函数期望一个序列化消息作为参数。
+事实上，FunC有[send_raw_message](/v3/documentation/smart-contracts/func/docs/stdlib#send_raw_message)函数，该函数期望一个序列化消息作为参数。
 
 由于TON是一个功能广泛的系统，支持所有这些功能的消息可能看起来相当复杂。尽管如此，大多数情况下并不使用那么多功能，消息序列化在大多数情况下可以简化为：
 
@@ -154,7 +154,7 @@ currencies$_ grams:Grams other:ExtraCurrencyCollection
 ## 消息大小
 
 :::info cell大小
-请注意，任何[Cell](/learn/overviews/cells)最多可包含`1023`位。如果您需要存储更多数据，您应该将其分割成块并存储在引用cell中。
+请注意，任何[Cell](/v3/documentation/data-formats/cells/overview)最多可包含`1023`位。如果您需要存储更多数据，您应该将其分割成块并存储在引用cell中。
 :::
 
 例如，如果您的消息体大小为900位长，您无法将其存储在与消息头相同的cell中。
@@ -166,7 +166,7 @@ currencies$_ grams:Grams other:ExtraCurrencyCollection
 
 :::info 消息大小
 
-更多配置参数及其值可在 [这里](/develop/howto/blockchain-configs#param-43) 找到。
+更多配置参数及其值可在 [这里](/v3/documentation/network/config-params/overview#param-43) 找到。
 :::
 
 ## 消息模式

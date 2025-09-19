@@ -7,7 +7,7 @@
 有不同的方式连接到区块链：
 
 1. RPC 数据提供程序或其他应用程序接口：在大多数情况下，您必须\*依赖于其稳定性和安全性。
-2. ADNL 连接：您正在连接一个 [liteserver](/participate/run-nodes/liteserver）。它们可能无法访问，但通过一定程度的验证（在库中实现），无法作恶。
+2. ADNL 连接：您正在连接一个 [liteserver](/v3/guidelines/nodes/running-nodes/liteserver-node)）。它们可能无法访问，但通过一定程度的验证（在库中实现），无法作恶。
 3. Tonlib 二进制：您也在连接 liteserver，因此所有优点和缺点都适用，但您的应用程序还包含一个外部编译的动态加载库。
 4. 仅链下。此类 SDK 可以创建 cell 并将其序列化，然后发送给 API。
 
@@ -17,8 +17,8 @@
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | [ton](https://github.com/ton-org/ton)           | 通过 RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / 等)                    | 方便的客户端库，带有钱包包装器，用于在 TON 区块链上开发 dApp。                                                |
 | [tonweb](https://github.com/toncenter/tonweb)   | 通过 RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / 等)                    | 旧式 TON JS SDK，外部依赖性极低，已在生产中进行过广泛测试。                                                 |
-| [tonkite/adnl](https://github.com/tonkite/adnl) | [ADNL](/develop/network/adnl-tcp) 本地/通过 WebSocket                                                                     | ADNL TypeScript 实现。                                                                 |
-| [tonutils](https://github.com/thekiba/tonutils) | 本地 [ADNL](/develop/network/adnl-tcp)                                                                                  | 基于 TypeScript 的界面，用于构建 TON 生态系统中的应用程序并与之交互。由于依赖于本地 ADNL，因此不能用于浏览器中的区块链交互。           |
+| [tonkite/adnl](https://github.com/tonkite/adnl) | [ADNL](/v3/documentation/network/protocols/adnl/tcp) 本地/通过 WebSocket                                                                     | ADNL TypeScript 实现。                                                                 |
+| [tonutils](https://github.com/thekiba/tonutils) | 本地 [ADNL](/v3/documentation/network/protocols/adnl/tcp)                                                                                  | 基于 TypeScript 的界面，用于构建 TON 生态系统中的应用程序并与之交互。由于依赖于本地 ADNL，因此不能用于浏览器中的区块链交互。           |
 | [foton](https://foton.sh/)                      | 通过 RPC ([Orbs](https://www.orbs.com/ton-access/) / [Toncenter](https://toncenter.com/api/v2/) / 等)                    | 用于与 TON 钱包和整个区块链交互的 TypeScript 工具包。该库将现有的解决方案（Blueprint 和 TON Connect）封装成一个舒适的 API。 |
 
 ### Java

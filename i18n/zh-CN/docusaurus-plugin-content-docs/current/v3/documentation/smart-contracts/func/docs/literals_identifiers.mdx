@@ -51,7 +51,7 @@ FunC 允许使用非常广泛的标识符类别（函数和变量名）。具体
 
 变量名末尾的 `'` 通常用于表示某个旧值的修改版本。例如，几乎所有用于 hashmap 操作的内置修改原语（除了以 `~` 为前缀的原语）都会接收一个 hashmap 并返回新版本的 hashmap 及必要时的其他数据。将这些值命名为相同名称后加 `'` 很方便。
 
-后缀 `?` 通常用于布尔变量（TVM 没有内置的 bool 类型；bools 由整数表示：0 为 false，-1 为 true）或返回某些标志位的函数，通常表示操作的成功（如 [stdlib.fc](/develop/func/stdlib) 中的 `udict_get?`）。
+后缀 `?` 通常用于布尔变量（TVM 没有内置的 bool 类型；bools 由整数表示：0 为 false，-1 为 true）或返回某些标志位的函数，通常表示操作的成功（如 [stdlib.fc](/v3/documentation/smart-contracts/func/docs/stdlib) 中的 `udict_get?`）。
 
 以下是无效的标识符：
 
