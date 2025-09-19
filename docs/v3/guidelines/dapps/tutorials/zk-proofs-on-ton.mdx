@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Zero-knowledge proofs on TON with Circom and Groth16
+# Zero-knowledge proofs on TON
 
 ## Introduction
 
@@ -194,16 +194,116 @@ expect(await verifier.getVerify({ pi_a, pi_b, pi_c, pubInputs })).toBe(true);
 await verifier.sendVerify(deployer.getSender(), { pi_a, pi_b, pi_c, pubInputs, value: toNano('0.15') });
 ```
 
-## Wrap-up
+## Other Languages
 
-You have compiled a minimal example: Circom → trusted setup → export verifier → verification in TON. Based on this, it is easy to build more complex scenarios.
+In this tutorial we followed the path **Circom → snarkjs → export-ton-verifier → TON**.  
+But the same workflow applies to other stacks — the key requirement is to obtain a `proof` and a `verification key` in **snarkjs** format.
 
-## Useful links
+In the example repository — [zk-ton-example](https://github.com/zkTokenTip/zk-ton-example/) — there are already templates for **Noname**, **gnark**, and **arkworks**: you can generate a proof in any of these stacks, then convert it into snarkjs format and verify it both locally and on-chain in the same way.
+
+:::note My conversion utilities  
+I maintain two utilities that help convert proofs and verification keys into a format compatible with **snarkjs**:
+
+- [ark-snarkjs](https://github.com/mysteryon88/ark-snarkjs): use for exporting from **arkworks**
+- [gnark-to-snarkjs](https://github.com/mysteryon88/gnark-to-snarkjs): use for exporting from **gnark**  
+:::
+
+The idea is always the same: generate `proof.json` and `verification_key.json` in **snarkjs** format, then use `export-ton-verifier` and perform verification in TON.
+
+### Arkworks (Rust)
+
+Use the **arkworks** library to generate the proof and verification key, then convert them into snarkjs format with **ark-snarkjs**.
+
+1. Set up an Arkworks project.
+2. Add **ark-snarkjs** as a dependency:
+
+```sh
+cargo add ark-snarkjs
+```
+
+3. Export the proof and verification key to JSON. Simply specify the file path:
+
+```rust
+use ark_snarkjs::{export_proof, export_vk};
+use ark_bls12_381::{Bls12_381, Fr};
+
+let _ = export_proof::<Bls12_381, _>(&proof, &public_inputs, "json/proof.json");
+let _ = export_vk::<Bls12_381, _>(
+    &params.vk,
+    public_inputs.len(),
+    "json/verification_key.json",
+);
+```
+
+The directory and files will be created automatically.
+
+4. Export the verifier contract:
+
+```sh
+# FunC contract
+npx export-ton-verifier ./circuits/Arkworks/MulCircuit/json/verification_key.json ./contracts/verifier_ark.fc
+
+# Tact contract
+npx export-ton-verifier ./circuits/Arkworks/MulCircuit/json/verification_key.json ./contracts/verifier_ark.tact --tact
+
+# Tolk contract
+npx export-ton-verifier ./circuits/Arkworks/MulCircuit/json/verification_key.json ./contracts/verifier_ark.tolk --tolk
+```
+### Gnark (Go)
+
+Use the **gnark** library to generate the proof and verification key, then convert them into snarkjs format with **gnark-to-snarkjs**.
+
+1. Set up a Gnark project.
+2. Add **gnark-to-snarkjs** as a dependency:
+
+```sh
+go get github.com/mysteryon88/gnark-to-snarkjs@latest
+```
+
+3. Export the proof and verification key:
+
+```go
+{
+  proof_out, _ := os.Create("proof.json")
+  defer proof_out.Close()
+  _ = gnarktosnarkjs.ExportProof(proof, []string{"35"}, proof_out)
+}
+{
+  out, _ := os.Create("verification_key.json")
+  defer out.Close()
+  _ = gnarktosnarkjs.ExportVerifyingKey(vk, out)
+}
+```
+
+4. Export the verifier contract:
+
+```sh
+# Tact contract
+npx export-ton-verifier "./circuits/Cubic (gnark)/verification_key.json" ./contracts/verifier_cubic.tact --tact
+
+# FunC contract
+npx export-ton-verifier "./circuits/Cubic (gnark)/verification_key.json" ./contracts/verifier_cubic.fc
+
+# Tolk contract
+npx export-ton-verifier "./circuits/Cubic (gnark)/verification_key.json" ./contracts/verifier_cubic.tolk --tolk
+```
+## Conclusion
+
+You have built a minimal example: **circuit → trusted setup → verifier export → verification in TON**.  
+From here, it is easy to extend the workflow to more complex scenarios.
+
+## Useful Links
 
 - Example repository: [zk-ton-example](https://github.com/zkTokenTip/zk-ton-example/)
-- Verifier exporter: [export-ton-verifier](https://github.com/mysteryon88/export-ton-verifier)
+- Verifier export library: [export-ton-verifier](https://github.com/mysteryon88/export-ton-verifier)
+- Additional utilities:
+    - [ark-snarkjs](https://github.com/mysteryon88/ark-snarkjs)
+    - [gnark-to-snarkjs](https://github.com/mysteryon88/gnark-to-snarkjs)
+- Using ZK proofs in Tact: [docs.tact](https://docs.tact-lang.org/cookbook/zk-proofs/)
 - Circom: [docs.circom.io](https://docs.circom.io/)
 - Noname: [zksecurity/noname](https://github.com/zksecurity/noname)
-- SnarkJS: [github.com/iden3/snarkjs](https://github.com/iden3/snarkjs)
+- Gnark: [Consensys/gnark](https://github.com/Consensys/gnark)
+- Arkworks: [arkworks.rs](https://arkworks.rs/)
+- SnarkJS: [iden3/snarkjs](https://github.com/iden3/snarkjs)
 
 <Feedback />

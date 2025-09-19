@@ -1,6 +1,6 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Zero-knowledge доказательства в TON с Circom и Groth16
+# Доказательства с нулевым разглашением в TON
 
 ## Введение
 
@@ -197,15 +197,109 @@ expect(await verifier.getVerify({ pi_a, pi_b, pi_c, pubInputs })).toBe(true);
 await verifier.sendVerify(deployer.getSender(), { pi_a, pi_b, pi_c, pubInputs, value: toNano('0.15') });
 ```
 
+## Другие языки
+
+В этом руководстве мы шли по пути **Circom → snarkjs → export-ton-verifier → TON**. Но тот же конвейер работает и для других стеков — важно лишь получить `proof` и `verification key` в формате snarkjs.
+
+В репозитории с примерами — [zk-ton-example](https://github.com/zkTokenTip/zk-ton-example/) — уже есть заготовки для **Noname**, **gnark** и **arkworks**: вы можете собрать доказательство в любом из этих стеков, затем сконвертировать его в формат snarkjs и проверить верификацию локально и on-chain таким же способом.
+
+:::note Мои утилиты конвертации  
+У меня есть две утилиты, которые помогают перенести доказательства и ключи верификации в формат, совместимый со snarkjs:
+- [ark-snarkjs](https://github.com/mysteryon88/ark-snarkjs): для экспорта из **arkworks**
+- [gnark-to-snarkjs](https://github.com/mysteryon88/gnark-to-snarkjs): для экспорта из **gnark**  
+:::
+
+Идея одна: получить `proof.json` и `verification_key.json` в формате snarkjs, а дальше использовать `export-ton-verifier` и проверять в TON.
+### Arkworks (Rust)
+
+Используйте библиотеку **arkworks** для генерации доказательства и верификационного ключа, затем сконвертируйте всё в формат snarkjs через **ark-snarkjs**.
+
+1. Подготовьте проект с использованием arkworks.
+2. Добавьте в зависимости пакет **ark-snarkjs**:
+
+```sh
+cargo add ark-snarkjs
+```
+
+3. Экспортируйте доказательство и ключ верификации в формат JSON — достаточно указать путь к файлу:
+
+```rust
+use ark_snarkjs::{export_proof, export_vk};
+use ark_bls12_381::Bls12_381;
+
+let _ = export_proof::<Bls12_381, _>(&proof, &public_inputs, "json/proof.json");
+let _ = export_vk::<Bls12_381, _>(
+    &params.vk,
+    public_inputs.len(),
+    "json/verification_key.json",
+);
+```
+
+Каталог и файлы будут созданы автоматически.
+
+4. Экспортируйте контракт-верификатор:
+
+```sh
+# экспорт FunC контракта
+npx export-ton-verifier ./circuits/Arkworks/MulCircuit/json/verification_key.json ./contracts/verifier_ark.fc
+# экспорт Tact контракта
+npx export-ton-verifier ./circuits/Arkworks/MulCircuit/json/verification_key.json ./contracts/verifier_ark.tact --tact
+# экспорт Tolk контракта
+npx export-ton-verifier ./circuits/Arkworks/MulCircuit/json/verification_key.json ./contracts/verifier_ark.tolk --tolk
+```
+### Gnark (Go)
+
+Используйте библиотеку **gnark** для генерации доказательства и верификационного ключа, затем сконвертируйте всё в формат snarkjs через **gnark-to-snarkjs**.
+
+1. Подготовьте проект gnark.
+2. Добавьте в зависимости пакет **gnark-to-snarkjs**:
+
+```sh
+go get github.com/mysteryon88/gnark-to-snarkjs@latest
+```
+
+3. Экспортируйте доказательство и ключ верификации:
+
+```go
+{
+  proof_out, _ := os.Create("proof.json")
+  defer proof_out.Close()
+  _ = gnarktosnarkjs.ExportProof(proof, []string{"35"}, proof_out)
+}
+{
+  out, _ := os.Create("verification_key.json")
+  defer out.Close()
+  _ = gnarktosnarkjs.ExportVerifyingKey(vk, out)
+}
+```
+
+4. Экспортируйте контракт-верификатор:
+
+```sh
+# экспорт Tact контракта
+npx export-ton-verifier "./circuits/Cubic (gnark)/verification_key.json" ./contracts/verifier_cubic.tact --tact
+# экспорт FunC контракта
+npx export-ton-verifier "./circuits/Cubic (gnark)/verification_key.json" ./contracts/verifier_cubic.fc
+# экспорт Tolk контракта
+npx export-ton-verifier "./circuits/Cubic (gnark)/verification_key.json" ./contracts/verifier_cubic.tolk --tolk
+```
+
 ## Заключение
 
-Вы собрали минимальный пример: Circom → trusted setup → экспорт верификатора → проверка в TON. На этой базе легко строить более сложные сценарии.
+Вы собрали минимальный пример: **схема → trusted setup → экспорт верификатора → проверка в TON**. На этой базе легко строить более сложные сценарии.
+
 ## Полезные ссылки
 
-- Репозиторий с примером: [zk-ton-example](https://github.com/zkTokenTip/zk-ton-example/) 
-- Библиотека экспорта контрактов: [export-ton-verifier](https://github.com/mysteryon88/export-ton-verifier) 
+- Репозиторий с примером: [zk-ton-example](https://github.com/zkTokenTip/zk-ton-example/)
+- Библиотека экспорта контрактов: [export-ton-verifier](https://github.com/mysteryon88/export-ton-verifier)
+- Дополнительные библиотеки:
+    - [ark-snarkjs](https://github.com/mysteryon88/ark-snarkjs)
+    - [gnark-to-snarkjs](https://github.com/mysteryon88/gnark-to-snarkjs)
+- Использование ZKP в Tact: [docs.tact](https://docs.tact-lang.org/cookbook/zk-proofs/)
 - Circom: [docs.circom.io](https://docs.circom.io/)
 - Noname: [zksecurity/noname](https://github.com/zksecurity/noname)
+- Gnark: [Consensys/gnark](https://github.com/Consensys/gnark)
+- Arkworks: [arkworks.rs](https://arkworks.rs/)
 - SnarkJS: [iden3/snarkjs](https://github.com/iden3/snarkjs)
 
 <Feedback />
