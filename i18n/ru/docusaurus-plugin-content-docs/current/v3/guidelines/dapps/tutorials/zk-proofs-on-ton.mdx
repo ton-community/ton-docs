@@ -11,7 +11,7 @@ import Feedback from '@site/src/components/Feedback';
 :::note
 Это руководство также применимо к схемам, написанным на языке [Noname](https://github.com/zksecurity/noname), так как библиотека `export-ton-verifier` интегрируется со `snarkjs`, который, в свою очередь, поддерживает интеграцию с языком Noname.  
 
-Примеры можно посмотреть в репозитории [zk-ton-example](https://github.com/zkTokenTip/zk-ton-example/).
+Примеры можно посмотреть в репозитории [zk-ton-example](https://github.com/zk-examples/zk-ton-examples/).
 :::
 ## О чем это руководство
 
@@ -201,7 +201,7 @@ await verifier.sendVerify(deployer.getSender(), { pi_a, pi_b, pi_c, pubInputs, v
 
 В этом руководстве мы шли по пути **Circom → snarkjs → export-ton-verifier → TON**. Но тот же конвейер работает и для других стеков — важно лишь получить `proof` и `verification key` в формате snarkjs.
 
-В репозитории с примерами — [zk-ton-example](https://github.com/zkTokenTip/zk-ton-example/) — уже есть заготовки для **Noname**, **gnark** и **arkworks**: вы можете собрать доказательство в любом из этих стеков, затем сконвертировать его в формат snarkjs и проверить верификацию локально и on-chain таким же способом.
+В репозитории с примерами — [zk-ton-examples](https://github.com/zk-examples/zk-ton-examples/) — уже есть заготовки для **Noname**, **gnark** и **arkworks**: вы можете собрать доказательство в любом из этих стеков, затем сконвертировать его в формат snarkjs и проверить верификацию локально и on-chain таким же способом.
 
 :::note Мои утилиты конвертации  
 У меня есть две утилиты, которые помогают перенести доказательства и ключи верификации в формат, совместимый со snarkjs:
@@ -290,7 +290,7 @@ npx export-ton-verifier "./circuits/Cubic (gnark)/verification_key.json" ./contr
 
 ## Полезные ссылки
 
-- Репозиторий с примером: [zk-ton-example](https://github.com/zkTokenTip/zk-ton-example/)
+- Репозиторий с примером: [zk-ton-examples](https://github.com/zk-examples/zk-ton-examples/)
 - Библиотека экспорта контрактов: [export-ton-verifier](https://github.com/mysteryon88/export-ton-verifier)
 - Дополнительные библиотеки:
     - [ark-snarkjs](https://github.com/mysteryon88/ark-snarkjs)
