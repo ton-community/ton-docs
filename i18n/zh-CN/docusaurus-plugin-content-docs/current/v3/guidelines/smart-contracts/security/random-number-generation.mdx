@@ -8,13 +8,13 @@
 
 这些算法通常要求你提供一个_seed_值，该值将被用来生成一系列_伪随机_数。因此，如果你多次运行相同的程序并使用相同的_seed_，你将始终得到相同的结果。在TON中，每个区块的_seed_是不同的。
 
-- [区块随机seed的生成](/develop/smart-contracts/security/random)
+- [区块随机seed的生成](/v3/guidelines/smart-contracts/security/random)
 
 因此，要预测智能合约中`random()`函数的结果，你只需要知道当前区块的`seed`，如果你不是验证者，这是不可能的。
 
 ## 只需使用`randomize_lt()`
 
-为了使随机数生成不可预测，你可以将当前的[逻辑时间](/develop/smart-contracts/guidelines/message-delivery-guarantees#what-is-a-logical-time)添加到seed中，这样不同的交易将具有不同的seed和结果。
+为了使随机数生成不可预测，你可以将当前的[逻辑时间](/v3/documentation/smart-contracts/message-management/messages-and-transactions#what-is-a-logical-time)添加到seed中，这样不同的交易将具有不同的seed和结果。
 
 只需在生成随机数之前调用`randomize_lt()`，你的随机数就会变得不可预测：
 
@@ -97,10 +97,10 @@ const echo_address = "Ef8Nb7157K5bVxNKAvIWreRcF0RcUlzcCA7lwmewWVNtqM3s"a;
 
 ## 这种方法100%安全吗？
 
-虽然它确实有所帮助，但如果入侵者同时控制了几个验证者，仍然有可能被操纵。在这种情况下，他们可能会以某种概率[影响](/develop/smart-contracts/security/random#conclusion)依赖的_seed_。即使这种可能性极小，仍然值得考虑。
+虽然它确实有所帮助，但如果入侵者同时控制了几个验证者，仍然有可能被操纵。在这种情况下，他们可能会以某种概率[影响](/v3/guidelines/smart-contracts/security/random#conclusion)依赖的_seed_。即使这种可能性极小，仍然值得考虑。
 
 随着最新的TVM升级，向`c7`寄存器中引入新值可以进一步提高随机数生成的安全性。具体来说，升级在`c7`寄存器中添加了关于最近16个主链区块的信息。
 
 由于主链区块信息的不断变化性质，它可以作为随机数生成的额外熵源。通过将这些数据纳入你的随机算法中，你可以创建出更难以被潜在对手预测的数字。
 
-有关此TVM升级的更多详细信息，请参考[TVM升级](/learn/tvm-instructions/tvm-upgrade-2023-07)。
+有关此TVM升级的更多详细信息，请参考[TVM升级](/v3/documentation/tvm/changelog/tvm-upgrade-2023-07)。

@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 Before proceeding with this tutorial, we recommend familiarizing yourself with the [single nominator pool specification](/v3/documentation/smart-contracts/contracts-specs/single-nominator-pool).
 :::
 
-### Set up single nominator mode
+## Set up single nominator mode
 
 :::caution
 Before starting, ensure you have topped up and [activated](/v3/guidelines/nodes/running-nodes/validator-node#activate-the-wallets) the validator's wallet.
@@ -17,7 +17,7 @@ Before starting, ensure you have topped up and [activated](/v3/guidelines/nodes/
 
 1. Enable single nominator mode:
 
-```bash
+```text
 MyTonCtrl> enable_mode single-nominator
 ```
 
@@ -32,7 +32,7 @@ single-nominator  enabled  Orbs's single nominator pools.
 3. Create a pool:
 
 ```bash
-MyTonCtrl> new_single_pool <pool-name> <owner_address>
+MyTonCtrl> new_single_pool <pool-name> <owner-address>
 ```
 
 If you have already created a pool, you can import it:
@@ -63,7 +63,7 @@ Name       Status  Balance  Version   Address
 test-pool  active  0.99389  spool_r2  kf_JcC5pn3etTAdwOnc16_tyMmKE8-ftNUnf0OnUjAIdDJpX
 ```
 
-You can manage this pool via MyTonCtrl like a standard nominator pool.
+You can manage this pool in MyTonCtrl as a standard nominator pool.
 
 :::info
 If the pool's balance is sufficient to participate in both rounds (`balance > min_stake_amount * 2`), MyTonCtrl will automatically participate in both rounds using `stake = balance / 2`, unless you manually set the stake using the `set stake` command. This behavior differs from using a nominator pool but resembles staking with a validator wallet.
@@ -145,7 +145,7 @@ $ fift -s ./scripts/fift/str-to-addr.fif Ef-kC0..._WLqgs
 
 7. Back up the deployer private key (`./build/deploy.config.json`) and `single-nominator.addr` files.
 8. Copy `single-nominator.addr` to `mytoncore/pools/single-nominator-1.addr`.
-9. Send a stake from the owner's address to the single nominator's address.
+9. Send a stake from the owner address to the single-nominator address.
 
 ### Withdrawals from the single nominator
 
@@ -203,13 +203,13 @@ npx ts-node scripts/ts/withdraw-deeplink.ts <single-nominator-addr> <withdraw-am
 
 You can deposit using **MyTonCtrl** with the following commands:
 
-```sh
-MyTonCtrl> mg <from-wallet-name> <pool-account-addr> <amount>
+```bash
+MyTonCtrl> mg <from-wallet-name> <pool-addr> <amount>
 ```
 
 or
 
-```sh
+```bash
 MyTonCtrl> deposit_to_pool <pool-addr> <amount>
 ```
 
@@ -226,7 +226,7 @@ If the wallet does not open automatically, manually send the transaction by copy
 
 You can withdraw funds using the following command:
 
-```sh
+```bash
 MyTonCtrl> withdraw_from_pool <pool-addr> <amount>
 ```
 
@@ -299,23 +299,23 @@ func WithdrawSingleNominatorMessage(single_nominator_address string, query_id, a
 
 ### Set up a single nominator pool
 
-Configure the single nominator pool contract using the [following instructions](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-a-single-nominator-pool).
+Configure the single nominator pool contract using the [following instructions](/v3/guidelines/smart-contracts/howto/single-nominator-pool#create-a-single-nominator-pool).
 
 ### Join the elections
 
-[Deposit](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-a-single-nominator-pool) the minimum stake amount into the single nominator pool.
+[Deposit](/v3/guidelines/smart-contracts/howto/single-nominator-pool#deposit-to-pool) the minimum stake amount into the single nominator pool.
 
 **MyTonCtrl** will automatically join the elections. You can set the stake amount that MyTonCtrl sends to the [elector contract](/v3/documentation/smart-contracts/contracts-specs/governance#elector) approximately every 18 hours on Mainnet and 2 hours on Testnet.
 
-```sh
+```bash
 MyTonCtrl> set stake 90000
 ```
 
 Find the **minimum stake** amount using the `status` command.
 
-![](/img/docs/single-nominator/tetsnet-conf.png)
+![](/img/docs/single-nominator/testnet-status.png)
 
-You can set `stake` to `null`, which will calculate based on the `stakePercent` value (check with `status_settings`).
+Set `stake` to `null` to have it calculated from `stakePercent` (see `status_settings`).
 
 Verify if the election has started:
 
@@ -337,7 +337,7 @@ If the election has started and the single nominator pool is activated, the vali
 
 Check the validator wallet:
 
-```sh
+```bash
 MyTonCtrl> wl
 Name                  Status  Balance           Ver  Wch  Address
 validator_wallet_001  active  995.828585374     v1   -1   kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
@@ -345,7 +345,7 @@ validator_wallet_001  active  995.828585374     v1   -1   kf_dctjwS4tqWdeG4GcCLJ
 
 Check the transaction history:
 
-```sh
+```bash
 MyTonCtrl> vas kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct
 Address                                           Status  Balance        Version
 kf_dctjwS4tqWdeG4GcCLJ53rkgxZOGGrdDzHJ_mxPkm_Xct  active  995.828585374  v1r3
@@ -400,7 +400,7 @@ MyTonCtrl> disable_mode validator
 
 1. Disable the `validator` mode to stop participating in elections.
 2. Wait for both stakes to return from the elector.
-3. Follow the [steps](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-a-single-nominator-pool) to set up a single nominator pool.
+3. Follow the [steps](/v3/guidelines/smart-contracts/howto/single-nominator-pool#set-up-single-nominator-mode) to set up a single nominator pool.
 
 ## Single nominator pool client
 

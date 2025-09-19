@@ -78,7 +78,7 @@ PoW Giver 智能合约框架定义了最初的挖矿流程，为 TON 奠定了�
 要下载和创建 TON 钱包，请按以下简单步骤操作：
 
 1. 在智能手机上安装 Tonkeeper 应用程序。可在 [此处](https://Tonkeeper.com/) 下载。
-2. 接下来，您需要在 Tonkeeper 中 [启用测试模式](/v3/concepts/dive-into-ton/tonecosystem/wallet-apps#tonkeeper-test-environment)。
+2. 接下来，您需要在 Tonkeeper 中 [启用测试模式](/v3/documentation/smart-contracts/getting-started/testnet#wallets)。
 
 简单！现在我们开始开发。
 
@@ -194,7 +194,7 @@ PoW Giver 智能合约框架定义了最初的挖矿流程，为 TON 奠定了�
 
 - **智能合约地址** 作为目的地。我们的目标是从 **工作防伪智能合约** 中挖掘一个 NFT，因此我们需要一个地址来获取当前的挖矿复杂度。
 - **API provider** 向 TON 区块链提出请求。TON 有多种 [API 类型](/v3/guidelines/dapps/apis-sdks/api-types)，用于不同目的。我们将使用 [toncenter.com](https://toncenter.com/) API 的 testnet 版本。
-- **JavaScript SDK**：需要使用 JavaScript SDK（请注意，SDK 是软件开发工具包）来解析正在使用的智能合约地址，并为创建 API 请求做好准备。为了更好地理解 TON 地址以及为什么需要对其进行解析以执行此过程，请参阅此 [资源](/v3/documentation/smart-contracts/addresses)，以了解我们为什么要对其进行解析。为了执行此过程，我们将使用 [`@ton/ton`](https://github.com/ton-org/ton)。
+- **JavaScript SDK**：需要使用 JavaScript SDK（请注意，SDK 是软件开发工具包）来解析正在使用的智能合约地址，并为创建 API 请求做好准备。为了更好地理解 TON 地址以及为什么需要对其进行解析以执行此过程，请参阅此 [资源](/v3/documentation/smart-contracts/addresses/address)，以了解我们为什么要对其进行解析。为了执行此过程，我们将使用 [`@ton/ton`](https://github.com/ton-org/ton)。
 
 下一节我们将介绍用户如何使用 TONCenter API 和`@ton/ton`向TON区块链发送初始请求，以便从PoW智能合约接收数据。
 
@@ -227,7 +227,7 @@ mine();
 
 #### 地址解析
 
-在 TON 上，智能合约地址有不同的形式，可以使用多种标志类型。在这里，我们将使用_用户友好地址形式。也就是说，如果您想了解更多关于不同智能合约地址类型的信息，请随时查看我们文档中的附加 [资源](/v3/documentation/smart-contracts/addresses)。
+在 TON 上，智能合约地址有不同的形式，可以使用多种标志类型。在这里，我们将使用_用户友好地址形式。也就是说，如果您想了解更多关于不同智能合约地址类型的信息，请随时查看我们文档中的附加 [资源](/v3/documentation/smart-contracts/addresses/address)。
 
 为了让矿工正常工作，我们需要添加两种不同的智能合约地址类型。其中包括
 
@@ -266,7 +266,7 @@ const client = new TonClient({ endpoint });
 ```
 
 :::info 在生产中该做些什么？
-最好使用 RPC 节点提供程序，或运行自己的 ton-http-api 实例。更多信息请访问 [TonCenter API 页面](/v3/guidelines/dapps/apis-sdks/ton-http-apis)。
+最好使用 RPC 节点提供程序，或运行自己的 ton-http-api 实例。更多信息请访问 [TonCenter API 页面](/v3/guidelines/dapps/apis-sdks/api-types#http-api)。
 :::
 
 ### 从 TON 区块链接收采矿数据
@@ -336,7 +336,7 @@ TupleReader {
 
 :::info  TON  gas 参数
 
-1. 要更好地了解 TON 虚拟机（TVM）的运行方式以及 TON 如何处理事务，请查阅 [TVM 概述部分](/v3/documentation/tvm/tvm-overview)。
+1. 要更好地了解 TON 虚拟机（TVM）的运行方式以及 TON 如何处理事务，请查阅 [TVM 概述部分](/v3/documentation/tvm/overview)。
 2. 其次，如果您有兴趣了解更多有关 TON 交易费和 gas 费如何运作的信息，请考虑阅读我们文档中的[本节](/v3/documentation/smart-contracts/transaction-fees/fees)。
 3. 最后，要更好地了解执行 TVM 指令所需的确切 gas 值，请参阅我们文档中的 [本节](/v3/documentation/tvm/instructions#gas-prices)。
    :::
@@ -411,7 +411,7 @@ npm run start:script
 幸运的是，[README文件](https://github.com/ton-community/ton-onboarding-challenge#mining-process-deep-dive)允许我们检索给出正确指导来实现此目标。正如您所看到的，上面的README文件包括一个表格，其中包含某些字段和cell类型（标题为“Layout of Proof of Work Cell”），来帮助实现我们期望的结果。
 
 :::info 什么是 cell ？
-cell是TON上的数据存储结构，用于多种目的，包括提高网络可扩展性和智能合约交易速度。我们不会在这里详细讨论，但如果您对cell的复杂性及其工作方式感兴趣，可以考虑深入了解[我们文档的这一部分](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage)。
+cell是TON上的数据存储结构，用于多种目的，包括提高网络可扩展性和智能合约交易速度。我们不会在这里详细讨论，但如果您对cell的复杂性及其工作方式感兴趣，可以考虑深入了解[我们文档的这一部分](/v3/concepts/dive-into-ton/ton-blockchain/cells)。
 :::
 
 幸运的是，本教程中使用的所有数据结构已经用TypeScript编写。请使用 _NftGiver.data.ts_ 中的 `MineMessageParams` 对象来构建一个 _Queries_ 交易：

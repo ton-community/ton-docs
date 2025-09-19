@@ -1,7 +1,5 @@
 import Feedback from '@site/src/components/Feedback';
 
-import Button from '@site/src/components/button'
-
 # TON smart contract security best practices
 
 This comprehensive guide covers the most critical security vulnerabilities found in TON smart contracts, based on real-world audits and security research. Understanding these pitfalls is essential for developing secure smart contracts on TON Blockchain.
@@ -71,10 +69,10 @@ Improper handling of signed integers can allow attackers to exploit overflow/und
 (cell,()) transfer_voting_power(cell votes, slice from, slice to, int amount) impure {
     int from_votes = get_voting_power(votes, from);
     int to_votes = get_voting_power(votes, to);
-
+    
     from_votes -= amount;  // Can become negative!
     to_votes += amount;
-
+    
     votes~set_voting_power(from, from_votes);
     votes~set_voting_power(to, to_votes);
     return (votes,());
@@ -86,12 +84,12 @@ Improper handling of signed integers can allow attackers to exploit overflow/und
 (cell,()) transfer_voting_power(cell votes, slice from, slice to, int amount) impure {
     int from_votes = get_voting_power(votes, from);
     int to_votes = get_voting_power(votes, to);
-
+    
     throw_unless(998, from_votes >= amount);  // Validate sufficient balance
-
+    
     from_votes -= amount;
     to_votes += amount;
-
+    
     votes~set_voting_power(from, from_votes);
     votes~set_voting_power(to, to_votes);
     return (votes,());
@@ -133,19 +131,19 @@ Failing to handle bounced messages can lead to inconsistent state and fund loss.
 () recv_internal(int msg_value, cell in_msg_full, slice in_msg_body) impure {
     slice in_msg_full_slice = in_msg_full.begin_parse();
     int msg_flags = in_msg_full_slice~load_msg_flags();
-
+    
     if (msg_flags & 1) {  // Check bounced flag
         on_bounce(in_msg_body);
         return ();
     }
-
+    
     ;; Normal message processing
 }
 
 () on_bounce(slice in_msg_body) impure {
     in_msg_body~skip_bits(32);  // Skip 0xFFFFFFFF
     int op = in_msg_body~load_op();
-
+    
     ;; Handle specific bounced operations
     if (op == op::transfer) {
         ;; Restore user balance
@@ -157,7 +155,7 @@ Failing to handle bounced messages can lead to inconsistent state and fund loss.
 
 **Severity:** 🔴 **Critical**
 
-All data stored on blockchain is public and permanent, including transaction history.
+All data stored on the blockchain is public and permanent, including transaction history.
 
 #### Vulnerable approach:
 ```func
@@ -184,7 +182,7 @@ Destroying accounts without proper checks can lead to fund loss in race conditio
     if (in_msg_body.slice_empty?()) {
         return ();  ;; Dangerous: empty message handling
     }
-
+    
     ;; Process and destroy account
     send_raw_message(msg, 128 + 32);  ;; Destroys account
 }
@@ -195,10 +193,10 @@ Destroying accounts without proper checks can lead to fund loss in race conditio
 () recv_internal(msg_value, in_msg_full, in_msg_body) {
     ;; Proper validation before any destruction
     throw_unless(error::unauthorized, authorized_sender?(sender));
-
+    
     ;; Ensure no pending operations
     throw_unless(error::pending_operations, safe_to_destroy?());
-
+    
     ;; Then proceed with destruction if really needed
 }
 ```
@@ -215,11 +213,11 @@ External messages without replay protection can be re-executed multiple times.
     slice ds = get_data().begin_parse();
     int stored_seqno = ds~load_uint(32);
     int msg_seqno = in_msg~load_uint(32);
-
+    
     throw_unless(33, msg_seqno == stored_seqno);  ;; Prevent replay
-
+    
     accept_message();
-
+    
     ;; Update sequence number
     set_data(begin_cell().store_uint(stored_seqno + 1, 32)...);
 }
@@ -277,7 +275,7 @@ Message cascades can span multiple blocks, allowing attackers to initiate parall
 () handle_transfer(slice sender, int amount) impure {
     int current_balance = get_balance(sender);
     throw_unless(error::insufficient_funds, current_balance >= amount);
-
+    
     ;; Don't assume balance will remain the same in subsequent messages
 }
 ```
@@ -318,9 +316,9 @@ Accepting transfers without validating the sender's jetton wallet address.
 () handle_jetton_transfer(slice sender_address, int jetton_amount, slice from_user) impure {
     ;; Calculate expected jetton wallet address
     slice expected_wallet = calculate_jetton_wallet_address(from_user, jetton_master_address);
-
+    
     throw_unless(error::invalid_jetton_wallet, equal_slice_bits(sender_address, expected_wallet));
-
+    
     ;; Process valid transfer
 }
 ```
@@ -386,7 +384,7 @@ Contracts can be updated if not properly protected, changing their behavior unex
 () update_code(cell new_code) impure {
     throw_unless(error::unauthorized, authorized_admin?(sender()));
     throw_unless(error::invalid_code, validate_code?(new_code));
-
+    
     set_code(new_code);
 }
 ```
@@ -507,22 +505,22 @@ Before deploying your smart contract, ensure you've addressed:
 
 ## See also
 
-- [Random number generation](/v3/guidelines/smart-contracts/security/random/)
+- [Random number generation](/v3/guidelines/smart-contracts/security/random-number-generation/)
 - [Secure programming guide](/v3/guidelines/smart-contracts/security/secure-programming/)
 - [TON hack challenge analysis](/v3/guidelines/smart-contracts/security/ton-hack-challenge-1/)
 - [Testing guidelines](/v3/guidelines/smart-contracts/testing/overview/)
-- [Message structure](/v3/documentation/smart-contracts/messages/)
-- [Gas and fees](/v3/documentation/smart-contracts/fees/)
-- [Jetton standard](/v3/documentation/smart-contracts/standards/jettons/)
-- [TVM transaction phases](/v3/documentation/tvm/overview/#transaction-phases)
+- [Message structure](/v3/documentation/smart-contracts/message-management/messages-and-transactions/)
+- [Gas and fees](/v3/documentation/smart-contracts/transaction-fees/fees/)
+- [Jetton standard](/v3/guidelines/dapps/asset-processing/jettons/)
+- [TVM transaction phases](/v3/documentation/tvm/overview#transactions-and-phases)
 - [TVM instructions](/v3/documentation/tvm/instructions/)
-- [FunC functions and modifiers](/v3/documentation/smart-contracts/func/functions/)
+- [FunC functions and modifiers](/v3/documentation/smart-contracts/func/docs/functions/)
 
 ## References
 
 - [SlowMist TON Security Best Practices](https://github.com/slowmist/Toncoin-Smart-Contract-Security-Best-Practices)
 - [TON Hack Challenge #1](https://github.com/ton-blockchain/hack-challenge-1)
 - [TON Smart Contract Guidelines](/v3/guidelines/smart-contracts/guidelines/)
-- [TVM Exit Codes](/v3/documentation/tvm/exit-codes/)
+- [TVM Exit Codes](/v3/documentation/tvm/exit-codes)
 
-<Feedback />
+<Feedback /> 

@@ -1,16 +1,16 @@
 import Feedback from '@site/src/components/Feedback';
 
-# Status
+# MyTonCtrl status
 
 This document serves as a comprehensive guide to help you understand the output of **MyTonCtrl**'s `status` command.
 
-![status](/img/docs/mytonctrl/status.png)
+![MyTonCtrl status screen](/img/docs/mytonctrl/status.png)
 
 ## TON network status
 
 ### Network name
 
-Possible values are: `mainnet`, `testnet`, and `unknown`. However, the value `unknown` should never be displayed.
+Possible values are: `mainnet`, `testnet`, and `unknown`. However, the value `unknown` should not appear under normal conditions.
 
 ### Number of validators
 
@@ -18,7 +18,7 @@ There are two key values: one represented in green and the other in yellow. The 
 
 Both values must be integers greater than 0. You can obtain the green value using the command `getconfig 34` with MyTonCtrl. For more information, please check the [relevant section here](/v3/documentation/network/config-params/overview#param-32-34-and-36) regarding parameters 32, 34, and 36.
 
-### Number of shardchains
+### Number of ShardChains
 
 This value must be an integer greater than 0 and is displayed in green.
 
@@ -68,17 +68,17 @@ This section also displays three integers, following the same logic as the `load
 
 **Absolute and Relative Memory Usage:** This refers to the usage of RAM and swap memory in two pairs of integers.
 
-### Disk load average
+### Disk usage
 
 This is similar to the `memory load`. However, it relates to the usage of all disk space instead.
 
 ### Mytoncore status
 
-The status indicator should be green, showing how long Mytoncore has been operational.
+The indicator should be green and show how long mytoncore has been operational.
 
-### Local validator status
+### Local validator uptime
 
-This indicator should also be green, displaying the uptime of the local validator.
+This indicator should be green, displaying the uptime of the local validator.
 
 ### Local validator out of sync
 
@@ -88,7 +88,7 @@ This integer value should be less than 20, indicating that it is functioning pro
 
 This entry displays the number of MasterChain blocks that are currently out of service.
 
-### Local Validator database size
+### Local validator database size
 
 The absolute load size should be less than 1000 GB, and the relative load should be under 80%.
 
@@ -104,31 +104,31 @@ This shows the hash of the commit and the name of the branch.
 
 ### Configurator address
 
-The address of the configurator. Refer to [this parameter-0](/v3/documentation/network/config-params/overview#param-0) for more information.
+The address of the configurator. Refer to [Param 0](/v3/documentation/network/config-params/overview#param-0) for more information.
 
 ### Elector address
 
-The address of the elector. Refer to [this parameter-1](/v3/documentation/network/config-params/overview#param-1) for additional details.
+The address of the elector. Refer to [Param 1](/v3/documentation/network/config-params/overview#param-1) for additional details.
 
 ### Validation period
 
-The duration of the validation period in seconds. Check [this parameter-15](/v3/documentation/network/config-params/overview#param-15).
+The duration of the validation period in seconds. Check [Param 15](/v3/documentation/network/config-params/overview#param-15).
 
 ### Duration of elections
 
-This refers to the duration of elections in seconds. To know more, refer to [this parameter-15](/v3/documentation/network/config-params/overview#param-15).
+This refers to the duration of elections in seconds. To know more, refer to [Param 15](/v3/documentation/network/config-params/overview#param-15).
 
 ### Hold period
 
-The hold period in seconds, with details available at [this parameter-15](/v3/documentation/network/config-params/overview#param-15).
+The hold period in seconds, with details available at [Param 15](/v3/documentation/network/config-params/overview#param-15).
 
 ### Minimum stake
 
-The minimum stake required in TONs. Check [this parameter-17](/v3/documentation/network/config-params/overview#param-17).
+The minimum stake required in Toncoins. Check [Param 17](/v3/documentation/network/config-params/overview#param-17).
 
 ### Maximum stake
 
-The maximum stake allowed in TONs. Check [this parameter-17](/v3/documentation/network/config-params/overview#param-17).
+The maximum stake allowed in Toncoins. Check [Param 17](/v3/documentation/network/config-params/overview#param-17).
 
 ## TON timestamps
 
@@ -150,11 +150,10 @@ The timestamp for when elections begin. This will be green if it represents a fu
 
 ### End of elections
 
-The timestamp indicating the end of elections is displayed in green if it predicts a future date.
+The timestamp indicating the end of elections is displayed in green if it indicates a future date.
 
-### Beginning of the next elections
+### Start of the next elections
 
 The timestamp for the start of the next elections will appear green if it signifies a future event.
 
 <Feedback />
-

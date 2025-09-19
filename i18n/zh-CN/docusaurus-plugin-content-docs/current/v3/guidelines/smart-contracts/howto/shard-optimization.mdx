@@ -145,7 +145,7 @@ if((addressA.hash[0] >> 4) == (addressb.hash[0] >> 4)) {
 }
 ```
 
-从人类的角度来看，检查地址分片的最简单方法是查看地址 [原始格式](/v3/concepts/dive-into-ton/ton-blockchain/smart-contract-addresses#raw-address)。
+从人类的角度来看，检查地址分片的最简单方法是查看地址 [原始格式](/v3/documentation/smart-contracts/addresses/address-formats#raw-address)。
 可以使用 [address page](https://ton.org/address/)。
 让我们以 USDT 地址为例进行测试：`EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs`。
 您将看到 `0:b113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe` 的原始表示，前 4 位基本上是第一个十六进制符号 - `b`。
@@ -153,7 +153,7 @@ if((addressA.hash[0] >> 4) == (addressb.hash[0] >> 4)) {
 
 ### 如何将合约部署到某个分片
 
-为了理解其工作原理，我们应该了解合约地址 [depends](/v3/documentation/smart-contracts/addresses#account-id) 是如何依赖于其代码和数据的。
+为了理解其工作原理，我们应该了解合约地址 [depends](/v3/documentation/smart-contracts/addresses/address#account-id) 是如何依赖于其代码和数据的。
 从本质上讲，这是在部署时对代码和数据进行的 SHA256 加密。
 因此，要在不同的分片中部署具有相同代码的合约，唯一的办法就是处理初始数据。
 用于操作生成的合约地址的数据字段称为 _nonce_。

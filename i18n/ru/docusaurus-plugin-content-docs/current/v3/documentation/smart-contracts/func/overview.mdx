@@ -23,9 +23,9 @@ FunC — это специализированный, C-подобный, ста
 }
 ```
 
-Программы FunC компилируются в код ассемблера Fift, который генерирует соответствующий байт-код для [виртуальной машины TON](/v3/documentation/tvm/tvm-overview).
+Программы FunC компилируются в код ассемблера Fift, который генерирует соответствующий байт-код для [виртуальной машины TON](/v3/documentation/tvm/overview).
 
-этот байт-код (по сути, [дерево ячеек](/v3/concepts/dive-into-ton/ton-blockchain/cells-as-data-storage), как и любые другие данные в блокчейне TON) затем можно использовать для создания смарт-контрактов в блокчейне или запустить на локальном экземпляре TVM.
+этот байт-код (по сути, [дерево ячеек](/v3/concepts/dive-into-ton/ton-blockchain/cells), как и любые другие данные в блокчейне TON) затем можно использовать для создания смарт-контрактов в блокчейне или запустить на локальном экземпляре TVM.
 
 <Button href="/v3/documentation/smart-contracts/func/cookbook" colorType={'primary'} sizeType={'sm'}>
 
@@ -51,13 +51,7 @@ npm create ton@latest
 
 ### Компиляция с использованием оригинальных двоичных файлов
 
-Если вы хотите использовать собственный компилятор TON, FunC, локально, вам необходимо настроить двоичные файлы на вашем компьютере. Двоичные файлы компилятора FunC для Windows, macOS (Intel/M1) и Ubuntu можно загрузить с:
-
-- [Страница настройки среды](/v3/documentation/archive/precompiled-binaries)
-
-:::info
-В качестве альтернативы вы можете создать двоичные файлы из исходного кода, например, [исходный код компилятора FunC](https://github.com/ton-blockchain/ton/tree/master/crypto/func) (прочитайте [как скомпилировать](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#func) компилятор FunC из исходников).
-:::
+Чтобы создать двоичные файлы из исходного кода, например, [исходный код компилятора FunC](https://github.com/ton-blockchain/ton/tree/master/crypto/func) (прочитайте [как скомпилировать](/v3/guidelines/smart-contracts/howto/compile/compilation-instructions#func) компилятор FunC из исходников).
 
 ## Курс TON: FunC
 

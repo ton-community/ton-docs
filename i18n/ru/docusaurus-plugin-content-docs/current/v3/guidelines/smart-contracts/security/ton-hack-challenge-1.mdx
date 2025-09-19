@@ -151,7 +151,7 @@ slice safe_execute(int image, (int -> slice) dehasher) inline {
 }
 ```
 
-Не существует способа безопасно выполнить сторонний код в контракте, поскольку исключение [`out of gas`](/v3/documentation/tvm/tvm-exit-codes#standard-exit-codes) не может быть обработано `CATCH`. Злоумышленник просто может использовать [`COMMIT`](/v3/documentation/tvm/instructions#F80F) для любого состояния контракта и поднять `out of gas`.
+Не существует способа безопасно выполнить сторонний код в контракте, поскольку исключение [`out of gas`](/v3/documentation/tvm/exit-codes) не может быть обработано `CATCH`. Злоумышленник просто может использовать [`COMMIT`](/v3/documentation/tvm/instructions#F80F) для любого состояния контракта и поднять `out of gas`.
 
 ## Заключение
 

@@ -6,7 +6,7 @@
 
 ## 概述
 
-存档节点是一种[完整节点](/participate/run-nodes/fullnode)类型，存储区块链的扩展历史数据。 如果您正在创建一个需要访问历史数据的 blockchain 浏览器或类似的应用程序， 建议使用归档节点作为索引器。
+存档节点是一种[完整节点](/v3/guidelines/nodes/running-nodes/full-node)类型，存储区块链的扩展历史数据。 如果您正在创建一个需要访问历史数据的 blockchain 浏览器或类似的应用程序， 建议使用归档节点作为索引器。
 
 ## 先决条件
 
@@ -230,7 +230,7 @@ zfs rollback data/ton-work@dumpstate
 
 ### 强制归档节点不存储数据块
 
-要强制节点不存储归档块，请使用 86400。请查看 [set_node_argument 部分](/v3/documentation/infra/nodes/mytonctrl/mytonctrl-overview#set_node_argument) 了解更多信息。
+要强制节点不存储归档块，请使用 86400。请查看 [set_node_argument 部分](/v3/documentation/nodes/mytonctrl/overview#set_node_argument) 了解更多信息。
 
 ```bash
 installer set_node_argument --archive-ttl 86400
@@ -242,5 +242,5 @@ installer set_node_argument --archive-ttl 86400
 
 ## 参阅
 
-- [TON 节点类型](/v3/documentation/infra/nodes/node-types)
+- [TON 节点类型](/v3/documentation/nodes/overview)
 - [运行全节点](/v3/guidelines/nodes/running-nodes/full-node)

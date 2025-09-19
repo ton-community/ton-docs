@@ -1391,7 +1391,7 @@ table.cmp-func-tolk-table:not(.different-col-widths) th {
   width: 50%;
 }
 
-table.cmp-func-tolk-table code:not(.inline) {
+table.cmp-func-tolk-table code:not(.inline), table.code-remove-bg code:not(.inline) {
   display: block;
   padding: 0 3px;
   background: transparent;

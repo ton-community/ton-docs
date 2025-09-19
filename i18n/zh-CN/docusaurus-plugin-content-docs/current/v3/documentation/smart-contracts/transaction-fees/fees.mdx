@@ -40,7 +40,7 @@
 
 > *这是否意味着有一天gas价格可能会上涨1000倍甚至更多？*
 
-TON上的费用难以提前计算，因为它们的数量取决于交易运行时间、账户状态、消息内容和大小、区块链网络设置以及无法在交易发送之前计算的其他许多变量。阅读关于[计算费用](/develop/howto/fees-low-level#computation-fees)的低层级文章概述。
+TON上的费用难以提前计算，因为它们的数量取决于交易运行时间、账户状态、消息内容和大小、区块链网络设置以及无法在交易发送之前计算的其他许多变量。阅读关于[计算费用](/v3/documentation/smart-contracts/transaction-fees/fees-low-level#computation-fees)的低层级文章概述。
 
 这就是为什么即使NFT市场通常会额外收取大约1 TON的TON，并在稍后返还(*`1 - transaction_fee`*)。
 
@@ -48,7 +48,7 @@ TON上的费用难以提前计算，因为它们的数量取决于交易运行�
 
 TON 的费用很难提前计算，因为其金额取决于交易运行时间、账户状态、信息内容和大小、区块链网络设置以及其他一些变量，在交易发送之前无法计算。
 
-根据[低层级费用概述](/develop/howto/fees-low-level)，TON上的费用按照以下公式计算：
+根据[低层级费用概述](/v3/documentation/smart-contracts/transaction-fees/fees-low-level)，TON上的费用按照以下公式计算：
 
 :::info
 Each contract should check incoming messages for the amount of TON attached to ensure it is enough to cover the fees.

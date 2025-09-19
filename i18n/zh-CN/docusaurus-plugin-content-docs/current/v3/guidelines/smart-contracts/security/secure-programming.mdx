@@ -173,7 +173,7 @@ int min_amount = in_msg_body~load_coins();
 3. `your_contract_wallet` 向 `your_contract` 发送 `op::transfer_notification` 消息，传递 `forward_ton_amount`, `forward_payload`, 以及 `sender_address` 和 `jetton_amount` ；
 4. 在合约的 `handle_transfer_notification()` 中，流程开始了。
 
-在这里，你需要弄清楚这是一个什么样的请求，是否有足够的 gas 来完成它，以及有效载荷中的所有内容是否正确。在这一阶段，不应使用`throw_if()/throw_unless()`，因为这样会导致 Jettons 丢失，请求无法执行。值得使用 try-catch 语句[从 FunC v0.4.0 开始可用](/v3/documentation/smart-contracts/funcs/docs/statements#try-catch-statements)。
+在这里，你需要弄清楚这是一个什么样的请求，是否有足够的 gas 来完成它，以及有效载荷中的所有内容是否正确。在这一阶段，不应使用`throw_if()/throw_unless()`，因为这样会导致 Jettons 丢失，请求无法执行。值得使用 try-catch 语句[从 FunC v0.4.0 开始可用](/v3/documentation/smart-contracts/func/docs/statements#try-catch-statements)。
 
 如果不符合合约规定，则必须退回 jetton 。
 

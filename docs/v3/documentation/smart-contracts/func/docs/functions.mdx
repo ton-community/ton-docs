@@ -49,7 +49,7 @@ Every program must include a function with `id = 0`, meaning it must define eith
 
 #### Receive internal
 
-The `recv_internal` function is invoked when a smart contract receives **an inbound internal message**. When the [TVM initializes](/v3/documentation/tvm/tvm-overview#initializing-tvm), certain variables are automatically placed on the stack. By specifying arguments in `recv_internal`, the smart contract can access some of these values. Any values not explicitly referenced in the function parameters will remain unused at the bottom of the stack.
+The `recv_internal` function is invoked when a smart contract receives **an inbound internal message**. When the [TVM initializes](/v3/documentation/tvm/initialization), certain variables are automatically placed on the stack. By specifying arguments in `recv_internal`, the smart contract can access some of these values. Any values not explicitly referenced in the function parameters will remain unused at the bottom of the stack.
 
 The following `recv_internal` function declarations are all valid. Functions with fewer parameters consume slightly less gas, as each unused argument results in an additional `DROP` instruction:
 
@@ -402,7 +402,7 @@ int inc_then_negate'(int x) asm "INC NEGATE";
 Here, `INC NEGATE` is treated as a single assembler command by FunC, but the Fift assembler correctly interprets it as two separate commands.
 
 :::info
-The list of assembler commands can be found here: [TVM instructions](/v3/documentation/tvm/tvm-overview#tvm-instructions).
+The list of assembler commands can be found here: [TVM instructions](/v3/documentation/tvm/instructions).
 :::
 
 ### Rearranging stack entries

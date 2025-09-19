@@ -9,7 +9,7 @@ toc_max_heading_level: 6
 本节讨论了 [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) 库，它包含了在 FunC 中使用的标准函数。
 :::
 
-目前，该库只是最常用的 TVM 命令的汇编器的包装，这些命令不是内置的。库中使用的每个 TVM 命令的描述都可以在 [TVM 文档](/learn/tvm-instructions/tvm-overview)部分找到。本文档也借用了一些描述。
+目前，该库只是最常用的 TVM 命令的汇编器的包装，这些命令不是内置的。库中使用的每个 TVM 命令的描述都可以在 [TVM 文档](/v3/documentation/tvm/overview)部分找到。本文档也借用了一些描述。
 
 文件中的一些函数被注释掉了。这意味着它们已经成为了优化目的的内置函数。然而，类型签名和语义保持不变。
 
@@ -17,7 +17,7 @@ toc_max_heading_level: 6
 
 ## 元组操作原语
 
-名称和类型大多是自解释的。有关多态函数的更多信息，请参见 [多态性与 forall](/develop/func/functions#polymorphism-with-forall)。
+名称和类型大多是自解释的。有关多态函数的更多信息，请参见 [多态性与 forall](/v3/documentation/smart-contracts/func/docs/functions#polymorphism-with-forall)。
 
 请注意，目前原子类型 `tuple` 的值不能转换为复合元组类型（例如 `[int, cell]`），反之亦然。
 
@@ -47,7 +47,7 @@ forall X -> (X, tuple) uncons(tuple list) asm "UNCONS";
 forall X -> (tuple, X) list_next(tuple list) asm( -> 1 0) "UNCONS";
 ```
 
-提取 Lisp 类型列表的头和尾。可用作 [(非)修改方法](/develop/func/statements#methods-calls)。
+提取 Lisp 类型列表的头和尾。可用作 [(非)修改方法](/v3/documentation/smart-contracts/func/docs/statements#method-calls)。
 
 ```func
 () foo(tuple xs) {
@@ -232,7 +232,7 @@ forall X, Y, Z -> Z triple_third([X, Y, Z] p) asm "THIRD";
 
 ### 从 c7 提取信息
 
-关于智能合约调用的一些有用信息可以在 [c7 特殊寄存器](/learn/tvm-instructions/tvm-overview#control-registers)中找到。这些原语用于方便地提取数据。
+关于智能合约调用的一些有用信息可以在 [c7 特殊寄存器](/v3/documentation/tvm/overview#control-registers)中找到。这些原语用于方便地提取数据。
 
 #### now
 
@@ -417,7 +417,7 @@ cont bless(slice s) impure asm "BLESS";
 
 将当前 gas 限制`gl`设置为其允许的最大值`gm`，并将 gas 信用`gc`重置为零，同时减少`gr`的值`gc`。换句话说，当前智能合约同意购买一些 gas 以完成当前交易。这个动作是处理不携带价值（因此不含 gas ）的外部消息所必需的。
 
-有关更多详细信息，请查看[accept_message effects](/develop/smart-contracts/guidelines/accept)
+有关更多详细信息，请查看[accept_message effects](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects)
 
 #### set_gas_limit
 
@@ -427,7 +427,7 @@ cont bless(slice s) impure asm "BLESS";
 
 将当前 gas 限制`gl`设置为`limit`和`gm`的最小值，并将 gas 信用`gc`重置为零。此时，如果消耗的 gas 量（包括当前指令）超过`gl`的结果值，则在设置新 gas 限制之前会抛出（未处理的） gas 不足异常。请注意，带有`limit ≥ 2^63 − 1`参数的`set_gas_limit`等同于`accept_message`。
 
-有关更多详细信息，请查看[accept_message effects](/develop/smart-contracts/guidelines/accept)
+有关更多详细信息，请查看[accept_message effects](/v3/documentation/smart-contracts/transaction-fees/accept-message-effects)
 
 #### commit
 
@@ -515,7 +515,7 @@ cont bless(slice s) impure asm "BLESS";
 2. **+2 标志** - 这在外部消息（例如，发送到钱包）中非常重要。
    :::
 
-伪随机数生成器使用随机种子（一个无符号的256位整数）和（有时）[c7](/learn/tvm-instructions/tvm-overview#control-registers)中保存的其他数据。在TON区块链中执行智能合约之前，随机种子的初始值是智能合约地址和全局区块随机种子的哈希。如果在一个区块内有多次运行相同的智能合约，那么所有这些运行都将具有相同的随机种子。例如，可以通过在第一次使用伪随机数生成器之前运行`randomize_lt`来解决这个问题。
+伪随机数生成器使用随机种子（一个无符号的256位整数）和（有时）[c7](/v3/documentation/tvm/overview#control-registers)中保存的其他数据。在TON区块链中执行智能合约之前，随机种子的初始值是智能合约地址和全局区块随机种子的哈希。如果在一个区块内有多次运行相同的智能合约，那么所有这些运行都将具有相同的随机种子。例如，可以通过在第一次使用伪随机数生成器之前运行`randomize_lt`来解决这个问题。
 
 #### set_code
 
@@ -657,7 +657,7 @@ tuple parse_addr(slice s) asm "PARSEMSGADDR";
 
 ## 调试原语
 
-据说，如果原语仅返回数据，则称其为_预加载_数据（可用作[非修改方法](/develop/func/statements#non-modifying-methods)）。
+据说，如果原语仅返回数据，则称其为_预加载_数据（可用作[非修改方法](/v3/documentation/smart-contracts/func/docs/statements#non-modifying-methods)）。
 
 #### ~dump
 
@@ -1036,7 +1036,7 @@ int cell_null?(cell c) asm "ISNULL";
 > 字典作为 TVM 堆栈值有两种不同的表示方法：
 >
 > - slice `s` 的序列化类型为 `HashmapE(n, X)` 的 TL-B 值。换句话说，`s` 包含一个等于零的比特（如果字典为空），或者一个等于一的比特和对包含二叉树根的 cell 的引用，即`Hashmap(n, X)`类型的序列化值。
-> - 一个 "Maybe  cell" `c^?`，即一个 cell 值（包含一个类型为`Hashmap(n, X)`的序列化值）或一个`null`（对应于一个空字典，参见 [null values](/v3/documentation/smart-contracts/funcs/docs/types#null-values)）。当使用 "Maybe  cell " `c^?` 来表示字典时，我们通常用`D`来表示。
+> - 一个 "Maybe  cell" `c^?`，即一个 cell 值（包含一个类型为`Hashmap(n, X)`的序列化值）或一个`null`（对应于一个空字典，参见 [null values](/v3/documentation/smart-contracts/func/docs/types#null-values)）。当使用 "Maybe  cell " `c^?` 来表示字典时，我们通常用`D`来表示。
 >
 > 下面列出的大多数字典原语都接受并返回第二种形式的字典，因为第二种形式更便于堆栈操作。不过，较大的 TL-B 对象中的序列化字典使用第一种表示法。
 
@@ -1306,7 +1306,7 @@ int dict_empty?(cell c) asm "DICTEMPTY";
 
 ## null
 
-TVM 还支持具有非固定长度键的字典，这些键构成前缀码（即没有任何键是另一个键的前缀）。有关它们的更多信息，请参阅 [TVM 说明](/v3/documentation/tvm/tvm-overview) 部分。
+TVM 还支持具有非固定长度键的字典，这些键构成前缀码（即没有任何键是另一个键的前缀）。有关它们的更多信息，请参阅 [TVM 说明](/v3/documentation/tvm/overview) 部分。
 
 #### pfxdict_get?
 

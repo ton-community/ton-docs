@@ -23,7 +23,7 @@ Transactions for precompiled smart contracts (those with code hashes in `ConfigP
 1. Retrieve the `gas_usage` value from the masterchain config
 2. If the contract balance cannot cover the `gas_usage` cost, the compute phase fails with `cskip_no_gas`.
 3. Execution proceeds via one of two paths:
-   - **TVM execution**: Used if precompiled execution is disabled or the C++ implementation is unavailable in the node version. TVM executes with the gas limits defined by the network configuration (see [gas and fee parameters](/v3/documentation/smart-contracts/limits#gas-and-fee-parameters) and [Param20/Param21](/v3/documentation/network/configs/blockchain-configs#param-20-and-21)).
+   - **TVM execution**: Used if precompiled execution is disabled or the C++ implementation is unavailable in the node version. TVM executes with the gas limits defined by the network configuration (see [gas and fee parameters](/v3/documentation/smart-contracts/limits#gas-and-fee-parameters) and [Param20/Param21](/v3/documentation/network/config-params/overview#param-20-and-21)).
    - **Native execution**: Used when precompiled implementation is both enabled and available, executing the C++ code directly
 4. Compute phase values are overridden:
    - `gas_used` set to `gas_usage`
@@ -32,7 +32,7 @@ Transactions for precompiled smart contracts (those with code hashes in `ConfigP
 
 For precompiled contracts, the 17th element of `c7` (index `16`) holds the precompiled `gas_usage` value for the current contract as defined in `ConfigParam 45`; see [c7](/v3/documentation/tvm/changelog/tvm-upgrade-2024-04#c7). The `GETPRECOMPILEDGAS` opcode is currently reserved and returns `null`; when activated, it will return the precompiled contract gas usage; see [new opcodes](/v3/documentation/tvm/changelog/tvm-upgrade-2024-04#new-opcodes). Non-precompiled contracts return `null` for this value.
 
-**Note**: Enable precompiled contract execution by running `validator-engine` with the [`--enable-precompiled-smc`](/v3/documentation/infra/nodes/node-commands) (experimental) flag. Both execution methods produce identical transactions, allowing validators with and without C++ implementations to coexist in the network. This enables gradual adoption when adding new entries to `ConfigParam 45`.
+**Note**: Enable precompiled contract execution by running `validator-engine` with the [`--enable-precompiled-smc`](/v3/documentation/nodes/mytonctrl/commands#advanced-options) (experimental) flag. Both execution methods produce identical transactions, allowing validators with and without C++ implementations to coexist in the network. This enables gradual adoption when adding new entries to `ConfigParam 45`.
 
 ## See also
 

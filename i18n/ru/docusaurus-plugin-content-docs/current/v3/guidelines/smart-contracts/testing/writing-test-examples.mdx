@@ -493,7 +493,7 @@ index - идентификатор транзакции в массиве `launc
 
 ## Тесты пограничных случаев
 
-В этом разделе будут приведены тестовые случаи для [кодов](/v3/documentation/tvm/tvm-exit-codes) выхода TVM, которые могут возникнуть во время обработки транзакции. Эти коды выхода находятся в самом коде блокчейна. При этом необходимо различать код выхода во время [Compute Phase](/v3/documentation/tvm/tvm-overview#compute-phase) и код выхода во время Action Phase.
+В этом разделе будут приведены тестовые случаи для [кодов](/v3/documentation/tvm/exit-codes) выхода TVM, которые могут возникнуть во время обработки транзакции. Эти коды выхода находятся в самом коде блокчейна. При этом необходимо различать код выхода во время [Compute Phase](/v3/documentation/tvm/overview#compute-phase) и код выхода во время Action Phase.
 
 Во время Compute Phase выполняется логика контракта (его код). В процессе обработки могут быть созданы различные действия. Эти действия будут обработаны в следующей фазе - Action Phase. Если Compute Phase завершилась неудачей, то Action Phase не начинается. Однако если Compute Phase прошла успешно, это не гарантирует, что Action Phase также завершится успешно.
 
@@ -509,7 +509,7 @@ index - идентификатор транзакции в массиве `launc
 
 ### Compute Phase | код выхода = 2
 
-TVM - это [стековая машина](/v3/documentation/tvm/tvm-overview#tvm-is-a-stack-machine). При взаимодействии с различными значениями они появляются в стеке. Если вдруг в стеке нет элементов, но какой-то опкод их требует, то будет выброшена эта ошибка.
+TVM - это [стековая машина](/v3/documentation/tvm/overview). При взаимодействии с различными значениями они появляются в стеке. Если вдруг в стеке нет элементов, но какой-то опкод их требует, то будет выброшена эта ошибка.
 
 Это может произойти при работе с опкодами напрямую, поскольку [stdlib.fc](https://github.com/ton-blockchain/ton/blob/master/crypto/smartcont/stdlib.fc) (библиотека для FunC) предполагает, что такой проблемы не возникнет.
 
@@ -553,7 +553,7 @@ TVM - это [стековая машина](/v3/documentation/tvm/tvm-overview#
 
 ### Compute Phase | код выхода = 8
 
-Все данные в TON хранятся в ячейках ([cells](/v3/documentation/data-formats/tlb/cell-boc#cell)). Ячейка может хранить 1023 бита данных и 4 ссылки на другие ячейки. Если Вы попытаетесь записать более 1023 бит или более 4 ссылок, будет выброшен код выхода 8.
+Все данные в TON хранятся в ячейках ([cells](/v3/documentation/data-formats/cells/overview)). Ячейка может хранить 1023 бита данных и 4 ссылки на другие ячейки. Если Вы попытаетесь записать более 1023 бит или более 4 ссылок, будет выброшен код выхода 8.
 
 ### Compute Phase | код выхода = 9
 
@@ -600,7 +600,7 @@ root_cell
 
 ### Action Phase | код выхода = 32
 
-Action Phase начинается после Compute Phase и обрабатывает действия, которые были записаны в [регистр c5](/v3/documentation/tvm/tvm-initialization#control-register-c5) во время Compute Phase. Если данные в этот регистр записаны неверно, то будет выброшен код выхода 32.
+Action Phase начинается после Compute Phase и обрабатывает действия, которые были записаны в [регистр c5](/v3/documentation/tvm/initialization#control-register-c5) во время Compute Phase. Если данные в этот регистр записаны неверно, то будет выброшен код выхода 32.
 
 ### Action Phase | код выхода = 33
 
@@ -612,7 +612,7 @@ Action Phase начинается после Compute Phase и обрабатыв
 
 ### Action Phase | код выхода = 35
 
-Во время создания части сообщения [CommonMsgInfo](/v3/guidelines/smart-contracts/howto/wallet#commonmsginfo) Вы должны указать правильный адрес источника. Он должен быть равен либо [addr_none](/v3/documentation/data-formats/tlb/msg-tlb#addr_none00), либо адресу аккаунта, который отправляет сообщение.
+Во время создания части сообщения [CommonMsgInfo](/v3/guidelines/smart-contracts/howto/wallet#commonmsginfo) Вы должны указать правильный адрес источника. Он должен быть равен либо [addr_none](/v3/documentation/data-formats/layout/messages#addr_none00), либо адресу аккаунта, который отправляет сообщение.
 
 В коде блокчейна за это отвечает функция [check_replace_src_addr](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1985).
 
@@ -626,7 +626,7 @@ Action Phase начинается после Compute Phase и обрабатыв
 
 ### Action Phase | код выхода = 38
 
-То же самое, что и в коде выхода `37`, но относится к отсутствию [ExtraCurrency](/v3/documentation/infra/minter-flow#extracurrency) на балансе.
+То же самое, что и в коде выхода `37`, но относится к отсутствию [extra currency](/v3/documentation/dapps/assets/extra-currencies) на балансе.
 
 ### Action Phase | код выхода = 40
 
@@ -636,7 +636,7 @@ Action Phase начинается после Compute Phase и обрабатыв
 
 Может возникнуть, если превышено максимальное количество ячеек в библиотеке или превышена максимальная глубина дерева Меркла.
 
-Библиотека - это ячейка, которая хранится в [Мастерчейне](/v3/concepts/dive-into-ton/ton-blockchain/blockchain-of-blockchains#masterchain-blockchain-of-blockchains) и может использоваться всеми смарт-контрактами, если она [публичная](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1844).
+Библиотека - это ячейка, которая хранится в [Мастерчейне](//v3/guidelines/dapps/transactions/foundations-of-blockchain#мастерчейн-и-бейсчейн) и может использоваться всеми смарт-контрактами, если она [публичная](https://github.com/ton-blockchain/ton/blob/9728bc65b75defe4f9dcaaea0f62a22f198abe96/crypto/block/transaction.cpp#L1844).
 
 :::info
 Поскольку порядок строк может меняться при обновлении кода, некоторые ссылки становятся неактуальными. Поэтому все ссылки будут использовать состояние кодовой базы на момент фиксации [9728bc65b75defe4f9dcaaea0f62a22f198abe96](https://github.com/ton-blockchain/ton/tree/9728bc65b75defe4f9dcaaea0f62a22f198abe96).

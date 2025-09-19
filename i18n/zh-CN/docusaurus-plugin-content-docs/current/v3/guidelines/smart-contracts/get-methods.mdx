@@ -1,14 +1,14 @@
 # Get 方法
 
 :::note
-在继续之前，建议读者对[FunC编程语言](/develop/func/overview)和TON区块链上的[智能合约开发](/develop/smart-contracts)有基本的了解。这将有助于您更有效地理解这里提供的信息。
+在继续之前，建议读者对[FunC编程语言](/v3/documentation/smart-contracts/func/overview)和TON区块链上的[智能合约开发](/v3/documentation/smart-contracts/overview)有基本的了解。这将有助于您更有效地理解这里提供的信息。
 :::
 
 ## 介绍
 
 Get方法是智能合约中用于查询特定数据的特殊函数。它们的执行不需要任何费用，并且在区块链之外进行。
 
-这些函数对于大多数智能合约来说都非常常见。例如，默认的[钱包合约](/participate/wallets/contracts)有几个get方法，如`seqno()`、`get_subwallet_id()`和`get_public_key()`。它们被钱包、SDK和API用来获取有关钱包的数据。
+这些函数对于大多数智能合约来说都非常常见。例如，默认的[钱包合约](/v3/documentation/smart-contracts/contracts-specs/wallet-contracts)有几个get方法，如`seqno()`、`get_subwallet_id()`和`get_public_key()`。它们被钱包、SDK和API用来获取有关钱包的数据。
 
 ## Get 方法的设计模式
 
@@ -70,7 +70,7 @@ int seqno() method_id {
 }
 ```
 
-返回特定钱包中交易的序列号。这个方法主要用于[重放保护](/develop/smart-contracts/tutorials/wallet#replay-protection---seqno)。
+返回特定钱包中交易的序列号。这个方法主要用于[重放保护](/v3/guidelines/smart-contracts/howto/wallet#replay-protection)。
 
 #### get_subwallet_id()
 
@@ -80,7 +80,7 @@ int get_subwallet_id() method_id {
 }
 ```
 
-- [什么是Subwallet ID？](/develop/smart-contracts/tutorials/wallet#what-is-subwallet-id)
+- [什么是Subwallet ID？](/v3/guidelines/smart-contracts/howto/wallet#subwallet-ids)
 
 #### get_public_key()
 
@@ -301,7 +301,7 @@ it('should return correct number from get method', async () => {
 
 ### 解决方案和变通方法
 
-在TON区块链中，智能合约通过消息进行通信，而不是直接从另一个合约调用方法。向目标合约发送请求执行特定方法的消息。这些请求通常以特殊的[操作码](/develop/smart-contracts/guidelines/internal-messages)开头。
+在TON区块链中，智能合约通过消息进行通信，而不是直接从另一个合约调用方法。向目标合约发送请求执行特定方法的消息。这些请求通常以特殊的[操作码](/v3/documentation/smart-contracts/message-management/internal-messages)开头。
 
 被设计为接受这些请求的合约将执行所需的方法，并在单独的消息中发送结果。虽然这可能看起来很复杂，但它实际上简化了合约之间的通信，并提高了区块链网络的可扩展性和性能。
 
@@ -357,7 +357,7 @@ int get_total() method_id {
 
 为了简单起见，我们只是使用了简单的小数字1、2和3作为操作码。但对于真实项目，请根据标准设置它们：
 
-- [用于操作码的CRC32哈希](/develop/data-formats/crc32)
+- [用于操作码的CRC32哈希](/v3/documentation/data-formats/tlb/crc32)
 
 ## 常见陷阱及如何避免
 

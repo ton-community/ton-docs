@@ -99,7 +99,7 @@ Most SDKs automatically verify a wallet address during creation or transaction p
 </Tabs>
 
 :::tip
-Full Address description on the [Smart contract addresses](/v3/documentation/smart-contracts/addresses) page.
+Full Address description on the [Smart contract addresses](/v3/documentation/smart-contracts/addresses/address) page.
 :::
 
 ## Working with transfers
@@ -192,7 +192,7 @@ Learn the basics of payment processing from the [TMA USDT Payments demo](https:/
 8. Requests sent to `v3` of `high-load` have a 60-second expiration time by default. After expiration, unprocessed requests can be safely resent following steps 3-6.
 
 :::caution
-If the attached `value` is too small, the transaction may fail with the error `cskip_no_gas`. In this case, Toncoin will be transferred, but no logic will be executed on the recipient's side (the TVM will not launch). Read more [here](/v3/documentation/network/configs/blockchain-configs#param-20-and-21).
+If the attached `value` is too small, the transaction may fail with the error `cskip_no_gas`. In this case, Toncoin will be transferred, but no logic will be executed on the recipient's side (the TVM will not launch). Read more [here](/v3/documentation/network/config-params/overview#param-20-and-21).
 :::
 
 ### Get the transaction ID
@@ -238,17 +238,17 @@ Best for dApps that require multiple transactions within a session or a persiste
 ### Invoices with ton:// link
 
 :::warning
+
 The TON link is deprecated.
+
 :::
 
-Although deprecated, for simple one-time flows you may still generate a ton:// link; prefer TON Connect.
+Although deprecated, for simple one-time flows, you may still generate a ton:// link prefer TON Connect.
 It is best suited for one-time payments and invoices.
 
 ```text
 ton://transfer/<destination-address>?
-    [nft=<nft-address>&]
-    [fee-amount=<nanocoins>&]
-    [forward-amount=<nanocoins>] 
+    [nft=<nft-address>]
 ```
 
 **Advantages**
@@ -265,9 +265,26 @@ ton://transfer/<destination-address>?
 
 [Learn more about TON links here](https://github.com/tonkeeper/wallet-api#payment-urls).
 
+
+### Invoices with wallet-specific links
+
+You can use wallet-specific links to create simple Jetton and Toncoin transfers. The syntax is usually similar to `ton://transfer` links, but you should always check each wallet’s documentation.
+
+Example: transferring 1 USDT to someone:
+```
+https://app.tonkeeper.com/transfer/saint.ton?amount=1000000&jetton=EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs
+or
+https://my.tt/transfer/UQDYzZmfsrGzhObKJUw4gzdeIxEai3jAFbiGKGwxvxHinf4K?amount=1000000&jetton=EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs
+```
+You can find more examples and supported features in the documentation:
+
+- Tonkeeper - [docs.tonconsole.com](https://docs.tonconsole.com/tonkeeper/deep-linking)
+- MyTonWallet - [help.mytonwallet.io](https://help.mytonwallet.io/intro/key-features/deeplinks-in-mytonwallet)
+
+
 ## Explorers
 
-To generate a transaction link, the service must obtain the account address, logical time (lt), and transaction hash by calling the [getTransactions](toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method. Using these values, [tonviewer.com](https://tonviewer.com), [tonscan.org](https://tonscan.org) and [explorer.toncoin.org](https://explorer.toncoin.org/) explorers render the transaction page according to the following formats:
+To generate a transaction link, the service must obtain the account address, logical time (lt), and transaction hash by calling the [getTransactions](https://toncenter.com/api/v2/#/transactions/get_transactions_getTransactions_get) method. Using these values, [tonviewer.com](https://tonviewer.com), [tonscan.org](https://tonscan.org), and [explorer.toncoin.org](https://explorer.toncoin.org/) render the transaction page according to the following formats:
 
 `https://tonviewer.com/transaction/{hash as base64url}`
 

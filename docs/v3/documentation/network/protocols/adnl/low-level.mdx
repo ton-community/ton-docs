@@ -49,7 +49,7 @@ After encrypting `aes_params`, noted as `E(aes_params)`, remove AES as it is no 
 
 | Parameter | Size | Notes |
 |---------------------|-----------|------------------------------------------------------------|
-| receiver_address | 32 bytes | Server peer identity as described in the corresponding section |
+| receiver_address | 32 bytes | Server peer identity as described in the [Peer identity](#peer-identity) section |
 | sender_public | 32 bytes | Client public key |
 | SHA-256(aes_params) | 32 bytes | Integrity proof of session parameters |
 | E(aes_params) | 160 bytes | Encrypted session parameters |
@@ -97,9 +97,9 @@ If an encryption key is derived only from the `secret` parameter, it will be sta
 
 #### Datagram nonce
 
-The purpose of the `nonce` field in the datagram may not be immediately clear. Even without it, any two ciphertexts will differ due to the session-bounded keys used in AES and the encryption method in CTR mode. However, if a nonce is absent or predictable, a potential attack can occur.
+The purpose of the `nonce` field in the datagram may not be immediately clear. Even without it, any two ciphertexts will differ due to the session-bounded keys used in AES and the encryption method in CTR mode. However, if a nonce is absent or predictable, a potential attack can occur. 
 
-In CTR encryption mode, block ciphers like AES function as stream ciphers, allowing for bit-flipping attacks. If an attacker knows the plaintext corresponding to an encrypted datagram, they can create an exact key stream and XOR it with their own plaintext, effectively replacing the original message sent by a peer. Although buffer integrity is protected by a hash (referred to here as SHA-256), an attacker can still manipulate it because if they know the entire plaintext, they can also compute its hash.
+In CTR encryption mode, block ciphers like AES function as stream ciphers, allowing for bit-flipping attacks. If an attacker knows the plaintext corresponding to an encrypted datagram, they can create an exact key stream and XOR it with their own plaintext, effectively replacing the original message sent by a peer. Although buffer integrity is protected by a hash (referred to here as SHA-256), an attacker can still manipulate it because if they know the entire plaintext, they can also compute its hash. 
 
 The nonce field is crucial for preventing such attacks, as it ensures that an attacker cannot replace the SHA-256 without also having access to the nonce.
 
@@ -116,4 +116,3 @@ A detailed description can be found in the article [ADNL UDP - internode](/v3/do
 _Thanks to the [hacker-volodya](https://github.com/hacker-volodya) for contributing to the community!_
 _Here a [link to the original article](https://github.com/tonstack/ton-docs/tree/main/ADNL) on GitHub._
 <Feedback />
-

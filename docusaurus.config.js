@@ -73,10 +73,12 @@ const config = {
       crossorigin: 'anonymous',
     },
   ],
-  onBrokenLinks: 'warn', // for PRODUCTION
-  onBrokenMarkdownLinks: 'warn', //for PRODUCTION
-  // onBrokenLinks: 'throw',
-  // onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'throw',
+  // This requires special care for the TVM instructions page.
+  // Hence, it can only be set to 'warn' for the time being.
+  onBrokenAnchors: 'warn',
+  onDuplicateRoutes: 'throw',
   favicon: 'img/favicon32x32.png',
 
   // GitHub pages deployment config.
