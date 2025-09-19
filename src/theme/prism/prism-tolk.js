@@ -18,11 +18,11 @@
       }
     ],
 
-    'type-hint': /\b(enum|int|cell|void|never|bool|slice|tuple|builder|continuation|coins|int8|int16|int32|int64|uint8|uint16|uint32|uint64|uint256|bytes16|bytes32|bytes64|bits8|bits16|bits32|bits64|bits128|bits256|address)\b/,
+    'type-hint': /\b(int|cell|void|never|bool|slice|tuple|builder|continuation|coins|int8|int16|int32|int64|uint8|uint16|uint32|uint64|uint256|bytes16|bytes32|bytes64|bits8|bits16|bits32|bits64|bits128|bits256|address|map)\b/,
 
     'boolean': /\b(false|true|null)\b/,
 
-    'keyword': /\b(do|if|as|is|try|else|while|break|throw|catch|return|assert|repeat|continue|asm|builtin|import|export|true|false|null|redef|mutate|tolk|global|const|var|val|fun|get|struct|match|type|lazy)\b/,
+    'keyword': /\b(do|if|as|is|try|else|while|break|throw|catch|return|assert|repeat|continue|asm|builtin|import|export|true|false|null|redef|mutate|tolk|global|const|var|val|fun|get\sfun|struct|match|type|lazy|enum|private|readonly)\b/,
 
     'self': /\b(self)\b/,
 
