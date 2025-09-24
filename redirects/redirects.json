@@ -788,5 +788,9 @@
     {
       "from": "/v3/documentation/smart-contracts/addresses",
       "to": "/v3/documentation/smart-contracts/addresses/address"
+    },
+    {
+      "from": "/participate/network-maintenance/staking-incentives",
+      "to": "/v3/documentation/nodes/validation/staking-incentives"
     }
 ]
