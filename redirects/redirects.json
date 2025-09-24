@@ -792,5 +792,9 @@
     {
       "from": "/participate/network-maintenance/staking-incentives",
       "to": "/v3/documentation/nodes/validation/staking-incentives"
+    },
+    {
+      "from": "/participate/run-nodes/full-node",
+      "to": "/v3/guidelines/nodes/running-nodes/full-node"
     }
 ]
