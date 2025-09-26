@@ -4,6 +4,10 @@
         "to": "/v3/concepts/glossary"
     },
     {
+        "from": "/participate/web3/site-management",
+        "to": "/v3/guidelines/web3/ton-proxy-sites/site-and-domain-management"
+    },
+    {
         "from": "/develop/ethereum-to-ton/difference-of-blockchains",
         "to": "/v3/concepts/dive-into-ton/go-from-ethereum/difference-of-blockchains"
     },
