@@ -89,6 +89,10 @@ The general state fully defines all account types in TON. Examples:
 
 ![Account properties](/img/docs/blockchain-fundamentals/account_eng.svg)
 
+:::note
+Account balances in TON never become negative. [If storage fees exceed the available balance](https://toncenter.com/api/v3/transactions?hash=f3e8c9c48dd055a533e7c5d0735b2e305eaf18e571d842d607e0fc5ef0eb45ef&limit=1&offset=0&sort=desc), the balance is set to zero and the unpaid remainder is recorded as debt — `due_payment` in `StorageInfo` (account state) and `storage_fees_due` in transactions.
+:::
+
 ### Smart contract
 
 A **smart contract** is an account whose _code_ and _data_ are already deployed to the blockchain in addition to its general state.
@@ -213,13 +217,16 @@ Let’s clarify which properties are part of the **account properties**, accordi
 The data and code are defined within the state: `AccountState` field.
 
 Now, let’s take a closer look at the account properties and how it’s represented in the data layout.
+
+### Account state
+
 TON defines account states `AccountState` as follows:
 
-| State   | TL-B code | Description                                                                                                                                                                                                                                                       |
-|----------|-----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `uninit` | `00`      | The account exists but contains no code or data. It may hold a non-zero balance but is not initialized yet.                                                                                                                                                       |
-| `frozen` | `01`      | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. It can't be used, but it can be restored. The account has a zero balance and accumulated debt. Therefore, does not meet the WorkChain’s minimum requirement.     |
-| `active` | `10`      | The account includes a `StateInit`, which stands for State Initialized, with deployed code and data. It means that it's already initialized. It is an active smart contract, ready to process incoming messages.                                                  |
+| Status   | TL-B code | Description                                                                                                                                                                                                                                  |
+| -------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `uninit` | `00`      | The account exists but contains no code or data. It may hold a non-zero balance but is not initialized yet.                                                                                                                                  |
+| `frozen` | `01`      | The account is frozen: its code and data are deleted, but a hash of the previous state is retained. The account has zero balance; any unpaid storage fees are tracked as debt (`StorageInfo.due_payment`) It can't be used, but it can be restored. |
+| `active` | `10`      | The account includes a `StateInit`, which stands for State Initialized, with deployed code and data. It means that it's already initialized. It is an active smart contract, ready to process incoming messages.                             |
 
 ```tlb
 account_uninit$00 = AccountState;
@@ -243,6 +250,15 @@ acc_state_nonexist$11 = AccountStatus;
 The diagram below illustrates the lifecycle of an account in the TON blockchain, showing how its status changes under different conditions.
 
 ![Account's lifecycle](/img/docs/blockchain-fundamentals/account_status.svg)
+
+#### Account state vs transaction status
+
+- On-chain storage keeps an `Account` in one of two container forms:
+  - `account_none$0 = Account` — the account is absent on-chain (often called "nonexist").
+  - `account$1 ... storage:AccountStorage = Account` — the account exists and its `AccountStorage.state` is one of the `AccountState` variants (`uninit`, `active`, `frozen`).
+- Transactions use a separate tag `AccountStatus` to record the status before and after a transaction: `orig_status` and `end_status`.
+  - TL‑B: `acc_state_uninit$00`, `acc_state_frozen$01`, `acc_state_active$10`, `acc_state_nonexist$11`.
+  - Note: `AccountStatus` is part of the transaction record, not `AccountStorage`. `nonexist` corresponds to `account_none$0` (account absence), not to an `AccountState` variant.
 
 ### Smart contract structure
 
