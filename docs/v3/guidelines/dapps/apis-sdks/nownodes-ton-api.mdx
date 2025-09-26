@@ -1,0 +1,94 @@
+import Feedback from "@site/src/components/Feedback";
+
+# Access TON Blockchain via NOWNodes
+
+:::info
+[NOWNodes](https://nownodes.io/) provides access to the TON blockchain through multiple API interfaces. This guide covers getting started, supported interfaces, core methods, and integration examples.
+:::
+
+### 1. Get Your API Key
+
+#### 1. Sign up at [NOWNodes](https://account.nownodes.io/auth/login?utm_source=tondocs&utm_medium=guide).
+
+![NOWNodes login](/img/docs/nownodes-img/login_nownodes.png)
+
+#### 2. Choose the plan which suits you.
+
+![NOWNodes plans](/img/docs/nownodes-img/plans_nownodes.png)
+
+#### 3. Navigate to **Dashboard** and generate a new key and store it securely — all requests require it.
+
+![NOWNodes dashboard](/img/docs/nownodes-img/dashboard_nownodes.png)
+
+### 2. Supported Interfaces
+
+NOWNodes offers three main TON API interfaces:
+
+| Interface            | Description            | Description                                                                                                   |
+| -------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **API V1**           | Classic RPC interface  | Basic queries: get account state, balance, blocks, and send transactions.                                     |
+| **API V2**           | Extended RPC interface | Includes additional methods and improved performance for blockchain queries.                                  |
+| **API V3 (Indexer)** | Indexer-based API      | Optimized for fetching transactions, and advanced queries like wallets, collections, and event-based filters. |
+
+To check all supported methods, you can check [NOWNodes documentation](https://nownodes.gitbook.io/ton-toncoin?utm_source=tondocs&utm_medium=guide).
+
+### 3. Connecting to TON via NOWNodes
+
+Let’s take a look closer how to connect to TON with NOWNodes
+
+Example: Get up-to-date masterchain state.
+
+Use this endpoint: https://ton.nownodes.io/getMasterchainInfo
+
+Here is an example of the request:
+
+```bash
+curl --location 'https://ton.nownodes.io/getMasterchainInfo' \
+--header 'api-key: YOUR_API_KEY' \
+--header 'Content-Type: application/json'
+```
+
+Here is an example of the correct response:
+
+```json
+{
+  "ok": true,
+  "result": {
+    "@type": "blocks.masterchainInfo",
+    "last": {
+      "@type": "ton.blockIdExt",
+      "workchain": -1,
+      "shard": "-9223372036854775808",
+      "seqno": 52266460,
+      "root_hash": "uQzcsabTYGT9rO4yF+ZxIhdAWIpOkq/bSvVBs90NG9c=",
+      "file_hash": "nPP70Hz95nRRze16USISEzlB15obheSQ23FrWuIK36U="
+    },
+    "state_root_hash": "gTl/1j0sZukHTBI8yLPkBtp7g5wo4Kq+Lz6BCv+GEZw=",
+    "init": {
+      "@type": "ton.blockIdExt",
+      "workchain": -1,
+      "shard": "0",
+      "seqno": 0,
+      "root_hash": "F6OpKZKqvqeFp6CQmFomXNMfMj2EnaUSOXN+Mh+wVWk=",
+      "file_hash": "XplPz01CXAps5qeSWUtxcyBfdAo5zVb1N979KLSKD24="
+    },
+    "@extra": "1758640859.1752262:6:0.6899334555338705"
+  }
+}
+```
+
+### Why NOWNodes?
+
+NOWNodes is a multi-chain blockchain infrastructure provider that simplifies development and accelerates deployment. Key benefits:
+
+- Access to 115+ blockchains in one place including TON.
+
+- 99,95% uptime: Reliable performance under any load — with failover nodes, global redundancy, and smart load balancing built in.
+
+- Unlimited requests per second (RPS) - perfect for high-load apps and for the leading web3 Institutions. We are handle the workload of top Web3 companies
+
+- 24/7 support: 3min to get the answer from NOWNodes support team. Your request will be immediately handled by a person from the technical team, so that you receive help much faster!
+
+[NOWNodes](https://nownodes.io/) turns blockchain node management into a plug-and-play service, letting developers focus on building apps instead of infrastructure.
+
+<Feedback />
