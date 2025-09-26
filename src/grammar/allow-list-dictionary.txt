@@ -407,3 +407,8 @@ plsc
 clcf
 permissionless
 Misbehaviour
+gnark
+Gnark
+arkworks
+Arkworks
+PUSHNULL

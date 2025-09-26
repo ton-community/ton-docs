@@ -1,0 +1,305 @@
+import Feedback from '@site/src/components/Feedback';
+
+# Доказательства с нулевым разглашением в TON
+
+## Введение
+
+Это руководство показывает, как создать, скомпилировать и протестировать простую Circom-схему и проверить **ZK-proof** в блокчейне **TON** с использованием протокола **zk-SNARK Groth16**. Подход является стартовой точкой для более сложных кейсов и интеграций. Основа примеров — минимальная схема умножения. 
+
+Подробнее о Circom и ZK-доказательствах можно прочитать [здесь](https://docs.circom.io/).
+
+:::note
+Это руководство также применимо к схемам, написанным на языке [Noname](https://github.com/zksecurity/noname), так как библиотека `export-ton-verifier` интегрируется со `snarkjs`, который, в свою очередь, поддерживает интеграцию с языком Noname.  
+
+Примеры можно посмотреть в репозитории [zk-ton-example](https://github.com/zk-examples/zk-ton-examples/).
+:::
+## О чем это руководство
+
+- Базовый поток работы с zero-knowledge доказательствами в TON.
+- Настройка окружения для ZK в TON.
+- Создание и компиляция схемы Circom.
+- Проведение упрощённой trusted setup (Groth16).
+- Экспорт верификатора для FunC, Tolk и Tact.
+- Локальная и on-chain проверка доказательства.
+
+## Предварительные требования
+
+- Установлены **Node.js** и **npm**.
+- Установлены **circom** и **snarkjs** 
+- Базовое знакомство с TON и инструментарием Blueprint.
+
+## Подготовка проекта
+
+1. Создайте новый проект с помощью Blueprint:
+
+```bash
+npm create ton@latest ZkSimple
+cd ZkSimple
+````
+
+2. Установите библиотеки для работы с ZK-доказательствами:
+
+```bash
+npm install snarkjs @types/snarkjs
+```
+
+3. Установите утилиту экспорта верификаторов для TON:    
+
+```bash
+npm install export-ton-verifier@latest
+```
+
+Эта утилита экспортирует контракты-верификаторы для FunC, Tolk и Tact.
+
+## Создание схемы Circom
+
+Создайте каталог `circuits/Multiplier` и файл `Multiplier.circom`:
+
+```bash
+mkdir -p circuits/Multiplier
+cd circuits/Multiplier
+```
+
+```circom
+pragma circom 2.2.2;
+
+template Multiplier() {
+  signal input a;
+  signal input b;
+
+  signal output c;
+
+  c <== a*b;
+}
+
+component main = Multiplier();
+```
+
+Эта схема доказывает знание двух чисел `a` и `b`, произведение которых равно публичному выходу `c`, без раскрытия самих `a` и `b`.
+
+### Компиляция схемы
+
+Выполните в `circuits/Multiplier`:
+
+```bash
+circom Multiplier.circom --r1cs --wasm --sym --prime bls12381
+```
+
+После компиляции появятся файлы:
+
+- `Multiplier.r1cs` — ограничения схемы (R1CS)
+- `Multiplier.sym` — символическая карта сигналов
+- `Multiplier.wasm` — артефакт для генерации доказательства
+
+Проверить ограничения:
+
+```bash
+snarkjs r1cs info Multiplier.r1cs
+```
+
+Пример вывода:
+
+```
+[INFO]  snarkJS: Curve: bls12-381
+[INFO]  snarkJS: # of Wires: 4
+[INFO]  snarkJS: # of Constraints: 1
+[INFO]  snarkJS: # of Private Inputs: 2
+[INFO]  snarkJS: # of Public Inputs: 0
+[INFO]  snarkJS: # of Outputs: 1
+```
+
+:::note Кривые altbn-128 и bls12-381  
+`snarkjs` поддерживает кривые **altbn-128** и **bls12-381**. В Ethereum доступна altbn-128, но для TON используется **bls12-381**, поэтому в этом руководстве выбрана именно она.  
+:::
+
+## Trusted setup (Groth16)
+
+Для локальных тестов выполните упрощённую церемонию trusted setup. Параметр (`10`) влияет на время выполнения, его выбор зависит от размеры схемы, чем больше ограничений, тем больше требуется параметр.
+
+```bash
+# первый этап
+snarkjs powersoftau new bls12-381 10 pot10_0000.ptau -v
+snarkjs powersoftau contribute pot10_0000.ptau pot10_0001.ptau --name="First contribution" -v -e="some random text"
+
+# второй этап (зависит от скомпилированной схемы)
+snarkjs powersoftau prepare phase2 pot10_0001.ptau pot10_final.ptau -v
+snarkjs groth16 setup Multiplier.r1cs pot10_final.ptau Multiplier_0000.zkey
+snarkjs zkey contribute Multiplier_0000.zkey Multiplier_final.zkey --name="1st Contributor" -v -e="some random text"
+
+# экспорт ключа верификации
+snarkjs zkey export verificationkey Multiplier_final.zkey verification_key.json
+```
+
+Очистите лишние артефакты:
+
+```bash
+rm pot10_0000.ptau pot10_0001.ptau pot10_final.ptau Multiplier_0000.zkey
+```
+
+## Экспорт контракта-верификатора
+
+```bash
+# экспорт FunC контракта (по умолчанию)
+npx export-ton-verifier ./circuits/Multiplier/Multiplier_final.zkey ./contracts/verifier_multiplier.fc
+
+# экспорт Tolk контракта
+npx export-ton-verifier ./circuits/Multiplier/Multiplier_final.zkey ./contracts/verifier_multiplier.tolk --tolk
+
+# экспорт Tact контракта
+npx export-ton-verifier ./circuits/Multiplier/Multiplier_final.zkey ./contracts/verifier_multiplier.tact --tact
+```
+
+Для FunC/Tolk:
+
+```bash
+npx export-ton-verifier import-wrapper ./wrappers/Verifier.ts --force
+```
+
+## Тестирование и проверка доказательства
+
+В `tests/ZkSimple.spec.ts`:
+
+```ts
+import * as snarkjs from 'snarkjs';
+import path from 'path';
+import { dictFromInputList, groth16CompressProof } from 'export-ton-verifier';
+
+// для Tact (После запуска `npx blueprint build --all`)
+import { Verifier } from '../build/Verifier_tact/tact_Verifier';
+
+// для FunC и Tolk вам также необходимо вручную создать обертки:
+import { Verifier } from '../wrappers/Verifier';
+```
+
+Генерация и проверка:
+
+```ts
+const wasmPath = path.join(__dirname, '../circuits/Multiplier', 'Multiplier.wasm');
+const zkeyPath = path.join(__dirname, '../circuits/Multiplier', 'Multiplier_final.zkey');
+const verificationKey = require('../circuits/Multiplier/verification_key.json');
+
+const input = { a: '342', b: '1245' };
+
+const { proof, publicSignals } = await snarkjs.groth16.fullProve(input, wasmPath, zkeyPath);
+const okLocal = await snarkjs.groth16.verify(verificationKey, publicSignals, proof);
+```
+
+On-chain проверка:
+
+```ts
+const { pi_a, pi_b, pi_c, pubInputs } = await groth16CompressProof(proof, publicSignals);
+
+// Быстрая проверка с помощью метода get: проверяет доказательство локально, не изменяя состояние блокчейна.
+expect(await verifier.getVerify({ pi_a, pi_b, pi_c, pubInputs })).toBe(true);
+
+// Отправка доказательства в контракт в сообщении.
+// Контракт выполнит проверку; обработка результата/потока зависит от разработчика, использующего этот шаблон.
+await verifier.sendVerify(deployer.getSender(), { pi_a, pi_b, pi_c, pubInputs, value: toNano('0.15') });
+```
+
+## Другие языки
+
+В этом руководстве мы шли по пути **Circom → snarkjs → export-ton-verifier → TON**. Но тот же конвейер работает и для других стеков — важно лишь получить `proof` и `verification key` в формате snarkjs.
+
+В репозитории с примерами — [zk-ton-examples](https://github.com/zk-examples/zk-ton-examples/) — уже есть заготовки для **Noname**, **gnark** и **arkworks**: вы можете собрать доказательство в любом из этих стеков, затем сконвертировать его в формат snarkjs и проверить верификацию локально и on-chain таким же способом.
+
+:::note Мои утилиты конвертации  
+У меня есть две утилиты, которые помогают перенести доказательства и ключи верификации в формат, совместимый со snarkjs:
+- [ark-snarkjs](https://github.com/mysteryon88/ark-snarkjs): для экспорта из **arkworks**
+- [gnark-to-snarkjs](https://github.com/mysteryon88/gnark-to-snarkjs): для экспорта из **gnark**  
+:::
+
+Идея одна: получить `proof.json` и `verification_key.json` в формате snarkjs, а дальше использовать `export-ton-verifier` и проверять в TON.
+### Arkworks (Rust)
+
+Используйте библиотеку **arkworks** для генерации доказательства и верификационного ключа, затем сконвертируйте всё в формат snarkjs через **ark-snarkjs**.
+
+1. Подготовьте проект с использованием arkworks.
+2. Добавьте в зависимости пакет **ark-snarkjs**:
+
+```sh
+cargo add ark-snarkjs
+```
+
+3. Экспортируйте доказательство и ключ верификации в формат JSON — достаточно указать путь к файлу:
+
+```rust
+use ark_snarkjs::{export_proof, export_vk};
+use ark_bls12_381::Bls12_381;
+
+let _ = export_proof::<Bls12_381, _>(&proof, &public_inputs, "json/proof.json");
+let _ = export_vk::<Bls12_381, _>(
+    &params.vk,
+    public_inputs.len(),
+    "json/verification_key.json",
+);
+```
+
+Каталог и файлы будут созданы автоматически.
+
+4. Экспортируйте контракт-верификатор:
+
+```sh
+# экспорт FunC контракта
+npx export-ton-verifier ./circuits/Arkworks/MulCircuit/json/verification_key.json ./contracts/verifier_ark.fc
+# экспорт Tact контракта
+npx export-ton-verifier ./circuits/Arkworks/MulCircuit/json/verification_key.json ./contracts/verifier_ark.tact --tact
+# экспорт Tolk контракта
+npx export-ton-verifier ./circuits/Arkworks/MulCircuit/json/verification_key.json ./contracts/verifier_ark.tolk --tolk
+```
+### Gnark (Go)
+
+Используйте библиотеку **gnark** для генерации доказательства и верификационного ключа, затем сконвертируйте всё в формат snarkjs через **gnark-to-snarkjs**.
+
+1. Подготовьте проект gnark.
+2. Добавьте в зависимости пакет **gnark-to-snarkjs**:
+
+```sh
+go get github.com/mysteryon88/gnark-to-snarkjs@latest
+```
+
+3. Экспортируйте доказательство и ключ верификации:
+
+```go
+{
+  proof_out, _ := os.Create("proof.json")
+  defer proof_out.Close()
+  _ = gnarktosnarkjs.ExportProof(proof, []string{"35"}, proof_out)
+}
+{
+  out, _ := os.Create("verification_key.json")
+  defer out.Close()
+  _ = gnarktosnarkjs.ExportVerifyingKey(vk, out)
+}
+```
+
+4. Экспортируйте контракт-верификатор:
+
+```sh
+# экспорт Tact контракта
+npx export-ton-verifier "./circuits/Cubic (gnark)/verification_key.json" ./contracts/verifier_cubic.tact --tact
+# экспорт FunC контракта
+npx export-ton-verifier "./circuits/Cubic (gnark)/verification_key.json" ./contracts/verifier_cubic.fc
+# экспорт Tolk контракта
+npx export-ton-verifier "./circuits/Cubic (gnark)/verification_key.json" ./contracts/verifier_cubic.tolk --tolk
+```
+
+## Заключение
+
+Вы собрали минимальный пример: **схема → trusted setup → экспорт верификатора → проверка в TON**. На этой базе легко строить более сложные сценарии.
+
+## Полезные ссылки
+
+- Репозиторий с примером: [zk-ton-examples](https://github.com/zk-examples/zk-ton-examples/)
+- Библиотека экспорта контрактов: [export-ton-verifier](https://github.com/mysteryon88/export-ton-verifier)
+- Дополнительные библиотеки:
+    - [ark-snarkjs](https://github.com/mysteryon88/ark-snarkjs)
+    - [gnark-to-snarkjs](https://github.com/mysteryon88/gnark-to-snarkjs)
+- Использование ZKP в Tact: [docs.tact](https://docs.tact-lang.org/cookbook/zk-proofs/)
+- Circom: [docs.circom.io](https://docs.circom.io/)
+- Noname: [zksecurity/noname](https://github.com/zksecurity/noname)
+- Gnark: [Consensys/gnark](https://github.com/Consensys/gnark)
+- Arkworks: [arkworks.rs](https://arkworks.rs/)
+- SnarkJS: [iden3/snarkjs](https://github.com/iden3/snarkjs)
+
+<Feedback />
