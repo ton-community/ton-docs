@@ -13,11 +13,13 @@ jobs:
       issue_number: ${{ github.event.issue.number }}
     steps:
       - id: check
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
         run: |
-          if [[ "${{ github.event.comment.body }}" =~ ^/previewdraft ]]
+          if [[ "$COMMENT_BODY" =~ ^/previewdraft ]]
           then
             echo "command=previewdraft" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.event.comment.body }}" =~ ^/preview ]]
+          elif [[ "$COMMENT_BODY" =~ ^/preview ]]
           then
             echo "command=preview" >> $GITHUB_OUTPUT
           fi
