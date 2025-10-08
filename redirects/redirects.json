@@ -1,5 +1,9 @@
 [
     {
+        "from": "/participate/nodes/node-types",
+        "to": "/v3/documentation/nodes/overview"
+    },
+    {
         "from": "/learn/glossary",
         "to": "/v3/concepts/glossary"
     },
