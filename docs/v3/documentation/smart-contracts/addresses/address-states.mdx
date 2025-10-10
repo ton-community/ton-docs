@@ -17,8 +17,8 @@ Each address exists in one of the following states:
 
 :::note
 Thresholds for storage‑fee debt:
-- If unpaid storage fees (debt) exceed balance + 0.1 TON, the account becomes frozen ([source](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L949C11-L953C12)).
-- If the debt exceeds 1 TON, the account is deleted (status `nonexist`) ([source](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L936C11-L946C12)).
+- If unpaid storage fees (StorageInfo.due_payment) exceed 0.1 TON, the account becomes frozen ([source](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L949C11-L953C12)).
+- If the debt (StorageInfo.due_payment) exceeds 1 TON, the account is deleted (status `nonexist`) ([source](https://github.com/ton-blockchain/ton/blob/72056a2261cbb11f7cf0f20b389bcbffe018b1a8/crypto/block/transaction.cpp#L936C11-L946C12)).
 :::
 
 ## State transitions
