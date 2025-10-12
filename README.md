@@ -103,7 +103,7 @@ git submodule update --init --recursive
 </a>
 
 <p align="right" style="font-size: 14px; color: #555; margin-top: 20px;">
-  <a href="#readme-top" style="text-decoration: none; color: blue; font-weight: bold;">
+  <a href="#TON-documentation-" style="text-decoration: none; color: blue; font-weight: bold;">
     ↑ Back to Top ↑
   </a>
 </p>
