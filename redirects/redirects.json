@@ -97,6 +97,10 @@
         "from": "/develop/dapps/tutorials/simple-zk-on-ton",
         "to": "/v3/guidelines/dapps/tutorials/zero-knowledge-proofs"
     },
+        {
+        "from": "/develop/dapps/tutorials/zk-proofs-on-ton",
+        "to": "/v3/guidelines/dapps/tutorials/zk-proofs-on-ton"
+    },
     {
         "from": "/develop/dapps/tutorials/accept-payments-in-a-telegram-bot",
         "to": "/v3/guidelines/dapps/tutorials/telegram-bot-examples/accept-payments-in-a-telegram-bot"
