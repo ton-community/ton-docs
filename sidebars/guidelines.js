@@ -338,6 +338,7 @@ module.exports = [
         items: [
           'v3/guidelines/dapps/asset-processing/payments-processing',
           'v3/guidelines/dapps/asset-processing/jettons',
+          'v3/guidelines/dapps/asset-processing/usdt-processing',
           'v3/guidelines/dapps/asset-processing/mintless-jettons',
           'v3/guidelines/dapps/asset-processing/compressed-nfts',
           'v3/guidelines/dapps/asset-processing/mass-mint-tools',

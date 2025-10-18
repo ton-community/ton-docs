@@ -8,11 +8,18 @@ In this guide we use TypeScript with the following packages:
 - [`@ton/ton`](https://www.npmjs.com/package/@ton/ton)
 - [`@ton/core`](https://www.npmjs.com/package/@ton/core)
 
-//TODO add a picture that describes what is deposit address, wallet address, and two jetton wallets address
-
-
 
 The process is as follows:
+
+```mermaid
+flowchart LR
+    User1((User<br/>Wallet)) --> Receiver((User<br/>Jetton<br/>Wallet)) --> B((CEX<br/>Jetton<br/>Wallet)) --> User2((CEX<br/>Wallet))
+
+    style User1 r:50
+    style Receiver r:50
+    style B r:50
+    style User2 r:50
+```
 
 0. Set up the client.
 ```ts
