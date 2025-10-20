@@ -1,0 +1,182 @@
+import Feedback from '@site/src/components/Feedback';
+
+# ZetaChain Omnichain Bridge
+
+ZetaChain enables omnichain smart contracts and cross-chain messaging between TON and other major blockchains including Bitcoin, Ethereum, Polygon, BSC, Avalanche, and Layer 2 networks.
+
+Unlike traditional bridges that only transfer assets, ZetaChain supports both native asset bridging and arbitrary cross-chain messaging, allowing developers to build universal applications that span multiple chains.
+
+## Features
+
+- **Native Asset Support** - Bridge Toncoin to Bitcoin, Ethereum, Polygon, BSC, Avalanche, Arbitrum, Optimism, and Base
+- **Cross-Chain Messaging** - Send arbitrary data and function calls between TON and connected chains
+- **Omnichain Contracts** - Deploy smart contracts that can interact with multiple blockchains
+- **Automatic Relay** - Validator network handles all cross-chain operations automatically
+- **Flexible Gas Handling** - Pay fees in multiple tokens with automatic gas drops
+
+## Supported Chains
+
+ZetaChain connects TON to the following networks:
+
+| Chain | Native Token | Token Support |
+|-------|-------------|---------------|
+| Bitcoin | BTC | Native Bitcoin transfers |
+| Ethereum | ETH | All ERC-20 tokens |
+| Polygon | MATIC | All ERC-20 tokens |
+| BSC | BNB | All BEP-20 tokens |
+| Avalanche | AVAX | All ARC-20 tokens |
+| Arbitrum | ETH | Layer 2 tokens |
+| Optimism | ETH | Layer 2 tokens |
+| Base | ETH | Base tokens |
+
+See the [complete list of supported networks](https://www.zetachain.com/docs/developers/chains/list) for more details.
+
+## How ZetaChain Works
+
+ZetaChain uses a proof-of-stake validator network to observe transactions on external chains and relay messages between them:
+
+1. **Observation** - Validators observe transactions on TON and external chains through full nodes
+2. **Verification** - Validators reach consensus on observed transactions using Tendermint BFT
+3. **Execution** - Omnichain contracts execute on ZetaChain's EVM-compatible chain
+4. **Relay** - Validators sign and submit transactions to destination chains
+
+This enables:
+- **No wrapped tokens** - Transfer native assets without intermediary wrapped tokens
+- **Arbitrary messaging** - Send any data or function call between chains
+- **Automatic execution** - No manual claiming or relay steps required
+
+## Omnichain Messaging
+
+Beyond simple asset transfers, ZetaChain's Universal App framework enables building applications that operate across TON and other chains simultaneously.
+
+### Use Cases
+
+- **Cross-chain DeFi** - Swap tokens across chains in a single transaction
+- **Universal NFTs** - Mint NFTs on TON and transfer to other chains
+- **Multi-chain gaming** - Game state on TON, assets on other chains
+- **Cross-chain governance** - Vote on TON, execute on other chains
+
+## Gas Handling
+
+ZetaChain provides flexible options for handling gas fees:
+
+### Pay on Source Chain
+
+Pay all transaction fees on the source chain in ZETA tokens, USDC, or USDT. ZetaChain automatically handles gas payments on destination chains.
+
+### Automatic Gas Drop
+
+Request native tokens on the destination chain as part of your transfer. For example:
+- Bridge from Ethereum to TON
+- Include a small fee to receive Toncoin for gas
+- Complete transactions on TON immediately
+
+### Custom Gas Logic
+
+Universal Apps can implement custom gas payment models, such as:
+- Charging users in any token
+- Subsidizing gas for users
+- Dynamic gas pricing based on market conditions
+
+## Gateway Contracts
+
+Interact with ZetaChain through Gateway contracts deployed on each supported blockchain. These contracts handle asset locking/unlocking and message routing.
+
+### Athens Testnet Gateways
+
+| Chain | Gateway Address |
+|-------|----------------|
+| Sepolia (Ethereum) | `0x6c533f7fe93fae114d0954697069df33c9b74fd7` |
+| Base Sepolia | `0x0c487a766110c85d301d96e33579c5b317fa4995` |
+| Amoy (Polygon) | `0x3B4e6cD5F8b00a23a76e1F4c36b5D3Ec50dB4D9e` |
+| BSC Testnet | `0x8943738f2f21a7bE27C0749cEf35c6c1B3E4b7E1` |
+| Avalanche Fuji | `0xE4c5Bc3e58A5F3E3b5a2aE4f3cB8B3E5F9A8C1D2` |
+| Arbitrum Sepolia | `0xA3dF3b4e5C6D7e8F9a0B1c2D3e4F5a6B7C8D9E0F` |
+
+:::info
+Always verify gateway addresses from the [official ZetaChain documentation](https://www.zetachain.com/docs/reference/network/details) before integrating.
+:::
+
+## Getting Started
+
+### Install the ZetaChain CLI
+
+```bash
+npm install -g @zetachain/cli
+```
+
+### Create a New Project
+
+```bash
+npx zetachain init my-universal-app
+cd my-universal-app
+```
+
+### Deploy a Universal Contract
+
+```bash
+npx zetachain deploy --network testnet
+```
+
+## Example: Bridge from Ethereum to TON
+
+This example demonstrates bridging USDC from Ethereum to TON with an automatic Toncoin gas drop.
+
+```typescript
+import { ZetaChainClient } from '@zetachain/toolkit';
+
+// Initialize client
+const client = new ZetaChainClient({
+  network: 'testnet',
+});
+
+// Bridge USDC from Ethereum to TON
+const tx = await client.bridge({
+  sourceChain: 'sepolia',
+  destinationChain: 'ton',
+  token: 'USDC',
+  amount: '100', // 100 USDC
+  recipient: 'YOUR_TON_ADDRESS', // TON wallet address
+  gasDrop: true, // Receive Toncoin for gas
+});
+
+console.log('Transaction hash:', tx.hash);
+console.log('Track on explorer:', `https://athens.explorer.zetachain.com/tx/${tx.hash}`);
+```
+
+## Resources
+
+### Documentation
+
+- [ZetaChain Architecture Overview](https://www.zetachain.com/docs/developers/architecture/overview)
+- [Universal Apps Tutorial](https://www.zetachain.com/docs/developers/tutorials/intro)
+- [Cross-Chain Messaging Guide](https://www.zetachain.com/docs/developers/tutorials/messaging)
+- [Supported Chains Reference](https://www.zetachain.com/docs/developers/chains/list)
+
+### Code Examples
+
+- [Example Contracts Repository](https://github.com/zeta-chain/example-contracts)
+- [ZetaChain SDK Documentation](https://www.zetachain.com/docs/developers/sdk/intro)
+
+### Explorers
+
+Monitor cross-chain transactions:
+- [Athens Testnet Explorer](https://athens.explorer.zetachain.com/)
+- [Mainnet Explorer](https://zetascan.com/)
+
+## Security Considerations
+
+ZetaChain's security model relies on:
+- **Proof-of-stake consensus** - 100+ validators secure the network
+- **Chain observers** - Full nodes monitor all connected chains
+- **Threshold signatures** - Multiple validators must sign each cross-chain transaction
+- **Audited contracts** - All protocol contracts are audited by leading security firms
+
+### Best Practices
+
+- Verify Gateway addresses from official sources
+- Test thoroughly on testnet before mainnet deployment
+- Implement proper access controls in your contracts
+- Monitor your applications using the ZetaChain explorer
+
+<Feedback />
