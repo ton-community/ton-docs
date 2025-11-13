@@ -532,7 +532,7 @@ The behavior depends on the `mode` parameter:
 - If `mode = 1` or `mode = 3`, all but the `amount` of nanotons is reserved.
 
 This process is equivalent to generating an outbound message that transfers the `amount` of nanotons or `b − amount` nanotons,
-where `b` represents the remaining balance, to the sender. This ensures that subsequent output actions cannot exceed the remaining funds.
+where `b` represents the remaining balance, to oneself. This ensures that subsequent output actions cannot exceed the remaining funds.
 
 **Mode Flags**
 
