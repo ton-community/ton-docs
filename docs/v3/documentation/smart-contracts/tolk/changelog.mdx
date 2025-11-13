@@ -4,6 +4,15 @@ import Feedback from '@site/src/components/Feedback';
 
 Once new versions are released, they will be announced on this page.
 
+## v1.2
+
+1. Breaking change: `address` is now "internal only" ([details and migration](https://github.com/ton-blockchain/ton/pull/1886))
+2. Rich bounces: not 256 bits, but the full body on bounce
+3. Cheap builder-to-slice, StateInit, and address composition
+4. Compilation errors significantly improved
+5. Anonymous functions supported
+6. Borrow checker and other stuff related to undefined behavior
+
 ## v1.1
 
 1. `map<K, V>` — a convenient zero-overhead wrapper over TVM dictionaries

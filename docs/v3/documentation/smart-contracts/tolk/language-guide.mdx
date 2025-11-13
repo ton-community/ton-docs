@@ -178,7 +178,8 @@ repeat (10) {
 - `cell` - a TVM cell
 - `slice` - a TVM slice; you can also use `bitsN`. (e.g. `bits512` for storing a signature)
 - `builder` - a TVM builder
-- `address` - blockchain address
+- `address` - internal (standard) address
+- `any_address` — internal/external/none address
 - `coins` - Toncoin or coin amounts
 - `void` - no return value
 - `never` -  function never returns (always throws an exception)
@@ -285,10 +286,7 @@ A dedicated type for blockchain addresses:
 
 ```tolk
 val addr = address("EQDKbjIcfM6ezt8KjKJJLshZJJSqX7XOA4ff-W72r5gqPrHF");
-
-if (addr.isInternal()) {
-    var workchain = addr.getWorkchain();
-}
+val workchain = addr.getWorkchain();
 ```
 
 ## Tensors
@@ -643,7 +641,7 @@ Create messages using a high-level syntax:
 
 ```tolk
 val reply = createMessage({
-    bounce: false,
+    bounce: BounceMode.NoBounce,
     value: ton("0.05"),
     dest: senderAddress,
     body: RequestedInfo { ... }

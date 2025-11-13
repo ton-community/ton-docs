@@ -685,7 +685,8 @@ We have the following types:
 - `coins` and function `ton("0.05")`
 - `int32`, `uint64`, and other fixed-width integers (just int at TVM) [details](https://github.com/ton-blockchain/ton/pull/1559)
 - `bytesN` and `bitsN`, similar to `intN` (backed by slices at TVM)
-- `address` (internal/external/none, still a slice at TVM)
+- `address` (internal (standard) address, still a slice at TVM)
+- `any_address` (internal/external/none)
 - `void` (more canonical to be named `unit`, but `void` is more reliable)
 - `self`, to make chainable methods, described below; actually it's not a type, it can only occur instead of return type of a function
 - `never` (an always-throwing function returns `never`, for example; an _impossible type_ is also `never`)
@@ -815,6 +816,77 @@ return tupleLast(t);       // ok if function specifies return type
 ```
 
 Also note that `T` for asm functions must occupy one stack slot, whereas for a user-defined function, `T` could be of any shape. Otherwise, asm body is unable to handle it properly.
+
+### Anonymous functions (lambdas)
+
+You can use lambdas — function expressions, without capturing outer variables. They can be passed as callbacks, assigned to variables, etc.
+
+```tolk
+fun callAndAssertTrue(callback: () -> bool) {
+    val result = callback();
+    assert (result == true) throw 123;
+}
+
+callAndAssertTrue(fun() {   // lambda
+    ...
+    return ...;
+});
+```
+
+Unlike regular functions, where you must specify all parameters types, lambda parameters types may be omitted if they can be inferred:
+```tolk
+fun Result.pushMath(mutate self, loadFn: (int, slice) -> int) {
+    val ans = mathFn(32, "...");
+    self.output.push(ans);
+}
+
+r.pushMath(fun(bits, s) {    // bits is `int`, s is `slice`
+    return s.loadUint(bits)
+});
+
+// but it's an error: param's type cannot be inferred here:
+val doubleFn = fun(param) { return param * 2 };
+// correct is:
+val doubleFn = fun(param: int) { return param * 2 };
+```
+
+From the type system point of view, a function (and a lambda) has a special type `(...ArgsT) -> ReturnT`.
+
+```tolk
+// a regular function
+fun abs(a: int): int { ... }
+
+val cb1 = abs;                           // (int) -> int
+val cb2 = fun(a: coins): MyData { ... }; // (coins) -> MyData 
+val cb3 = fun(a: slice) {};              // (slice) -> void
+```
+
+As first-class functions, lambdas can even be returned:
+```tolk
+fun createFinalizer() {
+    return fun(b: builder) {
+        b.storeUint(0xFFFFFFFF, 32);
+        return b.toSlice();
+    }
+}
+
+val f = createFinalizer();    // (builder) -> slice
+f(beginCell());               // slice with 32 bits
+```
+
+While lambdas are not common in smart contracts, they become useful in general purpose tools. 
+They can easily be combined with generics of any level, nested into each other, and so on.
+
+Note that lambdas are not closures: capturing outer variables not supported.
+```tolk
+fun outer(x: int) {
+    return fun(y: int) {
+        return x + y;    // error: undefined symbol `x`
+    }
+}
+```
+
+Capturing variables is nearly impossible to implement on a stack machine, just like inheritance (conceptually equivalent).
 
 ### #include → import. Strict imports
 
@@ -1557,22 +1629,20 @@ globalTuple.1.2 += 10;  // "GETGLOB" + ... + "SETGLOB"
 
 ### Type address
 
-In TVM, all **binary data** is just **a slice.** Same goes for addresses: while TL-B describes the entity `MsgAddress` (internal/external/none/var address),
-
-and TVM assembler has instructions to load/validate addresses, nevertheless: at the low level, it's just a slice.
+In TVM, all **binary data** is just **a slice.** Same goes for addresses: while TL-B describes the entity `MsgAddress`, at the TVM level, it's just a slice.
 That's why in FunC's standard library `loadAddress` returned `slice`, and `storeAddress` accepted `slice`.
 
-Tolk introduces the dedicated `address` type. It's still a TVM slice at runtime (internal/external/none),
+Tolk introduces the dedicated `address` type meaning "internal address". It's still a TVM slice at runtime,
 but it differs from an **abstract slice** from the type system point of view:
 
-1. Integrated with auto-serialization: compiler knows how to pack/unpack it (`LDMSGADDR` and `STSLICE`)
+1. Integrated with auto-serialization: compiler knows how to pack/unpack it (`LDSTDADDR` and `STSTDADDR`)
 2. Comparable: operators `==` and `!=` work on addresses:
 
 ```tolk
 if (senderAddress == msg.owner)
 ```
 
-3. Introspectable: `address.isNone()`, `address.isInternal()`, `address.isExternal()`, `address.getWorkchain()` and `address.getWorkchainAndHash()` (valid for internal addresses)
+3. Introspectable: `address.getWorkchain()` and `address.getWorkchainAndHash()`
 
 Passing a slice instead leads to an error:
 
@@ -1580,9 +1650,11 @@ Passing a slice instead leads to an error:
 var a: slice = s.loadAddress();  // error, can not assign `address` to `slice`
 ```
 
+There is also a type `any_address` to store internal/external/none.
+
 **Embedding a const address into a contract**
 
-Use the built-in `address()` function, which accepts a standard address. In FunC, there was a postfix `"..."a` that returned a slice.
+Use the built-in `address()` function. In FunC, there was a postfix `"..."a` that returned a slice.
 
 ```tolk
 address("EQCRDM9h4k3UJdOePPuyX40mCgA4vxge5Dc5vjBR8djbEKC5")
@@ -1612,20 +1684,16 @@ According to a standard, there are different types of addresses. The most freque
 - `01` (**external** prefix) + len (9 bits) + len bits — external addresses
 - `00` (**none** prefix) — address **none**, 2 bits
 
-The `address` type can hold any of these. Most often, it's an internal address. But the type system does not restrict it exactly: this can't be done without heavy runtime checks.
+**`address` is "internal only"** (90% use cases).  
+**`address?` (nullable) is "internal/none"** (9% use cases).  
+**`any_address` is "internal/external/none"** (1% use cases).
 
-So, if `address` comes from an untrusted input, you should probably validate it:
+Remember that `address` is (WorkChain + hash). When it comes from untrusted input, you should probably validate it:
 
 ```tolk
 val newOwner = msg.nextOwnerAddress;
-assert(newOwner.isInternal()) throw 403;
 assert(newOwner.getWorkchain() == BASECHAIN) throw 403;
 ```
-
-All in all, if you don't trust inputs — you should validate everything: numbers, payload, and addresses particularly.
-But if an input comes from a trusted source (your own contract storage, for example) — of course, you can rely on its contents.
-The compiler does not insert hidden instructions.
-Just remember, that `address` in general can hold all valid types.
 
 ### Type aliases type NewName = \<existing type>
 
@@ -2502,7 +2570,7 @@ No more manual `beginCell().storeUint(...).storeRef(...)` boilerplate. Just desc
 
 ```tolk
 val reply = createMessage({
-    bounce: false,
+    bounce: BounceMode.NoBounce,
     value: ton("0.05"),
     dest: senderAddress,
     body: RequestedInfo { ... }
@@ -2850,17 +2918,31 @@ fun onInternalMessage(in: InMessage) {
 }
 ```
 
-**Remember about 256 bits on bounces**
+**Bounced body is either "first 256 bits" or "the entire body"**
 
-Currently, TON Blockchain works in such a way that when a message is bounced, only the first 256 bits are present, starting with 0xFFFFFFFF ("bounced prefix"). That's why you manually control which fields you can read (they fit the rest of the 224 bits) and which do not.
+When you use `createMessage`, its parameter `bounce` is an enum:
+* `BounceMode.NoBounce`
+* `BounceMode.Only256BitsOfBody` — `in.bouncedBody` will be "0xFFFFFFFF" + first 256 bits of original body (cheapest)
+* `BounceMode.RichBounce` — parse `in.bouncedBody` with `RichBounceBody.fromSlice`
+* `BounceMode.RichBounceOnlyRootCell` — same, but `originalBody` will contain only a root cell
 
 ```tolk
+// demo for "old-fashioned" 256 bits (if you send all with Only256BitsOfBody) 
 fun onBouncedMessage(in: InMessageBounced) {
-    in.bouncedBody    // 256 bits
+    in.bouncedBody    // 32-bit prefix + 256 bits
 
-    // typically, you'll do
     in.bouncedBody.skipBouncedPrefix();   // skips 0xFFFFFFFF
     // handle rest of body, probably with lazy match
+}
+```
+
+```tolk
+// demo for "rich bounces" to access not 256 bits, but the entire body
+// (if you send ALL outgoing messages with BounceMode.RichBounce)
+fun onBouncedMessage(in: InMessageBounced) {
+    val rich = lazy RichBounceBody.fromSlice(in.bouncedBody);
+    // handle rich.originalBody, probably with lazy match
+    // use rich.xxx to get exitCode, gasUsed, and so on
 }
 ```
 
