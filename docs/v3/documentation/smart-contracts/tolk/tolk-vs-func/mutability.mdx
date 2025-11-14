@@ -79,7 +79,6 @@ fun someFn(x: int) {
 var origX = 0;
 someFn(origX);  // origX remains 0
 someFn(10);     // ok, just int
-origX.someFn(); // still allowed (but not recommended), origX remains 0
 ```
 
 The same goes for cells, slices, whatever:

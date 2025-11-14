@@ -45,18 +45,20 @@ For example, if you assign 256 to uint8, asm command "8 STU" will fail with code
 | `coins`                  | VarUInteger 16                           | `STGRAMS`                           |
 | `varint16`, 32, etc.     | Var(U)Integer 16/32                      | `STVARINT16` / `STVARUINT32` / etc. |
 | `bits8`, `bits123`, etc. | just N bits                              | runtime check + `STSLICE` (1)       |
-| `address`                | MsgAddress (internal/external/none)      | `STSLICE` (2)                       |
+| `address`                | addr_std (internal, 267 bits)            | `STSTDADDR`                         |
+| `address?`               | addr_none or addr_std (2/267 bits)       | `STOPTSTDADDR`                      |
+| `any_address`            | MsgAddress (internal/external/none)      | `STSLICE`                           |
 | `bool`                   | one bit                                  | `1 STI`                             |
 | `cell`                   | untyped reference, TL-B `^Cell`          | `STREF`                             |
 | `cell?`                  | maybe reference, TL-B `(Maybe ^Cell)`    | `STOPTREF`                          |
 | `Cell<T>`                | typed reference, TL-B `^T`               | `STREF`                             |
 | `Cell<T>?`               | maybe typed reference, TL-B `(Maybe ^T)` | `STOPTREF`                          |
 | `RemainingBitsAndRefs`   | rest of slice                            | `STSLICE`                           |
-| `builder`                | only for writing, not for reading (5)    | `STB`                               |
-| `slice`                  | only for writing, not for reading (5)    | `STSLICE`                           |
+| `builder`                | only for writing, not for reading (4)    | `STB`                               |
+| `slice`                  | only for writing, not for reading (4)    | `STSLICE`                           |
 | `T?`                     | TL-B `(Maybe T)`                         | `1 STI` + IF ...                    |
-| `T1 \| T2`               | TL-B `(Either T1 T2)`                    | `1 STI` + IF ... + ELSE ... (3)     |
-| `T1 \| T2 \| ...`        | TL-B multiple constructors               | IF ... + ELSE IF ... + ELSE ... (4) |
+| `T1 \| T2`               | TL-B `(Either T1 T2)`                    | `1 STI` + IF ... + ELSE ... (2)     |
+| `T1 \| T2 \| ...`        | TL-B multiple constructors               | IF ... + ELSE IF ... + ELSE ... (3) |
 | `(T1, T2)`               | TL-B `(Pair T1 T2)` = one by one         | pack T1 + pack T2                   |
 | `(T1, T2, ...)`          | nested pairs = one by one                | pack T1 + pack T2 + ...             |
 | `SomeStruct`             | fields one by one                        | like a tensor                       |
@@ -67,21 +69,14 @@ For example, if you assign 256 to uint8, asm command "8 STU" will fail with code
   These checks ensure that serialized binary data will be correct, but they cost gas.
   However, if you guarantee that a slice is valid (for example, it comes from trusted sources), pass an option `skipBitsNValidation` to disable runtime checks.
 
-- (2) In TVM, all addresses are also plain slices. Type `address` indicates that it's a slice containing _some_ valid address (internal/external/none).
-  It's packed with `STSLICE` (no runtime checks) and loaded with `LDMSGADDR`.
-
-Don't confuse `address none` with null! `None` is a valid address (two zero bits), whereas `address?` is `maybe address` (bit "0" OR bit "1" + address).
-
-- (3) TL-B Either is expressed with a union `T1 | T2`. For example, `int32 | int64` is packed as ("0" + 32-bit int OR "1" + 64-bit int).
-
+- (2) TL-B Either is expressed with a union `T1 | T2`. For example, `int32 | int64` is packed as ("0" + 32-bit int OR "1" + 64-bit int). 
 However, if T1 and T2 are both structures with manual serialization prefixes, those prefixes are used instead of a 0/1 bit.
 
-
-- (4) To (un)pack a union, say, `Msg1 | Msg2 | Msg3`, we need serialization prefixes. For structures, you can specify them manually
+- (3) To (un)pack a union, say, `Msg1 | Msg2 | Msg3`, we need serialization prefixes. For structures, you can specify them manually
 (or the compiler will generate them right here). For primitives, like `int32 | int64 | int128 | int256`, the compiler generates a prefix tree 
 (00/01/10/11 in this case). Read **auto-generating serialization prefixes** below.
 
-- (5) Using raw `builder` and `slice` for writing is supported but not recommended, as they do not reveal any information about their internal structure.
+- (4) Using raw `builder` and `slice` for writing is supported but not recommended, as they do not reveal any information about their internal structure.
 Auto-generated TypeScript wrappers will be available in the future. However, for a raw `slice`, a wrapper cannot be generated, as there is no way to predict how to read such a field back.
 This feature will likely be removed in the future.
 
@@ -92,11 +87,12 @@ This feature will likely be removed in the future.
 struct A {
     f1: int8       // just int8
     f2: int8?      // maybe int8
-    f3: address    // internal/external/none
-    f4: bool       // TRUE (-1) serialized as bit '1'
-    f5: B          // embed fields of struct B
-    f6: B?         // maybe B
-    f7: coins      // used for money amounts
+    f3: address    // internal address (267 bits)
+    f4: address?   // internal or none (`null` <-> '00', `address` <-> 267 bits) 
+    f5: bool       // TRUE (-1) serialized as bit '1'
+    f6: B          // embed fields of struct B
+    f7: B?         // maybe B
+    f8: coins      // used for money amounts
 
     r1: cell          // always-existing untyped ref
     r2: Cell<B>       // typed ref
@@ -590,7 +586,7 @@ Why do we say "potentially"? Because for many types, their size can vary:
 
 - `int8?` is either one or nine bits
 - `coins` is variadic: from 4 bits (small values) up to 124 bits
-- `address` is internal (267 bits), or external (up to 521 bits), or none (2 bits); but since external addresses are very rare, estimation is "from 2 to 267 bits"
+- `any_address` is internal (267 bits), or external (up to 521 bits), or none (2 bits)
 
 So, suppose you have:
 
@@ -646,45 +642,6 @@ All in all, the compiler indicates on potential cell overflow, and it's your cho
 
 Probably, in the future, there will be more policies (besides "suppress") — for example, to auto-repack fields. For now, it's absolutely straightforward.
 
-## Write builder, read slice
-
-Since Tolk remains low-level whenever you need, it allows doing tricky things. Suppose you manually create an address from bits:
-
-```tolk
-var addrB = beginCell()
-           .storeUint(0b01)   // addr_extern
-           ...;
-```
-
-And you want to use this `addrB` (it's `builder`! not `address`) to write into a storage:
-
-```tolk
-struct MyStorage {
-    ...
-    addr: address
-}
-
-var st: MyStorage;
-st.addr = addrB;   // error, can not assign `builder` to `address`
-```
-
-Of course, you can do `addrB.endCell().beginParse() as address`, but creating a cell is expensive. How can you write `addrB` directly?
-
-The solution is: if you want `builder` for writing, and `address` for reading... Do exactly what you want!
-
-```tolk
-struct MyStorageData<T> {
-    ...
-    addr: T
-}
-
-type MyStorage = MyStorageData<address>
-type MyStorageForWrite = MyStorageData<builder>
-```
-
-The same technique can be combined with `RemainingBitsAndRefs` and some more cases.
-Moreover, for performance optimizations, you can create different "views" over the same data. Don't underestimate generics and the type system in general.
-
 ## Integration with message sending
 
 Auto-serialization is natively integrated with sending messages to other contracts.
@@ -692,7 +649,7 @@ You just "send some object," and the compiler automatically serializes it, detec
 
 ```tolk
 val reply = createMessage({
-    bounce: true,
+    bounce: BounceMode.RichBounce,
     value: ton("0.05"),
     dest: senderAddress,
     body: RequestedInfo {     // auto-serialized

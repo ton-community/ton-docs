@@ -6,7 +6,7 @@ In FunC, you had to compose message cells manually and regularly face code like:
 
 ```func
 cell m = begin_cell()
-    .store_uint(0x18, 6)
+    .store_uint(0x10, 6)
     .store_slice(sender_address)
     .store_coins(50000000)
     .store_uint(0, 1 + 4 + 4 + 64 + 32 + 1 + 1)
@@ -21,7 +21,7 @@ In Tolk, you use a high-level function — and it's even more gas-effective:
 
 ```tolk
 val reply = createMessage({
-    bounce: true,
+    bounce: BounceMode.NoBounce,
     value: ton("0.05"),
     dest: senderAddress,
     body: RequestedInfo { ... }
@@ -94,7 +94,7 @@ dest: someAddress,
 dest: (workchain, hash)
 ```
 
-It's either an address, OR a OR (WorkChain + hash), OR ...:
+It's either an address, OR (WorkChain + hash), OR ...:
 
 ```tolk
 struct CreateMessageOptions<TBody> {
@@ -310,26 +310,26 @@ If you don't need any `body` at all, just leave it out:
 
 ```tolk
 createMessage({
-    bounce: true,
+    bounce: BounceMode.NoBounce,
     dest: somewhere,
     value: remainingBalance
 });
 ```
 
-A curious reader might ask, "what's the type of `body` here? How is it expressed in the type system?" The answer is: `never`.
+A curious reader might ask, "what's the type of `body` here? How is it expressed in the type system?" The answer is: `void`.
 
 Actually, `CreateMessageOptions` is declared like this:
 
 ```tolk
 // declared in stdlib
-struct CreateMessageOptions<TBody = never> {
+struct CreateMessageOptions<TBody = void> {
     ...
     body: TBody;
 }
 ```
 
-Hence, when we miss `body` in `createMessage`, it leads to the default `TBody = never`.
-And by convention, fields having `never` type are not required in a literal.
+Hence, when we miss `body` in `createMessage`, it leads to the default `TBody = void`.
+And by convention, fields having `void` type are not required in a literal.
 It's not that obvious, but it is definitely beautiful.
 
 ## Don't confuse StateInit and code+data, they are different
@@ -421,9 +421,9 @@ emitMsg.send(SEND_MODE_REGULAR);
 **Available options for external-out messages** are only `dest` and `body`, actually:
 
 ```tolk
-struct CreateExternalLogMessageOptions<TBody = never> {
+struct CreateExternalLogMessageOptions<TBody = void> {
     /// destination is either an external address or a pattern to calculate it
-    dest: address |         // either some valid external/none address (not internal!)
+    dest: any_address |     // either some valid external/none address (not internal!)
           builder |         // ... or a manually constructed builder with a valid external address
           ExtOutLogBucket;  // ... or encode topic/eventID in destination
     
