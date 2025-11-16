@@ -14,20 +14,19 @@ It was initially written by TON [contributors](/v3/contribute/maintainers/) and 
 
 ---
 
-
-
 ## Join TON Docs Club 💎
 
 <img align="right" width="300px" src="static\img\readme\contribute.png">
 
-TON is an actively growing ecosystem, and every day many devs contribute to its development. 
+TON is an actively growing ecosystem, and every day many devs contribute to its development.
 
-You can participate in TON by helping organize knowledge, making Pull Requests and creating tutorials to help other developers. 
+You can participate in TON by helping organize knowledge, making Pull Requests and creating tutorials to help other developers.
 
 Feedback, lectures, technical articles, tutorials, and examples. All this can help the developers community grow even faster!
 
 Join TON Docs Club chat in Telegram to join contributors party:
-* https://t.me/+c-0fVO4XHQsyOWM8
+
+- https://t.me/+c-0fVO4XHQsyOWM8
 
 ---
 
@@ -35,17 +34,15 @@ Join TON Docs Club chat in Telegram to join contributors party:
 
 ## How to contribute? 🦄
 
-— Have an issue? [Prepare a solution with TON Docs Wizard](https://t.me/ton_docs_bot).  
+— Have an issue? [Prepare a solution with TON Docs Wizard](https://t.me/ton_docs_bot).
 
-— Have an idea? [Submit a Feature Request](https://github.com/ton-community/ton-docs/issues/new/choose).  
+— Have an idea? [Submit a Feature Request](https://github.com/ton-community/ton-docs/issues/new/choose).
 
 — Want to contribute? [How to contribute](https://docs.ton.org/v3/contribute).
 
 — Want to translate? [Localization](https://docs.ton.org/v3/contribute/localization-program/how-to-contribute).
 
 — Have a question? [Documentation development chat](https://t.me/+c-0fVO4XHQsyOWM8).
-
-
 
 ---
 
@@ -65,39 +62,43 @@ Use Gitpod for contributing. It'll launch a workspace with a single click:
 
 1. Download repository from GitHub with its submodules
 
-    ```
-    git clone --recursive https://github.com/ton-community/ton-docs.git 
-    ```
+   ```
+   git clone --recursive https://github.com/ton-community/ton-docs.git
+   ```
 
 2. Install last version [NodeJS LTS](https://nodejs.org/en/download/) to run local build
 3. Open Terminal in project directory
 4. Install dependencies with command:
 
-    ```
-    npm install
-    ```
+   ```
+   npm install
+   ```
+
 5. Run project with command:
 
-    ```
-    npm run start
-    ```
+   ```
+   npm run start
+   ```
+
 6. Build with multiple locales and run it locally
 
-    ```
-    npm run build
-    npm run serve
-    ```
+   ```
+   npm run build
+   npm run serve
+   ```
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
 ## Install recursive module
 
 If you cloned the repository from GitHub without step 1, you'll need to install the submodules to enable local execution.
+
 ```
 git submodule update --init --recursive
 ```
 
 ## Contributors wall
+
 <a href="https://github.com/ton-community/ton-docs/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ton-community/ton-docs&max=204" />
 </a>
@@ -110,5 +111,3 @@ git submodule update --init --recursive
 ## License
 
 [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)
-
-
