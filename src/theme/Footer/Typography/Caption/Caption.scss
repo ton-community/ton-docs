@@ -1,20 +1,22 @@
-@import "../../styles/all";
+@use "../../styles/all";
+@use "../../styles/utils/media_queries";
+@use "../../styles/utils/typography";
 
 .Caption {
-  @include font-inter;
-  font-size: $font-size-small-xs;
-  line-height: $line-height-small-s;
+  @include typography.font-inter;
+  font-size: typography.$font-size-small-xs;
+  line-height: typography.$line-height-small-s;
 
   p {
     overflow: visible;
   }
 
-  @include media-breakpoint-tablet-m {
-    font-size: $font-size-small-s;
+  @include media_queries.media-breakpoint-tablet-m {
+    font-size: typography.$font-size-small-s;
   }
 
   &--weight-medium {
-    font-weight: $font-weight-medium;
+    font-weight: typography.$font-weight-medium;
   }
 
   &--scheme-light {

@@ -1,10 +1,12 @@
-@import "../../styles/all";
+@use "../../styles/all";
+@use "../../styles/utils/media_queries";
+@use "../../styles/utils/typography";
 
 .Text {
-  @include font-inter;
+  @include typography.font-inter;
 
   &--weight-semi {
-    font-weight: $font-weight-semi-bold;
+    font-weight: typography.$font-weight-semi-bold;
   }
 
   &--scheme-light {
@@ -16,12 +18,12 @@
   }
 
   &--level-1 {
-    font-size: $text-1-font-size-mobile;
-    line-height: $text-1-line-height-mobile;
+    font-size: typography.$text-1-font-size-mobile;
+    line-height: typography.$text-1-line-height-mobile;
 
-    @include media-breakpoint-desktop {
-      font-size: $text-1-font-size-desktop;
-      line-height: $text-1-line-height-desktop;
+    @include media_queries.media-breakpoint-desktop {
+      font-size: typography.$text-1-font-size-desktop;
+      line-height: typography.$text-1-line-height-desktop;
     }
   }
 }

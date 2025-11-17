@@ -1,4 +1,4 @@
-@import "media_queries";
+@use "media_queries";
 
 $font-weight-black: 900;
 $font-weight-extra-bold: 800;
@@ -169,7 +169,7 @@ $line-height-small-xs: 14px;
   font-size: $text-1-font-size-desktop;
   line-height: $text-1-line-height-desktop;
 
-  @include media-breakpoint-s {
+  @include media_queries.media-breakpoint-s {
     font-size: $text-1-font-size-mobile;
     line-height: $text-1-line-height-mobile;
   }

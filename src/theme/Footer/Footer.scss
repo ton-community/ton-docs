@@ -1,9 +1,12 @@
-@import "./styles/all";
+@use "styles/all";
+@use "styles/base/vars";
+@use "styles/utils/media_queries";
+@use "styles/utils/mixins";
 
 .CustomFooter {
   margin-top: 100px;
 
-  @include media-breakpoint-m {
+  @include media_queries.media-breakpoint-m {
     margin-top: 52px;
   }
 
@@ -22,10 +25,10 @@
   &--with-small-offset {
     margin-top: 46px;
 
-    @include media-breakpoint-xxl {
+    @include media_queries.media-breakpoint-xxl {
       margin-top: 26px;
     }
-    @include media-breakpoint-m {
+    @include media_queries.media-breakpoint-m {
       margin-top: 16px;
     }
   }
@@ -41,7 +44,7 @@
     &--large {
       display: block;
 
-      @include media-breakpoint-l {
+      @include media_queries.media-breakpoint-l {
         display: none;
       }
     }
@@ -49,7 +52,7 @@
     &--small {
       display: none;
 
-      @include media-breakpoint-l {
+      @include media_queries.media-breakpoint-l {
         display: block;
       }
     }
@@ -59,7 +62,7 @@
     position: relative;
     padding-bottom: 24px;
 
-    @include media-breakpoint-s {
+    @include media_queries.media-breakpoint-s {
       padding-top: 16px;
     }
   }
@@ -79,7 +82,7 @@
     gap: 8px;
     margin-top: 8px;
 
-    @include media-breakpoint-tablet-s {
+    @include media_queries.media-breakpoint-tablet-s {
       margin-top: 12px;
     }
   }
@@ -89,7 +92,7 @@
   }
 
   &--m-scheme-light &__colLink div {
-    @include hover-state {
+    @include mixins.hover-state {
       &:hover {
         color: var(--accent-hover-light);
       }
@@ -101,7 +104,7 @@
   }
 
   &--m-scheme-dark &__colLink div {
-    @include hover-state {
+    @include mixins.hover-state {
       &:hover {
         color: var(--accent-hover-dark);
       }
@@ -118,10 +121,10 @@
       padding: 26px 16px;
     }
 
-    @include media-breakpoint-tablet-s {
+    @include media_queries.media-breakpoint-tablet-s {
       padding: 24px 0 32px;
     }
-    @include media-breakpoint-desktop {
+    @include media_queries.media-breakpoint-desktop {
       padding: 24px 0 40px;
     }
   }
@@ -145,7 +148,7 @@
   &__network rect,
   &__network:nth-child(4) circle,
   &__network path {
-    transition: $def-trans-duration all;
+    transition: vars.$def-trans-duration all;
   }
 
   &--m-scheme-dark &__network path {
@@ -177,7 +180,7 @@
   &__network {
     color: var(--icon_light_thirdly);
 
-    @include hover-state {
+    @include mixins.hover-state {
       &:hover {
         color: var(--accent-hover-light);
       }
