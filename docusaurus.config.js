@@ -144,7 +144,7 @@ const config = {
       announcementBar: {
         id: 'deprecation_notice',
         content: '<a rel="noopener noreferrer" href="https://docs.ton.org"><span>Deprecated! Please, visit the new documentation at <b>docs.ton.org</b></span> <span class="mobile-view">Deprecated, go to <b>new docs</b>!</span></a>',
-        backgroundColor: '#0088CC',
+        backgroundColor: '#CC0000',
         textColor: '#FFFFFF',
         isCloseable: false,
       },
