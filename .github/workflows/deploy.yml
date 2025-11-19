@@ -1,0 +1,49 @@
+name: Deploy build
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+      - canary
+
+  workflow_dispatch:
+    inputs:
+      ref_name:
+        description: "Branch or tag"
+        required: true
+        type: string
+
+  workflow_call:
+    inputs:
+      ref_name:
+        required: true
+        type: string
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+    permissions:
+      packages: write
+      contents: read
+    with:
+      ref_name: ${{ inputs.ref_name || github.ref_name }}
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run deployment wf
+        uses: the-actions-org/workflow-dispatch@v4
+        with:
+          workflow: deploy-v2.yml
+          ref: main
+          repo: ${{ vars.DEPLOY_REPO }}
+          token: ${{ secrets.DEPLOY_REPO_TOKEN }}
+          inputs: |
+            {
+              "app_name": "${{ vars.APP_NAME }}",
+              "image_tag": "${{ needs.build.outputs.image_tag }}",
+              "image_digest": "${{ needs.build.outputs.image_digest }}"
+            }
