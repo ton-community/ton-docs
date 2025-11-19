@@ -141,12 +141,13 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      // announcementBar: {
-      //   // id: 'contribute/hacktoberfest',
-      //   content: '<a rel="noopener noreferrer" target="_blank" href="https://society.ton.org/hack-ton-berfest-2023?utm_source=tondocs&utm_medium=top_banner&utm_campaign=promo"><span>The <b>HACK-TON-BERFEST 2023</b> event is near! Double-merch, NFT rewards and more!</span> <span class="mobile-view">Double-merch, NFT reward and more!</span></a>',
-      //   textColor: '#F3F3F7',
-      //   isCloseable: false,
-      // },
+      announcementBar: {
+        id: 'deprecation_notice',
+        content: '<a rel="noopener noreferrer" href="https://docs.ton.org"><span>Deprecated! Please, visit the new documentation at <b>docs.ton.org</b></span> <span class="mobile-view">Deprecated, go to <b>new docs</b>!</span></a>',
+        backgroundColor: '#0088CC',
+        textColor: '#FFFFFF',
+        isCloseable: false,
+      },
       metadata: [
         {
           name: 'keywords',

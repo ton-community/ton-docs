@@ -1,8 +1,6 @@
-# TON documentation 📚
+# ARCHIVED! Actual TON documentation is moved to: https://github.com/ton-org/docs
 
 <img align="left" width="300px" src="static\img\readme\about.png">
-
-This is the official repository for The Open Network documentation.
 
 Latest documentation release: [docs.ton.org](https://docs.ton.org).
 
