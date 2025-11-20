@@ -58,7 +58,7 @@ Account information includes the `balance`, `state`, `code`, and `data`.
   - `nonexist`: The address has no data.
   - `uninit`: The address has a balance but no smart contract code.
   - `active`: The address is live with code and balance.
-  - `frozen`: The address is locked due to insufficient balance for storage costs.
+  - `frozen`: The address is locked when storage fee debt exceed 0.1 TON. The balance becomes zero; unpaid storage fees are tracked as debt (see `StorageInfo.due_payment` and transaction `storage_fees_due`).
 - `code`: The contract's code in raw format.
 - `data`: Serialized contract data stored in a [_Cell_](/v3/concepts/dive-into-ton/ton-blockchain/cells).
 
