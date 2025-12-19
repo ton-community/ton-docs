@@ -17,6 +17,13 @@ import Feedback from '@site/src/components/Feedback';
 
 ## Create a manifest
 
+:::note
+TonConnect can run on `localhost`, but the app manifest must be accessible over the public internet via **HTTPS**.  
+All URLs in the manifest, such as `url` and `icons`, must also be publicly available.  
+
+For more information, see the [local development guide](https://github.com/ton-connect/sdk/blob/main/guidelines/work-with-localhost.md).
+:::
+
 A TON Connect *manifest* is a small JSON file that lets wallets discover your DApp:
 
 ```jsonc
