@@ -1,6 +1,6 @@
-@import "media_queries";
-@import "typography";
-@import "../base/vars";
+@use "media_queries";
+@use "typography";
+@use "../base/vars";
 
 
 @mixin untilMedia($display-width: 1000) {
@@ -66,21 +66,21 @@
 
 @mixin with-transition($prop, $prop2: false, $prop3: false) {
   @if $prop3 {
-    transition: $prop $transition-duration $transition-timing-function, $prop2 $transition-duration $transition-timing-function, $prop3 $transition-duration $transition-timing-function;
+    transition: $prop vars.$transition-duration vars.$transition-timing-function, $prop2 vars.$transition-duration vars.$transition-timing-function, $prop3 vars.$transition-duration vars.$transition-timing-function;
   } @else if $prop2 {
-    transition: $prop $transition-duration $transition-timing-function, $prop2 $transition-duration $transition-timing-function;
+    transition: $prop vars.$transition-duration vars.$transition-timing-function, $prop2 vars.$transition-duration vars.$transition-timing-function;
   } @else {
-    transition: $prop $transition-duration $transition-timing-function;
+    transition: $prop vars.$transition-duration vars.$transition-timing-function;
   }
 }
 
 @mixin with-transition-default-f($prop, $prop2: false, $prop3: false) {
   @if $prop3 {
-    transition: $prop $transition-duration $transition-timing-function, $prop2 $transition-duration $transition-timing-function, $prop3 $transition-duration;
+    transition: $prop vars.$transition-duration vars.$transition-timing-function, $prop2 vars.$transition-duration vars.$transition-timing-function, $prop3 vars.$transition-duration;
   } @else if $prop2 {
-    transition: $prop $transition-duration $transition-timing-function, $prop2 $transition-duration;
+    transition: $prop vars.$transition-duration vars.$transition-timing-function, $prop2 vars.$transition-duration;
   } @else {
-    transition: $prop $transition-duration;
+    transition: $prop vars.$transition-duration;
   }
 }
 
@@ -212,7 +212,7 @@
   gap: $desktopGap;
   
   @if $mobileGap {
-      @include media-breakpoint-s {
+      @include media_queries.media-breakpoint-s {
           gap: $mobileGap;
       }
   }

@@ -1,16 +1,18 @@
-@import "../styles/all";
+@use "../styles/all";
+@use "../styles/utils/media_queries";
+@use "../styles/utils/mixins";
 
 .Logo {
   position: relative;
   display: block;
   cursor: pointer;
-  @include with-transition(color);
+  @include mixins.with-transition(color);
 
   &__inner {
     display: block;
 
     &--large {
-      @include media-breakpoint-xl {
+      @include media_queries.media-breakpoint-xl {
         display: none;
       }
     }
@@ -18,7 +20,7 @@
     &--small {
       display: none;
 
-      @include media-breakpoint-xl {
+      @include media_queries.media-breakpoint-xl {
         display: block;
       }
     }

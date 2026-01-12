@@ -1,4 +1,5 @@
-@import "../../styles/all";
+@use "../../styles/all";
+@use "../../styles/utils/media_queries";
 
 .NewRow {
   display: grid;
@@ -13,28 +14,28 @@
     margin-left: 0;
   }
 
-  @include media-breakpoint-tablet-s {
+  @include media_queries.media-breakpoint-tablet-s {
     row-gap: calc(#{var(--tabletSGridGap)} * 1px);
     grid-template-columns: var(--tabletSGridSize);
     margin-left: calc(#{var(--tabletSGridGap)} / 2 * -1px);
     width: calc(100% + #{var(--tabletSGridGap)} * 1px);
   }
 
-  @include media-breakpoint-tablet-m {
+  @include media_queries.media-breakpoint-tablet-m {
     row-gap: calc(#{var(--tabletMGridGap)} * 1px);
     grid-template-columns: var(--tabletMGridSize);
     margin-left: calc(#{var(--tabletMGridGap)} / 2 * -1px);
     width: calc(100% + #{var(--tabletMGridGap)} * 1px);
   }
 
-  @include media-breakpoint-desktop {
+  @include media_queries.media-breakpoint-desktop {
     row-gap: calc(#{var(--desktopGridGap)} * 1px);
     grid-template-columns: var(--desktopGridSize);
     margin-left: calc(#{var(--desktopGridGap)} / 2 * -1px);
     width: calc(100% + #{var(--desktopGridGap)} * 1px);
   }
 
-  @include media-breakpoint-desktop-large {
+  @include media_queries.media-breakpoint-desktop-large {
     row-gap: calc(#{var(--desktopLargeGridGap)} * 1px);
     grid-template-columns: var(--desktopLargeGridSize);
     margin-left: calc(#{var(--desktopLargeGridGap)} / 2 * -1px);
@@ -44,7 +45,7 @@
 
   &-m-left-triangle {
 
-    @include media-breakpoint-tablet-s {
+    @include media_queries.media-breakpoint-tablet-s {
       grid-template-areas: 'first second'
                           'first third';
 
