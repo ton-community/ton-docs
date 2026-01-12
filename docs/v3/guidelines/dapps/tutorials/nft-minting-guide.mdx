@@ -1,6 +1,4 @@
 import Feedback from '@site/src/components/Feedback';
-import { BlockMath, InlineMath } from 'react-katex';
-import 'katex/dist/katex.min.css';
 
 # Step-by-Step NFT Collection Minting
 
@@ -580,8 +578,7 @@ const NftItemCodeCell = Cell.fromBase64(
 dataCell.storeRef(NftItemCodeCell);
 ```
 
-The smart contract stores royalty parameters using royaltyFactor, royaltyBase, and royaltyAddress. The royalty percentage is calculated using the formula: <InlineMath math="\left( \frac{\text{royaltyFactor}}{\text{royaltyBase}} \right) \times 100\%" />
-. If we know royaltyPercent, calculating royaltyFactor is straightforward.
+The smart contract stores royalty parameters using royaltyFactor, royaltyBase, and royaltyAddress. The royalty percentage is calculated using the formula: $\left( \frac{\text{royaltyFactor}}{\text{royaltyBase}} \right) \times 100\%$. If we know the royaltyPercent, calculating royaltyFactor is straightforward.
 
 ```ts
 const royaltyBase = 1000;

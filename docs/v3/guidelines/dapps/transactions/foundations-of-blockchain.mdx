@@ -15,8 +15,6 @@ faq:
 ---
 
 import Feedback from '@site/src/components/Feedback';
-import { BlockMath} from 'react-katex';
-import 'katex/dist/katex.min.css';
 import Button from '@site/src/components/button';
 
 
@@ -274,11 +272,15 @@ It consists of the following components:
 
 The address is defined as:
 
-<BlockMath math="\text{Address} := (\text{workchain\_id}, \text{account\_id})" />
+$$
+\text{Address} := (\text{workchain\_id}, \text{account\_id})
+$$
 
 where:
 
-<BlockMath math="\text{account\_id}:= \text{HASH(initial\_code, initial\_data)}" />
+$$
+\text{account\_id}:= \text{HASH(initial\_code, initial\_data)}
+$$
 
 :::important
 `StateInit` (_State Initialized_) defines the contract’s initialization parameters: _code_, _data_, and optionally a _library_.

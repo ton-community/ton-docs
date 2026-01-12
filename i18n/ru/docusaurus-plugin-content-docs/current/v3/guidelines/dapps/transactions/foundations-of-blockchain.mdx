@@ -1,6 +1,4 @@
 import Feedback from '@site/src/components/Feedback';
-import { BlockMath} from 'react-katex';
-import 'katex/dist/katex.min.css';
 import Button from '@site/src/components/button';
 
 # Основы блокчейна
@@ -223,11 +221,15 @@ account_frozen$01 state_hash:bits256 = AccountState;
 
 Адрес определяется как:
 
-<BlockMath math="{Address} := ({workchain_id},{account_id})" />
+$$
+{Address} := ({workchain_id},{account_id})
+$$
 
 , где
 
-<BlockMath math="{account_id}:= {HASH(StateInit)}" />
+$$
+{account_id}:= {HASH(StateInit)}
+$$
 
 Адрес соответствует состоянию контракта при его первичной инициализации, и может быть вычислен даже **до** развёртывания контракта.
 Это позволяет использовать адрес заранее — например, для получения токенов или настройки взаимодействий.
