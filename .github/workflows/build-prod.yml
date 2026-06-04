@@ -9,6 +9,7 @@ concurrency: prod-ci
 
 jobs:
   docker:
+    if: false
     runs-on: ubuntu-latest
     steps:
       # Step 1: Checkout the repository to get all commits and submodules
