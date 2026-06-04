@@ -9,6 +9,7 @@ concurrency: demo-ci
 
 jobs:
   docker:
+    if: false
     runs-on: ubuntu-latest
     steps:
       - name: checkout

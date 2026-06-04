@@ -22,6 +22,7 @@ on:
 
 jobs:
   build:
+    if: false
     uses: ./.github/workflows/build.yml
     secrets: inherit
     permissions:
@@ -31,6 +32,7 @@ jobs:
       ref_name: ${{ inputs.ref_name || github.ref_name }}
 
   deploy:
+    if: false
     needs: build
     runs-on: ubuntu-latest
     steps:
