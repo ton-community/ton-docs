@@ -150,6 +150,10 @@ const config = {
       },
       metadata: [
         {
+          name: 'robots',
+          content: 'noindex, nofollow'
+        },
+        {
           name: 'keywords',
           content: 'TON Blockchain, TON, The Open Network, TON smart contracts, TON wallets, TON transactions, TON SDK, TON API, TON documentation, TON developers, TON DApps, DeFi on TON, TON NFTs'
         },
