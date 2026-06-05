@@ -93,6 +93,7 @@ const config = {
           trackingID: 'G-0PVST6PCG8',
           anonymizeIP: true,
         },
+        sitemap: false,
         docs: {
           routeBasePath: '/',
           showLastUpdateAuthor: true,
